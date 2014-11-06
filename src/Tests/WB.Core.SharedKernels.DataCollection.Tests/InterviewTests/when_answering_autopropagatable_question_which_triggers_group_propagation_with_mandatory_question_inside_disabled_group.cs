@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
@@ -11,9 +8,7 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
@@ -41,12 +36,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                                                         && _.GetRosterGroupsByRosterSizeQuestion(questionWhichIsForcesPropagationId) == new Guid[] { propagatedGroupId }
                                                         && _.HasGroup(propagatedGroupId) == true
                                                         && _.GetRosterLevelForGroup(propagatedGroupId) == 1
-                                                        //&& _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(propagatedGroupId) == new Guid[] { propagatedGroupId }
                                                         && _.GetRostersFromTopToSpecifiedGroup(propagatedGroupId) == new Guid[] { propagatedGroupId }
-                                                        //&& _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(propagatedGroupId) == new Guid[] { propagatedGroupId }
                                                         && _.GetAllParentGroupsForQuestion(mandatoryQuestionId) == new Guid[] { propagatedGroupId }
                                                         && _.GetRostersFromTopToSpecifiedQuestion(mandatoryQuestionId) == new Guid[] { propagatedGroupId }
-                                                        //&& _.GetUnderlyingMandatoryQuestions(propagatedGroupId) == new Guid[] { mandatoryQuestionId }
                                                         );
 
             var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
@@ -80,12 +72,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
 
         private It should_not_raise_AnswerDeclaredValid_event = () =>
-             eventContext.ShouldNotContainEvent<AnswerDeclaredValid>(@event
-                 => @event.QuestionId == mandatoryQuestionId);
+             eventContext.ShouldNotContainEvent<AnswersDeclaredValid>(@event
+                 => @event.Questions.Any(x => x.Id == mandatoryQuestionId));
 
         private It should_not_raise_AnswerDeclaredInvalid_event = () =>
-            eventContext.ShouldNotContainEvent<AnswerDeclaredInvalid>(@event
-                => @event.QuestionId == mandatoryQuestionId);
+            eventContext.ShouldNotContainEvent<AnswersDeclaredInvalid>(@event
+                => @event.Questions.Any(x => x.Id == mandatoryQuestionId));
 
         private static EventContext eventContext;
         private static Interview interview;
