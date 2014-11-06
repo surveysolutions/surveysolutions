@@ -5,7 +5,6 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Widget;
-using Main.Core;
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
@@ -14,6 +13,7 @@ using System;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
@@ -28,12 +28,14 @@ namespace WB.UI.QuestionnaireTester
     public class LoadingActivity : Activity
     {
         protected ILogger logger;
+        protected IArchiveUtils archiver;
         private CancellationTokenSource longOperationTokenSource;
 
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
+            this.archiver = ServiceLocator.Current.GetInstance<IArchiveUtils>();
             this.ActionBar.SetDisplayShowHomeEnabled(false);
             this.longOperationTokenSource =
                 this.WaitForLongOperation((ct) => Restore(ct, Guid.Parse(this.Intent.GetStringExtra("publicKey"))));
@@ -100,7 +102,7 @@ namespace WB.UI.QuestionnaireTester
 
             try
             {
-                string content = PackageHelper.DecompressString(template.Questionnaire);
+                string content = archiver.DecompressString(template.Questionnaire);
                 var questionnaireDocument = JsonUtils.GetObject<QuestionnaireDocument>(content);
 
                 var assemblyFileAccessor = ServiceLocator.Current.GetInstance<IQuestionnaireAssemblyFileAccessor>();

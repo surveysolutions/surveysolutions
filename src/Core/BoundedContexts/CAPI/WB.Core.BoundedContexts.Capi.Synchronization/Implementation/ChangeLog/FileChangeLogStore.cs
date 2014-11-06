@@ -6,6 +6,7 @@ using Main.Core.View;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Synchronization.Views.InterviewMetaInfo;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.ChangeLog
@@ -15,10 +16,12 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.ChangeLog
         private const string ChangelogFolder = "Changelog";
         private readonly string changelogPath;
         private readonly IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> metaInfoFactory;
+        private readonly IArchiveUtils archiver;
 
-        public FileChangeLogStore(IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> metaInfoFactory)
+        public FileChangeLogStore(IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> metaInfoFactory, IArchiveUtils archiver)
         {
             this.metaInfoFactory = metaInfoFactory;
+            this.archiver = archiver;
             this.changelogPath = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), ChangelogFolder);
             if (!Directory.Exists(this.changelogPath))
             {
@@ -37,10 +40,10 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.ChangeLog
 
             var syncItem = new SyncItem()
                 {
-                    Content = PackageHelper.CompressString(JsonUtils.GetJsonData(recordData)),
+                    Content = archiver.CompressString(JsonUtils.GetJsonData(recordData)),
                     IsCompressed = true,
                     ItemType = SyncItemType.Questionnare,
-                    MetaInfo = PackageHelper.CompressString(
+                    MetaInfo = archiver.CompressString(
                         JsonUtils.GetJsonData(
                             metaData)),
                     Id = eventSourceId

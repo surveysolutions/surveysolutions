@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace WB.Core.Infrastructure.FileSystem
 {
@@ -12,5 +9,7 @@ namespace WB.Core.Infrastructure.FileSystem
         void Unzip(string archivedFile, string extractToFolder);
         bool IsZipFile(string filePath);
         Dictionary<string, long> GetArchivedFileNamesAndSize(string filePath);
+        string CompressString(string stringToCompress);
+        string DecompressString(string stringToDecompress);
     }
 }

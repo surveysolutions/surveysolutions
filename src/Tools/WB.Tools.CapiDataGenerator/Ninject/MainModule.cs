@@ -31,6 +31,7 @@ using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.ChangeLog;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
@@ -87,7 +88,7 @@ namespace CapiDataGenerator
             var publicStore = new SqliteReadSideRepositoryAccessor<PublicChangeSetDTO>(denormalizerStore);
             var plainQuestionnaireStore = new SqlitePlainStorageAccessor<QuestionnaireDocument>(plainStore);
             var interviewMetaInfoFactory = new InterviewMetaInfoFactory(questionnaireStore);
-            var changeLogStore = new FileChangeLogStore(interviewMetaInfoFactory);
+            var changeLogStore = new FileChangeLogStore(interviewMetaInfoFactory, this.Kernel.Get<IArchiveUtils>());
 
             var capiTemplateWriter = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>();
             this.capiTemplateVersionedWriter = new VersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>(capiTemplateWriter);

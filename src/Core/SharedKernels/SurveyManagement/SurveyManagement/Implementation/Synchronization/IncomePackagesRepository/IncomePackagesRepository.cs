@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core;
 using Main.Core.Events;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
@@ -35,11 +34,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
         private readonly SyncSettings syncSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IJsonUtils jsonUtils;
+        private readonly IArchiveUtils archiver;
         private IStreamableEventStore eventStore;
         private IEventDispatcher eventBus;
 
         public IncomePackagesRepository(ILogger logger, SyncSettings syncSettings, ICommandService commandService,
-            IFileSystemAccessor fileSystemAccessor, IJsonUtils jsonUtils,
+            IFileSystemAccessor fileSystemAccessor, IJsonUtils jsonUtils, IArchiveUtils archiver,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter, bool overrideReceivedEventTimeStamp, string origin)
         {
             this.logger = logger;
@@ -47,6 +47,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             this.commandService = commandService;
             this.fileSystemAccessor = fileSystemAccessor;
             this.jsonUtils = jsonUtils;
+            this.archiver = archiver;
             this.interviewSummaryRepositoryWriter = interviewSummaryRepositoryWriter;
             this.overrideReceivedEventTimeStamp = overrideReceivedEventTimeStamp;
             this.origin = origin;
@@ -88,7 +89,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
 
             try
             { 
-                var meta = this.jsonUtils.Deserrialize<InterviewMetaInfo>(PackageHelper.DecompressString(item.MetaInfo));
+                var meta = this.jsonUtils.Deserrialize<InterviewMetaInfo>(archiver.DecompressString(item.MetaInfo));
                 if (meta.CreatedOnClient.HasValue && meta.CreatedOnClient.Value && this.interviewSummaryRepositoryWriter.GetById(meta.PublicKey)==null)
                 {
                     AnsweredQuestionSynchronizationDto[] prefilledQuestions = null;
@@ -152,7 +153,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
 
             var fileContent = this.fileSystemAccessor.ReadAllText(fileName);
 
-            var items = this.jsonUtils.Deserrialize<AggregateRootEvent[]>(PackageHelper.DecompressString(fileContent));
+            var items = this.jsonUtils.Deserrialize<AggregateRootEvent[]>(archiver.DecompressString(fileContent));
             if (items.Length > 0)
             {
                 if (this.EventStore == null)

@@ -293,7 +293,6 @@
     <Compile Include="ICommandListSupplier.cs" />
     <Compile Include="IRavenDBSettings.cs" />
     <Compile Include="NCQRSInit.cs" />
-    <Compile Include="PackageHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\EventMergeUtils.cs" />
     <Compile Include="Utility\LINQExtensions.cs" />
