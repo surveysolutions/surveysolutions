@@ -8,6 +8,7 @@ using Main.Core.View.User;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
+using WB.Core.Infrastructure.CommandBus;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
 {

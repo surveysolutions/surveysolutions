@@ -12,6 +12,7 @@ using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace WB.UI.Shared.Android.Controls.ScreenItems{

@@ -6,6 +6,7 @@ using Moq;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
+using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Designer.Api;
 using It = Machine.Specifications.It;
 
