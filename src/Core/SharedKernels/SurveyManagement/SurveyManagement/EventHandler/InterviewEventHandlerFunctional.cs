@@ -41,7 +41,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswerCommented>,
         IUpdateHandler<ViewWithSequence<InterviewData>, MultipleOptionsQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, NumericRealQuestionAnswered>,
-        IUpdateHandler<ViewWithSequence<InterviewData>, NumericQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, NumericIntegerQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, TextQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, TextListQuestionAnswered>,
@@ -527,12 +526,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             return new ViewWithSequence<InterviewData>(this.SaveAnswer(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
                 evnt.Payload.Answer), evnt.EventSequence);
-        }
-
-        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<NumericQuestionAnswered> evnt)
-        {
-            return new ViewWithSequence<InterviewData>(this.SaveAnswer(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-                     evnt.Payload.Answer), evnt.EventSequence);
         }
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<NumericIntegerQuestionAnswered> evnt)

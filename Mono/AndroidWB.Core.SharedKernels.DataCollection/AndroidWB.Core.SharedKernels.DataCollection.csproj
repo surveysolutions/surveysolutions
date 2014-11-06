@@ -375,9 +375,6 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\NumericIntegerQuestionAnswered.cs">
       <Link>Events\Interview\NumericIntegerQuestionAnswered.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\NumericQuestionAnswered.cs">
-      <Link>Events\Interview\NumericQuestionAnswered.cs</Link>
-    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\NumericRealQuestionAnswered.cs">
       <Link>Events\Interview\NumericRealQuestionAnswered.cs</Link>
     </Compile>

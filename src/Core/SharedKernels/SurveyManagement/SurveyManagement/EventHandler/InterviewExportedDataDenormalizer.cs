@@ -39,7 +39,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<MultipleOptionsQuestionAnswered>,
         IEventHandler<SingleOptionQuestionAnswered>,
         IEventHandler<NumericRealQuestionAnswered>,
-        IEventHandler<NumericQuestionAnswered>,
         IEventHandler<NumericIntegerQuestionAnswered>,
         IEventHandler<DateTimeQuestionAnswered>,
         IEventHandler<GeoLocationQuestionAnswered>,
@@ -166,11 +165,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         }
 
         public void Handle(IPublishedEvent<NumericRealQuestionAnswered> evnt)
-        {
-            this.RecordFirstAnswerIfNeeded(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTime);
-        }
-
-        public void Handle(IPublishedEvent<NumericQuestionAnswered> evnt)
         {
             this.RecordFirstAnswerIfNeeded(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTime);
         }

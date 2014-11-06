@@ -37,7 +37,6 @@ namespace CAPI.Android.Core.Model.EventHandlers
                                       IEventHandler<MultipleOptionsQuestionAnswered>,
                                       IEventHandler<SingleOptionQuestionAnswered>,
                                       IEventHandler<NumericRealQuestionAnswered>,
-                                      IEventHandler<NumericQuestionAnswered>,
                                       IEventHandler<NumericIntegerQuestionAnswered>,
                                       IEventHandler<DateTimeQuestionAnswered>,
                                       IEventHandler<GeoLocationQuestionAnswered>,
@@ -292,11 +291,6 @@ namespace CAPI.Android.Core.Model.EventHandlers
         }
 
         public void Handle(IPublishedEvent<NumericRealQuestionAnswered> evnt)
-        {
-            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
-        }
-
-        public void Handle(IPublishedEvent<NumericQuestionAnswered> evnt)
         {
             AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
         }
