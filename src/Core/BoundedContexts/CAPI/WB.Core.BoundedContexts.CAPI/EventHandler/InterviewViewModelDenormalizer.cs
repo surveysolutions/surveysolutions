@@ -45,7 +45,6 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<AnswersDeclaredInvalid>,
         IEventHandler<AnswersDeclaredValid>,
         IEventHandler<SynchronizationMetadataApplied>,
-        IEventHandler<AnswerRemoved>,
         IEventHandler<AnswersRemoved>,
         IEventHandler<SingleOptionLinkedQuestionAnswered>, 
         IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
@@ -211,11 +210,6 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         {
             this.SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
                           evnt.Payload.SelectedPropagationVectors);
-        }
-
-        public void Handle(IPublishedEvent<AnswerRemoved> evnt)
-        {
-            this.RemoveAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector);
         }
 
         public void Handle(IPublishedEvent<AnswersRemoved> evnt)

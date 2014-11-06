@@ -138,7 +138,6 @@ namespace WB.UI.Capi
             bus.RegisterHandler(eventHandler, typeof(RosterInstancesRemoved));
             bus.RegisterHandler(eventHandler, typeof(SynchronizationMetadataApplied));
             bus.RegisterHandler(eventHandler, typeof(GeoLocationQuestionAnswered));
-            bus.RegisterHandler(eventHandler, typeof(AnswerRemoved));
             bus.RegisterHandler(eventHandler, typeof(AnswersRemoved));
             bus.RegisterHandler(eventHandler, typeof(SingleOptionLinkedQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(MultipleOptionsLinkedQuestionAnswered));
@@ -149,7 +148,6 @@ namespace WB.UI.Capi
             bus.RegisterHandler(eventHandler, typeof(TextListQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(InterviewOnClientCreated));
 
-            bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(AnswerRemoved));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(AnswersRemoved));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(TextQuestionAnswered));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(NumericIntegerQuestionAnswered));
@@ -225,7 +223,6 @@ namespace WB.UI.Capi
             bus.RegisterHandler(dashboardeventHandler, typeof (NumericRealQuestionAnswered));
             bus.RegisterHandler(dashboardeventHandler, typeof(NumericIntegerQuestionAnswered));
             bus.RegisterHandler(dashboardeventHandler, typeof(DateTimeQuestionAnswered));
-            bus.RegisterHandler(dashboardeventHandler, typeof(AnswerRemoved));
         }
 
         

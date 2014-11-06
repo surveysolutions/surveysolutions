@@ -52,7 +52,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<ViewWithSequence<InterviewData>, GeoLocationQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, QRBarcodeQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, PictureQuestionAnswered>,
-        IUpdateHandler<ViewWithSequence<InterviewData>, AnswerRemoved>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswersRemoved>,
         IUpdateHandler<ViewWithSequence<InterviewData>, GroupDisabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, GroupEnabled>,
@@ -597,17 +596,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             return new ViewWithSequence<InterviewData>(this.SaveAnswer(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
                 evnt.Payload.PictureFileName), evnt.EventSequence);
-        }
-
-        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<AnswerRemoved> evnt)
-        {
-            return new ViewWithSequence<InterviewData>(
-                UpdateQuestion(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, question =>
-                {
-                    question.Answer = null;
-                    question.IsAnswered = false;
-                }),
-                evnt.EventSequence);
         }
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<AnswersRemoved> evnt)

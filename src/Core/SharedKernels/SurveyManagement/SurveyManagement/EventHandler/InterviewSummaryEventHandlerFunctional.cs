@@ -29,7 +29,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewSummary, DateTimeQuestionAnswered>,
         IUpdateHandler<InterviewSummary, GeoLocationQuestionAnswered>,
         IUpdateHandler<InterviewSummary, QRBarcodeQuestionAnswered>,
-        IUpdateHandler<InterviewSummary, AnswerRemoved>,
         IUpdateHandler<InterviewSummary, AnswersRemoved>,
         IUpdateHandler<InterviewSummary, InterviewerAssigned>,
         IUpdateHandler<InterviewSummary, InterviewDeleted>,
@@ -216,17 +215,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<QRBarcodeQuestionAnswered> evnt)
         {
             return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.EventTimeStamp);
-        }
-
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<AnswerRemoved> evnt)
-        {
-            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
-            {
-                if (interview.AnswersToFeaturedQuestions.ContainsKey(evnt.Payload.QuestionId))
-                {
-                    interview.AnswersToFeaturedQuestions[evnt.Payload.QuestionId].Answer = string.Empty;
-                }
-            });
         }
 
         public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<AnswersRemoved> evnt)
