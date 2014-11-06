@@ -188,8 +188,6 @@
     <Compile Include="Events\Interview\FlagRemovedFromAnswer.cs" />
     <Compile Include="Events\Interview\FlagSetToAnswer.cs" />
     <Compile Include="Events\Interview\GeoLocationQuestionAnswered.cs" />
-    <Compile Include="Events\Interview\GroupDisabled.cs" />
-    <Compile Include="Events\Interview\GroupEnabled.cs" />
     <Compile Include="Events\Interview\GroupPropagated.cs" />
     <Compile Include="Events\Interview\InterviewApproved.cs" />
     <Compile Include="Events\Interview\InterviewCreated.cs" />

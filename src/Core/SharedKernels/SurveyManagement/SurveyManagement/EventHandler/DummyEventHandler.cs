@@ -16,8 +16,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<QuestionDisabled>,
         IEventHandler<QuestionsEnabled>,
         IEventHandler<QuestionsDisabled>,
-        IEventHandler<GroupDisabled>,
-        IEventHandler<GroupEnabled>,
         IEventHandler<GroupsDisabled>,
         IEventHandler<GroupsEnabled>,
         IEventHandler<InterviewSynchronized>,
@@ -54,10 +52,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<FlagRemovedFromAnswer> evnt) {}
 
         public void Handle(IPublishedEvent<FlagSetToAnswer> evnt) {}
-
-        public void Handle(IPublishedEvent<GroupDisabled> evnt) { }
-
-        public void Handle(IPublishedEvent<GroupEnabled> evnt) { }
 
         public void Handle(IPublishedEvent<GroupsDisabled> evnt) { }
 
