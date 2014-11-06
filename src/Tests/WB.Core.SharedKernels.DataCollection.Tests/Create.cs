@@ -19,9 +19,18 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
             {
                 var identities = new[]
                 {
-                    new DataCollection.Events.Interview.Dtos.Identity(id ?? Guid.NewGuid(), rosterVector ?? rosterVector), 
+                    new DataCollection.Events.Interview.Dtos.Identity(id ?? Guid.NewGuid(), rosterVector ?? new decimal[0]), 
                 };
                 return new GroupsDisabled(identities);
+            }
+
+            public static QuestionsDisabled QuestionsDisabled(Guid? id = null, decimal[] rosterVector = null)
+            {
+                var identities = new[]
+                {
+                    new DataCollection.Events.Interview.Dtos.Identity(id ?? Guid.NewGuid(), rosterVector ?? new decimal[0]), 
+                };
+                return new QuestionsDisabled(identities);
             }
         }
 

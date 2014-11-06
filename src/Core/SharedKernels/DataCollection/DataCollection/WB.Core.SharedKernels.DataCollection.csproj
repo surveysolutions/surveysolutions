@@ -204,8 +204,6 @@
     <Compile Include="Events\Interview\InterviewStatusChanged.cs" />
     <Compile Include="Events\Interview\MultipleOptionsQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericRealQuestionAnswered.cs" />
-    <Compile Include="Events\Interview\QuestionDisabled.cs" />
-    <Compile Include="Events\Interview\QuestionEnabled.cs" />
     <Compile Include="Events\Interview\SingleOptionQuestionAnswered.cs" />
     <Compile Include="Events\Interview\SupervisorAssigned.cs" />
     <Compile Include="Events\Interview\TextQuestionAnswered.cs" />

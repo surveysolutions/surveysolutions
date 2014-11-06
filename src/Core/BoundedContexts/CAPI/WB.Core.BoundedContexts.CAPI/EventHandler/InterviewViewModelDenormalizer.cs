@@ -35,8 +35,6 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<GeoLocationQuestionAnswered>,
         IEventHandler<GroupsDisabled>,
         IEventHandler<GroupsEnabled>,
-        IEventHandler<QuestionDisabled>,
-        IEventHandler<QuestionEnabled>,
         IEventHandler<QuestionsDisabled>,
         IEventHandler<QuestionsEnabled>,
         IEventHandler<AnswersDeclaredInvalid>,
@@ -229,18 +227,6 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
             {
                 doc.SetScreenStatus(new InterviewItemId(group.Id, group.RosterVector), true);
             }
-        }
-
-        public void Handle(IPublishedEvent<QuestionDisabled> evnt)
-        {
-            var doc = this.GetStoredViewModel(evnt.EventSourceId);
-            doc.SetQuestionStatus(new InterviewItemId(evnt.Payload.QuestionId, evnt.Payload.PropagationVector), false);
-        }
-
-        public void Handle(IPublishedEvent<QuestionEnabled> evnt)
-        {
-            var doc = this.GetStoredViewModel(evnt.EventSourceId);
-            doc.SetQuestionStatus(new InterviewItemId(evnt.Payload.QuestionId, evnt.Payload.PropagationVector), true);
         }
 
         public void Handle(IPublishedEvent<QuestionsDisabled> evnt)

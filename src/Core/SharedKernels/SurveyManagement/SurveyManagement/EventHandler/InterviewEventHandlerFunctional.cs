@@ -54,8 +54,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswersRemoved>,
         IUpdateHandler<ViewWithSequence<InterviewData>, GroupsDisabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, GroupsEnabled>,
-        IUpdateHandler<ViewWithSequence<InterviewData>, QuestionDisabled>,
-        IUpdateHandler<ViewWithSequence<InterviewData>, QuestionEnabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, QuestionsDisabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, QuestionsEnabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswersDeclaredInvalid>,
@@ -630,22 +628,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                         }
                     })),
                 evnt.EventSequence);
-        }
-
-        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<QuestionDisabled> evnt)
-        {
-            return
-                new ViewWithSequence<InterviewData>(
-                    ChangeQuestionConditionState(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-                        false), evnt.EventSequence);
-        }
-
-        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<QuestionEnabled> evnt)
-        {
-            return
-                new ViewWithSequence<InterviewData>(
-                    ChangeQuestionConditionState(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-               true), evnt.EventSequence);
         }
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<QuestionsDisabled> evnt)
