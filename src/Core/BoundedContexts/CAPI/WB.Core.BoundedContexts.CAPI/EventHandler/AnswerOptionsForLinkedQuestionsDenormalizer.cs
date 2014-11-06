@@ -14,7 +14,6 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<TextQuestionAnswered>,
         IEventHandler<NumericIntegerQuestionAnswered>,
         IEventHandler<NumericRealQuestionAnswered>,
-        IEventHandler<NumericQuestionAnswered>,
         IEventHandler<DateTimeQuestionAnswered>
     {
         private readonly IReadSideRepositoryWriter<InterviewViewModel> interviewStorage;
@@ -45,11 +44,6 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         }
 
         public void Handle(IPublishedEvent<NumericRealQuestionAnswered> @event)
-        {
-            this.AddAnswerOptionForLinkedQuestions(@event.EventSourceId, @event.Payload.QuestionId, @event.Payload.PropagationVector);
-        }
-
-        public void Handle(IPublishedEvent<NumericQuestionAnswered> @event)
         {
             this.AddAnswerOptionForLinkedQuestions(@event.EventSourceId, @event.Payload.QuestionId, @event.Payload.PropagationVector);
         }

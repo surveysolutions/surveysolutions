@@ -28,7 +28,6 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<MultipleOptionsQuestionAnswered>,
         IEventHandler<NumericIntegerQuestionAnswered>,
         IEventHandler<NumericRealQuestionAnswered>,
-        IEventHandler<NumericQuestionAnswered>,
         IEventHandler<TextQuestionAnswered>,
         IEventHandler<TextListQuestionAnswered>,
         IEventHandler<SingleOptionQuestionAnswered>,
@@ -184,12 +183,6 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         {
             this.SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
                          evnt.Payload.Answer);
-        }
-
-        public void Handle(IPublishedEvent<NumericQuestionAnswered> evnt)
-        {
-            this.SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
-                          evnt.Payload.Answer);
         }
 
         public void Handle(IPublishedEvent<DateTimeQuestionAnswered> evnt)
