@@ -4,6 +4,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.FileSystem;
 using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
 using WB.UI.Shared.Web.Membership;
@@ -20,7 +21,8 @@ namespace WB.Tests.Unit.Applications.Designer.TesterApiControllerTests
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory = null,
             IQuestionnaireExportService exportService = null,
             IExpressionProcessorGenerator expressionProcessorGenerator = null,
-            ILogger logger = null)
+            ILogger logger = null,
+            IArchiveUtils archiver = null)
         {
             return new TesterController(userHelper ?? Mock.Of<IMembershipUserService>(),
                 questionnaireHelper ?? Mock.Of<IQuestionnaireHelper>(),
@@ -29,7 +31,7 @@ namespace WB.Tests.Unit.Applications.Designer.TesterApiControllerTests
                 questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),
                 exportService ?? Mock.Of<IQuestionnaireExportService>(),
                 expressionProcessorGenerator ?? Mock.Of<IExpressionProcessorGenerator>(),
-                logger ?? Mock.Of<ILogger>());
+                logger ?? Mock.Of<ILogger>(), archiver ?? Mock.Of<IArchiveUtils>());
         }
     }
 }

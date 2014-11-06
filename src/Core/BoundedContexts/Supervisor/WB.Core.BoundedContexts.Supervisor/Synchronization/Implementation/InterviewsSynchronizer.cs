@@ -20,6 +20,7 @@ using WB.Core.BoundedContexts.Supervisor.Questionnaires;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -56,6 +57,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter;
         private readonly Func<HttpMessageHandler> httpMessageHandler;
         private readonly IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage;
+        private readonly IArchiveUtils archiver;
 
         public InterviewsSynchronizer(
             IAtomFeedReader feedReader,
@@ -73,7 +75,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             IJsonUtils jsonUtils,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter,
             IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter,
-            Func<HttpMessageHandler> httpMessageHandler, IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage)
+            Func<HttpMessageHandler> httpMessageHandler, IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage,
+            IArchiveUtils archiver)
         {
             if (feedReader == null) throw new ArgumentNullException("feedReader");
             if (settings == null) throw new ArgumentNullException("settings");
@@ -88,6 +91,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             if (headquartersPushContext == null) throw new ArgumentNullException("headquartersPushContext");
             if (eventStore == null) throw new ArgumentNullException("eventStore");
             if (jsonUtils == null) throw new ArgumentNullException("jsonUtils");
+            if (archiver == null) throw new ArgumentNullException("archiver");
             if (interviewSummaryRepositoryWriter == null) throw new ArgumentNullException("interviewSummaryRepositoryWriter");
             if (readyToSendInterviewsRepositoryWriter == null) throw new ArgumentNullException("readyToSendInterviewsRepositoryWriter");
             if (httpMessageHandler == null) throw new ArgumentNullException("httpMessageHandler");
@@ -109,6 +113,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.readyToSendInterviewsRepositoryWriter = readyToSendInterviewsRepositoryWriter;
             this.httpMessageHandler = httpMessageHandler;
             this.interviewSynchronizationFileStorage = interviewSynchronizationFileStorage;
+            this.archiver = archiver;
         }
 
         public void PullInterviewsForSupervisors(Guid[] supervisorIds)
@@ -436,10 +441,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             var syncItem = new SyncItem
             {
-                Content = PackageHelper.CompressString(this.jsonUtils.GetItemAsContent(eventsToSend)),
+                Content = archiver.CompressString(this.jsonUtils.GetItemAsContent(eventsToSend)),
                 IsCompressed = true,
                 ItemType = SyncItemType.Questionnare,
-                MetaInfo = PackageHelper.CompressString(this.jsonUtils.GetItemAsContent(metadata)),
+                MetaInfo = archiver.CompressString(this.jsonUtils.GetItemAsContent(metadata)),
                 Id = interviewId
             };
 
