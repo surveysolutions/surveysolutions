@@ -113,7 +113,6 @@ namespace WB.UI.Capi
             bus.RegisterHandler(eventHandler, typeof (MultipleOptionsQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (NumericIntegerQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (NumericRealQuestionAnswered));
-            bus.RegisterHandler(eventHandler, typeof (NumericQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (TextQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (TextListQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (SingleOptionQuestionAnswered));
@@ -150,9 +149,7 @@ namespace WB.UI.Capi
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(TextQuestionAnswered));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(NumericIntegerQuestionAnswered));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(NumericRealQuestionAnswered));
-            bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(NumericQuestionAnswered));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(DateTimeQuestionAnswered));
-
 
             bus.RegisterHandler(answerOptionsForCascadingQuestionsDenormalizer, typeof(AnswersRemoved));
             bus.RegisterHandler(answerOptionsForCascadingQuestionsDenormalizer, typeof(SingleOptionQuestionAnswered));

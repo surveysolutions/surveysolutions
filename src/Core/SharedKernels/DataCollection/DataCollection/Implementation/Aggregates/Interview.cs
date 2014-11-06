@@ -236,16 +236,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ExpressionProcessorStatePrototype.UpdateMediaAnswer(@event.QuestionId, @event.PropagationVector, @event.PictureFileName);
         }
 
-        private void Apply(NumericQuestionAnswered @event)
-        {
-            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
-
-            this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.Answer;
-            this.interviewState.AnsweredQuestions.Add(questionKey);
-
-            this.ExpressionProcessorStatePrototype.UpdateNumericRealAnswer(@event.QuestionId, @event.PropagationVector, (double)@event.Answer);
-        }
-
         internal void Apply(NumericRealQuestionAnswered @event)
         {
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);

@@ -116,7 +116,6 @@
     <Compile Include="Events\Interview\InterviewForTestingCreated.cs" />
     <Compile Include="Events\Interview\MultipleOptionsLinkedQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericIntegerQuestionAnswered.cs" />
-    <Compile Include="Events\Interview\NumericQuestionAnswered.cs" />
     <Compile Include="Events\Interview\QuestionsDisabled.cs" />
     <Compile Include="Events\Interview\QuestionsEnabled.cs" />
     <Compile Include="Events\Interview\RosterRowAdded.cs" />

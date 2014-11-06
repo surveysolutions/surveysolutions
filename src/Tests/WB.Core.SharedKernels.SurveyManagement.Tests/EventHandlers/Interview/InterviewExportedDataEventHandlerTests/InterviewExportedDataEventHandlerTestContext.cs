@@ -2,26 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
-using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -101,7 +91,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
                     new MultipleOptionsQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, new decimal[0]),
                     new SingleOptionQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, 1),
                     new NumericRealQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, 1),
-                    new NumericQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, 1),
                     new NumericIntegerQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, 1),
                     new DateTimeQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, DateTime.Now),
                     new GeoLocationQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, 1,1,1,1, DateTime.Now),

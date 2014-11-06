@@ -24,7 +24,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewSummary, MultipleOptionsQuestionAnswered>,
         IUpdateHandler<InterviewSummary, SingleOptionQuestionAnswered>,
         IUpdateHandler<InterviewSummary, NumericRealQuestionAnswered>,
-        IUpdateHandler<InterviewSummary, NumericQuestionAnswered>,
         IUpdateHandler<InterviewSummary, NumericIntegerQuestionAnswered>,
         IUpdateHandler<InterviewSummary, DateTimeQuestionAnswered>,
         IUpdateHandler<InterviewSummary, GeoLocationQuestionAnswered>,
@@ -187,11 +186,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         }
 
         public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<NumericRealQuestionAnswered> evnt)
-        {
-            return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString(CultureInfo.InvariantCulture), evnt.EventTimeStamp);
-        }
-
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<NumericQuestionAnswered> evnt)
         {
             return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString(CultureInfo.InvariantCulture), evnt.EventTimeStamp);
         }

@@ -34,7 +34,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<MultipleOptionsQuestionAnswered>,
         IEventHandler<SingleOptionQuestionAnswered>,
         IEventHandler<NumericRealQuestionAnswered>,
-        IEventHandler<NumericQuestionAnswered>,
         IEventHandler<NumericIntegerQuestionAnswered>,
         IEventHandler<DateTimeQuestionAnswered>,
         IEventHandler<GeoLocationQuestionAnswered>,
@@ -154,13 +153,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         }
 
         public void Handle(IPublishedEvent<NumericRealQuestionAnswered> evnt)
-        {
-            AddInterviewAction(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.AnswerTime, InterviewHistoricalAction.AnswerSet,
-              evnt.Payload.UserId,
-              CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.Answer), evnt.Payload.PropagationVector));
-        }
-
-        public void Handle(IPublishedEvent<NumericQuestionAnswered> evnt)
         {
             AddInterviewAction(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.AnswerTime, InterviewHistoricalAction.AnswerSet,
               evnt.Payload.UserId,
