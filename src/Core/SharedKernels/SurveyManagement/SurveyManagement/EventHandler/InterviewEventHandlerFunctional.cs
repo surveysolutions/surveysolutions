@@ -32,9 +32,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<ViewWithSequence<InterviewData>, SupervisorAssigned>,
         IUpdateHandler<ViewWithSequence<InterviewData>, InterviewerAssigned>,
         IUpdateHandler<ViewWithSequence<InterviewData>, GroupPropagated>,
-        IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowAdded>,
-        IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowRemoved>,
-        IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowTitleChanged>,
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterInstancesTitleChanged>,
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterInstancesAdded>,
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterInstancesRemoved>,
@@ -420,28 +417,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return currentState;
         }
 
-        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterRowAdded> evnt)
-        {
-            var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(currentState.Document, evnt.Payload.GroupId);
-
-            this.AddLevelToInterview(currentState.Document, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId, evnt.Payload.SortIndex, scopeOfCurrentGroup);
-
-            currentState.Sequence = evnt.EventSequence;
-            return currentState;
-        }
-
-        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterRowRemoved> evnt)
-        {
-            var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(currentState.Document, evnt.Payload.GroupId);
-
-            var newVector = this.CreateNewVector(evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId);
-            var levelKey = CreateLevelIdFromPropagationVector(newVector);
-            this.RemoveLevelFromInterview(currentState.Document, levelKey, new[] { evnt.Payload.GroupId }, scopeOfCurrentGroup.ScopeVector);
-
-            currentState.Sequence = evnt.EventSequence;
-            return currentState;
-        }
-
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterInstancesAdded> evnt)
         {
             foreach (var instance in evnt.Payload.Instances)
@@ -690,25 +665,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<InterviewDeclaredValid> evt)
         {
             return new ViewWithSequence<InterviewData>(this.SetInterviewValidity(currentState.Document, true), evt.EventSequence);
-        }
-
-        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterRowTitleChanged> evnt)
-        {
-            var newVector = this.CreateNewVector(evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId);
-
-            return
-                new ViewWithSequence<InterviewData>(PreformActionOnLevel(currentState.Document, newVector, (level) =>
-                {
-                    if (level.RosterRowTitles.ContainsKey(evnt.Payload.GroupId))
-                    {
-                        level.RosterRowTitles[evnt.Payload.GroupId] = evnt.Payload.Title;
-                    }
-                    else
-                    {
-                        level.RosterRowTitles.Add(evnt.Payload.GroupId, evnt.Payload.Title);
-                    }
-
-                }), evnt.EventSequence);
         }
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterInstancesTitleChanged> evnt)

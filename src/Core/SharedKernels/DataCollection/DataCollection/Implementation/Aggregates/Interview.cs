@@ -407,36 +407,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             //expressionProcessorStatePrototype could also be changed but it's an old code.
         }
 
-        internal void Apply(RosterRowAdded @event)
-        {
-            string rosterGroupKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.GroupId, @event.OuterRosterVector);
-            DistinctDecimalList rosterRowInstances = this.interviewState.RosterGroupInstanceIds.ContainsKey(rosterGroupKey)
-                ? this.interviewState.RosterGroupInstanceIds[rosterGroupKey]
-                : new DistinctDecimalList();
-
-            rosterRowInstances.Add(@event.RosterInstanceId);
-
-            this.interviewState.RosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
-
-            this.ExpressionProcessorStatePrototype.AddRoster(@event.GroupId, @event.OuterRosterVector, @event.RosterInstanceId, @event.SortIndex);
-        }
-
-        private void Apply(RosterRowRemoved @event)
-        {
-            string rosterGroupKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.GroupId, @event.OuterRosterVector);
-
-            var rosterRowInstances = this.interviewState.RosterGroupInstanceIds.ContainsKey(rosterGroupKey)
-                ? this.interviewState.RosterGroupInstanceIds[rosterGroupKey]
-                : new DistinctDecimalList();
-            rosterRowInstances.Remove(@event.RosterInstanceId);
-
-            this.interviewState.RosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
-
-            this.ExpressionProcessorStatePrototype.RemoveRoster(@event.GroupId, @event.OuterRosterVector, @event.RosterInstanceId);
-        }
-
-        private void Apply(RosterRowTitleChanged @event) { }
-
         private void Apply(RosterInstancesTitleChanged @event) { }
 
         internal void Apply(RosterInstancesAdded @event)

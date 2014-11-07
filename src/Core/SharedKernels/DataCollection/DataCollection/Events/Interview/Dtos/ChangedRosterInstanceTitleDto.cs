@@ -1,6 +1,9 @@
+using System.Diagnostics;
+
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
 {
     /// <remarks>Make sure not to reuse this class on read or write side. Use your own copies.</remarks>
+    [DebuggerDisplay("Title = {Title}, RosterInstance = {RosterInstance}")]
     public class ChangedRosterInstanceTitleDto
     {
         public RosterInstance RosterInstance { get; private set; }
