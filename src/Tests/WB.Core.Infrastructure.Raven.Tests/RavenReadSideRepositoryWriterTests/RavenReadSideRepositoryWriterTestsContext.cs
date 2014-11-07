@@ -3,6 +3,7 @@
 using Moq;
 
 using Raven.Client.Document;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide;
@@ -19,7 +20,7 @@ namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideRepositoryWriterTests
             where TEntity : class, IReadSideRepositoryEntity
         {
             return new RavenReadSideRepositoryWriter<TEntity>(
-                ravenStore ?? new DocumentStore());
+                ravenStore ?? new DocumentStore(),  Mock.Of<IFileSystemAccessor>(),"");
         }
     }
 }
