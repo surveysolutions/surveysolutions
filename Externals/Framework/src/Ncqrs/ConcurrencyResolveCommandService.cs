@@ -3,7 +3,7 @@ using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Logging;
 
-namespace Main.Core.Commands
+namespace Ncqrs
 {
     /// <summary>
     /// Repeates command execution until success.

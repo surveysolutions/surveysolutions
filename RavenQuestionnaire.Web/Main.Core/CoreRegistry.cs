@@ -5,6 +5,7 @@ using System.Reflection;
 using Main.Core.Conventions;
 using Main.Core.View;
 using Main.DenormalizerStorage;
+using Ncqrs;
 using Ncqrs.Commanding;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ninject;
