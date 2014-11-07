@@ -7,6 +7,7 @@ using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -117,20 +118,29 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 .ShouldContain(rosterAId, rosterBId);
 
         It should_set_empty_outer_roster_vector_to_all_RosterRowTitleChanged_events = () =>
-            eventContext.GetEvents<RosterRowTitleChanged>()
-                .ShouldEachConformTo(@event => Enumerable.SequenceEqual(@event.OuterRosterVector, emptyRosterVector));
+            eventContext.GetEvents<RosterInstancesTitleChanged>()
+                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.RosterInstance.OuterRosterVector.SequenceEqual(emptyRosterVector)));
 
-        It should_set_title_to__Answer_3__in_all_RosterRowTitleChanged_events_with_roster_instance_id_equals_to_1 = () =>
-            eventContext.GetEvents<RosterRowTitleChanged>().Where(@event => @event.RosterInstanceId == 1).Select(@event => @event.Title)
-                .ShouldEachConformTo(title => title == "Answer 1");
+        It should_set_title_to__Answer_3__in_all_RosterRowTitleChanged_events_with_roster_instance_id_equals_to_1 = () => 
+            eventContext.GetSingleEvent<RosterInstancesTitleChanged>()
+                        .ChangedInstances
+                        .Where(x => x.RosterInstance.RosterInstanceId == 1)
+                        .Select(x => x.Title)
+                        .ShouldContainOnly("Answer 1", "Answer 1");
 
         It should_set_title_to__Answer_3__in_all_RosterRowTitleChanged_events_with_roster_instance_id_equals_to_2 = () =>
-            eventContext.GetEvents<RosterRowTitleChanged>().Where(@event => @event.RosterInstanceId == 2).Select(@event => @event.Title)
-                .ShouldEachConformTo(title => title == "Answer 2");
+            eventContext.GetSingleEvent<RosterInstancesTitleChanged>()
+                        .ChangedInstances
+                        .Where(x => x.RosterInstance.RosterInstanceId == 2)
+                        .Select(x => x.Title)
+                        .ShouldContainOnly("Answer 2", "Answer 2");
 
         It should_set_title_to__Answer_3__in_all_RosterRowTitleChanged_events_with_roster_instance_id_equals_to_3 = () =>
-            eventContext.GetEvents<RosterRowTitleChanged>().Where(@event => @event.RosterInstanceId == 3).Select(@event => @event.Title)
-                .ShouldEachConformTo(title => title == "Answer 3");
+            eventContext.GetSingleEvent<RosterInstancesTitleChanged>()
+                        .ChangedInstances
+                        .Where(x => x.RosterInstance.RosterInstanceId == 3)
+                        .Select(x => x.Title)
+                        .ShouldContainOnly("Answer 3", "Answer 3");
 
         Cleanup stuff = () =>
         {

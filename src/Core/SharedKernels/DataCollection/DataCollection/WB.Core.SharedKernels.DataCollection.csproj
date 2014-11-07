@@ -118,12 +118,9 @@
     <Compile Include="Events\Interview\NumericIntegerQuestionAnswered.cs" />
     <Compile Include="Events\Interview\QuestionsDisabled.cs" />
     <Compile Include="Events\Interview\QuestionsEnabled.cs" />
-    <Compile Include="Events\Interview\RosterRowAdded.cs" />
-    <Compile Include="Events\Interview\RosterRowRemoved.cs" />
     <Compile Include="Events\Interview\RosterInstancesAdded.cs" />
     <Compile Include="Events\Interview\RosterInstancesRemoved.cs" />
     <Compile Include="Events\Interview\RosterInstancesTitleChanged.cs" />
-    <Compile Include="Events\Interview\RosterRowTitleChanged.cs" />
     <Compile Include="Events\Interview\TextListQuestionAnswered.cs" />
     <Compile Include="Events\Questionnaire\PlainQuestionnaireRegistered.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireDeleted.cs" />
