@@ -42,7 +42,7 @@ namespace Main.Core.Tests.Entities
                     Answers = answers,
                     ConditionalDependentGroups = new List<Guid>() { Guid.NewGuid() },
                     ConditionalDependentQuestions = new List<Guid>() { Guid.NewGuid() },
-                    QuestionsWhichCustomValidationDependsOnQuestion = new List<Guid>() { Guid.NewGuid() },
+                    //QuestionsWhichCustomValidationDependsOnQuestion = new List<Guid>() { Guid.NewGuid() },
                     QuestionIdsInvolvedInCustomEnablementConditionOfQuestion = new List<Guid>() { Guid.NewGuid() },
                     QuestionIdsInvolvedInCustomValidationOfQuestion = new List<Guid>() { Guid.NewGuid() }
                 };

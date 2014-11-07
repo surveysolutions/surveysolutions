@@ -28,7 +28,7 @@ namespace Main.Core.Entities.SubEntities
         List<Guid> ConditionalDependentQuestions { get; set; }
         List<Guid> ConditionalDependentGroups { get; set; }
 
-        List<Guid> QuestionsWhichCustomValidationDependsOnQuestion { get; set; }
+        //List<Guid> QuestionsWhichCustomValidationDependsOnQuestion { get; set; }
 
         List<Guid> QuestionIdsInvolvedInCustomEnablementConditionOfQuestion { get; set; }
 

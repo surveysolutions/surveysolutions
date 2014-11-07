@@ -47,7 +47,7 @@ namespace Main.Core.Entities.SubEntities
 
         public List<Guid> ConditionalDependentQuestions { get; set; }
         public List<Guid> ConditionalDependentGroups { get; set; }
-        public List<Guid> QuestionsWhichCustomValidationDependsOnQuestion { get; set; }
+        //public List<Guid> QuestionsWhichCustomValidationDependsOnQuestion { get; set; }
 
         public List<Guid> QuestionIdsInvolvedInCustomEnablementConditionOfQuestion
         {
@@ -150,11 +150,11 @@ namespace Main.Core.Entities.SubEntities
                 question.ConditionalDependentQuestions = new List<Guid>(this.ConditionalDependentQuestions);
             }
 
-            if (this.QuestionsWhichCustomValidationDependsOnQuestion != null)
-            {
-                question.QuestionsWhichCustomValidationDependsOnQuestion =
-                    new List<Guid>(this.QuestionsWhichCustomValidationDependsOnQuestion);
-            }
+            //if (this.QuestionsWhichCustomValidationDependsOnQuestion != null)
+            //{
+            //    //question.QuestionsWhichCustomValidationDependsOnQuestion =
+            //    //    new List<Guid>(this.QuestionsWhichCustomValidationDependsOnQuestion);
+            //}
 
             if (this.QuestionIdsInvolvedInCustomEnablementConditionOfQuestion != null)
             {
