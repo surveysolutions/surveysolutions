@@ -28,8 +28,6 @@ namespace Main.Core.Entities.SubEntities
         List<Guid> ConditionalDependentQuestions { get; set; }
         List<Guid> ConditionalDependentGroups { get; set; }
 
-        List<Guid> QuestionIdsInvolvedInCustomValidationOfQuestion { get; set; }
-
         Guid? LinkedToQuestionId { get; set; }
 
         Guid? CascadeFromQuestionId { get; set; }

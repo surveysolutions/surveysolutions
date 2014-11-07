@@ -152,8 +152,6 @@ namespace Main.Core.Entities.SubEntities
 
             if (this.QuestionIdsInvolvedInCustomValidationOfQuestion != null)
             {
-                question.QuestionIdsInvolvedInCustomValidationOfQuestion =
-                    new List<Guid>(this.QuestionIdsInvolvedInCustomValidationOfQuestion);
             }
 
             // handle reference part
