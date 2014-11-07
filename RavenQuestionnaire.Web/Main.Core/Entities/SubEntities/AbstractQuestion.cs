@@ -150,18 +150,6 @@ namespace Main.Core.Entities.SubEntities
                 question.ConditionalDependentQuestions = new List<Guid>(this.ConditionalDependentQuestions);
             }
 
-            //if (this.QuestionsWhichCustomValidationDependsOnQuestion != null)
-            //{
-            //    //question.QuestionsWhichCustomValidationDependsOnQuestion =
-            //    //    new List<Guid>(this.QuestionsWhichCustomValidationDependsOnQuestion);
-            //}
-
-            if (this.QuestionIdsInvolvedInCustomEnablementConditionOfQuestion != null)
-            {
-                question.QuestionIdsInvolvedInCustomEnablementConditionOfQuestion =
-                    new List<Guid>(this.QuestionIdsInvolvedInCustomEnablementConditionOfQuestion);
-            }
-
             if (this.QuestionIdsInvolvedInCustomValidationOfQuestion != null)
             {
                 question.QuestionIdsInvolvedInCustomValidationOfQuestion =
