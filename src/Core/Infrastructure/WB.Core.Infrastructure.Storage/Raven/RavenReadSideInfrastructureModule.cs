@@ -12,11 +12,13 @@ namespace WB.Core.Infrastructure.Storage.Raven
     public class RavenReadSideInfrastructureModule : RavenInfrastructureModule
     {
         private readonly Assembly[] assembliesWithIndexes;
+        private readonly string basePath;
 
-        public RavenReadSideInfrastructureModule(RavenConnectionSettings settings, params Assembly[] assembliesWithIndexes)
+        public RavenReadSideInfrastructureModule(RavenConnectionSettings settings, string basePath, params Assembly[] assembliesWithIndexes)
             : base(settings)
         {
             this.assembliesWithIndexes = assembliesWithIndexes;
+            this.basePath = basePath;
         }
 
         public override void Load()
@@ -29,7 +31,7 @@ namespace WB.Core.Infrastructure.Storage.Raven
             this.Bind<IReadSideAdministrationService>().To<RavenReadSideService>().InSingletonScope();
 
             // each repository writer should exist in one instance because it might use caching
-            this.Kernel.Bind(typeof(RavenReadSideRepositoryWriter<>)).ToSelf().InSingletonScope();
+            this.Kernel.Bind(typeof(RavenReadSideRepositoryWriter<>)).ToSelf().InSingletonScope().WithConstructorArgument("basePath", basePath);
 
             this.Kernel.Bind(typeof(IReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);
             this.Kernel.Bind(typeof(IQueryableReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);
