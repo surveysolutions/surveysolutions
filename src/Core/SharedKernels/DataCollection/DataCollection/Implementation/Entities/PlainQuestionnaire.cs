@@ -739,13 +739,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             var questionWarmingUpMethods = new Action<Guid>[]
             {
-                questionId =>
-                {
-                    IQuestion question = GetQuestionOrThrow(questions, questionId);
-                    question.QuestionIdsInvolvedInCustomValidationOfQuestion =
-                        GetQuestionsInvolvedInExpression(questions, question.PublicKey, question.ValidationExpression).ToList();
-                },
-
                 questionId => SetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questions, groups, questionId)
             };
 
@@ -828,18 +821,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private static IQuestion GetQuestionByStataCaption(Dictionary<Guid, IQuestion> questions, string identifier)
         {
             return questions.Values.FirstOrDefault(q => q.StataExportCaption == identifier);
-        }
-
-        private static bool DoesQuestionCustomValidationDependOnSpecifiedQuestion(Dictionary<Guid, IQuestion> questions, Guid questionId,
-            Guid specifiedQuestionId)
-        {
-            var question = GetQuestion(questions, questionId);
-
-            IEnumerable<Guid> involvedQuestions = question.QuestionIdsInvolvedInCustomValidationOfQuestion;
-
-            bool isSpecifiedQuestionInvolved = involvedQuestions.Contains(specifiedQuestionId);
-
-            return isSpecifiedQuestionInvolved;
         }
 
         private static bool DoesGroupCustomEnablementDependOnSpecifiedQuestion(Dictionary<Guid, IGroup> groups, Guid groupId,
