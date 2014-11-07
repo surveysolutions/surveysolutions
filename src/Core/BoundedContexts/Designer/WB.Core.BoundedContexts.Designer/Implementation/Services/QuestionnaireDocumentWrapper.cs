@@ -79,8 +79,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 questionId =>
                 {
                     IQuestion question = GetQuestionOrThrow(questions, questionId);
-                    question.QuestionIdsInvolvedInCustomValidationOfQuestion =
-                        GetQuestionsInvolvedInExpression(questions, question.PublicKey, question.ValidationExpression).ToList();
                 },
 
                 questionId => SetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questions, groups, questionId)
