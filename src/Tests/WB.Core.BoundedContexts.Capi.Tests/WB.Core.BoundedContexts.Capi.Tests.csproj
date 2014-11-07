@@ -177,6 +177,7 @@
     <Compile Include="Views\InterviewViewModelTests\when_setting_answer_to_roster_title_question_of_2_rosters_in_one_scope_with_shared_title_question.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
