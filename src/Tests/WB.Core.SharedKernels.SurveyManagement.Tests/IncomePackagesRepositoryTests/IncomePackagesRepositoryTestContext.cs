@@ -26,13 +26,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.IncomePackagesRepositoryT
 
         protected static IncomePackagesRepository CreateIncomePackagesRepository(IJsonUtils jsonUtils = null,
             IFileSystemAccessor fileSystemAccessor = null, ICommandService commandService = null, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryStorage=null,
-            IStreamableEventStore eventStore = null)
+            IStreamableEventStore eventStore = null, IArchiveUtils archiver = null)
         {
             return new IncomePackagesRepository(logger: Mock.Of<ILogger>(),
                 syncSettings: new SyncSettings(true, appDataDirectory, incomingCapiPackagesDirectoryName, incomingCapiPackagesWithErrorsDirectoryName, incomingCapiPackageFileNameExtension),
                 commandService: commandService ?? Mock.Of<ICommandService>(),
                 fileSystemAccessor: fileSystemAccessor ?? CreateDefaultFileSystemAccessorMock().Object,
                 jsonUtils: jsonUtils ?? Mock.Of<IJsonUtils>(),
+                archiver: archiver ?? Mock.Of<IArchiveUtils>(),
                 interviewSummaryRepositoryWriter: interviewSummaryStorage ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(), overrideReceivedEventTimeStamp: false, origin: "capi-sync")
             {
                 EventStore = eventStore ?? Mock.Of<IStreamableEventStore>(),

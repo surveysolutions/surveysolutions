@@ -2,7 +2,7 @@
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
-using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
@@ -29,7 +29,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.IncomePackagesRepositoryT
 
             fileSystemAccessorMock = CreateDefaultFileSystemAccessorMock();
 
-            incomePackagesRepository = CreateIncomePackagesRepository(jsonMock.Object, fileSystemAccessorMock.Object, commandServiceMock.Object);
+            incomePackagesRepository = CreateIncomePackagesRepository(jsonMock.Object, fileSystemAccessorMock.Object,
+                commandServiceMock.Object, archiver: new ZipArchiveUtils(Mock.Of<IFileSystemAccessor>()));
         };
 
         Because of = () =>
