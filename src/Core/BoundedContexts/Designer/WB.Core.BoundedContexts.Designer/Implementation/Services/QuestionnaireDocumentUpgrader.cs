@@ -56,11 +56,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             {
                 question.ConditionalDependentQuestions = null;
                 question.ConditionalDependentGroups = null;
-                //question.QuestionsWhichCustomValidationDependsOnQuestion = null;
                 question.QuestionIdsInvolvedInCustomEnablementConditionOfQuestion = null;
                 question.QuestionIdsInvolvedInCustomValidationOfQuestion = null;
                 question.QuestionsInvolvedInCustomEnablementConditionOfQuestion = null;
-                question.QuestionsInvolvedInCustomValidationOfQuestion = null;
             }
 
             return document;
