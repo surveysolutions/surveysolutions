@@ -4,6 +4,7 @@ using Main.Core.Documents;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -31,6 +32,34 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
                     new DataCollection.Events.Interview.Dtos.Identity(id ?? Guid.NewGuid(), rosterVector ?? new decimal[0]), 
                 };
                 return new QuestionsDisabled(identities);
+            }
+
+            public static RosterInstancesAdded RosterInstancesAdded(Guid? rosterGroupId = null, 
+                decimal[] rosterVector = null, 
+                decimal? rosterInstanceId = null, 
+                int? sortIndex = null)
+            {
+                return new RosterInstancesAdded(new[]
+                {
+                    new AddedRosterInstance(rosterGroupId ?? Guid.NewGuid(), rosterVector ?? new decimal[0], rosterInstanceId ?? 0.0m, sortIndex)
+                });
+            }
+
+            public static RosterInstancesRemoved RosterInstancesRemoved(Guid? rosterGroupId = null)
+            {
+                return new RosterInstancesRemoved(new[]
+                {
+                    new RosterInstance(rosterGroupId ?? Guid.NewGuid(), new decimal[0], 0.0m)
+                });
+            }
+
+            public static RosterInstancesTitleChanged RosterInstancesTitleChanged(Guid? rosterId = null)
+            {
+                return new RosterInstancesTitleChanged(
+                    new[]
+                {
+                    new ChangedRosterInstanceTitleDto(new RosterInstance(rosterId ?? Guid.NewGuid(), new decimal[0], 0.0m), "title")
+                });
             }
         }
 

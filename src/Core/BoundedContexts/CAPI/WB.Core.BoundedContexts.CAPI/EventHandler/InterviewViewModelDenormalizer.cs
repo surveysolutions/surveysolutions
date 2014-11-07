@@ -16,9 +16,6 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
     public class InterviewViewModelDenormalizer :
         IEventHandler<InterviewSynchronized>,
         IEventHandler<GroupPropagated>,
-        IEventHandler<RosterRowAdded>,
-        IEventHandler<RosterRowRemoved>,
-        IEventHandler<RosterRowTitleChanged>,
         IEventHandler<RosterInstancesTitleChanged>,
         IEventHandler<RosterInstancesAdded>,
         IEventHandler<RosterInstancesRemoved>,
@@ -299,25 +296,6 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
             var doc = this.GetStoredViewModel(evnt.EventSourceId);
             doc.UpdatePropagateGroupsByTemplate(evnt.Payload.GroupId, evnt.Payload.OuterScopePropagationVector,
                                                 evnt.Payload.Count);
-        }
-
-        public void Handle(IPublishedEvent<RosterRowAdded> evnt)
-        {
-            var doc = this.GetStoredViewModel(evnt.EventSourceId);
-            doc.AddRosterScreen(evnt.Payload.GroupId, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId, evnt.Payload.SortIndex);
-        }
-
-        public void Handle(IPublishedEvent<RosterRowRemoved> evnt)
-        {
-            var doc = this.GetStoredViewModel(evnt.EventSourceId);
-            doc.RemovePropagatedScreen(evnt.Payload.GroupId, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId);
-        }
-
-        public void Handle(IPublishedEvent<RosterRowTitleChanged> evnt)
-        {
-            var doc = this.GetStoredViewModel(evnt.EventSourceId);
-            
-            doc.UpdateRosterRowTitle(evnt.Payload.GroupId, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId, evnt.Payload.Title);
         }
 
         public void Handle(IPublishedEvent<RosterInstancesTitleChanged> evnt)

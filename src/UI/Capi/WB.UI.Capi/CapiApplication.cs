@@ -128,8 +128,6 @@ namespace WB.UI.Capi
             bus.RegisterHandler(eventHandler, typeof(InterviewCompleted));
             bus.RegisterHandler(eventHandler, typeof(InterviewRestarted));
             bus.RegisterHandler(eventHandler, typeof(GroupPropagated));
-            bus.RegisterHandler(eventHandler, typeof(RosterRowAdded));
-            bus.RegisterHandler(eventHandler, typeof(RosterRowRemoved));
             bus.RegisterHandler(eventHandler, typeof(RosterInstancesAdded));
             bus.RegisterHandler(eventHandler, typeof(RosterInstancesRemoved));
             bus.RegisterHandler(eventHandler, typeof(SynchronizationMetadataApplied));
@@ -137,7 +135,6 @@ namespace WB.UI.Capi
             bus.RegisterHandler(eventHandler, typeof(AnswersRemoved));
             bus.RegisterHandler(eventHandler, typeof(SingleOptionLinkedQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(MultipleOptionsLinkedQuestionAnswered));
-            bus.RegisterHandler(eventHandler, typeof(RosterRowTitleChanged));
             bus.RegisterHandler(eventHandler, typeof(RosterInstancesTitleChanged));
             bus.RegisterHandler(eventHandler, typeof(QRBarcodeQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(PictureQuestionAnswered));

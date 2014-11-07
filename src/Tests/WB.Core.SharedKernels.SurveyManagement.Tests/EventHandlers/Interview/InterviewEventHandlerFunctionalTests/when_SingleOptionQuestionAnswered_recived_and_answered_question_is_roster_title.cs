@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
 
             interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional(questionnaireRosterStructure);
             viewState = interviewEventHandlerFunctional.Update(viewState,
-                CreatePublishableEvent(new RosterRowAdded(rosterGroupId, new decimal[0], 0, null)));
+                CreatePublishableEvent(Create.RosterInstancesAdded(rosterGroupId)));
         };
 
         Because of = () =>

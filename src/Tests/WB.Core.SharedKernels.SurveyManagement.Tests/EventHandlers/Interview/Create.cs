@@ -4,6 +4,7 @@ using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -11,6 +12,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview
 {
     internal static class Create
     {
+        public static RosterInstancesAdded RosterInstancesAdded(Guid? rosterGroupId = null)
+        {
+            return new RosterInstancesAdded(new[]
+                {
+                    new AddedRosterInstance(rosterGroupId ?? Guid.NewGuid(), new decimal[0], 0.0m, null)
+                });
+        }
+
+        public static RosterInstancesRemoved RosterInstancesRemoved(Guid? rosterGroupId = null)
+        {
+            return new RosterInstancesRemoved(new[]
+                {
+                    new RosterInstance(rosterGroupId ?? Guid.NewGuid(), new decimal[0], 0.0m)
+                });
+        }
+
+        public static RosterInstancesTitleChanged RosterInstancesTitleChanged(Guid? rosterId = null, string rosterTitle = null)
+        {
+            return new RosterInstancesTitleChanged(
+                new[]
+                {
+                    new ChangedRosterInstanceTitleDto(new RosterInstance(rosterId ?? Guid.NewGuid(), new decimal[0], 0.0m), rosterTitle ?? "title")
+                });
+        }
+
         private static IPublishedEvent<T> ToPublishedEvent<T>(T @event)
             where T : class
         {

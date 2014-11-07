@@ -43,12 +43,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             interview = CreateInterview(questionnaireId: questionnaireId);
 
             interview.Apply(new TextListQuestionAnswered(userId, textListQuestionId, new decimal[] { }, DateTime.Now, previousAnswer));
-            interview.Apply(new RosterRowAdded(rosterAId, emptyRosterVector, 1, sortIndex: null));
-            interview.Apply(new RosterRowAdded(rosterAId, emptyRosterVector, 2, sortIndex: null));
-            interview.Apply(new RosterRowAdded(rosterAId, emptyRosterVector, 3, sortIndex: null));
-            interview.Apply(new RosterRowAdded(rosterBId, emptyRosterVector, 1, sortIndex: null));
-            interview.Apply(new RosterRowAdded(rosterBId, emptyRosterVector, 2, sortIndex: null));
-            interview.Apply(new RosterRowAdded(rosterBId, emptyRosterVector, 3, sortIndex: null));
+            interview.Apply(Create.Events.RosterInstancesAdded(rosterAId, emptyRosterVector, 1));
+            interview.Apply(Create.Events.RosterInstancesAdded(rosterAId, emptyRosterVector, 2));
+            interview.Apply(Create.Events.RosterInstancesAdded(rosterAId, emptyRosterVector, 3));
+            interview.Apply(Create.Events.RosterInstancesAdded(rosterBId, emptyRosterVector, 1));
+            interview.Apply(Create.Events.RosterInstancesAdded(rosterBId, emptyRosterVector, 2));
+            interview.Apply(Create.Events.RosterInstancesAdded(rosterBId, emptyRosterVector, 3));
 
             eventContext = new EventContext();
         };
@@ -66,10 +66,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
            eventContext.ShouldContainEvent<TextListQuestionAnswered>();
 
         It should_raise_0_RosterRowAdded_events = () =>
-            eventContext.ShouldContainEvents<RosterRowAdded>(count: 0);
+            eventContext.ShouldContainEvents<RosterInstancesAdded>(count: 0);
 
         It should_raise_0_any_RosterRowRemoved_events = () =>
-            eventContext.ShouldContainEvents<RosterRowRemoved>(count: 0);
+            eventContext.ShouldContainEvents<RosterInstancesAdded>(count: 0);
 
         It should_raise_1_RosterRowsTitleChanged_events = () =>
             eventContext.ShouldContainEvents<RosterInstancesTitleChanged>(count: 1);
@@ -91,19 +91,29 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 .ShouldContain(rosterAId, rosterBId);
 
         It should_set_empty_outer_roster_vector_to_all_RosterRowTitleChanged_events = () =>
-            eventContext.GetEvents<RosterRowTitleChanged>()
-                .ShouldEachConformTo(@event => Enumerable.SequenceEqual(@event.OuterRosterVector, emptyRosterVector));
+            eventContext.GetEvents<RosterInstancesTitleChanged>()
+                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.RosterInstance.OuterRosterVector.SequenceEqual(emptyRosterVector)));
 
         It should_set_title_to__Answer_1_New__in_all_RosterRowTitleChanged_events_with_roster_instance_id_equals_to_1 = () =>
-            eventContext.GetEvents<RosterRowTitleChanged>().Where(@event => @event.RosterInstanceId == 1).Select(@event => @event.Title)
-                .ShouldEachConformTo(title => title == "Answer 1 !New");
-        
+            eventContext.GetSingleEvent<RosterInstancesTitleChanged>()
+                        .ChangedInstances
+                        .Where(x => x.RosterInstance.RosterInstanceId == 1)
+                        .Select(x => x.Title)
+                        .ShouldContainOnly("Answer 1 !New", "Answer 1 !New");
+
         It should_set_title_to__Answer_2_New__in_all_RosterRowTitleChanged_events_with_roster_instance_id_equals_to_2 = () =>
-            eventContext.GetEvents<RosterRowTitleChanged>().Where(@event => @event.RosterInstanceId == 2).Select(@event => @event.Title)
-                .ShouldEachConformTo(title => title == "Answer 2 !New");
+            eventContext.GetSingleEvent<RosterInstancesTitleChanged>()
+                        .ChangedInstances
+                        .Where(x => x.RosterInstance.RosterInstanceId == 2)
+                        .Select(x => x.Title)
+                        .ShouldContainOnly("Answer 2 !New", "Answer 2 !New");
+
         It should_set_title_to__Answer_3_New__in_all_RosterRowTitleChanged_events_with_roster_instance_id_equals_to_3 = () =>
-            eventContext.GetEvents<RosterRowTitleChanged>().Where(@event => @event.RosterInstanceId == 3).Select(@event => @event.Title)
-                .ShouldEachConformTo(title => title == "Answer 3 !New");
+            eventContext.GetSingleEvent<RosterInstancesTitleChanged>()
+                        .ChangedInstances
+                        .Where(x => x.RosterInstance.RosterInstanceId == 3)
+                        .Select(x => x.Title)
+                        .ShouldContainOnly("Answer 3 !New", "Answer 3 !New");
 
         Cleanup stuff = () =>
         {

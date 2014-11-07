@@ -134,65 +134,6 @@ namespace WB.Tools.EventsConverter
             CommittedEvent tmpEvent = null;
             foreach (var committedEvent in eventsFromSingleCommit)
             {
-                var rosterAdded = committedEvent.Payload as RosterRowAdded;
-                if (rosterAdded != null)
-                {
-                    if (currentFlushGroup != 8)
-                    {
-                        sequence = FlushCompactEvents(eventsFromSingleCommit, tmpEvent, sequence, rostersAdded, streamToSave, rostersRemoved, answersValid, answersInvalid, questionsEnabled, questionsDisabled, groupsEnabled, groupsDisabled, answersRemoved);
-
-                        answersValid = new List<Identity>();
-                        answersInvalid = new List<Identity>();
-                        questionsEnabled = new List<Identity>();
-                        questionsDisabled = new List<Identity>();
-                        groupsEnabled = new List<Identity>();
-                        groupsDisabled = new List<Identity>();
-                        answersRemoved = new List<Identity>();
-                        rostersAdded = new List<AddedRosterInstance>();
-                        rostersRemoved = new List<RosterInstance>();
-                    }
-
-                    currentFlushGroup = 8;
-                    
-                    rostersAdded.Add(new AddedRosterInstance(rosterAdded.GroupId, rosterAdded.OuterRosterVector,
-                            rosterAdded.RosterInstanceId, rosterAdded.SortIndex));
-                    tmpEvent = committedEvent;
-                        continue;
-                    
-                }
-
-                var rosterRemoved = committedEvent.Payload as RosterRowRemoved;
-                if (rosterRemoved != null)
-                {
-                    if (currentFlushGroup != 9)
-                    {
-                        sequence = FlushCompactEvents(eventsFromSingleCommit, tmpEvent, sequence, rostersAdded, streamToSave, rostersRemoved, answersValid, answersInvalid, questionsEnabled, questionsDisabled, groupsEnabled, groupsDisabled, answersRemoved);
-
-                        answersValid = new List<Identity>();
-                        answersInvalid = new List<Identity>();
-                        questionsEnabled = new List<Identity>();
-                        questionsDisabled = new List<Identity>();
-                        groupsEnabled = new List<Identity>();
-                        groupsDisabled = new List<Identity>();
-                        answersRemoved = new List<Identity>();
-                        rostersAdded = new List<AddedRosterInstance>();
-                        rostersRemoved = new List<RosterInstance>();
-                    }
-
-                    currentFlushGroup = 9;
-
-
-                    
-                    rostersRemoved.Add(new RosterInstance(rosterRemoved.GroupId, rosterRemoved.OuterRosterVector,
-                            rosterRemoved.RosterInstanceId));
-                    tmpEvent = committedEvent;
-                        continue;
-                    
-                }
-
-
-                sequence = FlushCompactEvents(eventsFromSingleCommit,tmpEvent, sequence, rostersAdded, streamToSave, rostersRemoved, answersValid, answersInvalid, questionsEnabled, questionsDisabled, groupsEnabled, groupsDisabled, answersRemoved);
-
                 streamToSave.Append(new UncommittedEvent(committedEvent.EventIdentifier, committedEvent.EventSourceId, sequence + 1, 1,
                     committedEvent.EventTimeStamp, committedEvent.Payload, committedEvent.EventVersion));
                 sequence++;
@@ -209,26 +150,7 @@ namespace WB.Tools.EventsConverter
                 tmpEvent = null;
             }
 
-            sequence = FlushCompactEvents(eventsFromSingleCommit,tmpEvent, sequence, rostersAdded, streamToSave, rostersRemoved, answersValid, answersInvalid, questionsEnabled, questionsDisabled, groupsEnabled, groupsDisabled, answersRemoved);
-
             eventStoreTarget.Store(streamToSave);
-            return sequence;
-        }
-
-        private static long FlushCompactEvents(IEnumerable<CommittedEvent> eventsFromSingleCommit,CommittedEvent tmpEvent, long sequence, List<AddedRosterInstance> rostersAdded,
-            UncommittedEventStream streamToSave, List<RosterInstance> rostersRemoved, List<Identity> answersValid, List<Identity> answersInvalid, List<Identity> questionsEnabled,
-            List<Identity> questionsDisabled, List<Identity> groupsEnabled, List<Identity> groupsDisabled, List<Identity> answersRemoved)
-        {
-            if (rostersAdded.Any())
-            {
-                sequence = AddOrIgnoreAndReturnNewSequence<RosterInstancesAdded, RosterRowAdded>(streamToSave, eventsFromSingleCommit,tmpEvent,
-                    () => new RosterInstancesAdded(rostersAdded.ToArray()), sequence);
-            }
-            if (rostersRemoved.Any())
-            {
-                sequence = AddOrIgnoreAndReturnNewSequence<RosterInstancesRemoved, RosterRowRemoved>(streamToSave, eventsFromSingleCommit, tmpEvent,
-                    () => new RosterInstancesRemoved(rostersRemoved.ToArray()), sequence);
-            }
             return sequence;
         }
 
@@ -241,13 +163,6 @@ namespace WB.Tools.EventsConverter
 
         private static long AddOrIgnoreAndReturnNewSequence<T, TBase>(UncommittedEventStream stream, IEnumerable<CommittedEvent> eventsFromSingleCommit, CommittedEvent baseEvent, Func<T> creator, long sequence) where T : class
         {
-        /*    var baseEvent = eventsFromSingleCommit.FirstOrDefault(evt => evt.Payload is TBase);
-            if (baseEvent == null)
-                return sequence;*/
-        /*    var eventFromStream = stream.FirstOrDefault(evt => evt.Payload is T);
-            if (eventFromStream != null)
-                return sequence;*/
-
             var newSequence = sequence + 1;
 
             var eventFromStream = new UncommittedEvent(baseEvent.EventIdentifier, baseEvent.EventSourceId, newSequence, 1,

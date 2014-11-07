@@ -1,8 +1,10 @@
 using System;
+using System.Diagnostics;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
 {
     /// <remarks>Make sure not to reuse this class on read or write side. Use your own copies.</remarks>
+    [DebuggerDisplay("GroupId = {GroupId}, RosterInstanceId = {RosterInstanceId}, OuterRosterVector = {OuterRosterVector}")]
     public class RosterInstance
     {
         public Guid GroupId { get; private set; }
