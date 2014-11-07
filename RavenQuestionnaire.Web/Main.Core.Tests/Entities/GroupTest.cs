@@ -27,7 +27,6 @@ namespace Main.Core.Tests.Entities
                 IsRoster = true,
                 Propagated = Propagate.AutoPropagated,
                 PublicKey = Guid.NewGuid(),
-                QuestionIdsInvolvedInCustomEnablementConditionOfGroup = new List<Guid>() { Guid.NewGuid() },
                 RosterFixedTitles = new[] { "t1", "t2" },
                 RosterTitleQuestionId=Guid.NewGuid(),
                 RosterSizeSource=RosterSizeSourceType.Question,

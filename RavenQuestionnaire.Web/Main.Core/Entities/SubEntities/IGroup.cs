@@ -24,10 +24,5 @@ namespace Main.Core.Entities.SubEntities
         string[] RosterFixedTitles { get; }
 
         Guid? RosterTitleQuestionId { get; }
-
-        List<Guid> QuestionIdsInvolvedInCustomEnablementConditionOfGroup { get; set; }
-        
-        [Obsolete("please use QuestionIdsInvolvedInCustomEnablementConditionOfGroup instead")]
-        List<QuestionIdAndVariableName> QuestionsInvolvedInCustomEnablementConditionOfGroup { get; set; }
     }
 }
