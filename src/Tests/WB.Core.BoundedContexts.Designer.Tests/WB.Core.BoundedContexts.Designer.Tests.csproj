@@ -633,7 +633,6 @@
     <Compile Include="QuestionnaireDenormalizerTests\when_updating_question_by_id_and_there_are_3_questions_with_same_id.cs" />
     <Compile Include="QuestionnaireDocumentExtensions.cs" />
     <Compile Include="QuestionnaireDocumentUpgraderTests\QuestionnaireDocumentUpgraderTestsContext.cs" />
-    <Compile Include="QuestionnaireDocumentUpgraderTests\when_cleaning_expression_caches_and_initial_document_has_2_questions_each_with_filled_caches.cs" />
     <Compile Include="QuestionnaireDocumentUpgraderTests\when_translating_propagating_properties_to_roster_properties_and_propagating_question_references_3_groups_by_3_triggers___.cs" />
     <Compile Include="QuestionnaireDocumentUpgraderTests\when_translating_propagating_properties_to_roster_properties_and_questionnaire_has_2_rosters_and_1_head_question.cs" />
     <Compile Include="QuestionnaireDocumentUpgraderTests\when_translating_propagating_properties_to_roster_properties_and_questionnaire_has_2_propagating_questions.cs" />

@@ -747,7 +747,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 },
 
                 questionId => SetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questions, questionId),
-                questionId => SetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(questions, questionId),
+                //questionId => SetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(questions, questionId),
                 questionId => SetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questions, questionId),
                 questionId => SetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questions, groups, questionId)
             };
@@ -794,18 +794,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 GetQuestionsInvolvedInExpression(questions, group.PublicKey, group.ConditionExpression).ToList();
         }
 
-        private static void SetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(Dictionary<Guid, IQuestion> questions, Guid questionId)
-        {
-            var targetQuestion = GetQuestion(questions, questionId);
-            targetQuestion.QuestionsWhichCustomValidationDependsOnQuestion = Enumerable.ToList(
-                from question in questions.Values
-                where
-                    DoesQuestionCustomValidationDependOnSpecifiedQuestion(questions, question.PublicKey,
-                        specifiedQuestionId: questionId)
-                        && questionId != question.PublicKey
-                select question.PublicKey
-                );
-        }
+        //private static void SetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(Dictionary<Guid, IQuestion> questions, Guid questionId)
+        //{
+        //    var targetQuestion = GetQuestion(questions, questionId);
+        //    targetQuestion.QuestionsWhichCustomValidationDependsOnQuestion = Enumerable.ToList(
+        //        from question in questions.Values
+        //        where
+        //            DoesQuestionCustomValidationDependOnSpecifiedQuestion(questions, question.PublicKey,
+        //                specifiedQuestionId: questionId)
+        //                && questionId != question.PublicKey
+        //        select question.PublicKey
+        //        );
+        //}
 
         private static void SetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Dictionary<Guid, IQuestion> questions,
             Guid questionId)
