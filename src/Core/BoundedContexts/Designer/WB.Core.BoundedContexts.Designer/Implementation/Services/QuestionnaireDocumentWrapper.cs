@@ -74,38 +74,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     question => question.PublicKey,
                     question => question);
 
-            var questionWarmingUpMethods = new Action<Guid>[]
-            {
-                questionId =>
-                {
-                    IQuestion question = GetQuestionOrThrow(questions, questionId);
-                },
-
-                questionId => SetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questions, groups, questionId)
-            };
-
-            foreach (IGroup @group in groups.Values)
-            {
-                try
-                {
-                    SetQuestionsInvolvedInCustomEnablementConditionOfGroup(questions, groups, @group.PublicKey);
-                }
-                catch { }
-            }
-
-            foreach (Action<Guid> method in questionWarmingUpMethods)
-            {
-                foreach (IQuestion question in questions.Values)
-                {
-
-                    try
-                    {
-                        method.Invoke(question.PublicKey);
-                    }
-                    catch { }
-                }
-            }
-
             document.IsCacheWarmed = true;
 
             this.innerDocument = document;
@@ -651,25 +619,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         #region warmup caches
 
-        private static void SetQuestionsInvolvedInCustomEnablementConditionOfGroup(Dictionary<Guid, IQuestion> questions,
-            Dictionary<Guid, IGroup> groups, Guid questionId)
-        {
-            IGroup group = GetGroup(groups, questionId);
-            group.QuestionIdsInvolvedInCustomEnablementConditionOfGroup =
-                GetQuestionsInvolvedInExpression(questions, group.PublicKey, group.ConditionExpression).ToList();
-        }
-
-        private static void SetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Dictionary<Guid, IQuestion> questions,
-            Dictionary<Guid, IGroup> groups, Guid questionId)
-        {
-            var targetQuestion = GetQuestion(questions, questionId);
-            targetQuestion.ConditionalDependentGroups = Enumerable.ToList(
-                from @group in groups.Values
-                where DoesGroupCustomEnablementDependOnSpecifiedQuestion(groups, @group.PublicKey, specifiedQuestionId: questionId)
-                select @group.PublicKey
-                );
-        }
-
         private static IEnumerable<Guid> GetQuestionsInvolvedInExpression(Dictionary<Guid, IQuestion> questions, Guid contextQuestionId,
             string expression)
         {
@@ -703,18 +652,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static IQuestion GetQuestionByStataCaption(Dictionary<Guid, IQuestion> questions, string identifier)
         {
             return questions.Values.FirstOrDefault(q => q.StataExportCaption == identifier);
-        }
-
-        private static bool DoesGroupCustomEnablementDependOnSpecifiedQuestion(Dictionary<Guid, IGroup> groups, Guid groupId,
-            Guid specifiedQuestionId)
-        {
-            var group = GetGroup(groups, groupId);
-
-            IEnumerable<Guid> involvedQuestions = group.QuestionIdsInvolvedInCustomEnablementConditionOfGroup;
-
-            bool isSpecifiedQuestionInvolved = involvedQuestions.Contains(specifiedQuestionId);
-
-            return isSpecifiedQuestionInvolved;
         }
 
         #endregion
