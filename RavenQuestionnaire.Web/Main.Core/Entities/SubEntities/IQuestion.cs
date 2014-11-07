@@ -40,8 +40,5 @@ namespace Main.Core.Entities.SubEntities
 
         void AddAnswer(Answer answer);
         IEnumerable<string> GetVariablesUsedInTitle();
-
-        [Obsolete("please use QuestionIdsInvolvedInCustomEnablementConditionOfQuestion instead")]
-        List<QuestionIdAndVariableName> QuestionsInvolvedInCustomEnablementConditionOfQuestion { get; set; }
     }
 }
