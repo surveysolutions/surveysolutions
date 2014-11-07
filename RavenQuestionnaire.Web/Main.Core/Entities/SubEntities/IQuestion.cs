@@ -28,8 +28,6 @@ namespace Main.Core.Entities.SubEntities
         List<Guid> ConditionalDependentQuestions { get; set; }
         List<Guid> ConditionalDependentGroups { get; set; }
 
-        //List<Guid> QuestionsWhichCustomValidationDependsOnQuestion { get; set; }
-
         List<Guid> QuestionIdsInvolvedInCustomEnablementConditionOfQuestion { get; set; }
 
         List<Guid> QuestionIdsInvolvedInCustomValidationOfQuestion { get; set; }
@@ -45,7 +43,5 @@ namespace Main.Core.Entities.SubEntities
 
         [Obsolete("please use QuestionIdsInvolvedInCustomEnablementConditionOfQuestion instead")]
         List<QuestionIdAndVariableName> QuestionsInvolvedInCustomEnablementConditionOfQuestion { get; set; }
-        [Obsolete("please use QuestionsWhichCustomValidationDependsOnQuestion instead")]
-        List<QuestionIdAndVariableName> QuestionsInvolvedInCustomValidationOfQuestion { get; set; }
     }
 }
