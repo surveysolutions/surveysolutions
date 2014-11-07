@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using Ncqrs.Eventing;
 
 namespace Ncqrs.Domain
 {
@@ -28,13 +27,6 @@ namespace Ncqrs.Domain
             : base(message, inner)
         {
             Event = evnt;
-        }
-
-        protected EventNotHandledException(
-            SerializationInfo info,
-            StreamingContext context)
-            : base(info, context)
-        {
         }
     }
 }

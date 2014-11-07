@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
 using System.Reflection;
 using System.Threading;
-
-using Ncqrs.Commanding;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Logging;
@@ -33,13 +28,6 @@ namespace Ncqrs.Domain
 
         public UnitOfWork(Guid commandId, string origin, IDomainRepository domainRepository, IEventStore eventStore, ISnapshotStore snapshotStore, IEventBus eventBus, ISnapshottingPolicy snapshottingPolicy) : base(commandId)
         {
-            #if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(domainRepository != null);
-            Contract.Requires<ArgumentNullException>(snapshotStore != null);
-            Contract.Requires<ArgumentNullException>(eventStore != null);
-            Contract.Requires<ArgumentNullException>(eventBus != null);
-            Contract.Requires<ArgumentNullException>(snapshottingPolicy != null);
-            #endif
             _repository = domainRepository;
             _snapshottingPolicy = snapshottingPolicy;
             _eventBus = eventBus;
@@ -54,13 +42,6 @@ namespace Ncqrs.Domain
             RegisterDirtyInstance(aggregateRoot);            
             _eventStream.Append(evnt);
         }
-        #if USE_CONTRACTS
-        [ContractInvariantMethod]
-        private void ContractInvariants()
-        {
-            Contract.Invariant(Contract.ForAll(_dirtyInstances, (instance => instance != null)), "None of the dirty instances can be null.");
-        }
-        #endif
         /// <summary>
         /// Gets aggregate root by its id.
         /// </summary>
@@ -89,9 +70,6 @@ namespace Ncqrs.Domain
         /// </summary>
         public override void Accept()
         {
-#if USE_CONTRACTS
-            Contract.Requires<ObjectDisposedException>(!IsDisposed);
-#endif
             Log.DebugFormat("Accepting unit of work {0}", this);
             Log.DebugFormat("Storing the event stream for command {0} to event store", _eventStream.CommitId);
             _eventStore.Store(_eventStream);
@@ -133,9 +111,6 @@ namespace Ncqrs.Domain
         /// <param name="dirtyInstance">The dirty instance.</param>
         private void RegisterDirtyInstance(AggregateRoot dirtyInstance)
         {
-            #if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(dirtyInstance != null, "dirtyInstance could not be null.");
-            #endif
             if (!_dirtyInstances.Contains(dirtyInstance))
             {
                 Log.DebugFormat("Registering aggregate root {0} as dirty in unit of work {1}",

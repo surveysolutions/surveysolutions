@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 
@@ -9,9 +8,6 @@ namespace Ncqrs.Eventing.Storage
     /// <summary>
     /// A <see cref="Snapshot"/> store. Can store and retrieve a <see cref="Snapshot"/>.
     /// </summary>
-    #if USE_CONTRACTS
-    [ContractClass(typeof(ISnapshotStoreContracts))]
-#endif
     public interface ISnapshotStore
     {
         /// <summary>
@@ -31,21 +27,4 @@ namespace Ncqrs.Eventing.Storage
         /// </returns>
         Snapshot GetSnapshot(Guid eventSourceId, long maxVersion);
     }
-    #if USE_CONTRACTS
-    [ContractClassFor(typeof(ISnapshotStore))]
-    internal abstract class ISnapshotStoreContracts : ISnapshotStore
-    {
-        public void SaveShapshot(Snapshot source)
-        {
-            Contract.Requires<ArgumentNullException>(source != null, "The source cannot be null.");
-        }
-
-        public Snapshot GetSnapshot(Guid eventSourceId, long maxVersion)
-        {
-            Contract.Ensures(Contract.Result<Snapshot>() != null ? Contract.Result<Snapshot>().EventSourceId == eventSourceId : true);
-
-            return default(Snapshot);
-        }
-    }
-    #endif
 }

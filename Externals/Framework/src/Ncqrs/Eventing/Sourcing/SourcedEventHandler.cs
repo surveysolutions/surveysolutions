@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Ncqrs.Eventing.Sourcing
+﻿namespace Ncqrs.Eventing.Sourcing
 {
     //public abstract class SourcedEventHander<TEvent> : ISourcedEventHandler where TEvent : ISourcedEvent
     //{

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
-using Ncqrs.Eventing.Sourcing;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -23,9 +21,6 @@ namespace Ncqrs.Eventing.Storage.Serialization
         /// <exception cref="ArgumentNullException"><paramref name="typeResolver"/> is <value>null</value>.</exception>
         public JsonEventFormatter(IEventTypeResolver typeResolver)
         {
-            #if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(typeResolver != null, "typeResolver");
-#endif
             if (typeResolver == null)
                 throw new ArgumentNullException("typeResolver");
             _typeResolver = typeResolver;

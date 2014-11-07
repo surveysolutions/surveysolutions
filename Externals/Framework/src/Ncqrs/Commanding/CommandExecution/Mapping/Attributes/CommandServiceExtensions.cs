@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using Ncqrs.Commanding.ServiceModel;
 
-
 namespace Ncqrs.Commanding.CommandExecution.Mapping.Attributes
 {
     public static class RegisterExecutorForAllMappedCommandsInAssemblyExtension

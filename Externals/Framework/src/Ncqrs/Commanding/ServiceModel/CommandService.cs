@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Reflection;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using System.Reflection;
 using Ncqrs.Commanding.CommandExecution;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.CommandBus;
@@ -71,9 +70,6 @@ namespace Ncqrs.Commanding.ServiceModel
 
         public virtual void RegisterExecutor<TCommand>(Type commandType, ICommandExecutor<TCommand> executor) where TCommand : ICommand
         {
-            #if USE_CONTRACTS
-            Contract.Requires<ArgumentOutOfRangeException>(typeof(TCommand).IsAssignableFrom(commandType));
-#endif
             if (_executors.ContainsKey(commandType)) return;
             Action<ICommand, string> action = (cmd, origin) => executor.Execute((TCommand) cmd, origin);
             _executors.Add(commandType, action);

@@ -1,20 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Globalization;
-using System.Linq;
 using System.Reflection;
-
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.CommandExecution;
 using Ncqrs.Config;
 using Ncqrs.Domain;
-using Ncqrs.Eventing;
+using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
-using Ncqrs.Domain.Storage;
-using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Logging;
 
 namespace Ncqrs
@@ -83,9 +77,6 @@ namespace Ncqrs
         /// </returns>
         public static T Get<T>() where T : class
         {
-            #if USE_CONTRACTS
-            Contract.Ensures(Contract.Result<T>() != null, "The result cannot be null.");
-#endif
             Log.DebugFormat("Requesting instance {0} from the environment.", typeof(T).FullName);
 
             T result = null;
@@ -123,17 +114,11 @@ namespace Ncqrs
         /// <param name="instance">The instance to set as default.</param>
         public static void SetDefault<T>(T instance) where T : class
         {
-#if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(instance != null, "The instance cannot be null.");
-#endif
             _defaults[typeof(T)] = instance;
         }
 
         public static void SetGetter<T>(Func<T> getter) where T : class
         {
-#if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(get != null, "The getter cannot be null.");
-#endif
             _getters[typeof(T)] = getter;
         }
 
@@ -153,12 +138,6 @@ namespace Ncqrs
         /// <param name="source">The source that contains the configuration for the current environment.</param>
         public static void Configure(IEnvironmentConfiguration source)
         {
-            #if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(source != null, "The source cannot be null.");
-            Contract.Requires<InvalidOperationException>(!IsConfigured, "Cannot configure the environment when it is already configured.");
-            Contract.Ensures(_instance == source, "The given source should initialize the _instance member.");
-            Contract.Ensures(IsConfigured, "The given source should configure this environment.");
-#endif
             _instance = source;
 
             Log.InfoFormat("Ncqrs environment configured with {0} configuration source.", source.GetType().FullName);

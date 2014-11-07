@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 
@@ -78,9 +77,6 @@ namespace Ncqrs.Eventing.Storage
         /// </exception>
         public void AddEvent(Type type)
         {   
-#if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(type != null, "type cannot be null");
-#endif
             if (_eventNames.ContainsKey(type))
                 return;
 

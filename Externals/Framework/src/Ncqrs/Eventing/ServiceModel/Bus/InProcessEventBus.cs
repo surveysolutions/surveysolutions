@@ -1,12 +1,10 @@
-﻿ using System;
+﻿#if !MONODROID
+#endif
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
-
-#if !MONODROID
-using System.Transactions;
-#endif
 using WB.Core.GenericSubdomains.Logging;
 
 namespace Ncqrs.Eventing.ServiceModel.Bus
@@ -62,9 +60,6 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 
         private static void TransactionallyPublishToHandlers(IPublishableEvent eventMessage, Type eventMessageType, IEnumerable<Action<PublishedEvent>> handlers)
         {
-#if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(handlers != null);
-#endif
 #if !MONODROID
             using (var transaction = new TransactionScope())
             {
@@ -78,9 +73,6 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 
         private static void PublishToHandlers(IPublishableEvent eventMessage, Type eventMessageType, IEnumerable<Action<PublishedEvent>> handlers)
         {
-            #if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(handlers != null);
-            #endif
             Log.DebugFormat("Found {0} handlers for event {1}.", handlers.Count(), eventMessageType.FullName);
 
             var publishedEventClosedType = typeof (PublishedEvent<>).MakeGenericType(eventMessage.Payload.GetType());

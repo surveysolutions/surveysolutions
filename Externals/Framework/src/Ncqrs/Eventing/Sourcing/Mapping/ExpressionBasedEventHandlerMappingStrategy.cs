@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Diagnostics.Contracts;
 using System.Reflection;
 using Ncqrs.Domain;
 
@@ -40,9 +38,6 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
         /// <returns>All the <see cref="ISourcedEventHandler"/>'s created based on the given mapping.</returns>
         public IEnumerable<ISourcedEventHandler> GetEventHandlers(object target)
         {
-#if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(target != null, "The target cannot be null.");
-#endif
             if (!(target is AggregateRootMappedWithExpressions))
                 throw new ArgumentException("aggregateRoot need to be of type AggregateRootMappedWithExpressions to be used in a ExpressionBasedEventHandlerMappingStrategy.");
 

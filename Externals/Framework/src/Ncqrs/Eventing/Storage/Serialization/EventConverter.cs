@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using Newtonsoft.Json.Linq;
 
 namespace Ncqrs.Eventing.Storage.Serialization
@@ -23,9 +22,6 @@ namespace Ncqrs.Eventing.Storage.Serialization
         /// <exception cref="ArgumentNullException"><paramref name="typeResolver"/> is <value>null</value>.</exception>
         public EventConverter(IEventTypeResolver typeResolver)
         {
-            #if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(typeResolver != null, "typeResolver");
-            #endif
             if (typeResolver == null)
                 throw new ArgumentNullException("typeResolver");
 
@@ -70,11 +66,6 @@ namespace Ncqrs.Eventing.Storage.Serialization
         /// <exception cref="ArgumentException">If a converter for <paramref name="eventType"/> has already been added.</exception>
         public void AddConverter(Type eventType, IEventConverter converter)
         {
-            #if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(eventType != null, "eventType");
-            Contract.Requires<ArgumentNullException>(converter != null, "converter");
-            #endif
-
             if (eventType == null)
                 throw new ArgumentNullException("eventType");
 
@@ -98,10 +89,6 @@ namespace Ncqrs.Eventing.Storage.Serialization
         /// <exception cref="ArgumentException">If a converter for <paramref name="eventName"/> has already been added.</exception>
         public void AddConverter(string eventName, IEventConverter converter)
         {
-#if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(eventName != null, "eventName");
-            Contract.Requires<ArgumentNullException>(converter != null, "converter");
-#endif
             if (eventName == null)
                 throw new ArgumentNullException("eventName");
 

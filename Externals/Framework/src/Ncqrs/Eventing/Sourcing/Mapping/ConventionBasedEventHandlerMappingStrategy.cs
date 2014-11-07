@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -25,7 +24,7 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
     ///     </item>
     ///     <item>
     ///         <value>
-    ///             The parameter must be, or implemented from, the type specified by the <see cref="EventBaseType"/> property. Which is <see cref="Object"/> by default.
+    ///             The parameter must be, or implemented from, the type specified by the <see cref="EventBaseType"/> property. Which is <see cref="object"/> by default.
     ///         </value>
     ///     </item>
     /// </list>
@@ -46,10 +45,6 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
 
         public IEnumerable<ISourcedEventHandler> GetEventHandlers(object target)
         {
-#if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(target != null, "The target cannot be null.");
-            Contract.Ensures(Contract.Result<IEnumerable<ISourcedEventHandler>>() != null, "The result should never be null.");
-#endif
             var targetType = target.GetType();
             var handlers = new List<ISourcedEventHandler>();
 

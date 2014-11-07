@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using Ncqrs.Domain;
 
 namespace Ncqrs.Eventing.Sourcing.Mapping
@@ -11,18 +10,12 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
 
         protected MappedAggregateRoot(IEventHandlerMappingStrategy strategy)
         {
-            #if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(strategy != null, "The strategy cannot be null.");
-            #endif
             _mappingStrategy = strategy;
             InitializeHandlers();
         }
 
         protected MappedAggregateRoot(Guid id, IEventHandlerMappingStrategy strategy) : base(id)
         {
-#if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(strategy != null, "The strategy cannot be null.");
-#endif
             _mappingStrategy = strategy;
             InitializeHandlers();
         }

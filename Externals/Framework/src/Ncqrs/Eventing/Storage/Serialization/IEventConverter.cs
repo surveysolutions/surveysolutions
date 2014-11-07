@@ -1,5 +1,3 @@
-using System;
-using System.Diagnostics.Contracts;
 using Newtonsoft.Json.Linq;
 
 namespace Ncqrs.Eventing.Storage.Serialization
@@ -9,9 +7,6 @@ namespace Ncqrs.Eventing.Storage.Serialization
     /// </summary>
     /// <seealso cref="EventConverter"/>
     /// <seealso cref="NullEventConverter"/>
-    #if USE_CONTRACTS
-    [ContractClass(typeof(IEventConverterContracts))]
-#endif
     public interface IEventConverter
     {
         /// <summary>
@@ -37,14 +32,4 @@ namespace Ncqrs.Eventing.Storage.Serialization
         /// <param name="theEvent">The event to be upgraded.</param>
         void Upgrade(StoredEvent<JObject> theEvent);
     }
-    #if USE_CONTRACTS
-    [ContractClassFor(typeof(IEventConverter))]
-    internal abstract class IEventConverterContracts : IEventConverter
-    {
-        public void Upgrade(StoredEvent<JObject> theEvent)
-        {
-            Contract.Requires<ArgumentNullException>(theEvent != null, "theEvent");
-        }
-    }
-    #endif
 }

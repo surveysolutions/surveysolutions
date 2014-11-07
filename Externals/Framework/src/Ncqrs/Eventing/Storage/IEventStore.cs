@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using Ncqrs.Eventing.Sourcing;
 
 namespace Ncqrs.Eventing.Storage
@@ -8,9 +6,6 @@ namespace Ncqrs.Eventing.Storage
     /// <summary>
     /// An event store. Can store and load events from an <see cref="IEventSource"/>.
     /// </summary>
-    #if USE_CONTRACTS
-    [ContractClass(typeof(IEventStoreContracts))]
-#endif
     public interface IEventStore
     {
         /// <summary>
@@ -32,23 +27,4 @@ namespace Ncqrs.Eventing.Storage
         /// <param name="eventStream">The <see cref="UncommittedEventStream"/> to commit.</param>
         void Store(UncommittedEventStream eventStream);
     }
-    #if USE_CONTRACTS
-    [ContractClassFor(typeof(IEventStore))]
-    internal abstract class IEventStoreContracts : IEventStore
-    {
-        public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
-        {
-            Contract.Ensures(Contract.Result<CommittedEventStream>().SourceId == id);
-            Contract.Ensures(Contract.Result<CommittedEventStream>().CurrentSourceVersion <= maxVersion);
-            return default(CommittedEventStream);
-        }
-
-        public void Store(UncommittedEventStream eventStream)
-        {
-            Contract.Requires<ArgumentNullException>(eventStream != null, "The stream cannot be null.");
-        }
-
-
-    }
-#endif
 }

@@ -1,9 +1,8 @@
 ﻿using System;
-using Ncqrs.Commanding;
 using Ncqrs.Domain.Storage;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
-using Ncqrs.Eventing.ServiceModel.Bus;
 
 namespace Ncqrs.Domain
 {

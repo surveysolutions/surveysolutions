@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
 using System.Runtime.Serialization;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using WB.Core.Infrastructure.CommandBus;
 
 namespace Ncqrs.Commanding
@@ -74,9 +71,6 @@ namespace Ncqrs.Commanding
         /// <param name="idGenerator">The id generator. This cannot be <c>null</c>.</param>
         protected CommandBase(IUniqueIdentifierGenerator idGenerator)
         {
-#if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(idGenerator != null);
-#endif
             CommandIdentifier = idGenerator.GenerateNewId();
         }
 

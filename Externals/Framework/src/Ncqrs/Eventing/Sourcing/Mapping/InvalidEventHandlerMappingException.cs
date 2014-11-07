@@ -8,9 +8,5 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
     {
         public InvalidEventHandlerMappingException(string message) : base(message) { }
         public InvalidEventHandlerMappingException(string message, Exception inner) : base(message, inner) { }
-        protected InvalidEventHandlerMappingException(
-          SerializationInfo info,
-          StreamingContext context)
-            : base(info, context) { }
     }
 }

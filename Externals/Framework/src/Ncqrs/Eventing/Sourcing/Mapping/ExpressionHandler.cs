@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Reflection;
 
 namespace Ncqrs.Eventing.Sourcing.Mapping
@@ -35,9 +34,6 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
         /// <returns>Itself <see cref="ExpressionHandler{T}"/>.</returns>
         public ExpressionHandler<T> ToHandler(Action<T> mappingaction)
         {
-            #if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(mappingaction != null, "The mappingaction can not be null.");
-#endif
             ActionMethodInfo = mappingaction.Method;
 
             return this;

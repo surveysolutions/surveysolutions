@@ -161,12 +161,5 @@ namespace Ncqrs.Eventing
         public InvalidCommittedEventException(string message, Exception inner) : base(message, inner)
         {
         }
-
-        protected InvalidCommittedEventException(
-            SerializationInfo info,
-            StreamingContext context) : base(info, context)
-        {
-            
-        }
     }
 }

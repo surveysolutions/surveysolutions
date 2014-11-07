@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Reflection;
 using System.Threading;
-
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Logging;
 
@@ -42,9 +40,6 @@ namespace Ncqrs.Domain
         protected UnitOfWorkBase(Guid commandId)
         {
             _commandId = commandId;
-            #if USE_CONTRACTS
-            Contract.Ensures(IsDisposed == false);
-#endif
             Log.DebugFormat("Creating new unit of work for command {0} on thread {1}", commandId,
                             Thread.CurrentThread.ManagedThreadId);
 
@@ -82,9 +77,6 @@ namespace Ncqrs.Domain
         /// </summary>
         public void Dispose()
         {
-            #if USE_CONTRACTS
-            Contract.Ensures(IsDisposed == true);
-            #endif
             Dispose(true);
             GC.SuppressFinalize(this);
         }
@@ -95,9 +87,6 @@ namespace Ncqrs.Domain
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected virtual void Dispose(bool disposing)
         {
-            #if USE_CONTRACTS
-            Contract.Ensures(IsDisposed == true);
-            #endif
             if (!IsDisposed)
             {
                 if (disposing)
@@ -110,10 +99,6 @@ namespace Ncqrs.Domain
                 IsDisposed = true;
             }
         }
-
-               
-
-        
 
         public abstract AggregateRoot GetById(Type aggregateRootType, Guid eventSourceId, long? lastKnownRevision);
         public TAggregateRoot GetById<TAggregateRoot>(Guid eventSourceId, long? lastKnownRevision) where TAggregateRoot : AggregateRoot

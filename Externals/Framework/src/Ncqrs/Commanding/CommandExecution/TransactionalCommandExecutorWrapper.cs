@@ -1,9 +1,5 @@
-﻿using System;
-using System.Diagnostics.Contracts;
-using WB.Core.Infrastructure.CommandBus;
-#if !MONODROID
-using System.Transactions;
-#endif
+﻿using WB.Core.Infrastructure.CommandBus;
+
 namespace Ncqrs.Commanding.CommandExecution
 {
     /// <summary>
@@ -25,17 +21,9 @@ namespace Ncqrs.Commanding.CommandExecution
         /// <param name="executor">The executor to use to execute the command.</param>
         public TransactionalCommandExecutorWrapper(ICommandExecutor<TCommand> executor)
         {
-            #if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(executor != null, "The executor cannot be null.");
-#endif
             _executor = executor;
         }
         
-        /// <summary>
-        /// Executes the command within a transaction. The transaction logic uses TransactionScope.
-        /// </summary>
-        /// <param name="command">The command to execute. This should not be null.</param>
-        /// <exception cref="ArgumentNullException">Occurs when <i>command</i> is null.</exception>
         public void Execute(TCommand command, string origin)
         {
             var transactionService = NcqrsEnvironment.Get<ITransactionService>();

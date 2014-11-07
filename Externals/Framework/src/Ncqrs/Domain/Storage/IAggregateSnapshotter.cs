@@ -1,6 +1,6 @@
 using System;
-using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
 
 namespace Ncqrs.Domain.Storage
 {

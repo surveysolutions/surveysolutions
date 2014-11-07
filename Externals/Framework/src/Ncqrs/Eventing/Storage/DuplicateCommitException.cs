@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace Ncqrs.Eventing.Storage
 {
@@ -18,21 +17,6 @@ namespace Ncqrs.Eventing.Storage
         {
             _eventSourceId = eventSourceId;
             _commitId = commitId;
-        }
-
-
-        protected DuplicateCommitException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            _commitId = (Guid) info.GetValue("CommitId", typeof (Guid));
-            _eventSourceId = (Guid)info.GetValue("EventSourceId", typeof(Guid));
-        }
-
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-            info.AddValue("CommitId", _commitId);
-            info.AddValue("EventSourceId", _eventSourceId);
         }
 
         public Guid CommitId

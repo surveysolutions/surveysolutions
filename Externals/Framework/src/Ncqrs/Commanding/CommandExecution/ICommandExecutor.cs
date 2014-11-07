@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics.Contracts;
-using WB.Core.Infrastructure.CommandBus;
+﻿using WB.Core.Infrastructure.CommandBus;
 
 namespace Ncqrs.Commanding.CommandExecution
 {
@@ -8,26 +6,8 @@ namespace Ncqrs.Commanding.CommandExecution
     /// Executes a command. This means that the handles 
     /// executes the correct action based on the command.
     /// </summary>
-    #if USE_CONTRACTS
-    [ContractClass(typeof(ICommandExecutorContracts<>))]
-#endif
     public interface ICommandExecutor<in TCommand> where TCommand : ICommand
     {
-        /// <summary>
-        /// Executes the command.
-        /// </summary>
-        /// <param name="command">The command to execute. This should not be null.</param>
-        /// <exception cref="ArgumentNullException">Occurs when <i>command</i> is null.</exception>
         void Execute(TCommand command, string origin);
     }
-    #if USE_CONTRACTS
-    [ContractClassFor(typeof(ICommandExecutor<>))]
-    internal abstract class ICommandExecutorContracts<TCommand> : ICommandExecutor<TCommand> where TCommand : ICommand
-    {
-        public void Execute(TCommand command)
-        {
-            Contract.Requires<ArgumentNullException>(command != null, "The command cannot be null.");
-        }
-    }
-    #endif
 }

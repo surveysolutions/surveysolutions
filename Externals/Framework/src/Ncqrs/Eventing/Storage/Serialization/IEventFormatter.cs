@@ -1,8 +1,4 @@
-﻿using System;
-using System.Diagnostics.Contracts;
-using Ncqrs.Eventing.Sourcing;
-
-namespace Ncqrs.Eventing.Storage.Serialization
+﻿namespace Ncqrs.Eventing.Storage.Serialization
 {
     /// <summary>
     /// Serializes/deserializes strongly typed events for storage.
@@ -20,9 +16,6 @@ namespace Ncqrs.Eventing.Storage.Serialization
     /// </para>
     /// </remarks>
     /// <typeparam name="T">The type of the serialized data.</typeparam>
-    #if USE_CONTRACTS
-    [ContractClass(typeof(IEventFormatterContracts<>))]
-    #endif
     public interface IEventFormatter<T>
     {
         /// <summary>
@@ -39,24 +32,4 @@ namespace Ncqrs.Eventing.Storage.Serialization
         /// <returns>A strongly typed event from <paramref name="obj"/>.</returns>
         object Deserialize(T obj, string eventName);
     }
-    #if USE_CONTRACTS
-    [ContractClassFor(typeof(IEventFormatter<>))]
-    internal abstract class IEventFormatterContracts<T> : IEventFormatter<T>
-    {
-        public T Serialize(object theEvent, out string eventName)
-        {
-            Contract.Requires<ArgumentNullException>(theEvent != null, "theEvent");
-            Contract.Ensures(Contract.Result<T>() != null);
-            eventName = null;
-            return default(T);
-        }
-
-        public object Deserialize(T obj, string eventName)
-        {
-            Contract.Requires<ArgumentNullException>(obj != null, "obj");
-            Contract.Ensures(Contract.Result<object>() != null);
-            return default(object);
-        }
-    }
-#endif
 }

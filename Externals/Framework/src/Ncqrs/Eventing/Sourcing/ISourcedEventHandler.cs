@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 
 namespace Ncqrs.Eventing.Sourcing
 {
     /// <summary>
     /// An event handler that handles the domain events.
     /// </summary>
-   #if USE_CONTRACTS
-    [ContractClass(typeof(IEventSourcedHandlerContracts))]
-    #endif
     public interface ISourcedEventHandler
     {
         /// <summary>
@@ -20,16 +16,4 @@ namespace Ncqrs.Eventing.Sourcing
         /// handler was not interested in handling this event.</remarks></returns>
         Boolean HandleEvent(object sourcedEvent);
     }
-#if USE_CONTRACTS
-    [ContractClassFor(typeof(ISourcedEventHandler))]
-    internal abstract class IEventSourcedHandlerContracts : ISourcedEventHandler
-    {
-        public bool HandleEvent(object sourcedEvent)
-        {
-            Contract.Requires<ArgumentNullException>(sourcedEvent != null, "The sourcedEvent cannot be null.");
-
-            return default(bool);
-        }
-    }
-#endif
 }

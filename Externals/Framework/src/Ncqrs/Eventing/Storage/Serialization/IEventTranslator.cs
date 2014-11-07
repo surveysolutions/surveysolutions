@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics.Contracts;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 
 namespace Ncqrs.Eventing.Storage.Serialization
 {
@@ -9,9 +7,6 @@ namespace Ncqrs.Eventing.Storage.Serialization
     /// and a raw format for storage.
     /// </summary>
     /// <typeparam name="T">The type of the raw data.</typeparam>
-    #if USE_CONTRACTS
-    [ContractClass(typeof(IEventTranslatorContracts<>))]
-    #endif
     public interface IEventTranslator<T>
     {
         /// <summary>
@@ -30,23 +25,4 @@ namespace Ncqrs.Eventing.Storage.Serialization
         /// <seealso cref="StoredEvent{T}.Clone{TOther}"/>
         StoredEvent<T> TranslateToRaw(StoredEvent<JObject> obj);
     }
-    #if USE_CONTRACTS
-    [ContractClassFor(typeof(IEventTranslator<>))]
-    internal abstract class IEventTranslatorContracts<T> : IEventTranslator<T>
-    {
-        public StoredEvent<JObject> TranslateToCommon(StoredEvent<T> obj)
-        {
-            Contract.Requires<ArgumentNullException>(obj != null, "obj");
-            Contract.Ensures(Contract.Result<StoredEvent<JObject>>() != null);
-            return default(StoredEvent<JObject>);
-        }
-
-        public StoredEvent<T> TranslateToRaw(StoredEvent<JObject> obj)
-        {
-            Contract.Requires<ArgumentNullException>(obj != null, "obj");
-            Contract.Ensures(Contract.Result<StoredEvent<T>>() != null);
-            return default(StoredEvent<T>);
-        }
-    }
-#endif
 }

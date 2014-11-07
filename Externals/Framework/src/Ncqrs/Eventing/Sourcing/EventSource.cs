@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Reflection;
-
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Logging;
@@ -27,9 +25,6 @@ namespace Ncqrs.Eventing.Sourcing
             get { return _eventSourceId; }
             protected set
             {
-                #if USE_CONTRACTS
-                Contract.Requires<InvalidOperationException>(Version == 0);
-                #endif
                 _eventSourceId = value;
             }
         }
@@ -94,10 +89,7 @@ namespace Ncqrs.Eventing.Sourcing
 
         public virtual void InitializeFromSnapshot(Snapshot snapshot)
         {
-                #if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(snapshot != null, "The snapshot cannot be null.");
-            #endif
-                Log.DebugFormat("Initializing event source {0} from snapshot (version {1}).", snapshot.EventSourceId, snapshot.Version);
+            Log.DebugFormat("Initializing event source {0} from snapshot (version {1}).", snapshot.EventSourceId, snapshot.Version);
 
             _eventSourceId = snapshot.EventSourceId;
             _initialVersion = _currentVersion = snapshot.Version;
@@ -109,9 +101,6 @@ namespace Ncqrs.Eventing.Sourcing
         /// <param name="history">The history.</param>
         public virtual void InitializeFromHistory(CommittedEventStream history)
         {
-            #if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(history != null, "The history cannot be null.");
-            #endif
             if (history == null)
                 throw new ArgumentNullException("The history cannot be null.");
                 if (_initialVersion != Version)
@@ -150,18 +139,12 @@ namespace Ncqrs.Eventing.Sourcing
 
         internal protected void RegisterHandler(ISourcedEventHandler handler)
         {
-                #if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(handler != null, "The handler cannot be null.");
-                #endif
             _eventHandlers.Add(handler);
         }
 
         protected virtual void HandleEvent(object evnt)
         {
-                #if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(evnt != null, "The Event cannot be null.");
-            #endif
-                Boolean handled = false;
+            Boolean handled = false;
 
             // Get a copy of the handlers because an event
             // handler can register a new handler. This will

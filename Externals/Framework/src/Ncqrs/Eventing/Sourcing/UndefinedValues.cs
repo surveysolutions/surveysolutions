@@ -1,5 +1,4 @@
 using System;
-using Ncqrs.Eventing.Storage;
 
 namespace Ncqrs.Eventing.Sourcing
 {

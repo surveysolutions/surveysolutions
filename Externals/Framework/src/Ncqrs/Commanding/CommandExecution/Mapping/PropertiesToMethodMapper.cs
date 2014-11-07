@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
@@ -102,9 +101,6 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping
 
         private static void MakeSureAllPropertieOrdinalsAreUnique(List<PropertyToParameterMappingInfo> propertiesToMap)
         {
-            #if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(propertiesToMap != null);
-#endif
             var query = from p in propertiesToMap
                         where p.Ordinal.HasValue
                         group p by p.Ordinal
@@ -122,9 +118,6 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping
 
         private static void MakeSureAllPropertiesToMapOnNameHaveUniqueNames(List<PropertyToParameterMappingInfo> propertiesToMap)
         {
-            #if USE_CONTRACTS
-            Contract.Requires<ArgumentNullException>(propertiesToMap != null);
-#endif
             var query = from p in propertiesToMap
                         where !p.TargetName.IsNullOrEmpty()
                         group p by p.TargetName

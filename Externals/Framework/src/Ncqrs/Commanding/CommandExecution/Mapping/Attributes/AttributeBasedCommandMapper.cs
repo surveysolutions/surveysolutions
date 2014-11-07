@@ -5,7 +5,6 @@ using System.Reflection;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.CommandBus;
 
-
 namespace Ncqrs.Commanding.CommandExecution.Mapping.Attributes
 {
     public class AttributeBasedCommandMapper : ICommandMapper
