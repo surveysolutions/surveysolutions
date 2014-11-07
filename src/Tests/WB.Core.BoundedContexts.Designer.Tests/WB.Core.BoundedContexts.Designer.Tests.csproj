@@ -620,9 +620,7 @@
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_NumericQuestionChanged_event_and_max_value_is_specified.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_NumericQuestionCloned_event_and_max_value_is_specified.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_QuestionCloned_event_and_triggers_are_not_empty.cs" />
-    <Compile Include="QuestionnaireDenormalizerTests\when_handling_QuestionnaireCloned_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_RosterChanged_event.cs" />
-    <Compile Include="QuestionnaireDenormalizerTests\when_handling_TemplateImported_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_TextListQuestionAdded_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_TextListQuestionChanged_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_TextListQuestionCloned_event.cs" />
