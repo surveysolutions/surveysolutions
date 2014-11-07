@@ -46,21 +46,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return document;
         }
 
-        public QuestionnaireDocument CleanExpressionCaches(QuestionnaireDocument originalDocument)
-        {
-            var document = originalDocument.Clone();
-
-            var allQuestions = document.Find<IQuestion>(_ => true).ToList();
-
-            foreach (var question in allQuestions)
-            {
-                question.ConditionalDependentQuestions = null;
-                question.ConditionalDependentGroups = null;
-            }
-
-            return document;
-        }
-
         private static void MarkAllNonReferencedAutoPropagatedGroupsAsNotPropagated(QuestionnaireDocument document)
         {
             var autoGroups = document.Find<Group>(q => q.Propagated != Propagate.None).ToList();
