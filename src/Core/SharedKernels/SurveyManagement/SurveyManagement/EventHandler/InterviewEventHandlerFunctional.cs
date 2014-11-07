@@ -65,14 +65,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures;
         private readonly ISynchronizationDataStorage syncStorage;
 
-        public override Type[] UsesViews
+        public override object[] Readers
         {
-            get { return new Type[] { typeof(UserDocument), typeof(QuestionnaireRosterStructure) }; }
+            get { return new[] { users }; }
         }
 
-        public override Type[] BuildsViews
+        public override object[] Writers
         {
-            get { return base.BuildsViews.Union(new[] { typeof (SynchronizationDelta) }).ToArray(); }
+            get
+            {
+                var result = new List<object>();
+                result.AddRange(base.Writers);
+                result.Add(syncStorage);
+                return result.ToArray();
+            }
         }
 
         private static string CreateLevelIdFromPropagationVector(decimal[] vector)

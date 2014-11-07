@@ -15,8 +15,8 @@ using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class QuestionnaireDenormalizer : IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, 
-        IEventHandler<QuestionnaireDeleted>, IEventHandler<QuestionnaireAssemblyImported>, IEventHandler
+    public class QuestionnaireDenormalizer : BaseDenormalizer, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, 
+        IEventHandler<QuestionnaireDeleted>, IEventHandler<QuestionnaireAssemblyImported>
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> documentStorage;
         private readonly ISynchronizationDataStorage synchronizationDataStorage;
@@ -37,6 +37,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
 
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
+        }
+
+        public override object[] Writers
+        {
+            get { return new object[] { documentStorage, synchronizationDataStorage }; }
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
@@ -79,21 +84,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             this.synchronizationDataStorage.SaveQuestionnaire(document, version, allowCensusMode, timestamp);
             
-        }
-
-        public string Name
-        {
-            get { return this.GetType().Name; }
-        }
-
-        public Type[] UsesViews
-        {
-            get { return new Type[0]; }
-        }
-
-        public Type[] BuildsViews
-        {
-            get { return new Type[] { typeof(QuestionnaireDocument), typeof(SynchronizationDelta) }; }
         }
 
         public void Handle(IPublishedEvent<QuestionnaireAssemblyImported> evnt)

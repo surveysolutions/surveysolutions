@@ -11,14 +11,23 @@ using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class AnswersByVariableDenormalizer :
+    public class AnswersByVariableDenormalizer :BaseDenormalizer,
         IEventHandler<GeoLocationQuestionAnswered>,
-        IEventHandler<AnswersRemoved>,
-        IEventHandler
+        IEventHandler<AnswersRemoved>
     {
         private readonly IReadSideRepositoryWriter<AnswersByVariableCollection> answersByVariableStorage;
         private readonly IReadSideRepositoryWriter<InterviewBrief> interviewBriefStorage;
         private readonly IReadSideRepositoryWriter<QuestionnaireQuestionsInfo> variablesStorage;
+
+        public override object[] Writers
+        {
+            get { return new[] { answersByVariableStorage }; }
+        }
+
+        public override object[] Readers
+        {
+            get { return new object[] { interviewBriefStorage, variablesStorage }; }
+        }
 
         public AnswersByVariableDenormalizer(IReadSideRepositoryWriter<InterviewBrief> interviewBriefStorage,
             IReadSideRepositoryWriter<QuestionnaireQuestionsInfo> variablesStorage,
@@ -113,21 +122,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private string CreateLevelIdFromPropagationVector(decimal[] vector)
         {
             return vector.Length == 0 ? "#" : EventHandlerUtils.CreateLeveKeyFromPropagationVector(vector);
-        }
-
-        public string Name
-        {
-            get { return this.GetType().Name; }
-        }
-
-        public Type[] UsesViews
-        {
-            get { return new Type[0]; }
-        }
-
-        public Type[] BuildsViews
-        {
-            get { return new Type[] { typeof (InterviewBrief), typeof (SynchronizationDelta) }; }
         }
     }
 }

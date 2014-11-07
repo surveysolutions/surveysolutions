@@ -13,7 +13,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
     public abstract class RavenReadSideRepositoryAccessor<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
     {
-        private readonly DocumentStore ravenStore;
+        protected readonly DocumentStore ravenStore;
 
         protected RavenReadSideRepositoryAccessor(DocumentStore ravenStore)
         {
@@ -22,7 +22,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         protected abstract TResult QueryImpl<TResult>(Func<IRavenQueryable<TEntity>, TResult> query);
 
-        private static string ViewName
+        protected string ViewName
         {
             get
             {
@@ -38,7 +38,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             return this.ravenStore.OpenSession();
         }
 
-        protected static string ToRavenId(string id)
+        protected string ToRavenId(string id)
         {
             return string.Format("{0}${1}", ViewName, id);
         }

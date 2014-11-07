@@ -3,6 +3,7 @@ using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -12,7 +13,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    internal class QuestionnaireExportStructureDenormalizer : IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>, IEventHandler
+    internal class QuestionnaireExportStructureDenormalizer : BaseDenormalizer, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> readsideRepositoryWriter;
         private readonly IQuestionnaireUpgradeService questionnaireUpgradeService;
@@ -32,17 +33,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.questionnaireUpgradeService = questionnaireUpgradeService;
         }
 
-        public string Name
+        public override object[] Writers
         {
-            get { return this.GetType().Name; }
+            get { return new object[] { readsideRepositoryWriter, dataExportWriter }; }
         }
-
-        public Type[] UsesViews
-        {
-            get { return new Type[0]; }
-        }
-
-        public Type[] BuildsViews { get { return new [] { typeof(QuestionnaireExportStructure) }; } }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {

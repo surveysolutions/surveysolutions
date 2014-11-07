@@ -28,10 +28,6 @@ namespace WB.Core.Infrastructure.Storage.Raven
                 .WithConstructorArgument("assembliesWithIndexes", this.assembliesWithIndexes);
             this.Bind<IReadSideAdministrationService>().To<RavenReadSideService>().InSingletonScope();
 
-            this.Bind<IReadSideRepositoryWriterRegistry>().To<ReadSideRepositoryWriterRegistry>().InSingletonScope();
-
-            this.Bind<IReadSideRepositoryCleanerRegistry>().To<ReadSideRepositoryCleanerRegistry>().InSingletonScope();
-
             // each repository writer should exist in one instance because it might use caching
             this.Kernel.Bind(typeof(RavenReadSideRepositoryWriter<>)).ToSelf().InSingletonScope();
 

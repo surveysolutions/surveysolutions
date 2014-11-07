@@ -26,6 +26,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers
             this.documentStorage = documentStorage;
         }
 
+        public override object[] Writers
+        {
+            get { return new object[] {  documentStorage}; }
+        }
+
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
             QuestionnaireDocument document = evnt.Payload.Source.Clone();
@@ -46,12 +51,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers
         private string CreateDocumentId(Guid questionnaireId, long questionnaireVersion)
         {
             return questionnaireId.FormatGuid() + "$" + questionnaireVersion;
-        }
-
-        
-        public override Type[] BuildsViews
-        {
-            get { return new Type[] { typeof (QuestionnaireDocument) }; }
         }
     }
 }

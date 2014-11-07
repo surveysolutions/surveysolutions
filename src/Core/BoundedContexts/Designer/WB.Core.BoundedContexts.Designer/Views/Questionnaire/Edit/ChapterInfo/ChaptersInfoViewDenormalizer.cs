@@ -57,16 +57,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             this.questionnaireUpgrader = questionnaireUpgrader;
         }
 
-        public override Type[] UsesViews
-        {
-            get { return new Type[0]; }
-        }
-
-        public override Type[] BuildsViews
-        {
-            get { return base.BuildsViews.Union(new[] { typeof(GroupInfoView) }).ToArray(); }
-        }
-
         public GroupInfoView Create(IPublishedEvent<NewQuestionnaireCreated> evnt)
         {
             return CreateQuestionnaire(evnt.EventSourceId);

@@ -15,12 +15,11 @@ namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideRepositoryWriterTests
     internal class RavenReadSideRepositoryWriterTestsContext
     {
         internal static RavenReadSideRepositoryWriter<TEntity> CreateRavenReadSideRepositoryWriter<TEntity>(
-            DocumentStore ravenStore, IReadSideRepositoryWriterRegistry writerRegistry)
+            DocumentStore ravenStore)
             where TEntity : class, IReadSideRepositoryEntity
         {
             return new RavenReadSideRepositoryWriter<TEntity>(
-                ravenStore ?? new DocumentStore(),
-                writerRegistry ?? Mock.Of<IReadSideRepositoryWriterRegistry>());
+                ravenStore ?? new DocumentStore());
         }
     }
 }

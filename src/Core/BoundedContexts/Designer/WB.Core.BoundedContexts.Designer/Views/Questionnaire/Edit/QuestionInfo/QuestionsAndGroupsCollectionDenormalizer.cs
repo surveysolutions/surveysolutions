@@ -60,16 +60,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             this.questionnaireUpgrader = questionnaireUpgrader;
         }
 
-        public override Type[] UsesViews
-        {
-            get { return new Type[0]; }
-        }
-
-        public override Type[] BuildsViews
-        {
-            get { return base.BuildsViews.Union(new[] { typeof (QuestionsAndGroupsCollectionView) }).ToArray(); }
-        }
-
         public QuestionsAndGroupsCollectionView Create(IPublishedEvent<NewQuestionnaireCreated> evnt)
         {
             return this.CreateStateWithAllQuestions(new QuestionnaireDocument());

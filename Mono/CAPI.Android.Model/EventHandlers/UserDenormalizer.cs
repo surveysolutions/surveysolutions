@@ -7,7 +7,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
-    public class UserDenormalizer : IEventHandler<NewUserCreated>, IEventHandler<UserChanged>, IEventHandler
+    public class UserDenormalizer : BaseDenormalizer,IEventHandler<NewUserCreated>, IEventHandler<UserChanged>
     {
         private readonly IReadSideRepositoryWriter<LoginDTO> documentStorage;
 
@@ -16,6 +16,10 @@ namespace CAPI.Android.Core.Model.EventHandlers
             this.documentStorage = documentStorage;
         }
 
+        public override object[] Writers
+        {
+            get { return new object[] { documentStorage}; }
+        }
 
         public void Handle(IPublishedEvent<NewUserCreated> evnt)
         {
@@ -34,27 +38,6 @@ namespace CAPI.Android.Core.Model.EventHandlers
             this.documentStorage.Store(new LoginDTO(evnt.EventSourceId, user.Login.ToLower(), evnt.Payload.PasswordHash, 
                 user.IsLockedBySupervisor, false, Guid.Parse(user.Supervisor)),
                                     evnt.EventSourceId);
-        }
-
-        public string Name
-        {
-            get { return typeof (UserDenormalizer).FullName; }
-        }
-
-        public Type[] UsesViews
-        {
-            get
-            {
-                return new Type[0];
-            }
-        }
-
-        public Type[] BuildsViews
-        {
-            get
-            {
-                return new[]{typeof(LoginDTO)};
-            }
         }
     }
 }

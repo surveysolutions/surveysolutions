@@ -32,6 +32,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
             this.interviewInterviewSummaryes = interviewInterviewSummaryes;
         }
 
+        public override object[] Writers
+        {
+            get { return new object[] { writer}; }
+        }
+
+        public override object[] Readers
+        {
+            get { return new object[] { interviews, interviewInterviewSummaryes }; }
+        }
+
         public void Handle(IPublishedEvent<SupervisorAssigned> evnt)
         {
             InterviewData interviewData = Monads.Maybe(() => this.interviews.GetById(evnt.EventSourceId).Document);
@@ -110,11 +120,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
                 EntryId = evnt.EventIdentifier.FormatGuid(),
                 UserId = evnt.Payload.UserId.FormatGuid()
             }, evnt.EventIdentifier);
-        }
-
-        public override Type[] BuildsViews
-        {
-            get { return new[] { typeof (InterviewFeedEntry) }; }
         }
     }
 }

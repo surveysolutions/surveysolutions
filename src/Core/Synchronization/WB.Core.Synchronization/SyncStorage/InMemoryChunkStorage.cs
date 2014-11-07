@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
-    internal class InMemoryChunkStorage : IChunkWriter, IChunkReader
+    internal class InMemoryChunkStorage : IChunkWriter, IChunkReader, IReadSideRepositoryCleaner
     {
         private readonly IDictionary<Guid, SyncItem> container;
 
@@ -49,5 +50,27 @@ namespace WB.Core.Synchronization.SyncStorage
         {
             throw new NotImplementedException();
         }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EnableCache()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DisableCache()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetReadableStatus()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Type ViewType { get; private set; }
     }
 }
