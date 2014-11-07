@@ -8,7 +8,7 @@ using Main.Core;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.IncomePackagesRepositoryT
             {
                 Content = "some content",
                 Id = Guid.NewGuid(),
-                MetaInfo = PackageHelper.CompressString("some string")
+                MetaInfo = new ZipArchiveUtils(Mock.Of<IFileSystemAccessor>()).CompressString("some string")
             };
 
             jsonMock = new Mock<IJsonUtils>();

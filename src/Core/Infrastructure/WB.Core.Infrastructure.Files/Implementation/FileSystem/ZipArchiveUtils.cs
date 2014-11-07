@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using Ionic.Zip;
 using Ionic.Zlib;
 using WB.Core.Infrastructure.FileSystem;
@@ -78,6 +77,34 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
                 }
             }
             return result;
+        }
+
+        public string CompressString(string stringToCompress)
+        {
+            var bytes = Encoding.Unicode.GetBytes(stringToCompress);
+            using (var msi = new MemoryStream(bytes))
+            using (var mso = new MemoryStream())
+            {
+                using (var gs = new GZipStream(mso, CompressionMode.Compress))
+                {
+                    msi.CopyTo(gs);
+                }
+                return Convert.ToBase64String(mso.ToArray());
+            }
+        }
+
+        public string DecompressString(string stringToDecompress)
+        {
+            var bytes = Convert.FromBase64String(stringToDecompress);
+            using (var msi = new MemoryStream(bytes))
+            using (var mso = new MemoryStream())
+            {
+                using (var gs = new GZipStream(msi, CompressionMode.Decompress))
+                {
+                    gs.CopyTo(mso);
+                }
+                return Encoding.Unicode.GetString(mso.ToArray());
+            }
         }
     }
 }

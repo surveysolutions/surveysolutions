@@ -27,6 +27,7 @@ using WB.Core.BoundedContexts.Capi.Synchronization.Views.InterviewMetaInfo;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -65,7 +66,7 @@ namespace CAPI.Android.Core.Model
             var plainQuestionnaireStore = new SqlitePlainStorageAccessor<QuestionnaireDocument>(plainStore);
             var fileSystem = new FileStorageService();
             var interviewMetaInfoFactory = new InterviewMetaInfoFactory(questionnaireStore);
-            var changeLogStore = new FileChangeLogStore(interviewMetaInfoFactory);
+            var changeLogStore = new FileChangeLogStore(interviewMetaInfoFactory, this.Kernel.Get<IArchiveUtils>());
             var syncCacher = new FileCapiSynchronizationCacheService();
             var sharedPreferencesBackup = new SharedPreferencesBackupOperator();
             var templateStore = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>();

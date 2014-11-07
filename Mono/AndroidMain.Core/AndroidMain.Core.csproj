@@ -53,12 +53,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\CommandListSupplier.cs">
-      <Link>CommandListSupplier.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\ConcurrencyResolveCommandService.cs">
-      <Link>Commands\ConcurrencyResolveCommandService.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\File\UploadFileCommand.cs">
       <Link>Commands\File\UploadFileCommand.cs</Link>
     </Compile>
@@ -298,17 +292,8 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\User\UserUnlocked.cs">
       <Link>Events\User\UserUnlocked.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\ICommandListSupplier.cs">
-      <Link>ICommandListSupplier.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\IRavenDBSettings.cs">
       <Link>IRavenDBSettings.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\NCQRSInit.cs">
-      <Link>NCQRSInit.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\PackageHelper.cs">
-      <Link>PackageHelper.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\EventMergeUtils.cs">
       <Link>Utility\EventMergeUtils.cs</Link>

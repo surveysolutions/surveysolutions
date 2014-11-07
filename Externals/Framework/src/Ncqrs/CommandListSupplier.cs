@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Main.Core
+namespace Ncqrs
 {
     /// <summary>
     /// TODO: Update summary.

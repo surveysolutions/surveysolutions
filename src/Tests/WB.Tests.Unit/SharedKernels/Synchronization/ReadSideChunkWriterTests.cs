@@ -4,6 +4,7 @@ using Main.DenormalizerStorage;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -28,7 +29,8 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
             Guid userId = Guid.NewGuid();
             var someContent = "some content";
             IQueryableReadSideRepositoryWriter<SynchronizationDelta> querableStorageMock = new InMemoryReadSideRepositoryAccessor<SynchronizationDelta>();
-            ReadSideChunkWriter target = CreateRavenChunkWriter(querableStorageMock);
+            var archiever = Mock.Of<IArchiveUtils>();
+            ReadSideChunkWriter target = CreateRavenChunkWriter(querableStorageMock, archiever);
 
             // act
             target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent, IsCompressed = false }, userId, DateTime.Now);
@@ -48,7 +50,8 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
             var someContent1 = "some content1";
             var someContent2 = "some content2";
             var querableStorageMock = new InMemoryReadSideRepositoryAccessor<SynchronizationDelta>();
-            ReadSideChunkWriter target = CreateRavenChunkWriter(querableStorageMock);
+            var archiever = Mock.Of<IArchiveUtils>();
+            ReadSideChunkWriter target = CreateRavenChunkWriter(querableStorageMock, archiever);
 
             target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent1, IsCompressed = false }, userId, DateTime.Now);
 
@@ -63,9 +66,9 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
         }
         
 
-        private ReadSideChunkWriter CreateRavenChunkWriter(IQueryableReadSideRepositoryWriter<SynchronizationDelta> writeStorage)
+        private ReadSideChunkWriter CreateRavenChunkWriter(IQueryableReadSideRepositoryWriter<SynchronizationDelta> writeStorage, IArchiveUtils archiver)
         {
-            return new ReadSideChunkWriter(writeStorage);
+            return new ReadSideChunkWriter(writeStorage, archiver: archiver);
         }
 
     }

@@ -18,7 +18,7 @@ using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils.Serialization;
@@ -73,7 +73,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
             IQueryablePlainStorageAccessor<LocalInterviewFeedEntry> plainStorage = null,
             IHeadquartersInterviewReader headquartersInterviewReader = null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
-            IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage = null)
+            IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage = null,
+            IArchiveUtils archiver = null)
         {
             return new InterviewsSynchronizer(
                 Mock.Of<IAtomFeedReader>(),
@@ -96,7 +97,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
                 httpMessageHandler ?? Mock.Of<Func<HttpMessageHandler>>(),
                 interviewSynchronizationFileStorage ??
                     Mock.Of<IInterviewSynchronizationFileStorage>(
-                        _ => _.GetBinaryFilesFromSyncFolder() == new List<InterviewBinaryDataDescriptor>()));
+                        _ => _.GetBinaryFilesFromSyncFolder() == new List<InterviewBinaryDataDescriptor>()),
+                 archiver: archiver ?? Mock.Of<IArchiveUtils>());
         }
 
         public static IHeadquartersSettings HeadquartersSettings(Uri loginServiceUri = null,

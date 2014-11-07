@@ -5,7 +5,7 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.CommandBus;
 using CommandService = Ncqrs.Commanding.ServiceModel.CommandService;
 
-namespace Main.Core.Commands
+namespace Ncqrs
 {
     /// <summary>
     /// Repeates command execution until success.

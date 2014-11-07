@@ -107,6 +107,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\..\..\..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -128,6 +131,8 @@
     <Compile Include="Commanding\CommandExecution\Mapping\ICommandMapper.cs" />
     <Compile Include="Commanding\CommandExecution\Mapping\UoWMappedCommandExecutor.cs" />
     <Compile Include="Commanding\IKnownCommandsEnumerator.cs" />
+    <Compile Include="CommandListSupplier.cs" />
+    <Compile Include="ConcurrencyResolveCommandService.cs" />
     <Compile Include="Domain\AggregateExtensions.cs" />
     <Compile Include="Domain\Entity.cs" />
     <Compile Include="Domain\EntityMappedByConvention.cs" />
@@ -228,6 +233,7 @@
     <Compile Include="Eventing\Storage\Serialization\StringEventTranslator.cs" />
     <Compile Include="Eventing\Storage\StoredEvent.cs" />
     <Compile Include="IClock.cs" />
+    <Compile Include="ICommandListSupplier.cs" />
     <Compile Include="InternalExtensions.cs" />
     <Compile Include="LoggerExtensions.cs" />
     <Compile Include="LogManager.cs" />
@@ -259,6 +265,7 @@
     <Compile Include="Eventing\Storage\ConcurrencyException.cs" />
     <Compile Include="Eventing\Storage\IEventStore.cs" />
     <Compile Include="Eventing\Storage\InMemoryEventStore.cs" />
+    <Compile Include="NCQRSInit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

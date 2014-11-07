@@ -167,6 +167,9 @@
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\TransactionalCommandExecutorWrapper.cs">
       <Link>Commanding\CommandExecution\TransactionalCommandExecutorWrapper.cs</Link>
     </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\ICommand.cs">
+      <Link>Commanding\ICommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\IKnownCommandsEnumerator.cs">
       <Link>Commanding\IKnownCommandsEnumerator.cs</Link>
     </Compile>
@@ -176,8 +179,17 @@
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\ServiceModel\CommandService.cs">
       <Link>Commanding\ServiceModel\CommandService.cs</Link>
     </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\ServiceModel\ICommandService.cs">
+      <Link>Commanding\ServiceModel\ICommandService.cs</Link>
+    </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\ServiceModel\ICommandServiceInterceptor.cs">
       <Link>Commanding\ServiceModel\ICommandServiceInterceptor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\CommandListSupplier.cs">
+      <Link>CommandListSupplier.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\ConcurrencyResolveCommandService.cs">
+      <Link>ConcurrencyResolveCommandService.cs</Link>
     </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Config\IEnvironmentConfiguration.cs">
       <Link>Config\IEnvironmentConfiguration.cs</Link>
@@ -467,6 +479,9 @@
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\IClock.cs">
       <Link>IClock.cs</Link>
     </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\ICommandListSupplier.cs">
+      <Link>ICommandListSupplier.cs</Link>
+    </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\InternalExtensions.cs">
       <Link>InternalExtensions.cs</Link>
     </Compile>
@@ -488,6 +503,9 @@
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\NcqrsEnvironmentException.cs">
       <Link>NcqrsEnvironmentException.cs</Link>
     </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\NCQRSInit.cs">
+      <Link>NCQRSInit.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -495,9 +513,9 @@
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
-      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
-      <Name>WB.Core.Infrastructure</Name>
+    <ProjectReference Include="..\AndroidNinject\AndroidNinject.csproj">
+      <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>
+      <Name>AndroidNinject</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

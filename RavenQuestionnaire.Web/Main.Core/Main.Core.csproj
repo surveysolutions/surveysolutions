@@ -131,8 +131,6 @@
     <Compile Include="Commands\File\UploadFileCommand.cs" />
     <Compile Include="Domain\FileAR.cs" />
     <Compile Include="Entities\QuestionData.cs" />
-    <Compile Include="CommandListSupplier.cs" />
-    <Compile Include="Commands\ConcurrencyResolveCommandService.cs" />
     <Compile Include="Commands\Synchronization\UpdateRegisterDeviceCommand.cs" />
     <Compile Include="Commands\Synchronization\RegisterNewDeviceCapiCommand.cs" />
     <Compile Include="Commands\Synchronization\RegisterNewSupervisorCommand.cs" />
@@ -290,10 +288,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Events\Sync\NewSyncActivityCreated.cs" />
-    <Compile Include="ICommandListSupplier.cs" />
     <Compile Include="IRavenDBSettings.cs" />
-    <Compile Include="NCQRSInit.cs" />
-    <Compile Include="PackageHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\EventMergeUtils.cs" />
     <Compile Include="Utility\LINQExtensions.cs" />
