@@ -746,9 +746,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                         GetQuestionsInvolvedInExpression(questions, question.PublicKey, question.ValidationExpression).ToList();
                 },
 
-                questionId => SetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questions, questionId),
-                //questionId => SetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(questions, questionId),
-                questionId => SetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questions, questionId),
                 questionId => SetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questions, groups, questionId)
             };
 
@@ -779,46 +776,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         #region warmup caches
 
-        private static void SetQuestionsInvolvedInCustomEnablementConditionOfQuestion(Dictionary<Guid, IQuestion> questions, Guid questionId)
-        {
-            IQuestion question = GetQuestionOrThrow(questions, questionId);
-            question.QuestionIdsInvolvedInCustomEnablementConditionOfQuestion =
-                GetQuestionsInvolvedInExpression(questions, question.PublicKey, question.ConditionExpression).ToList();
-        }
-
         private static void SetQuestionsInvolvedInCustomEnablementConditionOfGroup(Dictionary<Guid, IQuestion> questions,
             Dictionary<Guid, IGroup> groups, Guid questionId)
         {
             IGroup group = GetGroup(groups, questionId);
             group.QuestionIdsInvolvedInCustomEnablementConditionOfGroup =
                 GetQuestionsInvolvedInExpression(questions, group.PublicKey, group.ConditionExpression).ToList();
-        }
-
-        //private static void SetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(Dictionary<Guid, IQuestion> questions, Guid questionId)
-        //{
-        //    var targetQuestion = GetQuestion(questions, questionId);
-        //    targetQuestion.QuestionsWhichCustomValidationDependsOnQuestion = Enumerable.ToList(
-        //        from question in questions.Values
-        //        where
-        //            DoesQuestionCustomValidationDependOnSpecifiedQuestion(questions, question.PublicKey,
-        //                specifiedQuestionId: questionId)
-        //                && questionId != question.PublicKey
-        //        select question.PublicKey
-        //        );
-        //}
-
-        private static void SetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Dictionary<Guid, IQuestion> questions,
-            Guid questionId)
-        {
-            var targetQuestion = GetQuestion(questions, questionId);
-            targetQuestion.ConditionalDependentQuestions = Enumerable.ToList(
-                from question in questions.Values
-                where
-                    DoesQuestionCustomEnablementDependOnSpecifiedQuestion(questions, question.PublicKey,
-                        specifiedQuestionId: questionId)
-                        && questionId != question.PublicKey
-                select question.PublicKey
-                );
         }
 
         private static void SetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Dictionary<Guid, IQuestion> questions,
@@ -873,18 +836,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             var question = GetQuestion(questions, questionId);
 
             IEnumerable<Guid> involvedQuestions = question.QuestionIdsInvolvedInCustomValidationOfQuestion;
-
-            bool isSpecifiedQuestionInvolved = involvedQuestions.Contains(specifiedQuestionId);
-
-            return isSpecifiedQuestionInvolved;
-        }
-
-        private static bool DoesQuestionCustomEnablementDependOnSpecifiedQuestion(Dictionary<Guid, IQuestion> questions, Guid questionId,
-            Guid specifiedQuestionId)
-        {
-            var question = GetQuestion(questions, questionId);
-
-            IEnumerable<Guid> involvedQuestions = question.QuestionIdsInvolvedInCustomEnablementConditionOfQuestion;
 
             bool isSpecifiedQuestionInvolved = involvedQuestions.Contains(specifiedQuestionId);
 
