@@ -146,6 +146,7 @@
     <Compile Include="WebClientExtensionsTests\when_auth_token_provided.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
