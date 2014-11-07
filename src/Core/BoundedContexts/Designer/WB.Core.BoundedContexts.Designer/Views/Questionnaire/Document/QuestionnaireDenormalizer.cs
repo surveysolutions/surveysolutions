@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 {
     using Main.Core.Entities;
 
-    internal class QuestionnaireDenormalizer :
+    internal class QuestionnaireDenormalizer :BaseDenormalizer,
         IEventHandler<NewQuestionnaireCreated>,
         IEventHandler<ExpressionsMigratedToCSharp>,
 
@@ -52,9 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<StaticTextAdded>,
         IEventHandler<StaticTextUpdated>,
         IEventHandler<StaticTextCloned>,
-        IEventHandler<StaticTextDeleted>,
-
-        IEventHandler
+        IEventHandler<StaticTextDeleted>
     {
         private readonly IQuestionnaireDocumentUpgrader upgrader;
         private readonly IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage;
@@ -68,6 +66,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             this.documentStorage = documentStorage;
             this.questionnaireEntityFactory = questionnaireEntityFactory;
             this.logger = logger;
+        }
+
+        public override object[] Writers
+        {
+            get { return new object[] { documentStorage}; }
         }
 
         public void Handle(IPublishedEvent<NewQuestionnaireCreated> evnt)
@@ -513,21 +516,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             questionnaireDocument = this.upgrader.TranslatePropagatePropertiesToRosterProperties(questionnaireDocument);
             this.documentStorage.Store(questionnaireDocument, questionnaireDocument.PublicKey);
-        }
-
-        public string Name
-        {
-            get { return this.GetType().Name; }
-        }
-
-        public Type[] UsesViews
-        {
-            get { return new Type[0]; }
-        }
-
-        public Type[] BuildsViews
-        {
-            get { return new Type[] { typeof(QuestionnaireDocument) }; }
         }
     }
 }

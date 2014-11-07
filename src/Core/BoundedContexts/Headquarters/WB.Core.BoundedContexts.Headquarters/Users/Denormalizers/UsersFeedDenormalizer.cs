@@ -25,6 +25,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Denormalizers
             this.users = users;
         }
 
+        public override object[] Writers
+        {
+            get { return new object[] { usersFeed }; }
+        }
+
+        public override object[] Readers
+        {
+            get { return new object[] { users}; }
+        }
+
         public void Handle(IPublishedEvent<NewUserCreated> evnt)
         {
             if (evnt.Payload.Roles.HasSupervisorApplicationRole())
@@ -55,11 +65,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Denormalizers
                     Timestamp = evnt.EventTimeStamp
                 }, eventId);
             }
-        }
-
-        public override Type[] BuildsViews
-        {
-            get { return new Type[] { typeof(UserChangedFeedEntry) }; }
         }
 
         private static string GetSupervisorId(IPublishedEvent<NewUserCreated> evnt)

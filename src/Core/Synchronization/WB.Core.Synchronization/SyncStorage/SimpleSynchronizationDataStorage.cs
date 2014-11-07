@@ -35,6 +35,11 @@ namespace WB.Core.Synchronization.SyncStorage
             this.metaBuilder = metaBuilder;
         }
 
+        public void Clear()
+        {
+            chunkStorageWriter.Clear();
+        }
+
         public void SaveInterview(InterviewSynchronizationDto doc, Guid responsibleId, DateTime timestamp)
         {
             var syncItem = new SyncItem
@@ -185,5 +190,22 @@ namespace WB.Core.Synchronization.SyncStorage
             return  JsonConvert.SerializeObject(item, Formatting.None, settings);
         }
         #endregion
+
+        public void EnableCache()
+        {
+            chunkStorageWriter.EnableCache();
+        }
+
+        public void DisableCache()
+        {
+            chunkStorageWriter.DisableCache();
+        }
+
+        public string GetReadableStatus()
+        {
+            return chunkStorageWriter.GetReadableStatus();
+        }
+
+        public Type ViewType { get { return chunkStorageWriter.ViewType; } }
     }
 }

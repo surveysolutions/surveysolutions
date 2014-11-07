@@ -5,6 +5,7 @@ using System.Reflection;
 using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.StorageStrategy;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -140,14 +141,11 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
 
         public string Name { get { return this.GetType().Name; } }
 
-        public virtual Type[] BuildsViews
-        {
-            get { return new[] { typeof(T) }; }
-        }
+        public virtual object[] Writers { get { return new object[] { readsideRepositoryWriter }; } }
 
-        public virtual Type[] UsesViews
+        public virtual object[] Readers
         {
-            get { return new Type[0]; }
+            get { return new object[0]; }
         }
     }
 }
