@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Main.Core.Documents;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 
 namespace WB.Core.Synchronization
 {
-    public interface ISynchronizationDataStorage
+    public interface ISynchronizationDataStorage : IReadSideRepositoryCleaner, IReadSideRepositoryWriter
     {
         void SaveInterview(InterviewSynchronizationDto doc, Guid responsibleId, DateTime timestamp);
         void SaveQuestionnaire(QuestionnaireDocument doc, long version, bool allowCensusMode, DateTime timestamp);

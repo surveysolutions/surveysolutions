@@ -9,7 +9,7 @@ using WB.UI.Shared.Web.MembershipProvider.Roles;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Account
 {
-    internal class AccountDenormalizer : IEventHandler<AccountConfirmed>, 
+    internal class AccountDenormalizer : BaseDenormalizer, IEventHandler<AccountConfirmed>, 
                                        IEventHandler<AccountDeleted>, 
                                        IEventHandler<AccountLocked>, 
                                        IEventHandler<AccountOnlineUpdated>, 
@@ -24,14 +24,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
                                        IEventHandler<AccountRoleRemoved>, 
                                        IEventHandler<AccountLoginFailed>, 
                                        IEventHandler<AccountPasswordResetTokenChanged>, 
-                                       IEventHandler<AccountValidated>,
-                                       IEventHandler
+                                       IEventHandler<AccountValidated>
     {
         private readonly IReadSideRepositoryWriter<AccountDocument> _accounts;
 
         public AccountDenormalizer(IReadSideRepositoryWriter<AccountDocument> accounts)
         {
             this._accounts = accounts;
+        }
+
+        public override object[] Writers
+        {
+            get { return new object[] { _accounts }; }
         }
 
         public void Handle(IPublishedEvent<AccountConfirmed> @event)
@@ -178,21 +182,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         private static string GetNormalizedUserName(string userName)
         {
             return userName.ToLower();
-        }
-
-        public string Name
-        {
-            get { return this.GetType().Name; }
-        }
-
-        public Type[] UsesViews
-        {
-            get { return new Type[0]; }
-        }
-
-        public Type[] BuildsViews
-        {
-            get { return new Type[] { typeof(AccountDocument) }; }
         }
 
         public void Handle(IPublishedEvent<AccountValidated> evnt) // Here added just to have this event registered in NCQRS

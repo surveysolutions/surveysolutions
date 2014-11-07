@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Client.Document;
+using Raven.Client.Indexes;
 using Raven.Client.Linq;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository;
@@ -11,7 +13,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors
 {
     #warning TLK: make string identifiers here after switch to new storage
-    public class RavenReadSideRepositoryWriter<TEntity> : RavenReadSideRepositoryAccessor<TEntity>, IQueryableReadSideRepositoryWriter<TEntity>, IReadSideRepositoryWriter
+    public class RavenReadSideRepositoryWriter<TEntity> : RavenReadSideRepositoryAccessor<TEntity>, IQueryableReadSideRepositoryWriter<TEntity>, IReadSideRepositoryWriter, IReadSideRepositoryCleaner
         where TEntity : class, IReadSideRepositoryEntity
     {
         private const int MaxCountOfCachedEntities = 256;
@@ -33,10 +35,9 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         private bool isCacheEnabled = false;
         private readonly Dictionary<string, CachedEntity> cache = new Dictionary<string, CachedEntity>();
 
-        public RavenReadSideRepositoryWriter(DocumentStore ravenStore, IReadSideRepositoryWriterRegistry writerRegistry)
+        public RavenReadSideRepositoryWriter(DocumentStore ravenStore)
             : base(ravenStore)
         {
-            writerRegistry.Register(this);
         }
 
         protected override TResult QueryImpl<TResult>(Func<IRavenQueryable<TEntity>, TResult> query)
@@ -274,6 +275,14 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         private void ClearCache()
         {
             this.cache.Clear();
+        }
+
+        public void Clear()
+        {
+            
+            const string DefaultIndexName = "Raven/DocumentsByEntityName";
+            if (this.ravenStore.DatabaseCommands.GetIndex(DefaultIndexName) != null)
+                this.ravenStore.DatabaseCommands.DeleteByIndex(DefaultIndexName, new IndexQuery() { Query = string.Format("Tag: *{0}*", global::Raven.Client.Util.Inflector.Pluralize(ViewName)) }, false).WaitForCompletion();
         }
     }
 }
