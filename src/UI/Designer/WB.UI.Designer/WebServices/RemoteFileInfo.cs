@@ -10,12 +10,15 @@ namespace WB.UI.Designer.WebServices
         [MessageBodyMember]
         public Stream FileByteStream;
 
+        /*[MessageHeader]
+        public string FileName;*/
+
         [MessageHeader]
-        public string FileName;
+        public string SupportingAssembly;
 
         [MessageHeader]
         public long Length;
-
+        
         public void Dispose()
         {
             if (this.FileByteStream != null)

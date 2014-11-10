@@ -40,19 +40,18 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
             interviewSynchronizationDto = CreateInterviewSynchronizationDto(
                 answers: new[]
                 {
-                    new AnsweredQuestionSynchronizationDto(filteredComboboxQuestionId, new decimal[0], new decimal[] { 2, 1 }, null)
+                    new AnsweredQuestionSynchronizationDto(filteredComboboxQuestionId, new decimal[0], 2.00m, null)
                 },
                 propagatedGroupInstanceCounts: new Dictionary<InterviewItemId, RosterSynchronizationDto[]>());
         };
 
         Because of = () =>
-          interviewViewModel = CreateInterviewViewModel(questionnarie, rosterStructure,
-              interviewSynchronizationDto);
+          interviewViewModel = CreateInterviewViewModel(questionnarie, rosterStructure, interviewSynchronizationDto);
 
         It should_answer_string_of_filtered_combobox_question_be_equal_to_2_1 = () =>
             ((FilteredComboboxQuestionViewModel)interviewViewModel.FindQuestion(
                 question => question.PublicKey == new InterviewItemId(filteredComboboxQuestionId, new decimal[0]))
-                .FirstOrDefault()).AnswerString.ShouldEqual("2, 1");
+                .FirstOrDefault()).AnswerString.ShouldEqual("2");
 
         private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;

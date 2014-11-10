@@ -12,6 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
+    [Ignore("C#, KP-4388 Different question types without validation expressions (barcode)")]
     internal class when_answering_qr_barcode_question_and_parent_group_is_disabled : InterviewTestsContext
     {
         Establish context = () =>
@@ -21,7 +22,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 (_
                     => _.HasQuestion(questionId) == true &&
                         _.GetQuestionType(questionId) == QuestionType.QRBarcode &&
-                        _.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new Guid[] { parentGroupId } &&
+                       // _.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new Guid[] { parentGroupId } &&
                         _.IsRosterGroup(parentGroupId) == false &&
                         _.GetRostersFromTopToSpecifiedGroup(parentGroupId) == new Guid[0] &&
                         _.GetAllParentGroupsForQuestion(questionId) == new Guid[] { parentGroupId }

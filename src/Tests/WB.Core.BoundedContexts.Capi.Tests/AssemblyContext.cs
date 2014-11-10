@@ -20,9 +20,15 @@ namespace WB.Core.BoundedContexts.Capi.Tests
 
             var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
 
+            var substitutionService = new SubstitutionService();
+
             serviceLocatorMock
                 .Setup(locator => locator.GetInstance<ISubstitutionService>())
-                .Returns(new SubstitutionService());
+                .Returns(substitutionService);
+
+            serviceLocatorMock
+                .Setup(locator => locator.GetInstance<IKeywordsProvider>())
+                .Returns(new KeywordsProvider(substitutionService));
 
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
         }

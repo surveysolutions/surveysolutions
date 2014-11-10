@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Models;
 
@@ -31,6 +31,9 @@ namespace WB.Tests.Unit.Applications.Designer.VerificationErrorsMapperTests
         
         It should_return_error_with_same_References_count_as_input_error_has = () =>
             result.First().References.Count.ShouldEqual(verificationErrors.First().References.Count());
+
+        It should_return_error_with_IsGroupOfErrors_field_set_in_true = () =>
+            result.First().IsGroupOfErrors.ShouldBeTrue();
         
         It should_return_error_that_references_static_text_with_staticTextId = () =>
             result.First().References.First().ItemId.ShouldEqual(staticTextId);

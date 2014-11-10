@@ -73,12 +73,12 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SyncManagerTests
             syncProvider.Verify(x => x.GetSyncItem(registrationId, itemId, sequence), Times.Once());
             Assert.That(result, Is.Not.Null);
             Assert.That(result.ItemsContainer.Count, Is.EqualTo(1));
-            Assert.That(result.IsErrorOccured, Is.EqualTo(false));
+            
             Assert.That(result.ItemsContainer[0].Id, Is.EqualTo(itemId));
         }
 
         [Test]
-        public void ReceiveSyncPackage_when_Valid_Request_Arrived_but_Item_was_NOT_Found_SyncPackage_with_error_status_Is_returned()
+        public void ReceiveSyncPackage_when_Valid_Request_Arrived_but_Item_was_NOT_Found_Exception_is_thrown()
         {
             //Arrange
             var syncProvider = new Mock<ISyncProvider>();
@@ -89,12 +89,10 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SyncManagerTests
             ISyncManager manager = CreateDefaultSyncManager(syncProvider.Object);
 
             //Act
-            var result = manager.ReceiveSyncPackage(registrationId, itemId, sequence);
+            TestDelegate act = () => manager.ReceiveSyncPackage(registrationId, itemId, sequence); 
 
             //Assert
-            syncProvider.Verify(x => x.GetSyncItem(registrationId, itemId, sequence), Times.Once());
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result.IsErrorOccured, Is.EqualTo(true));
+            Assert.Throws<Exception>(act);
         }
 
 

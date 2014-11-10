@@ -39,3 +39,4 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("WB.Core.BoundedContexts.Supervisor.Tests")]
 [assembly: InternalsVisibleTo("Core.Supervisor.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
+[assembly: InternalsVisibleTo("WB.Tests.Unit")]
