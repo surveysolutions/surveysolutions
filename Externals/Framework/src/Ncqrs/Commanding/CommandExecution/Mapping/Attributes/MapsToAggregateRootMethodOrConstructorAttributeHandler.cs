@@ -31,7 +31,7 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping.Attributes
 
             Action executorAction = () => executor.ExecuteActionOnExistingOrCreatingNewInstance(GetAggregateRootId, GetAggregateRootType, existingAction, create);
 
-            if (commandType.IsDefined(typeof(TransactionalAttribute), false))
+            if (commandType.GetTypeInfo().IsDefined(typeof(TransactionalAttribute), false))
             {
                 var transactionService = NcqrsEnvironment.Get<ITransactionService>();
                 transactionService.ExecuteInTransaction(executorAction);

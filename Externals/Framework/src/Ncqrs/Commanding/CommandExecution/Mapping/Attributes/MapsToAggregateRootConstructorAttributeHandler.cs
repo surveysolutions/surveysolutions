@@ -22,7 +22,7 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping.Attributes
 
             Action executorAction = () => executor.ExecuteActionCreatingNewInstance(create);
 
-            if (commandType.IsDefined(typeof(TransactionalAttribute), false))
+            if (commandType.GetTypeInfo().IsDefined(typeof(TransactionalAttribute), false))
             {
                 var transactionService = NcqrsEnvironment.Get<ITransactionService>();
                 transactionService.ExecuteInTransaction(executorAction);
@@ -33,7 +33,7 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping.Attributes
             }
         }
 
-        private static Tuple<ConstructorInfo, PropertyInfo[]> GetMatchingConstructor(MapsToAggregateRootConstructorAttribute attribute, Type commandType)
+        private static Tuple<MethodInfo, PropertyInfo[]> GetMatchingConstructor(MapsToAggregateRootConstructorAttribute attribute, Type commandType)
         {
             var strategy = new AttributePropertyMappingStrategy();
             var sources = strategy.GetMappedProperties(commandType);
@@ -44,7 +44,7 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping.Attributes
         private static void ValidateCommandType(Type mappedCommandType)
         {
             var expectedAttribute = typeof (MapsToAggregateRootConstructorAttribute);
-            bool containsThisAttribute = mappedCommandType.IsDefined(expectedAttribute, false);
+            bool containsThisAttribute = mappedCommandType.GetTypeInfo().IsDefined(expectedAttribute, false);
 
             if (!containsThisAttribute) throw new ArgumentException("The given command type does not contain " +
                                                                     expectedAttribute.FullName + ".",

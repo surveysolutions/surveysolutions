@@ -39,7 +39,7 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping.Attributes
         {
             var strategy = new AttributePropertyMappingStrategy();
             var sources = strategy.GetMappedProperties(commandType);
-            var bindingFlags = BindingFlags.Public | BindingFlags.Static;
+            Func<MethodInfo, bool> bindingFlags = x => x.IsPublic || x.IsStatic;
 
             return PropertiesToMethodMapper.GetMethod(sources, attribute.Type, bindingFlags, methodName);
         }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using Ninject.Infrastructure.Language;
 
 namespace Ncqrs.Eventing.Storage
 {
@@ -10,7 +12,6 @@ namespace Ncqrs.Eventing.Storage
     /// </summary>
     public class PropertyBagConverter : IPropertyBagConverter
     {
-        private const BindingFlags PublicInstanceProperties = BindingFlags.Public | BindingFlags.Instance;
         private readonly Dictionary<Type, IPropertyBagPostConverter> _converters = new Dictionary<Type, IPropertyBagPostConverter>();
 
         public PropertyBagConverter()
@@ -50,7 +51,7 @@ namespace Ncqrs.Eventing.Storage
             var eventName = TypeResolver.EventNameFor(type);
             var document = new PropertyBag(eventName);
 
-            foreach (PropertyInfo propertyInfo in type.GetProperties(PublicInstanceProperties))
+            foreach (PropertyInfo propertyInfo in RuntimeReflectionExtensions.GetRuntimeProperties(type))
             {
                 document.AddPropertyValue(propertyInfo.Name, propertyInfo.GetValue(obj, null));
             }
@@ -87,6 +88,8 @@ namespace Ncqrs.Eventing.Storage
         {
             var flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
             var noArgs = new object[0];
+
+            targetType.GetTypeInfo().GetD
             var defaultCtor = targetType.GetConstructor(flags, null, Type.EmptyTypes, null);
 
             if(defaultCtor == null)

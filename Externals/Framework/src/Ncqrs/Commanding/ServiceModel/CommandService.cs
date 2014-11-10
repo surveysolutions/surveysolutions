@@ -14,12 +14,6 @@ namespace Ncqrs.Commanding.ServiceModel
         private readonly Dictionary<Type, Action<ICommand, string>> _executors = new Dictionary<Type, Action<ICommand, string>>();
         private readonly List<ICommandServiceInterceptor> _interceptors = new List<ICommandServiceInterceptor>(0);
 
-        /// <summary>
-        /// Execute a <see cref="ICommand"/> by giving it to the registered <see cref="ICommandExecutor{TCommand}"/>.
-        /// </summary>
-        /// <param name="command">The command to execute.</param>
-        /// <exception cref="ArgumentNullException">Occurs when the <i>command</i> was a <c>null</c> dereference.</exception>
-        /// <exception cref="ExecutorForCommandNotFoundException">Occurs when the <see cref="ICommandExecutor{TCommand}"/> was not found for on the given <see cref="ICommand"/>.</exception>
         public virtual void Execute(ICommand command, string origin)
         {
             Type commandType = command.GetType();
@@ -28,14 +22,20 @@ namespace Ncqrs.Commanding.ServiceModel
             try
             {
                 // Call OnBeforeExecution on every interceptor.
-                _interceptors.ForEach(i => i.OnBeforeBeforeExecutorResolving(context));
+                foreach (var interceptor in _interceptors)
+                {
+                    interceptor.OnBeforeBeforeExecutorResolving(context);
+                }
 
                 // Get executor for the command.
                 var executor = GetCommandExecutorForCommand(commandType);
                 context.ExecutorResolved = executor != null;
 
                 // Call OnBeforeExecution on every interceptor.
-                _interceptors.ForEach(i => i.OnBeforeExecution(context));
+                foreach (var interceptor in _interceptors)
+                {
+                    interceptor.OnBeforeExecution(context);
+                }
 
                 // When we couldn't find an executor, throw exception.
                 if (executor == null)
@@ -59,7 +59,10 @@ namespace Ncqrs.Commanding.ServiceModel
             finally
             {
                 // Call OnAfterExecution on every interceptor.
-                _interceptors.ForEach(i=>i.OnAfterExecution(context));
+                foreach (var interceptor in _interceptors)
+                {
+                    interceptor.OnAfterExecution(context);
+                }
             }
         }
 
@@ -75,12 +78,6 @@ namespace Ncqrs.Commanding.ServiceModel
             _executors.Add(commandType, action);
         }
 
-        /// <summary>
-        /// Registers the executor for the specified command type. The executor will be called for every command of the specified type.
-        /// </summary>
-        /// <typeparam name="TCommand">The type of the command.</typeparam>
-        /// <param name="executor">The executor that will be called for every command of the specified type.</param>
-        /// <exception cref="ArgumentNullException">Occurs when the <i>commandType</i> or <i>executor</i> was a <c>null</c> dereference.</exception>
         public virtual void RegisterExecutor<TCommand>(ICommandExecutor<TCommand> executor) where TCommand : ICommand
         {
             if (_executors.ContainsKey(typeof(TCommand))) return;
@@ -88,12 +85,6 @@ namespace Ncqrs.Commanding.ServiceModel
             _executors.Add(typeof(TCommand), action);
         }
 
-        /// <summary>
-        /// Unregisters the executor of the specified command type. The executor will not be called any more.
-        /// </summary>
-        /// <param name="executor">The executor to unregister.</param>
-        /// <exception cref="ArgumentNullException">Occurs when the <i>commandType</i> or <i>executor</i> was a <c>null</c> dereference.</exception>
-        /// <exception cref="InvalidOperationException">Occurs when the <i>executor</i> is not the same as the registered executor for the specified command type.</exception>
         public virtual void UnregisterExecutor<TCommand>() where TCommand : ICommand
         {
             _executors.Remove(typeof (TCommand));

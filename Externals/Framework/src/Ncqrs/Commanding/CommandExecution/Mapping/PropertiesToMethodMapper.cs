@@ -8,23 +8,26 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping
 {
     public class PropertiesToMethodMapper
     {
-        private static BindingFlags All = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-
-        public static Tuple<ConstructorInfo, PropertyInfo[]> GetConstructor(PropertyToParameterMappingInfo[] sources, Type targetType)
+        public static Tuple<MethodInfo, PropertyInfo[]> GetConstructor(PropertyToParameterMappingInfo[] sources, Type targetType)
         {
-            var potentialTargets = targetType.GetConstructors(All);
-            return GetMethodBase(sources, potentialTargets);
+            IEnumerable<MethodInfo> potentialTargets = targetType.GetMethods()
+                .Where(x => x.IsConstructor)
+                .Where(x => x.IsPublic || x.IsPrivate);
+
+            var methodBase = GetMethodBase(sources, potentialTargets);
+
+            return methodBase;
         }
 
-        public static Tuple<MethodInfo, PropertyInfo[]> GetMethod(PropertyToParameterMappingInfo[] sources, Type targetType, BindingFlags bindingFlags, string methodName = null)
+        public static Tuple<MethodInfo, PropertyInfo[]> GetMethod(PropertyToParameterMappingInfo[] sources, Type targetType, Func<MethodInfo, bool> bindingFlags, string methodName = null)
         {
-            IEnumerable<MethodInfo> potentialTargets = targetType.GetMethods(bindingFlags);
+            IEnumerable<MethodInfo> potentialTargets = targetType.GetMethods().Where(bindingFlags);
 
             if (methodName != null)
             {
                 potentialTargets = potentialTargets.Where
                 (
-                    method => method.Name.Equals(methodName, StringComparison.InvariantCultureIgnoreCase)
+                    method => method.Name.Equals(methodName, StringComparison.CurrentCultureIgnoreCase)
                 );
             }
 
@@ -33,13 +36,13 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping
 
         public static Tuple<MethodInfo, PropertyInfo[]> GetMethod(PropertyToParameterMappingInfo[] sources, Type targetType, string methodName = null)
         {
-            IEnumerable<MethodInfo> potentialTargets = targetType.GetMethods(All);
+            IEnumerable<MethodInfo> potentialTargets = targetType.GetMethods().Where(x => x.IsPublic || x.IsPrivate); ;
 
             if(methodName != null)
             {
                 potentialTargets = potentialTargets.Where
                 (
-                    method => method.Name.Equals(methodName, StringComparison.InvariantCultureIgnoreCase)
+                    method => method.Name.Equals(methodName, StringComparison.CurrentCultureIgnoreCase)
                 );
             }
 
@@ -153,7 +156,7 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping
                     {
                         var matchedOnName = toMap.SingleOrDefault
                             (
-                                p => p.TargetName.Equals(param.Name, StringComparison.InvariantCultureIgnoreCase)
+                                p => p.TargetName.Equals(param.Name, StringComparison.CurrentCultureIgnoreCase)
                             );
 
                         if (matchedOnName != null)
@@ -185,7 +188,7 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping
 
                 if (prop != null)
                 {
-                    bool isAssignable = param.ParameterType.IsAssignableFrom(prop.PropertyType);
+                    bool isAssignable = param.ParameterType.GetTypeInfo().IsAssignableFrom(prop.PropertyType.GetTypeInfo());
                     isInvokable &= isAssignable;
                 }
             }
@@ -210,7 +213,7 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping
                     int idx = prop.Ordinal.Value - 1;
 
                     if (mappedProps[idx] != null)
-                        throw new ApplicationException(); // TODO: Throw if already mapped.
+                        throw new Exception(); // TODO: Throw if already mapped.
 
                     mappedProps[idx] = prop.Property;
 

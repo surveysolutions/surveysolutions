@@ -14,12 +14,6 @@ namespace Ncqrs.Eventing.Sourcing
         [NonSerialized]
         private Guid _eventSourceId;
         
-        /// <summary>
-        /// Gets the globally unique identifier.
-        /// </summary>
-        /// <exception cref="InvalidOperationException">Thrown when setting this
-        /// value when the version of this aggregate root is not 0 or this
-        /// instance contains are any uncommitted events.</exception>
         public Guid EventSourceId
         {
             get { return _eventSourceId; }
@@ -166,7 +160,7 @@ namespace Ncqrs.Eventing.Sourcing
         internal protected void ApplyEvent(object evnt)
         {
             Log.DebugFormat("Applying an event to event source {0}", evnt);
-            var eventVersion = evnt.GetType().Assembly.GetName().Version;
+            var eventVersion = evnt.GetType().GetTypeInfo().Assembly.GetName().Version;
             var eventSequence = GetNextSequence();
             var wrappedEvent = new UncommittedEvent(_idGenerator.GenerateNewId(), EventSourceId, eventSequence, _initialVersion, DateTime.UtcNow, evnt, eventVersion);
 

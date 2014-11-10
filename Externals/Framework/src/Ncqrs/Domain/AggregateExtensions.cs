@@ -14,8 +14,8 @@ namespace Ncqrs.Domain
         {
             // Query all ISnapshotable interfaces. We only allow only
             // one ISnapshotable interface per aggregate root type.
-            var snapshotables = from i in aggregateType.GetInterfaces()
-                                where i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ISnapshotable<>)
+            var snapshotables = from i in aggregateType.GetTypeInfo().ImplementedInterfaces
+                                where i.GetTypeInfo().IsGenericType && i.GetGenericTypeDefinition() == typeof(ISnapshotable<>)
                                 select i;
 
             // Aggregate does not implement any ISnapshotable interface.

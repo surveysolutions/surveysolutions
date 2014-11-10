@@ -95,7 +95,7 @@ namespace WB.Core.GenericSubdomains.Utils
 
         private static bool IsNullableType(Type theType)
         {
-            if (theType.IsGenericType)
+            if (theType.GetTypeInfo().IsGenericType)
                 return theType.GetGenericTypeDefinition() == typeof(Nullable<>);
             else
                 return false;
