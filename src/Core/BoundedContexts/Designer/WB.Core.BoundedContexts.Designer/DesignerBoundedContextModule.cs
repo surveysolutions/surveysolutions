@@ -1,4 +1,5 @@
 ﻿using Ninject.Modules;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Text;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -14,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
@@ -55,6 +57,12 @@ namespace WB.Core.BoundedContexts.Designer
             this.Kernel.RegisterFactory<AccountListViewFactory>();
             this.Kernel.RegisterFactory<AccountViewFactory>();
             this.Kernel.RegisterFactory<PdfQuestionnaireFactory>();
+
+            CommandRegistry.Add<UpdateTextQuestionCommand, Aggregates.Questionnaire>(
+                command => command.QuestionnaireId,
+                (command, aggregate) => aggregate.UpdateTextQuestion(
+                    command.QuestionId, command.Title, command.VariableName, command.VariableLabel, command.IsMandatory, command.IsPreFilled, command.Scope,
+                    command.EnablementCondition, command.ValidationExpression, command.ValidationMessage, command.Instructions, command.Mask, command.ResponsibleId));
         }
     }
 }
