@@ -92,7 +92,7 @@ namespace WB.Tools.CapiDataGenerator.Models
 
             var basePath = System.IO.Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
             new StandardKernel(
-                new RavenReadSideInfrastructureModule(ravenSupervisorSettings),
+                new RavenReadSideInfrastructureModule(ravenSupervisorSettings, basePath),
                 new SynchronizationModule(synchronizationSettings),
                 new RavenPlainStorageInfrastructureModule(ravenSupervisorSettings),
                 new CapiDataGeneratorRegistry(),

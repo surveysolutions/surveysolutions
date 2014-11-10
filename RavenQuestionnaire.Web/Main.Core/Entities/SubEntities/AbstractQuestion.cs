@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Main.Core.Entities.Composite;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
@@ -34,7 +33,6 @@ namespace Main.Core.Entities.SubEntities
             {
                 return new List<IComposite>(0);
             }
-
             set
             {
                 // do nothing
@@ -44,50 +42,6 @@ namespace Main.Core.Entities.SubEntities
         public string Comments { get; set; }
 
         public string ConditionExpression { get; set; }
-
-        public List<Guid> ConditionalDependentQuestions { get; set; }
-        public List<Guid> ConditionalDependentGroups { get; set; }
-        //public List<Guid> QuestionsWhichCustomValidationDependsOnQuestion { get; set; }
-
-        public List<Guid> QuestionIdsInvolvedInCustomEnablementConditionOfQuestion
-        {
-            get
-            {
-                if (questionIdsInvolvedInCustomEnablementConditionOfQuestion == null &&
-                    QuestionsInvolvedInCustomEnablementConditionOfQuestion != null)
-                {
-                    questionIdsInvolvedInCustomEnablementConditionOfQuestion =
-                        QuestionsInvolvedInCustomEnablementConditionOfQuestion.Select(q => q.Id).ToList();
-                }
-                return questionIdsInvolvedInCustomEnablementConditionOfQuestion;
-            }
-            set { questionIdsInvolvedInCustomEnablementConditionOfQuestion = value; }
-        }
-
-        private List<Guid> questionIdsInvolvedInCustomEnablementConditionOfQuestion;
-
-        public List<Guid> QuestionIdsInvolvedInCustomValidationOfQuestion
-        {
-            get
-            {
-                if (questionIdsInvolvedInCustomValidationOfQuestion == null && QuestionsInvolvedInCustomValidationOfQuestion != null)
-                {
-                    questionIdsInvolvedInCustomValidationOfQuestion =
-                        QuestionsInvolvedInCustomValidationOfQuestion.Select(q => q.Id).ToList();
-                }
-                return questionIdsInvolvedInCustomValidationOfQuestion;
-            }
-            set { questionIdsInvolvedInCustomValidationOfQuestion = value; }
-        }
-
-        private List<Guid> questionIdsInvolvedInCustomValidationOfQuestion;
-
-
-        [Obsolete("please use QuestionIdsInvolvedInCustomEnablementConditionOfQuestion instead")]
-        public List<QuestionIdAndVariableName> QuestionsInvolvedInCustomEnablementConditionOfQuestion { get; set; }
-
-        [Obsolete("please use QuestionIdsInvolvedInCustomValidationOfQuestion instead")]
-        public List<QuestionIdAndVariableName> QuestionsInvolvedInCustomValidationOfQuestion { get; set; }
 
         public bool Featured { get; set; }
 
@@ -140,23 +94,9 @@ namespace Main.Core.Entities.SubEntities
 
             question.SetParent(null);
 
-            if (this.ConditionalDependentGroups != null)
-            {
-                question.ConditionalDependentGroups = new List<Guid>(this.ConditionalDependentGroups);
-            }
-
-            if (this.ConditionalDependentQuestions != null)
-            {
-                question.ConditionalDependentQuestions = new List<Guid>(this.ConditionalDependentQuestions);
-            }
-
-            if (this.QuestionIdsInvolvedInCustomValidationOfQuestion != null)
-            {
-            }
-
             // handle reference part
             question.Answers = new List<Answer>();
-            foreach (Answer answer in this.Answers)
+            foreach (var answer in this.Answers)
             {
                 question.Answers.Add(answer.Clone());
             }

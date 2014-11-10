@@ -234,6 +234,10 @@
       <Project>{f907b0f2-4cfd-438c-8b53-f2d44c581f56}</Project>
       <Name>WB.Core.BoundedContexts.Capi.Synchronization</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.Capi.csproj">
+      <Project>{c6ed30a9-4d14-48d1-8311-c2267dfd424f}</Project>
+      <Name>WB.Core.BoundedContexts.Capi</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.NLog\WB.Core.GenericSubdomains.Logging.NLog.csproj">
       <Project>{AFED8C20-0E91-4605-ADB5-35A7F0C0DD0A}</Project>
       <Name>WB.Core.GenericSubdomains.Logging.NLog</Name>

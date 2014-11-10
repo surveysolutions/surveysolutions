@@ -101,10 +101,6 @@ namespace Main.Core.Documents
             get { return null; }
         }
 
-        public List<Guid> QuestionIdsInvolvedInCustomEnablementConditionOfGroup { get; set; }
-        [Obsolete("please use QuestionIdsInvolvedInCustomEnablementConditionOfGroup instead")]
-        public List<QuestionIdAndVariableName> QuestionsInvolvedInCustomEnablementConditionOfGroup { get; set; }
-
         public List<Guid> SharedPersons { get; set; }
 
         public long LastEventSequence { get; set; }
@@ -536,7 +532,6 @@ namespace Main.Core.Documents
             }
         }
 
-
         public void CheckIsQuestionHeadAndUpdateRosterProperties(Guid itemToCheckId, Guid? groupPublicKey)
         {
             IQuestion item = this.GetItemOrLogWarning(itemToCheckId) as IQuestion;
@@ -546,7 +541,6 @@ namespace Main.Core.Documents
                 MoveHeadQuestionPropertiesToRoster(itemToCheckId, groupPublicKey);
             }
         }
-
 
         public void MoveHeadQuestionPropertiesToRoster(Guid questionId, Guid? groupPublicKey)
         {
@@ -609,7 +603,5 @@ namespace Main.Core.Documents
                 triggeredGroup.RosterSizeQuestionId = rosterSizeQuestionId;
             }
         }
-
-        public bool IsCacheWarmed { get; set; }
     }
 }

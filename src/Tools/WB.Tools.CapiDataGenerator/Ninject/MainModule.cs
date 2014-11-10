@@ -45,7 +45,6 @@ using WB.Core.Infrastructure.Storage.Raven.Implementation;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
-using WB.Core.SharedKernels.DataCollection.EventHandler;
 using WB.Core.SharedKernels.DataCollection.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -252,7 +251,7 @@ namespace CapiDataGenerator
 
         private void InitCapiTemplateStorage(NcqrCompatibleEventDispatcher bus)
         {
-            var fileSorage = new QuestionnaireDenormalizer(this.capiTemplateVersionedWriter, this.Kernel.Get<IPlainQuestionnaireRepository>());
+            var fileSorage = new WB.Core.BoundedContexts.Capi.EventHandler.QuestionnaireDenormalizer(this.capiTemplateVersionedWriter, this.Kernel.Get<IPlainQuestionnaireRepository>());
             bus.Register(fileSorage);
         }
 
