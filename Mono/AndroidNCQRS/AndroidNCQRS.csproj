@@ -506,6 +506,15 @@
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\NCQRSInit.cs">
       <Link>NCQRSInit.cs</Link>
     </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\_WB\AggregateRootRepository.cs">
+      <Link>_WB\AggregateRootRepository.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\_WB\EventPublisher.cs">
+      <Link>_WB\EventPublisher.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\_WB\SnapshotManager.cs">
+      <Link>_WB\SnapshotManager.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
