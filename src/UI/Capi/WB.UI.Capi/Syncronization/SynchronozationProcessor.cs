@@ -12,6 +12,7 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Synchronization.Services;
 using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Settings;

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using WB.Core.GenericSubdomains.Rest;
+using WB.Core.GenericSubdomains.Utils.Rest;
 
 namespace WB.UI.Capi.Syncronization.Push
 {

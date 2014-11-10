@@ -6,6 +6,7 @@ using System.Threading;
 using Microsoft.Practices.ServiceLocation;
 using RestSharp;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.SharedKernel.Utils.Serialization;
 
 namespace WB.Core.GenericSubdomains.Rest.Android
