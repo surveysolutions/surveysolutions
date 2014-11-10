@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Machine.Specifications;
-using Main.Core.Utility;
 using Moq;
 using Moq.Protected;
 using Ncqrs.Commanding.ServiceModel;

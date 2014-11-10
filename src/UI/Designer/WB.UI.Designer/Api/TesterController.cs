@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Designer.Api.Attributes;

@@ -272,6 +272,9 @@
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Domain\UnitOfWorkFactory.cs">
       <Link>Domain\UnitOfWorkFactory.cs</Link>
     </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\AggregateRootEvent.cs">
+      <Link>Eventing\AggregateRootEvent.cs</Link>
+    </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\CommittedEvent.cs">
       <Link>Eventing\CommittedEvent.cs</Link>
     </Compile>
@@ -280,6 +283,9 @@
     </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Event.cs">
       <Link>Eventing\Event.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\EventMergeUtils.cs">
+      <Link>Eventing\EventMergeUtils.cs</Link>
     </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\EventNotHandledException.cs">
       <Link>Eventing\EventNotHandledException.cs</Link>
@@ -522,7 +528,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="01f84441-80d3-49b4-ab18-96894acb2f90" />
+      <UserProperties ProjectLinkReference="01f84441-80d3-49b4-ab18-96894acb2f90" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

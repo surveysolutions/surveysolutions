@@ -81,6 +81,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
+      <Project>{b9af365d-f3c9-423a-86e2-9c3e0c1ac402}</Project>
+      <Name>WB.Core.GenericSubdomains.Utils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
@@ -124,7 +128,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="abd380d9-b4f3-410f-af37-3635b6c5449c" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="abd380d9-b4f3-410f-af37-3635b6c5449c" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

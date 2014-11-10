@@ -144,8 +144,10 @@
     <Compile Include="Domain\Storage\SimpleAggregateRootCreationStrategy.cs" />
     <Compile Include="Domain\UnitOfWorkBase.cs" />
     <Compile Include="Domain\UnitOfWorkContext.cs" />
+    <Compile Include="Eventing\AggregateRootEvent.cs" />
     <Compile Include="Eventing\CommittedEvent.cs" />
     <Compile Include="Eventing\CommittedEventStream.cs" />
+    <Compile Include="Eventing\EventMergeUtils.cs" />
     <Compile Include="Eventing\EventSourceInformation.cs" />
     <Compile Include="Eventing\ServiceModel\Bus\IPublishableEvent.cs" />
     <Compile Include="Eventing\ServiceModel\Bus\PublishedEvent.cs" />

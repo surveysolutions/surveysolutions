@@ -26,10 +26,13 @@ using WB.Core.BoundedContexts.Capi.Synchronization.Services;
 using WB.Core.BoundedContexts.Capi.Synchronization.Views.InterviewMetaInfo;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection;
@@ -97,6 +100,7 @@ namespace CAPI.Android.Core.Model
             this.Bind<ICapiSynchronizationCacheService>().ToConstant(syncCacher);
             this.Bind<IViewFactory<DashboardInput, DashboardModel>>().To<DashboardFactory>();
             this.Bind<IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo>>().ToConstant(interviewMetaInfoFactory);
+            this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope();
             
             var backupable = new List<IBackupable>()
             {

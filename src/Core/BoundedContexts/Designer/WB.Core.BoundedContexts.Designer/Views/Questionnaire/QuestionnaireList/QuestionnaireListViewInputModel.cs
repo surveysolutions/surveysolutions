@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Main.Core.Entities;
-using Main.Core.Utility;
+using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 {
@@ -18,15 +17,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         {
             get
             {
-                return StringUtil.GetOrderRequestString(this.Orders);
+                return this.Orders.GetOrderRequestString();
             }
 
             set
             {
-                this.Orders = StringUtil.ParseOrderRequestString(value);
+                this.Orders = value.ParseOrderRequestString();
             }
         }
-        public List<OrderRequestItem> Orders { get; set; }
+        public IEnumerable<OrderRequestItem> Orders { get; set; }
         public int Page { get; set; }
         public int PageSize { get; set; }
         public bool IsAdminMode { get; set; }

@@ -365,7 +365,6 @@
     <EmbeddedResource Include="Views\ControlPanel\IncomingDataWithErrors.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\NConfig.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\RevalidateInterviews.cshtml" />
-    <EmbeddedResource Include="Views\Device\Index.cshtml" />
     <EmbeddedResource Include="Views\ImportExport\ViewTestUploadFile.cshtml" />
     <EmbeddedResource Include="Views\Survey\Index.cshtml" />
     <EmbeddedResource Include="Views\Survey\Interviews.cshtml" />

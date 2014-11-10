@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Events;
-using Main.Core.Utility;
 using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;

@@ -1,11 +1,10 @@
-﻿namespace WB.UI.Designer
+﻿using WB.Core.GenericSubdomains.Utils;
+
+namespace WB.UI.Designer
 {
     using System.Web.Mvc;
     using System.Web.Routing;
     using System.Web.Security;
-
-    using Main.Core.Utility;
-
     using WB.UI.Designer.Controllers;
     using WB.UI.Shared.Web.Membership;
 

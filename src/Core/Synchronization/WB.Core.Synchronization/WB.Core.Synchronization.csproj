@@ -104,6 +104,10 @@
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
+      <Project>{b9af365d-f3c9-423a-86e2-9c3e0c1ac402}</Project>
+      <Name>WB.Core.GenericSubdomains.Utils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
       <Project>{e7d429a7-1c9f-4f25-9c23-686ef9c2d60a}</Project>
       <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>

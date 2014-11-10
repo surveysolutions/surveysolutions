@@ -13,6 +13,7 @@ using Machine.Specifications;
 using Main.Core.View;
 using Main.Core.View.User;
 using Moq;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;

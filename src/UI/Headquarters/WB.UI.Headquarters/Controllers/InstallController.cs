@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Utility;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Utils.Implementation.Crypto;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -14,9 +15,12 @@ namespace WB.UI.Headquarters.Controllers
 {
     public class InstallController : BaseController
     {
-        public InstallController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger)
+        private readonly IPasswordHasher passwordHasher;
+
+        public InstallController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger, IPasswordHasher passwordHasher)
             : base(commandService, globalInfo, logger)
         {
+            this.passwordHasher = passwordHasher;
         }
 
         public ActionResult Finish()
@@ -33,7 +37,7 @@ namespace WB.UI.Headquarters.Controllers
                 try
                 {
                     this.CommandService.Execute(new CreateUserCommand(publicKey: Guid.NewGuid(), userName: model.UserName,
-                    password: SimpleHash.ComputeHash(model.Password), email: model.Email, isLockedBySupervisor: false,
+                    password: passwordHasher.Hash(model.Password), email: model.Email, isLockedBySupervisor: false,
                     isLockedByHQ: false, roles: new[] { UserRoles.Headquarter }, supervsor: null));
                     return this.RedirectToAction("LogOn", "Account");
                 }

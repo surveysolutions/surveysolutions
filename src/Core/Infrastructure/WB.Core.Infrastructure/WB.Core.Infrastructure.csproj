@@ -57,6 +57,7 @@
     <Compile Include="ReadSide\IReadSideRepositoryWriter.cs" />
     <Compile Include="ReadSide\IReadSideAdministrationService.cs" />
     <Compile Include="ReadSide\IReadSideStatusService.cs" />
+    <Compile Include="ReadSide\IViewFactory.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IFilterableReadSideRepositoryReader.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IFilterableReadSideRepositoryWriter.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IQueryableReadSideRepositoryWriter.cs" />

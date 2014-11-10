@@ -5,7 +5,6 @@ using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
-using Main.Core.Utility;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;

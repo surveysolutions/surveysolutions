@@ -9,8 +9,6 @@ using System.Text;
 using System.Threading;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
-using Main.Core.Utility;
-using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
@@ -22,8 +20,10 @@ using WB.Core.BoundedContexts.Capi.Synchronization.Views.Login;
 using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Utils;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
@@ -83,6 +83,7 @@ namespace WB.UI.Capi
 
         private Operation? currentOperation;
         private IBackup backupManager;
+        private IPasswordHasher passwordHasher;
 
         #endregion
 
@@ -96,6 +97,7 @@ namespace WB.UI.Capi
             this.SetContentView(Resource.Layout.sync_dialog);
 
             this.backupManager = CapiApplication.Kernel.Get<IBackup>();
+            this.passwordHasher = CapiApplication.Kernel.Get<IPasswordHasher>();
             this.tabletInformationSenderFactory = CapiApplication.Kernel.Get<ITabletInformationSenderFactory>();
             this.btnSync.Click += this.ButtonSyncClick;
             this.btnBackup.Click += this.btnBackup_Click;
@@ -368,7 +370,7 @@ namespace WB.UI.Capi
                         loginDialog.Hide();
                         if (this.progressDialog != null)
                             this.progressDialog.Show();
-                        result = new SyncCredentials(teLogin.Text, SimpleHash.ComputeHash(tePassword.Text));
+                        result = new SyncCredentials(teLogin.Text, passwordHasher.Hash(tePassword.Text));
                         actionCompleted = true;
                     };
 
