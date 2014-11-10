@@ -86,9 +86,9 @@ namespace WB.UI.Capi.Syncronization
             this.ExitIfCanceled();
             this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", Operation.Pull, true, 0));
 
-            this.CancelIfException(() =>
+            this.CancelIfException(async () =>
                 {
-                    this.remoteChuncksForDownload = this.pull.GetChuncks(this.credentials.Login, this.credentials.Password, this.clientRegistrationId, this.lastTimestamp, this.ct);
+                    this.remoteChuncksForDownload = await this.pull.GetChuncks(this.credentials.Login, this.credentials.Password, this.clientRegistrationId, this.lastTimestamp, this.ct);
                     
                     int progressCounter = 0;
                     foreach (var chunckId in this.remoteChuncksForDownload.Keys.ToList())
@@ -98,7 +98,7 @@ namespace WB.UI.Capi.Syncronization
 
                         try
                         {
-                            var data = this.pull.RequestChunck(this.credentials.Login, this.credentials.Password, chunckId.Id, chunckId.Timestamp, this.clientRegistrationId, this.ct);
+                            var data = await this.pull.RequestChunck(this.credentials.Login, this.credentials.Password, chunckId.Id, chunckId.Timestamp, this.clientRegistrationId, this.ct);
 
                             this.dataProcessor.SavePulledItem(data);
                             this.remoteChuncksForDownload[chunckId] = true;
