@@ -47,6 +47,7 @@
     <Compile Include="Implementation\TopologicalSorter\StronglyConnectedComponentList.cs" />
     <Compile Include="Implementation\TopologicalSorter\Vertex.cs" />
     <Compile Include="ITopologicalSorter.cs" />
+    <Compile Include="QueryableExtensions.cs" />
     <Compile Include="Monads.cs" />
     <Compile Include="ExceptionExtensions.cs" />
     <Compile Include="Implementation\Crypto\ArrayExtensions.cs" />
@@ -63,6 +64,8 @@
     <Compile Include="GuidExtensions.cs" />
     <Compile Include="Implementation\PasswordHasher.cs" />
     <Compile Include="IPasswordHasher.cs" />
+    <Compile Include="OrderDirection.cs" />
+    <Compile Include="OrderRequestItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rest\INetworkService.cs" />
     <Compile Include="Rest\IRestServiceWrapper.cs" />

@@ -1,10 +1,12 @@
 ﻿using System;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Utility;
 using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Utils.Implementation.Crypto;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -15,14 +17,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public class TeamController : BaseController
     {
         private readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
+        private readonly IPasswordHasher passwordHasher;
 
         public TeamController(ICommandService commandService, 
                               IGlobalInfoProvider globalInfo, 
                               ILogger logger,
-                              IViewFactory<UserViewInputModel, UserView> userViewFactory)
+                              IViewFactory<UserViewInputModel, UserView> userViewFactory,
+                              IPasswordHasher passwordHasher)
             : base(commandService, globalInfo, logger)
         {
             this.userViewFactory = userViewFactory;
+            this.passwordHasher = passwordHasher;
             this.ViewBag.ActivePage = MenuItem.Teams;
         }
 
@@ -55,13 +60,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 passwordHash:
                     string.IsNullOrEmpty(editModel.Password)
                         ? user.Password
-                        : SimpleHash.ComputeHash(editModel.Password), userId: this.GlobalInfo.GetCurrentUser().Id));
+                        : passwordHasher.Hash(editModel.Password), userId: this.GlobalInfo.GetCurrentUser().Id));
         }
 
         private void CreateUser(UserModel user, UserRoles role, Guid? supervisorId = null)
         {
             this.CommandService.Execute(new CreateUserCommand(publicKey: Guid.NewGuid(), userName: user.UserName,
-                password: SimpleHash.ComputeHash(user.Password), email: user.Email, isLockedBySupervisor: false,
+                password: passwordHasher.Hash(user.Password), email: user.Email, isLockedBySupervisor: false,
                 isLockedByHQ: user.IsLocked, roles: new[] {role},
                 supervsor: supervisorId.HasValue ? this.GetUserById(supervisorId.Value).GetUseLight() : null));
         }

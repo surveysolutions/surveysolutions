@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Rest;
+using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.UI.Capi.Syncronization.Pull
@@ -19,10 +21,10 @@ namespace WB.UI.Capi.Syncronization.Pull
             this.webExecutor = webExecutor;
         }
 
-        public SyncItem RequestChunck(string login, string password, Guid id, long timestamp, string deviceId,
+        public async Task<SyncItem> RequestChunck(string login, string password, Guid id, long timestamp, string deviceId,
             CancellationToken ct)
         {
-            var package = webExecutor.ExecuteRestRequestAsync<SyncPackage>(getChunckPath, ct, null,
+            var package = await webExecutor.ExecuteRestRequestAsync<SyncPackage>(getChunckPath, ct, null,
                 login, password, "GET",
                 new KeyValuePair<string, object>("aRKey", id),
                 new KeyValuePair<string, object>("aRTimestamp", timestamp),
@@ -34,10 +36,10 @@ namespace WB.UI.Capi.Syncronization.Pull
             return package.ItemsContainer[0];
         }
 
-        public IDictionary<SynchronizationChunkMeta, bool> GetChuncks(string login, string password, string deviceId,
+        public async Task<Dictionary<SynchronizationChunkMeta, bool>> GetChuncks(string login, string password, string deviceId,
             string sequence, CancellationToken ct)
         {
-            var syncItemsMetaContainer = webExecutor.ExecuteRestRequestAsync<SyncItemsMetaContainer>(
+            var syncItemsMetaContainer = await webExecutor.ExecuteRestRequestAsync<SyncItemsMetaContainer>(
                 getARKeysPath, ct, null, login, password, "GET",
                 new KeyValuePair<string, object>("clientRegistrationId", deviceId),
                 new KeyValuePair<string, object>("sequence", sequence)

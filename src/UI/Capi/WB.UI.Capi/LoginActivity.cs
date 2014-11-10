@@ -51,7 +51,7 @@ namespace WB.UI.Capi
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            bool result = CapiApplication.Membership.LogOn(this.teLogin.Text, this.tePassword.Text);
+            bool result = CapiApplication.Membership.LogOn(this.teLogin.Text, this.tePassword.Text).Result;
             if (result)
             {
                 this.ClearAllBackStack<DashboardActivity>();

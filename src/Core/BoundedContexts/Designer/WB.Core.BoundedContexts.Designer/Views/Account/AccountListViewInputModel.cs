@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using Main.Core.Entities;
-using Main.Core.Utility;
+using WB.Core.GenericSubdomains.Utils;
 using WB.UI.Shared.Web.MembershipProvider.Roles;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Account
@@ -17,12 +16,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         {
             get
             {
-                return StringUtil.GetOrderRequestString(this.Orders);
+                return this.Orders.GetOrderRequestString();
             }
 
             set
             {
-                this.Orders = StringUtil.ParseOrderRequestString(value);
+                this.Orders = value.ParseOrderRequestString();
             }
         }
 
@@ -34,7 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         /// <summary>
         /// Gets or sets the orders.
         /// </summary>
-        public List<OrderRequestItem> Orders = new List<OrderRequestItem>();
+        public IEnumerable<OrderRequestItem> Orders = new List<OrderRequestItem>();
 
         /// <summary>
         /// Gets or sets the page.

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using WB.Core.GenericSubdomains.Rest;
+using WB.Core.GenericSubdomains.Utils.Rest;
 
 namespace WB.UI.Capi.Syncronization.Update
 {

@@ -13,6 +13,7 @@ using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization.Update;

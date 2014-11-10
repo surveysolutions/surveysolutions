@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Main.Core.Entities;
-using Main.Core.Utility;
+using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Device
 {
@@ -46,19 +45,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Device
         {
             get
             {
-                return StringUtil.GetOrderRequestString(this._orders);
+                return this._orders.GetOrderRequestString();
             }
 
             set
             {
-                this._orders = StringUtil.ParseOrderRequestString(value);
+                this._orders = value.ParseOrderRequestString();
             }
         }
 
         /// <summary>
         /// Gets or sets the orders.
         /// </summary>
-        public List<OrderRequestItem> Orders
+        public IEnumerable<OrderRequestItem> Orders
         {
             get
             {
@@ -110,7 +109,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Device
         /// <summary>
         /// The _orders.
         /// </summary>
-        private List<OrderRequestItem> _orders = new List<OrderRequestItem>();
+        private IEnumerable<OrderRequestItem> _orders = new List<OrderRequestItem>();
 
         /// <summary>
         /// The _page.

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using Main.Core.Entities;
-using Main.Core.Utility;
+using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views
 {
@@ -26,9 +25,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
         /// </summary>
         public string Order
         {
-            get { return StringUtil.GetOrderRequestString(this._orders); }
+            get { return this._orders.GetOrderRequestString(); }
 
-            set { this._orders = StringUtil.ParseOrderRequestString(value); }
+            set { this._orders = value.ParseOrderRequestString(); }
         }
 
         /// <summary>

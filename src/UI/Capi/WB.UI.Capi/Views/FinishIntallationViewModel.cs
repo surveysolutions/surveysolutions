@@ -1,9 +1,9 @@
 using System.Collections.Specialized;
 using Cirrious.MvvmCross.ViewModels;
-using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.ValueObjects;
+using WB.Core.GenericSubdomains.Utils;
 using WB.UI.Capi.Settings;
 
 namespace WB.UI.Capi.Views
@@ -15,6 +15,14 @@ namespace WB.UI.Capi.Views
             get
             {
                 return  ServiceLocator.Current.GetInstance<INavigationService>();
+            }
+        }
+
+        private IPasswordHasher PasswordHasher
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<IPasswordHasher>();
             }
         }
 
@@ -64,7 +72,7 @@ namespace WB.UI.Capi.Views
             NavigationService.NavigateTo(CapiPages.Synchronization, new NameValueCollection
             {
                 {"Login", Login},
-                {"PasswordHash", SimpleHash.ComputeHash(Password)}
+                {"PasswordHash", PasswordHasher.Hash(Password)}
             });
         }
     }
