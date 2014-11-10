@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Ninject;
 using WB.Core.GenericSubdomains.Rest;
+using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.QuestionnaireTester.Authentication;

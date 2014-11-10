@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace WB.Core.GenericSubdomains.Rest
+namespace WB.Core.GenericSubdomains.Utils.Rest
 {
     public interface IRestServiceWrapper
     {
