@@ -23,6 +23,7 @@ using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.EventHandler;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.BoundedContexts.Supervisor.Factories;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Rest.Android;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Files;
@@ -227,7 +228,9 @@ namespace WB.UI.QuestionnaireTester
             kernel.Unbind<IQuestionnaireAssemblyFileAccessor>();
             kernel.Bind<IQuestionnaireAssemblyFileAccessor>().To<QuestionnareAssemblyTesterFileAccessor>().InSingletonScope();
 
-            NcqrsEnvironment.SetDefault<ICommandService>(new Ncqrs.Commanding.ServiceModel.CommandService());
+            var ncqrsCommandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
+            NcqrsEnvironment.SetDefault(ncqrsCommandService);
+            NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>(), ncqrsCommandService);
 
             NcqrsInit.Init(this.kernel);
 
