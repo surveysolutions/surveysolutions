@@ -1,4 +1,4 @@
-namespace Main.Core.View
+namespace WB.Core.Infrastructure.ReadSide
 {
     public interface IViewFactory<TInput, TOutput>
     {

@@ -272,6 +272,9 @@
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Domain\UnitOfWorkFactory.cs">
       <Link>Domain\UnitOfWorkFactory.cs</Link>
     </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\AggregateRootEvent.cs">
+      <Link>Eventing\AggregateRootEvent.cs</Link>
+    </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\CommittedEvent.cs">
       <Link>Eventing\CommittedEvent.cs</Link>
     </Compile>
@@ -280,6 +283,9 @@
     </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Event.cs">
       <Link>Eventing\Event.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\EventMergeUtils.cs">
+      <Link>Eventing\EventMergeUtils.cs</Link>
     </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\EventNotHandledException.cs">
       <Link>Eventing\EventNotHandledException.cs</Link>
@@ -502,6 +508,15 @@
     </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\SilverlightHacks.cs">
       <Link>SilverlightHacks.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\_WB\AggregateRootRepository.cs">
+      <Link>_WB\AggregateRootRepository.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\_WB\EventPublisher.cs">
+      <Link>_WB\EventPublisher.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\_WB\SnapshotManager.cs">
+      <Link>_WB\SnapshotManager.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

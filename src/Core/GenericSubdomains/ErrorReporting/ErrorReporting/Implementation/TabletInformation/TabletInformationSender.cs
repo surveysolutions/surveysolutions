@@ -2,10 +2,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.CapiInformationService;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernel.Utils.Serialization;
@@ -89,14 +89,14 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformat
 
             this.ExitIfCanceled();
 
-            this.CancelIfException(() =>
+            this.CancelIfException(async () =>
             {
                 var content = this.fileSystemAccessor.ReadAllBytes(this.pathToInfoArchive);
 
                 var tabletInformationPackage = new TabletInformationPackage(this.fileSystemAccessor.GetFileName(this.pathToInfoArchive), content,
                     this.androidId, this.registrationKeyName);
 
-                var result = this.webExecutor.ExecuteRestRequestAsync<bool>(PostInfoPackagePath, this.ct,
+                var result = await this.webExecutor.ExecuteRestRequestAsync<bool>(PostInfoPackagePath, this.ct,
                     this.jsonUtils.GetItemAsContent(tabletInformationPackage), null, null, null);
 
                 this.fileSystemAccessor.DeleteFile(this.pathToInfoArchive);

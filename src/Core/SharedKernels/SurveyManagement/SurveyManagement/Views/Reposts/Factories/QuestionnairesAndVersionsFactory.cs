@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Main.Core.View;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;

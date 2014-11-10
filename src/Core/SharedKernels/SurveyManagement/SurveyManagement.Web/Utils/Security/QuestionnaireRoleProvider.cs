@@ -9,6 +9,7 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
 {

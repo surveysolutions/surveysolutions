@@ -7,6 +7,7 @@ using WB.Core.Infrastructure.CommandBus;
 
 namespace Ncqrs.Commanding.ServiceModel
 {
+    // TODO: TLK, KP-4337: remove with all used stuff
     public class CommandService : ICommandService
     {
         protected readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);

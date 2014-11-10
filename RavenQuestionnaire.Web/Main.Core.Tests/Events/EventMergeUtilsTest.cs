@@ -8,8 +8,6 @@ namespace RavenQuestionnaire.Core.Tests.Events
     using System.Linq;
 
     using Main.Core.Events;
-    using Main.Core.Utility;
-
     using Ncqrs.Eventing;
 
     using NUnit.Framework;

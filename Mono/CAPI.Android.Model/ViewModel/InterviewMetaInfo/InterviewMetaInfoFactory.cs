@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
-using Main.Core.View;
 using WB.Core.BoundedContexts.Capi.Synchronization.Views.InterviewMetaInfo;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;

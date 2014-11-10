@@ -29,7 +29,7 @@ namespace WB.UI.Headquarters.Tests.FilterTests.InstallationAttributeTests
             exception =
                 Catch.Exception(
                     () =>
-                        attribute.OnActionExecuting(CreateFilterContext(new InstallController(null, null, null))));
+                        attribute.OnActionExecuting(CreateFilterContext(new InstallController(null, null, null, null))));
 
         It should_exception_not_be_null = () =>
             exception.ShouldNotBeNull();

@@ -2,31 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Events;
-using Ncqrs.Eventing;
 
-namespace Main.Core.Utility
+namespace Ncqrs.Eventing
 {
-    /// <summary>
-    /// The event merge utils.
-    /// </summary>
     public static class EventMergeUtils
     {
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The create uncommitted event stream.
-        /// </summary>
-        /// <param name="stream">
-        /// The stream.
-        /// </param>
-        /// <param name="baseStream">
-        /// The base stream.
-        /// </param>
-        /// <returns>
-        /// The Ncqrs.Eventing.UncommittedEventStream.
-        /// </returns>
-        /// <exception cref="ArgumentException">
-        /// </exception>
         public static UncommittedEventStream CreateUncommittedEventStream(
             this IEnumerable<AggregateRootEvent> stream, CommittedEventStream baseStream)
         {
@@ -42,21 +22,6 @@ namespace Main.Core.Utility
             return uncommitedStream;
         }
 
-        /// <summary>
-        /// The create uncommitted event stream.
-        /// </summary>
-        /// <param name="stream">
-        /// The stream.
-        /// </param>
-        /// <param name="baseStream">
-        /// The base stream.
-        /// </param>
-        /// <param name="dvergentEventId">
-        /// The dvergent Event Id.
-        /// </param>
-        /// <returns>
-        /// The Ncqrs.Eventing.UncommittedEventStream.
-        /// </returns>
         public static UncommittedEventStream CreateUncommittedEventStream(
             this IEnumerable<AggregateRootEvent> stream, CommittedEventStream baseStream, Guid? dvergentEventId)
         {
@@ -96,20 +61,6 @@ namespace Main.Core.Utility
             return uncommitedStream;
         }
 
-        /// <summary>
-        /// The find divergent sequence number.
-        /// </summary>
-        /// <param name="stream">
-        /// The stream.
-        /// </param>
-        /// <param name="baseStream">
-        /// The base stream.
-        /// </param>
-        /// <returns>
-        /// The System.Int64.
-        /// </returns>
-        /// <exception cref="ArgumentException">
-        /// </exception>
         public static Guid? FindDivergentEventGuid(
             this IEnumerable<AggregateRootEvent> stream, CommittedEventStream baseStream)
         {
@@ -161,7 +112,5 @@ namespace Main.Core.Utility
                 }
             }
         }
-
-        #endregion
     }
 }

@@ -59,6 +59,7 @@
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="_WB\AggregateRootRepository.cs" />
     <Compile Include="Commanding\AllCommandsInAppDomainEnumerator.cs" />
     <Compile Include="Commanding\CommandExecution\DefaultTransactionService.cs" />
     <Compile Include="Commanding\CommandExecution\ITransactionService.cs" />
@@ -86,8 +87,10 @@
     <Compile Include="Domain\Storage\SimpleAggregateRootCreationStrategy.cs" />
     <Compile Include="Domain\UnitOfWorkBase.cs" />
     <Compile Include="Domain\UnitOfWorkContext.cs" />
+    <Compile Include="Eventing\AggregateRootEvent.cs" />
     <Compile Include="Eventing\CommittedEvent.cs" />
     <Compile Include="Eventing\CommittedEventStream.cs" />
+    <Compile Include="Eventing\EventMergeUtils.cs" />
     <Compile Include="Eventing\EventSourceInformation.cs" />
     <Compile Include="Eventing\ServiceModel\Bus\IPublishableEvent.cs" />
     <Compile Include="Eventing\ServiceModel\Bus\PublishedEvent.cs" />
@@ -210,6 +213,8 @@
     <Compile Include="NCQRSInit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SilverlightHacks.cs" />
+    <Compile Include="_WB\EventPublisher.cs" />
+    <Compile Include="_WB\SnapshotManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">

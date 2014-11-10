@@ -14,7 +14,6 @@ using Main.Core.Documents;
 using Main.Core.Events.File;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Events.User;
-using Main.Core.View;
 using Main.DenormalizerStorage;
 using Microsoft.Practices.ServiceLocation;
 using Mono.Android.Crasher;
@@ -33,11 +32,13 @@ using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services;
 using WB.Core.BoundedContexts.Capi.Synchronization.Services;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.BoundedContexts.Supervisor.Factories;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Rest.Android;
 using WB.Core.GenericSubdomains.ErrorReporting;
 using WB.Core.GenericSubdomains.Logging.AndroidLogger;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Files;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -254,7 +255,11 @@ namespace WB.UI.Capi
             this.kernel.Bind<Context>().ToConstant(this);
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
             this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
-            
+
+            var ncqrsCommandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
+            NcqrsEnvironment.SetDefault(ncqrsCommandService);
+            NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>(), ncqrsCommandService);
+
             NcqrsInit.Init(this.kernel);
        
             NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());

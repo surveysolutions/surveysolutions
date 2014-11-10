@@ -1,4 +1,4 @@
-namespace Main.Core.Entities
+namespace WB.Core.GenericSubdomains.Utils
 {
     public class OrderRequestItem
     {

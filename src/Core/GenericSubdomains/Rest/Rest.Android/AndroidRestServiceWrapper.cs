@@ -3,9 +3,11 @@ using System.Linq;
 using System.Net;
 using System.Security.Authentication;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
 using RestSharp;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.SharedKernel.Utils.Serialization;
 
 namespace WB.Core.GenericSubdomains.Rest.Android
@@ -53,49 +55,28 @@ namespace WB.Core.GenericSubdomains.Rest.Android
             return this.HandlerResponse<T>(response);
         }
 
-        public T ExecuteRestRequestAsync<T>(string url, KeyValuePair<string, object>[] queryStringParams, CancellationToken ct, byte[] file, string fileName, string login, string password,
+        public async Task<T> ExecuteRestRequestAsync<T>(string url, KeyValuePair<string, object>[] queryStringParams, CancellationToken ct, byte[] file, string fileName, string login, string password,
             string method, params KeyValuePair<string, object>[] additionalParams)
         {
-            var restClient = this.BuildRestClient(login, password);
-            var request = this.BuildRequest(url, queryStringParams, additionalParams, file, fileName, this.GetRequestMethod(method));
-            IRestResponse response = null;
-
-            var token = restClient.ExecuteAsync(request, (r) => { response = r; });
-
-            while (response == null)
-            {
-                if (ct.IsCancellationRequested)
-                {
-                    token.Abort();
-                    throw new RestException("Operation was canceled.");
-                }
-            }
+            RestClient restClient = this.BuildRestClient(login, password);
+            RestRequest request = this.BuildRequest(url, queryStringParams, additionalParams, file, fileName, this.GetRequestMethod(method));
+            IRestResponse response = await restClient.ExecuteTaskAsync(request, ct);
 
             return this.HandlerResponse<T>(response);
         }
 
-        public void ExecuteRestRequestAsync(string url, CancellationToken ct, byte[] file, string fileName, string login, string password,
+        public async Task ExecuteRestRequestAsync(string url, CancellationToken ct, byte[] file, string fileName, string login, string password,
            string method, params KeyValuePair<string, object>[] additionalParams)
         {
             var restClient = this.BuildRestClient(login, password);
 
             var request = this.BuildRequest(url, new KeyValuePair<string, object>[]{}, additionalParams, file, fileName, this.GetRequestMethod(method));
 
-            IRestResponse response = null;
-
-            var token = restClient.ExecuteAsync(request, (r) => { response = r; });
-
-            while (response == null)
-            {
-                if (ct.IsCancellationRequested)
-                {
-                    token.Abort();
-                    throw new RestException("Operation was canceled.");
-                }
-            }
+            Task<IRestResponse> responseTask = restClient.ExecuteTaskAsync(request, ct);
+            var response = await responseTask;
 
             if (response.StatusCode == HttpStatusCode.OK) 
-                return;
+                return ;
 
             if (response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
                 throw new AuthenticationException("Not autorized");
@@ -104,24 +85,13 @@ namespace WB.Core.GenericSubdomains.Rest.Android
             throw new RestException(string.Format("Target returned unexpected result. Status: {0}. {1}", response.StatusCode, response.StatusDescription));
         }
 
-        public T ExecuteRestRequestAsync<T>(string url, CancellationToken ct, object requestBody, string login, string password, string method,
+        public async Task<T> ExecuteRestRequestAsync<T>(string url, CancellationToken ct, object requestBody, string login, string password, string method,
             params KeyValuePair<string, object>[] additionalParams)
         {
             var restClient = this.BuildRestClient(login,password);
             var request = this.BuildRequest(url, additionalParams, requestBody, this.GetRequestMethod(method));
-            
-            IRestResponse response = null;
 
-            var token = restClient.ExecuteAsync(request, (r) => { response = r; });
-
-            while (response==null)
-            {
-                if (ct.IsCancellationRequested)
-                {
-                    token.Abort();
-                    throw new RestException("Operation was canceled.");
-                }
-            }
+            var response = await restClient.ExecuteTaskAsync(request, ct);
 
             return this.HandlerResponse<T>(response);
         }
@@ -154,7 +124,7 @@ namespace WB.Core.GenericSubdomains.Rest.Android
             {
                 this.logger.Error("Error occured during synchronization. Response contains exception. Message: " + response.ErrorMessage, response.ErrorException);
                 throw new RestException("Error occurred on communication. Please, check settings or try again later. Status: " + response.StatusDescription);
-            }
+            } 
 
             if (response.StatusCode != HttpStatusCode.OK)
             {
