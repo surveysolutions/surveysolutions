@@ -88,7 +88,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DataTransferObjects\Synchronization\RosterSynchronizationDto.cs" />
-    <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
     <Compile Include="Events\Interview\AnswersDeclaredInvalid.cs" />
     <Compile Include="Events\Interview\AnswersDeclaredValid.cs" />
     <Compile Include="Events\Interview\AnswersRemoved.cs" />
@@ -297,6 +296,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="EventHandler\" />
     <Folder Include="ValueObjects\Questionnaire\" />
   </ItemGroup>
   <ItemGroup>

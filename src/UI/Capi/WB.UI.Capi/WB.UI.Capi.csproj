@@ -183,6 +183,11 @@
     <Compile Include="Implementations\Navigation\NavigationService.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
     <Compile Include="FinishInstallationActivity.cs" />
+    <Compile Include="Properties\Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
     <Compile Include="Syncronization\CapiCleanUpService.cs" />
     <Compile Include="LoadingActivity.cs" />
     <Compile Include="LoginActivity.cs" />
@@ -350,10 +355,6 @@
       <Project>{77572d67-d00d-4e26-b2e2-6b7faea92416}</Project>
       <Name>WB.Core.GenericSubdomains.Rest.Android</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Rest\Rest\WB.Core.GenericSubdomains.Rest.csproj">
-      <Project>{877d263d-c2fe-4a95-b98e-6017843d0746}</Project>
-      <Name>WB.Core.GenericSubdomains.Rest</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
       <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
       <Name>WB.Core.GenericSubdomains.Utils</Name>
@@ -389,6 +390,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

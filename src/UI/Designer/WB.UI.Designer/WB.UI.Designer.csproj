@@ -589,7 +589,7 @@
     <Content Include="Configuration\ANK.Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Configuration\DPA.Designer.Web.config" />
+    <Content Include="Configuration\Dima.Designer.Web.config" />
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
@@ -1454,6 +1454,7 @@
     <Content Include="App_GlobalResources\TesterApiController.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>TesterApiController.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <PropertyGroup>
