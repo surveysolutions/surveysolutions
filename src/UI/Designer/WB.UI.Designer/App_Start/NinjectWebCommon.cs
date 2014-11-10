@@ -6,6 +6,7 @@ using Microsoft.Practices.ServiceLocation;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
@@ -15,11 +16,13 @@ using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Indexes;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
+using WB.Core.Infrastructure.Snapshots;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.UI.Designer.App_Start;
@@ -102,13 +105,26 @@ namespace WB.UI.Designer.App_Start
             NcqrsEnvironment.SetDefault(ncqrsCommandService);
             NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>(), ncqrsCommandService);
 
-            var commandService = new CommandService(ncqrsCommandService);
-            kernel.Bind<ICommandService>().ToConstant(commandService);
-
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
 
+            kernel.Bind<ISnapshottingPolicy>().ToMethod(context => NcqrsEnvironment.Get<ISnapshottingPolicy>());
+            kernel.Bind<ISnapshotStore>().ToMethod(context => NcqrsEnvironment.Get<ISnapshotStore>());
+            kernel.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
+            kernel.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
+
+            kernel.Bind<IDomainRepository>().To<DomainRepository>();
+
             CreateAndRegisterEventBus(kernel);
+
+            kernel.Bind<IAggregateRootRepository>().To<AggregateRootRepository>();
+            kernel.Bind<IEventPublisher>().To<EventPublisher>();
+            kernel.Bind<ISnapshotManager>().To<SnapshotManager>();
+
+            // TODO: TLK, KP-4337: make correct mapping here, not a direct creation
+            var commandService = new CommandService(ncqrsCommandService, kernel.Get<IAggregateRootRepository>(), kernel.Get<IEventPublisher>(), kernel.Get<ISnapshotManager>());
+
+            kernel.Bind<ICommandService>().ToConstant(commandService);
         }
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)

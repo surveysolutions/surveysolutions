@@ -41,12 +41,16 @@
     <Folder Include="Implementation\ReadSide\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aggregates\IAggregateRoot.cs" />
+    <Compile Include="Aggregates\IAggregateRootRepository.cs" />
+    <Compile Include="CommandBus\CommandRegistry.cs" />
     <Compile Include="CommandBus\CommandService.cs" />
     <Compile Include="CommandBus\ICommand.cs" />
     <Compile Include="CommandBus\ICommandService.cs" />
     <Compile Include="DenormalizerStorage\InMemoryReadSideRepositoryAccessor.cs" />
     <Compile Include="EventBus\BaseDenormalizer.cs" />
     <Compile Include="EventBus\IEventHandler.cs" />
+    <Compile Include="EventBus\IEventPublisher.cs" />
     <Compile Include="EventHandlerDescription.cs" />
     <Compile Include="FileSystem\IArchiveUtils.cs" />
     <Compile Include="FileSystem\IFileSystemAccessor.cs" />
@@ -72,6 +76,7 @@
     <Compile Include="MaintenanceException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryWriter.cs" />
+    <Compile Include="Snapshots\ISnapshotManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">

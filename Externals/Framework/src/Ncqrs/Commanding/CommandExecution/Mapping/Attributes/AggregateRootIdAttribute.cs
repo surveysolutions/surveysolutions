@@ -8,5 +8,6 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping.Attributes
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
     public class AggregateRootIdAttribute : ExcludeInMappingAttribute
     {
+        // TODO: TLK, KP-4337: remove class
     }
 }

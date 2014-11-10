@@ -18,6 +18,9 @@ namespace Ncqrs.Eventing
         private readonly List<UncommittedEvent> _events = new List<UncommittedEvent>();
         private readonly Dictionary<Guid, EventSourceInformation> _eventSourceInformation = new Dictionary<Guid, EventSourceInformation>();
 
+        public UncommittedEventStream(string origin)
+            : this(Guid.NewGuid(), origin) { }
+
         /// <summary>
         /// Creates new uncommitted event stream.
         /// </summary>

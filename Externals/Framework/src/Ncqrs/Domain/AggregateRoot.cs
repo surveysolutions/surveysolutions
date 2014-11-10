@@ -5,19 +5,23 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Eventing.Sourcing.Mapping;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.Aggregates;
+
 namespace Ncqrs.Domain
 {
     /// <summary>
     /// The abstract concept of an aggregate root.
     /// </summary>
-    public abstract class AggregateRoot : EventSource
+    public abstract class AggregateRoot : EventSource, IAggregateRoot
     {
-         private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
     
         // 628426 13 Feb 2011
         // Previous ThreadStatic was null referencing at random times under load 
         // These things work great
         private static System.Threading.ThreadLocal<List<Action<AggregateRoot, UncommittedEvent>>> _eventAppliedCallbacks = new System.Threading.ThreadLocal<List<Action<AggregateRoot, UncommittedEvent>>>(() => new List<Action<AggregateRoot, UncommittedEvent>>());
+
+        private readonly List<UncommittedEvent> changes = new List<UncommittedEvent>();
 
         public static void RegisterThreadStaticEventAppliedCallback(Action<AggregateRoot, UncommittedEvent> callback)
         {
@@ -41,6 +45,9 @@ namespace Ncqrs.Domain
         protected override void OnEventApplied(UncommittedEvent appliedEvent)
         {
             base.OnEventApplied(appliedEvent);
+
+            this.changes.Add(appliedEvent);
+
             var callbacks = _eventAppliedCallbacks.Value;
 
             foreach(var callback in callbacks)
@@ -48,6 +55,16 @@ namespace Ncqrs.Domain
                 Log.DebugFormat("Calling event applied callback {0} for event {1} in aggregate root {2}", callback.GetHashCode(), appliedEvent, this);
                 callback(this, appliedEvent);
             }
+        }
+
+        public IEnumerable<UncommittedEvent> GetUncommittedChanges()
+        {
+            return this.changes;
+        }
+
+        public void MarkChangesAsCommitted()
+        {
+            this.changes.Clear();
         }
     }
 }
