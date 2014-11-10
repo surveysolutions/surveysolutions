@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;

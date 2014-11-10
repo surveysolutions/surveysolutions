@@ -46,5 +46,13 @@ namespace WB.Core.GenericSubdomains.Utils
 
             yield return selector.Invoke(current, next, null);
         }
+
+        public static string GetOrderRequestString(this IEnumerable<OrderRequestItem> orders)
+        {
+            return orders == null
+                ? String.Empty
+                : String.Join(",",
+                    orders.Select(o => o.Field + (o.Direction == OrderDirection.Asc ? String.Empty : " Desc")));
+        }
     }
 }

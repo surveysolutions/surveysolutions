@@ -2,8 +2,8 @@
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Utility;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Utils.Implementation.Crypto;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Controllers
 
         private bool Login(string login, string password)
         {
-            return this.validateUserCredentials(login, this.passwordHasher.Hash(password)) || this.validateUserCredentials(login, SimpleHash.ComputeHash(password));
+            return this.validateUserCredentials(login, this.passwordHasher.Hash(password));
         }
 
         public bool IsLoggedIn()
