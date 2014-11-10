@@ -42,9 +42,6 @@ namespace Main.Core.Tests.Entities
                     Answers = answers,
                     ConditionalDependentGroups = new List<Guid>() { Guid.NewGuid() },
                     ConditionalDependentQuestions = new List<Guid>() { Guid.NewGuid() },
-                    //QuestionsWhichCustomValidationDependsOnQuestion = new List<Guid>() { Guid.NewGuid() },
-                    QuestionIdsInvolvedInCustomEnablementConditionOfQuestion = new List<Guid>() { Guid.NewGuid() },
-                    QuestionIdsInvolvedInCustomValidationOfQuestion = new List<Guid>() { Guid.NewGuid() }
                 };
 
             var target = question.Clone() as SingleQuestion;
@@ -59,8 +56,6 @@ namespace Main.Core.Tests.Entities
             {
                 var answer = target.Answers.FirstOrDefault(q => q.PublicKey == question.Answers[i].PublicKey);
                 Assert.IsTrue(answer != null);
-
-
                 Assert.IsTrue(!answer.Equals(question.Answers[i])); // they are interfaces and Equals uses Reference equality
             }
         }
