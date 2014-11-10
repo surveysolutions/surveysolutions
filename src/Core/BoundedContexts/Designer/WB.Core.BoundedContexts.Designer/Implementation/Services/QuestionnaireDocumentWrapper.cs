@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
@@ -61,21 +59,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public QuestionnaireDocumentWrapper(QuestionnaireDocument document)
         {
             document.ConnectChildrenWithParent();
-
-            var groups = document
-                .Find<IGroup>(_ => true)
-                .ToDictionary(
-                    @group => @group.PublicKey,
-                    @group => @group);
-
-            var questions = document
-                .Find<IQuestion>(_ => true)
-                .ToDictionary(
-                    question => question.PublicKey,
-                    question => question);
-
-            document.IsCacheWarmed = true;
-
             this.innerDocument = document;
         }
 
@@ -617,14 +600,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 question.PublicKey);
         }
 
-        #region warmup caches
-
-        private static IEnumerable<Guid> GetQuestionsInvolvedInExpression(Dictionary<Guid, IQuestion> questions, Guid contextQuestionId,
-            string expression)
-        {
-            return Enumerable.Empty<Guid>();
-        }
-
         private static IQuestion GetQuestionOrThrow(Dictionary<Guid, IQuestion> questions, Guid questionId)
         {
             IQuestion question = GetQuestion(questions, questionId);
@@ -653,7 +628,5 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return questions.Values.FirstOrDefault(q => q.StataExportCaption == identifier);
         }
-
-        #endregion
     }
 }
