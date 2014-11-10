@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformation;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.CapiInformationService;
@@ -24,7 +25,7 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Tests.TabletInformationSender
                 Mock.Of<IRestServiceWrapperFactory>(_ => _.CreateRestServiceWrapper(
                     Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()) ==
                     Mock.Of<IRestServiceWrapper>(r_ => r_.ExecuteRestRequestAsync<bool>(It.IsAny<string>(), It.IsAny<CancellationToken>(),
-                        It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()) == isSentSuccessfully)));
+                        It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()) == Task.FromResult(isSentSuccessfully))));
         }
 
         protected static bool WaitUntilOperationEndsReturnFalseIfCanceled(TabletInformationSender tabletInformationSender,

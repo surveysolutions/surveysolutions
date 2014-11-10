@@ -254,7 +254,8 @@ namespace WB.UI.Capi
             this.kernel.Bind<Context>().ToConstant(this);
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
             this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
-            
+
+            NcqrsEnvironment.SetDefault<ICommandService>(new Ncqrs.Commanding.ServiceModel.CommandService());
             NcqrsInit.Init(this.kernel);
        
             NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());

@@ -130,7 +130,7 @@ namespace WB.UI.Capi
                     {
                         this.DestroyDialog();
                         this.tvSyncResult.Text = "Sync is finished.";
-                        bool result = CapiApplication.Membership.LogOn(login, passwordHash, true);
+                        bool result = CapiApplication.Membership.LogOn(login, passwordHash, wasPasswordHashed: true).Result;
                         if (result)
                         {
                             this.ClearAllBackStack<DashboardActivity>();

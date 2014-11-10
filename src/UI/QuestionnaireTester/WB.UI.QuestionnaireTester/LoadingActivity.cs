@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
@@ -54,11 +55,12 @@ namespace WB.UI.QuestionnaireTester
             base.Finish();
         }
 
-        protected void Restore(CancellationToken ct, Guid publicKey)
+        protected async Task Restore(CancellationToken ct, Guid publicKey)
         {
             Guid interviewId = Guid.NewGuid();
 
-            if (!LoadTemplateAndCreateInterview(publicKey, interviewId, ct))
+            var loaded = await LoadTemplateAndCreateInterview(publicKey, interviewId, ct);
+            if (!loaded)
                 this.RunOnUiThread(() => CapiTesterApplication.Context.ClearAllBackStack<QuestionnaireListActivity>());
             else
             {
@@ -76,7 +78,7 @@ namespace WB.UI.QuestionnaireTester
             }
         }
 
-        private bool LoadTemplateAndCreateInterview(Guid itemKey, Guid interviewId, CancellationToken ct)
+        private async Task<bool> LoadTemplateAndCreateInterview(Guid itemKey, Guid interviewId, CancellationToken ct)
         {
             if (!CapiTesterApplication.DesignerMembership.IsLoggedIn)
                 return false;
@@ -84,7 +86,7 @@ namespace WB.UI.QuestionnaireTester
             QuestionnaireCommunicationPackage template;
             try
             {
-                template = CapiTesterApplication.DesignerServices.GetTemplateForCurrentUser(CapiTesterApplication.DesignerMembership.RemoteUser, itemKey, ct);
+                template = await CapiTesterApplication.DesignerServices.GetTemplateForCurrentUser(CapiTesterApplication.DesignerMembership.RemoteUser, itemKey, ct);
             }
             catch (Exception exc) 
             {

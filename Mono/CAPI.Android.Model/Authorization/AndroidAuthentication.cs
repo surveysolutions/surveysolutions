@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Utils;
@@ -43,7 +44,7 @@ namespace CAPI.Android.Core.Model.Authorization
         public bool IsLoggedIn { get { return currentUser != null; }
     }
 
-        public bool LogOn(string userName, string password, bool wasPasswordHashed = false)
+        public Task<bool> LogOn(string userName, string password, bool wasPasswordHashed = false)
         {
             if (currentUser != null)
                 throw new InvalidOperationException("Please logoff first.");
@@ -55,17 +56,17 @@ namespace CAPI.Android.Core.Model.Authorization
                 LoginDTO user = this.documentStorage.Filter(u => u.Login == userNameToLower).FirstOrDefault();
 
                 if (user == null || user.Password != hash || user.IsLockedBySupervisor || user.IsLockedByHQ)
-                    return false;
+                    return Task.FromResult(false);
 
                 currentUser = new UserLight(Guid.Parse(user.Id), user.Login);
 
                 Guid super;
                 this.SupervisorId = Guid.TryParse(user.Supervisor, out super) ? super : Guid.NewGuid();
-                return true;
+                return Task.FromResult(true);
             }
             catch(Exception e)
             {
-                return false;
+                return Task.FromResult(false);
             }
         }
 

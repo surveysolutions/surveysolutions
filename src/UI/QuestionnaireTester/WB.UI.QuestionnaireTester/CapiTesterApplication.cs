@@ -227,6 +227,8 @@ namespace WB.UI.QuestionnaireTester
             kernel.Unbind<IQuestionnaireAssemblyFileAccessor>();
             kernel.Bind<IQuestionnaireAssemblyFileAccessor>().To<QuestionnareAssemblyTesterFileAccessor>().InSingletonScope();
 
+            NcqrsEnvironment.SetDefault<ICommandService>(new Ncqrs.Commanding.ServiceModel.CommandService());
+
             NcqrsInit.Init(this.kernel);
 
             NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());
