@@ -102,6 +102,10 @@
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
+      <Project>{b9af365d-f3c9-423a-86e2-9c3e0c1ac402}</Project>
+      <Name>WB.Core.GenericSubdomains.Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
