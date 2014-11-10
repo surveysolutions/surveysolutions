@@ -88,6 +88,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Questionnaires\IHeadquartersQuestionnaireReader.cs" />
     <Compile Include="Questionnaires\Implementation\HeadquartersQuestionnaireReader.cs" />
+    <Compile Include="Resources\InterviewsSynchronizer.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InterviewsSynchronizer.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\LocalUserFeedProcessor.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LocalUserFeedProcessor.resx</DependentUpon>
+    </Compile>
     <Compile Include="SupervisorContextModule.cs" />
     <Compile Include="Synchronization\Atom\Implementation\AtomFeedReader.cs" />
     <Compile Include="Synchronization\Atom\IAtomFeedReader.cs" />
@@ -165,7 +175,16 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\InterviewsSynchronizer.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>InterviewsSynchronizer.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\LocalUserFeedProcessor.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocalUserFeedProcessor.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
