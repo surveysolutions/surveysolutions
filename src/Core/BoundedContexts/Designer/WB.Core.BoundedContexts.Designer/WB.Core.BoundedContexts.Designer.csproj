@@ -306,10 +306,8 @@
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplateExt.cs" />
     <Compile Include="Services\IQuestionnaireVerifier.cs" />
-    <Compile Include="Services\IQuestionnaireWrapper.cs" />
     <Compile Include="Implementation\Services\QuestionnaireExportService .cs" />
     <Compile Include="Implementation\Services\QuestionnaireDocumentUpgrader.cs" />
-    <Compile Include="Implementation\Services\QuestionnaireDocumentWrapper.cs" />
     <Compile Include="Implementation\Services\QuestionnaireVersioner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Roster.Designer.cs">
