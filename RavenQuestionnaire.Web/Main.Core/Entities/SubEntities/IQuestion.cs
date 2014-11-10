@@ -23,11 +23,6 @@ namespace Main.Core.Entities.SubEntities
         string ValidationExpression { get; set; }
         string ValidationMessage { get; set; }
 
-        #warning TLK: no data is added to following dependent questions and groups, they should be deleted
-
-        List<Guid> ConditionalDependentQuestions { get; set; }
-        List<Guid> ConditionalDependentGroups { get; set; }
-
         Guid? LinkedToQuestionId { get; set; }
 
         Guid? CascadeFromQuestionId { get; set; }

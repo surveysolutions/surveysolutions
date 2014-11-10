@@ -39,9 +39,7 @@ namespace Main.Core.Tests.Entities
                     Instructions = "instructions", 
                     AnswerOrder = Order.Random, 
                     StataExportCaption = "stata", 
-                    Answers = answers,
-                    ConditionalDependentGroups = new List<Guid>() { Guid.NewGuid() },
-                    ConditionalDependentQuestions = new List<Guid>() { Guid.NewGuid() },
+                    Answers = answers
                 };
 
             var target = question.Clone() as SingleQuestion;

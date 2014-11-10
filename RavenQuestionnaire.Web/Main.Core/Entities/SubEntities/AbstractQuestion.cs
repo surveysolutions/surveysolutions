@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Main.Core.Entities.Composite;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
@@ -43,10 +42,6 @@ namespace Main.Core.Entities.SubEntities
         public string Comments { get; set; }
 
         public string ConditionExpression { get; set; }
-
-        public List<Guid> ConditionalDependentQuestions { get; set; }
-
-        public List<Guid> ConditionalDependentGroups { get; set; }
 
         public bool Featured { get; set; }
 
@@ -98,16 +93,6 @@ namespace Main.Core.Entities.SubEntities
             var question = this.MemberwiseClone() as IQuestion;
 
             question.SetParent(null);
-
-            if (this.ConditionalDependentGroups != null)
-            {
-                question.ConditionalDependentGroups = new List<Guid>(this.ConditionalDependentGroups);
-            }
-
-            if (this.ConditionalDependentQuestions != null)
-            {
-                question.ConditionalDependentQuestions = new List<Guid>(this.ConditionalDependentQuestions);
-            }
 
             // handle reference part
             question.Answers = new List<Answer>();
