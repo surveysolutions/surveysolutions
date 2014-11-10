@@ -49,11 +49,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly Dictionary<string, QuestionnaireExportEntity> cache = new Dictionary<string, QuestionnaireExportEntity>();
 
         public FileBasedDataExportRepositoryWriter(
-            IReadSideRepositoryCleanerRegistry cleanerRegistry,
             IDataExportWriter dataExportWriter,
             IEnvironmentContentService environmentContentService,
-            IFileSystemAccessor fileSystemAccessor, ILogger logger, IPlainInterviewFileStorage plainFileRepository,
-            IReadSideRepositoryWriterRegistry writerRegistry, IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewDataWriter,
+            IFileSystemAccessor fileSystemAccessor, ILogger logger, IPlainInterviewFileStorage plainFileRepository, IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewDataWriter,
             IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter,
             IReadSideRepositoryWriter<UserDocument> users, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter,
             IExportViewFactory exportViewFactory, IFilebasedExportedDataAccessor filebasedExportedDataAccessor)
@@ -69,9 +67,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.interviewSummaryWriter = interviewSummaryWriter;
             this.exportViewFactory = exportViewFactory;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
-
-            cleanerRegistry.Register(this);
-            writerRegistry.Register(this);
         }
 
         public void Clear()
@@ -184,7 +179,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 cache.Values.Sum(c => c.Actions.Count));
         }
 
-        public Type ViewType { get { return typeof(InterviewDataExportView); } }
+        public Type ViewType { get { return dataExportWriter.GetType(); } }
 
         private void ReduceCacheIfNeeded(string entityDbPath)
         {
@@ -327,9 +322,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private InterviewActionExportView CreateInterviewAction(InterviewExportedAction action, Guid interviewId, Guid userId, DateTime timestamp)
         {
             UserDocument responsible = this.users.GetById(userId);
-
-            if (responsible == null)
-                return null;
 
             var userName = this.GetUserName(responsible);
 

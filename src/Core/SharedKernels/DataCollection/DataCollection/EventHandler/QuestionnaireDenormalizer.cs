@@ -61,9 +61,9 @@ namespace WB.Core.SharedKernels.DataCollection.EventHandler
             this.questionnarieStorage.Store(template, id);
         }
 
-        public override Type[] BuildsViews
+        public override object[] Writers
         {
-            get { return new Type[]{typeof(QuestionnaireDocumentVersioned)}; }
+            get { return new[] { questionnarieStorage }; }
         }
     }
 }

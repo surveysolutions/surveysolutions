@@ -75,7 +75,9 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
 
         public void PublishEventToHandlers(IPublishableEvent eventMessage, IEnumerable<IEventHandler> handlers)
         {
-            foreach (var bus in this.GetListOfBusesForRebuild(handlers))
+            var handlersToPublishEvent = this.GetListOfBusesForRebuild(handlers).ToList();
+
+            foreach (var bus in handlersToPublishEvent)
             {
                 bus.Publish(eventMessage);
             }
@@ -116,7 +118,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
 
         private IEnumerable<InProcessEventBus> GetListOfBusesForRebuild(IEnumerable<IEventHandler> enabledHandlers)
         {
-            return this.registredHandlers.Values.Where(h => enabledHandlers.Contains(h.Handler)).Select(h => h.Bus).ToList();
+            return this.registredHandlers.Values.Where(h => enabledHandlers.Contains(h.Handler)).Select(h => h.Bus);
         }
     }
 }

@@ -25,6 +25,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     internal class InterviewExportedDataDenormalizer : 
+        BaseDenormalizer,
         IEventHandler<InterviewApprovedByHQ>, 
         IEventHandler<SupervisorAssigned>,
         IEventHandler<InterviewerAssigned>,
@@ -47,9 +48,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<TextListQuestionAnswered>,
         IEventHandler<QRBarcodeQuestionAnswered>,
         IEventHandler<PictureQuestionAnswered>,
-        IEventHandler<InterviewRestored>,
-
-        IEventHandler
+        IEventHandler<InterviewRestored>
     {
         private readonly InterviewExportedAction[] listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded = new[] { InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restarted };
         private readonly IReadSideRepositoryWriter<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewWriter;
@@ -67,14 +66,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.interviewSummaryStorage = interviewSummaryStorage;
         }
 
-        public string Name { get { return this.GetType().Name; } }
-
-        public Type[] UsesViews
+        public override object[] Writers
         {
-            get { return new Type[] { typeof(InterviewData), typeof(UserDocument), typeof(RecordFirstAnswerMarkerView), typeof(QuestionnaireExportStructure) }; }
+            get { return new object[] { dataExportWriter, recordFirstAnswerMarkerViewWriter }; }
         }
 
-        public Type[] BuildsViews { get { return new Type[] { typeof(InterviewDataExportView), typeof(RecordFirstAnswerMarkerView) }; } }
+        public override object[] Readers
+        {
+            get { return new object[] { users, interviewSummaryStorage }; }
+        }
 
         public void Handle(IPublishedEvent<InterviewApprovedByHQ> evnt)
         {

@@ -7,7 +7,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.DenormalizerStorage
 {
-    public class InMemoryReadSideRepositoryAccessor<TView> : IQueryableReadSideRepositoryReader<TView>, IQueryableReadSideRepositoryWriter<TView>
+    public class InMemoryReadSideRepositoryAccessor<TView> : IReadSideRepositoryCleaner, IQueryableReadSideRepositoryReader<TView>, IQueryableReadSideRepositoryWriter<TView>
         where TView : class, IView
     {
         private readonly Dictionary<string, TView> repository;
@@ -69,7 +69,7 @@ namespace Main.DenormalizerStorage
 
         public void Clear()
         {
-            this.repository.Clear();
-        }
+           this.repository.Clear();
+       }
     }
 }
