@@ -3,7 +3,7 @@ using System.Threading;
 using Moq;
 using WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformation;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.CapiInformationService;
-using WB.Core.GenericSubdomains.Rest;
+using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Utils.Serialization;
 
