@@ -36,6 +36,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.syncStorage = syncStorage;
         }
 
+        public override object[] Writers
+        {
+            get { return new object[] { users, syncStorage }; }
+        }
+
         public void Handle(IPublishedEvent<NewUserCreated> evnt)
         {
             var doc = new UserDocument
@@ -82,11 +87,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             item.IsLockedByHQ = false;
             this.users.Store(item, item.PublicKey);
             this.syncStorage.SaveUser(item, @event.EventTimeStamp);
-        }
-
-        public override Type[] BuildsViews
-        {
-            get { return new Type[] {typeof (UserDocument), typeof (SynchronizationDelta)}; }
         }
 
         public void Handle(IPublishedEvent<UserLockedBySupervisor> evnt)

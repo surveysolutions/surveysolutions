@@ -5,7 +5,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class DummyEventHandler :
+    public class DummyEventHandler :BaseDenormalizer,
         IEventHandler<AnswerCommented>,
         IEventHandler<FlagRemovedFromAnswer>,
         IEventHandler<FlagSetToAnswer>,
@@ -26,8 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         //IEventHandler<SynchronizationMetadataApplied>,
         IEventHandler<InterviewApproved>,
         IEventHandler<InterviewRejected>,
-        IEventHandler<InterviewDeclaredInvalid>,
-    IEventHandler
+        IEventHandler<InterviewDeclaredInvalid>
     {
         public void Handle(IPublishedEvent<AnswersDeclaredValid> evnt) { }
 
@@ -65,19 +64,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void Handle(IPublishedEvent<InterviewApproved> evnt) { }
 
-        public string Name
+        public override string Name
         {
             get { return "Dummy event handler"; }
         }
 
-        public Type[] UsesViews
+        public override object[] Writers
         {
-            get { return new Type[0]; }
-        }
-
-        public Type[] BuildsViews
-        {
-            get { return new Type[0]; }
+            get { return new object[0]; }
         }
 
         public void Handle(IPublishedEvent<InterviewRestarted> evnt){}

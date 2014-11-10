@@ -4,14 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
-using Raven.Abstractions.Data;
-using Raven.Client;
-using Raven.Client.Document;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
 {
@@ -30,25 +28,18 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
 
         private readonly IStreamableEventStore eventStore;
         private readonly IEventDispatcher eventBus;
-        private readonly DocumentStore ravenStore;
         private readonly ILogger logger;
-        private readonly IReadSideRepositoryWriterRegistry writerRegistry;
-        private readonly IReadSideRepositoryCleanerRegistry cleanerRegistry;
 
         static RavenReadSideService()
         {
             UpdateStatusMessage("No administration operations were performed so far.");
         }
 
-        public RavenReadSideService(IStreamableEventStore eventStore, IEventDispatcher eventBus, DocumentStore ravenStore, ILogger logger,
-            IReadSideRepositoryWriterRegistry writerRegistry, IReadSideRepositoryCleanerRegistry cleanerRegistry)
+        public RavenReadSideService(IStreamableEventStore eventStore, IEventDispatcher eventBus, ILogger logger)
         {
             this.eventStore = eventStore;
             this.eventBus = eventBus;
-            this.ravenStore = ravenStore;
             this.logger = logger;
-            this.writerRegistry = writerRegistry;
-            this.cleanerRegistry = cleanerRegistry;
         }
 
         #region IReadLayerStatusService implementation
@@ -98,9 +89,18 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
                 this.eventBus.GetAllRegistredEventHandlers()
                     .Select(
                         h =>
-                        new EventHandlerDescription(h.Name, h.UsesViews.Select(u => u.Name).ToArray(),
-                                                    h.BuildsViews.Select(b => b.Name).ToArray()))
+                        new EventHandlerDescription(h.Name, h.Readers.Select(CreateViewName).ToArray(),
+                                                    h.Writers.Select(CreateViewName).ToArray()))
                     .ToList();
+        }
+
+        private string CreateViewName(object storage)
+        {
+            var readSideRepositoryWriter = storage as IReadSideRepositoryWriter;
+            if (readSideRepositoryWriter != null)
+                return GetRepositoryEntityName(readSideRepositoryWriter);
+
+            return storage.GetType().Name;
         }
 
         #endregion // IReadLayerAdministrationService implementation
@@ -141,23 +141,19 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
 
                 var handlers = this.GetListOfEventHandlersForRebuild(handlerNames);
 
-                var viewTypes = this.GetAllViewsBuildByHandlers(handlers);
-
-                this.DeleteViews(viewTypes);
-
-                var writers = this.GetListOfWritersForEnableCache(viewTypes);
+                this.CleanUpWritersForHandlers(handlers);
 
                 string republishDetails = "<<NO DETAILS>>";
 
                 try
                 {
-                    this.EnableCacheInRepositoryWriters(writers);
+                    this.EnableCacheForAllRepositoryWriters();
 
-                    republishDetails = this.RepublishAllEvents();
+                    republishDetails = this.RepublishAllEvents(handlers: handlers);
                 }
                 finally
                 {
-                    this.DisableCacheInRepositoryWriters(writers);
+                    this.DisableCacheForAllRepositoryWriters();
 
                     UpdateStatusMessage("Rebuild specific views succeeded." + Environment.NewLine + republishDetails);
                 }
@@ -175,14 +171,6 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
             }
         }
 
-        private Type[] GetAllViewsBuildByHandlers(IEventHandler[] handlers)
-        {
-            return handlers
-                    .SelectMany(h => h.BuildsViews)
-                    .Distinct()
-                    .ToArray();
-        }
-
         private IEventHandler[] GetListOfEventHandlersForRebuild(string[] handlerNames)
         {
             var allHandlers = this.eventBus.GetAllRegistredEventHandlers();
@@ -195,11 +183,6 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
             return result.ToArray();
         }
 
-        private IEnumerable<IReadSideRepositoryWriter> GetListOfWritersForEnableCache(Type[] viewTypes)
-        {
-            return this.writerRegistry.GetAll().Where(w => viewTypes.Contains(w.ViewType)).ToArray();
-        }
-
         private void RebuildAllViewsImpl(int skipEvents)
         {
             try
@@ -208,7 +191,6 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
 
                 if (skipEvents == 0)
                 {
-                    this.DeleteAllViews();
                     this.CleanUpAllWriters();
                 }
 
@@ -216,13 +198,13 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
 
                 try
                 {
-                    this.EnableCacheInAllRepositoryWriters();
+                    this.EnableCacheForAllRepositoryWriters();
 
                     republishDetails = this.RepublishAllEvents(skipEvents);
                 }
                 finally
                 {
-                    this.DisableCacheInAllRepositoryWriters();
+                    this.DisableCacheForAllRepositoryWriters();
 
                     UpdateStatusMessage("Rebuild all views succeeded." + Environment.NewLine + republishDetails);
                 }
@@ -242,72 +224,34 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
 
         private void CleanUpAllWriters()
         {
-            foreach (var cleaner in this.cleanerRegistry.GetAll())
-            {
-                cleaner.Clear();
-            }
+            this.CleanUpWritersForHandlers(eventBus.GetAllRegistredEventHandlers());
         }
 
-        private void DeleteViews(Type[] viewTypes)
+
+        private void CleanUpWritersForHandlers(IEnumerable<IEventHandler> handlers)
         {
-            foreach (var viewType in viewTypes)
+            var cleaners = handlers.SelectMany(x=>x.Writers.OfType<IReadSideRepositoryCleaner>())
+                  .Distinct()
+                  .ToArray();
+
+            foreach (var readSideRepositoryCleaner in cleaners)
             {
                 ThrowIfShouldStopViewsRebuilding();
-                UpdateStatusMessage(string.Format("Deleting {0}", viewType.Name));
-                var query = string.Format("Tag: *{0}*", viewType.Name);
 
-                this.ravenStore
-                    .DatabaseCommands
-                    .DeleteByIndex("Raven/DocumentsByEntityName", new IndexQuery
-                    {
-                        Query = query
-                    });
-                UpdateStatusMessage(string.Format("{0} view was deleted.", viewType.Name));
-
-
-                int resultViewCount = this.ravenStore
-                                          .DatabaseCommands
-                                          .Query("Raven/DocumentsByEntityName", new IndexQuery
-                                          {
-                                              Query = query
-                                          }, new string[0]).Results.Count;
-
-                if (resultViewCount > 0)
-                    throw new Exception(string.Format(
-                        "Failed to delete all views. Remaining {0} count: {1}.", resultViewCount, viewType.Name));
+                var cleanerName = CreateViewName(readSideRepositoryCleaner);
+                UpdateStatusMessage(string.Format("Deleting views for {0}", cleanerName));
+                readSideRepositoryCleaner.Clear();
+                UpdateStatusMessage(string.Format("Views for {0} was deleted.", cleanerName));
             }
         }
 
-        private void DeleteAllViews()
-        {
-            ThrowIfShouldStopViewsRebuilding();
-
-            UpdateStatusMessage("Deleting all views.");
-
-            const string defaultIndexName = "Raven/DocumentsByEntityName";
-
-            if (this.ravenStore.DatabaseCommands.GetIndex(defaultIndexName) != null)
-                this.ravenStore.DatabaseCommands.DeleteByIndex(defaultIndexName, new IndexQuery(), false).WaitForCompletion();
-
-            UpdateStatusMessage("All views were deleted.");
-        }
-
-        private int DocumentsInViewsDatabaseCount()
-        {
-            int resultViewCount=0;
-            using (IDocumentSession session = this.ravenStore.OpenSession())
-            {
-                resultViewCount = session
-                    .Query<object>("Raven/DocumentsByEntityName")
-                    .Customize(customization => customization.WaitForNonStaleResultsAsOfNow())
-                    .Count();
-            }
-            return resultViewCount;
-        }
-
-        private void EnableCacheInRepositoryWriters(IEnumerable<IReadSideRepositoryWriter> writers)
+        private void EnableWritersCacheForHandlers(IEnumerable<IEventHandler> handlers)
         {
             UpdateStatusMessage("Enabling cache in repository writers.");
+
+            var writers = handlers.SelectMany(x => x.Writers.OfType<IReadSideRepositoryWriter>())
+               .Distinct()
+               .ToArray();
 
             foreach (IReadSideRepositoryWriter writer in writers)
             {
@@ -317,19 +261,23 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
             UpdateStatusMessage("Cache in repository writers enabled.");
         }
 
-        private void EnableCacheInAllRepositoryWriters()
+        private void EnableCacheForAllRepositoryWriters()
         {
-            this.EnableCacheInRepositoryWriters(this.writerRegistry.GetAll());
+            this.EnableWritersCacheForHandlers(eventBus.GetAllRegistredEventHandlers());
         }
 
-        private void DisableCacheInAllRepositoryWriters()
+        private void DisableCacheForAllRepositoryWriters()
         {
-            this.DisableCacheInRepositoryWriters(this.writerRegistry.GetAll());
+            this.DisableWritersCacheForHandlers(eventBus.GetAllRegistredEventHandlers());
         }
 
-        private void DisableCacheInRepositoryWriters(IEnumerable<IReadSideRepositoryWriter> writers)
+        private void DisableWritersCacheForHandlers(IEnumerable<IEventHandler> handlers)
         {
             UpdateStatusMessage("Disabling cache in repository writers.");
+
+            var writers = handlers.SelectMany(x => x.Writers.OfType<IReadSideRepositoryWriter>())
+             .Distinct()
+             .ToArray();
 
             foreach (IReadSideRepositoryWriter writer in writers)
             {
@@ -353,7 +301,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
             UpdateStatusMessage("Cache in repository writers disabled.");
         }
 
-        private string RepublishAllEvents(int skipEventsCount = 0)
+        private string RepublishAllEvents(int skipEventsCount = 0, IEnumerable<IEventHandler> handlers = null)
         {
             int processedEventsCount = skipEventsCount;
             int failedEventsCount = 0;
@@ -383,7 +331,10 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
 
                     try
                     {
-                        this.eventBus.Publish(@event);
+                        if (handlers == null)
+                            this.eventBus.Publish(@event);
+                        else
+                            this.eventBus.PublishEventToHandlers(@event, handlers);
                     }
                     catch (Exception exception)
                     {
@@ -454,7 +405,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
 
         private string GetReadableListOfRepositoryWriters()
         {
-            List<IReadSideRepositoryWriter> writers = this.writerRegistry.GetAll().ToList();
+            List<IReadSideRepositoryWriter> writers =eventBus.GetAllRegistredEventHandlers().SelectMany(x=>x.Writers.OfType<IReadSideRepositoryWriter>()).Distinct().ToList();
 
             bool areThereNoWriters = writers.Count == 0;
 #warning to Tolik: calls to dictionary (writer cache) from other thread rais exceptions because Dictionary is not thread safe
@@ -472,11 +423,11 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
                             .ToArray()));
         }
 
-        private static string GetRepositoryEntityName(IReadSideRepositoryWriter writer)
+        private string GetRepositoryEntityName(IReadSideRepositoryWriter writer)
         {
-            var arguments = writer.GetType().GetGenericArguments();
+            var arguments = writer.ViewType.GetGenericArguments();
             if (!arguments.Any())
-                return writer.GetType().Name;
+                return writer.ViewType.Name;
             return arguments.Single().Name;
         }
 

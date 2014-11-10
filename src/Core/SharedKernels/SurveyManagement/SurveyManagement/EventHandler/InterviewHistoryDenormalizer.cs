@@ -23,7 +23,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    internal class InterviewHistoryDenormalizer : IEventHandler<InterviewApprovedByHQ>,
+    internal class InterviewHistoryDenormalizer : BaseDenormalizer, IEventHandler<InterviewApprovedByHQ>,
         IEventHandler<SupervisorAssigned>,
         IEventHandler<InterviewerAssigned>,
         IEventHandler<InterviewStatusChanged>,
@@ -42,22 +42,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<TextListQuestionAnswered>,
         IEventHandler<QRBarcodeQuestionAnswered>,
         IEventHandler<PictureQuestionAnswered>,
-        IEventHandler<AnswerCommented>,
-
-        IEventHandler
+        IEventHandler<AnswerCommented>
     {
-        public string Name { get { return this.GetType().Name; } }
-
-        public Type[] UsesViews
-        {
-            get { return new Type[] { typeof(InterviewData), typeof(UserDocument), typeof(InterviewHistoricalRecord) }; }
-        }
-
-        public Type[] BuildsViews
-        {
-            get { return new Type[] { typeof(InterviewHistoricalRecord) }; }
-        }
-
         private readonly IReadSideRepositoryWriter<InterviewHistoricalRecord> interviewHistoryStore;
 
         public InterviewHistoryDenormalizer(IReadSideRepositoryWriter<InterviewHistoricalRecord> interviewHistoryStore)
@@ -247,6 +233,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 result.Add("roster", string.Join(",", propagationVector));
             }
             return result;
+        }
+
+        public override object[] Writers
+        {
+            get { return new[] { interviewHistoryStore }; }
         }
     }
 }

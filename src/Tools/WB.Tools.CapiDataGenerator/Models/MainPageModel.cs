@@ -20,6 +20,7 @@ using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -73,14 +74,6 @@ namespace CapiDataGenerator
             }
         }
 
-        private IReadSideRepositoryWriterRegistry writerRegistry
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<IReadSideRepositoryWriterRegistry>();
-            }
-        }
-
         private IChangeLogManipulator changeLogManipulator
         {
             get
@@ -97,6 +90,14 @@ namespace CapiDataGenerator
             }
         }
 
+        private IEventDispatcher eventDispatcher
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<IEventDispatcher>();
+            }
+        }
+
         static readonly Random _rand = new Random();
         readonly Timer _timer = new Timer(1000);
         private DateTime _startTime;
@@ -104,7 +105,7 @@ namespace CapiDataGenerator
 
         private void EnableCacheInAllRepositoryWriters()
         {
-            foreach (IReadSideRepositoryWriter writer in this.writerRegistry.GetAll())
+            foreach (IReadSideRepositoryWriter writer in this.eventDispatcher.GetAllRegistredEventHandlers().SelectMany(x => x.Writers.OfType<IReadSideRepositoryWriter>()))
             {
                 writer.EnableCache();
             }
@@ -112,7 +113,7 @@ namespace CapiDataGenerator
 
         private void DisableCacheInAllRepositoryWriters()
         {
-            foreach (IReadSideRepositoryWriter writer in this.writerRegistry.GetAll())
+            foreach (IReadSideRepositoryWriter writer in this.eventDispatcher.GetAllRegistredEventHandlers().SelectMany(x => x.Writers.OfType<IReadSideRepositoryWriter>()))
             {
                 writer.DisableCache();
             }

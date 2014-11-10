@@ -8,15 +8,20 @@ using System.Linq;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons
 {
-    internal class QuestionnaireSharedPersonsDenormalizer :
+    internal class QuestionnaireSharedPersonsDenormalizer :BaseDenormalizer,
         IEventHandler<SharedPersonToQuestionnaireAdded>,
-        IEventHandler<SharedPersonFromQuestionnaireRemoved>, IEventHandler
+        IEventHandler<SharedPersonFromQuestionnaireRemoved>
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireSharedPersons> documentStorage;
 
         public QuestionnaireSharedPersonsDenormalizer(IReadSideRepositoryWriter<QuestionnaireSharedPersons> documentStorage)
         {
             this.documentStorage = documentStorage;
+        }
+
+        public override object[] Writers
+        {
+            get { return new object[] { documentStorage}; }
         }
 
         public void Handle(IPublishedEvent<SharedPersonToQuestionnaireAdded> evnt)
@@ -49,21 +54,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons
 
                 this.documentStorage.Store(item, evnt.EventSourceId);
             }
-        }
-
-        public string Name
-        {
-            get { return this.GetType().Name; }
-        }
-
-        public Type[] UsesViews
-        {
-            get { return new Type[0]; }
-        }
-
-        public Type[] BuildsViews
-        {
-            get { return new Type[] { typeof(QuestionnaireSharedPersons) }; }
         }
     }
 }

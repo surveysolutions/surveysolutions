@@ -46,11 +46,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaires;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
-         
-        public override Type[] UsesViews
-        {
-            get { return new Type[] { typeof(UserDocument), typeof(QuestionnaireBrowseItem) }; }
-        }
 
         public InterviewSummaryEventHandlerFunctional(IReadSideRepositoryWriter<InterviewSummary> interviewSummary,
             IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaires, IReadSideRepositoryWriter<UserDocument> users)
@@ -60,6 +55,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.users = users;
         }
 
+        public override object[] Readers
+        {
+            get { return new object[] { questionnaires, users }; }
+        }
 
         private InterviewSummary UpdateInterviewSummary(InterviewSummary interviewSummary, DateTime updateDateTime, Action<InterviewSummary> update)
         {

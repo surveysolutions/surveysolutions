@@ -32,16 +32,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         {
         }
 
-        public override Type[] UsesViews
-        {
-            get { return new Type[0]; }
-        }
-
-        public override Type[] BuildsViews
-        {
-            get { return base.BuildsViews.Union(new[] {typeof (QuestionnaireInfoView)}).ToArray(); }
-        }
-
         public QuestionnaireInfoView Create(IPublishedEvent<NewQuestionnaireCreated> evnt)
         {
             return CreateQuestionnaire(evnt.EventSourceId, evnt.Payload.Title, evnt.Payload.IsPublic);

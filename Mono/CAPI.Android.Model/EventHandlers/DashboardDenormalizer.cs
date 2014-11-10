@@ -65,6 +65,16 @@ namespace CAPI.Android.Core.Model.EventHandlers
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
         }
 
+        public override object[] Writers
+        {
+            get { return new object[] { questionnaireDtOdocumentStorage, surveyDtoDocumentStorage}; }
+        }
+
+        public override object[] Readers
+        {
+            get { return new object[] { questionnaireDtOdocumentStorage}; }
+        }
+
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
         {
             AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId, 
@@ -217,11 +227,6 @@ namespace CAPI.Android.Core.Model.EventHandlers
         private bool IsInterviewCompletedOrRestarted(InterviewStatus status)
         {
             return status == InterviewStatus.Completed || status == InterviewStatus.Restarted;
-        }
-
-        public override Type[] BuildsViews
-        {
-            get { return new Type[] { typeof(QuestionnaireDTO) }; }
         }
 
         public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
