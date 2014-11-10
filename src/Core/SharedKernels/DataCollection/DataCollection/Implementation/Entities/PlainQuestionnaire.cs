@@ -721,31 +721,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private static void InitializeQuestionnaireDocument(QuestionnaireDocument source)
         {
             source.ConnectChildrenWithParent();
-
-            if (source.IsCacheWarmed)
-                return;
-
-            var groups = source
-                .Find<IGroup>(_ => true)
-                .ToDictionary(
-                    @group => @group.PublicKey,
-                    @group => @group);
-
-            var questions = source
-                .Find<IQuestion>(_ => true)
-                .ToDictionary(
-                    question => question.PublicKey,
-                    question => question);
-
-            source.IsCacheWarmed = true;
-        }
-
-        #region warmup caches
-
-        private static IEnumerable<Guid> GetQuestionsInvolvedInExpression(Dictionary<Guid, IQuestion> questions, Guid contextQuestionId,
-            string expression)
-        {
-            return Enumerable.Empty<Guid>();
         }
 
         private static IQuestion GetQuestionOrThrow(Dictionary<Guid, IQuestion> questions, Guid questionId)
@@ -776,8 +751,5 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             return questions.Values.FirstOrDefault(q => q.StataExportCaption == identifier);
         }
-
-        #endregion
-
     }
 }
