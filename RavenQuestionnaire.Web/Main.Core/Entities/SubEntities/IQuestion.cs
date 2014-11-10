@@ -4,9 +4,6 @@ using Main.Core.Entities.Composite;
 
 namespace Main.Core.Entities.SubEntities
 {
-    /// <summary>
-    /// The Question interface.
-    /// </summary>
     public interface IQuestion : IComposite, IConditional
     {
         List<Answer> Answers { get; set; }
@@ -17,18 +14,14 @@ namespace Main.Core.Entities.SubEntities
         bool Mandatory { get; set; }
         string QuestionText { get; set; }
         QuestionType QuestionType { get; set; }
-        QuestionScope QuestionScope { get; set; } 
+        QuestionScope QuestionScope { get; set; }
         string StataExportCaption { get; set; }
         string VariableLabel { get; set; }
         string ValidationExpression { get; set; }
         string ValidationMessage { get; set; }
-
         Guid? LinkedToQuestionId { get; set; }
-
         Guid? CascadeFromQuestionId { get; set; }
-
         bool? IsFilteredCombobox { get; set; }
-
         void AddAnswer(Answer answer);
         IEnumerable<string> GetVariablesUsedInTitle();
     }
