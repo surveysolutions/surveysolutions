@@ -1,9 +1,10 @@
-﻿using Machine.Specifications;
+﻿using System.Runtime.InteropServices;
+using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Utility;
 using Moq;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -17,9 +18,13 @@ namespace WB.UI.Headquarters.Tests.InterviewControllerTests
     {
         private Establish context = () =>
         {
+            Mock<IPasswordHasher> passwordHasherMock = new Mock<IPasswordHasher>();
+            passwordHasherMock.Setup(_ => _.Hash(model.Password)).Returns(hashedPassword);
+
             commandServiceMock.Setup(_ => _.Execute(Moq.It.IsAny<ICommand>(), Moq.It.IsAny<string>()))
                 .Callback<ICommand, string>((command, origin) => executedCommand = command);
-            controller = CreateController(commandService:commandServiceMock.Object);
+
+            controller = CreateController(commandService:commandServiceMock.Object, passwordHasher: passwordHasherMock.Object);
         };
 
         Because of = () =>
@@ -50,7 +55,7 @@ namespace WB.UI.Headquarters.Tests.InterviewControllerTests
             GetSpecifiedCommand().Supervisor.ShouldBeNull();
 
         It should_execute_command_Password_be_computed_hash_by_model_password = () =>
-            GetSpecifiedCommand().Password.ShouldEqual(SimpleHash.ComputeHash(model.Password));
+            GetSpecifiedCommand().Password.ShouldEqual(hashedPassword);
 
         private static CreateUserCommand GetSpecifiedCommand()
         {
@@ -68,5 +73,7 @@ namespace WB.UI.Headquarters.Tests.InterviewControllerTests
             ConfirmPassword = "P@$$w0rd",
             Email = "hq@wbcapi.org"
         };
+
+        private static string hashedPassword = "hashedPassword";
     }
 }

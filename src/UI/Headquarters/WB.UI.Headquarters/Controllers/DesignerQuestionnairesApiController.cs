@@ -4,7 +4,6 @@ using System.ServiceModel;
 using System.Web;
 using System.Web.Http;
 using Main.Core.Documents;
-using Main.Core.Utility;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
@@ -70,7 +69,7 @@ namespace WB.UI.Headquarters.Controllers
                         Filter: data.Request.Filter,
                         PageIndex: data.Pager.Page,
                         PageSize: data.Pager.PageSize,
-                        SortOrder: StringUtil.GetOrderRequestString(data.SortOrder)));
+                        SortOrder: data.SortOrder.GetOrderRequestString()));
 
             return new DesignerQuestionnairesView()
                 {

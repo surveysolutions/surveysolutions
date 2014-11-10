@@ -1,4 +1,4 @@
-namespace WB.Core.GenericSubdomains.Rest
+namespace WB.Core.GenericSubdomains.Utils.Rest
 {
     public interface INetworkService
     {
