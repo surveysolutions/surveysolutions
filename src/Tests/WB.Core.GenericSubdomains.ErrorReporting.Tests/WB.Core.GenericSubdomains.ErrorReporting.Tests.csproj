@@ -81,9 +81,9 @@
       <Project>{64ff78f2-775b-4728-9d8a-d3a7b9a7344c}</Project>
       <Name>WB.Core.GenericSubdomains.ErrorReporting</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\GenericSubdomains\Rest\Rest\WB.Core.GenericSubdomains.Rest.csproj">
-      <Project>{877d263d-c2fe-4a95-b98e-6017843d0746}</Project>
-      <Name>WB.Core.GenericSubdomains.Rest</Name>
+    <ProjectReference Include="..\..\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
+      <Project>{b9af365d-f3c9-423a-86e2-9c3e0c1ac402}</Project>
+      <Name>WB.Core.GenericSubdomains.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
