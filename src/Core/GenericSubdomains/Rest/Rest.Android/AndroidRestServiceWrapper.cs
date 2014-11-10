@@ -57,20 +57,9 @@ namespace WB.Core.GenericSubdomains.Rest.Android
         public T ExecuteRestRequestAsync<T>(string url, KeyValuePair<string, object>[] queryStringParams, CancellationToken ct, byte[] file, string fileName, string login, string password,
             string method, params KeyValuePair<string, object>[] additionalParams)
         {
-            var restClient = this.BuildRestClient(login, password);
-            var request = this.BuildRequest(url, queryStringParams, additionalParams, file, fileName, this.GetRequestMethod(method));
-            IRestResponse response = null;
-
-            var token = restClient.ExecuteAsync(request, (r) => { response = r; });
-
-            while (response == null)
-            {
-                if (ct.IsCancellationRequested)
-                {
-                    token.Abort();
-                    throw new RestException("Operation was canceled.");
-                }
-            }
+            RestClient restClient = this.BuildRestClient(login, password);
+            RestRequest request = this.BuildRequest(url, queryStringParams, additionalParams, file, fileName, this.GetRequestMethod(method));
+            IRestResponse response = restClient.ExecuteTaskAsync(request, ct).Result;
 
             return this.HandlerResponse<T>(response);
         }
@@ -82,18 +71,7 @@ namespace WB.Core.GenericSubdomains.Rest.Android
 
             var request = this.BuildRequest(url, new KeyValuePair<string, object>[]{}, additionalParams, file, fileName, this.GetRequestMethod(method));
 
-            IRestResponse response = null;
-
-            var token = restClient.ExecuteAsync(request, (r) => { response = r; });
-
-            while (response == null)
-            {
-                if (ct.IsCancellationRequested)
-                {
-                    token.Abort();
-                    throw new RestException("Operation was canceled.");
-                }
-            }
+            IRestResponse response = restClient.ExecuteTaskAsync(request, ct).Result;
 
             if (response.StatusCode == HttpStatusCode.OK) 
                 return;
@@ -110,20 +88,8 @@ namespace WB.Core.GenericSubdomains.Rest.Android
         {
             var restClient = this.BuildRestClient(login,password);
             var request = this.BuildRequest(url, additionalParams, requestBody, this.GetRequestMethod(method));
-            
-            IRestResponse response = null;
 
-            var token = restClient.ExecuteAsync(request, (r) => { response = r; });
-
-            while (response==null)
-            {
-                if (ct.IsCancellationRequested)
-                {
-                    token.Abort();
-                    throw new RestException("Operation was canceled.");
-                }
-            }
-
+            var response = restClient.ExecuteTaskAsync(request, ct).Result;
             return this.HandlerResponse<T>(response);
         }
 
@@ -155,7 +121,7 @@ namespace WB.Core.GenericSubdomains.Rest.Android
             {
                 this.logger.Error("Error occured during synchronization. Response contains exception. Message: " + response.ErrorMessage, response.ErrorException);
                 throw new RestException("Error occurred on communication. Please, check settings or try again later. Status: " + response.StatusDescription);
-            }
+            } 
 
             if (response.StatusCode != HttpStatusCode.OK)
             {
