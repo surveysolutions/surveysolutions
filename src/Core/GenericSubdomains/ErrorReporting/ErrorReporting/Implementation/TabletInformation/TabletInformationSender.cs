@@ -89,14 +89,14 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformat
 
             this.ExitIfCanceled();
 
-            this.CancelIfException(() =>
+            this.CancelIfException(async () =>
             {
                 var content = this.fileSystemAccessor.ReadAllBytes(this.pathToInfoArchive);
 
                 var tabletInformationPackage = new TabletInformationPackage(this.fileSystemAccessor.GetFileName(this.pathToInfoArchive), content,
                     this.androidId, this.registrationKeyName);
 
-                var result = this.webExecutor.ExecuteRestRequestAsync<bool>(PostInfoPackagePath, this.ct,
+                var result = await this.webExecutor.ExecuteRestRequestAsync<bool>(PostInfoPackagePath, this.ct,
                     this.jsonUtils.GetItemAsContent(tabletInformationPackage), null, null, null);
 
                 this.fileSystemAccessor.DeleteFile(this.pathToInfoArchive);

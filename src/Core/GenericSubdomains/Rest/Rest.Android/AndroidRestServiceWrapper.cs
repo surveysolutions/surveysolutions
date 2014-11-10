@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Authentication;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
 using RestSharp;
 using WB.Core.GenericSubdomains.Logging;
@@ -54,27 +55,28 @@ namespace WB.Core.GenericSubdomains.Rest.Android
             return this.HandlerResponse<T>(response);
         }
 
-        public T ExecuteRestRequestAsync<T>(string url, KeyValuePair<string, object>[] queryStringParams, CancellationToken ct, byte[] file, string fileName, string login, string password,
+        public async Task<T> ExecuteRestRequestAsync<T>(string url, KeyValuePair<string, object>[] queryStringParams, CancellationToken ct, byte[] file, string fileName, string login, string password,
             string method, params KeyValuePair<string, object>[] additionalParams)
         {
             RestClient restClient = this.BuildRestClient(login, password);
             RestRequest request = this.BuildRequest(url, queryStringParams, additionalParams, file, fileName, this.GetRequestMethod(method));
-            IRestResponse response = restClient.ExecuteTaskAsync(request, ct).Result;
+            IRestResponse response = await restClient.ExecuteTaskAsync(request, ct);
 
             return this.HandlerResponse<T>(response);
         }
 
-        public void ExecuteRestRequestAsync(string url, CancellationToken ct, byte[] file, string fileName, string login, string password,
+        public async Task ExecuteRestRequestAsync(string url, CancellationToken ct, byte[] file, string fileName, string login, string password,
            string method, params KeyValuePair<string, object>[] additionalParams)
         {
             var restClient = this.BuildRestClient(login, password);
 
             var request = this.BuildRequest(url, new KeyValuePair<string, object>[]{}, additionalParams, file, fileName, this.GetRequestMethod(method));
 
-            IRestResponse response = restClient.ExecuteTaskAsync(request, ct).Result;
+            Task<IRestResponse> responseTask = restClient.ExecuteTaskAsync(request, ct);
+            var response = await responseTask;
 
             if (response.StatusCode == HttpStatusCode.OK) 
-                return;
+                return ;
 
             if (response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
                 throw new AuthenticationException("Not autorized");
@@ -83,13 +85,14 @@ namespace WB.Core.GenericSubdomains.Rest.Android
             throw new RestException(string.Format("Target returned unexpected result. Status: {0}. {1}", response.StatusCode, response.StatusDescription));
         }
 
-        public T ExecuteRestRequestAsync<T>(string url, CancellationToken ct, object requestBody, string login, string password, string method,
+        public async Task<T> ExecuteRestRequestAsync<T>(string url, CancellationToken ct, object requestBody, string login, string password, string method,
             params KeyValuePair<string, object>[] additionalParams)
         {
             var restClient = this.BuildRestClient(login,password);
             var request = this.BuildRequest(url, additionalParams, requestBody, this.GetRequestMethod(method));
 
-            var response = restClient.ExecuteTaskAsync(request, ct).Result;
+            var response = await restClient.ExecuteTaskAsync(request, ct);
+
             return this.HandlerResponse<T>(response);
         }
 

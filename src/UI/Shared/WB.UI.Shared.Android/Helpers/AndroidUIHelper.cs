@@ -1,14 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Android.App;
-using Android.Content;
 using Android.Graphics;
-using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 
@@ -16,7 +10,9 @@ namespace WB.UI.Shared.Android.Helpers
 {
     public static class AndroidUIHelper
     {
-        public static CancellationTokenSource WaitForLongOperation(this Activity activity, Action<CancellationToken> operation, bool showProgressDialog = true)
+        public static CancellationTokenSource WaitForLongOperation(this Activity activity, 
+            Action<CancellationToken> operation, 
+            bool showProgressDialog = true)
         {
             var progressBar = showProgressDialog ? CreateProgressBar(activity) : null;
             var cancellationTokenSource = new CancellationTokenSource();
