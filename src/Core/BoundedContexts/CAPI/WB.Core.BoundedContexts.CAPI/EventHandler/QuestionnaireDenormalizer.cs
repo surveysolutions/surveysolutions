@@ -7,13 +7,11 @@ using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace WB.Core.SharedKernels.DataCollection.EventHandler
+namespace WB.Core.BoundedContexts.Capi.EventHandler
 {
     public class QuestionnaireDenormalizer : 
         BaseDenormalizer,
-        IEventHandler,
         IEventHandler<TemplateImported>, IEventHandler<QuestionnaireDeleted>,
         IEventHandler<PlainQuestionnaireRegistered>
     {
@@ -63,7 +61,7 @@ namespace WB.Core.SharedKernels.DataCollection.EventHandler
 
         public override object[] Writers
         {
-            get { return new[] { questionnarieStorage }; }
+            get { return new[] { this.questionnarieStorage }; }
         }
     }
 }
