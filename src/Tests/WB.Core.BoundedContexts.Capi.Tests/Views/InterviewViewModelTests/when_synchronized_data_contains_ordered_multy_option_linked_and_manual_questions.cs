@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -98,16 +96,6 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
             ((SelectebleQuestionViewModel)interviewViewModel.FindQuestion(
                 question => question.PublicKey == new InterviewItemId(manualMultyOptionQuestionId, new decimal[0]))
                 .FirstOrDefault()).AnswerString.ShouldEqual("2, 1");
-
-       /* It should_first_linked_question_inside_roster_has_2_options = () =>
-           ((LinkedQuestionViewModel)interviewViewModel.FindQuestion(
-               question => question.PublicKey == new InterviewItemId(manualMultyOptionQuestionId, new decimal[] { 0 }))
-               .FirstOrDefault()).AnswerOptions.Count().ShouldEqual(2);
-
-        It should_second_linked_question_inside_roster_has_2_options = () =>
-          ((LinkedQuestionViewModel)interviewViewModel.FindQuestion(
-              question => question.PublicKey == new InterviewItemId(manualMultyOptionQuestionId, new decimal[] { 1 }))
-              .FirstOrDefault()).AnswerOptions.Count().ShouldEqual(2);*/
 
         private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;

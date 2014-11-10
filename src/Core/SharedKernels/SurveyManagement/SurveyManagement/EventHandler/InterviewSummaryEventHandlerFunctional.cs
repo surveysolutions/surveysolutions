@@ -397,7 +397,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 Status = status,
                 Date = date,
                 Comment = comment,
-                Responsible = GetResponsibleIdName(responsibleId)
+                Responsible = GetResponsibleIdName(responsibleId),
+                ResponsibleId = responsibleId
             });
         }
 

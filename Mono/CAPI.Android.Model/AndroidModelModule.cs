@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using Android.OS;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
@@ -17,8 +16,8 @@ using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using CAPI.Android.Settings;
 using Main.Core.Documents;
 using Main.Core.View;
-using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;
+using Ninject;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.ChangeLog;
@@ -28,9 +27,12 @@ using WB.Core.BoundedContexts.Capi.Synchronization.Views.InterviewMetaInfo;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace CAPI.Android.Core.Model
@@ -94,11 +96,12 @@ namespace CAPI.Android.Core.Model
             this.Bind<ICapiSynchronizationCacheService>().ToConstant(syncCacher);
             this.Bind<IViewFactory<DashboardInput, DashboardModel>>().To<DashboardFactory>();
             this.Bind<IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo>>().ToConstant(interviewMetaInfoFactory);
-
-            var backupable = new List<IBackupable>(){
+            
+            var backupable = new List<IBackupable>()
+            {
                     evenStore, changeLogStore, fileSystem, denormalizerStore, plainStore,
                     bigSurveyStore, syncCacher, sharedPreferencesBackup, templateStore, propagationStructureStore
-                };
+            };
 
             foreach (var folderToBackup in foldersToBackup)
             {

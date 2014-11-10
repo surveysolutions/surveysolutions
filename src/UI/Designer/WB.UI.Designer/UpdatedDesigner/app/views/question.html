@@ -30,7 +30,7 @@
 
             <div class="form-group input-variable-name col-xs-4 pull-right">
                 <label for="edit-group-title" class="wb-label">Variable name<help key="variableName" /></label><br>
-                <input id="edit-question-variable-name" type="text" ng-model="activeQuestion.variable"
+                <input id="edit-question-variable-name" type="text" ng-model="activeQuestion.variable" spellcheck="false"
                        class="form-control" maxlength="32">
             </div>
         </div>
@@ -68,25 +68,26 @@
             </div>
         </div>
 
-        <div class="form-group" ng-hide="activeQuestion.questionScope == 'Prefilled'" ng-class="{'has-error': !questionForm.enablementCondition.$valid}">
+        <div class="form-group" ng-hide="!doesQuestionSupportEnablementConditions()" ng-class="{'has-error': !questionForm.enablementCondition.$valid}">
             <label for="edit-question-enablement-condition">Condition expression <help key="conditionExpression" /></label>
             <textarea id="edit-question-enablement-condition"
                       name="enablementCondition"
                       deny-this-keyword msd-elastic
                       ng-model="activeQuestion.enablementCondition"
+                      spellcheck="false"
                       class="form-control"></textarea>
             <p class="help-block ng-cloak" ng-show="questionForm.enablementCondition.$error.denyThisKeyword">
                 You cannot use self-reference in conditions
             </p>
         </div>
 
-        <div class="form-group" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode' || activeQuestion.type == 'Multimedia'">
+        <div class="form-group" ng-show="doesQuestionSupportValidations()">
             <label for="edit-question-validation-expression">Validation expression <help key="validationExpression" /></label>
-            <textarea id="edit-question-validation-expression" ng-model="activeQuestion.validationExpression"
+            <textarea id="edit-question-validation-expression" ng-model="activeQuestion.validationExpression" spellcheck="false"
                       class="form-control" msd-elastic></textarea>
         </div>
 
-        <div class="form-group" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode' || activeQuestion.type == 'Multimedia'">
+        <div class="form-group" ng-show="doesQuestionSupportValidations()">
             <label for="edit-question-validation-message">Validation message <help key="validationMessage" /></label>
             <textarea id="edit-question-validation-message" ng-model="activeQuestion.validationMessage"
                       class="form-control" msd-elastic></textarea>

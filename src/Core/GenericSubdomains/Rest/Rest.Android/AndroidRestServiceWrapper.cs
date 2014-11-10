@@ -1,11 +1,10 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Security.Authentication;
 using System.Threading;
 using Microsoft.Practices.ServiceLocation;
 using RestSharp;
-using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Utils.Serialization;
 
@@ -26,46 +25,39 @@ namespace WB.Core.GenericSubdomains.Rest.Android
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
-        public void ExecuteRestRequest(string url,  string login, string password, string method, params KeyValuePair<string, string>[] additionalParams)
+        public void ExecuteRestRequest(string url,  string login, string password, string method, params KeyValuePair<string, object>[] additionalParams)
         {
             var restClient = this.BuildRestClient(login, password);
-
             var request = this.BuildRequest(url, additionalParams, null, this.GetRequestMethod(method));
-
             var response = restClient.Execute(request);
 
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                var exception = new Exception("Target returned unsupported result.");
+            if (response.StatusCode == HttpStatusCode.OK) 
+                return;
 
-                if (response.StatusCode == HttpStatusCode.Forbidden)
-                    exception = new AuthenticationException("user wasn't authorized");
-                
-                this.logger.Error("Sync error. Response status:" + response.StatusCode, exception);
+            if (response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
+                throw new AuthenticationException("Not autorized");
 
-                throw exception; 
-            }
+            this.logger.Error(string.Format("Sync error. Status: {0}, Response Uri: {1}, Url: {2} Method:{3}, Login: {4}, args: {5}",
+                response.StatusDescription, response.ResponseUri, url, method, login, 
+                string.Join(";", additionalParams.Select(x => x.Key + "=" + x.Value.ToString()).ToArray())));
+            throw new RestException(string.Format("Target returned unexpected result. Status: {0}", response.StatusDescription));
+            
         }
 
-        public T ExecuteRestRequest<T>(string url, string login, string password, string method, params KeyValuePair<string, string>[] additionalParams)
+        public T ExecuteRestRequest<T>(string url, string login, string password, string method, params KeyValuePair<string, object>[] additionalParams)
         {
             var restClient = this.BuildRestClient(login, password);
-
             var request = this.BuildRequest(url, additionalParams, null, this.GetRequestMethod(method));
-
             var response = restClient.Execute(request);
 
             return this.HandlerResponse<T>(response);
         }
 
-        public T ExecuteRestRequestAsync<T>(string url, CancellationToken ct, byte[] file, string fileName, string login, string password,
-            string method,
-            params KeyValuePair<string, string>[] additionalParams)
+        public T ExecuteRestRequestAsync<T>(string url, KeyValuePair<string, object>[] queryStringParams, CancellationToken ct, byte[] file, string fileName, string login, string password,
+            string method, params KeyValuePair<string, object>[] additionalParams)
         {
             var restClient = this.BuildRestClient(login, password);
-
-            var request = this.BuildRequest(url, additionalParams, file, fileName, this.GetRequestMethod(method));
-
+            var request = this.BuildRequest(url, queryStringParams, additionalParams, file, fileName, this.GetRequestMethod(method));
             IRestResponse response = null;
 
             var token = restClient.ExecuteAsync(request, (r) => { response = r; });
@@ -83,12 +75,11 @@ namespace WB.Core.GenericSubdomains.Rest.Android
         }
 
         public void ExecuteRestRequestAsync(string url, CancellationToken ct, byte[] file, string fileName, string login, string password,
-           string method,
-           params KeyValuePair<string, string>[] additionalParams)
+           string method, params KeyValuePair<string, object>[] additionalParams)
         {
             var restClient = this.BuildRestClient(login, password);
 
-            var request = this.BuildRequest(url, additionalParams, file, fileName, this.GetRequestMethod(method));
+            var request = this.BuildRequest(url, new KeyValuePair<string, object>[]{}, additionalParams, file, fileName, this.GetRequestMethod(method));
 
             IRestResponse response = null;
 
@@ -101,26 +92,22 @@ namespace WB.Core.GenericSubdomains.Rest.Android
                     token.Abort();
                     throw new RestException("Operation was canceled.");
                 }
-            } 
-
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                var exception = new Exception(string.Format("Target returned unsupported result with status {0},{1}", response.StatusCode, response.StatusDescription));
-
-                if (response.StatusCode == HttpStatusCode.Forbidden)
-                    exception = new AuthenticationException("User is not authorized.");
-
-                this.logger.Error("Sync error. Response status:" + response.StatusCode, exception);
-
-                throw exception;
             }
+
+            if (response.StatusCode == HttpStatusCode.OK) 
+                return;
+
+            if (response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
+                throw new AuthenticationException("Not autorized");
+
+            this.logger.Error(string.Format("Sync error. Response status: {0}. {1}", response.StatusCode, response.StatusDescription));
+            throw new RestException(string.Format("Target returned unexpected result. Status: {0}. {1}", response.StatusCode, response.StatusDescription));
         }
 
         public T ExecuteRestRequestAsync<T>(string url, CancellationToken ct, object requestBody, string login, string password, string method,
-            params KeyValuePair<string, string>[] additionalParams)
+            params KeyValuePair<string, object>[] additionalParams)
         {
             var restClient = this.BuildRestClient(login,password);
-
             var request = this.BuildRequest(url, additionalParams, requestBody, this.GetRequestMethod(method));
             
             IRestResponse response = null;
@@ -165,44 +152,45 @@ namespace WB.Core.GenericSubdomains.Rest.Android
         {
             if (response.ErrorException != null)
             {
-                this.logger
-                          .Error("Sync error, response contains exception. Message:" + response.ErrorMessage, 
-                                 response.ErrorException);
-                throw new Exception("Error occurred on communication with target. Please, check settings or try again later.");
+                this.logger.Error("Error occured during synchronization. Response contains exception. Message: " + response.ErrorMessage, response.ErrorException);
+                throw new RestException("Error occurred on communication. Please, check settings or try again later. Status: " + response.StatusDescription);
             }
 
-            if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
+            if (response.StatusCode != HttpStatusCode.OK)
             {
-                var exception = new Exception(string.Format("Target returned unsupported result with status {0},{1}", response.StatusCode, response.StatusDescription));
+                if(response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
+                    throw new AuthenticationException("Not autorized");
 
-                if (response.StatusCode == HttpStatusCode.Forbidden)
-                    exception = new AuthenticationException("User is not authorized.");
+                this.logger.Error(string.Format("Sync error. Status: {0}", response.StatusDescription));
+                throw new RestException(string.Format("Target returned unexpected result. Status: {0}", response.StatusDescription));
+            }
 
-                this.logger.Error("Sync error. Response status:" + response.StatusCode, exception);
-
-                throw exception;
+            if (string.IsNullOrWhiteSpace(response.Content))
+            {
+                this.logger.Error("Sync error. Empty content was returned.");
+                throw new RestException(string.Format("Target returned unexpected result."));
             }
 
             var syncItemsMetaContainer = this.jsonUtils.Deserrialize<T>(response.Content);
 
             if (syncItemsMetaContainer == null)
             {
-                throw new Exception("Elements to be synchronized are not found.");
+                throw new RestException("Elements to be synchronized are not found.");
             }
 
             return syncItemsMetaContainer;
         }
 
-        private RestRequest BuildRequest(string url, KeyValuePair<string, string>[] additionalParams, object requestBody, RestSharp.Method method)
+        private RestRequest BuildRequest(string url, IEnumerable<KeyValuePair<string, object>> additionalParams, object requestBody, RestSharp.Method method)
         {
-            var request = new RestRequest(url, method);
-            request.RequestFormat = DataFormat.Json;
-
+            var request = new RestRequest(url, method)
+            {
+                RequestFormat = DataFormat.Json
+            };
             request.AddHeader("Accept-Encoding", "gzip,deflate");
 
             if (requestBody != null && !string.IsNullOrWhiteSpace(requestBody.ToString()))
             {
-                //request.AddBody(requestBody);
                 request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             }
 
@@ -213,11 +201,13 @@ namespace WB.Core.GenericSubdomains.Rest.Android
 
             return request;
         }
-        private RestRequest BuildRequest(string url, KeyValuePair<string, string>[] additionalParams, byte[] file,string fileName, RestSharp.Method method)
+        private RestRequest BuildRequest(string url, IEnumerable<KeyValuePair<string, object>> queryStringParams, 
+            IEnumerable<KeyValuePair<string, object>> additionalParams, byte[] file, string fileName, RestSharp.Method method)
         {
-            var request = new RestRequest(url, method);
-            request.RequestFormat = DataFormat.Json;
-
+            var request = new RestRequest(url, method)
+            {
+                RequestFormat = DataFormat.Json
+            };
             request.AddHeader("Accept-Encoding", "gzip,deflate");
 
             if (file != null && file.Length>0)
@@ -225,6 +215,11 @@ namespace WB.Core.GenericSubdomains.Rest.Android
                 request.AddFile(fileName, file, fileName);
             }
 
+            foreach (var additionalParam in queryStringParams)
+            {
+                request.AddParameter(additionalParam.Key, additionalParam.Value, ParameterType.UrlSegment);
+            }
+            
             foreach (var additionalParam in additionalParams)
             {
                 request.AddParameter(additionalParam.Key, additionalParam.Value);

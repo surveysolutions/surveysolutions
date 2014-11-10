@@ -1,32 +1,29 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
-using Android.Graphics;
+using Android.Graphics.Drawables;
 using Android.Views;
 using Android.Widget;
-using Main.Core.Utility;
-using RestSharp;
+using Org.Apache.Http.Authentication;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.UI.Shared.Android.Adapters;
 using WB.UI.Shared.Android.Helpers;
 
 namespace WB.UI.QuestionnaireTester.Adapters
 {
     public class QuestionnaireListAdapter : BaseAdapter<QuestionnaireListItem>
     {
-        private Activity activity;
+        private readonly Activity activity;
         private IList<QuestionnaireListItem> unfilteredList;
         protected IList<QuestionnaireListItem> items;
 
         public QuestionnaireListAdapter(Activity activity)
-            : base()
         {
-            this.items = new List<QuestionnaireListItem>();
-            this.unfilteredList=new List<QuestionnaireListItem>();
+            items = new List<QuestionnaireListItem>();
+            unfilteredList = new List<QuestionnaireListItem>();
 
             this.activity = activity;
 
@@ -35,21 +32,41 @@ namespace WB.UI.QuestionnaireTester.Adapters
 
         protected void UploadQuestionnairesFromDesigner(CancellationToken cancellationToken)
         {
-            var questionnaireListPackage = CapiTesterApplication.DesignerServices.GetQuestionnaireListForCurrentUser(cancellationToken);
-
-            unfilteredList = items =
-                questionnaireListPackage == null
-                    ? new List<QuestionnaireListItem>()
-                    : questionnaireListPackage.Items;
-           
-            activity.RunOnUiThread(() =>
+            if (CapiTesterApplication.DesignerMembership.IsLoggedIn)
             {
-                if (items == null)
+                try
                 {
-                    CapiTesterApplication.DesignerMembership.LogOff();
+                    QuestionnaireListCommunicationPackage questionnaireListPackage =
+                    CapiTesterApplication.DesignerServices.GetQuestionnaireListForCurrentUser(CapiTesterApplication.DesignerMembership.RemoteUser, cancellationToken);
+
+                    unfilteredList = items = questionnaireListPackage.Items;
                 }
-                this.NotifyDataSetChanged();
-            });
+                catch (Exception exc) 
+                {
+                    ShowLongToastInUIThread(exc.Message);
+                    activity.RunOnUiThread(() =>
+                    {
+                        if (items == null)
+                        {
+                            CapiTesterApplication.DesignerMembership.LogOff();
+                        }
+                    });
+                }
+
+                activity.RunOnUiThread(NotifyDataSetChanged);
+            }
+
+            else
+            {
+                activity.RunOnUiThread(() =>
+                {
+                    if (items == null)
+                    {
+                        CapiTesterApplication.DesignerMembership.LogOff();
+                    }
+                });
+            }
+            
         }
 
         public void Update()
@@ -61,41 +78,31 @@ namespace WB.UI.QuestionnaireTester.Adapters
         {
             if (!string.IsNullOrEmpty(searchQuery))
             {
-                items = unfilteredList.Where(i => CultureInfo.InvariantCulture.CompareInfo.IndexOf(i.Title, searchQuery, CompareOptions.IgnoreCase) >= 0).ToList();
+                items =
+                    unfilteredList.Where(
+                        i =>
+                            CultureInfo.InvariantCulture.CompareInfo.IndexOf(i.Title, searchQuery,
+                                CompareOptions.IgnoreCase) >= 0).ToList();
             }
             else
             {
                 items = unfilteredList;
             }
-            this.NotifyDataSetChanged();
+            NotifyDataSetChanged();
         }
 
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
-
-            var dataItem = this[position];
-            var view = this.BuildViewItem(dataItem, position);
-          /*  if (convertView == null)
-            {
-                convertView = this.CreateViewElement(dataItem, position);
-            }
-            else
-            {
-                var elementId = Convert.ToInt32(convertView.GetTag(Resource.Id.ElementId).ToString());
-                if (elementId != position)
-                {
-                    convertView.TryClearBindingsIfPossible();
-
-                    convertView = this.CreateViewElement(dataItem, position);
-                }
-            }*/
-
+            QuestionnaireListItem dataItem = this[position];
+            View view = BuildViewItem(dataItem, position);
+         
             return view;
         }
+
         protected View BuildViewItem(QuestionnaireListItem dataItem, int position)
         {
-            LayoutInflater layoutInflater =
-                (LayoutInflater) this.activity.GetSystemService(Context.LayoutInflaterService);
+            var layoutInflater =
+                (LayoutInflater) activity.GetSystemService(Context.LayoutInflaterService);
 
             var view = layoutInflater.Inflate(Resource.Layout.template_list_item, null) as LinearLayout;
             var tvTitle =
@@ -105,8 +112,8 @@ namespace WB.UI.QuestionnaireTester.Adapters
 
 
             var tvArrow =
-              view.FindViewById<TextView>(Resource.Id.tvArrow);
-            var img = activity.Resources.GetDrawable(global::Android.Resource.Drawable.IcMediaPlay);
+                view.FindViewById<TextView>(Resource.Id.tvArrow);
+            Drawable img = activity.Resources.GetDrawable(Android.Resource.Drawable.IcMediaPlay);
             tvArrow.SetCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
             view.SetTag(Resource.Id.QuestionnaireId, dataItem.Id.ToString());
             return view;
@@ -119,12 +126,17 @@ namespace WB.UI.QuestionnaireTester.Adapters
 
         public override int Count
         {
-            get { return this.items.Count; }
+            get { return items.Count; }
         }
 
         public override QuestionnaireListItem this[int position]
         {
-            get { return this.items[position]; }
+            get { return items[position]; }
+        }
+
+        private void ShowLongToastInUIThread(string message)
+        {
+            this.activity.RunOnUiThread(() => Toast.MakeText(activity, message, ToastLength.Long).Show());
         }
     }
 }

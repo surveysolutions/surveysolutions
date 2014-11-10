@@ -41,13 +41,13 @@ namespace CAPI.Android.Core.Model.Authorization
         public bool IsLoggedIn { get { return currentUser != null; }
     }
 
-        public bool LogOn(string userName, string password)
+        public bool LogOn(string userName, string password, bool wasPasswordHashed = false)
         {
             if (currentUser != null)
                 throw new InvalidOperationException("Please logoff first.");
             try
             {
-                var hash = SimpleHash.ComputeHash(password);
+                var hash = wasPasswordHashed ? password : SimpleHash.ComputeHash(password);
                 var userNameToLower = userName.ToLower();
 
                 LoginDTO user = this.documentStorage.Filter(u => u.Login == userNameToLower).FirstOrDefault();
@@ -65,7 +65,6 @@ namespace CAPI.Android.Core.Model.Authorization
             {
                 return false;
             }
-
         }
 
         public void LogOff()

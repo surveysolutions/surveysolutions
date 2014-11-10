@@ -212,6 +212,10 @@
   <ItemGroup>
     <AndroidResource Include="Resources\Values\Strings.xml" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <AndroidResource Include="Resources\Values\Colors.xml" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Mono\AndroidMain.Core\AndroidMain.Core.csproj">
       <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>
@@ -241,6 +245,9 @@
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
+  </ItemGroup>  
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\answer_progress_indicator.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\bookmarkStyle.xml" />
@@ -260,8 +267,11 @@
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\errorwarningstyle.xml" />
   </ItemGroup>
-   <ItemGroup>
+  <ItemGroup>
     <AndroidResource Include="Resources\Drawable\no_image_found.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\ic_drawer_dark.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\CounterRoundShape.xml">

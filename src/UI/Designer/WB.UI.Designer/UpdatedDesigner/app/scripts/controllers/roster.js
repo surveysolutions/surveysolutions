@@ -3,12 +3,23 @@
 
     angular.module('designerApp')
         .controller('RosterCtrl', 
-            function ($rootScope, $scope, $stateParams, questionnaireService, commandService, confirmService, $log, utilityService) {
+            function ($rootScope, $scope, $stateParams, questionnaireService, commandService, confirmService, $log, utilityService, hotkeys) {
                 $scope.currentChapterId = $stateParams.chapterId;
                 $scope.selectedNumericQuestion = null;
                 $scope.selectedMultiQuestion = null;
                 $scope.selectedListQuestion = null;
                 $scope.selectedTitleQuestion = null;
+
+                hotkeys.bindTo($scope)
+                      .add({
+                          combo: 'ctrl+s',
+                          description: 'Save current roster',
+                          allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                          callback: function (event) {
+                              $scope.saveRoster();
+                              event.preventDefault();
+                          }
+                      });
 
                 var dataBind = function(result) {
                     $scope.activeRoster = result;

@@ -45,3 +45,4 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("Core.Supervisor.Tests")]
 [assembly: InternalsVisibleTo("WB.Core.BoundedContexts.Capi.Tests")]
 [assembly: InternalsVisibleTo("WB.Core.SharedKernels.SurveyManagement.Tests")]
+[assembly: InternalsVisibleTo("WB.Tools.QuestionnaireDocumentsConverter")]

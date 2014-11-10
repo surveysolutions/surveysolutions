@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -19,6 +19,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <NuGetPackageImportStamp>56b3b042</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -136,6 +137,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\..\..\..\packages\System.Data.SQLite.Core.1.0.94.0\lib\net45\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -399,6 +403,7 @@
     <Content Include="Views\HQ\TakeNew.cshtml" />
     <Content Include="Views\HQ\VerifySample.cshtml" />
     <Content Include="Views\ControlPanel\CreateHeadquarters.cshtml" />
+    <None Include="Properties\PublishProfiles\nastya.pubxml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -438,6 +443,17 @@
     <Compile Include="API\Attributes\HeadquarterFeatureOnlyAttribute.cs" />
     <Compile Include="API\Feeds\QuestionnaireFeedController.cs" />
     <Compile Include="API\Filters\HeadquarterFeatureOnlyFilter.cs" />
+    <Compile Include="API\Resources\AssembliesResourceController.cs" />
+    <Compile Include="App_GlobalResources\BatchUpload.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BatchUpload.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Dashboard.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Dashboard.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\MainMenu.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -569,6 +585,10 @@
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
+      <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
@@ -576,10 +596,6 @@
     <ProjectReference Include="..\..\..\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
       <Project>{D55B9582-70FD-4340-A3BC-55A33D49B2E6}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
-      <Project>{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}</Project>
-      <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernels\SurveyManagement\SurveyManagement.Web\WB.Core.SharedKernels.SurveyManagement.Web.csproj">
       <Project>{e96a3629-18f6-4b7c-9920-fc9a1b3892c1}</Project>
@@ -618,6 +634,19 @@
       <LastGenOutput>MainMenu.Designer.cs</LastGenOutput>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\BatchUpload.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>BatchUpload.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\Dashboard.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Dashboard.Designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -625,7 +654,14 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
-  <Target Name="CustomCollectFiles">
+  <Import Project="..\..\..\..\packages\System.Data.SQLite.Core.1.0.94.0\build\net45\System.Data.SQLite.Core.targets" Condition="Exists('..\..\..\..\packages\System.Data.SQLite.Core.1.0.94.0\build\net45\System.Data.SQLite.Core.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\..\packages\System.Data.SQLite.Core.1.0.94.0\build\net45\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\System.Data.SQLite.Core.1.0.94.0\build\net45\System.Data.SQLite.Core.targets'))" />
+  </Target>
+  <Target Name="CustomCollectFiles" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
     <ItemGroup>
       <_CustomFiles Include="Externals\**\*" />
       <FilesForPackagingFromProject Include="%(_CustomFiles.Identity)">
@@ -633,12 +669,24 @@
       </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
-  <PropertyGroup>
-    <CopyAllFilesToSingleFolderForMsdeployDependsOn>
-      CustomCollectFiles;
-      $(CopyAllFilesToSingleFolderForMsdeployDependsOn);
-    </CopyAllFilesToSingleFolderForMsdeployDependsOn>
-  </PropertyGroup>
+  <Target Name="CollectFilesFromBin_x64" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
+    <Message Text="Copying sqlite x64" Importance="high" />
+    <ItemGroup>
+      <_SQLiteFiles_x64 Include="$(MSBuildProjectDirectory)\bin\x64\**\*" />
+      <FilesForPackagingFromProject Include="%(_SQLiteFiles_x64.Identity)">
+        <DestinationRelativePath>bin\x64\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
+      </FilesForPackagingFromProject>
+    </ItemGroup>
+  </Target>
+  <Target Name="CollectFilesFromBin_x86" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
+    <Message Text="Copying sqlite x86" Importance="high" />
+    <ItemGroup>
+      <_SQLiteFiles_x86 Include="$(MSBuildProjectDirectory)\bin\x86\**\*" />
+      <FilesForPackagingFromProject Include="%(_SQLiteFiles_x86.Identity)">
+        <DestinationRelativePath>bin\x86\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
+      </FilesForPackagingFromProject>
+    </ItemGroup>
+  </Target>
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">

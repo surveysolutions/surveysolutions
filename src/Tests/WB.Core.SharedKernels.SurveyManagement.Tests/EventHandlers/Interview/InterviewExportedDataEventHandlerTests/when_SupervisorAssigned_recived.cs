@@ -20,31 +20,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
     {
         Establish context = () =>
         {
-            dataExportService = new Mock<IDataExportService>();
-            interviewActionLogWriter = new Mock<IReadSideRepositoryWriter<InterviewActionLog>>();
-            questionnarie = CreateQuestionnaireDocument(new Dictionary<string, Guid>());
-
-            interviewActionLogWriter.Setup(x => x.Store(Moq.It.IsAny<InterviewActionLog>(), interviewId.FormatGuid()))
-              .Callback<InterviewActionLog,string>((action, id) => interviewActionLog = action);
-
+            dataExportService = new Mock<IDataExportRepositoryWriter>();
             interviewExportedDataDenormalizer = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
-                () => questionnarie,
-                CreateInterviewData, dataExportService.Object, new UserDocument() { UserName = "user name" }, interviewActionLogWriter.Object);
+                dataExportRepositoryWriter: dataExportService.Object);
         };
 
         Because of = () =>
             interviewExportedDataDenormalizer.Handle(CreatePublishableEvent(() => new SupervisorAssigned(Guid.NewGuid(), Guid.NewGuid()),
                 interviewId));
 
+        It should_SupervisorAssigned_action_be_added_to_dataExport = () =>
+               dataExportService.Verify(x => x.AddInterviewAction(
+                        InterviewExportedAction.SupervisorAssigned,
+                        Moq.It.IsAny<Guid>(), Moq.It.IsAny<Guid>(), Moq.It.IsAny<DateTime>()), Times.Once);
 
-        It should_SupervisorAssigned_action_be_present_in_list_of_actions = () =>
-            interviewActionLog.Actions[0].Action.ShouldEqual(InterviewExportedAction.SupervisorAssigned);
 
         private static InterviewExportedDataDenormalizer interviewExportedDataDenormalizer;
-        private static QuestionnaireDocument questionnarie;
-        private static Mock<IReadSideRepositoryWriter<InterviewActionLog>> interviewActionLogWriter;
-        private static Mock<IDataExportService> dataExportService;
+        private static Mock<IDataExportRepositoryWriter> dataExportService;
         private static Guid interviewId = Guid.NewGuid();
-        private static InterviewActionLog interviewActionLog;
     }
 }

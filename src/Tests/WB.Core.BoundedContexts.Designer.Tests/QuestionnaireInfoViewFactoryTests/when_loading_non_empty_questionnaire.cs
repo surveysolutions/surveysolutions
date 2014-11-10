@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewFactoryTes
 
             questionnaire.CreatedBy = userId;
 
-            var questionnaireDocument = Mock.Of<IReadSideRepositoryReader<QuestionnaireDocument>>(x => x.GetById(questionnaireId) == questionnaire);
+            var questionnaireDocument = Mock.Of<IQueryableReadSideRepositoryReader<QuestionnaireDocument>>(x => x.GetById(questionnaireId) == questionnaire);
             var userRepositoryMock =
                 Mock.Of<IReadSideRepositoryReader<AccountDocument>>(
                     x => x.GetById(userId.FormatGuid()) == new AccountDocument() { Email = ownerEmail });

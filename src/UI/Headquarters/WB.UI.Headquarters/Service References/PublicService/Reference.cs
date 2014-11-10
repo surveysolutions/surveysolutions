@@ -15,8 +15,7 @@ namespace WB.UI.Headquarters.PublicService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="QuestionnaireVersion", Namespace="http://schemas.datacontract.org/2004/07/WB.Core.SharedKernels.QuestionnaireVerifi" +
-        "cation.ValueObjects")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="QuestionnaireVersion", Namespace="http://schemas.datacontract.org/2004/07/WB.Core.SharedKernels.DataCollection")]
     [System.SerializableAttribute()]
     public partial class QuestionnaireVersion : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -163,12 +162,6 @@ namespace WB.UI.Headquarters.PublicService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPublicService/DownloadQuestionnaire", ReplyAction="http://tempuri.org/IPublicService/DownloadQuestionnaireResponse")]
         System.Threading.Tasks.Task<WB.UI.Headquarters.PublicService.RemoteFileInfo> DownloadQuestionnaireAsync(WB.UI.Headquarters.PublicService.DownloadQuestionnaireRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPublicService/DownloadQuestionnaireSource", ReplyAction="http://tempuri.org/IPublicService/DownloadQuestionnaireSourceResponse")]
-        string DownloadQuestionnaireSource(System.Guid request);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPublicService/DownloadQuestionnaireSource", ReplyAction="http://tempuri.org/IPublicService/DownloadQuestionnaireSourceResponse")]
-        System.Threading.Tasks.Task<string> DownloadQuestionnaireSourceAsync(System.Guid request);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPublicService/Dummy", ReplyAction="http://tempuri.org/IPublicService/DummyResponse")]
         void Dummy();
         
@@ -211,10 +204,10 @@ namespace WB.UI.Headquarters.PublicService {
     public partial class RemoteFileInfo {
         
         [System.ServiceModel.MessageHeaderAttribute(Namespace="http://tempuri.org/")]
-        public string FileName;
+        public long Length;
         
         [System.ServiceModel.MessageHeaderAttribute(Namespace="http://tempuri.org/")]
-        public long Length;
+        public string SupportingAssembly;
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=0)]
         public System.IO.Stream FileByteStream;
@@ -222,9 +215,9 @@ namespace WB.UI.Headquarters.PublicService {
         public RemoteFileInfo() {
         }
         
-        public RemoteFileInfo(string FileName, long Length, System.IO.Stream FileByteStream) {
-            this.FileName = FileName;
+        public RemoteFileInfo(long Length, string SupportingAssembly, System.IO.Stream FileByteStream) {
             this.Length = Length;
+            this.SupportingAssembly = SupportingAssembly;
             this.FileByteStream = FileByteStream;
         }
     }
@@ -323,14 +316,14 @@ namespace WB.UI.Headquarters.PublicService {
             return base.Channel.DownloadQuestionnaire(request);
         }
         
-        public string DownloadQuestionnaire(System.Guid QuestionnaireId, WB.UI.Headquarters.PublicService.QuestionnaireVersion SupportedQuestionnaireVersion, out long Length, out System.IO.Stream FileByteStream) {
+        public long DownloadQuestionnaire(System.Guid QuestionnaireId, WB.UI.Headquarters.PublicService.QuestionnaireVersion SupportedQuestionnaireVersion, out string SupportingAssembly, out System.IO.Stream FileByteStream) {
             WB.UI.Headquarters.PublicService.DownloadQuestionnaireRequest inValue = new WB.UI.Headquarters.PublicService.DownloadQuestionnaireRequest();
             inValue.QuestionnaireId = QuestionnaireId;
             inValue.SupportedQuestionnaireVersion = SupportedQuestionnaireVersion;
             WB.UI.Headquarters.PublicService.RemoteFileInfo retVal = ((WB.UI.Headquarters.PublicService.IPublicService)(this)).DownloadQuestionnaire(inValue);
-            Length = retVal.Length;
+            SupportingAssembly = retVal.SupportingAssembly;
             FileByteStream = retVal.FileByteStream;
-            return retVal.FileName;
+            return retVal.Length;
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -343,14 +336,6 @@ namespace WB.UI.Headquarters.PublicService {
             inValue.QuestionnaireId = QuestionnaireId;
             inValue.SupportedQuestionnaireVersion = SupportedQuestionnaireVersion;
             return ((WB.UI.Headquarters.PublicService.IPublicService)(this)).DownloadQuestionnaireAsync(inValue);
-        }
-        
-        public string DownloadQuestionnaireSource(System.Guid request) {
-            return base.Channel.DownloadQuestionnaireSource(request);
-        }
-        
-        public System.Threading.Tasks.Task<string> DownloadQuestionnaireSourceAsync(System.Guid request) {
-            return base.Channel.DownloadQuestionnaireSourceAsync(request);
         }
         
         public void Dummy() {

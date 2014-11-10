@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewFactoryTes
         }
 
         protected static QuestionnaireInfoViewFactory CreateQuestionnaireInfoViewFactory(
-            IReadSideRepositoryReader<QuestionnaireDocument> documentReader = null, 
+            IQueryableReadSideRepositoryReader<QuestionnaireDocument> documentReader = null, 
             IQueryableReadSideRepositoryReader<QuestionnaireInfoView> repository = null, 
             IReadSideRepositoryReader<QuestionnaireSharedPersons> sharedWith = null,
             IReadSideRepositoryReader<AccountDocument> accountsDocumentReader = null)
@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewFactoryTes
             return
                 new QuestionnaireInfoViewFactory(repository ?? Mock.Of<IQueryableReadSideRepositoryReader<QuestionnaireInfoView>>(),
                                                 sharedWith ?? Mock.Of<IReadSideRepositoryReader<QuestionnaireSharedPersons>>(),
-                                                documentReader ?? Mock.Of<IReadSideRepositoryReader<QuestionnaireDocument>>(x => x.GetById(It.IsAny<string>()) == new QuestionnaireDocument()),
+                                                documentReader ?? Mock.Of<IQueryableReadSideRepositoryReader<QuestionnaireDocument>>(x => x.GetById(It.IsAny<string>()) == new QuestionnaireDocument()),
                                                 accountsDocumentReader ?? Mock.Of<IReadSideRepositoryReader<AccountDocument>>());
         }
     }

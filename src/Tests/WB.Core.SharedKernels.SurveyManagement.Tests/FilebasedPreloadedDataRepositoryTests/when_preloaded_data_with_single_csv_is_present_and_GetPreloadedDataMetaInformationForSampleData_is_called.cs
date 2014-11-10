@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
             fileSystemAccessor = CreateIFileSystemAccessorMock();
             fileSystemAccessor.Setup(x => x.IsDirectoryExists("PreLoadedData\\" + csvFileId)).Returns(true);
 
-            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(preLoadedData + "\\" + csvFileId)).Returns(new string[] { csvFileName + ".csv" });
+            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(preLoadedData + "\\" + csvFileId)).Returns(new string[] { csvFileName + ".tab" });
 
             archiveUtils = new Mock<IArchiveUtils>();
             archiveUtils.Setup(x => x.IsZipFile(Moq.It.IsAny<string>())).Returns(false);
@@ -34,8 +34,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
         It should_result_has_info_about_1_elements = () =>
             result.FilesMetaInformation.Length.ShouldEqual(1);
 
-        It should_result_has_info_about_first_element_with_name_test_csv = () =>
-          result.FilesMetaInformation[0].FileName.ShouldEqual("test.csv");
+        It should_result_has_info_about_first_element_with_name_test_tab = () =>
+          result.FilesMetaInformation[0].FileName.ShouldEqual("test.tab");
 
         It should_first_element_be_marked_and_CanBeHandled = () =>
          result.FilesMetaInformation[0].CanBeHandled.ShouldEqual(true);

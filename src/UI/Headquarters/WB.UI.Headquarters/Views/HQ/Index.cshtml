@@ -8,11 +8,12 @@
     @Scripts.Render("~/Scripts/viewmodels/pages/questionnaires.js")
     <script type="text/javascript">
         var $getExportedDataUrl = '@Url.Action("GetExportedData", "ImportExport")';
+        var $getExportedApprovedDataUrl = '@Url.Action("GetExportedApprovedData", "ImportExport")';
         var $getExportedFilesUrl = '@Url.Action("GetExportedFiles", "ImportExport")';
         var $newInterviewUrl = '@Url.Action("TakeNew", "HQ")';
         var $batchUploadUrl = '@Url.Action("BatchUpload", "HQ")';
         var $importTemplateUrl = '@Url.Action("Import", "Template")';
-        $(function() {
+        $(function () {
             var questionnairesUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "AllQuestionnaires"})';
             var deleteQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "DeleteQuestionnaire"})';
 
@@ -26,7 +27,7 @@
 
 @section header
 {
-    <h3 class="sinle-line-header">Questionnaires</h3>
+    <h3 class="sinle-line-header">@Dashboard.Questionnaires</h3>
 }
 
 @section gridnavigation
@@ -35,7 +36,7 @@
         <div class="form-inline">
             <a class="btn btn-default" data-bind="attr: { href: $importTemplateUrl }">
                 <i class="glyphicon glyphicon-import">
-                </i> Import template
+                </i> @Dashboard.ImportTemplate
             </a>
         </div>
     </div>
@@ -46,11 +47,11 @@
     <table class="table table-striped table-bordered table-condensed table-hover">
         <thead>
             <tr>
-                <th class="fit-column-by-content" data-bind='sortby : "AllowCensusMode"'>Census</th>
-                <th data-bind='sortby : "Title"'>Title</th>
-                <th data-bind='sortby : "Version"'>Version</th>
-                <th data-bind='sortby : "CreationDate"'>Creation Date</th>
-                <th data-bind='sortby : "LastEntryDate"'>Last Entry Date</th>
+                <th class="fit-column-by-content" data-bind='sortby : "AllowCensusMode"'>@Dashboard.Census</th>
+                <th data-bind='sortby : "Title"'>@Dashboard.Title</th>
+                <th data-bind='sortby : "Version"'>@Dashboard.Version</th>
+                <th data-bind='sortby : "CreationDate"'>@Dashboard.CreationDate</th>
+                <th data-bind='sortby : "LastEntryDate"'>@Dashboard.LastEntryDate</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -69,26 +70,65 @@
                 <td data-bind="date: LastEntryDate"></td>
                 <td>
                     <!-- ko ifnot:AllowCensusMode -->
-                    <a class="btn btn-primary" data-bind="attr: { href: $batchUploadUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
-                        <i class="icon-white"></i>Batch upload
-                    </a>
-                    <a class="btn btn-primary" data-bind="attr: { href: $newInterviewUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
-                        <i class="glyphicon glyphicon-plus-sign"></i> New Interview
-                    </a>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                            <i class="glyphicon glyphicon-plus-sign"></i>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a data-bind="attr: { href: $batchUploadUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
+                                    <i class="glyphicon glyphicon-plus-sign"></i>
+                                    @Dashboard.BatchUpload
+                                </a>
+                            </li>
+                            <li>
+                                <a data-bind="attr: { href: $newInterviewUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
+                                    <i class="glyphicon glyphicon-plus-sign"></i>
+                                    @Dashboard.NewInterview
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
                     <!-- /ko -->
                 </td>
                 <td>
-                    <a class="btn btn-success" data-bind="attr: { href: $getExportedDataUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
-                        <i class=" glyphicon glyphicon-download">
-                        </i> CSV
-                    </a>
-                    <a class="btn btn-success" data-bind="attr: { href: $getExportedFilesUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
-                        <i class=" glyphicon glyphicon-download">
-                        </i> Binary data
-                    </a>
-                    <a class="btn btn-danger" data-bind="click : $parent.deleteQuestionnaire">
-                        <i class="glyphicon"></i> Delete
-                    </a>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                            <i class=" glyphicon glyphicon-download">
+                            </i>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a data-bind="attr: { href: $getExportedDataUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
+                                    <i class=" glyphicon glyphicon-download">
+                                    </i> @Dashboard.AllData
+                                </a>
+                            </li>
+                            <li>
+                                <a data-bind="attr: { href: $getExportedApprovedDataUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
+                                    <i class="glyphicon glyphicon-download">
+                                    </i> @Dashboard.ApprovedData
+                                </a>
+                            </li>
+                            <li>
+                                <a data-bind="attr: { href: $getExportedFilesUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
+                                    <i class="glyphicon glyphicon-download">
+                                    </i> @Dashboard.BinaryData
+                                </a>
+                            </li>
+                        </ul>
+
+
+
+                    </div>
+                    <div class="btn-group">
+                        <a class="btn btn-danger" data-bind="click : $parent.deleteQuestionnaire">
+                            <i class="glyphicon glyphicon-remove"></i>
+                        </a>
+                    </div>
                 </td>
             </tr>
             <!-- /ko -->

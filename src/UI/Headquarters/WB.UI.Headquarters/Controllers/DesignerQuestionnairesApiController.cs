@@ -16,7 +16,6 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Template;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
-using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.PublicService;
 using WB.UI.Shared.Web.Filters;
 
@@ -83,60 +82,44 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         public QuestionnaireVerificationResponse GetQuestionnaire(ImportQuestionnaireRequest request)
         {
-            QuestionnaireDocument document = null;
             try
             {
                 var supportedVerstion = this.supportedVersionProvider.GetSupportedQuestionnaireVersion();
-                RemoteFileInfo docSource;
-                try
-                {
-                    docSource = this.DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(request.QuestionnaireId,
-                            new QuestionnaireVersion
-                            {
-                                Major = supportedVerstion.Major,
-                                Minor = supportedVerstion.Minor,
-                                Patch = supportedVerstion.Patch
-                            }));
-                }
-                catch (FaultException ex)
-                {
-                    this.Logger.Error(string.Format("Designer: error when importing template #{0}", request.QuestionnaireId), ex);
-                    return new QuestionnaireVerificationResponse(true)
-                    {
-                        ImportError = ex.Reason.ToString()
-                    };
-                }
 
-                document = this.zipUtils.Decompress<QuestionnaireDocument>(docSource.FileByteStream);
+                RemoteFileInfo docSource =
+                    this.DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(request.QuestionnaireId,
+                        new QuestionnaireVersion
+                        {
+                            Major = supportedVerstion.SupportedQuestionnaireVersionMajor,
+                            Minor = supportedVerstion.SupportedQuestionnaireVersionMinor,
+                            Patch = supportedVerstion.SupportedQuestionnaireVersionPatch
+                        }));
 
-                this.CommandService.Execute(new ImportFromDesigner(this.GlobalInfo.GetCurrentUser().Id, document, request.AllowCensusMode));
+                var document = this.zipUtils.Decompress<QuestionnaireDocument>(docSource.FileByteStream);
 
-                return new QuestionnaireVerificationResponse(true);
+                var supportingAssembly = docSource.SupportingAssembly;
+
+                this.CommandService.Execute(new ImportFromDesigner(this.GlobalInfo.GetCurrentUser().Id, document,
+                    request.AllowCensusMode, supportingAssembly));
+
+                return new QuestionnaireVerificationResponse();
+            }
+            catch (FaultException ex)
+            {
+                this.Logger.Error(
+                    string.Format("Designer: error when importing template #{0}", request.QuestionnaireId), ex);
+
+                return new QuestionnaireVerificationResponse() {ImportError = ex.Reason.ToString()};
             }
             catch (Exception ex)
             {
                 var domainEx = ex.GetSelfOrInnerAs<QuestionnaireException>();
-                if (domainEx == null)
-                {
-                    this.Logger.Error(
-                        string.Format("Designer: error when importing template #{0}", request.QuestionnaireId), ex);
-                    throw;
-                }
+                if (domainEx != null) return new QuestionnaireVerificationResponse() {ImportError = domainEx.Message};
 
-                var response = new QuestionnaireVerificationResponse(true, document.Title);
-                var verificationException = domainEx as QuestionnaireVerificationException;
-                if (verificationException != null)
-                {
-                    response.SetErrorsForQuestionnaire(verificationException.Errors, document);
-                }
-                return response;
+                this.Logger.Error(
+                    string.Format("Designer: error when importing template #{0}", request.QuestionnaireId), ex);
+                throw;
             }
-        }
-
-        public class ImportQuestionnaireRequest
-        {
-            public Guid QuestionnaireId { get; set; }
-            public bool AllowCensusMode { get; set; }
         }
     }
 }

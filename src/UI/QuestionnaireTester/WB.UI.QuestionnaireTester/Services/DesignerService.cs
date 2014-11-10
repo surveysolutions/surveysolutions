@@ -4,6 +4,8 @@ using System.Threading;
 using Ninject;
 using WB.Core.GenericSubdomains.Rest;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Core.SharedKernels.DataCollection;
+using WB.UI.QuestionnaireTester.Authentication;
 
 namespace WB.UI.QuestionnaireTester.Services
 {
@@ -21,8 +23,7 @@ namespace WB.UI.QuestionnaireTester.Services
             var webExecutor = restUtilsFactory.CreateRestServiceWrapper(CapiTesterApplication.GetPathToDesigner());
             try
             {
-                return webExecutor.ExecuteRestRequestAsync<bool>(
-                    "ValidateCredentials", cancellationToken, null, userName, password, "POST");
+                return webExecutor.ExecuteRestRequestAsync<bool>("ValidateCredentials", cancellationToken, null, userName, password, "POST");
             }
             catch (Exception e)
             {
@@ -30,42 +31,32 @@ namespace WB.UI.QuestionnaireTester.Services
             }
         }
 
-        public QuestionnaireListCommunicationPackage  GetQuestionnaireListForCurrentUser(CancellationToken cancellationToken)
+        public QuestionnaireListCommunicationPackage  GetQuestionnaireListForCurrentUser(UserInfo remoteUser, CancellationToken cancellationToken)
         {
-            if (!CapiTesterApplication.DesignerMembership.IsLoggedIn)
-                return null;
             var webExecutor = restUtilsFactory.CreateRestServiceWrapper(CapiTesterApplication.GetPathToDesigner());
-            try
-            {
-                return webExecutor.ExecuteRestRequestAsync<QuestionnaireListCommunicationPackage>(
-                    "GetAllTemplates", cancellationToken, null, CapiTesterApplication.DesignerMembership.RemoteUser.UserName,
-                    CapiTesterApplication.DesignerMembership.RemoteUser.Password, "GET");
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
+            return webExecutor.ExecuteRestRequestAsync<QuestionnaireListCommunicationPackage>(
+                    "GetAllTemplates", 
+                    cancellationToken, 
+                    null, 
+                    remoteUser.UserName,
+                    remoteUser.Password, 
+                    "GET");
+            
         }
 
-        public QuestionnaireCommunicationPackage GetTemplateForCurrentUser(Guid id, CancellationToken cancellationToken)
+        public QuestionnaireCommunicationPackage GetTemplateForCurrentUser(UserInfo remoteUser, Guid id, CancellationToken cancellationToken)
         {
-            if (!CapiTesterApplication.DesignerMembership.IsLoggedIn)
-                return null;
-
             var webExecutor = restUtilsFactory.CreateRestServiceWrapper(CapiTesterApplication.GetPathToDesigner());
-            try
-            {
-                var package = webExecutor.ExecuteRestRequestAsync<QuestionnaireCommunicationPackage>(
-                    "GetTemplate", cancellationToken, null, CapiTesterApplication.DesignerMembership.RemoteUser.UserName,
-                    CapiTesterApplication.DesignerMembership.RemoteUser.Password, "GET",
-                    new KeyValuePair<string, string>("id", id.ToString()));
-
-                return package;
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
+            return webExecutor.ExecuteRestRequestAsync<QuestionnaireCommunicationPackage>(
+                    "GetTemplate", 
+                    cancellationToken, 
+                    null, 
+                    remoteUser.UserName,
+                    remoteUser.Password, 
+                    "GET",
+                    new KeyValuePair<string, object>("id", id),
+                    new KeyValuePair<string, object>("maxSupportedVersion", QuestionnaireVersionProvider.GetCurrentEngineVersion().ToString()));
+                
         }
     }
 }

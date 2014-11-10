@@ -4,8 +4,7 @@ using Android.Graphics;
 using Android.OS;
 using Android.Widget;
 using Android.Content.PM;
-using CAPI.Android.Core.Model.ViewModel.Login;
-using Cirrious.MvvmCross.Droid.Simple;
+using Cirrious.MvvmCross.Droid.Views;
 using WB.Core.BoundedContexts.Capi.Views.Login;
 using WB.UI.Capi.Extensions;
 using WB.UI.Shared.Android.Extensions;
@@ -16,7 +15,7 @@ namespace WB.UI.Capi
     /// The login activity.
     /// </summary>
     [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
-    public class LoginActivity : MvxSimpleBindingActivity
+    public class LoginActivity : MvxActivity
     {
         protected Button btnLogin
         {
@@ -35,7 +34,6 @@ namespace WB.UI.Capi
         {
             base.OnStart();
             this.CreateActionBar();
-
         }
 
         protected override void OnCreate(Bundle bundle)

@@ -43,6 +43,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         public IEnumerable<PreloadedDataVerificationError> VerifySample(Guid questionnaireId, long version, PreloadedDataByFile data)
         {
+            if (data == null)
+            {
+                return new[] { new PreloadedDataVerificationError("PL0024", PreloadingVerificationMessages.PL0024_DataWasNotFound) };
+            }
+
             var preloadedDataService = CreatePreloadedDataService(questionnaireId, version);
             if (preloadedDataService == null)
             {
@@ -62,6 +67,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         public IEnumerable<PreloadedDataVerificationError> VerifyPanel(Guid questionnaireId, long version, PreloadedDataByFile[] data)
         {
+            if (data == null || !data.Any())
+            {
+                yield return new PreloadedDataVerificationError("PL0024", PreloadingVerificationMessages.PL0024_DataWasNotFound) ;
+                yield break;
+            }
+
             var preloadedDataService = CreatePreloadedDataService(questionnaireId, version);
             if (preloadedDataService == null)
             {

@@ -58,9 +58,8 @@
     <Reference Include="Cirrious.MvvmCross.Wpf">
       <HintPath>..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.0.9\lib\net45\Cirrious.MvvmCross.Wpf.dll</HintPath>
     </Reference>
-    <Reference Include="Ionic.Zip, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Ionic.Zip.dll</HintPath>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\..\..\packages\DotNetZip.1.9.3\lib\net20\Ionic.Zip.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -274,10 +273,6 @@
     <ProjectReference Include="..\..\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
       <Project>{D55B9582-70FD-4340-A3BC-55A33D49B2E6}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
-      <Project>{44a49db2-2e7e-4be7-b931-7e225ef057f4}</Project>
-      <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\SurveyManagement\SurveyManagement\WB.Core.SharedKernels.SurveyManagement.csproj">
       <Project>{29A132B5-A573-40D2-9E8F-2871E95D7766}</Project>

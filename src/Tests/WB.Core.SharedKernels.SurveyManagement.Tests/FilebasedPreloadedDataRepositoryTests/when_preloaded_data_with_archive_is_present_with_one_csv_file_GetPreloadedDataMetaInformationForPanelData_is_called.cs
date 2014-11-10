@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
             archiveUtils = new Mock<IArchiveUtils>();
             archiveUtils.Setup(x => x.IsZipFile(Moq.It.IsAny<string>())).Returns(true);
             archiveUtils.Setup(x => x.GetArchivedFileNamesAndSize(Moq.It.IsAny<string>()))
-                .Returns(new Dictionary<string, long>() { { "1.csv", 20 },{"nastya",1} });
+                .Returns(new Dictionary<string, long>() { { "1.tab", 20 },{"nastya",1} });
             recordsAccessorFactory = new Mock<IRecordsAccessorFactory>();
             filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository(fileSystemAccessor.Object, archiveUtils.Object, recordsAccessorFactory.Object);
         };
@@ -38,8 +38,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
         It should_result_has_info_about_2_elements = () =>
             result.FilesMetaInformation.Length.ShouldEqual(2);
 
-        It should_result_has_info_about_first_element_with_name_1_csv = () =>
-          result.FilesMetaInformation[0].FileName.ShouldEqual("1.csv");
+        It should_result_has_info_about_first_element_with_name_1_tab = () =>
+          result.FilesMetaInformation[0].FileName.ShouldEqual("1.tab");
 
         It should_first_element_be_marked_and_CanBeHandled = () =>
          result.FilesMetaInformation[0].CanBeHandled.ShouldEqual(true);
