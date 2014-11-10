@@ -1,6 +1,8 @@
 using System;
 using Android.App;
 using Android.Content.PM;
+using Android.Graphics;
+using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
@@ -57,9 +59,9 @@ namespace WB.UI.Capi.Implementations.Activities
             this.ActionBar.SetDisplayShowCustomEnabled(true);
             this.ActionBar.SetDisplayUseLogoEnabled(true);
             this.ActionBar.SetCustomView(Resource.Layout.InterviewActionBar);
-
+            
             var txtTitle = (TextView)this.ActionBar.CustomView.FindViewById(Resource.Id.txtTitle);
-            txtTitle.Text = CreateScreenTitle();
+            txtTitle.Text = Title;
 
             var imgProgress = (ImageView)this.ActionBar.CustomView.FindViewById(Resource.Id.imgAnswerProgress);
 

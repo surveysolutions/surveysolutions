@@ -26,11 +26,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.Interviews.InterviewsFeedDe
             interviewDeletedEvent = Create.PublishedEvent(Guid.NewGuid(), new InterviewDeleted(userId));
 
             writer = Substitute.For<IReadSideRepositoryWriter<InterviewFeedEntry>>();
-            var interviews = Substitute.For<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>();
+            var interviews = Substitute.For<IReadSideRepositoryWriter<InterviewSummary>>();
             interviews.GetById(interviewDeletedEvent.EventSourceId.FormatGuid())
-                .Returns(new ViewWithSequence<InterviewData>(new InterviewData { SupervisorId = supervisorId, CreatedOnClient = false }, 1));
+                .Returns(new InterviewSummary() { TeamLeadId = supervisorId, WasCreatedOnClient = false });
 
-            denormalizer = Create.InterviewsFeedDenormalizer(writer, interviews);
+            denormalizer = Create.InterviewsFeedDenormalizer(writer, interviewSummaryRepository: interviews);
         };
 
         private Because of = () => denormalizer.Handle(interviewDeletedEvent);

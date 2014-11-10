@@ -12,6 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
+    [Ignore("C#, KP-4391 Interview reevalution")]
     internal class when_reevaluating_whole_interview_and_questionnaire_has_mandatory_single_question_with_condition_and_validation : InterviewTestsContext
     {
         Establish context = () =>
@@ -31,16 +32,16 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 && _.GetAnswerOptionsAsValues(singleQuestion2Id) == new decimal[] { 1, 2, 3 }
                 && _.GetAllMandatoryQuestions() == new[] { singleQuestion1Id, singleQuestion2Id }
                 && _.IsCustomValidationDefined(singleQuestion2Id) == true
-                && _.GetAllQuestionsWithNotEmptyValidationExpressions() == new[] { singleQuestion2Id }
+                //&& _.GetAllQuestionsWithNotEmptyValidationExpressions() == new[] { singleQuestion2Id }
                 && _.GetCustomValidationExpression(singleQuestion2Id) == validationExpression
-                && _.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new[] { singleQuestion2Id }
+                //&& _.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new[] { singleQuestion2Id }
                 && _.GetCustomEnablementConditionForQuestion(singleQuestion2Id) == enablementCondition
                 && _.IsQuestionMandatory(singleQuestion1Id) == true
                 && _.IsQuestionMandatory(singleQuestion2Id) == true
             );
 
             var expressionProcessor =
-                Mock.Of<IExpressionProcessor>(
+                Mock.Of<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>(
                     x =>
                         x.EvaluateBooleanExpression(validationExpression, Moq.It.IsAny<Func<string, object>>()) == true &&
                         x.EvaluateBooleanExpression(enablementCondition, Moq.It.IsAny<Func<string, object>>()) == true &&
@@ -51,7 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(questionnaireRepository);
 
-            SetupInstanceToMockedServiceLocator<IExpressionProcessor>(expressionProcessor);
+            SetupInstanceToMockedServiceLocator<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>(expressionProcessor);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
             interview.Apply(new SingleOptionQuestionAnswered(userId: userId, questionId: singleQuestion1Id,

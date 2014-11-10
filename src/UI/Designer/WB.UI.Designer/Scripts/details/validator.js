@@ -67,6 +67,10 @@
             },
 
             isValidExpression: function (expression) {
+                return {
+                    isValid: true
+                };
+
                 if (_.isEmpty(expression)) {
                     return {
                         isValid: true

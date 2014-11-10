@@ -1,5 +1,4 @@
 using Machine.Specifications;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.SupportedVersionProviderTests
@@ -20,15 +19,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.SupportedVersionProviderT
             supportedVersion = versionProvider.GetSupportedQuestionnaireVersion();
 
         It should_set_Major_property_to_1 = () =>
-            supportedVersion.Major.ShouldEqual(1);
+            supportedVersion.SupportedQuestionnaireVersionMajor.ShouldEqual(1);
 
         It should_set_Minor_property_to_6 = () =>
-            supportedVersion.Minor.ShouldEqual(6);
+            supportedVersion.SupportedQuestionnaireVersionMinor.ShouldEqual(6);
 
         It should_set_Patch_property_to_0 = () =>
-            supportedVersion.Patch.ShouldEqual(2);
+            supportedVersion.SupportedQuestionnaireVersionPatch.ShouldEqual(2);
 
-        private static QuestionnaireVersion supportedVersion;
+        private static ApplicationVersionSettings supportedVersion;
         private static SupportedVersionProvider versionProvider;
 
     }

@@ -10,6 +10,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using It = Machine.Specifications.It;
 
@@ -19,10 +20,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadingTemplateService
     {
         Establish context = () =>
         {
-            dataFileExportService = CreateIDataFileExportServiceMock();
-           
-            questionnaireExportStructure = CreateQuestionnaireExportStructure(2);
-            preloadingTemplateService = CreatePreloadingTemplateService(dataFileExportService.Object, questionnaireExportStructure);
+            exportedDataFormatter=new Mock<IDataExportService>();
+            fileSystemAccessor = CreateIFileSystemAccessorMock();
+            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>())).Returns(new[] { "1.tab" });
+            preloadingTemplateService = CreatePreloadingTemplateService(fileSystemAccessor.Object,
+                dataExportService: exportedDataFormatter.Object);
         };
 
         Because of = () => result = preloadingTemplateService.GetFilePathToPreloadingTemplate(questionnaireId, 1);
@@ -33,13 +35,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadingTemplateService
         It should_return_valid_archive_name = () =>
             result.ShouldEndWith(string.Format("template_{0}_v{1}.zip", questionnaireId.FormatGuid(), 1));
 
-        It should_header_be_created_for_both_leveles = () =>
-            dataFileExportService.Verify(x=>x.CreateHeader(Moq.It.IsAny<HeaderStructureForLevel>(),Moq.It.IsAny<string>()), Times.Exactly(2));
+        It should_only_create_template_for_preload_once = () =>
+            exportedDataFormatter.Verify(x => x.CreateHeaderStructureForPreloadingForQuestionnaire(questionnaireId, 1, Moq.It.IsAny<string>()), Times.Once);
 
         private static PreloadingTemplateService preloadingTemplateService;
         private static string result;
-        private static QuestionnaireExportStructure questionnaireExportStructure;
-        private static Mock<IDataFileExportService> dataFileExportService;
-        private static Guid questionnaireId=Guid.NewGuid();
+        private static Mock<IFileSystemAccessor> fileSystemAccessor;
+        private static Mock<IDataExportService> exportedDataFormatter;
+        private static Guid questionnaireId = Guid.NewGuid();
     }
 }

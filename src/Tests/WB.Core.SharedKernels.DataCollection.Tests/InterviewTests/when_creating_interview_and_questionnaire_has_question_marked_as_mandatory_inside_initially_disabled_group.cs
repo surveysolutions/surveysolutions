@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             var questionaire = Mock.Of<IQuestionnaire>(_
                 => _.GetAllMandatoryQuestions() == new Guid[] { mandatoryQuestionId }
-                   &&_.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new[] { groupId }
+                   //&&_.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new[] { groupId }
                    && _.GetAllParentGroupsForQuestion(mandatoryQuestionId) == new[] { groupId }
                 );
 

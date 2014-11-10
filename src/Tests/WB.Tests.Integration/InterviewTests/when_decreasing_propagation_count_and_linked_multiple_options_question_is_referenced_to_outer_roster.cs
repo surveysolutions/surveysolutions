@@ -14,7 +14,7 @@ namespace WB.Tests.Integration.InterviewTests
 {
     internal class when_decreasing_propagation_count_and_linked_multiple_options_question_is_referenced_to_outer_roster : InterviewTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             userId = Guid.Parse("AAAA0000AAAA00000000AAAA0000AAAA");
             answerTime = new DateTime(2013, 10, 02);
@@ -87,15 +87,15 @@ namespace WB.Tests.Integration.InterviewTests
             eventContext = new EventContext();
         };
 
-        private Because of = () =>
+        Because of = () =>
             interview.AnswerNumericIntegerQuestion(userId, numericQuestionId, new decimal[] { }, answerTime, 2);
 
-        private It should_raise_AnswersRemoved_event_with_source_for_linked_id_and_propagation_vector = () =>
+        It should_raise_AnswersRemoved_event_with_source_for_linked_id_and_propagation_vector = () =>
             eventContext.ShouldContainEvent<AnswersRemoved>(@event => @event.Questions.Any(question
                 => question.Id == referencedQuestionId
                     && question.RosterVector.SequenceEqual(new decimal[] { 2 })));
 
-        private Cleanup stuff = () =>
+        Cleanup stuff = () =>
         {
             eventContext.Dispose();
             eventContext = null;

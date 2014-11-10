@@ -22,13 +22,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
         {
             fileSystemAccessor = CreateIFileSystemAccessorMock();
             fileSystemAccessor.Setup(x => x.IsDirectoryExists(Moq.It.IsAny<string>())).Returns(true);
-            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(preLoadedData + "\\" + csvFileId)).Returns(new string[] { csvFileName + ".csv" });
+            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(preLoadedData + "\\" + csvFileId)).Returns(new string[] { csvFileName + ".tab" });
 
             archiveUtils = new Mock<IArchiveUtils>();
             archiveUtils.Setup(x => x.IsZipFile(Moq.It.IsAny<string>())).Returns(false);
 
             recordsAccessorFactory = new Mock<IRecordsAccessorFactory>();
-            recordsAccessorFactory.Setup(x => x.CreateRecordsAccessor(Moq.It.IsAny<Stream>()))
+            recordsAccessorFactory.Setup(x => x.CreateRecordsAccessor(Moq.It.IsAny<Stream>(), Moq.It.IsAny<string>()))
                 .Returns(Mock.Of<IRecordsAccessor>(_ => _.Records == new string[][] { new string[] { "q1" }, new string[] { "1" }, }));
             filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository(fileSystemAccessor.Object, archiveUtils.Object, recordsAccessorFactory.Object);
         };
@@ -36,8 +36,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
         Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataOfSample(csvFileId);
 
 
-        It should_first_pre_loaded_data_name_should_be_test_csv = () =>
-            result.FileName.ShouldEqual("test.csv");
+        It should_first_pre_loaded_data_name_should_be_test_tab = () =>
+            result.FileName.ShouldEqual("test.tab");
 
         It should_first_pre_loaded_data_has_one_row = () =>
             result.Content.Length.ShouldEqual(1);

@@ -116,7 +116,7 @@
 
         MultiOptionQuestionCanNotBeFeatured,
 
-        ExpressionContainsNotExistingQuestionReference,
+        ExpressionContainsNotExistingQuestionOrRosterReference,
 
         QuestionOrGroupDependOnAnotherQuestion,
 

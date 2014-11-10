@@ -25,12 +25,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
             fileSystemAccessor.Setup(x => x.GetFilesInDirectory(preLoadedData + "\\" + archiveId)).Returns(new string[] { archiveName + ".zip" });
             fileSystemAccessor.Setup(x => x.GetDirectoriesInDirectory(preLoadedData + "\\" + archiveId)).Returns(new string[] { archiveName});
             fileSystemAccessor.Setup(x => x.GetFilesInDirectory(preLoadedData + "\\" + archiveId + "\\Unzipped"))
-                .Returns(new string[] { "1.csv", "2.csv" });
+                .Returns(new string[] { "1.tab", "2.tab" });
             archiveUtils=new Mock<IArchiveUtils>();
             archiveUtils.Setup(x => x.IsZipFile(Moq.It.IsAny<string>())).Returns(true);
 
             recordsAccessorFactory=new Mock<IRecordsAccessorFactory>();
-            recordsAccessorFactory.Setup(x => x.CreateRecordsAccessor(Moq.It.IsAny<Stream>()))
+            recordsAccessorFactory.Setup(x => x.CreateRecordsAccessor(Moq.It.IsAny<Stream>(), Moq.It.IsAny<string>()))
                 .Returns(Mock.Of<IRecordsAccessor>(_ => _.Records == new string[][] { new string[] { "q1" }, new string[] { "1" }, }));
             filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository(fileSystemAccessor.Object, archiveUtils.Object, recordsAccessorFactory.Object);
         };
@@ -40,8 +40,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
         It should_result_has_2_elements = () =>
             result.Length.ShouldEqual(2);
 
-        It should_first_pre_loaded_data_name_should_be_1_csv = () =>
-            result[0].FileName.ShouldEqual("1.csv");
+        It should_first_pre_loaded_data_name_should_be_1_tab = () =>
+            result[0].FileName.ShouldEqual("1.tab");
 
         It should_first_pre_loaded_data_has_one_row = () =>
             result[0].Content.Length.ShouldEqual(1);
@@ -58,8 +58,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
         It should_first_pre_loaded_data_header_has_value_equal_to_q1 = () =>
            result[0].Header[0].ShouldEqual("q1");
 
-        It should_second_pre_loaded_data_name_should_be_2_csv = () =>
-           result[1].FileName.ShouldEqual("2.csv");
+        It should_second_pre_loaded_data_name_should_be_2_tab = () =>
+           result[1].FileName.ShouldEqual("2.tab");
 
         private static Mock<IFileSystemAccessor> fileSystemAccessor;
         private static FilebasedPreloadedDataRepository filebasedPreloadedDataRepository;

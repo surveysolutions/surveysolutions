@@ -43,6 +43,22 @@
     <Reference Include="HtmlSanitizer">
       <HintPath>..\..\..\..\..\packages\HtmlSanitizer.1.1.5297.28403\lib\net40\HtmlSanitizer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CodeAnalysis">
+      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.Common.0.7.4091001-beta\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp">
+      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.CSharp.0.7.4091001-beta\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp.Desktop">
+      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.CSharp.0.7.4091001-beta\lib\net45\Microsoft.CodeAnalysis.CSharp.Desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.Desktop">
+      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.Common.0.7.4091001-beta\lib\net45\Microsoft.CodeAnalysis.Desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -64,8 +80,16 @@
       <HintPath>..\..\..\..\..\packages\RavenDB.Client.2.5.2907\lib\net45\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.1.20.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Immutable.1.1.20-beta\lib\portable-net45+win8\System.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Reflection.Metadata, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Metadata.1.0.12-alpha\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -119,6 +143,7 @@
     <Compile Include="Commands\Questionnaire\Question\GpsCoordinates\AddGpsCoordinatesQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\GpsCoordinates\CloneGpsCoordinatesQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\GpsCoordinates\UpdateGpsCoordinatesQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\MigrateExpressionsToCSharp.cs" />
     <Compile Include="Commands\Questionnaire\Question\Mulimedia\UpdateMultimediaQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\MultiOption\AddMultiOptionQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\MultiOption\CloneMultiOptionQuestionCommand.cs" />
@@ -161,7 +186,10 @@
     <Compile Include="Commands\Questionnaire\StaticText\MoveStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\UpdateStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
+    <Compile Include="Events\Questionnaire\ExpressionsMigratedToCSharp.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\IDynamicCompiler.cs" />
     <Compile Include="Events\Questionnaire\MultimediaQuestionUpdated.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\InterviewCompiler.cs" />
     <Compile Include="Events\Users\AccountConfirmed.cs" />
     <Compile Include="Events\Users\AccountDeleted.cs" />
     <Compile Include="Events\Users\AccountLocked.cs" />
@@ -178,6 +206,11 @@
     <Compile Include="Events\Users\AccountUpdated.cs" />
     <Compile Include="Events\Users\AccountValidated.cs" />
     <Compile Include="Events\Users\UserLoggedIn.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\ITemplateModel.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\RoslynExpressionProcessor.cs" />
+    <Compile Include="Implementation\Services\INCalcToCSharpConverter.cs" />
+    <Compile Include="Implementation\Services\NCalcToCSharpConverter.cs" />
+    <Compile Include="Implementation\Services\QuestionnaireVerifier.cs" />
     <Compile Include="Implementation\Services\WbHtmlSanitizer.cs" />
     <Compile Include="DesignerBoundedContextModule.cs" />
     <Compile Include="Events\Questionnaire\AbstractListQuestionDataEvent.cs" />
@@ -230,9 +263,48 @@
     <Compile Include="Exceptions\DomainExceptionType.cs" />
     <Compile Include="Implementation\Factories\IQuestionnaireEntityFactory.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireEntityFactory.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\CodeGenerator.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\RosterScopeBaseModel.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\QuestionnaireLevelTemplateModel.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\RosterScopeTemplateModel.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionnaireLevelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplateExt.cs" />
     <Compile Include="Implementation\Services\ExpressionReplacer.cs" />
-    <Compile Include="Implementation\Services\JsonExportService.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\RosterTemplateModel.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\GroupTemplateModel.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\QuestionTemplateModel.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\QuestionnaireExecutorTemplateModel.cs" />
+    <Compile Include="Resources\VerificationMessages.Designer.cs">
+      <DependentUpon>VerificationMessages.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="QuestionnaireVerificationModule.cs" />
+    <Compile Include="Services\GenerationResult.cs" />
+    <Compile Include="Services\ICodeGenerator.cs" />
+    <Compile Include="Services\IExpressionProcessorGenerator.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\QuestionnireExpressionProcessorGenerator.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.cs">
+      <DependentUpon>InterviewExpressionStateTemplate.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplateExt.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.cs">
+      <DependentUpon>RosterScopeTemplate.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplateExt.cs" />
+    <Compile Include="Services\IQuestionnaireVerifier.cs" />
+    <Compile Include="Services\IQuestionnaireWrapper.cs" />
+    <Compile Include="Implementation\Services\QuestionnaireExportService .cs" />
     <Compile Include="Implementation\Services\QuestionnaireDocumentUpgrader.cs" />
+    <Compile Include="Implementation\Services\QuestionnaireDocumentWrapper.cs" />
     <Compile Include="Implementation\Services\QuestionnaireVersioner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Roster.Designer.cs">
@@ -246,10 +318,14 @@
       <DependentUpon>ExceptionMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\IExpressionReplacer.cs" />
-    <Compile Include="Services\IJsonExportService.cs" />
+    <Compile Include="Services\IQuestionnaireExportService .cs" />
     <Compile Include="Services\IQuestionnaireDocumentUpgrader.cs" />
     <Compile Include="Services\IQuestionnaireVersioner.cs" />
     <Compile Include="Services\TemplateInfo.cs" />
+    <Compile Include="ValueObjects\InconsistentVersionException.cs" />
+    <Compile Include="ValueObjects\QuestionnaireVerificationError.cs" />
+    <Compile Include="ValueObjects\QuestionnaireVerificationReference.cs" />
+    <Compile Include="ValueObjects\QuestionnaireVerificationReferenceType.cs" />
     <Compile Include="Views\Account\AccountDenormalizer.cs" />
     <Compile Include="Views\Account\AccountDocument.cs" />
     <Compile Include="Views\Account\AccountListItem.cs" />
@@ -392,6 +468,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\ExpressionEvaluator\Evaluant.Calculator\NCalc.csproj">
+      <Project>{5f014003-50d8-49e0-8afe-91d38dccc97c}</Project>
+      <Name>NCalc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
       <Name>Ncqrs</Name>
@@ -420,26 +500,46 @@
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
+      <Project>{553b4fc2-5fc7-4256-b14d-82758d64a3bd}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
       <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
-      <Project>{44a49db2-2e7e-4be7-b931-7e225ef057f4}</Project>
-      <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>InterviewExpressionStateTemplate.cs</LastGenOutput>
+    </None>
+    <None Include="Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>QuestionnaireLevelTemplate.cs</LastGenOutput>
+    </None>
+    <None Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>RosterScopeTemplate.cs</LastGenOutput>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Properties\Roster.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Roster.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\VerificationMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>VerificationMessages.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ExceptionMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>

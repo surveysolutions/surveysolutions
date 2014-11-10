@@ -266,5 +266,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
                 return ResourceManager.GetString("PL0023_UnsupportedMultimediaQuestion", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preloading data was not found.
+        /// </summary>
+        internal static string PL0024_DataWasNotFound {
+            get {
+                return ResourceManager.GetString("PL0024_DataWasNotFound", resourceCulture);
+            }
+        }
     }
 }

@@ -35,6 +35,9 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AppDomainToolkit">
+      <HintPath>..\..\..\packages\AppDomainToolkit.1.0.4.1\lib\net\AppDomainToolkit.dll</HintPath>
+    </Reference>
     <Reference Include="Machine.Specifications, Version=0.8.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Machine.Specifications.0.8.1\lib\net45\Machine.Specifications.dll</HintPath>
@@ -46,6 +49,19 @@
     <Reference Include="Machine.Specifications.Should, Version=0.7.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Machine.Specifications.Should.0.7.1\lib\net45\Machine.Specifications.Should.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis">
+      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.Common.0.7.4091001-beta\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp">
+      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.CSharp.0.7.4091001-beta\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp.Desktop">
+      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.CSharp.0.7.4091001-beta\lib\net45\Microsoft.CodeAnalysis.CSharp.Desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.Desktop">
+      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.Common.0.7.4091001-beta\lib\net45\Microsoft.CodeAnalysis.Desktop.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -63,8 +79,14 @@
       <HintPath>..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable">
+      <HintPath>..\..\..\packages\Microsoft.Bcl.Immutable.1.1.20-beta\lib\portable-net45+win8\System.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Reflection.Metadata">
+      <HintPath>..\..\..\packages\Microsoft.Bcl.Metadata.1.0.12-alpha\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -194,7 +216,10 @@
     <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_and_variable_name_is_null.cs" />
     <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_with_linkedQuestion_and_supervisor_scope.cs" />
     <Compile Include="AddStaticTextHandlerTests\when_adding_static_text_and_parent_does_not_exists.cs" />
+    <Compile Include="AddTextQuestionHandlerTests\when_adding_text_question_and_enablementCondition_reference_existing_roster.cs" />
+    <Compile Include="AddTextQuestionHandlerTests\when_adding_text_question_and_enablementCondition_reference_not_existing_roster.cs" />
     <Compile Include="AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_is_null.cs" />
+    <Compile Include="AddTextQuestionHandlerTests\when_adding_text_question_with_self_referencing_valiation_expression.cs" />
     <Compile Include="AddTextQuestionHandlerTests\when_adding_text_question_with_substitution_referencing_valid_variable_but_another_question_has_null_variable_name.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_MultimediaQuestionUpdated_event_received.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_StaticTextDeleted_event_received.cs" />
@@ -217,16 +242,31 @@
     <Compile Include="CloneStaticTextHandlerTests\when_cloning_static_text_and_entity_does_not_exists.cs" />
     <Compile Include="CloneStaticTextHandlerTests\when_cloning_static_text_and_user_dont_have_permissions.cs" />
     <Compile Include="CloneTextQuestionHandlerTests\when_cloning_text_question_and_variable_name_is_null.cs" />
+    <Compile Include="CodeGenerationModelTests\CodeGenerationModelTestsContext.cs" />
+    <Compile Include="CodeGenerationModelTests\when_getting_ordered_list_by_condition_dependency.cs" />
+    <Compile Include="CodeGenerationTests\when_expression_state_processes_condition_expressions_on_scope_roster.cs" />
+    <Compile Include="CodeGenerationTests\when_expression_state_processes_condition_expressions_on_nested_roster.cs" />
+    <Compile Include="CodeGenerationTests\when_expression_state_processes_condition_expressions_on_roster.cs" />
+    <Compile Include="CodeGenerationTests\when_expression_state_processes_condition_expressions.cs" />
+    <Compile Include="CodeGenerationTests\when_expression_state_processes_mandatory_question.cs" />
+    <Compile Include="CodeGenerationTests\when_generating_assembly_and_questionnaire_has_multi_linked_mandatory_question.cs" />
+    <Compile Include="CodeGenerationTests\when_generating_assembly_and_questionnaire_has_roster_with_corner_naming.cs" />
+    <Compile Include="EventExtensions.cs" />
+    <Compile Include="Execute.cs" />
+    <Compile Include="InterviewCompilerTests\when_generating_assembly_as_string.cs" />
     <Compile Include="MoveStaticTextHandlerTests\when_moving_static_text_and_all_parameters_specified.cs" />
     <Compile Include="MoveStaticTextHandlerTests\when_moving_static_text_and_target_entity_does_not_exists.cs" />
     <Compile Include="MoveStaticTextHandlerTests\when_moving_static_text_and_entity_does_not_exists.cs" />
     <Compile Include="MoveStaticTextHandlerTests\when_moving_static_text_and_user_dont_have_permissions.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_MultimediaQuestionUpdated_event.cs" />
+    <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_QuestionCloned_event_with_validation_expression.cs" />
+    <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_QuestionnaireCloned_event_with_question_contains_validation_expression.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_StaticTextDeleted_event.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_StaticTextCloned_event.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_StaticTextUpdated_event.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_StaticTextAdded_event.cs" />
     <Compile Include="QuestionDetailsFactoryTests\when_creating_multimedia_question_details_view.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_ExpressionsMigratedToCSharp_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_MultimediaQuestionUpdated_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_StaticTextDeleted_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_StaticTextCloned_event.cs" />
@@ -240,26 +280,33 @@
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_static_edit_view_and_static_text_is_absent.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_static_text_edit_view_and_questionnaire_is_absent.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_static_text_edit_view.cs" />
+    <Compile Include="QuestionnaireInfoViewFactoryTests\when_counting_questionnaires_which_are_not_migrated_to_csharp_and_4_questionnaires_have_csharp_flag_and_5_do_not_have.cs" />
+    <Compile Include="QuestionnaireInfoViewFactoryTests\when_getting_questionnaires_which_are_not_migrated_to_csharp_and_4_questionnaires_have_csharp_flag_and_5_do_not_have.cs" />
     <Compile Include="QuestionnaireTests\CascadigOptions\when_removing_single_option_question.cs" />
     <Compile Include="QuestionnaireTests\CascadigOptions\when_updating_question_setting_to_cascade_from_non_existing_question.cs" />
     <Compile Include="QuestionnaireTests\CascadigOptions\when_updating_question_with_empty_cascading_options.cs" />
     <Compile Include="QuestionnaireTests\GetChapterOfTests\when_finding_group_that_exists_in_questionnaire.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_group_with_invalid_variable_name.cs" />
     <Compile Include="QuestionnaireTests\when_adding_roster_group_by_fixed_titles_with_too_long_title.cs" />
     <Compile Include="QuestionnaireTests\when_adding_roster_group_by_question_and_roster_size_question_is_empty.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_chapter_with_multimedia_question.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_chapter_with_static_text.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning__the_same_question_by_id_twice_with_the_same_id.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_text_question_by_id.cs" />
+    <Compile Include="QuestionnaireTests\when_migrating_expressions_to_csharp_and_2_questions_have_both_validation_expressions_and_enablement_conditions.cs" />
+    <Compile Include="QuestionnaireTests\when_migrating_expressions_to_csharp_and_all_questions_have_empty_expressions.cs" />
+    <Compile Include="QuestionnaireTests\when_migrating_expressions_to_csharp_and_converter_throws_exception_and_one_question_has_validation_expressions_and_enablement_conditions.cs" />
+    <Compile Include="QuestionnaireTests\when_migrating_expressions_to_csharp_and_group_B_and_rosted_D_both_have_enablement_conditions.cs" />
+    <Compile Include="QuestionnaireTests\when_migrating_expressions_to_csharp_and_question_has_enablement_condition_but_validation_expression_is_empty.cs" />
+    <Compile Include="QuestionnaireTests\when_migrating_expressions_to_csharp_and_question_has_validation_expression_but_enablement_condition_is_empty.cs" />
+    <Compile Include="QuestionnaireTests\when_migrating_expressions_to_csharp_twice.cs" />
     <Compile Include="QuestionnaireTests\when_moving_chapter_with_roster_inside_and_groster_has_question_with_rostertitle_in_substitution.cs" />
     <Compile Include="QuestionnaireTests\CascadigOptions\when_updating_question_with_cascading_options_setting_linked_and_cascading.cs" />
     <Compile Include="QuestionnaireTests\when_moving_group_inside_the_same_parent_to_position_which_is_bigger_then_parent_children_count.cs" />
     <Compile Include="QuestionnaireTests\when_moving_group_to_negative_position.cs" />
     <Compile Include="QuestionnaireTests\when_moving_group_to_position_which_is_bigger_then_group_children_count.cs" />
+    <Compile Include="QuestionnaireTests\when_updating_group_with_invalid_variable_name.cs" />
     <Compile Include="QuestionnaireTests\when_updating_roster_group_by_numeric_question_and_question_is_null.cs" />
-    <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_filtered_combobox.cs" />
-    <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_multimedia_questioin.cs" />
-    <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_static_text.cs" />
-    <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_group_with_variable_name.cs" />
-    <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_masked_text_question.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_MultimediaQuestionUpdated_event.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_StaticTextAdded_event.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_StaticTextDeleted_event.cs" />
@@ -269,6 +316,8 @@
     <Compile Include="DeleteStaticTextHandlerTests\when_deleting_static_text_and_all_parameters_specified.cs" />
     <Compile Include="DeleteStaticTextHandlerTests\when_deleting_static_text_and_entity_does_not_exists.cs" />
     <Compile Include="DeleteStaticTextHandlerTests\when_deleting_static_text_and_user_dont_have_permissions.cs" />
+    <Compile Include="Setup.cs" />
+    <Compile Include="StringExtensions.cs" />
     <Compile Include="UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_variable_name_is_null.cs" />
     <Compile Include="UpdateCascadingComboboxOptionsHandlerTests\when_updating_cascading_combobox_options_and_1_option_dont_have_a_value.cs" />
     <Compile Include="UpdateCascadingComboboxOptionsHandlerTests\when_updating_cascading_combobox_options_and_1_option_have_empty_title.cs" />
@@ -298,6 +347,8 @@
     <Compile Include="UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_and_variable_name_is_null.cs" />
     <Compile Include="UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_with_linkedQuestion_and_supervisor_scope.cs" />
     <Compile Include="UpdateQrBarcodeQuestionHandlerTests\when_updating_qr_barcode_question_and_variable_name_is_null.cs" />
+    <Compile Include="UpdateSingleOptionQuestionHandlerTests\when_updating_cascading_combobox_question_that_has_condition_expression.cs" />
+    <Compile Include="UpdateSingleOptionQuestionHandlerTests\when_updating_cascading_combobox_question_that_has_validation_expression.cs" />
     <Compile Include="UpdateSingleOptionQuestionHandlerTests\when_updating_cascading_combobox_question_that_was_filtered_combobox_and_options_are_more_then_200.cs" />
     <Compile Include="UpdateSingleOptionQuestionHandlerTests\when_updating_filtered_combobox_question_and_all_parameters_is_specified.cs" />
     <Compile Include="UpdateSingleOptionQuestionHandlerTests\when_updating_filtered_combobox_question_that_was_cascading_combobox_and_options_are_more_then_200.cs" />
@@ -318,6 +369,9 @@
     <Compile Include="ChapterInfoViewDenormalizerTests\when_GroupBecameARoster_event_received.cs" />
     <Compile Include="CloneNumericQuestionHandlerTests\when_cloning_numeric_question_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="CloneNumericQuestionHandlerTests\when_cloning_numeric_question_with_variable_name_roster_title.cs" />
+    <Compile Include="CodeGenerationTests\CodeGenerationTestsContext.cs" />
+    <Compile Include="CodeGenerationTests\when_expression_state_processes_validation_expressions.cs" />
+    <Compile Include="CodeGenerationTests\when_generating_assembly_with_evaluatorgenerator.cs" />
     <Compile Include="CreateQuestionnaireCommandTests\when_creating_new_questionnaire.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionUpdated_event.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionAdded_event.cs" />
@@ -892,8 +946,6 @@
     <Compile Include="QuestionnaireTests\when_updating_text_list_question_and_max_answer_count_is_specified.cs" />
     <Compile Include="QuestionnaireVersionerTests\QuestionnaireVersionerTestContext.cs" />
     <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_without_specific_elements.cs" />
-    <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_nested_rosters.cs" />
-    <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_qr_questions.cs" />
     <Compile Include="RoleProviderTests\when_adding_roles_to_users_with_non_Guid_userId.cs" />
     <Compile Include="RoleProviderTests\RoleProviderTestsContext.cs" />
     <Compile Include="RoleRepositoryTests\when_adding_role_to_user_with_role_repository.cs" />
@@ -985,13 +1037,13 @@
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
+      <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
       <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
-      <Project>{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}</Project>
-      <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>

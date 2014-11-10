@@ -16,6 +16,8 @@ namespace WB.Core.BoundedContexts.Supervisor
 
         string QuestionnaireDetailsEndpoint { get; }
 
+        string QuestionnaireAssemblyEndpoint { get; }
+
         string AccessToken { get; }
 
         Uri InterviewsPushUrl { get; }

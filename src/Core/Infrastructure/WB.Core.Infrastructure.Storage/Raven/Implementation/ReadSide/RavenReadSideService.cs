@@ -32,7 +32,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
         private readonly IEventDispatcher eventBus;
         private readonly DocumentStore ravenStore;
         private readonly ILogger logger;
-        private readonly IRavenReadSideRepositoryWriterRegistry writerRegistry;
+        private readonly IReadSideRepositoryWriterRegistry writerRegistry;
         private readonly IReadSideRepositoryCleanerRegistry cleanerRegistry;
 
         static RavenReadSideService()
@@ -41,7 +41,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
         }
 
         public RavenReadSideService(IStreamableEventStore eventStore, IEventDispatcher eventBus, DocumentStore ravenStore, ILogger logger,
-            IRavenReadSideRepositoryWriterRegistry writerRegistry, IReadSideRepositoryCleanerRegistry cleanerRegistry)
+            IReadSideRepositoryWriterRegistry writerRegistry, IReadSideRepositoryCleanerRegistry cleanerRegistry)
         {
             this.eventStore = eventStore;
             this.eventBus = eventBus;
@@ -195,7 +195,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
             return result.ToArray();
         }
 
-        private IEnumerable<IRavenReadSideRepositoryWriter> GetListOfWritersForEnableCache(Type[] viewTypes)
+        private IEnumerable<IReadSideRepositoryWriter> GetListOfWritersForEnableCache(Type[] viewTypes)
         {
             return this.writerRegistry.GetAll().Where(w => viewTypes.Contains(w.ViewType)).ToArray();
         }
@@ -305,11 +305,11 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
             return resultViewCount;
         }
 
-        private void EnableCacheInRepositoryWriters(IEnumerable<IRavenReadSideRepositoryWriter> writers)
+        private void EnableCacheInRepositoryWriters(IEnumerable<IReadSideRepositoryWriter> writers)
         {
             UpdateStatusMessage("Enabling cache in repository writers.");
 
-            foreach (IRavenReadSideRepositoryWriter writer in writers)
+            foreach (IReadSideRepositoryWriter writer in writers)
             {
                 writer.EnableCache();
             }
@@ -327,11 +327,11 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
             this.DisableCacheInRepositoryWriters(this.writerRegistry.GetAll());
         }
 
-        private void DisableCacheInRepositoryWriters(IEnumerable<IRavenReadSideRepositoryWriter> writers)
+        private void DisableCacheInRepositoryWriters(IEnumerable<IReadSideRepositoryWriter> writers)
         {
             UpdateStatusMessage("Disabling cache in repository writers.");
 
-            foreach (IRavenReadSideRepositoryWriter writer in writers)
+            foreach (IReadSideRepositoryWriter writer in writers)
             {
                 UpdateStatusMessage(string.Format(
                     "Disabling cache in repository writer for entity {0}.",
@@ -454,7 +454,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
 
         private string GetReadableListOfRepositoryWriters()
         {
-            List<IRavenReadSideRepositoryWriter> writers = this.writerRegistry.GetAll().ToList();
+            List<IReadSideRepositoryWriter> writers = this.writerRegistry.GetAll().ToList();
 
             bool areThereNoWriters = writers.Count == 0;
 #warning to Tolik: calls to dictionary (writer cache) from other thread rais exceptions because Dictionary is not thread safe
@@ -472,9 +472,12 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
                             .ToArray()));
         }
 
-        private static string GetRepositoryEntityName(IRavenReadSideRepositoryWriter writer)
+        private static string GetRepositoryEntityName(IReadSideRepositoryWriter writer)
         {
-            return writer.GetType().GetGenericArguments().Single().Name;
+            var arguments = writer.GetType().GetGenericArguments();
+            if (!arguments.Any())
+                return writer.GetType().Name;
+            return arguments.Single().Name;
         }
 
         #region Error reporting methods

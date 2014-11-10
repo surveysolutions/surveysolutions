@@ -53,9 +53,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             foreach (var localSupervisor in localSupervisors)
             {
-                this.headquartersPullContext.PushMessage(string.Format("Processing events for supervisor {0} with Id {1}", localSupervisor.UserName, localSupervisor.PublicKey));
                 IEnumerable<LocalUserChangedFeedEntry> events = this.localFeedStorage.GetNotProcessedSupervisorEvents(localSupervisor.PublicKey.FormatGuid());
-                this.headquartersPullContext.PushMessage(string.Format("Received {0} non processed events for supervisor {1}", events.Count(), localSupervisor.UserName));
+                this.headquartersPullContext.PushMessage(string.Format("Processing {0} non processed events for supervisor '{1}'", events.Count(), localSupervisor.UserName));
 
                 foreach (var userChanges in events.GroupBy(x => x.ChangedUserId))
                 {

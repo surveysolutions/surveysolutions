@@ -4,7 +4,7 @@ using Cirrious.MvvmCross.Droid.Views;
 
 namespace WB.UI.Capi
 {
-    [Activity(MainLauncher = true, NoHistory = true, Theme = "@style/Theme.SplashBackground")]
+    [Activity(MainLauncher = true, NoHistory = true)]
     public class SplashScreen : MvxSplashScreenActivity
     {
         public SplashScreen()

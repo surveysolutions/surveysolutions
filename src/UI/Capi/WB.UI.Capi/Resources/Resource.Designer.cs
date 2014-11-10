@@ -38,11 +38,14 @@ namespace WB.UI.Capi
 			global::WB.UI.Shared.Android.Resource.Attribute.MvxLang = global::WB.UI.Capi.Resource.Attribute.MvxLang;
 			global::WB.UI.Shared.Android.Resource.Attribute.MvxSource = global::WB.UI.Capi.Resource.Attribute.MvxSource;
 			global::WB.UI.Shared.Android.Resource.Attribute.MvxTemplate = global::WB.UI.Capi.Resource.Attribute.MvxTemplate;
+			global::WB.UI.Shared.Android.Resource.Color.capi_orange = global::WB.UI.Capi.Resource.Color.capi_orange;
+			global::WB.UI.Shared.Android.Resource.Drawable.answer_progress_indicator = global::WB.UI.Capi.Resource.Drawable.answer_progress_indicator;
 			global::WB.UI.Shared.Android.Resource.Drawable.bookmarkStyle = global::WB.UI.Capi.Resource.Drawable.bookmarkStyle;
 			global::WB.UI.Shared.Android.Resource.Drawable.CounterRoundShape = global::WB.UI.Capi.Resource.Drawable.CounterRoundShape;
 			global::WB.UI.Shared.Android.Resource.Drawable.donecountershape = global::WB.UI.Capi.Resource.Drawable.donecountershape;
 			global::WB.UI.Shared.Android.Resource.Drawable.errorwarningstyle = global::WB.UI.Capi.Resource.Drawable.errorwarningstyle;
 			global::WB.UI.Shared.Android.Resource.Drawable.grid_headerItem = global::WB.UI.Capi.Resource.Drawable.grid_headerItem;
+			global::WB.UI.Shared.Android.Resource.Drawable.ic_drawer_dark = global::WB.UI.Capi.Resource.Drawable.ic_drawer_dark;
 			global::WB.UI.Shared.Android.Resource.Drawable.no_image_found = global::WB.UI.Capi.Resource.Drawable.no_image_found;
 			global::WB.UI.Shared.Android.Resource.Drawable.questionAnsweredShape = global::WB.UI.Capi.Resource.Drawable.questionAnsweredShape;
 			global::WB.UI.Shared.Android.Resource.Drawable.questionDisabledShape = global::WB.UI.Capi.Resource.Drawable.questionDisabledShape;
@@ -61,18 +64,14 @@ namespace WB.UI.Capi
 			global::WB.UI.Shared.Android.Resource.Id.btnComplete = global::WB.UI.Capi.Resource.Id.btnComplete;
 			global::WB.UI.Shared.Android.Resource.Id.btnInstructions = global::WB.UI.Capi.Resource.Id.btnInstructions;
 			global::WB.UI.Shared.Android.Resource.Id.btnInvalid = global::WB.UI.Capi.Resource.Id.btnInvalid;
-			global::WB.UI.Shared.Android.Resource.Id.btnNavigation = global::WB.UI.Capi.Resource.Id.btnNavigation;
 			global::WB.UI.Shared.Android.Resource.Id.btnUnanswered = global::WB.UI.Capi.Resource.Id.btnUnanswered;
 			global::WB.UI.Shared.Android.Resource.Id.contentFrame = global::WB.UI.Capi.Resource.Id.contentFrame;
 			global::WB.UI.Shared.Android.Resource.Id.etComments = global::WB.UI.Capi.Resource.Id.etComments;
-			global::WB.UI.Shared.Android.Resource.Id.lNavigationContainer = global::WB.UI.Capi.Resource.Id.lNavigationContainer;
 			global::WB.UI.Shared.Android.Resource.Id.llButtom = global::WB.UI.Capi.Resource.Id.llButtom;
 			global::WB.UI.Shared.Android.Resource.Id.llContainer = global::WB.UI.Capi.Resource.Id.llContainer;
 			global::WB.UI.Shared.Android.Resource.Id.llContent = global::WB.UI.Capi.Resource.Id.llContent;
-			global::WB.UI.Shared.Android.Resource.Id.llNavigationButton = global::WB.UI.Capi.Resource.Id.llNavigationButton;
 			global::WB.UI.Shared.Android.Resource.Id.llNavigationHolder = global::WB.UI.Capi.Resource.Id.llNavigationHolder;
 			global::WB.UI.Shared.Android.Resource.Id.llRoot = global::WB.UI.Capi.Resource.Id.llRoot;
-			global::WB.UI.Shared.Android.Resource.Id.llSpaceFiller = global::WB.UI.Capi.Resource.Id.llSpaceFiller;
 			global::WB.UI.Shared.Android.Resource.Id.llTop = global::WB.UI.Capi.Resource.Id.llTop;
 			global::WB.UI.Shared.Android.Resource.Id.llWrapper = global::WB.UI.Capi.Resource.Id.llWrapper;
 			global::WB.UI.Shared.Android.Resource.Id.tvComments = global::WB.UI.Capi.Resource.Id.tvComments;
@@ -97,6 +96,8 @@ namespace WB.UI.Capi
 			global::WB.UI.Shared.Android.Resource.Layout.zxingscanneractivitylayout = global::WB.UI.Capi.Resource.Layout.zxingscanneractivitylayout;
 			global::WB.UI.Shared.Android.Resource.Layout.zxingscannerfragmentlayout = global::WB.UI.Capi.Resource.Layout.zxingscannerfragmentlayout;
 			global::WB.UI.Shared.Android.Resource.String.ApplicationName = global::WB.UI.Capi.Resource.String.ApplicationName;
+			global::WB.UI.Shared.Android.Resource.String.drawer_close = global::WB.UI.Capi.Resource.String.drawer_close;
+			global::WB.UI.Shared.Android.Resource.String.drawer_open = global::WB.UI.Capi.Resource.String.drawer_open;
 			global::WB.UI.Shared.Android.Resource.Styleable.MvxBinding = global::WB.UI.Capi.Resource.Styleable.MvxBinding;
 			global::WB.UI.Shared.Android.Resource.Styleable.MvxBinding_MvxBind = global::WB.UI.Capi.Resource.Styleable.MvxBinding_MvxBind;
 			global::WB.UI.Shared.Android.Resource.Styleable.MvxBinding_MvxLang = global::WB.UI.Capi.Resource.Styleable.MvxBinding_MvxLang;
@@ -307,9 +308,6 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f05002e
 			public const int btnLogin = 2131034158;
 			
-			// aapt resource value: 0x7f050024
-			public const int btnNavigation = 2131034148;
-			
 			// aapt resource value: 0x7f05001d
 			public const int btnNewInterview = 2131034141;
 			
@@ -361,9 +359,6 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f050026
 			public const int imgAnswerProgress = 2131034150;
 			
-			// aapt resource value: 0x7f050021
-			public const int lNavigationContainer = 2131034145;
-			
 			// aapt resource value: 0x7f050032
 			public const int llButtom = 2131034162;
 			
@@ -373,11 +368,8 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f050031
 			public const int llContent = 2131034161;
 			
-			// aapt resource value: 0x7f050022
-			public const int llNavigationButton = 2131034146;
-			
-			// aapt resource value: 0x7f050025
-			public const int llNavigationHolder = 2131034149;
+			// aapt resource value: 0x7f050021
+			public const int llNavigationHolder = 2131034145;
 			
 			// aapt resource value: 0x7f050019
 			public const int llQuestionnairie = 2131034137;
@@ -391,9 +383,6 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f050034
 			public const int llScreen = 2131034164;
 			
-			// aapt resource value: 0x7f050023
-			public const int llSpaceFiller = 2131034147;
-			
 			// aapt resource value: 0x7f05002f
 			public const int llSurveyHolder = 2131034159;
 			
@@ -403,14 +392,26 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f05000b
 			public const int llWrapper = 2131034123;
 			
+			// aapt resource value: 0x7f050023
+			public const int login = 2131034147;
+			
 			// aapt resource value: 0x7f050012
 			public const int pagesSpinner = 2131034130;
+			
+			// aapt resource value: 0x7f050024
+			public const int password = 2131034148;
 			
 			// aapt resource value: 0x7f050033
 			public const int qGuid = 2131034163;
 			
 			// aapt resource value: 0x7f05001c
 			public const int rlSurveyHeader = 2131034140;
+			
+			// aapt resource value: 0x7f050025
+			public const int startSynchronization = 2131034149;
+			
+			// aapt resource value: 0x7f050022
+			public const int syncEndpoint = 2131034146;
 			
 			// aapt resource value: 0x7f05002c
 			public const int teLogin = 2131034156;
@@ -519,52 +520,55 @@ namespace WB.UI.Capi
 			public const int FilteredComboboxRowLayout = 2130903049;
 			
 			// aapt resource value: 0x7f03000a
-			public const int InterviewActionBar = 2130903050;
+			public const int FinishInstallation = 2130903050;
 			
 			// aapt resource value: 0x7f03000b
-			public const int list_navigation_item = 2130903051;
+			public const int InterviewActionBar = 2130903051;
 			
 			// aapt resource value: 0x7f03000c
-			public const int Login = 2130903052;
+			public const int list_navigation_item = 2130903052;
 			
 			// aapt resource value: 0x7f03000d
-			public const int Main = 2130903053;
+			public const int Login = 2130903053;
 			
 			// aapt resource value: 0x7f03000e
-			public const int RosterQuestion = 2130903054;
+			public const int Main = 2130903054;
 			
 			// aapt resource value: 0x7f03000f
-			public const int ScreenContentFragment = 2130903055;
+			public const int RosterQuestion = 2130903055;
 			
 			// aapt resource value: 0x7f030010
-			public const int ScreenGroupView = 2130903056;
+			public const int ScreenContentFragment = 2130903056;
 			
 			// aapt resource value: 0x7f030011
-			public const int ScreenNavigationView = 2130903057;
+			public const int ScreenGroupView = 2130903057;
 			
 			// aapt resource value: 0x7f030012
-			public const int settings_dialog = 2130903058;
+			public const int ScreenNavigationView = 2130903058;
 			
 			// aapt resource value: 0x7f030013
-			public const int SplashScreen = 2130903059;
+			public const int settings_dialog = 2130903059;
 			
 			// aapt resource value: 0x7f030014
-			public const int StaticTextView = 2130903060;
+			public const int SplashScreen = 2130903060;
 			
 			// aapt resource value: 0x7f030015
-			public const int StatisticsContent = 2130903061;
+			public const int StaticTextView = 2130903061;
 			
 			// aapt resource value: 0x7f030016
-			public const int sync_dialog = 2130903062;
+			public const int StatisticsContent = 2130903062;
 			
 			// aapt resource value: 0x7f030017
-			public const int SyncLogin = 2130903063;
+			public const int sync_dialog = 2130903063;
 			
 			// aapt resource value: 0x7f030018
-			public const int zxingscanneractivitylayout = 2130903064;
+			public const int SyncLogin = 2130903064;
 			
 			// aapt resource value: 0x7f030019
-			public const int zxingscannerfragmentlayout = 2130903065;
+			public const int zxingscanneractivitylayout = 2130903065;
+			
+			// aapt resource value: 0x7f03001a
+			public const int zxingscannerfragmentlayout = 2130903066;
 			
 			static Layout()
 			{
@@ -582,8 +586,14 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f060000
 			public const int ApplicationName = 2131099648;
 			
+			// aapt resource value: 0x7f060003
+			public const int Hello = 2131099651;
+			
+			// aapt resource value: 0x7f060002
+			public const int drawer_close = 2131099650;
+			
 			// aapt resource value: 0x7f060001
-			public const int Hello = 2131099649;
+			public const int drawer_open = 2131099649;
 			
 			static String()
 			{

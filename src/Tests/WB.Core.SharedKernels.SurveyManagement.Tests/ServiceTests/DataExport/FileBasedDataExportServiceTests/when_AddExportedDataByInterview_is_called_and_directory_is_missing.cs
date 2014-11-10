@@ -7,6 +7,7 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
+using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using It = Machine.Specifications.It;
 
@@ -16,21 +17,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
     {
         Establish context = () =>
         {
-            var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
-            fileSystemAccessorMock.Setup(x => x.IsDirectoryExists(Moq.It.IsAny<string>())).Returns(false);
-            fileBasedDataExportService = CreateFileBasedDataExportService(fileSystemAccessorMock.Object);
+            var filebaseExportRouteServiceMock = new Mock<IFilebasedExportedDataAccessor>();
+            filebaseExportRouteServiceMock.Setup(x => x.GetFolderPathOfDataByQuestionnaire(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
+                .Throws<InterviewDataExportException>();
+            fileBasedDataExportRepositoryWriter =
+                CreateFileBasedDataExportService(filebasedExportedDataAccessor: filebaseExportRouteServiceMock.Object);
         };
 
         Because of =()=>
-            raisedException = Catch.Exception(() => fileBasedDataExportService.AddExportedDataByInterview(new InterviewDataExportView(Guid.NewGuid(), Guid.NewGuid(), 1, null))) as InterviewDataExportException;
+            raisedException = Catch.Exception(() => fileBasedDataExportRepositoryWriter.AddExportedDataByInterview(Guid.NewGuid())) as InterviewDataExportException;
 
-        It should_InterviewDataExportException_be_rised = () =>
+        It should_rise_InterviewDataExportException = () =>
             raisedException.ShouldNotBeNull();
 
-        It should_rised_exception_has_message_about_missing_folder = () =>
-            raisedException.Message.ShouldContain("data files are absent for questionnaire");
-
-        private static FileBasedDataExportService fileBasedDataExportService;
+        private static FileBasedDataExportRepositoryWriter fileBasedDataExportRepositoryWriter;
         private static InterviewDataExportException raisedException;
     }
 }
