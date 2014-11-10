@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Main.Core.Entities;
+using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {

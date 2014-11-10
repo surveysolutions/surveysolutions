@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ninject;
 using Ninject.Activation;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.Core.Infrastructure.FunctionalDenormalization
 {
@@ -26,6 +24,15 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization
 
                 GetValue(kernel, denormalizerType, interfaceType, scope);
             }
+        }
+
+        public static void RegisterFactory<T>(this IKernel kernel)
+        {
+            var interfaceType = typeof(IViewFactory<,>);
+            var factoryType = typeof(T);
+            Func<IContext, object> scope = (c) => kernel;
+
+            GetValue(kernel, factoryType, interfaceType, scope);
         }
 
         private static void GetValue(IKernel kernel, Type factoryType, Type interfaceType, Func<IContext, object> scope)
