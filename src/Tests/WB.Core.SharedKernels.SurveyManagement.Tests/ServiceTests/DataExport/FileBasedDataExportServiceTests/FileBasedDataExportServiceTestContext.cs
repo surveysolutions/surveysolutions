@@ -39,14 +39,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter = null, UserDocument user = null, InterviewData interviewData=null)
         {
             var currentFileSystemAccessor = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
-            return new FileBasedDataExportRepositoryWriter(Mock.Of<IReadSideRepositoryCleanerRegistry>(),
+            return new FileBasedDataExportRepositoryWriter(
                 dataExportWriter ?? Mock.Of<IDataExportWriter>(),
                 environmentContentService ?? Mock.Of<IEnvironmentContentService>(), currentFileSystemAccessor,
                 Mock.Of<ILogger>(),
                 plainFileRepository ??
                     Mock.Of<IPlainInterviewFileStorage>(
                         _ => _.GetBinaryFilesForInterview(Moq.It.IsAny<Guid>()) == new List<InterviewBinaryDataDescriptor>()),
-                Mock.Of<IReadSideRepositoryWriterRegistry>(),
                 Mock.Of<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>(
                     _ => _.GetById(It.IsAny<string>()) == new ViewWithSequence<InterviewData>(interviewData??new InterviewData(), 1)),
                 Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>>(

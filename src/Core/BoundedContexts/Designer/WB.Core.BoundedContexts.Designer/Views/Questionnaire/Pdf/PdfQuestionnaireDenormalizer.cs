@@ -14,7 +14,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
-    internal class PdfQuestionnaireDenormalizer :
+    internal class PdfQuestionnaireDenormalizer :BaseDenormalizer,
         IEventHandler<GroupCloned>,
         IEventHandler<GroupDeleted>,
         IEventHandler<GroupUpdated>,
@@ -41,8 +41,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         IEventHandler<StaticTextAdded>,
         IEventHandler<StaticTextUpdated>,
         IEventHandler<StaticTextCloned>,
-        IEventHandler<StaticTextDeleted>,
-        IEventHandler
+        IEventHandler<StaticTextDeleted>
     {
         private readonly IQuestionnaireDocumentUpgrader updrader;
         private readonly IReadSideRepositoryWriter<PdfQuestionnaireView> repositoryWriter;
@@ -58,6 +57,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             this.repositoryWriter = repositoryWriter;
             this.logger = logger;
             this.accounts = accounts;
+        }
+
+        public override object[] Writers
+        {
+            get { return new object[] { repositoryWriter }; }
+        }
+
+        public override object[] Readers
+        {
+            get { return new object[] {accounts }; }
         }
 
         private void HandleUpdateEvent<TEvent>(IPublishedEvent<TEvent> evnt, Func<TEvent, PdfQuestionnaireView, PdfQuestionnaireView> handle)
@@ -585,20 +594,5 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             });
         }
         #endregion
-
-        public string Name
-        {
-            get { return this.GetType().Name; }
-        }
-
-        public Type[] UsesViews
-        {
-            get { return new Type[] { typeof(AccountDocument) }; }
-        }
-
-        public Type[] BuildsViews
-        {
-            get { return new Type[] { typeof(PdfQuestionnaireView) }; }
-        }
     }
 }

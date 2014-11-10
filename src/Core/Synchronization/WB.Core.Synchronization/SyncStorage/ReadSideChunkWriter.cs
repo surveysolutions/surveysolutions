@@ -1,5 +1,6 @@
 ﻿using System;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
@@ -25,5 +26,36 @@ namespace WB.Core.Synchronization.SyncStorage
                 syncItem.ItemType, metaInfo), syncItem.Id);
 
         }
+
+        public void Clear()
+        {
+            var readSideRepositoryCleaner = storage as IReadSideRepositoryCleaner;
+            if (readSideRepositoryCleaner != null)
+                readSideRepositoryCleaner.Clear();
+        }
+
+        public void EnableCache()
+        {
+            var readSideRepositoryWriter = storage as IReadSideRepositoryWriter;
+            if (readSideRepositoryWriter != null)
+                readSideRepositoryWriter.EnableCache();
+        }
+
+        public void DisableCache()
+        {
+            var readSideRepositoryWriter = storage as IReadSideRepositoryWriter;
+            if (readSideRepositoryWriter != null)
+                readSideRepositoryWriter.DisableCache();
+        }
+
+        public string GetReadableStatus()
+        {
+            var readSideRepositoryWriter = storage as IReadSideRepositoryWriter;
+            if (readSideRepositoryWriter != null)
+                return readSideRepositoryWriter.GetReadableStatus();
+            return "";
+        }
+
+        public Type ViewType { get { return typeof (SynchronizationDelta); } }
     }
 }
