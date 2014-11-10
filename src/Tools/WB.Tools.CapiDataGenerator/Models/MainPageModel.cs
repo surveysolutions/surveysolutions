@@ -11,13 +11,12 @@ using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Main.Core.Utility;
-using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FunctionalDenormalization;
@@ -98,6 +97,14 @@ namespace CapiDataGenerator
             }
         }
 
+        private IPasswordHasher passwordHasher
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<IPasswordHasher>();
+            }
+        }
+
         static readonly Random _rand = new Random();
         readonly Timer _timer = new Timer(1000);
         private DateTime _startTime;
@@ -138,7 +145,7 @@ namespace CapiDataGenerator
             {
                 Guid hqId = Guid.Parse("DF120CFD-B624-4E3F-BED8-7BE9033CCBC6");
                 string userName = "hq";
-                commandService.Execute(new CreateUserCommand(hqId, userName, SimpleHash.ComputeHash("Headquarter1"), "hq@example.com", new UserRoles[] { UserRoles.Headquarter }, false, false, null));
+                commandService.Execute(new CreateUserCommand(hqId, userName, passwordHasher.Hash("Headquarter1"), "hq@example.com", new UserRoles[] { UserRoles.Headquarter }, false, false, null));
 
                 this._headquarterUser = new UserLight(hqId, userName);
                 this.HeadquarterName = this._headquarterUser.Name;
@@ -158,7 +165,7 @@ namespace CapiDataGenerator
                 Guid superId = Guid.Parse("1A94734B-DEAD-462D-98F1-C8F44136C4E4");
                 string userName = "supervisor";
                 string userEmail = "s@example.com";
-                commandService.Execute(new CreateUserCommand(superId, userName, SimpleHash.ComputeHash("Supervisor1"), userEmail, new UserRoles[] { UserRoles.Supervisor}, false, false, null));
+                commandService.Execute(new CreateUserCommand(superId, userName, passwordHasher.Hash("Supervisor1"), userEmail, new UserRoles[] { UserRoles.Supervisor}, false, false, null));
 
 
                 //var emptySupervisor = new UserListItem(Guid.Empty, "Please, create new supervisor", null, DateTime.Now, false, false, null);
@@ -612,7 +619,7 @@ namespace CapiDataGenerator
                 var userName = string.Format("i{0}_{1}", userIndex, DateTime.Now.ToString("MMddHHmm", CultureInfo.InvariantCulture));
                 users.Add(new UserLight(uId, userName));
                 commandService.Execute(new CreateUserCommand(publicKey: uId, userName: userName,
-                    password: SimpleHash.ComputeHash(userName),
+                    password: passwordHasher.Hash(userName),
                     email: string.Concat(userName, "@example.com"), roles: new[] { UserRoles.Operator }, isLockedBySupervisor: false, isLockedByHQ: false,
                     supervsor: new UserLight(SelectedSupervisor.UserId, SelectedSupervisor.UserName)));
                 InvokeOnMainThread(() => InterviewersList.Add(userName));
