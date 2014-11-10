@@ -83,10 +83,6 @@
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Rest\Rest\WB.Core.GenericSubdomains.Rest.csproj">
-      <Project>{877d263d-c2fe-4a95-b98e-6017843d0746}</Project>
-      <Name>WB.Core.GenericSubdomains.Rest</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
