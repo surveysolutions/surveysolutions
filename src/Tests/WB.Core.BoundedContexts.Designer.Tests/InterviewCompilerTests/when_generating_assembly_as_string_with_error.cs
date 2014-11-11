@@ -7,40 +7,47 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.InterviewCompilerTests
 {
-    internal class when_generating_assembly_as_string
+    internal class when_generating_assembly_as_string_with_error
     {
 
         Establish context = () =>
         {
             compiler = new RoslynCompiler();
-            generatedClasses.Add("main", testClassToCompile);
+
+            var classes = new Dictionary<string, string>();
+            classes.Add("main", testClassToCompile);
+            classes.Add(fileName, testClassToCompilePartTwo);
+
+            generatedClasses = classes;
         };
 
         private Because of = () =>
             emitResult = compiler.GenerateAssemblyAsString(id, generatedClasses, new string[0], out resultAssembly);
 
 
-        private It should_result_succeded = () =>
-            emitResult.Success.ShouldEqual(true);
+        private It should_faled = () =>
+            emitResult.Success.ShouldEqual(false);
 
-        private It should_diagnostics_count_equal_0 = () =>
-            emitResult.Diagnostics.Count().ShouldEqual(0);
+        private It should_diagnostics_count_equal_1 = () =>
+            emitResult.Diagnostics.Count().ShouldEqual(1);
 
-        private It should_ = () =>
-            resultAssembly.Length.ShouldBeGreaterThan(0);
+        private It should_diagnostics_FilePath_equals_fileName = () =>
+            emitResult.Diagnostics.First().Location.SourceTree.FilePath.ShouldEqual(fileName);
         
+
         private static IDynamicCompiler compiler;
         private static Guid id = Guid.Parse("11111111111111111111111111111111");
         private static string resultAssembly;
         private static EmitResult emitResult;
-        private static Dictionary<string, string> generatedClasses = new Dictionary<string, string>();
+        private static Dictionary<string, string> generatedClasses;
 
+        private static string fileName = "validation:11111111111111111111111111111112";
 
         public static string testClassToCompile =
             @"using System.Collections.Generic;
                 using System.Linq;
                 using WB.Core.SharedKernels.DataCollection;
-                public class InterviewEvaluator : IInterviewEvaluator
+                public partial class InterviewEvaluator : IInterviewEvaluator
             {
                 public static object Evaluate()
                 {
@@ -48,11 +55,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.InterviewCompilerTests
                 }
 
                 private List<int> values = new List<int>() {40, 2};
-
-                public int Test()
-                {
-                    return values.Sum(i => i);
-                }
 
                 public List<Identity> CalculateValidationChanges()
                 {
@@ -64,6 +66,18 @@ namespace WB.Core.BoundedContexts.Designer.Tests.InterviewCompilerTests
                     return new List<Identity>();
                 }
  
+            }";
+
+        public static string testClassToCompilePartTwo =
+            @"using System.Collections.Generic;
+                using System.Linq;
+                using WB.Core.SharedKernels.DataCollection;
+                public partial class InterviewEvaluator
+            {
+               public int Test()
+                {
+                    return values.Sum(i => i)>;
+                } 
             }";
     }
 }
