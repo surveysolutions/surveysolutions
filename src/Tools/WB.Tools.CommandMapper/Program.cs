@@ -13,20 +13,25 @@ namespace WB.Tools.CommandMapper
     {
         static void Main(string[] args)
         {
-            var descriptors = typeof (DesignerBoundedContextModule)
+            Type[] types = typeof (DesignerBoundedContextModule)
                 .Assembly
-                .GetTypes()
-                .Where(HasAttribute<MapsToAggregateRootMethodAttribute>)
-                .Select(type => new
-                {
-                    Command = type,
-                    Attribute = type.CustomAttributes.Single(attribute => attribute.AttributeType == typeof (MapsToAggregateRootMethodAttribute)),
-                })
+                .GetTypes();
+
+            IEnumerable<Tuple<Type, CustomAttributeData>> commandsAndAttributes =
+                Enumerable.Concat(
+                    types
+                        .Where(HasAttribute<MapsToAggregateRootMethodAttribute>)
+                        .Select(type => Tuple.Create(type, GetAttribute<MapsToAggregateRootMethodAttribute>(type))),
+                    types
+                        .Where(HasAttribute<MapsToAggregateRootMethodOrConstructorAttribute>)
+                        .Select(type => Tuple.Create(type, GetAttribute<MapsToAggregateRootMethodOrConstructorAttribute>(type))));
+
+            var descriptors = commandsAndAttributes
                 .Select(x => new
                 {
-                    x.Command,
-                    Aggregate = (Type) x.Attribute.ConstructorArguments.First().Value,
-                    Method = (string)x.Attribute.ConstructorArguments.Last().Value,
+                    Command = x.Item1,
+                    Aggregate = (Type) x.Item2.ConstructorArguments.First().Value,
+                    Method = (string) x.Item2.ConstructorArguments.Last().Value,
                 })
                 .Select(x => new
                 {
@@ -52,6 +57,11 @@ namespace WB.Tools.CommandMapper
                 }
                 Console.WriteLine(@"            ;");
             }
+        }
+
+        private static CustomAttributeData GetAttribute<TAttribute>(Type type)
+        {
+            return type.CustomAttributes.Single(attribute => attribute.AttributeType == typeof (TAttribute));
         }
 
         private static IEnumerable<string> GetParams(Type aggregate, string methodName, Type command)
