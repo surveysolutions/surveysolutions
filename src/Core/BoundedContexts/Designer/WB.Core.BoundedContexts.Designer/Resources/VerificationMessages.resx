@@ -381,4 +381,7 @@
   <data name="WB0095_ValidationExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
     <value>Validation expresssion has length more than 10000 characters</value>
   </data>
+  <data name="WB0096_GeneralCompilationError" xml:space="preserve">
+    <value>Error occurred during questionnaire compilation</value>
+  </data>
 </root>

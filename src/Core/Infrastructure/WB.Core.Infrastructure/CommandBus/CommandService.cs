@@ -1,4 +1,5 @@
 ﻿using System;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Snapshots;
@@ -44,6 +45,15 @@ namespace WB.Core.Infrastructure.CommandBus
             Guid aggregateId = aggregateRootIdResolver.Invoke(command);
 
             IAggregateRoot aggregate = this.repository.GetLatest(aggregateType, aggregateId);
+
+            if (aggregate == null)
+            {
+                if (!CommandRegistry.IsConstructor(command))
+                    throw new Exception(string.Format("Unable to execute not-constructing command {0} because aggregate {1} does not exist.", command.GetType().Name, aggregateId.FormatGuid()));
+
+                aggregate = (IAggregateRoot) Activator.CreateInstance(aggregateType);
+                aggregate.SetId(aggregateId);
+            }
 
             commandHandler.Invoke(command, aggregate);
 

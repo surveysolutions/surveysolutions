@@ -61,6 +61,11 @@ namespace Ncqrs.Domain
             return this.changes;
         }
 
+        public void SetId(Guid id)
+        {
+            this.EventSourceId = id;
+        }
+
         public void MarkChangesAsCommitted()
         {
             this.changes.Clear();
