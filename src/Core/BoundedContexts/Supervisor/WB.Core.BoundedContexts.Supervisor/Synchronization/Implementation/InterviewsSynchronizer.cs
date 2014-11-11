@@ -48,7 +48,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly IQueryablePlainStorageAccessor<LocalInterviewFeedEntry> plainStorage;
         private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
-        private readonly IHeadquartersQuestionnaireReader headquartersQuestionnaireReader;
         private readonly IHeadquartersInterviewReader headquartersInterviewReader;
         private readonly HeadquartersPullContext headquartersPullContext;
         private readonly HeadquartersPushContext headquartersPushContext;
@@ -68,7 +67,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             IQueryablePlainStorageAccessor<LocalInterviewFeedEntry> plainStorage, 
             IQueryableReadSideRepositoryReader<UserDocument> users,
             IPlainQuestionnaireRepository plainQuestionnaireRepository,
-            IHeadquartersQuestionnaireReader headquartersQuestionnaireReader,
             IHeadquartersInterviewReader headquartersInterviewReader,
             HeadquartersPullContext headquartersPullContext,
             HeadquartersPushContext headquartersPushContext,
@@ -86,7 +84,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             if (plainStorage == null) throw new ArgumentNullException("plainStorage");
             if (users == null) throw new ArgumentNullException("users");
             if (plainQuestionnaireRepository == null) throw new ArgumentNullException("plainQuestionnaireRepository");
-            if (headquartersQuestionnaireReader == null) throw new ArgumentNullException("headquartersQuestionnaireReader");
             if (headquartersInterviewReader == null) throw new ArgumentNullException("headquartersInterviewReader");
             if (headquartersPullContext == null) throw new ArgumentNullException("headquartersPullContext");
             if (headquartersPushContext == null) throw new ArgumentNullException("headquartersPushContext");
@@ -104,7 +101,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.plainStorage = plainStorage;
             this.users = users;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
-            this.headquartersQuestionnaireReader = headquartersQuestionnaireReader;
             this.headquartersInterviewReader = headquartersInterviewReader;
             this.headquartersPullContext = headquartersPullContext;
             this.headquartersPushContext = headquartersPushContext;
@@ -127,7 +123,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     this.plainStorage.Query(_ => _.Where(x => x.SupervisorId == localSupervisor.FormatGuid() && !x.Processed))
                                      .OrderByDescending(x => x.Timestamp).ToList();
 
-                this.headquartersPullContext.PushMessage(string.Format("Synchronizing interviews for supervisor '{0}'. Events count: {1}", localSupervisor, events.Count()));
+                this.headquartersPullContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.SynchronizingInterviewsForSupervisor0EventsCount1Format, localSupervisor, events.Count()));
                 
                 foreach (var interviewFeedEntry in events)
                 {
@@ -161,7 +157,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                                 break;
                             default:
                                 this.logger.Warn(string.Format(
-                                    "Unknown event of type {0} received in interviews feed. It was skipped and marked as processed with error. EventId: {1}",
+                                    Resources.InterviewsSynchronizer.Unknowneventoftype0receivedininterviewsfeedItwasskippedandmarkedasprocessedwitherrorEventId1Format,
                                     interviewFeedEntry.EntryType, interviewFeedEntry.EntryId));
                                 break;
                         }
@@ -179,7 +175,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     catch (Exception ex)
                     {
                         this.MarkAsProcessedWithError(interviewFeedEntry, ex);
-                        this.logger.Error(string.Format("Interviews synchronization error in event {0}.", interviewFeedEntry.EntryId), ex);
+                        this.logger.Error(string.Format(Resources.InterviewsSynchronizer.Interviewssynchronizationerrorinevent0Format, interviewFeedEntry.EntryId), ex);
                     }
                     finally
                     {
@@ -197,14 +193,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 .ForEach(x => {
                     x.Processed = true;
                     this.plainStorage.Store(x, x.EntryId);
-                    this.headquartersPullContext.PushMessage(string.Format("Event {0}, '{1}' is marked as processed because it is overriden by {2}, '{3}'",
+                    this.headquartersPullContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Event01ismarkedasprocessedbecauseitisoverridenby23Format,
                         x.EntryId, x.EntryType, interviewFeedEntry.EntryId, interviewFeedEntry.EntryType));
                 });
         }
 
         private async Task<InterviewSynchronizationDto> GetInterviewDetails(LocalInterviewFeedEntry interviewFeedEntry)
         {
-            this.headquartersPullContext.PushMessage(string.Format("Loading interview using {0} URL", interviewFeedEntry.InterviewUri));
+            this.headquartersPullContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Loadinginterviewusing0URLFormat, interviewFeedEntry.InterviewUri));
             InterviewSynchronizationDto interviewDetails =
                 await this.headquartersInterviewReader.GetInterviewByUri(interviewFeedEntry.InterviewUri).ConfigureAwait(false);
             return interviewDetails;
@@ -220,7 +216,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             var supervisorIdGuid = Guid.Parse(supervisorId);
 
-            this.headquartersPullContext.PushMessage(string.Format("Interview {0} was rejected by HQ", interviewId));
+            this.headquartersPullContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Interview0wasrejectedbyHQFormat, interviewId));
 
             var interviewSummary = this.interviewSummaryRepositoryWriter.GetById(interviewId);
             if (interviewSummary == null)
@@ -249,7 +245,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private void PushInterviewData(Guid userId)
         {
             List<Guid> interviewsToPush = this.GetInterviewsToPush();
-            this.headquartersPushContext.PushMessage(string.Format("Found {0} interviews to push.", interviewsToPush.Count));
+            this.headquartersPushContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Found0interviewstopushFormat, interviewsToPush.Count));
 
             for (int interviewIndex = 0; interviewIndex < interviewsToPush.Count; interviewIndex++)
             {
@@ -257,17 +253,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                 try
                 {
-                    this.headquartersPushContext.PushMessage(string.Format("Pushing interview {0} ({1} out of {2}).", interviewId.FormatGuid(),
+                    this.headquartersPushContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Pushinginterview01outof2Format, interviewId.FormatGuid(),
                         interviewIndex + 1, interviewsToPush.Count));
                     this.PushInterview(interviewId, userId);
                     this.interviewSynchronizationFileStorage.MoveInterviewsBinaryDataToSyncFolder(interviewId);
-                    this.headquartersPushContext.PushMessage(string.Format("Interview {0} successfully pushed.", interviewId.FormatGuid()));
+                    this.headquartersPushContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Interview0successfullypushedFormat, interviewId.FormatGuid()));
                 }
                 catch (Exception exception)
                 {
-                    this.logger.Error(string.Format("Failed to push interview {0} to Headquarters.", interviewId.FormatGuid()), exception);
+                    this.logger.Error(string.Format(Resources.InterviewsSynchronizer.Failed_to_push_interview__0__to_Headquarters_Format, interviewId.FormatGuid()), exception);
                     this.headquartersPushContext.PushError(string.Format(
-                        "Failed to push interview {0}. Error message: {1}. Exception messages: {2}",
+                        Resources.InterviewsSynchronizer.Failed_to_push_interview__0___Error_message___1___Exception_messages___2_Format,
                         interviewId.FormatGuid(), exception.Message,
                         string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(x => x.Message))));
                 }
@@ -276,9 +272,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private void PushInterviewFile()
         {
-            this.headquartersPushContext.PushMessage("Getting interviews files to be pushed.");
+            this.headquartersPushContext.PushMessage(Resources.InterviewsSynchronizer.Getting_interviews_files_to_be_pushed_);
             var files = this.interviewSynchronizationFileStorage.GetBinaryFilesFromSyncFolder();
-            this.headquartersPushContext.PushMessage(string.Format("Found {0} files to push.", files.Count));
+            this.headquartersPushContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Found__0__files_to_push_Format, files.Count));
 
             for (int interviewIndex = 0; interviewIndex < files.Count; interviewIndex++)
             {
@@ -286,17 +282,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                 try
                 {
-                    this.headquartersPushContext.PushMessage(string.Format("Pushing file {0} for interview {1} ({2} out of {3}).", interviewFile.FileName, interviewFile.InterviewId.FormatGuid(),
+                    this.headquartersPushContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Pushing_file__0__for_interview__1____2__out_of__3_Format, interviewFile.FileName, interviewFile.InterviewId.FormatGuid(),
                         interviewIndex + 1, files.Count));
                     this.PushFile(interviewFile);
                     this.interviewSynchronizationFileStorage.RemoveBinaryDataFromSyncFolder(interviewFile.InterviewId, interviewFile.FileName);
-                    this.headquartersPushContext.PushMessage(string.Format("File {0} for interview {1} successfully pushed.", interviewFile.FileName, interviewFile.InterviewId.FormatGuid()));
+                    this.headquartersPushContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.File__0__for_interview__1__successfully_pushed_Format, interviewFile.FileName, interviewFile.InterviewId.FormatGuid()));
                 }
                 catch (Exception exception)
                 {
-                    this.logger.Error(string.Format("Failed to push file {0} for interview {1} to Headquarters.", interviewFile.FileName, interviewFile.InterviewId.FormatGuid()), exception);
+                    this.logger.Error(string.Format(Resources.InterviewsSynchronizer.Failed_to_push_file__0__for_interview__1__to_Headquarters_Format, interviewFile.FileName, interviewFile.InterviewId.FormatGuid()), exception);
                     this.headquartersPushContext.PushError(string.Format(
-                        "Failed to push file {0} for interview {1}. Error message: {2}. Exception messages: {3}",
+                        Resources.InterviewsSynchronizer.Failed_to_push_file__0__for_interview__1___Error_message___2___Exception_messages___3_Format,
                         interviewFile.FileName, interviewFile.InterviewId.FormatGuid(), exception.Message,
                         string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(x => x.Message))));
                 }
@@ -328,7 +324,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             
             var supervisorIdGuid = Guid.Parse(supervisorId);
 
-            this.headquartersPullContext.PushMessage(string.Format("Interview {0} was assigned by HQ for supervisor {1}", interviewDetails.Id, interviewDetails.UserId));
+            this.headquartersPullContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Interview__0__was_assigned_by_HQ_for_supervisor__1_Format, interviewDetails.Id, interviewDetails.UserId));
             this.executeCommand(new SynchronizeInterviewFromHeadquarters(interviewDetails.Id, interviewDetails.UserId, supervisorIdGuid, interviewDetails, DateTime.Now));
         }
 
@@ -341,7 +337,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             Guid userIdGuid = Guid.Parse(userId);
 
-            this.headquartersPullContext.PushMessage(string.Format("Interview {0} was canceled by HQ", interviewId));
+            this.headquartersPullContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Interview__0__was_canceled_by_HQFormat, interviewId));
             this.executeCommand(new CancelInterviewByHQSynchronizationCommand(interviewId: interviewIdGuid, userId: userIdGuid));
         }
 
@@ -355,7 +351,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             Guid userIdGuid = Guid.Parse(userId);
 
-            this.headquartersPullContext.PushMessage(string.Format("Interview {0} was deleted by HQ", interviewId));
+            this.headquartersPullContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Interview__0__was_deleted_by_HQFormat, interviewId));
             this.executeCommand(new HardDeleteInterview(interviewId: interviewIdGuid, userId: userIdGuid));
         }
 
@@ -367,7 +363,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 this.feedReader
                     .ReadAfterAsync<LocalInterviewFeedEntry>(this.settings.InterviewsFeedUrl, lastStoredEntry)
                     .Result;
-            this.headquartersPullContext.PushMessage(string.Format("Received {0} events from {1} feed", remoteEvents.Count(), this.settings.InterviewsFeedUrl));
+            this.headquartersPullContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Received__0__events_from__1__feedFormat, remoteEvents.Count(), this.settings.InterviewsFeedUrl));
 
             var newEvents = new List<LocalInterviewFeedEntry>();
             foreach (AtomFeedEntry<LocalInterviewFeedEntry> remoteEvent in remoteEvents)
@@ -401,7 +397,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             }
             else
             {
-                this.logger.Info(string.Format("Interview {0} was not sent to Headquarters because there are no events which should be sent.", interviewId.FormatGuid()));
+                this.logger.Info(string.Format(Resources.InterviewsSynchronizer.Interview__0__was_not_sent_to_Headquarters_because_there_are_no_events_which_should_be_sent_Format, interviewId.FormatGuid()));
             }
 
             this.MarkInterviewAsSentToHeadquarters(interviewId, userId);
@@ -465,7 +461,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 string result = response.Content.ReadAsStringAsync().Result;
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new Exception(string.Format("Failed to send interview {0}. Server response: {1}",
+                    throw new Exception(string.Format(Resources.InterviewsSynchronizer.Failed_to_send_interview__0___Server_response___1_Format,
                         interviewId, result));
                 }
 
@@ -478,13 +474,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 catch (Exception exception)
                 {
                     throw new Exception(
-                        string.Format("Failed to read server response while sending interview {0}. Server response: {1}", interviewId, result),
+                        string.Format(Resources.InterviewsSynchronizer.Failed_to_read_server_response_while_sending_interview__0___Server_response___1_Format, interviewId, result),
                         exception);
                 }
 
                 if (!serverOperationSucceeded)
                 {
-                    throw new Exception(string.Format("Failed to send interview {0} because server returned negative response.", interviewId));
+                    throw new Exception(string.Format(Resources.InterviewsSynchronizer.Failed_to_send_interview__0__because_server_returned_negative_response_Format, interviewId));
                 }
             }
         }
@@ -504,7 +500,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 string result = response.Content.ReadAsStringAsync().Result;
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new Exception(string.Format("Failed to send  file {0} for interview {1}. Server response: {2}",
+                    throw new Exception(string.Format(Resources.InterviewsSynchronizer.Failed_to_send__file__0__for_interview__1___Server_response___2_Format,
                         interviewFile.FileName, interviewFile.InterviewId, result));
                 }
             }
@@ -532,7 +528,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private void MarkAsProcessedWithError(LocalInterviewFeedEntry interviewFeedEntry, Exception ex)
         {
             interviewFeedEntry.ProcessedWithError = true;
-            this.headquartersPullContext.PushError(string.Format("Error while processing event {0}. ErrorMessage: {1}. Exception messages: {2}",
+            this.headquartersPullContext.PushError(string.Format(Resources.InterviewsSynchronizer.Error_while_processing_event__0___ErrorMessage___1___Exception_messages___2_Format,
                 interviewFeedEntry.EntryId, ex.Message, string.Join(Environment.NewLine, ex.UnwrapAllInnerExceptions().Select(x => x.Message))));
         }
     }

@@ -7,6 +7,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class QuestionnaireExecutorTemplateModel
     {
+        public bool GenerateEmbeddedExpressionMethods { get; set; }
+
         public Guid Id { set; get; }
 
         public List<QuestionTemplateModel> AllQuestions { set; get; }

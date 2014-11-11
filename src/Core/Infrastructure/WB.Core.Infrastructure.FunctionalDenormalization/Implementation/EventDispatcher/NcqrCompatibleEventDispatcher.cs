@@ -77,10 +77,22 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
         {
             var handlersToPublishEvent = this.GetListOfBusesForRebuild(handlers).ToList();
 
+            var occurredExceptions = new List<Exception>();
             foreach (var bus in handlersToPublishEvent)
             {
-                bus.Publish(eventMessage);
+                try
+                {
+                    bus.Publish(eventMessage);
+                }
+                catch (Exception exception)
+                {
+                    occurredExceptions.Add(exception);
+                }
             }
+            if (occurredExceptions.Count > 0)
+                throw new AggregateException(
+                     string.Format("{0} handler(s) failed to handle published event '{1}'.", occurredExceptions.Count, eventMessage.EventIdentifier),
+                     occurredExceptions);
         }
 
         public void Register(IEventHandler handler)

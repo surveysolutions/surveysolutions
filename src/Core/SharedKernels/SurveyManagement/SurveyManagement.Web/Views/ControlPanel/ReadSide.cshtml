@@ -25,6 +25,8 @@ Requesting status...
 <h3 style="color: red">We have an issue with synchronization packages. If your denormalizer builds  SynchronizationDelta view you need to rebuild all</h3>
 @using (Html.BeginForm("RebuildReadSidePartially", "ControlPanel", FormMethod.Post))
 {
+    <label for="skipEvents">Skip events:</label>
+    @Html.TextBox("skipEvents", "0");
     <ul style="list-style: none;">
 
 

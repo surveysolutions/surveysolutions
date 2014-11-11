@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Microsoft.CodeAnalysis.Emit;
@@ -12,10 +13,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.InterviewCompilerTests
         Establish context = () =>
         {
             compiler = new RoslynCompiler();
+            generatedClasses.Add("main", testClassToCompile);
         };
 
         private Because of = () =>
-            emitResult = compiler.GenerateAssemblyAsString(id, testClassToCompile, new string[0], out resultAssembly);
+            emitResult = compiler.GenerateAssemblyAsString(id, generatedClasses, new string[0], out resultAssembly);
 
 
         private It should_result_succeded = () =>
@@ -31,6 +33,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.InterviewCompilerTests
         private static Guid id = Guid.Parse("11111111111111111111111111111111");
         private static string resultAssembly;
         private static EmitResult emitResult;
+        private static Dictionary<string, string> generatedClasses = new Dictionary<string, string>();
+
 
         public static string testClassToCompile =
             @"using System.Collections.Generic;

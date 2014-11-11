@@ -108,9 +108,9 @@ namespace WB.UI.Headquarters.Controllers
             return this.ReadSideAdministrationService.GetReadableStatus();
         }
 
-        public ActionResult RebuildReadSidePartially(string[] handlers)
+        public ActionResult RebuildReadSidePartially(string[] handlers, int skipEvents = 0)
         {
-            this.ReadSideAdministrationService.RebuildViewsAsync(handlers);
+            this.ReadSideAdministrationService.RebuildViewsAsync(handlers, skipEvents);
             this.TempData["CheckedHandlers"] = handlers;
             return this.RedirectToAction("ReadSide");
         }
