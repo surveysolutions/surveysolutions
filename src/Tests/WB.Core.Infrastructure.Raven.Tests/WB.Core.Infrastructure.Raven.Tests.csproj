@@ -124,6 +124,15 @@
     <Compile Include="RavenReadSideRepositoryReaderTests\when_counting_repository_entities_and_views_are_being_rebuilt.cs" />
     <Compile Include="RavenReadSideRepositoryReaderTests\when_getting_repository_entity_by_id_and_views_are_being_rebuilt.cs" />
     <Compile Include="RavenReadSideRepositoryReaderTests\when_querying_repository_entities_and_views_are_being_rebuilt.cs" />
+    <Compile Include="RavenReadSideRepositoryWriterTests\when_disabling_cache.cs" />
+    <Compile Include="RavenReadSideRepositoryWriterTests\when_get_by_id_called_and_cache_is_disabled.cs" />
+    <Compile Include="RavenReadSideRepositoryWriterTests\when_get_by_id_called_and_cache_is_enabled.cs" />
+    <Compile Include="RavenReadSideRepositoryWriterTests\when_get_by_id_called_cache_is_enabled_and_view_stored_at_file_system.cs" />
+    <Compile Include="RavenReadSideRepositoryWriterTests\when_remove_called_and_cache_is_disabled.cs" />
+    <Compile Include="RavenReadSideRepositoryWriterTests\when_remove_called_and_cache_is_enabled.cs" />
+    <Compile Include="RavenReadSideRepositoryWriterTests\when_remove_called_cache_is_enabled_and_view_stored_at_file_system.cs" />
+    <Compile Include="RavenReadSideRepositoryWriterTests\when_store_called_cache_is_enabled_and_cache_limit_is_reached.cs" />
+    <Compile Include="RavenReadSideRepositoryWriterTests\when_store_called_cache_is_enabled_and_view_stored_at_file_system.cs" />
     <Compile Include="RavenReadSideServiceTests\RavenReadSideServiceTestContext.cs" />
     <Compile Include="RavenReadSideServiceTests\when_get_list_of_all_available_handlers.cs" />
     <Compile Include="RavenReadSideServiceTests\when_rebuild_all_views.cs" />
@@ -141,6 +150,10 @@
     <ProjectReference Include="..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Files\WB.Core.Infrastructure.Files.csproj">
+      <Project>{6AC3A080-CECA-4974-9CA1-C239695ED8F8}</Project>
+      <Name>WB.Core.Infrastructure.Files</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
       <Project>{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}</Project>
