@@ -28,8 +28,6 @@ namespace WB.UI.Capi
 		{
 			global::WB.Core.GenericSubdomains.ErrorReporting.Resource.String.ApplicationName = global::WB.UI.Capi.Resource.String.ApplicationName;
 			global::WB.Core.GenericSubdomains.ErrorReporting.Resource.String.Hello = global::WB.UI.Capi.Resource.String.Hello;
-			global::WB.Core.GenericSubdomains.Rest.Android.Resource.String.ApplicationName = global::WB.UI.Capi.Resource.String.ApplicationName;
-			global::WB.Core.GenericSubdomains.Rest.Android.Resource.String.Hello = global::WB.UI.Capi.Resource.String.Hello;
 			global::WB.Core.Infrastructure.Files.Resource.String.ApplicationName = global::WB.UI.Capi.Resource.String.ApplicationName;
 			global::WB.Core.Infrastructure.Files.Resource.String.Hello = global::WB.UI.Capi.Resource.String.Hello;
 			global::WB.UI.Shared.Android.Resource.Attribute.MvxBind = global::WB.UI.Capi.Resource.Attribute.MvxBind;
