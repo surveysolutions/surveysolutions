@@ -6,7 +6,18 @@ namespace WB.Core.Infrastructure.CommandBus
 {
     public static class CommandRegistry
     {
-        private static readonly Dictionary<string, HandlerDescriptor> Handlers = new Dictionary<string,HandlerDescriptor>();
+        private static readonly Dictionary<string, HandlerDescriptor> Handlers = new Dictionary<string, HandlerDescriptor>();
+
+        public class AggregateRegistry<TAggregate>
+            where TAggregate : IAggregateRoot
+        {
+            public AggregateRegistry<TAggregate> Add<TCommand>(Func<TCommand, Guid> aggregateRootIdResolver, Action<TCommand, TAggregate> commandHandler)
+                where TCommand : ICommand
+            {
+                CommandRegistry.Add(aggregateRootIdResolver, commandHandler);
+                return this;
+            }
+        }
 
         private class HandlerDescriptor
         {
@@ -20,6 +31,12 @@ namespace WB.Core.Infrastructure.CommandBus
             public Type AggregateType { get; private set; }
             public Func<ICommand, Guid> IdResolver { get; private set; }
             public Action<ICommand, IAggregateRoot> Handler { get; private set; }
+        }
+
+        public static AggregateRegistry<TAggregate> For<TAggregate>()
+            where TAggregate : IAggregateRoot
+        {
+            return new AggregateRegistry<TAggregate>();
         }
 
         public static void Add<TCommand, TAggregate>(Func<TCommand, Guid> aggregateRootIdResolver, Action<TCommand, TAggregate> commandHandler)
