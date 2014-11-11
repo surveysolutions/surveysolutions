@@ -49,6 +49,7 @@
     <Compile Include="CommandBus\ICommandService.cs" />
     <Compile Include="DenormalizerStorage\InMemoryReadSideRepositoryAccessor.cs" />
     <Compile Include="EventBus\BaseDenormalizer.cs" />
+    <Compile Include="EventBus\IAtomicEventHandler.cs" />
     <Compile Include="EventBus\IEventHandler.cs" />
     <Compile Include="EventBus\IEventPublisher.cs" />
     <Compile Include="EventHandlerDescription.cs" />
