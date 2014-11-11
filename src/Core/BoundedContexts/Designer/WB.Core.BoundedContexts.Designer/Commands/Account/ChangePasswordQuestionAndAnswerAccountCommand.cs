@@ -5,7 +5,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 namespace WB.Core.BoundedContexts.Designer.Commands.Account
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof (AccountAR), "ChangePasswordQuestionAndUnswer")]
+    [MapsToAggregateRootMethod(typeof (AccountAR), "ChangePasswordQuestionAndAnswer")]
     public class ChangePasswordQuestionAndAnswerAccountCommand : AccountCommandBase
     {
         public ChangePasswordQuestionAndAnswerAccountCommand(Guid accountId, string passwordQuestion,
