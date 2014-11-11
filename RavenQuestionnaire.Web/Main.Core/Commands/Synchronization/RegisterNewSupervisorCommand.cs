@@ -1,12 +1,9 @@
 ﻿using System;
-using Main.Core.Domain;
 using Ncqrs.Commanding;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
 namespace Main.Core.Commands.Synchronization
 {
     [Serializable]
-    [MapsToAggregateRootConstructor(typeof(DeviceAR))]
     public class RegisterNewSupervisorCommand : CommandBase
     {
         public RegisterNewSupervisorCommand(string description, byte[] publicKeyCapi, Guid tabletId)
@@ -17,7 +14,6 @@ namespace Main.Core.Commands.Synchronization
             this.RegisteredDate = DateTime.Now;
         }
 
-        [AggregateRootId]
         public Guid RegisterGuid { get; set; }
 
         public string Description { get; set; }

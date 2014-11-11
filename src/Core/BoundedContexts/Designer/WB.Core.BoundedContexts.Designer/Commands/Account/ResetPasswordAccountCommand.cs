@@ -1,11 +1,8 @@
 ﻿using System;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-using WB.Core.BoundedContexts.Designer.Aggregates;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Account
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof (AccountAR), "ResetPassword")]
     public class ResetPasswordAccountCommand : AccountCommandBase
     {
         public ResetPasswordAccountCommand(Guid accountId, string password, string passwordSalt)

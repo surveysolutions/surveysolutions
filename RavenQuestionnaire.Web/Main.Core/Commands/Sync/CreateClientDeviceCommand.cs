@@ -1,12 +1,9 @@
 ﻿using System;
-using Main.Core.Domain;
 using Ncqrs.Commanding;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
 namespace Main.Core.Commands.Sync
 {
     [Serializable]
-    [MapsToAggregateRootConstructor(typeof(ClientDeviceAR))]
     public class CreateClientDeviceCommand  : CommandBase
     {
         public Guid Id { get; set; }

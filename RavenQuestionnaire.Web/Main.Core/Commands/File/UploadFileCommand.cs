@@ -3,16 +3,12 @@
     using System;
     using System.IO;
 
-    using Main.Core.Domain;
-
     using Ncqrs.Commanding;
-    using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
     /// <summary>
     /// The upload file command.
     /// </summary>
     [Serializable]
-    [MapsToAggregateRootConstructor(typeof(FileAR))]
     public class UploadFileCommand : CommandBase
     {
         public UploadFileCommand(Guid publicKey, string title, string desc, Stream origData)

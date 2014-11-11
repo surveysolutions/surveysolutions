@@ -40,7 +40,6 @@ namespace Ncqrs.Eventing.Storage.Serialization
         /// </remarks>
         /// <param name="theEvent">The event to be upgraded.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="theEvent"/> is <value>null</value>.</exception>
-        /// <seealso cref="AddConverter"/>
         public void Upgrade(StoredEvent<JObject> theEvent)
         {
             if(theEvent == null)

@@ -219,12 +219,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AndroidCastle.Core\AndroidCastle.Core.csproj">
-      <Project>{C9FA7474-8407-4C32-A946-DF47591FCC89}</Project>
-      <Name>AndroidCastle.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

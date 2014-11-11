@@ -303,10 +303,6 @@
       <Project>{f9a0b560-a8bf-4914-88fb-7d98df4242ef}</Project>
       <Name>AndroidNcqrs.Eventing.Storage.SQLite</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Mono\AndroidNCQRS\AndroidNCQRS.csproj">
-      <Project>{1b9537f5-8650-467a-a280-df6ea396d6c5}</Project>
-      <Name>AndroidNCQRS</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Mono\AndroidNinject.Extensions.Conventions\AndroidNinject.Extensions.Conventions.csproj">
       <Project>{e21bc003-84b5-41be-928c-75874418acd2}</Project>
       <Name>AndroidNinject.Extensions.Conventions</Name>

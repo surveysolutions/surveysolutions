@@ -1,12 +1,9 @@
 ﻿using System;
-using Main.Core.Domain;
 using Ncqrs.Commanding;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
 namespace Main.Core.Commands.Synchronization
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(DeviceAR), "UpdateDevice")]
     public class UpdateRegisterDeviceCommand : CommandBase
     {
         public UpdateRegisterDeviceCommand(string description, Guid publicKey, byte[] secretKey, Guid registrator)
@@ -17,7 +14,6 @@ namespace Main.Core.Commands.Synchronization
             this.SecretKey = secretKey;
         }
 
-        [AggregateRootId]
         public Guid PublicKey { get; set; }
 
         public Guid Registrator { get; set; }
