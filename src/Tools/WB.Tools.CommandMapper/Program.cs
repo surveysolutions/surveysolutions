@@ -51,9 +51,9 @@ namespace WB.Tools.CommandMapper
 
                 foreach (var descriptor in aggregate)
                 {
-                    Console.WriteLine(@"                .Add<{0}>(", descriptor.Command);
-                    Console.WriteLine(@"                    command => command.{0},", descriptor.IdProperty);
-                    Console.WriteLine(@"                    (command, aggregate) => aggregate.{0}({1}))", descriptor.Method, string.Join(", ", descriptor.Parameters.Select(p => "command." + p)));
+                    Console.Write(@"                .Add<{0}>(", descriptor.Command);
+                    Console.Write(@"command => command.{0}, ", descriptor.IdProperty);
+                    Console.WriteLine(@"(command, aggregate) => aggregate.{0}({1}))", descriptor.Method, string.Join(", ", descriptor.Parameters.Select(p => "command." + p)));
                 }
                 Console.WriteLine(@"            ;");
             }
