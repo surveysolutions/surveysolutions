@@ -6,9 +6,6 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs;
 using Ncqrs.Commanding;
-using Ncqrs.Commanding.CommandExecution.Mapping;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Config;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.Infrastructure.CommandBus;
@@ -68,11 +65,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests
 
         private static void InitializeInternalCommandService(CommandService service)
         {
-            var mapper = new AttributeBasedCommandMapper();
-            foreach (Type type in ScanForTypes().Where(ImplementsAtLeastOneICommand))
-            {
-                service.RegisterExecutor(type, new UoWMappedCommandExecutor(mapper));
-            }
+            //var mapper = new AttributeBasedCommandMapper();
+            //foreach (Type type in ScanForTypes().Where(ImplementsAtLeastOneICommand))
+            //{
+            //    service.RegisterExecutor(type, new UoWMappedCommandExecutor(mapper));
+            //}
         }
 
         private static IEnumerable<Type> ScanForTypes()
