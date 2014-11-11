@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Xml.Linq;
 
 namespace Ncqrs.Eventing.Storage
 {
@@ -28,7 +29,7 @@ namespace Ncqrs.Eventing.Storage
         public AttributeEventTypeResolver()
         {
             _eventNames = new Dictionary<Type, string>();
-            _eventTypes = new Dictionary<string, Type>(StringComparer.InvariantCultureIgnoreCase);
+            _eventTypes = new Dictionary<string, Type>(StringComparer.CurrentCultureIgnoreCase);
         }
 
 
@@ -115,10 +116,9 @@ namespace Ncqrs.Eventing.Storage
         /// </exception>
         public void AddAllEventsInAssembly(Assembly assembly)
         {
-            foreach (var type in assembly.GetTypes().Where(x => typeof(IEvent).IsAssignableFrom(x)))
-                AddEvent(type);
+            foreach (var type in assembly.DefinedTypes.Where(x => typeof(IEvent).GetTypeInfo().IsAssignableFrom(x)))
+                AddEvent(type.DeclaringType);
         }
-
 
         private void ThrowIfNameExists(Type type, string name)
         {
@@ -131,7 +131,10 @@ namespace Ncqrs.Eventing.Storage
 
         private static string FindNameForEvent(Type type)
         {
-            var names = (EventNameAttribute[]) type.GetCustomAttributes(typeof(EventNameAttribute), false);
+            var names = type.GetTypeInfo().CustomAttributes
+                .Where(x => x.AttributeType == typeof (EventNameAttribute))
+                .Cast<EventNameAttribute>()
+                .ToArray();
 
             if (names.Length == 0) {
                 var message = string.Format("No name found for event {0}, specify an EventNameAttribute.", type);
@@ -148,7 +151,7 @@ namespace Ncqrs.Eventing.Storage
 
         private static IEnumerable<string> FindAliasesForEvent(Type type)
         {
-            var names = (EventNameAliasAttribute[]) type.GetCustomAttributes(typeof(EventNameAliasAttribute), false);
+            var names = type.GetTypeInfo().CustomAttributes.Where(x => x.AttributeType == typeof(EventNameAliasAttribute)).Cast<EventNameAliasAttribute>().ToArray();
             return names.Select(x => x.Name);
         }
     }

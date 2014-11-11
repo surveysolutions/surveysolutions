@@ -32,7 +32,7 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
     /// </summary>
     public class ConventionBasedEventHandlerMappingStrategy : IEventHandlerMappingStrategy
     {
-        private static readonly ILogger Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ConventionBasedEventHandlerMappingStrategy));
 
         public Type EventBaseType { get; set; }
         public String MethodNameRegexPattern { get; set; }
@@ -50,21 +50,18 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
 
             Logger.DebugFormat("Trying to get all event handlers based by convention for {0}.", targetType);
 
-            var methodsToMatch = targetType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            var methodsToMatch = targetType.GetMethods();
 
             var matchedMethods = from method in methodsToMatch
                                  let parameters = method.GetParameters()
-                                 let noEventHandlerAttributes =
-                                     method.GetCustomAttributes(typeof(NoEventHandlerAttribute), true)
                                  where
                                      // Get only methods where the name matches.
                                     Regex.IsMatch(method.Name, MethodNameRegexPattern, RegexOptions.CultureInvariant) &&
                                      // Get only methods that have 1 parameter.
                                     parameters.Length == 1 &&
                                      // Get only methods where the first parameter is an event.
-                                    EventBaseType.IsAssignableFrom(parameters[0].ParameterType) &&
+                                    EventBaseType.GetTypeInfo().IsAssignableFrom(parameters[0].ParameterType.GetTypeInfo())
                                      // Get only methods that are not marked with the no event handler attribute.
-                                    noEventHandlerAttributes.Length == 0
                                  select
                                     new { MethodInfo = method, FirstParameter = method.GetParameters()[0] };
 

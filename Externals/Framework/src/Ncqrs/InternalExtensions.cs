@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Ncqrs
 {
@@ -34,10 +35,10 @@ namespace Ncqrs
             if (source == null) throw new ArgumentNullException("source");
             if (interfaceType == null) throw new ArgumentNullException("interfaceType");
             
-            if (!interfaceType.IsInterface)
+            if (!interfaceType.GetTypeInfo().IsInterface)
                 throw new ArgumentException("The provided interface type is not an interface.", "interfaceType");
 
-            return interfaceType.IsAssignableFrom(source);
+            return interfaceType.GetTypeInfo().IsAssignableFrom(source.GetTypeInfo());
         }
 
         /// <summary>
@@ -75,7 +76,8 @@ namespace Ncqrs
         /// </returns>
         public static bool IsNullable(this Type type)
         {
-            return !type.IsValueType || (type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(Nullable<>)));
+            var typeInfo = type.GetTypeInfo();
+            return !typeInfo.IsValueType || (typeInfo.IsGenericType && (typeInfo.GetGenericTypeDefinition() == typeof(Nullable<>)));
         }
     }
 }

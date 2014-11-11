@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Reflection;
-using System.Threading;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Logging;
 
@@ -9,7 +7,7 @@ namespace Ncqrs.Domain
     public abstract class UnitOfWorkBase : IUnitOfWorkContext
     {
         private readonly Guid _commandId;
-        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(typeof(UnitOfWorkBase));
 
         private readonly Action<AggregateRoot, UncommittedEvent> _eventAppliedCallback;
 
@@ -40,8 +38,8 @@ namespace Ncqrs.Domain
         protected UnitOfWorkBase(Guid commandId)
         {
             _commandId = commandId;
-            Log.DebugFormat("Creating new unit of work for command {0} on thread {1}", commandId,
-                            Thread.CurrentThread.ManagedThreadId);
+#warning Slava: restore Thread.CurrentThread.ManagedThreadId
+            Log.DebugFormat("Creating new unit of work for command {0} on thread {1}", commandId, "Thread.CurrentThread.ManagedThreadId");
 
             _eventAppliedCallback = new Action<AggregateRoot, UncommittedEvent>(AggregateRootEventAppliedHandler);
             IsDisposed = false;

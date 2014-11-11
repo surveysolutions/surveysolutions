@@ -1,4 +1,5 @@
 using System;
+using Ncqrs;
 using Ncqrs.Eventing;
 
 namespace Main.Core.Events

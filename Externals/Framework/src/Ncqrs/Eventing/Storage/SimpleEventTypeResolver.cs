@@ -14,7 +14,7 @@ namespace Ncqrs.Eventing.Storage
     {
         public Type ResolveType(string eventName)
         {
-            return Type.GetType(eventName, true, false);
+            return Type.GetType(eventName, true);
         }
 
         public string EventNameFor(Type type)

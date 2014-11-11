@@ -14,7 +14,7 @@ namespace Ncqrs.Domain
     /// </summary>
     public abstract class AggregateRoot : EventSource, IAggregateRoot
     {
-        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(typeof(AggregateRoot));
     
         // 628426 13 Feb 2011
         // Previous ThreadStatic was null referencing at random times under load 
@@ -41,7 +41,6 @@ namespace Ncqrs.Domain
         protected AggregateRoot(Guid id) : base(id)
         {}
 
-        [NoEventHandler]
         protected override void OnEventApplied(UncommittedEvent appliedEvent)
         {
             base.OnEventApplied(appliedEvent);

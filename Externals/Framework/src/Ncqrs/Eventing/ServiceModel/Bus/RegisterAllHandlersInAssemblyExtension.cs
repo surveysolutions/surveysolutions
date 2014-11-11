@@ -7,7 +7,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 {
     public static class RegisterAllHandlersInAssemblyExtension
     {
-        private static ILogger _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static ILogger _log = LogManager.GetLogger(typeof(RegisterAllHandlersInAssemblyExtension));
 
         public static void RegisterAllHandlersInAssembly(this InProcessEventBus target, Assembly asm)
         {
@@ -16,13 +16,13 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 
         public static void RegisterAllHandlersInAssembly(this InProcessEventBus target, Assembly asm, Func<Type, object> handlerFactory)
         {
-            foreach(var type in asm.GetTypes().Where(ImplementsAtLeastOneIEventHandlerInterface))
+            foreach (var typeInfo in asm.DefinedTypes.Where(ImplementsAtLeastOneIEventHandlerInterface))
             {
-                var handler = handlerFactory(type);
+                var handler = handlerFactory(typeInfo.DeclaringType);
 
-                foreach(var handlerInterfaceType in type.GetInterfaces().Where(IsIEventHandlerInterface))
+                foreach (var handlerInterfaceType in typeInfo.ImplementedInterfaces.Where(IsIEventHandlerInterface))
                 {
-                    var eventDataType = handlerInterfaceType.GetGenericArguments().First();
+                    var eventDataType = handlerInterfaceType.GenericTypeArguments.First();
                     target.RegisterHandler(handler, eventDataType);
                 }
             }
@@ -48,17 +48,18 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             _log.InfoFormat("Registered {0} as event handler for event {1}.", handler.GetType().FullName, eventDataType.FullName);
         }
 
-        private static bool ImplementsAtLeastOneIEventHandlerInterface(Type type)
+        private static bool ImplementsAtLeastOneIEventHandlerInterface(TypeInfo typeInfo)
         {
-            return type.IsClass && !type.IsAbstract &&
-                   type.GetInterfaces().Any(IsIEventHandlerInterface);
+            return typeInfo.IsClass && !typeInfo.IsAbstract &&
+                   typeInfo.ImplementedInterfaces.Any(IsIEventHandlerInterface);
         }
 
         private static bool IsIEventHandlerInterface(Type type)
         {
-            return type.IsInterface &&
-                   type.IsGenericType &&
-                   type.GetGenericTypeDefinition() == typeof (IEventHandler<>);
+            var typeInfo = type.GetTypeInfo();
+            return typeInfo.IsInterface &&
+                   typeInfo.IsGenericType &&
+                   typeInfo.GetGenericTypeDefinition() == typeof (IEventHandler<>);
         }
     }
 }

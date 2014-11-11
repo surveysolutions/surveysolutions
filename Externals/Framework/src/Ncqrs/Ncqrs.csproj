@@ -38,18 +38,11 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Elmah">
-      <HintPath>..\..\..\..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\..\packages\Newtonsoft.Json.6.0.1\lib\portable-net40+sl5+wp80+win8+monotouch+monoandroid\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Ninject">
-      <HintPath>..\..\..\..\packages\Portable.Ninject.3.3\lib\portable-net4+sl5+wp8+win8+wpa81+monotouch+monoandroid\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="System.Threading">
       <HintPath>..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETPortable\v4.6\Profile\Profile32\System.Threading.dll</HintPath>
@@ -59,20 +52,12 @@
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Eventing\Sourcing\Mapping\ConventionBasedEventHandlerMappingStrategy.cs" />
+    <Compile Include="Eventing\Sourcing\Mapping\IEventHandlerMappingStrategy.cs" />
     <Compile Include="_WB\AggregateRootRepository.cs" />
     <Compile Include="Commanding\AllCommandsInAppDomainEnumerator.cs" />
     <Compile Include="Commanding\CommandExecution\DefaultTransactionService.cs" />
     <Compile Include="Commanding\CommandExecution\ITransactionService.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootConstructorAttributeHandler.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\IMappingAttributeHandler.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootMethodAttributeHandler.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootMethodOrConstructorAttribute.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootMethodOrConstructorAttributeHandler.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootStaticCreateAttribute.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootStaticCreateAttributeHandler.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Fluent\MappedCommandToAggregateRootMethodOrConstructor.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\ICommandMapper.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\UoWMappedCommandExecutor.cs" />
     <Compile Include="Commanding\IKnownCommandsEnumerator.cs" />
     <Compile Include="CommandListSupplier.cs" />
     <Compile Include="ConcurrencyResolveCommandService.cs" />
@@ -112,19 +97,6 @@
     <Compile Include="GuidCombGenerator.cs" />
     <Compile Include="Commanding\CommandBase.cs" />
     <Compile Include="Commanding\CommandExecution\ICommandExecutorExtensions.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\AttributeBasedCommandMapper.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\AttributePropertyMappingStrategy.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\CommandServiceExtensions.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Fluent\Map.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\PropertiesToMethodMapper.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\ParameterAttribute.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Fluent\MappedCommand.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Fluent\MappedCommandToAggregateRoot.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Fluent\MappedCommandToAggregateRootConstructor.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Fluent\MappedCommandToAggregateRootMethod.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\CommandMappingException.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\PropertyToParameterMappingInfo.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\MappingNotFoundException.cs" />
     <Compile Include="Commanding\CommandExecution\CommandExecutorBase.cs" />
     <Compile Include="Commanding\CommandExecution\ExecutorForCommandNotFoundException.cs" />
     <Compile Include="Commanding\CommandExecution\ICommandExecutor.cs" />
@@ -132,19 +104,11 @@
     <Compile Include="Commanding\ServiceModel\CommandContext.cs" />
     <Compile Include="Commanding\ServiceModel\ICommandServiceInterceptor.cs" />
     <Compile Include="Commanding\CommandExecution\TransactionalCommandExecutorWrapper.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\AggregateRootIdAttribute.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\ExcludeInMappingAttribute.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootConstructorAttribute.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootMethodAttribute.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\TransactionalAttribute.cs" />
     <Compile Include="Config\InstanceNotFoundInEnvironment.cs" />
     <Compile Include="DateTimeBasedClock.cs" />
-    <Compile Include="Domain\AggregateRootMappedWithExpressions.cs" />
     <Compile Include="Domain\Storage\AggregateRootNotFoundException.cs" />
     <Compile Include="Eventing\EventNotHandledException.cs" />
-    <Compile Include="Eventing\Sourcing\Mapping\ExpressionHandler.cs" />
     <Compile Include="Domain\IUnitOfWorkContext.cs" />
-    <Compile Include="Eventing\Sourcing\Mapping\ExpressionBasedEventHandlerMappingStrategy.cs" />
     <Compile Include="Domain\NoUnitOfWorkAvailableInThisContextException.cs" />
     <Compile Include="Eventing\Sourcing\EventSource.cs" />
     <Compile Include="Eventing\Sourcing\TypeThresholdedActionBasedSourcedEventHandler.cs" />
@@ -188,15 +152,8 @@
     <Compile Include="NcqrsEnvironmentException.cs" />
     <Compile Include="Domain\AggregateRoot.cs" />
     <Compile Include="Domain\AggregateRootMappedByConvention.cs" />
-    <Compile Include="Domain\AggregateRootMappedWithAttributes.cs" />
     <Compile Include="Domain\IUnitOfWorkFactory.cs" />
-    <Compile Include="Eventing\Sourcing\Mapping\AttributeBasedEventHandlerMappingStrategy.cs" />
-    <Compile Include="Eventing\Sourcing\Mapping\ConventionBasedEventHandlerMappingStrategy.cs" />
-    <Compile Include="Eventing\Sourcing\Mapping\EventHandlerAttribute.cs" />
-    <Compile Include="Eventing\Sourcing\Mapping\IEventHandlerMappingStrategy.cs" />
-    <Compile Include="Eventing\Sourcing\Mapping\InvalidEventHandlerMappingException.cs" />
     <Compile Include="Eventing\Sourcing\Mapping\MappedAggregateRoot.cs" />
-    <Compile Include="Eventing\Sourcing\Mapping\NoEventHandlerAttribute.cs" />
     <Compile Include="Domain\Storage\AggregateRootCreationException.cs" />
     <Compile Include="Domain\Storage\DomainRepository.cs" />
     <Compile Include="Domain\Storage\IDomainRepository.cs" />

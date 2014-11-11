@@ -1,6 +1,4 @@
-﻿#if !MONODROID
-#endif
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
@@ -12,13 +10,9 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
     public class InProcessEventBus : IEventBus
     {
         private readonly Dictionary<Type, List<Action<PublishedEvent>>> _handlerRegister = new Dictionary<Type, List<Action<PublishedEvent>>>();
-        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(typeof(InProcessEventBus));
         private readonly bool _useTransactionScope;
 
-        /// <summary>
-        /// Creates new <see cref="InProcessEventBus"/> instance that wraps publishing to
-        /// handlers into a <see cref="TransactionScope"/>.
-        /// </summary>
         public InProcessEventBus()
             : this(true)
         {            
@@ -60,15 +54,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 
         private static void TransactionallyPublishToHandlers(IPublishableEvent eventMessage, Type eventMessageType, IEnumerable<Action<PublishedEvent>> handlers)
         {
-#if !MONODROID
-            using (var transaction = new TransactionScope())
-            {
-#endif
             PublishToHandlers(eventMessage, eventMessageType, handlers);
-#if !MONODROID
-                transaction.Complete();
-            }
-#endif
         }
 
         private static void PublishToHandlers(IPublishableEvent eventMessage, Type eventMessageType, IEnumerable<Action<PublishedEvent>> handlers)
@@ -114,7 +100,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 
             foreach(var key in _handlerRegister.Keys)
             {
-                if(key.IsAssignableFrom(dataType))
+                if (key.GetTypeInfo().IsAssignableFrom(dataType.GetTypeInfo()))
                 {
                     var handlers = _handlerRegister[key];
                     result.AddRange(handlers);

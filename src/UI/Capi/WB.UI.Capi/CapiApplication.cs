@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using Android.App;
 using Android.Content;
 using Android.Runtime;
@@ -8,6 +11,7 @@ using CAPI.Android.Core.Model.EventHandlers;
 using CAPI.Android.Core.Model.FileStorage;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.Login;
+using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.Droid.Platform;
 using Main.Core;
 using Main.Core.Documents;
@@ -23,6 +27,7 @@ using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using WB.Core.BoundedContexts.Capi;
@@ -216,7 +221,25 @@ namespace WB.UI.Capi
             bus.RegisterHandler(dashboardeventHandler, typeof(DateTimeQuestionAnswered));
         }
 
-        
+        internal static void RegisterEventHandlers(InProcessEventBus bus, IKernel kernel)
+        {
+            IEnumerable<object> handlers = Enumerable.Distinct<object>(kernel.GetAll(typeof(IEventHandler<>))).ToList();
+            foreach (object handler in handlers)
+            {
+                IEnumerable<Type> ieventHandlers = handler.GetType().GetInterfaces().Where(IsIEventHandlerInterface);
+                foreach (Type ieventHandler in ieventHandlers)
+                {
+                    bus.RegisterHandler(handler, ieventHandler.GenericTypeArguments[0]);
+                }
+            }
+        }
+
+        private static bool IsIEventHandlerInterface(Type type)
+        {
+            var typeInfo = type.GetTypeInfo();
+            return typeInfo.IsInterface && typeInfo.IsGenericType && typeInfo.GetGenericTypeDefinition() == typeof(IEventHandler<>);
+        }
+
         public override void OnCreate()
         {
             base.OnCreate();
@@ -225,11 +248,11 @@ namespace WB.UI.Capi
 
              // initialize app if necessary
             MvxAndroidSetupSingleton.EnsureSingletonAvailable(this);
-            MvxAndroidSetupSingleton.Instance.EnsureInitialized();
+            MvxSingleton<MvxAndroidSetupSingleton>.Instance.EnsureInitialized();
 
 
-            var basePath = Directory.Exists(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal))
-                ? System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal)
+            var basePath = Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Personal))
+                ? Environment.GetFolderPath(Environment.SpecialFolder.Personal)
                 : Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
             
             const string SynchronizationFolder = "SYNC";
@@ -258,11 +281,21 @@ namespace WB.UI.Capi
 
             var ncqrsCommandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
             NcqrsEnvironment.SetDefault(ncqrsCommandService);
-            NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>(), ncqrsCommandService);
+            NcqrsInit.InitializeCommandService(this.kernel.Get<ICommandListSupplier>(), ncqrsCommandService);
 
-            NcqrsInit.Init(this.kernel);
-       
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());
+            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
+
+            var snpshotStore = new InMemoryEventStore();
+            // key param for storing im memory
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(snpshotStore);
+
+            var bus1 = new InProcessEventBus(true);
+            NcqrsEnvironment.SetDefault<IEventBus>(bus1);
+            this.kernel.Bind<IEventBus>().ToConstant(bus1);
+
+            NcqrsInit.RegisterEventHandlers(bus1, this.kernel);
+
+            NcqrsEnvironment.SetDefault(Kernel.Get<ISnapshotStore>());
             NcqrsEnvironment.SetDefault(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
             var domainrepository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(), NcqrsEnvironment.Get<IAggregateSnapshotter>());
             this.kernel.Bind<IDomainRepository>().ToConstant(domainrepository);

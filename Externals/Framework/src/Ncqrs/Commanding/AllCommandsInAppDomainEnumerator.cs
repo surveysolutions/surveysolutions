@@ -4,14 +4,12 @@ using System.Linq;
 
 namespace Ncqrs.Commanding
 {
+    [Obsolete("All commands should be mapped manually and known while registration")]
     public class AllCommandsInAppDomainEnumerator : IKnownCommandsEnumerator
     {
         public IEnumerable<Type> GetAllCommandTypes()
         {
-            return from asm in AppDomain.CurrentDomain.GetAssemblies()
-                         from type in asm.GetTypes()
-                         where typeof(CommandBase).IsAssignableFrom(type)
-                         select type;
+            return Enumerable.Empty<Type>();
         }
     }
 }

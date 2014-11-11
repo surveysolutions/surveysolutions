@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.CommandExecution;
 using Ncqrs.Config;
@@ -19,7 +18,7 @@ namespace Ncqrs
     /// </remarks></summary>
     public static class NcqrsEnvironment
     {
-        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(typeof(NcqrsEnvironment));
 
         static NcqrsEnvironment()
         {

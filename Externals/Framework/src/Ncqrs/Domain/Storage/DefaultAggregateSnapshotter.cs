@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Reflection;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
@@ -8,7 +9,7 @@ namespace Ncqrs.Domain.Storage
 {
     public class DefaultAggregateSnapshotter : IAggregateSnapshotter
     {
-        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(typeof(DefaultAggregateSnapshotter));
 
         private readonly IAggregateRootCreationStrategy _aggregateRootCreator;
 

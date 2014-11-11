@@ -42,11 +42,6 @@ namespace Ncqrs.Commanding.CommandExecution
             _factory = unitOfWorkFactory;
         }
         
-        /// <summary>
-        /// Executes the command.
-        /// </summary>
-        /// <param name="command">The command to execute. This should not be null.</param>
-        /// <exception cref="ArgumentNullException">Occurs when <i>command</i> is null.</exception>
         public void Execute(TCommand command, string origin)
         {
             using (var work = _factory.CreateUnitOfWork(command.CommandIdentifier, origin))

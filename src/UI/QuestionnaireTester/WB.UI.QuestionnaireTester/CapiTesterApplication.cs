@@ -17,6 +17,7 @@ using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using WB.Core.BoundedContexts.Capi;
@@ -232,7 +233,17 @@ namespace WB.UI.QuestionnaireTester
             NcqrsEnvironment.SetDefault(ncqrsCommandService);
             NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>(), ncqrsCommandService);
 
-            NcqrsInit.Init(this.kernel);
+            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
+
+            var snpshotStore = new InMemoryEventStore();
+            // key param for storing im memory
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(snpshotStore);
+
+            var bus1 = new InProcessEventBus(true);
+            NcqrsEnvironment.SetDefault<IEventBus>(bus1);
+            this.kernel.Bind<IEventBus>().ToConstant(bus1);
+
+            NcqrsInit.RegisterEventHandlers(bus1, this.kernel);
 
             NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());
             NcqrsEnvironment.SetDefault<IEventStore>(Kernel.Get<IEventStore>());

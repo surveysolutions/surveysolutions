@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using Ninject.Infrastructure.Language;
 
 namespace Ncqrs.Eventing.Storage
 {
@@ -86,11 +85,9 @@ namespace Ncqrs.Eventing.Storage
 
         private object CreateInstanceOfType(Type targetType)
         {
-            var flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
             var noArgs = new object[0];
 
-            targetType.GetTypeInfo().GetD
-            var defaultCtor = targetType.GetConstructor(flags, null, Type.EmptyTypes, null);
+            var defaultCtor = targetType.GetTypeInfo().DeclaredConstructors.FirstOrDefault(x => !x.GetParameters().Any());
 
             if(defaultCtor == null)
             {

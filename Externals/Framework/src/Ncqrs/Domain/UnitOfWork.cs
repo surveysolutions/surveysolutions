@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -14,7 +11,7 @@ namespace Ncqrs.Domain
 {
     public class UnitOfWork : UnitOfWorkBase
     {
-        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(typeof(UnitOfWork));
 
         /// <summary>
         /// A queue that holds a reference to all instances that have themself registered as a dirty instance during the lifespan of this unit of work instance.
@@ -122,7 +119,8 @@ namespace Ncqrs.Domain
 
         public override string ToString()
         {
-            return string.Format("{0}@{1}", CommandId, Thread.CurrentThread.ManagedThreadId);
+#warning Slava: restore Thread.CurrentThread.ManagedThreadId
+            return string.Format("{0}@{1}", CommandId, "Thread.CurrentThread.ManagedThreadId");
         }
     }
 }

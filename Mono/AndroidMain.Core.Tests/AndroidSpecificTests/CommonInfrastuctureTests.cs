@@ -10,6 +10,8 @@
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Commanding;
+using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.Infrastructure.CommandBus;
 
 namespace AndroidMain.Core.Tests.CommonTests
@@ -56,7 +58,17 @@ namespace AndroidMain.Core.Tests.CommonTests
 
             this._kernel.Load(new FakeCore());
 
-            NcqrsInit.Init(this._kernel);
+            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
+
+            var snpshotStore = new InMemoryEventStore();
+            // key param for storing im memory
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(snpshotStore);
+
+            var bus = new InProcessEventBus(true);
+            NcqrsEnvironment.SetDefault<IEventBus>(bus);
+            this._kernel.Bind<IEventBus>().ToConstant(bus);
+
+            NcqrsInit.RegisterEventHandlers(bus, this._kernel);
         }
 
         [Test]
