@@ -8,7 +8,6 @@ using WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformation;
 
 namespace WB.Core.GenericSubdomains.ErrorReporting.Tests.TabletInformationSenderTests
 {
-    [Ignore("Fix tomorrow")]
     class when_archive_was_sent_successfully_to_supervisor : TabletInformationSenderTestContext
     {
         Establish context = () =>
