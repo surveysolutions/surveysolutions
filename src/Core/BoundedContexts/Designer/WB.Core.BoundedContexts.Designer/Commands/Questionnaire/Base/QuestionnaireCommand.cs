@@ -1,5 +1,4 @@
 ﻿using System;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
 {
@@ -11,7 +10,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             this.QuestionnaireId = questionnaireId;
         }
 
-        [AggregateRootId]
         public Guid QuestionnaireId { get; private set; }
     }
 }

@@ -1,12 +1,9 @@
 ﻿using System;
 using Ncqrs.Commanding;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-using WB.Core.BoundedContexts.Designer.Aggregates;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
 {
     [Serializable]
-    [MapsToAggregateRootConstructor(typeof(Aggregates.Questionnaire))]
     public class CreateQuestionnaireCommand : CommandBase
     {
         public CreateQuestionnaireCommand(Guid questionnaireId, string text, Guid? createdBy = null, bool isPublic = false)

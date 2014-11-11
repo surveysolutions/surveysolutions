@@ -1,11 +1,9 @@
 ﻿using System;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.TextList
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof (Aggregates.Questionnaire), "CloneTextListQuestion")]
     public class CloneTextListQuestionCommand : AbstractCloneQuestionCommand
     {
         public CloneTextListQuestionCommand(Guid questionnaireId, Guid questionId, Guid parentGroupId, Guid sourceQuestionId, int targetIndex,

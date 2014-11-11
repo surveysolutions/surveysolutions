@@ -1,12 +1,9 @@
 ﻿using System;
 using Ncqrs.Commanding;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-using WB.Core.BoundedContexts.Designer.Aggregates;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Account
 {
     [Serializable]
-    [MapsToAggregateRootConstructor(typeof (AccountAR))]
     public class RegisterAccountCommand : CommandBase
     {
         public RegisterAccountCommand(string applicationName, string userName, string email,

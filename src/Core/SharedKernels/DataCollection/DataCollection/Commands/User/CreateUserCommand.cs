@@ -1,14 +1,10 @@
 ﻿using System;
-using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Commanding;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.User
 {
     [Serializable]
-    [MapsToAggregateRootConstructor(typeof(UserAR))]
     public class CreateUserCommand : CommandBase
     {
         public CreateUserCommand()

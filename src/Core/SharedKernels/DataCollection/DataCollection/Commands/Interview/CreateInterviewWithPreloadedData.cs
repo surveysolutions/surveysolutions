@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
-    [MapsToAggregateRootConstructor(typeof(Implementation.Aggregates.Interview))]
     public class CreateInterviewWithPreloadedData : InterviewCommand
     {
         public CreateInterviewWithPreloadedData(Guid interviewId, Guid userId, Guid questionnaireId, long version, PreloadedDataDto preloadedDataDto, DateTime answersTime, Guid supervisorId)

@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.DateTime
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "AddDateTimeQuestion")]
     public class AddDateTimeQuestionCommand : AbstractAddQuestionCommand
     {
         public AddDateTimeQuestionCommand(

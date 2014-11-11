@@ -212,7 +212,6 @@
   <ItemGroup>
     <AndroidResource Include="Resources\Values\Strings.xml" />
   </ItemGroup>
-  
   <ItemGroup>
     <AndroidResource Include="Resources\Values\Colors.xml" />
   </ItemGroup>
@@ -220,10 +219,6 @@
     <ProjectReference Include="..\..\..\..\Mono\AndroidMain.Core\AndroidMain.Core.csproj">
       <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>
       <Name>AndroidMain.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Mono\AndroidNCQRS\AndroidNCQRS.csproj">
-      <Project>{1b9537f5-8650-467a-a280-df6ea396d6c5}</Project>
-      <Name>AndroidNCQRS</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Mono\AndroidNinject\AndroidNinject.csproj">
       <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>
@@ -245,7 +240,7 @@
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
-  </ItemGroup>  
+  </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\answer_progress_indicator.png" />
   </ItemGroup>

@@ -1,13 +1,10 @@
 ﻿using System;
 using Main.Core.Documents;
 using Ncqrs.Commanding;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-using WB.Core.BoundedContexts.Designer.Aggregates;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
 {
     [Serializable]
-    [MapsToAggregateRootConstructor(typeof(Aggregates.Questionnaire))]
     public class CloneQuestionnaireCommand : CommandBase
     {
         public CloneQuestionnaireCommand(Guid publicKey, string title, Guid createdBy, bool isPublic, IQuestionnaireDocument doc)
