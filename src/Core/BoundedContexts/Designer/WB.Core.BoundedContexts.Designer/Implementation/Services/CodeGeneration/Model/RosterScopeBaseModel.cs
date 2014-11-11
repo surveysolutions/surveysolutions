@@ -6,6 +6,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public abstract class RosterScopeBaseModel
     {
+        public bool GenerateEmbeddedExpressionMethods { get; set; }
+
         public RosterScopeBaseModel ParentScope { set; get; }
 
         public string GeneratedRosterScopeName { get; set; }
