@@ -11,6 +11,8 @@ namespace WB.Core.Infrastructure.ReadSide
 
         void RebuildViewsAsync(string[] handlerNames, int skipEvents = 0);
 
+        void RebuildViewForEventSourcesAsync(string[] handlerNames, Guid[] eventSourceIds);
+
         void StopAllViewsRebuilding();
 
         IEnumerable<EventHandlerDescription> GetAllAvailableHandlers();
