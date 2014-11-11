@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Logging;
 
 namespace Ncqrs
@@ -8,7 +7,7 @@ namespace Ncqrs
     {
         public static ILogger GetLogger(Type type)
         {
-            return ServiceLocator.Current.GetInstance<ILogger>();
+            return NcqrsEnvironment.Get<ILogger>();
         }
     }
 }

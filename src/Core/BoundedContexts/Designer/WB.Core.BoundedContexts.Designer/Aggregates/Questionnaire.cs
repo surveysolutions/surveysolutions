@@ -21,7 +21,7 @@ using Ncqrs;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
+using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {

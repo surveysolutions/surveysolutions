@@ -8,7 +8,6 @@ using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
-using WB.Core.GenericSubdomains.Logging;
 
 namespace Ncqrs
 {
@@ -18,17 +17,15 @@ namespace Ncqrs
     /// </remarks></summary>
     public static class NcqrsEnvironment
     {
-        private static readonly ILogger Log = LogManager.GetLogger(typeof(NcqrsEnvironment));
-
         static NcqrsEnvironment()
         {
-            InitDefaults();
+            //InitDefaults();
         }
 
         /// <summary>
         /// Initialize defaults with default components.
         /// </summary>
-        private static void InitDefaults()
+        public static void InitDefaults()
         {
             // Initialize defaults.
             SetDefault<IClock>(new DateTimeBasedClock());
@@ -76,8 +73,6 @@ namespace Ncqrs
         /// </returns>
         public static T Get<T>() where T : class
         {
-            Log.DebugFormat("Requesting instance {0} from the environment.", typeof(T).FullName);
-
             T result = null;
 
             if (_instance == null || !_instance.TryGet(out result))
@@ -138,8 +133,6 @@ namespace Ncqrs
         public static void Configure(IEnvironmentConfiguration source)
         {
             _instance = source;
-
-            Log.InfoFormat("Ncqrs environment configured with {0} configuration source.", source.GetType().FullName);
         }
 
         /// <summary>

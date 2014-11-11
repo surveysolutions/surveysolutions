@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 .Setup(x => x.GetQuestionReferencedByLinkedQuestion(multyOptionAnsweredQuestionId))
                 .Throws(new QuestionnaireException("not a linked"));
 
-            var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
+            var expressionProcessor = new Mock<IExpressionProcessor>();
             
 //            expressionProcessor
 //                .Setup(x => x.EvaluateBooleanExpression(it.IsAny<string>(), it.IsAny<Func<string, object>>()))

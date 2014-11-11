@@ -203,10 +203,6 @@
       <Project>{6B901897-7B53-41FB-8E33-D5AA93218ADC}</Project>
       <Name>AndroidWB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Mono\AndroidWB.Core.SharedKernels.ExpressionProcessor\AndroidWB.Core.SharedKernels.ExpressionProcessor.csproj">
-      <Project>{82cabf37-a3a7-43e3-8e9d-850bdab3a935}</Project>
-      <Name>AndroidWB.Core.SharedKernels.ExpressionProcessor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Mono\Mono.Android.Crasher\Mono.Android.Crasher.csproj">
       <Project>{4ECE2C97-13A0-46D6-95D1-7BB50A48267B}</Project>
       <Name>Mono.Android.Crasher</Name>

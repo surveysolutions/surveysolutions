@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Main.Core.Entities.Composite;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
+using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace Main.Core.Entities.SubEntities
 {
