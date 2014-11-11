@@ -1,8 +1,8 @@
 ﻿using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
-using WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
+using WB.Core.GenericSubdomains.Utils.Implementation.Services;
+using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.Core.BoundedContexts.Capi.Tests
 {
@@ -25,10 +25,6 @@ namespace WB.Core.BoundedContexts.Capi.Tests
             serviceLocatorMock
                 .Setup(locator => locator.GetInstance<ISubstitutionService>())
                 .Returns(substitutionService);
-
-            serviceLocatorMock
-                .Setup(locator => locator.GetInstance<IKeywordsProvider>())
-                .Returns(new KeywordsProvider(substitutionService));
 
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
         }

@@ -21,7 +21,6 @@ using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Snapshots;
 using WB.Core.Infrastructure.Storage.Raven;
-using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.CommandDeserialization;
@@ -79,7 +78,6 @@ namespace WB.UI.Designer.App_Start
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
                 new RavenReadSideInfrastructureModule(ravenSettings, AppDomain.CurrentDomain.BaseDirectory, typeof(DesignerReportQuestionnaireListViewItem).Assembly),
                 new DesignerCommandDeserializationModule(),
-                new ExpressionProcessorModule(),
                 new DesignerBoundedContextModule(),
                 new QuestionnaireVerificationModule(),
                 new MembershipModule(),
@@ -87,6 +85,11 @@ namespace WB.UI.Designer.App_Start
                 new FileInfrastructureModule(),
                 new DesignerRegistry()
                 );
+            NcqrsEnvironment.SetGetter<ILogger>(() =>
+            {
+                return kernel.Get<ILogger>();
+            });
+            NcqrsEnvironment.InitDefaults();
             kernel.Load(ModulesFactory.GetEventStoreModule());
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
@@ -98,6 +101,7 @@ namespace WB.UI.Designer.App_Start
 
         private static void PrepareNcqrsInfrastucture(StandardKernel kernel)
         {
+            
             var ncqrsCommandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
             NcqrsEnvironment.SetDefault(ncqrsCommandService);
             NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>(), ncqrsCommandService);

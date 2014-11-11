@@ -1,4 +1,4 @@
-namespace WB.Core.SharedKernels.ExpressionProcessor.Services
+namespace WB.Core.GenericSubdomains.Utils.Services
 {
     public interface ISubstitutionService
     {

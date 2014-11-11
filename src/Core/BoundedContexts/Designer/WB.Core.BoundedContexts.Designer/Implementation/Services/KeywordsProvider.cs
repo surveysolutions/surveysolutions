@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.GenericSubdomains.Utils.Services;
 
-namespace WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
-    public class KeywordsProvider : IKeywordsProvider
+    internal class KeywordsProvider : IKeywordsProvider
     {
         public KeywordsProvider(ISubstitutionService substitutionService)
         {
-            reservedKeywords = CSharpKeyWords
+            this.reservedKeywords = CSharpKeyWords
                 .Union(StataVariableRestrictions)
                 .Union(SpssReservedKeywords)
                 .Union(new[] { substitutionService.RosterTitleSubstitutionReference })
@@ -45,7 +46,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services
         
         public string[] GetAllReservedKeywords()
         {
-            return reservedKeywords;
+            return this.reservedKeywords;
         }
     }
 }

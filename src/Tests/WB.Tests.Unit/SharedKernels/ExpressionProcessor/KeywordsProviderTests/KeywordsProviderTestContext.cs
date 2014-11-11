@@ -1,5 +1,7 @@
-﻿using WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
+﻿using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.GenericSubdomains.Utils.Implementation.Services;
+using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.Tests.Unit.SharedKernels.ExpressionProcessor.KeywordsProviderTests
 {
@@ -14,8 +16,5 @@ namespace WB.Tests.Unit.SharedKernels.ExpressionProcessor.KeywordsProviderTests
         {
             return new SubstitutionService();
         }
-
-        
-
     }
 }

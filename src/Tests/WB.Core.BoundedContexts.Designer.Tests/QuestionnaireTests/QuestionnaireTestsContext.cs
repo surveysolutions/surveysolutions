@@ -9,8 +9,7 @@ using Moq;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
-using WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
+using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
