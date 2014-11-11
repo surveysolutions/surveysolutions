@@ -159,6 +159,9 @@ namespace WB.Core.BoundedContexts.Designer
                 .Add<DeleteStaticTextCommand>(
                     command => command.QuestionnaireId,
                     (command, aggregate) => aggregate.DeleteStaticText(command.EntityId, command.ResponsibleId))
+                .Add<ImportQuestionnaireCommand>(
+                    command => command.QuestionnaireId,
+                    (command, aggregate) => aggregate.ImportQuestionnaire(command.CreatedBy, command.Source))
                 .Add<MigrateExpressionsToCSharp>(
                     command => command.QuestionnaireId,
                     (command, aggregate) => aggregate.MigrateExpressionsToCSharp())
