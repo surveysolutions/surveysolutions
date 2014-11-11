@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json.Serialization;
 using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Client.Document;
@@ -38,9 +39,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
             var readSideCacheFolderPath = GetFolderPathAndCreateIfAbsent(basePath, ReadSideCacheFolderName);
 
-            var readSideCacheFolderForViewPath = GetFolderPathAndCreateIfAbsent(readSideCacheFolderPath, ViewName);
-
-            this.basePath = readSideCacheFolderForViewPath;
+            this.basePath = GetFolderPathAndCreateIfAbsent(readSideCacheFolderPath, ViewName);
         }
 
         private string GetFolderPathAndCreateIfAbsent(string path, string folderName)
@@ -301,8 +300,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             {
                 return new JsonSerializerSettings
                 {
-                    TypeNameHandling = TypeNameHandling.Objects,
-                    NullValueHandling = NullValueHandling.Ignore
+                    ContractResolver = ravenStore.Conventions.JsonContractResolver
                 };
             }
         }
