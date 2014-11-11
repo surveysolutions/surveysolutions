@@ -9,7 +9,7 @@ namespace WB.Core.Infrastructure.ReadSide
 
         void RebuildAllViewsAsync(int skipEvents = 0);
 
-        void RebuildViewsAsync(string[] handlerNames);
+        void RebuildViewsAsync(string[] handlerNames, int skipEvents = 0);
 
         void StopAllViewsRebuilding();
 
