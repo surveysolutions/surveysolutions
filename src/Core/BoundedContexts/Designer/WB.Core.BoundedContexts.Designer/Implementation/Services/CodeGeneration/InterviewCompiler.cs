@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -25,10 +26,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.portableAssembliesPath = pathToAssemblies;
         }
 
-        public EmitResult GenerateAssemblyAsString(Guid templateId, string classCode, string[] referencedPortableAssemblies,
+        private IEnumerable<SyntaxTree> GetTrees(Dictionary<string, string> generatedClasses)
+        {
+            return generatedClasses.Select(generatedClass => SyntaxFactory.ParseSyntaxTree(generatedClass.Value, path: generatedClass.Key)).ToArray();
+        }
+
+        public EmitResult GenerateAssemblyAsString(Guid templateId, Dictionary<string, string> generatedClasses , string[] referencedPortableAssemblies,
             out string generatedAssembly)
         {
-            var tree = SyntaxFactory.ParseSyntaxTree(classCode);
+            var syntaxTrees = GetTrees(generatedClasses);
 
             var metadataFileReference =
                 this.defaultReferencedPortableAssemblies.Select(
@@ -45,7 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var compilation = CSharpCompilation.Create(
                 String.Format("rules-{0}-{1}.dll", templateId, uniqueAssemblySuffix),
                 options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, checkOverflow: true),
-                syntaxTrees: new[] { tree },
+                syntaxTrees: syntaxTrees,
                 references: metadataFileReference);
 
             EmitResult compileResult;

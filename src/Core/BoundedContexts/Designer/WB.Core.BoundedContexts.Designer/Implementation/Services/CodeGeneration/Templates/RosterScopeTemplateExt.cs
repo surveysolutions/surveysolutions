@@ -7,9 +7,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         protected RosterScopeTemplateModel Model { private set; get; }
 
-        public RosterScopeTemplate(KeyValuePair<string, List<RosterTemplateModel>> rosterScope, QuestionnaireExecutorTemplateModel executorModel)
+        public RosterScopeTemplate(KeyValuePair<string, List<RosterTemplateModel>> rosterScope, QuestionnaireExecutorTemplateModel executorModel, bool generateEmbeddedExpressionMethods)
         {
-            this.Model = new RosterScopeTemplateModel(rosterScope, executorModel);
+            this.Model = new RosterScopeTemplateModel(rosterScope, executorModel, generateEmbeddedExpressionMethods);
         }
     }
 }
