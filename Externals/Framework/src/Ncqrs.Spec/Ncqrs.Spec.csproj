@@ -132,7 +132,6 @@
   <ItemGroup>
     <Compile Include="AggregateRootTestFixture.cs" />
     <Compile Include="AndAttribute.cs" />
-    <Compile Include="AutoMappedCommandTestFixture.cs" />
     <Compile Include="BaseTestFixture.cs" />
     <Compile Include="DomainTestFixture.cs" />
     <Compile Include="CommandTestFixture.cs" />

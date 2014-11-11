@@ -58,6 +58,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\MvvmCross.HotTuna.Plugin.Sqlite.3.0.10\lib\MonoAndroid16\Cirrious.MvvmCross.Plugins.Sqlite.Droid.dll</HintPath>
     </Reference>
+    <Reference Include="FluentAssertions">
+      <HintPath>..\..\packages\FluentAssertions.Xamarin.3.2.1\lib\monoandroid\FluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentAssertions.Core">
+      <HintPath>..\..\packages\FluentAssertions.3.2.1\lib\portable-monotouch+monoandroid\FluentAssertions.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
@@ -86,9 +92,9 @@
     <Compile Include="SqliteTestsContext.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AndroidFluentAssertions\AndroidFluentAssertions.csproj">
-      <Project>{667b05ae-cf79-4a4b-b9f8-dcc0999a729b}</Project>
-      <Name>AndroidFluentAssertions</Name>
+    <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
+      <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
+      <Name>Ncqrs</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidNcqrs.Eventing.Storage.SQLite\AndroidNcqrs.Eventing.Storage.SQLite.csproj">
       <Project>{F9A0B560-A8BF-4914-88FB-7D98DF4242EF}</Project>

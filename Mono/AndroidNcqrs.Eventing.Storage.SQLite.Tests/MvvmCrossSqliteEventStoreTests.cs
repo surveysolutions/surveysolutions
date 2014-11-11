@@ -1,9 +1,6 @@
 ﻿using AndroidNcqrs.Eventing.Storage.SQLite;
 using Cirrious.CrossCore;
-using Cirrious.CrossCore.Plugins;
 using Cirrious.MvvmCross.Plugins.Sqlite;
-using Moq;
-using Ncqrs.Eventing.Sourcing;
 using SQLite;
 
 namespace Ncqrs.Eventing.Storage.SQLite.Tests
@@ -27,13 +24,6 @@ namespace Ncqrs.Eventing.Storage.SQLite.Tests
         {
             Teardown();
     
-        /*    if (MvxServiceProvider.Instance == null)
-            {
-                Mock<IMvxPluginManager> pluginManagerCache = new Mock<IMvxPluginManager>();
-                var provider= new MvxServiceProvider(new MvxSimpleIoCServiceProvider());
-                provider.RegisterServiceInstance<IMvxPluginManager>(pluginManagerCache.Object);
-                
-            }*/
             Mock<ISQLiteConnectionFactory> sqlFactoryMock = new Mock<ISQLiteConnectionFactory>();
             Mvx.RegisterSingleton(sqlFactoryMock.Object);
             ISQLiteConnection sqlConnection = new SQLiteConnection(DBPath);
