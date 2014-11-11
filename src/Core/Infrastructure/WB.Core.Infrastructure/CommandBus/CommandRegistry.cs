@@ -12,17 +12,19 @@ namespace WB.Core.Infrastructure.CommandBus
 
         private class HandlerDescriptor
         {
-            public HandlerDescriptor(Type aggregateType, bool isConstructor, Func<ICommand, Guid> idResolver, Action<ICommand, IAggregateRoot> handler)
+            public HandlerDescriptor(Type aggregateType, bool isInitializer, Func<ICommand, Guid> idResolver, Func<IAggregateRoot> constructor, Action<ICommand, IAggregateRoot> handler)
             {
-                this.IsConstructor = isConstructor;
                 this.AggregateType = aggregateType;
+                this.IsInitializer = isInitializer;
                 this.IdResolver = idResolver;
+                this.Constructor = constructor;
                 this.Handler = handler;
             }
 
             public Type AggregateType { get; private set; }
-            public bool IsConstructor { get; set; }
+            public bool IsInitializer { get; private set; }
             public Func<ICommand, Guid> IdResolver { get; private set; }
+            public Func<IAggregateRoot> Constructor { get; private set; }
             public Action<ICommand, IAggregateRoot> Handler { get; private set; }
         }
 
@@ -31,33 +33,34 @@ namespace WB.Core.Infrastructure.CommandBus
         #region Fluent setup
 
         public class AggregateSetup<TAggregate>
-            where TAggregate : IAggregateRoot
+            where TAggregate : IAggregateRoot, new()
         {
-            public AggregateSetup<TAggregate> InitializedWith<TCommand>(Func<TCommand, Guid> aggregateRootIdResolver, Action<TCommand, TAggregate> commandHandler)
+            public AggregateSetup<TAggregate> InitializesWith<TCommand>(Func<TCommand, Guid> aggregateRootIdResolver, Action<TCommand, TAggregate> commandHandler)
                 where TCommand : ICommand
             {
-                Register(aggregateRootIdResolver, commandHandler, isConstructor: true);
+                Register(aggregateRootIdResolver, commandHandler, isInitializer: true);
                 return this;
             }
 
             public AggregateSetup<TAggregate> Handles<TCommand>(Func<TCommand, Guid> aggregateRootIdResolver, Action<TCommand, TAggregate> commandHandler)
                 where TCommand : ICommand
             {
-                Register(aggregateRootIdResolver, commandHandler, isConstructor: false);
+                Register(aggregateRootIdResolver, commandHandler, isInitializer: false);
                 return this;
             }
         }
 
         public static AggregateSetup<TAggregate> Setup<TAggregate>()
-            where TAggregate : IAggregateRoot
+            where TAggregate : IAggregateRoot, new()
         {
             return new AggregateSetup<TAggregate>();
         }
 
         #endregion
 
-        private static void Register<TCommand, TAggregate>(Func<TCommand, Guid> aggregateRootIdResolver, Action<TCommand, TAggregate> commandHandler, bool isConstructor)
-            where TCommand : ICommand where TAggregate : IAggregateRoot
+        private static void Register<TCommand, TAggregate>(Func<TCommand, Guid> aggregateRootIdResolver, Action<TCommand, TAggregate> commandHandler, bool isInitializer)
+            where TCommand : ICommand
+            where TAggregate : IAggregateRoot, new()
         {
             string commandName = typeof (TCommand).Name;
 
@@ -66,8 +69,9 @@ namespace WB.Core.Infrastructure.CommandBus
 
             Handlers.Add(commandName, new HandlerDescriptor(
                 typeof (TAggregate),
-                isConstructor,
+                isInitializer,
                 command => aggregateRootIdResolver.Invoke((TCommand) command),
+                () => new TAggregate(),
                 (command, aggregate) => commandHandler.Invoke((TCommand) command, (TAggregate) aggregate)));
         }
 
@@ -81,14 +85,19 @@ namespace WB.Core.Infrastructure.CommandBus
             return Handlers[command.GetType().Name].AggregateType;
         }
 
-        internal static bool IsConstructor(ICommand command)
+        internal static bool IsInitializer(ICommand command)
         {
-            return Handlers[command.GetType().Name].IsConstructor;
+            return Handlers[command.GetType().Name].IsInitializer;
         }
 
         internal static Func<ICommand, Guid> GetAggregateRootIdResolver(ICommand command)
         {
             return Handlers[command.GetType().Name].IdResolver;
+        }
+
+        internal static Func<IAggregateRoot> GetAggregateRootConstructor(ICommand command)
+        {
+            return Handlers[command.GetType().Name].Constructor;
         }
 
         internal static Action<ICommand, IAggregateRoot> GetCommandHandler(ICommand command)

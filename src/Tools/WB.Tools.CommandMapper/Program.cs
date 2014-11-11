@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Designer;
 
 namespace WB.Tools.CommandMapper
 {
+    // TODO: TLK, KP-4337: remove whole project
     class Program
     {
         static void Main(string[] args)
@@ -60,7 +61,7 @@ namespace WB.Tools.CommandMapper
 
                 foreach (var descriptor in aggregate)
                 {
-                    Console.Write(@"                .{1}<{0}>(", descriptor.Command, descriptor.IsConstructor ? "InitializedWith" : "Handles");
+                    Console.Write(@"                .{1}<{0}>(", descriptor.Command, descriptor.IsConstructor ? "InitializesWith" : "Handles");
                     Console.Write(@"command => command.{0}, ", descriptor.IdProperty);
                     Console.WriteLine(@"(command, aggregate) => aggregate.{0}({1}))", descriptor.Method, string.Join(", ", descriptor.Parameters.Select(p => "command." + p)));
                 }
