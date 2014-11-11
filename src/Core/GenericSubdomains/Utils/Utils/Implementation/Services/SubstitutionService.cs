@@ -1,11 +1,11 @@
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
+using WB.Core.GenericSubdomains.Utils.Services;
 
-namespace WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services
+namespace WB.Core.GenericSubdomains.Utils.Implementation.Services
 {
-    internal class SubstitutionService : ISubstitutionService
+    public class SubstitutionService : ISubstitutionService
     {
         private const string SubstitutionVariableDelimiter = "%";
         private readonly string AllowedSubstitutionVariableNameRegexp = String.Format(@"(?<={0})(\w+(?={0}))", SubstitutionVariableDelimiter);
@@ -15,7 +15,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services
             if (String.IsNullOrWhiteSpace(source))
                 return new string[0];
 
-            var allOccurenses = Regex.Matches(source, (string)AllowedSubstitutionVariableNameRegexp).OfType<Match>().Select(m => m.Value).Distinct();
+            var allOccurenses = Regex.Matches(source, (string)this.AllowedSubstitutionVariableNameRegexp).OfType<Match>().Select(m => m.Value).Distinct();
             return allOccurenses.ToArray();
         }
 

@@ -1,7 +1,6 @@
-﻿using System;
 using System.Collections.Generic;
 
-namespace WB.Core.SharedKernels.ExpressionProcessor.Services
+namespace WB.Core.BoundedContexts.Designer.Services
 {
     /// <summary>
     /// Expression processor which incapsulates all operations with expressions such as analysis and evaluation.
