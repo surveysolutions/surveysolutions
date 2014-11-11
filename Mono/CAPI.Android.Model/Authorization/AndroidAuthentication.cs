@@ -3,6 +3,7 @@ using System.Linq;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Android.Core.Model.Authorization
@@ -11,10 +12,12 @@ namespace CAPI.Android.Core.Model.Authorization
     {
         #warning ViewFactory should be used here
         private readonly IFilterableReadSideRepositoryReader<LoginDTO> documentStorage;
+        private readonly IPasswordHasher passwordHasher;
 
-        public AndroidAuthentication(IFilterableReadSideRepositoryReader<LoginDTO> documentStorage)
+        public AndroidAuthentication(IFilterableReadSideRepositoryReader<LoginDTO> documentStorage, IPasswordHasher passwordHasher)
         {
             this.documentStorage = documentStorage;
+            this.passwordHasher = passwordHasher;
         }
 
         private UserLight currentUser;
@@ -47,7 +50,7 @@ namespace CAPI.Android.Core.Model.Authorization
                 throw new InvalidOperationException("Please logoff first.");
             try
             {
-                var hash = wasPasswordHashed ? password : SimpleHash.ComputeHash(password);
+                var hash = wasPasswordHashed ? password : passwordHasher.Hash(password);
                 var userNameToLower = userName.ToLower();
 
                 LoginDTO user = this.documentStorage.Filter(u => u.Login == userNameToLower).FirstOrDefault();
