@@ -211,8 +211,15 @@
     <Compile Include="Events\Users\AccountUpdated.cs" />
     <Compile Include="Events\Users\AccountValidated.cs" />
     <Compile Include="Events\Users\UserLoggedIn.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\ExpressionMethodModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\ITemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\RoslynExpressionProcessor.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExpressionMethodTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplateExt.cs" />
     <Compile Include="Implementation\Services\INCalcToCSharpConverter.cs" />
     <Compile Include="Implementation\Services\NCalcToCSharpConverter.cs" />
     <Compile Include="Implementation\Services\QuestionnaireVerifier.cs" />
@@ -289,6 +296,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="QuestionnaireVerificationModule.cs" />
+    <Compile Include="Services\ExpressionLocation.cs" />
     <Compile Include="Services\GenerationResult.cs" />
     <Compile Include="Services\ICodeGenerator.cs" />
     <Compile Include="Services\IExpressionProcessorGenerator.cs" />
@@ -522,11 +530,15 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>RosterScopeTemplate.cs</LastGenOutput>
     </None>
+    <None Include="Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ExpressionMethodTemplate.cs</LastGenOutput>
+      <TransformOnBuild>False</TransformOnBuild>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>

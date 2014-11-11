@@ -867,9 +867,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public Questionnaire(Guid publicKey, string title, Guid? createdBy = null, bool isPublic = false)
             : base(publicKey)
         {
-            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespacesOrTooLong(title);
-
             this.questionnaireEntityFactory = new QuestionnaireEntityFactory();
+
+            this.CreateQuestionnaire(publicKey, title, createdBy, isPublic);
+        }
+
+        public void CreateQuestionnaire(Guid publicKey, string title, Guid? createdBy, bool isPublic)
+        {
+            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespacesOrTooLong(title);
 
             this.ApplyEvent(
                 new NewQuestionnaireCreated
@@ -905,6 +910,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public Questionnaire(Guid publicKey, string title, Guid createdBy, bool isPublic, IQuestionnaireDocument source)
             : base(publicKey)
+        {
+            this.CloneQuestionnaire(title, isPublic, createdBy, publicKey, source);
+        }
+
+        public void CloneQuestionnaire(string title, bool isPublic, Guid createdBy, Guid publicKey, IQuestionnaireDocument source)
         {
             this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespacesOrTooLong(title);
 

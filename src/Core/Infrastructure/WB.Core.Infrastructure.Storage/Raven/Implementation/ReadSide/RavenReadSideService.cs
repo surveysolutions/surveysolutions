@@ -70,9 +70,9 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
             new Task(() => this.RebuildAllViews(skipEvents)).Start();
         }
 
-        public void RebuildViewsAsync(string[] handlerNames)
+        public void RebuildViewsAsync(string[] handlerNames, int skipEvents)
         {
-            new Task(() => this.RebuildViews(handlerNames)).Start();
+            new Task(() => this.RebuildViews(skipEvents, handlerNames)).Start();
         }
 
         public void StopAllViewsRebuilding()
@@ -105,7 +105,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
 
         #endregion // IReadLayerAdministrationService implementation
 
-        private void RebuildViews(string[] handlerNames)
+        private void RebuildViews(int skipEvents, string[] handlerNames)
         {
             if (!areViewsBeingRebuiltNow)
             {
@@ -113,7 +113,8 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
                 {
                     if (!areViewsBeingRebuiltNow)
                     {
-                        this.RebuildViewsImpl(handlerNames);
+                        var handlers = this.GetListOfEventHandlersForRebuild(handlerNames);
+                        this.RebuildViewsImpl(skipEvents, handlers);
                     }
                 }
             }
@@ -127,47 +128,9 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
                 {
                     if (!areViewsBeingRebuiltNow)
                     {
-                        this.RebuildAllViewsImpl(skipEvents);
+                        this.RebuildViewsImpl(skipEvents, eventBus.GetAllRegistredEventHandlers());
                     }
                 }
-            }
-        }
-
-        private void RebuildViewsImpl(string[] handlerNames)
-        {
-            try
-            {
-                areViewsBeingRebuiltNow = true;
-
-                var handlers = this.GetListOfEventHandlersForRebuild(handlerNames);
-
-                this.CleanUpWritersForHandlers(handlers);
-
-                string republishDetails = "<<NO DETAILS>>";
-
-                try
-                {
-                    this.EnableCacheForAllRepositoryWriters();
-
-                    republishDetails = this.RepublishAllEvents(handlers: handlers);
-                }
-                finally
-                {
-                    this.DisableCacheForAllRepositoryWriters();
-
-                    UpdateStatusMessage("Rebuild specific views succeeded." + Environment.NewLine + republishDetails);
-                }
-            }
-            catch (Exception exception)
-            {
-                this.SaveErrorForStatusReport("Unexpected error occurred", exception);
-                UpdateStatusMessage(string.Format("Unexpectedly failed. Last status message:{0}{1}",
-                    Environment.NewLine, statusMessage));
-                throw;
-            }
-            finally
-            {
-                areViewsBeingRebuiltNow = false;
             }
         }
 
@@ -183,7 +146,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
             return result.ToArray();
         }
 
-        private void RebuildAllViewsImpl(int skipEvents)
+        private void RebuildViewsImpl(int skipEvents, IEnumerable<IEventHandler> handlers)
         {
             try
             {
@@ -191,22 +154,22 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
 
                 if (skipEvents == 0)
                 {
-                    this.CleanUpAllWriters();
+                    this.CleanUpWritersForHandlers(handlers);
                 }
 
                 string republishDetails = "<<NO DETAILS>>";
 
                 try
                 {
-                    this.EnableCacheForAllRepositoryWriters();
+                    this.EnableWritersCacheForHandlers(handlers);
 
-                    republishDetails = this.RepublishAllEvents(skipEvents);
+                    republishDetails = this.RepublishAllEvents(skipEvents, handlers: handlers);
                 }
                 finally
                 {
-                    this.DisableCacheForAllRepositoryWriters();
+                    this.DisableWritersCacheForHandlers(handlers);
 
-                    UpdateStatusMessage("Rebuild all views succeeded." + Environment.NewLine + republishDetails);
+                    UpdateStatusMessage("Rebuild specific views succeeded." + Environment.NewLine + republishDetails);
                 }
             }
             catch (Exception exception)
@@ -220,11 +183,6 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
             {
                 areViewsBeingRebuiltNow = false;
             }
-        }
-
-        private void CleanUpAllWriters()
-        {
-            this.CleanUpWritersForHandlers(eventBus.GetAllRegistredEventHandlers());
         }
 
 
@@ -259,16 +217,6 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
             }
 
             UpdateStatusMessage("Cache in repository writers enabled.");
-        }
-
-        private void EnableCacheForAllRepositoryWriters()
-        {
-            this.EnableWritersCacheForHandlers(eventBus.GetAllRegistredEventHandlers());
-        }
-
-        private void DisableCacheForAllRepositoryWriters()
-        {
-            this.DisableWritersCacheForHandlers(eventBus.GetAllRegistredEventHandlers());
         }
 
         private void DisableWritersCacheForHandlers(IEnumerable<IEventHandler> handlers)
@@ -331,10 +279,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
 
                     try
                     {
-                        if (handlers == null)
-                            this.eventBus.Publish(@event);
-                        else
-                            this.eventBus.PublishEventToHandlers(@event, handlers);
+                        this.eventBus.PublishEventToHandlers(@event, handlers);
                     }
                     catch (Exception exception)
                     {

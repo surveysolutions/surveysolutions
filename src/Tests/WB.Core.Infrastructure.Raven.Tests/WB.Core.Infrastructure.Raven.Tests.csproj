@@ -124,6 +124,10 @@
     <Compile Include="RavenReadSideRepositoryReaderTests\when_counting_repository_entities_and_views_are_being_rebuilt.cs" />
     <Compile Include="RavenReadSideRepositoryReaderTests\when_getting_repository_entity_by_id_and_views_are_being_rebuilt.cs" />
     <Compile Include="RavenReadSideRepositoryReaderTests\when_querying_repository_entities_and_views_are_being_rebuilt.cs" />
+    <Compile Include="RavenReadSideServiceTests\RavenReadSideServiceTestContext.cs" />
+    <Compile Include="RavenReadSideServiceTests\when_get_list_of_all_available_handlers.cs" />
+    <Compile Include="RavenReadSideServiceTests\when_rebuild_all_views.cs" />
+    <Compile Include="RavenReadSideServiceTests\when_rebuild_selected_views.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -133,6 +137,14 @@
     <ProjectReference Include="..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
+      <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
+      <Name>WB.Core.GenericSubdomains.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
+      <Project>{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}</Project>
+      <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Storage\WB.Core.Infrastructure.Storage.csproj">
       <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>

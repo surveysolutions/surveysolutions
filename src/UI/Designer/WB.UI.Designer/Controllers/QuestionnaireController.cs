@@ -100,7 +100,7 @@ namespace WB.UI.Designer.Controllers
                     generationResult = new GenerationResult()
                     {
                         Success = false,
-                        Diagnostics = new List<GenerationDiagnostic>() { new GenerationDiagnostic("Common verifier error", "Error", GenerationDiagnosticSeverity.Error) }
+                        Diagnostics = new List<GenerationDiagnostic>() { new GenerationDiagnostic("Common verifier error", "Error", "unknown", GenerationDiagnosticSeverity.Error) }
                     };
                 }
                 //errors shouldn't be displayed as is 
