@@ -2,6 +2,7 @@
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
+    [Serializable]
     public class ExpressionLocation
     {
         public Guid Id { set; get; }
