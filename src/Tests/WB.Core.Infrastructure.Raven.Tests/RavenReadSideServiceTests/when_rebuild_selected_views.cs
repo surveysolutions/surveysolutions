@@ -49,7 +49,7 @@ namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideServiceTests
         Because of = () => WaitRebuildReadsideFinish();
 
         It should_rebuild_all_view = () =>
-            ravenReadSideService.AreViewsBeingRebuiltNow().ShouldEqual(true);
+            ravenReadSideService.AreViewsBeingRebuiltNow().ShouldEqual(false);
 
         It should_call_clean_method_for_registered_writers_once = () =>
             readSideRepositoryCleanerMock.Verify(x => x.Clear(), Times.Once);
@@ -76,17 +76,16 @@ namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideServiceTests
         private static CommittedEvent committedEvent;
         private static string HandlerToRebuild = "handler to rebuild";
 
-        protected static async void WaitRebuildReadsideFinish()
+        protected static void WaitRebuildReadsideFinish()
         {
-            await Task.Run(() =>
-            {
-                ravenReadSideService.RebuildViewsAsync(new [] { HandlerToRebuild }, 0);
+            ravenReadSideService.RebuildViewsAsync(new [] { HandlerToRebuild }, 0);
 
-                while (!ravenReadSideService.AreViewsBeingRebuiltNow())
-                {
-                    Thread.Sleep(1000);
-                }
-            });
+            Thread.Sleep(1000);
+
+            while (ravenReadSideService.AreViewsBeingRebuiltNow())
+            {
+                Thread.Sleep(1000);
+            }
         }
     }
 }
