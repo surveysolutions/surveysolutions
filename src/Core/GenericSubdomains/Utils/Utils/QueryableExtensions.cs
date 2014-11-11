@@ -120,20 +120,17 @@ namespace WB.Core.GenericSubdomains.Utils
             {
                 // support to be sorted on child fields.
                 string[] childProperties = propertyName.Split('.');
-                property = typeof(TEntity).GetProperty(
-                    childProperties[0], BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                property = typeof (TEntity).GetTypeInfo().DeclaredProperties.FirstOrDefault(x => x.Name == childProperties[0]);
                 propertyAccess = Expression.MakeMemberAccess(parameter, property);
                 for (int i = 1; i < childProperties.Length; i++)
                 {
-                    property = property.PropertyType.GetProperty(
-                        childProperties[i], BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                    property = property.PropertyType.GetTypeInfo().DeclaredProperties.FirstOrDefault(x => x.Name == childProperties[i]);
                     propertyAccess = Expression.MakeMemberAccess(propertyAccess, property);
                 }
             }
             else
             {
-                property = typeof(TEntity).GetProperty(
-                    propertyName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                property = typeof (TEntity).GetTypeInfo().DeclaredProperties.FirstOrDefault(x => x.Name == propertyName);
                 propertyAccess = Expression.MakeMemberAccess(parameter, property);
             }
 
