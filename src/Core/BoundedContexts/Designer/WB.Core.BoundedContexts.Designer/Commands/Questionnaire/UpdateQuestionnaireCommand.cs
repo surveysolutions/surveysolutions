@@ -1,12 +1,9 @@
 ﻿using System;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "UpdateQuestionnaire")]
     public class UpdateQuestionnaireCommand : QuestionnaireCommand
     {
         public UpdateQuestionnaireCommand(Guid questionnaireId, string title, bool isPublic, Guid responsibleId)

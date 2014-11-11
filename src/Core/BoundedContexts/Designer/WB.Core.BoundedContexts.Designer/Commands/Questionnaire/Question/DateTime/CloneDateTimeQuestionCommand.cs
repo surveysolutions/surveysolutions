@@ -1,12 +1,10 @@
 ﻿using System;
 using Main.Core.Entities.SubEntities;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.DateTime
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "CloneDateTimeQuestion")]
     public class CloneDateTimeQuestionCommand : AbstractCloneQuestionCommand
     {
         public CloneDateTimeQuestionCommand(

@@ -1,11 +1,8 @@
 ﻿using System;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-using WB.Core.BoundedContexts.Designer.Aggregates;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Account
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof (AccountAR), "Update")]
     public class UpdateAccountCommand : AccountCommandBase
     {
         public UpdateAccountCommand(Guid accountId, string userName, bool isLockedOut, string passwordQuestion,
