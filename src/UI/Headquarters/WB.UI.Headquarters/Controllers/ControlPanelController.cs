@@ -7,6 +7,7 @@ using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
@@ -26,16 +27,18 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IServiceLocator serviceLocator;
         private readonly IIncomePackagesRepository incomePackagesRepository;
         private readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
+        private readonly IPasswordHasher passwordHasher;
 
         public ControlPanelController(IServiceLocator serviceLocator, IIncomePackagesRepository incomePackagesRepository,
             ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
-            IViewFactory<UserViewInputModel, UserView> userViewFactory)
+            IViewFactory<UserViewInputModel, UserView> userViewFactory, IPasswordHasher passwordHasher)
             : base(commandService: commandService, globalInfo: globalInfo, logger: logger)
         {
             this.serviceLocator = serviceLocator;
             this.incomePackagesRepository = incomePackagesRepository;
 
             this.userViewFactory = userViewFactory;
+            this.passwordHasher = passwordHasher;
         }
 
         /// <remarks>
@@ -218,7 +221,7 @@ namespace WB.UI.Headquarters.Controllers
                     {
                         this.CommandService.Execute(new CreateUserCommand(publicKey: Guid.NewGuid(),
                             userName: model.UserName,
-                            password: SimpleHash.ComputeHash(model.Password), email: model.Email,
+                            password: passwordHasher.Hash(model.Password), email: model.Email,
                             isLockedBySupervisor: false,
                             isLockedByHQ: false, roles: new[] {UserRoles.Headquarter}, supervsor: null));
                         return this.RedirectToAction("LogOn", "Account");

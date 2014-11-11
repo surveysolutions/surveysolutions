@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Supervisor.Extensions;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
@@ -25,22 +26,26 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
         private readonly Func<HttpMessageHandler> messageHandler;
         private readonly IHeadquartersSettings headquartersSettings;
         private readonly IHeadquartersUserReader headquartersUserReader;
+        private readonly IPasswordHasher passwordHasher;
 
         public HeadquartersLoginService(ILogger logger, 
             ICommandService commandService,
             Func<HttpMessageHandler> messageHandler,
             IHeadquartersSettings headquartersSettings,
-            IHeadquartersUserReader headquartersUserReader)
+            IHeadquartersUserReader headquartersUserReader,
+            IPasswordHasher passwordHasher)
         {
             if (logger == null) throw new ArgumentNullException("logger");
             if (commandService == null) throw new ArgumentNullException("commandService");
             if (headquartersSettings == null) throw new ArgumentNullException("headquartersSettings");
+            if(passwordHasher == null) throw  new ArgumentNullException("passwordHasher");
 
             this.logger = logger;
             this.executeCommand = command => commandService.Execute(command, origin: Constants.HeadquartersSynchronizationOrigin);
             this.messageHandler = messageHandler;
             this.headquartersSettings = headquartersSettings;
             this.headquartersUserReader = headquartersUserReader;
+            this.passwordHasher = passwordHasher;
         }
 
         public async Task LoginAndCreateAccount(string login, string password)
@@ -99,7 +104,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
 
         private Uri BuildValidationUri(string login, string password)
         {
-            var passwordHash = SimpleHash.ComputeHash(password);
+            var passwordHash = passwordHasher.Hash(password);
             var query = HttpUtility.ParseQueryString(string.Empty);
             query["login"] = login;
             query["passwordHash"] = passwordHash;
