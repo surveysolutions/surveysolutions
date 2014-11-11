@@ -41,9 +41,6 @@
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\..\packages\Newtonsoft.Json.6.0.1\lib\portable-net40+sl5+wp80+win8+monotouch+monoandroid\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System.Threading">
       <HintPath>..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETPortable\v4.6\Profile\Profile32\System.Threading.dll</HintPath>
     </Reference>
@@ -129,17 +126,10 @@
     <Compile Include="Eventing\Storage\IPropertyBagConverter.cs" />
     <Compile Include="Eventing\Storage\IPropertyBagPostConverter.cs" />
     <Compile Include="Eventing\Storage\ISnapshotStore.cs" />
-    <Compile Include="Eventing\Storage\Serialization\EventConverter.cs" />
-    <Compile Include="Eventing\Storage\Serialization\IEventConverter.cs" />
-    <Compile Include="Eventing\Storage\Serialization\JsonEventFormatter.cs" />
     <Compile Include="Eventing\Storage\PropertyBag.cs" />
     <Compile Include="Eventing\Storage\PropertyBagConverter.cs" />
     <Compile Include="Eventing\Storage\PropertyBagConvertionException.cs" />
-    <Compile Include="Eventing\Storage\Serialization\NullEventConverter.cs" />
     <Compile Include="Eventing\Storage\SimpleEventTypeResolver.cs" />
-    <Compile Include="Eventing\Storage\Serialization\IEventTranslator.cs" />
-    <Compile Include="Eventing\Storage\Serialization\IEventFormatter.cs" />
-    <Compile Include="Eventing\Storage\Serialization\StringEventTranslator.cs" />
     <Compile Include="Eventing\Storage\StoredEvent.cs" />
     <Compile Include="IClock.cs" />
     <Compile Include="ICommandListSupplier.cs" />

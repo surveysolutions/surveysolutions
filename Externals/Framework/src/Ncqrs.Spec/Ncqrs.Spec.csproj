@@ -135,7 +135,6 @@
     <Compile Include="AutoMappedCommandTestFixture.cs" />
     <Compile Include="BaseTestFixture.cs" />
     <Compile Include="DomainTestFixture.cs" />
-    <Compile Include="JsonEventSerializationFixture.cs" />
     <Compile Include="CommandTestFixture.cs" />
     <Compile Include="BigBangTestFixture.cs" />
     <Compile Include="EventSerializationFixture.cs" />

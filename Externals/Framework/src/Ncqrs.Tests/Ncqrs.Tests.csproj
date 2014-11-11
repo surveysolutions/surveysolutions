@@ -152,9 +152,6 @@
     <Compile Include="Eventing\Storage\DuplicateCommitExceptionTests.cs" />
     <Compile Include="Eventing\Storage\PropertyBagConverterTests.cs" />
     <Compile Include="Eventing\Storage\PropertyBagTests.cs" />
-    <Compile Include="Eventing\Storage\Serialization\EventConverterTests.cs" />
-    <Compile Include="Eventing\Storage\Serialization\JsonEventFormatterTests.cs" />
-    <Compile Include="Eventing\Storage\Serialization\StringEventTranslatorTests.cs" />
     <Compile Include="Eventing\Storage\SimpleEventTypeResolverTests.cs" />
     <Compile Include="Eventing\UncommittedEventStreamTests.cs" />
     <Compile Include="GuidCombGenerator.cs" />
@@ -191,6 +188,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Eventing\Storage\Serialization\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
