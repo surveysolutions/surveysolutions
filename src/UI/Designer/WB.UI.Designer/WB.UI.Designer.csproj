@@ -220,6 +220,7 @@
   <ItemGroup>
     <Compile Include="Api\Attributes\ApiBasicAuthAttribute.cs" />
     <Compile Include="Api\CommandController.cs" />
+    <Compile Include="Api\ExpressionGenerationController.cs" />
     <Compile Include="Api\NCalcToSharpController.cs" />
     <Compile Include="Api\QuestionnaireController.cs" />
     <Compile Include="App_GlobalResources\TesterApiController.Designer.cs">
@@ -1378,6 +1379,7 @@
     <Content Include="UpdatedDesigner\vendor\bootstrap-select\less\bootstrap-select.less" />
     <Content Include="UpdatedDesigner\vendor\bootstrap-select\less\variables.less" />
     <Content Include="UpdatedDesigner\vendor\bootstrap-select\LICENSE" />
+    <Content Include="Views\ControlPanel\ExpressionGeneration.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -143,6 +143,22 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
 
         public virtual object[] Writers { get { return new object[] { readsideRepositoryWriter }; } }
 
+        public virtual void CleanWritersByEventSource(Guid eventSourceId)
+        {
+            if (this.Writers.Length > 1)
+                throw new InvalidOperationException(
+                    "default implementation on CleanWritersByEventSource can't be performed for FunctionalEvent handler which builds ore then one view. Please provide your own implementation of CleanWritersByEventSource");
+
+            if (this.Writers.Length == 0)
+                throw new InvalidOperationException(
+                  "writers to clean up are missing");
+
+            if (this.Writers[0] != readsideRepositoryWriter)
+                throw new InvalidOperationException("mismatch of view and writer");
+
+            readsideRepositoryWriter.Remove(eventSourceId);
+        }
+
         public virtual object[] Readers
         {
             get { return new object[0]; }

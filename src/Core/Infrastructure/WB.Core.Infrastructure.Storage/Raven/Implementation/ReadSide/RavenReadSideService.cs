@@ -75,6 +75,11 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
             new Task(() => this.RebuildViews(skipEvents, handlerNames)).Start();
         }
 
+        public void RebuildViewForEventSourcesAsync(string[] handlerNames, Guid[] eventSourceIds)
+        {
+            new Task(() => this.RebuildViewsForEventSources(this.GetListOfEventHandlersForRebuild(handlerNames), eventSourceIds)).Start();
+        }
+
         public void StopAllViewsRebuilding()
         {
             if (!areViewsBeingRebuiltNow)
@@ -90,7 +95,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
                     .Select(
                         h =>
                         new EventHandlerDescription(h.Name, h.Readers.Select(CreateViewName).ToArray(),
-                                                    h.Writers.Select(CreateViewName).ToArray()))
+                                                    h.Writers.Select(CreateViewName).ToArray(), h is IAtomicEventHandler))
                     .ToList();
         }
 
@@ -104,6 +109,20 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
         }
 
         #endregion // IReadLayerAdministrationService implementation
+
+        private void RebuildViewsForEventSources(IEventHandler[] handlers, Guid[] eventSourceIds)
+        {
+            if (!areViewsBeingRebuiltNow)
+            {
+                lock (RebuildAllViewsLockObject)
+                {
+                    if (!areViewsBeingRebuiltNow)
+                    {
+                        this.RebuildViewsByEventSourcesImpl(eventSourceIds, handlers);
+                    }
+                }
+            }
+        }
 
         private void RebuildViews(int skipEvents, string[] handlerNames)
         {
@@ -146,6 +165,69 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
             return result.ToArray();
         }
 
+        private void RebuildViewsByEventSourcesImpl(Guid[] eventSourceIds, IEventHandler[] handlers)
+        {
+            try
+            {
+                areViewsBeingRebuiltNow = true;
+
+                var atomicEventHandlers = handlers.OfType<IAtomicEventHandler>().ToArray();
+
+                if (atomicEventHandlers.Length != handlers.Length)
+                    throw new Exception(
+                        "Not all handlers supports partial rebuild. Handlers which are not supporting partial rebuild are {0}" +
+                            string.Join(",", handlers.Where(h => !atomicEventHandlers.Contains(h)).Select(h => h.Name)));
+
+                foreach (var atomicEventHandler in atomicEventHandlers)
+                {
+                    ThrowIfShouldStopViewsRebuilding();
+
+                    var cleanerName = atomicEventHandler.Name;
+
+                    foreach (var eventSourceId in eventSourceIds)
+                    {
+                        UpdateStatusMessage(string.Format("Cleaning views for {0} and event source {1}", cleanerName, eventSourceId));
+                        atomicEventHandler.CleanWritersByEventSource(eventSourceId);
+                        UpdateStatusMessage(string.Format("Views for {0}  and event source {1} was cleaned.", cleanerName, eventSourceId));
+                    }
+                }
+
+                string republishDetails = "<<NO DETAILS>>";
+
+                try
+                {
+
+                    this.EnableWritersCacheForHandlers(handlers);
+
+                    foreach (var eventSourceId in eventSourceIds)
+                    {
+                        var eventsToPublish = eventStore.ReadFrom(eventSourceId, 0, long.MaxValue);
+                        republishDetails += Environment.NewLine +
+                            this.RepublishAllEvents(eventsToPublish,eventsToPublish.Count(),
+                            handlers: handlers);
+                    }
+                }
+                finally
+                {
+                    this.DisableWritersCacheForHandlers(handlers);
+
+                    UpdateStatusMessage("Rebuild specific views succeeded." + Environment.NewLine + republishDetails);
+
+                }
+            }
+            catch (Exception exception)
+            {
+                this.SaveErrorForStatusReport("Unexpected error occurred", exception);
+                UpdateStatusMessage(string.Format("Unexpectedly failed. Last status message:{0}{1}",
+                    Environment.NewLine, statusMessage));
+                throw;
+            }
+            finally
+            {
+                areViewsBeingRebuiltNow = false;
+            }
+        }
+
         private void RebuildViewsImpl(int skipEvents, IEnumerable<IEventHandler> handlers)
         {
             try
@@ -163,7 +245,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
                 {
                     this.EnableWritersCacheForHandlers(handlers);
 
-                    republishDetails = this.RepublishAllEvents(skipEvents, handlers: handlers);
+                    republishDetails = this.RepublishAllEvents(GetEventStream(skipEvents), this.eventStore.CountOfAllEvents(),skipEventsCount: skipEvents, handlers: handlers);
                 }
                 finally
                 {
@@ -184,6 +266,17 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
                 areViewsBeingRebuiltNow = false;
             }
         }
+
+        private IEnumerable<CommittedEvent> GetEventStream(int skipEventsCount)
+        {
+            foreach (CommittedEvent[] eventBulk in this.eventStore.GetAllEvents(skipEvents: skipEventsCount))
+            {
+                foreach (var committedEvent in eventBulk)
+                {
+                    yield return committedEvent;
+                }
+            }
+        } 
 
 
         private void CleanUpWritersForHandlers(IEnumerable<IEventHandler> handlers)
@@ -249,7 +342,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
             UpdateStatusMessage("Cache in repository writers disabled.");
         }
 
-        private string RepublishAllEvents(int skipEventsCount = 0, IEnumerable<IEventHandler> handlers = null)
+        private string RepublishAllEvents(IEnumerable<CommittedEvent> eventStream, int allEventsCount, int skipEventsCount = 0, IEnumerable<IEventHandler> handlers = null)
         {
             int processedEventsCount = skipEventsCount;
             int failedEventsCount = 0;
@@ -260,16 +353,14 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
 
             UpdateStatusMessage("Determining count of events to be republished.");
 
-            int allEventsCount = this.eventStore.CountOfAllEvents();
-
             DateTime republishStarted = DateTime.Now;
             UpdateStatusMessage(
                 "Acquiring first portion of events. "
                 + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
-
-            foreach (CommittedEvent[] eventBulk in this.eventStore.GetAllEvents(skipEvents: skipEventsCount))
-            {
-                foreach (CommittedEvent @event in eventBulk)
+     
+          /*  foreach (CommittedEvent[] eventBulk in this.eventStore.GetAllEvents(skipEvents: skipEventsCount))
+            {*/
+            foreach (CommittedEvent @event in eventStream)
                 {
                     ThrowIfShouldStopViewsRebuilding(GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
 
@@ -300,7 +391,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
                 UpdateStatusMessage(
                     "Acquiring next portion of events. "
                     + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
-            }
+          //  }
 
             this.logger.Info(String.Format("Processed {0} events, failed {1}", processedEventsCount, failedEventsCount));
 

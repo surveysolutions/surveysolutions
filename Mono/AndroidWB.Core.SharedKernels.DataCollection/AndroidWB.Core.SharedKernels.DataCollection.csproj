@@ -174,12 +174,6 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\SynchronizeInterviewFromHeadquarters.cs">
       <Link>Commands\Interview\SynchronizeInterviewFromHeadquarters.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs">
-      <Link>Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs">
-      <Link>Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs</Link>
-    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Questionnaire\DeleteQuestionnaire.cs">
       <Link>Commands\Questionnaire\DeleteQuestionnaire.cs</Link>
     </Compile>

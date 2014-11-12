@@ -13,7 +13,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
         void Handle(IEnumerable<IPublishableEvent> publishableEvents, Guid eventSourceId);
         void RegisterHandlersInOldFashionNcqrsBus(InProcessEventBus oldEventBus);
     }
-    public interface IFunctionalEventHandler<T> : IFunctionalEventHandler, IEventHandler where T : class, IReadSideRepositoryEntity
+    public interface IFunctionalEventHandler<T> : IFunctionalEventHandler, IAtomicEventHandler where T : class, IReadSideRepositoryEntity
     {
         void Handle(IPublishableEvent evt, IReadSideRepositoryWriter<T> storage);
     }

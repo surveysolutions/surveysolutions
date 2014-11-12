@@ -7,14 +7,16 @@ using System.Text;
 using System.Threading.Tasks;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using WB.Core.BoundedContexts.Designer;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Tools.CommandMapper
 {
+    // TODO: TLK, KP-4337: remove whole project
     class Program
     {
         static void Main(string[] args)
         {
-            Type[] types = typeof (DesignerBoundedContextModule)
+            Type[] types = typeof(DataCollectionSharedKernelModule)
                 .Assembly
                 .GetTypes();
 
@@ -47,6 +49,7 @@ namespace WB.Tools.CommandMapper
                     IdProperty = GetAggregateIdProperty(x.Command),
                     Parameters = GetParams(x.Aggregate, x.Method, x.Command)
                 })
+                .ToList()
                 .OrderByDescending(x => x.IsConstructor)
                 .ThenBy(x => x.Method)
                 .GroupBy(x => x.Aggregate)
@@ -60,7 +63,7 @@ namespace WB.Tools.CommandMapper
 
                 foreach (var descriptor in aggregate)
                 {
-                    Console.Write(@"                .{1}<{0}>(", descriptor.Command, descriptor.IsConstructor ? "InitializedWith" : "Handles");
+                    Console.Write(@"                .{1}<{0}>(", descriptor.Command, descriptor.IsConstructor ? "InitializesWith" : "Handles");
                     Console.Write(@"command => command.{0}, ", descriptor.IdProperty);
                     Console.WriteLine(@"(command, aggregate) => aggregate.{0}({1}))", descriptor.Method, string.Join(", ", descriptor.Parameters.Select(p => "command." + p)));
                 }
@@ -105,7 +108,7 @@ namespace WB.Tools.CommandMapper
                     .Select(parameter => parameter.Name)
                     .ToList();
 
-                return parameters.Select(parameter => properties.Single(property => string.Equals(parameter, property, StringComparison.InvariantCultureIgnoreCase)));
+                return parameters.Select(parameter => properties.Single(property => string.Equals(parameter, property, StringComparison.InvariantCultureIgnoreCase))).ToList();
             }
             else
             {
