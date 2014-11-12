@@ -187,8 +187,8 @@
     <Compile Include="Commands\Questionnaire\StaticText\UpdateStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
     <Compile Include="Events\Questionnaire\ExpressionsMigratedToCSharp.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\IDynamicCompiler.cs" />
     <Compile Include="Events\Questionnaire\MultimediaQuestionUpdated.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\DefaultDynamicCompillerSettings.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\InterviewCompiler.cs" />
     <Compile Include="Events\Users\AccountConfirmed.cs" />
     <Compile Include="Events\Users\AccountDeleted.cs" />
@@ -284,6 +284,8 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="QuestionnaireVerificationModule.cs" />
+    <Compile Include="Services\CodeGeneration\IDynamicCompiler.cs" />
+    <Compile Include="Services\CodeGeneration\IDynamicCompilerSettings.cs" />
     <Compile Include="Services\GenerationResult.cs" />
     <Compile Include="Services\ICodeGenerator.cs" />
     <Compile Include="Services\IExpressionProcessorGenerator.cs" />

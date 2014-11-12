@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                 }
                 );
 
-            verifier = CreateQuestionnaireVerifier(expressionProcessorGenerator: new QuestionnireExpressionProcessorGenerator());
+            verifier = CreateQuestionnaireVerifier(expressionProcessorGenerator: CreateExpressionProcessorGenerator());
         };
 
         Because of = () =>
