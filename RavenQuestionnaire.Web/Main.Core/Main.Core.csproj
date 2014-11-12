@@ -131,7 +131,11 @@
     <Compile Include="Commands\File\UploadFileCommand.cs" />
     <Compile Include="Domain\FileAR.cs" />
     <Compile Include="Entities\QuestionData.cs" />
+    <Compile Include="Commands\Synchronization\UpdateRegisterDeviceCommand.cs" />
+    <Compile Include="Commands\Synchronization\RegisterNewDeviceCapiCommand.cs" />
+    <Compile Include="Commands\Synchronization\RegisterNewSupervisorCommand.cs" />
     <Compile Include="Commands\Sync\CreateClientDeviceCommand.cs" />
+    <Compile Include="Commands\Sync\CreateSyncActivityCommand.cs" />
     <Compile Include="Conventions\RegisterFirstInstanceOfInterface.cs" />
     <Compile Include="CoreRegistry.cs" />
     <Compile Include="Documents\ClientDeviceDocument.cs" />
@@ -146,6 +150,8 @@
     <Compile Include="Documents\SynchronizationType.cs" />
     <Compile Include="Documents\UserDocument.cs" />
     <Compile Include="Domain\ClientDeviceAR.cs" />
+    <Compile Include="Domain\DeviceAR.cs" />
+    <Compile Include="Domain\SyncActivityAR.cs" />
     <Compile Include="Entities\Composite\CompositeException.cs" />
     <Compile Include="Entities\Composite\IComposite.cs" />
     <Compile Include="Entities\Observers\ITriggerable.cs" />
@@ -311,9 +317,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Commands\Synchronization\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

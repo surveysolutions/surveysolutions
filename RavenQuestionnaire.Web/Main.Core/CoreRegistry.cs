@@ -2,10 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Main.Core.Commands.File;
-using Main.Core.Commands.Sync;
 using Main.Core.Conventions;
-using Main.Core.Domain;
 using Main.Core.View;
 using Main.DenormalizerStorage;
 using Ncqrs;
@@ -43,14 +40,6 @@ namespace Main.Core
             RegisterDenormalizers();
             RegisterEventHandlers();
             RegisterAdditionalElements();
-
-            CommandRegistry
-                .Setup<ClientDeviceAR>()
-                .InitializesWith<CreateClientDeviceCommand>(command => command.Id, (command, aggregate) => aggregate.CreateClientDevice(command.Id, command.DeviceId, command.ClientInstanceKey, command.SupervisorKey));
-
-            CommandRegistry
-                .Setup<FileAR>()
-                .InitializesWith<UploadFileCommand>(command => command.PublicKey, (command, aggregate) => aggregate.UploadFile(command.Description, command.OriginalFile, command.PublicKey, command.Title));
         }
 
         protected virtual IEnumerable<Type> RegisteredCommandList()

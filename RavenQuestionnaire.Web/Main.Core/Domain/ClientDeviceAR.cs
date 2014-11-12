@@ -20,19 +20,13 @@ namespace Main.Core.Domain
         public ClientDeviceAR(Guid Id, string deviceId, Guid clientInstanceKey, Guid SupervisorKey)
             : base(Id)
         {
-            this.CreateClientDevice(Id, deviceId, clientInstanceKey, SupervisorKey);
-        }
-
-        public void CreateClientDevice(Guid id, string deviceId, Guid clientInstanceKey, Guid supervisorKey)
-        {
             base.ApplyEvent(new NewClientDeviceCreated()
-            {
-                Id = id,
+                {Id = Id, 
                 CreationDate = clock.UtcNow(),
                 DeviceId = deviceId,
                 ClientInstanceKey = clientInstanceKey,
-                SupervisorKey = supervisorKey
-            });
+                SupervisorKey = SupervisorKey
+                });
         }
 
         protected void OnNewClientDeviceCreated(NewClientDeviceCreated evt)
@@ -57,5 +51,6 @@ namespace Main.Core.Domain
         {
             lastSyncItemIdentifier = evt.LastSyncItemSequence;
         }
+
     }
 }
