@@ -60,6 +60,8 @@
     <Compile Include="Commands\Interview\AnswerTextListQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerQRBarcodeQuestionCommand.cs" />
     <Compile Include="Commands\Interview\CancelInterviewByHqSynchronizationCommand.cs" />
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Commands\Interview\CreateInterviewCreatedOnClientCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewOnClientCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewWithPreloadedData.cs" />
@@ -70,7 +72,9 @@
     <Compile Include="Commands\Interview\MarkInterviewAsSentToHeadquarters.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\Interview\RejectInterviewFromHeadquartersCommand.cs" />
+    <Compile Include="Commands\Interview\RejectInterviewFromHeadquartersCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Commands\Interview\SynchronizeInterviewFromHeadquarters.cs" />
     <Compile Include="Commands\Questionnaire\DeleteQuestionnaire.cs" />
     <Compile Include="Commands\Questionnaire\ImportFromDesignerForTester.cs" />
