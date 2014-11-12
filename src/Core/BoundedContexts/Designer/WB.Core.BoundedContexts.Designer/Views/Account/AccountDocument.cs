@@ -143,20 +143,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         }
 
         /// <summary>
-        /// Gets the roles.
+        /// Gets or sets the simple roles.
         /// </summary>
-        public IEnumerable<string> Roles
+        public List<SimpleRoleEnum> SimpleRoles
         {
             get
             {
-                return this.SimpleRoles.Select(x => Enum.GetName(typeof(SimpleRoleEnum), x));
+                if (simpleRoles == null)
+                    simpleRoles = new List<SimpleRoleEnum>();
+                return simpleRoles;
             }
+            set { simpleRoles = value; }
         }
 
-        /// <summary>
-        /// Gets or sets the simple roles.
-        /// </summary>
-        public List<SimpleRoleEnum> SimpleRoles { get; set; }
+        private List<SimpleRoleEnum> simpleRoles;
 
         /// <summary>
         /// Gets or sets the user name.
@@ -167,20 +167,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
 
         #region Public Methods and Operators
 
-        /// <summary>
-        /// The is in role.
-        /// </summary>
-        /// <param name="roleName">
-        /// The role name.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
         public bool IsInRole(string roleName)
         {
-            return this.Roles.Contains(roleName);
+            return this.GetRoles().Contains(roleName);
         }
 
+        public IEnumerable<string> GetRoles()
+        {
+            return this.SimpleRoles.Select(x => Enum.GetName(typeof(SimpleRoleEnum), x));
+        }
         #endregion
     }
 }
