@@ -115,7 +115,7 @@
             var user = this.Repository.GetUser(this.ApplicationName, username);
             if (user == null)
                 return new string[0];
-            return user.Roles.ToArray();
+            return user.GetRoles().ToArray();
         }
 
         /// <summary>
