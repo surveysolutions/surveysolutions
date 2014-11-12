@@ -8,7 +8,11 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
@@ -451,7 +455,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 
         public static IInterviewExpressionState GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
         {
-            var expressionProcessorGenerator = new QuestionnireExpressionProcessorGenerator();
+            var expressionProcessorGenerator = CreateExpressionProcessorGenerator();
 
             string resultAssembly;
             var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, out resultAssembly);
@@ -480,6 +484,20 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             }
 
             throw new Exception("Error on IInterviewExpressionState generation");
+        }
+
+        public static IExpressionProcessorGenerator CreateExpressionProcessorGenerator(ICodeGenerator codeGenerator = null, IDynamicCompiler dynamicCompiler = null)
+        {
+            return
+                new QuestionnireExpressionProcessorGenerator(
+                    new RoslynCompiler(
+                        new DefaultDynamicCompillerSettings()
+                        {
+                            PortableAssembliesPath =
+                                "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.0\\Profile\\Profile24",
+                            DefaultReferencedPortableAssemblies = new[] { "System.dll", "System.Core.dll", "mscorlib.dll" }
+                        }, new FileSystemIOAccessor()),
+                    new CodeGenerator());
         }
     }
 }
