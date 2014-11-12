@@ -122,7 +122,9 @@ namespace WB.UI.Shared.Android.Controls
         {
             if (disposing)
             {
+#if DEBUG
                 Console.WriteLine("disposing roster PartOfRosterView");
+#endif
                 this.DisposeChildrenAndCleanUp();
             }
 
