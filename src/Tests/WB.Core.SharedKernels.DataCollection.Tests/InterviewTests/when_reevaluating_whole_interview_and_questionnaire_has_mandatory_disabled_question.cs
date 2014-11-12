@@ -8,7 +8,6 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
@@ -29,7 +28,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                                                        /* _.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new Guid[] { conditionallyDisabledMandatoryQuestionId }
                                                         &&*/ _.GetAllMandatoryQuestions() == new Guid[] { conditionallyDisabledMandatoryQuestionId });
 
-            var expressionProcessor = new Mock<IExpressionProcessor>();
+            //var expressionProcessor = new Mock<IExpressionProcessor>();
 
             //setup expression processor throw exception
 //            expressionProcessor.Setup(x => x.EvaluateBooleanExpression(Moq.It.IsAny<string>(), Moq.It.IsAny<Func<string, object>>()))
@@ -42,9 +41,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
                 .Returns(questionnaireRepository);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IExpressionProcessor>())
-                .Returns(expressionProcessor.Object);
+            //Mock.Get(ServiceLocator.Current)
+            //    .Setup(locator => locator.GetInstance<IExpressionProcessor>())
+            //    .Returns(expressionProcessor.Object);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
 

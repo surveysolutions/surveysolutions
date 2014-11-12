@@ -6,6 +6,7 @@ using Moq;
 using Ncqrs;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.GenericSubdomains.Logging;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.CreateQuestionnaireCommandTests
@@ -20,19 +21,24 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CreateQuestionnaireCommandTests
             createdBy = Guid.NewGuid();
             eventContext = new EventContext();
             isPublic = true;
-            currentDate = new DateTime(2010, 2, 3);
-
-            NcqrsEnvironment.SetDefault(Mock.Of<IClock>(x => x.UtcNow() == currentDate));
         };
 
         Because of = () => questionnaire = new Questionnaire(questionnaireId, questionnaireTitle, createdBy, isPublic);
 
         It should_raise_questionnaire_created_event = () => 
-            eventContext.ShouldContainEvent<NewQuestionnaireCreated>(e => e.PublicKey == questionnaireId && 
-                e.Title == questionnaireTitle &&
-                e.IsPublic == isPublic &&
-                e.CreatedBy == createdBy &&
-                e.CreationDate == currentDate);
+            eventContext.ShouldContainEvent<NewQuestionnaireCreated>();
+
+        It should_raise_questionnaire_created_event_with_given_id = () =>
+            eventContext.ShouldContainEvent<NewQuestionnaireCreated>(e => e.PublicKey == questionnaireId);
+
+        It should_raise_questionnaire_created_event_with_given_Title = () =>
+            eventContext.ShouldContainEvent<NewQuestionnaireCreated>(e => e.Title == questionnaireTitle);
+
+        It should_raise_questionnaire_created_event_with_given_IsPublic_flag = () =>
+            eventContext.ShouldContainEvent<NewQuestionnaireCreated>(e => e.IsPublic == isPublic);
+
+        It should_raise_questionnaire_created_event_with_given_CreatedBy = () =>
+            eventContext.ShouldContainEvent<NewQuestionnaireCreated>(e => e.CreatedBy == createdBy);
 
         It should_raise_new_group_added_event = () => eventContext.ShouldContainEvent<NewGroupAdded>(e => e.ParentGroupPublicKey == null && e.GroupText == "New Chapter");
 
@@ -43,7 +49,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CreateQuestionnaireCommandTests
         static EventContext eventContext;
         static Guid createdBy;
         static bool isPublic;
-        private static DateTime currentDate;
     }
 }
 

@@ -1,6 +1,8 @@
 ﻿using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using Ncqrs;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils.Implementation.Services;
 using WB.Core.GenericSubdomains.Utils.Services;
 
@@ -27,6 +29,10 @@ namespace WB.Core.BoundedContexts.Capi.Tests
                 .Returns(substitutionService);
 
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+
+            NcqrsEnvironment.SetGetter<ILogger>(Mock.Of<ILogger>);
+            NcqrsEnvironment.SetGetter<IUniqueIdentifierGenerator>(Mock.Of<IUniqueIdentifierGenerator>);
+            NcqrsEnvironment.SetGetter<IClock>(Mock.Of<IClock>);
         }
 
         public void OnAssemblyComplete() {}

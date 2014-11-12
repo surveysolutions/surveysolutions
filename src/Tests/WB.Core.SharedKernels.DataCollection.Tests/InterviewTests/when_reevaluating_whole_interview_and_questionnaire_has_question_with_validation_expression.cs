@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                                                         && _.GetQuestionType(conditionallyInvalidQuestionId)==QuestionType.Text
                                                         && _.IsCustomValidationDefined(conditionallyInvalidQuestionId) == true);
 
-            var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
+            //var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
 
             //setup expression processor throw exception
 //            expressionProcessor.Setup(x => x.EvaluateBooleanExpression(Moq.It.IsAny<string>(), Moq.It.IsAny<Func<string, object>>()))
@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                                                                                                 questionaire);
 
             SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(questionnaireRepository);
-            SetupInstanceToMockedServiceLocator<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>(expressionProcessor.Object);
+            //SetupInstanceToMockedServiceLocator<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>(expressionProcessor.Object);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
             interview.AnswerTextQuestion(userId, conditionallyInvalidQuestionId, new decimal[0], DateTime.Now, "answer");
