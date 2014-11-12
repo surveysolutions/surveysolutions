@@ -3,16 +3,16 @@ using System.IO;
 using System.Reflection;
 using Machine.Specifications;
 using Microsoft.CodeAnalysis.Emit;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.InterviewCompilerTests
 {
-    internal class when_loading_assembly_from_file
+    internal class when_loading_assembly_from_file : InterviewCompilerTestsContext
     {
         private Establish context = () =>
         {
-            compiler = new RoslynCompiler();
+            compiler = CreateRoslynCompiler();
             emitResult = compiler.GenerateAssemblyAsString(id, testClass, new string[] { }, out resultAssembly);
 
             filePath = Path.GetTempFileName();
