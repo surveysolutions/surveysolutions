@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Main.Core;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.SharedKernels.DataCollection;
@@ -16,7 +17,7 @@ namespace WB.Tools.CommandMapper
     {
         static void Main(string[] args)
         {
-            Type[] types = typeof(DataCollectionSharedKernelModule)
+            Type[] types = typeof(CoreRegistry)
                 .Assembly
                 .GetTypes();
 

@@ -13,11 +13,19 @@ namespace Main.Core.Domain
         public FileAR(Guid publicKey, string title, string description, string originalFile)
             : base(publicKey)
         {
+            this.UploadFile(description, originalFile, publicKey, title);
+        }
+
+        public void UploadFile(string description, string originalFile, Guid publicKey, string title)
+        {
             this.ApplyEvent(
                 new FileUploaded
-                    {
-                       PublicKey = publicKey, Title = title, Description = description, OriginalFile = originalFile 
-                    });
+                {
+                    PublicKey = publicKey,
+                    Title = title,
+                    Description = description,
+                    OriginalFile = originalFile
+                });
         }
 
         protected void OnFileUploaded(FileUploaded e)
