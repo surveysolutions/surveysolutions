@@ -1,34 +1,26 @@
-﻿using AndroidNcqrs.Eventing.Storage.SQLite;
+﻿using System;
+using System.IO;
+using System.Linq;
 using Cirrious.CrossCore;
-using Cirrious.MvvmCross.Plugins.Sqlite;
-using SQLite;
+using FluentAssertions;
+using Ncqrs.Eventing;
+using Ncqrs.Eventing.Storage.SQLite.Tests.Fakes;
+using NUnit.Framework;
 
-namespace Ncqrs.Eventing.Storage.SQLite.Tests
+namespace AndroidNcqrs.Eventing.Storage.SQLite.Tests
 {
-	using System;
-	using System.IO;
-	using System.Linq;
-	using Fakes;
-	using FluentAssertions;
-	using NUnit.Framework;
-
-   
-
     [TestFixture]
     public class MvvmCrossSqliteEventStoreTests
 	{
-
-
         [SetUp]
         public void Setup()
         {
-            Teardown();
+            this.Teardown();
     
-            Mock<ISQLiteConnectionFactory> sqlFactoryMock = new Mock<ISQLiteConnectionFactory>();
-            Mvx.RegisterSingleton(sqlFactoryMock.Object);
-            ISQLiteConnection sqlConnection = new SQLiteConnection(DBPath);
-            sqlFactoryMock.Setup(x => x.Create(It.IsAny<string>())).Returns(sqlConnection);
-            _store = new MvvmCrossSqliteEventStore(TestDataBaseName);
+            var sqlFactoryMock = new SqlFactoryMock(DBPath);
+
+            Mvx.RegisterSingleton(sqlFactoryMock);
+            this._store = new MvvmCrossSqliteEventStore(TestDataBaseName);
 
         }
 
@@ -46,9 +38,9 @@ namespace Ncqrs.Eventing.Storage.SQLite.Tests
         [TearDown]
         public void Teardown()
         {
-            if (File.Exists(DBPath))
+            if (File.Exists(this.DBPath))
                 
-                File.Delete(DBPath);
+                File.Delete(this.DBPath);
        //     SqliteTestsContext.Context.DeleteDatabase(TestDataBaseName);
         }
 
@@ -59,9 +51,9 @@ namespace Ncqrs.Eventing.Storage.SQLite.Tests
 		{
 			var id = Guid.NewGuid();
 
-			var stream = GetUncommiteEventStream(id);
+			var stream = this.GetUncommiteEventStream(id);
 
-			_store.Store(stream);
+			this._store.Store(stream);
 		}
 
 		private UncommittedEventStream GetUncommiteEventStream(Guid id)
@@ -86,11 +78,11 @@ namespace Ncqrs.Eventing.Storage.SQLite.Tests
 		{
 			var id = Guid.NewGuid();
 
-			var stream = GetUncommiteEventStream(id);
+			var stream = this.GetUncommiteEventStream(id);
 
-			_store.Store(stream);
+			this._store.Store(stream);
 
-			var result = _store.ReadFrom(id, long.MinValue, long.MaxValue);
+			var result = this._store.ReadFrom(id, long.MinValue, long.MaxValue);
 
 			result.Count().Should().Be(stream.Count());
 
@@ -125,9 +117,9 @@ namespace Ncqrs.Eventing.Storage.SQLite.Tests
 				new UncommittedEvent(Guid.NewGuid(), id, 1, 0, utcNow, new CustomerCreatedEvent("Foo", 35),
 				                     new Version(1, 0)));
 
-			_store.Store(stream);
+			this._store.Store(stream);
 
-			var commitedStream = _store.ReadFrom(id, long.MinValue, long.MaxValue);
+			var commitedStream = this._store.ReadFrom(id, long.MinValue, long.MaxValue);
 
 			commitedStream.Count().Should().BeGreaterThan(0);
 
@@ -142,11 +134,11 @@ namespace Ncqrs.Eventing.Storage.SQLite.Tests
 		{
 			var id = Guid.NewGuid();
 
-		    var stream = GetUncommiteEventStream(id);
+		    var stream = this.GetUncommiteEventStream(id);
 
-			_store.Store(stream);
+			this._store.Store(stream);
 
-			var commitedEvents = _store.ReadFrom(id, 2, 3);
+			var commitedEvents = this._store.ReadFrom(id, 2, 3);
 
 			commitedEvents.Count().Should().Be(1);
 		}
@@ -155,34 +147,34 @@ namespace Ncqrs.Eventing.Storage.SQLite.Tests
 		public void store_should_return_all_events_from_all_sources()
 		{
 			var firstId = Guid.NewGuid();
-			var firstStream = GetUncommiteEventStream(firstId);
-			_store.Store(firstStream);
+			var firstStream = this.GetUncommiteEventStream(firstId);
+			this._store.Store(firstStream);
 
 			var secondId = Guid.NewGuid();
-			var secondStream = GetUncommiteEventStream(secondId);
-			_store.Store(secondStream);
+			var secondStream = this.GetUncommiteEventStream(secondId);
+			this._store.Store(secondStream);
 
 			var thirdId = Guid.NewGuid();
-			var thirdStream = GetUncommiteEventStream(thirdId);
-			_store.Store(thirdStream);
+			var thirdStream = this.GetUncommiteEventStream(thirdId);
+			this._store.Store(thirdStream);
 		}
 
 		[Test]
 		public void store_should_retriev_events_by_source_and_version()
 		{
 			var firstId = Guid.NewGuid();
-			var firstStream = GetUncommiteEventStream(firstId);
-			_store.Store(firstStream);
+			var firstStream = this.GetUncommiteEventStream(firstId);
+			this._store.Store(firstStream);
 
 			var secondId = Guid.NewGuid();
-			var secondStream = GetUncommiteEventStream(secondId);
-			_store.Store(secondStream);
+			var secondStream = this.GetUncommiteEventStream(secondId);
+			this._store.Store(secondStream);
 
 			var thirdId = Guid.NewGuid();
-			var thirdStream = GetUncommiteEventStream(thirdId);
-			_store.Store(thirdStream);
+			var thirdStream = this.GetUncommiteEventStream(thirdId);
+			this._store.Store(thirdStream);
 
-			var events = _store.ReadFrom(secondId, minVersion: 0, maxVersion: 1);
+			var events = this._store.ReadFrom(secondId, minVersion: 0, maxVersion: 1);
 
 			Assert.That(events.Count(), Is.EqualTo(2));
 

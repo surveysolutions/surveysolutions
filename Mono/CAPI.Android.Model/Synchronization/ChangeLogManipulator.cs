@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using Main.Core.Events;
-using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
 using WB.Core.GenericSubdomains.Utils;

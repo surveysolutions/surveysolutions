@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
             commandServiceMock.Verify(x => x.Execute(it.IsAny<SynchronizeInterviewFromHeadquarters>(), Constants.HeadquartersSynchronizationOrigin), Times.Never);
 
         It should_unassign_interview = () => 
-            commandServiceMock.Verify(x => x.Execute(it.IsAny<CancelInterviewByHQSynchronizationCommand>(), Constants.HeadquartersSynchronizationOrigin), Times.Once);
+            commandServiceMock.Verify(x => x.Execute(it.IsAny<CancelInterviewByHqSynchronizationCommand>(), Constants.HeadquartersSynchronizationOrigin), Times.Once);
         
         private static InterviewsSynchronizer synchronizer;
         private static Guid supervisorId = Guid.Parse("11111111111111111111111111111111");

@@ -114,6 +114,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\Base\QuestionCommand.cs">
       <Link>Commands\Interview\Base\QuestionCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\CancelInterviewByHqSynchronizationCommand.cs">
+      <Link>Commands\Interview\CancelInterviewByHqSynchronizationCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\CommentAnswerCommand.cs">
       <Link>Commands\Interview\CommentAnswerCommand.cs</Link>
     </Compile>
@@ -155,6 +158,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\RejectInterviewCommand.cs">
       <Link>Commands\Interview\RejectInterviewCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\RejectInterviewFromHeadquartersCommand.cs">
+      <Link>Commands\Interview\RejectInterviewFromHeadquartersCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\RemoveFlagFromAnswerCommand.cs">
       <Link>Commands\Interview\RemoveFlagFromAnswerCommand.cs</Link>
@@ -659,7 +665,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" />
+      <UserProperties ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

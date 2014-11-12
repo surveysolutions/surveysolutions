@@ -3,9 +3,9 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
-    public class CancelInterviewByHQSynchronizationCommand : InterviewCommand
+    public class CancelInterviewByHqSynchronizationCommand : InterviewCommand
     {
-        public CancelInterviewByHQSynchronizationCommand(Guid interviewId, Guid userId)
+        public CancelInterviewByHqSynchronizationCommand(Guid interviewId, Guid userId)
             : base(interviewId, userId) {}
     }
 }

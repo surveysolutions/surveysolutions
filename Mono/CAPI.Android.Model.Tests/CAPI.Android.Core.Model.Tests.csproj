@@ -76,9 +76,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChangeLogManipulatorTests.cs" />
-    <Compile Include="FilterableDenormalizerStorageStub.cs" />
-    <Compile Include="InterviewMetaInfo\InterviewMetaInfoFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -123,6 +120,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="InterviewMetaInfo\" />
     <Folder Include="Resources\Drawable\" />
     <Folder Include="Resources\Layout\" />
     <Folder Include="Resources\Values\" />

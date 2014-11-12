@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             //should be resolve outside
             this.portableAssembliesPath =
-                "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.0\\Profile\\Profile24";
+                "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.5\\Profile\\Profile111";
         }
 
         public RoslynCompiler(string pathToAssemblies)
