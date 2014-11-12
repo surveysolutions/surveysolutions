@@ -3,9 +3,11 @@ using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using Ncqrs;
 using Ncqrs.Spec;
 using NUnit.Framework;
 using Newtonsoft.Json;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -19,6 +21,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
         public void SetUp()
         {
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            NcqrsEnvironment.SetGetter<ILogger>(Mock.Of<ILogger>);
+            NcqrsEnvironment.SetGetter<IUniqueIdentifierGenerator>(Mock.Of<IUniqueIdentifierGenerator>);
+            NcqrsEnvironment.SetGetter<IClock>(Mock.Of<IClock>);;
         }
 
         [Test]

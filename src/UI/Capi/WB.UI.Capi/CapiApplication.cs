@@ -51,7 +51,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.UI.Capi.Implementations.Navigation;
 using WB.UI.Capi.Injections;
 using WB.UI.Shared.Android.Controls.ScreenItems;
@@ -269,8 +268,7 @@ namespace WB.UI.Capi
                 new AndroidLoggingModule(),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath, 
                     syncDirectoryName: SynchronizationFolder, dataDirectoryName: InterviewFilesFolder, 
-                    questionnaireAssembliesFolder : QuestionnaireAssembliesFolder),
-                new ExpressionProcessorModule());
+                    questionnaireAssembliesFolder : QuestionnaireAssembliesFolder));
 
             CrashManager.Initialize(this);
             CrashManager.AttachSender(() => new FileReportSender("Interviewer", this.kernel.Get<IInfoFileSupplierRegistry>()));
@@ -292,8 +290,6 @@ namespace WB.UI.Capi
             var bus1 = new InProcessEventBus(true);
             NcqrsEnvironment.SetDefault<IEventBus>(bus1);
             this.kernel.Bind<IEventBus>().ToConstant(bus1);
-
-            NcqrsInit.RegisterEventHandlers(bus1, this.kernel);
 
             NcqrsEnvironment.SetDefault(Kernel.Get<ISnapshotStore>());
             NcqrsEnvironment.SetDefault(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);

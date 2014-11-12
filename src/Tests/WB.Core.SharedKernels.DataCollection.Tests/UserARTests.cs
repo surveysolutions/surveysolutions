@@ -5,8 +5,10 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.User;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using Ncqrs;
 using Ncqrs.Spec;
 using NUnit.Framework;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.User;
 
@@ -21,6 +23,11 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
         public void Init()
         {
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+
+            NcqrsEnvironment.SetGetter<ILogger>(Mock.Of<ILogger>);
+            NcqrsEnvironment.SetGetter<IUniqueIdentifierGenerator>(Mock.Of<IUniqueIdentifierGenerator>);
+            NcqrsEnvironment.SetGetter<IClock>(Mock.Of<IClock>);
+
             this.eventContext = new EventContext();
         }
 
