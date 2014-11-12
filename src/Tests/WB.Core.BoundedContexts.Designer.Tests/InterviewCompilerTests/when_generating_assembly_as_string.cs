@@ -3,6 +3,8 @@ using System.Linq;
 using Machine.Specifications;
 using Microsoft.CodeAnalysis.Emit;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.InterviewCompilerTests
 {
@@ -11,7 +13,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.InterviewCompilerTests
 
         Establish context = () =>
         {
-            compiler = new RoslynCompiler();
+            compiler = new RoslynCompiler(
+                new DefaultDynamicCompillerSettings()
+                {
+                    PortableAssembliesPath =
+                        "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.0\\Profile\\Profile24",
+                    DefaultReferencedPortableAssemblies = new[] {"System.dll", "System.Core.dll", "mscorlib.dll"}
+                }, new FileSystemIOAccessor());
         };
 
         private Because of = () =>
