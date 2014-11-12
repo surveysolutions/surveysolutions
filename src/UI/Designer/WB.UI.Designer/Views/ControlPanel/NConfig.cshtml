@@ -3,6 +3,9 @@
     this.ViewBag.Title = "Control Panel: NConfig";
 }
 
+
+<h3>Configuration</h3>
+
 <b>Value of Test Parameter:</b><br/>
 @(System.Configuration.ConfigurationManager.AppSettings["Test"] ?? "<null>")
 
