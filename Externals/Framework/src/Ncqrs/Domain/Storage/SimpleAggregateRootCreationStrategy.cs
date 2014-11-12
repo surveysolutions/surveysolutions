@@ -11,7 +11,11 @@ namespace Ncqrs.Domain.Storage
         protected override AggregateRoot CreateAggregateRootFromType(Type aggregateRootType)
         {
             // Get the constructor that we want to invoke.
-            var ctor = aggregateRootType.GetTypeInfo().DeclaredConstructors.FirstOrDefault(x => !x.GetParameters().Any());
+            var ctor = aggregateRootType
+                .GetTypeInfo()
+                .DeclaredConstructors
+                .Where(x => !x.GetParameters().Any())
+                .FirstOrDefault(x => x.IsPublic);
 
             // If there was no ctor found, throw exception.
             if (ctor == null)
@@ -22,7 +26,7 @@ namespace Ncqrs.Domain.Storage
             }
 
             // There was a ctor found, so invoke it and return the instance.
-            var aggregateRoot = (AggregateRoot)(ctor.Invoke(null));
+            var aggregateRoot = (AggregateRoot)(ctor.Invoke(new object[0]));
 
             return aggregateRoot;
         }
