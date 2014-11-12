@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Controllers
 
         private bool Login(string login, string password)
         {
-            return this.validateUserCredentials(login, this.passwordHasher.Hash(password)) || this.validateUserCredentials(login, SimpleHash.ComputeHash(password));
+            return this.validateUserCredentials(login, this.passwordHasher.Hash(password));
         }
 
         public bool IsLoggedIn()

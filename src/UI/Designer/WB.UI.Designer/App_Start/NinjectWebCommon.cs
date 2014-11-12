@@ -1,5 +1,6 @@
 using System;
 using System.Web;
+using System.Web.Configuration;
 using Main.Core;
 using Main.Core.Commands;
 using Microsoft.Practices.ServiceLocation;
@@ -71,19 +72,21 @@ namespace WB.UI.Designer.App_Start
                 failoverBehavior: AppSettings.Instance.FailoverBehavior,
                 activeBundles: AppSettings.Instance.ActiveBundles);
 
+            var dynamicCompilerSettings = (DynamicCompilerSettings)WebConfigurationManager.GetSection("dynamicCompilerSettings");
+
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
                 new RavenReadSideInfrastructureModule(ravenSettings, typeof (DesignerReportQuestionnaireListViewItem).Assembly),
+                new DesignerRegistry(),
                 new DesignerCommandDeserializationModule(),
                 new ExpressionProcessorModule(),
-                new DesignerBoundedContextModule(),
+                new DesignerBoundedContextModule(dynamicCompilerSettings),
                 new QuestionnaireVerificationModule(),
                 new MembershipModule(),
                 new MainModule(),
-                new FileInfrastructureModule(),
-                new DesignerRegistry()
+                new FileInfrastructureModule()
                 );
             kernel.Load(ModulesFactory.GetEventStoreModule());
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
