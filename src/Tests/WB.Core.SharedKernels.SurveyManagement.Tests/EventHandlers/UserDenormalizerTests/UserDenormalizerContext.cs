@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.UserDenorma
         
         protected static IPublishedEvent<UserLockedBySupervisor> CreateUserLockedBySupervisor(Guid executorId, Guid eventSourceId)
         {
-            var evnt = ToPublishedEvent(new UserLockedBySupervisor(executorId), eventSourceId);
+            var evnt = ToPublishedEvent(new UserLockedBySupervisor(), eventSourceId);
             return evnt;
         }
 
@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.UserDenorma
 
         protected static IPublishedEvent<UserUnlockedBySupervisor> CreateUserUnlockedBySupervisor(Guid executorId, Guid eventSourceId)
         {
-            return ToPublishedEvent(new UserUnlockedBySupervisor(executorId), eventSourceId);
+            return ToPublishedEvent(new UserUnlockedBySupervisor(), eventSourceId);
         }
 
         protected static IPublishedEvent<UserUnlocked> CreateUserUnlocked(Guid eventSourceId)
