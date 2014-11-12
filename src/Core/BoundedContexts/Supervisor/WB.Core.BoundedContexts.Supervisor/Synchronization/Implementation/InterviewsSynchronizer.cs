@@ -338,7 +338,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             Guid userIdGuid = Guid.Parse(userId);
 
             this.headquartersPullContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Interview__0__was_canceled_by_HQFormat, interviewId));
-            this.executeCommand(new CancelInterviewByHQSynchronizationCommand(interviewId: interviewIdGuid, userId: userIdGuid));
+            this.executeCommand(new CancelInterviewByHqSynchronizationCommand(interviewId: interviewIdGuid, userId: userIdGuid));
         }
 
         private void HardDeleteInterview(string interviewId, string userId)
