@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                                                         _.GetAllParentGroupsForQuestion(mandatoryQuestionId) == new Guid[] { conditionallyDisabledGroupId } && 
                                                         _.GetAllMandatoryQuestions() == new Guid[] { mandatoryQuestionId });
 
-            var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
+            //var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
 
             //setup expression processor throw exception
 //            expressionProcessor.Setup(x => x.EvaluateBooleanExpression(Moq.It.IsAny<string>(), Moq.It.IsAny<Func<string, object>>()))
@@ -41,9 +41,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
                 .Returns(questionnaireRepository);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>())
-                .Returns(expressionProcessor.Object);
+            //Mock.Get(ServiceLocator.Current)
+            //    .Setup(locator => locator.GetInstance<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>())
+            //    .Returns(expressionProcessor.Object);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
 

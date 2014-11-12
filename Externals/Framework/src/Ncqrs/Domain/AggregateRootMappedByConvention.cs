@@ -33,7 +33,6 @@ namespace Ncqrs.Domain
     /// }
     /// </code>
     /// </example>
-    /// <seealso cref="ConventionBasedDomainSourcedEventHandlerMappingStrategy"/>
     public abstract class AggregateRootMappedByConvention : MappedAggregateRoot
     {
         /// <summary>

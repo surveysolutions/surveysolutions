@@ -38,7 +38,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.UI.QuestionnaireTester.Authentication;
 using WB.UI.QuestionnaireTester.Services;
 using WB.UI.Shared.Android.Controls.ScreenItems;
@@ -215,8 +214,7 @@ namespace WB.UI.QuestionnaireTester
                 new TesterLoggingModule(),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false, basePath: basePath),
                 new RestAndroidModule(),
-                new FileInfrastructureModule(),
-                new ExpressionProcessorModule());
+                new FileInfrastructureModule());
 
             this.kernel.Bind<IAuthentication, DesignerAuthentication>().ToConstant(new DesignerAuthentication());
             this.kernel.Bind<DesignerService>().ToConstant(new DesignerService());
@@ -242,8 +240,6 @@ namespace WB.UI.QuestionnaireTester
             var bus1 = new InProcessEventBus(true);
             NcqrsEnvironment.SetDefault<IEventBus>(bus1);
             this.kernel.Bind<IEventBus>().ToConstant(bus1);
-
-            NcqrsInit.RegisterEventHandlers(bus1, this.kernel);
 
             NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());
             NcqrsEnvironment.SetDefault<IEventStore>(Kernel.Get<IEventStore>());
