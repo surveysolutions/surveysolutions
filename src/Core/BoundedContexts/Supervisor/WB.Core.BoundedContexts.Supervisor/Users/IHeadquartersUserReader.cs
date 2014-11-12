@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Main.Core.Documents;
-using Main.Core.View.User;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 
 namespace WB.Core.BoundedContexts.Supervisor.Users
 {

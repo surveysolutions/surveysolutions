@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
-using Main.Core.View;
 using System;
 using System.Linq;
 using System.Net;

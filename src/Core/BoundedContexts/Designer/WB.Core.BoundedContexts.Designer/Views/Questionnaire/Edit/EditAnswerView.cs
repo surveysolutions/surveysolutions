@@ -1,6 +1,5 @@
 using System;
 using Main.Core.Entities.SubEntities;
-using Main.Core.View;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {

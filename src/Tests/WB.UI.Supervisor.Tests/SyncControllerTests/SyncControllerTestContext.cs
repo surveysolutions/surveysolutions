@@ -2,10 +2,7 @@
 using System.Net.Http;
 using System.Text;
 using System.Web.Http;
-using Main.Core.View;
-using Main.Core.View.User;
 using Moq;
-using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
@@ -14,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.Core.SharedKernels.SurveyManagement.Web.Views.User;
 using WB.Core.Synchronization;
 
 namespace WB.UI.Supervisor.Tests.SyncControllerTests

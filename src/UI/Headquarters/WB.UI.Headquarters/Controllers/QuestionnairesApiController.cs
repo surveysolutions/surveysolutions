@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Main.Core.Entities;
-using Main.Core.View;
-using Ncqrs.Commanding.ServiceModel;
 using System.Linq;
 using System.Web.Http;
 using WB.Core.GenericSubdomains.Logging;

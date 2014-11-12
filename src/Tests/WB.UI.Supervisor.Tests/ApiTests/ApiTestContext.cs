@@ -1,5 +1,4 @@
 ﻿using System;
-using Main.Core.View;
 using Moq;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide;

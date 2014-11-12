@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
@@ -11,6 +10,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
+using WB.Core.SharedKernels.DataCollection.Views;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Capi.Tests.CapiDataSynchronizationServiceTests

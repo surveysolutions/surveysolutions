@@ -1,9 +1,7 @@
 ﻿using System;
 using Main.Core.Documents;
-using Main.Core.View;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.Infrastructure.ReadSide;
