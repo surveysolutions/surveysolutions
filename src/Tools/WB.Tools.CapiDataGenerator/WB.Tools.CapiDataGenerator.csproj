@@ -230,10 +230,6 @@
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.Capi.Synchronization\WB.Core.BoundedContexts.Capi.Synchronization.csproj">
-      <Project>{f907b0f2-4cfd-438c-8b53-f2d44c581f56}</Project>
-      <Name>WB.Core.BoundedContexts.Capi.Synchronization</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.Capi.csproj">
       <Project>{c6ed30a9-4d14-48d1-8311-c2267dfd424f}</Project>
       <Name>WB.Core.BoundedContexts.Capi</Name>

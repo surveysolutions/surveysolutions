@@ -137,10 +137,6 @@
       <Project>{c62669d1-2b5f-4976-a33d-a66b674d0149}</Project>
       <Name>WB.Core.BoundedContexts.Capi.Android</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.Capi.Synchronization.Android\WB.Core.BoundedContexts.Capi.Synchronization.Android.csproj">
-      <Project>{73601a04-81a9-4bff-9a5f-591569291d8c}</Project>
-      <Name>WB.Core.BoundedContexts.Capi.Synchronization.Android</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\GenericSubdomains\ErrorReporting\ErrorReporting.Android\WB.Core.GenericSubdomains.ErrorReporting.Android.csproj">
       <Project>{04ff9769-ab98-416e-8aa9-89271724582e}</Project>
       <Name>WB.Core.GenericSubdomains.ErrorReporting.Android</Name>
