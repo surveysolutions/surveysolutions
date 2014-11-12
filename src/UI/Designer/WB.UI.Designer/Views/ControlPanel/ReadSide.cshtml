@@ -1,50 +1,97 @@
 ﻿@{
-    
+
     this.Layout = "~/Views/Shared/Layout.admin.cshtml";
     this.ViewBag.Title = "Control Panel: Read Side";
 }
 @model IEnumerable<WB.Core.Infrastructure.EventHandlerDescription>
+<div class="page-header">
+    <h3>Read Side Control Panel</h3>
+</div>
 
-<h3>Read Side Control Panel</h3>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" data-target="#collapseAll"
+               href="#collapseAll" class='@(IsPanelCollapsed("all")?"collapsed":"")'>
+                Rebuild all
+            </a>
+        </h4>
+    </div>
+    <div id="collapseAll" class='panel-collapse @(IsPanelCollapsed("all")?"collapse":"")'>
+        <div class="panel-body">
+            @using (Html.BeginForm("RebuildReadSide", "ControlPanel", FormMethod.Get))
+            {
+                <label for="skipEvents">Skip events:</label>
+                @Html.TextBox("skipEvents", "0");
+                <input type="submit" value="Rebuild" class="btn btn-primary" onclick="return confirmAction()" />
+
+                <div class="help-block">
+                    If any of events are skipped, then views will not be deleted.
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" data-target="#collapseByHandlers"
+               href="#collapseByHandlers" class='@(IsPanelCollapsed("handlers")?"collapsed":"")'>
+                Rebuild by handlers
+            </a>
+        </h4>
+    </div>
+    <div id="collapseByHandlers" class='panel-collapse @(IsPanelCollapsed("handlers")?"collapse":"")'>
+        <div class="panel-body">
+            @using (Html.BeginForm("RebuildReadSidePartially", "ControlPanel", FormMethod.Post))
+            {
+                <label for="skipEvents">Skip events:</label>
+                @Html.TextBox("skipEvents", "0")
+                <button class="btn btn-primary" type="submit" onclick=" return confirmAction() ">Rebuild</button>
+                <div class="help-block">
+                    If any of events are skipped, then views will not be deleted.
+                </div>
+                <br />
+                <br />
+                @Handlers(false)
+            }
+
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" data-target="#collapseByHandlersAndSource"
+               href="#collapseByHandlersAndSource" class='@(IsPanelCollapsed("sources")?"collapsed":"")'>
+                Rebuild by handlers and event source
+            </a>
+        </h4>
+    </div>
+    <div id="collapseByHandlersAndSource" class='panel-collapse @(IsPanelCollapsed("sources")?"collapse":"")'>
+        <div class="panel-body">
+            @using (Html.BeginForm("RebuildReadSidePartiallyForEventSources", "ControlPanel", FormMethod.Post))
+            {
+                <label for="eventSourceids">Rebuild for event sources:</label>
+                <br />
+                @Html.TextArea("eventSourceIds", EventSources(), 3, 40, new { })
+                <br />
+                <button class="btn btn-primary" type="submit" onclick=" return confirmAction() ">Rebuild</button>
+                <br />
+                <br />
+                @Handlers(true)
+            }
+
+        </div>
+    </div>
+</div>
 
 <pre id="statusArea" style="height: 500px; overflow-y: scroll;">
 Requesting status...
 </pre>
-@using (Html.BeginForm("RebuildReadSidePartially", "ControlPanel", FormMethod.Post))
-{
-    <ul style="list-style: none;">
-
-
-        @foreach (var handler in Model)
-        {
-            <li>
-                <label>
-                    <input type='checkbox' value="@handler.Name" name="handlers" checked="@IsHandlerChecked(handler.Name)"/>
-                    <span><b>@handler.Name</b> , Builds:
-                        @foreach (var buildsView in handler.BuildsViews)
-                        {
-                            <i>@buildsView</i>
-                        }
-                        @if (handler.UsesViews.Length > 0)
-                        {
-
-                            <span>, Uses:</span>
-                            foreach (var usesView in handler.UsesViews)
-                            {
-                                <i>@usesView</i>
-                            }
-                        } </span>
-                </label>
-            </li>
-        }
-      
-    </ul>
-   
-    @Html.ActionLink("Rebuild All", "RebuildReadSide", new { }, new { @class = "btn btn-primary", onclick="return confirmAction()" })
-    <button class="btn btn-default" type="submit" onclick="return confirmAction()">Rebuild Selected</button>
-    @Html.ActionLink("Stop", "StopReadSideRebuilding", new { }, new { @class = "btn btn-default" })
-}
-
+@Html.ActionLink("Stop", "StopReadSideRebuilding", new { }, new { @class = "btn btn-default" })
 @functions{
     public bool IsHandlerChecked(string handlerName)
     {
@@ -55,11 +102,74 @@ Requesting status...
             return false;
         return checkedHandlers.Contains(handlerName);
     }
+    public string EventSources()
+    {
+        if (!TempData.ContainsKey("EventSources"))
+            return "";
+        return TempData["EventSources"] as string;
+    }
+
+    public bool IsPanelCollapsed(string panelName)
+    {
+        if (!TempData.ContainsKey("InProgress"))
+            return true;
+
+        switch (panelName)
+        {
+            case "all":
+                return TempData.ContainsKey("CheckedHandlers") || !string.IsNullOrEmpty(EventSources());
+            case "handlers":
+                return !TempData.ContainsKey("CheckedHandlers") || !string.IsNullOrEmpty(EventSources());
+            case "sources":
+                return !TempData.ContainsKey("CheckedHandlers") || string.IsNullOrEmpty(EventSources());
+        }
+        return true;
+    }
 }
+
+@helper Handlers(bool renderOnlyPartial)
+{
+    <table class="table table-striped table-bordered table-condensed table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Builds</th>
+                <th>Uses</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var handler in Model)
+            {
+                if (!renderOnlyPartial || handler.SupportsPartialRebuild)
+                {
+                    <tr>
+                        <td><input type='checkbox' value="@handler.Name" name="handlers" checked="@IsHandlerChecked(handler.Name)" /></td>
+
+                        <td><b>@handler.Name</b></td>
+                        <td>
+                            @string.Join(",", handler.BuildsViews)
+                        </td>
+                        <td>
+                            @string.Join(",", handler.UsesViews)
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+}
+
 @section scripts
 {
-    <script type="text/javascript">
 
+
+    <script type="text/javascript">
+        function confirmAction() {
+            var confirmed = confirm("Are you sure you want to rebuild read layer at " + window.location.host + " ?");
+            return confirmed;
+        }
         function updateReadSideStatus() {
             return $.ajax({
                 url: '@Url.Action("GetReadSideStatus")',
@@ -73,18 +183,13 @@ Requesting status...
 
         function updateReadSideStatusNeverending() {
             $.when(updateReadSideStatus()).always(function () {
-                setTimeout(updateReadSideStatusNeverending, 1000);
+                setTimeout(updateReadSideStatusNeverending, 3000);
             });
         }
 
         $(function () {
             updateReadSideStatusNeverending();
         });
-        
-        function confirmAction() {
-            var confirmed = confirm("Are you sure you want to rebuild read side at " + window.location.host + " ?");
-            return confirmed;
-        }
-    </script>
 
+    </script>
 }

@@ -80,7 +80,7 @@ namespace WB.UI.Designer.App_Start
                 new ServiceLocationModule(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
-                new RavenReadSideInfrastructureModule(ravenSettings, AppDomain.CurrentDomain.BaseDirectory, typeof(DesignerReportQuestionnaireListViewItem).Assembly),
+                new RavenReadSideInfrastructureModule(ravenSettings, AppDomain.CurrentDomain.GetData("DataDirectory").ToString(), typeof(DesignerReportQuestionnaireListViewItem).Assembly),
                 new DesignerCommandDeserializationModule(),
                 new ExpressionProcessorModule(),
                 new DesignerBoundedContextModule(),
