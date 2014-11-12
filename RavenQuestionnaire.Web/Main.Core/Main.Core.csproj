@@ -300,7 +300,6 @@
     <Compile Include="Utility\RegistryHelper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Utility\SimpleHash.cs" />
     <Compile Include="Utility\SimpleObjectExtensions.cs" />
     <Compile Include="Utility\StringUtil.cs" />
     <Compile Include="View\Device\DeviceItemView.cs" />

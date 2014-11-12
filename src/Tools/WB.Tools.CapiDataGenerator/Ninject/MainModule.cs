@@ -29,6 +29,8 @@ using NinjectAdapter;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.ChangeLog;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FunctionalDenormalization;
@@ -122,6 +124,7 @@ namespace CapiDataGenerator
                     new IBackupable[]{capiEvenStore, changeLogStore, denormalizerStore, plainStore, capiTemplateWriter});
 
             this.Bind<IViewFactory<UserListViewInputModel, UserListView>>().To<UserListViewFactory>();
+            this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope();
             
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(Kernel));
             this.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);

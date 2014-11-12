@@ -18,6 +18,7 @@ using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils.Serialization;
@@ -33,13 +34,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
             Func<HttpMessageHandler> messageHandler = null,
             ILogger logger = null,
             ICommandService commandService = null,
-            IHeadquartersSettings headquartersSettings = null)
+            IHeadquartersSettings headquartersSettings = null,
+            IPasswordHasher passwordHasher = null)
         {
             return new HeadquartersLoginService(logger ?? Substitute.For<ILogger>(),
                 commandService ?? Substitute.For<ICommandService>(),
                 messageHandler ?? Substitute.For<Func<HttpMessageHandler>>(),
                 headquartersSettings ?? HeadquartersSettings(),
-                headquartersUserReader ?? Substitute.For<IHeadquartersUserReader>());
+                headquartersUserReader ?? Substitute.For<IHeadquartersUserReader>(),
+                passwordHasher: passwordHasher ?? Substitute.For<IPasswordHasher>());
         }
 
         public static UserChangedFeedReader UserChangedFeedReader(IHeadquartersSettings settings = null,
