@@ -120,6 +120,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 this.Kernel.RegisterDenormalizer<QuestionnaireExportStructureDenormalizer>();
             }
 
+            this.Kernel.RegisterDenormalizer<SynchronizationDenormalizer>();
+
             this.Bind<IIncomePackagesRepository>()
                 .To<IncomePackagesRepository>()
                 .InSingletonScope()
