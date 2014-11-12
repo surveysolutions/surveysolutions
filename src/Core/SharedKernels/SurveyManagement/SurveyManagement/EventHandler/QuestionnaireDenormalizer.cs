@@ -16,32 +16,27 @@ using WB.Core.Synchronization.SyncStorage;
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     public class QuestionnaireDenormalizer : BaseDenormalizer, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, 
-        IEventHandler<QuestionnaireDeleted>, IEventHandler<QuestionnaireAssemblyImported>
+        IEventHandler<QuestionnaireDeleted>
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> documentStorage;
-        private readonly ISynchronizationDataStorage synchronizationDataStorage;
         private readonly IQuestionnaireCacheInitializer questionnaireCacheInitializer;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
 
         public QuestionnaireDenormalizer(
             IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> documentStorage, 
-            ISynchronizationDataStorage synchronizationDataStorage,
             IQuestionnaireCacheInitializer questionnaireCacheInitializer,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository, 
-            IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor)
+            IPlainQuestionnaireRepository plainQuestionnaireRepository, IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor)
         {
             this.documentStorage = documentStorage;
-            this.synchronizationDataStorage = synchronizationDataStorage;
             this.questionnaireCacheInitializer = questionnaireCacheInitializer;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
-
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
         }
 
         public override object[] Writers
         {
-            get { return new object[] { documentStorage, synchronizationDataStorage }; }
+            get { return new object[] { documentStorage }; }
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
@@ -66,8 +61,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             this.documentStorage.Remove(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
             this.questionnareAssemblyFileAccessor.RemoveAssembly(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
-
-            this.synchronizationDataStorage.DeleteQuestionnaire(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion, evnt.EventTimeStamp);
         }
 
         private void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument, bool allowCensusMode, DateTime timestamp)
@@ -81,16 +74,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.documentStorage.Store(
                 new QuestionnaireDocumentVersioned() { Questionnaire = document, Version = version },
                 id);
-
-            this.synchronizationDataStorage.SaveQuestionnaire(document, version, allowCensusMode, timestamp);
             
-        }
-
-        public void Handle(IPublishedEvent<QuestionnaireAssemblyImported> evnt)
-        {
-            var assemblyAsBase64String = this.questionnareAssemblyFileAccessor.GetAssemblyAsBase64String(evnt.EventSourceId, evnt.Payload.Version);
-
-            this.synchronizationDataStorage.SaveTemplateAssembly(evnt.EventSourceId, evnt.Payload.Version, assemblyAsBase64String, evnt.EventTimeStamp);
         }
     }
 }

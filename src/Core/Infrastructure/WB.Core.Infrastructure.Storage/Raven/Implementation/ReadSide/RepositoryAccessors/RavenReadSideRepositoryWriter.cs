@@ -305,6 +305,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             {
                 return new JsonSerializerSettings
                 {
+                    TypeNameHandling = TypeNameHandling.All,
                     ContractResolver = ravenStore.Conventions.JsonContractResolver
                 };
             }
@@ -322,7 +323,14 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         private TEntity Deserrialize(string payload)
         {
-            return JsonConvert.DeserializeObject<TEntity>(payload, JsonSerializerSettings);
+            try
+            {
+                return JsonConvert.DeserializeObject<TEntity>(payload, JsonSerializerSettings);
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException(payload, e);
+            }
         }
 
         public void Clear()

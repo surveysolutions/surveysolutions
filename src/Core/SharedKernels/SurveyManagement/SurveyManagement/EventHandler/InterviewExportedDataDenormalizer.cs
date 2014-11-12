@@ -25,7 +25,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     internal class InterviewExportedDataDenormalizer : 
-        BaseDenormalizer,
+        BaseDenormalizer, IAtomicEventHandler,
         IEventHandler<InterviewApprovedByHQ>, 
         IEventHandler<SupervisorAssigned>,
         IEventHandler<InterviewerAssigned>,
@@ -69,6 +69,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public override object[] Writers
         {
             get { return new object[] { dataExportWriter, recordFirstAnswerMarkerViewWriter }; }
+        }
+
+        public void CleanWritersByEventSource(Guid eventSourceId)
+        {
+            this.dataExportWriter.DeleteInterview(eventSourceId);
+            this.recordFirstAnswerMarkerViewWriter.Remove(eventSourceId);
         }
 
         public override object[] Readers

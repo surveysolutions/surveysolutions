@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Linq;
+using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Shared.Web.Filters;
@@ -50,17 +52,32 @@ namespace WB.UI.Designer.Controllers
             return this.ReadSideAdministrationService.GetReadableStatus();
         }
 
-        public ActionResult RebuildReadSidePartially(string[] handlers)
+        public ActionResult RebuildReadSidePartially(string[] handlers, int skipEvents = 0)
         {
-            this.ReadSideAdministrationService.RebuildViewsAsync(handlers);
+            this.ReadSideAdministrationService.RebuildViewsAsync(handlers, skipEvents);
+            this.TempData["InProgress"] = true;
             this.TempData["CheckedHandlers"] = handlers;
+            this.TempData["SkipEvents"] = skipEvents;
             return this.RedirectToAction("ReadSide");
         }
 
-        public ActionResult RebuildReadSide()
+        public ActionResult RebuildReadSidePartiallyForEventSources(string[] handlers, string eventSourceIds)
         {
-            this.ReadSideAdministrationService.RebuildAllViewsAsync();
+            var sourceIds =
+                eventSourceIds.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None).Select(e => Guid.Parse(e.Trim())).ToArray();
+            this.ReadSideAdministrationService.RebuildViewForEventSourcesAsync(handlers, sourceIds);
 
+            this.TempData["InProgress"] = true;
+            this.TempData["CheckedHandlers"] = handlers;
+            this.TempData["EventSources"] = eventSourceIds;
+            return this.RedirectToAction("ReadSide");
+        }
+
+        public ActionResult RebuildReadSide(int skipEvents = 0)
+        {
+            this.ReadSideAdministrationService.RebuildAllViewsAsync(skipEvents);
+            this.TempData["InProgress"] = true;
+            this.TempData["SkipEvents"] = skipEvents;
             return this.RedirectToAction("ReadSide");
         }
 

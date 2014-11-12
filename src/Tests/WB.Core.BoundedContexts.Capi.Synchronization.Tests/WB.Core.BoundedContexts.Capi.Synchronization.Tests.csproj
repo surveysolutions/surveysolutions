@@ -73,7 +73,6 @@
     <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_delete_interview.cs" />
     <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_delete_interview_and_delete_throw_exception.cs" />
     <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_existing_user.cs" />
-    <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_file.cs" />
     <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_new_broken_interview.cs" />
     <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_new_interview.cs" />
     <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_new_user.cs" />
