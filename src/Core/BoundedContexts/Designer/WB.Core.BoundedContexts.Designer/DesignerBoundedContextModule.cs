@@ -4,6 +4,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -23,6 +24,12 @@ namespace WB.Core.BoundedContexts.Designer
 {
     public class DesignerBoundedContextModule : NinjectModule
     {
+        private readonly IDynamicCompilerSettings dynamicCompilerSettings;
+
+        public DesignerBoundedContextModule(IDynamicCompilerSettings dynamicCompilerSettings)
+        {
+            this.dynamicCompilerSettings = dynamicCompilerSettings;
+        }
         public override void Load()
         {
             this.Bind<IQuestionDetailsViewMapper>().To<QuestionDetailsViewMapper>().InSingletonScope();
@@ -36,6 +43,8 @@ namespace WB.Core.BoundedContexts.Designer
 
             this.Unbind<IExpressionProcessor>();
             this.Bind<IExpressionProcessor>().To<RoslynExpressionProcessor>().InSingletonScope();
+            this.Unbind<IDynamicCompilerSettings>();
+            this.Bind<IDynamicCompilerSettings>().ToConstant(this.dynamicCompilerSettings);
 
             DispatcherRegistryHelper.RegisterDenormalizer<AccountDenormalizer>(this.Kernel);
             DispatcherRegistryHelper.RegisterDenormalizer<QuestionnaireDenormalizer>(this.Kernel);
