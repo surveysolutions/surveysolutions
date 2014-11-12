@@ -174,12 +174,6 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\SynchronizeInterviewFromHeadquarters.cs">
       <Link>Commands\Interview\SynchronizeInterviewFromHeadquarters.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs">
-      <Link>Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs">
-      <Link>Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs</Link>
-    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Questionnaire\DeleteQuestionnaire.cs">
       <Link>Commands\Questionnaire\DeleteQuestionnaire.cs</Link>
     </Compile>
@@ -665,7 +659,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

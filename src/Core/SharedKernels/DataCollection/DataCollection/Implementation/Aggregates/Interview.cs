@@ -556,8 +556,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public Interview(Func<Guid> getQuestionnaireId, Func<long> getVersion, Guid id)
             : base(id)
         {
-            this.questionnaireId = getQuestionnaireId();
-            this.questionnaireVersion = getVersion();
+            this.SetQuestionnaireProperties(getQuestionnaireId(), getVersion());
 
             if (ExpressionProcessorStatePrototype == null)
             {
@@ -566,10 +565,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         }
 
+        private void SetQuestionnaireProperties(Guid questionnaireId, long questionnaireVersion)
+        {
+            this.questionnaireId = questionnaireId;
+            this.questionnaireVersion = questionnaireVersion;
+        }
+
         public Interview(Guid id, Guid userId, Guid questionnaireId, long version, PreloadedDataDto preloadedData, DateTime answersTime,
             Guid supervisorId)
             : this(() => questionnaireId, () => version, id)
         {
+            this.CreateInterviewWithPreloadedData(questionnaireId, version, preloadedData, supervisorId, answersTime, userId);
+        }
+
+        public void CreateInterviewWithPreloadedData(Guid questionnaireId, long version, PreloadedDataDto preloadedData, Guid supervisorId, DateTime answersTime, Guid userId)
+        {
+            this.SetQuestionnaireProperties(questionnaireId, version);
+
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(questionnaireId, version);
 
             var interviewChangeStructures = new InterviewChangeStructures();
@@ -625,8 +637,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             DateTime answersTime, Guid supervisorId)
             : this(() => questionnaireId, () => questionnaireVersion, id)
         {
-            this.questionnaireId = questionnaireId;
-            this.questionnaireVersion = questionnaireVersion;
+            this.CreateInterview(questionnaireId, questionnaireVersion, supervisorId, answersToFeaturedQuestions, answersTime, userId);
+        }
+
+        public void CreateInterview(Guid questionnaireId, long questionnaireVersion, Guid supervisorId,
+            Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime, Guid userId)
+        {
+            this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
+
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
 
             var interviewChangeStructures = new InterviewChangeStructures();
@@ -668,6 +686,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             DateTime answersTime)
             : this(() => questionnaireId, () => GetQuestionnaireOrThrow(questionnaireId).Version, id)
         {
+            this.CreateInterviewForTesting(questionnaireId, answersToFeaturedQuestions, answersTime, userId);
+        }
+
+        public void CreateInterviewForTesting(Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime, Guid userId)
+        {
+            this.SetQuestionnaireProperties(questionnaireId, GetQuestionnaireOrThrow(questionnaireId).Version);
+
             IQuestionnaire questionnaire = GetQuestionnaireOrThrow(questionnaireId);
 
             var interviewChangeStructures = new InterviewChangeStructures();
@@ -713,6 +738,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 return questionnaire.Version;
             }, id)
         {
+            this.CreateInterviewOnClient(questionnaireId, questionnaireVersion, supervisorId, answersTime, userId);
+        }
+
+        public void CreateInterviewOnClient(Guid questionnaireId, long? questionnaireVersion, Guid supervisorId, DateTime answersTime, Guid userId)
+        {
+            this.SetQuestionnaireProperties(questionnaireId, (questionnaireVersion.HasValue
+                    ? GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion.Value)
+                    : GetQuestionnaireOrThrow(questionnaireId)).Version);
 
             IQuestionnaire questionnaire = questionnaireVersion.HasValue
                 ? GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion.Value)
@@ -745,6 +778,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             InterviewStatus interviewStatus, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, bool isValid)
             : this(() => questionnaireId, () => questionnaireVersion, id)
         {
+            this.CreateInterviewCreatedOnClient(questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, isValid, userId);
+        }
+
+        public void CreateInterviewCreatedOnClient(Guid questionnaireId, long questionnaireVersion, InterviewStatus interviewStatus,
+            AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, bool isValid, Guid userId)
+        {
+            this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
+
             GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
             this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
             this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, true, null));
@@ -1622,6 +1663,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void SynchronizeInterviewFromHeadquarters(Guid id, Guid userId, Guid supervisorId, InterviewSynchronizationDto interviewDto, DateTime synchronizationTime)
         {
+            this.SetQuestionnaireProperties(interviewDto.QuestionnaireId, interviewDto.QuestionnaireVersion);
+
             ThrowIfInterviewHardDeleted();
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(interviewDto.QuestionnaireId,
                 interviewDto.QuestionnaireVersion);
@@ -1717,6 +1760,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void ApplySynchronizationMetadata(Guid id, Guid userId, Guid questionnaireId, long questionnaireVersion, InterviewStatus interviewStatus,
             AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid, bool createdOnClient)
         {
+            this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
+
             if (this.status == InterviewStatus.Deleted)
                 this.Restore(userId);
             else

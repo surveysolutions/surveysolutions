@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using WB.Core.BoundedContexts.Designer;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Tools.CommandMapper
 {
@@ -15,7 +16,7 @@ namespace WB.Tools.CommandMapper
     {
         static void Main(string[] args)
         {
-            Type[] types = typeof (DesignerBoundedContextModule)
+            Type[] types = typeof(DataCollectionSharedKernelModule)
                 .Assembly
                 .GetTypes();
 
@@ -48,6 +49,7 @@ namespace WB.Tools.CommandMapper
                     IdProperty = GetAggregateIdProperty(x.Command),
                     Parameters = GetParams(x.Aggregate, x.Method, x.Command)
                 })
+                .ToList()
                 .OrderByDescending(x => x.IsConstructor)
                 .ThenBy(x => x.Method)
                 .GroupBy(x => x.Aggregate)
@@ -106,7 +108,7 @@ namespace WB.Tools.CommandMapper
                     .Select(parameter => parameter.Name)
                     .ToList();
 
-                return parameters.Select(parameter => properties.Single(property => string.Equals(parameter, property, StringComparison.InvariantCultureIgnoreCase)));
+                return parameters.Select(parameter => properties.Single(property => string.Equals(parameter, property, StringComparison.InvariantCultureIgnoreCase))).ToList();
             }
             else
             {
