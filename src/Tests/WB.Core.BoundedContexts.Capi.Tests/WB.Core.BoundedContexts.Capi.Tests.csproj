@@ -83,6 +83,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
+    <Compile Include="CapiDataSynchronizationServiceTests\CapiDataSynchronizationServiceTestContext.cs" />
+    <Compile Include="CapiDataSynchronizationServiceTests\when_GetItemsForPush_called.cs" />
+    <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_delete_interview.cs" />
+    <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_delete_interview_and_delete_throw_exception.cs" />
+    <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_delete_questionnaire.cs" />
+    <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_delete_questionnaire_with_broken_metadata.cs" />
+    <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_existing_user.cs" />
+    <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_file.cs" />
+    <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_new_broken_interview.cs" />
+    <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_new_interview.cs" />
+    <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_new_user.cs" />
+    <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_questionnaire.cs" />
+    <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_questionnaire_assembly.cs" />
+    <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_questionnaire_assembly_with_broken_metadata.cs" />
+    <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_questionnaire_in_census_mode.cs" />
+    <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_questionnaire_with_broken_metadata.cs" />
     <Compile Include="CascadingComboboxTests\CascadingComboboxQuestionViewTestContext.cs" />
     <Compile Include="CascadingComboboxTests\AnswerOptionsForCascadingQuestionsDenormalizerTestContext.cs" />
     <Compile Include="CascadingComboboxTests\InterviewViewModelTestContext.cs" />
@@ -108,6 +124,12 @@
     <Compile Include="QuestionnaireBrowseItemDenormalizerTests\when_QuestionnaireDeleted_event_arrived.cs" />
     <Compile Include="QuestionnaireBrowseItemDenormalizerTests\when_TemplateImported_event_arrived.cs" />
     <Compile Include="QuestionnaireBrowseItemDenormalizerTests\when_TemplateImported_event_arrived_with_not_empty_version.cs" />
+    <Compile Include="SyncPackageRestoreServiceTests\SyncPackageRestoreServiceTestContext.cs" />
+    <Compile Include="SyncPackageRestoreServiceTests\when_synchronization_item_doesnt_exist.cs" />
+    <Compile Include="SyncPackageRestoreServiceTests\when_synchronization_item_exists.cs" />
+    <Compile Include="SyncPackageRestoreServiceTests\when_synchronization_item_exists_and_restore_it_called_from_2_separate_thereads.cs" />
+    <Compile Include="SyncPackageRestoreServiceTests\when_synchronization_item_exists_but_empty_string.cs" />
+    <Compile Include="SyncPackageRestoreServiceTests\when_synchronization_item_exists_but_invalid.cs" />
     <Compile Include="UI\MaskedFormatterTests\when_answer_is_1_and_mask_has_8_symbols.cs" />
     <Compile Include="UI\MaskedFormatterTests\when_FormatValue_called_for_1_and_mask_with_any_sumbol_and_lower_dashes.cs" />
     <Compile Include="UI\MaskedFormatterTests\when_FormatValue_called_for_full_masked_text_and_one_symbol_is_replaced.cs" />
@@ -208,6 +230,14 @@
     <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
+      <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
+      <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

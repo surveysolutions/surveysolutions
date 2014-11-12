@@ -75,6 +75,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CapiBoundedContextModule.cs" />
+    <Compile Include="CapiSynchronizationModule.cs" />
+    <Compile Include="ChangeLog\ChangeLogRecordWithContent.cs" />
+    <Compile Include="ChangeLog\ChangeLogShortRecord.cs" />
+    <Compile Include="ChangeLog\IChangeLogManipulator.cs" />
+    <Compile Include="ChangeLog\IChangeLogStore.cs" />
     <Compile Include="EventHandler\AnswerOptionsForCascadingQuestionsDenormalizer.cs" />
     <Compile Include="EventHandler\AnswerOptionsForLinkedQuestionsDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewViewModelDenormalizer.cs" />
@@ -82,10 +87,18 @@
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireRosterStructureDenormalizer.cs" />
     <Compile Include="IAuthentication.cs" />
+    <Compile Include="Implementation\ChangeLog\FileChangeLogStore.cs" />
+    <Compile Include="Implementation\Services\CapiDataSynchronizationService.cs" />
+    <Compile Include="Implementation\Services\FileCapiSynchronizationCacheService.cs" />
+    <Compile Include="Implementation\Services\SyncPackageRestoreService.cs" />
     <Compile Include="ModelUtils\JsonUtils.cs" />
     <Compile Include="ModelUtils\QuestionUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ICapiCleanUpService.cs" />
+    <Compile Include="Services\ICapiDataSynchronizationService.cs" />
+    <Compile Include="Services\ICapiSynchronizationCacheService.cs" />
     <Compile Include="Services\INavigationService.cs" />
+    <Compile Include="Services\ISyncPackageRestoreService.cs" />
     <Compile Include="UI\MaskFormatter\EmptyMaskFormatter.cs" />
     <Compile Include="UI\MaskFormatter\IMaskedFormatter.cs" />
     <Compile Include="UI\MaskFormatter\MaskCharacter.cs" />
@@ -115,14 +128,15 @@
     <Compile Include="Views\InterviewDetails\SelectebleQuestionViewModel.cs" />
     <Compile Include="Views\InterviewDetails\TextListQuestionViewModel.cs" />
     <Compile Include="Views\InterviewDetails\ValueQuestionViewModel.cs" />
+    <Compile Include="Views\InterviewMetaInfo\InterviewMetaInfoInputModel.cs" />
+    <Compile Include="Views\Login\LoginView.cs" />
+    <Compile Include="Views\Login\LoginViewInput.cs" />
     <Compile Include="Views\Login\LoginViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\FinishInstallation\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
@@ -140,6 +154,10 @@
       <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
       <Name>WB.Core.GenericSubdomains.Utils</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
+      <Project>{A134F8E7-42C7-4804-8177-D11178600CAA}</Project>
+      <Name>WB.Core.Infrastructure.Backup</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
@@ -147,6 +165,14 @@
     <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
       <Project>{89b14b50-5305-45e2-9835-7a05bd0b97a9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
+      <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
+      <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
