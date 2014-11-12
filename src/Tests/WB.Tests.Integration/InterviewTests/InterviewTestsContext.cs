@@ -11,6 +11,7 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -175,7 +176,16 @@ namespace WB.Tests.Integration.InterviewTests
 
         public static IInterviewExpressionState GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
         {
-            var expressionProcessorGenerator = new QuestionnireExpressionProcessorGenerator();
+            var expressionProcessorGenerator =
+                new QuestionnireExpressionProcessorGenerator(
+                    new RoslynCompiler(
+                        new DefaultDynamicCompillerSettings()
+                        {
+                            PortableAssembliesPath =
+                                "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.0\\Profile\\Profile24",
+                            DefaultReferencedPortableAssemblies = new[] { "System.dll", "System.Core.dll", "mscorlib.dll" }
+                        }, new FileSystemIOAccessor()),
+                    new CodeGenerator());
 
             string resultAssembly;
             var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, out resultAssembly);
