@@ -3,8 +3,10 @@ using System.Linq;
 using Main.Core.Documents;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Core.SharedKernels.SurveyManagement.Views;
 
-namespace Main.Core.View.User
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Views.User
 {
     /// <summary>
     /// The user browse view factory.

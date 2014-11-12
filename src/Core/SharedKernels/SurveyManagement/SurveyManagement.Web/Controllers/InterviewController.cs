@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Reflection;
 using System.Web.Mvc;
-using Main.Core.View;
-using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;

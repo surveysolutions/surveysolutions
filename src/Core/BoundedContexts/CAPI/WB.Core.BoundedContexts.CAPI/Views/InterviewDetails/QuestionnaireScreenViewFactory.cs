@@ -1,5 +1,4 @@
 using System;
-using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Eventing;

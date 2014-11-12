@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Main.Core.View.User
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Views.User
 {
     /// <summary>
     /// The user browse view.

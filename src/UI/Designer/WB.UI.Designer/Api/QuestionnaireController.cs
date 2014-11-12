@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
-using Main.Core.View;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;

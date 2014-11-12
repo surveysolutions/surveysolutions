@@ -2,13 +2,11 @@
 using System.Collections.Specialized;
 using System.Web;
 using System.Web.Security;
-using Main.Core.View;
-using Main.Core.View.User;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveyManagement.Web.Views.User;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
 {

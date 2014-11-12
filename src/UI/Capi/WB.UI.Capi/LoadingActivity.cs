@@ -5,10 +5,9 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.Capi.Synchronization.Services;
+using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.UI.Capi.Implementations.Activities;
-using WB.UI.Capi.Syncronization;
 using WB.UI.Shared.Android.Helpers;
 
 namespace WB.UI.Capi

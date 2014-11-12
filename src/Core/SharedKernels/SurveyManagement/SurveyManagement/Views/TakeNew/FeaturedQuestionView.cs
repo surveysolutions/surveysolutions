@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Main.Core.View;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.TakeNew
 {
-    public class FeaturedQuestionView : ICompositeView
+    public class FeaturedQuestionView 
     {
         public FeaturedQuestionView(IQuestion doc, Guid? parentId)
         {

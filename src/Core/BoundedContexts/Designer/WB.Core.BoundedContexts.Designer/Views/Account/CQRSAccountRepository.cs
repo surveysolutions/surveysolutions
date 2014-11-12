@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Security;
-using Main.Core.View;
-using Ncqrs.Commanding;
-using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Designer.Commands.Account;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;

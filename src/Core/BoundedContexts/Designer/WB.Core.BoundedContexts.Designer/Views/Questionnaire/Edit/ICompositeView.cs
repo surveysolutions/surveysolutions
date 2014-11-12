@@ -1,7 +1,6 @@
 using System;
-using System.Collections.Generic;
 
-namespace Main.Core.View
+namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
     public interface ICompositeView
     {

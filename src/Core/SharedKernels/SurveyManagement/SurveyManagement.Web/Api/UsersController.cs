@@ -2,7 +2,6 @@
 using System.Net;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
-using Main.Core.View;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;

@@ -1,6 +1,5 @@
 ﻿using System;
 using Machine.Specifications;
-using Main.Core.View;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.Infrastructure.ReadSide;

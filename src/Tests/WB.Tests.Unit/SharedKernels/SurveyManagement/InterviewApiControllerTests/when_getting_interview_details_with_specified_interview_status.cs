@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Web.Mvc;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Main.Core.View;
 using Moq;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;

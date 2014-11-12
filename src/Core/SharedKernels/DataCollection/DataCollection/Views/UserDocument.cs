@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Main.Core.Entities.SubEntities;
 using WB.Core.Infrastructure.ReadSide;
 
-namespace Main.Core.Documents
+namespace WB.Core.SharedKernels.DataCollection.Views
 {
     [DebuggerDisplay("User {UserName}")]
     public class UserDocument : IView

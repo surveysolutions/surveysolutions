@@ -6,11 +6,11 @@ using System.Web;
 using System.Web.SessionState;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Main.Core.View.User;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
+using WB.Core.SharedKernels.SurveyManagement.Web.Views.User;
 using It = Machine.Specifications.It;
 
 namespace Questionnaire.Core.Web.Security.Tests.QuestionaireRoleProviderTests
