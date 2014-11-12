@@ -56,6 +56,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\File\UploadFileCommand.cs">
       <Link>Commands\File\UploadFileCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Sync\CreateClientDeviceCommand.cs">
+      <Link>Commands\Sync\CreateClientDeviceCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Conventions\RegisterFirstInstanceOfInterface.cs">
       <Link>Conventions\RegisterFirstInstanceOfInterface.cs</Link>
     </Compile>
@@ -91,6 +94,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\UserDocument.cs">
       <Link>Documents\UserDocument.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\ClientDeviceAR.cs">
+      <Link>Domain\ClientDeviceAR.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\FileAR.cs">
       <Link>Domain\FileAR.cs</Link>
@@ -251,8 +257,17 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Synchronization\UpdateRegisteredDevice.cs">
       <Link>Events\Synchronization\UpdateRegisteredDevice.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Sync\ClientDeviceLastSyncItemUpdated.cs">
+      <Link>Events\Sync\ClientDeviceLastSyncItemUpdated.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Sync\NewClientDeviceCreated.cs">
       <Link>Events\Sync\NewClientDeviceCreated.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Sync\NewSyncActivityCreated.cs">
+      <Link>Events\Sync\NewSyncActivityCreated.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Sync\SyncActivityUpdated.cs">
+      <Link>Events\Sync\SyncActivityUpdated.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\User\NewUserCreated.cs">
       <Link>Events\User\NewUserCreated.cs</Link>
@@ -336,13 +351,11 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Commands\Synchronization\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="8332bcd2-dc58-466e-8d80-5bcb1faccd6c" />
+      <UserProperties ProjectLinkReference="8332bcd2-dc58-466e-8d80-5bcb1faccd6c" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
