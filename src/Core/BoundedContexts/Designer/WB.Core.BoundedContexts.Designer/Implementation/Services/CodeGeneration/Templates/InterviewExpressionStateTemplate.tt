@@ -4,9 +4,13 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="Main.Core.Entities.SubEntities" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
+
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
@@ -116,7 +120,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             targetLevel.UpdateDateTimeAnswer(questionId, answer);
         }
 
-		public override void UpdateMediaAnswer(Guid questionId, decimal[] rosterVector, string answer)
+        public override void UpdateMediaAnswer(Guid questionId, decimal[] rosterVector, string answer)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
@@ -198,17 +202,21 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             return new <#=QuestionnaireTemplateStructure.GeneratedClassName#>(this.InterviewScopes, this.SiblingRosters);
         }
 
+    }
+
+
         //generate QuestionnaireLevel
         <#           
             QuestionnaireLevelTemplate questionnairetemplate = new QuestionnaireLevelTemplate(QuestionnaireTemplateStructure.QuestionnaireLevelModel);
-            this.Write(questionnairetemplate .TransformText());                           
+            this.Write(questionnairetemplate.TransformText());                           
          #>
 
         //generating rosters
         <#foreach (var rosterGroup in QuestionnaireTemplateStructure.RostersGroupedByScope) 
            {
-                RosterScopeTemplate template = new RosterScopeTemplate(rosterGroup, QuestionnaireTemplateStructure);
-                this.Write(template.TransformText());                
+                RosterScopeTemplate template = new RosterScopeTemplate(rosterGroup, QuestionnaireTemplateStructure, QuestionnaireTemplateStructure.GenerateEmbeddedExpressionMethods);
+                this.Write(template.TransformText());
+                
            }
         #>
 
@@ -243,9 +251,9 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
                 <#foreach (var dependency in QuestionnaireTemplateStructure.ConditionalDependencies)
                 {#>
                 {Guid.Parse("<#= dependency.Key #>"), new Guid[]{
-                <#foreach (var d in dependency.Value)
+                <#foreach (var dependencyValue in dependency.Value)
                 {#>
-                    Guid.Parse("<#= d #>"),
+                    Guid.Parse("<#= dependencyValue #>"),
                 <# }#>
                 }},
                 <# }#>
@@ -283,5 +291,5 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
                 <# }#>                                        
             };
         }
-    }
+    
 }
