@@ -86,25 +86,32 @@ namespace WB.UI.Supervisor.Controllers
             return this.ReadSideAdministrationService.GetReadableStatus();
         }
 
-        [AllowAnonymous]
-        public ActionResult RebuildReadSidePartially(string[] handlers, int skipEvents = 0, string eventSourceIds = null)
+        public ActionResult RebuildReadSidePartially(string[] handlers, int skipEvents = 0)
         {
-            if(string.IsNullOrEmpty(eventSourceIds))
-                this.ReadSideAdministrationService.RebuildViewsAsync(handlers, skipEvents);
-            else
-            {
-                var sourceIds = eventSourceIds.Split(new[] { ";", ",", "\r\n", "\n" }, StringSplitOptions.None).Select(e => Guid.Parse(e.Trim())).ToArray();
-                this.ReadSideAdministrationService.RebuildViewForEventSourcesAsync(handlers, sourceIds);
-            }
+            this.ReadSideAdministrationService.RebuildViewsAsync(handlers, skipEvents);
+            this.TempData["InProgress"] = true;
             this.TempData["CheckedHandlers"] = handlers;
+            this.TempData["SkipEvents"] = skipEvents;
             return this.RedirectToAction("ReadSide");
         }
 
-        [AllowAnonymous]
+        public ActionResult RebuildReadSidePartiallyForEventSources(string[] handlers, string eventSourceIds)
+        {
+            var sourceIds =
+                eventSourceIds.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None).Select(e => Guid.Parse(e.Trim())).ToArray();
+            this.ReadSideAdministrationService.RebuildViewForEventSourcesAsync(handlers, sourceIds);
+
+            this.TempData["InProgress"] = true;
+            this.TempData["CheckedHandlers"] = handlers;
+            this.TempData["EventSources"] = eventSourceIds;
+            return this.RedirectToAction("ReadSide");
+        }
+
         public ActionResult RebuildReadSide(int skipEvents = 0)
         {
             this.ReadSideAdministrationService.RebuildAllViewsAsync(skipEvents);
-
+            this.TempData["InProgress"] = true;
+            this.TempData["SkipEvents"] = skipEvents;
             return this.RedirectToAction("ReadSide");
         }
 

@@ -69,9 +69,6 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
                 case SyncItemType.User:
                     this.ChangeOrCreateUser(item);
                     break;
-                case SyncItemType.File:
-                    this.UploadFile(item);
-                    break;
                 case SyncItemType.Template:
                     this.UpdateQuestionnaire(item);
                     break;
@@ -91,13 +88,6 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
         {
             var records = this.changelog.GetClosedDraftChunksIds();
             return records.Select(chunk => new ChangeLogRecordWithContent(chunk.RecordId, chunk.EventSourceId, this.changelog.GetDraftRecordContent(chunk.RecordId))).ToList();
-        }
-
-        private void UploadFile(SyncItem item)
-        {
-            var file = this.ExtractObject<FileSyncDescription>(item.Content, item.IsCompressed);
-
-            this.commandService.Execute(new UploadFileCommand(file.PublicKey, file.Title, file.Description, file.OriginalFile));
         }
 
         private void DeleteInterview(SyncItem item)
