@@ -85,10 +85,7 @@ namespace WB.UI.Designer.App_Start
                 new FileInfrastructureModule(),
                 new DesignerRegistry()
                 );
-            NcqrsEnvironment.SetGetter<ILogger>(() =>
-            {
-                return kernel.Get<ILogger>();
-            });
+            NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
             NcqrsEnvironment.InitDefaults();
             kernel.Load(ModulesFactory.GetEventStoreModule());
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);

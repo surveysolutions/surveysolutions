@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
             commandServiceMock.Verify(
                 x =>
                     x.Execute(
-                        Moq.It.IsAny<CancelInterviewByHQSynchronizationCommand>(), Constants.HeadquartersSynchronizationOrigin), Times.Once);
+                        Moq.It.IsAny<CancelInterviewByHqSynchronizationCommand>(), Constants.HeadquartersSynchronizationOrigin), Times.Once);
 
 
         private static InterviewsSynchronizer interviewsSynchronizer;
