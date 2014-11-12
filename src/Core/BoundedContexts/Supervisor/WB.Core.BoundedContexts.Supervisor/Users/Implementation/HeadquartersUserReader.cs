@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Main.Core.View.User;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
 using WB.Core.SharedKernel.Utils.Serialization;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 
 namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
 {

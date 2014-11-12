@@ -1,5 +1,4 @@
 ﻿using Main.Core.Documents;
-using Main.Core.View;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;

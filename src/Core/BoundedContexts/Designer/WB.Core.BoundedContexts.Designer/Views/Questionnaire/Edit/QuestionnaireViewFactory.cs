@@ -1,6 +1,5 @@
 ﻿using System;
 using Main.Core.Documents;
-using Main.Core.View;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 

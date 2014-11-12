@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Main.Core.View;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;

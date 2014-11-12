@@ -1,10 +1,9 @@
 using System;
 using Main.Core.Entities.SubEntities;
-using Main.Core.View;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.TakeNew
 {
-    public class FeaturedAnswerView : ICompositeView
+    public class FeaturedAnswerView 
     {
         public FeaturedAnswerView()
         {

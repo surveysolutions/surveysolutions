@@ -12,6 +12,7 @@ using Moq;
 using WB.Core.GenericSubdomains.Utils.Implementation.Services;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;

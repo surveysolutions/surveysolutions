@@ -1,4 +1,5 @@
 ﻿using Main.Core.Documents;
+using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.User
 {

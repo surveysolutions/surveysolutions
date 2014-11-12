@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 using Machine.Specifications;
-using Main.Core.View;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
-using WB.UI.Supervisor.Controllers;
 
 namespace WB.UI.Supervisor.Tests.ImportExportControllerTests
 {

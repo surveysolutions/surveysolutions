@@ -9,9 +9,6 @@ using System.Threading.Tasks;
 using System.Web.Hosting;
 using System.Web.Http;
 using System.Web.Security;
-using Main.Core.View;
-using Main.Core.View.User;
-using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.CommandBus;
@@ -25,6 +22,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 using WB.Core.SharedKernels.SurveyManagement.Web.Resources;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.Core.SharedKernels.SurveyManagement.Web.Views.User;
 using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api

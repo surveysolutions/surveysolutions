@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Main.Core.View;
+﻿using System.Linq;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 

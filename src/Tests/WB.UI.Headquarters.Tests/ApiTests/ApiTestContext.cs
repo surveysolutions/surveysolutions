@@ -1,5 +1,4 @@
 ﻿using System;
-using Main.Core.View;
 using Moq;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide;
@@ -10,7 +9,6 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-using WB.UI.Headquarters.API;
 
 namespace WB.UI.Headquarters.Tests.ApiTests
 {

@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.Synchronization.MetaInfo;
 
 namespace WB.Core.Synchronization.SyncStorage

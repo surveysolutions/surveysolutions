@@ -1,7 +1,5 @@
 ﻿using Machine.Specifications;
-using Main.Core.View;
 using Moq;
-using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
