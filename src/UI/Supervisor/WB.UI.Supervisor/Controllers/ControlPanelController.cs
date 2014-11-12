@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.ServiceModel;
 using System.Web.Configuration;
 using System.Web.Mvc;
@@ -86,9 +87,15 @@ namespace WB.UI.Supervisor.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult RebuildReadSidePartially(string[] handlers, int skipEvents = 0)
+        public ActionResult RebuildReadSidePartially(string[] handlers, int skipEvents = 0, string eventSourceIds = null)
         {
-            this.ReadSideAdministrationService.RebuildViewsAsync(handlers, skipEvents);
+            if(string.IsNullOrEmpty(eventSourceIds))
+                this.ReadSideAdministrationService.RebuildViewsAsync(handlers, skipEvents);
+            else
+            {
+                var sourceIds = eventSourceIds.Split(new[] { ";", ",", "\r\n", "\n" }, StringSplitOptions.None).Select(e => Guid.Parse(e.Trim())).ToArray();
+                this.ReadSideAdministrationService.RebuildViewForEventSourcesAsync(handlers, sourceIds);
+            }
             this.TempData["CheckedHandlers"] = handlers;
             return this.RedirectToAction("ReadSide");
         }

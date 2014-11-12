@@ -24,5 +24,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             return new GenerationResult(emmitResult.Success, emmitResult.Diagnostics);
         }
+
+        public Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire)
+        {
+            return this.codeGenerator.GenerateEvaluator(questionnaire);
+        }
+
+        public string GenerateProcessorStateSingleClass(QuestionnaireDocument questionnaire)
+        {
+            return this.codeGenerator.Generate(questionnaire);
+        }
     }
 }

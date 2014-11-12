@@ -16,11 +16,13 @@ using Quartz;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
+using WB.Core.Infrastructure.Snapshots;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement;
@@ -43,6 +45,7 @@ using WB.UI.Shared.Web.MembershipProvider.Settings;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
 using WebActivatorEx;
+using CommandService = WB.Core.Infrastructure.CommandBus.CommandService;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: ApplicationShutdownMethod(typeof(NinjectWebCommon), "Stop")]
@@ -154,11 +157,6 @@ namespace WB.UI.Headquarters
             
             PrepareNcqrsInfrastucture(kernel);
 
-            var repository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(),
-                NcqrsEnvironment.Get<IAggregateSnapshotter>());
-            kernel.Bind<IDomainRepository>().ToConstant(repository);
-            kernel.Bind<ISnapshotStore>().ToConstant(NcqrsEnvironment.Get<ISnapshotStore>());
-
             kernel.Bind<ITokenVerifier>().ToConstant(new SimpleTokenVerifier(WebConfigurationManager.AppSettings["Synchronization.Key"]));
 
             kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(System.Web.Http.Filters.FilterScope.Controller)
@@ -188,14 +186,30 @@ namespace WB.UI.Headquarters
        
         private static void PrepareNcqrsInfrastucture(StandardKernel kernel)
         {
-            var commandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
-            NcqrsEnvironment.SetDefault(commandService);
-            NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>(), commandService);
-            kernel.Bind<ICommandService>().ToConstant(commandService);
+            var ncqrsCommandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
+            NcqrsEnvironment.SetDefault(ncqrsCommandService);
+            NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>(), ncqrsCommandService);
+
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
 
+            kernel.Bind<ISnapshottingPolicy>().ToMethod(context => NcqrsEnvironment.Get<ISnapshottingPolicy>());
+            kernel.Bind<ISnapshotStore>().ToMethod(context => NcqrsEnvironment.Get<ISnapshotStore>());
+            kernel.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
+            kernel.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
+
+            kernel.Bind<IDomainRepository>().To<DomainRepository>();
+
             CreateAndRegisterEventBus(kernel);
+
+            kernel.Bind<IAggregateRootRepository>().To<AggregateRootRepository>();
+            kernel.Bind<IEventPublisher>().To<EventPublisher>();
+            kernel.Bind<ISnapshotManager>().To<SnapshotManager>();
+
+            // TODO: TLK, KP-4337: make correct mapping here, not a direct creation
+            var commandService = new CommandService(ncqrsCommandService, kernel.Get<IAggregateRootRepository>(), kernel.Get<IEventPublisher>(), kernel.Get<ISnapshotManager>());
+
+            kernel.Bind<ICommandService>().ToConstant(commandService);
         }
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)

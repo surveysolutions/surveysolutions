@@ -174,6 +174,13 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         {
             this.cache.AddOrUpdate(id, (key) => entity, (key, value) => entity);
 
+            var filePath = this.GetPathToEntity(id);
+
+            if (fileSystemAccessor.IsFileExists(filePath))
+            {
+                fileSystemAccessor.DeleteFile(filePath);
+            }
+
             this.ReduceCacheIfNeeded();
         }
 
@@ -247,7 +254,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         private void StoreAllCachedEntitiesToRepository()
         {
-            using (IDocumentSession session = this.OpenSession())
+            using (var session = this.ravenStore.BulkInsert())
             {
                 var restOfCaches = cache.Keys.ToList();
 
@@ -262,7 +269,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
                         }
                     }
                     restOfCaches = cache.Keys.ToList();
-                }
+                } 
 
                 var fileNamesWithCachedEntities =
                     fileSystemAccessor.GetFilesInDirectory(fileSystemAccessor.CombinePath(basePath, cacheFolderUniqueId));
@@ -273,25 +280,23 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
                     {
                         StoreCachedEntityToRepository(session, fileSystemAccessor.GetFileName(fileNamesWithCachedEntity),
                             this.Deserrialize(fileSystemAccessor.ReadAllText(fileNamesWithCachedEntity)));
-
                         fileSystemAccessor.DeleteFile(fileNamesWithCachedEntity);
                     }
 
                     fileNamesWithCachedEntities =
                         fileSystemAccessor.GetFilesInDirectory(fileSystemAccessor.CombinePath(basePath, cacheFolderUniqueId));
                 }
-
-                session.SaveChanges();
             }
 
             this.fileSystemAccessor.DeleteDirectory(fileSystemAccessor.CombinePath(basePath, this.cacheFolderUniqueId));
         }
 
-        private void StoreCachedEntityToRepository(IDocumentSession session, string id, TEntity entity)
+        private void StoreCachedEntityToRepository(BulkInsertOperation bulkOperation, string id, TEntity entity)
         {
+            if(entity==null)
+                return;
             string ravenId = ToRavenId(id);
-            if (entity != null)
-                session.Store(entity: entity, id: ravenId);
+            bulkOperation.Store(entity: entity, id: ravenId);
         }
 
         private JsonSerializerSettings JsonSerializerSettings

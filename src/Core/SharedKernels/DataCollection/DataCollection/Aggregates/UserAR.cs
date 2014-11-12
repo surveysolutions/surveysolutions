@@ -18,19 +18,24 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         public UserAR(Guid publicKey, string userName, string password, string email, UserRoles[] roles, bool isLockedbySupervisor, 
             bool isLockedbyHQ, UserLight supervisor) : base(publicKey)
         {
+            this.CreateUser(email, isLockedbySupervisor, isLockedbyHQ, password, publicKey, roles, supervisor, userName);
+        }
+
+        public void CreateUser(string email, bool isLockedBySupervisor, bool isLockedByHq, string password, Guid publicKey, UserRoles[] roles, UserLight supervisor, string userName)
+        {
             //// Check for uniqueness of person name and email!
             this.ApplyEvent(
                 new NewUserCreated
-                    {
-                        Name = userName, 
-                        Password = password, 
-                        Email = email,
-                        IsLockedBySupervisor = isLockedbySupervisor,
-                        IsLocked = isLockedbyHQ, 
-                        Roles = roles, 
-                        Supervisor = supervisor, 
-                        PublicKey = publicKey
-                    });
+                {
+                    Name = userName,
+                    Password = password,
+                    Email = email,
+                    IsLockedBySupervisor = isLockedBySupervisor,
+                    IsLocked = isLockedByHq,
+                    Roles = roles,
+                    Supervisor = supervisor,
+                    PublicKey = publicKey
+                });
         }
 
         public void ChangeUser(string email, bool? isLockedBySupervisor, bool isLockedByHQ, UserRoles[] roles, string passwordHash, Guid userId)
@@ -39,11 +44,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
             if (isLockedBySupervisor.HasValue && isLockedBySupervisor.Value && !isUserLockedBySupervisor)
             {
-                this.ApplyEvent(new UserLockedBySupervisor(userId));
+                this.ApplyEvent(new UserLockedBySupervisor());
             }
             else if (isLockedBySupervisor.HasValue && !isLockedBySupervisor.Value && isUserLockedBySupervisor)
             {
-                this.ApplyEvent(new UserUnlockedBySupervisor(userId));
+                this.ApplyEvent(new UserUnlockedBySupervisor());
             }
 
             if (isLockedByHQ && !isUserLockedByHQ)
@@ -66,14 +71,14 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             this.ApplyEvent(new UserUnlocked());
         }
 
-        public void LockBySupervisor(Guid userId)
+        public void LockBySupervisor()
         {
-            this.ApplyEvent(new UserLockedBySupervisor(userId));
+            this.ApplyEvent(new UserLockedBySupervisor());
         }
 
-        public void UnlockBySupervisor(Guid userId)
+        public void UnlockBySupervisor()
         {
-            this.ApplyEvent(new UserUnlockedBySupervisor(userId));
+            this.ApplyEvent(new UserUnlockedBySupervisor());
         }
 
         protected void OnNewUserCreated(NewUserCreated e)
