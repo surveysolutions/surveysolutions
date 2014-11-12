@@ -43,54 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\CapiSynchronizationModule.cs">
-      <Link>CapiSynchronizationModule.cs</Link>
-    </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\ChangeLog\ChangeLogRecordWithContent.cs">
-      <Link>ChangeLog\ChangeLogRecordWithContent.cs</Link>
-    </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\ChangeLog\ChangeLogShortRecord.cs">
-      <Link>ChangeLog\ChangeLogShortRecord.cs</Link>
-    </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\ChangeLog\IChangeLogManipulator.cs">
-      <Link>ChangeLog\IChangeLogManipulator.cs</Link>
-    </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\ChangeLog\IChangeLogStore.cs">
-      <Link>ChangeLog\IChangeLogStore.cs</Link>
-    </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Implementation\ChangeLog\FileChangeLogStore.cs">
-      <Link>Implementation\ChangeLog\FileChangeLogStore.cs</Link>
-    </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Implementation\Services\CapiDataSynchronizationService.cs">
-      <Link>Implementation\Services\CapiDataSynchronizationService.cs</Link>
-    </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Implementation\Services\FileCapiSynchronizationCacheService.cs">
-      <Link>Implementation\Services\FileCapiSynchronizationCacheService.cs</Link>
-    </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Implementation\Services\SyncPackageRestoreService.cs">
-      <Link>Implementation\Services\SyncPackageRestoreService.cs</Link>
-    </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Services\ICapiCleanUpService.cs">
-      <Link>Services\ICapiCleanUpService.cs</Link>
-    </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Services\ICapiDataSynchronizationService.cs">
-      <Link>Services\ICapiDataSynchronizationService.cs</Link>
-    </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Services\ICapiSynchronizationCacheService.cs">
-      <Link>Services\ICapiSynchronizationCacheService.cs</Link>
-    </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Services\ISyncPackageRestoreService.cs">
-      <Link>Services\ISyncPackageRestoreService.cs</Link>
-    </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Views\InterviewMetaInfo\InterviewMetaInfoInputModel.cs">
-      <Link>Views\InterviewMetaInfo\InterviewMetaInfoInputModel.cs</Link>
-    </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Views\Login\LoginView.cs">
-      <Link>Views\Login\LoginView.cs</Link>
-    </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Views\Login\LoginViewInput.cs">
-      <Link>Views\Login\LoginViewInput.cs</Link>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -152,7 +104,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="f907b0f2-4cfd-438c-8b53-f2d44c581f56" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="f907b0f2-4cfd-438c-8b53-f2d44c581f56" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

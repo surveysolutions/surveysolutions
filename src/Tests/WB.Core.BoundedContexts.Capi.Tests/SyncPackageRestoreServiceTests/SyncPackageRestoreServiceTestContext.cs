@@ -1,0 +1,24 @@
+﻿using Moq;
+using WB.Core.BoundedContexts.Capi.Implementation.Services;
+using WB.Core.BoundedContexts.Capi.Services;
+using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernel.Utils.Compression;
+using WB.Core.SharedKernel.Utils.Serialization;
+
+namespace WB.Core.BoundedContexts.Capi.Tests.SyncPackageRestoreServiceTests
+{
+    internal class SyncPackageRestoreServiceTestContext
+    {
+        protected static SyncPackageRestoreService CreateSyncPackageRestoreService(
+            ICapiSynchronizationCacheService capiSynchronizationCacheService = null,
+            IJsonUtils jsonUtils = null, ICommandService commandService = null)
+        {
+            var stringCompressorMock = new Mock<IStringCompressor>();
+            stringCompressorMock.Setup(x => x.DecompressString(Moq.It.IsAny<string>())).Returns<string>(s => s);
+            return new SyncPackageRestoreService(Mock.Of<ILogger>(),
+                capiSynchronizationCacheService ?? Mock.Of<ICapiSynchronizationCacheService>(), stringCompressorMock.Object,
+                jsonUtils ?? Mock.Of<IJsonUtils>(), commandService ?? Mock.Of<ICommandService>());
+        }
+    }
+}

@@ -75,6 +75,21 @@
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\CapiBoundedContextModule.cs">
       <Link>CapiBoundedContextModule.cs</Link>
     </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\CapiSynchronizationModule.cs">
+      <Link>CapiSynchronizationModule.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\ChangeLog\ChangeLogRecordWithContent.cs">
+      <Link>ChangeLog\ChangeLogRecordWithContent.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\ChangeLog\ChangeLogShortRecord.cs">
+      <Link>ChangeLog\ChangeLogShortRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\ChangeLog\IChangeLogManipulator.cs">
+      <Link>ChangeLog\IChangeLogManipulator.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\ChangeLog\IChangeLogStore.cs">
+      <Link>ChangeLog\IChangeLogStore.cs</Link>
+    </Compile>
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\EventHandler\AnswerOptionsForCascadingQuestionsDenormalizer.cs">
       <Link>EventHandler\AnswerOptionsForCascadingQuestionsDenormalizer.cs</Link>
     </Compile>
@@ -96,14 +111,38 @@
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\IAuthentication.cs">
       <Link>IAuthentication.cs</Link>
     </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Implementation\ChangeLog\FileChangeLogStore.cs">
+      <Link>Implementation\ChangeLog\FileChangeLogStore.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Implementation\Services\CapiDataSynchronizationService.cs">
+      <Link>Implementation\Services\CapiDataSynchronizationService.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Implementation\Services\FileCapiSynchronizationCacheService.cs">
+      <Link>Implementation\Services\FileCapiSynchronizationCacheService.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Implementation\Services\SyncPackageRestoreService.cs">
+      <Link>Implementation\Services\SyncPackageRestoreService.cs</Link>
+    </Compile>
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\ModelUtils\JsonUtils.cs">
       <Link>ModelUtils\JsonUtils.cs</Link>
     </Compile>
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\ModelUtils\QuestionUtils.cs">
       <Link>ModelUtils\QuestionUtils.cs</Link>
     </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Services\ICapiCleanUpService.cs">
+      <Link>Services\ICapiCleanUpService.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Services\ICapiDataSynchronizationService.cs">
+      <Link>Services\ICapiDataSynchronizationService.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Services\ICapiSynchronizationCacheService.cs">
+      <Link>Services\ICapiSynchronizationCacheService.cs</Link>
+    </Compile>
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\Services\INavigationService.cs">
       <Link>Services\INavigationService.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Services\ISyncPackageRestoreService.cs">
+      <Link>Services\ISyncPackageRestoreService.cs</Link>
     </Compile>
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\UI\MaskFormatter\EmptyMaskFormatter.cs">
       <Link>UI\MaskFormatter\EmptyMaskFormatter.cs</Link>
@@ -192,6 +231,15 @@
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\ValueQuestionViewModel.cs">
       <Link>Views\InterviewDetails\ValueQuestionViewModel.cs</Link>
     </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewMetaInfo\InterviewMetaInfoInputModel.cs">
+      <Link>Views\InterviewMetaInfo\InterviewMetaInfoInputModel.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\Login\LoginView.cs">
+      <Link>Views\Login\LoginView.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\Login\LoginViewInput.cs">
+      <Link>Views\Login\LoginViewInput.cs</Link>
+    </Compile>
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\Login\LoginViewModel.cs">
       <Link>Views\Login\LoginViewModel.cs</Link>
     </Compile>
@@ -222,21 +270,31 @@
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
+      <Project>{a134f8e7-42c7-4804-8177-d11178600caa}</Project>
+      <Name>WB.Core.Infrastructure.Backup</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Utils.Android\WB.Core.SharedKernel.Utils.Android.csproj">
+      <Project>{5f8613d4-a556-4826-8d69-9918808b113e}</Project>
+      <Name>WB.Core.SharedKernel.Utils.Android</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\FinishInstallation\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="c6ed30a9-4d14-48d1-8311-c2267dfd424f" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="c6ed30a9-4d14-48d1-8311-c2267dfd424f" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

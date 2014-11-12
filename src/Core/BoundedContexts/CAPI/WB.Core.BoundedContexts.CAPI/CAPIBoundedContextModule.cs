@@ -1,5 +1,4 @@
-﻿using Main.Core.View;
-using Ninject.Modules;
+﻿using Ninject.Modules;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.ReadSide;
 
