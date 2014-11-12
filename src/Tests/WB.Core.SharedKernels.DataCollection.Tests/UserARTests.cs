@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
             UserAR user = CreateUserAR();
 
             // act
-            user.LockBySupervisor(Guid.Empty);
+            user.LockBySupervisor();
 
             // assert
             Assert.That(this.GetRaisedEvents<UserLockedBySupervisor>().Count(), Is.EqualTo(1));
@@ -78,7 +78,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
             UserAR user = CreateUserAR();
 
             // act
-            user.UnlockBySupervisor(Guid.Empty);
+            user.UnlockBySupervisor();
 
             // assert
             Assert.That(this.GetRaisedEvents<UserUnlockedBySupervisor>().Count(), Is.EqualTo(1));
