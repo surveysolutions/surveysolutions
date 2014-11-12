@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using CsQuery.ExtensionMethods;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -225,139 +224,23 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             if(hasExceededLimitByConditionExpresssionCharactersLength || hasExceededLimitByValidationExpresssionCharactersLength)
                 yield break;
-            
-            if (IsQuestionnaireValidByValidationsAndConditions(questionnaire))
+
+            var compilationResult = GetCompilationResult(questionnaire);
+
+            if (compilationResult.Success)
                 yield break;
-
-            var expressionErrorsCount = 0;
-            var questionnaireItemsWithExpressionErrors = new Queue<IEnumerable<IComposite>>(new[] { questionnaire.Find<IComposite>(_ => true) });
             
-            while (questionnaireItemsWithExpressionErrors.Count > 0)
+            foreach (var location in compilationResult.Diagnostics.Select(x=>x.Location).Distinct())
             {
-                var questionnaireItems = questionnaireItemsWithExpressionErrors.Dequeue();
-
-                if (!questionnaireItems.Any() || !HaveQuestionnaireItemsExpressionErrors(questionnaire, questionnaireItems))
-                    continue;
-
-                if (questionnaireItems.Count() == 1)
-                {
-                    foreach (var expressionError in QuestionnaireItemExpressionErrors(questionnaire, questionnaireItems.First()))
-                    {
-                        if (expressionErrorsCount++ == maxExpressionErrorsCount)
-                            yield break;
-
-                        yield return expressionError;
-                    }
-
-                    continue;
-                }
-
-                foreach (var part in DivideArrayIntoTwoParts(questionnaireItems))
-                {
-                    questionnaireItemsWithExpressionErrors.Enqueue(part);
-                }
+                yield return CreateExpressionSyntaxError(new ExpressionLocation(location));
             }
         }
-
-        private IEnumerable<IEnumerable<IComposite>> DivideArrayIntoTwoParts(IEnumerable<IComposite> questionnaireItems)
-        {
-            var newQestionnaireItemsCount = questionnaireItems.Count() / 2;
-
-            return new[]{questionnaireItems.Take(newQestionnaireItemsCount), questionnaireItems.Skip(newQestionnaireItemsCount)};
-        }
-
-        private IEnumerable<QuestionnaireVerificationError> QuestionnaireItemExpressionErrors(
-            QuestionnaireDocument questionnaire, IComposite questionnaireItem)
-        {
-            var group = questionnaireItem as IGroup;
-            if (group != null)
-            {
-                yield return ConditionExpressionSyntaxError(questionnaireItem);
-            }
-
-            var question = questionnaireItem as IQuestion;
-            if (question != null)
-            {
-                if (string.IsNullOrEmpty(question.ValidationExpression))
-                {
-                    yield return ConditionExpressionSyntaxError(questionnaireItem);
-                }
-                else if (string.IsNullOrEmpty(question.ConditionExpression))
-                {
-                    yield return ValidationExpressionSyntaxError(question);
-                }
-                else
-                {
-                    if (HasQuestionErrorInConditionExpression(questionnaire, question))
-                    {
-                        yield return ConditionExpressionSyntaxError(questionnaireItem);
-                    }
-
-                    if (HasQuestionErrorInValidationExpression(questionnaire, question))
-                    {
-                        yield return ValidationExpressionSyntaxError(question);
-                    }
-                }
-            }
-        }
-
-        private bool HasQuestionErrorInValidationExpression(QuestionnaireDocument questionnaire, IQuestion question)
-        {
-            var clonedQuestionnaire = GetQuestionnaireWithEmptyConditionsAndValidations(questionnaire);
-
-            clonedQuestionnaire.Find<IQuestion>(question.PublicKey).ValidationExpression = question.ValidationExpression;
-
-            return !IsQuestionnaireValidByValidationsAndConditions(clonedQuestionnaire);
-        }
-
-        private bool HasQuestionErrorInConditionExpression(QuestionnaireDocument questionnaire, IQuestion question)
-        {
-            var clonedQuestionnaire = GetQuestionnaireWithEmptyConditionsAndValidations(questionnaire);
-
-            clonedQuestionnaire.Find<IQuestion>(question.PublicKey).ConditionExpression = question.ConditionExpression;
-
-            return !IsQuestionnaireValidByValidationsAndConditions(clonedQuestionnaire);
-        }
-
-        private static QuestionnaireDocument GetQuestionnaireWithEmptyConditionsAndValidations(
-            QuestionnaireDocument questionnaire)
-        {
-            var clonedQuestionnaire = questionnaire.Clone();
-            clonedQuestionnaire.Find<IComposite>(_ => true).ForEach(RemoveConditionAndValidationExpressions);
-            return clonedQuestionnaire;
-        }
-
-        private bool HaveQuestionnaireItemsExpressionErrors(QuestionnaireDocument questionnaire, IEnumerable<IComposite> questionnaireItems)
-        {
-            var clonedQuestionnaire = questionnaire.Clone();
-
-            clonedQuestionnaire.Find<IComposite>(_=>true).Where(
-                questionnaireItem => questionnaireItems.All(sourceQuestionnaireItem => sourceQuestionnaireItem.PublicKey != questionnaireItem.PublicKey))
-                .ForEach(RemoveConditionAndValidationExpressions);
-
-            return !IsQuestionnaireValidByValidationsAndConditions(clonedQuestionnaire);
-        }
-
-        private bool IsQuestionnaireValidByValidationsAndConditions(QuestionnaireDocument questionnaire)
+        
+        private GenerationResult GetCompilationResult(QuestionnaireDocument questionnaire)
         {
             string resultAssembly;
-            var generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire, out resultAssembly);
 
-            return generationResult.Success;
-        }
-
-        private static void RemoveConditionAndValidationExpressions(IComposite questionnaireItem)
-        {
-            var group = questionnaireItem as IGroup;
-            if (group != null)
-            {
-                group.ConditionExpression = string.Empty;
-            }
-            var question = questionnaireItem as IQuestion;
-            if (question != null)
-            {
-                question.ConditionExpression = question.ValidationExpression = string.Empty;
-            }
+            return this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire, out resultAssembly);
         }
 
         private bool CascadingQuestionOptionsWithParentValuesShouldBeUnique(SingleQuestion question)
@@ -1276,17 +1159,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 entity.PublicKey);
         }
 
-        private bool CustomValidationExpressionHasIncorrectSyntax(IQuestion question)
-        {
-            if (string.IsNullOrWhiteSpace(question.ValidationExpression))
-                return false;
-
-            if (!QuestionTypesValidToHaveValidationExpressions.Contains(question.QuestionType))
-                return false;
-
-            return !this.expressionProcessor.IsSyntaxValid(question.ValidationExpression);
-        }
-
+        
         private bool QuestionHasValidationExpressionWithoutValidationMessage(IQuestion question)
         {
             if (string.IsNullOrWhiteSpace(question.ValidationExpression) || question.QuestionType == QuestionType.QRBarcode)
@@ -1294,17 +1167,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             return string.IsNullOrWhiteSpace(question.ValidationMessage);
         }
-
-        private bool CustomEnablementConditionHasIncorrectSyntax(IComposite entity)
-        {
-            string customEnablementCondition = GetCustomEnablementCondition(entity);
-
-            if (string.IsNullOrWhiteSpace(customEnablementCondition))
-                return false;
-
-            return !this.expressionProcessor.IsSyntaxValid(customEnablementCondition);
-        }
-
+        
         private bool CategoricalMultianswerQuestionIsFeatured(IMultyOptionsQuestion question, QuestionnaireDocument questionnaire)
         {
             return IsPreFilledQuestion(question);
@@ -1498,25 +1361,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 CreateReference(questionWithValidationExpression));
         }
 
-        private static QuestionnaireVerificationError CustomConditionExpressionReferencesQuestionWithDeeperPropagationLevel(
-           IComposite questionWithValidationExpression, IQuestion questionsReferencedInValidation)
-        {
-            return new QuestionnaireVerificationError("WB0046",
-                VerificationMessages.WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel,
-                CreateReference(questionWithValidationExpression),
-                CreateReference(questionsReferencedInValidation));
-
-        }
-
-        private static QuestionnaireVerificationError CustomValidationExpressionReferencesQuestionWithDeeperPropagationLevel(
-            IComposite questionWithValidationExpression, IQuestion questionsReferencedInValidation)
-        {
-            return new QuestionnaireVerificationError("WB0014",
-                VerificationMessages.WB0014_CustomValidationExpressionReferencesQuestionWithDeeperRosterLevel,
-                CreateReference(questionWithValidationExpression),
-                CreateReference(questionsReferencedInValidation));
-
-        }
+        
 
         private static QuestionnaireVerificationError QuestionWithTitleSubstitutionCantBePrefilled(IQuestion questionsWithSubstitution)
         {
@@ -1593,19 +1438,29 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 CreateReference(sourseQuestion));
         }
 
-        private static QuestionnaireVerificationError ConditionExpressionSyntaxError(IComposite groupOrQuestion)
+        private static QuestionnaireVerificationError CreateExpressionSyntaxError(ExpressionLocation expressionLocation)
         {
-            return new QuestionnaireVerificationError("WB0003",
-                VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax,
-                CreateReference(groupOrQuestion));
+            if(expressionLocation.ExpressionType == ExpressionType.General)
+            {
+                return new QuestionnaireVerificationError("WB0096", VerificationMessages.WB0096_GeneralCompilationError);
+            }
+
+            var referense = new QuestionnaireVerificationReference(
+                expressionLocation.ItemType == ItemType.Question ? 
+                    QuestionnaireVerificationReferenceType.Question : 
+                    QuestionnaireVerificationReferenceType.Group, expressionLocation.Id);
+
+            if(expressionLocation.ExpressionType == ExpressionType.Validations)
+            {
+                return new QuestionnaireVerificationError("WB0002", VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax, referense);
+            }
+            else //(expressionLocation.ExpressionType == ExpressionType.Conditions)
+            {
+                return new QuestionnaireVerificationError("WB0003",
+                    VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax, referense);
+            }
         }
 
-        private static QuestionnaireVerificationError ValidationExpressionSyntaxError(IQuestion question)
-        {
-            return new QuestionnaireVerificationError("WB0002",
-                VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax,
-                CreateReference(question));
-        }
 
         private static void VerifyEnumerableAndAccumulateErrorsToList<T>(IEnumerable<T> enumerableToVerify,
             List<QuestionnaireVerificationError> errorList, 

@@ -1,4 +1,5 @@
-﻿using Main.Core.Documents;
+﻿using System.Collections.Generic;
+using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 
@@ -17,7 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public GenerationResult GenerateProcessorStateAssembly(QuestionnaireDocument questionnaire, out string generatedAssembly)
         {
-            string genertedEvaluator = this.codeGenerator.Generate(questionnaire);
+            Dictionary<string, string> genertedEvaluator = this.codeGenerator.GenerateEvaluator(questionnaire);
 
             var emmitResult = this.codeCompiler.GenerateAssemblyAsString(questionnaire.PublicKey, genertedEvaluator, new string[] { },
                 out generatedAssembly);
