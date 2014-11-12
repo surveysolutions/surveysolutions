@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     public class RosterScopeTemplateModel : RosterScopeBaseModel
     {
         public RosterScopeTemplateModel(KeyValuePair<string, List<RosterTemplateModel>> rosterScope,
-            QuestionnaireExecutorTemplateModel executorModel)
+            QuestionnaireExecutorTemplateModel executorModel, bool generateEmbeddedExpressionMethods)
         {
             this.GeneratedTypeName = rosterScope.Key;
             this.RostersInScope = rosterScope.Value;
@@ -19,6 +19,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.Rosters = rosterScope.Value.SelectMany(r => r.Rosters).ToList();
 
             this.ExecutorModel = executorModel;
+
+            this.GenerateEmbeddedExpressionMethods = generateEmbeddedExpressionMethods;
         }
 
         public QuestionnaireExecutorTemplateModel ExecutorModel { private set; get; }

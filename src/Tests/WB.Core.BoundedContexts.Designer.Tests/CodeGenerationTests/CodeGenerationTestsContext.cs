@@ -221,6 +221,43 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             };
         }
 
+
+        public static QuestionnaireDocument CreateQuestionnaireWithQuestionAndRosterWithQuestionWithInvalidExpressions(Guid questionId, Guid questionInRosterId)
+        {
+            return new QuestionnaireDocument()
+            {
+                Children = new List<IComposite>()
+                {
+                    new Group("Chapter")
+                    {
+                        Children = new List<IComposite>()
+                        {
+                            new Group("Roster")
+                            {
+                                IsRoster = true,
+                                RosterSizeSource = RosterSizeSourceType.FixedTitles,
+                                RosterFixedTitles = new[] {"Roster row 1", "Roster row 2"},
+                                Children = new List<IComposite>()
+                                {
+                                    new TextQuestion("Text")
+                                    {
+                                        PublicKey = questionInRosterId,
+                                        ValidationExpression = "if"
+                                    }
+                                }
+                            },
+                            new TextQuestion("Text")
+                            {
+                                QuestionType = QuestionType.Text,
+                                PublicKey = questionId,
+                                ConditionExpression = "bool"
+                            }
+                        }
+                    }
+                }
+            };
+        }
+
         public static QuestionnaireDocument CreateQuestionnaireDocumenteWithOneNumericIntegerQuestionAndRosters(Guid questionnaireId,
             Guid questionId, Guid rosterId)
         {
