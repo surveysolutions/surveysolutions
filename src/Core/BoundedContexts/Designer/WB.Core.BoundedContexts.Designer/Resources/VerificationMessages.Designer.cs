@@ -854,5 +854,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0095_ValidationExpresssionHasLengthMoreThan10000Characters", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error occurred during questionnaire compilation.
+        /// </summary>
+        internal static string WB0096_GeneralCompilationError {
+            get {
+                return ResourceManager.GetString("WB0096_GeneralCompilationError", resourceCulture);
+            }
+        }
     }
 }

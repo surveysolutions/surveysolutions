@@ -7,6 +7,7 @@ using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
@@ -26,16 +27,18 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IServiceLocator serviceLocator;
         private readonly IIncomePackagesRepository incomePackagesRepository;
         private readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
+        private readonly IPasswordHasher passwordHasher;
 
         public ControlPanelController(IServiceLocator serviceLocator, IIncomePackagesRepository incomePackagesRepository,
             ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
-            IViewFactory<UserViewInputModel, UserView> userViewFactory)
+            IViewFactory<UserViewInputModel, UserView> userViewFactory, IPasswordHasher passwordHasher)
             : base(commandService: commandService, globalInfo: globalInfo, logger: logger)
         {
             this.serviceLocator = serviceLocator;
             this.incomePackagesRepository = incomePackagesRepository;
 
             this.userViewFactory = userViewFactory;
+            this.passwordHasher = passwordHasher;
         }
 
         /// <remarks>
@@ -218,7 +221,7 @@ namespace WB.UI.Headquarters.Controllers
                     {
                         this.CommandService.Execute(new CreateUserCommand(publicKey: Guid.NewGuid(),
                             userName: model.UserName,
-                            password: SimpleHash.ComputeHash(model.Password), email: model.Email,
+                            password: passwordHasher.Hash(model.Password), email: model.Email,
                             isLockedBySupervisor: false,
                             isLockedByHQ: false, roles: new[] {UserRoles.Headquarter}, supervsor: null));
                         return this.RedirectToAction("LogOn", "Account");
@@ -234,6 +237,44 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     this.Error("User name already exists. Please enter a different user name.");
                 }
+            }
+
+            return View(model);
+        }
+
+        public ActionResult ResetHeadquartersPassword()
+        {
+            return this.View(new UserModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ResetHeadquartersPassword(UserModel model)
+        {
+            UserView userToCheck =
+                this.userViewFactory.Load(new UserViewInputModel(UserName: model.UserName, UserEmail: null));
+            if (userToCheck != null && userToCheck.Roles.Contains(UserRoles.Headquarter))
+            {
+                try
+                {
+                    this.CommandService.Execute(new ChangeUserCommand(publicKey: userToCheck.PublicKey,
+                        email: userToCheck.Email, isLockedByHQ: userToCheck.IsLockedByHQ,
+                        isLockedBySupervisor: userToCheck.IsLockedBySupervisor,
+                        passwordHash: passwordHasher.Hash(model.Password), userId: Guid.Empty,
+                        roles: userToCheck.Roles.ToArray()));
+                    this.Success(string.Format("Password for headquarters '{0}' successfully changed",
+                        userToCheck.UserName));
+                }
+                catch (Exception ex)
+                {
+                    var userErrorMessage = "Error when updating password for headquarters user";
+                    this.Error(userErrorMessage);
+                    this.Logger.Fatal(userErrorMessage, ex);
+                }
+            }
+            else
+            {
+                this.Error(string.Format("Headquarters '{0}' does not exists", model.UserName));
             }
 
             return View(model);

@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
                 {
                     PublicKey = new Guid(),
                     Children =
-                        new IComposite[20].Select(_ => new TextQuestion() {PublicKey = new Guid()}).ToList<IComposite>()
+                        new IComposite[101].Select(_ => new TextQuestion() {PublicKey = new Guid()}).ToList<IComposite>()
                 }
             });
             var questionnaireView = CreateQuestionnaireView(questionnaireDocument);
