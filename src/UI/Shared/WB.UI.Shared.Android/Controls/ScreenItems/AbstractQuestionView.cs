@@ -47,8 +47,9 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
             if (disposing)
             {
+#if DEBUG
                 Console.WriteLine(string.Format("disposing question '{0}'", this.Model.Text));
-
+#endif
                 this.ClearAllBindings();
 
                 if (this.instructionDialog != null)

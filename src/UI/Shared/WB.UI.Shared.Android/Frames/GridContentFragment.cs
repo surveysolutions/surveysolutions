@@ -160,7 +160,9 @@ namespace WB.UI.Shared.Android.Frames
         {
             if (disposing)
             {
+#if DEBUG
                 Console.WriteLine("disposing roster");
+#endif
                 this.UnSubscribeModelOnRowDisable();
 
                 if (this.LlTablesContainer != null)
