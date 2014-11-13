@@ -57,9 +57,9 @@ namespace WB.UI.Designer.Controllers
             return this.RedirectToAction("ReadSide");
         }
 
-        public ActionResult RebuildReadSide()
+        public ActionResult RebuildReadSide(int skipEvents=0)
         {
-            this.ReadSideAdministrationService.RebuildAllViewsAsync();
+            this.ReadSideAdministrationService.RebuildAllViewsAsync(skipEvents: skipEvents);
 
             return this.RedirectToAction("ReadSide");
         }
