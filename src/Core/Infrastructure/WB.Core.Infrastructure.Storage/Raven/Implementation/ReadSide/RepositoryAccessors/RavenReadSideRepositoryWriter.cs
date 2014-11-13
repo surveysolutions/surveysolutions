@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json.Serialization;
 using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Client.Document;
-using Raven.Client.Indexes;
 using Raven.Client.Linq;
 using Raven.Imports.Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Utils;
@@ -31,6 +28,19 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         private readonly ConcurrentDictionary<string, TEntity> cache = new ConcurrentDictionary<string, TEntity>();
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string basePath;
+
+        private JsonSerializerSettings JsonSerializerSettings
+        {
+            get
+            {
+                return new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.All,
+                    ContractResolver = ravenStore.Conventions.JsonContractResolver,
+                    NullValueHandling = NullValueHandling.Ignore
+                };
+            }
+        }
 
         public RavenReadSideRepositoryWriter(DocumentStore ravenStore, IFileSystemAccessor fileSystemAccessor, string basePath)
             : base(ravenStore)
@@ -297,18 +307,6 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
                 return;
             string ravenId = ToRavenId(id);
             bulkOperation.Store(entity: entity, id: ravenId);
-        }
-
-        private JsonSerializerSettings JsonSerializerSettings
-        {
-            get
-            {
-                return new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.All,
-                    ContractResolver = ravenStore.Conventions.JsonContractResolver
-                };
-            }
         }
 
         private string GetPathToEntity(string entityName)
