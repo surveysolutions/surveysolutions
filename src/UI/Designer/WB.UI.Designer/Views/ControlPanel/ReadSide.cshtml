@@ -6,7 +6,18 @@
 @model IEnumerable<WB.Core.Infrastructure.EventHandlerDescription>
 
 <h3>Read Side Control Panel</h3>
+<div class="well">
+    @using (Html.BeginForm("RebuildReadSide", "ControlPanel", FormMethod.Get))
+    {
+        <label for="skipEvents">Skip events:</label>
+        @Html.TextBox("skipEvents", "0");
+        <input type="submit" value="Rebuild All" class="btn btn-primary" onclick="return confirmAction()" />
+        <div class="help-block">
+            If any of events are skipped, then views will not be deleted.
+        </div>
+    }
 
+</div>
 <pre id="statusArea" style="height: 500px; overflow-y: scroll;">
 Requesting status...
 </pre>
@@ -40,7 +51,6 @@ Requesting status...
       
     </ul>
    
-    @Html.ActionLink("Rebuild All", "RebuildReadSide", new { }, new { @class = "btn btn-primary", onclick="return confirmAction()" })
     <button class="btn btn-default" type="submit" onclick="return confirmAction()">Rebuild Selected</button>
     @Html.ActionLink("Stop", "StopReadSideRebuilding", new { }, new { @class = "btn btn-default" })
 }
