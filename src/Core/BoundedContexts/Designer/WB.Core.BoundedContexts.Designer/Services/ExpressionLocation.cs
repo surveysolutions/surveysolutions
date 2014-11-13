@@ -31,19 +31,4 @@ namespace WB.Core.BoundedContexts.Designer.Services
             return String.Format("{0}:{1}:{2}", ItemType, ExpressionType, Id);
         }
     }
-
-    public enum ItemType
-    {
-        Questionnaire = 0,
-        Question = 1,
-        Group = 2,
-        Roster = 4,
-    }
-
-    public enum ExpressionType
-    {
-        General = 0,
-        Conditions = 1,
-        Validations = 2
-    }
 }

@@ -16,17 +16,17 @@ namespace WB.Core.BoundedContexts.Designer.Tests.InterviewCompilerTests
             generatedClasses.Add("main", testClassToCompile);
         };
 
-        private Because of = () =>
+        Because of = () =>
             emitResult = compiler.GenerateAssemblyAsString(id, generatedClasses, new string[0], out resultAssembly);
 
 
-        private It should_result_succeded = () =>
+        It should_result_succeded = () =>
             emitResult.Success.ShouldEqual(true);
 
-        private It should_diagnostics_count_equal_0 = () =>
+        It should_diagnostics_count_equal_0 = () =>
             emitResult.Diagnostics.Count().ShouldEqual(0);
 
-        private It should_ = () =>
+        It should_ = () =>
             resultAssembly.Length.ShouldBeGreaterThan(0);
         
         private static IDynamicCompiler compiler;
