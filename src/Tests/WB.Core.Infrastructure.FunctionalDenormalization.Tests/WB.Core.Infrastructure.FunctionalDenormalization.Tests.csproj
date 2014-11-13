@@ -59,7 +59,13 @@
   <ItemGroup>
     <Compile Include="AbstractFunctionalEventHandlerTests\AbstractFunctionalEventHandlerTestContext.cs" />
     <Compile Include="AbstractFunctionalEventHandlerTests\TestableFunctionalEventHandler.cs" />
-    <Compile Include="AbstractFunctionalEventHandlerTests\when_batch_of_10_events_is_published_on_event_handler.cs" />
+    <Compile Include="AbstractFunctionalEventHandlerTests\when_batch_of_different_events_are_published_on_event_handler.cs" />
+    <Compile Include="AbstractFunctionalEventHandlerTests\when_CleanWritersByEventSource_is_called.cs" />
+    <Compile Include="AbstractFunctionalEventHandlerTests\when_CleanWritersByEventSource_is_called_and_handler_has_more_then_one_writer.cs" />
+    <Compile Include="AbstractFunctionalEventHandlerTests\when_CleanWritersByEventSource_is_called_and_handler_has_no_writers.cs" />
+    <Compile Include="AbstractFunctionalEventHandlerTests\when_CleanWritersByEventSource_is_called_and_handler_has_writer_which_doesnt_support_cleaning.cs" />
+    <Compile Include="AbstractFunctionalEventHandlerTests\when_delete_handler_is_called.cs" />
+    <Compile Include="AbstractFunctionalEventHandlerTests\when_view_is_deleted_by_update_handler.cs" />
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="InMemoryViewWriterTests\InMemoryViewWriterTestContext.cs" />
     <Compile Include="InMemoryViewWriterTests\when_disposing_inmemroywriter_after_view_was_created_in_memory.cs" />
