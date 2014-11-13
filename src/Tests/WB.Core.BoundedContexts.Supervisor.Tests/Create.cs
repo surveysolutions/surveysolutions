@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
                 messageHandler ?? Substitute.For<Func<HttpMessageHandler>>(),
                 headquartersSettings ?? HeadquartersSettings(),
                 headquartersUserReader ?? Substitute.For<IHeadquartersUserReader>(),
-                passwordHasher ?? Substitute.For<IPasswordHasher>());
+                passwordHasher: passwordHasher ?? Substitute.For<IPasswordHasher>());
         }
 
         public static UserChangedFeedReader UserChangedFeedReader(IHeadquartersSettings settings = null,

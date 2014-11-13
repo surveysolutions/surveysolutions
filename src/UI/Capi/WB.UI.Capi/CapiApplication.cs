@@ -36,7 +36,8 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Rest.Android;
 using WB.Core.GenericSubdomains.ErrorReporting;
 using WB.Core.GenericSubdomains.Logging.AndroidLogger;
-using WB.Core.Infrastructure.CommandBus;
+using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -276,6 +277,8 @@ namespace WB.UI.Capi
 
             this.kernel.Unbind<ISyncPackageRestoreService>();
             this.kernel.Bind<ISyncPackageRestoreService>().To<SyncPackageRestoreService>().InSingletonScope();
+
+            this.kernel.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope();
             
             #region register handlers
 

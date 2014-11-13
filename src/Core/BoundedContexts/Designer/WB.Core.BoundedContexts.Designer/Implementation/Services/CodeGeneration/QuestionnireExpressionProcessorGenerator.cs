@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
@@ -9,10 +10,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         private readonly IDynamicCompiler codeCompiler;
         private readonly ICodeGenerator codeGenerator;
 
-        public QuestionnireExpressionProcessorGenerator()
+        public QuestionnireExpressionProcessorGenerator(IDynamicCompiler codeCompiler, ICodeGenerator codeGenerator)
         {
-            this.codeCompiler =  new RoslynCompiler();
-            this.codeGenerator = new CodeGenerator();
+            this.codeCompiler =  codeCompiler;
+            this.codeGenerator = codeGenerator;
         }
 
         public GenerationResult GenerateProcessorStateAssembly(QuestionnaireDocument questionnaire, out string generatedAssembly)

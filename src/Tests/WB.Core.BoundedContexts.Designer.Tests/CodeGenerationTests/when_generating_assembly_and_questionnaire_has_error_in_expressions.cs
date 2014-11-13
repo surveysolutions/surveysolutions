@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
                 ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
 
-                IExpressionProcessorGenerator expressionProcessorGenerator = new QuestionnireExpressionProcessorGenerator();
+                IExpressionProcessorGenerator expressionProcessorGenerator = CreateExpressionProcessorGenerator();
 
                 QuestionnaireDocument questionnaireDocument = CreateQuestionnaireWithQuestionAndRosterWithQuestionWithInvalidExpressions(questionId, questionInRosterId);
 
