@@ -31,18 +31,26 @@ namespace WB.UI.Shared.Android.Frames
     
         protected AlertDialog openedDilog;
 
-        public StatisticsContentFragment()
-            : base()
-        {
-        }
+        public StatisticsContentFragment(): base(){}
 
         private View CreatePopupView(IList<QuestionViewModel> questions, IList<Func<QuestionViewModel, string>> valueFunctions)
         {
             var invalidQuestionsView = new ListView(this.Activity);
-
             invalidQuestionsView.Adapter = new StatisticsDataAdapter(questions, valueFunctions, this.Activity, ChangeScreen);
-
             invalidQuestionsView.ScrollingCacheEnabled = false;
+            invalidQuestionsView.ScrollStateChanged += (sender, args) =>
+            {
+                if (args.ScrollState == ScrollState.TouchScroll)
+                {
+                    var currentFocus = this.Activity.CurrentFocus;
+                    if (currentFocus != null)
+                    {
+                        currentFocus.ClearFocus();
+                    }
+                }
+
+            };
+
             return invalidQuestionsView;
         }
 
