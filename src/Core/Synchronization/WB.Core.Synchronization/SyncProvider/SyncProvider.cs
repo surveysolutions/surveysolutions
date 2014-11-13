@@ -15,7 +15,7 @@ namespace WB.Core.Synchronization.SyncProvider
 
     internal class SyncProvider : ISyncProvider
     {
-        private readonly ICommandService commandService = NcqrsEnvironment.Get<ICommandService>();
+        private readonly ICommandService commandService;
         
         private readonly IQueryableReadSideRepositoryWriter<ClientDeviceDocument> devices;
 
@@ -27,13 +27,13 @@ namespace WB.Core.Synchronization.SyncProvider
 
         public SyncProvider(IQueryableReadSideRepositoryWriter<ClientDeviceDocument> devices,
             ISynchronizationDataStorage storage,IIncomePackagesRepository incomeRepository,
-            ILogger logger)
+            ILogger logger, ICommandService commandService)
         {
             this.devices = devices;
             this.incomeRepository = incomeRepository;
             this.storage = storage;
             this.logger = logger;
-
+            this.commandService = commandService;
         }
 
         public SyncItem GetSyncItem(Guid clientRegistrationKey, Guid id, DateTime timestamp)

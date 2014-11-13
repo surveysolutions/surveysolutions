@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
 
         public ICommandService CommandInvoker
         {
-            get { return NcqrsEnvironment.Get<ICommandService>(); }
+            get { return ServiceLocator.Current.GetInstance<ICommandService>(); }
         }
 
         public override bool EnablePasswordReset
