@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                     StataExportCaption = "var1"
                 });
 
-            verifier = CreateQuestionnaireVerifier(expressionProcessorGenerator: new QuestionnireExpressionProcessorGenerator());
+            verifier = CreateQuestionnaireVerifier(expressionProcessorGenerator: CreateExpressionProcessorGenerator());
         };
 
         Because of = () =>

@@ -258,5 +258,43 @@ namespace WB.UI.Headquarters.Controllers
 
             return View(model);
         }
+
+        public ActionResult ResetHeadquartersPassword()
+        {
+            return this.View(new UserModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ResetHeadquartersPassword(UserModel model)
+        {
+            UserView userToCheck =
+                this.userViewFactory.Load(new UserViewInputModel(UserName: model.UserName, UserEmail: null));
+            if (userToCheck != null && userToCheck.Roles.Contains(UserRoles.Headquarter))
+            {
+                try
+                {
+                    this.CommandService.Execute(new ChangeUserCommand(publicKey: userToCheck.PublicKey,
+                        email: userToCheck.Email, isLockedByHQ: userToCheck.IsLockedByHQ,
+                        isLockedBySupervisor: userToCheck.IsLockedBySupervisor,
+                        passwordHash: passwordHasher.Hash(model.Password), userId: Guid.Empty,
+                        roles: userToCheck.Roles.ToArray()));
+                    this.Success(string.Format("Password for headquarters '{0}' successfully changed",
+                        userToCheck.UserName));
+                }
+                catch (Exception ex)
+                {
+                    var userErrorMessage = "Error when updating password for headquarters user";
+                    this.Error(userErrorMessage);
+                    this.Logger.Fatal(userErrorMessage, ex);
+                }
+            }
+            else
+            {
+                this.Error(string.Format("Headquarters '{0}' does not exists", model.UserName));
+            }
+
+            return View(model);
+        }
     }
 }

@@ -44,4 +44,6 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("WB.Tests.Integration")]
 [assembly: InternalsVisibleTo("WB.Core.BoundedContexts.Supervisor.Tests")]
 [assembly: InternalsVisibleTo("WB.Core.SharedKernels.SurveyManagement.Tests")]
+[assembly: InternalsVisibleTo("WB.Core.BoundedContexts.Designer.Tests")]
+[assembly: InternalsVisibleTo("WB.Tests.Unit")]
 [assembly: InternalsVisibleTo("WB.Core.Infrastructure.Raven.Tests")]
