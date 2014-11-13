@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireListViewDenormaliz
             string newtitle = "newTitle";
             QuestionnaireDocument documentReplacement = new QuestionnaireDocument() { PublicKey = questionnaireId, Title = newtitle };
 
-            var updrader = Mock.Of<IQuestionnaireDocumentUpgrader>(x => x.TranslatePropagatePropertiesToRosterProperties(It.IsAny<QuestionnaireDocument>()) == documentReplacement);
+            var updrader = Mock.Of<IQuestionnaireDocumentUpgrader>();
 
             QuestionnaireListViewItemDenormalizer target = CreateQuestionnaireDenormalizer(updrader);
             // act
@@ -51,10 +51,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireListViewDenormaliz
             string newtitle = "newTitle";
             QuestionnaireDocument documentReplacement = new QuestionnaireDocument() { PublicKey = questionnaireId, Title = newtitle};
 
-            var updrader = Mock.Of<IQuestionnaireDocumentUpgrader>(x => x.TranslatePropagatePropertiesToRosterProperties(It.IsAny<QuestionnaireDocument>()) == documentReplacement);
-
             questionnaireStorageMock.Setup(x => x.GetById(questionnaireId.ToString())).Returns(currentItem);
 
+            var updrader = Mock.Of<IQuestionnaireDocumentUpgrader>();
             QuestionnaireListViewItemDenormalizer target = CreateQuestionnaireDenormalizer(updrader);
             // act
             target.Handle(CreateEvent(CreateTemplateImportedEvent(documentReplacement)));

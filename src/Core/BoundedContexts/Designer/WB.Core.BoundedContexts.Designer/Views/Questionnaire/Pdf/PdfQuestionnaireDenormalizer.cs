@@ -428,7 +428,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             this.HandleUpdateEvent(evnt,
                 handle:
                     (@event, questionnaire) =>
-                        this.CreatePdfQuestionnaireViewFromQuestionnaireDocument(updrader.TranslatePropagatePropertiesToRosterProperties(@event.Source)));
+                        this.CreatePdfQuestionnaireViewFromQuestionnaireDocument((@event.Source)));
         }
 
         public void Handle(IPublishedEvent<QuestionnaireCloned> evnt)

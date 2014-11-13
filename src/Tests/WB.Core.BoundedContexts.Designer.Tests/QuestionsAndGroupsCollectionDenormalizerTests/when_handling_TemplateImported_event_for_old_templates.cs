@@ -87,12 +87,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
                 }
             };
 
-            var oldImportedDocument = new QuestionnaireDocument();
-            evnt = CreateTemplateImportedEvent(oldImportedDocument);
+            evnt = CreateTemplateImportedEvent(questionnaire);
 
             var upgrader = new Mock<IQuestionnaireDocumentUpgrader>();
-            upgrader.Setup(x => x.TranslatePropagatePropertiesToRosterProperties(oldImportedDocument))
-                .Returns(questionnaire);
 
             denormalizer = CreateQuestionnaireInfoDenormalizer(
                 questionDetailsViewMapper: questionDetailsFactoryMock.Object,

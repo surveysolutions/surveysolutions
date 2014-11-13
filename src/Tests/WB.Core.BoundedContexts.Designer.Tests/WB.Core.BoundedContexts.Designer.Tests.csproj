@@ -628,15 +628,9 @@
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_TextListQuestionCloned_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_moving_group_to_another_group_by_id_and_there_are_3_groups_with_same_id_in_initial_group.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_moving_question_to_another_group_by_id_and_there_are_4_questions_with_same_id_in_initial_group.cs" />
-    <Compile Include="QuestionnaireDenormalizerTests\when_QuestionChangeEvent_with_Autopropagate_question_type_is_come.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_updating_group_by_id_and_there_are_2_groups_with_same_id.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_updating_question_by_id_and_there_are_3_questions_with_same_id.cs" />
     <Compile Include="QuestionnaireDocumentExtensions.cs" />
-    <Compile Include="QuestionnaireDocumentUpgraderTests\QuestionnaireDocumentUpgraderTestsContext.cs" />
-    <Compile Include="QuestionnaireDocumentUpgraderTests\when_translating_propagating_properties_to_roster_properties_and_propagating_question_references_3_groups_by_3_triggers___.cs" />
-    <Compile Include="QuestionnaireDocumentUpgraderTests\when_translating_propagating_properties_to_roster_properties_and_questionnaire_has_2_rosters_and_1_head_question.cs" />
-    <Compile Include="QuestionnaireDocumentUpgraderTests\when_translating_propagating_properties_to_roster_properties_and_questionnaire_has_2_propagating_questions.cs" />
-    <Compile Include="QuestionnaireDocumentUpgraderTests\when_translating_propagating_properties_to_roster_properties.cs" />
     <Compile Include="ChapterInfoViewFactoryTests\ChapterInfoViewFactoryContext.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\QuestionnaireInfoFactoryTestContext.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_group_edit_view.cs" />

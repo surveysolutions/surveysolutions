@@ -805,7 +805,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         protected bool IsGroupRoster(IGroup group)
         {
-            return group.Propagated != Propagate.None || group.IsRoster;
+            return group.IsRoster;
         }
 
         protected void UpdateQuestionHash(QuestionViewModel question)

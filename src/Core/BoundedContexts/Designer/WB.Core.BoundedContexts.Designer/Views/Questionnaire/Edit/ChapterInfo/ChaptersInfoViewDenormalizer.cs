@@ -79,10 +79,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         private void BuildQuestionnaireFrom(QuestionnaireDocument questionnaireDocument, GroupInfoView questionnaire)
         {
-            QuestionnaireDocument sourceQuestionnaireOrGroup =
-                this.questionnaireUpgrader.TranslatePropagatePropertiesToRosterProperties(questionnaireDocument);
-            sourceQuestionnaireOrGroup.ConnectChildrenWithParent();
-            this.AddQuestionnaireItem(currentState: questionnaire, sourceQuestionnaireOrGroup: sourceQuestionnaireOrGroup);
+            questionnaireDocument.ConnectChildrenWithParent();
+            this.AddQuestionnaireItem(currentState: questionnaire, sourceQuestionnaireOrGroup: questionnaireDocument);
         }
 
         public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<NewGroupAdded> evnt)

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Main.Core.Commands.Sync;
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -13,6 +12,8 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization;
+using WB.Core.Synchronization.Commands;
+using WB.Core.Synchronization.Documents;
 using WB.Core.Synchronization.SyncProvider;
 
 namespace WB.Tests.Unit.SharedKernels.Synchronization.SyncProviderTests

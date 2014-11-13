@@ -32,10 +32,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests
         {
             var questionnaireDocumentUpgrader = Mock.Of<IQuestionnaireDocumentUpgrader>();
 
-            Mock.Get(questionnaireDocumentUpgrader)
-                .Setup(upgrader => upgrader.TranslatePropagatePropertiesToRosterProperties(It.IsAny<QuestionnaireDocument>()))
-                .Returns<QuestionnaireDocument>(questionnaireDocument => questionnaireDocument);
-
             Setup.InstanceToMockedServiceLocator(questionnaireDocumentUpgrader);
         }
 

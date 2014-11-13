@@ -15,8 +15,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
             readSideRepositoryWriter.Setup(x => x.GetById(It.IsAny<string>())).Returns(view);
 
             var upgraderMock = new Mock<IQuestionnaireDocumentUpgrader>();
-            upgraderMock.Setup(x => x.TranslatePropagatePropertiesToRosterProperties(It.IsAny<QuestionnaireDocument>()))
-                .Returns<QuestionnaireDocument>(document => document);
 
             return new ChaptersInfoViewDenormalizer(readSideRepositoryWriter.Object,
                 expressionProcessor ?? Mock.Of<IExpressionProcessor>(),
