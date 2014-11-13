@@ -299,6 +299,7 @@
     <Compile Include="Services\CodeGeneration\IDynamicCompiler.cs" />
     <Compile Include="Services\CodeGeneration\IDynamicCompilerSettings.cs" />
     <Compile Include="Services\ExpressionLocation.cs" />
+    <Compile Include="Services\ExpressionType.cs" />
     <Compile Include="Services\GenerationResult.cs" />
     <Compile Include="Services\ICodeGenerator.cs" />
     <Compile Include="Services\IExpressionProcessorGenerator.cs" />
@@ -334,6 +335,7 @@
     <Compile Include="Services\IQuestionnaireExportService .cs" />
     <Compile Include="Services\IQuestionnaireDocumentUpgrader.cs" />
     <Compile Include="Services\IQuestionnaireVersioner.cs" />
+    <Compile Include="Services\ItemType.cs" />
     <Compile Include="Services\TemplateInfo.cs" />
     <Compile Include="ValueObjects\InconsistentVersionException.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationError.cs" />
