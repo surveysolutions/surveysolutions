@@ -90,6 +90,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Main.Core, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\src\UI\Designer\WB.UI.Designer\Bin\Main.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -128,30 +132,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\File\UploadFileCommand.cs" />
-    <Compile Include="Commands\Sync\CreateClientDeviceCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Domain\ClientDeviceAR.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Domain\FileAR.cs" />
     <Compile Include="Entities\QuestionData.cs" />
-    <Compile Include="Conventions\RegisterFirstInstanceOfInterface.cs" />
+    <Compile Include="RegisterFirstInstanceOfInterface.cs" />
     <Compile Include="CoreRegistry.cs" />
-    <Compile Include="Documents\ClientDeviceDocument.cs" />
-    <Compile Include="Documents\FileDescription.cs" />
     <Compile Include="Documents\IQuestionnaireDocument.cs" />
-    <Compile Include="Documents\ProcessedEventChunk.cs" />
-    <Compile Include="Documents\QuestionAnswer.cs" />
     <Compile Include="Documents\QuestionnaireDocument.cs" />
-    <Compile Include="Documents\SyncActivityDocument.cs" />
-    <Compile Include="Documents\SyncDeviceRegisterDocument.cs" />
-    <Compile Include="Documents\SynchronizationStatisticType.cs" />
-    <Compile Include="Documents\SynchronizationType.cs" />
     <Compile Include="Entities\Composite\CompositeException.cs" />
     <Compile Include="Entities\Composite\IComposite.cs" />
-    <Compile Include="Entities\Observers\ITriggerable.cs" />
     <Compile Include="Entities\RegisterData.cs" />
     <Compile Include="Entities\SubEntities\AbstractQuestion.cs">
       <SubType>Code</SubType>
@@ -170,8 +157,6 @@
     <Compile Include="Entities\SubEntities\Question\IQRBarcodeQuestion.cs" />
     <Compile Include="Entities\SubEntities\Question\MultimediaQuestion.cs" />
     <Compile Include="Entities\SubEntities\Question\QRBarcodeQuestion.cs" />
-    <Compile Include="Entities\SubEntities\Question\IAutoPropagate.cs" />
-    <Compile Include="Entities\SubEntities\Question\IAutoPropagateQuestion.cs" />
     <Compile Include="Entities\SubEntities\Group.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -200,9 +185,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\SubEntities\QuestionType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Entities\SubEntities\Question\AutoPropagateQuestion.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\SubEntities\Question\DateTimeQuestion.cs">
@@ -236,56 +218,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\TemplateLight.cs" />
-    <Compile Include="EventHandlers\DeviceDenormalizer.cs" />
-    <Compile Include="EventHandlers\FileStoreDenormalizer.cs" />
-    <Compile Include="Events\File\FileDeleted.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\File\FileMetaUpdated.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\File\FileUploaded.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Synchronization\AggregateRootEventStreamPushed.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Synchronization\NewDeviceRegistered.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Synchronization\NewSynchronizationProcessCreated.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Synchronization\UpdateRegisteredDevice.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Sync\ClientDeviceLastSyncItemUpdated.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Sync\NewClientDeviceCreated.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Sync\NewSyncActivityCreated.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Sync\SyncActivityUpdated.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\User\NewUserCreated.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\User\UserBaseEvent.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\User\UserChanged.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\User\UserLocked.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\User\UserUnlocked.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

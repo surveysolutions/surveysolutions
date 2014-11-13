@@ -1,8 +1,8 @@
 ﻿using System;
 using Machine.Specifications;
-using Main.Core.Commands.File;
 using Moq;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
+using WB.Core.BoundedContexts.Capi.Commands;
 using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization;

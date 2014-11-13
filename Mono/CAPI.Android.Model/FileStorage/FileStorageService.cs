@@ -1,6 +1,6 @@
 using System.IO;
-using Main.Core.Documents;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace CAPI.Android.Core.Model.FileStorage
 {

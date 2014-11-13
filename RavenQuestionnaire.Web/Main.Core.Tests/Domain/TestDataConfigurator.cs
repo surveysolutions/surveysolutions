@@ -104,15 +104,9 @@ namespace Main.Core.Tests.Domain
             var answer1 = new Answer { PublicKey = this.Answer1Key, AnswerValue = "1" };
             var answer2 = new Answer { PublicKey = this.Answer2Key, AnswerValue = "2" };
 
-            var question2Prop = new AutoPropagateQuestion("Q1")
-                {
-                   PublicKey = this.AutoPropQuestionKey, MaxValue = 10, Triggers = new List<Guid> { this.AutoGroupKey } 
-                };
-
             question1.AddAnswer(answer1);
             question1.AddAnswer(answer2);
             group1.Children.Add(question1);
-            group1.Children.Add(question2Prop);
 
             var group2Auto = new Group { Propagated = Propagate.AutoPropagated, PublicKey = this.AutoGroupKey };
 

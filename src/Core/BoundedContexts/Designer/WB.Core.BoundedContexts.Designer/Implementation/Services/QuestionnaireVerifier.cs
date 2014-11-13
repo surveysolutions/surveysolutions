@@ -115,8 +115,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IGroup>(RosterSizeSourceQuestionTypeIsIncorrect, "WB0023", VerificationMessages.WB0023_RosterSizeSourceQuestionTypeIsIncorrect),
                     Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldNotBeEmpty, "WB0025", VerificationMessages.WB0025_RosterSizeQuestionMaxValueCouldNotBeEmpty),
                     Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldBeInRange1And40, "WB0026", VerificationMessages.WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And40),
-                    Verifier<IGroup>(QuestionnaireHaveAutopropagatedGroups, "WB0027", VerificationMessages.WB0027_QuestionnaireHaveAutopropagatedGroups),
-                    Verifier<IQuestion>(QuestionnaireHaveAutopropagatedQuestions, "WB0028", VerificationMessages.WB0028_QuestionnaireHaveAutopropagatedQuestions),
                     Verifier<IQuestion>(PrefilledQuestionCantBeInsideOfRoster, "WB0030", VerificationMessages.WB0030_PrefilledQuestionCantBeInsideOfRoster),
                     Verifier<IGroup>(GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles, "WB0032", VerificationMessages.WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles),
                     Verifier<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion, "WB0033", VerificationMessages.WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion),
@@ -640,16 +638,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool PrefilledQuestionCantBeInsideOfRoster(IQuestion question, QuestionnaireDocument questionnaire)
         {
             return IsPreFilledQuestion(question) && GetAllParentGroupsForQuestion(question, questionnaire).Any(IsRosterGroup);
-        }
-
-        private static bool QuestionnaireHaveAutopropagatedQuestions(IQuestion question, QuestionnaireDocument questionnaire)
-        {
-            return questionnaire.Find<IAutoPropagateQuestion>(_ => true).Any();
-        }
-
-        private static bool QuestionnaireHaveAutopropagatedGroups(IGroup group, QuestionnaireDocument questionnaire)
-        {
-            return questionnaire.Find<IGroup>(IsGroupPropagatable).Any();
         }
 
         private static bool TextListQuestionCannotBePrefilled(ITextListQuestion question)
@@ -1482,11 +1470,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool NoQuestionsExist(QuestionnaireDocument questionnaire)
         {
             return !questionnaire.Find<IQuestion>(_ => true).Any();
-        }
-
-        private static bool IsGroupPropagatable(IGroup group)
-        {
-            return group.Propagated == Propagate.AutoPropagated;
         }
 
         private static bool IsRosterGroup(IGroup group)

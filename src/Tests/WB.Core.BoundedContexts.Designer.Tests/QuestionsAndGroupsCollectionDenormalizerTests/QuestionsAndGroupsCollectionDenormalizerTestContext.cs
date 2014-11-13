@@ -11,7 +11,6 @@ using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using It = Moq.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDenormalizerTests
 {
@@ -25,8 +24,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
             IQuestionnaireDocumentUpgrader upgrader = null)
         {
             var upgraderMock = new Mock<IQuestionnaireDocumentUpgrader>();
-            upgraderMock.Setup(x => x.TranslatePropagatePropertiesToRosterProperties(It.IsAny<QuestionnaireDocument>()))
-                .Returns<QuestionnaireDocument>(document => document);
 
             return new QuestionsAndGroupsCollectionDenormalizer(readsideRepositoryWriter ?? Mock.Of<IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView>>(),
                 questionDetailsViewMapper ?? Mock.Of<IQuestionDetailsViewMapper>(),

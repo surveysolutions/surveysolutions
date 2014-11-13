@@ -105,8 +105,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            QuestionnaireDocument upgradedQuestionnaireDocument = upgrader.TranslatePropagatePropertiesToRosterProperties(evnt.Payload.Source);
-            this.CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(upgradedQuestionnaireDocument);
+            this.CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(evnt.Payload.Source);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireCloned> evnt)

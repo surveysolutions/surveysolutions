@@ -272,8 +272,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
         private static Dictionary<Guid, int> GetMaxValuesForRosterSizeQuestions(QuestionnaireDocument document)
         {
-            IEnumerable<IAutoPropagateQuestion> autoPropagateQuestions = document.Find<IAutoPropagateQuestion>(question => true);
-
             var rosterGroups = document.Find<IGroup>(@group => @group.IsRoster && @group.RosterSizeQuestionId.HasValue);
 
             var fixedRosterGroups =
@@ -292,11 +290,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                     .Where(question => question != null).Distinct();
 
             var collectedMaxValues = new Dictionary<Guid, int>();
-
-            foreach (IAutoPropagateQuestion autoPropagateQuestion in autoPropagateQuestions)
-            {
-                collectedMaxValues.Add(autoPropagateQuestion.PublicKey, autoPropagateQuestion.MaxValue);
-            }
 
             foreach (INumericQuestion rosterSizeNumericQuestion in rosterSizeNumericQuestions)
             {
@@ -410,8 +403,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 var innerGroup = groupChild as IGroup;
                 if (innerGroup != null)
                 {
-                    //### old questionnaires supporting        //### roster
-                    if (innerGroup.Propagated != Propagate.None || innerGroup.IsRoster)
+                    if (innerGroup.IsRoster)
                         continue;
                     this.FillHeaderWithQuestionsInsideGroup(headerStructureForLevel, innerGroup, referenceInfoForLinkedQuestions,
                         maxValuesForRosterSizeQuestions);

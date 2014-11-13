@@ -782,9 +782,6 @@ namespace CapiDataGenerator
 
                 case QuestionType.Text:
                     return "value " + _rand.Next();
-
-                case QuestionType.AutoPropagate:
-                    return new decimal(_rand.Next(((IAutoPropagate) question).MaxValue));
             }
 
             return null;

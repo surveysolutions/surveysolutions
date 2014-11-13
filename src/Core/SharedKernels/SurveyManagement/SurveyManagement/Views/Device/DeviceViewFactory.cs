@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Synchronization.Documents;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Device
 {

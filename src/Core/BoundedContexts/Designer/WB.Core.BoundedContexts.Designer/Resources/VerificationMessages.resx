@@ -178,10 +178,10 @@
     <value>Max value for roster size question must be in range [1, 40].</value>
   </data>
   <data name="WB0027_QuestionnaireHaveAutopropagatedGroups" xml:space="preserve">
-    <value>Questionnaire has autopropagated groups.</value>
+    <value />
   </data>
   <data name="WB0028_QuestionnaireHaveAutopropagatedQuestions" xml:space="preserve">
-    <value>Questionnaire has autopropagated questions.</value>
+    <value />
   </data>
   <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
     <value>Prefilled questions cannot be inside of roster.</value>

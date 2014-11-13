@@ -74,18 +74,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aggregates\FileAR.cs" />
     <Compile Include="CapiBoundedContextModule.cs" />
     <Compile Include="CapiSynchronizationModule.cs" />
     <Compile Include="ChangeLog\ChangeLogRecordWithContent.cs" />
     <Compile Include="ChangeLog\ChangeLogShortRecord.cs" />
     <Compile Include="ChangeLog\IChangeLogManipulator.cs" />
     <Compile Include="ChangeLog\IChangeLogStore.cs" />
+    <Compile Include="Commands\UploadFileCommand.cs" />
     <Compile Include="EventHandler\AnswerOptionsForCascadingQuestionsDenormalizer.cs" />
     <Compile Include="EventHandler\AnswerOptionsForLinkedQuestionsDenormalizer.cs" />
+    <Compile Include="EventHandler\FileStoreDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewViewModelDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireRosterStructureDenormalizer.cs" />
+    <Compile Include="Events\File\FileDeleted.cs" />
+    <Compile Include="Events\File\FileMetaUpdated.cs" />
+    <Compile Include="Events\File\FileUploaded.cs" />
     <Compile Include="IAuthentication.cs" />
     <Compile Include="Implementation\ChangeLog\FileChangeLogStore.cs" />
     <Compile Include="Implementation\Services\CapiDataSynchronizationService.cs" />

@@ -72,6 +72,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Aggregates\FileAR.cs">
+      <Link>Aggregates\FileAR.cs</Link>
+    </Compile>
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\CapiBoundedContextModule.cs">
       <Link>CapiBoundedContextModule.cs</Link>
     </Compile>
@@ -90,11 +93,17 @@
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\ChangeLog\IChangeLogStore.cs">
       <Link>ChangeLog\IChangeLogStore.cs</Link>
     </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Commands\UploadFileCommand.cs">
+      <Link>Commands\UploadFileCommand.cs</Link>
+    </Compile>
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\EventHandler\AnswerOptionsForCascadingQuestionsDenormalizer.cs">
       <Link>EventHandler\AnswerOptionsForCascadingQuestionsDenormalizer.cs</Link>
     </Compile>
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\EventHandler\AnswerOptionsForLinkedQuestionsDenormalizer.cs">
       <Link>EventHandler\AnswerOptionsForLinkedQuestionsDenormalizer.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\EventHandler\FileStoreDenormalizer.cs">
+      <Link>EventHandler\FileStoreDenormalizer.cs</Link>
     </Compile>
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\EventHandler\InterviewViewModelDenormalizer.cs">
       <Link>EventHandler\InterviewViewModelDenormalizer.cs</Link>
@@ -107,6 +116,15 @@
     </Compile>
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\EventHandler\QuestionnaireRosterStructureDenormalizer.cs">
       <Link>EventHandler\QuestionnaireRosterStructureDenormalizer.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Events\File\FileDeleted.cs">
+      <Link>Events\File\FileDeleted.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Events\File\FileMetaUpdated.cs">
+      <Link>Events\File\FileMetaUpdated.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Events\File\FileUploaded.cs">
+      <Link>Events\File\FileUploaded.cs</Link>
     </Compile>
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\IAuthentication.cs">
       <Link>IAuthentication.cs</Link>
@@ -294,7 +312,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="c6ed30a9-4d14-48d1-8311-c2267dfd424f" />
+      <UserProperties ProjectLinkReference="c6ed30a9-4d14-48d1-8311-c2267dfd424f" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -59,7 +59,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aggregates\ClientDeviceAR.cs" />
     <Compile Include="ClientIdentifier.cs" />
+    <Compile Include="Commands\CreateClientDeviceCommand.cs" />
+    <Compile Include="Documents\ClientDeviceDocument.cs" />
+    <Compile Include="Documents\SyncDeviceRegisterDocument.cs" />
+    <Compile Include="EventHandler\DeviceDenormalizer.cs" />
+    <Compile Include="Events\Sync\ClientDeviceLastSyncItemUpdated.cs" />
+    <Compile Include="Events\Sync\NewClientDeviceCreated.cs" />
+    <Compile Include="Events\Sync\NewDeviceRegistered.cs" />
+    <Compile Include="Events\Sync\UpdateRegisteredDevice.cs" />
     <Compile Include="IBackupManager.cs" />
     <Compile Include="IIncomePackagesRepository.cs" />
     <Compile Include="Implementation\ImportManager\DefaultBackupManager.cs" />
@@ -133,6 +142,7 @@
       <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

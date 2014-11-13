@@ -295,7 +295,6 @@
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_2_rosters_triggered_by_1_TextListQuestion.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_fixed_roster_and_MultyOptionLinkedQuestion_to_header.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_multy_options_roster_size_question_and_multy_option___.cs" />
-    <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_roster_max_2_rows_and_MultyOptionLinkedQuestion.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_roter_triggered_by_TextListQuestion.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_with_no_rosters_but_roster_is_present_in_roster_stucture.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_view_factory_from_containing_nested_group_inside_roster.cs" />
@@ -381,8 +380,6 @@
     <Compile Include="QuestionDataParserTests\when_building_answer_from_string_array_for_numeric_qustion.cs" />
     <Compile Include="QuestionDataParserTests\when_building_answer_from_string_array_for_textlist_question.cs" />
     <Compile Include="QuestionDataParserTests\when_parsing_empty_string_as_an_answer.cs" />
-    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_autopropagated_question.cs" />
-    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_autopropagated_question_and_answer_cant_be_parsed.cs" />
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_datetime_question.cs" />
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_datetime_question_and_answer_cant_be_parsed.cs" />
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_geolocation_question.cs" />

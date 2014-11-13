@@ -20,48 +20,6 @@ namespace Main.Core.Tests.Documents
         }
 
         [Test]
-        public void RemoveGroup_when_not_AutoPropagate_group_removed_then_count_of_triggers_in_AutoPropagate_question_should_be_the_same()
-        {
-            // Arrange
-            var notAutoPropagateGroupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            AutoPropagateQuestion autoQuestion;
-            var doc = this.CreateQuestionnaireDocumentWithRegularGroupAndAutoPropagateQuestion(notAutoPropagateGroupId, out autoQuestion);
-            var expectedCountOfTriggers = autoQuestion.Triggers.Count;
-
-            // Act
-            doc.RemoveGroup(notAutoPropagateGroupId);
-
-            // Assert
-            Assert.That(autoQuestion.Triggers.Count, Is.EqualTo(expectedCountOfTriggers));
-        }
-
-        private QuestionnaireDocument CreateQuestionnaireDocumentWithRegularGroupAndAutoPropagateQuestion(Guid groupId, out AutoPropagateQuestion autoQuestion)
-        {
-            var doc = new QuestionnaireDocument();
-            var chapter1 = new Group("Chapter 1") { PublicKey = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA1") };
-            autoQuestion = new AutoPropagateQuestion("Auto question")
-            {
-                PublicKey = Guid.NewGuid(), 
-                MaxValue = 10,
-                Triggers = new List<Guid>
-                {
-                    Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC1"), 
-                    Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC2")
-                }
-            };
-            var chapter2 = new Group("Chapter 2") { PublicKey = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA2") };
-            var autoGroup = new Group("Auto Group") { PublicKey = groupId, Propagated = Propagate.None };
-
-            chapter1.Children.Add(autoQuestion);
-            chapter2.Children.Add(autoGroup);
-
-            doc.Children.Add(chapter1);
-            doc.Children.Add(chapter2);
-
-            return doc;
-        }
-
-        [Test]
         public void RemoveHeadPropertiesFromRosters_when_removeRosterTitle_is_called_then_allrosters_titleQuestionId_is_CleanedUp()
         {
             // Arrange
@@ -323,32 +281,6 @@ namespace Main.Core.Tests.Documents
             chapter1.Children.Add(group1);
 
             doc.Children.Add(chapter1);
-
-            return doc;
-        }
-
-        private QuestionnaireDocument CreateQuestionnaireDocumentWithAutoPropagateGroupAndQuestion(Guid autoGroupId, out AutoPropagateQuestion autoQuestion)
-        {
-            var doc = new QuestionnaireDocument();
-            var chapter1 = new Group("Chapter 1") { PublicKey = Guid.Parse("ABBBBBBBBBBBBBBBBBBBBBBBBBBBBBB1") };
-            autoQuestion = new AutoPropagateQuestion("Auto question")
-            {
-                PublicKey = Guid.Parse("EBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), 
-                MaxValue = 10, 
-                Triggers = new List<Guid> { autoGroupId }
-            };
-            var chapter2 = new Group("Chapter 2") { PublicKey = Guid.Parse("ABBBBBBBBBBBBBBBBBBBBBBBBBBBBBB2") };
-            var autoGroup = new Group("Auto Group")
-            {
-                PublicKey = autoGroupId, 
-                Propagated = Propagate.AutoPropagated
-            };
-
-            chapter1.Children.Add(autoQuestion);
-            chapter2.Children.Add(autoGroup);
-
-            doc.Children.Add(chapter1);
-            doc.Children.Add(chapter2);
 
             return doc;
         }

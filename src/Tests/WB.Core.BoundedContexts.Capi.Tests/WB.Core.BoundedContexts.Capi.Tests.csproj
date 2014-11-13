@@ -195,7 +195,6 @@
     <Compile Include="Views\InterviewViewModelTests\when_updating_roster_title.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_add_roster_row_method_called.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_delete_roster_row_method_called.cs" />
-    <Compile Include="Views\InterviewViewModelTests\when_synchronized_data_contains_propagated_groups_with_linked_question_and_questions_with_substitution_from_linked_answer.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_setting_answer_to_roster_title_question_of_2_rosters_in_one_scope_with_shared_title_question.cs" />
   </ItemGroup>
   <ItemGroup>

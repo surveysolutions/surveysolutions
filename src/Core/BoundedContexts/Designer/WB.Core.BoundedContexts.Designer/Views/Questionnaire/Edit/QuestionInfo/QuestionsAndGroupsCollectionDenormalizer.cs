@@ -433,14 +433,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
         private QuestionsAndGroupsCollectionView CreateStateWithAllQuestions(QuestionnaireDocument questionnaire)
         {
-            var convertedDocument = this.questionnaireUpgrader.TranslatePropagatePropertiesToRosterProperties(questionnaire);
-            convertedDocument.ConnectChildrenWithParent();
-            var questions = convertedDocument.GetEntitiesByType<IQuestion>()
+            questionnaire.ConnectChildrenWithParent();
+            var questions = questionnaire.GetEntitiesByType<IQuestion>()
                 .Select(question => this.questionDetailsViewMapper.Map(question, question.GetParent().PublicKey))
                 .Where(q => q != null)
                 .ToList();
 
-            var groups = convertedDocument.GetAllGroups()
+            var groups = questionnaire.GetAllGroups()
                 .Select(g => new GroupAndRosterDetailsView
                 {
                     Id = g.PublicKey,
@@ -450,14 +449,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                     RosterSizeQuestionId = g.RosterSizeQuestionId,
                     RosterSizeSourceType = g.RosterSizeSource,
                     RosterTitleQuestionId = g.RosterTitleQuestionId,
-                    ParentGroupId = g.GetParent().PublicKey == convertedDocument.PublicKey ? Guid.Empty : g.GetParent().PublicKey,
+                    ParentGroupId = g.GetParent().PublicKey == questionnaire.PublicKey ? Guid.Empty : g.GetParent().PublicKey,
                     EnablementCondition = g.ConditionExpression,
                     VariableName = g.VariableName
                 })
                 .ToList();
 
             var staticTexts =
-                convertedDocument.GetEntitiesByType<IStaticText>().Select(staticText => new StaticTextDetailsView()
+                questionnaire.GetEntitiesByType<IStaticText>().Select(staticText => new StaticTextDetailsView()
                 {
                     Id = staticText.PublicKey,
                     ParentGroupId = staticText.GetParent().PublicKey,

@@ -257,22 +257,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (!this.DoesQuestionSupportRoster(questionId))
                 return Enumerable.Empty<Guid>();
 
-            //### old questionnaires supporting
-            IQuestion question = this.GetQuestionOrThrow(questionId);
-            var autoPropagatingQuestion = question as IAutoPropagateQuestion;
-            if (autoPropagatingQuestion != null)
-            {
-                foreach (Guid groupId in autoPropagatingQuestion.Triggers)
-                {
-                    this.ThrowIfGroupDoesNotExist(groupId,
-                        string.Format("Propagating question with id '{0}' references missing group.",
-                            FormatQuestionForException(autoPropagatingQuestion)));
-                }
-
-                return autoPropagatingQuestion.Triggers.ToList();
-            }
-
-            //### roster
             return this.GetAllGroups().Where(x => x.RosterSizeQuestionId == questionId && x.IsRoster).Select(x => x.PublicKey);
         }
 
@@ -281,12 +265,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IQuestion question = this.GetQuestionOrThrow(questionId);
             this.ThrowIfQuestionDoesNotSupportRoster(question.PublicKey);
 
-            //### old questionnaires supporting
-            var autoPropagatingQuestion = question as IAutoPropagateQuestion;
-            if (autoPropagatingQuestion != null)
-                return autoPropagatingQuestion.MaxValue;
-
-            //### roster
             var numericQuestion = question as INumericQuestion;
             if (numericQuestion != null)
                 return numericQuestion.MaxValue;
@@ -409,12 +387,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
-            //### old questionnaires supporting
-            var autoPropagateQuestion = question as IAutoPropagate;
-            if (autoPropagateQuestion != null)
-                return true;
-
-            //### roster
             var numericQuestion = question as INumericQuestion;
             if (numericQuestion == null)
                 throw new QuestionnaireException(string.Format("Question with id '{0}' must be numeric.", questionId));
@@ -655,18 +627,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private static bool DoesQuestionSupportRoster(IQuestion question)
         {
-            //### roster
             return question.QuestionType == QuestionType.Numeric
                 || question.QuestionType == QuestionType.MultyOption
-                || question.QuestionType == QuestionType.TextList
-                //### old questionnaires supporting
-                || (question.QuestionType == QuestionType.AutoPropagate && question is IAutoPropagateQuestion);
+                || question.QuestionType == QuestionType.TextList;
         }
 
         private static bool IsRosterGroup(IGroup group)
         {
-            //### old questionnaires supporting                    //### roster
-            return group.Propagated == Propagate.AutoPropagated || group.IsRoster;
+            return  group.IsRoster;
         }
 
         private void ThrowIfQuestionDoesNotSupportRoster(Guid questionId)

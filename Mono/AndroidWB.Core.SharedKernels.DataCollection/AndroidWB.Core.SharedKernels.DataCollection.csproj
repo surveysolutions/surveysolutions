@@ -428,8 +428,23 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Questionnaire\TemplateImported.cs">
       <Link>Events\Questionnaire\TemplateImported.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\User\NewUserCreated.cs">
+      <Link>Events\User\NewUserCreated.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\User\UserBaseEvent.cs">
+      <Link>Events\User\UserBaseEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\User\UserChanged.cs">
+      <Link>Events\User\UserChanged.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\User\UserLocked.cs">
+      <Link>Events\User\UserLocked.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\User\UserLockedBySupervisor.cs">
       <Link>Events\User\UserLockedBySupervisor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\User\UserUnlocked.cs">
+      <Link>Events\User\UserUnlocked.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\User\UserUnlockedBySupervisor.cs">
       <Link>Events\User\UserUnlockedBySupervisor.cs</Link>
@@ -578,6 +593,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Views\BinaryData\InterviewBinaryDataDescriptor.cs">
       <Link>Views\BinaryData\InterviewBinaryDataDescriptor.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Views\FileDescription.cs">
+      <Link>Views\FileDescription.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Views\Interview\InterviewTextListAnswer.cs">
       <Link>Views\Interview\InterviewTextListAnswer.cs</Link>
     </Compile>
@@ -670,7 +688,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" />
+      <UserProperties ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
