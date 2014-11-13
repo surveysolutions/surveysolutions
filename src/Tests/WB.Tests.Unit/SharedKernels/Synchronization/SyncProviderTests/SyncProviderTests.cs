@@ -137,7 +137,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SyncProviderTests
         }
         private SyncProvider CreateDefaultSyncProvider(IQueryableReadSideRepositoryWriter<ClientDeviceDocument> devices, ISynchronizationDataStorage storage, IIncomePackagesRepository incomeRepository, ILogger logger)
         {
-            return new SyncProvider(devices, storage, incomeRepository, logger);
+            return new SyncProvider(devices, storage, incomeRepository, logger, Mock.Of<ICommandService>());
         }
 
     }
