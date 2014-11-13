@@ -63,6 +63,19 @@ namespace WB.UI.Shared.Android.Frames
             this.llContent.DescendantFocusability = DescendantFocusability.BeforeDescendants;
             this.llContent.ItemsCanFocus = true;
             this.llContent.ScrollingCacheEnabled = false;
+            this.llContent.ScrollStateChanged += (sender, args) =>
+            {
+                if (args.ScrollState == ScrollState.TouchScroll)
+                {
+                    var currentFocus = this.Activity.CurrentFocus;
+                    if (currentFocus != null)
+                    {
+                        currentFocus.ClearFocus();
+                    }
+                }
+
+            };
+
             this.llContent.ChildViewRemoved += this.llContent_ChildViewRemoved;
            
             return this.top;

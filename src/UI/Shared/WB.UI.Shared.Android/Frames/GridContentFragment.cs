@@ -114,6 +114,20 @@ namespace WB.UI.Shared.Android.Frames
             const int columnCount = 2;
             this.LlTablesContainer.Adapter = new GridContentAdapter(this.Model, columnCount, this.Activity, this.OnScreenChanged, this.GetQuestionViewFactory());
             this.LlTablesContainer.ScrollingCacheEnabled = false;
+
+            this.LlTablesContainer.ScrollStateChanged += (sender, args) =>
+            {
+                if (args.ScrollState == ScrollState.TouchScroll)
+                {
+                    var currentFocus = this.Activity.CurrentFocus;
+                    if (currentFocus != null)
+                    {
+                        currentFocus.ClearFocus();
+                    }
+                }
+
+            };
+
             this.LlTablesContainer.ChildViewRemoved += this.LlTablesContainer_ChildViewRemoved;
             this.Top.AddView(this.LlTablesContainer);
         }
