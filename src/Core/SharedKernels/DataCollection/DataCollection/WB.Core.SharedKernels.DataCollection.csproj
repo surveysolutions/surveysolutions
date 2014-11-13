@@ -126,7 +126,12 @@
     <Compile Include="Events\Questionnaire\PlainQuestionnaireRegistered.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireDeleted.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireAssemblyImported.cs" />
+    <Compile Include="Events\User\NewUserCreated.cs" />
+    <Compile Include="Events\User\UserBaseEvent.cs" />
+    <Compile Include="Events\User\UserChanged.cs" />
+    <Compile Include="Events\User\UserLocked.cs" />
     <Compile Include="Events\User\UserLockedBySupervisor.cs" />
+    <Compile Include="Events\User\UserUnlocked.cs" />
     <Compile Include="Events\User\UserUnlockedBySupervisor.cs" />
     <Compile Include="Factories\IQuestionnaireFactory.cs" />
     <Compile Include="Factories\IQuestionnaireRosterStructureFactory.cs" />
@@ -242,6 +247,7 @@
     <Compile Include="ValueObjects\Interview\InterviewItemId.cs" />
     <Compile Include="ValueObjects\ValueVector.cs" />
     <Compile Include="Views\BinaryData\InterviewBinaryDataDescriptor.cs" />
+    <Compile Include="Views\FileDescription.cs" />
     <Compile Include="Views\Interview\InterviewTextListAnswer.cs" />
     <Compile Include="Views\Interview\InterviewTextListAnswers.cs" />
     <Compile Include="Views\Questionnaire\FeaturedQuestionItem.cs">

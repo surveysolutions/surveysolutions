@@ -84,9 +84,6 @@
     <Compile Include="Factories\QuestionnaireRosterStructureFactoryTests\QuestionnaireRosterStructureFactoryTestContext.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Factories\QuestionnaireRosterStructureFactoryTests\when_creating_roster_structure_factory_for_questionnarie_which_has_capital_question_inside_autopropagate_.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Factories\QuestionnaireRosterStructureFactoryTests\when_creating_roster_structure_factory_for_questionnarie_which_has_capital_question_inside_roster.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -242,8 +239,6 @@
     <Compile Include="QuestionnaireTests\when_questionnaire_has_nested_roster_inside_nested_group_of_other_roster_and_GetNestedRostersOfGroupById_called_for_parent_roster.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_has_nested_rosters_and_GetNestedRostersOfRosterById_called_for_parent_roster.cs" />
     <Compile Include="QuestionnaireTests\when_deleting_questionnaire_and_user_is_not_the_creator_of_this_questionaire.cs" />
-    <Compile Include="QuestionnaireTests\when_questionnaire_have_autopropagate_question_with_not_existing_group_in_triggers_then_GetRosterGroupsByRosterSizeQuestion_should_t___.cs" />
-    <Compile Include="QuestionnaireTests\when_questionnaire_have_autopropagate_groups_and_GetRosterGroupsByRosterSizeQuestion_return_them.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_has_multi_question_and_its_type_does_not_support_GetMaxSelectedAnswerOptions_method.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_has_multi_question_and_we_can_get_max_answers_number_for_it.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_have_nested_roster_group_with_not_empty_RosterSizeQuestionId_and_GetRosterGroupsByRosterSizeQuestion_called.cs" />

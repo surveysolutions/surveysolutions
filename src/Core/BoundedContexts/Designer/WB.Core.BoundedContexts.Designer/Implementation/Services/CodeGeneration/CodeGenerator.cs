@@ -447,7 +447,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private static bool IsRosterGroup(IGroup group)
         {
-            return group.IsRoster || group.Propagated == Propagate.AutoPropagated;
+            return group.IsRoster;
         }
 
         private string GenerateTypeNameByScope(IEnumerable<Guid> currentRosterScope,

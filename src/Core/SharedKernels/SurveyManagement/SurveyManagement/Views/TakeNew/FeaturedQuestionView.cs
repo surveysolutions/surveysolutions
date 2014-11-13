@@ -32,18 +32,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TakeNew
 
             this.Answers = doc.Answers.Select(a => new FeaturedAnswerView(a)).ToArray();
 
-
-            var autoQuestion = doc as IAutoPropagate;
-
-            if (autoQuestion != null)
-            {
-                this.MaxValue = autoQuestion.MaxValue;
-                if (autoQuestion.Triggers != null)
-                {
-                    this.Triggers = autoQuestion.Triggers.ToList();
-                }
-            }
-
             var numericQuestion = doc as INumericQuestion;
             if (numericQuestion != null)
             {

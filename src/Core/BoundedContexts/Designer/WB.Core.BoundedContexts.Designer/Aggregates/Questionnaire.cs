@@ -118,14 +118,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         internal void Apply(TemplateImported e)
         {
-            var upgradedDocument = QuestionnaireDocumentUpgrader.TranslatePropagatePropertiesToRosterProperties(e.Source);
+            var upgradedDocument = e.Source;
             this.innerDocument = upgradedDocument;
         }
 
         private void Apply(QuestionnaireCloned e)
         {
-            var upgradedDocument = QuestionnaireDocumentUpgrader.TranslatePropagatePropertiesToRosterProperties(e.QuestionnaireDocument);
-            this.innerDocument = upgradedDocument;
+            this.innerDocument = e.QuestionnaireDocument;
         }
 
         private void Apply(GroupCloned e)

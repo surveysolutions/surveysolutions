@@ -514,7 +514,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
         private void AddNewQuestionnaire(QuestionnaireDocument questionnaireDocument)
         {
-            questionnaireDocument = this.upgrader.TranslatePropagatePropertiesToRosterProperties(questionnaireDocument);
             this.documentStorage.Store(questionnaireDocument, questionnaireDocument.PublicKey);
         }
     }

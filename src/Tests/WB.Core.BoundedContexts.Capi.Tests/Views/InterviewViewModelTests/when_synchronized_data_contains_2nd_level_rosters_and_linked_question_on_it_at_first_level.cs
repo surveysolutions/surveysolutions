@@ -73,51 +73,48 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
                         }
                     },
                     {
-                        new InterviewItemId(secondLevelRosterId, new decimal[] { 0 }),
+                        new InterviewItemId(secondLevelRosterId, rosterVector0),
                         new[]
                         {
-                            new RosterSynchronizationDto(secondLevelRosterId, new decimal[] { 0 }, 0, null, null),
-                            new RosterSynchronizationDto(secondLevelRosterId, new decimal[] { 0 }, 1, null, null),
+                            new RosterSynchronizationDto(secondLevelRosterId, rosterVector0, 0, null, null),
+                            new RosterSynchronizationDto(secondLevelRosterId, rosterVector0, 1, null, null),
                         }
                     },
                     {
-                        new InterviewItemId(secondLevelRosterId, new decimal[] { 1 }),
+                        new InterviewItemId(secondLevelRosterId, rosterVector1),
                         new[]
                         {
-                            new RosterSynchronizationDto(secondLevelRosterId, new decimal[] { 1 }, 0, null, null)
+                            new RosterSynchronizationDto(secondLevelRosterId, rosterVector1, 0, null, null)
                         }
                     }
                 });
         };
 
         Because of = () =>
-          interviewViewModel = CreateInterviewViewModel(questionnarie, rosterStructure,
-              interviewSynchronizationDto);
+          interviewViewModel = CreateInterviewViewModel(questionnarie, rosterStructure, interviewSynchronizationDto);
 
         It should_linked_in_first_row_has_2_options = () =>
-            ((LinkedQuestionViewModel)interviewViewModel.FindQuestion(
-                question => question.PublicKey == new InterviewItemId(linkedQuestionId, new decimal[]{0}))
-                .FirstOrDefault()).AnswerOptions.Count().ShouldEqual(2);
+            LinkedQuestionViewModel(linkedQuestionId, rosterVector0).AnswerOptions.Count().ShouldEqual(2);
 
         It should_linked_in_second_row_has_2_options = () =>
-         ((LinkedQuestionViewModel)interviewViewModel.FindQuestion(
-             question => question.PublicKey == new InterviewItemId(linkedQuestionId, new decimal[] { 1 }))
-             .FirstOrDefault()).AnswerOptions.Count().ShouldEqual(1);
+            LinkedQuestionViewModel(linkedQuestionId, rosterVector1).AnswerOptions.Count().ShouldEqual(1);
 
         It should_linked_question_in_first_row_has_first_option_equal_to_11 = () =>
-         ((LinkedQuestionViewModel)interviewViewModel.FindQuestion(
-             question => question.PublicKey == new InterviewItemId(linkedQuestionId, new decimal[]{0}))
-             .FirstOrDefault()).AnswerOptions.First().Title.ShouldEqual("11");
+            LinkedQuestionViewModel(linkedQuestionId, rosterVector0).AnswerOptions.First().Title.ShouldEqual("11");
 
         It should_linked_question_in_first_row_has_second_option_equal_to_12 = () =>
-        ((LinkedQuestionViewModel)interviewViewModel.FindQuestion(
-            question => question.PublicKey == new InterviewItemId(linkedQuestionId, new decimal[] { 0 }))
-            .FirstOrDefault()).AnswerOptions.Last().Title.ShouldEqual("12");
+            LinkedQuestionViewModel(linkedQuestionId, rosterVector0).AnswerOptions.Last().Title.ShouldEqual("12");
 
         It should_linked_question_in_second_row_has_first_option_equal_to_21 = () =>
-         ((LinkedQuestionViewModel)interviewViewModel.FindQuestion(
-             question => question.PublicKey == new InterviewItemId(linkedQuestionId, new decimal[]{1}))
-             .FirstOrDefault()).AnswerOptions.Last().Title.ShouldEqual("21");
+            LinkedQuestionViewModel(linkedQuestionId, rosterVector1).AnswerOptions.Last().Title.ShouldEqual("21");
+
+        private static LinkedQuestionViewModel LinkedQuestionViewModel(Guid linkedQuestionId, decimal[] rosterVector0)
+        {
+            var questionViewModel = interviewViewModel
+                .FindQuestion(question => question.PublicKey == new InterviewItemId(linkedQuestionId, rosterVector0))
+                .FirstOrDefault();
+            return (LinkedQuestionViewModel) questionViewModel;
+        }
 
         private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;
@@ -128,5 +125,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
         private static Guid linkedQuestionId;
         private static Guid secondLevelRosterId;
         private static Guid sourceForLinkedQuestionId;
+        private static decimal[] rosterVector1 = new decimal[] { 1 };
+        private static decimal[] rosterVector0 = new decimal[]{0};
     }
 }

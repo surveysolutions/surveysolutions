@@ -99,10 +99,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
 
         private static bool IsRoster(IGroup currentGroup)
         {
-                    //### old questionnaires supporting
-            return currentGroup.Propagated == Propagate.AutoPropagated ||
-                   //### roster
-                   (currentGroup.IsRoster);
+            return (currentGroup.IsRoster);
         }
 
         private InterviewLevel GetRootLevel(InterviewData interview)

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Main.Core.Commands.Sync;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Machine.Specifications;
