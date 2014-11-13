@@ -163,8 +163,6 @@ namespace CapiDataGenerator
                 bus.Register(handler as IEventHandler);
             }
 
-            this.Bind<ICommandService>().ToConstant(NcqrsEnvironment.Get<ICommandService>());
-            
             #region register handlers
 
             InitCapiTemplateStorage(bus);

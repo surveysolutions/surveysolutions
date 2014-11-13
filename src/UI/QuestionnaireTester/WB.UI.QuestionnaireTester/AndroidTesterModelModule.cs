@@ -1,5 +1,6 @@
 using Main.Core.Documents;
 using Main.DenormalizerStorage;
+using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
@@ -17,6 +18,8 @@ namespace WB.UI.QuestionnaireTester
         {
             var evenStore = new InMemoryEventStore();
             var snapshotStore = new InMemoryEventStore();
+
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(snapshotStore);
             
             var templateStore = new InMemoryReadSideRepositoryAccessor<QuestionnaireDocumentVersioned>();
             var propagationStructureStore = new InMemoryReadSideRepositoryAccessor<QuestionnaireRosterStructure>();

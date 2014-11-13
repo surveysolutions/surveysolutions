@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
         {
             get
             {
-                return NcqrsEnvironment.Get<ICommandService>(); /*KernelLocator.Kernel.Get<ICommandInvoker>()*/
+                return ServiceLocator.Current.GetInstance<ICommandService>(); /*KernelLocator.Kernel.Get<ICommandInvoker>()*/
             }
         }
 

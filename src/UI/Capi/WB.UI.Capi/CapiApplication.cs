@@ -23,8 +23,10 @@ using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
+using Ninject.Modules;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.EventHandler;
 using WB.Core.BoundedContexts.Capi.Services;
@@ -36,12 +38,15 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Rest.Android;
 using WB.Core.GenericSubdomains.ErrorReporting;
 using WB.Core.GenericSubdomains.Logging.AndroidLogger;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Snapshots;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
@@ -53,6 +58,7 @@ using WB.UI.Capi.Implementations.Navigation;
 using WB.UI.Capi.Injections;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Extensions;
+using CommandService = WB.Core.Infrastructure.CommandBus.CommandService;
 
 namespace WB.UI.Capi
 {
@@ -64,6 +70,15 @@ namespace WB.UI.Capi
     [Crasher(UseCustomData = false)]
     public class CapiApplication : Application
     {
+        public class ServiceLocationModule : NinjectModule
+        {
+            public override void Load()
+            {
+                ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.Kernel));
+                this.Kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
+            }
+        }
+
         #region static properties
 
         public static TOutput LoadView<TInput, TOutput>(TInput input)
@@ -75,7 +90,7 @@ namespace WB.UI.Capi
 
         public static ICommandService CommandService
         {
-            get { return NcqrsEnvironment.Get<ICommandService>(); }
+            get { return Kernel.Get<ICommandService>(); }
         }
 
         public static IDataCollectionAuthentication Membership
@@ -239,13 +254,14 @@ namespace WB.UI.Capi
             const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
 
             this.kernel = new StandardKernel(
+                new ServiceLocationModule(),
                 new CapiBoundedContextModule(),
                 new AndroidCoreRegistry(),
                 new RestAndroidModule(),
                 new FileInfrastructureModule(),
+                new AndroidLoggingModule(),
                 new AndroidModelModule(basePath, new[] { SynchronizationFolder, InterviewFilesFolder, QuestionnaireAssembliesFolder }),
                 new ErrorReportingModule(basePath),
-                new AndroidLoggingModule(),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath, 
                     syncDirectoryName: SynchronizationFolder, dataDirectoryName: InterviewFilesFolder, 
                     questionnaireAssembliesFolder : QuestionnaireAssembliesFolder),
@@ -255,20 +271,33 @@ namespace WB.UI.Capi
             CrashManager.AttachSender(() => new FileReportSender("Interviewer", this.kernel.Get<IInfoFileSupplierRegistry>()));
          
             this.kernel.Bind<Context>().ToConstant(this);
-            ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
-            this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
             var ncqrsCommandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
             NcqrsEnvironment.SetDefault(ncqrsCommandService);
             NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>(), ncqrsCommandService);
 
-            NcqrsInit.Init(this.kernel);
+            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
+
+            kernel.Bind<ISnapshottingPolicy>().ToMethod(context => NcqrsEnvironment.Get<ISnapshottingPolicy>());
+            kernel.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
+            kernel.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
+
+            kernel.Bind<IDomainRepository>().To<DomainRepository>();
+
+            var bus = new InProcessEventBus(true);
+            NcqrsEnvironment.SetDefault<IEventBus>(bus);
+            kernel.Bind<IEventBus>().ToConstant(bus);
+
+            kernel.Bind<IAggregateRootRepository>().To<AggregateRootRepository>();
+            kernel.Bind<IEventPublisher>().To<EventPublisher>();
+            kernel.Bind<ISnapshotManager>().To<SnapshotManager>();
+
+            // TODO: TLK, KP-4337: make correct mapping here, not a direct creation
+            var commandService = new CommandService(ncqrsCommandService, kernel.Get<IAggregateRootRepository>(), kernel.Get<IEventPublisher>(), kernel.Get<ISnapshotManager>());
+
+            kernel.Bind<ICommandService>().ToConstant(commandService);
        
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());
             NcqrsEnvironment.SetDefault(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
-            var domainrepository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(), NcqrsEnvironment.Get<IAggregateSnapshotter>());
-            this.kernel.Bind<IDomainRepository>().ToConstant(domainrepository);
-            this.kernel.Bind<ICommandService>().ToConstant(CommandService);
 
             this.kernel.Unbind<IAnswerOnQuestionCommandService>();
             this.kernel.Bind<IAnswerOnQuestionCommandService>().To<AnswerOnQuestionCommandService>().InSingletonScope();
@@ -285,8 +314,6 @@ namespace WB.UI.Capi
 
             var interviewViewBus = new InProcessEventBus();
             this.kernel.Bind<IEventBus>().ToConstant(interviewViewBus).Named("interviewViewBus");
-
-            var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
 
             var eventHandler =
                 new InterviewViewModelDenormalizer(
