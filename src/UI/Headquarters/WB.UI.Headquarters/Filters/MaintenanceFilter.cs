@@ -16,7 +16,7 @@ namespace WB.UI.Headquarters.Filters
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (filterContext.Controller is ControlPanelController) return;
+            if (filterContext.Controller is WB.UI.Headquarters.Controllers.ControlPanelController) return;
 
             if (!(filterContext.Controller is MaintenanceController) && readSideStatusService.AreViewsBeingRebuiltNow())
             {

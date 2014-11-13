@@ -69,6 +69,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             get { return new[] { syncStorage }; }
         }
 
+        public override object[] Readers
+        {
+            get { return new object[] { users, questionnriePropagationStructures, interviews, interviewSummarys }; }
+
+        }
+
         public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
         {
             var newStatus = evnt.Payload.Status;
