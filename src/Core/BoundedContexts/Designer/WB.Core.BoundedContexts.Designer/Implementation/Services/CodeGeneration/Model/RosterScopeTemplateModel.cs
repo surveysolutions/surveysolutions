@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,20 +8,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         public RosterScopeTemplateModel(KeyValuePair<string, List<RosterTemplateModel>> rosterScope,
             QuestionnaireExecutorTemplateModel executorModel, bool generateEmbeddedExpressionMethods)
+            : base(generateEmbeddedExpressionMethods, rosterScope.Value.First().ParentScope, String.Empty, rosterScope.Key,
+            rosterScope.Value.SelectMany(r => r.Groups).ToList(), rosterScope.Value.SelectMany(r => r.Questions).ToList(),
+            rosterScope.Value.SelectMany(r => r.Rosters).ToList(), new List<Guid>())
         {
-            this.GeneratedTypeName = rosterScope.Key;
             this.RostersInScope = rosterScope.Value;
-
             this.ParentTypeName = rosterScope.Value[0].ParentScope.GeneratedTypeName;
-            this.ParentScope = this.RostersInScope.First().ParentScope;
-
-            this.Questions = rosterScope.Value.SelectMany(r => r.Questions).ToList();
-            this.Groups = rosterScope.Value.SelectMany(r => r.Groups).ToList();
-            this.Rosters = rosterScope.Value.SelectMany(r => r.Rosters).ToList();
-
             this.ExecutorModel = executorModel;
-
-            this.GenerateEmbeddedExpressionMethods = generateEmbeddedExpressionMethods;
         }
 
         public QuestionnaireExecutorTemplateModel ExecutorModel { private set; get; }
