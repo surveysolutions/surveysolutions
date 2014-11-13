@@ -105,14 +105,6 @@ namespace CapiDataGenerator
             }
         }
 
-        private IPasswordHasher passwordHasher
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<IPasswordHasher>();
-            }
-        }
-
         static readonly Random _rand = new Random();
         readonly Timer _timer = new Timer(1000);
         private DateTime _startTime;

@@ -38,6 +38,7 @@ using WB.Core.GenericSubdomains.ErrorReporting;
 using WB.Core.GenericSubdomains.Logging.AndroidLogger;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
