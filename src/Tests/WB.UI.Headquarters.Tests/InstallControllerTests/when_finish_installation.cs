@@ -24,14 +24,13 @@ namespace WB.UI.Headquarters.Tests.InterviewControllerTests
             commandServiceMock.Setup(_ => _.Execute(Moq.It.IsAny<ICommand>(), Moq.It.IsAny<string>()))
                 .Callback<ICommand, string>((command, origin) => executedCommand = command);
 
-            controller = CreateController(commandService:commandServiceMock.Object, passwordHasher: passwordHasherMock.Object);
         };
 
         Because of = () =>
             controller.Finish(model);
 
         It should_execute_command_service_only_once = () =>
-            commandServiceMock.Verify(_=>_.Execute(executedCommand, null), Times.Once);
+            commandServiceMock.Verify(_ => _.Execute(executedCommand, null), Times.Once);
 
         It should_execute_command_be_type_of_CreateUserCommand = () =>
             executedCommand.ShouldBeOfExactType<CreateUserCommand>();

@@ -60,9 +60,12 @@ namespace WB.UI.Headquarters.Controllers
             return this.View();
         }
 
-        public ActionResult Edit(Guid id)
+        public ActionResult Edit(Guid? id)
         {
-            var user = this.GetUserById(id);
+            if (!id.HasValue)
+                return this.RedirectToAction("Edit", "Supervisor", new {id = GlobalInfo.GetCurrentUser().Id});
+
+            var user = this.GetUserById(id.Value);
 
             if(user == null) throw new HttpException(404, string.Empty);
 

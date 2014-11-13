@@ -18,7 +18,7 @@ namespace WB.UI.Capi.Views
             }
         }
 
-        private IPasswordHasher PasswordHasher
+        private IPasswordHasher passwordHasher
         {
             get
             {
@@ -72,7 +72,7 @@ namespace WB.UI.Capi.Views
             NavigationService.NavigateTo(CapiPages.Synchronization, new NameValueCollection
             {
                 {"Login", Login},
-                {"PasswordHash", PasswordHasher.Hash(Password)}
+                {"PasswordHash", passwordHasher.Hash(Password)}
             });
         }
     }
