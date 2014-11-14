@@ -40,8 +40,12 @@ namespace WB.Core.GenericSubdomains.Rest.Android
             this.logger.Error(string.Format("Sync error. Status: {0}, Response Uri: {1}, Url: {2} Method:{3}, Login: {4}, args: {5}",
                 response.StatusDescription, response.ResponseUri, url, method, login, 
                 string.Join(";", additionalParams.Select(x => x.Key + "=" + x.Value.ToString()).ToArray())));
-            throw new RestException(string.Format("Target returned unexpected result. Status: {0}", response.StatusDescription));
             
+            var exceptionMessage = string.IsNullOrWhiteSpace(response.Content)
+                    ? string.Format("Target returned unexpected result. Status: {0}", response.StatusDescription)
+                    : this.jsonUtils.Deserrialize<ErrorMessage>(response.Content).Message;
+
+            throw new RestException(exceptionMessage);            
         }
 
         public T ExecuteRestRequest<T>(string url, string login, string password, string method, params KeyValuePair<string, object>[] additionalParams)
@@ -101,7 +105,12 @@ namespace WB.Core.GenericSubdomains.Rest.Android
                 throw new AuthenticationException("Not autorized");
 
             this.logger.Error(string.Format("Sync error. Response status: {0}. {1}", response.StatusCode, response.StatusDescription));
-            throw new RestException(string.Format("Target returned unexpected result. Status: {0}. {1}", response.StatusCode, response.StatusDescription));
+        
+            var exceptionMessage = string.IsNullOrWhiteSpace(response.Content)
+                    ? string.Format("Target returned unexpected result. Status: {0}", response.StatusDescription)
+                    : this.jsonUtils.Deserrialize<ErrorMessage>(response.Content).Message;
+
+            throw new RestException(exceptionMessage);
         }
 
         public T ExecuteRestRequestAsync<T>(string url, CancellationToken ct, object requestBody, string login, string password, string method,
@@ -153,16 +162,21 @@ namespace WB.Core.GenericSubdomains.Rest.Android
             if (response.ErrorException != null)
             {
                 this.logger.Error("Error occured during synchronization. Response contains exception. Message: " + response.ErrorMessage, response.ErrorException);
-                throw new RestException("Error occurred on communication. Please, check settings or try again later. Status: " + response.StatusDescription);
+                throw new RestException("Error occurred on communication. Please, check settings or try again later");
             }
 
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                if(response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
+                if (response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
                     throw new AuthenticationException("Not autorized");
 
-                this.logger.Error(string.Format("Sync error. Status: {0}", response.StatusDescription));
-                throw new RestException(string.Format("Target returned unexpected result. Status: {0}", response.StatusDescription));
+                this.logger.Error(string.Format("Sync error. Status: {0}. {1}", response.StatusDescription, response.Content));
+
+                var exceptionMessage = string.IsNullOrWhiteSpace(response.Content) 
+                    ? string.Format("Target returned unexpected result. Status: {0}", response.StatusDescription) 
+                    : this.jsonUtils.Deserrialize<ErrorMessage>(response.Content).Message;
+
+                throw new RestException(exceptionMessage);
             }
 
             if (string.IsNullOrWhiteSpace(response.Content))
