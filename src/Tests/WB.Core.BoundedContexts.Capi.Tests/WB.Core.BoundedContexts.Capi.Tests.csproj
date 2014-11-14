@@ -90,7 +90,6 @@
     <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_delete_questionnaire.cs" />
     <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_delete_questionnaire_with_broken_metadata.cs" />
     <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_existing_user.cs" />
-    <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_file.cs" />
     <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_new_broken_interview.cs" />
     <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_new_interview.cs" />
     <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_new_user.cs" />
