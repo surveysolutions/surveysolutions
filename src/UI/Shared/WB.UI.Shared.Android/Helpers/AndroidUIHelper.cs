@@ -1,14 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Android.App;
-using Android.Content;
 using Android.Graphics;
-using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 
@@ -52,6 +46,21 @@ namespace WB.UI.Shared.Android.Helpers
             progressBar.SetX(size.X / 2);
             progressBar.SetY(size.Y / 2);
             return progressBar;
+        }
+
+        public static void AttachCheckAndClearFocusForPanel(this ListView view, Activity activity)
+        {
+            view.ScrollStateChanged += (sender, args) =>
+            {
+                if (args.ScrollState == ScrollState.TouchScroll)
+                {
+                    var currentFocus = activity.CurrentFocus;
+                    if (currentFocus != null)
+                    {
+                        currentFocus.ClearFocus();
+                    }
+                }
+            };
         }
     }
 }
