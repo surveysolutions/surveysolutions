@@ -292,10 +292,7 @@ namespace WB.UI.Capi
             kernel.Bind<IEventPublisher>().To<EventPublisher>();
             kernel.Bind<ISnapshotManager>().To<SnapshotManager>();
 
-            // TODO: TLK, KP-4337: make correct mapping here, not a direct creation
-            var commandService = new CommandService(ncqrsCommandService, kernel.Get<IAggregateRootRepository>(), kernel.Get<IEventPublisher>(), kernel.Get<ISnapshotManager>());
-
-            kernel.Bind<ICommandService>().ToConstant(commandService);
+            kernel.Bind<ICommandService>().To<CommandService>();
        
             NcqrsEnvironment.SetDefault(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
 
