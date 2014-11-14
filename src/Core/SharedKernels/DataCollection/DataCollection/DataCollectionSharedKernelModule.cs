@@ -69,6 +69,24 @@ namespace WB.Core.SharedKernels.DataCollection
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
 
             CommandRegistry
+                .Setup<Questionnaire>()
+                .ResolvesIdFrom<QuestionnaireCommand>           (command => command.QuestionnaireId)
+                .InitializesWith<ImportFromDesigner>            (aggregate => aggregate.ImportFromDesigner)
+                .InitializesWith<ImportFromDesignerForTester>   (aggregate => aggregate.ImportFromDesignerForTester)
+                .InitializesWith<ImportFromSupervisor>          (aggregate => aggregate.ImportFromSupervisor)
+                .InitializesWith<RegisterPlainQuestionnaire>    (aggregate => aggregate.RegisterPlainQuestionnaire)
+                .Handles<DeleteQuestionnaire>                   (aggregate => aggregate.DeleteQuestionnaire);
+
+            CommandRegistry
+                .Setup<UserAR>()
+                .InitializesWith<CreateUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.CreateUser(command.Email, command.IsLockedBySupervisor, command.IsLockedByHQ, command.Password, command.PublicKey, command.Roles, command.Supervisor, command.UserName))
+                .Handles<ChangeUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.ChangeUser(command.Email, command.IsLockedBySupervisor, command.IsLockedByHQ, command.Roles, command.PasswordHash, command.UserId))
+                .Handles<LockUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.Lock())
+                .Handles<LockUserBySupervisorCommand>(command => command.UserId, (command, aggregate) => aggregate.LockBySupervisor())
+                .Handles<UnlockUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.Unlock())
+                .Handles<UnlockUserBySupervisorCommand>(command => command.PublicKey, (command, aggregate) => aggregate.UnlockBySupervisor());
+
+            CommandRegistry
                 .Setup<Interview>()
                 .InitializesWith<ApplySynchronizationMetadata>(command => command.InterviewId, (command, aggregate) => aggregate.ApplySynchronizationMetadata(command.Id, command.UserId, command.QuestionnaireId, command.QuestionnaireVersion, command.InterviewStatus, command.FeaturedQuestionsMeta, command.Comments, command.Valid, command.CreatedOnClient))
                 .InitializesWith<CreateInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterview(command.QuestionnaireId, command.QuestionnaireVersion, command.SupervisorId, command.AnswersToFeaturedQuestions, command.AnswersTime, command.UserId))
@@ -108,24 +126,6 @@ namespace WB.Core.SharedKernels.DataCollection
                 .Handles<RestoreInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Restore(command.UserId))
                 .Handles<SetFlagToAnswerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.SetFlagToAnswer(command.UserId, command.QuestionId, command.RosterVector))
                 .Handles<SynchronizeInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.SynchronizeInterview(command.UserId, command.SynchronizedInterview));
-
-            CommandRegistry
-                .Setup<Questionnaire>()
-                .ResolvesIdFrom<QuestionnaireCommand>           (command => command.QuestionnaireId)
-                .InitializesWith<ImportFromDesigner>            (aggregate => aggregate.ImportFromDesigner)
-                .InitializesWith<ImportFromDesignerForTester>   (aggregate => aggregate.ImportFromDesignerForTester)
-                .InitializesWith<ImportFromSupervisor>          (aggregate => aggregate.ImportFromSupervisor)
-                .InitializesWith<RegisterPlainQuestionnaire>    (aggregate => aggregate.RegisterPlainQuestionnaire)
-                .Handles<DeleteQuestionnaire>                   (aggregate => aggregate.DeleteQuestionnaire);
-
-            CommandRegistry
-                .Setup<UserAR>()
-                .InitializesWith<CreateUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.CreateUser(command.Email, command.IsLockedBySupervisor, command.IsLockedByHQ, command.Password, command.PublicKey, command.Roles, command.Supervisor, command.UserName))
-                .Handles<ChangeUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.ChangeUser(command.Email, command.IsLockedBySupervisor, command.IsLockedByHQ, command.Roles, command.PasswordHash, command.UserId))
-                .Handles<LockUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.Lock())
-                .Handles<LockUserBySupervisorCommand>(command => command.UserId, (command, aggregate) => aggregate.LockBySupervisor())
-                .Handles<UnlockUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.Unlock())
-                .Handles<UnlockUserBySupervisorCommand>(command => command.PublicKey, (command, aggregate) => aggregate.UnlockBySupervisor());
         }
     }
 }
