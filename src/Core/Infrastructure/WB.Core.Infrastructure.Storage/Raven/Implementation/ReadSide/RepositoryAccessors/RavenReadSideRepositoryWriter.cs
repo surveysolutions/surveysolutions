@@ -37,6 +37,8 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
                 {
                     TypeNameHandling = TypeNameHandling.All,
                     ContractResolver = ravenStore.Conventions.JsonContractResolver,
+                    DefaultValueHandling = DefaultValueHandling.Ignore,
+                    MissingMemberHandling = MissingMemberHandling.Ignore,
                     NullValueHandling = NullValueHandling.Ignore
                 };
             }

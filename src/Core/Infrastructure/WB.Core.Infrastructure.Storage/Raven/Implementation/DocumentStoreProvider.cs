@@ -77,11 +77,11 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation
                 {
                     FailoverBehavior = this.settings.FailoverBehavior,
                     JsonContractResolver = new PropertiesOnlyContractResolver(),
-                //    FindTypeTagName = x => x.Name,
                     CustomizeJsonSerializer = serializer =>
                     {
-                        serializer.TypeNameHandling =
-                            TypeNameHandling.All;
+                        serializer.TypeNameHandling = TypeNameHandling.All;
+                        serializer.NullValueHandling = NullValueHandling.Ignore;
+                        serializer.DefaultValueHandling = DefaultValueHandling.Ignore;
                     }
                 }
             };
