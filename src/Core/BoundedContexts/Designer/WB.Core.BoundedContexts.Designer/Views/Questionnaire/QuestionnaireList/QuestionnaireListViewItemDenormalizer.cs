@@ -110,23 +110,23 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            this.CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(evnt.Payload.Source);
+            this.CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(evnt.Payload.Source, true);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireCloned> evnt)
         {
-            this.CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(evnt.Payload.QuestionnaireDocument);
+            this.CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(evnt.Payload.QuestionnaireDocument, false);
         }
 
-        private void CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(QuestionnaireDocument document)
+        private void CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(QuestionnaireDocument document, bool shouldPreserveSharedPersons)
         {
             var item = new QuestionnaireListViewItem(
-                document.PublicKey,
-                document.Title,
-                document.CreationDate,
-                document.LastEntryDate,
-                document.CreatedBy,
-                document.IsPublic);
+             document.PublicKey,
+             document.Title,
+             document.CreationDate,
+             document.LastEntryDate,
+             document.CreatedBy,
+             document.IsPublic);
             if (document.CreatedBy.HasValue)
             {
                 var user = this.accountStorage.GetById(document.CreatedBy.Value);
@@ -135,6 +135,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                     item.CreatorName = user.UserName;
                 }
             }
+
+            item.SharedPersons.AddRange(document.SharedPersons);
+
+            if (shouldPreserveSharedPersons)
+            {
+                var browseItem = this.documentStorage.GetById(document.PublicKey);
+                if (browseItem != null)
+                {
+                    foreach (var sharedPerson in browseItem.SharedPersons)
+                    {
+                        if (!item.SharedPersons.Contains(sharedPerson))
+                        {
+                            item.SharedPersons.Add(sharedPerson);
+                        }
+                    }
+                }
+            }
+
             this.documentStorage.Store(item, document.PublicKey);
         }
 

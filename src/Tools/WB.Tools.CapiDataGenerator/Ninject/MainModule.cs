@@ -173,10 +173,7 @@ namespace CapiDataGenerator
             this.Bind<IEventPublisher>().To<EventPublisher>();
             this.Bind<ISnapshotManager>().To<SnapshotManager>();
 
-            // TODO: TLK, KP-4337: make correct mapping here, not a direct creation
-            var commandService = new CommandService(ncqrsCommandService, this.Kernel.Get<IAggregateRootRepository>(), this.Kernel.Get<IEventPublisher>(), this.Kernel.Get<ISnapshotManager>());
-
-            this.Bind<ICommandService>().ToConstant(commandService);
+            this.Bind<ICommandService>().To<CommandService>();
         }
 
         private IEventStore GetHeadquartersEventStore()

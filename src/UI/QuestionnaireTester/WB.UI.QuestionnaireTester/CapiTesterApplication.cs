@@ -265,10 +265,7 @@ namespace WB.UI.QuestionnaireTester
             kernel.Bind<IEventPublisher>().To<EventPublisher>();
             kernel.Bind<ISnapshotManager>().To<SnapshotManager>();
 
-            // TODO: TLK, KP-4337: make correct mapping here, not a direct creation
-            var commandService = new CommandService(ncqrsCommandService, this.kernel.Get<IAggregateRootRepository>(), this.kernel.Get<IEventPublisher>(), this.kernel.Get<ISnapshotManager>());
-
-            kernel.Bind<ICommandService>().ToConstant(commandService);
+            kernel.Bind<ICommandService>().To<CommandService>();
 
             NcqrsEnvironment.SetDefault<IEventStore>(Kernel.Get<IEventStore>());
 

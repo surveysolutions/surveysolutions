@@ -279,7 +279,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Strings.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -418,6 +418,8 @@
     <EmbeddedResource Include="Views\Error\NotFound.cshtml" />
     <EmbeddedResource Include="Views\Error\WebsitePathIsTooLong.cshtml" />
     <EmbeddedResource Include="Views\Shared\_LayoutForErrorPage.cshtml" />
+    <EmbeddedResource Include="Views\Account\Manage.cshtml" />
+    <EmbeddedResource Include="Views\Shared\UserEditFormWithoutLock.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
