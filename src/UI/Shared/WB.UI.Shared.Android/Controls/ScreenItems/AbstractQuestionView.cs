@@ -236,20 +236,15 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected void HideKeyboard(EditText editor)
         {
-            InputMethodManager imm
-                = (InputMethodManager) this.Context.GetSystemService(
-                    Context.InputMethodService);
+            InputMethodManager imm = (InputMethodManager) this.Context.GetSystemService(Context.InputMethodService);
             imm.HideSoftInputFromWindow(editor.WindowToken, 0);
         }
 
         protected void ShowKeyboard(EditText editor)
         {
-            InputMethodManager imm
-                = (InputMethodManager) this.Context.GetSystemService(
-                    Context.InputMethodService);
+            InputMethodManager imm = (InputMethodManager) this.Context.GetSystemService(Context.InputMethodService);
             imm.ShowSoftInput(editor, 0);
         }
-
 
         private void SetEditCommentsVisibility(bool visible)
         {

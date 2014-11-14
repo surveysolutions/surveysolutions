@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Shared.Android.Adapters;
 using WB.UI.Shared.Android.Events;
+using WB.UI.Shared.Android.Helpers;
 
 namespace WB.UI.Shared.Android.Frames
 {
@@ -31,18 +32,14 @@ namespace WB.UI.Shared.Android.Frames
     
         protected AlertDialog openedDilog;
 
-        public StatisticsContentFragment()
-            : base()
-        {
-        }
+        public StatisticsContentFragment(): base(){}
 
         private View CreatePopupView(IList<QuestionViewModel> questions, IList<Func<QuestionViewModel, string>> valueFunctions)
         {
             var invalidQuestionsView = new ListView(this.Activity);
-
             invalidQuestionsView.Adapter = new StatisticsDataAdapter(questions, valueFunctions, this.Activity, ChangeScreen);
-
             invalidQuestionsView.ScrollingCacheEnabled = false;
+            invalidQuestionsView.AttachCheckAndClearFocusForPanel(this.Activity);
             return invalidQuestionsView;
         }
 
