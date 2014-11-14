@@ -13,6 +13,9 @@ using WB.Core.SharedKernels.DataCollection.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using Interview = WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Interview;
+using Questionnaire = WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire;
+using UserAR = WB.Core.SharedKernels.DataCollection.Aggregates.UserAR;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
@@ -66,7 +69,7 @@ namespace WB.Core.SharedKernels.DataCollection
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
 
             CommandRegistry
-                .Setup<Implementation.Aggregates.Interview>()
+                .Setup<Interview>()
                 .InitializesWith<ApplySynchronizationMetadata>(command => command.InterviewId, (command, aggregate) => aggregate.ApplySynchronizationMetadata(command.Id, command.UserId, command.QuestionnaireId, command.QuestionnaireVersion, command.InterviewStatus, command.FeaturedQuestionsMeta, command.Comments, command.Valid, command.CreatedOnClient))
                 .InitializesWith<CreateInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterview(command.QuestionnaireId, command.QuestionnaireVersion, command.SupervisorId, command.AnswersToFeaturedQuestions, command.AnswersTime, command.UserId))
                 .InitializesWith<CreateInterviewCreatedOnClientCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewCreatedOnClient(command.QuestionnaireId, command.QuestionnaireVersion, command.InterviewStatus, command.FeaturedQuestionsMeta, command.IsValid, command.UserId))
@@ -107,15 +110,16 @@ namespace WB.Core.SharedKernels.DataCollection
                 .Handles<SynchronizeInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.SynchronizeInterview(command.UserId, command.SynchronizedInterview));
 
             CommandRegistry
-                .Setup<Implementation.Aggregates.Questionnaire>()
-                .InitializesWith<ImportFromDesigner>(command => command.QuestionnaireId, (command, aggregate) => aggregate.ImportFromDesigner(command.CreatedBy, command.Source, command.AllowCensusMode, command.SupportingAssembly))
-                .InitializesWith<ImportFromDesignerForTester>(command => command.QuestionnaireId, (command, aggregate) => aggregate.ImportFromDesignerForTester(command.Source))
-                .InitializesWith<ImportFromSupervisor>(command => command.QuestionnaireId, (command, aggregate) => aggregate.ImportFromSupervisor(command.Source))
-                .InitializesWith<RegisterPlainQuestionnaire>(command => command.QuestionnaireId, (command, aggregate) => aggregate.RegisterPlainQuestionnaire(command.Id, command.Version, command.AllowCensusMode, command.SupportingAssembly))
-                .Handles<DeleteQuestionnaire>(command => command.QuestionnaireId, (command, aggregate) => aggregate.DeleteQuestionnaire(command.QuestionnaireVersion, command.ResponsibleId));
+                .Setup<Questionnaire>()
+                .ResolvesIdFrom<QuestionnaireCommand>           (command => command.QuestionnaireId)
+                .InitializesWith<ImportFromDesigner>            (aggregate => aggregate.ImportFromDesigner)
+                .InitializesWith<ImportFromDesignerForTester>   (aggregate => aggregate.ImportFromDesignerForTester)
+                .InitializesWith<ImportFromSupervisor>          (aggregate => aggregate.ImportFromSupervisor)
+                .InitializesWith<RegisterPlainQuestionnaire>    (aggregate => aggregate.RegisterPlainQuestionnaire)
+                .Handles<DeleteQuestionnaire>                   (aggregate => aggregate.DeleteQuestionnaire);
 
             CommandRegistry
-                .Setup<Aggregates.UserAR>()
+                .Setup<UserAR>()
                 .InitializesWith<CreateUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.CreateUser(command.Email, command.IsLockedBySupervisor, command.IsLockedByHQ, command.Password, command.PublicKey, command.Roles, command.Supervisor, command.UserName))
                 .Handles<ChangeUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.ChangeUser(command.Email, command.IsLockedBySupervisor, command.IsLockedByHQ, command.Roles, command.PasswordHash, command.UserId))
                 .Handles<LockUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.Lock())

@@ -1,5 +1,6 @@
 ﻿using System;
 using Machine.Specifications;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using It = Machine.Specifications.It;
@@ -15,7 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 
         Because of = () =>
                 exception = Catch.Exception(
-                        () => questionnaire.DeleteQuestionnaire(questionnaireVersion: 1, responsibleId: unknownUserId));
+                        () => questionnaire.DeleteQuestionnaire(new DeleteQuestionnaire(questionnaireVersion: 1, responsibleId: unknownUserId, questionnaireId: Guid.NewGuid())));
 
         It should_not_exception_be_null = () =>
             exception.ShouldNotBeNull();
