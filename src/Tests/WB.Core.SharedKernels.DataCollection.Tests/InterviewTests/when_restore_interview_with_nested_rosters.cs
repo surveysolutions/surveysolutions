@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
+using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using It = Machine.Specifications.It;
@@ -30,6 +31,16 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             nestedRosterGroupId = Guid.Parse("22222222222222222222222222222222");
 
+            int callOrder = 0;
+            interviewExpressionStateMock = new Mock<IInterviewExpressionState>();
+            interviewExpressionStateMock.Setup(
+                x => x.AddRoster(Moq.It.IsAny<Guid>(), Moq.It.IsAny<decimal[]>(), Moq.It.IsAny<decimal>(), Moq.It.IsAny<int?>()))
+                .Callback<Guid, decimal[], decimal, int?>(
+                    (id, vector, rosterId, sort) =>
+                    {
+                        rosterAddIndex[id] = callOrder;
+                        callOrder++;
+                    });
 
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => 
@@ -50,6 +61,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             interview = CreateInterview(questionnaireId: questionnaireId);
 
+            SetupInstanceToMockedServiceLocator(Mock.Of<IInterviewExpressionStatePrototypeProvider>(_ => _.GetExpressionState(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == interviewExpressionStateMock.Object));
+
             interviewSynchronizationDto =new InterviewSynchronizationDto(interview.EventSourceId, InterviewStatus.RejectedBySupervisor, null, userId, questionnaireId,
                     questionnaire.Version,
                     new AnsweredQuestionSynchronizationDto[0],
@@ -58,17 +71,17 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                     new Dictionary<InterviewItemId, RosterSynchronizationDto[]>
                     {
                         {
+                            new InterviewItemId(nestedRosterGroupId, new decimal[] {1}),
+                            new[]
+                            {
+                                new RosterSynchronizationDto(nestedRosterGroupId, new decimal[] {1}, 1, null, string.Empty),
+                            }
+                        },
+                        {
                             new InterviewItemId(rosterGroupId, new decimal[] {}),
                             new[]
                             {
                                 new RosterSynchronizationDto(rosterGroupId, new decimal[] {}, 1, null, string.Empty),
-                            }
-                        },
-                        {
-                            new InterviewItemId(nestedRosterGroupId, new decimal[] {1}),
-                            new[]
-                            {
-                                new RosterSynchronizationDto(rosterGroupId, new decimal[] {1}, 1, null, string.Empty),
                             }
                         }
                     },
@@ -83,23 +96,23 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext = null;
         };
 
-        Because of = () => {
-                               interview.SynchronizeInterview(userId, interviewSynchronizationDto);
-                               interviewState = interview.CreateSnapshot();
-        };
+        Because of = () => interview.SynchronizeInterview(userId, interviewSynchronizationDto);
 
         It should_raise_InterviewSynchronized_event = () =>
             eventContext.ShouldContainEvent<InterviewSynchronized>(@event
                 => @event.InterviewData==interviewSynchronizationDto);
 
-        It should_contains_2_roster_instances_at_interview_state = () =>
-            interviewState.RosterGroupInstanceIds.Count.ShouldEqual(2);
+        It should_add_first_roster_to_expression_state = () =>
+            interviewExpressionStateMock.Verify(x => x.AddRoster(rosterGroupId, new decimal[0], 1, null), Times.Once);
 
-        It should_contain_first_roster_instance = () =>
-            interviewState.RosterGroupInstanceIds["11111111111111111111111111111111[]"].ShouldEqual(new DistinctDecimalList(new decimal[]{1}));
+        It should_add_nested_roster_to_expression_state = () =>
+            interviewExpressionStateMock.Verify(x => x.AddRoster(nestedRosterGroupId, new decimal[]{1}, 1, null), Times.Once);
 
-        It should_contain_nested_roster_instance = () =>
-            interviewState.RosterGroupInstanceIds["22222222222222222222222222222222[1]"].ShouldEqual(new DistinctDecimalList(new decimal[] { 1 }));
+        It should_add_parent_roster_first = () =>
+            rosterAddIndex[rosterGroupId].ShouldEqual(0);
+
+        It should_add_nested_roster_second = () =>
+           rosterAddIndex[nestedRosterGroupId].ShouldEqual(1);
 
         private static EventContext eventContext;
         private static Interview interview;
@@ -107,6 +120,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         private static Guid rosterGroupId;
         private static Guid nestedRosterGroupId;
         private static InterviewSynchronizationDto interviewSynchronizationDto;
-        private static InterviewState interviewState;
+        private static Dictionary<Guid, int> rosterAddIndex = new Dictionary<Guid, int>(); 
+        private static Mock<IInterviewExpressionState> interviewExpressionStateMock;
     }
 }
