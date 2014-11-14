@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveySolutions;
 using Environment = System.Environment;
 
 namespace CAPI.Android.Core.Model.ReadSideStore

@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Main.Core.Entities.Composite;
-using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 
+// ReSharper disable once CheckNamespace
 namespace Main.Core.Entities.SubEntities
 {
     [DebuggerDisplay("Question {PublicKey}")]
@@ -116,7 +117,8 @@ namespace Main.Core.Entities.SubEntities
 
         public IEnumerable<string> GetVariablesUsedInTitle()
         {
-            return ServiceLocator.Current.GetInstance<ISubstitutionService>().GetAllSubstitutionVariableNames(QuestionText);
+#warning: Slava: make nice injection here
+            return (new SubstitutionService()).GetAllSubstitutionVariableNames(QuestionText);
         }
 
         public override string ToString()

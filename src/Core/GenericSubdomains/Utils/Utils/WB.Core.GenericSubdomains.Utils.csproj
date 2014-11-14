@@ -38,6 +38,8 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <Folder Include="Implementation\Services\" />
+    <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IAsyncExecutor.cs" />
@@ -46,7 +48,6 @@
     <Compile Include="Implementation\TopologicalSorter.cs" />
     <Compile Include="Implementation\TopologicalSorter\StronglyConnectedComponentList.cs" />
     <Compile Include="Implementation\TopologicalSorter\Vertex.cs" />
-    <Compile Include="Services\ISubstitutionService.cs" />
     <Compile Include="ITopologicalSorter.cs" />
     <Compile Include="QueryableExtensions.cs" />
     <Compile Include="Monads.cs" />
@@ -73,7 +74,6 @@
     <Compile Include="Rest\IRestServiceWrapperFactory.cs" />
     <Compile Include="Rest\RestException.cs" />
     <Compile Include="StringExtensions.cs" />
-    <Compile Include="Implementation\Services\SubstitutionService.cs" />
     <Compile Include="Tree.cs" />
     <Compile Include="TypeSwitch.cs" />
     <Compile Include="WhereClouseHelper.cs" />

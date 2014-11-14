@@ -1,3 +1,5 @@
+using WB.Core.SharedKernels.SurveySolutions;
+
 namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
 {
     /// <summary>

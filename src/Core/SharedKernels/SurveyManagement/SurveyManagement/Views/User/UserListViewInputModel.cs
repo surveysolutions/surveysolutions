@@ -7,13 +7,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
     /// </summary>
     public class UserListViewInputModel : ListViewModelBase
     {
-        #region Fields
-       
-        /// <summary>
-        ///     Get users by role
-        /// </summary>
         public UserRoles Role = UserRoles.Undefined;
-
-        #endregion
     }
 }

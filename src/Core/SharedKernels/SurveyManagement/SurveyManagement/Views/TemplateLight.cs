@@ -1,6 +1,6 @@
 using System;
 
-namespace Main.Core.Entities
+namespace WB.Core.SharedKernels.SurveyManagement.Views
 {
     /// <summary>
     /// The template light.

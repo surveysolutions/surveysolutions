@@ -236,6 +236,18 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\DataTransferObjects\Synchronization\RosterSynchronizationDto.cs">
       <Link>DataTransferObjects\Synchronization\RosterSynchronizationDto.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\EventHandler\FileStoreDenormalizer.cs">
+      <Link>EventHandler\FileStoreDenormalizer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\File\FileDeleted.cs">
+      <Link>Events\File\FileDeleted.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\File\FileMetaUpdated.cs">
+      <Link>Events\File\FileMetaUpdated.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\File\FileUploaded.cs">
+      <Link>Events\File\FileUploaded.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\AnswerCommented.cs">
       <Link>Events\Interview\AnswerCommented.cs</Link>
     </Compile>
@@ -667,9 +679,9 @@
       <Project>{553b4fc2-5fc7-4256-b14d-82758d64a3bd}</Project>
       <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidMain.Core\AndroidMain.Core.csproj">
-      <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>
-      <Name>AndroidMain.Core</Name>
+    <ProjectReference Include="..\..\src\Core\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
+      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
+      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidNinject\AndroidNinject.csproj">
       <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>
@@ -677,7 +689,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="EventHandler\" />
     <Folder Include="Implementation\Services\" />
     <Folder Include="Services\" />
     <Folder Include="ValueObjects\Questionnaire\" />

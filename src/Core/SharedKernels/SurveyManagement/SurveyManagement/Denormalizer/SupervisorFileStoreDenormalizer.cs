@@ -1,5 +1,7 @@
-﻿using Ncqrs.Eventing.ServiceModel.Bus;
+﻿using Main.Core.Events.File;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.EventHandler;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.Synchronization;
 

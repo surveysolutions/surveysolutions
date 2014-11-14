@@ -195,9 +195,9 @@
       <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
       <Name>Ncqrs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Mono\AndroidMain.Core\AndroidMain.Core.csproj">
-      <Project>{6B9B6AB7-8858-49A3-A44A-4B56EE31C12C}</Project>
-      <Name>AndroidMain.Core</Name>
+    <ProjectReference Include="..\..\..\..\Mono\AndroidNinject.Extensions.Conventions\AndroidNinject.Extensions.Conventions.csproj">
+      <Project>{E21BC003-84B5-41BE-928C-75874418ACD2}</Project>
+      <Name>AndroidNinject.Extensions.Conventions</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Mono\AndroidNinject\AndroidNinject.csproj">
       <Project>{DC128FDF-0F94-4B63-B79E-DDD02E5E1F0F}</Project>
@@ -234,6 +234,10 @@
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Files.Android\WB.Core.Infrastructure.Files.Android.csproj">
       <Project>{8ceacd5d-ab0e-4104-8bce-ddd7900887e0}</Project>
       <Name>WB.Core.Infrastructure.Files.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
+      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
+      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils.Android\WB.Core.SharedKernel.Utils.Android.csproj">
       <Project>{5f8613d4-a556-4826-8d69-9918808b113e}</Project>

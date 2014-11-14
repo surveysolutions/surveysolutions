@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 
 namespace Main.Core.Entities.SubEntities.Question
@@ -21,11 +20,6 @@ namespace Main.Core.Entities.SubEntities.Question
             if (answer == null)
             {
                 return;
-            }
-
-            if (this.Answers.Any(a => a.PublicKey.Equals(answer.PublicKey)))
-            {
-                throw new DuplicateNameException("answer with current public key already exist");
             }
 
             this.Answers.Add(answer);

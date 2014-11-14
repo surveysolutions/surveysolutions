@@ -1,6 +1,5 @@
 ﻿using System;
 using Main.Core.Documents;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Implementation

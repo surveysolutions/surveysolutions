@@ -1,4 +1,5 @@
-﻿namespace Main.Core.Entities.SubEntities
+﻿// ReSharper disable once CheckNamespace
+namespace Main.Core.Entities.SubEntities
 {
     public enum UserRoles
     {

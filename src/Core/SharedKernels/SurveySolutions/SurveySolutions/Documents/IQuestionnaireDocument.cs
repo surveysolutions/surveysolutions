@@ -2,6 +2,7 @@ using System;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 
+// ReSharper disable once CheckNamespace
 namespace Main.Core.Documents
 {
     public interface IQuestionnaireDocument : IGroup
@@ -16,9 +17,6 @@ namespace Main.Core.Documents
 
         Guid? CreatedBy { get; set; }
 
-        /// <summary>
-        /// Gets or sets whether questionnaire owner wants to share questionnaire document with other teams
-        /// </summary>
         bool IsPublic { get; set; }
 
         bool UsesCSharp { get; set; }

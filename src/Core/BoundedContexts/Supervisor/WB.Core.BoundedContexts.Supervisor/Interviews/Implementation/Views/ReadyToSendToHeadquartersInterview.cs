@@ -1,5 +1,5 @@
 using System;
-using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views
 {

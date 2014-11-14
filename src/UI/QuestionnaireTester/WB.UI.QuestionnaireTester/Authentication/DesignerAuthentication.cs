@@ -12,7 +12,6 @@ namespace WB.UI.QuestionnaireTester.Authentication
         public UserInfo RemoteUser { get; private set; }
 
         private UserLight currentUser; 
-    
         
         UserLight IAuthentication.CurrentUser {
             get { return currentUser; }

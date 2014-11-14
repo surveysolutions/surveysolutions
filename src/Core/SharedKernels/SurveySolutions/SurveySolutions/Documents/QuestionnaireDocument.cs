@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Logging;
-using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace Main.Core.Documents
 {
@@ -13,7 +11,6 @@ namespace Main.Core.Documents
     {
         public QuestionnaireDocument()
         {
-            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
             this.CreationDate = DateTime.Now;
             this.LastEntryDate = DateTime.Now;
             this.PublicKey = Guid.NewGuid();
@@ -45,8 +42,6 @@ namespace Main.Core.Documents
         public bool UsesCSharp { get; set; }
 
         private IComposite parent;
-
-        private ILogger logger;
 
         public Propagate Propagated
         {
@@ -193,12 +188,6 @@ namespace Main.Core.Documents
                 int indexOfEntity = entityParent.Children.FindIndex(child => IsEntityWithSpecifiedId(child, oldEntityId));
                 entityParent.Children[indexOfEntity] = newEntity;
             }
-            else
-            {
-                logger.Warn(string.Format(
-                    "Failed to replace entity '{0}' with new because it's parent is not found.",
-                    oldEntityId));
-            }
         }
 
         public void Remove(Guid itemKey, Guid? propagationKey, Guid? parentPublicKey, Guid? parentPropagationKey)
@@ -226,10 +215,6 @@ namespace Main.Core.Documents
             {
                 var group = groupParent.Children.First(child => IsGroupWithSpecifiedId(child, groupId)) as IGroup;
                 RemoveChildGroupBySpecifiedId(groupParent, groupId);
-            }
-            else
-            {
-                logger.Warn(string.Format("Failed to remove group '{0}' because it's parent is not found.", groupId));
             }
         }
 
@@ -259,10 +244,6 @@ namespace Main.Core.Documents
             if (entityParent != null)
             {
                 RemoveChildEntityBySpecifiedId(entityParent, entityId);
-            }
-            else
-            {
-                logger.Warn(string.Format("Failed to remove entity '{0}' because it's parent is not found.", entityId));
             }
         }
 
@@ -469,22 +450,12 @@ namespace Main.Core.Documents
         {
             var itemToMove = this.Find<IComposite>(item => item.PublicKey == itemId).FirstOrDefault();
 
-            if (itemToMove == null)
-            {
-                logger.Warn(string.Format("Failed to locate item {0}.", itemId));
-            }
-
             return itemToMove;
         }
 
         private IComposite GetParentOfItemOrLogWarning(IComposite item)
         {
             IComposite foundParent = this.GetParentOfItem(item);
-
-            if (foundParent == null)
-            {
-                logger.Warn(string.Format("Failed to find parent of item {0}.", item.PublicKey));
-            }
 
             return foundParent;
         }
@@ -495,11 +466,6 @@ namespace Main.Core.Documents
                 return this;
 
             IComposite foundGroup = this.Find<IGroup>(group => group.PublicKey == groupId).FirstOrDefault();
-
-            if (foundGroup == null)
-            {
-                logger.Warn(string.Format("Failed to find group {0}.", groupId.Value));
-            }
 
             return foundGroup;
         }
@@ -553,7 +519,6 @@ namespace Main.Core.Documents
             var foundGroup = this.Find<IGroup>(group => group.PublicKey == groupPublicKey).FirstOrDefault() as Group;
             if (foundGroup == null)
             {
-                logger.Warn(string.Format("Failed to find group {0}.", groupPublicKey));
                 return;
             }
             if (foundGroup.IsRoster)
@@ -595,7 +560,6 @@ namespace Main.Core.Documents
 
                 if (triggeredGroup == null)
                 {
-                    logger.Warn(string.Format("Failed to find group [{0}]. This groups was used in triggers in [{1}]s question", triggeredGroupId, rosterSizeQuestionId));
                     continue;
                 }
 

@@ -1,15 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-
-using Machine.Specifications;
-
+﻿using Machine.Specifications;
 using Moq;
-
 using Raven.Client.Document;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
+using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideRepositoryReaderTests
 {

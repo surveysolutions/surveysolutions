@@ -3,6 +3,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.User;
 using Ncqrs.Domain;
 using WB.Core.SharedKernels.DataCollection.Events.User;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates

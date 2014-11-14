@@ -1,4 +1,4 @@
-using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide
 {

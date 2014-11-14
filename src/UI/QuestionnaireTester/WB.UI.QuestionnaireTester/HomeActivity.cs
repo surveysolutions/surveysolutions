@@ -8,7 +8,6 @@ using Android.Widget;
 using Cirrious.MvvmCross.Droid.Simple;
 using Main.Core.Documents;
 using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;

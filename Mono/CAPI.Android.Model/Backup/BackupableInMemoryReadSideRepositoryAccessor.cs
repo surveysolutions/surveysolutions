@@ -1,6 +1,7 @@
 using Main.DenormalizerStorage;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace CAPI.Android.Core.Model.Backup
 {
