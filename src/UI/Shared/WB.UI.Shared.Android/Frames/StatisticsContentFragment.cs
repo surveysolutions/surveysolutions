@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Shared.Android.Adapters;
 using WB.UI.Shared.Android.Events;
+using WB.UI.Shared.Android.Helpers;
 
 namespace WB.UI.Shared.Android.Frames
 {
@@ -38,19 +39,7 @@ namespace WB.UI.Shared.Android.Frames
             var invalidQuestionsView = new ListView(this.Activity);
             invalidQuestionsView.Adapter = new StatisticsDataAdapter(questions, valueFunctions, this.Activity, ChangeScreen);
             invalidQuestionsView.ScrollingCacheEnabled = false;
-            invalidQuestionsView.ScrollStateChanged += (sender, args) =>
-            {
-                if (args.ScrollState == ScrollState.TouchScroll)
-                {
-                    var currentFocus = this.Activity.CurrentFocus;
-                    if (currentFocus != null)
-                    {
-                        currentFocus.ClearFocus();
-                    }
-                }
-
-            };
-
+            invalidQuestionsView.AttachCheckAndClearFocusForPanel(this.Activity);
             return invalidQuestionsView;
         }
 
