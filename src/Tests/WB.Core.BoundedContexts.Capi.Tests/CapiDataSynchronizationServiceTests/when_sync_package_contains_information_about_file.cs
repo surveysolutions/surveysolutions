@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.CapiDataSynchronizationServiceTests
             var jsonUtilsMock = new Mock<IJsonUtils>();
             jsonUtilsMock.Setup(x => x.Deserrialize<FileSyncDescription>(Moq.It.IsAny<string>())).Returns(fileSyncDescription);
             
-            syncItem = new SyncItem() { ItemType = SyncItemType.File, IsCompressed = false, Content = "some content", Id = Guid.NewGuid() };
+            syncItem = new SyncItem() { ItemType = SyncItemType.Template, IsCompressed = false, Content = "some content", Id = Guid.NewGuid() };
 
             commandService = new Mock<ICommandService>();
 

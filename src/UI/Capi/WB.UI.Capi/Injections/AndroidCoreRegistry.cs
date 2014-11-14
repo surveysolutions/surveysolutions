@@ -19,6 +19,7 @@ using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ninject;
 using Ninject.Activation;
+using Ninject.Extensions.Conventions;
 using Ninject.Extensions.Conventions.BindingGenerators;
 using Ninject.Modules;
 using Ninject.Syntax;

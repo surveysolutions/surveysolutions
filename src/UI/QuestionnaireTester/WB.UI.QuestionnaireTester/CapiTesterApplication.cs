@@ -23,6 +23,7 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Modules;
+using Ninject.Extensions.Conventions;
 using Ninject.Extensions.Conventions.BindingGenerators;
 using Ninject.Modules;
 using Ninject.Syntax;

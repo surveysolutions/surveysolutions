@@ -5,6 +5,8 @@ using Ncqrs;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer
 {
