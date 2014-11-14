@@ -33,6 +33,8 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
+using AccountAR = WB.Core.BoundedContexts.Designer.Aggregates.AccountAR;
+using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Designer
 {
@@ -81,7 +83,7 @@ namespace WB.Core.BoundedContexts.Designer
             this.Kernel.RegisterFactory<PdfQuestionnaireFactory>();
 
             CommandRegistry
-                .Setup<Aggregates.AccountAR>()
+                .Setup<AccountAR>()
                 .InitializesWith<RegisterAccountCommand>(command => command.AccountId, (command, aggregate) => aggregate.RegisterAccount(command.ApplicationName, command.UserName, command.Email, command.AccountId, command.Password, command.PasswordSalt, command.IsConfirmed, command.ConfirmationToken))
                 .Handles<AddRoleToAccountCommand>(command => command.AccountId, (command, aggregate) => aggregate.AddRole(command.Role))
                 .Handles<ChangeOnlineAccountCommand>(command => command.AccountId, (command, aggregate) => aggregate.ChangeOnline())
@@ -99,7 +101,7 @@ namespace WB.Core.BoundedContexts.Designer
                 .Handles<ValidateAccountCommand>(command => command.AccountId, (command, aggregate) => aggregate.Validate());
 
             CommandRegistry
-                .Setup<Aggregates.Questionnaire>()
+                .Setup<Questionnaire>()
                 .InitializesWith<CloneQuestionnaireCommand>(command => command.PublicKey, (command, aggregate) => aggregate.CloneQuestionnaire(command.Title, command.IsPublic, command.CreatedBy, command.PublicKey, command.Source))
                 .InitializesWith<CreateQuestionnaireCommand>(command => command.PublicKey, (command, aggregate) => aggregate.CreateQuestionnaire(command.PublicKey, command.Title, command.CreatedBy, command.IsPublic))
                 .InitializesWith<ImportQuestionnaireCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.ImportQuestionnaire(command.CreatedBy, command.Source))
