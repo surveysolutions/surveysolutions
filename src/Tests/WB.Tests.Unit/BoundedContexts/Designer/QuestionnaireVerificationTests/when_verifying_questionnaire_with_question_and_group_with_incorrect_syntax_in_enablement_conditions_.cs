@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                     ConditionExpression = incorrectConditionExpression,
                 });
             
-            verifier = CreateQuestionnaireVerifier(expressionProcessorGenerator: new QuestionnireExpressionProcessorGenerator());
+            verifier = CreateQuestionnaireVerifier(expressionProcessorGenerator: CreateExpressionProcessorGenerator());
         };
 
         Because of = () =>

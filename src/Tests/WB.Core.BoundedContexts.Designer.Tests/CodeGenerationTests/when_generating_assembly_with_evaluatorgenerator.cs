@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
                 ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
 
-                IExpressionProcessorGenerator expressionProcessorGenerator = new QuestionnireExpressionProcessorGenerator();
+                var expressionProcessorGenerator = CreateExpressionProcessorGenerator();
 
                 QuestionnaireDocument questionnaireDocument = CreateQuestionnaireForGeneration(id);
 
@@ -42,11 +42,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 
         It should_result_succeded = () =>
             results.Success.ShouldEqual(true);
-
-        //temporary disabled
-        //unnesessary usings returns as errors
-        /*It should_result_errors_count = () =>
-            results.DiagnosticsCount.ShouldEqual(0);*/
 
         It should_assembly_length_greate_0 = () =>
             results.AssemblyLength.ShouldBeGreaterThan(0);

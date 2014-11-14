@@ -15,12 +15,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.UserDenorma
 {
     internal class UserDenormalizerContext
     {
-        protected static UserDenormalizer CreateUserDenormalizer(IReadSideRepositoryWriter<UserDocument> users = null, 
-            ISynchronizationDataStorage syncStorage = null)
+        protected static UserDenormalizer CreateUserDenormalizer(IReadSideRepositoryWriter<UserDocument> users = null)
         {
             return new UserDenormalizer(
-                users ?? Mock.Of<IReadSideRepositoryWriter<UserDocument>>(),
-                syncStorage ?? new Mock<ISynchronizationDataStorage>().Object);
+                users ?? Mock.Of<IReadSideRepositoryWriter<UserDocument>>());
         }
 
         protected static IPublishedEvent<T> ToPublishedEvent<T>(T @event, Guid eventSourceId) where T : class

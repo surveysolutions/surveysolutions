@@ -68,21 +68,28 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             return Guid.Empty;
         }
 
-        public IEnumerable<string> Roles
+        public List<SimpleRoleEnum> SimpleRoles
         {
             get
             {
-                return this.SimpleRoles.Select(x => Enum.GetName(typeof(SimpleRoleEnum), x));
+                if (simpleRoles == null)
+                    simpleRoles = new List<SimpleRoleEnum>();
+                return simpleRoles;
             }
+            set { simpleRoles = value; }
         }
 
-        public List<SimpleRoleEnum> SimpleRoles { get; set; }
+        private List<SimpleRoleEnum> simpleRoles;
 
         public string UserName { get; set; }
 
         public bool IsInRole(string roleName)
         {
-            return this.Roles.Contains(roleName);
+            return this.GetRoles().Contains(roleName);
+        }
+        public IEnumerable<string> GetRoles()
+        {
+            return this.SimpleRoles.Select(x => Enum.GetName(typeof(SimpleRoleEnum), x));
         }
     }
 }

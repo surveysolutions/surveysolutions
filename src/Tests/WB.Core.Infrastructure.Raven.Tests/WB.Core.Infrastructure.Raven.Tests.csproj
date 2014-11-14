@@ -137,6 +137,7 @@
     <Compile Include="RavenReadSideServiceTests\when_get_list_of_all_available_handlers.cs" />
     <Compile Include="RavenReadSideServiceTests\when_rebuild_all_views.cs" />
     <Compile Include="RavenReadSideServiceTests\when_rebuild_selected_views.cs" />
+    <Compile Include="RavenReadSideServiceTests\when_rebuild_selected_views_by_selected_event_sources.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

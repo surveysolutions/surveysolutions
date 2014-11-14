@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json.Serialization;
 using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Client.Document;
@@ -30,6 +28,19 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         private readonly ConcurrentDictionary<string, TEntity> cache = new ConcurrentDictionary<string, TEntity>();
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string basePath;
+
+        private JsonSerializerSettings JsonSerializerSettings
+        {
+            get
+            {
+                return new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.All,
+                    ContractResolver = ravenStore.Conventions.JsonContractResolver,
+                    NullValueHandling = NullValueHandling.Ignore
+                };
+            }
+        }
 
         public RavenReadSideRepositoryWriter(DocumentStore ravenStore, IFileSystemAccessor fileSystemAccessor, string basePath)
             : base(ravenStore)
@@ -298,17 +309,6 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             bulkOperation.Store(entity: entity, id: ravenId);
         }
 
-        private JsonSerializerSettings JsonSerializerSettings
-        {
-            get
-            {
-                return new JsonSerializerSettings
-                {
-                    ContractResolver = ravenStore.Conventions.JsonContractResolver
-                };
-            }
-        }
-
         private string GetPathToEntity(string entityName)
         {
             return fileSystemAccessor.CombinePath(fileSystemAccessor.CombinePath(basePath, cacheFolderUniqueId), entityName);
@@ -321,7 +321,14 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         private TEntity Deserrialize(string payload)
         {
-            return JsonConvert.DeserializeObject<TEntity>(payload, JsonSerializerSettings);
+            try
+            {
+                return JsonConvert.DeserializeObject<TEntity>(payload, JsonSerializerSettings);
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException(payload, e);
+            }
         }
 
         public void Clear()

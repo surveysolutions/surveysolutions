@@ -3,30 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Microsoft.CodeAnalysis.Emit;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.InterviewCompilerTests
 {
-    internal class when_generating_assembly_as_string
+    internal class when_generating_assembly_as_string : InterviewCompilerTestsContext
     {
 
         Establish context = () =>
         {
-            compiler = new RoslynCompiler();
+            compiler = CreateRoslynCompiler();
             generatedClasses.Add("main", testClassToCompile);
         };
 
-        private Because of = () =>
+        Because of = () =>
             emitResult = compiler.GenerateAssemblyAsString(id, generatedClasses, new string[0], out resultAssembly);
 
 
-        private It should_result_succeded = () =>
+        It should_result_succeded = () =>
             emitResult.Success.ShouldEqual(true);
 
-        private It should_diagnostics_count_equal_0 = () =>
+        It should_diagnostics_count_equal_0 = () =>
             emitResult.Diagnostics.Count().ShouldEqual(0);
 
-        private It should_ = () =>
+        It should_ = () =>
             resultAssembly.Length.ShouldBeGreaterThan(0);
         
         private static IDynamicCompiler compiler;

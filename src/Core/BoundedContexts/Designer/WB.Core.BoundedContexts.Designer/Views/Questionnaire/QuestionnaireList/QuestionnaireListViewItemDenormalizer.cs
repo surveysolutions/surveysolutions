@@ -12,7 +12,7 @@ using WB.UI.Designer.Providers.CQRS.Accounts;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 {
-    internal class QuestionnaireListViewItemDenormalizer : BaseDenormalizer, IEventHandler<NewQuestionnaireCreated>,
+    internal class QuestionnaireListViewItemDenormalizer : BaseDenormalizer,IAtomicEventHandler, IEventHandler<NewQuestionnaireCreated>,
         IEventHandler<QuestionnaireUpdated>,
         IEventHandler<QuestionnaireDeleted>,
         IEventHandler<TemplateImported>,
@@ -47,6 +47,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         public override object[] Writers
         {
             get { return new object[] { documentStorage}; }
+        }
+
+        public void CleanWritersByEventSource(Guid eventSourceId)
+        {
+            documentStorage.Remove(eventSourceId);
         }
 
         public override object[] Readers

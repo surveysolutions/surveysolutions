@@ -1,5 +1,6 @@
 using System;
 using System.Web;
+using System.Web.Configuration;
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
@@ -72,18 +73,20 @@ namespace WB.UI.Designer.App_Start
                 failoverBehavior: AppSettings.Instance.FailoverBehavior,
                 activeBundles: AppSettings.Instance.ActiveBundles);
 
+            var dynamicCompilerSettings = (DynamicCompilerSettings)WebConfigurationManager.GetSection("dynamicCompilerSettings");
+
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
-                new RavenReadSideInfrastructureModule(ravenSettings, AppDomain.CurrentDomain.BaseDirectory, typeof(DesignerReportQuestionnaireListViewItem).Assembly),
+                new RavenReadSideInfrastructureModule(ravenSettings, AppDomain.CurrentDomain.GetData("DataDirectory").ToString(), typeof(DesignerReportQuestionnaireListViewItem).Assembly),
+                new DesignerRegistry(),
                 new DesignerCommandDeserializationModule(),
-                new DesignerBoundedContextModule(),
+                new DesignerBoundedContextModule(dynamicCompilerSettings),
                 new QuestionnaireVerificationModule(),
                 new MembershipModule(),
                 new MainModule(),
-                new FileInfrastructureModule(),
-                new DesignerRegistry()
+                new FileInfrastructureModule()
                 );
             NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
             NcqrsEnvironment.InitDefaults();
