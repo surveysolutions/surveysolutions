@@ -11,6 +11,7 @@ using WB.UI.Shared.Android.Adapters;
 using WB.UI.Shared.Android.Controls;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Extensions;
+using WB.UI.Shared.Android.Helpers;
 
 namespace WB.UI.Shared.Android.Frames
 {
@@ -22,10 +23,7 @@ namespace WB.UI.Shared.Android.Frames
         public const string ScreenId = "screenId";
         public const string QuestionnaireId = "questionnaireId";
 
-        public GridContentFragment()
-            : base()
-        {
-        }
+        public GridContentFragment(): base(){}
 
         protected abstract IQuestionViewFactory GetQuestionViewFactory();
         protected abstract InterviewViewModel GetInterviewViewModel(Guid questionnaireId);
@@ -115,19 +113,7 @@ namespace WB.UI.Shared.Android.Frames
             this.LlTablesContainer.Adapter = new GridContentAdapter(this.Model, columnCount, this.Activity, this.OnScreenChanged, this.GetQuestionViewFactory());
             this.LlTablesContainer.ScrollingCacheEnabled = false;
 
-            this.LlTablesContainer.ScrollStateChanged += (sender, args) =>
-            {
-                if (args.ScrollState == ScrollState.TouchScroll)
-                {
-                    var currentFocus = this.Activity.CurrentFocus;
-                    if (currentFocus != null)
-                    {
-                        currentFocus.ClearFocus();
-                    }
-                }
-
-            };
-
+            this.LlTablesContainer.AttachCheckAndClearFocusForPanel(this.Activity);
             this.LlTablesContainer.ChildViewRemoved += this.LlTablesContainer_ChildViewRemoved;
             this.Top.AddView(this.LlTablesContainer);
         }
