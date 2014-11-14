@@ -2,6 +2,7 @@
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.Storage;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 // ReSharper disable once CheckNamespace
 namespace Main.Core.Events.User

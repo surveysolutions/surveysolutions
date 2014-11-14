@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Capi
 {

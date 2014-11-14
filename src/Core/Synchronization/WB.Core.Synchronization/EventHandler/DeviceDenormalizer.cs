@@ -1,4 +1,3 @@
-using Main.Core.Documents;
 using Main.Core.Events.Synchronization;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -6,44 +5,17 @@ using WB.Core.Synchronization.Documents;
 
 namespace WB.Core.Synchronization.EventHandler
 {
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
     public class DeviceDenormalizer : IEventHandler<NewDeviceRegistered>,
                                       IEventHandler<UpdateRegisteredDevice>
     {
-        #region Fields
-
-        /// <summary>
-        /// Devices field
-        /// </summary>
         private readonly IReadSideRepositoryWriter<SyncDeviceRegisterDocument> devices;
 
-        #endregion
-
-        #region Constructor
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DeviceDenormalizer"/> class.
-        /// </summary>
-        /// <param name="registerDevices">
-        /// The register devices.
-        /// </param>
         public DeviceDenormalizer(IReadSideRepositoryWriter<SyncDeviceRegisterDocument> registerDevices)
         {
             this.devices = registerDevices;
         }
 
-        #endregion
 
-        #region Public Methods
-
-        /// <summary>
-        /// Add new device 
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
         public void Handle(IPublishedEvent<NewDeviceRegistered> evnt)
         {
             this.devices.Store(
@@ -59,10 +31,6 @@ namespace WB.Core.Synchronization.EventHandler
                 },
                 evnt.Payload.IdForRegistration);
         }
-
-
-        #endregion
-
 
         public void Handle(IPublishedEvent<UpdateRegisteredDevice> evnt)
         {
