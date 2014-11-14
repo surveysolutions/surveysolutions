@@ -2,10 +2,10 @@
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
-using Main.Core.View;
-using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
