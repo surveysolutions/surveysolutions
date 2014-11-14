@@ -1,9 +1,13 @@
-﻿using System;
+﻿using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Implementation.Crypto;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
@@ -11,22 +15,16 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : TeamController
     {
         private readonly IFormsAuthentication authentication;
-        private readonly IGlobalInfoProvider globalProvider;
-        private readonly IPasswordHasher passwordHasher;
-        private readonly Func<string, string, bool> validateUserCredentials;
 
-        public AccountController(IFormsAuthentication authentication, IGlobalInfoProvider globalProvider, IPasswordHasher passwordHasher)
-            : this(authentication, globalProvider, passwordHasher, Membership.ValidateUser) { }
-
-        internal AccountController(IFormsAuthentication auth, IGlobalInfoProvider globalProvider, IPasswordHasher passwordHasher, Func<string, string, bool> validateUserCredentials)
+        public AccountController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
+            IFormsAuthentication authentication, IViewFactory<UserViewInputModel, UserView> userViewFactory,
+            IPasswordHasher passwordHasher)
+            : base(commandService, globalInfo, logger, userViewFactory, passwordHasher)
         {
-            this.authentication = auth;
-            this.globalProvider = globalProvider;
-            this.passwordHasher = passwordHasher;
-            this.validateUserCredentials = validateUserCredentials;
+            this.authentication = authentication;
         }
 
         [HttpGet]
@@ -42,7 +40,7 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.ActivePage = MenuItem.Logon;
             if (this.ModelState.IsValid)
             {
-                if (this.Login(model.UserName, model.Password))
+                if (Membership.ValidateUser(model.UserName, passwordHasher.Hash(model.Password)))
                 {
                     bool isHeadquarter = Roles.IsUserInRole(model.UserName, UserRoles.Headquarter.ToString());
                     bool isSupervisor = Roles.IsUserInRole(model.UserName, UserRoles.Supervisor.ToString());
@@ -68,26 +66,36 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(model);
         }
 
-        private bool Login(string login, string password)
-        {
-            return this.validateUserCredentials(login, this.passwordHasher.Hash(password));
-        }
-
-        public bool IsLoggedIn()
-        {
-            return this.globalProvider.GetCurrentUser() != null;
-        }
-
         public ActionResult LogOff()
         {
             this.authentication.SignOut();
             return this.Redirect("~/");
         }
 
-        public Guid GetCurrentUser()
+        public ActionResult Manage()
         {
-            UserLight currentUser = this.globalProvider.GetCurrentUser();
-            return currentUser != null ? currentUser.Id : Guid.Empty;
+            this.ViewBag.ActivePage = MenuItem.ManageAccount;
+
+            var currentUser = GetUserById(GlobalInfo.GetCurrentUser().Id);
+
+            if (currentUser == null || !GlobalInfo.IsHeadquarter)
+                throw new HttpException(404, string.Empty);
+
+            return View(new UserEditModel() {Id = currentUser.PublicKey, Email = currentUser.Email});
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Manage(UserEditModel model)
+        {
+            this.ViewBag.ActivePage = MenuItem.ManageAccount;
+            if (this.ModelState.IsValid)
+            {
+                this.UpdateAccount(user: GetUserById(GlobalInfo.GetCurrentUser().Id), editModel: model);
+                this.Success(Core.SharedKernels.SurveyManagement.Web.Properties.Strings.HQ_AccountController_AccountUpdatedSuccessfully);
+            }
+
+            return this.View(model);
         }
     }
 }

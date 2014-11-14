@@ -13,8 +13,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
     public class TeamController : BaseController
     {
-        private readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
-        private readonly IPasswordHasher passwordHasher;
+        protected readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
+        protected readonly IPasswordHasher passwordHasher;
 
         public TeamController(ICommandService commandService, 
                               IGlobalInfoProvider globalInfo, 
@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             CreateUser(user: supervisor, role: UserRoles.Supervisor);
         }
 
-        protected void UpdateSupervisorOrInterviewer(UserView user, UserEditModel editModel)
+        protected void UpdateAccount(UserView user, UserEditModel editModel)
         {
             this.CommandService.Execute(new ChangeUserCommand(publicKey: user.PublicKey, email: editModel.Email,
                 roles: user.Roles.ToArray(),
