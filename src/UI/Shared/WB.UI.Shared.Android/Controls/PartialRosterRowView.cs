@@ -64,7 +64,9 @@ namespace WB.UI.Shared.Android.Controls
             var boundChild = e.Child as IMvxBindingContextOwner;
             if (boundChild != null)
             {
+#if DEBUG
                 Console.WriteLine("clean up binding from roster");
+#endif
                 boundChild.ClearAllBindings();
             }
         }

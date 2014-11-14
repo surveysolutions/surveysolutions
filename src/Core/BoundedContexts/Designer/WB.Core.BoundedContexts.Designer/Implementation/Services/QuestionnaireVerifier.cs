@@ -227,10 +227,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             if (compilationResult.Success)
                 yield break;
-            
-            foreach (var location in compilationResult.Diagnostics.Select(x=>x.Location).Distinct())
+
+            foreach (var locationOfExpressionError in compilationResult.Diagnostics.Select(x => x.Location).Distinct())
             {
-                yield return CreateExpressionSyntaxError(new ExpressionLocation(location));
+                yield return CreateExpressionSyntaxError(new ExpressionLocation(locationOfExpressionError));
             }
         }
         
@@ -1432,19 +1432,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return new QuestionnaireVerificationError("WB0096", VerificationMessages.WB0096_GeneralCompilationError);
             }
 
-            var referense = new QuestionnaireVerificationReference(
+            var reference = new QuestionnaireVerificationReference(
                 expressionLocation.ItemType == ItemType.Question ? 
                     QuestionnaireVerificationReferenceType.Question : 
                     QuestionnaireVerificationReferenceType.Group, expressionLocation.Id);
 
             if(expressionLocation.ExpressionType == ExpressionType.Validations)
             {
-                return new QuestionnaireVerificationError("WB0002", VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax, referense);
+                return new QuestionnaireVerificationError("WB0002", VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax, reference);
             }
-            else //(expressionLocation.ExpressionType == ExpressionType.Conditions)
+            else 
             {
                 return new QuestionnaireVerificationError("WB0003",
-                    VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax, referense);
+                    VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax, reference);
             }
         }
 

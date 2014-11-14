@@ -10,7 +10,7 @@
         /// <summary>
         /// Gets a list of all roles that the user is a member of.
         /// </summary>
-        IEnumerable<string> Roles { get; }
+        IEnumerable<string> GetRoles();
 
         /// <summary>
         /// Check if the user is a member of the specified role

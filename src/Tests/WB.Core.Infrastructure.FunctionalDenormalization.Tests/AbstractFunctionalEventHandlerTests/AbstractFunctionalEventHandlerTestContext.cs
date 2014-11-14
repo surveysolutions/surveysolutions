@@ -16,10 +16,10 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Tests.AbstractFunctio
     [Subject(typeof(AbstractFunctionalEventHandler<>))]
     internal class AbstractFunctionalEventHandlerTestContext
     {
-        protected static TestableFunctionalEventHandler<T> CreateAbstractFunctionalEventHandler<T>(
-            IReadSideRepositoryWriter<T> readSideRepositoryWriter = null) where T : class, IReadSideRepositoryEntity
+        protected static TestableFunctionalEventHandler CreateAbstractFunctionalEventHandler(
+            IReadSideRepositoryWriter<IReadSideRepositoryEntity> readSideRepositoryWriter = null)
         {
-            return new TestableFunctionalEventHandler<T>(readSideRepositoryWriter ?? Mock.Of<IReadSideRepositoryWriter<T>>());
+            return new TestableFunctionalEventHandler(readSideRepositoryWriter ?? Mock.Of<IReadSideRepositoryWriter<IReadSideRepositoryEntity>>());
         }
 
         protected static IReadSideRepositoryEntity CreateReadSideRepositoryEntity()
@@ -27,17 +27,9 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Tests.AbstractFunctio
             return Mock.Of<IReadSideRepositoryEntity>();
         }
 
-        protected static IPublishableEvent CreatePublishableEvent()
+        protected static IPublishableEvent CreatePublishableEvent(object payload=null)
         {
-            return Mock.Of<IPublishableEvent>(_ => _.Payload == new object());
-        }
-
-        protected static IEnumerable<IPublishableEvent> CreatePublishableEvents(int countOfEvents)
-        {
-            for (int i = 0; i < countOfEvents; i++)
-            {
-                yield return CreatePublishableEvent();
-            }
+            return Mock.Of<IPublishableEvent>(_ => _.Payload == (payload ?? new object()));
         }
     }
 }

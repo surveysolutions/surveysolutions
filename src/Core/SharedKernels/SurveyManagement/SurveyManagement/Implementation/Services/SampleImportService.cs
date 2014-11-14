@@ -109,7 +109,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 
             int errorCountOccuredOnInterviewsCreaition = 0;
 
-            var commandInvoker = NcqrsEnvironment.Get<ICommandService>();
+            var commandInvoker = ServiceLocator.Current.GetInstance<ICommandService>();
             for (int i = 0; i < interviewForCreate.Length; i++)
             {
                 try

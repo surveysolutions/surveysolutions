@@ -167,17 +167,16 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
 
         private void RebuildViewsByEventSourcesImpl(Guid[] eventSourceIds, IEventHandler[] handlers)
         {
+            areViewsBeingRebuiltNow = true;
+
+            var atomicEventHandlers = handlers.OfType<IAtomicEventHandler>().ToArray();
+
+            if (atomicEventHandlers.Length != handlers.Length)
+                throw new Exception(
+                    "Not all handlers supports partial rebuild. Handlers which are not supporting partial rebuild are {0}" +
+                        string.Join(",", handlers.Where(h => !atomicEventHandlers.Contains(h)).Select(h => h.Name)));
             try
             {
-                areViewsBeingRebuiltNow = true;
-
-                var atomicEventHandlers = handlers.OfType<IAtomicEventHandler>().ToArray();
-
-                if (atomicEventHandlers.Length != handlers.Length)
-                    throw new Exception(
-                        "Not all handlers supports partial rebuild. Handlers which are not supporting partial rebuild are {0}" +
-                            string.Join(",", handlers.Where(h => !atomicEventHandlers.Contains(h)).Select(h => h.Name)));
-
                 foreach (var atomicEventHandler in atomicEventHandlers)
                 {
                     ThrowIfShouldStopViewsRebuilding();
@@ -203,8 +202,8 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
                     {
                         var eventsToPublish = eventStore.ReadFrom(eventSourceId, 0, long.MaxValue);
                         republishDetails += Environment.NewLine +
-                            this.RepublishAllEvents(eventsToPublish,eventsToPublish.Count(),
-                            handlers: handlers);
+                            this.RepublishAllEvents(eventsToPublish, eventsToPublish.Count(),
+                                handlers: handlers);
                     }
                 }
                 finally
@@ -342,7 +341,8 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
             UpdateStatusMessage("Cache in repository writers disabled.");
         }
 
-        private string RepublishAllEvents(IEnumerable<CommittedEvent> eventStream, int allEventsCount, int skipEventsCount = 0, IEnumerable<IEventHandler> handlers = null)
+        private string RepublishAllEvents(IEnumerable<CommittedEvent> eventStream, int allEventsCount, int skipEventsCount = 0,
+            IEnumerable<IEventHandler> handlers = null)
         {
             int processedEventsCount = skipEventsCount;
             int failedEventsCount = 0;
@@ -356,42 +356,45 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
             DateTime republishStarted = DateTime.Now;
             UpdateStatusMessage(
                 "Acquiring first portion of events. "
-                + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
-     
-          /*  foreach (CommittedEvent[] eventBulk in this.eventStore.GetAllEvents(skipEvents: skipEventsCount))
-            {*/
+                    +
+                    GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
+
+
             foreach (CommittedEvent @event in eventStream)
-                {
-                    ThrowIfShouldStopViewsRebuilding(GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
-
-                    UpdateStatusMessage(
-                        string.Format("Publishing event {0}. ", processedEventsCount + 1)
-                        + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
-
-                    try
-                    {
-                        this.eventBus.PublishEventToHandlers(@event, handlers);
-                    }
-                    catch (Exception exception)
-                    {
-                        this.SaveErrorForStatusReport(
-                            string.Format("Failed to publish event {0} of {1} ({2})",
-                                processedEventsCount + 1, allEventsCount, @event.EventIdentifier),
-                            exception);
-
-                        failedEventsCount++;
-                    }
-
-                    processedEventsCount++;
-
-                    if (failedEventsCount >= MaxAllowedFailedEvents)
-                        throw new Exception(string.Format("Failed to rebuild read layer. Too many events failed: {0}.", failedEventsCount));
-                }
+            {
+                ThrowIfShouldStopViewsRebuilding(GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount,
+                    failedEventsCount, skipEventsCount));
 
                 UpdateStatusMessage(
-                    "Acquiring next portion of events. "
-                    + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
-          //  }
+                    string.Format("Publishing event {0}. ", processedEventsCount + 1)
+                        +
+                        GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount,
+                            skipEventsCount));
+
+                try
+                {
+                    this.eventBus.PublishEventToHandlers(@event, handlers);
+                }
+                catch (Exception exception)
+                {
+                    this.SaveErrorForStatusReport(
+                        string.Format("Failed to publish event {0} of {1} ({2})",
+                            processedEventsCount + 1, allEventsCount, @event.EventIdentifier),
+                        exception);
+
+                    failedEventsCount++;
+                }
+
+                processedEventsCount++;
+
+                if (failedEventsCount >= MaxAllowedFailedEvents)
+                    throw new Exception(string.Format("Failed to rebuild read layer. Too many events failed: {0}.", failedEventsCount));
+            }
+
+            UpdateStatusMessage(
+                "Acquiring next portion of events. "
+                    +
+                    GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
 
             this.logger.Info(String.Format("Processed {0} events, failed {1}", processedEventsCount, failedEventsCount));
 

@@ -14,7 +14,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.Infrastructure.FunctionalDenormalization.Tests.AbstractFunctionalEventHandlerTests
 {
-    internal class when_batch_of_10_events_is_published_on_event_handler : AbstractFunctionalEventHandlerTestContext
+    internal class when_batch_of_different_events_are_published_on_event_handler : AbstractFunctionalEventHandlerTestContext
     {
         Establish context = () =>
         {
@@ -24,7 +24,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Tests.AbstractFunctio
             testableFunctionalEventHandler = CreateAbstractFunctionalEventHandler(readSideRepositoryWriterMock.Object);
         };
 
-        Because of = () => testableFunctionalEventHandler.Handle(CreatePublishableEvents(10), eventSourceId);
+        Because of = () => testableFunctionalEventHandler.Handle(new[] { CreatePublishableEvent(), CreatePublishableEvent(), CreatePublishableEvent(), CreatePublishableEvent("test") }, eventSourceId);
 
         It should_readSideRepositoryWriters_method_GetById_called_only_once_at_firts_read = () =>
             readSideRepositoryWriterMock.Verify(x => x.GetById(eventSourceId.FormatGuid()), Times.Once());
@@ -32,10 +32,13 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Tests.AbstractFunctio
         It should_readSideRepositoryWriters_method_Store_called_once = () =>
             readSideRepositoryWriterMock.Verify(x => x.Store(Moq.It.IsAny<IReadSideRepositoryEntity>(), eventSourceId.FormatGuid()), Times.Once());
 
-        It should_count_of_updates_be_equal_to_10 = () =>
-           testableFunctionalEventHandler.CountOfUpdates.ShouldEqual(10);
+        It should_count_of_updates_be_equal_to_3= () =>
+           testableFunctionalEventHandler.CountOfUpdates.ShouldEqual(3);
 
-        private static TestableFunctionalEventHandler<IReadSideRepositoryEntity> testableFunctionalEventHandler;
+        It should_count_of_creates_be_equal_to_1 = () =>
+          testableFunctionalEventHandler.CountOfCreate.ShouldEqual(1);
+
+        private static TestableFunctionalEventHandler testableFunctionalEventHandler;
         private static Mock<IReadSideRepositoryWriter<IReadSideRepositoryEntity>> readSideRepositoryWriterMock;
         private static Guid eventSourceId;
     }

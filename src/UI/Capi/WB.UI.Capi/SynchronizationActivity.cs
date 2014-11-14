@@ -301,7 +301,7 @@ namespace WB.UI.Capi
                     authenticator,
                     new CapiDataSynchronizationService(
                         changeLogManipulator,
-                        NcqrsEnvironment.Get<ICommandService>(),
+                        CapiApplication.Kernel.Get<ICommandService>(),
                         CapiApplication.Kernel.Get<IViewFactory<LoginViewInput, LoginView>>(),
                         CapiApplication.Kernel.Get<IPlainQuestionnaireRepository>(),
                         cleaner,
