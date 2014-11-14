@@ -35,9 +35,8 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SyncProviderTests
         {
             //Arrange
             var commandService = new Mock<ICommandService>();
-            NcqrsEnvironment.SetDefault(commandService.Object);
 
-            ISyncProvider provider = CreateDefaultSyncProvider();
+            ISyncProvider provider = CreateDefaultSyncProvider(commandService: commandService.Object);
             var clientIdentifier = new ClientIdentifier()
                 {
                     ClientDeviceKey = "device1",
@@ -127,19 +126,14 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SyncProviderTests
 
         }
 
-        private SyncProvider CreateDefaultSyncProvider()
+        private SyncProvider CreateDefaultSyncProvider(ICommandService commandService = null)
         {
             var devices = new Mock<IQueryableReadSideRepositoryWriter<ClientDeviceDocument>>();
             var storage = new Mock<ISynchronizationDataStorage>();
             var incomeStorage = new Mock<IIncomePackagesRepository>();
             var logger = new Mock<ILogger>();
 
-            return CreateDefaultSyncProvider(devices.Object, storage.Object, incomeStorage.Object, logger.Object);
+            return new SyncProvider(devices.Object, storage.Object, incomeStorage.Object, logger.Object, commandService ?? Mock.Of<ICommandService>());
         }
-        private SyncProvider CreateDefaultSyncProvider(IQueryableReadSideRepositoryWriter<ClientDeviceDocument> devices, ISynchronizationDataStorage storage, IIncomePackagesRepository incomeRepository, ILogger logger)
-        {
-            return new SyncProvider(devices, storage, incomeRepository, logger, Mock.Of<ICommandService>());
-        }
-
     }
 }

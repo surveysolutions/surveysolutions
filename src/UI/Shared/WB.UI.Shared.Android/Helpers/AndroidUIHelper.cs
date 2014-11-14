@@ -49,5 +49,20 @@ namespace WB.UI.Shared.Android.Helpers
             progressBar.SetY(size.Y / 2);
             return progressBar;
         }
+
+        public static void AttachCheckAndClearFocusForPanel(this ListView view, Activity activity)
+        {
+            view.ScrollStateChanged += (sender, args) =>
+            {
+                if (args.ScrollState == ScrollState.TouchScroll)
+                {
+                    var currentFocus = activity.CurrentFocus;
+                    if (currentFocus != null)
+                    {
+                        currentFocus.ClearFocus();
+                    }
+                }
+            };
+        }
     }
 }
