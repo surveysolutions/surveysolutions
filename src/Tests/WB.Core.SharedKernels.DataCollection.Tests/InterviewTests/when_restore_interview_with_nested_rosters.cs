@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
     {
         Establish context = () =>
         {
-            var questionnaireId = Guid.Parse("10000000000000000000000000000000");
+            var questionnaireId = Guid.NewGuid();
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
             rosterGroupId = Guid.Parse("11111111111111111111111111111111");
@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             interview = CreateInterview(questionnaireId: questionnaireId);
 
-            SetupInstanceToMockedServiceLocator(Mock.Of<IInterviewExpressionStatePrototypeProvider>(_ => _.GetExpressionState(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == interviewExpressionStateMock.Object));
+            SetupInstanceToMockedServiceLocator(Mock.Of<IInterviewExpressionStatePrototypeProvider>(_ => _.GetExpressionState(questionnaireId, Moq.It.IsAny<long>()) == interviewExpressionStateMock.Object));
 
             interviewSynchronizationDto =new InterviewSynchronizationDto(interview.EventSourceId, InterviewStatus.RejectedBySupervisor, null, userId, questionnaireId,
                     questionnaire.Version,
@@ -94,6 +94,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         {
             eventContext.Dispose();
             eventContext = null;
+            SetupInstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(
+               CreateInterviewExpressionStateProviderStub());
         };
 
         Because of = () => interview.SynchronizeInterview(userId, interviewSynchronizationDto);
