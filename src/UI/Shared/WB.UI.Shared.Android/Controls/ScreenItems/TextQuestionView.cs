@@ -69,6 +69,9 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 return;
             }
 
+            if (!this.IsCommentsEditorFocused)
+                this.HideKeyboard(this.etAnswer);
+
             if (isInputMasked && !this.maskedWatcher.IsTextMaskMatched())
             {
                 this.PutAnswerStoredInModelToUI();
@@ -79,9 +82,6 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
             if (newAnswer != this.Model.AnswerString)
             {
-                if (!this.IsCommentsEditorFocused)
-                    this.HideKeyboard(this.etAnswer);
-
                 this.SaveAnswer(newAnswer,
                     new AnswerTextQuestionCommand(
                         this.QuestionnairePublicKey, this.Membership.CurrentUser.Id, this.Model.PublicKey.Id,
