@@ -112,6 +112,8 @@
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_wa___.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_real_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_text_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
+    <Compile Include="InterviewTests\LanguageTests\Cases\KP4586\file.cs" />
+    <Compile Include="InterviewTests\LanguageTests\Cases\KP4586\when_condition_uses_two_levels_of_nested_rosters.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_invalid_answer_and_all_questions_were_invalid_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_invalid_answer_and_all_questions_were_valid_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_valid_answer_and_all_questions_were_invalid_before_answer.cs" />
@@ -127,6 +129,11 @@
     <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_question_group_and_roster_have_not_empty_enablement_conditions_and_other_question_group_and_roster_have_empty_enablement_conditions.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value_not_correctly.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Setup.cs" />
     <Compile Include="InterviewStatistics\when_chart_statistics_is_empty.cs" />
     <Compile Include="InterviewStatistics\when_chart_statistics_is_empty_and_6_interviews_created_and_then_deleted_all_together.cs" />
@@ -150,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="InterviewTests\LanguageTests\Cases\KP4586\KP4586_Questionnaire.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -204,6 +212,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="QuestionnaireTests\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

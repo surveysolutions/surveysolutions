@@ -11,7 +11,7 @@ namespace WB.Core.GenericSubdomains.Rest.Android
             this.jsonUtils = jsonUtils;
         }
 
-        public IRestServiceWrapper CreateRestServiceWrapper(string baseAddress, bool acceptUnsignedCertificate = false)
+        public IRestServiceWrapper CreateRestServiceWrapper(string baseAddress, bool acceptUnsignedCertificate = true)
         {
             return new AndroidRestServiceWrapper(baseAddress, this.jsonUtils, acceptUnsignedCertificate);
         }
