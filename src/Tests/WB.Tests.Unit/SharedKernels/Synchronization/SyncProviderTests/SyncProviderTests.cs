@@ -28,6 +28,9 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SyncProviderTests
 
             var commandService = new Mock<IEventStore>();
             NcqrsEnvironment.SetDefault(commandService.Object);
+            NcqrsEnvironment.SetGetter<ILogger>(Mock.Of<ILogger>);
+            NcqrsEnvironment.SetGetter<IUniqueIdentifierGenerator>(Mock.Of<IUniqueIdentifierGenerator>);
+            NcqrsEnvironment.SetGetter<IClock>(Mock.Of<IClock>);
         }
 
         [Test]
