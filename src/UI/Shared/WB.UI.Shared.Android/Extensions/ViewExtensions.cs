@@ -29,13 +29,18 @@ namespace WB.UI.Shared.Android.Extensions
             var boundChild = view as IMvxBindingContextOwner;
             if (boundChild != null)
             {
+#if DEBUG
                 Console.WriteLine("clean up binding from adapter");
+#endif
                 boundChild.ClearAllBindings();
             }
             var groupViewChild = view as ViewGroup;
             if (groupViewChild != null)
             {
+
+#if DEBUG
                 Console.WriteLine("clean up binding from adapter for children");
+#endif
                 TryClearBindingsIfPossibleForChildren(groupViewChild);
             }
         }

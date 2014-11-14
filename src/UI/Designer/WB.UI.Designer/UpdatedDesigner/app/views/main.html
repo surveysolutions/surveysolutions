@@ -38,7 +38,7 @@
                        ng-pluralize
                        count="verificationStatus.errorsCount"
                        when="{'1': '{} error',
-                          '20' : '{}+ errors',
+                          '100' : '{}+ errors',
                           'other': '{} errors'}">
                     </a>
                 </span>
@@ -96,7 +96,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Verification: <span ng-pluralize count="verificationStatus.errorsCount" when="{'1': '{} error found', '20': '{}+ errors found', 'other': '{} errors found'}"></span></h3>
+                <h3 class="modal-title">Verification: <span ng-pluralize count="verificationStatus.errorsCount" when="{'1': '{} error found', '100': '{}+ errors found', 'other': '{} errors found'}"></span></h3>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><!--&times;--></button>
             </div>
             <div class="modal-body">

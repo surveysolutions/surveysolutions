@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         {
             viewState = CreateViewWithSequenceOfInterviewData();
             synchronizationDataStorage = new Mock<ISynchronizationDataStorage>();
-            interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional(synchronizationDataStorage.Object);
+            interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional();
             viewState.Document.Status = InterviewStatus.RejectedByHeadquarters;
         };
 

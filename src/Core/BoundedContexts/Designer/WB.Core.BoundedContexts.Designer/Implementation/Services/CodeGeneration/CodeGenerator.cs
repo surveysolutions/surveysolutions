@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }.ToString(), template.TransformText());
 
             //generating partial classes
-            GenerateQuestionnaryLevelExpressionClasses(questionnaireTemplateStructure, generatedClasses);
+            GenerateQuestionnaireLevelExpressionClasses(questionnaireTemplateStructure, generatedClasses);
             GenerateRostersPartialClasses(questionnaireTemplateStructure, generatedClasses);
 
             return generatedClasses;
@@ -56,17 +56,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         private static void GenerateRostersPartialClasses(QuestionnaireExecutorTemplateModel questionnaireTemplateStructure,
             Dictionary<string, string> generatedClasses)
         {
-            foreach (var grouppedRosters in questionnaireTemplateStructure.RostersGroupedByScope)
+            foreach (var groupedRosters in questionnaireTemplateStructure.RostersGroupedByScope)
             {
-                foreach (
-                    QuestionTemplateModel questionTemplateModel in grouppedRosters.Value.SelectMany(r => r.Questions))
+                foreach (QuestionTemplateModel questionTemplateModel in groupedRosters.Value.SelectMany(roster => roster.Questions))
                 {
                     if (!string.IsNullOrWhiteSpace(questionTemplateModel.Conditions))
                     {
                         var methodTemplate = new ExpressionMethodTemplate(new ExpressionMethodModel
                         {
                             ExpressionString = questionTemplateModel.Conditions,
-                            GeneratedClassName = grouppedRosters.Key,
+                            GeneratedClassName = groupedRosters.Key,
                             GeneratedMethodName = questionTemplateModel.GeneratedConditionsMethodName
                         });
 
@@ -84,7 +83,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         var methodTemplate = new ExpressionMethodTemplate(new ExpressionMethodModel
                         {
                             ExpressionString = questionTemplateModel.Validations,
-                            GeneratedClassName = grouppedRosters.Key,
+                            GeneratedClassName = groupedRosters.Key,
                             GeneratedMethodName = questionTemplateModel.GeneratedValidationsMethodName
                         });
 
@@ -97,14 +96,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     }
                 }
 
-                foreach (GroupTemplateModel groupTemplateModel in grouppedRosters.Value.SelectMany(r => r.Groups))
+                foreach (GroupTemplateModel groupTemplateModel in groupedRosters.Value.SelectMany(roster => roster.Groups))
                 {
                     if (!string.IsNullOrWhiteSpace(groupTemplateModel.Conditions))
                     {
                         var methodTemplate = new ExpressionMethodTemplate(new ExpressionMethodModel
                         {
                             ExpressionString = groupTemplateModel.Conditions,
-                            GeneratedClassName = grouppedRosters.Key,
+                            GeneratedClassName = groupedRosters.Key,
                             GeneratedMethodName = groupTemplateModel.GeneratedConditionsMethodName
                         });
 
@@ -118,14 +117,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     }
                 }
 
-                foreach (RosterTemplateModel rosterTemplateModel in grouppedRosters.Value)
+                foreach (RosterTemplateModel rosterTemplateModel in groupedRosters.Value)
                 {
                     if (!string.IsNullOrWhiteSpace(rosterTemplateModel.Conditions))
                     {
                         var methodTemplate = new ExpressionMethodTemplate(new ExpressionMethodModel
                         {
                             ExpressionString = rosterTemplateModel.Conditions,
-                            GeneratedClassName = grouppedRosters.Key,
+                            GeneratedClassName = groupedRosters.Key,
                             GeneratedMethodName = rosterTemplateModel.GeneratedConditionsMethodName
                         });
 
@@ -141,7 +140,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }
         }
 
-        private static void GenerateQuestionnaryLevelExpressionClasses(
+        private static void GenerateQuestionnaireLevelExpressionClasses(
             QuestionnaireExecutorTemplateModel questionnaireTemplateStructure, Dictionary<string, string> generatedClasses)
         {
             foreach (QuestionTemplateModel questionTemplateModel in questionnaireTemplateStructure.QuestionnaireLevelModel.Questions)
@@ -326,7 +325,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                                 ? childAsIGroup.PublicKey
                                 : childAsIGroup.RosterSizeQuestionId.Value;
 
-                            List<Guid> currentRosterScope = currentScope.RosterScope.Select(t => t).ToList();
+                            List<Guid> currentRosterScope = currentScope.RosterScope.ToList();
                             currentRosterScope.Add(currentScopeId);
 
                             string varName = !String.IsNullOrWhiteSpace(childAsIGroup.VariableName)

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -11,7 +10,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage
         where TEntity : class
     {
         private readonly SqlitePlainStore documentStore;
-
+        
         public SqlitePlainStorageAccessor(SqlitePlainStore documentStore)
         {
             this.documentStore = documentStore;
@@ -71,12 +70,21 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage
 
         private static string SerializeEntity(TEntity entity)
         {
-            return JsonConvert.SerializeObject(entity, Formatting.None, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+            return JsonConvert.SerializeObject(entity, Formatting.None, GetJsonSerializerSettings());
         }
 
         private static TEntity DeserializeEntity(string json)
         {
-            return JsonConvert.DeserializeObject<TEntity>(json, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+            return JsonConvert.DeserializeObject<TEntity>(json, GetJsonSerializerSettings());
+        }
+
+        private static JsonSerializerSettings GetJsonSerializerSettings()
+        {
+            return new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Objects,
+                NullValueHandling = NullValueHandling.Ignore
+            };
         }
 
         private static string ToSqliteId(string id)

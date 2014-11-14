@@ -22,6 +22,7 @@ using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Activation;
+using Ninject.Modules;
 using Ninject.Extensions.Conventions.BindingGenerators;
 using Ninject.Modules;
 using Ninject.Syntax;
@@ -31,10 +32,13 @@ using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Rest.Android;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Snapshots;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -47,6 +51,7 @@ using WB.UI.QuestionnaireTester.Authentication;
 using WB.UI.QuestionnaireTester.Services;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using Context = Android.Content.Context;
+using CommandService = WB.Core.Infrastructure.CommandBus.CommandService;
 
 namespace WB.UI.QuestionnaireTester
 {
@@ -59,6 +64,15 @@ namespace WB.UI.QuestionnaireTester
     [Crasher(UseCustomData = false)]
     public class CapiTesterApplication : Application
     {
+        public class ServiceLocationModule : NinjectModule
+        {
+            public override void Load()
+            {
+                ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.Kernel));
+                this.Kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
+            }
+        }
+
         #region static properties
 
         public static TOutput LoadView<TInput, TOutput>(TInput input)
@@ -70,7 +84,7 @@ namespace WB.UI.QuestionnaireTester
 
         public static ICommandService CommandService
         {
-            get { return NcqrsEnvironment.Get<ICommandService>(); }
+            get { return Kernel.Get<ICommandService>(); }
         }
 
         public static DesignerAuthentication DesignerMembership
@@ -214,10 +228,11 @@ namespace WB.UI.QuestionnaireTester
                    : Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
 
             this.kernel = new StandardKernel(
+                new ServiceLocationModule(),
                 new CapiTesterCoreRegistry(),
                 new CapiBoundedContextModule(),
-                new AndroidTesterModelModule(),
                 new TesterLoggingModule(),
+                new AndroidTesterModelModule(),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false, basePath: basePath),
                 new RestAndroidModule(),
                 new FileInfrastructureModule());
@@ -226,9 +241,6 @@ namespace WB.UI.QuestionnaireTester
             this.kernel.Bind<DesignerService>().ToConstant(new DesignerService());
             
             this.kernel.Bind<Context>().ToConstant(this);
-
-            ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
-            this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
             kernel.Unbind<IQuestionnaireAssemblyFileAccessor>();
             kernel.Bind<IQuestionnaireAssemblyFileAccessor>().To<QuestionnareAssemblyTesterFileAccessor>().InSingletonScope();
@@ -239,19 +251,26 @@ namespace WB.UI.QuestionnaireTester
 
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
 
-            var snpshotStore = new InMemoryEventStore();
-            // key param for storing im memory
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(snpshotStore);
+            kernel.Bind<ISnapshottingPolicy>().ToMethod(context => NcqrsEnvironment.Get<ISnapshottingPolicy>());
+            kernel.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
+            kernel.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
 
-            var bus1 = new InProcessEventBus(true);
-            NcqrsEnvironment.SetDefault<IEventBus>(bus1);
-            this.kernel.Bind<IEventBus>().ToConstant(bus1);
+            kernel.Bind<IDomainRepository>().To<DomainRepository>();
 
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());
+            var bus = new InProcessEventBus(true);
+            NcqrsEnvironment.SetDefault<IEventBus>(bus);
+            kernel.Bind<IEventBus>().ToConstant(bus);
+
+            kernel.Bind<IAggregateRootRepository>().To<AggregateRootRepository>();
+            kernel.Bind<IEventPublisher>().To<EventPublisher>();
+            kernel.Bind<ISnapshotManager>().To<SnapshotManager>();
+
+            // TODO: TLK, KP-4337: make correct mapping here, not a direct creation
+            var commandService = new CommandService(ncqrsCommandService, this.kernel.Get<IAggregateRootRepository>(), this.kernel.Get<IEventPublisher>(), this.kernel.Get<ISnapshotManager>());
+
+            kernel.Bind<ICommandService>().ToConstant(commandService);
+
             NcqrsEnvironment.SetDefault<IEventStore>(Kernel.Get<IEventStore>());
-            var domainrepository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(), NcqrsEnvironment.Get<IAggregateSnapshotter>());
-            this.kernel.Bind<IDomainRepository>().ToConstant(domainrepository);
-            this.kernel.Bind<ICommandService>().ToConstant(CommandService);
 
             this.kernel.Unbind<IAnswerOnQuestionCommandService>();
             this.kernel.Bind<IAnswerOnQuestionCommandService>().To<AnswerOnQuestionCommandService>().InSingletonScope();
@@ -260,12 +279,10 @@ namespace WB.UI.QuestionnaireTester
             
             #region register handlers
 
-            var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
             this.kernel.Bind<IEventBus>().ToConstant(bus).Named("interviewViewBus");
 
             this.InitInterviewStorage(bus);
             this.InitTemplateStorage(bus);
-            
 
             #endregion
         }

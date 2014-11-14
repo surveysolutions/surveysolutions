@@ -9,6 +9,7 @@ using Android.Views;
 using Android.Widget;
 using Android.Content.PM;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
@@ -144,7 +145,7 @@ namespace WB.UI.Capi
             Guid interviewUserId = CapiApplication.Membership.CurrentUser.Id;
             Guid supervisorId = CapiApplication.Membership.SupervisorId;
 
-            NcqrsEnvironment.Get<ICommandService>().Execute(new CreateInterviewOnClientCommand(interviewKey, interviewUserId,
+            ServiceLocator.Current.GetInstance<ICommandService>().Execute(new CreateInterviewOnClientCommand(interviewKey, interviewUserId,
                 questionnaireId, questionnaireVersion, DateTime.UtcNow, supervisorId));
 
             logManipulator.CreatePublicRecord(interviewKey);

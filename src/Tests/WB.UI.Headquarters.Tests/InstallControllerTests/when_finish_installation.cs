@@ -1,9 +1,6 @@
-﻿using System.Runtime.InteropServices;
-using Machine.Specifications;
+﻿using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
-using Ncqrs.Commanding;
-using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
@@ -24,14 +21,14 @@ namespace WB.UI.Headquarters.Tests.InterviewControllerTests
             commandServiceMock.Setup(_ => _.Execute(Moq.It.IsAny<ICommand>(), Moq.It.IsAny<string>()))
                 .Callback<ICommand, string>((command, origin) => executedCommand = command);
 
-            controller = CreateController(commandService:commandServiceMock.Object, passwordHasher: passwordHasherMock.Object);
+            controller = CreateController(commandService: commandServiceMock.Object, passwordHasher: passwordHasherMock.Object);
         };
 
         Because of = () =>
             controller.Finish(model);
 
         It should_execute_command_service_only_once = () =>
-            commandServiceMock.Verify(_=>_.Execute(executedCommand, null), Times.Once);
+            commandServiceMock.Verify(_ => _.Execute(executedCommand, null), Times.Once);
 
         It should_execute_command_be_type_of_CreateUserCommand = () =>
             executedCommand.ShouldBeOfExactType<CreateUserCommand>();

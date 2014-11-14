@@ -15,6 +15,7 @@ using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using CAPI.Android.Settings;
 using Main.Core.Documents;
+using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
@@ -72,6 +73,8 @@ namespace CAPI.Android.Core.Model
             var propagationStructureStore = new FileReadSideRepositoryWriter<QuestionnaireRosterStructure>();
 
             var bigSurveyStore = new BackupableInMemoryReadSideRepositoryAccessor<InterviewViewModel>();
+
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(snapshotStore);
 
             this.Bind<IEventStore>().ToConstant(evenStore);
             this.Bind<ISnapshotStore>().ToConstant(snapshotStore);

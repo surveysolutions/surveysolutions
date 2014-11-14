@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IGlobalInfoProvider globalInfo;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
-
+        private string ResponseInterviewerFileName = "interviewer.apk";
         private string CapiFileName = "wbcapi.apk";
         private string pathToSearchVersions = ("~/App_Data/Capi");
 
@@ -290,8 +290,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     Content = new StreamContent(fileSystemAccessor.ReadFile(pathToFile))
                 };
 
-                response.Content.Headers.ContentType =
-                    new MediaTypeHeaderValue("application/vnd.android.package-archive");
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.android.package-archive");
+                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = ResponseInterviewerFileName
+                };
 
                 return response;
             }

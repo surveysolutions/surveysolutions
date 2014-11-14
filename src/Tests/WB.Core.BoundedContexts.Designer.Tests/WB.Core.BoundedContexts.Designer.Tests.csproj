@@ -254,6 +254,7 @@
     <Compile Include="CodeGenerationTests\when_generating_assembly_and_questionnaire_has_roster_with_corner_naming.cs" />
     <Compile Include="EventExtensions.cs" />
     <Compile Include="Execute.cs" />
+    <Compile Include="InterviewCompilerTests\InterviewCompilerTestsContext.cs" />
     <Compile Include="InterviewCompilerTests\when_generating_assembly_as_string_with_error.cs" />
     <Compile Include="InterviewCompilerTests\when_generating_assembly_as_string.cs" />
     <Compile Include="MoveStaticTextHandlerTests\when_moving_static_text_and_all_parameters_specified.cs" />
@@ -1017,6 +1018,10 @@
     <ProjectReference Include="..\..\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
       <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
       <Name>WB.Core.GenericSubdomains.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Files\WB.Core.Infrastructure.Files.csproj">
+      <Project>{6ac3a080-ceca-4974-9ca1-c239695ed8f8}</Project>
+      <Name>WB.Core.Infrastructure.Files</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
       <Project>{e7d429a7-1c9f-4f25-9c23-686ef9c2d60a}</Project>

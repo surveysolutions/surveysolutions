@@ -26,6 +26,7 @@ using WB.Core.BoundedContexts.Capi.Implementation.ChangeLog;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
@@ -36,6 +37,7 @@ using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Snapshots;
 using WB.Core.Infrastructure.Storage.EventStore;
 using WB.Core.Infrastructure.Storage.EventStore.Implementation;
 using WB.Core.Infrastructure.Storage.Raven;
@@ -51,6 +53,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Tools.CapiDataGenerator.Ninject;
 using WB.UI.Shared.Web.Settings;
+using CommandService = WB.Core.Infrastructure.CommandBus.CommandService;
 using UserDenormalizer = CAPI.Android.Core.Model.EventHandlers.UserDenormalizer;
 
 namespace CapiDataGenerator
@@ -126,14 +129,19 @@ namespace CapiDataGenerator
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(Kernel));
             this.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
-            var commandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
-            NcqrsEnvironment.SetDefault(commandService);
-            NcqrsInit.InitializeCommandService(Kernel.Get<ICommandListSupplier>(), commandService);
-            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
+            var ncqrsCommandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
+            NcqrsEnvironment.SetDefault(ncqrsCommandService);
+            NcqrsInit.InitializeCommandService(Kernel.Get<ICommandListSupplier>(), ncqrsCommandService);
 
-            var snpshotStore = new InMemoryEventStore();
-            // key param for storing im memory
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(snpshotStore);
+            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
+
+            this.Bind<ISnapshottingPolicy>().ToMethod(context => NcqrsEnvironment.Get<ISnapshottingPolicy>());
+            this.Bind<ISnapshotStore>().ToMethod(context => NcqrsEnvironment.Get<ISnapshotStore>());
+            this.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
+            this.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
+
+            this.Bind<IDomainRepository>().To<DomainRepository>();
 
             var inProcessEventDispatcher = new CustomInProcessEventDispatcher(true);
 
@@ -150,8 +158,6 @@ namespace CapiDataGenerator
                 bus.Register(handler as IEventHandler);
             }
 
-            this.Bind<ICommandService>().ToConstant(NcqrsEnvironment.Get<ICommandService>());
-            
             #region register handlers
 
             InitCapiTemplateStorage(bus);
@@ -163,9 +169,14 @@ namespace CapiDataGenerator
 
             #endregion
 
-            var repository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(), NcqrsEnvironment.Get<IAggregateSnapshotter>());
-            this.Bind<IDomainRepository>().ToConstant(repository);
-            this.Bind<ISnapshotStore>().ToConstant(NcqrsEnvironment.Get<ISnapshotStore>());
+            this.Bind<IAggregateRootRepository>().To<AggregateRootRepository>();
+            this.Bind<IEventPublisher>().To<EventPublisher>();
+            this.Bind<ISnapshotManager>().To<SnapshotManager>();
+
+            // TODO: TLK, KP-4337: make correct mapping here, not a direct creation
+            var commandService = new CommandService(ncqrsCommandService, this.Kernel.Get<IAggregateRootRepository>(), this.Kernel.Get<IEventPublisher>(), this.Kernel.Get<ISnapshotManager>());
+
+            this.Bind<ICommandService>().ToConstant(commandService);
         }
 
         private IEventStore GetHeadquartersEventStore()

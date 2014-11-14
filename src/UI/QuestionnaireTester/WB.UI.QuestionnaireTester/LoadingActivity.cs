@@ -111,11 +111,11 @@ namespace WB.UI.QuestionnaireTester
                 var assemblyFileAccessor = ServiceLocator.Current.GetInstance<IQuestionnaireAssemblyFileAccessor>();
                 assemblyFileAccessor.StoreAssembly(questionnaireDocument.PublicKey, 0, template.QuestionnaireAssembly);
 
-                NcqrsEnvironment.Get<ICommandService>().Execute(new ImportFromDesignerForTester(questionnaireDocument));
+                ServiceLocator.Current.GetInstance<ICommandService>().Execute(new ImportFromDesignerForTester(questionnaireDocument));
 
                 Guid interviewUserId = Guid.NewGuid();
 
-                NcqrsEnvironment.Get<ICommandService>().Execute(new CreateInterviewForTestingCommand(interviewId, interviewUserId,
+                ServiceLocator.Current.GetInstance<ICommandService>().Execute(new CreateInterviewForTestingCommand(interviewId, interviewUserId,
                     questionnaireDocument.PublicKey, new Dictionary<Guid, object>(), DateTime.UtcNow));
             }
             catch (Exception e)

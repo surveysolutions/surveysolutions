@@ -21,25 +21,30 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
             Data = GetJsonData(data);
             
             Version = version.ToString();
-        
-
         }
         private string GetJsonData(object payload)
         {
-            return JsonConvert.SerializeObject(
-                payload, Formatting.None, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+            var jsonSerializerSettings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Objects,
+                NullValueHandling = NullValueHandling.Ignore
+            };
+            return JsonConvert.SerializeObject(payload, Formatting.None, jsonSerializerSettings);
         }
-       
 
         public string CommitId { get; set; }
+
         public string Origin { get; set; }
        
         public string EventId { get; set; }
+
         [PrimaryKey]
         public long Sequence { get; set; }
+
         public long TimeStamp { get; set; }
+
         public string Data { get; set; }
+
         public string Version { get; set; }
-        
     }
 }
