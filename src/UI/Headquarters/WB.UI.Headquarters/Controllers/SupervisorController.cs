@@ -60,12 +60,9 @@ namespace WB.UI.Headquarters.Controllers
             return this.View();
         }
 
-        public ActionResult Edit(Guid? id)
+        public ActionResult Edit(Guid id)
         {
-            if (!id.HasValue)
-                return this.RedirectToAction("Edit", "Supervisor", new {id = GlobalInfo.GetCurrentUser().Id});
-
-            var user = this.GetUserById(id.Value);
+            var user = this.GetUserById(id);
 
             if(user == null) throw new HttpException(404, string.Empty);
 
@@ -87,7 +84,7 @@ namespace WB.UI.Headquarters.Controllers
                 var user = this.GetUserById(model.Id);
                 if (user != null)
                 {
-                    this.UpdateSupervisorOrInterviewer(user: user, editModel: model);
+                    this.UpdateAccount(user: user, editModel: model);
                     this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
                     return this.RedirectToAction("Index");
                 }
