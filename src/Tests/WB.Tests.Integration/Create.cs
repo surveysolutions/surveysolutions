@@ -199,6 +199,19 @@ namespace WB.Tests.Integration
             };
         }
 
+        public static TextListQuestion ListQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, bool isMandatory = false)
+        {
+            return new TextListQuestion
+            {
+                QuestionType = QuestionType.TextList,
+                PublicKey = id ?? Guid.NewGuid(),
+                StataExportCaption = variable,
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+                Mandatory = isMandatory
+            };
+        }
+
         public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, bool isMandatory = false)
         {
             return new NumericQuestion
