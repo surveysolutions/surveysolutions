@@ -1,6 +1,6 @@
 using System;
-using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.StorageStrategy
 {

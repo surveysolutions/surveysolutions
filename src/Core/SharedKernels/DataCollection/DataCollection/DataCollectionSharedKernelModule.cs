@@ -1,8 +1,6 @@
 ﻿using Ninject.Modules;
 using WB.Core.BoundedContexts.Supervisor.Factories;
-using WB.Core.GenericSubdomains.Utils.Implementation.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernels.DataCollection.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
@@ -15,6 +13,8 @@ using WB.Core.SharedKernels.DataCollection.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.SharedKernels.DataCollection
 {

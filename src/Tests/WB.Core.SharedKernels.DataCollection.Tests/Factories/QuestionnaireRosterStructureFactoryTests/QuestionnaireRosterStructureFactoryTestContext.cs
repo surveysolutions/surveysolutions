@@ -1,9 +1,9 @@
-﻿using Machine.Specifications;
+﻿using System.Text.RegularExpressions;
+using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using Group = Main.Core.Entities.SubEntities.Group;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.Factories.QuestionnaireRosterStructureFactoryTests
 {

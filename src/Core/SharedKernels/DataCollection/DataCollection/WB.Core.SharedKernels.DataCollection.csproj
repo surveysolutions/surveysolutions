@@ -90,6 +90,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DataTransferObjects\Synchronization\RosterSynchronizationDto.cs" />
+    <Compile Include="EventHandler\FileStoreDenormalizer.cs" />
+    <Compile Include="Events\File\FileDeleted.cs" />
+    <Compile Include="Events\File\FileMetaUpdated.cs" />
+    <Compile Include="Events\File\FileUploaded.cs" />
     <Compile Include="Events\Interview\AnswersDeclaredInvalid.cs" />
     <Compile Include="Events\Interview\AnswersDeclaredValid.cs" />
     <Compile Include="Events\Interview\AnswersRemoved.cs" />
@@ -278,10 +282,6 @@
       <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
       <Name>Ncqrs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
-      <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
-      <Name>Main.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
@@ -294,6 +294,10 @@
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
+      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
+      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
       <Project>{553b4fc2-5fc7-4256-b14d-82758d64a3bd}</Project>
       <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
@@ -303,7 +307,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="EventHandler\" />
     <Folder Include="ValueObjects\Questionnaire\" />
   </ItemGroup>
   <ItemGroup>

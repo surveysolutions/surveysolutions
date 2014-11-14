@@ -1,6 +1,4 @@
-using WB.Core.Infrastructure.ReadSide.Repository;
-
-namespace WB.Core.Infrastructure.ReadSide
+namespace WB.Core.SharedKernels.SurveySolutions.Documents
 {
     /// <summary>
     /// Marker interface for read-side views.

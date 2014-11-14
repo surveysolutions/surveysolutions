@@ -6,14 +6,13 @@ using Newtonsoft.Json.Serialization;
 using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Client.Document;
-using Raven.Client.Indexes;
 using Raven.Client.Linq;
 using Raven.Imports.Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors
 {

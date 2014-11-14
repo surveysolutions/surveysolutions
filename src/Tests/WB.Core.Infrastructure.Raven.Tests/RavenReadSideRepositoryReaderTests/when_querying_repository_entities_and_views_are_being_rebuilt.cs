@@ -7,6 +7,7 @@ using Moq;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
+using WB.Core.SharedKernels.SurveySolutions;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideRepositoryReaderTests

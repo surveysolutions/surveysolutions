@@ -1,12 +1,11 @@
 using System;
 using System.IO;
-using Main.Core.Documents;
 using Main.Core.Events.File;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 
-namespace WB.Core.BoundedContexts.Capi.EventHandler
+namespace WB.Core.SharedKernels.DataCollection.EventHandler
 {
     /// <summary>
     /// Class handles file changes events.
@@ -37,7 +36,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
                     Description = evnt.Payload.Description,
                     Title = evnt.Payload.Title
                 };
-            this.attachments.Store(fileDescription, evnt.Payload.PublicKey);
+            ReadSideRepositoryWriterExtensions.Store(this.attachments, fileDescription, evnt.Payload.PublicKey);
             using (MemoryStream original = this.FromBase64(evnt.Payload.OriginalFile))
             {
                 fileDescription.Content = original;
@@ -54,7 +53,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         /// </param>
         public void Handle(IPublishedEvent<FileDeleted> evnt)
         {
-            this.attachments.Remove(evnt.Payload.PublicKey);
+            ReadSideRepositoryWriterExtensions.Remove(this.attachments, evnt.Payload.PublicKey);
         }
 
         public abstract void PostSaveHandler(IPublishedEvent<FileUploaded> evnt);

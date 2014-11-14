@@ -3,8 +3,8 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Utils.Implementation.Services;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.BoundedContexts.Capi.Tests
 {
