@@ -111,6 +111,9 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 return;
             }
 
+            if (!IsCommentsEditorFocused)
+                HideKeyboard(editor);
+
             string tagName = editor.GetTag(Resource.Id.AnswerId).ToString();
             decimal answerValue = decimal.Parse(tagName);
             
@@ -118,7 +121,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             {
                 if (!string.IsNullOrWhiteSpace(newAnswer))
                 {
-                    HideKeyboardAndSaveState(editor);
+                    SaveState(editor);
                     answersTreatedAsSaved.Add(answerValue);
                 }
             }
@@ -129,12 +132,12 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
                     if (this.valueBeforeEditing != newAnswer)
                     {
-                        this.HideKeyboardAndSaveState(editor);
+                        this.SaveState(editor);
                     }
                 }
                 else
                 {
-                    this.HideKeyboardAndSaveState(editor);
+                    this.SaveState(editor);
                     answersTreatedAsSaved.Remove(answerValue); 
                 }
             }
@@ -317,13 +320,9 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 container.RemoveView(childToRemove);
         }
 
-        private void HideKeyboardAndSaveState(EditText editor)
+        private void SaveState(EditText editor)
         {
-            if (!IsCommentsEditorFocused)
-                HideKeyboard(editor);
-
-            TextListAnswerViewModel[] answers =
-                GetAnswersFromUI().Where(item => !string.IsNullOrWhiteSpace(item.Answer)).ToArray();
+            TextListAnswerViewModel[] answers = GetAnswersFromUI().Where(item => !string.IsNullOrWhiteSpace(item.Answer)).ToArray();
 
             SaveAnswer(FormatSelectedAnswersAsString(answers), CreateSaveAnswerCommand(answers));
         }

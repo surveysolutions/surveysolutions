@@ -258,7 +258,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private bool CascadingQuestionHasMoreThanAllowedOptions(SingleQuestion question)
         {
-            return question.CascadeFromQuestionId.HasValue && question.Answers != null && question.Answers.Count > 100000;
+            return question.CascadeFromQuestionId.HasValue && question.Answers != null && question.Answers.Count > 10000;
         }
 
         private static EntityVerificationResult<SingleQuestion> CascadingHasCircularReference(SingleQuestion question, QuestionnaireDocument questionnaire)

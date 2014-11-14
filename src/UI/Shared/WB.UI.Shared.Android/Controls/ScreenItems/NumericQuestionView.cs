@@ -113,6 +113,9 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
                 return;
             }
 
+            if (!this.IsCommentsEditorFocused)
+                this.HideKeyboard(this.etAnswer);
+
             string newAnswer = this.etAnswer.Text.Trim();
 
             T answer;
@@ -135,10 +138,6 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
                 }
                 return;
             }
-
-            if (!this.IsCommentsEditorFocused)
-                this.HideKeyboard(this.etAnswer);
-
             this.SaveAnswer(newAnswer, this.CreateAnswerQuestionCommand(answer));
         }
 
