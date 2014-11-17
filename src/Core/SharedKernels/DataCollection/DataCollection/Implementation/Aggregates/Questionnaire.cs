@@ -8,6 +8,7 @@ using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -67,7 +68,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public Questionnaire(Guid createdBy, IQuestionnaireDocument source, bool allowCensusMode, string supportingAssembly)
             : base(source.PublicKey)
         {
-            this.ImportFromDesigner(createdBy, source, allowCensusMode, supportingAssembly);
+            this.ImportFromDesigner(new ImportFromDesigner(createdBy, source, allowCensusMode, supportingAssembly));
         }
 
         public Questionnaire(IQuestionnaireDocument source)
@@ -79,7 +80,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public Questionnaire(Guid id, long version, bool allowCensusMode, string supportingAssembly)
             : base(id)
         {
-            this.RegisterPlainQuestionnaire(id, version, allowCensusMode, supportingAssembly);
+            this.RegisterPlainQuestionnaire(new RegisterPlainQuestionnaire(id, version, allowCensusMode, supportingAssembly));
         }
 
         public IQuestionnaire GetQuestionnaire()
@@ -114,9 +115,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.availableVersions = snapshot.AvailableVersions;
         }
 
-        public void ImportFromDesigner(Guid createdBy, IQuestionnaireDocument source, bool allowCensusMode, string supportingAssembly)
+        public void ImportFromDesigner(ImportFromDesigner command)
         {
-            QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
+            QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(command.Source);
             this.ThrowIfCurrentAggregateIsUsedOnlyAsProxyToPlainQuestionnaireRepository();
 
             var newVersion = GetNextVersion();
@@ -124,69 +125,68 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new TemplateImported
             {
                 Source = document,
-                AllowCensusMode = allowCensusMode,
+                AllowCensusMode = command.AllowCensusMode,
                 Version = GetNextVersion(),
-                ResponsibleId = createdBy
+                ResponsibleId = command.CreatedBy
             });
 
-            if (supportingAssembly != null && !string.IsNullOrWhiteSpace(supportingAssembly))
+            if (command.SupportingAssembly != null && !string.IsNullOrWhiteSpace(command.SupportingAssembly))
             {
-                QuestionnareAssemblyFileAccessor.StoreAssembly(EventSourceId, newVersion, supportingAssembly);
+                QuestionnareAssemblyFileAccessor.StoreAssembly(EventSourceId, newVersion, command.SupportingAssembly);
                 this.ApplyEvent(new QuestionnaireAssemblyImported { Version = newVersion });
             }
         }
 
-        public void ImportFromSupervisor(IQuestionnaireDocument source)
+        public void ImportFromSupervisor(ImportFromSupervisor command)
         {
-            ImportFromQuestionnaireDocument(source);
+            ImportFromQuestionnaireDocument(command.Source);
         }
 
-        public void ImportFromDesignerForTester(IQuestionnaireDocument source)
+        public void ImportFromDesignerForTester(ImportFromDesignerForTester command)
         {
-            ImportFromQuestionnaireDocument(source);
+            ImportFromQuestionnaireDocument(command.Source);
         }
 
-        public void DeleteQuestionnaire(long questionnaireVersion, Guid? responsibleId)
+        public void DeleteQuestionnaire(DeleteQuestionnaire command)
         {
-            if(!availableVersions.ContainsKey(questionnaireVersion))
+            if (!availableVersions.ContainsKey(command.QuestionnaireVersion))
                 throw new QuestionnaireException(string.Format(
                     "Questionnaire {0} ver {1} cannot be deleted because it is absent in repository.",
-                    this.EventSourceId.FormatGuid(), questionnaireVersion));
-            var questionnaireTemplateVersion = availableVersions.ContainsKey(questionnaireVersion) ? availableVersions[questionnaireVersion] : null;
+                    this.EventSourceId.FormatGuid(), command.QuestionnaireVersion));
+            var questionnaireTemplateVersion = availableVersions.ContainsKey(command.QuestionnaireVersion) ? availableVersions[command.QuestionnaireVersion] : null;
 
             var createdById = questionnaireTemplateVersion != null
                 ? questionnaireTemplateVersion.ResponsibleId
                 : null;
 
-            if (createdById.HasValue && createdById != responsibleId)
+            if (createdById.HasValue && createdById != command.ResponsibleId)
             {
                 throw new QuestionnaireException(
                     string.Format("You don't have permissions to delete this questionnaire."));
             }
 
-
             this.ApplyEvent(new QuestionnaireDeleted()
             {
-                QuestionnaireVersion = questionnaireVersion,
-                ResponsibleId = responsibleId
+                QuestionnaireVersion = command.QuestionnaireVersion,
+                ResponsibleId = command.ResponsibleId
             });
         }
 
-        public void RegisterPlainQuestionnaire(Guid id, long version, bool allowCensusMode, string supportingAssembly)
+        public void RegisterPlainQuestionnaire(RegisterPlainQuestionnaire command)
         {
-            QuestionnaireDocument questionnaireDocument = this.PlainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
+            QuestionnaireDocument questionnaireDocument = this.PlainQuestionnaireRepository.GetQuestionnaireDocument(command.Id, command.Version);
 
             if (questionnaireDocument == null || questionnaireDocument.IsDeleted)
                 throw new QuestionnaireException(string.Format(
                     "Plain questionnaire {0} ver {1} cannot be registered because it is absent in plain repository.",
-                    this.EventSourceId.FormatGuid(), version));
+                    this.EventSourceId.FormatGuid(), command.Version));
 
-            this.ApplyEvent(new PlainQuestionnaireRegistered(version, allowCensusMode));
+            this.ApplyEvent(new PlainQuestionnaireRegistered(command.Version, command.AllowCensusMode));
 
-            if (supportingAssembly != null && !string.IsNullOrWhiteSpace(supportingAssembly))
+            if (command.SupportingAssembly != null && !string.IsNullOrWhiteSpace(command.SupportingAssembly))
             {
-                QuestionnareAssemblyFileAccessor.StoreAssembly(EventSourceId, version, supportingAssembly);
-                this.ApplyEvent(new QuestionnaireAssemblyImported { Version = version });
+                QuestionnareAssemblyFileAccessor.StoreAssembly(EventSourceId, command.Version, command.SupportingAssembly);
+                this.ApplyEvent(new QuestionnaireAssemblyImported { Version = command.Version });
             }
         }
 

@@ -81,7 +81,6 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation
                     {
                         serializer.TypeNameHandling = TypeNameHandling.All;
                         serializer.NullValueHandling = NullValueHandling.Ignore;
-                        serializer.DefaultValueHandling = DefaultValueHandling.Ignore;
                     }
                 }
             };

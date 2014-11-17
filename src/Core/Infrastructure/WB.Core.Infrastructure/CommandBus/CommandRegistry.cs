@@ -35,6 +35,12 @@ namespace WB.Core.Infrastructure.CommandBus
         public class AggregateSetup<TAggregate>
             where TAggregate : IAggregateRoot, new()
         {
+            public AggregateSetup<TAggregate> InitializesWith<TCommand>(Func<TCommand, Guid> aggregateRootIdResolver, Func<TAggregate, Action<TCommand>> commandHandler)
+                where TCommand : ICommand
+            {
+                return InitializesWith(aggregateRootIdResolver, (command, aggregate) => commandHandler(aggregate)(command));
+            }
+
             public AggregateSetup<TAggregate> InitializesWith<TCommand>(Func<TCommand, Guid> aggregateRootIdResolver, Action<TCommand, TAggregate> commandHandler)
                 where TCommand : ICommand
             {
@@ -42,10 +48,60 @@ namespace WB.Core.Infrastructure.CommandBus
                 return this;
             }
 
+            public AggregateSetup<TAggregate> Handles<TCommand>(Func<TCommand, Guid> aggregateRootIdResolver, Func<TAggregate, Action<TCommand>> commandHandler)
+                where TCommand : ICommand
+            {
+                return Handles(aggregateRootIdResolver, (command, aggregate) => commandHandler(aggregate)(command));
+            }
+
             public AggregateSetup<TAggregate> Handles<TCommand>(Func<TCommand, Guid> aggregateRootIdResolver, Action<TCommand, TAggregate> commandHandler)
                 where TCommand : ICommand
             {
                 Register(aggregateRootIdResolver, commandHandler, isInitializer: false);
+                return this;
+            }
+
+            public AggregateWithCommandSetup<TAggregate, TAggregateCommand> ResolvesIdFrom<TAggregateCommand>(Func<TAggregateCommand, Guid> aggregateRootIdResolver)
+                where TAggregateCommand : ICommand
+            {
+                return new AggregateWithCommandSetup<TAggregate, TAggregateCommand>(aggregateRootIdResolver);
+            }
+        }
+
+        public class AggregateWithCommandSetup<TAggregate, TAggregateCommand>
+            where TAggregate : IAggregateRoot, new()
+            where TAggregateCommand : ICommand
+        {
+            private readonly Func<TAggregateCommand, Guid> aggregateRootIdResolver;
+
+            public AggregateWithCommandSetup(Func<TAggregateCommand, Guid> aggregateRootIdResolver)
+            {
+                this.aggregateRootIdResolver = aggregateRootIdResolver;
+            }
+
+            public AggregateWithCommandSetup<TAggregate, TAggregateCommand> InitializesWith<TCommand>(Func<TAggregate, Action<TCommand>> commandHandler)
+                where TCommand : TAggregateCommand
+            {
+                return InitializesWith<TCommand>((command, aggregate) => commandHandler(aggregate)(command));
+            }
+
+            public AggregateWithCommandSetup<TAggregate, TAggregateCommand> InitializesWith<TCommand>(Action<TCommand, TAggregate> commandHandler)
+                where TCommand : TAggregateCommand
+            {
+                Register(command => this.aggregateRootIdResolver.Invoke(command), commandHandler, isInitializer: true);
+                return this;
+            }
+
+            public AggregateWithCommandSetup<TAggregate, TAggregateCommand> Handles<TCommand>(Func<TAggregate, Action<TCommand>> commandHandler)
+                where TCommand : TAggregateCommand
+            {
+                return Handles<TCommand>((command, aggregate) => commandHandler(aggregate)(command));
+            }
+
+            public AggregateWithCommandSetup<TAggregate, TAggregateCommand> Handles<TCommand>(Action<TCommand, TAggregate> commandHandler)
+                where TCommand : TAggregateCommand
+            {
+                Register(command => this.aggregateRootIdResolver.Invoke(command), commandHandler, isInitializer: false);
                 return this;
             }
         }

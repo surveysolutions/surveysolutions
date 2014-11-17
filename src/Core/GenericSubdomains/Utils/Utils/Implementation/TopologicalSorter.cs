@@ -1,89 +1,66 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.GenericSubdomains.Utils.Implementation.TopologicalSorter;
 
 namespace WB.Core.GenericSubdomains.Utils.Implementation
 {
     /// <summary>
     /// Implementation of the Tarjan stronly connected components algorithm.
     /// </summary>
-    /// <seealso cref="http://en.wikipedia.org/wiki/Tarjan's_strongly_connected_components_algorithm"/>
-    /// <seealso cref="http://stackoverflow.com/questions/261573/best-algorithm-for-detecting-cycles-in-a-directed-graph"/>
+    /// <seealso cref="http://en.wikipedia.org/wiki/Topological_sorting"/>
     public class TopologicalSorter<T> : ITopologicalSorter<T>
     {
-        private StronglyConnectedComponentList<T> stronglyConnectedComponents;
-        private Stack<Vertex<T>> stack;
-        private int index;
-
         public List<T> Sort(Dictionary<T, T[]> dependencies)
         {
             if (dependencies == null || dependencies.Values
-                .SelectMany(dependentItems => dependentItems)
-                .Any(dependentItem => !dependencies.ContainsKey(dependentItem)))
+            .SelectMany(dependentItems => dependentItems)
+            .Any(dependentItem => !dependencies.ContainsKey(dependentItem)))
             {
                 throw new ArgumentException("dependencies");
             }
 
-            var vertexMap = dependencies.Keys.ToDictionary(key => key, key => new Vertex<T>(key));
-            var graph = new List<Vertex<T>>();
-            foreach (var dependency in dependencies)
+            /*
+L ← Empty list that will contain the sorted nodes
+while there are unmarked nodes do
+    select an unmarked node n
+    visit(n) 
+function visit(node n)
+    if n has a temporary mark then stop (not a DAG)
+    if n is not marked (i.e. has not been visited yet) then
+        mark n temporarily
+        for each node m with an edge from n to m do
+            visit(m)
+        mark n permanently
+        unmark n temporarily
+        add n to head of L
+             */
+
+            var temporaryMarked = new List<T>();
+            var orderedItems = new List<T>();
+            var unmarkedNodes = new List<T>();
+
+            unmarkedNodes.AddRange(dependencies.Keys);
+            while (unmarkedNodes.Any())
             {
-                var vertex = vertexMap[dependency.Key];
-                foreach (var dependentItemKey in dependency.Value)
-                {
-                    vertex.Dependencies.Add(vertexMap[dependentItemKey]);
-                }
-                graph.Add(vertex);
+                Visit(unmarkedNodes.First(), temporaryMarked, dependencies, unmarkedNodes, orderedItems);
             }
 
-            this.stronglyConnectedComponents = new StronglyConnectedComponentList<T>();
-            this.index = 0;
-            this.stack = new Stack<Vertex<T>>();
-            foreach (var v in graph)
-            {
-                if (v.Index < 0)
-                {
-                    this.StrongConnect(v);
-                }
-            }
-
-            List<T> result = graph.OrderBy(x => x.Index).Select(x => x.Value).ToList();
-
-            return result;
+            return orderedItems;
         }
 
-        private void StrongConnect(Vertex<T> v)
+        private void Visit(T item, List<T> temporaryMarked, Dictionary<T, T[]> dependencies, List<T> unmarkedNodes, List<T> orderedItems)
         {
-            v.Index = this.index;
-            v.LowLink = this.index;
-            this.index++;
-            this.stack.Push(v);
+            if (orderedItems.Contains(item) || temporaryMarked.Contains(item)) return;
 
-            foreach (Vertex<T> w in v.Dependencies)
-            {
-                if (w.Index < 0)
-                {
-                    this.StrongConnect(w);
-                    v.LowLink = Math.Min(v.LowLink, w.LowLink);
-                }
-                else if (this.stack.Contains(w))
-                {
-                    v.LowLink = Math.Min(v.LowLink, w.Index);
-                }
-            }
+            temporaryMarked.Add(item);
+            unmarkedNodes.Remove(item);
 
-            if (v.LowLink == v.Index)
+            foreach (var dependentItem in dependencies[item])
             {
-                var scc = new StronglyConnectedComponent<T>();
-                Vertex<T> w;
-                do
-                {
-                    w = this.stack.Pop();
-                    scc.Add(w);
-                } while (v != w);
-                this.stronglyConnectedComponents.Add(scc);
+                this.Visit(dependentItem, temporaryMarked, dependencies,unmarkedNodes, orderedItems);
             }
+            temporaryMarked.Remove(item);
+            orderedItems.Insert(0, item);
         }
     }
 }

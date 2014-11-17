@@ -12,6 +12,7 @@ using Moq;
 using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
+using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -102,7 +103,7 @@ namespace WB.Tests.Integration.InterviewTests
                 .Returns(instance);
         }
 
-        protected static Interview SetupInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null)
+        protected static Interview SetupInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, IInterviewExpressionState precompiledState = null)
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
 
@@ -117,13 +118,20 @@ namespace WB.Tests.Integration.InterviewTests
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
                 .Returns(questionnaireRepository);
 
-            SetupRoslyn(questionnaireDocument);
+            SetupRoslyn(questionnaireDocument, precompiledState);
 
             var interview = Create.Interview(questionnaireId: questionnaireId);
 
             ApplyAllEvents(interview, events);
 
             return interview;
+        }
+
+        protected static Interview SetupInterview(string questionnaireString, object[] events, IInterviewExpressionState precompiledState)
+        {
+            var json = new NewtonJsonUtils();
+            var questionnaireDocument = json.Deserrialize<QuestionnaireDocument>(questionnaireString);
+            return SetupInterview(questionnaireDocument, events);
         }
 
         public static void ApplyAllEvents(Interview interview, IEnumerable<object> events)
@@ -163,9 +171,9 @@ namespace WB.Tests.Integration.InterviewTests
             return firstTypedEvent != null ? ((T)firstTypedEvent.Payload) : null;
         }
 
-        public static void SetupRoslyn(QuestionnaireDocument questionnaireDocument)
+        public static void SetupRoslyn(QuestionnaireDocument questionnaireDocument, IInterviewExpressionState precompiledState = null)
         {
-            IInterviewExpressionState state = GetInterviewExpressionState(questionnaireDocument);
+            IInterviewExpressionState state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument) ;
 
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
 
