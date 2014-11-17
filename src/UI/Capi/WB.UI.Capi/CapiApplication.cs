@@ -286,7 +286,7 @@ namespace WB.UI.Capi
 
             var bus = new InProcessEventBus(true);
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
-            kernel.Bind<IEventBus>().ToConstant(bus);
+            kernel.Bind<IEventBus>().ToConstant(bus).Named("interviewViewBus");
 
             kernel.Bind<IAggregateRootRepository>().To<AggregateRootRepository>();
             kernel.Bind<IEventPublisher>().To<EventPublisher>();
