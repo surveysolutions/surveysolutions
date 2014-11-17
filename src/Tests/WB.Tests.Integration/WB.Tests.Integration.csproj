@@ -112,15 +112,15 @@
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_wa___.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_real_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_text_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
-    <Compile Include="InterviewTests\LanguageTests\Cases\KP4586\file.cs" />
-    <Compile Include="InterviewTests\LanguageTests\Cases\KP4586\when_condition_uses_two_levels_of_nested_rosters.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_condition_uses_two_levels_of_nested_rosters.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_invalid_answer_and_all_questions_were_invalid_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_invalid_answer_and_all_questions_were_valid_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_valid_answer_and_all_questions_were_invalid_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_valid_answer_and_all_questions_were_valid_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_and_related_group_condition_expression_throws_exception.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_validation_expression_throws_exception.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_condition_expression_throws_exception.cs" />
+    <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_validation_expression_throws_exception.cs" />
+    <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_which_is_part_of_condition_expression_in_another_question.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_question_A_with_answer_which_enables_B_and_disables_C_and_both_B_and_C_were_disabled_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_question_A_with_answer_which_enables_B_and_disables_C_and_both_B_and_C_were_enabled_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_question_which_enable_group_with_mandatory_question.cs" />
@@ -129,11 +129,6 @@
     <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_question_group_and_roster_have_not_empty_enablement_conditions_and_other_question_group_and_roster_have_empty_enablement_conditions.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value_not_correctly.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value.cs" />
-    <Compile Include="Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Setup.cs" />
     <Compile Include="InterviewStatistics\when_chart_statistics_is_empty.cs" />
     <Compile Include="InterviewStatistics\when_chart_statistics_is_empty_and_6_interviews_created_and_then_deleted_all_together.cs" />
@@ -145,7 +140,6 @@
     <Compile Include="InterviewTests\when_decreasing_propagation_count_and_linked_multiple_options_question_is_referenced_to_outer_roster.cs" />
     <Compile Include="InterviewTests\when_decreasing_propagation_count_and_latest_propagated_question_was_used_in_linked_multiple_options_question_as_selected_answer.cs" />
     <Compile Include="InterviewTests\when_decreasing_propagation_count_and_latest_propagated_question_was_used_in_linked_single_option_question_as_selected_answer.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_which_is_part_of_condition_expression_in_another_question.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShouldExtensions.cs" />
     <Compile Include="SqlDataExportWriterTests\SqlDataExportWriterTestContext.cs" />
@@ -157,7 +151,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="InterviewTests\LanguageTests\Cases\KP4586\KP4586_Questionnaire.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -212,12 +205,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="QuestionnaireTests\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
