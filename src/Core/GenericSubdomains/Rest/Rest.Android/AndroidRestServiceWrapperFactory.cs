@@ -1,5 +1,3 @@
-
-using WB.Core.GenericSubdomains.Rest;
 using WB.Core.SharedKernel.Utils.Serialization;
 
 namespace WB.Core.GenericSubdomains.Rest.Android
