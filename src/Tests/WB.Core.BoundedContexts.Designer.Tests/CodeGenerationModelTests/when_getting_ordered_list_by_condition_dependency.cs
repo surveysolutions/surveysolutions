@@ -17,6 +17,15 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationModelTests
                 { roster1Id, new List<Guid>() { question2Id }}
             };
 
+            var conditionsPlayOrder = new List<Guid>
+            {
+                question1Id,
+                question2Id,
+                roster1Id,
+                group1Id,
+                group2Id
+            };
+
             questions = new List<QuestionTemplateModel>()
             {
                 new QuestionTemplateModel()
@@ -50,7 +59,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationModelTests
                 }
             };
 
-            questionnaireExecutorTemplateModel = CreateQuestionnaireExecutorTemplateModel(conditionalDependencies);
+            questionnaireExecutorTemplateModel = CreateQuestionnaireExecutorTemplateModel(conditionalDependencies, conditionsPlayOrder);
             
         };
 
@@ -64,10 +73,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationModelTests
             result[0].Item1.ShouldEqual(question2GeneratedName);
 
         It should_be2 = () =>
-            result[1].Item1.ShouldEqual(group1GeneratedName);
+            result[1].Item1.ShouldEqual(roster1GeneratedName);
 
         It should_be3 = () =>
-            result[2].Item1.ShouldEqual(roster1GeneratedName);
+            result[2].Item1.ShouldEqual(group1GeneratedName);
 
         private static string question1GeneratedName = "11111111111111111111111111111111";
 

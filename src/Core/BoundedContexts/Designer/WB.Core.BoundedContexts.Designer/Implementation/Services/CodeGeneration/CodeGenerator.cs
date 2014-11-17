@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CsQuery.ExtensionMethods;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -10,6 +11,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Mo
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Templates;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
@@ -240,6 +242,36 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             Dictionary<Guid, List<Guid>> conditionalDependencies = BuildConditionalDependencies(questionnaire,
                 variableNames);
 
+            var mergedDependecies = new Dictionary<Guid, List<Guid>>();
+
+            var allIds = structuralDependencies.Select(x => x.Key)
+                .Union(structuralDependencies.SelectMany(x => x.Value))
+                .Union(conditionalDependencies.Select(x => x.Key))
+                .Union(conditionalDependencies.SelectMany(x => x.Value))
+                .Distinct();
+
+            allIds.ForEach(x => mergedDependecies.Add(x, new List<Guid>()));
+
+            structuralDependencies.ForEach(x => mergedDependecies[x.Key].AddRange(x.Value));
+
+            foreach (var dependency in conditionalDependencies)
+            {
+                foreach (var d in dependency.Value)
+                {
+                    if (mergedDependecies.ContainsKey(d) && !mergedDependecies[d].Contains(dependency.Key))
+                    {
+                        mergedDependecies[d].Add(dependency.Key);
+                    }
+                    if (!mergedDependecies.ContainsKey(d))
+                    {
+                        mergedDependecies.Add(d, new List<Guid> { dependency.Key });
+                    }
+                }
+            }
+
+            var sorter = new TopologicalSorter<Guid>();
+            IEnumerable<Guid> orderedList = sorter.Sort(mergedDependecies.ToDictionary(x => x.Key, x => x.Value.ToArray()));
+
             template.Id = questionnaire.PublicKey;
             template.AllQuestions = allQuestions;
             template.AllGroups = allGroups;
@@ -249,6 +281,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             template.RostersGroupedByScope = rostersGroupedByScope;
             template.ConditionalDependencies = conditionalDependencies;
             template.StructuralDependencies = structuralDependencies;
+            template.ConditionsPlayOrder = orderedList.ToList();
             template.QuestionnaireLevelModel = questionnaireLevelModel;
             template.VariableNames = variableNames;
 
@@ -421,15 +454,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         private Dictionary<Guid, List<Guid>> BuildConditionalDependencies(QuestionnaireDocument questionnaireDocument,
             Dictionary<string, Guid> variableNames)
         {
-            Dictionary<Guid, List<Guid>> dependencies = questionnaireDocument.GetAllGroups()
-                .Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression))
-                .ToDictionary(x => x.PublicKey,
-                    x => GetIdsOfQuestionsInvolvedInExpression(x.ConditionExpression, variableNames));
+            var groupsWithConditions = questionnaireDocument.GetAllGroups().Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression));
+            var questionsWithCondition = questionnaireDocument.GetEntitiesByType<IQuestion>().Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression));
 
-            questionnaireDocument.GetEntitiesByType<IQuestion>()
-                .Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression))
-                .ToDictionary(x => x.PublicKey,
-                    x => GetIdsOfQuestionsInvolvedInExpression(x.ConditionExpression, variableNames))
+            Dictionary<Guid, List<Guid>> dependencies = groupsWithConditions.ToDictionary(
+                x => x.PublicKey,
+                x => GetIdsOfQuestionsInvolvedInExpression(x.ConditionExpression, variableNames));
+
+            questionsWithCondition.ToDictionary(
+                x => x.PublicKey,
+                x => GetIdsOfQuestionsInvolvedInExpression(x.ConditionExpression, variableNames))
                 .ToList()
                 .ForEach(x => dependencies.Add(x.Key, x.Value));
 
@@ -439,8 +473,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         private List<Guid> GetIdsOfQuestionsInvolvedInExpression(string conditionExpression,
             Dictionary<string, Guid> variableNames)
         {
+            var identifiersUsedInExpression = ExpressionProcessor.GetIdentifiersUsedInExpression(conditionExpression);
+
             return new List<Guid>(
-                from variable in ExpressionProcessor.GetIdentifiersUsedInExpression(conditionExpression)
+                from variable in identifiersUsedInExpression
                 where variableNames.ContainsKey(variable)
                 select variableNames[variable]);
         }
