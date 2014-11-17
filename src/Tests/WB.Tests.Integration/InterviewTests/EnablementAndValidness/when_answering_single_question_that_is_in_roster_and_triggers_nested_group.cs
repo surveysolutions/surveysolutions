@@ -10,7 +10,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
-    //[Ignore("This is fail tais to ticket KP-4602")]
     internal class when_answering_single_question_that_is_in_roster_and_triggers_nested_group : InterviewTestsContext
     {
         Establish context = () =>

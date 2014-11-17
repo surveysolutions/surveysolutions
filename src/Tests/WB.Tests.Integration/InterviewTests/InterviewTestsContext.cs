@@ -19,8 +19,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Moq.It;
 
 namespace WB.Tests.Integration.InterviewTests
@@ -133,7 +131,7 @@ namespace WB.Tests.Integration.InterviewTests
         {
             var json = new NewtonJsonUtils();
             var questionnaireDocument = json.Deserrialize<QuestionnaireDocument>(questionnaireString);
-            return SetupInterview(questionnaireDocument, events, precompiledState: precompiledState);
+            return SetupInterview(questionnaireDocument, events);
         }
 
         public static void ApplyAllEvents(Interview interview, IEnumerable<object> events)
