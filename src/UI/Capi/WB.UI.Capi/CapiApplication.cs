@@ -304,8 +304,6 @@ namespace WB.UI.Capi
 
             this.kernel.Unbind<ISyncPackageRestoreService>();
             this.kernel.Bind<ISyncPackageRestoreService>().To<SyncPackageRestoreService>().InSingletonScope();
-
-            this.kernel.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope();
             
             #region register handlers
 
