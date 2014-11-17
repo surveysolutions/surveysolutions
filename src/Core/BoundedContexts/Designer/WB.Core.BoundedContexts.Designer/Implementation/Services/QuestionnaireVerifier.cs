@@ -1457,7 +1457,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     QuestionnaireVerificationReferenceType.Question : 
                     QuestionnaireVerificationReferenceType.Group, expressionLocation.Id);
 
-            if(expressionLocation.ExpressionType == ExpressionType.Validations)
+            if(expressionLocation.ExpressionType == ExpressionType.Validation)
             {
                 return new QuestionnaireVerificationError("WB0002", VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax, reference);
             }
