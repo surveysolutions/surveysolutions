@@ -531,9 +531,6 @@
     <Content Include="UpdatedDesigner\data\editQuestion\0be767d337cc4b6ba9a49be314f98eb9.json" />
     <Content Include="UpdatedDesigner\data\editGroup\dd45293c816e982d482334b1222ec41f.json" />
     <Content Include="UpdatedDesigner\data\editGroup\ddfaab0f37394a679f088add19325cfe.json" />
-    <Content Include="UpdatedDesigner\content\vendor.css.css.map">
-      <DependentUpon>vendor.css.css</DependentUpon>
-    </Content>
     <Content Include="UpdatedDesigner\content\lib\wb-vars.css.css.map" />
     <Content Include="UpdatedDesigner\content\designer-editor\wb-designer-editor.css.css.map">
       <DependentUpon>wb-designer-editor.css.css</DependentUpon>
@@ -1243,9 +1240,6 @@
     <Content Include="UpdatedDesigner\content\lib\wb-fontstyles.css.less" />
     <Content Include="UpdatedDesigner\content\lib\wb-mixins.css.less" />
     <Content Include="UpdatedDesigner\content\lib\wb-vars.css.less" />
-    <Content Include="UpdatedDesigner\content\markup.css.css.map">
-      <DependentUpon>markup.css.less</DependentUpon>
-    </Content>
     <Content Include="UpdatedDesigner\content\markup.css.less" />
     <Content Include="UpdatedDesigner\content\wb-init.css.less" />
     <Content Include="UpdatedDesigner\.bowerrc" />
