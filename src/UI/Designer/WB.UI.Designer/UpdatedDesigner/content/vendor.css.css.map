@@ -1,9 +1,1 @@
-{
-  "version": 3,
-  "file": "vendor.css.css",
-  "sources": [
-    "vendor.css.less"
-  ],
-  "names": [],
-  "mappings": "QAAQ;QACA"
-}
+﻿{"version":3,"sources":["vendor.css.less"],"names":[],"mappings":"QAAQ;QACA","file":"vendor.css.css"}
