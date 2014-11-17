@@ -2,8 +2,7 @@
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
-    [Serializable]
-    public class ExpressionLocation
+    public class ExpressionLocation : MarshalByRefObject
     {
         public Guid Id { set; get; }
 
