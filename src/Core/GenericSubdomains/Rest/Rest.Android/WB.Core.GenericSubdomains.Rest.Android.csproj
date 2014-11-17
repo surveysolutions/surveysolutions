@@ -56,6 +56,7 @@
     <Compile Include="AndroidNetworkService.cs" />
     <Compile Include="AndroidRestServiceWrapper.cs" />
     <Compile Include="AndroidRestServiceWrapperFactory.cs" />
+    <Compile Include="ErrorMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RestAndroidModule.cs" />
   </ItemGroup>
