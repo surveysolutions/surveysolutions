@@ -80,8 +80,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation
                     CustomizeJsonSerializer = serializer =>
                     {
                         serializer.TypeNameHandling = TypeNameHandling.All;
-                        //serializer.NullValueHandling = NullValueHandling.Ignore;
-                        //serializer.DefaultValueHandling = DefaultValueHandling.Ignore;
+                        serializer.NullValueHandling = NullValueHandling.Ignore;
                     }
                 }
             };
