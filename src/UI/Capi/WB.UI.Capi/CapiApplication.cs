@@ -307,9 +307,6 @@ namespace WB.UI.Capi
             
             #region register handlers
 
-            var interviewViewBus = new InProcessEventBus();
-            this.kernel.Bind<IEventBus>().ToConstant(interviewViewBus).Named("interviewViewBus");
-
             var eventHandler =
                 new InterviewViewModelDenormalizer(
                     this.kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>(),
@@ -324,12 +321,6 @@ namespace WB.UI.Capi
                 bus, 
                 eventHandler, 
                 answerOptionsForLinkedQuestionsDenormalizer, 
-                answerOptionsForCascadingQuestionsDenormalizer);
-            
-            this.RegisterInterviewHandlerInBus(
-                interviewViewBus, 
-                eventHandler, 
-                answerOptionsForLinkedQuestionsDenormalizer,
                 answerOptionsForCascadingQuestionsDenormalizer);
 
             this.InitTemplateStorage(bus);
@@ -352,7 +343,6 @@ namespace WB.UI.Capi
         {
             if (disposing)
             {
-
                 AndroidEnvironment.UnhandledExceptionRaiser -= this.AndroidEnvironmentUnhandledExceptionRaiser;
             }
 
