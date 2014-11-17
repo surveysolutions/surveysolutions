@@ -53,3 +53,4 @@ src/UI/Designer/WB.UI.Designer/UpdatedDesigner/node_modules/
 src/UI/Designer/WB.UI.Designer/UpdatedDesigner/build
 src/UI/Headquarters/WB.UI.Headquarters/DATA/*
 src/UI/Designer/WB.UI.Designer/App_Data/ReadSideCache/*
+src/UI/Designer/WB.UI.Designer/UpdatedDesigner/content/*.map

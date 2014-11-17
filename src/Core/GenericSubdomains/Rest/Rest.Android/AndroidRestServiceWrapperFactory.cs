@@ -1,5 +1,3 @@
-
-using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.SharedKernel.Utils.Serialization;
 
@@ -14,7 +12,7 @@ namespace WB.Core.GenericSubdomains.Rest.Android
             this.jsonUtils = jsonUtils;
         }
 
-        public IRestServiceWrapper CreateRestServiceWrapper(string baseAddress, bool acceptUnsignedCertificate = false)
+        public IRestServiceWrapper CreateRestServiceWrapper(string baseAddress, bool acceptUnsignedCertificate = true)
         {
             return new AndroidRestServiceWrapper(baseAddress, this.jsonUtils, acceptUnsignedCertificate);
         }

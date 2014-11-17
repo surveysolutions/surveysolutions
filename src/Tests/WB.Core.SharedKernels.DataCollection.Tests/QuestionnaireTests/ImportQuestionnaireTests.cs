@@ -7,6 +7,7 @@ using Ncqrs;
 using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -35,7 +36,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
                 var newState = CreateQuestionnaireDocumentWithOneChapter();
 
                 // act
-                questionnaire.ImportFromDesigner(Guid.NewGuid(),newState, false, null);
+                questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(),newState, false, null));
 
                 // assert
                 Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
@@ -53,7 +54,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
             // act
             TestDelegate act =
                 () =>
-                questionnaire.ImportFromDesigner(Guid.NewGuid(), docMock.Object, false, null);
+                questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), docMock.Object, false, null));
             
             // assert
             Assert.Throws<QuestionnaireException>(act);
@@ -70,7 +71,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
                 var newState = CreateQuestionnaireDocumentWithOneChapter();
 
                 // act
-                questionnaire.ImportFromSupervisor(newState);
+                questionnaire.ImportFromSupervisor(new ImportFromSupervisor(newState));
 
                 // assert
                 Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
@@ -87,7 +88,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
                 var newState = CreateQuestionnaireDocumentWithOneChapter();
 
                 // act
-                questionnaire.ImportFromDesignerForTester(newState);
+                questionnaire.ImportFromDesignerForTester(new ImportFromDesignerForTester(newState));
 
                 // assert
                 Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
@@ -106,9 +107,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 
             using (var eventContext = new EventContext())
             {
-                questionnaire.ImportFromDesigner(responsibleId, newState, false, null);
+                questionnaire.ImportFromDesigner(new ImportFromDesigner(responsibleId, newState, false, null));
                 // act
-                questionnaire.DeleteQuestionnaire(1, responsibleId);
+                questionnaire.DeleteQuestionnaire(new DeleteQuestionnaire(Guid.NewGuid(), 1, responsibleId));
                 // assert
                 var lastEvent = GetLastEvent<QuestionnaireDeleted>(eventContext);
             
@@ -126,9 +127,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 
             using (var eventContext = new EventContext())
             {
-                questionnaire.ImportFromDesigner(responsibleId, newState, false, null);
+                questionnaire.ImportFromDesigner(new ImportFromDesigner(responsibleId, newState, false, null));
                 // act
-                questionnaire.DeleteQuestionnaire(1, responsibleId);
+                questionnaire.DeleteQuestionnaire(new DeleteQuestionnaire(Guid.NewGuid(), 1, responsibleId));
                 // assert
                 var lastEvent = GetLastEvent<QuestionnaireDeleted>(eventContext);
 
@@ -144,7 +145,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 
             // act
 
-            Assert.Throws<QuestionnaireException>(() => questionnaire.DeleteQuestionnaire(2, null));
+            Assert.Throws<QuestionnaireException>(() => questionnaire.DeleteQuestionnaire(new DeleteQuestionnaire(Guid.NewGuid(), 2, null)));
         }
 
         [Test]
@@ -174,7 +175,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
                 Questionnaire questionnaire = CreateQuestionnaire();
                 var document = CreateQuestionnaireDocumentWithOneChapter();
                 // act
-                questionnaire.ImportFromDesignerForTester(document);
+                questionnaire.ImportFromDesignerForTester(new ImportFromDesignerForTester(document));
 
                 // assert
                 Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(document));
@@ -192,7 +193,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
                 var document = CreateQuestionnaireDocumentWithOneChapter();
 
                 // act
-                questionnaire.ImportFromSupervisor(document);
+                questionnaire.ImportFromSupervisor(new ImportFromSupervisor(document));
 
                 // assert
                 Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(document));
@@ -211,7 +212,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
                 var document = CreateQuestionnaireDocumentWithOneChapter();
 
                 // act
-                questionnaire.RegisterPlainQuestionnaire(document.PublicKey, 3, false, null);
+                questionnaire.RegisterPlainQuestionnaire(new RegisterPlainQuestionnaire(document.PublicKey, 3, false, null));
 
                 // assert
                 Assert.That(GetLastEvent<PlainQuestionnaireRegistered>(eventContext).AllowCensusMode, Is.EqualTo(false));
@@ -237,7 +238,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire();
 
             // act and assert
-            Assert.Throws<QuestionnaireException>(() => questionnaire.RegisterPlainQuestionnaire(document.PublicKey, 3, false, null));
+            Assert.Throws<QuestionnaireException>(() => questionnaire.RegisterPlainQuestionnaire(new RegisterPlainQuestionnaire(document.PublicKey, 3, false, null)));
         }
 
         [Test]
@@ -252,9 +253,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
                 var document = CreateQuestionnaireDocumentWithOneChapter();
 
                 // act
-                questionnaire.ImportFromDesigner(responsibleId, document, false, null);
-                questionnaire.DeleteQuestionnaire(2, responsibleId);
-                questionnaire.ImportFromDesigner(responsibleId, document, false, null);
+                questionnaire.ImportFromDesigner(new ImportFromDesigner(responsibleId, document, false, null));
+                questionnaire.DeleteQuestionnaire(new DeleteQuestionnaire(Guid.NewGuid(), 2, responsibleId));
+                questionnaire.ImportFromDesigner(new ImportFromDesigner(responsibleId, document, false, null));
 
                 // assert
                 Assert.That(GetLastEvent<TemplateImported>(eventContext).Version, Is.EqualTo(3));

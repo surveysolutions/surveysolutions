@@ -4,17 +4,14 @@ using Ncqrs.Commanding;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Questionnaire
 {
-    public class ImportFromDesignerForTester : CommandBase
+    public class ImportFromDesignerForTester : QuestionnaireCommand
     {
         public ImportFromDesignerForTester(IQuestionnaireDocument source)
-            : base(source.PublicKey)
+            : base(source.PublicKey, source.PublicKey)
         {
             Source = source;
-            QuestionnaireId = source.PublicKey;
         }
 
         public IQuestionnaireDocument Source { get; private set; }
-
-        public Guid QuestionnaireId { get; private set; }
     }
 }

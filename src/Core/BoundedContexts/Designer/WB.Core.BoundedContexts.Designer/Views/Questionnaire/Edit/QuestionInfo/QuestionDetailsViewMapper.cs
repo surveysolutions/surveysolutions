@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 {
@@ -92,7 +93,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 {
                     Title = x.AnswerText,
                     Value = decimal.Parse(x.AnswerValue),
-                    ParentValue = string.IsNullOrWhiteSpace(x.ParentValue) ? (decimal?)null : Convert.ToDecimal(x.ParentValue)
+                    ParentValue = string.IsNullOrWhiteSpace(x.ParentValue) || !x.ParentValue.IsDecimal() ? (decimal?)null : Convert.ToDecimal(x.ParentValue)
                 }
             ).ToArray();
         }
