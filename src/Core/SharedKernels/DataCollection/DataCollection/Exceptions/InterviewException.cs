@@ -2,6 +2,7 @@
 
 namespace WB.Core.SharedKernels.DataCollection.Exceptions
 {
+    [Serializable]
     public class InterviewException : Exception
     {
         internal InterviewException(string message)

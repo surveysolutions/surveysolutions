@@ -53,7 +53,12 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static IQuestion Question(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, bool isMandatory = false)
+        public static IQuestion Question(Guid? id = null,
+            string variable = null,
+            string enablementCondition = null,
+            string validationExpression = null, 
+            bool isMandatory = false,
+            string validationMessage = null)
         {
             return new TextQuestion("Question X")
             {
@@ -62,6 +67,7 @@ namespace WB.Tests.Unit
                 StataExportCaption = variable,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
                 Mandatory = isMandatory
             };
         }
