@@ -1,5 +1,3 @@
-
-using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.SharedKernel.Utils.Serialization;
 

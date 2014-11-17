@@ -12,10 +12,10 @@ namespace WB.UI.Capi.Syncronization.Update
 {
     public class UpdateProcessor
     {
-        private const string downloadFolder = "download";
-        private string pathToFolder = Path.Combine(global::Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, downloadFolder);
+        private const string DownloadFolder = "download";
+        private readonly string pathToFolder = Path.Combine(global::Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, DownloadFolder);
         private readonly IRestServiceWrapperFactory restServiceWrapperFactory;
-        private ILogger logger;
+        private readonly ILogger logger;
 
         public UpdateProcessor(IRestServiceWrapperFactory restServiceWrapperFactory)
         {
@@ -28,7 +28,7 @@ namespace WB.UI.Capi.Syncronization.Update
             }
         }
 
-        public void GetLatestVersion(string url, string fileName)
+        public void GetLatestVersion(Uri uri, string fileName)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace WB.UI.Capi.Syncronization.Update
                     File.Delete(pathTofile);
 
                 var client = new System.Net.WebClient();
-                client.DownloadFile(url, pathTofile);
+                client.DownloadFile(uri, pathTofile);
             }
             catch (Exception ex)
             {
