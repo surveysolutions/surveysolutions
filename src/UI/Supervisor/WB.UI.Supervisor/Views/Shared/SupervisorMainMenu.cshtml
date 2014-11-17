@@ -1,0 +1,41 @@
+﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Models
+@{
+    var page = ViewBag.ActivePage ?? MenuItem.Logon;
+}
+<ul class="nav navbar-nav" role="menu">
+    <li class="dropdown @(page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
+        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-th"></i> Reports <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+            <li class="@(page == MenuItem.Surveys ? "active" : "")">
+                <a href="@Url.Action("Index", "Survey")">Surveys and Statuses</a>
+            </li>
+            <li class="@(page == MenuItem.Summary ? "active" : "")">
+                <a href="@Url.Action("TeamMembersAndStatuses", "Survey")">Team members and Statuses</a>
+            </li>
+        </ul>
+    </li>
+
+    <li class="@(page == MenuItem.Docs ? "active" : "")">
+        <a href="@Url.Action("Interviews", "Survey")"><i class="glyphicon glyphicon-list-alt"></i> Interviews</a>
+    </li>
+
+    <li class="@(page == MenuItem.Teams ? "active" : "")">
+        <a href="@Url.Action("Index", "Interviewer", new { area = string.Empty })"><i class="glyphicon glyphicon-user"></i> Interviewers</a>
+    </li>
+    <li>
+        <a href="@Url.Action("Synchronization", "HQSync", new { area = string.Empty })" target="_blank">
+            <span id="synchronizationStatus" class="label">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            Synchronization
+        </a>
+    </li>
+</ul>
+<ul class="nav navbar-nav navbar-right" role="menu">
+    <li class="dropdown">
+        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Hi, <strong>@User.Identity.Name</strong> <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li>@Html.ActionLink("Logoff", "LogOff", "Account", new { area = string.Empty }, null)</li>
+        </ul>
+    </li>
+</ul>
