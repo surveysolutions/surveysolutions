@@ -6,11 +6,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationModelTests
 {
     internal class CodeGenerationModelTestsContext
     {
-        protected static QuestionnaireExecutorTemplateModel CreateQuestionnaireExecutorTemplateModel(Dictionary<Guid, List<Guid>> conditionalDependencies)
+        protected static QuestionnaireExecutorTemplateModel CreateQuestionnaireExecutorTemplateModel(Dictionary<Guid, List<Guid>> conditionalDependencies, List<Guid> conditionsPlayOrder)
         {
             return new QuestionnaireExecutorTemplateModel()
             {
-                ConditionalDependencies = conditionalDependencies
+                ConditionalDependencies = conditionalDependencies,
+                ConditionsPlayOrder = conditionsPlayOrder
             };
         }
     }
