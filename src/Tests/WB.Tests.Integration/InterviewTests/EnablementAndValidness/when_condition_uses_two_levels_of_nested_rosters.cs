@@ -6,11 +6,9 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using It = Machine.Specifications.It;
 
-namespace WB.Tests.Integration.InterviewTests.LanguageTests.Cases.KP4586
+namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
-    [Ignore("Fail test for nested rosters KP-4586")]
     internal class when_condition_uses_two_levels_of_nested_rosters : InterviewTestsContext
     {
         Establish context = () =>
@@ -60,7 +58,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests.Cases.KP4586
                var interview = SetupInterview(questionnaireDocument);
 
                interview.AnswerNumericIntegerQuestion(userId, numericQuestionId, Empty.RosterVector, DateTime.Now, 1);
-               interview.AnswerNumericIntegerQuestion(userId, petsQuestionId, new decimal[] { 0 }, DateTime.Now, 1);
+               interview.AnswerNumericIntegerQuestion(userId, petsQuestionId, new decimal[] { 0 }, DateTime.Now, 2);
 
                using (var eventContext = new EventContext())
                {
