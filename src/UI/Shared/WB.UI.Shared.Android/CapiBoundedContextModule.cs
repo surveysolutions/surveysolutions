@@ -1,7 +1,5 @@
 ﻿using Ninject.Modules;
-using WB.Core.BoundedContexts.Capi.Commands;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.UI.Shared.Android

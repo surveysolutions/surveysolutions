@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
