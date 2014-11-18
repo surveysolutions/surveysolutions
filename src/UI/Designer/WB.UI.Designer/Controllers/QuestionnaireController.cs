@@ -16,7 +16,6 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.SingleOpt
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Logging;
@@ -36,21 +35,16 @@ namespace WB.UI.Designer.Controllers
     {
         private readonly ICommandService commandService;
         private readonly IQuestionnaireHelper questionnaireHelper;
-        private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
-
-
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IViewFactory<QuestionnaireViewInputModel, EditQuestionnaireView> editQuestionnaireViewFactory;
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
-
         private readonly ILogger logger;
 
         public QuestionnaireController(
             ICommandService commandService,
             IMembershipUserService userHelper,
-            IQuestionnaireVerifier questionnaireVerifier,
             IQuestionnaireHelper questionnaireHelper,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
@@ -60,7 +54,6 @@ namespace WB.UI.Designer.Controllers
             : base(userHelper)
         {
             this.commandService = commandService;
-            this.questionnaireVerifier = questionnaireVerifier;
             this.questionnaireHelper = questionnaireHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.sharedPersonsViewFactory = sharedPersonsViewFactory;
@@ -77,41 +70,7 @@ namespace WB.UI.Designer.Controllers
                 this.View(
                     new QuestionnaireCloneModel { Title = string.Format("Copy of {0}", model.Title), Id = model.PublicKey });
         }
-
-        [HttpPost]
-        public JsonResult Verify(Guid id)
-        {
-            var questionnaireDocument = this.GetQuestionnaire(id).Source;
-            var questoinnaireErrors = questionnaireVerifier.Verify(questionnaireDocument).ToArray();
-            
-            if (!questoinnaireErrors.Any())
-            {
-                GenerationResult generationResult;
-                try
-                {
-                    string resultAssembly;
-                    generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, out resultAssembly);
-                }
-                catch (Exception)
-                {
-                    generationResult = new GenerationResult()
-                    {
-                        Success = false,
-                        Diagnostics = new List<GenerationDiagnostic>() { new GenerationDiagnostic("Common verifier error", "Error", "unknown", GenerationDiagnosticSeverity.Error) }
-                    };
-                }
-                //errors shouldn't be displayed as is 
-                questoinnaireErrors = generationResult.Success
-                    ? new QuestionnaireVerificationError[0]
-                    : generationResult.Diagnostics.Select(d => new QuestionnaireVerificationError("WB1001", d.Message, new QuestionnaireVerificationReference[0])).ToArray();
-            }
-
-            return this.Json(new VerificationResult
-            {
-                Errors = questoinnaireErrors
-            });
-        }
-
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Clone(QuestionnaireCloneModel model)
