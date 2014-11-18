@@ -1,5 +1,6 @@
 ﻿using Microsoft.Practices.ServiceLocation;
 using Moq;
+using Ncqrs;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 
@@ -18,6 +19,7 @@ namespace WB.Tests.Integration
                 .Returns(roslynExpressionProcessor);
 
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+            NcqrsEnvironment.Deconfigure();
         }
     }
 }
