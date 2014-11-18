@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.CascadingComboboxTests
 
         protected static InterviewViewModel CreateInterviewViewModel(Guid interviewId)
         {
-            return new InterviewViewModel(interviewId, Mock.Of<IQuestionnaireDocument>(), new QuestionnaireRosterStructure());
+            return new InterviewViewModel(interviewId, Mock.Of<QuestionnaireDocument>(), new QuestionnaireRosterStructure());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument()

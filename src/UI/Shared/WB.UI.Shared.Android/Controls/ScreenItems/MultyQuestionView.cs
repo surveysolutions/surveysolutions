@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Android.Content;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Ncqrs.Commanding.ServiceModel;
@@ -57,10 +58,19 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 a => a.PublicKey == answerGuid);
         }
 
-        protected override AnswerQuestionCommand CreateSaveAnswerCommand(AnswerViewModel[] selectedAnswers)
+        protected override async Task<AnswerQuestionCommand> CreateSaveAnswerCommand(AnswerViewModel[] selectedAnswers)
         {
             var answered = selectedAnswers.Where(w => w.AnswerOrder>0).OrderBy(o => o.AnswerOrder).Select(a => a.Value)
                 .Union(selectedAnswers.Where(w => w.AnswerOrder == 0).Select(s=>s.Value)).ToList();
+
+            var previousAnswers = this.Answers.Where(this.IsAnswerSelected);
+
+            bool result = await ConfirmRosterDecrease(Model.TriggeredRosters, previousAnswers.Count() - answered.Count);
+
+            if (!result)
+            {
+                return null;
+            }
 
             return new AnswerMultipleOptionsQuestionCommand(this.QuestionnairePublicKey,
                 this.Membership.CurrentUser.Id,

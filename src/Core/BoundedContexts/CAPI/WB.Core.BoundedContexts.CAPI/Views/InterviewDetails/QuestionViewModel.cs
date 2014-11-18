@@ -26,7 +26,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             object answerObject,
             string validationMessage,
             string variable,
-            IEnumerable<string> substitutionReferences)
+            IEnumerable<string> substitutionReferences,
+            string[] triggeredRosters)
         {
             this.PublicKey = publicKey;
             this.QuestionRosterScope = questionRosterScope;
@@ -44,6 +45,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.Instructions = instructions;
             this.Comments = comments;
             this.Variable = variable;
+            this.TriggeredRosters = triggeredRosters;
 
             this.Status = this.Status | QuestionStatus.ParentEnabled;
             if (enabled)
@@ -67,6 +69,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         public string Instructions { get; private set; }
         public string Comments { get; private set; }
         public string Variable { get; private set; }
+        public string[] TriggeredRosters { get; private set; }
         public IEnumerable<string> SubstitutionReferences { get; private set; }
         private readonly Dictionary<string, string> referencedQuestionAnswers = new Dictionary<string, string>();
 

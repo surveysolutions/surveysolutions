@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             bool valid, bool mandatory, string validationMessage, Func<decimal[], ValueVector<Guid>, IEnumerable<LinkedAnswerViewModel>> getAnswerOptions,
             string variable, IEnumerable<string> substitutionReferences, bool? areAnsewrsOrdered,int? maxAllowedAnswers)
             : base(
-                publicKey,questionRosterScope, text, questionType, enabled, instructions, null, valid, mandatory, null, validationMessage, variable, substitutionReferences)
+                publicKey, questionRosterScope, text, questionType, enabled, instructions, null, valid, mandatory, null, validationMessage, variable, substitutionReferences, null)
         {
             this.getAnswerOptions = getAnswerOptions;
             this.SelectedAnswers = new decimal[0][];
