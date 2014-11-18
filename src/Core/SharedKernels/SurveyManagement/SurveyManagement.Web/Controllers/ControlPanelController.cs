@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
-using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.DataCollection.Commands.User;
-using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -77,7 +73,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         public ActionResult ReadSide()
         {
-            return this.View(this.ReadSideAdministrationService.GetAllAvailableHandlers());
+            var eventHandlerDescriptions = this.ReadSideAdministrationService.GetAllAvailableHandlers();
+            return this.View(eventHandlerDescriptions.Select(x => 
+                new EventHandlerDescriptionModel
+                {
+                    Name = x.Name, 
+                    UsesViews = x.UsesViews, 
+                    BuildsViews = x.BuildsViews,  
+                    SupportsPartialRebuild = x.SupportsPartialRebuild
+                }));
         }
 
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
