@@ -193,28 +193,9 @@ namespace WB.Tests.Unit
             return new NCalcToCSharpConverter();
         }
 
-        public static NCalcToSharpController NCalcToSharpController(ICommandService commandService = null,
-            IQuestionnaireInfoViewFactory questionnaireInfoViewFactory = null)
-        {
-            return new NCalcToSharpController(
-                Mock.Of<ILogger>(),
-                commandService ?? Mock.Of<ICommandService>(),
-                questionnaireInfoViewFactory ?? Mock.Of<IQuestionnaireInfoViewFactory>(),
-                Create.SyncAsyncExecutor())
-            {
-                Request = new HttpRequestMessage(),
-                Configuration = new HttpConfiguration(),
-            };
-        }
-
         public static IAsyncExecutor SyncAsyncExecutor()
         {
             return new SyncAsyncExecutorStub();
-        }
-
-        public static NCalcToSharpController.OneQuestionnaireModel OneQuestionnaireModel(Guid id)
-        {
-            return new NCalcToSharpController.OneQuestionnaireModel { Id = id };
         }
 
         public static AtomFeedReader AtomFeedReader(Func<HttpMessageHandler> messageHandler = null, IHeadquartersSettings settings = null)
