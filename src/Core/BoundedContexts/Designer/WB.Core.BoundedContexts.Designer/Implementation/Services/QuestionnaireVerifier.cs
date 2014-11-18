@@ -1434,17 +1434,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static QuestionnaireVerificationError CreateExpressionSyntaxError(ExpressionLocation expressionLocation)
         {
-            if(expressionLocation.ExpressionType == ExpressionType.General)
+            if(expressionLocation.ExpressionType == ExpressionLocationType.General)
             {
                 return new QuestionnaireVerificationError("WB0096", VerificationMessages.WB0096_GeneralCompilationError);
             }
 
             var reference = new QuestionnaireVerificationReference(
-                expressionLocation.ItemType == ItemType.Question ? 
+                expressionLocation.ItemType == ExpressionLocationItemType.Question ? 
                     QuestionnaireVerificationReferenceType.Question : 
                     QuestionnaireVerificationReferenceType.Group, expressionLocation.Id);
 
-            if(expressionLocation.ExpressionType == ExpressionType.Validation)
+            if(expressionLocation.ExpressionType == ExpressionLocationType.Validation)
             {
                 return new QuestionnaireVerificationError("WB0002", VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax, reference);
             }
