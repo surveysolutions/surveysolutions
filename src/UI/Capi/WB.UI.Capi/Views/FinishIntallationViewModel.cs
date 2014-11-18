@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using Cirrious.MvvmCross.ViewModels;
 using Microsoft.Practices.ServiceLocation;
@@ -68,11 +69,11 @@ namespace WB.UI.Capi.Views
                 this.CanSetSyncEndpoint = false;
                 return;
             }
-            
-            NavigationService.NavigateTo(CapiPages.Synchronization, new NameValueCollection
+
+            NavigationService.NavigateTo(CapiPages.Synchronization, new Dictionary<string, string>
             {
-                {"Login", Login},
-                {"PasswordHash", passwordHasher.Hash(Password)}
+                { "Login", Login },
+                { "PasswordHash", passwordHasher.Hash(Password) }
             });
         }
     }

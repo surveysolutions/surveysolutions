@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Capi.Views.Login;
 using System;
 using Main.DenormalizerStorage;
