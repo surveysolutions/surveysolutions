@@ -289,6 +289,9 @@ namespace WB.UI.Capi
          
             this.kernel.Bind<Context>().ToConstant(this);
 
+            NcqrsEnvironment.SetDefault(ServiceLocator.Current.GetInstance<ILogger>());
+            NcqrsEnvironment.InitDefaults();
+
             var ncqrsCommandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
             NcqrsEnvironment.SetDefault(ncqrsCommandService);
             NcqrsInit.InitializeCommandService(this.kernel.Get<ICommandListSupplier>(), ncqrsCommandService);
