@@ -2,6 +2,7 @@ using System;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
+using Main.DenormalizerStorage;
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
@@ -10,6 +11,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
+using Ninject.Activation;
 using Ninject.Web.Common;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
@@ -22,8 +24,11 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Snapshots;
 using WB.Core.Infrastructure.Storage.Raven;
+using WB.Core.SharedKernel.Utils.Compression;
+using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
@@ -139,6 +144,10 @@ namespace WB.UI.Headquarters
                 new SurveyManagementWebModule(),
                 new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled));
 
+            NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
+            NcqrsEnvironment.InitDefaults();
+
+
             var eventStoreModule = ModulesFactory.GetEventStoreModule();
             var overrideReceivedEventTimeStamp = CoreSettings.EventStoreProvider == StoreProviders.Raven;
 
@@ -169,7 +178,8 @@ namespace WB.UI.Headquarters
             kernel.BindHttpFilter<HeadquarterFeatureOnlyFilter>(System.Web.Http.Filters.FilterScope.Controller)
                .WhenControllerHas<HeadquarterFeatureOnlyAttribute>();
 
-            kernel.Bind<IIdentityManager>().To<IdentityManager>().InSingletonScope();
+            kernel.Bind(typeof(InMemoryReadSideRepositoryAccessor<>)).ToSelf().InSingletonScope();
+
 
 
             ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
