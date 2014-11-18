@@ -192,9 +192,6 @@
     <Compile Include="BoundedContexts\Designer\EnumerableExtensions.cs" />
     <Compile Include="BoundedContexts\Designer\NCalcToCSharpConverterTests\when_converting__a_plus_b_gt_c_plus_d__to_roslyn_and_a_is_mapped_to_x_and_b_is_mapped_to_y.cs" />
     <Compile Include="BoundedContexts\Designer\NCalcToCSharpConverterTests\when_converting_different_ncalc_expressions_to_roslyn.cs" />
-    <Compile Include="BoundedContexts\Designer\NCalcToSharpControllerTests\when_getting_status.cs" />
-    <Compile Include="BoundedContexts\Designer\NCalcToSharpControllerTests\when_migrating_all_questionnaires_and_3_questionnaires_are_not_migrated_to_csharp.cs" />
-    <Compile Include="BoundedContexts\Designer\NCalcToSharpControllerTests\when_migrating_one_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\PdfQuestionnaireViewTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\when_adding_entity_and_root_id_is_used_as_parent_group_id.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\when_adding_group_specifying_root_id_as_parent.cs" />
