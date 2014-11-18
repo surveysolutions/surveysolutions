@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ApplicationName">$projectname$</string>
-
+  <string name="ApplicationName">$projectname$</string>
+  <string name="Warning">Warning</string>
+  <string name="Yes">Yes</string>
+  <string name="No">No</string>
+  <string name="AreYouSureYouWantToRemoveRowFromRosterFormat">Are you sure you want to remove {0} row(s) from dependent roster?</string>
   <string name="drawer_open">Open</string>
   <string name="drawer_close">Close</string>
   <item  type="id"  name="QuestionnaireId" />

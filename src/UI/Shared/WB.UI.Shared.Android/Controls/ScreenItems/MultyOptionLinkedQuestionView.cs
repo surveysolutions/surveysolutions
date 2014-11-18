@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Android.Content;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Ncqrs.Commanding.ServiceModel;
@@ -74,17 +75,20 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
               a => LinkedQuestionViewModel.IsVectorsEqual(a.PropagationVector, vector));
         }
 
-        protected override AnswerQuestionCommand CreateSaveAnswerCommand(LinkedAnswerViewModel[] selectedAnswers)
+        protected override Task<AnswerQuestionCommand> CreateSaveAnswerCommand(LinkedAnswerViewModel[] selectedAnswers)
         {
-            var elements = selectedAnswers.Select(a => new Tuple<decimal[], int>(a.PropagationVector, this.GetAnswerOrder(a))).ToList();
+            return new Task<AnswerQuestionCommand>(() =>
+            {
+                var elements = selectedAnswers.Select(a => new Tuple<decimal[], int>(a.PropagationVector, this.GetAnswerOrder(a))).ToList();
 
-            var answered = elements.OrderBy(tuple => tuple.Item2).Where(w => w.Item2 > 0).Select(a => a.Item1).
-                Union(elements.Where(w => w.Item2 == 0).Select(a => a.Item1));
-            
-            return new AnswerMultipleOptionsLinkedQuestionCommand(this.QuestionnairePublicKey,
-                this.Membership.CurrentUser.Id,
-                this.Model.PublicKey.Id, this.Model.PublicKey.InterviewItemPropagationVector, DateTime.UtcNow,
-                answered.ToArray());
+                var answered = elements.OrderBy(tuple => tuple.Item2).Where(w => w.Item2 > 0).Select(a => a.Item1).
+                    Union(elements.Where(w => w.Item2 == 0).Select(a => a.Item1));
+
+                return new AnswerMultipleOptionsLinkedQuestionCommand(this.QuestionnairePublicKey,
+                    this.Membership.CurrentUser.Id,
+                    this.Model.PublicKey.Id, this.Model.PublicKey.InterviewItemPropagationVector, DateTime.UtcNow,
+                    answered.ToArray());
+            });
         }
 
         protected override bool IsAnswerSelected(LinkedAnswerViewModel answer)
