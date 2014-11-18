@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using Ninject;
 using Ninject.Activation;
-using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide;

@@ -1,6 +1,5 @@
 using System;
 using Ncqrs.Commanding;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Questionnaire
 {
@@ -12,7 +11,6 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Questionnaire
             this.QuestionnaireId = questionnaireId;
         }
 
-        [AggregateRootId]
         public Guid QuestionnaireId { get; private set; }
     }
 }

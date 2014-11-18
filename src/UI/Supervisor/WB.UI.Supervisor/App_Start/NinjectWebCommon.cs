@@ -150,6 +150,9 @@ namespace WB.UI.Supervisor.App_Start
                 new SurveyManagementWebModule(),
                 new SupervisorBoundedContextModule(headquartersSettings, schedulerSettings));
 
+            NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
+            NcqrsEnvironment.InitDefaults();
+
             var eventStoreModule = ModulesFactory.GetEventStoreModule();
             var overrideReceivedEventTimeStamp = CoreSettings.EventStoreProvider == StoreProviders.Raven;
 

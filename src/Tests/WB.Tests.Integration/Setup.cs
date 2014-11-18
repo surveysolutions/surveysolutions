@@ -1,7 +1,7 @@
 ﻿using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
+using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.Tests.Integration
 {
