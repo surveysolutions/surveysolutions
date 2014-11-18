@@ -2,8 +2,8 @@
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
-    public class ExpressionLocation 
-
+    [Serializable]
+    public class ExpressionLocation
     {
         public Guid Id { set; get; }
 
@@ -17,13 +17,16 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
         public ExpressionLocation(string stringValue)
         {
-            var expressionLocation = stringValue.Split(':');
-            if(expressionLocation.Length != 3)
+            string[] expressionLocation = stringValue.Split(':');
+            if (expressionLocation.Length != 3)
                 throw new ArgumentException("stringValue");
 
-            this.ItemType = (ExpressionLocationItemType) Enum.Parse(typeof (ExpressionLocationItemType), expressionLocation[0], true);
-            this.ExpressionType = (ExpressionLocationType)Enum.Parse(typeof(ExpressionLocationType), expressionLocation[1], true);
-            this.Id = Guid.Parse(expressionLocation[2]);
+            ItemType =
+                (ExpressionLocationItemType)
+                    Enum.Parse(typeof (ExpressionLocationItemType), expressionLocation[0], true);
+            ExpressionType =
+                (ExpressionLocationType) Enum.Parse(typeof (ExpressionLocationType), expressionLocation[1], true);
+            Id = Guid.Parse(expressionLocation[2]);
         }
 
         public override string ToString()
