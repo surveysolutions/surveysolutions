@@ -23,7 +23,7 @@ namespace WB.Core.GenericSubdomains.Rest.Android
         {
             this.baseAddress = baseAddress;
             this.jsonUtils = jsonUtils;
-            this.acceptUnsignedCertificate = true;
+            this.acceptUnsignedCertificate = acceptUnsignedCertificate;
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
