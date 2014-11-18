@@ -14,7 +14,6 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.SingleOption;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
@@ -37,7 +36,6 @@ namespace WB.UI.Designer.Controllers
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
-        private readonly IViewFactory<QuestionnaireViewInputModel, EditQuestionnaireView> editQuestionnaireViewFactory;
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
         private readonly ILogger logger;
@@ -48,7 +46,7 @@ namespace WB.UI.Designer.Controllers
             IQuestionnaireHelper questionnaireHelper,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
-            ILogger logger, IViewFactory<QuestionnaireViewInputModel, EditQuestionnaireView> editQuestionnaireViewFactory,
+            ILogger logger,
             IQuestionnaireInfoFactory questionnaireInfoFactory,
             IExpressionProcessorGenerator expressionProcessorGenerator)
             : base(userHelper)
@@ -58,7 +56,6 @@ namespace WB.UI.Designer.Controllers
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.sharedPersonsViewFactory = sharedPersonsViewFactory;
             this.logger = logger;
-            this.editQuestionnaireViewFactory = editQuestionnaireViewFactory;
             this.questionnaireInfoFactory = questionnaireInfoFactory;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
         }
@@ -152,32 +149,6 @@ namespace WB.UI.Designer.Controllers
             }
 
             return this.Redirect(this.Request.UrlReferrer.ToString());
-        }
-
-        public ActionResult Edit(Guid id)
-        {
-            EditQuestionnaireView questionnaire = this.editQuestionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
-
-            if(questionnaire == null)
-                throw new HttpException(404, string.Empty);
-
-            QuestionnaireSharedPersons questionnaireSharedPersons =
-                this.sharedPersonsViewFactory.Load(new QuestionnaireSharedPersonsInputModel() { QuestionnaireId = id });
-
-            var isUserIsOwnerOrAdmin = questionnaire.CreatedBy == UserHelper.WebUser.UserId || UserHelper.WebUser.IsAdmin;
-            var isQuestionnaireIsSharedWithThisPerson = (questionnaireSharedPersons != null) && questionnaireSharedPersons.SharedPersons.Any(x => x.Id == this.UserHelper.WebUser.UserId);
-
-            if (isUserIsOwnerOrAdmin || isQuestionnaireIsSharedWithThisPerson)
-            {
-                this.ReplaceGuidsInValidationAndConditionRules(questionnaire);
-            }
-            else
-            {
-                throw new HttpException(403, string.Empty);
-            }
-
-            return
-                View(new QuestionnaireEditView(questionaire: questionnaire, questionnaireSharedPersons: questionnaireSharedPersons, isOwner: questionnaire.CreatedBy == UserHelper.WebUser.UserId));
         }
 
         public ActionResult Index(int? p, string sb, int? so, string f)
@@ -453,24 +424,7 @@ namespace WB.UI.Designer.Controllers
                 filter: filter,
                 viewerId: UserHelper.WebUser.UserId);
         }
-
-        private void ReplaceGuidsInValidationAndConditionRules(EditQuestionnaireView model)
-        {
-            var expressionReplacer = new ExpressionReplacer(model);
-            foreach (EditQuestionView question in model.Questions)
-            {
-                question.ConditionExpression =
-                       expressionReplacer.ReplaceGuidsWithStataCaptions(question.ConditionExpression, model.Id);
-                question.ValidationExpression =
-                    expressionReplacer.ReplaceGuidsWithStataCaptions(question.ValidationExpression, model.Id);
-            }
-
-            foreach (EditGroupView group in model.Groups)
-            {
-                group.ConditionExpression = expressionReplacer.ReplaceGuidsWithStataCaptions(group.ConditionExpression, model.Id);
-            }
-        }
-
+        
         private void SaveRequest(int? pageIndex, ref string sortBy, int? sortOrder, string filter)
         {
             this.ViewBag.PageIndex = pageIndex;
