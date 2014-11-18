@@ -365,7 +365,6 @@
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\StaticTextInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\QuestionInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\ChaptersInfoViewDenormalizer.cs" />
-    <Compile Include="Views\Questionnaire\Edit\EditStaticTextView.cs" />
     <Compile Include="Views\Questionnaire\Edit\GroupDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\IChapterInfoViewFactory.cs" />
     <Compile Include="Views\Questionnaire\Edit\ICompositeView.cs" />
@@ -375,7 +374,6 @@
     <Compile Include="Views\Questionnaire\Edit\NewEditQuestionView.cs" />
     <Compile Include="Views\Questionnaire\Edit\NewEditRosterView.cs" />
     <Compile Include="Views\Questionnaire\Edit\NewEditStaticTextView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionBrief.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\CategoricalOption.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\DateTimeDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\DescendantItemView.cs" />
@@ -400,13 +398,7 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\ChapterInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\IQuestionnaireInfoViewFactory.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoViewFactory.cs" />
-    <Compile Include="Views\Questionnaire\Edit\EditAnswerView.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Views\Questionnaire\Edit\EditGroupView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\Edit\EditQuestionnaireView.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireEntityNode.cs" />
@@ -465,9 +457,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireViewInputModel.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\Edit\EditQuestionView.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Views\Questionnaire\SharedPersons\QuestionnaireSharedPersons.cs">
