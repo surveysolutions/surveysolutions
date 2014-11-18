@@ -532,7 +532,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                         {
                             PortableAssembliesPath =
                                 "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.5\\Profile\\Profile111",
-                            DefaultReferencedPortableAssemblies = new[] { "System.dll", "System.Core.dll", "mscorlib.dll" }
+                            DefaultReferencedPortableAssemblies = new[] { "System.dll", "System.Core.dll", "mscorlib.dll", "System.Runtime.dll", 
+                                "System.Collections.dll", "System.Linq.dll" }
                         }, new FileSystemIOAccessor()),
                     new CodeGenerator());
         }

@@ -1,6 +1,6 @@
 ﻿namespace WB.Core.BoundedContexts.Designer.Services
 {
-    public enum ItemType
+    public enum ExpressionLocationItemType
     {
         Questionnaire = 0,
         Question = 1,
