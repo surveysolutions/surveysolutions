@@ -43,26 +43,5 @@ namespace Ncqrs.Tests.Config
 
             target.InnerException.Should().Be(theInnerException);
         }
-
-        [Test]
-        public void It_should_be_serializable()
-        {
-            var aMessage = "Hello world";
-            Type aInstanceType = typeof(String);
-
-            var theException = new InstanceNotFoundInEnvironmentConfigurationException(aInstanceType, aMessage);
-            InstanceNotFoundInEnvironmentConfigurationException deserializedException = null;
-
-            using (var buffer = new MemoryStream())
-            {
-                var formatter = new BinaryFormatter();
-                formatter.Serialize(buffer, theException);
-
-                buffer.Seek(0, SeekOrigin.Begin);
-                deserializedException = (InstanceNotFoundInEnvironmentConfigurationException)formatter.Deserialize(buffer);
-            }
-
-            deserializedException.Should().NotBeNull();
-        }
     }
 }

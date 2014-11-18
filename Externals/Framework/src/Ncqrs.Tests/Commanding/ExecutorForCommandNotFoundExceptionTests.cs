@@ -53,26 +53,5 @@ namespace Ncqrs.Tests.Commanding
 
             target.InnerException.Should().Be(theInnerException);
         }
-
-        [Test]
-        public void It_should_be_serializable()
-        {
-            String aMessage = "Hello world";
-            Type aCommandType = typeof(ICommand);
-
-            var theException = new ExecutorForCommandNotFoundException(aCommandType, aMessage);
-            ExecutorForCommandNotFoundException deserializedException = null;
-
-            using (var buffer = new MemoryStream())
-            {
-                var formatter = new BinaryFormatter();
-                formatter.Serialize(buffer, theException);
-
-                buffer.Seek(0, SeekOrigin.Begin);
-                deserializedException = (ExecutorForCommandNotFoundException)formatter.Deserialize(buffer);
-            }
-
-            deserializedException.Should().NotBeNull();
-        }
     }
 }

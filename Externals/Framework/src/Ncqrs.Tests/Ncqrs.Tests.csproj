@@ -125,7 +125,6 @@
     <Compile Include="Commanding\ServiceModel\CommandServiceBaseTests.cs" />
     <Compile Include="Commanding\TransactionalCommandExecutorWrapperTests.cs" />
     <Compile Include="Config\InstanceNotFoundInEnvironmentConfigurationExceptionTests.cs" />
-    <Compile Include="Domain\AggregateRootMappedByConventionTests.cs" />
     <Compile Include="Domain\AggregateRootTests.cs" />
     <Compile Include="Domain\EntityTests.cs" />
     <Compile Include="Domain\EventNotHandledExceptionTests.cs" />
@@ -135,9 +134,6 @@
     <Compile Include="Domain\NoUnitOfWorkAvailableInThisContextExceptionTests.cs" />
     <Compile Include="Domain\Storage\AggregateRootCreationExceptionTests.cs" />
     <Compile Include="Eventing\Storage\AttributeEventTypeResolverTests.cs" />
-    <Compile Include="Eventing\Storage\BaseExceptionTests.cs" />
-    <Compile Include="Eventing\Storage\ConcurrencyExceptionSpecs.cs" />
-    <Compile Include="Eventing\Storage\DuplicateCommitExceptionTests.cs" />
     <Compile Include="Eventing\Storage\PropertyBagConverterTests.cs" />
     <Compile Include="Eventing\Storage\PropertyBagTests.cs" />
     <Compile Include="Eventing\Storage\SimpleEventTypeResolverTests.cs" />

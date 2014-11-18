@@ -20,6 +20,7 @@ namespace Ncqrs.Tests.Domain
         public void SetUp()
         {
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+
         }
 
         [Test]
