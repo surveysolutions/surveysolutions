@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             new ExpressionLocation
                             {
                                 ItemType = ItemType.Question,
-                                ExpressionType = ExpressionType.Conditions,
+                                ExpressionType = ExpressionType.Condition,
                                 Id = questionTemplateModel.Id
                             }.ToString(), methodTemplate.TransformText());
                     }
@@ -92,7 +92,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         generatedClasses.Add(new ExpressionLocation
                         {
                             ItemType = ItemType.Question,
-                            ExpressionType = ExpressionType.Validations,
+                            ExpressionType = ExpressionType.Validation,
                             Id = questionTemplateModel.Id
                         }.ToString(), methodTemplate.TransformText());
                     }
@@ -113,7 +113,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             new ExpressionLocation
                             {
                                 ItemType = ItemType.Group,
-                                ExpressionType = ExpressionType.Conditions,
+                                ExpressionType = ExpressionType.Condition,
                                 Id = groupTemplateModel.Id
                             }.ToString(), methodTemplate.TransformText());
                     }
@@ -134,7 +134,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             new ExpressionLocation
                             {
                                 ItemType = ItemType.Roster,
-                                ExpressionType = ExpressionType.Conditions,
+                                ExpressionType = ExpressionType.Condition,
                                 Id = rosterTemplateModel.Id
                             }.ToString(), methodTemplate.TransformText());
                     }
@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         new ExpressionLocation
                         {
                             ItemType = ItemType.Question,
-                            ExpressionType = ExpressionType.Conditions,
+                            ExpressionType = ExpressionType.Condition,
                             Id = questionTemplateModel.Id
                         }.ToString(), methodTemplate.TransformText());
                 }
@@ -178,7 +178,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         new ExpressionLocation
                         {
                             ItemType = ItemType.Question,
-                            ExpressionType = ExpressionType.Validations,
+                            ExpressionType = ExpressionType.Validation,
                             Id = questionTemplateModel.Id
                         }.ToString(), methodTemplate.TransformText());
                 }
@@ -199,7 +199,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         new ExpressionLocation
                         {
                             ItemType = ItemType.Group,
-                            ExpressionType = ExpressionType.Conditions,
+                            ExpressionType = ExpressionType.Condition,
                             Id = groupTemplateModel.Id
                         }.ToString(), methodTemplate.TransformText());
                 }

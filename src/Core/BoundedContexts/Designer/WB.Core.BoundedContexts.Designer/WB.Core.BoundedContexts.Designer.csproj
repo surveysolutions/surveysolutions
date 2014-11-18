@@ -300,7 +300,7 @@
     <Compile Include="Services\CodeGeneration\IDynamicCompiler.cs" />
     <Compile Include="Services\CodeGeneration\IDynamicCompilerSettings.cs" />
     <Compile Include="Services\ExpressionLocation.cs" />
-    <Compile Include="Services\ExpressionType.cs" />
+    <Compile Include="Services\ExpressionLocationType.cs" />
     <Compile Include="Services\GenerationResult.cs" />
     <Compile Include="Services\ICodeGenerator.cs" />
     <Compile Include="Services\IExpressionProcessor.cs" />
