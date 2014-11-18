@@ -2,7 +2,6 @@
 
 namespace Ncqrs.Eventing.Sourcing
 {
-    [Serializable]
     public class EventAppliedEventArgs : EventArgs
     {
         private readonly UncommittedEvent _event;

@@ -6,7 +6,6 @@ namespace Ncqrs.Config
     /// <summary>
     /// Occurs when a requested instance could not be found in the Ncqrs environment configuration.
     /// </summary>
-    [Serializable]
     public class InstanceNotFoundInEnvironmentConfigurationException : NcqrsEnvironmentException
     {
         /// <summary>

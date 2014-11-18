@@ -5,7 +5,6 @@ namespace Ncqrs.Eventing.Sourcing.Snapshotting
     /// <summary>
     /// Holds the full state of an aggregate root at a certain version.
     /// </summary>
-    [Serializable]
     public class Snapshot
     {
         /// <summary>

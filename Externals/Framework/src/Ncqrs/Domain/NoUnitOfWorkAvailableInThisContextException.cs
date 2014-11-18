@@ -6,7 +6,6 @@ namespace Ncqrs.Domain
     /// <summary>
     /// Thrown when a <see cref="IUnitOfWork"/> is requested but was not available in the context.
     /// </summary>
-    [Serializable]
     public class NoUnitOfWorkAvailableInThisContextException : Exception
     {
         /// <summary>

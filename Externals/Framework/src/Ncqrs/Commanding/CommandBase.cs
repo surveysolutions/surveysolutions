@@ -10,7 +10,6 @@ namespace Ncqrs.Commanding
     /// information and intend that is needed to execute an corresponding
     /// action.
     /// </summary>
-    [Serializable]
     [DataContract]
     [KnownType("GetKnownTypes")]
     public abstract class CommandBase : ICommand

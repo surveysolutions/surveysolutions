@@ -5,7 +5,6 @@ namespace Ncqrs.Commanding.CommandExecution
     /// <summary>
     /// Occurs when no executor was not found to execute the command.
     /// </summary>
-    [Serializable]
     public class ExecutorForCommandNotFoundException : Exception
     {
         /// <summary>

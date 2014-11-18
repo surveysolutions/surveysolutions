@@ -5,7 +5,6 @@ namespace Ncqrs.Eventing
     /// <summary>
     /// The base for all event messages. All sourced events should subclass from <see cref="Ncqrs.Eventing.Sourcing.ISourcedEvent"/>.
     /// </summary>
-    [Serializable]
     public abstract class Event : IEvent
     {
         private static Version DefaultVersion = new Version(1,0);

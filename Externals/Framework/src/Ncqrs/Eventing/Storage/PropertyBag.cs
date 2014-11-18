@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace Ncqrs.Eventing.Storage
 {
-    [Serializable]
     public class PropertyBag
     {
         private readonly Dictionary<string, object> _properties = new Dictionary<string, object>();

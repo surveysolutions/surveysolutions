@@ -1,10 +1,8 @@
 using System;
-using Ncqrs;
 using Ncqrs.Eventing;
 
 namespace Main.Core.Events
 {
-    [Serializable]
     public class AggregateRootEvent
     {
         public AggregateRootEvent()

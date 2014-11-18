@@ -2,7 +2,6 @@
 
 namespace Ncqrs.Eventing.Storage
 {
-    [Serializable]
     public class ConcurrencyException : Exception
     {
         private readonly Guid _eventSourceId;
