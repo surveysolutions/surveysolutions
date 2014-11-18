@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing;
-using Ncqrs.Eventing.Sourcing.Mapping;
-using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Aggregates;
 
 namespace Ncqrs.Domain
@@ -14,8 +11,6 @@ namespace Ncqrs.Domain
     /// </summary>
     public abstract class AggregateRoot : EventSource, IAggregateRoot
     {
-        private static readonly ILogger Log = LogManager.GetLogger(typeof(AggregateRoot));
-    
         // 628426 13 Feb 2011
         // Previous ThreadStatic was null referencing at random times under load 
         // These things work great
@@ -25,13 +20,11 @@ namespace Ncqrs.Domain
 
         public static void RegisterThreadStaticEventAppliedCallback(Action<AggregateRoot, UncommittedEvent> callback)
         {
-            Log.DebugFormat("Registering event applied callback {0}", callback.GetHashCode());
             _eventAppliedCallbacks.Value.Add(callback);
         }
 
         public static void UnregisterThreadStaticEventAppliedCallback(Action<AggregateRoot, UncommittedEvent> callback)
         {
-            Log.DebugFormat("Deregistering event applied callback {0}", callback.GetHashCode());
             _eventAppliedCallbacks.Value.Remove(callback);
         }
 
@@ -51,7 +44,6 @@ namespace Ncqrs.Domain
 
             foreach(var callback in callbacks)
             {
-                Log.DebugFormat("Calling event applied callback {0} for event {1} in aggregate root {2}", callback.GetHashCode(), appliedEvent, this);
                 callback(this, appliedEvent);
             }
         }

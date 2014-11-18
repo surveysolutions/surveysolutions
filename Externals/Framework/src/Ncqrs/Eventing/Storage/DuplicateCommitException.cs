@@ -7,7 +7,6 @@ namespace Ncqrs.Eventing.Storage
     /// the same command has been executed more than onece. It is up to command handler to swallow it possibly
     /// putting some into in the logs.
     /// </summary>
-    [Serializable]
     public class DuplicateCommitException : Exception
     {
         private readonly Guid _eventSourceId;

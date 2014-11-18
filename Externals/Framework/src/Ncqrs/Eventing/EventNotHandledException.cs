@@ -3,7 +3,6 @@ using System.Runtime.Serialization;
 
 namespace Ncqrs.Domain
 {
-    [Serializable]
     public class EventNotHandledException : Exception
     {
         public object Event

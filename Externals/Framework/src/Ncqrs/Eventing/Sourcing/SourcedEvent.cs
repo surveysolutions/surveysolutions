@@ -3,7 +3,6 @@ using Ncqrs.Eventing.Storage;
 
 namespace Ncqrs.Eventing.Sourcing
 {
-    [Serializable]
     public abstract class SourcedEvent : Event, ISourcedEvent
     {
         /// <summary>

@@ -7,8 +7,6 @@ namespace Ncqrs.Domain
     public abstract class UnitOfWorkBase : IUnitOfWorkContext
     {
         private readonly Guid _commandId;
-        private static readonly ILogger Log = LogManager.GetLogger(typeof(UnitOfWorkBase));
-
         private readonly Action<AggregateRoot, UncommittedEvent> _eventAppliedCallback;
 
         /// <summary>
@@ -39,7 +37,6 @@ namespace Ncqrs.Domain
         {
             _commandId = commandId;
 #warning Slava: restore Thread.CurrentThread.ManagedThreadId
-            Log.DebugFormat("Creating new unit of work for command {0} on thread {1}", commandId, "Thread.CurrentThread.ManagedThreadId");
 
             _eventAppliedCallback = new Action<AggregateRoot, UncommittedEvent>(AggregateRootEventAppliedHandler);
             IsDisposed = false;
@@ -49,13 +46,11 @@ namespace Ncqrs.Domain
 
         private void InitializeAppliedEventHandler()
         {
-            Log.DebugFormat("Registering event applied callback into AggregateRoot from unit of work {0}", this);
             AggregateRoot.RegisterThreadStaticEventAppliedCallback(_eventAppliedCallback);
         }
 
         private void DestroyAppliedEventHandler()
         {
-            Log.DebugFormat("Deregistering event applied callback from AggregateRoot from unit of work {0}", this);
             AggregateRoot.UnregisterThreadStaticEventAppliedCallback(_eventAppliedCallback);
         }
 
@@ -89,7 +84,6 @@ namespace Ncqrs.Domain
             {
                 if (disposing)
                 {
-                    Log.DebugFormat("Disposing unit of work {0}", this);
                     DestroyAppliedEventHandler();
                     UnitOfWorkContext.Unbind();
                 }

@@ -11,8 +11,6 @@ namespace Ncqrs.Domain
 {
     public class UnitOfWork : UnitOfWorkBase
     {
-        private static readonly ILogger Log = LogManager.GetLogger(typeof(UnitOfWork));
-
         /// <summary>
         /// A queue that holds a reference to all instances that have themself registered as a dirty instance during the lifespan of this unit of work instance.
         /// </summary>
@@ -68,10 +66,7 @@ namespace Ncqrs.Domain
         /// </summary>
         public override void Accept()
         {
-            Log.DebugFormat("Accepting unit of work {0}", this);
-            Log.DebugFormat("Storing the event stream for command {0} to event store", _eventStream.CommitId);
             _eventStore.Store(_eventStream);
-            Log.DebugFormat("Publishing events for command {0} to event bus", _eventStream.CommitId);
            
 #if MONODROID
             _eventBus.Publish(_eventStream
@@ -111,8 +106,6 @@ namespace Ncqrs.Domain
         {
             if (!_dirtyInstances.Contains(dirtyInstance))
             {
-                Log.DebugFormat("Registering aggregate root {0} as dirty in unit of work {1}",
-                           dirtyInstance, this);
                 _dirtyInstances.Enqueue(dirtyInstance);
             }
         }

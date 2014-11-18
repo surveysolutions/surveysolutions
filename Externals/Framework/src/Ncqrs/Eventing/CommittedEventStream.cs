@@ -147,7 +147,6 @@ namespace Ncqrs.Eventing
         //}
     }
 
-    [Serializable]
     public class InvalidCommittedEventException : Exception
     {
         public InvalidCommittedEventException()

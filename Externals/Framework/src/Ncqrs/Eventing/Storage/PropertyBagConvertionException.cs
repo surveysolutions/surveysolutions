@@ -2,7 +2,6 @@
 
 namespace Ncqrs.Eventing.Storage
 {
-    [Serializable]
     public class PropertyBagConvertionException : Exception
     {
         public PropertyBagConvertionException() {}
@@ -11,4 +10,4 @@ namespace Ncqrs.Eventing.Storage
 
         public PropertyBagConvertionException(string message, Exception inner) : base(message, inner){ }
     }
-}
+}   

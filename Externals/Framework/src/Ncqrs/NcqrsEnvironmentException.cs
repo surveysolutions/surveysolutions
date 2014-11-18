@@ -5,7 +5,6 @@ namespace Ncqrs
     /// <summary>
     /// Occurs when there was an exception in the Ncqrs environment configuration.
     /// </summary>
-    [Serializable]
     public class NcqrsEnvironmentException : Exception
     {
         /// <summary>

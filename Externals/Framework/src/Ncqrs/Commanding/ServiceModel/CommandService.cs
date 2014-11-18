@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Ncqrs.Commanding.CommandExecution;
-using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.CommandBus;
 
 namespace Ncqrs.Commanding.ServiceModel
@@ -10,8 +8,6 @@ namespace Ncqrs.Commanding.ServiceModel
     // TODO: TLK, KP-4337: remove with all used stuff
     public class CommandService : ICommandService
     {
-        protected readonly ILogger Log = LogManager.GetLogger(typeof(CommandService));
-
         private readonly Dictionary<Type, Action<ICommand, string>> _executors = new Dictionary<Type, Action<ICommand, string>>();
         private readonly List<ICommandServiceInterceptor> _interceptors = new List<ICommandServiceInterceptor>(0);
 

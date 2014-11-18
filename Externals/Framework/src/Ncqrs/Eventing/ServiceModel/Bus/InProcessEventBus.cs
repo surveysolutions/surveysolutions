@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
-using WB.Core.GenericSubdomains.Logging;
 
 namespace Ncqrs.Eventing.ServiceModel.Bus
 {
     public class InProcessEventBus : IEventBus
     {
         private readonly Dictionary<Type, List<Action<PublishedEvent>>> _handlerRegister = new Dictionary<Type, List<Action<PublishedEvent>>>();
-        private static readonly ILogger Log = LogManager.GetLogger(typeof(InProcessEventBus));
         private readonly bool _useTransactionScope;
 
         public InProcessEventBus()
@@ -59,8 +57,6 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 
         private static void PublishToHandlers(IPublishableEvent eventMessage, Type eventMessageType, IEnumerable<Action<PublishedEvent>> handlers)
         {
-            Log.DebugFormat("Found {0} handlers for event {1}.", handlers.Count(), eventMessageType.FullName);
-
             var publishedEventClosedType = typeof (PublishedEvent<>).MakeGenericType(eventMessage.Payload.GetType());
             var publishedEvent = (PublishedEvent)Activator.CreateInstance(publishedEventClosedType, eventMessage);
 
@@ -68,9 +64,6 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 
             foreach (var handler in handlers)
             {
-                Log.DebugFormat("Calling handler {0} for event {1}.", handler.GetType().FullName,
-                                eventMessageType.FullName);
-
                 try
                 {
                     handler.Invoke(publishedEvent);
@@ -79,8 +72,6 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
                 {
                     occurredExceptions.Add(exception);
                 }
-
-                Log.DebugFormat("Call finished.");
             }
 
             if (occurredExceptions.Count > 0)

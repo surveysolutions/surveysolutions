@@ -16,6 +16,8 @@ namespace Ncqrs.Tests.Domain
         public void SetUp()
         {
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            var generator = Rhino.Mocks.MockRepository.GenerateMock<IUniqueIdentifierGenerator>();
+            NcqrsEnvironment.SetDefault<IUniqueIdentifierGenerator>(generator);
         }
 
         public class Customer : AggregateRootMappedByConvention

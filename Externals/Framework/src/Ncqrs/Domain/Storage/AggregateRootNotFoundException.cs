@@ -2,7 +2,6 @@
 
 namespace Ncqrs.Domain.Storage
 {
-    [Serializable]
     public class AggregateRootNotFoundException : Exception
     {
         public AggregateRootNotFoundException() { }

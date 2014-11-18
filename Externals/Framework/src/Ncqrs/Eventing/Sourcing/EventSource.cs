@@ -9,8 +9,6 @@ namespace Ncqrs.Eventing.Sourcing
 {
     public abstract class EventSource : IEventSource
     {
-        private static readonly ILogger Log = LogManager.GetLogger(typeof(EventSource));
-
         [NonSerialized]
         private Guid _eventSourceId;
         
@@ -83,8 +81,6 @@ namespace Ncqrs.Eventing.Sourcing
 
         public virtual void InitializeFromSnapshot(Snapshot snapshot)
         {
-            Log.DebugFormat("Initializing event source {0} from snapshot (version {1}).", snapshot.EventSourceId, snapshot.Version);
-
             _eventSourceId = snapshot.EventSourceId;
             _initialVersion = _currentVersion = snapshot.Version;
         }
@@ -101,7 +97,6 @@ namespace Ncqrs.Eventing.Sourcing
             {
                 throw new InvalidOperationException("Cannot apply history when instance has uncommitted changes.");
             }
-            Log.DebugFormat("Initializing event source {0} from history.", history.SourceId);
             if (history.IsEmpty)
             {
                 return;                
@@ -111,13 +106,9 @@ namespace Ncqrs.Eventing.Sourcing
 
             foreach (var historicalEvent in history)
             {
-                Log.DebugFormat("Appying historic event {0} to event source {1}", historicalEvent.EventIdentifier,
-                                history.SourceId);
                 ApplyEventFromHistory(historicalEvent);                
             }
 
-            Log.DebugFormat("Finished initializing event source {0} from history. Current event source version is {1}",
-                            history.SourceId, history.CurrentSourceVersion);
             _initialVersion = history.CurrentSourceVersion;
         }
 
@@ -148,8 +139,6 @@ namespace Ncqrs.Eventing.Sourcing
 
             foreach (var handler in handlers)
             {
-                Log.DebugFormat("Applying handler {0} of event source {1} to event {2}",
-                                handler, this, evnt);
                 handled |= handler.HandleEvent(evnt);
             }
 
@@ -159,7 +148,6 @@ namespace Ncqrs.Eventing.Sourcing
 
         internal protected void ApplyEvent(object evnt)
         {
-            Log.DebugFormat("Applying an event to event source {0}", evnt);
             var eventVersion = evnt.GetType().GetTypeInfo().Assembly.GetName().Version;
             var eventSequence = GetNextSequence();
             var wrappedEvent = new UncommittedEvent(_idGenerator.GenerateNewId(), EventSourceId, eventSequence, _initialVersion, DateTime.UtcNow, evnt, eventVersion);
@@ -170,9 +158,7 @@ namespace Ncqrs.Eventing.Sourcing
             {
                 sourcedEvent.ClaimEvent(EventSourceId, eventSequence);
             }
-            Log.DebugFormat("Handling event {0} in event source {1}", wrappedEvent, this);
             HandleEvent(wrappedEvent.Payload);
-            Log.DebugFormat("Notifying about application of an event {0} to event source {1}", wrappedEvent, this);
             OnEventApplied(wrappedEvent);
         }
 
@@ -193,7 +179,6 @@ namespace Ncqrs.Eventing.Sourcing
         private void ApplyEventFromHistory(CommittedEvent evnt)
         {
             ValidateHistoricalEvent(evnt);
-            Log.DebugFormat("Handling historical event {0} in event source {1}", evnt, this);
             HandleEvent(evnt.Payload);
             _currentVersion++;
         }
@@ -219,7 +204,6 @@ namespace Ncqrs.Eventing.Sourcing
         
         public void AcceptChanges()
         {
-            Log.DebugFormat("Accepting changes done to event source {0} up to version {1}", this, Version);
             _initialVersion = Version;
         }
 

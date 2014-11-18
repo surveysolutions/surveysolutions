@@ -9,11 +9,8 @@ namespace Ncqrs
     {
         
     }
-    internal class SerializableAttribute : Attribute
-	{
-	}
 
-	internal class NonSerializedAttribute : Attribute
+    internal class NonSerializedAttribute : Attribute
 	{
 	}
 

@@ -32,8 +32,6 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
     /// </summary>
     public class ConventionBasedEventHandlerMappingStrategy : IEventHandlerMappingStrategy
     {
-        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ConventionBasedEventHandlerMappingStrategy));
-
         public Type EventBaseType { get; set; }
         public String MethodNameRegexPattern { get; set; }
 
@@ -47,8 +45,6 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
         {
             var targetType = target.GetType();
             var handlers = new List<ISourcedEventHandler>();
-
-            Logger.DebugFormat("Trying to get all event handlers based by convention for {0}.", targetType);
 
             var methodsToMatch = targetType.GetMethods();
 
@@ -71,8 +67,6 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
                 Type firstParameterType = methodCopy.GetParameters().First().ParameterType;
 
                 Action<object> invokeAction = (e) => methodCopy.Invoke(target, new[] { e });
-
-                Logger.DebugFormat("Created event handler for method {0} based on convention.", methodCopy.Name);
 
                 var handler = new TypeThresholdedActionBasedDomainEventHandler(invokeAction, firstParameterType, methodCopy.Name, true);
                 handlers.Add(handler);

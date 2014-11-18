@@ -9,8 +9,6 @@ namespace Ncqrs.Domain.Storage
 {
     public class DomainRepository : IDomainRepository
     {
-        private static readonly ILogger Log = LogManager.GetLogger(typeof(DomainRepository));
-
         private readonly IAggregateRootCreationStrategy _aggregateRootCreator;
 
         private readonly IAggregateSnapshotter _aggregateSnapshotter;
@@ -41,8 +39,6 @@ namespace Ncqrs.Domain.Storage
         protected AggregateRoot GetByIdFromScratch(Type aggregateRootType, CommittedEventStream committedEventStream)
         {
             AggregateRoot aggregateRoot = null;
-            Log.DebugFormat("Reconstructing aggregate root {0}[{1}] directly from event stream", aggregateRootType.FullName,
-                               committedEventStream.SourceId.ToString("D"));
 
             if (committedEventStream.Count() > 0)
             {

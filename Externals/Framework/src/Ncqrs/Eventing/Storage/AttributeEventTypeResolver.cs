@@ -84,7 +84,7 @@ namespace Ncqrs.Eventing.Storage
             var name = FindNameForEvent(type);
             var aliases = FindAliasesForEvent(type);
 
-            if (name.Length == 0) {
+            if (string.IsNullOrWhiteSpace(name)) {
                 string message = string.Format("Type {0} does not have a name", type);
                 throw new ArgumentException(message);
             }
@@ -133,7 +133,7 @@ namespace Ncqrs.Eventing.Storage
         {
             var names = type.GetTypeInfo().CustomAttributes
                 .Where(x => x.AttributeType == typeof (EventNameAttribute))
-                .Cast<EventNameAttribute>()
+                .Select(x => x.ConstructorArguments[0])
                 .ToArray();
 
             if (names.Length == 0) {
@@ -146,13 +146,16 @@ namespace Ncqrs.Eventing.Storage
                 throw new ArgumentException(message);
             }
 
-            return names[0].Name;
+            return (string) names[0].Value;
         }
 
         private static IEnumerable<string> FindAliasesForEvent(Type type)
         {
-            var names = type.GetTypeInfo().CustomAttributes.Where(x => x.AttributeType == typeof(EventNameAliasAttribute)).Cast<EventNameAliasAttribute>().ToArray();
-            return names.Select(x => x.Name);
+            var names = type.GetTypeInfo().CustomAttributes
+                            .Where(x => x.AttributeType == typeof(EventNameAliasAttribute))
+                            .Select(x => x.ConstructorArguments[0])
+                            .ToArray();
+            return names.Select(x => (string)x.Value);
         }
     }
 
