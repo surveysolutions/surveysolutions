@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Views;
@@ -6,6 +8,7 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding.BindingContext;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
+using Java.Lang;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Capi;
@@ -15,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.UI.Shared.Android.Events;
 using WB.UI.Shared.Android.Extensions;
+using Exception = System.Exception;
 
 namespace WB.UI.Shared.Android.Controls.ScreenItems
 {
@@ -334,6 +338,42 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             wrapper.AddView(textView);
 
             this.llWrapper.AddView(wrapper);
+        }
+
+        protected virtual async Task<bool> ConfirmRosterDecrease(string[] rosterTitles, int countOfRemovedRows)
+        {
+            if (rosterTitles.Length == 0 || countOfRemovedRows < 1)
+                return true;
+
+            var alert = new AlertDialog.Builder(this.Context);
+            
+            alert.SetTitle(Resources.GetText(Resource.String.Warning));
+            alert.SetMessage(string.Format(Resources.GetText(Resource.String.AreYouSureYouWantToRemoveRowFromRosterFormat), countOfRemovedRows));
+
+            var result = false;
+            var isDialogOpen = true;
+
+            alert.SetPositiveButton(Resources.GetText(Resource.String.Yes), (e, s) =>
+            {
+                result = true;
+                isDialogOpen = false;
+            });
+
+            alert.SetNegativeButton(Resources.GetText(Resource.String.No), (e, s) => { isDialogOpen = false; });
+            
+            alert.Show();
+
+            await Task.Factory.StartNew(() =>
+            {
+                while (isDialogOpen)
+                {
+                    Thread.Sleep(200);
+                }
+                alert.Dispose();
+                alert = null;
+            });
+
+            return result;
         }
     }
 }
