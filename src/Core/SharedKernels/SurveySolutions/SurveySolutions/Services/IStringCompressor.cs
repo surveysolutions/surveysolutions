@@ -1,7 +1,7 @@
-namespace WB.Core.SharedKernel.Utils.Compression
-{
-    using System.IO;
+using System.IO;
 
+namespace WB.Core.SharedKernels.SurveySolutions.Services
+{
     /// <summary>
     /// The StringCompressor interface.
     /// </summary>

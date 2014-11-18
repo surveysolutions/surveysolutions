@@ -2,11 +2,13 @@
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Accessors;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Factories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.ReadSide;
@@ -15,11 +17,8 @@ using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
-using Interview = WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Interview;
-using Questionnaire = WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire;
-using UserAR = WB.Core.SharedKernels.DataCollection.Aggregates.UserAR;
 
-namespace WB.Core.SharedKernels.DataCollection
+namespace WB.Core.SharedKernels.SurveyManagement
 {
     public class DataCollectionSharedKernelModule : NinjectModule
     {
@@ -66,7 +65,7 @@ namespace WB.Core.SharedKernels.DataCollection
                 .To<InterviewSynchronizationFileStorage>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.basePath).WithConstructorArgument("syncDirectoryName", this.syncDirectoryName);
 
             this.Bind<IQuestionnaireAssemblyFileAccessor>()
-                .To<QuestionnaireAssemblyFileAccessor>().InSingletonScope().WithConstructorArgument("folderPath", basePath).WithConstructorArgument("assemblyDirectoryName", questionnaireAssembliesDirectoryName);
+                .To<QuestionnaireAssemblyFileAccessor>().InSingletonScope().WithConstructorArgument("folderPath", this.basePath).WithConstructorArgument("assemblyDirectoryName", this.questionnaireAssembliesDirectoryName);
 
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();

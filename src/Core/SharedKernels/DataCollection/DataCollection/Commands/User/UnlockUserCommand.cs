@@ -3,7 +3,6 @@ using Ncqrs.Commanding;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.User
 {
-    [Serializable]
     public class UnlockUserCommand : CommandBase
     {
         public UnlockUserCommand() { }

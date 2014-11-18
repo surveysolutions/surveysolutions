@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using Main.Core.Events;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
@@ -14,17 +13,23 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.ChangeLog
     {
         private const string ChangelogFolder = "Changelog";
         private readonly string changelogPath;
-        private readonly IViewFactory<InterviewMetaInfoInputModel, WB.Core.SharedKernel.Structures.Synchronization.InterviewMetaInfo> metaInfoFactory;
+        private readonly IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> metaInfoFactory;
         private readonly IArchiveUtils archiver;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
-        public FileChangeLogStore(IViewFactory<InterviewMetaInfoInputModel, WB.Core.SharedKernel.Structures.Synchronization.InterviewMetaInfo> metaInfoFactory, IArchiveUtils archiver)
+        public FileChangeLogStore(
+            IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> metaInfoFactory,
+            IArchiveUtils archiver, 
+            IFileSystemAccessor fileSystemAccessor,
+            string environmentalPersonalFolderPath)
         {
             this.metaInfoFactory = metaInfoFactory;
             this.archiver = archiver;
-            this.changelogPath = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), ChangelogFolder);
-            if (!Directory.Exists(this.changelogPath))
+            this.fileSystemAccessor = fileSystemAccessor;
+            this.changelogPath = fileSystemAccessor.CombinePath(environmentalPersonalFolderPath, ChangelogFolder);
+            if (!fileSystemAccessor.IsDirectoryExists(this.changelogPath))
             {
-                Directory.CreateDirectory(this.changelogPath);
+                fileSystemAccessor.CreateDirectory(this.changelogPath);
             }
         }
 
@@ -47,27 +52,27 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.ChangeLog
                             metaData)),
                     Id = eventSourceId
                 };
-            File.WriteAllText(path, JsonUtils.GetJsonData(syncItem));
+            fileSystemAccessor.WriteAllText(path, JsonUtils.GetJsonData(syncItem));
         }
 
         public string GetChangesetContent(Guid recordId)
         {
             var path = this.GetFileName(recordId);
-            if (!File.Exists(path))
+            if (!fileSystemAccessor.IsFileExists(path))
                 return null;
-            return File.ReadAllText(path);
+            return fileSystemAccessor.ReadAllText(path);
         }
 
         public void DeleteDraftChangeSet(Guid recordId)
         {
             var path = this.GetFileName(recordId);
-            if (File.Exists(path))
-                File.Delete(path);
+            if (fileSystemAccessor.IsFileExists(path))
+                fileSystemAccessor.DeleteFile(path);
         }
 
         private string GetFileName(Guid publicKey)
         {
-            return System.IO.Path.Combine(this.changelogPath,
+            return fileSystemAccessor.CombinePath(this.changelogPath,
                                           publicKey.ToString());
         }
 
@@ -79,18 +84,18 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.ChangeLog
 
         public void RestoreFromBackupFolder(string path)
         {
-            var dirWithCahngelog = Path.Combine(path, ChangelogFolder);
-            
-            foreach (var file in Directory.EnumerateFiles(this.changelogPath))
+            var dirWithCahngelog = fileSystemAccessor.CombinePath(path, ChangelogFolder);
+
+            foreach (var file in fileSystemAccessor.GetFilesInDirectory(this.changelogPath))
             {
-                File.Delete(file);
+                fileSystemAccessor.DeleteFile(file);
             }
 
-            if (!Directory.Exists(dirWithCahngelog))
+            if (!fileSystemAccessor.IsDirectoryExists(dirWithCahngelog))
                 return;
 
-            foreach (var file in Directory.GetFiles(dirWithCahngelog))
-                File.Copy(file, Path.Combine(this.changelogPath, Path.GetFileName(file)));
+            foreach (var file in fileSystemAccessor.GetFilesInDirectory(dirWithCahngelog))
+                fileSystemAccessor.CopyFileOrDirectory(file, fileSystemAccessor.CombinePath(this.changelogPath, fileSystemAccessor.GetFileName(file)));
         }
     }
 }

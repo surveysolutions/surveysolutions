@@ -1,11 +1,9 @@
 ﻿using System;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Commanding;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.User
 {
-    [Serializable]
     public class CreateUserCommand : CommandBase
     {
         public CreateUserCommand()

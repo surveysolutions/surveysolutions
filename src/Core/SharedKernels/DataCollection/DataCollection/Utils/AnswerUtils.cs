@@ -2,14 +2,23 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.DataCollection.Utils
 {
+    public static class LinqUtils
+    {
+        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> enumeration, Action<T> action)
+        {
+            foreach (var item in enumeration)
+            {
+                action(item);
+                yield return item;
+            }
+        }
+    }
+
     public static class AnswerUtils
     {
         public static string AnswerToString(object answer, Func<decimal, string> getCategoricalAnswerOptionText = null)
