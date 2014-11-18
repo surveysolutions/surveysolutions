@@ -225,7 +225,6 @@
     <Compile Include="Api\Attributes\ApiBasicAuthAttribute.cs" />
     <Compile Include="Api\CommandController.cs" />
     <Compile Include="Api\ExpressionGenerationController.cs" />
-    <Compile Include="Api\NCalcToSharpController.cs" />
     <Compile Include="Api\QuestionnaireController.cs" />
     <Compile Include="App_GlobalResources\TesterApiController.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -1364,7 +1363,6 @@
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.js.map" />
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.min.js.map" />
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\README.md" />
-    <Content Include="Views\ControlPanel\NCalcToCSharp.cshtml" />
     <Content Include="UpdatedDesigner\package.json" />
     <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\css\bootstrap-select.css.map" />
     <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\bootstrap-select.js.map" />
