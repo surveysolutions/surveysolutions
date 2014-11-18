@@ -5,8 +5,6 @@ using System.Reflection;
 using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.StorageStrategy;
-using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 

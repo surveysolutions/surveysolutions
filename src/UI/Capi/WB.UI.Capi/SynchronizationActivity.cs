@@ -28,6 +28,7 @@ using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization;

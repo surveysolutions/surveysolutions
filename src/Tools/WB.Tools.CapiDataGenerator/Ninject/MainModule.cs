@@ -90,10 +90,13 @@ namespace CapiDataGenerator
             var publicStore = new SqliteReadSideRepositoryAccessor<PublicChangeSetDTO>(denormalizerStore);
             var plainQuestionnaireStore = new SqlitePlainStorageAccessor<QuestionnaireDocument>(plainStore);
             var interviewMetaInfoFactory = new InterviewMetaInfoFactory(questionnaireStore);
+
+            var environmentalPersonalFolderPath = "";
             var changeLogStore = new FileChangeLogStore(
-                interviewMetaInfoFactory, 
+                interviewMetaInfoFactory,
                 this.Kernel.Get<IArchiveUtils>(),
-                this.Kernel.Get<IFileSystemAccessor>());
+                this.Kernel.Get<IFileSystemAccessor>(),
+                environmentalPersonalFolderPath);
 
             var capiTemplateWriter = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>();
             this.capiTemplateVersionedWriter = new VersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>(capiTemplateWriter);
@@ -105,6 +108,7 @@ namespace CapiDataGenerator
             var headquartersEventStore = this.GetHeadquartersEventStore();
 
             var eventStore = new CapiDataGeneratorEventStore(capiEvenStore, supervisorEventStore, headquartersEventStore);
+           
 
             this.Bind<IEventStore>().ToConstant(eventStore);
             this.Bind<IStreamableEventStore>().ToConstant(eventStore);

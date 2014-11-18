@@ -207,6 +207,10 @@
       <Project>{4ECE2C97-13A0-46D6-95D1-7BB50A48267B}</Project>
       <Name>Mono.Android.Crasher</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.Capi.csproj">
+      <Project>{c6ed30a9-4d14-48d1-8311-c2267dfd424f}</Project>
+      <Name>WB.Core.BoundedContexts.Capi</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\ErrorReporting\ErrorReporting.Android\WB.Core.GenericSubdomains.ErrorReporting.Android.csproj">
       <Project>{04ff9769-ab98-416e-8aa9-89271724582e}</Project>
       <Name>WB.Core.GenericSubdomains.ErrorReporting.Android</Name>
@@ -258,12 +262,6 @@
     <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Core\BoundedContexts\Capi\WB.Core.BoundedContexts.Capi.Android\WB.Core.BoundedContexts.Capi.Android.csproj">
-      <Project>{c62669d1-2b5f-4976-a33d-a66b674d0149}</Project>
-      <Name>WB.Core.BoundedContexts.Capi.Android</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
