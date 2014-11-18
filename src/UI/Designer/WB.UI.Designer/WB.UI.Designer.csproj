@@ -302,7 +302,6 @@
     <Compile Include="Models\VerificationErrors.cs" />
     <Compile Include="Models\VerificationResult.cs" />
     <Compile Include="Models\PasswordModel.cs" />
-    <Compile Include="Models\QuestionnaireEditView.cs" />
     <Compile Include="Models\QuestionnairePublicListViewModel.cs" />
     <Compile Include="Models\ResetPasswordConfirmationModel.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />
@@ -1196,13 +1195,11 @@
     <Content Include="Views\Shared\_html5shiv.cshtml" />
     <Content Include="Views\Shared\Create.cshtml" />
     <Content Include="Views\Shared\Details.cshtml" />
-    <Content Include="Views\Questionnaire\Edit.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Shared\Edit.cshtml" />
     <Content Include="Views\Error\AccessDenied.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
-    <Content Include="Views\Questionnaire\_QuestionTypes.cshtml" />
     <Content Include="Views\Pdf\_RenderChild.cshtml" />
     <Content Include="Views\Questionnaire\Clone.cshtml" />
     <Content Include="Views\Pdf\_RenderQuestionDetails.cshtml" />
@@ -1223,10 +1220,6 @@
     <Content Include="Views\Shared\_trackers.cshtml" />
     <Content Include="Views\Pdf\RenderTitlePage.cshtml" />
     <Content Include="Views\Pdf\_RenderTitlePage.cshtml" />
-    <Content Include="Views\Questionnaire\_QuestionDetails.cshtml" />
-    <Content Include="Views\Questionnaire\_GroupDetails.cshtml" />
-    <Content Include="Views\Questionnaire\_QuestionnaireDetails.cshtml" />
-    <Content Include="Views\Questionnaire\_QuestionnaireDetailsForOwner.cshtml" />
     <Content Include="Views\ControlPanel\ReadSide.cshtml" />
     <Content Include="Views\ControlPanel\NConfig.cshtml" />
     <Content Include="Views\App\Index.cshtml" />

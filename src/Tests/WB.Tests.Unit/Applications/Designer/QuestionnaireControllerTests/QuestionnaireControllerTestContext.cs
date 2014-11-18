@@ -27,7 +27,6 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireControllerTests
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory = null,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory = null,
             ILogger logger = null,
-            IViewFactory<QuestionnaireViewInputModel, EditQuestionnaireView> editQuestionnaireViewFactory = null,
             IQuestionnaireInfoFactory questionnaireInfoFactory = null,
             IExpressionProcessorGenerator expressionProcessorGenerator = null)
         {
@@ -37,7 +36,6 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireControllerTests
                 questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),
                 sharedPersonsViewFactory ?? Mock.Of<IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons>>(),
                 logger ?? Mock.Of<ILogger>(),
-                editQuestionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, EditQuestionnaireView>>(),
                 questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>(),
                 expressionProcessorGenerator ?? Mock.Of<IExpressionProcessorGenerator>());
         }
