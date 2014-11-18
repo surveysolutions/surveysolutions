@@ -33,7 +33,6 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireControllerTests
         {
             return new QuestionnaireController(commandService ?? Mock.Of<ICommandService>(),
                 userHelper ?? Mock.Of<IMembershipUserService>(),
-                questionnaireVerifier ?? Mock.Of<IQuestionnaireVerifier>(),
                 questionnaireHelper ?? Mock.Of<IQuestionnaireHelper>(),
                 questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),
                 sharedPersonsViewFactory ?? Mock.Of<IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons>>(),
