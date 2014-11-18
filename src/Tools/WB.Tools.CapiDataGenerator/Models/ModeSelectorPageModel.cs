@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.Synchronization;
 
 namespace WB.Tools.CapiDataGenerator.Models

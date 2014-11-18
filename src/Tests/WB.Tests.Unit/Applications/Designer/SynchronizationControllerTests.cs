@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Utils.Compression;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Designer.BootstrapSupport;
 using WB.UI.Designer.Controllers;
 using WB.UI.Shared.Web.Membership;

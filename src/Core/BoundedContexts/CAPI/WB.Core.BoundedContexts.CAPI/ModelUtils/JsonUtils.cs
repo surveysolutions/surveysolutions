@@ -1,4 +1,5 @@
 using System.IO;
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace WB.Core.BoundedContexts.Capi.ModelUtils
@@ -19,7 +20,7 @@ namespace WB.Core.BoundedContexts.Capi.ModelUtils
         public static T GetObject<T>(string json)
         {
             var type = typeof (T);
-            if (type.IsValueType)
+            if (type.GetTypeInfo().IsValueType)
                 return JSONDeserialize<T>(json);
             return JsonConvert.DeserializeObject<T>(json,
                                                     new JsonSerializerSettings

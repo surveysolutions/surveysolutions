@@ -203,17 +203,9 @@
       <Project>{DC128FDF-0F94-4B63-B79E-DDD02E5E1F0F}</Project>
       <Name>AndroidNinject</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Mono\AndroidWB.Core.SharedKernels.DataCollection\AndroidWB.Core.SharedKernels.DataCollection.csproj">
-      <Project>{6B901897-7B53-41FB-8E33-D5AA93218ADC}</Project>
-      <Name>AndroidWB.Core.SharedKernels.DataCollection</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Mono\Mono.Android.Crasher\Mono.Android.Crasher.csproj">
       <Project>{4ECE2C97-13A0-46D6-95D1-7BB50A48267B}</Project>
       <Name>Mono.Android.Crasher</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\BoundedContexts\Capi\WB.Core.BoundedContexts.Capi.Android\WB.Core.BoundedContexts.Capi.Android.csproj">
-      <Project>{C62669D1-2B5F-4976-A33D-A66B674D0149}</Project>
-      <Name>WB.Core.BoundedContexts.Capi.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\ErrorReporting\ErrorReporting.Android\WB.Core.GenericSubdomains.ErrorReporting.Android.csproj">
       <Project>{04ff9769-ab98-416e-8aa9-89271724582e}</Project>
@@ -234,6 +226,10 @@
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Files.Android\WB.Core.Infrastructure.Files.Android.csproj">
       <Project>{8ceacd5d-ab0e-4104-8bce-ddd7900887e0}</Project>
       <Name>WB.Core.Infrastructure.Files.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
+      <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
       <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>

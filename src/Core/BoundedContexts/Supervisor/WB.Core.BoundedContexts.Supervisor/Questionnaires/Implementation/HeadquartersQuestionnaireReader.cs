@@ -7,6 +7,7 @@ using Main.Core.Documents;
 using WB.Core.BoundedContexts.Supervisor.Extensions;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
 using WB.Core.SharedKernel.Utils.Serialization;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.BoundedContexts.Supervisor.Questionnaires.Implementation
 {

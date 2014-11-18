@@ -1,8 +1,8 @@
 ﻿using WB.Core.GenericSubdomains.ErrorReporting.Services.CapiInformationService;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Utils.Rest;
-using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformation
 {

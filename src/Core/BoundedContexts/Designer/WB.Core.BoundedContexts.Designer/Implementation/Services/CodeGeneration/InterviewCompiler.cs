@@ -34,8 +34,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 compilerSettings.DefaultReferencedPortableAssemblies.Select(
                     defaultReferencedPortableAssembly =>
                         AssemblyMetadata.CreateFromFile(
-                            fileSystemAccessor.CombinePath(compilerSettings.PortableAssembliesPath,
-                                defaultReferencedPortableAssembly)).GetReference()).ToList();
+                            fileSystemAccessor.CombinePath(compilerSettings.PortableAssembliesPath, defaultReferencedPortableAssembly))
+                            .GetReference())
+                            .ToList();
 
             metadataReferences.AddRange(
                 referencedPortableAssemblies.Select(

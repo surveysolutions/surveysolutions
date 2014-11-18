@@ -11,7 +11,6 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails.GridItems;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -164,7 +163,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             var referencedQuestion =
                 questionnaire.FirstOrDefault<IQuestion>(
-                    q => substitutionReference.Equals(q.StataExportCaption, StringComparison.InvariantCultureIgnoreCase));
+                    q => substitutionReference.Equals(q.StataExportCaption, StringComparison.CurrentCultureIgnoreCase));
 
             if (referencedQuestion == null)
                 return;

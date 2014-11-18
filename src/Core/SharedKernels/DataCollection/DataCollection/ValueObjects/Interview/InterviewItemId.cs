@@ -93,7 +93,7 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
             {
                 return "0";
             }
-            var possibleSeparators = new char[] { ',', '.' };
+            var possibleSeparators = new string[] { ",", "." };
 
             var decimalString = decimalValue.ToString();
 
@@ -113,7 +113,7 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 
         public static InterviewItemId Parse(string value)
         {
-            if (value.Contains(','))
+            if (value.Contains(","))
             {
                 var items = value.Split(',');
                 var vector = new decimal[items.Length - 1];

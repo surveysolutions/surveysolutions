@@ -66,8 +66,14 @@ namespace CAPI.Android.Core.Model
             var plainQuestionnaireStore = new SqlitePlainStorageAccessor<QuestionnaireDocument>(plainStore);
             var fileSystem = new FileStorageService();
             var interviewMetaInfoFactory = new InterviewMetaInfoFactory(questionnaireStore);
-            var changeLogStore = new FileChangeLogStore(interviewMetaInfoFactory, this.Kernel.Get<IArchiveUtils>());
-            var syncCacher = new FileCapiSynchronizationCacheService();
+
+            var changeLogStore = new FileChangeLogStore(
+                interviewMetaInfoFactory, 
+                this.Kernel.Get<IArchiveUtils>(), 
+                this.Kernel.Get<IFileSystemAccessor>(),
+                this.basePath);
+
+            var syncCacher = new FileCapiSynchronizationCacheService(this.Kernel.Get<IFileSystemAccessor>(), this.basePath);
             var sharedPreferencesBackup = new SharedPreferencesBackupOperator();
             var templateStore = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>();
             var propagationStructureStore = new FileReadSideRepositoryWriter<QuestionnaireRosterStructure>();

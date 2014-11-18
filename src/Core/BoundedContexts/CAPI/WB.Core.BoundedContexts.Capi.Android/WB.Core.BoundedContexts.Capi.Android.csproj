@@ -72,15 +72,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Aggregates\FileAR.cs">
-      <Link>Aggregates\FileAR.cs</Link>
-    </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.CAPI\CapiBoundedContextModule.cs">
-      <Link>CapiBoundedContextModule.cs</Link>
-    </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.CAPI\CapiSynchronizationModule.cs">
-      <Link>CapiSynchronizationModule.cs</Link>
-    </Compile>
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\ChangeLog\ChangeLogRecordWithContent.cs">
       <Link>ChangeLog\ChangeLogRecordWithContent.cs</Link>
     </Compile>
@@ -92,9 +83,6 @@
     </Compile>
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\ChangeLog\IChangeLogStore.cs">
       <Link>ChangeLog\IChangeLogStore.cs</Link>
-    </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Commands\UploadFileCommand.cs">
-      <Link>Commands\UploadFileCommand.cs</Link>
     </Compile>
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\EventHandler\AnswerOptionsForCascadingQuestionsDenormalizer.cs">
       <Link>EventHandler\AnswerOptionsForCascadingQuestionsDenormalizer.cs</Link>
@@ -260,10 +248,6 @@
       <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>
       <Name>AndroidNinject</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\Mono\AndroidWB.Core.SharedKernels.DataCollection\AndroidWB.Core.SharedKernels.DataCollection.csproj">
-      <Project>{6b901897-7b53-41fb-8e33-d5aa93218adc}</Project>
-      <Name>AndroidWB.Core.SharedKernels.DataCollection</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
       <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
       <Name>WB.Core.GenericSubdomains.Utils</Name>
@@ -279,6 +263,10 @@
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
+      <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
       <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
@@ -297,6 +285,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Aggregates\" />
+    <Folder Include="Commands\" />
     <Folder Include="Events\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

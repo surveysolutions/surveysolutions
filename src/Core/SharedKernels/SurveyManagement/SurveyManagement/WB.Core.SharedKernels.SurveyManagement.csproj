@@ -98,6 +98,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataCollectionSharedKernelModule.cs" />
     <Compile Include="EventHandler\AnswersByVariableDenormalizer.cs" />
     <Compile Include="EventHandler\ClientDeviceDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewHistoryDenormalizer.cs" />

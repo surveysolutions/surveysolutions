@@ -5,6 +5,7 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.BoundedContexts.Capi.Tests.SyncPackageRestoreServiceTests
 {

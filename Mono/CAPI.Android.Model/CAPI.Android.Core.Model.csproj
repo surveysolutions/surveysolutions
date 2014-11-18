@@ -133,9 +133,9 @@
       <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
       <Name>Ncqrs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Core\BoundedContexts\Capi\WB.Core.BoundedContexts.Capi.Android\WB.Core.BoundedContexts.Capi.Android.csproj">
-      <Project>{c62669d1-2b5f-4976-a33d-a66b674d0149}</Project>
-      <Name>WB.Core.BoundedContexts.Capi.Android</Name>
+    <ProjectReference Include="..\..\src\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.Capi.csproj">
+      <Project>{C6ED30A9-4D14-48D1-8311-C2267DFD424F}</Project>
+      <Name>WB.Core.BoundedContexts.Capi</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Core\GenericSubdomains\ErrorReporting\ErrorReporting.Android\WB.Core.GenericSubdomains.ErrorReporting.Android.csproj">
       <Project>{04ff9769-ab98-416e-8aa9-89271724582e}</Project>
@@ -165,6 +165,10 @@
       <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
       <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
+      <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
       <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
       <Name>WB.Core.SharedKernels.SurveySolutions</Name>
@@ -181,17 +185,11 @@
       <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>
       <Name>AndroidNinject</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidWB.Core.SharedKernels.DataCollection\AndroidWB.Core.SharedKernels.DataCollection.csproj">
-      <Project>{6b901897-7b53-41fb-8e33-d5aa93218adc}</Project>
-      <Name>AndroidWB.Core.SharedKernels.DataCollection</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ChangeLog\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

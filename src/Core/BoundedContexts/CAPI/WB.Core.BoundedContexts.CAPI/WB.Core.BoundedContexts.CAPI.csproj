@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
+    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{C6ED30A9-4D14-48D1-8311-C2267DFD424F}</ProjectGuid>
@@ -9,8 +10,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WB.Core.BoundedContexts.Capi</RootNamespace>
     <AssemblyName>WB.Core.BoundedContexts.Capi</AssemblyName>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -59,29 +62,21 @@
       <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.6.0.6\lib\portable-net45+wp80+win8+wpa81+aspnetcore50\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregates\FileAR.cs" />
-    <Compile Include="CapiBoundedContextModule.cs" />
-    <Compile Include="CapiSynchronizationModule.cs" />
     <Compile Include="ChangeLog\ChangeLogRecordWithContent.cs" />
     <Compile Include="ChangeLog\ChangeLogShortRecord.cs" />
     <Compile Include="ChangeLog\IChangeLogManipulator.cs" />
     <Compile Include="ChangeLog\IChangeLogStore.cs" />
-    <Compile Include="Commands\UploadFileCommand.cs" />
     <Compile Include="EventHandler\AnswerOptionsForCascadingQuestionsDenormalizer.cs" />
     <Compile Include="EventHandler\AnswerOptionsForLinkedQuestionsDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewViewModelDenormalizer.cs" />
@@ -136,9 +131,12 @@
     <Compile Include="Views\Login\LoginViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Commands\" />
     <Folder Include="Events\" />
   </ItemGroup>
   <ItemGroup>
@@ -174,12 +172,8 @@
       <Project>{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
-      <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
-      <Name>WB.Core.SharedKernel.Utils</Name>
-    </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

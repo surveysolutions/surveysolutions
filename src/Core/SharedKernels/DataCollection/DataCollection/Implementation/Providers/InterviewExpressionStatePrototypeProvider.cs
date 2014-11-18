@@ -30,9 +30,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
             {
                 //path is cached
                 //if assembly was loaded from this path it won't be loaded again 
-                var compiledAssembly = Assembly.LoadFrom(assemblyFile);
-                Type interviewExpressionStateType = compiledAssembly.GetTypes().
-                    SingleOrDefault(type => !(type.IsAbstract || type.IsGenericTypeDefinition || type.IsInterface) && type.GetInterfaces().Contains(typeof(IInterviewExpressionState)));
+                var compiledAssembly = Assembly.Load(new AssemblyName(assemblyFile));
+                Type interviewExpressionStateType = compiledAssembly.DefinedTypes.
+                    SingleOrDefault(x => !(x.IsAbstract || x.IsGenericTypeDefinition || x.IsInterface) && x.ImplementedInterfaces.Contains(typeof (IInterviewExpressionState)))
+                    .AsType();
 
                 if (interviewExpressionStateType == null)
                     throw new Exception("Type implementing IInterviewExpressionState was not found");

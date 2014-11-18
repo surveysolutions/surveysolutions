@@ -51,6 +51,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.Tools.CapiDataGenerator.Ninject;
 using WB.UI.Shared.Web.Settings;
 using CommandService = WB.Core.Infrastructure.CommandBus.CommandService;
@@ -89,7 +90,10 @@ namespace CapiDataGenerator
             var publicStore = new SqliteReadSideRepositoryAccessor<PublicChangeSetDTO>(denormalizerStore);
             var plainQuestionnaireStore = new SqlitePlainStorageAccessor<QuestionnaireDocument>(plainStore);
             var interviewMetaInfoFactory = new InterviewMetaInfoFactory(questionnaireStore);
-            var changeLogStore = new FileChangeLogStore(interviewMetaInfoFactory, this.Kernel.Get<IArchiveUtils>());
+            var changeLogStore = new FileChangeLogStore(
+                interviewMetaInfoFactory, 
+                this.Kernel.Get<IArchiveUtils>(),
+                this.Kernel.Get<IFileSystemAccessor>());
 
             var capiTemplateWriter = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>();
             this.capiTemplateVersionedWriter = new VersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>(capiTemplateWriter);

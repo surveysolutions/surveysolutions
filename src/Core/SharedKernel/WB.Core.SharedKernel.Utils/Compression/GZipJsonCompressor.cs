@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using WB.Core.SharedKernel.Utils.Serialization;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.SharedKernel.Utils.Compression
 {
@@ -8,7 +7,6 @@ namespace WB.Core.SharedKernel.Utils.Compression
     using System.IO.Compression;
     using System.Text;
 
-    using Newtonsoft.Json;
     public class GZipJsonCompressor : IStringCompressor
     {
         private readonly IJsonUtils jsonSerrializer;
