@@ -38,14 +38,11 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "AddTextListQuestion", typeof (AddTextListQuestionCommand) },
                     { "CloneQuestion", typeof (CloneQuestionCommand) },
                     { "CloneQuestionById", typeof(CloneQuestionByIdCommand) },
-                    { "CloneNumericQuestion", typeof (CloneNumericQuestionCommand) },
-                    { "CloneTextListQuestion", typeof (CloneTextListQuestionCommand) },
                     { "DeleteQuestion", typeof (DeleteQuestionCommand) },
                     { "MoveQuestion", typeof (MoveQuestionCommand) },
                     { "AddSharedPersonToQuestionnaire", typeof (AddSharedPersonToQuestionnaireCommand) },
                     { "RemoveSharedPersonFromQuestionnaire", typeof (RemoveSharedPersonFromQuestionnaireCommand) },
                     { "AddQRBarcodeQuestion", typeof (AddQRBarcodeQuestionCommand) },
-                    { "CloneQRBarcodeQuestion", typeof (CloneQRBarcodeQuestionCommand) },
                     //Update questions command
                     { "UpdateTextQuestion", typeof (UpdateTextQuestionCommand) },
                     { "UpdateNumericQuestion", typeof (UpdateNumericQuestionCommand) },
@@ -60,13 +57,11 @@ namespace WB.UI.Designer.CommandDeserialization
                     //Static text commands
                     { "AddStaticText", typeof (AddStaticTextCommand) },
                     { "UpdateStaticText", typeof (UpdateStaticTextCommand) },
-                    { "CloneStaticText", typeof (CloneStaticTextCommand) },
                     { "DeleteStaticText", typeof (DeleteStaticTextCommand) },
                     { "MoveStaticText", typeof (MoveStaticTextCommand) },
                     { "MigrateExpressionsToCSharp", typeof(MigrateExpressionsToCSharp)}
                 };
             }
-
         }
     }
 }
