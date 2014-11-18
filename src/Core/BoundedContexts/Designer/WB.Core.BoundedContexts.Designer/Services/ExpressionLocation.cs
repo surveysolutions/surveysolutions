@@ -2,13 +2,14 @@
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
-    public class ExpressionLocation : MarshalByRefObject
+    public class ExpressionLocation 
+
     {
         public Guid Id { set; get; }
 
-        public ItemType ItemType { set; get; }
+        public ExpressionLocationItemType ItemType { set; get; }
 
-        public ExpressionType ExpressionType { set; get; }
+        public ExpressionLocationType ExpressionType { set; get; }
 
         public ExpressionLocation()
         {
@@ -20,8 +21,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
             if(expressionLocation.Length != 3)
                 throw new ArgumentException("stringValue");
 
-            this.ItemType = (ItemType) Enum.Parse(typeof (ItemType), expressionLocation[0], true);
-            this.ExpressionType = (ExpressionType)Enum.Parse(typeof(ExpressionType), expressionLocation[1], true);
+            this.ItemType = (ExpressionLocationItemType) Enum.Parse(typeof (ExpressionLocationItemType), expressionLocation[0], true);
+            this.ExpressionType = (ExpressionLocationType)Enum.Parse(typeof(ExpressionLocationType), expressionLocation[1], true);
             this.Id = Guid.Parse(expressionLocation[2]);
         }
 

@@ -48,13 +48,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 
         It should_errors_locations_contains_question1 = () =>
             results.ErrorLocations.SingleOrDefault(x => x.Id == questionId 
-                && x.ItemType == ItemType.Question 
-                && x.ExpressionType == ExpressionType.Condition).ShouldNotBeNull();
+                && x.ItemType == ExpressionLocationItemType.Question 
+                && x.ExpressionType == ExpressionLocationType.Condition).ShouldNotBeNull();
     
         It should_errors_locations_contains_question2 = () =>
             results.ErrorLocations.SingleOrDefault(x => x.Id == questionInRosterId 
-                && x.ItemType == ItemType.Question 
-                && x.ExpressionType ==ExpressionType.Validation).ShouldNotBeNull();
+                && x.ItemType == ExpressionLocationItemType.Question 
+                && x.ExpressionType ==ExpressionLocationType.Validation).ShouldNotBeNull();
  
             
             
