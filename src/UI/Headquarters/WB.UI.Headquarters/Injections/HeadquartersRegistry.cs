@@ -20,8 +20,10 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Injections

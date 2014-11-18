@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Security.Cryptography;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;

@@ -1,4 +1,4 @@
-﻿namespace WB.Core.SharedKernel.Utils.Serialization
+﻿namespace WB.Core.SharedKernels.SurveySolutions.Services
 {
     public interface IJsonUtils
     {

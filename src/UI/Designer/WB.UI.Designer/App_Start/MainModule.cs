@@ -3,6 +3,7 @@ using Ninject.Modules;
 using Ninject.Web.Mvc.FilterBindingSyntax;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Designer.Exceptions;
 using WB.UI.Shared.Web.Membership;
 

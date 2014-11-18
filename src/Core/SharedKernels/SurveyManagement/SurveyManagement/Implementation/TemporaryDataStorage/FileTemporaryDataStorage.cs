@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading;
 using WB.Core.Infrastructure;
 using WB.Core.SharedKernel.Utils.Serialization;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataStorage
 {

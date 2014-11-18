@@ -1,9 +1,7 @@
 ﻿using System;
-using Ncqrs.Commanding;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Questionnaire
 {
-    [Serializable]
     public class DeleteQuestionnaire : QuestionnaireCommand
     {
         public DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? responsibleId)

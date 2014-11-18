@@ -4,7 +4,6 @@ using Ncqrs.Commanding;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.User
 {
-    [Serializable]
     public class ChangeUserCommand : CommandBase
     {
         public ChangeUserCommand()

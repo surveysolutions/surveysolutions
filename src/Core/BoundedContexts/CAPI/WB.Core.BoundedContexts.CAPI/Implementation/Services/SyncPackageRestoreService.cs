@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Concurrent;
-using System.Threading;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernel.Utils.Compression;
-using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.BoundedContexts.Capi.Implementation.Services
 {
@@ -31,6 +29,11 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             this.commandService = commandService;
         }
 
+        private async void WaitForSecond()
+        {
+            await System.Threading.Tasks.Task.Delay(TimeSpan.FromSeconds(1));
+        }
+
         private bool WaitUntilItemCanBeProcessed(Guid id)
         {
             int i = 0;
@@ -40,7 +43,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
                 {
                     return false;
                 }
-                Thread.Sleep(1000);
+                this.WaitForSecond();
                 i++;
             }
             return true;
