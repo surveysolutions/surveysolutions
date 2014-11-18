@@ -43,8 +43,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             generatedClasses.Add(new ExpressionLocation
             {
-                ItemType = ItemType.Questionnaire,
-                ExpressionType = ExpressionType.General,
+                ItemType = ExpressionLocationItemType.Questionnaire,
+                ExpressionType = ExpressionLocationType.General,
                 Id = questionnaire.PublicKey
             }.ToString(), template.TransformText());
 
@@ -74,8 +74,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         generatedClasses.Add(
                             new ExpressionLocation
                             {
-                                ItemType = ItemType.Question,
-                                ExpressionType = ExpressionType.Condition,
+                                ItemType = ExpressionLocationItemType.Question,
+                                ExpressionType = ExpressionLocationType.Condition,
                                 Id = questionTemplateModel.Id
                             }.ToString(), methodTemplate.TransformText());
                     }
@@ -91,8 +91,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                         generatedClasses.Add(new ExpressionLocation
                         {
-                            ItemType = ItemType.Question,
-                            ExpressionType = ExpressionType.Validation,
+                            ItemType = ExpressionLocationItemType.Question,
+                            ExpressionType = ExpressionLocationType.Validation,
                             Id = questionTemplateModel.Id
                         }.ToString(), methodTemplate.TransformText());
                     }
@@ -112,8 +112,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         generatedClasses.Add(
                             new ExpressionLocation
                             {
-                                ItemType = ItemType.Group,
-                                ExpressionType = ExpressionType.Condition,
+                                ItemType = ExpressionLocationItemType.Group,
+                                ExpressionType = ExpressionLocationType.Condition,
                                 Id = groupTemplateModel.Id
                             }.ToString(), methodTemplate.TransformText());
                     }
@@ -133,8 +133,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         generatedClasses.Add(
                             new ExpressionLocation
                             {
-                                ItemType = ItemType.Roster,
-                                ExpressionType = ExpressionType.Condition,
+                                ItemType = ExpressionLocationItemType.Roster,
+                                ExpressionType = ExpressionLocationType.Condition,
                                 Id = rosterTemplateModel.Id
                             }.ToString(), methodTemplate.TransformText());
                     }
@@ -159,8 +159,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     generatedClasses.Add(
                         new ExpressionLocation
                         {
-                            ItemType = ItemType.Question,
-                            ExpressionType = ExpressionType.Condition,
+                            ItemType = ExpressionLocationItemType.Question,
+                            ExpressionType = ExpressionLocationType.Condition,
                             Id = questionTemplateModel.Id
                         }.ToString(), methodTemplate.TransformText());
                 }
@@ -177,8 +177,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     generatedClasses.Add(
                         new ExpressionLocation
                         {
-                            ItemType = ItemType.Question,
-                            ExpressionType = ExpressionType.Validation,
+                            ItemType = ExpressionLocationItemType.Question,
+                            ExpressionType = ExpressionLocationType.Validation,
                             Id = questionTemplateModel.Id
                         }.ToString(), methodTemplate.TransformText());
                 }
@@ -198,8 +198,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     generatedClasses.Add(
                         new ExpressionLocation
                         {
-                            ItemType = ItemType.Group,
-                            ExpressionType = ExpressionType.Condition,
+                            ItemType = ExpressionLocationItemType.Group,
+                            ExpressionType = ExpressionLocationType.Condition,
                             Id = groupTemplateModel.Id
                         }.ToString(), methodTemplate.TransformText());
                 }
@@ -241,35 +241,35 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             Dictionary<Guid, List<Guid>> conditionalDependencies = BuildConditionalDependencies(questionnaire,
                 variableNames);
 
-            var mergedDependecies = new Dictionary<Guid, List<Guid>>();
+            var mergedDependencies = new Dictionary<Guid, List<Guid>>();
 
-            var allIds = structuralDependencies.Select(x => x.Key)
+            var allIdsInvolvedInExpressions = structuralDependencies.Select(x => x.Key)
                 .Union(structuralDependencies.SelectMany(x => x.Value))
                 .Union(conditionalDependencies.Select(x => x.Key))
                 .Union(conditionalDependencies.SelectMany(x => x.Value))
                 .Distinct();
 
-            allIds.ForEach(x => mergedDependecies.Add(x, new List<Guid>()));
+            allIdsInvolvedInExpressions.ForEach(x => mergedDependencies.Add(x, new List<Guid>()));
 
-            structuralDependencies.ForEach(x => mergedDependecies[x.Key].AddRange(x.Value));
+            structuralDependencies.ForEach(x => mergedDependencies[x.Key].AddRange(x.Value));
 
-            foreach (var dependency in conditionalDependencies)
+            foreach (var conditionalDependency in conditionalDependencies)
             {
-                foreach (var d in dependency.Value)
+                foreach (var dependency in conditionalDependency.Value)
                 {
-                    if (mergedDependecies.ContainsKey(d) && !mergedDependecies[d].Contains(dependency.Key))
+                    if (mergedDependencies.ContainsKey(dependency) && !mergedDependencies[dependency].Contains(conditionalDependency.Key))
                     {
-                        mergedDependecies[d].Add(dependency.Key);
+                        mergedDependencies[dependency].Add(conditionalDependency.Key);
                     }
-                    if (!mergedDependecies.ContainsKey(d))
+                    if (!mergedDependencies.ContainsKey(dependency))
                     {
-                        mergedDependecies.Add(d, new List<Guid> { dependency.Key });
+                        mergedDependencies.Add(dependency, new List<Guid> { conditionalDependency.Key });
                     }
                 }
             }
 
             var sorter = new TopologicalSorter<Guid>();
-            IEnumerable<Guid> orderedList = sorter.Sort(mergedDependecies.ToDictionary(x => x.Key, x => x.Value.ToArray()));
+            IEnumerable<Guid> listOfOrderedContitions = sorter.Sort(mergedDependencies.ToDictionary(x => x.Key, x => x.Value.ToArray()));
 
             template.Id = questionnaire.PublicKey;
             template.AllQuestions = allQuestions;
@@ -280,7 +280,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             template.RostersGroupedByScope = rostersGroupedByScope;
             template.ConditionalDependencies = conditionalDependencies;
             template.StructuralDependencies = structuralDependencies;
-            template.ConditionsPlayOrder = orderedList.ToList();
+            template.ConditionsPlayOrder = listOfOrderedContitions.ToList();
             template.QuestionnaireLevelModel = questionnaireLevelModel;
             template.VariableNames = variableNames;
 
