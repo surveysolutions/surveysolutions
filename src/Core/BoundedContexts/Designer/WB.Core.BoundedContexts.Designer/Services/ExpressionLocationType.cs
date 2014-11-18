@@ -1,6 +1,6 @@
 ﻿namespace WB.Core.BoundedContexts.Designer.Services
 {
-    public enum ExpressionType
+    public enum ExpressionLocationType
     {
         General = 0,
         Condition = 1,

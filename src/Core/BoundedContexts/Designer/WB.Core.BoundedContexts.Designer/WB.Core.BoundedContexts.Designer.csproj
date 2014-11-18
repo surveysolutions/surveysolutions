@@ -338,7 +338,7 @@
     <Compile Include="Services\IQuestionnaireExportService .cs" />
     <Compile Include="Services\IQuestionnaireDocumentUpgrader.cs" />
     <Compile Include="Services\IQuestionnaireVersioner.cs" />
-    <Compile Include="Services\ItemType.cs" />
+    <Compile Include="Services\ExpressionLocationItemType.cs" />
     <Compile Include="Services\TemplateInfo.cs" />
     <Compile Include="ValueObjects\InconsistentVersionException.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationError.cs" />
