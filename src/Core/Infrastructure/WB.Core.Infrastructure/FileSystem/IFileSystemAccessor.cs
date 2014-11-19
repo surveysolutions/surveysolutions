@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 
 namespace WB.Core.Infrastructure.FileSystem
 {
@@ -31,5 +32,6 @@ namespace WB.Core.Infrastructure.FileSystem
         string ReadAllText(string pathToFile);
 
         void CopyFileOrDirectory(string sourceDir, string targetDir);
+        Assembly LoadAssembly(string assemblyFile);
     }
 }

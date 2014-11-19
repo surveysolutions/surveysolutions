@@ -115,7 +115,6 @@
     <Compile Include="QuestionnaireAssemblyFileAccessorTests\when_getting_assembly_as_base_64_string.cs" />
     <Compile Include="QuestionnaireAssemblyFileAccessorTests\when_storing_assembly.cs" />
     <Compile Include="Setup.cs" />
-    <Compile Include="StronglyTypedInterviewEvaluator.cs" />
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_with_comments_from_HQ.cs" />
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_from_HQ.cs" />
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_in_deleted_state.cs" />
@@ -257,13 +256,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionnaireTests\ImportQuestionnaireTests.cs" />
     <Compile Include="QuestionnaireTests\QuestionnaireTestsContext.cs" />
-    <Compile Include="StronglyTypedInterviewEvaluatorTests\when_answering_int_question_with_var_equals_age_for_the_third_time.cs" />
-    <Compile Include="StronglyTypedInterviewEvaluatorTests\when_answering_int_question_with_var_equals_age.cs" />
-    <Compile Include="StronglyTypedInterviewEvaluatorTests\when_answering_int_question_with_var_equals_age_for_the_second_time.cs" />
-    <Compile Include="StronglyTypedInterviewEvaluatorTests\when_answering_single_option_question_with_var_equals_has_job.cs" />
-    <Compile Include="StronglyTypedInterviewEvaluatorTests\when_answering_single_option_question_with_var_equals_marital_status.cs" />
-    <Compile Include="StronglyTypedInterviewEvaluatorTests\when_answering_text_question_with_var_equals_persons_count.cs" />
-    <Compile Include="StronglyTypedInterviewEvaluatorTests\when_answering_text_question_with_var__equals_name.cs" />
+    <Compile Include="StronglyTypedInterviewEvaluator.cs" />
     <Compile Include="UserARTests.cs" />
     <Compile Include="ValueVectorTests\when_call_ToString_for_ValueVector_with_empty_vector_inside.cs" />
     <Compile Include="ValueVectorTests\when_call_ToString_for_ValueVector_with_not_empty_vector_inside.cs" />

@@ -2,6 +2,7 @@
 using System.CodeDom;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using WB.Core.Infrastructure.FileSystem;
 using ZetaLongPaths;
@@ -178,6 +179,11 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             {
                 this.CopyFile(sourceDir, targetDir);
             }
+        }
+
+        public Assembly LoadAssembly(string assemblyFile)
+        {
+            return Assembly.LoadFile(assemblyFile);
         }
 
         private string RemoveNonAscii(string s)
