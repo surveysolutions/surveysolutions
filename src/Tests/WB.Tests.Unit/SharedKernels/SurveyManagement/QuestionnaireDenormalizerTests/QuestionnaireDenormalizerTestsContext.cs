@@ -8,7 +8,6 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.Synchronization;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireDenormalizerTests
 {
@@ -19,7 +18,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireDenormalizer
             IQuestionnaireAssemblyFileAccessor assemblyFileAccessor = null)
         {
             return new QuestionnaireDenormalizer(Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>(),
-                Mock.Of<ISynchronizationDataStorage>(),
                 Mock.Of<IQuestionnaireCacheInitializer>(),
                 Mock.Of<IPlainQuestionnaireRepository>(),
                 assemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),

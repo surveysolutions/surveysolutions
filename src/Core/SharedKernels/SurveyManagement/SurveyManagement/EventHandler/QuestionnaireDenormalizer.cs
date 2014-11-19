@@ -5,7 +5,6 @@ using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
@@ -13,8 +12,6 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.Synchronization;
-using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
@@ -30,7 +27,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public QuestionnaireDenormalizer(
             IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> documentStorage, 
             IQuestionnaireCacheInitializer questionnaireCacheInitializer,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository, IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
+            IPlainQuestionnaireRepository plainQuestionnaireRepository, 
+            IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
             IQueryableReadSideRepositoryWriter<InterviewSummary> interviews)
         {
             this.documentStorage = documentStorage;
