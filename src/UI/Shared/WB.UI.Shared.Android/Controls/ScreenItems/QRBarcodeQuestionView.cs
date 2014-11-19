@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using Android.Content;
 using Android.Graphics;
+using Android.Views;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using MWBarcodeScanner;
@@ -29,7 +30,10 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         {
             base.Initialize();
 
-            this.qrBarcodeView = new TextView(this.Context);
+            var qrBarcodeViewParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent);
+            qrBarcodeViewParams.SetMargins(0, 0, 150, 0);
+
+            this.qrBarcodeView = new TextView(this.Context) {LayoutParameters = qrBarcodeViewParams};
             this.qrBarcodeView.SetTypeface(null, TypefaceStyle.Bold);
 
             this.InitializeViewAndButtonView(this.qrBarcodeView, "Scan", this.ScanQRBarcode);
