@@ -44,6 +44,9 @@
     </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
+    <Reference Include="Ninject">
+      <HintPath>..\..\..\..\..\packages\Portable.Ninject.3.3\lib\monoandroid\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="RestSharp.MonoDroid, Version=104.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\ExternalsMonodroid\RestSharp.MonoDroid.dll</HintPath>
@@ -67,10 +70,6 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Mono\AndroidNinject\AndroidNinject.csproj">
-      <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>
-      <Name>AndroidNinject</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
       <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
       <Name>WB.Core.SharedKernels.SurveySolutions</Name>
