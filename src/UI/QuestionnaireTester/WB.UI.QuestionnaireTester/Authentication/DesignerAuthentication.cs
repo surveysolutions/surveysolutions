@@ -24,7 +24,7 @@ namespace WB.UI.QuestionnaireTester.Authentication
             get { return RemoteUser != null; }
         }
 
-        public async Task<bool> LogOn(string userName, string password, CancellationToken cancellationToken)
+        public async Task<bool> LogOnAsync(string userName, string password, CancellationToken cancellationToken)
         {
             var loggedIn = await CapiTesterApplication.DesignerServices.Login(userName, password, cancellationToken);
             if (loggedIn)
@@ -36,9 +36,9 @@ namespace WB.UI.QuestionnaireTester.Authentication
             return false;
         }
 
-        public async Task<bool> LogOn(string userName, string password, bool wasPasswordHashed = false)
+        public async Task<bool> LogOnAsync(string userName, string password, bool wasPasswordHashed = false)
         {
-            return await LogOn(userName, password, new CancellationToken());
+            return await this.LogOnAsync(userName, password, new CancellationToken());
         }
 
         public void LogOff()

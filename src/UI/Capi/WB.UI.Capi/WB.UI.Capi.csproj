@@ -119,6 +119,9 @@
     <Reference Include="Mono.Android" />
     <Reference Include="Mono.Android.Export" />
     <Reference Include="mscorlib" />
+    <Reference Include="MWBarcodeScanner">
+      <HintPath>..\..\..\..\ExternalsMonodroid\MWBarcodeScanner.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Newtonsoft.Json.6.0.1\lib\portable-net40+sl5+wp80+win8+monotouch+monoandroid\Newtonsoft.Json.dll</HintPath>
@@ -142,17 +145,15 @@
       <Private>True</Private>
       <HintPath>..\..\..\..\packages\MvvmCross.PortableSupport.3.1.1\lib\MonoAndroid\System.Xml.Serialization.dll</HintPath>
     </Reference>
+    <Reference Include="Xamarin.Android.Support.v13">
+      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v13.20.0.0.4\lib\MonoAndroid32\Xamarin.Android.Support.v13.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Xamarin.Android.Support.v4">
-      <HintPath>..\..\..\..\packages\ZXing.Net.Mobile.1.4.2.1\lib\MonoAndroid\Xamarin.Android.Support.v4.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v4.20.0.0.4\lib\MonoAndroid32\Xamarin.Android.Support.v4.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Mobile">
       <HintPath>..\..\..\..\ExternalsMonodroid\Xamarin.Mobile.dll</HintPath>
-    </Reference>
-    <Reference Include="zxing.monoandroid">
-      <HintPath>..\..\..\..\packages\ZXing.Net.Mobile.1.4.2.1\lib\MonoAndroid\zxing.monoandroid.dll</HintPath>
-    </Reference>
-    <Reference Include="ZXing.Net.Mobile">
-      <HintPath>..\..\..\..\packages\ZXing.Net.Mobile.1.4.2.1\lib\MonoAndroid\ZXing.Net.Mobile.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

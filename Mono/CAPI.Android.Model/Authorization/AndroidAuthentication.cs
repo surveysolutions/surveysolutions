@@ -22,7 +22,6 @@ namespace CAPI.Android.Core.Model.Authorization
         }
 
         private UserLight currentUser;
-        #region Implementation of IAuthentication
 
         public UserLight CurrentUser
         {
@@ -45,7 +44,7 @@ namespace CAPI.Android.Core.Model.Authorization
         public bool IsLoggedIn { get { return currentUser != null; }
     }
 
-        public Task<bool> LogOn(string userName, string password, bool wasPasswordHashed = false)
+        public Task<bool> LogOnAsync(string userName, string password, bool wasPasswordHashed = false)
         {
             if (currentUser != null)
                 throw new InvalidOperationException("Please logoff first.");
@@ -75,7 +74,5 @@ namespace CAPI.Android.Core.Model.Authorization
         {
             currentUser = null;
         }
-
-        #endregion
     }
 }

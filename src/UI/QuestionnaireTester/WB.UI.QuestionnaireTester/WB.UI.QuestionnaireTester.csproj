@@ -87,6 +87,9 @@
     </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
+    <Reference Include="MWBarcodeScanner">
+      <HintPath>..\..\..\..\ExternalsMonodroid\MWBarcodeScanner.dll</HintPath>
+    </Reference>
     <Reference Include="RestSharp.MonoDroid">
       <HintPath>..\..\..\..\ExternalsMonodroid\RestSharp.MonoDroid.dll</HintPath>
     </Reference>
@@ -106,14 +109,11 @@
       <Private>True</Private>
       <HintPath>..\..\..\..\packages\MvvmCross.PortableSupport.3.1.1\lib\MonoAndroid\System.Xml.Serialization.dll</HintPath>
     </Reference>
+    <Reference Include="Xamarin.Android.Support.v13">
+      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v13.20.0.0.4\lib\MonoAndroid32\Xamarin.Android.Support.v13.dll</HintPath>
+    </Reference>
     <Reference Include="Xamarin.Android.Support.v4">
-      <HintPath>..\..\..\..\packages\ZXing.Net.Mobile.1.4.2.1\lib\MonoAndroid\Xamarin.Android.Support.v4.dll</HintPath>
-    </Reference>
-    <Reference Include="zxing.monoandroid">
-      <HintPath>..\..\..\..\packages\ZXing.Net.Mobile.1.4.2.1\lib\MonoAndroid\zxing.monoandroid.dll</HintPath>
-    </Reference>
-    <Reference Include="ZXing.Net.Mobile">
-      <HintPath>..\..\..\..\packages\ZXing.Net.Mobile.1.4.2.1\lib\MonoAndroid\ZXing.Net.Mobile.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v4.20.0.0.4\lib\MonoAndroid32\Xamarin.Android.Support.v4.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

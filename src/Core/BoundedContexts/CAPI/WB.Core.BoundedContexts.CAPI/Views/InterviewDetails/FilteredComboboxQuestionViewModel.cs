@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             string variable,
             IEnumerable<string> substitutionReferences)
             : base(publicKey, questionRosterScope, text, QuestionType.SingleOption, enabled, instructions, comments, valid, mandatory,
-                   answerObject, validationMessage, variable, substitutionReferences)
+                   answerObject, validationMessage, variable, substitutionReferences, null)
         {
             this.Answers = answers;
         }

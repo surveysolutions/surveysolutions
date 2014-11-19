@@ -13,9 +13,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         public TextListQuestionViewModel(InterviewItemId publicKey, ValueVector<Guid> questionRosterScope, string text, QuestionType questionType,
             bool enabled, string instructions, string comments, bool valid, bool mandatory,
             string validationMessage, string variable, IEnumerable<string> substitutionReferences,
-            int? maxAnswerCount, int maxAnswerCountLimit)
+            int? maxAnswerCount, int maxAnswerCountLimit,
+            string[] triggeredRosters)
             : base(publicKey, questionRosterScope, text, questionType, enabled, instructions, comments, valid, mandatory, null, 
-                   validationMessage, variable, substitutionReferences)
+                   validationMessage, variable, substitutionReferences, triggeredRosters)
         {
             this.ListAnswers = Enumerable.Empty<TextListAnswerViewModel>();
             this.MaxAnswerCount = maxAnswerCount;
@@ -36,7 +37,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                                                    this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
                                                    this.Mandatory,
                                                    this.ValidationMessage, this.Variable, this.SubstitutionReferences,
-                                                   this.MaxAnswerCount, this.MaxAnswerCountLimit);
+                                                   this.MaxAnswerCount, this.MaxAnswerCountLimit, this.TriggeredRosters);
         }
 
         public override void SetAnswer(object answer)
