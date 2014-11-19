@@ -1,9 +1,6 @@
 ﻿using System;
 using AppDomainToolkit;
 using Machine.Specifications;
-using Moq;
-using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewExpressionStatePrototypeProviderTests
@@ -25,8 +22,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewExpressionStatePro
 
                 var questionnareAssemblyFileAccessorMock = CreateIQuestionnareAssemblyFileAccessorMock(path);
 
-                var fileSystemAccessor = CreateIFileSystemAccessor();
-                var interviewExpressionStatePrototype = CreateInterviewExpressionStatePrototype(questionnareAssemblyFileAccessorMock.Object, fileSystemAccessor.Object);
+                var interviewExpressionStatePrototype = CreateInterviewExpressionStatePrototype(questionnareAssemblyFileAccessorMock.Object);
 
                 return interviewExpressionStatePrototype.GetExpressionState(id, version) != null;
             });
