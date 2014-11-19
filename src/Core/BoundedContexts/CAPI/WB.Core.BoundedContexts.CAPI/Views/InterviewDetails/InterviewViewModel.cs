@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             get { return ServiceLocator.Current.GetInstance<ISubstitutionService>(); }
         }
 
-        public InterviewViewModel(Guid id, IQuestionnaireDocument questionnaire, QuestionnaireRosterStructure rosterStructure, InterviewSynchronizationDto interview)
+        public InterviewViewModel(Guid id, QuestionnaireDocument questionnaire, QuestionnaireRosterStructure rosterStructure, InterviewSynchronizationDto interview)
             : this(id, questionnaire, rosterStructure)
         {
             #region interview data initialization
@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             #endregion
         }
 
-        public InterviewViewModel(Guid id, IQuestionnaireDocument questionnaire, QuestionnaireRosterStructure rosterStructure)
+        public InterviewViewModel(Guid id, QuestionnaireDocument questionnaire, QuestionnaireRosterStructure rosterStructure)
             : this(id)
         {
             #region interview structure initialization
@@ -271,7 +271,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 c => this.Screens[new InterviewItemId(c.PublicKey)]).OfType<QuestionnaireScreenViewModel>().ToList();
         }
 
-        protected void BuildInterviewStructureFromTemplate(IGroup document)
+        protected void BuildInterviewStructureFromTemplate(QuestionnaireDocument document)
         {
             List<IGroup> rout = new List<IGroup>();
             rout.Add(document);
@@ -282,7 +282,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
                 while (rout.Count > 0 && !rout[rout.Count - 1].Children.Contains(current))
                 {
-                    this.AddScreen(rout, rout.Last());
+                    this.AddScreen(rout, rout.Last(), document);
                     rout.RemoveAt(rout.Count - 1);
                 }
                 rout.Add(current);
@@ -292,9 +292,9 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 }
             }
             var last = rout.Last();
-            while (!(last is IQuestionnaireDocument))
+            while (!(last is QuestionnaireDocument))
             {
-                this.AddScreen(rout, last);
+                this.AddScreen(rout, last, document);
                 rout.Remove(last);
                 last = rout.Last();
             }
@@ -758,7 +758,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         }
 
         protected void AddScreen(List<IGroup> rout,
-            IGroup group)
+            IGroup group, QuestionnaireDocument document)
         {
             var key = new InterviewItemId(group.PublicKey);
             var lastVersionOfRout = rout.ToList();
@@ -768,11 +768,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 var routWithouLast = rout.Take(rout.Count - 1).ToList();
                 if (routWithouLast.Any(IsGroupRoster))
                 {
-                    AddPropagatedScreenPrototype(group, this.BuildBreadCrumbs(lastVersionOfRout), (groupId) => this.BuildSiblingsForNonPropagatedGroups(lastVersionOfRout, groupId));
+                    AddPropagatedScreenPrototype(group, this.BuildBreadCrumbs(lastVersionOfRout), (groupId) => this.BuildSiblingsForNonPropagatedGroups(lastVersionOfRout, groupId), document);
                 }
                 else
                 {
-                    var screenItems = this.BuildItems(group, true);
+                    var screenItems = this.BuildItems(group, true, document);
                     var screen = new QuestionnaireScreenViewModel(this.PublicKey, group.Title, this.Title, true,
                         key, screenItems,
                         this.BuildSiblingsForNonPropagatedGroups(lastVersionOfRout, key),
@@ -785,7 +785,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 var gridKey = new InterviewItemId(group.PublicKey);
                 if (!this.Screens.ContainsKey(gridKey))
                 {
-                    this.CreateGrid(group, lastVersionOfRout, this.IsNestedRoster(group));
+                    this.CreateGrid(group, lastVersionOfRout, this.IsNestedRoster(group), document);
                 }
             }
 
@@ -816,7 +816,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             question.PropertyChanged += this.QuestionPropertyChanged;
         }
 
-        protected void CreateGrid(IGroup group, List<IGroup> root, bool isNestedRoster)
+        protected void CreateGrid(IGroup group, List<IGroup> root, bool isNestedRoster, QuestionnaireDocument document)
         {
             InterviewItemId rosterKey = new InterviewItemId(group.PublicKey);
             var breadcrumbs = this.BuildBreadCrumbs(root);
@@ -838,7 +838,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 }
             }
 
-            AddPropagatedScreenPrototype(group, breadcrumbs, this.GetSiblings);
+            AddPropagatedScreenPrototype(group, breadcrumbs, this.GetSiblings, document);
 
             var siblings = root[root.Count - 2].Children.OfType<IGroup>();
 
@@ -854,10 +854,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 this.Screens.Add(rosterKey, roster);
         }
 
-        protected void AddPropagatedScreenPrototype(IGroup group, IList<InterviewItemId> breadcrumbs, Func<InterviewItemId, IEnumerable<InterviewItemId>> getSiblings)
+        protected void AddPropagatedScreenPrototype(IGroup group, IList<InterviewItemId> breadcrumbs, Func<InterviewItemId, IEnumerable<InterviewItemId>> getSiblings, QuestionnaireDocument document)
         {
             var newScreenKey = new InterviewItemId(group.PublicKey);
-            var screenItems = this.BuildItems(group, false);
+            var screenItems = this.BuildItems(group, false, document);
             var screenName = this.IsGroupRoster(group) ? string.Empty : group.Title;
             var screenPrototype = new QuestionnairePropagatedScreenViewModel(this.PublicKey, screenName, group.Title, true,
                 newScreenKey, screenItems,
@@ -867,12 +867,12 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.propagatedScreenPrototypes.Add(newScreenKey.Id, screenPrototype);
         }
 
-        protected IList<IQuestionnaireItemViewModel> BuildItems(IGroup screen, bool updateHash)
+        protected IList<IQuestionnaireItemViewModel> BuildItems(IGroup screen, bool updateHash, QuestionnaireDocument document)
         {
             IList<IQuestionnaireItemViewModel> result = new List<IQuestionnaireItemViewModel>();
             foreach (var child in screen.Children)
             {
-                var item = this.CreateView(child);
+                var item = this.CreateView(child, document);
                 if (item == null)
                     continue;
                 var question = item as QuestionViewModel;
@@ -963,7 +963,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             return comments.Any() ? comments.Last().Comment : string.Empty;
         }
 
-        protected IQuestionnaireItemViewModel CreateView(IComposite item)
+        protected IQuestionnaireItemViewModel CreateView(IComposite item, QuestionnaireDocument document)
         {
             var question = item as IQuestion;
 
@@ -977,7 +977,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 if (this.IfQuestionNeedToBeSkipped(question))
                     return null;
 
-                QuestionViewModel questionView = this.CreateQuestionView(question);
+                QuestionViewModel questionView = this.CreateQuestionView(question, document);
 
                 if (question.Featured)
                 {
@@ -1012,7 +1012,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             return question.QuestionScope != QuestionScope.Interviewer && !question.Featured;
         }
 
-        private QuestionViewModel CreateQuestionView(IQuestion question)
+        private QuestionViewModel CreateQuestionView(IQuestion question, QuestionnaireDocument document)
         {
             var questionViewType = this.CalculateViewType(question.QuestionType);
             if (this.selectableQuestionTypes.Contains(questionViewType))
@@ -1032,37 +1032,15 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 {
                     return this.CreateLinkedQuestion(question, questionViewType);
                 }
-                else
-                {
-                    return this.CreateSelectableQuestion(question, questionViewType);
-                }
-            }
-            else if (this.listQuestionTypes.Contains(question.QuestionType))
-            {
-                return this.CreateTextListQuestion(question, questionViewType);
-            }
-            return this.CreateValueQuestion(question, questionViewType);
-        }
 
-        private ValueQuestionViewModel CreateValueQuestion(IQuestion question, QuestionType newType)
-        {
-            var txtQuestion = question as TextQuestion;
-            var mask = "";
-            if (txtQuestion != null)
-            {
-                mask = txtQuestion.Mask;
+                return this.CreateSelectableQuestion(question, questionViewType, document);
             }
-
-            return new ValueQuestionViewModel(
-                new InterviewItemId(question.PublicKey), GetQuestionRosterScope(question), question.QuestionText,
-                newType,
-                null,
-                true, question.Instructions, mask, null,
-                true, question.Mandatory,
-                question.ValidationMessage,
-                question.StataExportCaption,
-                question.GetVariablesUsedInTitle(),
-                this.GetQuestionsIsIntegerSetting(question), this.GetQuestionsDecimalPlacesSetting(question));
+            
+            if (this.listQuestionTypes.Contains(question.QuestionType))
+            {
+                return this.CreateTextListQuestion(question, questionViewType, document);
+            }
+            return this.CreateValueQuestion(question, questionViewType, document);
         }
 
         private bool? GetQuestionsIsIntegerSetting(IQuestion question)
@@ -1096,7 +1074,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 multyOptionsQuestion != null ? multyOptionsQuestion.MaxAllowedAnswers : null);
         }
 
-        private TextListQuestionViewModel CreateTextListQuestion(IQuestion question, QuestionType newType)
+        private TextListQuestionViewModel CreateTextListQuestion(IQuestion question, QuestionType newType, QuestionnaireDocument document)
         {
             var textListQuestion = question as TextListQuestion;
 
@@ -1114,11 +1092,31 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 textListQuestion.StataExportCaption,
                 textListQuestion.GetVariablesUsedInTitle(),
                 textListQuestion.MaxAnswerCount,
-                TextListQuestion.MaxAnswerCountLimit);
+                TextListQuestion.MaxAnswerCountLimit, triggeredRosters: CreateTriggeredRosterListByQuestion(question, document));
         }
 
+        private ValueQuestionViewModel CreateValueQuestion(IQuestion question, QuestionType newType, QuestionnaireDocument document)
+        {
+            var txtQuestion = question as TextQuestion;
+            var mask = "";
+            if (txtQuestion != null)
+            {
+                mask = txtQuestion.Mask;
+            }
 
-        private SelectebleQuestionViewModel CreateSelectableQuestion(IQuestion question, QuestionType newType)
+            return new ValueQuestionViewModel(
+                new InterviewItemId(question.PublicKey), GetQuestionRosterScope(question), question.QuestionText,
+                newType,
+                null,
+                true, question.Instructions, mask, null,
+                true, question.Mandatory,
+                question.ValidationMessage,
+                question.StataExportCaption,
+                question.GetVariablesUsedInTitle(),
+                this.GetQuestionsIsIntegerSetting(question), this.GetQuestionsDecimalPlacesSetting(question), triggeredRosters: CreateTriggeredRosterListByQuestion(question, document));
+        }
+
+        private SelectebleQuestionViewModel CreateSelectableQuestion(IQuestion question, QuestionType newType, QuestionnaireDocument document)
         {
             var multyOptionsQuestion = question as MultyOptionsQuestion;
 
@@ -1129,7 +1127,14 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 true, question.Instructions, null,
                 true, question.Mandatory, null, question.ValidationMessage, question.StataExportCaption, question.GetVariablesUsedInTitle(),
                 multyOptionsQuestion != null ? multyOptionsQuestion.AreAnswersOrdered : (bool?)null,
-                multyOptionsQuestion != null ? multyOptionsQuestion.MaxAllowedAnswers : null);
+                multyOptionsQuestion != null ? multyOptionsQuestion.MaxAllowedAnswers : null, triggeredRosters: CreateTriggeredRosterListByQuestion(question, document));
+        }
+
+        private string[] CreateTriggeredRosterListByQuestion(IQuestion question, QuestionnaireDocument document)
+        {
+            if (!new[] { QuestionType.Numeric, QuestionType.TextList, QuestionType.MultyOption }.Contains(question.QuestionType))
+                return new string[0];
+            return document.Find<IGroup>(g => g.IsRoster && g.RosterSizeQuestionId == question.PublicKey).Select(r => r.Title).ToArray();
         }
 
         private CascadingComboboxQuestionViewModel CreateCascadingComboboxQuestion(IQuestion question)
