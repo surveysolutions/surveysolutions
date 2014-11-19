@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Threading.Tasks;
 using Android.Content;
 using Android.Text;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
@@ -37,13 +38,30 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             return int.TryParse(newAnswer, NumberStyles.AllowThousands | NumberStyles.AllowLeadingSign, CultureInfo.CurrentCulture, out answer);
         }
 
-        protected override AnswerQuestionCommand CreateAnswerQuestionCommand(int answer)
+        protected override async Task<AnswerQuestionCommand> CreateAnswerQuestionCommand(int answer)
         {
+            bool result = await ConfirmRosterDecrease(Model.TriggeredRosters, ParseCurrentAnswerString() - answer);
+
+            if (!result)
+            {
+                return null;
+            }
+
             return new AnswerNumericIntegerQuestionCommand(this.QuestionnairePublicKey,
                 this.Membership.CurrentUser.Id,
                 this.Model.PublicKey.Id,
                 this.Model.PublicKey.InterviewItemPropagationVector,
                 DateTime.UtcNow, answer);
+        }
+
+        private int ParseCurrentAnswerString()
+        {
+            int result;
+
+            if (IsParseAnswerStringSucceeded(Model.AnswerString, out result))
+                return result;
+
+            return 0;
         }
     }
 }

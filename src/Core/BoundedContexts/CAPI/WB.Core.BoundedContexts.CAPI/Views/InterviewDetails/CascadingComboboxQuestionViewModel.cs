@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 answerObject,
                 validationMessage,
                 variable,
-                substitutionReferences)
+                substitutionReferences, null)
         {
             this.getAnswerOptions = getAnswerOptions;
         }

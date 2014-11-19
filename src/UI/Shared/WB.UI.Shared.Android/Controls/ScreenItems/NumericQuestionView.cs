@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Threading.Tasks;
 using Android.Content;
 using Android.Text;
 using Android.Views;
@@ -106,7 +107,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
             return newCursorPosition;
         }
 
-        void etAnswer_FocusChange(object sender, View.FocusChangeEventArgs e)
+        async void etAnswer_FocusChange(object sender, View.FocusChangeEventArgs e)
         {
             if (e.HasFocus)
             {
@@ -138,12 +139,18 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
                 }
                 return;
             }
-            this.SaveAnswer(newAnswer, this.CreateAnswerQuestionCommand(answer));
+            var command = await this.CreateAnswerQuestionCommand(answer);
+            if (command == null)
+            {
+                this.PutAnswerStoredInModelToUI();
+                return;
+            }
+            this.SaveAnswer(newAnswer, command);
         }
 
         protected abstract bool IsParseAnswerStringSucceeded(string newAnswer, out T answer);
 
-        protected abstract AnswerQuestionCommand CreateAnswerQuestionCommand(T answer);
+        protected abstract  Task<AnswerQuestionCommand> CreateAnswerQuestionCommand(T answer);
 
         protected override string GetAnswerStoredInModelAsString()
         {

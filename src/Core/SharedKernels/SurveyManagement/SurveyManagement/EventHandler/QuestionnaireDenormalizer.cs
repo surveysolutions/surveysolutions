@@ -1,8 +1,10 @@
 using System;
+using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -10,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
 
@@ -19,6 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<QuestionnaireDeleted>
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> documentStorage;
+        private readonly IQueryableReadSideRepositoryWriter<InterviewSummary> interviews;
         private readonly IQuestionnaireCacheInitializer questionnaireCacheInitializer;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
@@ -26,12 +30,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public QuestionnaireDenormalizer(
             IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> documentStorage, 
             IQuestionnaireCacheInitializer questionnaireCacheInitializer,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository, IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor)
+            IPlainQuestionnaireRepository plainQuestionnaireRepository, IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
+            IQueryableReadSideRepositoryWriter<InterviewSummary> interviews)
         {
             this.documentStorage = documentStorage;
             this.questionnaireCacheInitializer = questionnaireCacheInitializer;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
+            this.interviews = interviews;
         }
 
         public override object[] Writers
@@ -52,6 +58,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             Guid id = evnt.EventSourceId;
             long version = evnt.Payload.Version;
+
             QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
 
             this.StoreQuestionnaire(id, version, questionnaireDocument, evnt.Payload.AllowCensusMode, evnt.EventTimeStamp);
@@ -60,7 +67,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
         {
             this.documentStorage.Remove(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
-            this.questionnareAssemblyFileAccessor.RemoveAssembly(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
+
+            var anyInterviewExists =
+                        interviews.Query(_ => _.Any(i =>!i.IsDeleted && i.QuestionnaireId == evnt.EventSourceId && i.QuestionnaireVersion == evnt.Payload.QuestionnaireVersion));
+            if (!anyInterviewExists)
+            {
+                this.questionnareAssemblyFileAccessor.RemoveAssembly(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
+            }
         }
 
         private void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument, bool allowCensusMode, DateTime timestamp)

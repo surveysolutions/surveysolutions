@@ -25,9 +25,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             string variable,
             IEnumerable<string> substitutionReferences,
             bool? areAnswersOrdered,
-            int? maxAllowedAnswers)
+            int? maxAllowedAnswers,
+            string[] triggeredRosters)
             : base(publicKey, questionRosterScope, text, questionType, enabled, instructions, comments, valid, mandatory,
-                   answerObject, validationMessage, variable, substitutionReferences)
+                   answerObject, validationMessage, variable, substitutionReferences, triggeredRosters)
         {
             this.Answers = answers;
             this.MaxAllowedAnswers = maxAllowedAnswers;
@@ -59,7 +60,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
                 this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
                 this.Mandatory, this.AnswerObject, this.ValidationMessage, this.Variable, this.SubstitutionReferences,
-                this.AreAnswersOrdered, this.MaxAllowedAnswers);
+                this.AreAnswersOrdered, this.MaxAllowedAnswers, this.TriggeredRosters);
         }
 
         public override void SetAnswer(object answer)
