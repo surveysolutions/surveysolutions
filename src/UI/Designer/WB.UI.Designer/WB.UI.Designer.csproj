@@ -1221,7 +1221,6 @@
     <Content Include="Views\Pdf\_RenderTitlePage.cshtml" />
     <Content Include="Views\ControlPanel\ReadSide.cshtml" />
     <Content Include="Views\ControlPanel\NConfig.cshtml" />
-    <Content Include="Views\App\Index.cshtml" />
     <Content Include="UpdatedDesigner\content\css-reset.css.less" />
     <Content Include="UpdatedDesigner\content\designer-editor\wb-context-menu.css.less" />
     <Content Include="UpdatedDesigner\content\designer-editor\wb-custom-scrollbar.css.less" />
