@@ -5,15 +5,6 @@ using System.Reflection;
 
 namespace Ncqrs
 {
-    internal enum BindingFlags
-    {
-        
-    }
-
-    internal class NonSerializedAttribute : Attribute
-	{
-	}
-
     internal static class Utils
     {
         public static bool IsAssignableFrom(this Type someType, Type otherType)
@@ -40,5 +31,9 @@ namespace Ncqrs
                 t = ti.BaseType;
             }
         }
+    }
+
+    internal class NonSerializedAttribute : Attribute
+    {
     }
 }

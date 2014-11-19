@@ -90,6 +90,9 @@
     <Reference Include="MWBarcodeScanner">
       <HintPath>..\..\..\..\ExternalsMonodroid\MWBarcodeScanner.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\..\..\..\packages\Portable.Ninject.3.3\lib\monoandroid\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="RestSharp.MonoDroid">
       <HintPath>..\..\..\..\ExternalsMonodroid\RestSharp.MonoDroid.dll</HintPath>
     </Reference>
@@ -194,14 +197,6 @@
     <ProjectReference Include="..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
       <Name>Ncqrs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Mono\AndroidNinject.Extensions.Conventions\AndroidNinject.Extensions.Conventions.csproj">
-      <Project>{E21BC003-84B5-41BE-928C-75874418ACD2}</Project>
-      <Name>AndroidNinject.Extensions.Conventions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Mono\AndroidNinject\AndroidNinject.csproj">
-      <Project>{DC128FDF-0F94-4B63-B79E-DDD02E5E1F0F}</Project>
-      <Name>AndroidNinject</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Mono\Mono.Android.Crasher\Mono.Android.Crasher.csproj">
       <Project>{4ECE2C97-13A0-46D6-95D1-7BB50A48267B}</Project>

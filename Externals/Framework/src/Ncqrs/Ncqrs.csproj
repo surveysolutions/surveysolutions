@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Eventing\Sourcing\Mapping\ConventionBasedEventHandlerMappingStrategy.cs" />
     <Compile Include="Eventing\Sourcing\Mapping\IEventHandlerMappingStrategy.cs" />
+    <Compile Include="Utils.cs" />
     <Compile Include="_WB\AggregateRootRepository.cs" />
     <Compile Include="Commanding\AllCommandsInAppDomainEnumerator.cs" />
     <Compile Include="Commanding\CommandExecution\DefaultTransactionService.cs" />
@@ -156,7 +157,6 @@
     <Compile Include="Eventing\Storage\InMemoryEventStore.cs" />
     <Compile Include="NCQRSInit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SilverlightHacks.cs" />
     <Compile Include="_WB\EventPublisher.cs" />
     <Compile Include="_WB\SnapshotManager.cs" />
   </ItemGroup>

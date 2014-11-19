@@ -21,9 +21,6 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Modules;
-using Ninject.Extensions.Conventions;
-using Ninject.Extensions.Conventions.BindingGenerators;
-using Ninject.Syntax;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.EventHandler;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
@@ -292,45 +289,6 @@ namespace WB.UI.QuestionnaireTester
         }
     }
 
-    public class RegisterFirstInstanceOfInterface : IBindingGenerator
-    {
-        public RegisterFirstInstanceOfInterface(IEnumerable<Assembly> assemblyes)
-        {
-            this._assemblyes = assemblyes;
-        }
-
-        private readonly IEnumerable<Assembly> _assemblyes;
-
-        public IEnumerable<IBindingWhenInNamedWithOrOnSyntax<object>> CreateBindings(
-            Type type, IBindingRoot bindingRoot)
-        {
-            IEnumerable<IBindingWhenInNamedWithOrOnSyntax<object>> y =
-                Enumerable.Empty<IBindingWhenInNamedWithOrOnSyntax<object>>();
-
-            if (!type.IsInterface)
-            {
-                return y;
-            }
-
-
-            if (type.IsGenericType)
-            {
-                return y;
-            }
-
-            Type matchedType = this._assemblyes
-                .SelectMany(a => a.GetTypes().Where(t => t.IsVisible))
-                .FirstOrDefault(
-                    x => !x.IsAbstract && x.GetInterface(type.FullName) != null);
-            if (matchedType == null)
-            {
-                return y;
-            }
-
-            return new[] { bindingRoot.Bind(new[] { type }).To(matchedType) };
-        }
-    }
-
     public abstract class CoreRegistry : NinjectModule
     {
         protected virtual IEnumerable<Assembly> GetAssembliesForRegistration()
@@ -366,11 +324,6 @@ namespace WB.UI.QuestionnaireTester
         {
             ICommandListSupplier commands = new CommandListSupplier(RegisteredCommandList());
             this.Bind<ICommandListSupplier>().ToConstant(commands);
-
-            this.Kernel.Bind(
-                x =>
-                x.From(this.GetAssembliesForRegistration()).SelectAllInterfaces().Excluding<ICommandListSupplier>().BindWith(
-                    new RegisterFirstInstanceOfInterface(this.GetAssembliesForRegistration())));
 
             foreach (KeyValuePair<Type, Type> customBindType in this.GetTypesForRegistration())
             {
