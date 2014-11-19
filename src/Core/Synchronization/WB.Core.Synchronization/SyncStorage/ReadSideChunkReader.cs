@@ -39,7 +39,7 @@ namespace WB.Core.Synchronization.SyncStorage
         {
             return
                 queryableStorage.QueryAll(
-                    d => d.Timestamp > timestamp && (d.UserId.HasValue && d.UserId.Value.In(users) || !d.UserId.HasValue))
+                    d => d.Timestamp > timestamp && (d.UserId.HasValue && d.UserId.Value.In(users) || !d.UserId.HasValue || d.UserId == null))
                                 .OrderBy(o => o.Timestamp)
                                 .Select(s => new SynchronizationChunkMeta(s.PublicKey, s.Timestamp.Ticks)).ToList();
         }

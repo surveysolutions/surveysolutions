@@ -130,7 +130,7 @@ namespace WB.UI.Capi
                     {
                         this.DestroyDialog();
                         this.tvSyncResult.Text = "Sync is finished.";
-                        bool result = CapiApplication.Membership.LogOn(login, passwordHash, wasPasswordHashed: true).Result;
+                        bool result = CapiApplication.Membership.LogOnAsync(login, passwordHash, wasPasswordHashed: true).Result;
                         if (result)
                         {
                             this.ClearAllBackStack<DashboardActivity>();
@@ -205,10 +205,30 @@ namespace WB.UI.Capi
 
         void btnBackup_Click(object sender, EventArgs e)
         {
-            var path = this.backupManager.Backup();
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-            alert.SetTitle("Success");
-            alert.SetMessage(string.Format("Backup was saved to {0}", path));
+            string path = string.Empty;
+            try
+            {
+                path = this.backupManager.Backup();
+            }
+            catch (Exception exception)
+            {
+                Logger.Fatal("Error occured during Backup. ", exception);
+            }
+            
+            var alert = new AlertDialog.Builder(this);
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                alert.SetTitle("Error");
+                alert.SetMessage(string.Format("Something went wrong and backup failed to be created."));
+            }
+            else
+            {
+                alert.SetTitle("Success");
+                alert.SetMessage(string.Format("Backup was saved to {0}", path));    
+            }
+            
+            
+            
             alert.Show();
         }
 
@@ -216,7 +236,7 @@ namespace WB.UI.Capi
         {
             this.ThrowExeptionIfDialogIsOpened();
 
-            this.PreperaUI();
+            this.PrepareUI();
 
             tabletInformationSender =
                 this.tabletInformationSenderFactory.CreateTabletInformationSender(SettingsManager.GetSyncAddressPoint(),
@@ -291,7 +311,7 @@ namespace WB.UI.Capi
 
             this.ThrowExeptionIfDialogIsOpened();
 
-            this.PreperaUI();
+            this.PrepareUI();
             try
             {
                 var changeLogManipulator = CapiApplication.Kernel.Get<IChangeLogManipulator>();
@@ -388,7 +408,7 @@ namespace WB.UI.Capi
             return result;
         }
 
-        private void PreperaUI()
+        private void PrepareUI()
         {
             this.tvSyncResult.Text = string.Empty;
         }

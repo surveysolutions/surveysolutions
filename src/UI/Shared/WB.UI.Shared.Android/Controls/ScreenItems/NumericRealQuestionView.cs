@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Android.Content;
 using Android.Text;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
@@ -68,13 +69,13 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             return decimal.TryParse(replacedAnswer, NumberStyles.Number, CultureInfo.CurrentCulture, out answer);
         }
 
-        protected override AnswerQuestionCommand CreateAnswerQuestionCommand(decimal answer)
+        protected override Task<AnswerQuestionCommand> CreateAnswerQuestionCommand(decimal answer)
         {
-            return new AnswerNumericRealQuestionCommand(this.QuestionnairePublicKey,
+            return new Task<AnswerQuestionCommand>(() => new AnswerNumericRealQuestionCommand(this.QuestionnairePublicKey,
                 this.Membership.CurrentUser.Id,
                 this.Model.PublicKey.Id,
                 this.Model.PublicKey.InterviewItemPropagationVector,
-                DateTime.UtcNow, answer);
+                DateTime.UtcNow, answer));
         }
     }
 }

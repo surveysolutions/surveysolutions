@@ -160,8 +160,8 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             }
             catch (JsonException exception)
             {
-                throw new SerializationException(string.Format("Error in deserialization of event: {0}, Data: {1}, Meta: {2}",
-                    resolvedEvent.Event.EventId, value, meta), exception);
+                throw new SerializationException(string.Format("Error in deserialization of event: {0} of type: {1}. EventSourceId: {2}",
+                    resolvedEvent.Event.EventId, resolvedEvent.Event.EventType, resolvedEvent.Event.EventStreamId), exception);
             }
         }
 
