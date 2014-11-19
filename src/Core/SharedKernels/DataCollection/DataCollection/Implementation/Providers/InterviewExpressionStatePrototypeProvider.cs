@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 
@@ -16,15 +17,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
         }
 
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
-        public InterviewExpressionStatePrototypeProvider(IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor)
+        public InterviewExpressionStatePrototypeProvider(IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor, IFileSystemAccessor fileSystemAccessor)
         {
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         public IInterviewExpressionState GetExpressionState(Guid questionnaireId, long questionnaireVersion)
         {
             string assemblyFile = this.questionnareAssemblyFileAccessor.GetFullPathToAssembly(questionnaireId, questionnaireVersion);
+
+            if (!fileSystemAccessor.IsFileExists(assemblyFile))
+            {
+                Logger.Fatal(String.Format("Assembly was not found. Questionnaire={0}, version={1}, search={2}", 
+                    questionnaireId, questionnaireVersion, assemblyFile));
+                throw new InterviewException("Interview loading error. Code EC0002");
+            }
 
             try
             {
