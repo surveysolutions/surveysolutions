@@ -24,13 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     internal class Interview : AggregateRootMappedByConvention, ISnapshotable<InterviewState>
     {
-        #region Constants
-
         private static readonly decimal[] EmptyRosterVector = { };
-
-        #endregion
-
-        #region State
 
         private Guid questionnaireId;
         private long questionnaireVersion;
@@ -630,8 +624,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.wasCompleted = snapshot.WasCompleted;
             this.wasHardDeleted = snapshot.WasHardDeleted;
         }
-
-        #endregion
 
         #region Dependencies
 

@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using System.Collections.Generic;
@@ -17,6 +18,8 @@ using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom.Implementation;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
 using WB.UI.Designer.Api;
 
@@ -24,6 +27,27 @@ namespace WB.Tests.Unit
 {
     internal static class Create
     {
+        public static IPublishedEvent<T> ToPublishedEvent<T>(this T @event, Guid eventSourceId)
+         where T : class
+        {
+            return Mock.Of<IPublishedEvent<T>>(publishedEvent
+                => publishedEvent.Payload == @event
+                && publishedEvent.EventSourceId == eventSourceId);
+        }
+
+        public static class Event
+        {
+            public static IPublishedEvent<QuestionnaireDeleted> QuestionnaireDeleted(Guid? questionnaireId = null, long? version = null)
+            {
+                var questionnaireDeleted = new QuestionnaireDeleted
+                {
+
+                    QuestionnaireVersion = version ?? 1
+                }.ToPublishedEvent(questionnaireId ?? Guid.NewGuid());
+                return questionnaireDeleted;
+            }
+        }
+
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
         {
             return new QuestionnaireDocument
@@ -213,6 +237,15 @@ namespace WB.Tests.Unit
             return new AtomFeedReader(
                 messageHandler ?? Mock.Of<Func<HttpMessageHandler>>(),
                 settings ?? Mock.Of<IHeadquartersSettings>());
+        }
+
+        public static InterviewSummary InterviewSummary(Guid? questionnaireId = null, long? questionnaireVersion = null)
+        {
+            return new InterviewSummary()
+            {
+                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
+                QuestionnaireVersion = questionnaireVersion ?? 1
+            };
         }
     }
 }
