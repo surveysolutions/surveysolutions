@@ -345,33 +345,20 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             if (rosterTitles.Length == 0 || countOfRemovedRows < 1)
                 return true;
 
+            var result = false;
+
             var alert = new AlertDialog.Builder(this.Context);
-            
+           
             alert.SetTitle(Resources.GetText(Resource.String.Warning));
             alert.SetMessage(string.Format(Resources.GetText(Resource.String.AreYouSureYouWantToRemoveRowFromRosterFormat), countOfRemovedRows));
+            alert.SetPositiveButton(Resources.GetText(Resource.String.Yes), (e, s) =>{result = true;});
+            alert.SetNegativeButton(Resources.GetText(Resource.String.No), (EventHandler<DialogClickEventArgs>)null);
 
-            var result = false;
-            var isDialogOpen = true;
+            var dialog = alert.Create();
 
-            alert.SetPositiveButton(Resources.GetText(Resource.String.Yes), (e, s) =>
-            {
-                result = true;
-                isDialogOpen = false;
-            });
+            dialog.Show();
 
-            alert.SetNegativeButton(Resources.GetText(Resource.String.No), (e, s) => { isDialogOpen = false; });
-            
-            alert.Show();
-
-            await Task.Factory.StartNew(() =>
-            {
-                while (isDialogOpen)
-                {
-                    Thread.Sleep(200);
-                }
-                alert.Dispose();
-                alert = null;
-            });
+            await dialog.Confirmation();
 
             return result;
         }

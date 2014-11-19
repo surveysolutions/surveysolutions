@@ -128,6 +128,7 @@
     <Compile Include="Bindings\ValidationMessageBinding.cs" />
     <Compile Include="Bindings\VisibilityBinding.cs" />
     <Compile Include="Bootstrap\PictureChooserPluginBootstrap.cs" />
+    <Compile Include="Controls\AlertDialogAsyncExtension.cs" />
     <Compile Include="Controls\Breadcrumbs.cs" />
     <Compile Include="Controls\IScreenChanging.cs" />
     <Compile Include="Controls\MaskedEditTextControl\MaskedWatcher.cs" />
