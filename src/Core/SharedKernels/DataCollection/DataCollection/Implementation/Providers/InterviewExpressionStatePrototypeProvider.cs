@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
             {
                 Logger.Fatal(String.Format("Assembly was not found. Questionnaire={0}, version={1}, search={2}", 
                     questionnaireId, questionnaireVersion, assemblyFile));
-                throw new InterviewException("Interview loading error. Code EC0002");
+                throw new InterviewException("Interview loading error. Code EC0003");
             }
 
             try
