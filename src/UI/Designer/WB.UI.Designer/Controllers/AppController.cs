@@ -16,11 +16,6 @@ namespace WB.UI.Designer.Controllers
             this.userHelper = userHelper;
         }
 
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         public ActionResult Open(Guid id)
         {
             var httpCookie = new HttpCookie("questionnaireId", id.FormatGuid());
