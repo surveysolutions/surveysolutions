@@ -1,5 +1,6 @@
 ﻿using System;
 using Machine.Specifications;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -10,12 +11,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewExpressionStatePro
     [Subject(typeof(InterviewExpressionStatePrototypeProvider))]
     internal class InterviewExpressionStatePrototypeProviderTestContext
     {
-        protected static InterviewExpressionStatePrototypeProvider CreateInterviewExpressionStatePrototype(IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor, 
-            IFileSystemAccessor fileSystemAccessor)
+        protected static InterviewExpressionStatePrototypeProvider CreateInterviewExpressionStatePrototype(IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor)
         {
-            return new InterviewExpressionStatePrototypeProvider(questionnareAssemblyFileAccessor, fileSystemAccessor);
+            return new InterviewExpressionStatePrototypeProvider(questionnareAssemblyFileAccessor, ServiceLocator.Current.GetInstance<IFileSystemAccessor>());
         }
-
 
         protected static Mock<IQuestionnaireAssemblyFileAccessor> CreateIQuestionnareAssemblyFileAccessorMock(string path)
         {
@@ -25,16 +24,6 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewExpressionStatePro
 
             return result;
         }
-
-        protected static Mock<IFileSystemAccessor> CreateIFileSystemAccessor()
-        {
-            var result = new Mock<IFileSystemAccessor>();
-            result.Setup(x => x.IsFileExists(Moq.It.IsAny<string>()))
-                .Returns(true);
-
-            return result;
-        }
-
 
         protected static void RunInAnotherAppDomain(CrossAppDomainDelegate actionToRun)
         {
