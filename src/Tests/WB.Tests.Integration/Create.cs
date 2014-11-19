@@ -5,8 +5,6 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Moq;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -140,20 +138,6 @@ namespace WB.Tests.Integration
             {
                 return new RosterInstancesAdded(rosterInstances);
             }
-        }
-
-        private static IPublishedEvent<T> ToPublishedEvent<T>(T @event)
-            where T : class
-        {
-            return ToPublishedEvent<T>(@event, Guid.NewGuid());
-        }
-
-        private static IPublishedEvent<T> ToPublishedEvent<T>(T @event, Guid eventSourceId)
-            where T : class
-        {
-            return Mock.Of<IPublishedEvent<T>>(publishedEvent
-                => publishedEvent.Payload == @event &&
-                   publishedEvent.EventSourceId == eventSourceId);
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
