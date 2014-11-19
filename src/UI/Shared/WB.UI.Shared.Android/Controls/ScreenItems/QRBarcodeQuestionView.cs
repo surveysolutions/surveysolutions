@@ -1,14 +1,14 @@
 using System;
+using System.Text;
 using Android.Content;
 using Android.Graphics;
-using Android.Views;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
+using MWBarcodeScanner;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using ZXing.Mobile;
 
 namespace WB.UI.Shared.Android.Controls.ScreenItems
 {
@@ -48,22 +48,17 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private async void ScanQRBarcode(object sender, EventArgs e)
         {
-            var scanner = new MobileBarcodeScanner(this.Context)
-            {
-                TopText = "Hold the camera up to the barcode\nAbout 6 inches away",
-                BottomText = "Wait for the barcode to automatically scan!"
-            };
-
+            var scanner = new Scanner(this.Context);
             var result = await scanner.Scan();
 
             if (result == null) return;
 
-            this.qrBarcodeView.Text = result.Text;
+            this.qrBarcodeView.Text = result.code;
 
-            this.SaveAnswer(result.Text,
+            this.SaveAnswer(result.code,
                 new AnswerQRBarcodeQuestionCommand(interviewId: this.QuestionnairePublicKey, userId: this.Membership.CurrentUser.Id,
                     questionId: this.Model.PublicKey.Id, rosterVector: this.Model.PublicKey.InterviewItemPropagationVector,
-                    answerTime: DateTime.UtcNow, answer: result.Text));
+                    answerTime: DateTime.UtcNow, answer: result.code));
         }
     }
 };
