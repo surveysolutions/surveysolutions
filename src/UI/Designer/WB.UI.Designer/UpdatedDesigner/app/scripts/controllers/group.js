@@ -41,7 +41,7 @@
 
             $scope.saveGroup = function () {
                 if ($scope.groupForm.$valid) {
-                    commandService.updateGroup($stateParams.questionnaireId, $scope.activeGroup).success(function (result) {
+                    commandService.updateGroup($stateParams.questionnaireId, $scope.activeGroup).success(function () {
                         $scope.initialGroup = angular.copy($scope.activeGroup);
                         $rootScope.$emit('groupUpdated', {
                             itemId: $scope.activeGroup.itemId,

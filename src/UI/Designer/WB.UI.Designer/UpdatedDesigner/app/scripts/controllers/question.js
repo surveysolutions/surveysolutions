@@ -37,7 +37,7 @@
                 $scope.activeQuestion.isFilteredCombobox = question.isFilteredCombobox;
 
                 var options = question.options || [];
-                _.each(options, function (option) {
+                _.each(options, function(option) {
                     option.id = utilityService.guid();
                 });
 
@@ -58,7 +58,7 @@
 
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = false;
                 $scope.questionForm.$setPristine();
-            }
+            };
 
             var dataBind = function (result) {
                 dictionnaires.allQuestionScopeOptions = result.allQuestionScopeOptions;
