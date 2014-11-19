@@ -21,7 +21,7 @@ namespace WB.UI.Capi.Syncronization.Pull
             this.webExecutor = webExecutor;
         }
 
-        public async Task<SyncItem> RequestChunck(string login, string password, Guid id, long timestamp, string deviceId,
+        public async Task<SyncItem> RequestChunckAsync(string login, string password, Guid id, long timestamp, string deviceId,
             CancellationToken ct)
         {
             var package = await webExecutor.ExecuteRestRequestAsync<SyncPackage>(getChunckPath, ct, null,
@@ -36,7 +36,7 @@ namespace WB.UI.Capi.Syncronization.Pull
             return package.ItemsContainer[0];
         }
 
-        public async Task<Dictionary<SynchronizationChunkMeta, bool>> GetChuncks(string login, string password, string deviceId,
+        public async Task<Dictionary<SynchronizationChunkMeta, bool>> GetChuncksAsync(string login, string password, string deviceId,
             string sequence, CancellationToken ct)
         {
             var syncItemsMetaContainer = await webExecutor.ExecuteRestRequestAsync<SyncItemsMetaContainer>(

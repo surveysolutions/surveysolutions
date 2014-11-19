@@ -49,9 +49,9 @@ namespace WB.UI.Capi
             this.btnLogin.Click += this.btnLogin_Click;
         }
 
-        private void btnLogin_Click(object sender, EventArgs e)
+        private async void btnLogin_Click(object sender, EventArgs e)
         {
-            bool result = CapiApplication.Membership.LogOn(this.teLogin.Text, this.tePassword.Text).Result;
+            bool result = await CapiApplication.Membership.LogOnAsync(this.teLogin.Text, this.tePassword.Text);
             if (result)
             {
                 this.ClearAllBackStack<DashboardActivity>();

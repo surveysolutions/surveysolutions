@@ -122,7 +122,7 @@ namespace WB.UI.QuestionnaireTester
 
         private async void LoginAsync()
         {
-            bool result = await CapiTesterApplication.DesignerMembership.LogOn(this.teLogin.Text, this.tePassword.Text, cancellationToken);
+            bool result = await CapiTesterApplication.DesignerMembership.LogOnAsync(this.teLogin.Text, this.tePassword.Text, cancellationToken);
             this.RunOnUiThread(() =>
             {
                 progressDialog.Hide();

@@ -129,7 +129,7 @@ namespace WB.UI.Capi
                     {
                         this.DestroyDialog();
                         this.tvSyncResult.Text = "Sync is finished.";
-                        bool result = CapiApplication.Membership.LogOn(login, passwordHash, wasPasswordHashed: true).Result;
+                        bool result = CapiApplication.Membership.LogOnAsync(login, passwordHash, wasPasswordHashed: true).Result;
                         if (result)
                         {
                             this.ClearAllBackStack<DashboardActivity>();
@@ -235,7 +235,7 @@ namespace WB.UI.Capi
         {
             this.ThrowExeptionIfDialogIsOpened();
 
-            this.PreperaUI();
+            this.PrepareUI();
 
             tabletInformationSender =
                 this.tabletInformationSenderFactory.CreateTabletInformationSender(SettingsManager.GetSyncAddressPoint(),
@@ -310,7 +310,7 @@ namespace WB.UI.Capi
 
             this.ThrowExeptionIfDialogIsOpened();
 
-            this.PreperaUI();
+            this.PrepareUI();
             try
             {
                 var changeLogManipulator = CapiApplication.Kernel.Get<IChangeLogManipulator>();
@@ -407,7 +407,7 @@ namespace WB.UI.Capi
             return result;
         }
 
-        private void PreperaUI()
+        private void PrepareUI()
         {
             this.tvSyncResult.Text = string.Empty;
         }
