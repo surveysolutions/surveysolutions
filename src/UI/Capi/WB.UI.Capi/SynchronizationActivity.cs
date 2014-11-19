@@ -204,10 +204,30 @@ namespace WB.UI.Capi
 
         void btnBackup_Click(object sender, EventArgs e)
         {
-            var path = this.backupManager.Backup();
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-            alert.SetTitle("Success");
-            alert.SetMessage(string.Format("Backup was saved to {0}", path));
+            string path = string.Empty;
+            try
+            {
+                path = this.backupManager.Backup();
+            }
+            catch (Exception exception)
+            {
+                Logger.Fatal("Error occured during Backup. ", exception);
+            }
+            
+            var alert = new AlertDialog.Builder(this);
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                alert.SetTitle("Error");
+                alert.SetMessage(string.Format("Something went wrong and backup failed to be created."));
+            }
+            else
+            {
+                alert.SetTitle("Success");
+                alert.SetMessage(string.Format("Backup was saved to {0}", path));    
+            }
+            
+            
+            
             alert.Show();
         }
 
