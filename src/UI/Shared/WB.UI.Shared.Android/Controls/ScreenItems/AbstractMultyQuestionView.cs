@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Android.Content;
 using Android.Graphics;
 using Android.Widget;
@@ -87,7 +88,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected abstract T FindAnswerInModelByCheckBoxTag(string tag);
 
-        protected abstract AnswerQuestionCommand CreateSaveAnswerCommand(T[] selectedAnswers);
+        protected abstract Task<AnswerQuestionCommand> CreateSaveAnswerCommand(T[] selectedAnswers);
 
         protected abstract bool IsAnswerSelected(T answer);
 
@@ -209,7 +210,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             return this.AreAnswersOrdered == true || this.MaxAllowedAnswers.HasValue;
         }
 
-        private void CheckBoxCheckedChange(object sender, CheckBox.CheckedChangeEventArgs e)
+        private async void CheckBoxCheckedChange(object sender, CheckBox.CheckedChangeEventArgs e)
         {
             var checkedBox = sender as CheckBox;
             if (checkedBox == null)
@@ -229,7 +230,14 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
             var selectedAnswers = this.GetSelectedAnswers();
 
-            this.SaveAnswer(this.FormatSelectedAnswersAsString(selectedAnswers), this.CreateSaveAnswerCommand(selectedAnswers.ToArray()));
+            var command = await this.CreateSaveAnswerCommand(selectedAnswers.ToArray());
+            if (command == null)
+            {
+                this.PutAnswerStoredInModelToUI();
+                return;
+            }
+
+            this.SaveAnswer(this.FormatSelectedAnswersAsString(selectedAnswers), command);
         }
 
         private List<T> GetSelectedAnswers()
