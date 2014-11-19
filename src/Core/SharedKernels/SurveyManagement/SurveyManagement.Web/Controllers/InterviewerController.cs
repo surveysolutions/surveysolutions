@@ -82,7 +82,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 var user = this.GetUserById(model.Id);
                 if (user != null)
                 {
-                    this.UpdateSupervisorOrInterviewer(user: user, editModel: model);
+                    this.UpdateAccount(user: user, editModel: model);
                     this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
                     return this.Back(user.Supervisor.Id);
                 }
