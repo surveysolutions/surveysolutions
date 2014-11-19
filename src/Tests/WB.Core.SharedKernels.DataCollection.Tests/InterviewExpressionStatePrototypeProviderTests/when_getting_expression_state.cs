@@ -25,7 +25,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewExpressionStatePro
 
                 var questionnareAssemblyFileAccessorMock = CreateIQuestionnareAssemblyFileAccessorMock(path);
 
-                var interviewExpressionStatePrototype = CreateInterviewExpressionStatePrototype(questionnareAssemblyFileAccessorMock.Object);
+                var fileSystemAccessor = CreateIFileSystemAccessor();
+                var interviewExpressionStatePrototype = CreateInterviewExpressionStatePrototype(questionnareAssemblyFileAccessorMock.Object, fileSystemAccessor.Object);
 
                 return interviewExpressionStatePrototype.GetExpressionState(id, version) != null;
             });

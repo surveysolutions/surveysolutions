@@ -1,6 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 using Moq;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 
@@ -9,9 +10,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewExpressionStatePro
     [Subject(typeof(InterviewExpressionStatePrototypeProvider))]
     internal class InterviewExpressionStatePrototypeProviderTestContext
     {
-        protected static InterviewExpressionStatePrototypeProvider CreateInterviewExpressionStatePrototype(IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor)
+        protected static InterviewExpressionStatePrototypeProvider CreateInterviewExpressionStatePrototype(IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor, 
+            IFileSystemAccessor fileSystemAccessor)
         {
-            return new InterviewExpressionStatePrototypeProvider(questionnareAssemblyFileAccessor);
+            return new InterviewExpressionStatePrototypeProvider(questionnareAssemblyFileAccessor, fileSystemAccessor);
         }
 
 
@@ -20,6 +22,15 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewExpressionStatePro
             var result = new Mock<IQuestionnaireAssemblyFileAccessor>();
             result.Setup(x => x.GetFullPathToAssembly(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
                 .Returns(path);
+
+            return result;
+        }
+
+        protected static Mock<IFileSystemAccessor> CreateIFileSystemAccessor()
+        {
+            var result = new Mock<IFileSystemAccessor>();
+            result.Setup(x => x.IsFileExists(Moq.It.IsAny<string>()))
+                .Returns(true);
 
             return result;
         }
