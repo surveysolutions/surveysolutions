@@ -10,13 +10,10 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <h4 class="panel-title">
-            <a data-toggle="collapse" data-target="#collapseAll"
-               href="#collapseAll" class='@(IsPanelCollapsed("all")?"collapsed":"")'>
-                Rebuild all
-            </a>
+            Rebuild all
         </h4>
     </div>
-    <div id="collapseAll" class='panel-collapse @(IsPanelCollapsed("all")?"collapse":"")'>
+    <div id="collapseAll" class="panel">
         <div class="panel-body">
             @using (Html.BeginForm("RebuildReadSide", "ControlPanel", FormMethod.Get))
             {
