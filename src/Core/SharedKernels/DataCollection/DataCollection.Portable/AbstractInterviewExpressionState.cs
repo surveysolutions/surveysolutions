@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public virtual void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
         {
-            if (!this.HasParentMapSuchRostre(rosterId))
+            if (!this.HasParentMapSuchRoster(rosterId))
             {
                 return;
             }
@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public virtual void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex)
         {
-            if (!this.HasParentMapSuchRostre(rosterId))
+            if (!this.HasParentMapSuchRoster(rosterId))
             {
                 return;
             }
@@ -60,7 +60,7 @@ namespace WB.Core.SharedKernels.DataCollection
             this.SetSiblings(rosterIdentityKey, rosterStringKey);
         }
 
-        public abstract bool HasParentMapSuchRostre(Guid rosterId);
+        public abstract bool HasParentMapSuchRoster(Guid rosterId);
 
         public abstract Guid GetQuestionnaireId();
 

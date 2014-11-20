@@ -83,7 +83,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
             }
         }
 
-        public override bool HasParentMapSuchRostre(Guid rosterId)
+        public override bool HasParentMapSuchRoster(Guid rosterId)
         {
             return true;
         }
