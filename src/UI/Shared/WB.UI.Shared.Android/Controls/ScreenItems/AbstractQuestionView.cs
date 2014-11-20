@@ -340,7 +340,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             this.llWrapper.AddView(wrapper);
         }
 
-        protected virtual async Task<bool> ConfirmRosterDecrease(string[] rosterTitles, int countOfRemovedRows)
+        protected virtual async Task<bool> ConfirmRosterDecreaseAsync(string[] rosterTitles, int countOfRemovedRows)
         {
             if (rosterTitles.Length == 0 || countOfRemovedRows < 1)
                 return true;
