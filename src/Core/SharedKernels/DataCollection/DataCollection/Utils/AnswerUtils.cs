@@ -9,12 +9,11 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
 {
     public static class LinqUtils
     {
-        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> enumeration, Action<T> action)
+        public static void ForEach<T>(this IEnumerable<T> enumeration, Action<T> action)
         {
             foreach (var item in enumeration)
             {
                 action(item);
-                yield return item;
             }
         }
     }
