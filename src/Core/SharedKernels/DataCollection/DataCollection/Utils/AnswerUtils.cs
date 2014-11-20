@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
@@ -7,17 +6,6 @@ using WB.Core.SharedKernels.DataCollection.Views.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Utils
 {
-    public static class LinqUtils
-    {
-        public static void ForEach<T>(this IEnumerable<T> enumeration, Action<T> action)
-        {
-            foreach (var item in enumeration)
-            {
-                action(item);
-            }
-        }
-    }
-
     public static class AnswerUtils
     {
         public static string AnswerToString(object answer, Func<decimal, string> getCategoricalAnswerOptionText = null)

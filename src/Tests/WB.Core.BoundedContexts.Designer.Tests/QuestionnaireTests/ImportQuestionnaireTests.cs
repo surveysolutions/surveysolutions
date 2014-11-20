@@ -3,10 +3,12 @@ using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using Ncqrs;
 using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
@@ -16,6 +18,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         public void SetUp()
         {
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+
+            NcqrsEnvironment.SetGetter<ILogger>(Mock.Of<ILogger>);
+            NcqrsEnvironment.SetGetter<IUniqueIdentifierGenerator>(Mock.Of<IUniqueIdentifierGenerator>);
+            NcqrsEnvironment.SetGetter<IClock>(Mock.Of<IClock>);
         }
 
         [Test]

@@ -251,6 +251,7 @@
     <Compile Include="Repositories\IQuestionnaireRepository.cs" />
     <Compile Include="Utils\AnswerUtils.cs" />
     <Compile Include="Utils\LinkedQuestionUtils.cs" />
+    <Compile Include="Utils\LinqUtils.cs" />
     <Compile Include="Utils\QuestionnaireHelper.cs" />
     <Compile Include="Utils\RepositoryKeysHelper.cs" />
     <Compile Include="ValueObjects\Interview\InterviewStatus.cs" />
@@ -284,10 +285,6 @@
     <Compile Include="Views\UserDocument.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
-      <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
-      <Name>Ncqrs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
