@@ -19,6 +19,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.Core.SharedKernels.SurveySolutions.Services;
@@ -186,7 +187,7 @@ namespace WB.UI.Supervisor.Injections
             {
                 typeof(SurveyManagementSharedKernelModule).Assembly,
                 typeof(QuestionnaireMembershipProvider).Assembly,
-                //typeof(DataCollectionSharedKernelModule).Assembly,
+                typeof(QuestionnaireItemInputModel).Assembly,
             });
         }
 
