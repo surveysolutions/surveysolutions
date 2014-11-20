@@ -5,7 +5,7 @@
   <string name="Send">Send</string>
   <string name="Cancel">Cancel</string>
   
-  <string name="Oops">Oops, something went wrong! You can help up to solve this issue faster if send an information about your tablet.</string>
+  <string name="Oops">Oops, something went wrong! You can help up to solve this issue faster if you send an information about your tablet.</string>
   <string name="InterviewLoadingError">Interview loading error</string>
 
  <string name="InformationPackageIsSuccessfullySent">Information package is successfully sent.</string>

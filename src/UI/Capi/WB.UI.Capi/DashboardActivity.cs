@@ -9,10 +9,12 @@ using Android.Views;
 using Android.Widget;
 using Android.Content.PM;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
+using Java.Util.Logging;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -33,6 +35,11 @@ namespace WB.UI.Capi
 
         private IChangeLogManipulator logManipulator = CapiApplication.Kernel.Get<IChangeLogManipulator>();
         private IPlainInterviewFileStorage plainInterviewFileStorage = CapiApplication.Kernel.Get<IPlainInterviewFileStorage>();
+
+        private ILogger Logger
+        {
+            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
+        }
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -145,15 +152,35 @@ namespace WB.UI.Capi
             Guid interviewUserId = CapiApplication.Membership.CurrentUser.Id;
             Guid supervisorId = CapiApplication.Membership.SupervisorId;
 
-            ServiceLocator.Current.GetInstance<ICommandService>().Execute(new CreateInterviewOnClientCommand(interviewKey, interviewUserId,
-                questionnaireId, questionnaireVersion, DateTime.UtcNow, supervisorId));
+            try
+            {
+                ServiceLocator.Current.GetInstance<ICommandService>()
+                    .Execute(new CreateInterviewOnClientCommand(interviewKey, interviewUserId,
+                        questionnaireId, questionnaireVersion, DateTime.UtcNow, supervisorId));
 
-            logManipulator.CreatePublicRecord(interviewKey);
-        
+                logManipulator.CreatePublicRecord(interviewKey);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message, ex);
+                ShowErrorMessage();
+                return;
+            }
+
             var intent = new Intent(this, typeof(CreateInterviewActivity));
             intent.PutExtra("publicKey", interviewKey.ToString());
             intent.AddFlags(ActivityFlags.NoHistory);
             this.StartActivity(intent);
+        }
+
+        private void ShowErrorMessage()
+        {
+            var alertBuilder = new AlertDialog.Builder(this);
+            
+            alertBuilder.SetTitle(Resources.GetText(Resource.String.Warning));
+            alertBuilder.SetMessage(Resources.GetText(Resource.String.Oops));
+            
+            alertBuilder.Show();
         }
 
         private void RequestData(Action restore)

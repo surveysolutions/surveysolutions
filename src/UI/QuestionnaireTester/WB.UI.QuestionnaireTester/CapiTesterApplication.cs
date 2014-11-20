@@ -238,6 +238,8 @@ namespace WB.UI.QuestionnaireTester
             
             this.kernel.Bind<Context>().ToConstant(this);
 
+            NcqrsEnvironment.SetDefault(ServiceLocator.Current.GetInstance<ILogger>());
+
             kernel.Unbind<IQuestionnaireAssemblyFileAccessor>();
             kernel.Bind<IQuestionnaireAssemblyFileAccessor>().To<QuestionnareAssemblyTesterFileAccessor>().InSingletonScope();
 
