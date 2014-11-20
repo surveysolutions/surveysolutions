@@ -4,21 +4,37 @@ using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
+using Android.Views;
+using Android.Widget;
 using Microsoft.Practices.ServiceLocation;
+using Ninject;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
+using WB.Core.SharedKernel.Utils;
+using WB.UI.Capi.Controls;
 using WB.UI.Capi.Implementations.Activities;
 using WB.UI.Shared.Android.Helpers;
 
 namespace WB.UI.Capi
 {
-    [Activity(Label = "Loading", NoHistory = true,
-        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
+    [Activity(Label = "Loading", NoHistory = true, ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class LoadingActivity : Activity
     {
         private CancellationTokenSource cancellationToken;
-        //protected ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
         private ISyncPackageRestoreService packageRestoreService = ServiceLocator.Current.GetInstance<ISyncPackageRestoreService>();
+        protected ITabletInformationSender tabletInformationSender;
+        protected ITabletInformationSenderFactory tabletInformationSenderFactory;
+        protected ProgressDialog progressDialog;
+
+        protected TabletInformationReportButton btnSendTabletInfo
+        {
+            get { return this.FindViewById<TabletInformationReportButton>(Resource.Id.btnSendTabletInfo); }
+        }
+        protected TextView tvSyncResult
+        {
+            get { return this.FindViewById<TextView>(Resource.Id.tvSyncResult); }
+        }
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -34,14 +50,36 @@ namespace WB.UI.Capi
         public override void OnBackPressed()
         {
             if (this.cancellationToken != null)
+            {
                 this.cancellationToken.Cancel();
+                this.cancellationToken = null;
+                return;
+            }
+            base.OnBackPressed();
         }
 
         protected override void OnStop()
         {
-            base.OnStop();
             if (this.cancellationToken != null)
+            {
                 this.cancellationToken.Cancel();
+                this.cancellationToken = null;
+            }
+            base.OnStop();
+        }
+
+        protected void ShowErrorMassageToUser()
+        {
+            this.RunOnUiThread(() =>
+            {
+                this.cancellationToken = null;
+                this.SetContentView(Resource.Layout.ErrorScreen);
+                this.btnSendTabletInfo.Click += this.btnSendTabletInfo_Click;
+                this.btnSendTabletInfo.ProcessFinished += this.btnSendTabletInfo_ProcessFinished;
+                this.btnSendTabletInfo.ProcessCanceled += this.btnSendTabletInfo_ProcessCanceled;
+                this.ActionBar.SetDisplayShowHomeEnabled(true);
+                this.Title = "Interview loading error";
+            });
         }
 
         protected void Restore(CancellationToken ct, Guid publicKey, bool createdOnClient)
@@ -50,7 +88,7 @@ namespace WB.UI.Capi
 
             if (!applyingResult || ct.IsCancellationRequested)
             {
-                this.RunOnUiThread(this.Finish);
+                ShowErrorMassageToUser();
                 return;
             }
 
@@ -59,7 +97,7 @@ namespace WB.UI.Capi
 
             if (interview == null || ct.IsCancellationRequested)
             {
-                this.RunOnUiThread(this.Finish);
+                ShowErrorMassageToUser();
                 return;
             }
 
@@ -76,6 +114,23 @@ namespace WB.UI.Capi
                 intent.PutExtra("publicKey", publicKey.ToString());
                 this.StartActivity(intent);
             }
+        }
+
+        private void btnSendTabletInfo_Click(object sender, EventArgs e)
+        {
+            this.tvSyncResult.Text = string.Empty;
+        }
+
+        void btnSendTabletInfo_ProcessFinished(object sender, EventArgs e)
+        {
+            this.tvSyncResult.Visibility = ViewStates.Visible;
+            this.tvSyncResult.Text = "Information package is successfully sent. Thank you! We'll try to fix your issue as soon as we can. We are sorry for inconvenience.";
+        }
+
+        private void btnSendTabletInfo_ProcessCanceled(object sender, EventArgs e)
+        {
+            this.tvSyncResult.Visibility = ViewStates.Visible;
+            this.tvSyncResult.Text = "Sending of information package is canceled.";
         }
     }
 }

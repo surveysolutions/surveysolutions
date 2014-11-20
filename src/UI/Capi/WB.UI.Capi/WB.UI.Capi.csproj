@@ -172,6 +172,7 @@
     <Compile Include="Controls\Navigation\NavigationItemsCollection.cs" />
     <Compile Include="Controls\Navigation\NavigationListener.cs" />
     <Compile Include="Controls\Navigation\NavigationSpinnerAdapter.cs" />
+    <Compile Include="Controls\TabletInformationReportButton.cs" />
     <Compile Include="Core\AjustableListView.cs" />
     <Compile Include="Core\CAPIParcelableCreator.cs" />
     <Compile Include="Core\MvxSimpleBindingFragmentActivity.cs" />
@@ -269,6 +270,11 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\Main.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Layout\ErrorScreen.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
