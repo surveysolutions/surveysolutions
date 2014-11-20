@@ -99,18 +99,10 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             this.etComments.ImeOptions = ImeAction.Done;
             this.etComments.FocusChange += this.etComments_FocusChange;
             this.llWrapper.LongClick += this.AbstractQuestionView_LongClick;
-            this.llWrapper.FocusChange += this.llWrapper_FocusChange;
             this.llWrapper.Clickable = true;
-            
-            /*llWrapper.Focusable = true;
-            llWrapper.FocusableInTouchMode = true;*/
         }
 
-        void llWrapper_FocusChange(object sender, View.FocusChangeEventArgs e)
-        {
-            
-        }
-
+        
         protected void SaveAnswer(string newAnswer, AnswerQuestionCommand saveAnswerCommand)
         {
             this.ExecuteSaveAnswerCommand(saveAnswerCommand);
