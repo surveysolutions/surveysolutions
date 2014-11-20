@@ -9,7 +9,7 @@ using Moq;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
+using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ReadSide;

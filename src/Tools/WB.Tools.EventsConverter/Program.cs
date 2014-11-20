@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs;
@@ -11,7 +8,6 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Raven.Client.Document;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
 namespace WB.Tools.EventsConverter

@@ -5,8 +5,8 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Events.User;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tools.CapiDataGenerator.Ninject

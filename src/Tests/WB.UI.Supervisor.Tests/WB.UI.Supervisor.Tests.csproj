@@ -211,10 +211,6 @@
     <Compile Include="TabletReportControllerTests\when_posting_info_package_is_caller_with_valid_content.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
-      <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
-      <Name>Ncqrs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\WB.Core.BoundedContexts.Supervisor.csproj">
       <Project>{755CA607-6B50-487F-98A0-34A98973593D}</Project>
       <Name>WB.Core.BoundedContexts.Supervisor</Name>

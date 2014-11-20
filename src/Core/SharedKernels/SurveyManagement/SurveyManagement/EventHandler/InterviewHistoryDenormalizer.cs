@@ -10,7 +10,6 @@ using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;

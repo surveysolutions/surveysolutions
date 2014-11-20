@@ -26,14 +26,14 @@ using WB.Core.BoundedContexts.Capi.Implementation.ChangeLog;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.FunctionalDenormalization;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
+using WB.Core.Infrastructure.Implementation.EventDispatcher;
+using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -151,9 +151,7 @@ namespace CapiDataGenerator
 
             this.Bind<IDomainRepository>().To<DomainRepository>();
 
-            var inProcessEventDispatcher = new CustomInProcessEventDispatcher(true);
-
-            var bus = new NcqrCompatibleEventDispatcher(() => inProcessEventDispatcher);
+            var bus = new NcqrCompatibleEventDispatcher();
 
             this.Bind<IEventDispatcher>().ToConstant(bus);
             NcqrsEnvironment.SetDefault<IEventBus>(bus);

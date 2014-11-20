@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
+using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;

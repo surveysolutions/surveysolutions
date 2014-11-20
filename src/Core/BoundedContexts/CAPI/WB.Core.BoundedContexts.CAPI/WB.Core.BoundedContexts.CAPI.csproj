@@ -88,6 +88,7 @@
     <Compile Include="Implementation\Services\CapiDataSynchronizationService.cs" />
     <Compile Include="Implementation\Services\FileCapiSynchronizationCacheService.cs" />
     <Compile Include="Implementation\Services\SyncPackageRestoreService.cs" />
+    <Compile Include="LinqUtils.cs" />
     <Compile Include="ModelUtils\JsonUtils.cs" />
     <Compile Include="ModelUtils\QuestionUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -140,10 +141,6 @@
     <Folder Include="Events\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
-      <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
-      <Name>Ncqrs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>

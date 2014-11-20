@@ -132,10 +132,6 @@
     <Compile Include="ViewModel\Synchronization\SyncViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
-      <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
-      <Name>Ncqrs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.Capi.csproj">
       <Project>{C6ED30A9-4D14-48D1-8311-C2267DFD424F}</Project>
       <Name>WB.Core.BoundedContexts.Capi</Name>

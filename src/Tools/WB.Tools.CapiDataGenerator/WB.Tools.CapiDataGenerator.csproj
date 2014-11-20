@@ -217,10 +217,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
-      <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
-      <Name>Ncqrs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Mono\AndroidNcqrs.Eventing.Storage.SQLite\AndroidNcqrs.Eventing.Storage.SQLite.csproj">
       <Project>{f9a0b560-a8bf-4914-88fb-7d98df4242ef}</Project>
       <Name>AndroidNcqrs.Eventing.Storage.SQLite</Name>
@@ -256,10 +252,6 @@
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Files\WB.Core.Infrastructure.Files.csproj">
       <Project>{6ac3a080-ceca-4974-9ca1-c239695ed8f8}</Project>
       <Name>WB.Core.Infrastructure.Files</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
-      <Project>{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}</Project>
-      <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Storage\WB.Core.Infrastructure.Storage.csproj">
       <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>

@@ -432,10 +432,6 @@
     <Compile Include="ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\when_load_interview_summary.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
-      <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
-      <Name>Ncqrs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
@@ -447,10 +443,6 @@
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Files\WB.Core.Infrastructure.Files.csproj">
       <Project>{6AC3A080-CECA-4974-9CA1-C239695ED8F8}</Project>
       <Name>WB.Core.Infrastructure.Files</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
-      <Project>{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}</Project>
-      <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>

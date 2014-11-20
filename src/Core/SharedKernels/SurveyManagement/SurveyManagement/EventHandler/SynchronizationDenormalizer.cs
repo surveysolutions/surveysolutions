@@ -9,7 +9,7 @@ using Main.Core.Events.Questionnaire;
 using Main.Core.Events.User;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
+using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;

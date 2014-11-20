@@ -1,6 +1,6 @@
 ﻿using System;
 using Machine.Specifications;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
+using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;

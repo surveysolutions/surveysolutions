@@ -162,10 +162,6 @@
       <Project>{AA90754B-CA47-429E-BDC8-2A83E94179B7}</Project>
       <Name>Ncqrs.Spec</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ncqrs\Ncqrs.csproj">
-      <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
-      <Name>Ncqrs</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

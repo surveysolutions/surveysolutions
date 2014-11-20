@@ -157,10 +157,6 @@
       <Project>{AA90754B-CA47-429E-BDC8-2A83E94179B7}</Project>
       <Name>Ncqrs.Spec</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
-      <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
-      <Name>Ncqrs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\WB.Core.BoundedContexts.Supervisor.csproj">
       <Project>{755ca607-6b50-487f-98a0-34a98973593d}</Project>
       <Name>WB.Core.BoundedContexts.Supervisor</Name>
@@ -176,10 +172,6 @@
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Files\WB.Core.Infrastructure.Files.csproj">
       <Project>{6ac3a080-ceca-4974-9ca1-c239695ed8f8}</Project>
       <Name>WB.Core.Infrastructure.Files</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
-      <Project>{e7d429a7-1c9f-4f25-9c23-686ef9c2d60a}</Project>
-      <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>

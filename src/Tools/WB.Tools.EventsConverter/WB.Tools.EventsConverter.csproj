@@ -65,13 +65,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
-      <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
-      <Name>Ncqrs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Storage\WB.Core.Infrastructure.Storage.csproj">
       <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
       <Name>WB.Core.Infrastructure.Storage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>

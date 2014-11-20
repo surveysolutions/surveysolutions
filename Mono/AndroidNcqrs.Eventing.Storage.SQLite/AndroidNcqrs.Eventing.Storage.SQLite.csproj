@@ -102,10 +102,6 @@
     <Compile Include="StoredEventExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
-      <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
-      <Name>Ncqrs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
       <Project>{a134f8e7-42c7-4804-8177-d11178600caa}</Project>
       <Name>WB.Core.Infrastructure.Backup</Name>

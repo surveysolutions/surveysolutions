@@ -8,7 +8,6 @@ using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide;

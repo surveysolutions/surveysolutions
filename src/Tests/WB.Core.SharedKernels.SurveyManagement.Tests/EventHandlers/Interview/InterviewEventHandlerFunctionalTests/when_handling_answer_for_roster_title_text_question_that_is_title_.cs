@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Machine.Specifications;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
+using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;

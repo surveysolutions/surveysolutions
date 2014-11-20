@@ -46,18 +46,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DispatcherRegistryHelper.cs" />
-    <Compile Include="EventHandlers\AbstractFunctionalEventHandler.cs" />
-    <Compile Include="EventHandlers\ICreateHandler.cs" />
-    <Compile Include="EventHandlers\IDeleteHandler.cs" />
-    <Compile Include="EventHandlers\IFunctionalEventHandler.cs" />
-    <Compile Include="EventHandlers\IUpdateHandler.cs" />
-    <Compile Include="IEventDispatcher.cs" />
-    <Compile Include="Implementation\EventDispatcher\EventHandlerWrapper.cs" />
-    <Compile Include="Implementation\EventDispatcher\NcqrCompatibleEventDispatcher.cs" />
-    <Compile Include="Implementation\ReadSide\ReadSideRepositoryReaderWithSequence.cs" />
-    <Compile Include="Implementation\ReadSide\ViewWithSequence.cs" />
-    <Compile Include="Implementation\StorageStrategy\InMemoryViewWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

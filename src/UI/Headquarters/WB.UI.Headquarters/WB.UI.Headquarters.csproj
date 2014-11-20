@@ -2,7 +2,7 @@
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-  <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
+    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>
@@ -548,10 +548,6 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
-      <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
-      <Name>Ncqrs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj">
       <Project>{3017EC6D-AE4A-4C19-A653-352999592A7E}</Project>
       <Name>WB.Core.BoundedContexts.Headquarters</Name>
@@ -571,10 +567,6 @@
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Files\WB.Core.Infrastructure.Files.csproj">
       <Project>{6AC3A080-CECA-4974-9CA1-C239695ED8F8}</Project>
       <Name>WB.Core.Infrastructure.Files</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
-      <Project>{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}</Project>
-      <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Storage\WB.Core.Infrastructure.Storage.csproj">
       <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
