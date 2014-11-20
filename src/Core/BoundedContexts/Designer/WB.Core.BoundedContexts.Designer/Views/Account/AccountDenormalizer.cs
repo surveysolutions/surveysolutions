@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 using WB.UI.Shared.Web.MembershipProvider.Roles;

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -29,10 +30,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             this.commandService = commandService;
         }
 
-        private async void WaitForSecond()
-        {
-            await System.Threading.Tasks.Task.Delay(TimeSpan.FromSeconds(1));
-        }
+        
 
         private bool WaitUntilItemCanBeProcessed(Guid id)
         {
@@ -43,7 +41,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
                 {
                     return false;
                 }
-                this.WaitForSecond();
+                WaitUtils.WaitForSecond();
                 i++;
             }
             return true;
