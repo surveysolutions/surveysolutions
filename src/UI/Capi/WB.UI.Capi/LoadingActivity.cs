@@ -78,7 +78,7 @@ namespace WB.UI.Capi
                 this.btnSendTabletInfo.ProcessFinished += this.btnSendTabletInfo_ProcessFinished;
                 this.btnSendTabletInfo.ProcessCanceled += this.btnSendTabletInfo_ProcessCanceled;
                 this.ActionBar.SetDisplayShowHomeEnabled(true);
-                this.Title = "Interview loading error";
+                this.Title = Resources.GetText(Resource.String.InterviewLoadingError);
             });
         }
 
@@ -124,13 +124,13 @@ namespace WB.UI.Capi
         void btnSendTabletInfo_ProcessFinished(object sender, EventArgs e)
         {
             this.tvSyncResult.Visibility = ViewStates.Visible;
-            this.tvSyncResult.Text = "Information package is successfully sent. Thank you! We'll try to fix your issue as soon as we can. We are sorry for inconvenience.";
+            this.tvSyncResult.Text = Resources.GetText(Resource.String.InformationPackageIsSuccessfullySent) + " " + Resources.GetText(Resource.String.ThankYouForPackage);
         }
 
         private void btnSendTabletInfo_ProcessCanceled(object sender, EventArgs e)
         {
             this.tvSyncResult.Visibility = ViewStates.Visible;
-            this.tvSyncResult.Text = "Sending of information package is canceled.";
+            this.tvSyncResult.Text = Resources.GetText(Resource.String.SendingOfInformationPackageIsCanceled);
         }
     }
 }
