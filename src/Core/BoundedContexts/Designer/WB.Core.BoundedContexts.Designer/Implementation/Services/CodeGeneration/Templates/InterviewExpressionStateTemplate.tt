@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             this.SiblingRosters = newSiblingRosters;
         }
 
-		public override bool HasParentMapSuchRostre(Guid rosterId)
+		public override bool HasParentMapSuchRoster(Guid rosterId)
         {
             return IdOf.parentScopeMap.ContainsKey(rosterId);
         }
