@@ -186,7 +186,7 @@ namespace WB.UI.Supervisor.Injections
             {
                 typeof(SurveyManagementSharedKernelModule).Assembly,
                 typeof(QuestionnaireMembershipProvider).Assembly,
-                typeof(DataCollectionSharedKernelModule).Assembly,
+                //typeof(DataCollectionSharedKernelModule).Assembly,
             });
         }
 
