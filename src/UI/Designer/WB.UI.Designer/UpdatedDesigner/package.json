@@ -1,7 +1,8 @@
 {
-  "name": "UpdatedDesigner",
-  "version": "0.0.0",
-  "description": "",
+  "name": "Designer Editor",
+  "version": "3.0.0",
+  "private": true,
+  "description": "Designer Editor",
   "main": "gulpfile.js",
   "directories": {
     "test": "test"
