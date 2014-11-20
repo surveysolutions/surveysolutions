@@ -71,7 +71,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
             result.QuestionsDisabledEventQuestionIds.ShouldContainOnly(questionId);
 
         It should_put_only_id_of_group_instances_with_enablement_conditions_to_QuestionsDisabled_event = () =>
-            result.GroupsDisabledEventGroupIds.ShouldContainOnly(groupId, rosterId);
+            result.GroupsDisabledEventGroupIds.ShouldContainOnly(groupId, rosterId, rosterId);
 
         private static AppDomainContext appDomainContext;
         private static InvokeResult result;
