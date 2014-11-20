@@ -78,7 +78,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected override Task<AnswerQuestionCommand> CreateSaveAnswerCommand(LinkedAnswerViewModel[] selectedAnswers)
         {
-            return new Task<AnswerQuestionCommand>(() =>
+            return Task.Run<AnswerQuestionCommand>(() =>
             {
                 var elements = selectedAnswers.Select(a => new Tuple<decimal[], int>(a.PropagationVector, this.GetAnswerOrder(a))).ToList();
 
