@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
@@ -8,7 +7,6 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding.BindingContext;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
-using Java.Lang;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Capi;
@@ -128,14 +126,21 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private void AbstractQuestionView_LongClick(object sender, LongClickEventArgs e)
         {
-            this.IsCommentsEditorFocused = true;
             this.SetEditCommentsVisibility(true);
             this.etComments.RequestFocus();
-            this.ShowKeyboard(this.etComments);
         }
 
         void etComments_FocusChange(object sender, View.FocusChangeEventArgs e)
         {
+            if (!e.HasFocus)
+            {
+                HideKeyboard(this.etComments);
+                this.SaveComment();
+            }
+            else
+                this.ShowKeyboard(this.etComments);
+
+
             this.IsCommentsEditorFocused = e.HasFocus;
         }
 
@@ -153,14 +158,10 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 this.tvComments.Text = newComments;
 
             }
-            this.SetEditCommentsVisibility(false);
-            this.etComments.Text = this.tvComments.Text;
-
         }
 
         protected void ExecuteSaveAnswerCommand(AnswerQuestionCommand command)
         {
-            //HideAllErrorMessages();
             this.AnswerCommandService.AnswerOnQuestion(command, this.SaveAnswerErrorHandler, this.SaveAnswerSuccessHandler);
         }
 
@@ -227,9 +228,10 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private void etComments_EditorAction(object sender, TextView.EditorActionEventArgs e)
         {
-            this.SaveComment();
-            this.etComments.ClearFocus();
-            this.HideKeyboard(this.etComments);
+            if (e.ActionId == ImeAction.Done)
+            {
+                this.etComments.ClearFocus();
+            }
         }
 
         protected void HideKeyboard(EditText editor)
