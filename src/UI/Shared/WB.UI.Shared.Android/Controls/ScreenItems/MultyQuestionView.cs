@@ -66,7 +66,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
             var previousAnswers = this.Answers.Where(this.IsAnswerSelected);
 
-            bool result = await ConfirmRosterDecrease(Model.TriggeredRosters, previousAnswers.Count() - answered.Count);
+            bool result = await ConfirmRosterDecreaseAsync(Model.TriggeredRosters, previousAnswers.Count() - answered.Count);
 
             if (!result)
             {
