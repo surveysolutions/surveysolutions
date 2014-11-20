@@ -78,7 +78,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             
             if (answersTreatedAsSaved.Contains(listItemValue))
             {
-                bool result = await ConfirmRosterDecrease(Model.TriggeredRosters, 1);
+                bool result = await ConfirmRosterDecreaseAsync(Model.TriggeredRosters, 1);
                 if (!result)
                     return;
 
