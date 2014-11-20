@@ -110,6 +110,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
         {
             if (e.HasFocus)
             {
+                this.ShowKeyboard(this.etAnswer);
                 return;
             }
 
@@ -168,7 +169,6 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
         void NumericQuestionView_Click(object sender, EventArgs e)
         {
             this.etAnswer.RequestFocus();
-            this.ShowKeyboard(this.etAnswer);
         }
 
         protected TextView tvTitle
