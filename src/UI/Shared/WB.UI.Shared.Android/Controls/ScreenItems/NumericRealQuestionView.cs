@@ -70,7 +70,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected override Task<AnswerQuestionCommand> CreateAnswerQuestionCommand(decimal answer)
         {
-            return new Task<AnswerQuestionCommand>(() => new AnswerNumericRealQuestionCommand(this.QuestionnairePublicKey,
+            return Task.Run<AnswerQuestionCommand>(() => new AnswerNumericRealQuestionCommand(this.QuestionnairePublicKey,
                 this.Membership.CurrentUser.Id,
                 this.Model.PublicKey.Id,
                 this.Model.PublicKey.InterviewItemPropagationVector,
