@@ -70,12 +70,12 @@ namespace WB.UI.Capi.Controls
             this.DestroyDialog();
             this.ProgressDialog = new ProgressDialog(activity);
 
-            this.ProgressDialog.SetTitle("Information package");
+            this.ProgressDialog.SetTitle(Resources.GetText(Resource.String.InformationPackage));
             this.ProgressDialog.SetProgressStyle(ProgressDialogStyle.Spinner);
-            this.ProgressDialog.SetMessage("Creating information package");
+            this.ProgressDialog.SetMessage(Resources.GetText(Resource.String.CreatingInformationPackage));
             this.ProgressDialog.SetCancelable(false);
 
-            this.ProgressDialog.SetButton("Cancel", this.TabletInformationSenderCanceled);
+            this.ProgressDialog.SetButton(Resources.GetText(Resource.String.Cancel), this.TabletInformationSenderCanceled);
 
             this.ProgressDialog.Show();
             tabletInformationSender.Run();
@@ -132,11 +132,13 @@ namespace WB.UI.Capi.Controls
                 var builder = new AlertDialog.Builder(activity);
 
                 builder.SetMessage(
-                    string.Format("Information package of size {0} will be sent via network. Are you sure you want to send it?",
+                    string.Format(Resources.GetText(Resource.String.InformationPackageSizeWarningFormat),
                         FileSizeUtils.SizeSuffix(e.FileSize)));
 
-                builder.SetPositiveButton("Yes", (s, positiveEvent) => { this.ProgressDialog.SetMessage("Sending information package"); remoteCommandDoneEvent.Set(); });
-                builder.SetNegativeButton("No", (s, negativeEvent) =>
+                builder.SetPositiveButton(Resources.GetText(Resource.String.Yes), (s, positiveEvent) =>
+                {
+                    this.ProgressDialog.SetMessage(Resources.GetText(Resource.String.SendingInformationPackage)); remoteCommandDoneEvent.Set(); });
+                builder.SetNegativeButton(Resources.GetText(Resource.String.No), (s, negativeEvent) =>
                 {
                     this.tabletInformationSender.Cancel();
                     remoteCommandDoneEvent.Set();

@@ -242,12 +242,12 @@ namespace WB.UI.Capi
 
         void btnSendTabletInfo_ProcessFinished(object sender, EventArgs e)
         {
-                this.tvSyncResult.Text = "Information package is successfully sent.";
+            this.tvSyncResult.Text = Resources.GetText(Resource.String.InformationPackageIsSuccessfullySent);
         }
 
         private void btnSendTabletInfo_ProcessCanceled(object sender, EventArgs e)
         {
-            this.tvSyncResult.Text = "Sending of information package is canceled.";
+            this.tvSyncResult.Text = Resources.GetText(Resource.String.SendingOfInformationPackageIsCanceled);
         }
 
         protected override void OnStart()
