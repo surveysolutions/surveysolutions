@@ -29,6 +29,7 @@ using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Services;
+using WB.UI.Capi.Controls;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization;
@@ -57,9 +58,9 @@ namespace WB.UI.Capi
             get { return this.FindViewById<Button>(Resource.Id.btnBackup); }
         }
 
-        protected Button btnSendTabletInfo
+        protected TabletInformationReportButton btnSendTabletInfo
         {
-            get { return this.FindViewById<Button>(Resource.Id.btnSendTabletInfo); }
+            get { return this.FindViewById<TabletInformationReportButton>(Resource.Id.btnSendTabletInfo); }
         }
 
         protected Button btnRestore
@@ -103,6 +104,8 @@ namespace WB.UI.Capi
             this.btnBackup.Click += this.btnBackup_Click;
             this.btnRestore.Click += this.btnRestore_Click;
             this.btnSendTabletInfo.Click += this.btnSendTabletInfo_Click;
+            this.btnSendTabletInfo.ProcessFinished += this.btnSendTabletInfo_ProcessFinished;
+            this.btnSendTabletInfo.ProcessCanceled += this.btnSendTabletInfo_ProcessCanceled;
             this.tvSyncResult.Click += this.tvSyncResult_Click;
             this.llContainer.Click += this.llContainer_Click;
 
@@ -234,64 +237,17 @@ namespace WB.UI.Capi
 
         private void btnSendTabletInfo_Click(object sender, EventArgs e)
         {
-            this.ThrowExeptionIfDialogIsOpened();
-
             this.PrepareUI();
-
-            tabletInformationSender =
-                this.tabletInformationSenderFactory.CreateTabletInformationSender(SettingsManager.GetSyncAddressPoint(),
-                    SettingsManager.GetRegistrationKey(), SettingsManager.AndroidId);
-
-            tabletInformationSender.InformationPackageCreated += this.tabletInformationSender_InformationPackageCreated;
-            tabletInformationSender.ProcessCanceled += this.tabletInformationSender_ProcessCanceled;
-            tabletInformationSender.ProcessFinished += this.tabletInformationSender_ProcessFinished;
-            this.CreateDialog(ProgressDialogStyle.Spinner, "Creating information package", true, tabletInformationSender_Cancel, "Information package");
-            tabletInformationSender.Run();
         }
 
-        void tabletInformationSender_ProcessFinished(object sender, EventArgs e)
+        void btnSendTabletInfo_ProcessFinished(object sender, EventArgs e)
         {
-            this.RunOnUiThread(() =>
-            {
-                this.DestroyDialog();
                 this.tvSyncResult.Text = "Information package is successfully sent.";
-            });
-            this.DestroyReportSending();
         }
 
-        void tabletInformationSender_ProcessCanceled(object sender, EventArgs e)
+        private void btnSendTabletInfo_ProcessCanceled(object sender, EventArgs e)
         {
-            this.RunOnUiThread(() =>
-            {
-                this.DestroyDialog();
-
-                this.tvSyncResult.Text = "Sending of information package is canceled.";
-            });
-            this.DestroyReportSending();
-        }
-
-        void tabletInformationSender_InformationPackageCreated(object sender, InformationPackageEventArgs e)
-        {
-            var remoteCommandDoneEvent = new AutoResetEvent(false);
-
-            this.RunOnUiThread(() =>
-            {
-                var builder = new AlertDialog.Builder(this);
-
-                builder.SetMessage(
-                    string.Format("Information package of size {0} will be sent via network. Are you sure you want to send it?",
-                        FileSizeUtils.SizeSuffix(e.FileSize)));
-
-                builder.SetPositiveButton("Yes", (s, positiveEvent) => { this.progressDialog.SetMessage("Sending information package"); remoteCommandDoneEvent.Set(); });
-                builder.SetNegativeButton("No", (s, negativeEvent) =>
-                {
-                    this.tabletInformationSender.Cancel();
-                    remoteCommandDoneEvent.Set();
-                });
-                builder.Show();
-            });
-
-            remoteCommandDoneEvent.WaitOne();
+            this.tvSyncResult.Text = "Sending of information package is canceled.";
         }
 
         protected override void OnStart()
@@ -299,7 +255,6 @@ namespace WB.UI.Capi
             base.OnStart();
             this.CreateActionBar();
         }
-
 
         private void StartSynctionization(ISyncAuthenticator authenticator, EventHandler synchronizerProcessFinished)
         {
@@ -473,16 +428,6 @@ namespace WB.UI.Capi
             this.synchronizer = null;
         }
 
-
-
-        private void DestroyReportSending()
-        {
-            tabletInformationSender.InformationPackageCreated -= this.tabletInformationSender_InformationPackageCreated;
-            tabletInformationSender.ProcessCanceled -= this.tabletInformationSender_ProcessCanceled;
-            tabletInformationSender.ProcessFinished -= this.tabletInformationSender_ProcessFinished;
-            tabletInformationSender = null;
-        }
-
         private void synchronizer_StatusChanged(object sender, SynchronizationEventArgs e)
         {
             this.RunOnUiThread(() =>
@@ -529,11 +474,6 @@ namespace WB.UI.Capi
         private void progressDialog_Cancel(object sender, DialogClickEventArgs e)
         {
             this.synchronizer.Cancel();
-        }
-
-        private void tabletInformationSender_Cancel(object sender, DialogClickEventArgs e)
-        {
-            this.tabletInformationSender.Cancel();
         }
 
         private void DestroyDialog()

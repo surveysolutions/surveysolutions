@@ -24,7 +24,7 @@
             android:layout_margin="15px"
             android:text="Backup" />
       
-      <Button
+      <wb.ui.capi.controls.TabletInformationReportButton
            android:id="@+id/btnSendTabletInfo"
            android:layout_width="fill_parent"
            android:layout_height="wrap_content"
