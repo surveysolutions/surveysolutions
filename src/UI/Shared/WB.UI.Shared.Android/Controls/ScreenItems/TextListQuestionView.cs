@@ -111,6 +111,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
             if (e.HasFocus)
             {
+                this.ShowKeyboard(editor);
                 this.valueBeforeEditing = newAnswer;
                 return;
             }
@@ -167,7 +168,6 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             if (newEditor != null)
             {
                 newEditor.RequestFocus();
-                ShowKeyboard(newEditor);
             }
 
             ItemsCountInUI++;

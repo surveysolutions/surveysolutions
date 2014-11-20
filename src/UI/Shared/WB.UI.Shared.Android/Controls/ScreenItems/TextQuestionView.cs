@@ -66,6 +66,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         {
             if (e.HasFocus)
             {
+                this.ShowKeyboard(this.etAnswer);
                 return;
             }
 
@@ -105,13 +106,15 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)
         {
-            this.etAnswer.ClearFocus();
+            if (e.ActionId == ImeAction.Done)
+            {
+                this.etAnswer.ClearFocus();
+            }
         }
 
         private void TextQuestionView_Click(object sender, EventArgs e)
         {
             this.etAnswer.RequestFocus();
-            this.ShowKeyboard(this.etAnswer);
         }
 
         protected EditText etAnswer { get; set; }
