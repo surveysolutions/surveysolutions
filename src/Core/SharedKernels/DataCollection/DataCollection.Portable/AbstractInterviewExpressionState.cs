@@ -171,7 +171,7 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public IEnumerable<IExpressionExecutable> GetRosterInstances(Identity[] rosterKey, Guid scopeId)
         {
-            var siblingsKey = Util.GetSiblingsKey(rosterKey, scopeId);
+             var siblingsKey = Util.GetSiblingsKey(rosterKey, scopeId);
 
             var siblingRosters = this.SiblingRosters.ContainsKey(siblingsKey)
                 ? this.SiblingRosters[siblingsKey].Select(x => this.InterviewScopes[x])

@@ -399,6 +399,9 @@
     <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\InterviewControllerTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\when_getting_interview_details_under_headquarter_user.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\when_getting_interview_details_which_belong_to_another_supervisor.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireDenormalizerTests\QuestionnaireDenormalizerTestsContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireDenormalizerTests\when_questionnaire_is_deleted_and_all_interviews_deleted.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireDenormalizerTests\when_questionnaire_is_deleted_but_interviews_still_exists.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireUpgradeServiceTests\QuestionnaireUpgradeServiceTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireUpgradeServiceTests\when_CreateRostersVariableName_called_for_QuestionnaireDocument_with_invalid_roster_variable_name.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ResourceControllerTests\when_getting_interview_file_which_is_absent.cs" />

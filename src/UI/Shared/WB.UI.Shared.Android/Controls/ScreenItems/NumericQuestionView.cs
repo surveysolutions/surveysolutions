@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Threading.Tasks;
 using Android.Content;
 using Android.Text;
 using Android.Views;
@@ -105,10 +106,11 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
             return newCursorPosition;
         }
 
-        void etAnswer_FocusChange(object sender, View.FocusChangeEventArgs e)
+        async void etAnswer_FocusChange(object sender, View.FocusChangeEventArgs e)
         {
             if (e.HasFocus)
             {
+                this.ShowKeyboard(this.etAnswer);
                 return;
             }
 
@@ -137,12 +139,18 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
                 }
                 return;
             }
-            this.SaveAnswer(newAnswer, this.CreateAnswerQuestionCommand(answer));
+            var command = await this.CreateAnswerQuestionCommand(answer);
+            if (command == null)
+            {
+                this.PutAnswerStoredInModelToUI();
+                return;
+            }
+            this.SaveAnswer(newAnswer, command);
         }
 
         protected abstract bool IsParseAnswerStringSucceeded(string newAnswer, out T answer);
 
-        protected abstract AnswerQuestionCommand CreateAnswerQuestionCommand(T answer);
+        protected abstract  Task<AnswerQuestionCommand> CreateAnswerQuestionCommand(T answer);
 
         protected override string GetAnswerStoredInModelAsString()
         {
@@ -156,12 +164,12 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
 
         void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)
         {
-            this.etAnswer.ClearFocus();
+            if(e.ActionId == ImeAction.Done)
+                this.etAnswer.ClearFocus();
         }
         void NumericQuestionView_Click(object sender, EventArgs e)
         {
             this.etAnswer.RequestFocus();
-            this.ShowKeyboard(this.etAnswer);
         }
 
         protected TextView tvTitle
