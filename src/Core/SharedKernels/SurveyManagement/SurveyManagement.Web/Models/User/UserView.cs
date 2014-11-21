@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Views.User
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
 {
     public class UserView
     {

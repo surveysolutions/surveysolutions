@@ -8,8 +8,8 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
-using WB.Core.SharedKernels.SurveyManagement.Web.Views.User;
 using It = Machine.Specifications.It;
 
 namespace WB.UI.Supervisor.Tests.SyncControllerTests

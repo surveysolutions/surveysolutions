@@ -265,13 +265,13 @@
     <Compile Include="Utils\Alerts.cs" />
     <Compile Include="Utils\Attributes\CompressContentAttribute.cs" />
     <Compile Include="Utils\ViewHelpers.cs" />
-    <Compile Include="Views\User\UserBrowseInputModel.cs" />
-    <Compile Include="Views\User\UserBrowseItem.cs" />
-    <Compile Include="Views\User\UserBrowseView.cs" />
-    <Compile Include="Views\User\UserBrowseViewFactory.cs" />
-    <Compile Include="Views\User\UserView.cs" />
-    <Compile Include="Views\User\UserViewFactory.cs" />
-    <Compile Include="Views\User\UserViewInputModel.cs" />
+    <Compile Include="Models\User\UserBrowseInputModel.cs" />
+    <Compile Include="Models\User\UserBrowseItem.cs" />
+    <Compile Include="Models\User\UserBrowseView.cs" />
+    <Compile Include="Models\User\UserBrowseViewFactory.cs" />
+    <Compile Include="Models\User\UserView.cs" />
+    <Compile Include="Models\User\UserViewFactory.cs" />
+    <Compile Include="Models\User\UserViewInputModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\FieldsAndValidations.resx">
