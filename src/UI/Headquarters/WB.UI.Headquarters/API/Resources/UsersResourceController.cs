@@ -7,7 +7,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
-using WB.Core.SharedKernels.SurveyManagement.Web.Views.User;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
 using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Shared.Web.Filters;
 
