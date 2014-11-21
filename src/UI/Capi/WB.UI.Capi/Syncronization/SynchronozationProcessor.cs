@@ -107,7 +107,6 @@ namespace WB.UI.Capi.Syncronization
                     catch (Exception e)
                     {
                         this.logger.Error(string.Format("chunk {0} wasn't processed", chunckId), e);
-
                         throw;
                     }
 
@@ -198,7 +197,7 @@ namespace WB.UI.Capi.Syncronization
                 string message = "connecting...";
                 this.OnStatusChanged(
                     new SynchronizationEventArgs(message, Operation.Handshake, true));
-                var registrationKey = SettingsManager.GetSetting(SettingsNames.RegistrationKeyName);
+                
                 this.clientRegistrationId = this.handshake.Execute(this.credentials.Login, this.credentials.Password, androidId, appId, this.clientRegistrationId);
             }
             catch (Exception e)
@@ -217,11 +216,19 @@ namespace WB.UI.Capi.Syncronization
 
         private async Task RunInternalAsync()
         {
-            this.Handshake();
-            await this.PushAsync();
-            await this.PullAsync();
+            try
+            {
+                this.Handshake();
+                await this.PushAsync();
+                await this.PullAsync();
 
-            this.OnProcessFinished();
+                this.OnProcessFinished();
+            }
+            catch (Exception e)
+            {
+                this.OnProcessCanceled(new List<Exception> {e});
+                throw;
+            }
         }
 
         public void Cancel()
