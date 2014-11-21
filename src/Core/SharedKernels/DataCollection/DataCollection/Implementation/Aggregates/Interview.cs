@@ -197,6 +197,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void Apply(SynchronizationMetadataApplied @event)
         {
             this.questionnaireId = @event.QuestionnaireId;
+            this.questionnaireVersion = @event.QuestionnaireVersion;
             this.status = @event.Status;
         }
 
