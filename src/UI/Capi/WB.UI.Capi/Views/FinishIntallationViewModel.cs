@@ -43,7 +43,7 @@ namespace WB.UI.Capi.Views
 
         public FinishIntallationViewModel()
         {
-            this.SyncEndpoint = "https://";
+            this.SyncEndpoint = "";
 #if DEBUG
             this.SyncEndpoint = "http://192.168.173.1/headquarters";
 #endif
