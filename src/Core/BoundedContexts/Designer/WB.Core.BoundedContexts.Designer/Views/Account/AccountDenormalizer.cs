@@ -158,6 +158,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
             item.SimpleRoles.Remove(@event.Payload.Role);
+            this._accounts.Store(item, @event.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<AccountLoginFailed> @event)
