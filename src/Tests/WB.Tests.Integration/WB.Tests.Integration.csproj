@@ -91,6 +91,9 @@
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options_with_decimal_number.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options_with_integer_number.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options_with_mandatory_child_under_condition_expression.cs" />
+    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_numeric_question_that_can_turn_off_cascading.cs" />
+    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_numeric_question_that_can_turn_on_cascading.cs" />
+    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_single_option_question_that_was_turned_on_by_numeric.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_cascading_question_depends_on_other_question.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_creating_new_interview_with_cascading_options_question.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_datetime_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_w___.cs" />
