@@ -66,7 +66,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 editor.ClearFocus();
         }
 
-        private void RemoveTextListItemButton_Click(object sender, EventArgs e)
+        private async void RemoveTextListItemButton_Click(object sender, EventArgs e)
         {
             var button = sender as Button;
             if (button == null)
@@ -77,6 +77,10 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             
             if (answersTreatedAsSaved.Contains(listItemValue))
             {
+                bool result = await ConfirmRosterDecreaseAsync(Model.TriggeredRosters, 1);
+                if (!result)
+                    return;
+
                 TextListAnswerViewModel[] answersToSave =
                     GetAnswersFromUI()
                         .Where(item => !String.IsNullOrWhiteSpace(item.Answer) && item.Value != listItemValue)
@@ -106,6 +110,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
             if (e.HasFocus)
             {
+                this.ShowKeyboard(editor);
                 this.valueBeforeEditing = newAnswer;
                 return;
             }
@@ -162,7 +167,6 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             if (newEditor != null)
             {
                 newEditor.RequestFocus();
-                ShowKeyboard(newEditor);
             }
 
             ItemsCountInUI++;

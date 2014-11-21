@@ -32,6 +32,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
                     IsRoster = true,
                     RosterSizeQuestionId = textListQuestionId,
                     RosterSizeSource = RosterSizeSourceType.Question,
+                    Title = groupTitle,
                     Children = new List<IComposite>
                     {
                         new NumericQuestion() { PublicKey = questionWithSubstitutionId, QuestionType = QuestionType.Numeric, QuestionText = "%rostertitle%"}
@@ -70,6 +71,9 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
                 .FirstOrDefault()
                 .Text.ShouldEqual("b");
 
+        It should_create_textlist_question_with_triggered_roster_titles_filled = () =>
+            interviewViewModel.FindQuestion(q => q.PublicKey.Id == textListQuestionId).First().TriggeredRosters.ShouldEqual(new[] { groupTitle });
+
         private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;
         private static QuestionnaireRosterStructure rosterStructure;
@@ -77,5 +81,6 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
         private static Guid rosterId;
         private static Guid questionWithSubstitutionId;
         private static Guid textListQuestionId;
+        private static string groupTitle = "group Title";
     }
 }
