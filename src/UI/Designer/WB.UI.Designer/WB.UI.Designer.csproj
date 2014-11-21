@@ -291,6 +291,7 @@
     <Compile Include="Mailers\ISystemMailer.cs" />
     <Compile Include="Mailers\SystemMailer.cs" />
     <Compile Include="Models\AccountListViewItemModel.cs" />
+    <Compile Include="Models\MakeAdminViewModel.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\ActionItem.cs" />
     <Compile Include="Models\JsonQuestionnaireResult.cs" />
@@ -1343,6 +1344,7 @@
     <Content Include="UpdatedDesigner\vendor\bootstrap-select\less\variables.less" />
     <Content Include="UpdatedDesigner\vendor\bootstrap-select\LICENSE" />
     <Content Include="Views\ControlPanel\ExpressionGeneration.cshtml" />
+    <Content Include="Views\ControlPanel\MakeAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
