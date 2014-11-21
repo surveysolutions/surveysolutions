@@ -1558,8 +1558,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void CancelByHQSynchronization(Guid userId)
         {
             ThrowIfInterviewHardDeleted();
-            this.ApplyEvent(new InterviewDeleted(userId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted, comment: null));
+
+            if (status != InterviewStatus.Completed)
+            {
+                this.ApplyEvent(new InterviewDeleted(userId));
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted, comment: null));
+            }
         }
 
         public void MarkInterviewAsSentToHeadquarters(Guid userId)
