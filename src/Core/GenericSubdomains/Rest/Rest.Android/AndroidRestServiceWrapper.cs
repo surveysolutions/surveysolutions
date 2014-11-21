@@ -27,7 +27,7 @@ namespace WB.Core.GenericSubdomains.Rest.Android
 
         public void ExecuteRestRequest(string url,  string login, string password, string method, params KeyValuePair<string, object>[] additionalParams)
         {
-            var restClient = this.BuildRestClient(login, password);
+            RestClient restClient = this.BuildRestClient(login, password);
             var request = this.BuildRequest(url, additionalParams, null, this.GetRequestMethod(method));
             var response = restClient.Execute(request);
 
@@ -40,7 +40,7 @@ namespace WB.Core.GenericSubdomains.Rest.Android
             this.logger.Error(string.Format("Sync error. Status: {0}, Response Uri: {1}, Url: {2} Method:{3}, Login: {4}, args: {5}",
                 response.StatusDescription, response.ResponseUri, url, method, login, 
                 string.Join(";", additionalParams.Select(x => x.Key + "=" + x.Value.ToString()).ToArray())));
-            
+
             var exceptionMessage = string.IsNullOrWhiteSpace(response.Content)
                     ? string.Format("Target returned unexpected result. Status: {0}", response.StatusDescription)
                     : this.jsonUtils.Deserrialize<ErrorMessage>(response.Content).Message;
