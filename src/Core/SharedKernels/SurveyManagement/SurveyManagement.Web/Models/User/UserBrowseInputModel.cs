@@ -1,10 +1,8 @@
 using System;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Views.User
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
 {
     /// <summary>
     /// The user browse input model.

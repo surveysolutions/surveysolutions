@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Views.User
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
 {
     /// <summary>
     /// The user view input model.

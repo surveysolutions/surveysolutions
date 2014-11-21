@@ -1,7 +1,7 @@
 using System;
 using Main.Core.Entities.SubEntities;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Views.User
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
 {
     /// <summary>
     /// The user browse item.

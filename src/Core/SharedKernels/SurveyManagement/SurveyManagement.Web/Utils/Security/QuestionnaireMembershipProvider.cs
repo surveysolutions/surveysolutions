@@ -6,7 +6,7 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.SurveyManagement.Web.Views.User;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
 {
