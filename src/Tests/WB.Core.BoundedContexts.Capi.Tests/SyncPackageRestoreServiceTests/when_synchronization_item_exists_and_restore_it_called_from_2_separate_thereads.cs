@@ -39,11 +39,9 @@ namespace WB.Core.BoundedContexts.Capi.Tests.SyncPackageRestoreServiceTests
 
         Because of = () =>
         {
-            Task task1 = Task.Factory.StartNew(() =>
-            {
-                                           result1 = syncPackageRestoreService.CheckAndApplySyncPackage(interviewSynchronizationDto.Id); });
-            Task task2 = Task.Factory.StartNew(() =>
-            {
+            Task task1 = Task.Factory.StartNew(() => {
+                result1 = syncPackageRestoreService.CheckAndApplySyncPackage(interviewSynchronizationDto.Id); });
+            Task task2 = Task.Factory.StartNew(() => {
                 result2 = syncPackageRestoreService.CheckAndApplySyncPackage(interviewSynchronizationDto.Id);
             });
 
@@ -51,7 +49,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.SyncPackageRestoreServiceTests
             task2.Wait();
         };
 
-        It should_SynchronizeInterviewCommand_be_called =
+        It should_call_SynchronizeInterviewCommand =
             () =>
                 commandServiceMock.Verify(
                     x =>
@@ -62,17 +60,17 @@ namespace WB.Core.BoundedContexts.Capi.Tests.SyncPackageRestoreServiceTests
                                         param.SynchronizedInterview == interviewSynchronizationDto &&
                                         param.UserId == interviewSynchronizationDto.UserId), null), Times.Once);
 
-        It should_result_of_first_thread_be_true = () => result1.ShouldBeTrue();
+        It should_return_true_for_first_thread = () => result1.ShouldBeTrue();
 
-        It should_synchronization_item_be_deleted = () => capiSynchronizationCacheServiceMock.DeleteCallCount.ShouldEqual(1);
+        It should_delete_synchronization_item = () => capiSynchronizationCacheServiceMock.DeleteCallCount.ShouldEqual(1);
 
-        private static SyncPackageRestoreService syncPackageRestoreService;
-        private static bool result1;
-        private static bool result2;
-        private static InterviewSynchronizationDto interviewSynchronizationDto;
-        private static CapiSynchronizationCacheServiceMock capiSynchronizationCacheServiceMock;
-        private static Mock<IJsonUtils> jsonUtilsMock;
-        private static Mock<ICommandService> commandServiceMock;
+        static SyncPackageRestoreService syncPackageRestoreService;
+        static bool result1;
+        static bool result2;
+        static InterviewSynchronizationDto interviewSynchronizationDto;
+        static CapiSynchronizationCacheServiceMock capiSynchronizationCacheServiceMock;
+        static Mock<IJsonUtils> jsonUtilsMock;
+        static Mock<ICommandService> commandServiceMock;
     }
 
     class CapiSynchronizationCacheServiceMock : ICapiSynchronizationCacheService
