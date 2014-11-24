@@ -23,12 +23,12 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
             {
 
                 Setup.MockedServiceLocator();
-                var parentSingleOptionQuestionId = Guid.Parse("9E96D4AB-DF91-4FC9-9585-23FA270B25D7");
-                var childCascadedComboboxId = Guid.Parse("C6CC807A-3E81-406C-A110-1044AE3FD89B");
+                var parentSingleOptionQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                var childCascadedComboboxId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+                var grandChildCascadedComboboxId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
                 var actorId = Guid.Parse("366404A9-374E-4DCC-9B56-1F15103DE880");
                 var questionnaireId = Guid.Parse("3B7145CD-A235-44D0-917C-7B34A1017AEC");
                 var numericQuestionId = Guid.Parse("11111111-1111-1111-1111-111111111111");
-                var grandChildCascadedComboboxId = Guid.Parse("107E3563-8005-41D3-8073-06DCDA4C528D");
 
                 var questionnaire = Create.QuestionnaireDocument(questionnaireId,
                     Create.NumericIntegerQuestion(numericQuestionId, variable: "numeric"),
@@ -67,7 +67,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
             });
 
         It should_not_enable_grand_child_question = () =>
-            results.WasGrandChildEnabled.ShouldBeTrue();
+            results.WasGrandChildEnabled.ShouldBeFalse();
 
         Cleanup stuff = () =>
         {
