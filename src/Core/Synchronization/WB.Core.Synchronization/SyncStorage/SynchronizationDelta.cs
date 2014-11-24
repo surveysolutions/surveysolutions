@@ -20,7 +20,7 @@ namespace WB.Core.Synchronization.SyncStorage
             PublicKey = publicKey;
             Content = content;
             Timestamp = timestamp;
-            UserId = userId;
+            UserId = userId ?? Guid.Empty;
             IsCompressed = isCompressed;
             ItemType = itemType;
             MetaInfo = metaInfo; 
@@ -29,7 +29,7 @@ namespace WB.Core.Synchronization.SyncStorage
         public Guid PublicKey { get; private set; }
         public string Content { get; private set; }
         public DateTime Timestamp { get; private set; }
-        public Guid? UserId { get; private set; }
+        public Guid UserId { get; private set; }
         public bool IsCompressed { get; private set; }
         public string ItemType { get; private set; }
 
