@@ -239,6 +239,7 @@ namespace WB.UI.QuestionnaireTester
             this.kernel.Bind<Context>().ToConstant(this);
 
             NcqrsEnvironment.SetDefault(ServiceLocator.Current.GetInstance<ILogger>());
+            NcqrsEnvironment.InitDefaults();
 
             kernel.Unbind<IQuestionnaireAssemblyFileAccessor>();
             kernel.Bind<IQuestionnaireAssemblyFileAccessor>().To<QuestionnareAssemblyTesterFileAccessor>().InSingletonScope();
@@ -257,7 +258,8 @@ namespace WB.UI.QuestionnaireTester
 
             var bus = new InProcessEventBus(true);
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
-            kernel.Bind<IEventBus>().ToConstant(bus);
+            //kernel.Bind<IEventBus>().ToConstant(bus);
+            this.kernel.Bind<IEventBus>().ToConstant(bus).Named("interviewViewBus");
 
             kernel.Bind<IAggregateRootRepository>().To<AggregateRootRepository>();
             kernel.Bind<IEventPublisher>().To<EventPublisher>();
@@ -273,8 +275,6 @@ namespace WB.UI.QuestionnaireTester
             this.kernel.Bind<IQuestionViewFactory>().To<DefaultQuestionViewFactory>();
             
             #region register handlers
-
-            this.kernel.Bind<IEventBus>().ToConstant(bus).Named("interviewViewBus");
 
             this.InitInterviewStorage(bus);
             this.InitTemplateStorage(bus);
