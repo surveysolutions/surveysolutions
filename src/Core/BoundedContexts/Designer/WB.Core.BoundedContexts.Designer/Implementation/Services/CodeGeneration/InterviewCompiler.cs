@@ -30,13 +30,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     generatedClass => SyntaxFactory.ParseSyntaxTree(generatedClass.Value, path: generatedClass.Key))
                     .ToArray();
 
-            List<PortableExecutableReference> metadataReferences =
+            var metadataReferences = new List<PortableExecutableReference>
+            {
+                AssemblyMetadata.CreateFromFile(typeof (Identity).Assembly.Location).GetReference()
+            };
+
+            metadataReferences.AddRange(
                 compilerSettings.DefaultReferencedPortableAssemblies.Select(
                     defaultReferencedPortableAssembly =>
                         AssemblyMetadata.CreateFromFile(
                             fileSystemAccessor.CombinePath(compilerSettings.PortableAssembliesPath, defaultReferencedPortableAssembly))
-                            .GetReference())
-                            .ToList();
+                            .GetReference()));
 
             metadataReferences.AddRange(
                 referencedPortableAssemblies.Select(
@@ -44,14 +48,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         AssemblyMetadata.CreateFromFile(
                             fileSystemAccessor.CombinePath(compilerSettings.PortableAssembliesPath,
                                 defaultReferencedPortableAssembly)).GetReference()));
-
-            metadataReferences.Add(AssemblyMetadata.CreateFromFile(typeof (Identity).Assembly.Location).GetReference());
-
-            Guid uniqueAssemblySuffix = Guid.NewGuid();
-
-
+            
             CSharpCompilation compilation = CSharpCompilation.Create(
-                String.Format("rules-{0}-{1}.dll", templateId, uniqueAssemblySuffix),
+                String.Format("rules-{0}-{1}.dll", templateId, Guid.NewGuid()),
                 options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, 
                     checkOverflow: true, 
                     optimizationLevel: OptimizationLevel.Release, 
