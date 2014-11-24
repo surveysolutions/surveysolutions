@@ -28,7 +28,7 @@ namespace WB.UI.QuestionnaireTester.Adapters
 
             this.activity = activity;
 
-            activity.WaitForLongOperation(this.UploadQuestionnairesFromDesigner);
+            activity.WaitForLongOperation((ct)=>this.UploadQuestionnairesFromDesigner(ct));
         }
 
         protected async Task UploadQuestionnairesFromDesigner(CancellationToken cancellationToken)

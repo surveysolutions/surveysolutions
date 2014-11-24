@@ -50,7 +50,7 @@ namespace WB.UI.QuestionnaireTester
         {
             base.OnCreate(bundle);
             this.ActionBar.SetDisplayShowHomeEnabled(false);
-            this.WaitForLongOperation((ct) => this.Restore(ct, Guid.Parse(this.Intent.GetStringExtra("publicKey"))));
+            longOperationTokenSource = this.WaitForLongOperation((ct) => this.Restore(ct, Guid.Parse(this.Intent.GetStringExtra("publicKey"))));
         }
 
         public override void OnBackPressed()

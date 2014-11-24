@@ -9,8 +9,8 @@ using Android.Widget;
 namespace WB.UI.Shared.Android.Helpers
 {
     public static class AndroidUIHelper
-    { 
-        public static void WaitForLongOperation(this Activity activity,
+    {
+        public static CancellationTokenSource WaitForLongOperation(this Activity activity,
             Func<CancellationToken, Task> operation, 
             bool showProgressDialog = true)
         {
@@ -32,6 +32,30 @@ namespace WB.UI.Shared.Android.Helpers
 
                     }, cancellationToken).Start(TaskScheduler.Current);
                 }, cancellationToken);
+            return cancellationTokenSource;
+        }
+
+        public static CancellationTokenSource WaitForLongOperation(this Activity activity,
+           Action<CancellationToken> operation,
+           bool showProgressDialog = true)
+        {
+
+            var cancellationTokenSource = new CancellationTokenSource();
+
+            var cancellationToken = cancellationTokenSource.Token;
+
+            var progressBar = showProgressDialog ? CreateProgressBar(activity) : null;
+
+            Task.Factory.StartNew(
+                () =>
+                {
+                    operation(cancellationToken);
+                    if (showProgressDialog)
+                    {
+                        activity.RunOnUiThread(() => { progressBar.Visibility = ViewStates.Gone; });
+                    }
+                }, cancellationToken);
+            return cancellationTokenSource;
         }
 
         private static ProgressBar CreateProgressBar(Activity activity)
