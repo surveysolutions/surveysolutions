@@ -183,7 +183,8 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
 
         public Assembly LoadAssembly(string assemblyFile)
         {
-            return Assembly.LoadFile(assemblyFile);
+            //please don't use LoadFile here
+            return Assembly.LoadFrom(assemblyFile);
         }
 
         private string RemoveNonAscii(string s)
