@@ -33,8 +33,6 @@ namespace WB.UI.QuestionnaireTester
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class LoadingActivity : Activity
     {
-        protected ILogger logger;
-        protected IArchiveUtils archiver;
         private CancellationTokenSource longOperationTokenSource;
         private string additionalMassage = string.Empty;
 
@@ -43,14 +41,16 @@ namespace WB.UI.QuestionnaireTester
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
         }
 
+        private IArchiveUtils Archive
+        {
+            get { return ServiceLocator.Current.GetInstance<IArchiveUtils>(); }
+        }
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
-            this.archiver = ServiceLocator.Current.GetInstance<IArchiveUtils>();
             this.ActionBar.SetDisplayShowHomeEnabled(false);
-            this.longOperationTokenSource =
-                this.WaitForLongOperation((ct) => Restore(ct, Guid.Parse(this.Intent.GetStringExtra("publicKey"))));
+            this.WaitForLongOperation((ct) => this.Restore(ct, Guid.Parse(this.Intent.GetStringExtra("publicKey"))));
         }
 
         public override void OnBackPressed()
@@ -65,13 +65,13 @@ namespace WB.UI.QuestionnaireTester
             {
                 this.longOperationTokenSource.Cancel();
             }
+
             base.Finish();
         }
 
         protected void ShowErrorMassageToUser()
         {
             this.longOperationTokenSource = null;
-
             this.ActionBar.SetDisplayShowHomeEnabled(true);
 
             var container = new LinearLayout(this);
@@ -146,9 +146,9 @@ namespace WB.UI.QuestionnaireTester
                 return false;
             }
 
-            try
+            try 
             {
-                string content = archiver.DecompressString(template.Questionnaire);
+                string content = Archive.DecompressString(template.Questionnaire);
                 var questionnaireDocument = JsonUtils.GetObject<QuestionnaireDocument>(content);
 
                 var assemblyFileAccessor = ServiceLocator.Current.GetInstance<IQuestionnaireAssemblyFileAccessor>();
@@ -163,7 +163,7 @@ namespace WB.UI.QuestionnaireTester
             }
             catch (Exception e)
             {
-                logger.Error(e.Message, e);
+                Logger.Error(e.Message, e);
                 additionalMassage = Resources.GetText(Resource.String.TemplateIsNotValidForCurrentVersionOfTester);
 #if DEBUG
                 additionalMassage += Environment.NewLine + e.Message;
