@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
@@ -42,8 +43,7 @@ namespace WB.UI.Capi
             this.ActionBar.SetDisplayShowHomeEnabled(false);
             this.cancellationToken =
                 this.WaitForLongOperation(
-                    (ct) =>
-                        this.Restore(ct, Guid.Parse(this.Intent.GetStringExtra("publicKey")),
+                    (ct) => this.Restore(ct, Guid.Parse(this.Intent.GetStringExtra("publicKey")),
                             this.Intent.GetBooleanExtra("createdOnClient", false)));
         }
 
