@@ -44,16 +44,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         IUpdateHandler<GroupInfoView, GroupBecameARoster>,
         IUpdateHandler<GroupInfoView, GroupStoppedBeingARoster>
     {
-        private readonly IExpressionProcessor expressionProcessor;
-        private IQuestionnaireDocumentUpgrader questionnaireUpgrader;
 
-        public ChaptersInfoViewDenormalizer(IReadSideRepositoryWriter<GroupInfoView> writer,
-            IExpressionProcessor expressionProcessor,
-            IQuestionnaireDocumentUpgrader questionnaireUpgrader)
+        public ChaptersInfoViewDenormalizer(IReadSideRepositoryWriter<GroupInfoView> writer)
             : base(writer)
         {
-            this.expressionProcessor = expressionProcessor;
-            this.questionnaireUpgrader = questionnaireUpgrader;
         }
 
         public GroupInfoView Create(IPublishedEvent<NewQuestionnaireCreated> evnt)
@@ -452,10 +446,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 return;
             }
 
-            var questionsUsedInConditionExpression = string.IsNullOrEmpty(questionConditionExpression)
-                        ? new string[0]
-                        : expressionProcessor.GetIdentifiersUsedInExpression(questionConditionExpression);
-
             var questionInfoView = new QuestionInfoView()
             {
                 ItemId = questionId,
@@ -488,10 +478,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
             if (questionView == null)
                 return;
-
-            var questionsUsedInConditionExpression = string.IsNullOrEmpty(questionConditionExpression)
-                        ? new string[0]
-                        : expressionProcessor.GetIdentifiersUsedInExpression(questionConditionExpression);
 
             questionView.Title = questionTitle;
             questionView.Type = questionType;

@@ -14,11 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
             var readSideRepositoryWriter = new Mock<IReadSideRepositoryWriter<GroupInfoView>>();
             readSideRepositoryWriter.Setup(x => x.GetById(It.IsAny<string>())).Returns(view);
 
-            var upgraderMock = new Mock<IQuestionnaireDocumentUpgrader>();
-
-            return new ChaptersInfoViewDenormalizer(readSideRepositoryWriter.Object,
-                expressionProcessor ?? Mock.Of<IExpressionProcessor>(),
-                upgraderMock.Object);
+            return new ChaptersInfoViewDenormalizer(readSideRepositoryWriter.Object);
         }
 
         protected static GroupInfoView CreateGroupInfoView()

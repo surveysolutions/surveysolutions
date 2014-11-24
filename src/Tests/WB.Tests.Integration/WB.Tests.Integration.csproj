@@ -82,6 +82,7 @@
     <Compile Include="Create.cs" />
     <Compile Include="Empty.cs" />
     <Compile Include="EventContextExtensions.cs" />
+    <Compile Include="EventHandler\when_event_handler_created.cs" />
     <Compile Include="Execute.cs" />
     <Compile Include="InterviewStatistics\Create.cs" />
     <Compile Include="InterviewStatistics\InterviewChartDenormalizerTestContext.cs" />
@@ -164,9 +165,21 @@
       <Project>{AA90754B-CA47-429E-BDC8-2A83E94179B7}</Project>
       <Name>Ncqrs.Spec</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.Capi.csproj">
+      <Project>{c6ed30a9-4d14-48d1-8311-c2267dfd424f}</Project>
+      <Name>WB.Core.BoundedContexts.Capi</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj">
       <Project>{DCBFC3F0-8E8C-4529-B474-B6A79225450E}</Project>
       <Name>WB.Core.BoundedContexts.Designer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj">
+      <Project>{3017ec6d-ae4a-4c19-a653-352999592a7e}</Project>
+      <Name>WB.Core.BoundedContexts.Headquarters</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\WB.Core.BoundedContexts.Supervisor.csproj">
+      <Project>{755ca607-6b50-487f-98a0-34a98973593d}</Project>
+      <Name>WB.Core.BoundedContexts.Supervisor</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
