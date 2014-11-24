@@ -2519,10 +2519,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var answersToRemoveByCascading = answerChanged ? this.GetQuestionsToRemoveAnswersFromDependingOnCascading(questionId, rosterVector, questionnaire, state) : Enumerable.Empty<Identity>();
 
+           var cascadingQuestionsToEnable = questionnaire.GetCascadingQuestionsThatDirectlyDependUponQuestion(questionId)
+                .Where(question => IsOptionFromQuestion(selectedValue, question, questionnaire)).ToList();
+
+            var cascadingQuestionsToDisable = questionnaire.GetCascadingQuestionsThatDependUponQuestion(questionId)
+                .Except(cascadingQuestionsToEnable);
+
+            var cascadingQuestionsToEnableIdentities = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
+                cascadingQuestionsToEnable, rosterVector, questionnaire, GetRosterInstanceIds);
+
+            var cascadingQuestionsToDisableIdentities = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
+                cascadingQuestionsToDisable, rosterVector, questionnaire, GetRosterInstanceIds);
+
+
             Action<IInterviewExpressionState> updateState = expressionProcessorState =>
             {
                 expressionProcessorState.UpdateSingleOptionAnswer(questionId, rosterVector, selectedValue);
                 answersToRemoveByCascading.ToList().ForEach(x => expressionProcessorState.UpdateSingleOptionAnswer(x.Id, x.RosterVector, (decimal?)null));
+                expressionProcessorState.DisableQuestions(cascadingQuestionsToDisableIdentities);
+                expressionProcessorState.EnableQuestions(cascadingQuestionsToEnableIdentities);
             };
 
             var interviewChangesOnAnswerSingleOptionQuestion = this.CalculateInterviewChangesOnAnswerQuestion(
@@ -2536,6 +2551,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             interviewChangesOnAnswerSingleOptionQuestion.AnswersForLinkedQuestionsToRemove.AddRange(answersToRemoveByCascading);
 
             return interviewChangesOnAnswerSingleOptionQuestion;
+        }
+
+        private static bool IsOptionFromQuestion(decimal option, Guid questionId, IQuestionnaire questionnaire)
+        {
+            return questionnaire.GetAnswerOptionsAsValues(questionId).Any(answerOption => answerOption == option);
         }
 
         private InterviewChanges CalculateInterviewChangesOnAnswerQRBarcodeQuestion(InterviewStateDependentOnAnswers state,
