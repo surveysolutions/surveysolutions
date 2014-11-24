@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                 //path is cached
                 //if assembly was loaded from this path it won't be loaded again 
                 var compiledAssembly = fileSystemAccessor.LoadAssembly(assemblyFile);
-
+                    
                 TypeInfo interviewExpressionStateTypeInfo = compiledAssembly.DefinedTypes.
                     SingleOrDefault(x => !(x.IsAbstract || x.IsGenericTypeDefinition || x.IsInterface) && x.ImplementedInterfaces.Contains(typeof (IInterviewExpressionState)));
 
@@ -63,9 +63,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
             }
             catch (Exception exception)
             {
-                Logger.Fatal("Error on assembly loading", exception);
+                Logger.Fatal(String.Format("Error on assembly loading for id={0} version={1}", questionnaireId, questionnaireVersion), exception);
                 if (exception.InnerException != null)
-                    Logger.Fatal("Error on assembly loading", exception.InnerException);
+                    Logger.Fatal("Error on assembly loading (inner)", exception.InnerException);
 
                 //hide original one
                 throw new InterviewException("Interview loading error. Code EC0001");
