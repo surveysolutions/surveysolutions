@@ -2519,23 +2519,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var answersToRemoveByCascading = answerChanged ? this.GetQuestionsToRemoveAnswersFromDependingOnCascading(questionId, rosterVector, questionnaire, state) : Enumerable.Empty<Identity>();
 
-            var cascadingQuestionsToEnable = questionnaire.GetCascadingQuestionsThatDirectlyDependUponQuestion(questionId);
-
-            var cascadingQuestionsToDisable = questionnaire.GetCascadingQuestionsThatDependUponQuestion(questionId)
-                .Except(cascadingQuestionsToEnable);
-
-            var cascadingQuestionsToEnableIdentities = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
-                cascadingQuestionsToEnable, rosterVector, questionnaire, GetRosterInstanceIds);
-
-            var cascadingQuestionsToDisableIdentities = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
-                cascadingQuestionsToDisable, rosterVector, questionnaire, GetRosterInstanceIds);
-
             Action<IInterviewExpressionState> updateState = expressionProcessorState =>
             {
                 expressionProcessorState.UpdateSingleOptionAnswer(questionId, rosterVector, selectedValue);
                 answersToRemoveByCascading.ToList().ForEach(x => expressionProcessorState.UpdateSingleOptionAnswer(x.Id, x.RosterVector, (decimal?)null));
-                expressionProcessorState.DisableQuestions(cascadingQuestionsToDisableIdentities);
-                expressionProcessorState.EnableQuestions(cascadingQuestionsToEnableIdentities);
             };
 
             var interviewChangesOnAnswerSingleOptionQuestion = this.CalculateInterviewChangesOnAnswerQuestion(
@@ -3750,8 +3737,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             expressionProcessorState.SaveAllCurrentStatesAsPrevious();
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
-            AppendCascadingQuestionChanges(interviewChanges, questionnaire, enablementChanges);
-
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
 
             var enablementAndValidityChanges = new InterviewChanges(
@@ -3763,36 +3748,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 null,
                 null);
             return enablementAndValidityChanges;
-        }
-
-        private static void AppendCascadingQuestionChanges(InterviewChangeStructures interviewChanges, IQuestionnaire questionnaire,
-            EnablementChanges enablementChanges)
-        {
-            var childCascadingQuestions = questionnaire.GetAllChildCascadingQuestions();
-            foreach (var childCascadingQuestionId in childCascadingQuestions)
-            {
-                var childCascadingQuestionRosterInstances = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(interviewChanges.State,
-                    childCascadingQuestionId,
-                    EmptyRosterVector,
-                    questionnaire,
-                    GetRosterInstanceIds);
-                foreach (var childCascadingQuestionRosterInstance in childCascadingQuestionRosterInstances)
-                {
-                    var cascadingQuestionParentId = questionnaire.GetCascadingQuestionParentId(childCascadingQuestionRosterInstance.Id);
-                    if (cascadingQuestionParentId.HasValue)
-                    {
-                        var parentInstance = GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(cascadingQuestionParentId.Value,
-                            childCascadingQuestionRosterInstance.RosterVector, questionnaire);
-
-                        var parentStringIdentity = ConversionHelper.ConvertIdentityToString(parentInstance);
-                        if (!interviewChanges.State.AnsweredQuestions.Contains(parentStringIdentity))
-                        {
-                            enablementChanges.QuestionsToBeDisabled.Add(childCascadingQuestionRosterInstance);
-                            enablementChanges.QuestionsToBeEnabled.Remove(childCascadingQuestionRosterInstance);
-                        }
-                    }
-                }
-            }
         }
 
         private static void UpdateExpressionProcessorStateWithAnswerChange(AnswerChange answerChange,
