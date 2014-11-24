@@ -95,6 +95,7 @@
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options_with_mandatory_child_under_condition_expression.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_numeric_question_that_can_turn_off_cascading.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_numeric_question_that_can_turn_on_cascading.cs" />
+    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_root_cascading_single_option_question_and_dependent_cascading_question_has_no_options_for_this_answer.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_single_option_question_that_was_turned_on_by_numeric.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_cascading_question_depends_on_other_question.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_creating_new_interview_with_cascading_options_question.cs" />
