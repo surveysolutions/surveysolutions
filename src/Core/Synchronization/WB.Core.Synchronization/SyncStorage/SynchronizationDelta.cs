@@ -10,7 +10,7 @@ namespace WB.Core.Synchronization.SyncStorage
         }
 
 
-        public SynchronizationDelta(Guid publicKey, string content, DateTime timestamp, Guid userId)
+        public SynchronizationDelta(Guid publicKey, string content, DateTime timestamp, Guid? userId)
             : this(publicKey, content, timestamp, userId, false, "temp", "")
         {
         }
