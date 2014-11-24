@@ -9,44 +9,41 @@ using Android.Widget;
 namespace WB.UI.Shared.Android.Helpers
 {
     public static class AndroidUIHelper
-    {
-        public static CancellationTokenSource WaitForLongOperation(this Activity activity, 
-            Action<CancellationToken> operation, 
+    { 
+        public static void WaitForLongOperation(this Activity activity,
+            Func<CancellationToken, Task> operation, 
             bool showProgressDialog = true)
         {
-            var progressBar = showProgressDialog ? CreateProgressBar(activity) : null;
             var cancellationTokenSource = new CancellationTokenSource();
+
             var cancellationToken = cancellationTokenSource.Token;
-            
-            Task.Factory.StartNew(() =>
-            {
-                operation(cancellationToken);
 
-                if (showProgressDialog)
+            var progressBar = showProgressDialog ? CreateProgressBar(activity) : null;
+
+            Task.Factory.StartNew(
+                () =>
                 {
-                    activity.RunOnUiThread(() =>
+                    operation(cancellationToken).ContinueWith((t) =>
                     {
-                        progressBar.Visibility = ViewStates.Gone;
-                    });
-                }
-            }, cancellationToken);
+                        if (showProgressDialog)
+                        {
+                            activity.RunOnUiThread(() => { progressBar.Visibility = ViewStates.Gone; });
+                        }
 
-            return cancellationTokenSource;
+                    }, cancellationToken).Start(TaskScheduler.Current);
+                }, cancellationToken);
         }
 
         private static ProgressBar CreateProgressBar(Activity activity)
         {
             var progressBar = new ProgressBar(activity);
-
-            activity.AddContentView(progressBar,
-                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent));
-            
-            Display display = activity.WindowManager.DefaultDisplay;
-            Point size = new Point();
+            var display = activity.WindowManager.DefaultDisplay;
+            var size = new Point();
             display.GetSize(size);
-
             progressBar.SetX(size.X / 2);
             progressBar.SetY(size.Y / 2);
+            activity.AddContentView(progressBar,
+                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent));
             return progressBar;
         }
 
