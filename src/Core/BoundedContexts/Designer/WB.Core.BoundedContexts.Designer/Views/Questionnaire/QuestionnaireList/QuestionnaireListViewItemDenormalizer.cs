@@ -31,14 +31,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         /// </summary>
         private readonly IReadSideRepositoryWriter<AccountDocument> accountStorage;
 
-        private readonly IQuestionnaireDocumentUpgrader upgrader;
-
         public QuestionnaireListViewItemDenormalizer(IReadSideRepositoryWriter<QuestionnaireListViewItem> documentStorage,
-            IReadSideRepositoryWriter<AccountDocument> accountStorage, IQuestionnaireDocumentUpgrader upgrader)
+            IReadSideRepositoryWriter<AccountDocument> accountStorage)
         {
             this.documentStorage = documentStorage;
             this.accountStorage = accountStorage;
-            this.upgrader = upgrader;
         }
 
         #endregion

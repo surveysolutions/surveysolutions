@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public override object[] Readers
         {
-            get { return new[] { questionnaires }; }
+            get { return new object[] { questionnaires, users }; }
         }
 
         private void HandleCreation(Guid eventSourceId, Guid responsibleId, Guid questionnaireId, long questionnaireVersion)

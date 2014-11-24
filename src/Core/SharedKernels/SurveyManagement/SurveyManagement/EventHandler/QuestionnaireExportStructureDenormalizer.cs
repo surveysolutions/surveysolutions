@@ -16,21 +16,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     internal class QuestionnaireExportStructureDenormalizer : BaseDenormalizer, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> readsideRepositoryWriter;
-        private readonly IQuestionnaireUpgradeService questionnaireUpgradeService;
         private readonly IDataExportRepositoryWriter dataExportWriter;
+
         private readonly IExportViewFactory exportViewFactory;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
         public QuestionnaireExportStructureDenormalizer(
             IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> readsideRepositoryWriter, IDataExportRepositoryWriter dataExportWriter,
-            IExportViewFactory exportViewFactory, IPlainQuestionnaireRepository plainQuestionnaireRepository,
-            IQuestionnaireUpgradeService questionnaireUpgradeService)
+            IExportViewFactory exportViewFactory, IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.readsideRepositoryWriter = readsideRepositoryWriter;
             this.dataExportWriter = dataExportWriter;
             this.exportViewFactory = exportViewFactory;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
-            this.questionnaireUpgradeService = questionnaireUpgradeService;
         }
 
         public override object[] Writers
@@ -64,7 +62,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private void StoreExportStructure(Guid id, long version, QuestionnaireDocument questionnaireDocument)
         {
-            questionnaireDocument = questionnaireUpgradeService.CreateRostersVariableName(questionnaireDocument);
             var questionnaireExportStructure = this.exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument, version);
             this.dataExportWriter.CreateExportStructureByTemplate(questionnaireExportStructure);
             this.readsideRepositoryWriter.Store(questionnaireExportStructure, id);
