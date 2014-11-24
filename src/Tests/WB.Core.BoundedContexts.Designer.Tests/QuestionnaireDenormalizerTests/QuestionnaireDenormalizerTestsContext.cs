@@ -32,14 +32,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         protected static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(
             IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage = null,
             IQuestionnaireEntityFactory questionnaireEntityFactory = null,
-            ILogger logger = null,
-            IQuestionnaireDocumentUpgrader upgrader = null)
+            ILogger logger = null)
         {
             return new QuestionnaireDenormalizer(
                 documentStorage ?? Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(),
                 questionnaireEntityFactory ?? Mock.Of<IQuestionnaireEntityFactory>(),
-                logger ?? Mock.Of<ILogger>(),
-                upgrader ?? Mock.Of<IQuestionnaireDocumentUpgrader>());
+                logger ?? Mock.Of<ILogger>());
         }
 
         protected static T GetEntityById<T>(QuestionnaireDocument document, Guid entityId)

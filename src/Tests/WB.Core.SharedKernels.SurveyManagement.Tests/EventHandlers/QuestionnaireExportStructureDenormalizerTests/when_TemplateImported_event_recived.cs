@@ -31,14 +31,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Questionnai
             questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId };
             questionnaireExportStructureMock=new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>>();
             dataExportServiceMock = new Mock<IDataExportRepositoryWriter>();
-            exportViewFactory=new Mock<IExportViewFactory>();
-
-            var questionnaireUpgradeServiceMock = new Mock<IQuestionnaireUpgradeService>();
-            questionnaireUpgradeServiceMock.Setup(x => x.CreateRostersVariableName(Moq.It.IsAny<QuestionnaireDocument>()))
-                .Returns<QuestionnaireDocument>(doc => doc);
+            exportViewFactory = new Mock<IExportViewFactory>();
 
             questionnaireExportStructureDenormalizer = new QuestionnaireExportStructureDenormalizer(
-                questionnaireExportStructureMock.Object, dataExportServiceMock.Object, exportViewFactory.Object, Mock.Of<IPlainQuestionnaireRepository>(), questionnaireUpgradeServiceMock.Object);
+                questionnaireExportStructureMock.Object, dataExportServiceMock.Object, exportViewFactory.Object, Mock.Of<IPlainQuestionnaireRepository>());
         };
 
         Because of = () =>

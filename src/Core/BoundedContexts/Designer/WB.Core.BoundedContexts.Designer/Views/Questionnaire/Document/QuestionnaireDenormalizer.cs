@@ -54,15 +54,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<StaticTextCloned>,
         IEventHandler<StaticTextDeleted>
     {
-        private readonly IQuestionnaireDocumentUpgrader upgrader;
         private readonly IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage;
         private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;
         private readonly ILogger logger;
 
         public QuestionnaireDenormalizer(IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage,
-            IQuestionnaireEntityFactory questionnaireEntityFactory, ILogger logger, IQuestionnaireDocumentUpgrader upgrader)
+            IQuestionnaireEntityFactory questionnaireEntityFactory, ILogger logger)
         {
-            this.upgrader = upgrader;
             this.documentStorage = documentStorage;
             this.questionnaireEntityFactory = questionnaireEntityFactory;
             this.logger = logger;

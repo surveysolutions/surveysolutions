@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public override object[] Readers
         {
-            get { return new[] { users }; }
+            get { return new object[] { users, questionnriePropagationStructures }; }
         }
 
         private static string CreateLevelIdFromPropagationVector(decimal[] vector)

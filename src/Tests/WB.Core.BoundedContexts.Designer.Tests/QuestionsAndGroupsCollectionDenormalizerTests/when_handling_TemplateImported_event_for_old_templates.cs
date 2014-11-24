@@ -89,12 +89,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
 
             evnt = CreateTemplateImportedEvent(questionnaire);
 
-            var upgrader = new Mock<IQuestionnaireDocumentUpgrader>();
-
             denormalizer = CreateQuestionnaireInfoDenormalizer(
                 questionDetailsViewMapper: questionDetailsFactoryMock.Object,
-                questionnaireEntityFactory: questionFactoryMock.Object,
-                upgrader: upgrader.Object);
+                questionnaireEntityFactory: questionFactoryMock.Object);
         };
 
         Because of = () =>

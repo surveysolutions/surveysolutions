@@ -26,10 +26,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireListViewDenormaliz
             Guid questionnaireId = Guid.NewGuid();
             string newtitle = "newTitle";
             QuestionnaireDocument documentReplacement = new QuestionnaireDocument() { PublicKey = questionnaireId, Title = newtitle };
-
-            var updrader = Mock.Of<IQuestionnaireDocumentUpgrader>();
-
-            QuestionnaireListViewItemDenormalizer target = CreateQuestionnaireDenormalizer(updrader);
+            
+            QuestionnaireListViewItemDenormalizer target = CreateQuestionnaireDenormalizer();
             // act
             target.Handle(CreateEvent(CreateTemplateImportedEvent(documentReplacement)));
 
@@ -53,8 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireListViewDenormaliz
 
             questionnaireStorageMock.Setup(x => x.GetById(questionnaireId.ToString())).Returns(currentItem);
 
-            var updrader = Mock.Of<IQuestionnaireDocumentUpgrader>();
-            QuestionnaireListViewItemDenormalizer target = CreateQuestionnaireDenormalizer(updrader);
+            QuestionnaireListViewItemDenormalizer target = CreateQuestionnaireDenormalizer();
             // act
             target.Handle(CreateEvent(CreateTemplateImportedEvent(documentReplacement)));
 
@@ -79,9 +76,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireListViewDenormaliz
             return mock.Object;
         }
 
-        private QuestionnaireListViewItemDenormalizer CreateQuestionnaireDenormalizer(IQuestionnaireDocumentUpgrader updrader)
+        private QuestionnaireListViewItemDenormalizer CreateQuestionnaireDenormalizer()
         {
-            return new QuestionnaireListViewItemDenormalizer(questionnaireStorageMock.Object, accountStorageMock.Object, updrader);
+            return new QuestionnaireListViewItemDenormalizer(questionnaireStorageMock.Object, accountStorageMock.Object);
         }
 
         private Mock<IReadSideRepositoryWriter<QuestionnaireListViewItem>> questionnaireStorageMock = new Mock<IReadSideRepositoryWriter<QuestionnaireListViewItem>>();

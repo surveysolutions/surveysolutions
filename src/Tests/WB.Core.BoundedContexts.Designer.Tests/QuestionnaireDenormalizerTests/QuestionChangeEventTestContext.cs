@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
     {
         internal static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(IQuestionnaireEntityFactory questionnaireEntityFactoryMock, Mock<IReadSideRepositoryWriter<QuestionnaireDocument>> storageStub)
         {
-            var denormalizer = new QuestionnaireDenormalizer(storageStub.Object, questionnaireEntityFactoryMock, Mock.Of<ILogger>(), Mock.Of<IQuestionnaireDocumentUpgrader>());
+            var denormalizer = new QuestionnaireDenormalizer(storageStub.Object, questionnaireEntityFactoryMock, Mock.Of<ILogger>());
 
             return denormalizer;
         }

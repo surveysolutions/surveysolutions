@@ -47,17 +47,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
     {
         private readonly IQuestionDetailsViewMapper questionDetailsViewMapper;
         private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;
-        private readonly IQuestionnaireDocumentUpgrader questionnaireUpgrader;
 
         public QuestionsAndGroupsCollectionDenormalizer(
             IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView> readsideRepositoryWriter,
-            IQuestionDetailsViewMapper questionDetailsViewMapper, IQuestionnaireEntityFactory questionnaireEntityFactory,
-            IQuestionnaireDocumentUpgrader questionnaireUpgrader)
+            IQuestionDetailsViewMapper questionDetailsViewMapper, IQuestionnaireEntityFactory questionnaireEntityFactory)
             : base(readsideRepositoryWriter)
         {
             this.questionDetailsViewMapper = questionDetailsViewMapper;
             this.questionnaireEntityFactory = questionnaireEntityFactory;
-            this.questionnaireUpgrader = questionnaireUpgrader;
         }
 
         public QuestionsAndGroupsCollectionView Create(IPublishedEvent<NewQuestionnaireCreated> evnt)

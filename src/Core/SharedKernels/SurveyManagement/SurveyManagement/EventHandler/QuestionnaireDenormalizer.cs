@@ -43,6 +43,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             get { return new object[] { documentStorage }; }
         }
 
+        public override object[] Readers
+        {
+            get { return new object[] { interviews }; }
+        }
+
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
             Guid id = evnt.EventSourceId;
