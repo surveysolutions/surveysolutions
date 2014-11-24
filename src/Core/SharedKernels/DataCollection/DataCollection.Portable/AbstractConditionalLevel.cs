@@ -238,11 +238,17 @@ namespace WB.Core.SharedKernels.DataCollection
 
         private static bool StateChangedToEnabled(ConditionalState state)
         {
+            if (state.State == State.Unknown && state.PreviousState == State.Disabled)
+            {
+                return false;
+            }
+
             bool isCurrentStateEnabled = state.State == State.Enabled || state.State == State.Unknown;
             bool isPreviousStateEnabled = state.PreviousState == State.Enabled || state.PreviousState == State.Unknown;
 
             return isCurrentStateEnabled && !isPreviousStateEnabled;
         }
+
 
         private static bool StateChangedToDisabled(ConditionalState state)
         {
