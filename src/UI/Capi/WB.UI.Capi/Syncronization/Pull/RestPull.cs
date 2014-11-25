@@ -21,13 +21,12 @@ namespace WB.UI.Capi.Syncronization.Pull
             this.webExecutor = webExecutor;
         }
 
-        public async Task<SyncItem> RequestChunckAsync(string login, string password, Guid id, long timestamp, string deviceId,
+        public async Task<SyncItem> RequestChunckAsync(string login, string password, Guid id, string deviceId,
             CancellationToken ct)
         {
             var package = await webExecutor.ExecuteRestRequestAsync<SyncPackage>(getChunckPath, ct, null,
                 login, password, "GET",
                 new KeyValuePair<string, object>("aRKey", id),
-                new KeyValuePair<string, object>("aRTimestamp", timestamp),
                 new KeyValuePair<string, object>("clientRegistrationId", deviceId));
 
             if (package.ItemsContainer == null || package.ItemsContainer.Count == 0)
@@ -42,7 +41,7 @@ namespace WB.UI.Capi.Syncronization.Pull
             var syncItemsMetaContainer = await webExecutor.ExecuteRestRequestAsync<SyncItemsMetaContainer>(
                 getARKeysPath, ct, null, login, password, "GET",
                 new KeyValuePair<string, object>("clientRegistrationId", deviceId),
-                new KeyValuePair<string, object>("sequence", sequence)
+                new KeyValuePair<string, object>("lastSyncedPackageId", sequence)
                 );
 
             if (syncItemsMetaContainer.ChunksMeta == null)
