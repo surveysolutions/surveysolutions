@@ -146,6 +146,8 @@
     <Compile Include="Models\AllQuestionnairesRequestModel.cs" />
     <Compile Include="Models\EventHandlerDescriptionModel.cs" />
     <Compile Include="Models\ImportQuestionnaireRequest.cs" />
+    <Compile Include="Models\RebuildReadSideInputViewModel.cs" />
+    <Compile Include="Models\RebuildReadSideType.cs" />
     <Compile Include="Resources\InterviewerSyncControllerMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -420,6 +422,9 @@
     <EmbeddedResource Include="Views\Shared\_LayoutForErrorPage.cshtml" />
     <EmbeddedResource Include="Views\Account\Manage.cshtml" />
     <EmbeddedResource Include="Views\Shared\UserEditFormWithoutLock.cshtml" />
+    <None Include="Scripts\moment.min.js.map">
+      <DependentUpon>moment.min.js</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
@@ -487,6 +492,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\typeahead.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\viewmodels\pages\controlpanel\readside.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\components\moment-duration-format.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
