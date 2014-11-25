@@ -46,7 +46,7 @@ namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideServiceTests
         It should_rebuild_all_view = () =>
             result.Select(x => x.Name).ToArray().ShouldEqual(new[] { FirstHandlerName, SecondHandlerName });
 
-        private static RavenReadSideService ravenReadSideService;
+        private static ReadSideService ravenReadSideService;
         private static Mock<IEventDispatcher> eventDispatcherMock;
         private static Mock<IEventHandler> firstEventHandlerMock;
         private static Mock<IEventHandler> secondEventHandlerMock;
