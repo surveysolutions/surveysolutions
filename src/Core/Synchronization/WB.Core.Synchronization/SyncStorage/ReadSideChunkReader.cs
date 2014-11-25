@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using Raven.Client.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -43,10 +41,11 @@ namespace WB.Core.Synchronization.SyncStorage
             if (lastSyncedPackageId == null)
             {
                 var fullStreamDeltas = queryableStorage.Query(_ => _.Where(x => x.UserId.In(userIds))
-                                                      .OrderBy(x => x.SortIndex));
+                                                                    .OrderBy(x => x.SortIndex)
+                                                                    .ToList());
 
-                var fullListResult = fullStreamDeltas.Select(s => new SynchronizationChunkMeta(s.PublicKey, s.Timestamp.Ticks))
-                                   .ToList();
+                var fullListResult = fullStreamDeltas.Select(s => new SynchronizationChunkMeta(s.PublicKey))
+                                                     .ToList();
                 return fullListResult; 
             }
 
@@ -58,19 +57,12 @@ namespace WB.Core.Synchronization.SyncStorage
             }
 
             var deltas = queryableStorage.Query(_ => _.Where(x => x.SortIndex > lastSyncedPackage.SortIndex && x.UserId.In(userIds))
-                                                      .OrderBy(x => x.SortIndex));
+                                                      .OrderBy(x => x.SortIndex)
+                                                      .ToList());
 
-            var result = deltas.Select(s => new SynchronizationChunkMeta(s.PublicKey, s.Timestamp.Ticks))
+            var result = deltas.Select(s => new SynchronizationChunkMeta(s.PublicKey))
                                .ToList();
             return result; 
-
-            //var userIds = users.Concat(new[] { Guid.Empty });
-
-            //return
-            //    queryableStorage.QueryAll(
-            //        d => d.Timestamp > timestamp && d.UserId.In(userIds))
-            //                    .OrderBy(o => o.Timestamp)
-            //                    .Select(s => new SynchronizationChunkMeta(s.PublicKey, s.Timestamp.Ticks)).ToList();
         }
     }
 

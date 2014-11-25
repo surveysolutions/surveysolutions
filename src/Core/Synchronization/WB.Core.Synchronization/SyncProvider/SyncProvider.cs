@@ -35,7 +35,7 @@ namespace WB.Core.Synchronization.SyncProvider
             this.commandService = commandService;
         }
 
-        public SyncItem GetSyncItem(Guid clientRegistrationKey, Guid id, DateTime timestamp)
+        public SyncItem GetSyncItem(Guid clientRegistrationKey, Guid id)
         {
             var device = devices.GetById(clientRegistrationKey);
             if (device == null)
