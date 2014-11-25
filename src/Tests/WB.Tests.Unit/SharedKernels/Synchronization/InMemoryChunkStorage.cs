@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.Synchronization.SyncStorage;
 
-namespace WB.Core.Synchronization.SyncStorage
+namespace WB.Tests.Unit.SharedKernels.Synchronization
 {
     internal class InMemoryChunkStorage : IChunkWriter, IChunkReader, IReadSideRepositoryCleaner
     {
@@ -30,7 +31,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public SyncItem ReadChunk(Guid id)
         {
-            return container[id];
+            return this.container[id];
         }
 
         public IEnumerable<SynchronizationChunkMeta> GetChunkMetaDataCreatedAfter(Guid? lastSyncedPackageId, IEnumerable<Guid> users)
