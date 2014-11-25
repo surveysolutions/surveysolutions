@@ -62,7 +62,7 @@ namespace WB.Tests.Integration.EventHandler
                 }
             }
         };
-
+        // Please check EventHandler's Readers and Writers implementation. It could be possible that not all database accessors are listed in eventhandler's Writers or Readers properties.
         It should_create_event_handlers_where_sum_of_readers_and_writers_is_equal_count_of_constructor_arguments = () =>
             eventHandlersWhereWritersAndReadersCountNotEqualToCountofConstructorArguments.ShouldBeEmpty();
 
