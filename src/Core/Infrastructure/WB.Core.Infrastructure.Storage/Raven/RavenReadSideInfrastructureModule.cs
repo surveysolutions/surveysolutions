@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Ninject;
 using Ninject.Activation;
+using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide;
@@ -24,10 +25,10 @@ namespace WB.Core.Infrastructure.Storage.Raven
         {
             this.BindDocumentStore();
 
-            this.Bind<IReadSideStatusService>().To<RavenReadSideService>().InSingletonScope();
+            this.Bind<IReadSideStatusService>().To<ReadSideService>().InSingletonScope();
             this.Bind<IReadSideRepositoryIndexAccessor>().To<RavenReadSideRepositoryIndexAccessor>().InSingletonScope()
                 .WithConstructorArgument("assembliesWithIndexes", this.assembliesWithIndexes);
-            this.Bind<IReadSideAdministrationService>().To<RavenReadSideService>().InSingletonScope();
+            this.Bind<IReadSideAdministrationService>().To<ReadSideService>().InSingletonScope();
 
             // each repository writer should exist in one instance because it might use caching
             this.Kernel.Bind(typeof(RavenReadSideRepositoryWriter<>)).ToSelf().InSingletonScope().WithConstructorArgument("basePath", basePath);
