@@ -12,7 +12,7 @@ namespace WB.Core.Synchronization.SyncProvider
 
         IEnumerable<SyncItem> GetSyncItemBulk(Guid userId, Guid clientRegistrationKey, DateTime timestamp);
 
-        IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, DateTime timestamp);
+        IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, Guid? lastSyncedPackageId);
 
         HandshakePackage CheckAndCreateNewSyncActivity(ClientIdentifier identifier);
 

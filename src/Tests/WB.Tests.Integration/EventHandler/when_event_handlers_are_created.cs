@@ -27,7 +27,7 @@ namespace WB.Tests.Integration.EventHandler
             var type = typeof(IEventHandler);
             var types = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
-                .Where(eh=>type.IsAssignableFrom(eh) && !eh.IsAbstract && !eh.IsInterface).ToArray();
+                .Where(eh => type.IsAssignableFrom(eh) && !eh.IsAbstract && !eh.IsInterface).ToArray();
 
             foreach (var eventHandlerType in types)
             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -20,11 +21,13 @@ namespace WB.Core.Synchronization.SyncStorage
         public void StoreChunk(SyncItem syncItem, Guid? userId, DateTime timestamp)
         {
             var content = syncItem.IsCompressed ? archiver.CompressString(syncItem.Content) : syncItem.Content;
-            var metaInfo = (syncItem.IsCompressed && !string.IsNullOrWhiteSpace(syncItem.MetaInfo)) ? archiver.CompressString(syncItem.MetaInfo) : syncItem.MetaInfo; 
+            var metaInfo = (syncItem.IsCompressed && !string.IsNullOrWhiteSpace(syncItem.MetaInfo)) ? archiver.CompressString(syncItem.MetaInfo) : syncItem.MetaInfo;
 
-            storage.Store(new SynchronizationDelta(syncItem.Id, content, timestamp, userId, syncItem.IsCompressed,
-                syncItem.ItemType, metaInfo), syncItem.Id);
+            var sortIndex = storage.Query(_ => _.Count());
 
+            var synchronizationDelta = new SynchronizationDelta(syncItem.Id, content, timestamp, userId, syncItem.IsCompressed, syncItem.ItemType, metaInfo, sortIndex);
+
+            storage.Store(synchronizationDelta, syncItem.Id);
         }
 
         public void Clear()

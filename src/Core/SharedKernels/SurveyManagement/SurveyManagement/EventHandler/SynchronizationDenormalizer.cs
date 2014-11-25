@@ -50,11 +50,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
-        public SynchronizationDenormalizer(ISynchronizationDataStorage syncStorage, IReadSideRepositoryWriter<UserDocument> users,
+        public SynchronizationDenormalizer(ISynchronizationDataStorage syncStorage, 
+            IReadSideRepositoryWriter<UserDocument> users,
             IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures,
             IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviews,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummarys,
-            IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor, IPlainQuestionnaireRepository plainQuestionnaireRepository)
+            IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor, 
+            IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.syncStorage = syncStorage;
             this.users = users;
