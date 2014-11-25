@@ -12,7 +12,7 @@ namespace WB.Core.Synchronization
         bool SendSyncPackage(SyncPackage package);
         bool SendSyncItem(SyncItem package);
 
-        IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, DateTime timestamp);
+        IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, Guid? lastSyncedPackageId);
 
         SyncPackage ReceiveSyncPackage(Guid clientRegistrationId, Guid id, DateTime timestamp);
 

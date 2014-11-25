@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
@@ -36,12 +33,12 @@ namespace WB.Core.Synchronization.SyncStorage
             return container[id];
         }
 
-        public IEnumerable<Guid> GetChunksCreatedAfterForUsers(DateTime timestamp, IEnumerable<Guid> users)
+        public IEnumerable<SynchronizationChunkMeta> GetChunkMetaDataCreatedAfter(Guid? lastSyncedPackageId, IEnumerable<Guid> users)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<SynchronizationChunkMeta> GetChunkMetaDataCreatedAfter(DateTime timestamp, IEnumerable<Guid> users)
+        public IEnumerable<Guid> GetChunksCreatedAfterForUsers(DateTime timestamp, IEnumerable<Guid> users)
         {
             throw new NotImplementedException();
         }

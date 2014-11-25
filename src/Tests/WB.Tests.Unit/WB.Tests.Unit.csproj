@@ -436,7 +436,6 @@
     <Compile Include="SharedKernels\SurveyManagement\Web\CommandTransformatorTests\when_need_to_transform_CreateInterviewControllerCommand.cs" />
     <Compile Include="SharedKernels\SurveySolutions\Documents\QuestionnaireDocumentTests.cs" />
     <Compile Include="SharedKernels\Synchronization\DefaultBackupManagerTests.cs" />
-    <Compile Include="SharedKernels\Synchronization\ReadSideChunkReaderTests.cs" />
     <Compile Include="SharedKernels\Synchronization\ReadSideChunkWriterTests.cs" />
     <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests.cs" />
     <Compile Include="SharedKernels\Synchronization\SyncManagerTests\SyncManagerTests.cs" />
