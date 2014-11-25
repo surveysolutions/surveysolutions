@@ -132,7 +132,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpGet]
         [ApiBasicAuth]
-        public HttpResponseMessage GetSyncPackage(Guid aRKey, long aRTimestamp, string clientRegistrationId)
+        public HttpResponseMessage GetSyncPackage(Guid aRKey, string clientRegistrationId)
         {
             Guid clientRegistrationKey;
             if (!Guid.TryParse(clientRegistrationId, out clientRegistrationKey))
@@ -142,7 +142,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             
             try
             {
-                SyncPackage package = syncManager.ReceiveSyncPackage(clientRegistrationKey, aRKey, new DateTime(aRTimestamp));
+                SyncPackage package = syncManager.ReceiveSyncPackage(clientRegistrationKey, aRKey);
 
                 if (package == null)
                     return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable,
@@ -190,9 +190,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
             try
             {
-                IEnumerable<SynchronizationChunkMeta> package =
-                    syncManager.GetAllARIdsWithOrder(user.PublicKey, clientRegistrationKey, clientSequence);
-                var result = new SyncItemsMetaContainer {ChunksMeta = package.ToList()};
+                IEnumerable<SynchronizationChunkMeta> package = syncManager.GetAllARIdsWithOrder(user.PublicKey, clientRegistrationKey, clientSequence);
+                var result = new SyncItemsMetaContainer {
+                    ChunksMeta = package.ToList()
+                };
 
                 return Request.CreateResponse(HttpStatusCode.OK, result);
             }

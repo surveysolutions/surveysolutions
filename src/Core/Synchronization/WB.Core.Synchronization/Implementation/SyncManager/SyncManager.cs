@@ -65,11 +65,11 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         }
 
 
-        public SyncPackage ReceiveSyncPackage(Guid clientRegistrationId, Guid id, DateTime timestamp)
+        public SyncPackage ReceiveSyncPackage(Guid clientRegistrationId, Guid id)
         {
             var syncPackage = new SyncPackage();
 
-            SyncItem item = this.syncProvider.GetSyncItem(clientRegistrationId, id, timestamp);
+            SyncItem item = this.syncProvider.GetSyncItem(clientRegistrationId, id);
 
             if (item == null)
             {

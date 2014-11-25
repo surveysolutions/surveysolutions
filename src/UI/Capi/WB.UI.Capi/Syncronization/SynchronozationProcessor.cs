@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Authentication;
 using System.Threading;
@@ -86,23 +87,31 @@ namespace WB.UI.Capi.Syncronization
             try
             {
                 var cancellationToken = this.cancellationSource.Token;
-                this.remoteChuncksForDownload = await this.pull.GetChuncksAsync(this.credentials.Login, this.credentials.Password, this.clientRegistrationId, this.lastTimestamp, cancellationToken);
+                this.remoteChuncksForDownload = await this.pull.GetChuncksAsync(this.credentials.Login, 
+                    this.credentials.Password, 
+                    this.clientRegistrationId, 
+                    this.lastTimestamp, 
+                    cancellationToken);
 
                 int progressCounter = 0;
-                foreach (var chunckId in this.remoteChuncksForDownload.Keys.ToList())
+                foreach (SynchronizationChunkMeta chunckId in this.remoteChuncksForDownload.Keys.ToList())
                 {
                     if (cancellationToken.IsCancellationRequested)
                         return;
 
                     try
                     {
-                        var data = await this.pull.RequestChunckAsync(this.credentials.Login, this.credentials.Password, chunckId.Id, chunckId.Timestamp, this.clientRegistrationId, cancellationToken);
+                        SyncItem data = await this.pull.RequestChunckAsync(this.credentials.Login, 
+                            this.credentials.Password, 
+                            chunckId.Id, 
+                            this.clientRegistrationId, 
+                            cancellationToken);
 
                         this.dataProcessor.SavePulledItem(data);
                         this.remoteChuncksForDownload[chunckId] = true;
 
-                        //save last handled item
-                        this.lastTimestamp = chunckId.Timestamp.ToString();
+                        // save last handled item
+                        this.lastTimestamp = chunckId.Id.ToString();
                     }
                     catch (Exception e)
                     {

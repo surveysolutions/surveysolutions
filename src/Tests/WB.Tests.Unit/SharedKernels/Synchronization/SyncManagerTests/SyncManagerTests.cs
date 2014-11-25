@@ -61,16 +61,16 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SyncManagerTests
             var sequence = DateTime.Now;
 
             SyncItem expectedResult = new SyncItem() { Id = itemId };
-            syncProvider.Setup(d => d.GetSyncItem(registrationId, itemId, sequence)).Returns(expectedResult);
+            syncProvider.Setup(d => d.GetSyncItem(registrationId, itemId)).Returns(expectedResult);
 
 
             ISyncManager manager = CreateDefaultSyncManager(syncProvider.Object);
 
             //Act
-            var result = manager.ReceiveSyncPackage(registrationId, itemId,sequence);
+            var result = manager.ReceiveSyncPackage(registrationId, itemId);
 
             //Assert
-            syncProvider.Verify(x => x.GetSyncItem(registrationId, itemId, sequence), Times.Once());
+            syncProvider.Verify(x => x.GetSyncItem(registrationId, itemId), Times.Once());
             Assert.That(result, Is.Not.Null);
             Assert.That(result.ItemsContainer.Count, Is.EqualTo(1));
             
@@ -89,7 +89,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SyncManagerTests
             ISyncManager manager = CreateDefaultSyncManager(syncProvider.Object);
 
             //Act
-            TestDelegate act = () => manager.ReceiveSyncPackage(registrationId, itemId, sequence); 
+            TestDelegate act = () => manager.ReceiveSyncPackage(registrationId, itemId); 
 
             //Assert
             Assert.Throws<Exception>(act);

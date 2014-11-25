@@ -8,7 +8,7 @@ namespace WB.Core.Synchronization.SyncProvider
 
     internal interface ISyncProvider
     {
-        SyncItem GetSyncItem(Guid syncId, Guid id, DateTime timestamp);
+        SyncItem GetSyncItem(Guid syncId, Guid id);
 
         IEnumerable<SyncItem> GetSyncItemBulk(Guid userId, Guid clientRegistrationKey, DateTime timestamp);
 
