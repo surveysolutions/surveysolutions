@@ -3,10 +3,8 @@ using System.Collections.Generic;
 
 namespace WB.Core.Infrastructure.ReadSide
 {
-    public interface IReadSideAdministrationService
+    public interface IReadSideAdministrationService : IReadSideStatusService
     {
-        string GetReadableStatus();
-
         void RebuildAllViewsAsync(int skipEvents = 0);
 
         void RebuildViewsAsync(string[] handlerNames, int skipEvents = 0);
@@ -16,5 +14,6 @@ namespace WB.Core.Infrastructure.ReadSide
         void StopAllViewsRebuilding();
 
         IEnumerable<EventHandlerDescription> GetAllAvailableHandlers();
+        RebuildReadSideStatus GetRebuildStatus();
     }
 }
