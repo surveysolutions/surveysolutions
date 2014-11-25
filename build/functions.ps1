@@ -270,6 +270,19 @@ function CopyCapi($Project, $PathToFinalCapi, $BuildNumber) {
 	Copy-Item "$PathToFinalCapi" "$SourceFolder\$BuildNumber" -Recurse
 }
 
+function CopyCapi2($Project, $source) {
+	$file = get-childitem $Project
+	$DestinationFolder = $file.directoryname + "\Externals\Client"
+
+	If (Test-Path "$DestinationFolder"){
+		Remove-Item "$DestinationFolder" -Force -Recurse
+	}
+	else{
+		New-Item -ItemType directory -Path "$DestinationFolder"
+	}
+	Copy-Item "$source" "$DestinationFolder" -Recurse
+}
+
 function UpdateSourceVersion($Version, $BuildNumber, [string]$file) {
 
 	$ver = $Version + "." + $BuildNumber
