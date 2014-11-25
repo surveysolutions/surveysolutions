@@ -106,7 +106,6 @@ namespace WB.Core.GenericSubdomains.Utils
             return resultExp;
         }
 
-
         private static LambdaExpression GenerateSelector<TEntity>(string propertyName, out Type resultType)
             where TEntity : class
         {
@@ -119,18 +118,19 @@ namespace WB.Core.GenericSubdomains.Utils
             if (propertyName.Contains("."))
             {
                 // support to be sorted on child fields.
-                string[] childProperties = propertyName.Split('.');
-                property = typeof (TEntity).GetTypeInfo().DeclaredProperties.FirstOrDefault(x => x.Name == childProperties[0]);
+                var childProperties = propertyName.Split('.');
+                property = typeof(TEntity).GetRuntimeProperty(childProperties[0]);
                 propertyAccess = Expression.MakeMemberAccess(parameter, property);
-                for (int i = 1; i < childProperties.Length; i++)
+                
+                for (var i = 1; i < childProperties.Length; i++)
                 {
-                    property = property.PropertyType.GetTypeInfo().DeclaredProperties.FirstOrDefault(x => x.Name == childProperties[i]);
+                    property = property.PropertyType.GetRuntimeProperty(childProperties[i]);
                     propertyAccess = Expression.MakeMemberAccess(propertyAccess, property);
                 }
             }
             else
             {
-                property = typeof (TEntity).GetTypeInfo().DeclaredProperties.FirstOrDefault(x => x.Name == propertyName);
+                property = typeof(TEntity).GetRuntimeProperty(propertyName);
                 propertyAccess = Expression.MakeMemberAccess(parameter, property);
             }
 
