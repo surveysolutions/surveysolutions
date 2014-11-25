@@ -161,7 +161,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpGet]
         [ApiBasicAuth]
-        public HttpResponseMessage GetARKeys(string clientRegistrationId, string sequence)
+        public HttpResponseMessage GetARKeys(string clientRegistrationId, string lastSyncedPackageId)
         {
             UserView user = GetUser(globalInfo.GetCurrentUser().Name);
             if (user == null)
@@ -173,23 +173,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, InterviewerSyncControllerMessages.InvalidDeviceIdentifier);
             }
 
-            long clientSequence;
-            if (!string.IsNullOrWhiteSpace(sequence))
+            Guid? clientSequence;
+            if (!string.IsNullOrWhiteSpace(lastSyncedPackageId))
             {
-                if (!long.TryParse(sequence, out clientSequence))
+                Guid blah;
+                if (!Guid.TryParse(lastSyncedPackageId, out blah))
                 {
                     return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, InterviewerSyncControllerMessages.InvalidSequenceIdentifier);
                 }
+                clientSequence = blah;
             }
             else
             {
-                clientSequence = 0;
+                clientSequence = null;
             }
 
             try
             {
                 IEnumerable<SynchronizationChunkMeta> package =
-                    syncManager.GetAllARIdsWithOrder(user.PublicKey, clientRegistrationKey, new DateTime(clientSequence));
+                    syncManager.GetAllARIdsWithOrder(user.PublicKey, clientRegistrationKey, clientSequence);
                 var result = new SyncItemsMetaContainer {ChunksMeta = package.ToList()};
 
                 return Request.CreateResponse(HttpStatusCode.OK, result);

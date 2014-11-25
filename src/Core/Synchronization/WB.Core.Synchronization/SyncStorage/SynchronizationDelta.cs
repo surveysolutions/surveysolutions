@@ -5,25 +5,28 @@ namespace WB.Core.Synchronization.SyncStorage
 {
     public class SynchronizationDelta : IView
     {
+        [Obsolete("Probably used for deserialization")]
         public SynchronizationDelta()
         {
         }
 
-
-        public SynchronizationDelta(Guid publicKey, string content, DateTime timestamp, Guid? userId)
-            : this(publicKey, content, timestamp, userId, false, "temp", "")
+        public SynchronizationDelta(Guid publicKey, 
+            string content, 
+            DateTime timestamp, 
+            Guid? userId, 
+            bool isCompressed, 
+            string itemType, 
+            string metaInfo,
+            int sortIndex)
         {
-        }
-
-        public SynchronizationDelta(Guid publicKey, string content, DateTime timestamp, Guid? userId, bool isCompressed, string itemType, string metaInfo)
-        {
-            PublicKey = publicKey;
-            Content = content;
-            Timestamp = timestamp;
-            UserId = userId ?? Guid.Empty;
-            IsCompressed = isCompressed;
-            ItemType = itemType;
-            MetaInfo = metaInfo; 
+            this.PublicKey = publicKey;
+            this.Content = content;
+            this.Timestamp = timestamp;
+            this.UserId = userId ?? Guid.Empty;
+            this.IsCompressed = isCompressed;
+            this.ItemType = itemType;
+            this.MetaInfo = metaInfo;
+            this.SortIndex = sortIndex;
         }
 
         public Guid PublicKey { get; private set; }
@@ -32,7 +35,7 @@ namespace WB.Core.Synchronization.SyncStorage
         public Guid UserId { get; private set; }
         public bool IsCompressed { get; private set; }
         public string ItemType { get; private set; }
-
         public string MetaInfo { get; private set; }
+        public int SortIndex { get; private set; }
     }
 }

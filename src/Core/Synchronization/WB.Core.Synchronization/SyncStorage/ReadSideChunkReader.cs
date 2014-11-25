@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Raven.Client.Linq;
@@ -35,15 +36,58 @@ namespace WB.Core.Synchronization.SyncStorage
                 };
         }
 
-        public IEnumerable<SynchronizationChunkMeta> GetChunkMetaDataCreatedAfter(DateTime timestamp, IEnumerable<Guid> users)
+        public IEnumerable<SynchronizationChunkMeta> GetChunkMetaDataCreatedAfter(Guid? lastSyncedPackageId, IEnumerable<Guid> users)
         {
             var userIds = users.Concat(new[] { Guid.Empty });
 
-            return
-                queryableStorage.QueryAll(
-                    d => d.Timestamp > timestamp && d.UserId.In(userIds))
-                                .OrderBy(o => o.Timestamp)
-                                .Select(s => new SynchronizationChunkMeta(s.PublicKey, s.Timestamp.Ticks)).ToList();
+            if (lastSyncedPackageId == null)
+            {
+                var fullStreamDeltas = queryableStorage.Query(_ => _.Where(x => x.UserId.In(userIds))
+                                                      .OrderBy(x => x.SortIndex));
+
+                var fullListResult = fullStreamDeltas.Select(s => new SynchronizationChunkMeta(s.PublicKey, s.Timestamp.Ticks))
+                                   .ToList();
+                return fullListResult; 
+            }
+
+            SynchronizationDelta lastSyncedPackage = queryableStorage.Query(_ => _.FirstOrDefault(x => x.PublicKey == lastSyncedPackageId));
+
+            if (lastSyncedPackage == null)
+            {
+                throw new SyncPackageNotFoundException(string.Format("Sync package with id {0} was not found on server", lastSyncedPackageId));
+            }
+
+            var deltas = queryableStorage.Query(_ => _.Where(x => x.SortIndex > lastSyncedPackage.SortIndex && x.UserId.In(userIds))
+                                                      .OrderBy(x => x.SortIndex));
+
+            var result = deltas.Select(s => new SynchronizationChunkMeta(s.PublicKey, s.Timestamp.Ticks))
+                               .ToList();
+            return result; 
+
+            //var userIds = users.Concat(new[] { Guid.Empty });
+
+            //return
+            //    queryableStorage.QueryAll(
+            //        d => d.Timestamp > timestamp && d.UserId.In(userIds))
+            //                    .OrderBy(o => o.Timestamp)
+            //                    .Select(s => new SynchronizationChunkMeta(s.PublicKey, s.Timestamp.Ticks)).ToList();
         }
+    }
+
+    [Serializable]
+    public class SyncPackageNotFoundException : Exception
+    {
+        public SyncPackageNotFoundException() {}
+
+        public SyncPackageNotFoundException(string message)
+            : base(message) {}
+
+        public SyncPackageNotFoundException(string message, Exception inner)
+            : base(message, inner) {}
+
+        protected SyncPackageNotFoundException(
+            SerializationInfo info,
+            StreamingContext context)
+            : base(info, context) {}
     }
 }

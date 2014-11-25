@@ -60,19 +60,15 @@ namespace WB.Core.Synchronization.SyncProvider
             throw new NotImplementedException();
         }
 
-        public IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, DateTime timestamp)
+        public IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, Guid? lastSyncedPackageId)
         {
             var device = devices.GetById(clientRegistrationKey);
 
             if (device == null)
                 throw new ArgumentException("Device was not found.");
 
-            /*if (clientSequence != device.LastSyncItemIdentifier)
-                logger.Info(string.Format("Local [{0}] and remote [{1}] sequence number mismatch.", device.LastSyncItemIdentifier, clientSequence));*/
-
-            return storage.GetChunkPairsCreatedAfter(timestamp, userId);
+            return storage.GetChunkPairsCreatedAfter(lastSyncedPackageId, userId);
         }
-
 
         public HandshakePackage CheckAndCreateNewSyncActivity(ClientIdentifier identifier)
         {

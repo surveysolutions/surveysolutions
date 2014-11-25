@@ -59,9 +59,9 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             return this.syncProvider.HandleSyncItem(item, Guid.Empty);
         }
 
-        public IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, DateTime timestamp)
+        public IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, Guid? lastSyncedPackageId)
         {
-            return this.syncProvider.GetAllARIdsWithOrder(userId, clientRegistrationKey, timestamp);
+            return this.syncProvider.GetAllARIdsWithOrder(userId, clientRegistrationKey, lastSyncedPackageId);
         }
 
 
