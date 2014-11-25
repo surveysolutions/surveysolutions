@@ -12,12 +12,12 @@ using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide;
 
 namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideServiceTests
 {
-    [Subject(typeof(RavenReadSideService))]
+    [Subject(typeof(ReadSideService))]
     internal class RavenReadSideServiceTestContext
     {
-        protected static RavenReadSideService CreateRavenReadSideService(IStreamableEventStore streamableEventStore = null, IEventDispatcher eventDispatcher=null)
+        protected static ReadSideService CreateRavenReadSideService(IStreamableEventStore streamableEventStore = null, IEventDispatcher eventDispatcher=null)
         {
-            return new RavenReadSideService(streamableEventStore ?? Mock.Of<IStreamableEventStore>(),
+            return new ReadSideService(streamableEventStore ?? Mock.Of<IStreamableEventStore>(),
                 eventDispatcher ?? Mock.Of<IEventDispatcher>(), Mock.Of<ILogger>());
         }
     }

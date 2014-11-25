@@ -61,7 +61,7 @@ namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideServiceTests
         It should_return_readble_status = () =>
             ravenReadSideService.GetRebuildStatus().CurrentRebuildStatus.ShouldContain("Rebuild specific views succeeded.");
 
-        private static RavenReadSideService ravenReadSideService;
+        private static ReadSideService ravenReadSideService;
         private static Mock<IEventDispatcher> eventDispatcherMock;
         private static Mock<IStreamableEventStore> streamableEventStoreMock;
         private static Mock<IAtomicEventHandler> eventHandlerMock;

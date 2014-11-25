@@ -58,7 +58,7 @@ namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideServiceTests
         It should_publish_one_event_on_event_dispatcher = () =>
             eventDispatcherMock.Verify(x=>x.PublishEventToHandlers(committedEvent, Moq.It.IsAny<IEnumerable<IEventHandler>>()), Times.Once);
 
-        private static RavenReadSideService ravenReadSideService;
+        private static ReadSideService ravenReadSideService;
         private static Mock<IEventDispatcher> eventDispatcherMock;
         private static Mock<IStreamableEventStore> streamableEventStoreMock;
         private static Mock<IEventHandler> eventHandlerMock;
