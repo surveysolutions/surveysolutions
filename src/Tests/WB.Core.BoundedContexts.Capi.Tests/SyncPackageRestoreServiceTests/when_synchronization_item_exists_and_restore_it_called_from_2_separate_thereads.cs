@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.SyncPackageRestoreServiceTests
                                         param.SynchronizedInterview == interviewSynchronizationDto &&
                                         param.UserId == interviewSynchronizationDto.UserId), null), Times.Once);
 
-        It should_return_true_for_first_thread = () => result1.ShouldBeTrue();
+        It should_return_true_for_first_thread = () => (result1 ^ result2).ShouldBeTrue();
 
         It should_delete_synchronization_item = () => capiSynchronizationCacheServiceMock.DeleteCallCount.ShouldEqual(1);
 
