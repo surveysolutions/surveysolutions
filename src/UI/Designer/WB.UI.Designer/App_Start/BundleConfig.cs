@@ -42,6 +42,18 @@ namespace WB.UI.Designer.App_Start
                     "~/Scripts/common.js"));
 
             bundles.Add(
+                new ScriptBundle("~/readside").Include(
+                    "~/Scripts/knockout-{version}.js",
+                    "~/Scripts/lodash.underscore.js",
+                    "~/Scripts/moment.js",
+                    "~/Scripts/components/moment-duration-format.js",
+                    "~/Scripts/components/bindings.js",
+                    "~/Scripts/viewmodels/designer.framework.js",
+                    "~/Scripts/viewmodels/viewmodelbase.js",
+                    "~/Scripts/viewmodels/pagebase.js",
+                    "~/Scripts/viewmodels/pages/controlpanel/readside.js"));
+
+            bundles.Add(
                 new ScriptBundle("~/designer").Include(
                     "~/Scripts/jquery-{version}.js", 
                     "~/Scripts/jquery.validate.js", 

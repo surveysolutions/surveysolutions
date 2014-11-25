@@ -224,6 +224,7 @@
   <ItemGroup>
     <Compile Include="Api\Attributes\ApiBasicAuthAttribute.cs" />
     <Compile Include="Api\CommandController.cs" />
+    <Compile Include="Api\ControlPanelApiController.cs" />
     <Compile Include="Api\ExpressionGenerationController.cs" />
     <Compile Include="Api\QuestionnaireController.cs" />
     <Compile Include="App_GlobalResources\TesterApiController.Designer.cs">
@@ -298,6 +299,8 @@
     <Compile Include="Models\JsonAddSharedUserToQuestionnaireSuccessResult.cs" />
     <Compile Include="Models\EmailConfirmationModel.cs" />
     <Compile Include="Models\JsonSuccessResult.cs" />
+    <Compile Include="Models\RebuildReadSideInputViewModel.cs" />
+    <Compile Include="Models\RebuildReadSideType.cs" />
     <Compile Include="Models\VerificationError.cs" />
     <Compile Include="Models\VerificationErrors.cs" />
     <Compile Include="Models\VerificationResult.cs" />
@@ -345,6 +348,12 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
+    <EmbeddedResource Include="Scripts\components\bindings.js" />
+    <EmbeddedResource Include="Scripts\components\moment-duration-format.js" />
+    <EmbeddedResource Include="Scripts\viewmodels\pagebase.js" />
+    <EmbeddedResource Include="Scripts\viewmodels\pages\controlpanel\readside.js" />
+    <EmbeddedResource Include="Scripts\viewmodels\viewmodelbase.js" />
+    <EmbeddedResource Include="Scripts\viewmodels\designer.framework.js" />
     <Content Include="UpdatedDesigner\content\wb-options-window.css" />
     <Content Include="Content\themes\base\images\animated-overlay.gif" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
