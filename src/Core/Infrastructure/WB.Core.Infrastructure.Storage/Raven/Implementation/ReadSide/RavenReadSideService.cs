@@ -245,7 +245,8 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
 
                     foreach (var eventSourceId in eventSourceIds)
                     {
-                        eventStore.ReadFrom(eventSourceId, 0, long.MaxValue);
+                        var eventsToPublish = eventStore.ReadFrom(eventSourceId, 0, long.MaxValue);
+                        this.RepublishAllEvents(eventsToPublish, eventsToPublish.Count(), handlers: handlers);
                     }
                 }
                 finally
