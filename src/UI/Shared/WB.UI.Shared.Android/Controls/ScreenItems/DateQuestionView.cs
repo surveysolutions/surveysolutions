@@ -1,9 +1,11 @@
 using System;
 using Android.App;
 using Android.Content;
+using Android.Graphics;
+using Android.Util;
+using Android.Views;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
-using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.CommandBus;
@@ -26,19 +28,28 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         protected override void Initialize()
         {
             base.Initialize();
-            this.dateDisplay = new TextView(this.Context);
-            this.llWrapper.AddView(this.dateDisplay);
-            DateTime date;
-            if (!DateTime.TryParse(this.Model.AnswerString, out date))
-                date = DateTime.Now;
-            this.dialog = new DatePickerDialog(this.Context, this.OnDateSet, date.Year, date.Month - 1, date.Day);
-            this.llWrapper.Click += delegate
-                {
 
-                    this.dialog.Show();
-                };
+            var hasAnswer = this.Model.AnswerObject is DateTime;
 
-            this.PutAnswerStoredInModelToUI();
+            selectedDate = hasAnswer ? (DateTime) this.Model.AnswerObject : DateTime.Now;
+
+            var viewParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent);
+            viewParams.SetMargins(10, 20, 250, 0);
+
+            dateDisplay = new TextView(this.Context) { LayoutParameters = viewParams };
+            dateDisplay.SetTextSize(ComplexUnitType.Dip, 20);
+
+            dialog = new DatePickerDialog(this.Context, this.OnDateSet, selectedDate.Year, selectedDate.Month - 1, selectedDate.Day);
+
+            InitializeViewAndButtonView(this.dateDisplay, "Select date", this.ShowDateTimePicker);
+
+            if (hasAnswer)
+                PutAnswerStoredInModelToUI();
+        }
+
+        private void ShowDateTimePicker(object sender, EventArgs e)
+        {
+            this.dialog.Show();
         }
 
         protected override string GetAnswerStoredInModelAsString()
@@ -48,19 +59,19 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected override void PutAnswerStoredInModelToUI()
         {
-            this.dateDisplay.Text = this.GetAnswerStoredInModelAsString();
+            this.dateDisplay.Text = selectedDate.ToString("d");
         }
 
         // the event received when the user "sets" the date in the dialog
         void OnDateSet(object sender, DatePickerDialog.DateSetEventArgs e)
         {
-            string newValue = e.Date.ToString("d");
-            if (newValue != this.Model.AnswerString)
+            if (e.Date != this.selectedDate)
             {
-                this.dateDisplay.Text = newValue;
+                selectedDate = e.Date;
+                PutAnswerStoredInModelToUI();
 
                 this.SaveAnswer(
-                    newValue,
+                    this.dateDisplay.Text,
                     new AnswerDateTimeQuestionCommand(this.QuestionnairePublicKey, this.Membership.CurrentUser.Id,
                         this.Model.PublicKey.Id, this.Model.PublicKey.InterviewItemPropagationVector, DateTime.UtcNow, e.Date));
             }
@@ -70,5 +81,6 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private TextView dateDisplay;
         private DatePickerDialog dialog;
+        private DateTime selectedDate;
     }
 }
