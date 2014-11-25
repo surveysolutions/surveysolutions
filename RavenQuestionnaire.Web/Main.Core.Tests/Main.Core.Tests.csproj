@@ -147,17 +147,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyContext.cs" />
-    <Compile Include="Documents\QuestionnaireDocumentTests.cs" />
-    <Compile Include="Domain\TestDataConfigurator.cs" />
-    <Compile Include="Entities\GroupTest.cs" />
-    <Compile Include="Entities\QuestionTest.cs" />
-    <Compile Include="Entities\SubEntities\GeoPositionTests\when_parsing_string_i_order_to_create_GeoPosition_object.cs" />
-    <Compile Include="Events\EventMergeUtilsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SimpleObjectExtensionsTests.cs" />
-    <Compile Include="Utils\RavenMockUtils.cs" />
-    <Compile Include="Utils\ReflectionUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
@@ -182,9 +172,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AbstractFactories\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

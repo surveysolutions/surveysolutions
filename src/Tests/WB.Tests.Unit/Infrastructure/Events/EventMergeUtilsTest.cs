@@ -1,20 +1,14 @@
-﻿using Microsoft.Practices.ServiceLocation;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Events;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
+using Ncqrs.Eventing;
+using NUnit.Framework;
 
-namespace RavenQuestionnaire.Core.Tests.Events
+namespace WB.Tests.Unit.Infrastructure.Events
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Main.Core.Events;
-    using Ncqrs.Eventing;
-
-    using NUnit.Framework;
-
-    /// <summary>
-    /// The event merge utils test.
-    /// </summary>
     [TestFixture]
     public class EventMergeUtilsTest
     {
@@ -24,11 +18,6 @@ namespace RavenQuestionnaire.Core.Tests.Events
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
         }
 
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The create uncommitted event stream_ event stream with 2 events strart point is 0_ all events are copied.
-        /// </summary>
         [Test]
         public void CreateUncommittedEventStream_EventStreamWith2EventsStrartPointIs0_AllEventsAreCopied()
         {
@@ -45,9 +34,6 @@ namespace RavenQuestionnaire.Core.Tests.Events
             Assert.AreEqual(result.Last().EventSequence, 2);
         }
 
-        /// <summary>
-        /// The create uncommitted event stream_ event stream with 2 events strart point is 1_2 event are copied.
-        /// </summary>
         [Test]
         public void CreateUncommittedEventStream_EventStreamWith2EventsStrartPointIs1_2EventAreCopied()
         {
@@ -121,9 +107,6 @@ namespace RavenQuestionnaire.Core.Tests.Events
         }
        
 
-        /// <summary>
-        /// The create uncommitted event stream_ event stream with 3 events base stream with 2 events_ only 1 event is copien to tail.
-        /// </summary>
         [Test]
         public void CreateUncommittedEventStream_EventStreamWith3EventsBaseStreamWith2Events_Only1EventIsCopienToTail()
         {
@@ -170,19 +153,6 @@ namespace RavenQuestionnaire.Core.Tests.Events
             // Assert.AreEqual(result.Last().EventSequence, 3);
         }
 
-        /*  [Test]
-        public void CreateUncommittedEventStream_EventStreamWith2EventsStrartPointIsVeryBig_ZeroEventAreCopied()
-        {
-            var stream = new List<AggregateRootEvent>
-                             {
-                                 new AggregateRootEvent() {EventSequence = 1, Payload = new object()},
-                                 new AggregateRootEvent() {EventSequence = 2, Payload = new object()}
-                             };
-            var result = stream.CreateUncommittedEventStream(100500);
-            Assert.AreEqual(result.Count(), 2);
-            Assert.AreEqual(result.First().EventSequence, 100501);
-            Assert.AreEqual(result.Last().EventSequence, 100502);
-        }*/
         [Test]
         public void FindDivergentSequenceNumber_RemoteStreamDontStartsFrom1_StreamsDoesntCross_NullIsReturned()
         {
@@ -223,9 +193,7 @@ namespace RavenQuestionnaire.Core.Tests.Events
             var result = stream.FindDivergentEventGuid(baseStream);
             Assert.AreEqual(result, sharedEvent);
         }
-        /// <summary>
-        /// The find divergent sequence number_ base event stream and new event contains do crossed_ zero returned.
-        /// </summary>
+
         [Test]
         public void FindDivergentSequenceNumber_BaseEventStreamAndNewEventContainsDoNotCrossed_NullIsReturned()
         {
@@ -243,9 +211,6 @@ namespace RavenQuestionnaire.Core.Tests.Events
             Assert.AreEqual(result, null);
         }
 
-        /// <summary>
-        /// The find divergent sequence number_ base event stream changed l ess then new stream changed_1 returned.
-        /// </summary>
         [Test]
         public void FindDivergentSequenceNumber_BaseEventStreamChangedLEssThenNewStreamChanged_SharedEventGuidIsReturned()
         {
@@ -269,9 +234,6 @@ namespace RavenQuestionnaire.Core.Tests.Events
             Assert.AreEqual(result, sharedEventid);
         }
 
-        /// <summary>
-        /// The find divergent sequence number_ base event stream changed more then new stream changed_1 returned.
-        /// </summary>
         [Test]
         public void FindDivergentSequenceNumber_BaseEventStreamChangedMoreThenNewStreamChanged_SharedEventGuidIsReturned()
         {
@@ -296,9 +258,6 @@ namespace RavenQuestionnaire.Core.Tests.Events
             Assert.AreEqual(result, sharedEventid);
         }
 
-        /// <summary>
-        /// The find divergent sequence number_ base event stream changed new stream changed_1 returned.
-        /// </summary>
         [Test]
         public void FindDivergentSequenceNumber_BaseEventStreamChangedNewStreamChanged_SharedEventGuidIsReturned()
         {
@@ -321,9 +280,6 @@ namespace RavenQuestionnaire.Core.Tests.Events
             Assert.AreEqual(result, sharedEventid);
         }
 
-        /// <summary>
-        /// The find divergent sequence number_ base event stream is empty_ zero returned.
-        /// </summary>
         [Test]
         public void FindDivergentSequenceNumber_BaseEventStreamIsEmpty_NullIsReturned()
         {
@@ -336,9 +292,6 @@ namespace RavenQuestionnaire.Core.Tests.Events
             Assert.AreEqual(result, null);
         }
 
-        /// <summary>
-        /// The find divergent sequence number_ base event stream not changed_1 returned.
-        /// </summary>
         [Test]
         public void FindDivergentSequenceNumber_BaseEventStreamNotChanged_SharedEventGuidIsReturned()
         {
@@ -363,16 +316,11 @@ namespace RavenQuestionnaire.Core.Tests.Events
             Assert.AreEqual(result, baseStream.First().EventIdentifier);
         }
 
-        /// <summary>
-        /// The find divergent sequence number_ event stream is empty_ exeptionis throwed.
-        /// </summary>
         [Test]
         public void FindDivergentSequenceNumber_EventStreamIsEmpty_ExeptionisThrowed()
         {
             var stream = new List<AggregateRootEvent>();
             Assert.Throws<ArgumentException>(() => stream.FindDivergentEventGuid(null));
         }
-
-        #endregion
     }
 }
