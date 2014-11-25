@@ -78,3 +78,8 @@ body {
 .margin-left10 {
     margin-left: 10px;
 }
+
+
+.text-nowrap {
+  white-space: nowrap;
+}
