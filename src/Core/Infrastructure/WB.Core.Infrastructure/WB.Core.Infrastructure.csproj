@@ -52,6 +52,7 @@
     <Compile Include="EventBus\IAtomicEventHandler.cs" />
     <Compile Include="EventBus\IEventHandler.cs" />
     <Compile Include="EventBus\IEventPublisher.cs" />
+    <Compile Include="Implementation\ReadSide\ReadSideService.cs" />
     <Compile Include="ReadSideRepositoryWriterError.cs" />
     <Compile Include="ReadSideRepositoryWriterStatus.cs" />
     <Compile Include="RebuildReadSideEventPublishingDetails.cs" />

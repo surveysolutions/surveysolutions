@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,9 +10,9 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
+namespace WB.Core.Infrastructure.Implementation.ReadSide
 {
-    internal class RavenReadSideService : IReadSideAdministrationService
+    public class ReadSideService : IReadSideAdministrationService
     {
         private const int MaxAllowedFailedEvents = 100;
 
@@ -29,12 +29,12 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
         private readonly IEventDispatcher eventBus;
         private readonly ILogger logger;
 
-        static RavenReadSideService()
+        static ReadSideService()
         {
             UpdateStatusMessage("No administration operations were performed so far.");
         }
 
-        public RavenReadSideService(IStreamableEventStore eventStore, IEventDispatcher eventBus, ILogger logger)
+        public ReadSideService(IStreamableEventStore eventStore, IEventDispatcher eventBus, ILogger logger)
         {
             this.eventStore = eventStore;
             this.eventBus = eventBus;
@@ -90,9 +90,9 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
 
         public RebuildReadSideStatus GetRebuildStatus()
         {
-            int republishedEventsCount = processedEventsCount - skippedEventsCount;
+            int republishedEventsCount = this.processedEventsCount - this.skippedEventsCount;
 
-            TimeSpan republishTimeSpent = this.AreViewsBeingRebuiltNow() ? DateTime.Now - lastRebuildDate : TimeSpan.Zero;
+            TimeSpan republishTimeSpent = this.AreViewsBeingRebuiltNow() ? DateTime.Now - this.lastRebuildDate : TimeSpan.Zero;
 
             int speedInEventsPerMinute = (int)(
                 republishTimeSpent.TotalSeconds == 0
@@ -102,33 +102,33 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
             TimeSpan estimatedTotalRepublishTime = TimeSpan.FromMilliseconds(
                 republishedEventsCount == 0
                 ? 0
-                : republishTimeSpent.TotalMilliseconds / republishedEventsCount * totalEventsToRebuildCount);
+                : republishTimeSpent.TotalMilliseconds / republishedEventsCount * this.totalEventsToRebuildCount);
 
 
             return new RebuildReadSideStatus()
             {
-                IsRebuildRunning = AreViewsBeingRebuiltNow(),
+                IsRebuildRunning = this.AreViewsBeingRebuiltNow(),
                 CurrentRebuildStatus = statusMessage,
-                LastRebuildDate = lastRebuildDate,
+                LastRebuildDate = this.lastRebuildDate,
                 EventPublishingDetails = new RebuildReadSideEventPublishingDetails()
                 {
                     ProcessedEvents = republishedEventsCount,
                     EstimatedTime = estimatedTotalRepublishTime,
-                    FailedEvents = failedEventsCount,
-                    SkippedEvents = skippedEventsCount,
+                    FailedEvents = this.failedEventsCount,
+                    SkippedEvents = this.skippedEventsCount,
                     Speed = speedInEventsPerMinute,
                     TimeSpent = republishTimeSpent,
-                    TotalEvents = totalEventsToRebuildCount
+                    TotalEvents = this.totalEventsToRebuildCount
 
                 },
-                StatusByRepositoryWriters = eventBus.GetAllRegistredEventHandlers()
+                StatusByRepositoryWriters = this.eventBus.GetAllRegistredEventHandlers()
                     .SelectMany(x => x.Writers.OfType<IReadSideRepositoryWriter>())
                     .Distinct()
                     .Select(
                         writer =>
                             new ReadSideRepositoryWriterStatus()
                             {
-                                WriterName = GetRepositoryEntityName(writer),
+                                WriterName = this.GetRepositoryEntityName(writer),
                                 Status = writer.GetReadableStatus()
                             }),
                 RebuildErrors = ReverseList(errors)
@@ -145,7 +145,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
         {
             var readSideRepositoryWriter = storage as IReadSideRepositoryWriter;
             if (readSideRepositoryWriter != null)
-                return GetRepositoryEntityName(readSideRepositoryWriter);
+                return this.GetRepositoryEntityName(readSideRepositoryWriter);
 
             return storage.GetType().Name;
         }
@@ -189,7 +189,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
                 {
                     if (!areViewsBeingRebuiltNow)
                     {
-                        this.RebuildViewsImpl(skipEvents, eventBus.GetAllRegistredEventHandlers());
+                        this.RebuildViewsImpl(skipEvents, this.eventBus.GetAllRegistredEventHandlers());
                     }
                 }
             }
@@ -215,7 +215,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
             {
                 var message =
                     "Not all handlers supports partial rebuild. Handlers which are not supporting partial rebuild are {0}" +
-                    string.Join(",", handlers.Where(h => !atomicEventHandlers.Contains(h)).Select(h => h.Name));
+                    string.Join((string) ",", (IEnumerable<string>) handlers.Where(h => !atomicEventHandlers.Contains(h)).Select(h => h.Name));
 
                 UpdateStatusMessage(message);
 
@@ -245,7 +245,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
 
                     foreach (var eventSourceId in eventSourceIds)
                     {
-                        var eventsToPublish = eventStore.ReadFrom(eventSourceId, 0, long.MaxValue);
+                        var eventsToPublish = this.eventStore.ReadFrom(eventSourceId, 0, long.MaxValue);
                         this.RepublishAllEvents(eventsToPublish, eventsToPublish.Count(), handlers: handlers);
                     }
                 }
@@ -284,7 +284,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
                 try
                 {
                     this.EnableWritersCacheForHandlers(handlers);
-                    this.RepublishAllEvents(GetEventStream(skipEvents), this.eventStore.CountOfAllEvents(),skipEventsCount: skipEvents, handlers: handlers);
+                    this.RepublishAllEvents(this.GetEventStream(skipEvents), this.eventStore.CountOfAllEvents(),skipEventsCount: skipEvents, handlers: handlers);
                 }
                 finally
                 {
@@ -326,7 +326,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
             {
                 ThrowIfShouldStopViewsRebuilding();
 
-                var cleanerName = CreateViewName(readSideRepositoryCleaner);
+                var cleanerName = this.CreateViewName(readSideRepositoryCleaner);
                 UpdateStatusMessage(string.Format("Deleting views for {0}", cleanerName));
                 readSideRepositoryCleaner.Clear();
                 UpdateStatusMessage(string.Format("Views for {0} was deleted.", cleanerName));
@@ -361,7 +361,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
             {
                 UpdateStatusMessage(string.Format(
                     "Disabling cache in repository writer for entity {0}.",
-                    GetRepositoryEntityName(writer)));
+                    this.GetRepositoryEntityName(writer)));
 
                 try
                 {
@@ -371,7 +371,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
                 {
                     this.SaveErrorForStatusReport(
                         string.Format("Failed to disable cache and store data to repository for writer {0}.",
-                            GetRepositoryEntityName(writer)),
+                            this.GetRepositoryEntityName(writer)),
                         exception);
                 }
             }
@@ -387,9 +387,9 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
         private void RepublishAllEvents(IEnumerable<CommittedEvent> eventStream, int allEventsCount, int skipEventsCount = 0,
             IEnumerable<IEventHandler> handlers = null)
         {
-            totalEventsToRebuildCount = allEventsCount;
-            skippedEventsCount = skipEventsCount;
-            processedEventsCount = skippedEventsCount;
+            this.totalEventsToRebuildCount = allEventsCount;
+            this.skippedEventsCount = skipEventsCount;
+            this.processedEventsCount = this.skippedEventsCount;
 
             ThrowIfShouldStopViewsRebuilding();
 
@@ -397,7 +397,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
 
             UpdateStatusMessage("Determining count of events to be republished.");
 
-            lastRebuildDate = DateTime.Now;
+            this.lastRebuildDate = DateTime.Now;
             UpdateStatusMessage("Acquiring first portion of events.");
 
 
@@ -405,7 +405,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
             {
                 ThrowIfShouldStopViewsRebuilding();
 
-                UpdateStatusMessage(string.Format("Publishing event {0}. ", processedEventsCount + 1));
+                UpdateStatusMessage(string.Format("Publishing event {0}. ", this.processedEventsCount + 1));
 
                 try
                 {
@@ -415,18 +415,18 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
                 {
                     this.SaveErrorForStatusReport(
                         string.Format("Failed to publish event {0} of {1} ({2})",
-                            processedEventsCount + 1, totalEventsToRebuildCount, @event.EventIdentifier),
+                            this.processedEventsCount + 1, this.totalEventsToRebuildCount, @event.EventIdentifier),
                         exception);
 
-                    failedEventsCount++;
+                    this.failedEventsCount++;
                 }
 
-                processedEventsCount++;
+                this.processedEventsCount++;
 
-                if (failedEventsCount >= MaxAllowedFailedEvents)
+                if (this.failedEventsCount >= MaxAllowedFailedEvents)
                 {
                     var message = string.Format("Failed to rebuild read layer. Too many events failed: {0}.",
-                        failedEventsCount);
+                        this.failedEventsCount);
                     UpdateStatusMessage(message);
                     throw new Exception(message);
                 }
@@ -434,7 +434,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
 
             UpdateStatusMessage("Acquiring next portion of events.");
 
-            this.logger.Info(String.Format("Processed {0} events, failed {1}", processedEventsCount, failedEventsCount));
+            this.logger.Info(String.Format("Processed {0} events, failed {1}", this.processedEventsCount, this.failedEventsCount));
 
             UpdateStatusMessage("All events were republished.");
         }
@@ -459,10 +459,10 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
 
         private string GetRepositoryEntityName(IReadSideRepositoryWriter writer)
         {
-            var arguments = writer.ViewType.GetGenericArguments();
-            if (!arguments.Any())
+           /* var arguments = writer.ViewType.GetGenericArguments();
+            if (!arguments.Any())*/
                 return writer.ViewType.Name;
-            return arguments.Single().Name;
+           // return arguments.Single().Name;
         }
 
         #region Error reporting methods
