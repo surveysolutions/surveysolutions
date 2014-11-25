@@ -58,7 +58,7 @@ namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideServiceTests
             eventDispatcherMock.Verify(x => x.PublishEventToHandlers(committedEvent, Moq.It.Is<IEnumerable<IEventHandler>>(handlers => handlers.Count() == 1 && handlers.First() == eventHandlerMock.Object)), Times.Once);
 
         It should_return_readble_status = () =>
-            ravenReadSideService.GetReadableStatus().ShouldContain("Rebuild specific views succeeded.");
+            ravenReadSideService.GetRebuildStatus().CurrentRebuildStatus.ShouldContain("Rebuild specific views succeeded.");
 
         private static RavenReadSideService ravenReadSideService;
         private static Mock<IEventDispatcher> eventDispatcherMock;
