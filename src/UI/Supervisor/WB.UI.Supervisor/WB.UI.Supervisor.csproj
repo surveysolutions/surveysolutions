@@ -509,6 +509,14 @@
       </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
+  <Target Name="CustomCollectFilesToExternals" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
+    <ItemGroup>
+      <_CustomFiles Include="Externals\**\*" />
+      <FilesForPackagingFromProject Include="%(_CustomFiles.Identity)">
+        <DestinationRelativePath>Externals\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
+      </FilesForPackagingFromProject>
+    </ItemGroup>
+  </Target>
   <PropertyGroup>
     <CopyAllFilesToSingleFolderForMsdeployDependsOn>
       CustomCollectFiles;
