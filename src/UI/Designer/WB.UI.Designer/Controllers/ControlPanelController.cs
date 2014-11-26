@@ -50,35 +50,35 @@ namespace WB.UI.Designer.Controllers
         {
             if (ModelState.IsValid)
             {
-                var account = Membership.GetUser(model.UserName);
+                var account = Membership.GetUser(model.Login);
                 if (account == null)
                 {
-                    this.Error(string.Format("Account '{0}' does not exists", model.UserName));
+                    this.Error(string.Format("Account '{0}' does not exists", model.Login));
                 }
                 else
                 {
-                    if (model.MakeAdmin)
+                    if (model.IsAdmin)
                     {
-                        if (Roles.IsUserInRole(model.UserName, UserHelper.ADMINROLENAME))
+                        if (Roles.IsUserInRole(model.Login, UserHelper.ADMINROLENAME))
                         {
-                            this.Error(string.Format("Account '{0}' has administrator role", model.UserName));
+                            this.Error(string.Format("Account '{0}' has administrator role", model.Login));
                         }
                         else
                         {
                             Roles.AddUserToRole(account.ProviderUserKey.ToString(), UserHelper.ADMINROLENAME);
-                            this.Success(string.Format("Administrator role for '{0}' successfully added", model.UserName));   
+                            this.Success(string.Format("Administrator role for '{0}' successfully added", model.Login));   
                         }
                     }
                     else
                     {
-                        if (!Roles.IsUserInRole(model.UserName, UserHelper.ADMINROLENAME))
+                        if (!Roles.IsUserInRole(model.Login, UserHelper.ADMINROLENAME))
                         {
-                            this.Error(string.Format("Account '{0}' is not in administrator role", model.UserName));
+                            this.Error(string.Format("Account '{0}' is not in administrator role", model.Login));
                         }
                         else
                         {
-                            Roles.RemoveUserFromRole(model.UserName, UserHelper.ADMINROLENAME);
-                            this.Success(string.Format("Administrator role for '{0}' successfully removed", model.UserName));    
+                            Roles.RemoveUserFromRole(model.Login, UserHelper.ADMINROLENAME);
+                            this.Success(string.Format("Administrator role for '{0}' successfully removed", model.Login));    
                         }
                     }
                 }
