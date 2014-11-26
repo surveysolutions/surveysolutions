@@ -290,7 +290,9 @@
     <AndroidResource Include="Resources\Drawable\Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Properties\AndroidManifest.xml" />
+    <Content Include="Properties\AndroidManifest.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <AndroidResource Include="Resources\Drawable\capi.png" />
     <AndroidResource Include="Resources\Drawable\cell_shape.xml" />
     <AndroidResource Include="Resources\Drawable\dashboardquestionnaire.xml">

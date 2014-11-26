@@ -387,16 +387,21 @@ namespace WB.UI.Capi
 
         void synchronizer_ProcessCanceling(object sender, EventArgs e)
         {
-            this.RunOnUiThread(() => this.CreateDialog(ProgressDialogStyle.Spinner, "Canceling....", false, null));
+            var remoteCommandDoneEvent = new AutoResetEvent(false);
+            this.RunOnUiThread(() =>
+            {
+                this.CreateDialog(ProgressDialogStyle.Spinner, "Canceling....", false, null);
+                remoteCommandDoneEvent.Set();
+            });
+            remoteCommandDoneEvent.WaitOne();
         }
 
         private void synchronizer_ProcessCanceled(object sender, SynchronizationCanceledEventArgs evt)
         {
+            var remoteCommandDoneEvent = new AutoResetEvent(false);
             this.RunOnUiThread(() =>
                 {
                     this.DestroyDialog();
-
-
                     if (evt.Exceptions != null || evt.Exceptions.Count > 0)
                     {
                         StringBuilder sb = new StringBuilder();
@@ -416,7 +421,9 @@ namespace WB.UI.Capi
                         }
                         this.tvSyncResult.Text = sb.ToString();
                     }
+                    remoteCommandDoneEvent.Set();
                 });
+            remoteCommandDoneEvent.WaitOne();
             this.DestroySynchronizer();
         }
 
