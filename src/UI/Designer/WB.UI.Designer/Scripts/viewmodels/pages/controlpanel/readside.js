@@ -88,7 +88,7 @@
             self.reloadErrorsList(data.RebuildErrors);
 
             _.delay(self.updateStatus, 3000);
-        }, true);
+        }, true, true);
     };
 
     self.reloadRepositoryWritersList = function (newList) {
@@ -122,7 +122,7 @@
         //remove old errors
         _.each(self.rebuildErrors(), function (oldError) {
             var error = _.find(newList, function (newError) {
-                return newError.ErrorDate == oldError.ErrorDate && newError.ErrorMessage == oldError.ErrorMessage;
+                return newError.ErrorTime == oldError.ErrorTime && newError.ErrorMessage == oldError.ErrorMessage;
             });
 
             if (_.isUndefined(error)) {
@@ -133,7 +133,7 @@
         //add new errors
         _.each(newList, function (error) {
             var existingError = _.find(self.rebuildErrors(), function (newError) {
-                return newError.ErrorDate == error.ErrorDate && newError.ErrorMessage == error.ErrorMessage;
+                return newError.ErrorTime == error.ErrorTime && newError.ErrorMessage == error.ErrorMessage;
             });
 
             if (_.isUndefined(existingError)) {
@@ -163,7 +163,7 @@
             self.setRebuildByType(Designer.VM.ControlPanel.ReadSide.RebuildReadSideType.All);
             
             self.updateStatus();
-        });
+        }, true, true);
     };
 
     self.rebuild = function() {

@@ -24,7 +24,7 @@
         }
     };
 
-    self.SendRequest = function (requestUrl, args, onSuccess, skipInProgressCheck) {
+    self.SendRequest = function (requestUrl, args, onSuccess, skipInProgressCheck, allowGet) {
 
         if (!skipInProgressCheck && !self.IsAjaxComplete()) {
             self.CheckForRequestComplete();
@@ -35,7 +35,7 @@
         
         $.ajax({
             url: requestUrl,
-            type: 'post',
+            type: allowGet === true ? 'get' : 'post',
             data: args,
             dataType: 'json'}).done(function (data) {
             if (!_.isUndefined(onSuccess)) {

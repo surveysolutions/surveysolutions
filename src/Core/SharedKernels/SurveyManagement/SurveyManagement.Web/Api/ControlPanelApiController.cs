@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Http;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -31,14 +32,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             };
         }
 
-        [HttpPost]
-        public IEnumerable<EventHandlerDescription> GetAllAvailableHandlers()
+        public IEnumerable<ReadSideEventHandlerDescription> GetAllAvailableHandlers()
         {
             return this.readSideAdministrationService.GetAllAvailableHandlers();
         }
 
-        [HttpPost]
-        public RebuildReadSideStatus GetReadSideStatus()
+        public ReadSideStatus GetReadSideStatus()
         {
             return this.readSideAdministrationService.GetRebuildStatus();
         }

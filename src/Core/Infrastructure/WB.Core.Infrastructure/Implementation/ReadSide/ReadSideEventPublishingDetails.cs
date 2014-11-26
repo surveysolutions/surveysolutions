@@ -1,8 +1,8 @@
 using System;
 
-namespace WB.Core.Infrastructure
+namespace WB.Core.Infrastructure.Implementation.ReadSide
 {
-    public class RebuildReadSideEventPublishingDetails
+    public class ReadSideEventPublishingDetails
     {
         public int ProcessedEvents { get; set; }
         public int TotalEvents { get; set; }

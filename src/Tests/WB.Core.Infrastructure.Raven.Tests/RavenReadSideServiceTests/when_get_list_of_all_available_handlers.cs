@@ -52,7 +52,7 @@ namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideServiceTests
         private static Mock<IEventHandler> secondEventHandlerMock;
         private static Mock<IReadSideRepositoryCleaner> readSideRepositoryCleanerMock;
         private static Mock<IReadSideRepositoryWriter> readSideRepositoryWriterMock;
-        private static IEnumerable<EventHandlerDescription> result;
+        private static IEnumerable<ReadSideEventHandlerDescription> result;
 
         private static string FirstHandlerName = "first handler";
         private static string SecondHandlerName = "second handler";
