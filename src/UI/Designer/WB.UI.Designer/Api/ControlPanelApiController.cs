@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.Filters;
@@ -17,14 +18,12 @@ namespace WB.UI.Designer.Api
             this.readSideAdministrationService = readSideAdministrationService;
         }
 
-        [HttpPost]
-        public IEnumerable<EventHandlerDescription> GetAllAvailableHandlers()
+        public IEnumerable<ReadSideEventHandlerDescription> GetAllAvailableHandlers()
         {
             return this.readSideAdministrationService.GetAllAvailableHandlers();
         }
 
-        [HttpPost]
-        public RebuildReadSideStatus GetReadSideStatus()
+        public ReadSideStatus GetReadSideStatus()
         {
             return this.readSideAdministrationService.GetRebuildStatus();
         }

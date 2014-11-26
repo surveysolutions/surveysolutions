@@ -14,6 +14,12 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 {
     public class ReadSideService : IReadSideAdministrationService
     {
+        private int totalEventsToRebuildCount = 0;
+        private int failedEventsCount = 0;
+        private int processedEventsCount = 0;
+        private int skippedEventsCount = 0;
+        private DateTime lastRebuildDate = DateTime.Now;
+
         private const int MaxAllowedFailedEvents = 100;
 
         private static readonly object RebuildAllViewsLockObject = new object();
@@ -77,18 +83,18 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             shouldStopViewsRebuilding = true;
         }
 
-        public IEnumerable<EventHandlerDescription> GetAllAvailableHandlers()
+        public IEnumerable<ReadSideEventHandlerDescription> GetAllAvailableHandlers()
         {
             return
                 this.eventBus.GetAllRegistredEventHandlers()
                     .Select(
                         h =>
-                        new EventHandlerDescription(h.Name, h.Readers.Select(CreateViewName).ToArray(),
+                        new ReadSideEventHandlerDescription(h.Name, h.Readers.Select(CreateViewName).ToArray(),
                                                     h.Writers.Select(CreateViewName).ToArray(), h is IAtomicEventHandler))
                     .ToList();
         }
 
-        public RebuildReadSideStatus GetRebuildStatus()
+        public ReadSideStatus GetRebuildStatus()
         {
             int republishedEventsCount = this.processedEventsCount - this.skippedEventsCount;
 
@@ -105,12 +111,12 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 : republishTimeSpent.TotalMilliseconds / republishedEventsCount * this.totalEventsToRebuildCount);
 
 
-            return new RebuildReadSideStatus()
+            return new ReadSideStatus()
             {
                 IsRebuildRunning = this.AreViewsBeingRebuiltNow(),
                 CurrentRebuildStatus = statusMessage,
                 LastRebuildDate = this.lastRebuildDate,
-                EventPublishingDetails = new RebuildReadSideEventPublishingDetails()
+                EventPublishingDetails = new ReadSideEventPublishingDetails()
                 {
                     ProcessedEvents = republishedEventsCount,
                     EstimatedTime = estimatedTotalRepublishTime,
@@ -134,9 +140,9 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 RebuildErrors = ReverseList(errors)
                     .Select(error => new ReadSideRepositoryWriterError()
                     {
-                        ErrorDate = error.Item1,
+                        ErrorTime = error.Item1,
                         ErrorMessage = error.Item2,
-                        InnerException = GetFullUnwrappedExceptionText(error.Item3)
+                        InnerException = error.Item3
                     })
             };
         }
@@ -379,11 +385,6 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             UpdateStatusMessage("Cache in repository writers disabled.");
         }
 
-        int totalEventsToRebuildCount = 0;
-        int failedEventsCount = 0;
-        int processedEventsCount = 0;
-        int skippedEventsCount = 0;
-        DateTime lastRebuildDate = DateTime.Now;
         private void RepublishAllEvents(IEnumerable<CommittedEvent> eventStream, int allEventsCount, int skipEventsCount = 0,
             IEnumerable<IEventHandler> handlers = null)
         {
