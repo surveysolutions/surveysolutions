@@ -48,5 +48,15 @@ namespace WB.UI.Capi.Syncronization.Pull
 
             return syncItemsMetaContainer.ChunksMeta;
         }
+
+        public async Task<Guid> GetChunkIdByTimestamp(string timestamp, string login, string password, CancellationToken ct)
+        {
+            var result = await webExecutor.ExecuteRestRequestAsync<Guid>(
+                "api/InterviewerSync/GetPacakgeIdByTimeStamp",
+                ct,
+                null,
+                login, password, "GET", new KeyValuePair<string, object>("timestamp", timestamp));
+            return result;
+        }
     }
 }

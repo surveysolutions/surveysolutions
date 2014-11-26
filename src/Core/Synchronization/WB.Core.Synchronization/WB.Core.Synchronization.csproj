@@ -82,13 +82,7 @@
     <Compile Include="SyncProvider\ISyncEventHandler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SyncProvider\ISyncProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="SyncProvider\SyncEventHandler.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SyncProvider\SyncProvider.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SyncSettings.cs" />

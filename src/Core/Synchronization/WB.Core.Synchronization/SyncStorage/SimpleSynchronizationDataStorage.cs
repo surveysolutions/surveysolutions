@@ -159,7 +159,10 @@ namespace WB.Core.Synchronization.SyncStorage
             chunkStorageWriter.StoreChunk(syncItem, null, timestamp);
         }
 
-        #region from sync provider
+        public SynchronizationChunkMeta GetChunkInfoByTimestamp(DateTime timestamp)
+        {
+            return this.chunkStorageReader.GetChunkMetaDataByTimestamp(timestamp);
+        }
 
         private static string GetItemAsContent(object item)
         {
@@ -171,7 +174,6 @@ namespace WB.Core.Synchronization.SyncStorage
 
             return  JsonConvert.SerializeObject(item, Formatting.None, settings);
         }
-        #endregion
 
         public void EnableCache()
         {
