@@ -369,6 +369,7 @@
     <Compile Include="BoundedContexts\Designer\RoslynExpressionProcessorTests\when_getting_identifiers_from_different_expressions.cs" />
     <Compile Include="BoundedContexts\Supervisor\AtomFeedReaderTests\when_reading_feed_from_specified_entry_and_such_entry_is_absent_in_feed.cs" />
     <Compile Include="Create.cs" />
+    <Compile Include="GenericSubdomains\Utils\when_sorting_by_property_from_parent_class_with_OrderBy_from_QueryableExtensions.cs" />
     <Compile Include="GenericSubdomains\Utils\StringExtensionsTests.cs" />
     <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\AbstractFunctionalEventHandlerTestContext.cs" />
     <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\TestableFunctionalEventHandler.cs" />
