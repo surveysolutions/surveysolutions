@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -11,7 +12,8 @@ namespace WB.Core.Synchronization.SyncStorage
     {
         private readonly IQueryableReadSideRepositoryWriter<SynchronizationDelta> storage;
         private readonly IArchiveUtils archiver;
-
+        private bool cacheEnabled = false;
+        private int currentSortIndex = 0;
         public ReadSideChunkWriter(IQueryableReadSideRepositoryWriter<SynchronizationDelta> storage, IArchiveUtils archiver)
         {
             this.storage = storage;
@@ -23,7 +25,18 @@ namespace WB.Core.Synchronization.SyncStorage
             var content = syncItem.IsCompressed ? archiver.CompressString(syncItem.Content) : syncItem.Content;
             var metaInfo = (syncItem.IsCompressed && !string.IsNullOrWhiteSpace(syncItem.MetaInfo)) ? archiver.CompressString(syncItem.MetaInfo) : syncItem.MetaInfo;
 
-            var sortIndex = storage.Query(_ => _.Count());
+            int sortIndex = 0;
+            if (cacheEnabled)
+            {
+                sortIndex = currentSortIndex;
+                currentSortIndex++;
+            }
+            else
+            {
+                var query = storage.Query(_ => _.OrderByDescending(x => x.SortIndex).Select(x => x.SortIndex));
+                if (query.Any())
+                    sortIndex = query.First();
+            }
 
             var synchronizationDelta = new SynchronizationDelta(syncItem.Id, content, timestamp, userId, syncItem.IsCompressed, syncItem.ItemType, metaInfo, sortIndex);
 
@@ -42,6 +55,9 @@ namespace WB.Core.Synchronization.SyncStorage
             var readSideRepositoryWriter = storage as IReadSideRepositoryWriter;
             if (readSideRepositoryWriter != null)
                 readSideRepositoryWriter.EnableCache();
+
+            cacheEnabled = true;
+            currentSortIndex = 0;
         }
 
         public void DisableCache()
@@ -49,6 +65,8 @@ namespace WB.Core.Synchronization.SyncStorage
             var readSideRepositoryWriter = storage as IReadSideRepositoryWriter;
             if (readSideRepositoryWriter != null)
                 readSideRepositoryWriter.DisableCache();
+
+            cacheEnabled = false;
         }
 
         public string GetReadableStatus()
