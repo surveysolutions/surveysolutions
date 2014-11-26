@@ -256,23 +256,9 @@ function BuildWebPackage($Project, $BuildConfiguration) {
     return $wasBuildSuccessfull
 }
 
-function CopyCapi($Project, $PathToFinalCapi, $BuildNumber) {
+function CopyCapi($Project, $source) {
 	$file = get-childitem $Project
-	$SourceFolder = $file.directoryname + "\Externals\Capi"
-
-	If (Test-Path "$SourceFolder"){
-		Remove-Item "$SourceFolder" -Force -Recurse
-	}
-	else{
-		New-Item -ItemType directory -Path "$SourceFolder"
-	}
-	New-Item -ItemType directory -Path "$SourceFolder\$BuildNumber"
-	Copy-Item "$PathToFinalCapi" "$SourceFolder\$BuildNumber" -Recurse
-}
-
-function CopyCapi2($Project, $source) {
-	$file = get-childitem $Project
-	$DestinationFolder = $file.directoryname + "\Externals\Client"
+	$DestinationFolder = $file.directoryname + "\Externals"
 
 	If (Test-Path "$DestinationFolder"){
 		Remove-Item "$DestinationFolder" -Force -Recurse

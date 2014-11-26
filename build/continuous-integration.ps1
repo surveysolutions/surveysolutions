@@ -48,13 +48,11 @@ try {
 	BuildWebPackage $ProjectDesigner $BuildConfiguration | %{ if (-not $_) { Exit } }
 
 	RunConfigTransform $ProjectHeadquarters $BuildConfiguration
-	#CopyCapi -Project $ProjectHeadquarters -PathToFinalCapi $PackageName -BuildNumber $BuildNumber
-	CopyCapi2 -Project $ProjectHeadquarters -source $PackageName
+	CopyCapi -Project $ProjectHeadquarters -source $PackageName
 	BuildWebPackage $ProjectHeadquarters $BuildConfiguration | %{ if (-not $_) { Exit } }
 
 	RunConfigTransform $ProjectSupervisor $BuildConfiguration
-	#CopyCapi -Project $ProjectSupervisor -PathToFinalCapi $PackageName -BuildNumber $BuildNumber
-	CopyCapi2 -Project $ProjectSupervisor -source $PackageName
+	CopyCapi -Project $ProjectSupervisor -source $PackageName
 	BuildWebPackage $ProjectSupervisor $BuildConfiguration | %{ if (-not $_) { Exit } }
 
 	$artifactsFolder = (Get-Location).Path + "\Artifacts"
