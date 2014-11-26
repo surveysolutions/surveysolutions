@@ -288,7 +288,8 @@ namespace WB.UI.Capi
                         CapiApplication.Kernel.Get<IQuestionnaireAssemblyFileAccessor>()),
                     cleaner,
                     CapiApplication.Kernel.Get<IRestServiceWrapperFactory>(),
-                    CapiApplication.Kernel.Get<IInterviewSynchronizationFileStorage>());
+                    CapiApplication.Kernel.Get<IInterviewSynchronizationFileStorage>(),
+                    CapiApplication.Kernel.Get<ISyncPackageIdsStorage>());
             }
             catch (Exception ex)
             {

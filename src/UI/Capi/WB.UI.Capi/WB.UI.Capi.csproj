@@ -206,6 +206,8 @@
     <Compile Include="SplashScreen.cs" />
     <Compile Include="SynchronizationActivity.cs" />
     <Compile Include="Syncronization\Handshake\RestHandshake.cs" />
+    <Compile Include="Syncronization\Implementation\SyncPackageIdsStorage.cs" />
+    <Compile Include="Syncronization\ISyncPackageIdsStorage.cs" />
     <Compile Include="Syncronization\Pull\RestPull.cs" />
     <Compile Include="Syncronization\Push\RestPush.cs" />
     <Compile Include="Syncronization\RestAuthenticator.cs" />
@@ -214,6 +216,7 @@
     <Compile Include="Syncronization\SynchronizationEventArgsWithPercent.cs" />
     <Compile Include="Syncronization\SynchronizationException.cs" />
     <Compile Include="Syncronization\SynchronozationProcessor.cs" />
+    <Compile Include="Syncronization\Implementation\SyncPackageId.cs" />
     <Compile Include="Syncronization\Update\RestVersionUpdate.cs" />
     <Compile Include="Syncronization\Update\UpdateProcessor.cs" />
     <Compile Include="Utils\BooleanToTextColorValueConverter.cs" />

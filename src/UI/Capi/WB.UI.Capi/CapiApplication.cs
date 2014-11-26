@@ -53,6 +53,8 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.UI.Capi.Implementations.Navigation;
 using WB.UI.Capi.Injections;
+using WB.UI.Capi.Syncronization;
+using WB.UI.Capi.Syncronization.Implementation;
 using WB.UI.Shared.Android;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Extensions;
@@ -320,6 +322,8 @@ namespace WB.UI.Capi
             this.kernel.Bind<IAnswerProgressIndicator>().To<AnswerProgressIndicator>().InSingletonScope();
             this.kernel.Bind<IQuestionViewFactory>().To<DefaultQuestionViewFactory>();
             this.kernel.Bind<INavigationService>().To<NavigationService>().InSingletonScope();
+            this.kernel.Bind<ISyncPackageIdsStorage>().To<SyncPackageIdsStorage>();
+
 
             this.kernel.Unbind<ISyncPackageRestoreService>();
             this.kernel.Bind<ISyncPackageRestoreService>().To<SyncPackageRestoreService>().InSingletonScope();
