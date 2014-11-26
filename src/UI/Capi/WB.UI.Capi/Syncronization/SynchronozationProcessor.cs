@@ -145,8 +145,7 @@ namespace WB.UI.Capi.Syncronization
 
         private async Task MigrateOldSyncTimestampToId(CancellationToken cancellationToken)
         {
-            DateTime id;
-            if (!string.IsNullOrEmpty(this.lastReceivedPackageId) || !DateTime.TryParse(this.lastReceivedPackageId, out id))
+            if (!string.IsNullOrEmpty(this.lastReceivedPackageId))
             {
                 this.OnStatusChanged(new SynchronizationEventArgs("Tablet had old installation. Migrating pacakge timestamp to it's id", Operation.Pull, true));
                 Guid lastReceivedChunkId = await this.pull.GetChunkIdByTimestamp(this.lastReceivedPackageId, this.credentials.Login, this.credentials.Password, cancellationToken);
