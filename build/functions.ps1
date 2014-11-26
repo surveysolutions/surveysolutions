@@ -280,7 +280,7 @@ function CopyCapi2($Project, $source) {
 	else{
 		New-Item -ItemType directory -Path "$DestinationFolder"
 	}
-	Copy-Item "$source" "$DestinationFolder" -Recurse
+	Copy-Item "$source" "$DestinationFolder\" -Recurse
 }
 
 function UpdateSourceVersion($Version, $BuildNumber, [string]$file) {
