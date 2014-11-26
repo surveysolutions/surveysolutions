@@ -35,7 +35,7 @@ namespace WB.Core.Synchronization.SyncStorage
             {
                 var query = storage.Query(_ => _.OrderByDescending(x => x.SortIndex).Select(x => x.SortIndex));
                 if (query.Any())
-                    sortIndex = query.First();
+                    sortIndex = query.First() + 1;
             }
 
             var synchronizationDelta = new SynchronizationDelta(syncItem.Id, content, timestamp, userId, syncItem.IsCompressed, syncItem.ItemType, metaInfo, sortIndex);
