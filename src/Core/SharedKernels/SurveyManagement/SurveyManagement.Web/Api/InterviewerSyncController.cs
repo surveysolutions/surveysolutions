@@ -24,6 +24,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 using WB.Core.SharedKernels.SurveyManagement.Web.Resources;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
+using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
@@ -190,12 +191,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
             try
             {
-                IEnumerable<SynchronizationChunkMeta> package = syncManager.GetAllARIdsWithOrder(user.PublicKey, clientRegistrationKey, clientSequence);
-                var result = new SyncItemsMetaContainer {
+                IEnumerable<SynchronizationChunkMeta> package = syncManager.GetAllARIdsWithOrder(user.PublicKey, clientRegistrationKey,
+                    clientSequence);
+
+                var result = new SyncItemsMetaContainer
+                {
                     ChunksMeta = package.ToList()
                 };
 
                 return Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            catch (SyncPackageNotFoundException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Gone, ex);
             }
             catch (Exception ex)
             {

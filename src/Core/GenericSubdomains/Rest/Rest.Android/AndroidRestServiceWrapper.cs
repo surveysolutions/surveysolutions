@@ -140,6 +140,16 @@ namespace WB.Core.GenericSubdomains.Rest.Android
                 if (response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
                     throw new AuthenticationException("Not autorized");
 
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    throw new NotFoundException(response.ErrorMessage);
+                }
+
+                if (response.StatusCode == HttpStatusCode.Gone)
+                {
+                    throw new GoneException(response.ErrorMessage);
+                }
+
                 this.logger.Error(string.Format("Sync error. Status: {0}. {1}", response.StatusDescription, response.Content));
 
                 var exceptionMessage = string.IsNullOrWhiteSpace(response.Content) 

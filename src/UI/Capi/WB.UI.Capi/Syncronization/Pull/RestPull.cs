@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
@@ -31,23 +29,24 @@ namespace WB.UI.Capi.Syncronization.Pull
 
             if (package.ItemsContainer == null || package.ItemsContainer.Count == 0)
                 throw new RestException("Content is absent.");
-            
+
             return package.ItemsContainer[0];
         }
 
-        public async Task<Dictionary<SynchronizationChunkMeta, bool>> GetChuncksAsync(string login, string password, string deviceId,
-            string sequence, CancellationToken ct)
+        public async Task<List<SynchronizationChunkMeta>> GetChuncksAsync(string login, string password, string deviceId,
+            Guid? lastReceivedPackageId, CancellationToken ct)
         {
             var syncItemsMetaContainer = await webExecutor.ExecuteRestRequestAsync<SyncItemsMetaContainer>(
                 getARKeysPath, ct, null, login, password, "GET",
                 new KeyValuePair<string, object>("clientRegistrationId", deviceId),
-                new KeyValuePair<string, object>("lastSyncedPackageId", sequence)
+                new KeyValuePair<string, object>("lastSyncedPackageId",
+                    lastReceivedPackageId.HasValue ? (object) lastReceivedPackageId.Value : "")
                 );
 
             if (syncItemsMetaContainer.ChunksMeta == null)
                 throw new RestException(Properties.Resource.ErrorOnItemListReceiving);
 
-            return syncItemsMetaContainer.ChunksMeta.ToDictionary(s => s, s => false);
+            return syncItemsMetaContainer.ChunksMeta;
         }
     }
 }
