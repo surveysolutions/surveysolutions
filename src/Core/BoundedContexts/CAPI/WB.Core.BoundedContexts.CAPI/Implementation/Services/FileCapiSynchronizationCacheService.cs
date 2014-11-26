@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
                 return;
 
             foreach (var file in fileSystemAccessor.GetFilesInDirectory(dirWithCahngelog))
-                fileSystemAccessor.CopyFileOrDirectory(file, fileSystemAccessor.CombinePath(this._basePath, fileSystemAccessor.GetFileName(file)));
+                fileSystemAccessor.CopyFileOrDirectory(file, this._basePath);
         }
     }
 }
