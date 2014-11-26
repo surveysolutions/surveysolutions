@@ -42,7 +42,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private string CapiFileName = "wbcapi.apk";
         private string pathToSearchVersions = ("~/Client/");
 
-        private readonly int currentBuildNumber;
 
         public InterviewerSyncController(ICommandService commandService, IGlobalInfoProvider globalInfo,
             ISyncManager syncManager,
@@ -61,8 +60,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IFileSystemAccessor fileSystemAccessor)
             : base(commandService, globalInfo, logger)
         {
-            this.currentBuildNumber = Assembly.GetExecutingAssembly().GetName().Version.Build;
-
+            
             this.checkIfUserIsInRole = checkIfUserIsInRole;
             this.plainFileRepository = plainFileRepository;
             this.versionProvider = versionProvider;
@@ -302,8 +300,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             string targetToSearchCapi = fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(pathToSearchVersions), CapiFileName);
 
-            bool newVersionExists = fileSystemAccessor.IsFileExists(targetToSearchCapi) && 
-                                    (currentBuildNumber > versionCode);
+            int? supervisorRevisionNumber = versionProvider.GetApplicationBuildNumber();
+
+            bool newVersionExists = fileSystemAccessor.IsFileExists(targetToSearchCapi) &&
+                                    supervisorRevisionNumber.HasValue &&
+                                    (supervisorRevisionNumber.Value > versionCode);
 
             return Request.CreateResponse(HttpStatusCode.OK, newVersionExists);
         }
