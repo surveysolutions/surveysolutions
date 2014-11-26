@@ -4,9 +4,14 @@ using Android.Graphics;
 using Android.OS;
 using Android.Widget;
 using Android.Content.PM;
+using CAPI.Android.Settings;
+using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Droid.Views;
+using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Capi.Views.Login;
 using WB.UI.Capi.Extensions;
+using WB.UI.Capi.Settings;
+using WB.UI.Capi.Views;
 using WB.UI.Shared.Android.Extensions;
 
 namespace WB.UI.Capi
@@ -47,6 +52,12 @@ namespace WB.UI.Capi
 
             this.SetContentView(Resource.Layout.Login);
             this.btnLogin.Click += this.btnLogin_Click;
+
+            if (string.IsNullOrWhiteSpace(SettingsManager.GetSetting(SettingsNames.RegistrationKeyName)))
+            {
+                this.ClearAllBackStack<FinishInstallationActivity>();
+                this.Finish();
+            }
         }
 
         private async void btnLogin_Click(object sender, EventArgs e)
