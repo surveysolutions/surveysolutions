@@ -39,6 +39,11 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
             throw new NotImplementedException();
         }
 
+        public SynchronizationChunkMeta GetChunkMetaDataByTimestamp(DateTime timestamp)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<Guid> GetChunksCreatedAfterForUsers(DateTime timestamp, IEnumerable<Guid> users)
         {
             throw new NotImplementedException();

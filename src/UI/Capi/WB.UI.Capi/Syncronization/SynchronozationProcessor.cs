@@ -87,11 +87,15 @@ namespace WB.UI.Capi.Syncronization
             try
             {
                 var cancellationToken = this.cancellationSource.Token;
+
+                await this.MigrateOldSyncTimestampToId(cancellationToken);
+
                 var remoteChuncksForDownload = new List<SynchronizationChunkMeta>();
 
                 bool foundNeededPackages = false;
                 var lastKnownPackageId = this.GetLastReceivedChunkId();
                 int returnedBackCount = 0;
+
                 do
                 {
                     try
@@ -150,6 +154,16 @@ namespace WB.UI.Capi.Syncronization
                 this.logger.Error("Error occurred during pull process. Process is being canceled.", e);
                 this.Cancel();
                 throw;
+            }
+        }
+
+        private async Task MigrateOldSyncTimestampToId(CancellationToken cancellationToken)
+        {
+            if (!string.IsNullOrEmpty(this.lastReceivedPackageId))
+            {
+                this.OnStatusChanged(new SynchronizationEventArgs("Tabled had old installaion. Migrating timestamp to id", Operation.Pull, true));
+                Guid lastReceivedChunkId = await this.pull.GetChunkIdByTimestamp(this.lastReceivedPackageId, this.credentials.Login, this.credentials.Password, cancellationToken);
+                this.StoreReceivedChunkId(lastReceivedChunkId);
             }
         }
 

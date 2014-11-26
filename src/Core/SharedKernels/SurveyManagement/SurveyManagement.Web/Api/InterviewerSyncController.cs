@@ -8,7 +8,6 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Hosting;
 using System.Web.Http;
-using System.Web.Security;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.CommandBus;
@@ -33,7 +32,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly ILogger logger;
         private readonly ISyncManager syncManager;
         private readonly IViewFactory<UserViewInputModel, UserView> viewFactory;
-        private readonly Func<string, string, bool> checkIfUserIsInRole;
         private readonly ISupportedVersionProvider versionProvider;
         private readonly IPlainInterviewFileStorage plainFileRepository;
         private readonly IGlobalInfoProvider globalInfo;
@@ -43,24 +41,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private string CapiFileName = "wbcapi.apk";
         private string pathToSearchVersions = ("~/App_Data/Capi");
 
-        public InterviewerSyncController(ICommandService commandService, IGlobalInfoProvider globalInfo,
+        public InterviewerSyncController(ICommandService commandService, 
+            IGlobalInfoProvider globalInfo,
             ISyncManager syncManager,
-            ILogger logger, IViewFactory<UserViewInputModel, UserView> viewFactory,
-            ISupportedVersionProvider versionProvider, IPlainInterviewFileStorage plainFileRepository,
-            IFileSystemAccessor fileSystemAccessor)
-            : this(commandService, globalInfo, syncManager, logger, viewFactory, versionProvider,
-                Roles.IsUserInRole, plainFileRepository, fileSystemAccessor)
-        {
-        }
-
-        public InterviewerSyncController(ICommandService commandService, IGlobalInfoProvider globalInfo,
-            ISyncManager syncManager,ILogger logger,
-            IViewFactory<UserViewInputModel, UserView> viewFactory, ISupportedVersionProvider versionProvider,
-            Func<string, string, bool> checkIfUserIsInRole,IPlainInterviewFileStorage plainFileRepository,
+            ILogger logger,
+            IViewFactory<UserViewInputModel, UserView> viewFactory, 
+            ISupportedVersionProvider versionProvider,
+            IPlainInterviewFileStorage plainFileRepository,
             IFileSystemAccessor fileSystemAccessor)
             : base(commandService, globalInfo, logger)
         {
-            this.checkIfUserIsInRole = checkIfUserIsInRole;
             this.plainFileRepository = plainFileRepository;
             this.versionProvider = versionProvider;
             this.syncManager = syncManager;
@@ -213,6 +203,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable,
                     InterviewerSyncControllerMessages.ServerError);
             }
+        }
+
+        [HttpGet]
+        [ApiBasicAuth]
+        public HttpResponseMessage GetPacakgeIdByTimeStamp(long timestamp)
+        {
+            var result = this.syncManager.GetPackageIdByTimestamp(new DateTime(timestamp));
+            return Request.CreateResponse(HttpStatusCode.OK, result);
         }
 
         [HttpPost]
