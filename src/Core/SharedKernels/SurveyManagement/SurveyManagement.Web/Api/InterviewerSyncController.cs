@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Hosting;
 using System.Web.Http;
@@ -40,7 +40,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         private string ResponseInterviewerFileName = "interviewer.apk";
         private string CapiFileName = "wbcapi.apk";
-        private string pathToSearchVersions = ("~/App_Data/Capi");
+        private string pathToSearchVersions = ("~/Client/");
+
+        private readonly int currentBuildNumber;
 
         public InterviewerSyncController(ICommandService commandService, IGlobalInfoProvider globalInfo,
             ISyncManager syncManager,
@@ -59,6 +61,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IFileSystemAccessor fileSystemAccessor)
             : base(commandService, globalInfo, logger)
         {
+            this.currentBuildNumber = Assembly.GetExecutingAssembly().GetName().Version.Build;
+
             this.checkIfUserIsInRole = checkIfUserIsInRole;
             this.plainFileRepository = plainFileRepository;
             this.versionProvider = versionProvider;
@@ -272,16 +276,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpGet]
         public HttpResponseMessage GetLatestVersion()
         {
-            int maxVersion = GetLastVersionNumber();
-
-            if (maxVersion <= 0)
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, InterviewerSyncControllerMessages.FileWasNotFound);
-
-
-            string targetToSearchVersions = HostingEnvironment.MapPath(pathToSearchVersions);
-
-            string path = fileSystemAccessor.CombinePath(targetToSearchVersions, maxVersion.ToString(CultureInfo.InvariantCulture));
-            string pathToFile = fileSystemAccessor.CombinePath(path, CapiFileName);
+            string pathToFile = fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(pathToSearchVersions), CapiFileName);
 
             if (fileSystemAccessor.IsFileExists(pathToFile))
             {
@@ -301,34 +296,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             
             return Request.CreateErrorResponse(HttpStatusCode.NotFound, InterviewerSyncControllerMessages.FileWasNotFound);
         }
-
-        private int GetLastVersionNumber()
-        {
-            int maxVersion = 0;
-
-            string targetToSearchVersions = HostingEnvironment.MapPath(pathToSearchVersions);
-            
-            if (fileSystemAccessor.IsDirectoryExists(targetToSearchVersions))
-            {
-                var containingDirectories = fileSystemAccessor.GetDirectoriesInDirectory(targetToSearchVersions);
-                
-                foreach (var directoryInfo in containingDirectories)
-                {
-                    int value;
-                    if (int.TryParse(fileSystemAccessor.GetFileName(directoryInfo), out value))
-                        if (maxVersion < value)
-                            maxVersion = value;
-                }
-            }
-
-            return maxVersion;
-        }
-
+        
         [HttpGet]
         public HttpResponseMessage CheckNewVersion(int versionCode)
         {
-            int maxVersion = GetLastVersionNumber();
-            return Request.CreateResponse(HttpStatusCode.OK, (maxVersion != 0 && maxVersion > versionCode));
+            string targetToSearchCapi = fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(pathToSearchVersions), CapiFileName);
+
+            bool newVersionExists = fileSystemAccessor.IsFileExists(targetToSearchCapi) && 
+                                    (currentBuildNumber > versionCode);
+
+            return Request.CreateResponse(HttpStatusCode.OK, newVersionExists);
         }
     }
 }
