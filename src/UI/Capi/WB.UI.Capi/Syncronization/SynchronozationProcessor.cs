@@ -161,7 +161,7 @@ namespace WB.UI.Capi.Syncronization
         {
             if (!string.IsNullOrEmpty(this.lastReceivedPackageId))
             {
-                this.OnStatusChanged(new SynchronizationEventArgs("Tabled had old installaion. Migrating timestamp to id", Operation.Pull, true));
+                this.OnStatusChanged(new SynchronizationEventArgs("Tablet had old installation. Migrating pacakge timestamp to it's id", Operation.Pull, true));
                 Guid lastReceivedChunkId = await this.pull.GetChunkIdByTimestamp(this.lastReceivedPackageId, this.credentials.Login, this.credentials.Password, cancellationToken);
                 this.StoreReceivedChunkId(lastReceivedChunkId);
                 this.lastReceivedPackageId = null;
