@@ -8,15 +8,12 @@ namespace WB.Core.Synchronization
     public interface ISyncManager
     {
         HandshakePackage ItitSync(ClientIdentifier identifier);
-        
-        bool SendSyncPackage(SyncPackage package);
+
         bool SendSyncItem(SyncItem package);
 
         IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, Guid? lastSyncedPackageId);
 
         SyncPackage ReceiveSyncPackage(Guid clientRegistrationId, Guid id);
-
-        int GetNumberToGet(Guid userId, Guid clientRegistrationId, DateTime timestamp);
-        
+        Guid GetPackageIdByTimestamp(DateTime timestamp);
     }
 }

@@ -64,7 +64,6 @@ namespace WB.UI.Supervisor.Tests.SyncControllerTests
                 logger ?? Mock.Of<ILogger>(),
                 viewFactory ?? Mock.Of<IViewFactory<UserViewInputModel, UserView>>(),
                 versionProvider ?? Mock.Of<ISupportedVersionProvider>(), 
-                (login, role) => true, 
                 plainFileRepository ?? Mock.Of<IPlainInterviewFileStorage>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>());
 

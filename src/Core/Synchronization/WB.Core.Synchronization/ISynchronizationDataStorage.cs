@@ -19,5 +19,6 @@ namespace WB.Core.Synchronization
         IEnumerable<SynchronizationChunkMeta> GetChunkPairsCreatedAfter(Guid? lastSyncedPackageId, Guid userId);
         void DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, DateTime timestamp);
         void SaveTemplateAssembly(Guid publicKey, long version, string assemblyAsBase64String, DateTime timestamp);
+        SynchronizationChunkMeta GetChunkInfoByTimestamp(DateTime timestamp);
     }
 }
