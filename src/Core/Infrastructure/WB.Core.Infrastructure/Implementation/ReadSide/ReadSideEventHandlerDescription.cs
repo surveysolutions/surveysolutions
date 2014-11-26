@@ -1,8 +1,8 @@
-﻿namespace WB.Core.Infrastructure
+﻿namespace WB.Core.Infrastructure.Implementation.ReadSide
 {
-    public class EventHandlerDescription
+    public class ReadSideEventHandlerDescription
     {
-        public EventHandlerDescription(string name,string[] usesViews, string[] buildsViews, bool supportsPartialRebuild)
+        public ReadSideEventHandlerDescription(string name,string[] usesViews, string[] buildsViews, bool supportsPartialRebuild)
         {
             this.SupportsPartialRebuild = supportsPartialRebuild;
             Name = name;

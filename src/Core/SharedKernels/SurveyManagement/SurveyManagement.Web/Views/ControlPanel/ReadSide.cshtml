@@ -179,7 +179,7 @@
             </thead>
             <tbody data-bind="foreach: rebuildErrors()">
                 <tr>
-                    <td class="text-nowrap" data-bind="date: ErrorDate, format:'MM/DD/YYYY HH:mm:ss'"></td>
+                    <td class="text-nowrap" data-bind="date: ErrorTime, format:'MM/DD/YYYY HH:mm:ss'"></td>
                     <td>
                         <div class="accordion-group accordion-caret">
                             <div class="accordion-heading">
@@ -188,7 +188,7 @@
                                 </a>
                             </div>
                             <div class="accordion-body collapse" data-bind="attr:{ id: ErrorKey}">
-                                <div class="accordion-inner margin-left10" data-bind="text: InnerException">
+                                <div class="accordion-inner margin-left10" data-bind="text: InnerException.Message">
                                 </div>
                             </div>
                         </div>

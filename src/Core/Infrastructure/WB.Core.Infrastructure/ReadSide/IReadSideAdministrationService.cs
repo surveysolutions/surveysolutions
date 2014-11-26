@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.Infrastructure.Implementation.ReadSide;
 
 namespace WB.Core.Infrastructure.ReadSide
 {
@@ -13,7 +14,7 @@ namespace WB.Core.Infrastructure.ReadSide
 
         void StopAllViewsRebuilding();
 
-        IEnumerable<EventHandlerDescription> GetAllAvailableHandlers();
-        RebuildReadSideStatus GetRebuildStatus();
+        IEnumerable<ReadSideEventHandlerDescription> GetAllAvailableHandlers();
+        ReadSideStatus GetRebuildStatus();
     }
 }
