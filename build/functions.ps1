@@ -263,10 +263,8 @@ function CopyCapi($Project, $source) {
 	If (Test-Path "$DestinationFolder"){
 		Remove-Item "$DestinationFolder" -Force -Recurse
 	}
-	else{
-		New-Item -ItemType directory -Path "$DestinationFolder"
-	}
-	Copy-Item "$source" "$DestinationFolder\" -Recurse
+	New-Item -ItemType directory -Path "$DestinationFolder"
+	Copy-Item "$source" "$DestinationFolder" -Recurse
 }
 
 function UpdateSourceVersion($Version, $BuildNumber, [string]$file) {
