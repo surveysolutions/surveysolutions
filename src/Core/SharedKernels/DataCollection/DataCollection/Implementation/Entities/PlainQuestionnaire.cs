@@ -152,7 +152,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     "Cannot return answer options for question with id '{0}' because it's type {1} does not support answer options.",
                     questionId, question.QuestionType));
 
-            return question.Answers.Select(answer => this.ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)).ToList();
+            return question.Answers.Select(answer => ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)).ToList();
         }
 
         public string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue)
@@ -169,7 +169,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             return question
                 .Answers
-                .Single(answer => answerOptionValue == this.ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId))
+                .Single(answer => answerOptionValue == ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId))
                 .AnswerText;
         }
 
@@ -187,7 +187,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             var stringParentAnswer = question
                 .Answers
-                .Single(answer => answerOptionValue == this.ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId))
+                .Single(answer => answerOptionValue == ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId))
                 .ParentValue;
 
             decimal parsedValue;
@@ -512,6 +512,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 }).Select(x => x.PublicKey);
         }
 
+        public bool DoesCascadingQuestionHaveOptionsForParentValue(Guid questionId, decimal parentValue)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            bool questionTypeDoesNotSupportAnswerOptions
+                = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
+
+            if (questionTypeDoesNotSupportAnswerOptions)
+                throw new QuestionnaireException(string.Format(
+                    "Cannot check does question with id '{0}' have options for parent value because it's type {1} does not support answer options.",
+                    questionId, question.QuestionType));
+
+            List<decimal> parentValuesFromQuestion = question
+                .Answers
+                .Select(answer => answer.ParentValue)
+                .Where(answerParentValue => answerParentValue != null)
+                .Select(answerParentValue => ParseAnswerOptionParentValueOrThrow(answerParentValue, questionId))
+                .Distinct()
+                .ToList();
+
+            return parentValuesFromQuestion.Contains(parentValue);
+        }
+
         public IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId)
         {
             if (!this.cacheOfUnderlyingMandatoryQuestions.ContainsKey(groupId))
@@ -601,13 +624,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return parentGroups;
         }
 
-        private decimal ParseAnswerOptionValueOrThrow(string value, Guid questionId)
+        private static decimal ParseAnswerOptionValueOrThrow(string value, Guid questionId)
         {
             decimal parsedValue;
 
             if (!decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out parsedValue))
                 throw new QuestionnaireException(string.Format(
                     "Cannot parse answer option value '{0}' as decimal. Question id: '{1}'.",
+                    value, questionId));
+
+            return parsedValue;
+        }
+
+        private static decimal ParseAnswerOptionParentValueOrThrow(string value, Guid questionId)
+        {
+            decimal parsedValue;
+
+            if (!decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out parsedValue))
+                throw new QuestionnaireException(string.Format(
+                    "Cannot parse answer option parent value '{0}' as decimal. Question id: '{1}'.",
                     value, questionId));
 
             return parsedValue;
