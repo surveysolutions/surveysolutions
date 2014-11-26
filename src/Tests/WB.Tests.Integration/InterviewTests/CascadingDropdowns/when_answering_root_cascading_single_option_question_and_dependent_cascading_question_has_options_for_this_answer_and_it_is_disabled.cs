@@ -6,11 +6,10 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
 namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 {
-    internal class when_answering_root_cascading_single_option_question_and_dependent_cascading_question_has_no_options_for_this_answer : InterviewTestsContext
+    internal class when_answering_root_cascading_single_option_question_and_dependent_cascading_question_has_options_for_this_answer_and_it_is_disabled : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -43,26 +42,26 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
                 var interview = SetupInterview(questionnaire, new object[]
                 {
-                    Create.Event.SingleOptionQuestionAnswered(questionId: parentSingleOptionQuestionId, answer: 1, propagationVector: Empty.RosterVector),
-                    Create.Event.QuestionsEnabled(Create.Identity(childCascadedComboboxId)),
+                    Create.Event.SingleOptionQuestionAnswered(questionId: parentSingleOptionQuestionId, answer: 2, propagationVector: Empty.RosterVector),
+                    Create.Event.QuestionsDisabled(Create.Identity(childCascadedComboboxId)),
                 });
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerSingleOptionQuestion(actorId, parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 2m);
+                    interview.AnswerSingleOptionQuestion(actorId, parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 1m);
 
                     return new InvokeResults
                     {
-                        DisabledQuestions = 
-                            eventContext.AnyEvent<QuestionsDisabled>()
-                                ? eventContext.GetSingleEvent<QuestionsDisabled>().Questions.Select(identity => identity.Id).ToArray()
+                        EnabledQuestions =
+                            eventContext.AnyEvent<QuestionsEnabled>()
+                                ? eventContext.GetSingleEvent<QuestionsEnabled>().Questions.Select(identity => identity.Id).ToArray()
                                 : null,
                     };
                 }
             });
 
-        It should_raise_QuestionsDisabled_event_for_dependent_question = () =>
-            results.DisabledQuestions.ShouldContainOnly(Guid.Parse("11111111111111111111111111111111"));
+        It should_raise_QuestionsEnabled_event_for_dependent_question = () =>
+            results.EnabledQuestions.ShouldContainOnly(Guid.Parse("11111111111111111111111111111111"));
 
         Cleanup stuff = () =>
         {
@@ -76,7 +75,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
         [Serializable]
         internal class InvokeResults
         {
-            public Guid[] DisabledQuestions { get; set; }
+            public Guid[] EnabledQuestions { get; set; }
         }
     }
 }
