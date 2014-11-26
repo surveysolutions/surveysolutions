@@ -164,6 +164,7 @@ namespace WB.UI.Capi.Syncronization
                 this.OnStatusChanged(new SynchronizationEventArgs("Tabled had old installaion. Migrating timestamp to id", Operation.Pull, true));
                 Guid lastReceivedChunkId = await this.pull.GetChunkIdByTimestamp(this.lastReceivedPackageId, this.credentials.Login, this.credentials.Password, cancellationToken);
                 this.StoreReceivedChunkId(lastReceivedChunkId);
+                this.lastReceivedPackageId = null;
             }
         }
 
