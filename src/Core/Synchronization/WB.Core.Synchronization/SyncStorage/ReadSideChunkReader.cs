@@ -67,7 +67,10 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public SynchronizationChunkMeta GetChunkMetaDataByTimestamp(DateTime timestamp)
         {
-            var meta = this.queryableStorage.Query(_ => _.First(x => x.Timestamp == timestamp));
+            var meta = this.queryableStorage.Query(_ => _.Where(x => timestamp >= x.Timestamp)
+                                                         .ToList()
+                                                         .OrderBy(x => x.SortIndex)
+                                                         .Last());
             return new SynchronizationChunkMeta(meta.PublicKey);
         }
     }
