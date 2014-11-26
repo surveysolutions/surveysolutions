@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.UI.Shared.Android.Controls.ScreenItems
 {
@@ -59,7 +60,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected override void PutAnswerStoredInModelToUI()
         {
-            this.dateDisplay.Text = selectedDate.ToString("d");
+            this.dateDisplay.Text = AnswerUtils.AnswerToString(selectedDate);
         }
 
         // the event received when the user "sets" the date in the dialog
