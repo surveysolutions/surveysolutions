@@ -10,6 +10,7 @@ using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
 using CAPI.Android.Settings;
 using Microsoft.Practices.ServiceLocation;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils.Rest;
@@ -36,7 +37,6 @@ namespace WB.UI.Capi.Syncronization
         private readonly ICapiDataSynchronizationService dataProcessor;
         private readonly ICapiCleanUpService cleanUpExecutor;
         private readonly IInterviewSynchronizationFileStorage fileSyncRepository;
-        private IDictionary<SynchronizationChunkMeta, bool> remoteChuncksForDownload;
 
         private readonly ISyncAuthenticator authentificator;
         private SyncCredentials credentials;
@@ -48,7 +48,7 @@ namespace WB.UI.Capi.Syncronization
             get { return SettingsManager.GetSetting(SettingsNames.RegistrationKeyName); }
         }
 
-        private string lastTimestamp
+        private string lastReceivedPackageId
         {
             set { SettingsManager.SetSetting(SettingsNames.LastTimestamp, value); }
             get { return SettingsManager.GetSetting(SettingsNames.LastTimestamp); }
@@ -82,19 +82,40 @@ namespace WB.UI.Capi.Syncronization
         private async Task PullAsync()
         {
             this.ExitIfCanceled();
-            this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", Operation.Pull, true, 0));
+            this.OnStatusChanged(new SynchronizationEventArgsWithPercent("Pulling", Operation.Pull, true, 0));
 
             try
             {
                 var cancellationToken = this.cancellationSource.Token;
-                this.remoteChuncksForDownload = await this.pull.GetChuncksAsync(this.credentials.Login, 
-                    this.credentials.Password, 
-                    this.clientRegistrationId, 
-                    this.lastTimestamp, 
-                    cancellationToken);
+                var remoteChuncksForDownload = new List<SynchronizationChunkMeta>();
 
+                bool foundNeededPackages = false;
+                var lastKnownPackageId = this.GetLastReceivedChunkId();
+                int returnedBackCount = 0;
+                do
+                {
+                    try
+                    {
+                        this.OnStatusChanged(new SynchronizationEventArgsWithPercent("Receiving list of packages to download", Operation.Pull, true, 0));
+                        remoteChuncksForDownload = await this.pull.GetChuncksAsync(this.credentials.Login,
+                            this.credentials.Password,
+                            this.clientRegistrationId,
+                            lastKnownPackageId,
+                            cancellationToken);
+                        foundNeededPackages = true;
+                    }
+                    catch (GoneException)
+                    {
+                        returnedBackCount++;
+                        this.OnStatusChanged(new SynchronizationEventArgsWithPercent(
+                            string.Format("Last known package not found on server. Searching for previous. Tried {0} packages", returnedBackCount), 
+                            Operation.Pull, true, 0));
+                        lastKnownPackageId = this.GetChunkBeforeChunkWithId(lastKnownPackageId);
+                    }
+                } while (!foundNeededPackages);
+                
                 int progressCounter = 0;
-                foreach (SynchronizationChunkMeta chunckId in this.remoteChuncksForDownload.Keys.ToList())
+                foreach (SynchronizationChunkMeta chunckId in remoteChuncksForDownload)
                 {
                     if (cancellationToken.IsCancellationRequested)
                         return;
@@ -108,19 +129,20 @@ namespace WB.UI.Capi.Syncronization
                             cancellationToken);
 
                         this.dataProcessor.SavePulledItem(data);
-                        this.remoteChuncksForDownload[chunckId] = true;
 
                         // save last handled item
-                        this.lastTimestamp = chunckId.Id.ToString();
+                        this.lastReceivedPackageId = chunckId.Id.ToString();
+
+                        this.StoreReceivedChunkId(chunckId.Id);
                     }
                     catch (Exception e)
                     {
-                        this.logger.Error(string.Format("chunk {0} wasn't processed", chunckId), e);
+                        this.logger.Error(string.Format("Chunk {0} wasn't processed", chunckId), e);
                         throw;
                     }
 
                     this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", Operation.Pull, true,
-                        ((progressCounter++) * 100) / this.remoteChuncksForDownload.Count));
+                        ((progressCounter++) * 100) / remoteChuncksForDownload.Count));
                 }
             }
             catch (Exception e)
@@ -203,9 +225,8 @@ namespace WB.UI.Capi.Syncronization
 
 
                 //string message = string.Format("handshake app {0}, device {1}", appId, androidId);
-                string message = "connecting...";
                 this.OnStatusChanged(
-                    new SynchronizationEventArgs(message, Operation.Handshake, true));
+                    new SynchronizationEventArgs("Connecting...", Operation.Handshake, true));
                 
                 this.clientRegistrationId = this.handshake.Execute(this.credentials.Login, this.credentials.Password, androidId, appId, this.clientRegistrationId);
             }
@@ -313,6 +334,60 @@ namespace WB.UI.Capi.Syncronization
             var cancellationToken1 = this.cancellationSource.Token;
             if (cancellationToken1.IsCancellationRequested)
                 cancellationToken1.ThrowIfCancellationRequested();
+        }
+
+        private void StoreReceivedChunkId(Guid chunkId)
+        {
+            var setting = SettingsManager.GetSetting(SettingsNames.ReceivedChunkIds);
+
+            var chunks = new List<Guid>();
+            if (!string.IsNullOrEmpty(setting))
+            {
+                chunks = JsonConvert.DeserializeObject<List<Guid>>(setting);
+            }
+            
+            chunks.Add(chunkId);
+            SettingsManager.SetSetting(SettingsNames.ReceivedChunkIds, JsonConvert.SerializeObject(chunks));
+        }
+
+        private Guid? GetLastReceivedChunkId()
+        {
+            var setting = SettingsManager.GetSetting(SettingsNames.ReceivedChunkIds);
+            if (string.IsNullOrEmpty(setting))
+            {
+                return null;
+            }
+
+            var chunks = JsonConvert.DeserializeObject<List<Guid>>(setting);
+            return chunks.LastOrDefault();
+        }
+
+        private Guid? GetChunkBeforeChunkWithId(Guid? chunkId)
+        {
+            if (!chunkId.HasValue)
+            {
+                return null;
+            }
+
+            var setting = SettingsManager.GetSetting(SettingsNames.ReceivedChunkIds);
+            if (string.IsNullOrEmpty(setting))
+            {
+                return null;
+            }
+
+            var chunks = JsonConvert.DeserializeObject<List<Guid>>(setting);
+            var indexOfChunk = chunks.IndexOf(chunkId.Value);
+            if (indexOfChunk < 0)
+            {
+                throw new ArgumentException("Chunk with id {0} is not stored on tablet. Please delete app and synchronize with Supervisor application", "chunkId");
+            }
+
+            if (indexOfChunk == 0)
+            {
+                return null;
+            }
+
+            return chunks[indexOfChunk - 1];
         }
     }
 }
