@@ -1248,7 +1248,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 .Select(
                     questionInstance =>
                         new LinkedAnswerViewModel(questionInstance.PublicKey.InterviewItemPropagationVector,
-                            this.BuildLinkedQuestionOptionTitle(linkedQuestionRosterVector, linkedQuestionRosterScope, questionInstance.QuestionRosterScope, questionInstance.PublicKey.InterviewItemPropagationVector, questionInstance.AnswerString)));
+                            this.BuildLinkedQuestionOptionTitle(linkedQuestionRosterVector, linkedQuestionRosterScope, questionInstance.QuestionRosterScope, questionInstance.PublicKey.InterviewItemPropagationVector, AnswerUtils.AnswerToString(questionInstance.AnswerObject))));
         }
 
         private string BuildLinkedQuestionOptionTitle(decimal[] linkedQuestionRosterVector,
