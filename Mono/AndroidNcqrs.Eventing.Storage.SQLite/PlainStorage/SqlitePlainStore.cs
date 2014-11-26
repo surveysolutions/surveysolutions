@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Plugins.Sqlite;
 using WB.Core.Infrastructure.Backup;
@@ -61,6 +62,11 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage
         {
             return this.WrapConnectionWithQuery(_ => _.Where(i => i.Id == id).FirstOrDefault());
         }
+        
+        public IEnumerable<T> Query<T>(Expression<Func<T, bool>> predExpr) where T : new()
+        {
+            return WrapConnectionWithQuery<IEnumerable<T>, T>((table) => table.Where(predExpr).ToList());
+        }
 
         public void Remove(string id)
         {
@@ -115,6 +121,20 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage
                     File.Delete(FullPathToDataBase);
                 else
                     File.Copy(pathToEventStore, FullPathToDataBase, true);
+            }
+        }
+
+        private TResult WrapConnectionWithQuery<TResult, TView>(Func<ITableQuery<TView>, TResult> query)
+            where TView : new()
+        {
+            lock (this.locker)
+            {
+                using (
+                    var connection = this.connectionFactory.Create(this.FullPathToDataBase))
+                {
+                    connection.CreateTable<TView>();
+                    return query.Invoke(connection.Table<TView>());
+                }
             }
         }
     }

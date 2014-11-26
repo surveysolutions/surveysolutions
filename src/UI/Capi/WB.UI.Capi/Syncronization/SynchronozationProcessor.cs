@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Security.Authentication;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,10 +9,10 @@ using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
 using CAPI.Android.Settings;
 using Microsoft.Practices.ServiceLocation;
-using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils.Rest;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Settings;
@@ -37,6 +36,7 @@ namespace WB.UI.Capi.Syncronization
         private readonly ICapiDataSynchronizationService dataProcessor;
         private readonly ICapiCleanUpService cleanUpExecutor;
         private readonly IInterviewSynchronizationFileStorage fileSyncRepository;
+        private readonly ISyncPackageIdsStorage packageIdStorage;
 
         private readonly ISyncAuthenticator authentificator;
         private SyncCredentials credentials;
@@ -58,8 +58,13 @@ namespace WB.UI.Capi.Syncronization
         public event EventHandler ProcessCanceling;
         public event EventHandler<SynchronizationCanceledEventArgs> ProcessCanceled;
 
-        public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, ICapiDataSynchronizationService dataProcessor,
-            ICapiCleanUpService cleanUpExecutor, IRestServiceWrapperFactory restServiceWrapperFactory, IInterviewSynchronizationFileStorage fileSyncRepository)
+        public SynchronozationProcessor(Context context, 
+            ISyncAuthenticator authentificator, 
+            ICapiDataSynchronizationService dataProcessor,
+            ICapiCleanUpService cleanUpExecutor, 
+            IRestServiceWrapperFactory restServiceWrapperFactory, 
+            IInterviewSynchronizationFileStorage fileSyncRepository,
+            ISyncPackageIdsStorage packageIdStorage)
         {
             this.context = context;
 
@@ -67,6 +72,7 @@ namespace WB.UI.Capi.Syncronization
             this.authentificator = authentificator;
             this.cleanUpExecutor = cleanUpExecutor;
             this.fileSyncRepository = fileSyncRepository;
+            this.packageIdStorage = packageIdStorage;
 
             var executor = restServiceWrapperFactory.CreateRestServiceWrapper(SettingsManager.GetSyncAddressPoint());
             this.pull = new RestPull(executor);
@@ -89,14 +95,14 @@ namespace WB.UI.Capi.Syncronization
             var remoteChuncksForDownload = new List<SynchronizationChunkMeta>();
 
             bool foundNeededPackages = false;
-            var lastKnownPackageId = this.GetLastReceivedChunkId();
+            var lastKnownPackageId = this.packageIdStorage.GetLastStoredChunkId();
             int returnedBackCount = 0;
 
             do
             {
                 try
                 {
-                    this.OnStatusChanged(new SynchronizationEventArgsWithPercent("Receiving list of packages to download", Operation.Pull, true, 0));
+                    this.OnStatusChanged(new SynchronizationEventArgsWithPercent("Receiving list of packageIdStorage to download", Operation.Pull, true, 0));
                     remoteChuncksForDownload = await this.pull.GetChuncksAsync(this.credentials.Login,
                         this.credentials.Password,
                         this.clientRegistrationId,
@@ -108,9 +114,9 @@ namespace WB.UI.Capi.Syncronization
                 {
                     returnedBackCount++;
                     this.OnStatusChanged(new SynchronizationEventArgsWithPercent(
-                        string.Format("Last known package not found on server. Searching for previous. Tried {0} packages", returnedBackCount), 
+                        string.Format("Last known package not found on server. Searching for previous. Tried {0} packageIdStorage", returnedBackCount), 
                         Operation.Pull, true, 0));
-                    lastKnownPackageId = this.GetChunkBeforeChunkWithId(lastKnownPackageId);
+                    lastKnownPackageId = this.packageIdStorage.GetChunkBeforeChunkWithId(lastKnownPackageId);
                 }
             } while (!foundNeededPackages);
                 
@@ -130,7 +136,7 @@ namespace WB.UI.Capi.Syncronization
 
                     this.dataProcessor.SavePulledItem(data);
 
-                    this.StoreReceivedChunkId(chunckId.Id);
+                    this.packageIdStorage.Append(chunckId.Id);
                 }
                 catch (Exception e)
                 {
@@ -149,7 +155,7 @@ namespace WB.UI.Capi.Syncronization
             {
                 this.OnStatusChanged(new SynchronizationEventArgs("Tablet had old installation. Migrating pacakge timestamp to it's id", Operation.Pull, true));
                 Guid lastReceivedChunkId = await this.pull.GetChunkIdByTimestamp(this.lastReceivedPackageId, this.credentials.Login, this.credentials.Password, cancellationToken);
-                this.StoreReceivedChunkId(lastReceivedChunkId);
+                this.packageIdStorage.Append(lastReceivedChunkId);
                 this.lastReceivedPackageId = null;
             }
         }
@@ -296,60 +302,6 @@ namespace WB.UI.Capi.Syncronization
             var cancellationToken1 = this.cancellationSource.Token;
             if (cancellationToken1.IsCancellationRequested)
                 cancellationToken1.ThrowIfCancellationRequested();
-        }
-
-        private void StoreReceivedChunkId(Guid chunkId)
-        {
-            var setting = SettingsManager.GetSetting(SettingsNames.ReceivedChunkIds);
-
-            var chunks = new List<Guid>();
-            if (!string.IsNullOrEmpty(setting))
-            {
-                chunks = JsonConvert.DeserializeObject<List<Guid>>(setting);
-            }
-            
-            chunks.Add(chunkId);
-            SettingsManager.SetSetting(SettingsNames.ReceivedChunkIds, JsonConvert.SerializeObject(chunks));
-        }
-
-        private Guid? GetLastReceivedChunkId()
-        {
-            var setting = SettingsManager.GetSetting(SettingsNames.ReceivedChunkIds);
-            if (string.IsNullOrEmpty(setting))
-            {
-                return null;
-            }
-
-            var chunks = JsonConvert.DeserializeObject<List<Guid>>(setting);
-            return chunks.LastOrDefault();
-        }
-
-        private Guid? GetChunkBeforeChunkWithId(Guid? chunkId)
-        {
-            if (!chunkId.HasValue)
-            {
-                return null;
-            }
-
-            var setting = SettingsManager.GetSetting(SettingsNames.ReceivedChunkIds);
-            if (string.IsNullOrEmpty(setting))
-            {
-                return null;
-            }
-
-            var chunks = JsonConvert.DeserializeObject<List<Guid>>(setting);
-            var indexOfChunk = chunks.IndexOf(chunkId.Value);
-            if (indexOfChunk < 0)
-            {
-                throw new ArgumentException("Chunk with id {0} is not stored on tablet. Please delete app and synchronize with Supervisor application", "chunkId");
-            }
-
-            if (indexOfChunk == 0)
-            {
-                return null;
-            }
-
-            return chunks[indexOfChunk - 1];
         }
     }
 }

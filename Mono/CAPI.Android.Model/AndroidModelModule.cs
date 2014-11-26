@@ -106,7 +106,8 @@ namespace CAPI.Android.Core.Model
             this.Bind<IViewFactory<DashboardInput, DashboardModel>>().To<DashboardFactory>();
             this.Bind<IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo>>().ToConstant(interviewMetaInfoFactory);
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope();
-            
+            this.Bind<SqlitePlainStore>().ToConstant(plainStore);
+
             var backupable = new List<IBackupable>()
             {
                     evenStore, changeLogStore, fileSystem, denormalizerStore, plainStore,
