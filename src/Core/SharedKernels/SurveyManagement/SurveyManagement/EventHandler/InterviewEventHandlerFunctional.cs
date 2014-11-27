@@ -374,7 +374,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             {
                 this.ResendInterviewInNewStatus(currentState.Document, newStatus, evnt.Payload.Comment, evnt.EventTimeStamp);
             }
-            else if (this.IsInterviewWithStatusNeedToBeDeletedOnCapi(newStatus))
+            else if (this.IsInterviewWithStatusNeedToBeDeletedOnCapi(newStatus, currentState.Document.CreatedOnClient))
             {
                 this.syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, null, evnt.EventTimeStamp);
             }
@@ -387,9 +387,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return newStatus == InterviewStatus.RejectedBySupervisor;
         }
 
-        private bool IsInterviewWithStatusNeedToBeDeletedOnCapi(InterviewStatus newStatus)
+        private bool IsInterviewWithStatusNeedToBeDeletedOnCapi(InterviewStatus newStatus, bool wasCreatedOnClient)
         {
-            return newStatus == InterviewStatus.Completed || newStatus == InterviewStatus.Deleted;
+            return (newStatus == InterviewStatus.Completed || newStatus == InterviewStatus.Deleted) && !wasCreatedOnClient;
         }
 
         public void ResendInterviewInNewStatus(InterviewData interview, InterviewStatus newStatus, string comments, DateTime timestamp)
@@ -420,7 +420,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             currentState.Document.ResponsibleRole = UserRoles.Operator;
             currentState.Sequence = evnt.EventSequence;
 
-            if (currentState.Document.Status != InterviewStatus.RejectedByHeadquarters)
+            if (currentState.Document.Status != InterviewStatus.RejectedByHeadquarters && !currentState.Document.CreatedOnClient)
             {
                 this.ResendInterviewForPerson(currentState.Document, evnt.Payload.InterviewerId, evnt.EventTimeStamp);
             }
