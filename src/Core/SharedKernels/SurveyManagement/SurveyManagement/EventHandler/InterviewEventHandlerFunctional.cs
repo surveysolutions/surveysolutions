@@ -420,7 +420,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             currentState.Document.ResponsibleRole = UserRoles.Operator;
             currentState.Sequence = evnt.EventSequence;
 
-            if (currentState.Document.Status != InterviewStatus.RejectedByHeadquarters)
+            if (currentState.Document.Status != InterviewStatus.RejectedByHeadquarters && !currentState.Document.CreatedOnClient)
             {
                 this.ResendInterviewForPerson(currentState.Document, evnt.Payload.InterviewerId, evnt.EventTimeStamp);
             }
