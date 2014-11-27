@@ -13,8 +13,15 @@
     }
     else
     {
-        @Html.Raw(string.Format("<h{0}><span>{2} &nbsp;&nbsp;&nbsp;</span>{1} <span class=\"variable-name\">{3}</span></h{0}>",
-            Math.Min(4, Model.Depth), Html.Encode(Model.Title), Html.Encode(Model.ItemNumber), Html.Encode(Model.VariableName)))
+        var depth = Math.Min(4, Model.Depth);
+
+        @Html.Raw(string.Format("<h{0}><span>{2} &nbsp;&nbsp;&nbsp;</span>{1}", depth, Html.Encode(Model.Title), Html.Encode(Model.ItemNumber)))
+        
+        if (!string.IsNullOrWhiteSpace(Model.VariableName)) {
+            <span class="variable-name">@Model.VariableName</span>
+        }
+
+        @Html.Raw(string.Format("</h{0}>", depth))
     }
 
     @if (this.Model.Children.Count > 0)
