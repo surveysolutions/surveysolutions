@@ -1803,37 +1803,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void CloneTextQuestion(
-            Guid questionId,
-            string title,
-            string variableName, string variableLabel,
-            bool isMandatory,
-            bool isPreFilled,
-            QuestionScope scope,
-            string enablementCondition,
-            string validationExpression,
-            string validationMessage,
-            string instructions,
-            string mask,
-            Guid parentGroupId,
-            Guid sourceQuestionId,
-            int targetIndex,
-            Guid responsibleId)
-        {
-            PrepareGeneralProperties(ref title, ref variableName);
-            var parentGroup = this.GetGroupById(parentGroupId);
-
-            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
-
-            this.ApplyTextQuestionClonedEvent(questionId: questionId, title: title, variableName: variableName, variableLabel: variableLabel,
-                isMandatory: isMandatory, isPreFilled: isPreFilled, scope: scope,
-                enablementCondition: enablementCondition, validationExpression: validationExpression,
-                validationMessage: validationMessage, instructions: instructions, mask: mask, parentGroupId: parentGroupId,
-                sourceQuestionId: sourceQuestionId, targetIndex: targetIndex, responsibleId: responsibleId);
-        }
-
         #endregion
 
         #region Question: GpsCoordinates command handlers
@@ -1903,31 +1872,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Instructions = instructions,
                 ResponsibleId = responsibleId
             });
-        }
-
-        public void CloneGpsCoordinatesQuestion(
-            Guid questionId,
-            string title,
-            string variableName, string variableLabel,
-            bool isMandatory,
-            string enablementCondition,
-            string instructions,
-            Guid parentGroupId,
-            Guid sourceQuestionId,
-            int targetIndex,
-            Guid responsibleId)
-        {
-            PrepareGeneralProperties(ref title, ref variableName);
-            var parentGroup = this.GetGroupById(parentGroupId);
-
-            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, responsibleId);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, string.Empty, variableName);
-
-            this.ApplyGeoLocationQuestionClonedEvent(questionId: questionId, title: title, variableName: variableName, variableLabel: variableLabel,
-                isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions,
-                parentGroupId: parentGroupId, sourceQuestionId: sourceQuestionId, targetIndex: targetIndex,
-                responsibleId: responsibleId);
         }
 
         #endregion
@@ -2013,37 +1957,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Instructions = instructions,
                 ResponsibleId = responsibleId
             });
-        }
-
-        public void CloneDateTimeQuestion(
-            Guid questionId,
-            string title,
-            string variableName, string variableLabel,
-            bool isMandatory,
-            bool isPreFilled,
-            QuestionScope scope,
-            string enablementCondition,
-            string validationExpression,
-            string validationMessage,
-            string instructions,
-            Guid parentGroupId,
-            Guid sourceQuestionId,
-            int targetIndex,
-            Guid responsibleId)
-        {
-            PrepareGeneralProperties(ref title, ref variableName);
-            var parentGroup = this.GetGroupById(parentGroupId);
-
-            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled,
-                responsibleId);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
-
-            this.ApplyDateTimeQuestionClonedEvent(questionId: questionId, title: title, variableName: variableName, variableLabel: variableLabel,
-                isMandatory: isMandatory, isPreFilled: isPreFilled, scope: scope,
-                enablementCondition: enablementCondition, validationExpression: validationExpression,
-                validationMessage: validationMessage, instructions: instructions, parentGroupId: parentGroupId,
-                sourceQuestionId: sourceQuestionId, targetIndex: targetIndex, responsibleId: responsibleId);
         }
 
         #endregion
@@ -2144,43 +2057,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 AreAnswersOrdered = areAnswersOrdered,
                 MaxAllowedAnswers = maxAllowedAnswers
             });
-        }
-
-        public void CloneMultiOptionQuestion(
-            Guid questionId,
-            string title,
-            string variableName, string variableLabel,
-            bool isMandatory,
-            QuestionScope scope,
-            string enablementCondition,
-            string validationExpression,
-            string validationMessage,
-            string instructions,
-            Guid parentGroupId,
-            Guid sourceQuestionId,
-            int targetIndex,
-            Guid responsibleId,
-            Option[] options,
-            Guid? linkedToQuestionId,
-            bool areAnswersOrdered,
-            int? maxAllowedAnswers)
-        {
-            PrepareGeneralProperties(ref title, ref variableName);
-            var parentGroup = this.GetGroupById(parentGroupId);
-
-            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, responsibleId);
-            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false, null, scope, null);
-            this.ThrowIfMaxAllowedAnswersInvalid(QuestionType.MultyOption, linkedToQuestionId, maxAllowedAnswers, options);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
-
-            this.ApplyCategoricalMultiAnswersQuestionClonedEvent(questionId: questionId, title: title,
-                variableName: variableName, variableLabel: variableLabel, isMandatory: isMandatory, scope: scope,
-                enablementCondition: enablementCondition, validationExpression: validationExpression,
-                validationMessage: validationMessage, instructions: instructions, parentGroupId: parentGroupId,
-                sourceQuestionId: sourceQuestionId, targetIndex: targetIndex, responsibleId: responsibleId,
-                options: options, linkedToQuestionId: linkedToQuestionId, areAnswersOrdered: areAnswersOrdered,
-                maxAllowedAnswers: maxAllowedAnswers);
         }
 
         #endregion
@@ -2311,45 +2187,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void CloneSingleOptionQuestion(
-            Guid questionId,
-            string title,
-            string variableName, string variableLabel,
-            bool isMandatory,
-            bool isPreFilled,
-            QuestionScope scope,
-            string enablementCondition,
-            string validationExpression,
-            string validationMessage,
-            string instructions,
-            Guid parentGroupId,
-            Guid sourceQuestionId,
-            int targetIndex,
-            Guid responsibleId,
-            Option[] options,
-            Guid? linkedToQuestionId,
-            bool isFilteredCombobox,
-            Guid? cascadeFromQuestionId)
-        {
-            PrepareGeneralProperties(ref title, ref variableName);
-            var parentGroup = this.GetGroupById(parentGroupId);
-
-            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled,
-                responsibleId);
-            
-            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox, scope, cascadeFromQuestionId);
-            this.ThrowIfCategoricalSingleOptionsQuestionHasMoreThan200Options(options, isFilteredCombobox, cascadeFromQuestionId, linkedToQuestionId.HasValue);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
-
-            this.ApplyCategoricalSingleAnswerQuestionEvent(questionId: questionId, title: title,
-                variableName: variableName, variableLabel: variableLabel, isMandatory: isMandatory, isPreFilled: isPreFilled, scope: scope,
-                enablementCondition: enablementCondition, validationExpression: validationExpression,
-                validationMessage: validationMessage, instructions: instructions, parentGroupId: parentGroupId,
-                sourceQuestionId: sourceQuestionId, targetIndex: targetIndex, responsibleId: responsibleId,
-                options: options, linkedToQuestionId: linkedToQuestionId, isFilteredCombobox: isFilteredCombobox, cascadeFromQuestionId: cascadeFromQuestionId);
-        }
-
         public void UpdateFilteredComboboxOptions(Guid questionId, Guid responsibleId, Option[] options)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
@@ -2469,45 +2306,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void CloneNumericQuestion(
-            Guid questionId,
-            Guid parentGroupId, 
-            string title,
-            string variableName, string variableLabel,
-            bool isMandatory,
-            bool isPreFilled,
-            QuestionScope scope,
-            string enablementCondition,
-            string validationExpression, 
-            string validationMessage,
-            string instructions,
-            Guid sourceQuestionId, 
-            int targetIndex, 
-            Guid responsibleId,
-            int? maxValue, 
-            bool isInteger, 
-            int? countOfDecimalPlaces)
-        {
-            PrepareGeneralProperties(ref title, ref variableName);
-
-            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-
-            var parentGroup = this.GetGroupById(parentGroupId);
-
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
-
-            this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
-            this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
-
-            this.ApplyNumericQuestionCloneEvent(questionId: questionId, parentGroupId: parentGroupId, title: title,
-                variableName: variableName, variableLabel: variableLabel, isMandatory: isMandatory, isPreFilled: isPreFilled, scope: scope,
-                enablementCondition: enablementCondition, validationExpression: validationExpression,
-                validationMessage: validationMessage, instructions: instructions, sourceQuestionId: sourceQuestionId,
-                targetIndex: targetIndex, responsibleId: responsibleId, maxValue: maxValue, isInteger: isInteger,
-                countOfDecimalPlaces: countOfDecimalPlaces);
-        }
-
         public void UpdateNumericQuestion(
             Guid questionId,
             string title,
@@ -2596,33 +2394,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 MaxAnswerCount = maxAnswerCount
             });
-        }
-
-        public void CloneTextListQuestion(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel,
-            bool isMandatory, string enablementCondition, string instructions, Guid sourceQuestionId, int targetIndex,
-            Guid responsibleId, int? maxAnswerCount)
-        {
-            PrepareGeneralProperties(ref title, ref variableName);
-
-            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-
-            var isPrefilled = false;
-            var validationExpression = string.Empty;
-            var validationMessage = string.Empty;
-
-            var parentGroup = this.GetGroupById(parentGroupId);
-
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled,
-                responsibleId);
-
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
-
-            ThrowIfMaxAnswerCountNotInRange1to40(maxAnswerCount);
-
-            this.ApplyTextListQuestionClonedEvent(questionId: questionId, parentGroupId: parentGroupId, title: title,
-                variableName: variableName, variableLabel:variableLabel, isMandatory: isMandatory, enablementCondition: enablementCondition,
-                instructions: instructions, sourceQuestionId: sourceQuestionId, targetIndex: targetIndex,
-                responsibleId: responsibleId, maxAnswerCount: maxAnswerCount);
         }
 
         public void UpdateTextListQuestion(Guid questionId, string title, string variableName, string variableLabel,
@@ -2741,22 +2512,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void CloneQRBarcodeQuestion(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel,
-            bool isMandatory, string enablementCondition, string instructions, Guid sourceQuestionId, int targetIndex,
-            Guid responsibleId)
-        {
-            PrepareGeneralProperties(ref title, ref variableName);
-
-            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-            this.ThrowIfGeneralQuestionSettingsAreInvalid(questionId: questionId, parentGroupId: parentGroupId, title: title,
-                variableName: variableName, condition: enablementCondition, responsibleId: responsibleId);
-
-            this.ApplyQRBarcodeQuestionClonedEvent(questionId: questionId, parentGroupId: parentGroupId, title: title,
-                variableName: variableName,variableLabel:variableLabel, isMandatory: isMandatory, enablementCondition: enablementCondition,
-                instructions: instructions, sourceQuestionId: sourceQuestionId, targetIndex: targetIndex,
-                responsibleId: responsibleId);
-        }
-
         #endregion
 
         #region Static text command handlers
@@ -2790,29 +2545,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 EntityId = entityId,
                 Text = text,
-                ResponsibleId = responsibleId
-            });
-        }
-
-        public void CloneStaticText(Guid entityId, Guid sourceEntityId, Guid responsibleId)
-        {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-
-            this.ThrowDomainExceptionIfEntityDoesNotExists(sourceEntityId);
-            this.ThrowDomainExceptionIfEntityAlreadyExists(entityId);
-
-            this.innerDocument.ConnectChildrenWithParent();
-
-            var staticText = this.innerDocument.Find<IStaticText>(sourceEntityId);
-            var parentOfStaticText = staticText.GetParent();
-
-            this.ApplyEvent(new StaticTextCloned()
-            {
-                EntityId = entityId,
-                ParentId = parentOfStaticText.PublicKey,
-                SourceEntityId = sourceEntityId,
-                TargetIndex = parentOfStaticText.Children.IndexOf(staticText) + 1,
-                Text = staticText.Text,
                 ResponsibleId = responsibleId
             });
         }
