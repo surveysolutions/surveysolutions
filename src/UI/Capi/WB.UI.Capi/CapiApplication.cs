@@ -322,7 +322,7 @@ namespace WB.UI.Capi
             this.kernel.Bind<IAnswerProgressIndicator>().To<AnswerProgressIndicator>().InSingletonScope();
             this.kernel.Bind<IQuestionViewFactory>().To<DefaultQuestionViewFactory>();
             this.kernel.Bind<INavigationService>().To<NavigationService>().InSingletonScope();
-            this.kernel.Bind<ISyncPackageIdsStorage>().To<SyncPackageIdsStorage>();
+            this.kernel.Bind<ISyncPackageIdsStorage>().To<SyncPackageIdsStorage>().InSingletonScope();
 
 
             this.kernel.Unbind<ISyncPackageRestoreService>();
