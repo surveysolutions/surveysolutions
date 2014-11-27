@@ -6,6 +6,6 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
     {
         public DateTime ErrorTime { get; set; }
         public string ErrorMessage { get; set; }
-        public Exception InnerException { get; set; }
+        public string InnerException { get; set; }
     }
 }

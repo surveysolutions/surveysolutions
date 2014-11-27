@@ -142,7 +142,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     {
                         ErrorTime = error.Item1,
                         ErrorMessage = error.Item2,
-                        InnerException = error.Item3
+                        InnerException = GetFullUnwrappedExceptionText(error.Item3)
                     })
             };
         }
