@@ -8,6 +8,8 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Implementation.Services;
+using WB.Core.Infrastructure.Services;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Mailers;
 using WB.UI.Designer.WebServices;
@@ -21,6 +23,7 @@ namespace WB.UI.Designer.Code
             ICommandListSupplier commands = new CommandListSupplier(CommandRegistry.GetRegisteredCommands());
             this.Bind<ICommandListSupplier>().ToConstant(commands);
 
+            this.Bind<IWaitService>().To<WaitService>().InSingletonScope();
             this.Bind<ICommandPreprocessor>().To<CommandPreprocessor>();
             this.Bind<IQuestionnaireHelper>().To<QuestionnaireHelper>();
             this.Bind<IVerificationErrorsMapper>().To<VerificationErrorsMapper>();
