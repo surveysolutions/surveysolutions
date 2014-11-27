@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Implementation.ReadSide
@@ -11,12 +12,15 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         private static ConcurrentDictionary<Guid, bool> packagesInProcess = new ConcurrentDictionary<Guid, bool>();
         private Action<Guid> additionalEventChecker;
         private const int CountOfAttempt = 60;
+        private readonly IWaitService waitService;
 
         public ReadSideRepositoryReaderWithSequence(
-            IReadSideRepositoryReader<ViewWithSequence<T>> readsideReader, Action<Guid> additionalEventChecker)
+            IReadSideRepositoryReader<ViewWithSequence<T>> readsideReader, Action<Guid> additionalEventChecker, 
+            IWaitService waitService)
         {
             this.readsideReader = readsideReader;
             this.additionalEventChecker = additionalEventChecker;
+            this.waitService = waitService;
         }
 
         public int Count()
@@ -77,7 +81,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 {
                     return false;
                 }
-                WaitUtils.WaitForSecond();
+                waitService.WaitForSecond();
                 i++;
             }
             return true;

@@ -14,8 +14,10 @@ using Ninject.Modules;
 using Ninject.Syntax;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.Implementation.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection;
@@ -217,6 +219,7 @@ namespace WB.UI.Supervisor.Injections
 
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
             this.Bind<IStringCompressor>().To<GZipJsonCompressor>();
+            this.Bind<IWaitService>().To<WaitService>().InSingletonScope();
         }
     }
 }

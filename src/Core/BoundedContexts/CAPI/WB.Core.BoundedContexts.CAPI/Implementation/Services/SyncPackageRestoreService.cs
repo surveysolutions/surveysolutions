@@ -4,6 +4,7 @@ using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.SurveySolutions.Services;
@@ -20,17 +21,19 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
         private readonly IStringCompressor stringCompressor;
         private readonly IJsonUtils jsonUtils;
         private readonly ICommandService commandService;
+        private readonly IWaitService waitService;
 
-        public SyncPackageRestoreService(ILogger logger, ICapiSynchronizationCacheService capiSynchronizationCacheService, IStringCompressor stringCompressor, IJsonUtils jsonUtils, ICommandService commandService)
+        public SyncPackageRestoreService(ILogger logger, ICapiSynchronizationCacheService capiSynchronizationCacheService, 
+            IStringCompressor stringCompressor, IJsonUtils jsonUtils, ICommandService commandService,
+            IWaitService waitService)
         {
             this.logger = logger;
             this.capiSynchronizationCacheService = capiSynchronizationCacheService;
             this.stringCompressor = stringCompressor;
             this.jsonUtils = jsonUtils;
             this.commandService = commandService;
+            this.waitService = waitService;
         }
-
-        
 
         private bool WaitUntilItemCanBeProcessed(Guid id)
         {
@@ -41,7 +44,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
                 {
                     return false;
                 }
-                WaitUtils.WaitForSecond();
+                waitService.WaitForSecond();
                 i++;
             }
             return true;
