@@ -1,6 +1,6 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
-using AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Plugins.Sqlite;
 using WB.Core.GenericSubdomains.Utils;
@@ -9,29 +9,50 @@ namespace WB.UI.Capi.Syncronization.Implementation
 {
     internal class SyncPackageIdsStorage : ISyncPackageIdsStorage
     {
-        private readonly SqlitePlainStore plainstore;
+        private readonly ISQLiteConnectionFactory connectionFactory;
 
-        public SyncPackageIdsStorage(SqlitePlainStore plainstore)
+        private string FullPathToDataBase
         {
-            this.plainstore = plainstore;
+            get
+            {
+                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "syncPackages");
+            }
+        }
+
+        public SyncPackageIdsStorage()
+        {
+            PluginLoader.Instance.EnsureLoaded();
+            connectionFactory = Mvx.GetSingleton<ISQLiteConnectionFactory>();
+            using (var connection = connectionFactory.Create(FullPathToDataBase))
+            {
+                connection.CreateTable<SyncPackageId>();
+            }
         }
 
         public void Append(Guid lastReceivedChunkId)
         {
-            var newId = new SyncPackageId();
-            newId.Id = lastReceivedChunkId.FormatGuid();
-            newId.SortIndex = this.plainstore.Query<SyncPackageId>(x => true).Count();
+            using (var connection = connectionFactory.Create(FullPathToDataBase))
+            {
+                var newId = new SyncPackageId();
+                newId.Id = lastReceivedChunkId.FormatGuid();
+                newId.SortIndex = connection.Table<SyncPackageId>().Count();
+
+                connection.Insert(newId);
+            }
         }
 
         public Guid? GetLastStoredChunkId()
         {
-            var lastStoredChunkId = this.plainstore.Query<SyncPackageId>(x => true).OrderBy(x => x.SortIndex).Select(x => x.Id).LastOrDefault();
-            if (lastStoredChunkId == null)
+            using (var connection = connectionFactory.Create(FullPathToDataBase))
             {
-                return null;
-            }
+                var lastStoredChunkId = connection.Table<SyncPackageId>().OrderBy(x => x.SortIndex).LastOrDefault();
+                if (lastStoredChunkId == null)
+                {
+                    return null;
+                }
 
-            return Guid.Parse(lastStoredChunkId);
+                return Guid.Parse(lastStoredChunkId.Id);
+            }
         }
 
         public Guid? GetChunkBeforeChunkWithId(Guid? before)
@@ -42,20 +63,23 @@ namespace WB.UI.Capi.Syncronization.Implementation
             }
 
             var stringId = before.FormatGuid();
-            SyncPackageId requestedSortIndex = this.plainstore.Query<SyncPackageId>(x => x.Id == stringId).SingleOrDefault();
-            if (requestedSortIndex == null || requestedSortIndex.SortIndex == 0)
-            {
-                return null;
-            }
+            using (var connection = connectionFactory.Create(FullPathToDataBase))
+            { 
+                SyncPackageId requestedSortIndex = connection.Table<SyncPackageId>().SingleOrDefault(x => x.Id == stringId);
+                if (requestedSortIndex == null || requestedSortIndex.SortIndex == 0)
+                {
+                    return null;
+                }
 
-            int prevSortIndex = requestedSortIndex.SortIndex - 1;
-            var chunkBeforeChunkWithId = this.plainstore.Query<SyncPackageId>(x => x.SortIndex == prevSortIndex).Select(x => x.Id).SingleOrDefault();
-            if (chunkBeforeChunkWithId == null)
-            {
-                return null;
-            }
+                int prevSortIndex = requestedSortIndex.SortIndex - 1;
+                var chunkBeforeChunkWithId = connection.Table<SyncPackageId>().SingleOrDefault(x => x.SortIndex == prevSortIndex);
+                if (chunkBeforeChunkWithId == null)
+                {
+                    return null;
+                }
 
-            return Guid.Parse(chunkBeforeChunkWithId);
+                return Guid.Parse(chunkBeforeChunkWithId.Id);
+            }
         }
     }
 }
