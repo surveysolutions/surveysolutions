@@ -209,6 +209,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
+        [Ignore("KP-3758 Remove old designer-related code")]
         public void DeleteGroup_When_Some_Groups_Id_Of_Question_used_as_roster_title_question_of_another_groups_Then_DomainException_should_be_thrown()
         {
             // arrange
