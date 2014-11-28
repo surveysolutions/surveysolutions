@@ -79,7 +79,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
         {
             var newStatus = evnt.Payload.Status;
-            var interviewWithVersion = interviews.GetById(evnt.EventSourceId);
+            ViewWithSequence<InterviewData> interviewWithVersion = interviews.GetById(evnt.EventSourceId);
 
             if (this.IsInterviewWithStatusNeedToBeResendToCapi(newStatus))
             {
@@ -100,7 +100,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             var interview = interviewWithVersion.Document;
 
-            if (interview.Status != InterviewStatus.RejectedByHeadquarters)
+            if (interview.Status != InterviewStatus.RejectedByHeadquarters && !interview.CreatedOnClient)
             {
                 this.ResendInterviewForPerson(interview, evnt.Payload.InterviewerId, evnt.EventTimeStamp);
             }

@@ -7,6 +7,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview
 {
@@ -154,6 +155,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview
         private static Guid GetGuidIdByStringId(string stringId)
         {
             return string.IsNullOrEmpty(stringId) ? Guid.NewGuid() : Guid.Parse(stringId);
+        }
+
+        public static InterviewData InterviewData(bool createdOnClient = false,
+            InterviewStatus status = InterviewStatus.Created)
+        {
+            var result = new InterviewData();
+            result.CreatedOnClient = createdOnClient;
+            result.Status = status;
+            return result;
         }
     }
 }
