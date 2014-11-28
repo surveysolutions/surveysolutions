@@ -27,7 +27,6 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.CommandDeserialization;
 using WB.UI.Shared.Web.Modules;
 using WebActivatorEx;
-using CommandService = WB.Core.Infrastructure.CommandBus.CommandService;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]
 [assembly: ApplicationShutdownMethod(typeof (NinjectWebCommon), "Stop")]
@@ -77,6 +76,7 @@ namespace WB.UI.Designer.App_Start
 
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
+                new InfrastructureModule().AsNinject(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
                 new RavenReadSideInfrastructureModule(ravenSettings, AppDomain.CurrentDomain.GetData("DataDirectory").ToString(), typeof(DesignerReportQuestionnaireListViewItem).Assembly),
@@ -101,11 +101,6 @@ namespace WB.UI.Designer.App_Start
 
         private static void PrepareNcqrsInfrastucture(StandardKernel kernel)
         {
-            
-            var ncqrsCommandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
-            NcqrsEnvironment.SetDefault(ncqrsCommandService);
-            NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>(), ncqrsCommandService);
-
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
 
@@ -121,8 +116,6 @@ namespace WB.UI.Designer.App_Start
             kernel.Bind<IAggregateRootRepository>().To<AggregateRootRepository>();
             kernel.Bind<IEventPublisher>().To<EventPublisher>();
             kernel.Bind<ISnapshotManager>().To<SnapshotManager>();
-
-            kernel.Bind<ICommandService>().To<CommandService>();
         }
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)

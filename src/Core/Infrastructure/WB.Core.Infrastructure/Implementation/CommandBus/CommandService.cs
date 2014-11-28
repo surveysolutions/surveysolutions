@@ -1,13 +1,13 @@
 ﻿using System;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Snapshots;
 
-namespace WB.Core.Infrastructure.CommandBus
+namespace WB.Core.Infrastructure.Implementation.CommandBus
 {
-    // TODO: TLK, KP-4337: make internal
-    public class CommandService : ICommandService
+    internal class CommandService : ICommandService
     {
         private readonly IAggregateRootRepository repository;
         private readonly IEventPublisher eventPublisher;
