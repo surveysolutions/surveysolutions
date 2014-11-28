@@ -81,6 +81,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             var newStatus = evnt.Payload.Status;
             ViewWithSequence<InterviewData> interviewWithVersion = interviews.GetById(evnt.EventSourceId);
 
+            if (newStatus == InterviewStatus.RejectedBySupervisor)
+            {
+                interviewWithVersion.Document.WasRejected = true;
+                interviews.Store(interviewWithVersion, evnt.EventSourceId);
+            }
+
             if (this.IsInterviewWithStatusNeedToBeResendToCapi(newStatus))
             {
                 this.ResendInterviewInNewStatus(interviewWithVersion, newStatus, evnt.Payload.Comment, evnt.EventTimeStamp);
@@ -231,7 +237,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private bool IsInterviewWithStatusNeedToBeDeletedOnCapi(InterviewStatus newStatus, ViewWithSequence<InterviewData> interviewData)
         {
-            return (newStatus == InterviewStatus.Completed || newStatus == InterviewStatus.Deleted) && !interviewData.Document.CreatedOnClient;
+            var statusForcesPushToTablets = (newStatus == InterviewStatus.Completed || newStatus == InterviewStatus.Deleted);
+            return statusForcesPushToTablets && (!interviewData.Document.CreatedOnClient || interviewData.Document.WasRejected);
         }
     }
 }
