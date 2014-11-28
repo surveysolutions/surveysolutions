@@ -81,7 +81,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             var newStatus = evnt.Payload.Status;
             ViewWithSequence<InterviewData> interviewWithVersion = interviews.GetById(evnt.EventSourceId);
 
-            if (newStatus == InterviewStatus.RejectedBySupervisor)
+            if (!interviewWithVersion.Document.WasRejected && newStatus == InterviewStatus.RejectedBySupervisor)
             {
                 interviewWithVersion.Document.WasRejected = true;
                 interviews.Store(interviewWithVersion, evnt.EventSourceId);
