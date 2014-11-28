@@ -262,6 +262,9 @@
     <Compile Include="ServiceTests\DataExport\SqlDataExportWriterTests\when_delete_interview_method_is_called.cs" />
     <Compile Include="ServiceTests\DataExport\SqlToTabDataExportServiceTests\SqlToTabDataExportServiceTestContext.cs" />
     <Compile Include="ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_creating_template_for_preloading_from_questionnaire_export_structure.cs" />
+    <Compile Include="SynchronizationDenormalizerTests\when_interview_created_on_client_and_assigned_to_interviewer.cs" />
+    <Compile Include="SynchronizationDenormalizerTests\SynchronizationDenormalizerTestsContext.cs" />
+    <Compile Include="SynchronizationDenormalizerTests\when_interview_is_created_on_client_and_sent_to_supervisor.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\Create.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\InterviewDetailsDataProcessorTestsContext.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\when_process_2_capi_packages_and_max_per_process_is_1.cs" />
