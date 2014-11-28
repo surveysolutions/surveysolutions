@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -81,12 +79,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
         {
             var newStatus = evnt.Payload.Status;
+            var interviewWithVersion = interviews.GetById(evnt.EventSourceId);
 
             if (this.IsInterviewWithStatusNeedToBeResendToCapi(newStatus))
             {
-                this.ResendInterviewInNewStatus(evnt.EventSourceId, newStatus, evnt.Payload.Comment, evnt.EventTimeStamp);
+                this.ResendInterviewInNewStatus(interviewWithVersion, newStatus, evnt.Payload.Comment, evnt.EventTimeStamp);
             }
-            else if (this.IsInterviewWithStatusNeedToBeDeletedOnCapi(newStatus))
+            else if (this.IsInterviewWithStatusNeedToBeDeletedOnCapi(newStatus, interviewWithVersion))
             {
                 this.syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, null, evnt.EventTimeStamp);
             }
@@ -200,14 +199,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.syncStorage.SaveUser(item, evnt.EventTimeStamp);
         }
 
-        private void ResendInterviewInNewStatus(Guid interviewId, InterviewStatus newStatus, string comments, DateTime timestamp)
+        private void ResendInterviewInNewStatus(ViewWithSequence<InterviewData> interviewData, InterviewStatus newStatus, string comments, DateTime timestamp)
         {
-            var interviewWithVersion = interviews.GetById(interviewId);
-
-            if (interviewWithVersion == null)
+            if (interviewData == null)
                 return;
 
-            var interview = interviewWithVersion.Document;
+            var interview = interviewData.Document;
 
             var interviewSyncData = this.BuildSynchronizationDtoWhichIsAssignedToUser(interview, interview.ResponsibleId, newStatus, comments);
 
@@ -232,9 +229,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return newStatus == InterviewStatus.RejectedBySupervisor;
         }
 
-        private bool IsInterviewWithStatusNeedToBeDeletedOnCapi(InterviewStatus newStatus)
+        private bool IsInterviewWithStatusNeedToBeDeletedOnCapi(InterviewStatus newStatus, ViewWithSequence<InterviewData> interviewData)
         {
-            return newStatus == InterviewStatus.Completed || newStatus == InterviewStatus.Deleted;
+            return (newStatus == InterviewStatus.Completed || newStatus == InterviewStatus.Deleted) && !interviewData.Document.CreatedOnClient;
         }
     }
 }
