@@ -848,7 +848,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #endregion
 
-
         #region Questionnaire command handlers
 
         public Questionnaire()
@@ -1071,7 +1070,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, isRoster: isRoster, rosterSizeSource: rosterSizeSource,
                 rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: rosterFixedTitles,
                 rosterTitleQuestionId: rosterTitleQuestionId, rosterDepthFunc: () => this.GetQuestionnaireItemDepthAsVector(parentGroupId));
-
 
             this.ApplyEvent(new GroupCloned
             {
@@ -1716,50 +1714,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         #region Question: Text command handlers
-
-        public void AddTextQuestion(
-            Guid questionId,
-            Guid parentGroupId,
-            string title,
-            string variableName, string variableLabel,
-            bool isMandatory,
-            bool isPreFilled,
-            QuestionScope scope,
-            string enablementCondition,
-            string validationExpression,
-            string validationMessage,
-            string instructions,
-            string mask,
-            Guid responsibleId)
-        {
-            PrepareGeneralProperties(ref title, ref variableName);
-            var parentGroup = this.GetGroupById(parentGroupId);
-
-            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled,
-                responsibleId);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, "aaa");
-
-            this.ApplyEvent(new NewQuestionAdded
-            {
-                PublicKey = questionId,
-                GroupPublicKey = parentGroupId,
-                QuestionText = title,
-                QuestionType = QuestionType.Text,
-                StataExportCaption = variableName,
-                VariableLabel = variableLabel,
-                Mandatory = isMandatory,
-                Featured = isPreFilled,
-                QuestionScope = scope,
-                ConditionExpression = enablementCondition,
-                ValidationExpression = validationExpression,
-                ValidationMessage = validationMessage,
-                Instructions = instructions,
-                Mask = mask,
-                ResponsibleId = responsibleId
-            });
-        }
-
+        
         public void UpdateTextQuestion(
             Guid questionId,
             string title,
@@ -1806,40 +1761,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #endregion
 
         #region Question: GpsCoordinates command handlers
-
-        public void AddGpsCoordinatesQuestion(Guid questionId,
-            Guid parentGroupId,
-            string title,
-            string variableName, string variableLabel,
-            bool isMandatory,
-            QuestionScope scope,
-            string enablementCondition,
-            string instructions,
-            Guid responsibleId)
-        {
-            PrepareGeneralProperties(ref title, ref variableName);
-            var parentGroup = this.GetGroupById(parentGroupId);
-
-            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, responsibleId);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, string.Empty, variableName);
-
-            this.ApplyEvent(new NewQuestionAdded
-            {
-                PublicKey = questionId,
-                GroupPublicKey = parentGroupId,
-                QuestionText = title,
-                QuestionType = QuestionType.GpsCoordinates,
-                StataExportCaption = variableName,
-                VariableLabel = variableLabel,
-                Mandatory = isMandatory,
-                QuestionScope = scope,
-                ConditionExpression = enablementCondition,
-                Instructions = instructions,
-                ResponsibleId = responsibleId
-            });
-        }
-
+        
         public void UpdateGpsCoordinatesQuestion(
             Guid questionId,
             string title,
@@ -1877,46 +1799,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #endregion
 
         #region Question: DateTime command handlers
-
-        public void AddDateTimeQuestion(Guid questionId,
-            Guid parentGroupId,
-            string title,
-            string variableName, string variableLabel,
-            bool isMandatory,
-            bool isPreFilled,
-            QuestionScope scope,
-            string enablementCondition,
-            string validationExpression,
-            string validationMessage,
-            string instructions,
-            Guid responsibleId)
-        {
-            PrepareGeneralProperties(ref title, ref variableName);
-            var parentGroup = this.GetGroupById(parentGroupId);
-
-            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled,
-                responsibleId);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
-
-            this.ApplyEvent(new NewQuestionAdded
-            {
-                PublicKey = questionId,
-                GroupPublicKey = parentGroupId,
-                QuestionText = title,
-                QuestionType = QuestionType.DateTime,
-                StataExportCaption = variableName,
-                VariableLabel = variableLabel,
-                Mandatory = isMandatory,
-                Featured = isPreFilled,
-                QuestionScope = scope,
-                ConditionExpression = enablementCondition,
-                ValidationExpression = validationExpression,
-                ValidationMessage = validationMessage,
-                Instructions = instructions,
-                ResponsibleId = responsibleId
-            });
-        }
 
         public void UpdateDateTimeQuestion(
             Guid questionId,
@@ -1962,54 +1844,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #endregion
 
         #region Question: MultiOption command handlers
-
-        public void AddMultiOptionQuestion(
-            Guid questionId,
-            Guid parentGroupId,
-            string title,
-            string variableName, string variableLabel,
-            bool isMandatory,
-            QuestionScope scope,
-            string enablementCondition,
-            string validationExpression,
-            string validationMessage,
-            string instructions,
-            Guid responsibleId,
-            Option[] options,
-            Guid? linkedToQuestionId,
-            bool areAnswersOrdered,
-            int? maxAllowedAnswers)
-        {
-            PrepareGeneralProperties(ref title, ref variableName);
-            var parentGroup = this.GetGroupById(parentGroupId);
-
-            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, responsibleId);
-            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false, null, scope, null);
-            this.ThrowIfMaxAllowedAnswersInvalid(QuestionType.MultyOption, linkedToQuestionId, maxAllowedAnswers, options);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
-
-            this.ApplyEvent(new NewQuestionAdded
-            {
-                PublicKey = questionId,
-                GroupPublicKey = parentGroupId,
-                QuestionText = title,
-                QuestionType = QuestionType.MultyOption,
-                StataExportCaption = variableName,
-                VariableLabel = variableLabel,
-                Mandatory = isMandatory,
-                QuestionScope = scope,
-                ConditionExpression = enablementCondition,
-                ValidationExpression = validationExpression,
-                ValidationMessage = validationMessage,
-                Instructions = instructions,
-                Answers = ConvertOptionsToAnswers(options),
-                ResponsibleId = responsibleId,
-                LinkedToQuestionId = linkedToQuestionId,
-                AreAnswersOrdered = areAnswersOrdered,
-                MaxAllowedAnswers = maxAllowedAnswers
-            });
-        }
 
         public void UpdateMultiOptionQuestion(
             Guid questionId,
@@ -2062,59 +1896,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #endregion
 
         #region Question: SingleOption command handlers
-
-        public void AddSingleOptionQuestion(
-            Guid questionId,
-            Guid parentGroupId,
-            string title,
-            string variableName, string variableLabel,
-            bool isMandatory,
-            bool isPreFilled,
-            QuestionScope scope,
-            string enablementCondition,
-            string validationExpression,
-            string validationMessage,
-            string instructions,
-            Option[] options,
-            Guid? linkedToQuestionId,
-            Guid responsibleId,
-            bool isFilteredCombobox,
-            Guid? cascadeFromQuestionId)
-        {
-            PrepareGeneralProperties(ref title, ref variableName);
-            var parentGroup = this.GetGroupById(parentGroupId);
-
-            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
-
-            var answers = !isFilteredCombobox ? ConvertOptionsToAnswers(options) : null;
-
-            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox, scope, cascadeFromQuestionId);
-            this.ThrowIfCategoricalSingleOptionsQuestionHasMoreThan200Options(options, isFilteredCombobox, cascadeFromQuestionId, linkedToQuestionId.HasValue);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
-
-            this.ApplyEvent(new NewQuestionAdded
-            {
-                PublicKey = questionId,
-                GroupPublicKey = parentGroupId,
-                QuestionText = title,
-                QuestionType = QuestionType.SingleOption,
-                StataExportCaption = variableName,
-                VariableLabel = variableLabel,
-                Mandatory = isMandatory,
-                Featured = isPreFilled,
-                QuestionScope = scope,
-                ConditionExpression = enablementCondition,
-                ValidationExpression = validationExpression,
-                ValidationMessage = validationMessage,
-                Instructions = instructions,
-                Answers = answers,
-                ResponsibleId = responsibleId,
-                LinkedToQuestionId = linkedToQuestionId,
-                IsFilteredCombobox = isFilteredCombobox,
-                CascadeFromQuestionId = cascadeFromQuestionId
-            });
-        }
 
         public void UpdateSingleOptionQuestion(
             Guid questionId,
@@ -2255,57 +2036,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #endregion
 
         #region Question: Numeric question command handlers
-
-        public void AddNumericQuestion(
-            Guid questionId,
-            Guid parentGroupId, 
-            string title,
-            string variableName, string variableLabel,
-            bool isMandatory, 
-            bool isPreFilled,
-            QuestionScope scope, 
-            string enablementCondition, 
-            string validationExpression, 
-            string validationMessage,
-            string instructions, 
-            int? maxValue, 
-            Guid responsibleId,
-            bool isInteger, 
-            int? countOfDecimalPlaces)
-        {
-            PrepareGeneralProperties(ref title, ref variableName);
-
-            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-
-            var parentGroup = this.GetGroupById(parentGroupId);
-
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
-            this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
-            this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
-
-            this.ApplyEvent(new NumericQuestionAdded
-            {
-                PublicKey = questionId,
-                GroupPublicKey = parentGroupId,
-                QuestionText = title,
-                StataExportCaption = variableName,
-                VariableLabel = variableLabel,
-                Mandatory = isMandatory,
-                Featured = isPreFilled,
-                Capital = false,
-                QuestionScope = scope,
-                ConditionExpression = enablementCondition,
-                ValidationExpression = validationExpression,
-                ValidationMessage = validationMessage,
-                Instructions = instructions,
-                ResponsibleId = responsibleId,
-                MaxAllowedValue = maxValue,
-                IsInteger = isInteger,
-                CountOfDecimalPlaces = countOfDecimalPlaces
-            });
-        }
-
+        
         public void UpdateNumericQuestion(
             Guid questionId,
             string title,
@@ -2360,42 +2091,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Question: List (text) command handlers
 
-        public void AddTextListQuestion(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel,
-            bool isMandatory, string enablementCondition, string instructions, Guid responsibleId, int? maxAnswerCount)
-        {
-            PrepareGeneralProperties(ref title, ref variableName);
-
-            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-
-            var isPrefilled = false;
-            var validationExpression = string.Empty;
-
-            var parentGroup = this.GetGroupById(parentGroupId);
-
-
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName,
-                isPrefilled, responsibleId);
-
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
-
-            ThrowIfMaxAnswerCountNotInRange1to40(maxAnswerCount);
-
-            this.ApplyEvent(new TextListQuestionAdded
-            {
-                PublicKey = questionId,
-                GroupId = parentGroupId,
-                QuestionText = title,
-                StataExportCaption = variableName,
-                VariableLabel = variableLabel,
-                Mandatory = isMandatory,
-                ConditionExpression = enablementCondition,
-                Instructions = instructions,
-                ResponsibleId = responsibleId,
-
-                MaxAnswerCount = maxAnswerCount
-            });
-        }
-
         public void UpdateTextListQuestion(Guid questionId, string title, string variableName, string variableLabel,
             bool isMandatory, string enablementCondition, string instructions, Guid responsibleId, int? maxAnswerCount)
         {
@@ -2410,8 +2105,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName,
-                isPrefilled, responsibleId);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled, responsibleId);
 
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
 
@@ -2464,30 +2158,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #endregion
 
         #region Question: QR-Barcode command handlers
-
-        public void AddQRBarcodeQuestion(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel,
-            bool isMandatory, string enablementCondition, string instructions, Guid responsibleId)
-        {
-            PrepareGeneralProperties(ref title, ref variableName);
-
-            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-            this.ThrowIfGeneralQuestionSettingsAreInvalid(questionId: questionId, parentGroupId: parentGroupId, title: title,
-                variableName: variableName, condition: enablementCondition, responsibleId: responsibleId);
-
-            this.ApplyEvent(new QRBarcodeQuestionAdded()
-            {
-                QuestionId = questionId,
-                ParentGroupId = parentGroupId,
-                Title = title,
-                VariableName = variableName,
-                VariableLabel = variableLabel,
-                IsMandatory = isMandatory,
-                EnablementCondition = enablementCondition,
-                Instructions = instructions,
-                ResponsibleId = responsibleId
-            });
-        }
-
+        
         public void UpdateQRBarcodeQuestion(Guid questionId, string title, string variableName, string variableLabel,
             bool isMandatory, string enablementCondition, string instructions, Guid responsibleId)
         {
@@ -4252,7 +3923,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ? @group.Title ?? "<<NO GROUP TITLE>>"
                 : "<<MISSING GROUP>>";
         }
-
 
         private void MigrateGroupToRoslyn(IGroup group, Dictionary<string, string> customMappings)
         {
