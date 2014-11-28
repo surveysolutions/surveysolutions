@@ -37,6 +37,7 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Rest.Android;
 using WB.Core.GenericSubdomains.ErrorReporting;
 using WB.Core.GenericSubdomains.Logging.AndroidLogger;
+using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
@@ -60,7 +61,6 @@ using WB.UI.Capi.Syncronization.Implementation;
 using WB.UI.Shared.Android;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Extensions;
-using CommandService = WB.Core.Infrastructure.CommandBus.CommandService;
 
 namespace WB.UI.Capi
 {
@@ -275,6 +275,7 @@ namespace WB.UI.Capi
 
             this.kernel = new StandardKernel(
                 new ServiceLocationModule(),
+                new InfrastructureModule().AsNinject(),
                 new CapiBoundedContextModule(),
                 new AndroidCoreRegistry(),
                 new RestAndroidModule(),
@@ -294,10 +295,6 @@ namespace WB.UI.Capi
             NcqrsEnvironment.SetDefault(ServiceLocator.Current.GetInstance<ILogger>());
             NcqrsEnvironment.InitDefaults();
 
-            var ncqrsCommandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
-            NcqrsEnvironment.SetDefault(ncqrsCommandService);
-            NcqrsInit.InitializeCommandService(this.kernel.Get<ICommandListSupplier>(), ncqrsCommandService);
-
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
 
             kernel.Bind<ISnapshottingPolicy>().ToMethod(context => NcqrsEnvironment.Get<ISnapshottingPolicy>());
@@ -313,8 +310,6 @@ namespace WB.UI.Capi
             kernel.Bind<IAggregateRootRepository>().To<AggregateRootRepository>();
             kernel.Bind<IEventPublisher>().To<EventPublisher>();
             kernel.Bind<ISnapshotManager>().To<SnapshotManager>();
-
-            kernel.Bind<ICommandService>().To<CommandService>();
 
             NcqrsEnvironment.SetDefault(Kernel.Get<ISnapshotStore>());
             NcqrsEnvironment.SetDefault(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);

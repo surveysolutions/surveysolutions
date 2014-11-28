@@ -43,7 +43,6 @@
     <Compile Include="Aggregates\IAggregateRoot.cs" />
     <Compile Include="Aggregates\IAggregateRootRepository.cs" />
     <Compile Include="CommandBus\CommandRegistry.cs" />
-    <Compile Include="CommandBus\CommandService.cs" />
     <Compile Include="CommandBus\CommandServiceException.cs" />
     <Compile Include="CommandBus\ICommand.cs" />
     <Compile Include="CommandBus\ICommandService.cs" />
@@ -52,6 +51,7 @@
     <Compile Include="EventBus\IAtomicEventHandler.cs" />
     <Compile Include="EventBus\IEventHandler.cs" />
     <Compile Include="EventBus\IEventPublisher.cs" />
+    <Compile Include="Implementation\CommandBus\CommandService.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideEventHandlerDescription.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideRepositoryWriterError.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideRepositoryWriterStatus.cs" />
@@ -73,8 +73,11 @@
     <Compile Include="Implementation\ReadSide\ReadSideRepositoryReaderWithSequence.cs" />
     <Compile Include="Implementation\ReadSide\ViewWithSequence.cs" />
     <Compile Include="Implementation\StorageStrategy\InMemoryViewWriter.cs" />
+    <Compile Include="InfrastructureModule.cs" />
     <Compile Include="ITemporaryDataStorage.cs" />
     <Compile Include="LinqUtils.cs" />
+    <Compile Include="Modularity\IIocRegistry.cs" />
+    <Compile Include="Modularity\Module.cs" />
     <Compile Include="Ncqrs\BasicGuidGenerator.cs" />
     <Compile Include="Ncqrs\Commanding\AllCommandsInAppDomainEnumerator.cs" />
     <Compile Include="Ncqrs\Commanding\CommandBase.cs" />
