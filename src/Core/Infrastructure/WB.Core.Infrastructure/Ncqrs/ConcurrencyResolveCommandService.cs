@@ -9,6 +9,7 @@ namespace Ncqrs
     /// Repeates command execution until success.
     /// </summary>
     public class ConcurrencyResolveCommandService : CommandService
+    // TODO: TLK, KP-4337: delete
     {
         private readonly ILogger logger;
 

@@ -5,11 +5,13 @@ using CapiDataGenerator;
 using Cirrious.MvvmCross.ViewModels;
 using Ninject;
 using WB.Core.GenericSubdomains.Logging.NLog;
+using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.Synchronization;
+using WB.UI.Shared.Web.Modules;
 
 namespace WB.Tools.CapiDataGenerator.Models
 {
@@ -92,6 +94,7 @@ namespace WB.Tools.CapiDataGenerator.Models
 
             var basePath = System.IO.Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
             new StandardKernel(
+                new InfrastructureModule().AsNinject(),
                 new RavenReadSideInfrastructureModule(ravenSupervisorSettings, basePath),
                 new SynchronizationModule(synchronizationSettings),
                 new RavenPlainStorageInfrastructureModule(ravenSupervisorSettings),

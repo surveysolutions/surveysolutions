@@ -54,7 +54,6 @@ using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.Tools.CapiDataGenerator.Ninject;
 using WB.UI.Shared.Web.Settings;
-using CommandService = WB.Core.Infrastructure.CommandBus.CommandService;
 using UserDenormalizer = CAPI.Android.Core.Model.EventHandlers.UserDenormalizer;
 
 namespace CapiDataGenerator
@@ -137,10 +136,6 @@ namespace CapiDataGenerator
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(Kernel));
             this.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
-            var ncqrsCommandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
-            NcqrsEnvironment.SetDefault(ncqrsCommandService);
-            NcqrsInit.InitializeCommandService(Kernel.Get<ICommandListSupplier>(), ncqrsCommandService);
-
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
 
@@ -178,8 +173,6 @@ namespace CapiDataGenerator
             this.Bind<IAggregateRootRepository>().To<AggregateRootRepository>();
             this.Bind<IEventPublisher>().To<EventPublisher>();
             this.Bind<ISnapshotManager>().To<SnapshotManager>();
-
-            this.Bind<ICommandService>().To<CommandService>();
         }
 
         private IEventStore GetHeadquartersEventStore()

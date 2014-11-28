@@ -184,6 +184,8 @@
     <Compile Include="GeolocationServices\GeoService.cs" />
     <Compile Include="GeolocationServices\IGeoService.cs" />
     <Compile Include="Helpers\AndroidUIHelper.cs" />
+    <Compile Include="ModuleExtensions.cs" />
+    <Compile Include="NinjectModuleAdapter.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CapiSharedSetup.cs" />

@@ -27,6 +27,7 @@ using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Rest.Android;
+using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
@@ -47,7 +48,6 @@ using WB.UI.QuestionnaireTester.Services;
 using WB.UI.Shared.Android;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using Context = Android.Content.Context;
-using CommandService = WB.Core.Infrastructure.CommandBus.CommandService;
 
 namespace WB.UI.QuestionnaireTester
 {
@@ -225,6 +225,7 @@ namespace WB.UI.QuestionnaireTester
 
             this.kernel = new StandardKernel(
                 new ServiceLocationModule(),
+                new InfrastructureModule().AsNinject(),
                 new CapiTesterCoreRegistry(),
                 new CapiBoundedContextModule(),
                 new TesterLoggingModule(),
@@ -244,10 +245,6 @@ namespace WB.UI.QuestionnaireTester
             kernel.Unbind<IQuestionnaireAssemblyFileAccessor>();
             kernel.Bind<IQuestionnaireAssemblyFileAccessor>().To<QuestionnareAssemblyTesterFileAccessor>().InSingletonScope();
 
-            var ncqrsCommandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
-            NcqrsEnvironment.SetDefault(ncqrsCommandService);
-            NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>(), ncqrsCommandService);
-
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
 
             kernel.Bind<ISnapshottingPolicy>().ToMethod(context => NcqrsEnvironment.Get<ISnapshottingPolicy>());
@@ -264,8 +261,6 @@ namespace WB.UI.QuestionnaireTester
             kernel.Bind<IAggregateRootRepository>().To<AggregateRootRepository>();
             kernel.Bind<IEventPublisher>().To<EventPublisher>();
             kernel.Bind<ISnapshotManager>().To<SnapshotManager>();
-
-            kernel.Bind<ICommandService>().To<CommandService>();
 
             NcqrsEnvironment.SetDefault<IEventStore>(Kernel.Get<IEventStore>());
 
