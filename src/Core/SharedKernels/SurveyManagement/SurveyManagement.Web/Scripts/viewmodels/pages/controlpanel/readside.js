@@ -145,6 +145,7 @@
     };
 
     self.load = function () {
+        self.updateStatus();
         self.SendRequest(self.eventHandlersApiUrl, {}, function (eventHandlers) {
 
             var eventHanlersForPartialRebuild = _.map(_.filter(eventHandlers, function(handler) {
@@ -161,8 +162,6 @@
             self.eventHanlersForPartialRebuild(eventHanlersForPartialRebuild);
 
             self.setRebuildByType(Supervisor.VM.ControlPanel.ReadSide.RebuildReadSideType.All);
-            
-            self.updateStatus();
         }, true, true);
     };
 
