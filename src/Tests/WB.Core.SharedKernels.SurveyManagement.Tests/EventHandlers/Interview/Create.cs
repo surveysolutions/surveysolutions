@@ -76,9 +76,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview
                     questionnaireId: GetGuidIdByStringId(questionnaireId), questionnaireVersion: questionnaireVersion));
         }
 
-        public static IPublishedEvent<InterviewStatusChanged> InterviewStatusChangedEvent(InterviewStatus status, string comment = null)
+        public static IPublishedEvent<InterviewStatusChanged> InterviewStatusChangedEvent(InterviewStatus status, 
+            string comment = null,
+            Guid? interviewId= null)
         {
-            return ToPublishedEvent(new InterviewStatusChanged(status, comment));
+            return ToPublishedEvent(new InterviewStatusChanged(status, comment), interviewId ?? Guid.NewGuid());
         }
 
         public static IPublishedEvent<SupervisorAssigned> SupervisorAssignedEvent(string userId = null,
@@ -158,11 +160,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview
         }
 
         public static InterviewData InterviewData(bool createdOnClient = false,
-            InterviewStatus status = InterviewStatus.Created)
+            InterviewStatus status = InterviewStatus.Created,
+            Guid? interviewId = null)
         {
             var result = new InterviewData();
             result.CreatedOnClient = createdOnClient;
             result.Status = status;
+            result.InterviewId = interviewId.GetValueOrDefault();
             return result;
         }
     }

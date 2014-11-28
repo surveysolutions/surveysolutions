@@ -16,8 +16,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.SynchronizationDenormaliz
     [Subject(typeof(SynchronizationDenormalizer))]
     internal class SynchronizationDenormalizerTestsContext
     {
-        protected static SynchronizationDenormalizer CreateDenormalizer(IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviews, 
-            ISynchronizationDataStorage synchronizationDataStorage)
+        protected static SynchronizationDenormalizer CreateDenormalizer(IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviews = null, 
+            ISynchronizationDataStorage synchronizationDataStorage = null)
         {
             var result = new SynchronizationDenormalizer(
                 synchronizationDataStorage ?? Mock.Of<ISynchronizationDataStorage>(), 
