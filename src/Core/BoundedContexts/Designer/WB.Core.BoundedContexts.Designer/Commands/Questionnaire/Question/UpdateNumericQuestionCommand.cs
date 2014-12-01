@@ -2,32 +2,30 @@
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 
-namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Numeric
+namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
     [Serializable]
-    public class AddNumericQuestionCommand : AbstractAddQuestionCommand
+    public class UpdateNumericQuestionCommand : AbstractUpdateQuestionCommand
     {
-        public AddNumericQuestionCommand(
-            Guid questionnaireId, 
-            Guid questionId, 
-            Guid parentGroupId,
+        public UpdateNumericQuestionCommand(
+            Guid questionnaireId,
+            Guid questionId,
             string title,
-            string variableName, string variableLabel,
-            bool isMandatory, 
+            string variableName, string variableLabel, 
+            bool isMandatory,
             bool isPreFilled,
             QuestionScope scope, 
             string enablementCondition, 
             string validationExpression, 
             string validationMessage, 
-            string instructions, 
+            string instructions,
             int? maxValue,
-             Guid responsibleId,
-            bool isInteger,
+            Guid responsibleId,
+            bool isInteger, 
             int? countOfDecimalPlaces)
             : base(
-                responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions,
-                parentGroupId: parentGroupId,variableLabel:variableLabel)
+                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
+                 variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions, variableLabel:variableLabel)
         {
             this.MaxValue = maxValue;
             this.IsInteger = isInteger;

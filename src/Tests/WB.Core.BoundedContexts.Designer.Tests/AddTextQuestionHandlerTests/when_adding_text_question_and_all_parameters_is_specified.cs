@@ -52,28 +52,28 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddTextQuestionHandlerTests
             eventContext.GetSingleEvent<NewQuestionAdded>()
                 .GroupPublicKey.ShouldEqual(chapterId);
 
-        It should_raise_NewQuestionAdded_event_with_variable_name_specified = () =>
-            eventContext.GetSingleEvent<NewQuestionAdded>()
-                .StataExportCaption.ShouldEqual(variableName);
-
         It should_raise_NewQuestionAdded_event_with_title_specified = () =>
             eventContext.GetSingleEvent<NewQuestionAdded>()
                 .QuestionText.ShouldEqual(title);
 
+        It should_raise_NewQuestionAdded_event_with_variable_name_specified = () =>
+            eventContext.GetSingleEvent<QuestionChanged>()
+                .StataExportCaption.ShouldEqual(variableName);
+
         It should_raise_NewQuestionAdded_event_with_enablementCondition_specified = () =>
-            eventContext.GetSingleEvent<NewQuestionAdded>()
+            eventContext.GetSingleEvent<QuestionChanged>()
                 .ConditionExpression.ShouldEqual(enablementCondition);
 
         It should_raise_NewQuestionAdded_event_with_ismandatory_specified = () =>
-            eventContext.GetSingleEvent<NewQuestionAdded>()
+            eventContext.GetSingleEvent<QuestionChanged>()
                 .Mandatory.ShouldEqual(isMandatory);
 
         It should_raise_NewQuestionAdded_event_with_ifeatured_specified = () =>
-            eventContext.GetSingleEvent<NewQuestionAdded>()
+            eventContext.GetSingleEvent<QuestionChanged>()
                 .Featured.ShouldEqual(isPreFilled);
 
         It should_raise_NewQuestionAdded_event_with_instructions_specified = () =>
-            eventContext.GetSingleEvent<NewQuestionAdded>()
+            eventContext.GetSingleEvent<QuestionChanged>()
                 .Instructions.ShouldEqual(instructions);
 
         private static EventContext eventContext;
@@ -89,7 +89,5 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddTextQuestionHandlerTests
         private static string enablementCondition = "enablementCondition";
         private static string validationExpression = "validationExpression";
         private static string validationMessage = "validationMessage";
-
-
     }
 }

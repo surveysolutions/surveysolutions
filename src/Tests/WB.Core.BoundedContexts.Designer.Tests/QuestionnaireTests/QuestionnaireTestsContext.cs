@@ -64,8 +64,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithOneGroupAndQuestionInIt(questionId: questionKey,
                 responsibleId: responsibleId);
 
-            questionnaire.UploadImage(questionKey, "image title", "image description", imageKey);
-
             return questionnaire;
         }
 
