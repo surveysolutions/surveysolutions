@@ -3,15 +3,6 @@ using System.Collections.Generic;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.DateTime;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.GpsCoordinates;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Mulimedia;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.MultiOption;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Numeric;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.QRBarcode;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.SingleOption;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Text;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.TextList;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.UI.Shared.Web.CommandDeserialization;
 
@@ -32,17 +23,12 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "CloneGroup", typeof (CloneGroupCommand) },
                     { "DeleteGroup", typeof (DeleteGroupCommand) },
                     { "MoveGroup", typeof (MoveGroupCommand) },
-                    { "UpdateQuestion", typeof (UpdateQuestionCommand) },
-                    { "AddQuestion", typeof (AddQuestionCommand) },
-                    { "AddNumericQuestion", typeof (AddNumericQuestionCommand) },
-                    { "AddTextListQuestion", typeof (AddTextListQuestionCommand) },
-                    { "CloneQuestion", typeof (CloneQuestionCommand) },
+                    { "AddDefaultTypeQuestion", typeof (AddDefaultTypeQuestionCommand) },
                     { "CloneQuestionById", typeof(CloneQuestionByIdCommand) },
                     { "DeleteQuestion", typeof (DeleteQuestionCommand) },
                     { "MoveQuestion", typeof (MoveQuestionCommand) },
                     { "AddSharedPersonToQuestionnaire", typeof (AddSharedPersonToQuestionnaireCommand) },
                     { "RemoveSharedPersonFromQuestionnaire", typeof (RemoveSharedPersonFromQuestionnaireCommand) },
-                    { "AddQRBarcodeQuestion", typeof (AddQRBarcodeQuestionCommand) },
                     //Update questions command
                     { "UpdateTextQuestion", typeof (UpdateTextQuestionCommand) },
                     { "UpdateNumericQuestion", typeof (UpdateNumericQuestionCommand) },

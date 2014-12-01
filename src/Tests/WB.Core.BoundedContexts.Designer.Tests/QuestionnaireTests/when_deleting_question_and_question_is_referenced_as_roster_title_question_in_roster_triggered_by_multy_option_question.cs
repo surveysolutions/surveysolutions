@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         };
 
         Because of = () =>
-                questionnaire.NewDeleteQuestion(rosterTitleQuestionId, responsibleId);
+                questionnaire.DeleteQuestion(rosterTitleQuestionId, responsibleId);
 
         It should_raise_QuestionDeleted_event = () =>
           eventContext.ShouldContainEvent<QuestionDeleted>();
