@@ -1,22 +1,20 @@
-﻿using System;
+using System;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 
-namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Text
+namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
     [Serializable]
-    public class AddTextQuestionCommand : AbstractAddQuestionCommand
+    public class UpdateDateTimeQuestionCommand : AbstractUpdateQuestionCommand
     {
-        public AddTextQuestionCommand(
+        public UpdateDateTimeQuestionCommand(
             Guid questionnaireId,
             Guid questionId,
-            Guid parentGroupId,
             string title,
             string variableName, string variableLabel,
             bool isMandatory,
             string enablementCondition,
             string instructions,
-            string mask,
             Guid responsibleId,
             string validationExpression,
             string validationMessage,
@@ -24,14 +22,12 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Text
             bool isPreFilled)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions,
-                parentGroupId: parentGroupId, variableLabel:variableLabel)
+                variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions,variableLabel:variableLabel)
         {
             this.IsPreFilled = isPreFilled;
             this.Scope = scope;
             this.ValidationMessage = CommandUtils.SanitizeHtml(validationMessage, removeAllTags: true);
             this.ValidationExpression = validationExpression;
-            this.Mask = mask;
         }
 
         public QuestionScope Scope { get; set; }
@@ -39,8 +35,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Text
         public string ValidationMessage { get; set; }
 
         public string ValidationExpression { get; set; }
-
-        public string Mask { get; set; }
 
         public bool IsPreFilled { get; set; }
     }

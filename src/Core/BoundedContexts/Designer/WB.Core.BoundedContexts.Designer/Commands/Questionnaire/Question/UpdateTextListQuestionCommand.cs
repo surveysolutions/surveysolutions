@@ -1,7 +1,7 @@
 ﻿using System;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 
-namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.TextList
+namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
     [Serializable]
     public class UpdateTextListQuestionCommand : AbstractUpdateQuestionCommand

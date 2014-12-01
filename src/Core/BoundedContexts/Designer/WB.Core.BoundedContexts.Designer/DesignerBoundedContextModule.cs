@@ -3,15 +3,6 @@ using WB.Core.BoundedContexts.Designer.Commands.Account;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.DateTime;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.GpsCoordinates;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Mulimedia;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.MultiOption;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Numeric;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.QRBarcode;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.SingleOption;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Text;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.TextList;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -73,7 +64,6 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IEventHandler>().To<QuestionnaireInfoViewDenormalizer>().InSingletonScope();
             this.Bind<IEventHandler>().To<ChaptersInfoViewDenormalizer>().InSingletonScope();
             this.Bind<IEventHandler>().To<QuestionsAndGroupsCollectionDenormalizer>().InSingletonScope();
-            
 
             this.Kernel.RegisterFactory<QuestionnaireListViewFactory>();
             this.Kernel.RegisterFactory<QuestionnaireViewFactory>();
@@ -112,7 +102,6 @@ namespace WB.Core.BoundedContexts.Designer
                 .Handles<AddStaticTextCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.AddStaticText(command.EntityId, command.ParentId, command.Text, command.ResponsibleId))                
                 .Handles<CloneGroupCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.CloneGroup(command.GroupId, command.ResponsibleId, command.SourceGroupId, command.TargetIndex))
                 .Handles<CloneGroupWithoutChildrenCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.CloneGroupWithoutChildren(command.GroupId, command.ResponsibleId, command.Title, command.VariableName, command.RosterSizeQuestionId, command.Description, command.Condition, command.ParentGroupId, command.SourceGroupId, command.TargetIndex, command.IsRoster, command.RosterSizeSource, command.RosterFixedTitles, command.RosterTitleQuestionId))
-                .Handles<CloneQuestionCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.CloneQuestion(command.QuestionId, command.ParentGroupId, command.Title, command.Type, command.VariableName, command.VariableLabel, command.Mask, command.IsMandatory, command.IsPreFilled, command.Scope, command.EnablementCondition, command.ValidationExpression, command.ValidationMessage, command.Instructions, command.Options, command.SourceQuestionId, command.TargetIndex, command.ResponsibleId, command.LinkedToQuestionId, command.AreAnswersOrdered, command.MaxAllowedAnswers, command.IsFilteredCombobox, command.CascadeFromQuestionId))
                 .Handles<CloneQuestionByIdCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.CloneQuestionById(command.QuestionId, command.ResponsibleId, command.TargetId))
                 .Handles<DeleteGroupCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.DeleteGroup(command.GroupId, command.ResponsibleId))
                 .Handles<DeleteQuestionnaireCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.DeleteQuestionnaire())
@@ -121,8 +110,8 @@ namespace WB.Core.BoundedContexts.Designer
                 .Handles<MoveGroupCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.MoveGroup(command.GroupId, command.TargetGroupId, command.TargetIndex, command.ResponsibleId))
                 .Handles<MoveQuestionCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.MoveQuestion(command.QuestionId, command.TargetGroupId, command.TargetIndex, command.ResponsibleId))
                 .Handles<MoveStaticTextCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.MoveStaticText(command.EntityId, command.TargetEntityId, command.TargetIndex, command.ResponsibleId))
-                .Handles<AddQuestionCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.NewAddQuestion(command.QuestionId, command.ParentGroupId, command.Title, command.Type, command.VariableName, command.VariableLabel, command.Mask, command.IsMandatory, command.IsPreFilled, command.Scope, command.EnablementCondition, command.ValidationExpression, command.ValidationMessage, command.Instructions, command.Options, command.ResponsibleId, command.LinkedToQuestionId, command.AreAnswersOrdered, command.MaxAllowedAnswers, command.IsFilteredCombobox, command.CascadeFromQuestionId))
-                .Handles<DeleteQuestionCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.NewDeleteQuestion(command.QuestionId, command.ResponsibleId))
+                .Handles<AddDefaultTypeQuestionCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.AddDefaultTypeQuestion(command))
+                .Handles<DeleteQuestionCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.DeleteQuestion(command.QuestionId, command.ResponsibleId))
                 .Handles<RemoveSharedPersonFromQuestionnaireCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.RemoveSharedPerson(command.PersonId, command.Email, command.ResponsibleId))
                 .Handles<UpdateCascadingComboboxOptionsCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateCascadingComboboxOptions(command.QuestionId, command.ResponsibleId, command.Options))
                 .Handles<UpdateDateTimeQuestionCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateDateTimeQuestion(command.QuestionId, command.Title, command.VariableName, command.VariableLabel, command.IsMandatory, command.IsPreFilled, command.Scope, command.EnablementCondition, command.ValidationExpression, command.ValidationMessage, command.Instructions, command.ResponsibleId))
@@ -133,7 +122,6 @@ namespace WB.Core.BoundedContexts.Designer
                 .Handles<UpdateMultiOptionQuestionCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateMultiOptionQuestion(command.QuestionId, command.Title, command.VariableName, command.VariableLabel, command.IsMandatory, command.Scope, command.EnablementCondition, command.ValidationExpression, command.ValidationMessage, command.Instructions, command.ResponsibleId, command.Options, command.LinkedToQuestionId, command.AreAnswersOrdered, command.MaxAllowedAnswers))
                 .Handles<UpdateNumericQuestionCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateNumericQuestion(command.QuestionId, command.Title, command.VariableName, command.VariableLabel, command.IsMandatory, command.IsPreFilled, command.Scope, command.EnablementCondition, command.ValidationExpression, command.ValidationMessage, command.Instructions, command.MaxValue, command.ResponsibleId, command.IsInteger, command.CountOfDecimalPlaces))
                 .Handles<UpdateQRBarcodeQuestionCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateQRBarcodeQuestion(command.QuestionId, command.Title, command.VariableName, command.VariableLabel, command.IsMandatory, command.EnablementCondition, command.Instructions, command.ResponsibleId))
-                .Handles<UpdateQuestionCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateQuestion(command.QuestionId, command.Title, command.Type, command.VariableName, command.VariableLabel, command.Mask, command.IsMandatory, command.IsPreFilled, command.Scope, command.EnablementCondition, command.ValidationExpression, command.ValidationMessage, command.Instructions, command.Options, command.ResponsibleId, command.LinkedToQuestionId, command.AreAnswersOrdered, command.MaxAllowedAnswers, command.IsFilteredCombobox, command.CascadeFromQuestionId))
                 .Handles<UpdateQuestionnaireCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateQuestionnaire(command.Title, command.IsPublic, command.ResponsibleId))
                 .Handles<UpdateSingleOptionQuestionCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateSingleOptionQuestion(command.QuestionId, command.Title, command.VariableName, command.VariableLabel, command.IsMandatory, command.IsPreFilled, command.Scope, command.EnablementCondition, command.ValidationExpression, command.ValidationMessage, command.Instructions, command.ResponsibleId, command.Options, command.LinkedToQuestionId, command.IsFilteredCombobox, command.CascadeFromQuestionId))
                 .Handles<UpdateStaticTextCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateStaticText(command.EntityId, command.Text, command.ResponsibleId))

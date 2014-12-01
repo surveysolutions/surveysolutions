@@ -1,6 +1,7 @@
 ﻿using System;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 
 namespace WB.Core.BoundedContexts.Designer.Tests
 {
@@ -23,23 +24,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             string mask,
             Guid responsibleId)
         {
-            AddQuestion(questionnaire,
-                questionId,
-                parentGroupId,
-                title,
-                QuestionType.Text,
-                variableName,
-                variableLabel,
-                mask,
-                isMandatory,
-                isPreFilled,
-                scope,
-                enablementCondition,
-                validationExpression,
-                validationMessage,
-                instructions,
-                null,
-                responsibleId);
+            questionnaire.AddDefaultTypeQuestion(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
+            questionnaire.UpdateTextQuestion(questionId, title, variableName, variableLabel, isMandatory, isPreFilled, scope, enablementCondition, validationExpression, validationMessage, instructions, mask, responsibleId);
         }
 
         public static void AddGpsCoordinatesQuestion(
@@ -55,23 +41,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             string instructions,
             Guid responsibleId)
         {
-            AddQuestion(questionnaire,
-                questionId,
-                parentGroupId,
-                title,
-                QuestionType.GpsCoordinates,
-                variableName,
-                variableLabel,
-                "",
-                isMandatory,
-                false,
-                scope,
-                enablementCondition,
-                "",
-                "",
-                instructions,
-                null,
-                responsibleId);
+            questionnaire.AddDefaultTypeQuestion(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
+            questionnaire.UpdateGpsCoordinatesQuestion(questionId, title, variableName, variableLabel, isMandatory, scope, enablementCondition, instructions, responsibleId);
         }
 
         public static void AddDateTimeQuestion(
@@ -89,23 +60,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             string instructions,
             Guid responsibleId)
         {
-            AddQuestion(questionnaire,
-                questionId,
-                parentGroupId,
-                title,
-                QuestionType.DateTime,
-                variableName,
-                variableLabel,
-                "",
-                isMandatory,
-                isPreFilled,
-                scope,
-                enablementCondition,
-                validationExpression,
-                validationMessage,
-                instructions,
-                null,
-                responsibleId);
+            questionnaire.AddDefaultTypeQuestion(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
+            questionnaire.UpdateDateTimeQuestion(questionId, title, variableName, variableLabel, isMandatory, isPreFilled, scope, enablementCondition, validationExpression, validationMessage, instructions, responsibleId);
         }
 
         public static void AddMultiOptionQuestion(
@@ -126,26 +82,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             bool areAnswersOrdered,
             int? maxAllowedAnswers)
         {
-            AddQuestion(questionnaire,
-                questionId,
-                parentGroupId,
-                title,
-                QuestionType.MultyOption,
-                variableName,
-                variableLabel,
-                "",
-                isMandatory,
-                false,
-                scope,
-                enablementCondition,
-                validationExpression,
-                validationMessage,
-                instructions,
-                options,
-                responsibleId,
-                linkedToQuestionId,
-                false,
-                maxAllowedAnswers);
+            questionnaire.AddDefaultTypeQuestion(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
+            questionnaire.UpdateMultiOptionQuestion(questionId, title, variableName, variableLabel, isMandatory, scope, enablementCondition, validationExpression, validationMessage, instructions, responsibleId, options, linkedToQuestionId, areAnswersOrdered, maxAllowedAnswers);
         }
 
         public static void AddSingleOptionQuestion(
@@ -167,29 +105,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             bool isFilteredCombobox,
             Guid? cascadeFromQuestionId)
         {
-            AddQuestion(questionnaire,
-                questionId,
-                parentGroupId,
-                title,
-                QuestionType.SingleOption,
-                variableName,
-                variableLabel,
-                "",
-                isMandatory,
-                isPreFilled,
-                scope,
-                enablementCondition,
-                validationExpression,
-                validationMessage,
-                instructions,
-                options,
-                responsibleId,
-                linkedToQuestionId,
-                false,
-                null,
-                isFilteredCombobox,
-                cascadeFromQuestionId
-                );
+            questionnaire.AddDefaultTypeQuestion(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
+            questionnaire.UpdateSingleOptionQuestion(questionId, title, variableName, variableLabel, isMandatory, isPreFilled, scope, enablementCondition, validationExpression, validationMessage, instructions, responsibleId, options, linkedToQuestionId, isFilteredCombobox, cascadeFromQuestionId);
         }
 
         public static void AddNumericQuestion(
@@ -210,27 +127,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             bool isInteger,
             int? countOfDecimalPlaces)
         {
-            AddQuestion(questionnaire,
-                questionId,
-                parentGroupId,
-                title,
-                QuestionType.Numeric,
-                variableName,
-                variableLabel,
-                "",
-                isMandatory,
-                isPreFilled,
-                scope,
-                enablementCondition,
-                validationExpression,
-                validationMessage,
-                instructions,
-                null,
-                responsibleId,
-                null,
-                false,
-                maxValue
-                );
+            questionnaire.AddDefaultTypeQuestion(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
+            questionnaire.UpdateDateTimeQuestion(questionId, title, variableName, variableLabel, isMandatory, isPreFilled, scope, enablementCondition, validationExpression, validationMessage, instructions, responsibleId);
         }
 
         public static void AddTextListQuestion(
@@ -246,26 +144,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             Guid responsibleId,
             int? maxAnswerCount)
         {
-            AddQuestion(questionnaire,
-                questionId,
-                parentGroupId,
-                title,
-                QuestionType.Text,
-                variableName,
-                variableLabel,
-                "",
-                isMandatory,
-                false,
-                QuestionScope.Interviewer,
-                enablementCondition,
-                "",
-                "",
-                instructions,
-                null,
-                responsibleId,
-                null,
-                false,
-                maxAnswerCount);
+            questionnaire.AddDefaultTypeQuestion(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
+            questionnaire.UpdateTextListQuestion(questionId, title, variableName, variableLabel, isMandatory, enablementCondition, instructions, responsibleId, maxAnswerCount);
         }
 
         public static void AddQRBarcodeQuestion(
@@ -280,71 +160,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             string instructions,
             Guid responsibleId)
         {
-            AddQuestion(questionnaire,
-                questionId,
-                parentGroupId,
-                title,
-                QuestionType.Text,
-                variableName,
-                variableLabel,
-                "",
-                isMandatory,
-                false,
-                QuestionScope.Interviewer,
-                enablementCondition,
-                "",
-                "",
-                instructions,
-                null,
-                responsibleId);
-        }
-
-        private static void AddQuestion(
-            this Questionnaire questionnaire,
-            Guid questionId,
-            Guid parentGroupId,
-            string title,
-            QuestionType type,
-            string variableName,
-            string variableLabel,
-            string mask,
-            bool isMandatory,
-            bool isPreFilled,
-            QuestionScope scope,
-            string enablementCondition,
-            string validationExpression,
-            string validationMessage,
-            string instructions,
-            Option[] options,
-            Guid responsibleId,
-            Guid? linkedToQuestionId = null,
-            bool areAnswersOrdered = false,
-            int? maxAllowedAnswers = null,
-            bool? isFilteredCombobox = null,
-            Guid? cascadeFromQuestionId = null)
-        {
-            questionnaire.NewAddQuestion(
-                questionId,
-                parentGroupId,
-                title,
-                type,
-                variableName,
-                variableLabel,
-                mask,
-                isMandatory,
-                isPreFilled,
-                scope,
-                enablementCondition,
-                validationExpression,
-                validationMessage,
-                instructions,
-                options,
-                responsibleId,
-                linkedToQuestionId,
-                areAnswersOrdered,
-                maxAllowedAnswers,
-                isFilteredCombobox,
-                cascadeFromQuestionId);
+            questionnaire.AddDefaultTypeQuestion(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
+            questionnaire.UpdateQRBarcodeQuestion(questionId, title, variableName, variableLabel, isMandatory, enablementCondition, instructions,responsibleId);
         }
     }
 }

@@ -247,20 +247,12 @@
                 commandService.addQuestion = function(questionnaireId, parentGroupId, newId) {                    
                     var command = {
                         "questionnaireId": questionnaireId,
+                        "parentGroupId": parentGroupId,
                         "questionId": newId,
-                        "title": "New Question",
-                        "type": "Text",
-                        "isPreFilled": false,
-                        "isMandatory": false,
-                        "scope": "Interviewer",
-                        "enablementCondition": "",
-                        "validationExpression": "",
-                        "validationMessage": "",
-                        "instructions": "",
-                        "parentGroupId": parentGroupId
+                        "title": "New Question"
                     };
 
-                    return commandCall("AddQuestion", command);
+                    return commandCall("AddDefaultTypeQuestion", command);
                 };
 
 

@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddTextQuestionHandlerTests
                 .PublicKey.ShouldEqual(questionId);
 
         It should_raise_NewQuestionAdded_event_with_validationExpression_specified = () =>
-            eventContext.GetSingleEvent<NewQuestionAdded>()
+            eventContext.GetSingleEvent<QuestionChanged>()
                 .ValidationExpression.ShouldEqual(validationExpression);
 
         private static Questionnaire questionnaire;

@@ -2,12 +2,12 @@ using System;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 
-namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.SingleOption
+namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
     [Serializable]
-    public class UpdateCascadingComboboxOptionsCommand : QuestionCommand
+    public class UpdateFilteredComboboxOptionsCommand : QuestionCommand
     {
-        public UpdateCascadingComboboxOptionsCommand(
+        public UpdateFilteredComboboxOptionsCommand(
             Guid questionnaireId,
             Guid questionId,
             Guid responsibleId,

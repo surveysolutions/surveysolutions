@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                questionnaire.NewDeleteQuestion(rosterTitleQuestionId, responsibleId));
+                questionnaire.DeleteQuestion(rosterTitleQuestionId, responsibleId));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
