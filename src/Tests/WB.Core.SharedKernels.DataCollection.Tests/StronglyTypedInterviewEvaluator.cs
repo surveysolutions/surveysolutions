@@ -83,21 +83,6 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
             }
         }
 
-        public override bool HasParentMapSuchRoster(Guid rosterId)
-        {
-            return true;
-        }
-
-        public override Guid GetQuestionnaireId()
-        {
-            return IdOf.questionnaire;
-        }
-
-        public override Guid[] GetRosterParentScopeMap(Guid rosterId)
-        {
-            return IdOf.parentScopeMap[rosterId];
-        }
-
         public override void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
         {
             if (!IdOf.parentScopeMap.ContainsKey(rosterId))
