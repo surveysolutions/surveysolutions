@@ -348,7 +348,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                         currentScope.Questions.Add(question);
 
-                        allQuestions.Add(question);
+                        if (allQuestions.All(x => x.VariableName != question.VariableName))
+                        {
+                            allQuestions.Add(question);
+                        }
 
                         continue;
                     }
@@ -385,7 +388,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             };
 
                             rostersToProcess.Enqueue(new Tuple<IGroup, RosterScopeBaseModel>(childAsIGroup, roster));
-                            allRosters.Add(roster);
+
+                            if (allRosters.All(x => x.VariableName != roster.VariableName))
+                            {
+                                allRosters.Add(roster);
+                            }
+
                             currentScope.Rosters.Add(roster);
                         }
                         else
