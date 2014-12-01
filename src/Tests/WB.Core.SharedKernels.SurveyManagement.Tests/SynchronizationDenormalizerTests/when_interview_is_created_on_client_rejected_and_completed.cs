@@ -40,8 +40,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.SynchronizationDenormaliz
             syncStorage.Verify(x => x.MarkInterviewForClientDeleting(interviewId, Moq.It.IsAny<Guid?>(), Moq.It.IsAny<DateTime>()));
 
         static SynchronizationDenormalizer synchronizationDenormalizer;
-        private static Mock<ISynchronizationDataStorage> syncStorage;
-        private static Guid interviewId;
+        static Mock<ISynchronizationDataStorage> syncStorage;
+        static Guid interviewId;
     }
 }
 
