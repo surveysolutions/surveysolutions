@@ -18,7 +18,7 @@ using Android.Widget;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Cirrious.MvvmCross.Plugins.PictureChooser;
-using Ncqrs.Commanding.ServiceModel;
+
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.CommandBus;

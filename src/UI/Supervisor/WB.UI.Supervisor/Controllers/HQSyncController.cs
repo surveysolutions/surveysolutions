@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
-using Ncqrs.Commanding.ServiceModel;
+
 using Newtonsoft.Json;
 using Quartz;
 using WB.Core.BoundedContexts.Supervisor.Synchronization;

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Ncqrs.Commanding;
-using Ncqrs.Commanding.CommandExecution;
 using Ncqrs.Config;
 using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
@@ -33,9 +32,6 @@ namespace Ncqrs
             SetDefault<IEventBus>(new InProcessEventBus());
             SetDefault<IEventStore>(new InMemoryEventStore());
             SetDefault<ISnapshotStore>(new NullSnapshotStore());
-            SetDefault<IUnitOfWorkFactory>(new UnitOfWorkFactory());
-            SetDefault<IKnownCommandsEnumerator>(new AllCommandsInAppDomainEnumerator());
-            SetDefault<ITransactionService>(new DefaultTransactionService());
             SetDefault<ISnapshottingPolicy>(new NoSnapshottingPolicy());
             SetDefault<IAggregateRootCreationStrategy>(new SimpleAggregateRootCreationStrategy());
             SetDefault<IAggregateSupportsSnapshotValidator>(new AggregateSupportsSnapshotValidator());

@@ -9,7 +9,6 @@ namespace WB.Core.Infrastructure.CommandBus
         #region Handlers
 
         private static readonly Dictionary<string, HandlerDescriptor> Handlers = new Dictionary<string, HandlerDescriptor>();
-        private static readonly List<Type> RegisteredCommands = new List<Type>();
 
         private class HandlerDescriptor
         {
@@ -113,10 +112,6 @@ namespace WB.Core.Infrastructure.CommandBus
             return new AggregateSetup<TAggregate>();
         }
 
-        public static List<Type> GetRegisteredCommands()
-        {
-            return RegisteredCommands;
-        } 
         #endregion
 
         private static void Register<TCommand, TAggregate>(Func<TCommand, Guid> aggregateRootIdResolver, Action<TCommand, TAggregate> commandHandler, bool isInitializer)
@@ -127,8 +122,6 @@ namespace WB.Core.Infrastructure.CommandBus
 
             if (Handlers.ContainsKey(commandName))
                 throw new ArgumentException(string.Format("Command {0} is already registered.", commandName));
-
-            RegisteredCommands.Add(typeof(TCommand));
 
             Handlers.Add(commandName, new HandlerDescriptor(
                 typeof (TAggregate),

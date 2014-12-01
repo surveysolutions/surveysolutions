@@ -7,7 +7,7 @@ using Android.Content;
 using Android.Graphics;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
-using Ncqrs.Commanding.ServiceModel;
+
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.CommandBus;

@@ -9,7 +9,7 @@ using Android.Widget;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Java.Util.Logging;
 using Microsoft.Practices.ServiceLocation;
-using Ncqrs.Commanding.ServiceModel;
+
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Logging;

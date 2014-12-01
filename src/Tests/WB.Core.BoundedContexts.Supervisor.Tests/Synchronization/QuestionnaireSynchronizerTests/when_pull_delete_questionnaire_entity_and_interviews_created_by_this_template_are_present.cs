@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
-using Ncqrs.Commanding.ServiceModel;
+
 using Raven.Abstractions.Commands;
 using WB.Core.BoundedContexts.Supervisor.Questionnaires;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
