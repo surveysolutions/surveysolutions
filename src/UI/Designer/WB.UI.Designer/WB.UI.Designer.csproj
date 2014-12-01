@@ -549,6 +549,9 @@
     <Content Include="UpdatedDesigner\content\designer-editor\wb-designer-verify-popover.css.css.map">
       <DependentUpon>wb-designer-verify-popover.css.css</DependentUpon>
     </Content>
+    <Content Include="UpdatedDesigner\content\markup.css.css.map">
+      <DependentUpon>markup.css.css</DependentUpon>
+    </Content>
     <None Include="UpdatedDesigner\data\editQuestion\d6c5faeed9fe43338b76e7a3ef184f5a.json" />
     <Content Include="UpdatedDesigner\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="UpdatedDesigner\app\index.html" />
