@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Net.Http;
 using Main.Core.Documents;
 using Moq;
-using Ncqrs.Commanding.ServiceModel;
+
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using NSubstitute;

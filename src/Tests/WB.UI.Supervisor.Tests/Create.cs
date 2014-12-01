@@ -1,5 +1,4 @@
 using Moq;
-using Ncqrs.Commanding.ServiceModel;
 using Quartz;
 using WB.Core.BoundedContexts.Supervisor.Synchronization;
 using WB.Core.GenericSubdomains.Logging;

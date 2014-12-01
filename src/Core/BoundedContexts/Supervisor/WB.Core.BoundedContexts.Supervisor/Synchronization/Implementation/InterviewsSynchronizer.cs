@@ -9,7 +9,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
 using Ncqrs.Commanding;
-using Ncqrs.Commanding.ServiceModel;
+
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Raven.Client.Linq;

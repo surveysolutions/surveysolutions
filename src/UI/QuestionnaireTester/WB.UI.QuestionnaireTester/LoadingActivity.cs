@@ -12,7 +12,7 @@ using Android.Widget;
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
+
 using System;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;

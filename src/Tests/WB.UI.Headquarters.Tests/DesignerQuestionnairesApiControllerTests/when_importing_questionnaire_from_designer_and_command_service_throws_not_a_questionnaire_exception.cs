@@ -2,7 +2,7 @@ using System;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Commanding;
-using Ncqrs.Commanding.ServiceModel;
+
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services;

@@ -7,7 +7,7 @@ using Machine.Specifications;
 using Moq;
 using Moq.Protected;
 using Ncqrs.Commanding;
-using Ncqrs.Commanding.ServiceModel;
+
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;

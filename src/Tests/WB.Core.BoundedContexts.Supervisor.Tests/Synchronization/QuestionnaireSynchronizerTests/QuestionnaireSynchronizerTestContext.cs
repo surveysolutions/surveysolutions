@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Commanding;
-using Ncqrs.Commanding.ServiceModel;
+
 using WB.Core.BoundedContexts.Supervisor.Questionnaires;
 using WB.Core.BoundedContexts.Supervisor.Synchronization;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;

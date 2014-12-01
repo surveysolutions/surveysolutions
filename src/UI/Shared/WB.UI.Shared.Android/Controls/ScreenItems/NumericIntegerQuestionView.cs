@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Android.Content;
 using Android.Text;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
-using Ncqrs.Commanding.ServiceModel;
+
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.CommandBus;

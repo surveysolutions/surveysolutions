@@ -4,7 +4,7 @@ using Cirrious.CrossCore;
 using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.Droid.Platform;
 using Main.Core.Entities.SubEntities;
-using Ncqrs.Commanding.ServiceModel;
+
 using Ninject;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;

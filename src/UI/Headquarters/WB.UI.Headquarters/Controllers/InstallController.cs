@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
-using Ncqrs.Commanding.ServiceModel;
+
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation.Crypto;

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
+
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure;

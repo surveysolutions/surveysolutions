@@ -13,7 +13,6 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding;
-using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.GenericSubdomains.Utils;

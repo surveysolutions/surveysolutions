@@ -94,21 +94,11 @@ namespace WB.UI.Headquarters.Injections
             RegisterAdditionalElements();
         }
 
-        protected virtual IEnumerable<Type> RegisteredCommandList()
-        {
-            var implementations =
-             this.GetAssembliesForRegistration().SelectMany(a => a.GetTypes()).Where(t => ImplementsAtLeastOneInterface(t, typeof(ICommand)));
-            return implementations;
-        }
-
         protected virtual void RegisterAdditionalElements()
         {
-            ICommandListSupplier commands = new CommandListSupplier(RegisteredCommandList());
-            this.Bind<ICommandListSupplier>().ToConstant(commands);
-
             this.Kernel.Bind(
                 x =>
-                x.From(this.GetAssembliesForRegistration()).SelectAllInterfaces().Excluding<ICommandListSupplier>().BindWith(
+                x.From(this.GetAssembliesForRegistration()).SelectAllInterfaces().BindWith(
                     new RegisterFirstInstanceOfInterface(this.GetAssembliesForRegistration())));
 
             foreach (KeyValuePair<Type, Type> customBindType in this.GetTypesForRegistration())

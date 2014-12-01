@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using Moq.Protected;
-using Ncqrs.Commanding.ServiceModel;
+
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
 using WB.Core.GenericSubdomains.Utils;
