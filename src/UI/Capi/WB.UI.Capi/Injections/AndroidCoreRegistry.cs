@@ -50,18 +50,8 @@ namespace WB.UI.Capi.Injections
             RegisterAdditionalElements();
         }
 
-        protected virtual IEnumerable<Type> RegisteredCommandList()
-        {
-            var implementations =
-             this.GetAssembliesForRegistration().SelectMany(a => a.GetTypes()).Where(t => ImplementsAtLeastOneInterface(t, typeof(ICommand)));
-            return implementations;
-        }
-
         protected virtual void RegisterAdditionalElements()
         {
-            ICommandListSupplier commands = new CommandListSupplier(RegisteredCommandList());
-            this.Bind<ICommandListSupplier>().ToConstant(commands);
-
             foreach (KeyValuePair<Type, Type> customBindType in this.GetTypesForRegistration())
             {
                 this.Kernel.Bind(customBindType.Key).To(customBindType.Value);

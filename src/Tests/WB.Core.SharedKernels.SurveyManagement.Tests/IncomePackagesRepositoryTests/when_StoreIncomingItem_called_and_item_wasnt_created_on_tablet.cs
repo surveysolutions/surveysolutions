@@ -2,7 +2,7 @@
 using Machine.Specifications;
 using Main.Core;
 using Moq;
-using Ncqrs.Commanding.ServiceModel;
+
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;

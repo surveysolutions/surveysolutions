@@ -11,7 +11,6 @@ namespace Ncqrs.Commanding
     /// action.
     /// </summary>
     [DataContract]
-    [KnownType("GetKnownTypes")]
     public abstract class CommandBase : ICommand
     {
         /// <summary>
@@ -21,19 +20,6 @@ namespace Ncqrs.Commanding
         {
             get;
             private set;
-        }
-
-        /// <summary>
-        /// Gets the known version of the aggregate root.
-        /// This can be used for optimistic concurrency.
-        /// When set, the command should only be executed
-        /// when the current version of the aggregate root
-        /// is the same as the known version.
-        /// </summary>
-        public long? KnownVersion
-        { 
-            get; 
-            private set; 
         }
 
         /// <summary>
@@ -71,21 +57,6 @@ namespace Ncqrs.Commanding
         protected CommandBase(IUniqueIdentifierGenerator idGenerator)
         {
             CommandIdentifier = idGenerator.GenerateNewId();
-        }
-
-        /// <summary>
-        /// Used by WCF to enumerate all types inheriting from <see cref="CommandBase"/>,
-        /// so that instances of them can be sent to a service operation that expects a command.
-        /// </summary>
-        /// <returns>An enumeration of all classes in the current AppDomain inheriting from <see cref="CommandBase" /></returns>
-        public static IEnumerable<Type> GetKnownTypes()
-        {
-            var knownCommandsEnumerator = NcqrsEnvironment.Get<IKnownCommandsEnumerator>();
-            if (knownCommandsEnumerator == null)
-            {
-                throw new InvalidOperationException("No Ncqrs.Commanding.IKnownCommandsEnumerator implementation registered with the NcqrsEnvironment.");
-            }
-            return knownCommandsEnumerator.GetAllCommandTypes();
         }
     }
 }

@@ -4,7 +4,7 @@ using System.ServiceModel;
 using System.Web;
 using System.Web.Http;
 using Main.Core.Documents;
-using Ncqrs.Commanding.ServiceModel;
+
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.CommandBus;

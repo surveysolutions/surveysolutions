@@ -2,7 +2,6 @@
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;

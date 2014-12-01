@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Ncqrs.Commanding;
-using Ncqrs.Commanding.ServiceModel;
+
 using WB.Core.BoundedContexts.Supervisor.Questionnaires;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
 using WB.Core.GenericSubdomains.Logging;

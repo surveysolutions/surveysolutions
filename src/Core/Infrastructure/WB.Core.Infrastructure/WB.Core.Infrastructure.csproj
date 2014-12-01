@@ -79,21 +79,7 @@
     <Compile Include="Modularity\IIocRegistry.cs" />
     <Compile Include="Modularity\Module.cs" />
     <Compile Include="Ncqrs\BasicGuidGenerator.cs" />
-    <Compile Include="Ncqrs\Commanding\AllCommandsInAppDomainEnumerator.cs" />
     <Compile Include="Ncqrs\Commanding\CommandBase.cs" />
-    <Compile Include="Ncqrs\Commanding\CommandExecution\CommandExecutorBase.cs" />
-    <Compile Include="Ncqrs\Commanding\CommandExecution\DefaultTransactionService.cs" />
-    <Compile Include="Ncqrs\Commanding\CommandExecution\ExecutorForCommandNotFoundException.cs" />
-    <Compile Include="Ncqrs\Commanding\CommandExecution\ICommandExecutor.cs" />
-    <Compile Include="Ncqrs\Commanding\CommandExecution\ICommandExecutorExtensions.cs" />
-    <Compile Include="Ncqrs\Commanding\CommandExecution\ITransactionService.cs" />
-    <Compile Include="Ncqrs\Commanding\CommandExecution\TransactionalCommandExecutorWrapper.cs" />
-    <Compile Include="Ncqrs\Commanding\IKnownCommandsEnumerator.cs" />
-    <Compile Include="Ncqrs\Commanding\ServiceModel\CommandContext.cs" />
-    <Compile Include="Ncqrs\Commanding\ServiceModel\CommandService.cs" />
-    <Compile Include="Ncqrs\Commanding\ServiceModel\ICommandServiceInterceptor.cs" />
-    <Compile Include="Ncqrs\CommandListSupplier.cs" />
-    <Compile Include="Ncqrs\ConcurrencyResolveCommandService.cs" />
     <Compile Include="Ncqrs\Config\IEnvironmentConfiguration.cs" />
     <Compile Include="Ncqrs\Config\InstanceNotFoundInEnvironment.cs" />
     <Compile Include="Ncqrs\DateTimeBasedClock.cs" />
@@ -102,8 +88,6 @@
     <Compile Include="Ncqrs\Domain\AggregateRootMappedByConvention.cs" />
     <Compile Include="Ncqrs\Domain\Entity.cs" />
     <Compile Include="Ncqrs\Domain\EntityMappedByConvention.cs" />
-    <Compile Include="Ncqrs\Domain\IUnitOfWorkContext.cs" />
-    <Compile Include="Ncqrs\Domain\IUnitOfWorkFactory.cs" />
     <Compile Include="Ncqrs\Domain\NoUnitOfWorkAvailableInThisContextException.cs" />
     <Compile Include="Ncqrs\Domain\Storage\AggregateRootCreationException.cs" />
     <Compile Include="Ncqrs\Domain\Storage\AggregateRootCreationStrategy.cs" />
@@ -117,10 +101,6 @@
     <Compile Include="Ncqrs\Domain\Storage\IAggregateSupportsSnapshotValidator.cs" />
     <Compile Include="Ncqrs\Domain\Storage\IDomainRepository.cs" />
     <Compile Include="Ncqrs\Domain\Storage\SimpleAggregateRootCreationStrategy.cs" />
-    <Compile Include="Ncqrs\Domain\UnitOfWork.cs" />
-    <Compile Include="Ncqrs\Domain\UnitOfWorkBase.cs" />
-    <Compile Include="Ncqrs\Domain\UnitOfWorkContext.cs" />
-    <Compile Include="Ncqrs\Domain\UnitOfWorkFactory.cs" />
     <Compile Include="Ncqrs\Eventing\AggregateRootEvent.cs" />
     <Compile Include="Ncqrs\Eventing\CommittedEvent.cs" />
     <Compile Include="Ncqrs\Eventing\CommittedEventStream.cs" />
@@ -177,7 +157,6 @@
     <Compile Include="Ncqrs\Eventing\UncommittedEventStream.cs" />
     <Compile Include="Ncqrs\GuidCombGenerator.cs" />
     <Compile Include="Ncqrs\IClock.cs" />
-    <Compile Include="Ncqrs\ICommandListSupplier.cs" />
     <Compile Include="Ncqrs\InternalExtensions.cs" />
     <Compile Include="Ncqrs\IUniqueIdentifierGenerator.cs" />
     <Compile Include="Ncqrs\LoggerExtensions.cs" />
@@ -185,7 +164,6 @@
     <Compile Include="Ncqrs\NamespaceDoc.cs" />
     <Compile Include="Ncqrs\NcqrsEnvironment.cs" />
     <Compile Include="Ncqrs\NcqrsEnvironmentException.cs" />
-    <Compile Include="Ncqrs\NCQRSInit.cs" />
     <Compile Include="Ncqrs\Utils.cs" />
     <Compile Include="Ncqrs\_WB\AggregateRootRepository.cs" />
     <Compile Include="Ncqrs\_WB\EventPublisher.cs" />
