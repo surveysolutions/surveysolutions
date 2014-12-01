@@ -85,21 +85,153 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             this.SiblingRosters = newSiblingRosters;
         }
         
-        public override bool HasParentMapSuchRoster(Guid rosterId)
+        public override void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex)
         {
-            return IdOf.parentScopeMap.ContainsKey(rosterId);
+            if (!IdOf.parentScopeMap.ContainsKey(rosterId))
+            {
+                return;
+            }
+
+            decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
+            Guid[] rosterScopeIds = IdOf.parentScopeMap[rosterId];
+            var rosterIdentityKey = Util.GetRosterKey(rosterScopeIds, rosterVector);
+            string rosterStringKey = Util.GetRosterStringKey(rosterIdentityKey);
+
+            if (this.InterviewScopes.ContainsKey(rosterStringKey))
+            {
+                return;
+            }
+                        
+            var rosterParentIdentityKey = outerRosterVector.Length == 0
+                ? Util.GetRosterKey(new[] { IdOf.@__questionnaire }, new decimal[0])
+                : Util.GetRosterKey(rosterScopeIds.Shrink(), outerRosterVector);
+
+            var parent = this.InterviewScopes[Util.GetRosterStringKey(rosterParentIdentityKey)];
+
+            var rosterLevel = parent.CreateChildRosterInstance(rosterId, rosterVector, rosterIdentityKey);
+
+            this.InterviewScopes.Add(rosterStringKey, rosterLevel);
+            this.SetSiblings(rosterIdentityKey, rosterStringKey);
         }
 
-		public override Guid GetQuestionnaireId()
+        public override void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
         {
-            return IdOf.@__questionnaire;
+            if (!IdOf.parentScopeMap.ContainsKey(rosterId))
+            {
+                return;
+            }
+
+            decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
+            var rosterIdentityKey = Util.GetRosterKey(IdOf.parentScopeMap[rosterId], rosterVector);
+            
+            var dependentRosters = this.InterviewScopes.Keys.Where(x => x.StartsWith(Util.GetRosterStringKey((rosterIdentityKey)))).ToArray();
+            
+            foreach (var rosterKey in dependentRosters)
+            {
+                this.InterviewScopes.Remove(rosterKey);
+                foreach (var siblings in this.SiblingRosters.Values)
+                {
+                    siblings.Remove(rosterKey);
+                }
+            }
         }
 
-		public override Guid[] GetRosterParentScopeMap(Guid rosterId)
-		{
-			return IdOf.parentScopeMap[rosterId];
-		}
+        public override void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long? answer)
+        {
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
+            if (targetLevel == null) return;
 
+            targetLevel.UpdateNumericIntegerAnswer(questionId, answer);
+        }
+
+        public override void UpdateNumericRealAnswer(Guid questionId, decimal[] rosterVector, double? answer)
+        {
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
+            if (targetLevel == null) return;
+
+            targetLevel.UpdateNumericRealAnswer(questionId, answer);
+        }
+
+        public override void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime? answer)
+        {
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
+            if (targetLevel == null) return;
+
+            targetLevel.UpdateDateTimeAnswer(questionId, answer);
+        }
+
+        public override void UpdateMediaAnswer(Guid questionId, decimal[] rosterVector, string answer)
+        {
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
+            if (targetLevel == null) return;
+
+            targetLevel.UpdateMediaAnswer(questionId, answer);
+        }
+
+        public override void UpdateTextAnswer(Guid questionId, decimal[] rosterVector, string answer)
+        {
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
+            if (targetLevel == null) return;
+
+            targetLevel.UpdateTextAnswer(questionId, answer);
+        }
+        
+        public override void UpdateQrBarcodeAnswer(Guid questionId, decimal[] rosterVector, string answer)
+        {
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
+            if (targetLevel == null) return;
+
+            targetLevel.UpdateQrBarcodeAnswer(questionId, answer);
+        }
+
+        public override void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal? answer)
+        {
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
+            if (targetLevel == null) return;
+
+            targetLevel.UpdateSingleOptionAnswer(questionId, answer);
+        }
+
+        public override void UpdateMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] answer)
+        {
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
+            if (targetLevel == null) return;
+
+            targetLevel.UpdateMultiOptionAnswer(questionId, answer);
+        }
+
+        public override void UpdateGeoLocationAnswer(Guid questionId, decimal[] rosterVector, double latitude, double longitude, double accuracy, double altitude)
+        {
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
+            if (targetLevel == null) return;
+
+            targetLevel.UpdateGeoLocationAnswer(questionId, latitude,  longitude,  accuracy, altitude);
+        }
+
+        public override void UpdateTextListAnswer(Guid questionId, decimal[] rosterVector, Tuple<decimal, string>[] answers)
+        {
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
+            if (targetLevel == null) return;
+
+            targetLevel.UpdateTextListAnswer(questionId, answers);
+        }
+
+        public override void UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] selectedPropagationVector)
+        {
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
+            if (targetLevel == null) return;
+            
+            targetLevel.UpdateLinkedSingleOptionAnswer(questionId, selectedPropagationVector);
+        }
+
+        public override void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[][] answer)
+        {
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
+            if (targetLevel == null) return;
+
+            targetLevel.UpdateLinkedMultiOptionAnswer(questionId, answer);
+        }
+        
         public override Dictionary<Guid, Guid[]> GetParentsMap()
         {
             return IdOf.parentScopeMap;
