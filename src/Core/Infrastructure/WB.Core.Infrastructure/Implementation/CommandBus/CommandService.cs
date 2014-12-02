@@ -1,4 +1,5 @@
 ﻿using System;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
@@ -10,13 +11,13 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
     internal class CommandService : ICommandService
     {
         private readonly IAggregateRootRepository repository;
-        private readonly IEventPublisher eventPublisher;
+        private readonly IEventBus eventBus;
         private readonly ISnapshotManager snapshotManager;
 
-        public CommandService(IAggregateRootRepository repository, IEventPublisher eventPublisher, ISnapshotManager snapshotManager)
+        public CommandService(IAggregateRootRepository repository, IEventBus eventBus, ISnapshotManager snapshotManager)
         {
             this.repository = repository;
-            this.eventPublisher = eventPublisher;
+            this.eventBus = eventBus;
             this.snapshotManager = snapshotManager;
         }
 
@@ -47,7 +48,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
 
             commandHandler.Invoke(command, aggregate);
 
-            this.eventPublisher.PublishUncommitedEventsFromAggregateRoot(aggregate, origin);
+            this.eventBus.PublishUncommitedEventsFromAggregateRoot(aggregate, origin);
 
             this.snapshotManager.CreateSnapshotIfNeededAndPossible(aggregate);
         }

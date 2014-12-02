@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.Infrastructure.Aggregates;
 
 namespace Ncqrs.Eventing.ServiceModel.Bus
 {
@@ -10,6 +11,8 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
     {
         void Publish(IPublishableEvent eventMessage);
 
-        void Publish(IEnumerable<IPublishableEvent> eventMessages);        
+        void Publish(IEnumerable<IPublishableEvent> eventMessages);
+
+        void PublishUncommitedEventsFromAggregateRoot(IAggregateRoot aggregateRoot, string origin);
     }
 }

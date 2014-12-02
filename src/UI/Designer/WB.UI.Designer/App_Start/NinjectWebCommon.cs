@@ -113,8 +113,6 @@ namespace WB.UI.Designer.App_Start
 
             CreateAndRegisterEventBus(kernel);
 
-            kernel.Bind<IAggregateRootRepository>().To<AggregateRootRepository>();
-            kernel.Bind<IEventPublisher>().To<EventPublisher>();
             kernel.Bind<ISnapshotManager>().To<SnapshotManager>();
         }
 
@@ -132,7 +130,7 @@ namespace WB.UI.Designer.App_Start
 
         private static NcqrCompatibleEventDispatcher CreateEventBus(StandardKernel kernel)
         {
-            var bus = new NcqrCompatibleEventDispatcher();
+            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>());
 
             foreach (var handler in kernel.GetAll(typeof (IEventHandler)))
             {

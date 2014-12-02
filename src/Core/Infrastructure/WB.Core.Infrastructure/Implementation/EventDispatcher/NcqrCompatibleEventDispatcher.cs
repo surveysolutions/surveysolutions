@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Storage;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
 
@@ -12,15 +15,18 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
     {
         private readonly Dictionary<Type, EventHandlerWrapper> registredHandlers = new Dictionary<Type, EventHandlerWrapper>();
         private readonly Func<InProcessEventBus> getInProcessEventBus;
+        private readonly IEventStore eventStore;
 
-        public NcqrCompatibleEventDispatcher()
+        public NcqrCompatibleEventDispatcher(IEventStore eventStore)
         {
-            this.getInProcessEventBus = () => new InProcessEventBus(true);
+            this.eventStore = eventStore;
+            this.getInProcessEventBus = () => new InProcessEventBus(true, eventStore);
         }
 
-        internal NcqrCompatibleEventDispatcher(Func<InProcessEventBus> getInProcessEventBus)
+        internal NcqrCompatibleEventDispatcher(Func<InProcessEventBus> getInProcessEventBus, IEventStore eventStore)
         {
             this.getInProcessEventBus = getInProcessEventBus;
+            this.eventStore = eventStore;
         }
 
         public void Publish(IPublishableEvent eventMessage)
@@ -68,6 +74,21 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                     handler.Bus.Publish(publishableEvent);
                 }
             }
+        }
+
+        public void PublishUncommitedEventsFromAggregateRoot(IAggregateRoot aggregateRoot, string origin)
+        {
+            var eventStream = new UncommittedEventStream(origin);
+
+            foreach (UncommittedEvent @event in aggregateRoot.GetUncommittedChanges())
+            {
+                eventStream.Append(@event);
+            }
+
+            this.eventStore.Store(eventStream);
+            this.Publish(eventStream);
+
+            aggregateRoot.MarkChangesAsCommitted();
         }
 
         public void PublishEventToHandlers(IPublishableEvent eventMessage, IEnumerable<IEventHandler> handlers)

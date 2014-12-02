@@ -50,7 +50,7 @@
     <Compile Include="EventBus\BaseDenormalizer.cs" />
     <Compile Include="EventBus\IAtomicEventHandler.cs" />
     <Compile Include="EventBus\IEventHandler.cs" />
-    <Compile Include="EventBus\IEventPublisher.cs" />
+    <Compile Include="Implementation\Aggregates\AggregateRootRepository.cs" />
     <Compile Include="Implementation\CommandBus\CommandService.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideEventHandlerDescription.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideRepositoryWriterError.cs" />
@@ -109,7 +109,6 @@
     <Compile Include="Ncqrs\Eventing\EventNotHandledException.cs" />
     <Compile Include="Ncqrs\Eventing\EventSourceInformation.cs" />
     <Compile Include="Ncqrs\Eventing\IEvent.cs" />
-    <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\CompositeEventBus.cs" />
     <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\IEventBus.cs" />
     <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\IEventHandler.cs" />
     <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\InProcessEventBus.cs" />
@@ -165,8 +164,6 @@
     <Compile Include="Ncqrs\NcqrsEnvironment.cs" />
     <Compile Include="Ncqrs\NcqrsEnvironmentException.cs" />
     <Compile Include="Ncqrs\Utils.cs" />
-    <Compile Include="Ncqrs\_WB\AggregateRootRepository.cs" />
-    <Compile Include="Ncqrs\_WB\EventPublisher.cs" />
     <Compile Include="Ncqrs\_WB\SnapshotManager.cs" />
     <Compile Include="PlainStorage\IPlainStorageAccessor.cs" />
     <Compile Include="PlainStorage\IQueryablePlainStorageAccessor.cs" />

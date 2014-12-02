@@ -30,7 +30,6 @@ using WB.Core.GenericSubdomains.Rest.Android;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -258,7 +257,6 @@ namespace WB.UI.QuestionnaireTester
             //kernel.Bind<IEventBus>().ToConstant(bus);
             this.kernel.Bind<IEventBus>().ToConstant(bus).Named("interviewViewBus");
 
-            kernel.Bind<IAggregateRootRepository>().To<AggregateRootRepository>();
             kernel.Bind<IEventPublisher>().To<EventPublisher>();
             kernel.Bind<ISnapshotManager>().To<SnapshotManager>();
 

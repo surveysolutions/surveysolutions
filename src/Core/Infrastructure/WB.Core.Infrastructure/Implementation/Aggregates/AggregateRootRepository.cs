@@ -3,11 +3,11 @@ using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
+using WB.Core.Infrastructure.Aggregates;
 
-namespace WB.Core.Infrastructure.Aggregates
+namespace WB.Core.Infrastructure.Implementation.Aggregates
 {
-    // TODO: TLK, KP-4337: this should be moved to WB.Core.Infrastructure.Aggregates when NCQRS will be portable
-    public class AggregateRootRepository : IAggregateRootRepository
+    internal class AggregateRootRepository : IAggregateRootRepository
     {
         private readonly IEventStore eventStore;
         private readonly ISnapshotStore snapshotStore;

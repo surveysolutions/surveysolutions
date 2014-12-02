@@ -146,7 +146,7 @@ namespace CapiDataGenerator
 
             this.Bind<IDomainRepository>().To<DomainRepository>();
 
-            var bus = new NcqrCompatibleEventDispatcher();
+            var bus = new NcqrCompatibleEventDispatcher(eventStore);
 
             this.Bind<IEventDispatcher>().ToConstant(bus);
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
@@ -170,8 +170,6 @@ namespace CapiDataGenerator
 
             #endregion
 
-            this.Bind<IAggregateRootRepository>().To<AggregateRootRepository>();
-            this.Bind<IEventPublisher>().To<EventPublisher>();
             this.Bind<ISnapshotManager>().To<SnapshotManager>();
         }
 
