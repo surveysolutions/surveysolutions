@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
+using Ncqrs.Eventing.Storage;
+using WB.Core.Infrastructure.Aggregates;
 
 namespace Ncqrs.Eventing.ServiceModel.Bus
 {
@@ -10,9 +12,10 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
     {
         private readonly Dictionary<Type, List<Action<PublishedEvent>>> _handlerRegister = new Dictionary<Type, List<Action<PublishedEvent>>>();
         private readonly bool _useTransactionScope;
+        private readonly IEventStore eventStore;
 
-        public InProcessEventBus()
-            : this(true)
+        public InProcessEventBus(IEventStore eventStore)
+            : this(true, eventStore)
         {            
         }
 
@@ -20,9 +23,11 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         /// Creates new <see cref="InProcessEventBus"/> instance.
         /// </summary>
         /// <param name="useTransactionScope">Use transaction scope?</param>
-        public InProcessEventBus(bool useTransactionScope)            
+        /// <param name="eventStore">Event store</param>
+        public InProcessEventBus(bool useTransactionScope, IEventStore eventStore)
         {
             _useTransactionScope = useTransactionScope;
+            this.eventStore = eventStore;
         }
 
         public void Publish(IPublishableEvent eventMessage)
@@ -107,6 +112,21 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             {
                 Publish(eventMessage);
             }
+        }
+
+        public void PublishUncommitedEventsFromAggregateRoot(IAggregateRoot aggregateRoot, string origin)
+        {
+            var eventStream = new UncommittedEventStream(origin);
+
+            foreach (UncommittedEvent @event in aggregateRoot.GetUncommittedChanges())
+            {
+                eventStream.Append(@event);
+            }
+
+            this.eventStore.Store(eventStream);
+            this.Publish(eventStream);
+
+            aggregateRoot.MarkChangesAsCommitted();
         }
 
         public virtual void RegisterHandler<TEvent>(IEventHandler<TEvent> handler)

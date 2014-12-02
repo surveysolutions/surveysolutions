@@ -40,7 +40,6 @@ using WB.Core.GenericSubdomains.Logging.AndroidLogger;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.Services;
 using WB.Core.Infrastructure.ReadSide;
@@ -307,7 +306,6 @@ namespace WB.UI.Capi
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
             kernel.Bind<IEventBus>().ToConstant(bus).Named("interviewViewBus");
 
-            kernel.Bind<IAggregateRootRepository>().To<AggregateRootRepository>();
             kernel.Bind<IEventPublisher>().To<EventPublisher>();
             kernel.Bind<ISnapshotManager>().To<SnapshotManager>();
 

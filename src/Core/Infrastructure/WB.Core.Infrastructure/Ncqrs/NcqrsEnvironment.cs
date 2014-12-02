@@ -29,8 +29,9 @@ namespace Ncqrs
             // Initialize defaults.
             SetDefault<IClock>(new DateTimeBasedClock());
             SetDefault<IUniqueIdentifierGenerator>(new BasicGuidGenerator());
-            SetDefault<IEventBus>(new InProcessEventBus());
-            SetDefault<IEventStore>(new InMemoryEventStore());
+            var eventStore = new InMemoryEventStore();
+            SetDefault<IEventBus>(new InProcessEventBus(eventStore));
+            SetDefault<IEventStore>(eventStore);
             SetDefault<ISnapshotStore>(new NullSnapshotStore());
             SetDefault<ISnapshottingPolicy>(new NoSnapshottingPolicy());
             SetDefault<IAggregateRootCreationStrategy>(new SimpleAggregateRootCreationStrategy());
