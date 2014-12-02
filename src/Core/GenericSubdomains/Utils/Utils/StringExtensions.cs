@@ -131,5 +131,10 @@ namespace WB.Core.GenericSubdomains.Utils
             int iSource;
             return Int32.TryParse(source, out iSource);
         }
+
+        public static string NullIfEmptyOrWhiteSpace(this string src)
+        {
+            return string.IsNullOrWhiteSpace(src) ? null : src;
+        }
     }
 }

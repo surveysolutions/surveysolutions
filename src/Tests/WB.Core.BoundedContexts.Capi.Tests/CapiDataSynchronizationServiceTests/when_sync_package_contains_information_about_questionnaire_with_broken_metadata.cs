@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.CapiDataSynchronizationServiceTests
                 PublicKey = Guid.NewGuid()
             };
 
-            syncItem = new SyncItem() { ItemType = SyncItemType.Template, IsCompressed = true, Content = "some content", MetaInfo = "some metadata", Id = Guid.NewGuid()};
+            syncItem = new SyncItem() { ItemType = SyncItemType.Template, IsCompressed = true, Content = "some content", MetaInfo = "some metadata", RootId = Guid.NewGuid()};
 
             var jsonUtilsMock = new Mock<IJsonUtils>();
             jsonUtilsMock.Setup(x => x.Deserrialize<QuestionnaireDocument>(syncItem.Content)).Returns(questionnaireDocument);
@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.CapiDataSynchronizationServiceTests
         () =>
             changeLogManipulator.Verify(
                 x =>
-                    x.CreatePublicRecord(syncItem.Id),
+                    x.CreatePublicRecord(syncItem.RootId),
                 Times.Never);
 
         private static CapiDataSynchronizationService capiDataSynchronizationService;

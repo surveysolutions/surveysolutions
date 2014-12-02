@@ -53,14 +53,14 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             if (string.IsNullOrWhiteSpace(item.Content))
                 throw new ArgumentException("Sync Item content is not set.");
 
-            if (item.Id == Guid.Empty)
+            if (item.RootId == Guid.Empty)
                 throw new ArgumentException("Sync Item id is not set.");
 
             this.incomeRepository.StoreIncomingItem(item);
             return true;
         }
 
-        public IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, Guid? lastSyncedPackageId)
+        public IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, string lastSyncedPackageId)
         {
             var device = devices.GetById(clientRegistrationKey);
 
@@ -70,7 +70,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             return storage.GetChunkPairsCreatedAfter(lastSyncedPackageId, userId);
         }
 
-        public SyncPackage ReceiveSyncPackage(Guid clientRegistrationId, Guid id)
+        public SyncPackage ReceiveSyncPackage(Guid clientRegistrationId, string id)
         {
             var syncPackage = new SyncPackage();
 
@@ -86,12 +86,12 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             return syncPackage;
         }
 
-        public Guid GetPackageIdByTimestamp(DateTime timestamp)
+        public string GetPackageIdByTimestamp(DateTime timestamp)
         {
             return this.storage.GetChunkInfoByTimestamp(timestamp).Id;
         }
 
-        private SyncItem GetSyncItem(Guid clientRegistrationKey, Guid id)
+        private SyncItem GetSyncItem(Guid clientRegistrationKey, string id)
         {
             var device = devices.GetById(clientRegistrationKey);
             if (device == null)

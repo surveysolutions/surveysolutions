@@ -445,7 +445,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 IsCompressed = true,
                 ItemType = SyncItemType.Questionnare,
                 MetaInfo = archiver.CompressString(this.jsonUtils.GetItemAsContent(metadata)),
-                Id = interviewId
+                RootId = interviewId
             };
 
             return this.jsonUtils.GetItemAsContent(syncItem);

@@ -18,15 +18,15 @@ namespace WB.Core.Synchronization.SyncStorage
         }
 
 
-        public SyncItem ReadChunk(Guid id)
+        public SyncItem ReadChunk(string id)
         {
-            var item = queryableStorage.GetById(id);
+            SynchronizationDelta item = queryableStorage.GetById(id);
             if (item == null)
                 throw new ArgumentException("chunk is absent");
 
             return new SyncItem
                 {
-                    Id = item.PublicKey,
+                    RootId = item.RootId,
                     IsCompressed = item.IsCompressed,
                     ItemType = item.ItemType,
                     Content = item.Content,
@@ -34,7 +34,7 @@ namespace WB.Core.Synchronization.SyncStorage
                 };
         }
 
-        public IEnumerable<SynchronizationChunkMeta> GetChunkMetaDataCreatedAfter(Guid? lastSyncedPackageId, IEnumerable<Guid> users)
+        public IEnumerable<SynchronizationChunkMeta> GetChunkMetaDataCreatedAfter(string lastSyncedPackageId, IEnumerable<Guid> users)
         {
             var userIds = users.Concat(new[] { Guid.Empty });
 

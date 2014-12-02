@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.IncomePackagesRepositoryT
             syncItem = new SyncItem()
             {
                 Content = "some content",
-                Id = Guid.NewGuid(),
+                RootId = Guid.NewGuid(),
                 MetaInfo = new ZipArchiveUtils(Mock.Of<IFileSystemAccessor>()).CompressString("some string")
             };
 
