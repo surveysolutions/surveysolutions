@@ -38,6 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <Folder Include="Ncqrs\_WB\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregates\IAggregateRoot.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Implementation\InMemoryPlainStorageAccessor.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideRepositoryReaderWithSequence.cs" />
     <Compile Include="Implementation\ReadSide\ViewWithSequence.cs" />
+    <Compile Include="Implementation\Snapshots\Snapshooter.cs" />
     <Compile Include="Implementation\StorageStrategy\InMemoryViewWriter.cs" />
     <Compile Include="InfrastructureModule.cs" />
     <Compile Include="ITemporaryDataStorage.cs" />
@@ -164,7 +166,6 @@
     <Compile Include="Ncqrs\NcqrsEnvironment.cs" />
     <Compile Include="Ncqrs\NcqrsEnvironmentException.cs" />
     <Compile Include="Ncqrs\Utils.cs" />
-    <Compile Include="Ncqrs\_WB\SnapshotManager.cs" />
     <Compile Include="PlainStorage\IPlainStorageAccessor.cs" />
     <Compile Include="PlainStorage\IQueryablePlainStorageAccessor.cs" />
     <Compile Include="ReadSide\IReadSideRepositoryWriter.cs" />
@@ -184,7 +185,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryWriter.cs" />
     <Compile Include="Services\IWaitService.cs" />
-    <Compile Include="Snapshots\ISnapshotManager.cs" />
+    <Compile Include="Snapshots\ISnapshooter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">

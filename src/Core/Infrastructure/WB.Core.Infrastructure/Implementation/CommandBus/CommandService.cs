@@ -12,13 +12,13 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
     {
         private readonly IAggregateRootRepository repository;
         private readonly IEventBus eventBus;
-        private readonly ISnapshotManager snapshotManager;
+        private readonly ISnapshooter snapshooter;
 
-        public CommandService(IAggregateRootRepository repository, IEventBus eventBus, ISnapshotManager snapshotManager)
+        public CommandService(IAggregateRootRepository repository, IEventBus eventBus, ISnapshooter snapshooter)
         {
             this.repository = repository;
             this.eventBus = eventBus;
-            this.snapshotManager = snapshotManager;
+            this.snapshooter = snapshooter;
         }
 
         public void Execute(ICommand command, string origin)
@@ -50,7 +50,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
 
             this.eventBus.PublishUncommitedEventsFromAggregateRoot(aggregate, origin);
 
-            this.snapshotManager.CreateSnapshotIfNeededAndPossible(aggregate);
+            this.snapshooter.CreateSnapshotIfNeededAndPossible(aggregate);
         }
     }
 }

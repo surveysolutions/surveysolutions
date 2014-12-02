@@ -169,8 +169,6 @@ namespace CapiDataGenerator
 
 
             #endregion
-
-            this.Bind<ISnapshotManager>().To<SnapshotManager>();
         }
 
         private IEventStore GetHeadquartersEventStore()

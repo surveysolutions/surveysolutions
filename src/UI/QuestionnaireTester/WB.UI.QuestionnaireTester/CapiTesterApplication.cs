@@ -252,13 +252,10 @@ namespace WB.UI.QuestionnaireTester
 
             kernel.Bind<IDomainRepository>().To<DomainRepository>();
 
-            var bus = new InProcessEventBus(true);
+            var bus = new InProcessEventBus(true, Kernel.Get<IEventStore>());
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
             //kernel.Bind<IEventBus>().ToConstant(bus);
             this.kernel.Bind<IEventBus>().ToConstant(bus).Named("interviewViewBus");
-
-            kernel.Bind<IEventPublisher>().To<EventPublisher>();
-            kernel.Bind<ISnapshotManager>().To<SnapshotManager>();
 
             NcqrsEnvironment.SetDefault<IEventStore>(Kernel.Get<IEventStore>());
 

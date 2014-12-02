@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 
 namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
@@ -12,7 +13,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
     {
         protected static NcqrCompatibleEventDispatcher CreateNcqrCompatibleEventDispatcher()
         {
-            return new NcqrCompatibleEventDispatcher();
+            return new NcqrCompatibleEventDispatcher(Mock.Of<IEventStore>());
         }
 
         protected static IPublishableEvent CreatePublishableEvent(Guid eventSourceId)

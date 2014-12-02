@@ -1,4 +1,5 @@
 ﻿using Ncqrs.Domain;
+using WB.Core.Infrastructure.Aggregates;
 
 namespace Ncqrs.Eventing.Sourcing.Snapshotting
 {
@@ -19,7 +20,7 @@ namespace Ncqrs.Eventing.Sourcing.Snapshotting
             _snapshotIntervalInEvents = snapshotIntervalInEvents;
         }
 
-        public bool ShouldCreateSnapshot(AggregateRoot aggregateRoot)
+        public bool ShouldCreateSnapshot(IAggregateRoot aggregateRoot)
         {
             for (var i = aggregateRoot.InitialVersion + 1; i <= aggregateRoot.Version; i++)
             {
