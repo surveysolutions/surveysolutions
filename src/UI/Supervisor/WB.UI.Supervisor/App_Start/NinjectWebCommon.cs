@@ -200,14 +200,12 @@ namespace WB.UI.Supervisor.App_Start
 
             CreateAndRegisterEventBus(kernel);
 
-            kernel.Bind<IAggregateRootRepository>().To<AggregateRootRepository>();
-            kernel.Bind<IEventPublisher>().To<EventPublisher>();
             kernel.Bind<ISnapshotManager>().To<SnapshotManager>();
         }
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
-            var bus = new NcqrCompatibleEventDispatcher();
+            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>());
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
             kernel.Bind<IEventBus>().ToConstant(bus);
             kernel.Bind<IEventDispatcher>().ToConstant(bus);
