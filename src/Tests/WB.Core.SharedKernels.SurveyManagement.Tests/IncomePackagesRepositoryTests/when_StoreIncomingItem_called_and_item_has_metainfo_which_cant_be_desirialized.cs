@@ -27,11 +27,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.IncomePackagesRepositoryT
             incomePackagesRepository.StoreIncomingItem(syncItem);
 
         It should_write_text_file_to_error_folder = () =>
-          fileSystemAccessorMock.Verify(x => x.WriteAllText(GetPathToSynchItemInErrorFolder(syncItem.Id), contentOfSyncItem), Times.Once);
+          fileSystemAccessorMock.Verify(x => x.WriteAllText(GetPathToSynchItemInErrorFolder(syncItem.RootId), contentOfSyncItem), Times.Once);
 
         private static IncomePackagesRepository incomePackagesRepository;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
-        private static SyncItem syncItem = new SyncItem() { Content = "some content", Id = Guid.NewGuid() };
+        private static SyncItem syncItem = new SyncItem() { Content = "some content", RootId = Guid.NewGuid() };
         private static Mock<IJsonUtils> jsonMock;
         private static string contentOfSyncItem = "content of sync item";
     }

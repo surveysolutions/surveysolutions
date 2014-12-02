@@ -15,8 +15,8 @@ namespace WB.Core.Synchronization
         void SaveQuestionnaire(QuestionnaireDocument doc, long version, bool allowCensusMode, DateTime timestamp);
         void MarkInterviewForClientDeleting(Guid id, Guid? responsibleId, DateTime timestamp);
         void SaveUser(UserDocument doc, DateTime timestamp);
-        SyncItem GetLatestVersion(Guid id);
-        IEnumerable<SynchronizationChunkMeta> GetChunkPairsCreatedAfter(Guid? lastSyncedPackageId, Guid userId);
+        SyncItem GetLatestVersion(string id);
+        IEnumerable<SynchronizationChunkMeta> GetChunkPairsCreatedAfter(string lastSyncedPackageId, Guid userId);
         void DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, DateTime timestamp);
         void SaveTemplateAssembly(Guid publicKey, long version, string assemblyAsBase64String, DateTime timestamp);
         SynchronizationChunkMeta GetChunkInfoByTimestamp(DateTime timestamp);

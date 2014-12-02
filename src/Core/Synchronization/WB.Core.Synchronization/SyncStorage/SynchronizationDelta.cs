@@ -1,4 +1,5 @@
 ﻿using System;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.Synchronization.SyncStorage
@@ -19,7 +20,8 @@ namespace WB.Core.Synchronization.SyncStorage
             string metaInfo,
             int sortIndex)
         {
-            this.PublicKey = publicKey;
+            this.RootId = publicKey;
+            this.PublicKey = publicKey.FormatGuid() + "$" + sortIndex;
             this.Content = content;
             this.Timestamp = timestamp;
             this.UserId = userId ?? Guid.Empty;
@@ -28,8 +30,8 @@ namespace WB.Core.Synchronization.SyncStorage
             this.MetaInfo = metaInfo;
             this.SortIndex = sortIndex;
         }
-
-        public Guid PublicKey { get; private set; }
+        public Guid RootId { get; private set; }
+        public string PublicKey { get; private set; }
         public string Content { get; private set; }
         public DateTime Timestamp { get; private set; }
         public Guid UserId { get; private set; }

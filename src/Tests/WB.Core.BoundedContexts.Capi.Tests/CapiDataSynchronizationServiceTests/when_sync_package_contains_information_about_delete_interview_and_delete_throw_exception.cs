@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.CapiDataSynchronizationServiceTests
         {
             interviewId = Guid.NewGuid();
 
-            syncItem = new SyncItem() { ItemType = SyncItemType.DeleteQuestionnare, IsCompressed = false, Content = interviewId.ToString(), MetaInfo = "some metadata", Id = Guid.NewGuid() };
+            syncItem = new SyncItem() { ItemType = SyncItemType.DeleteQuestionnare, IsCompressed = false, Content = interviewId.ToString(), MetaInfo = "some metadata", RootId = Guid.NewGuid() };
 
             commandService = new Mock<ICommandService>();
 
@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.CapiDataSynchronizationServiceTests
         () =>
             changeLogManipulator.Verify(
                 x =>
-                    x.CreatePublicRecord(syncItem.Id),
+                    x.CreatePublicRecord(syncItem.RootId),
                 Times.Never);
 
         It should_throw_NullReferenceException = () =>

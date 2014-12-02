@@ -111,8 +111,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
         It should_set_sync_item_compression_flag_to_true = () =>
             syncItem.IsCompressed.ShouldBeTrue();
 
-        It should_set_sync_item_id_to_interview_id = () =>
-            syncItem.Id.ShouldEqual(interviewId);
+        It should_set_sync_item_id_to_interview_id_with_sort_index = () =>
+            syncItem.RootId.ShouldEqual(interviewId);
 
         It should_set_sync_item_type_to_questionnaire = () =>
             syncItem.ItemType.ShouldEqual("q");

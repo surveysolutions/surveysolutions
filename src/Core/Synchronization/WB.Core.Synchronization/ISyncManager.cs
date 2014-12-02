@@ -11,9 +11,9 @@ namespace WB.Core.Synchronization
 
         bool SendSyncItem(SyncItem package);
 
-        IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, Guid? lastSyncedPackageId);
+        IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, string lastSyncedPackageId);
 
-        SyncPackage ReceiveSyncPackage(Guid clientRegistrationId, Guid id);
-        Guid GetPackageIdByTimestamp(DateTime timestamp);
+        SyncPackage ReceiveSyncPackage(Guid clientRegistrationId, string id);
+        string GetPackageIdByTimestamp(DateTime timestamp);
     }
 }

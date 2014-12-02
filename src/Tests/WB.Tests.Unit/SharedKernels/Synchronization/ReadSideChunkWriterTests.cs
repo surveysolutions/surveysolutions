@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
             ReadSideChunkWriter target = CreateRavenChunkWriter(querableStorageMock, archiever);
 
             // act
-            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent, IsCompressed = false }, userId, DateTime.Now);
+            target.StoreChunk(new SyncItem() { RootId = chunkId, Content = someContent, IsCompressed = false }, userId, DateTime.Now);
 
             // assert
             var storedChunck = querableStorageMock.GetById(chunkId);
@@ -53,11 +53,11 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
             var archiever = Mock.Of<IArchiveUtils>();
             ReadSideChunkWriter target = CreateRavenChunkWriter(querableStorageMock, archiever);
 
-            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent1, IsCompressed = false }, userId, DateTime.Now);
+            target.StoreChunk(new SyncItem() { RootId = chunkId, Content = someContent1, IsCompressed = false }, userId, DateTime.Now);
 
             // act
 
-            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent2, IsCompressed = false }, userId, DateTime.Now);
+            target.StoreChunk(new SyncItem() { RootId = chunkId, Content = someContent2, IsCompressed = false }, userId, DateTime.Now);
 
             // assert
             var storedChunck = ((IQueryableReadSideRepositoryWriter<SynchronizationDelta>) querableStorageMock).GetById(chunkId);

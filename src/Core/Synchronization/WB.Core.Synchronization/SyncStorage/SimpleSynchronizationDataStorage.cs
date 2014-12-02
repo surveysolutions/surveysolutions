@@ -45,7 +45,7 @@ namespace WB.Core.Synchronization.SyncStorage
         {
             var syncItem = new SyncItem
                 {
-                    Id = doc.Id,
+                    RootId = doc.Id,
                     ItemType = SyncItemType.Questionnare,
                     IsCompressed = UseCompression,
                     Content = GetItemAsContent(doc),
@@ -58,7 +58,7 @@ namespace WB.Core.Synchronization.SyncStorage
         {
             var syncItem = new SyncItem
             {
-                Id = id,
+                RootId = id,
                 ItemType = SyncItemType.DeleteQuestionnare,
                 IsCompressed = UseCompression,
                 Content = id.ToString()
@@ -71,7 +71,7 @@ namespace WB.Core.Synchronization.SyncStorage
             doc.IsDeleted = false;
             var syncItem = new SyncItem
             {
-                Id = doc.PublicKey.Combine(version),
+                RootId = doc.PublicKey.Combine(version),
                 ItemType = SyncItemType.Template,
                 IsCompressed = UseCompression,
                 Content = GetItemAsContent(doc),
@@ -84,7 +84,7 @@ namespace WB.Core.Synchronization.SyncStorage
         {
             var syncItem = new SyncItem
             {
-                Id = questionnaireId.Combine(questionnaireVersion),
+                RootId = questionnaireId.Combine(questionnaireVersion),
                 ItemType = SyncItemType.DeleteTemplate,
                 IsCompressed = UseCompression,
                 Content = questionnaireId.ToString(),
@@ -101,13 +101,13 @@ namespace WB.Core.Synchronization.SyncStorage
             }
         }
        
-        public SyncItem GetLatestVersion(Guid id)
+        public SyncItem GetLatestVersion(string id)
         {
             var result = chunkStorageReader.ReadChunk(id);
             return result;
         }
 
-        public IEnumerable<SynchronizationChunkMeta> GetChunkPairsCreatedAfter(Guid? lastSyncedPackageId, Guid userId)
+        public IEnumerable<SynchronizationChunkMeta> GetChunkPairsCreatedAfter(string lastSyncedPackageId, Guid userId)
         {
             var users = GetUserTeamates(userId);
             return
@@ -134,7 +134,7 @@ namespace WB.Core.Synchronization.SyncStorage
         {
             var syncItem = new SyncItem
             {
-                Id = doc.PublicKey,
+                RootId = doc.PublicKey,
                 ItemType = SyncItemType.User,
                 IsCompressed = UseCompression,
                 Content = GetItemAsContent(doc)
@@ -150,7 +150,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
             var syncItem = new SyncItem
             {
-                Id = publicKey.Combine(AssemblySeed).Combine(version),
+                RootId = publicKey.Combine(AssemblySeed).Combine(version),
                 ItemType = SyncItemType.QuestionnaireAssembly,
                 IsCompressed = UseCompressionForFiles,
                 Content = assemblyAsBase64String,

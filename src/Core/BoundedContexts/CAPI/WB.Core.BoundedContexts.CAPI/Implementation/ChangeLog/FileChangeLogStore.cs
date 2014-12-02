@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.ChangeLog
                     MetaInfo = this.archiver.CompressString(
                         JsonUtils.GetJsonData(
                             metaData)),
-                    Id = eventSourceId
+                    RootId = eventSourceId
                 };
             fileSystemAccessor.WriteAllText(path, JsonUtils.GetJsonData(syncItem));
         }
