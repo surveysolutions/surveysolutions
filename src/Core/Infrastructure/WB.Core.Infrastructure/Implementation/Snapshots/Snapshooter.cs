@@ -1,19 +1,18 @@
-﻿using Ncqrs.Domain;
-using Ncqrs.Domain.Storage;
+﻿using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.Snapshots;
 
-namespace WB.Core.Infrastructure.Snapshots
+namespace WB.Core.Infrastructure.Implementation.Snapshots
 {
-    // TODO: TLK, KP-4337: refactor this somehow when snapshots will be made portable
-    public class SnapshotManager : ISnapshotManager
+    internal class Snapshooter : ISnapshooter
     {
         private readonly ISnapshottingPolicy snapshottingPolicy;
         private readonly IDomainRepository repository;
         private readonly ISnapshotStore snapshotStore;
 
-        public SnapshotManager(ISnapshottingPolicy snapshottingPolicy, IDomainRepository repository, ISnapshotStore snapshotStore)
+        public Snapshooter(ISnapshottingPolicy snapshottingPolicy, IDomainRepository repository, ISnapshotStore snapshotStore)
         {
             this.snapshottingPolicy = snapshottingPolicy;
             this.repository = repository;
@@ -22,12 +21,10 @@ namespace WB.Core.Infrastructure.Snapshots
 
         public void CreateSnapshotIfNeededAndPossible(IAggregateRoot aggregateRoot)
         {
-            var aggregate = (AggregateRoot)aggregateRoot; // TODO: TLK, KP-4337: this cast should be removed when snapshots will be made portable
-
-            if (!this.snapshottingPolicy.ShouldCreateSnapshot(aggregate))
+            if (!this.snapshottingPolicy.ShouldCreateSnapshot(aggregateRoot))
                 return;
 
-            var snapshot = this.repository.TryTakeSnapshot(aggregate);
+            var snapshot = this.repository.TryTakeSnapshot(aggregateRoot);
 
             if (snapshot == null)
                 return;

@@ -2,8 +2,7 @@
 
 namespace WB.Core.Infrastructure.Snapshots
 {
-    // TODO: TLK, KP-4337: refactor this somehow when snapshots will be made portable
-    public interface ISnapshotManager
+    public interface ISnapshooter
     {
         void CreateSnapshotIfNeededAndPossible(IAggregateRoot aggregateRoot);
     }

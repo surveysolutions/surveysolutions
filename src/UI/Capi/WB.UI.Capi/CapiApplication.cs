@@ -302,12 +302,9 @@ namespace WB.UI.Capi
 
             kernel.Bind<IDomainRepository>().To<DomainRepository>();
 
-            var bus = new InProcessEventBus(true);
+            var bus = new InProcessEventBus(true, NcqrsEnvironment.Get<IEventStore>());
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
             kernel.Bind<IEventBus>().ToConstant(bus).Named("interviewViewBus");
-
-            kernel.Bind<IEventPublisher>().To<EventPublisher>();
-            kernel.Bind<ISnapshotManager>().To<SnapshotManager>();
 
             NcqrsEnvironment.SetDefault(Kernel.Get<ISnapshotStore>());
             NcqrsEnvironment.SetDefault(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);

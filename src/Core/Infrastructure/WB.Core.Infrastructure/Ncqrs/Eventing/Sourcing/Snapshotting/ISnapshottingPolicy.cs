@@ -1,4 +1,5 @@
 ﻿using Ncqrs.Domain;
+using WB.Core.Infrastructure.Aggregates;
 
 namespace Ncqrs.Eventing.Sourcing.Snapshotting
 {
@@ -12,6 +13,6 @@ namespace Ncqrs.Eventing.Sourcing.Snapshotting
         /// </summary>
         /// <param name="aggregateRoot">Aggregate root.</param>
         /// <returns></returns>
-        bool ShouldCreateSnapshot(AggregateRoot aggregateRoot);
+        bool ShouldCreateSnapshot(IAggregateRoot aggregateRoot);
     }
 }
