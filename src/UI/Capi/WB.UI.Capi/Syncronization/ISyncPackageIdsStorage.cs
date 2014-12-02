@@ -4,7 +4,7 @@ namespace WB.UI.Capi.Syncronization
 {
     public interface ISyncPackageIdsStorage
     {
-        void Append(Guid lastReceivedChunkId);
+        void Append(string lastReceivedChunkId);
         Guid? GetLastStoredChunkId();
         Guid? GetChunkBeforeChunkWithId(Guid? before);
     }

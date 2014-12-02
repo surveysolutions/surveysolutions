@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Linq.Expressions;
+using System.Threading;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -13,7 +13,8 @@ namespace WB.Core.Synchronization.SyncStorage
         private readonly IQueryableReadSideRepositoryWriter<SynchronizationDelta> storage;
         private readonly IArchiveUtils archiver;
         private bool cacheEnabled = false;
-        private int currentSortIndex = 0;
+        private static int currentSortIndex = 0;
+
         public ReadSideChunkWriter(IQueryableReadSideRepositoryWriter<SynchronizationDelta> storage, IArchiveUtils archiver)
         {
             this.storage = storage;
@@ -29,7 +30,7 @@ namespace WB.Core.Synchronization.SyncStorage
             if (cacheEnabled)
             {
                 sortIndex = currentSortIndex;
-                currentSortIndex++;
+                Interlocked.Increment(ref currentSortIndex);
             }
             else
             {
@@ -38,9 +39,9 @@ namespace WB.Core.Synchronization.SyncStorage
                     sortIndex = query.First() + 1;
             }
 
-            var synchronizationDelta = new SynchronizationDelta(syncItem.Id, content, timestamp, userId, syncItem.IsCompressed, syncItem.ItemType, metaInfo, sortIndex);
+            var synchronizationDelta = new SynchronizationDelta(syncItem.RootId, content, timestamp, userId, syncItem.IsCompressed, syncItem.ItemType, metaInfo, sortIndex);
 
-            storage.Store(synchronizationDelta, syncItem.Id);
+            storage.Store(synchronizationDelta, synchronizationDelta.PublicKey);
         }
 
         public void Clear()
@@ -67,6 +68,7 @@ namespace WB.Core.Synchronization.SyncStorage
                 readSideRepositoryWriter.DisableCache();
 
             cacheEnabled = false;
+            currentSortIndex = 0;
         }
 
         public string GetReadableStatus()

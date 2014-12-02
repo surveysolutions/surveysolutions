@@ -10,6 +10,7 @@ using System.Web.Hosting;
 using System.Web.Http;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
@@ -125,7 +126,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpGet]
         [ApiBasicAuth]
-        public HttpResponseMessage GetSyncPackage(Guid aRKey, string clientRegistrationId)
+        public HttpResponseMessage GetSyncPackage(string packageId, string clientRegistrationId)
         {
             Guid clientRegistrationKey;
             if (!Guid.TryParse(clientRegistrationId, out clientRegistrationKey))
@@ -135,7 +136,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             
             try
             {
-                SyncPackage package = syncManager.ReceiveSyncPackage(clientRegistrationKey, aRKey);
+                SyncPackage package = syncManager.ReceiveSyncPackage(clientRegistrationKey, packageId);
 
                 if (package == null)
                     return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable,
@@ -166,25 +167,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, InterviewerSyncControllerMessages.InvalidDeviceIdentifier);
             }
 
-            Guid? clientSequence;
-            if (!string.IsNullOrWhiteSpace(lastSyncedPackageId))
-            {
-                Guid blah;
-                if (!Guid.TryParse(lastSyncedPackageId, out blah))
-                {
-                    return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, InterviewerSyncControllerMessages.InvalidSequenceIdentifier);
-                }
-                clientSequence = blah;
-            }
-            else
-            {
-                clientSequence = null;
-            }
-
             try
             {
-                IEnumerable<SynchronizationChunkMeta> package = syncManager.GetAllARIdsWithOrder(user.PublicKey, clientRegistrationKey,
-                    clientSequence);
+                IEnumerable<SynchronizationChunkMeta> package = syncManager.GetAllARIdsWithOrder(user.PublicKey, 
+                    clientRegistrationKey, 
+                    lastSyncedPackageId.NullIfEmptyOrWhiteSpace());
 
                 var result = new SyncItemsMetaContainer
                 {

@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.CapiDataSynchronizationServiceTests
 
             questionnaireMetadata = new QuestionnaireMetadata(Guid.NewGuid(), 1, false);
 
-            syncItem = new SyncItem() { ItemType = SyncItemType.DeleteTemplate, IsCompressed = true, Content = "some content", MetaInfo = "some metadata", Id = Guid.NewGuid() };
+            syncItem = new SyncItem() { ItemType = SyncItemType.DeleteTemplate, IsCompressed = true, Content = "some content", MetaInfo = "some metadata", RootId = Guid.NewGuid() };
 
             var jsonUtilsMock = new Mock<IJsonUtils>();
             jsonUtilsMock.Setup(x => x.Deserrialize<QuestionnaireMetadata>(syncItem.MetaInfo)).Returns(questionnaireMetadata);
@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.CapiDataSynchronizationServiceTests
         () =>
             changeLogManipulator.Verify(
                 x =>
-                    x.CreatePublicRecord(syncItem.Id),
+                    x.CreatePublicRecord(syncItem.RootId),
                 Times.Once);
 
         private static CapiDataSynchronizationService capiDataSynchronizationService;

@@ -29,13 +29,15 @@ namespace WB.UI.Capi.Syncronization.Implementation
             }
         }
 
-        public void Append(Guid lastReceivedChunkId)
+        public void Append(string lastReceivedChunkId)
         {
             using (var connection = connectionFactory.Create(FullPathToDataBase))
             {
-                var newId = new SyncPackageId();
-                newId.Id = lastReceivedChunkId.FormatGuid();
-                newId.SortIndex = connection.Table<SyncPackageId>().Count();
+                var newId = new SyncPackageId
+                {
+                    Id = lastReceivedChunkId, 
+                    SortIndex = connection.Table<SyncPackageId>().Count()
+                };
 
                 connection.Insert(newId);
             }

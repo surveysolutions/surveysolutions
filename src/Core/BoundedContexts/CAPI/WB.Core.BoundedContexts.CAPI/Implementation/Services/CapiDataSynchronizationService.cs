@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
                 default: break;
             }
 
-            this.changelog.CreatePublicRecord(item.Id);
+            this.changelog.CreatePublicRecord(item.RootId);
         }
 
         public IList<ChangeLogRecordWithContent> GetItemsForPush()

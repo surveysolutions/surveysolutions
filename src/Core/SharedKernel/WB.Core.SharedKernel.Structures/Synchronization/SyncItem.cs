@@ -4,7 +4,7 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
 {
     public class SyncItem
     {
-        public Guid Id;
+        public Guid RootId;
 
         public string Content;
         public string ItemType;
@@ -13,10 +13,5 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
         public long ChangeTracker = 0;
 
         public string MetaInfo;
-
-        public SyncItem()
-        {
-        }
-        
     }
 }

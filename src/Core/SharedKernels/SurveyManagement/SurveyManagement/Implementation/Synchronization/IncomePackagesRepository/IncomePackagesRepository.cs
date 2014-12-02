@@ -115,7 +115,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             catch (Exception ex)
             {
                 this.logger.Error("error on handling incoming package,", ex);
-                this.fileSystemAccessor.WriteAllText(this.GetItemFileNameForErrorStorage(item.Id),this.jsonUtils.GetItemAsContent(item));
+                this.fileSystemAccessor.WriteAllText(this.GetItemFileNameForErrorStorage(item.RootId),this.jsonUtils.GetItemAsContent(item));
             }
         }
 

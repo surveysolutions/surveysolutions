@@ -4,11 +4,11 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
 {
     public class SynchronizationChunkMeta
     {
-        public SynchronizationChunkMeta(Guid id)
+        public SynchronizationChunkMeta(string id)
         {
             Id = id;
         }
 
-        public Guid Id { get; private set; }
+        public string Id { get; private set; }
     }
 }

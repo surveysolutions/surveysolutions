@@ -11,20 +11,20 @@ namespace WB.UI.Capi.Syncronization.Pull
     {
         private readonly IRestServiceWrapper webExecutor;
 
-        private const string getChunckPath = "api/InterviewerSync/GetSyncPackage";
-        private const string getARKeysPath = "api/InterviewerSync/GetARKeys";
+        private const string GetChunckPath = "api/InterviewerSync/GetSyncPackage";
+        private const string GetARKeysPath = "api/InterviewerSync/GetARKeys";
 
         public RestPull(IRestServiceWrapper webExecutor)
         {
             this.webExecutor = webExecutor;
         }
 
-        public async Task<SyncItem> RequestChunckAsync(string login, string password, Guid id, string deviceId,
+        public async Task<SyncItem> RequestChunckAsync(string login, string password, string id, string deviceId,
             CancellationToken ct)
         {
-            var package = await webExecutor.ExecuteRestRequestAsync<SyncPackage>(getChunckPath, ct, null,
+            var package = await webExecutor.ExecuteRestRequestAsync<SyncPackage>(GetChunckPath, ct, null,
                 login, password, "GET",
-                new KeyValuePair<string, object>("aRKey", id),
+                new KeyValuePair<string, object>("packageId", id),
                 new KeyValuePair<string, object>("clientRegistrationId", deviceId));
 
             if (package.ItemsContainer == null || package.ItemsContainer.Count == 0)
@@ -37,7 +37,7 @@ namespace WB.UI.Capi.Syncronization.Pull
             Guid? lastReceivedPackageId, CancellationToken ct)
         {
             var syncItemsMetaContainer = await webExecutor.ExecuteRestRequestAsync<SyncItemsMetaContainer>(
-                getARKeysPath, ct, null, login, password, "GET",
+                GetARKeysPath, ct, null, login, password, "GET",
                 new KeyValuePair<string, object>("clientRegistrationId", deviceId),
                 new KeyValuePair<string, object>("lastSyncedPackageId",
                     lastReceivedPackageId.HasValue ? (object) lastReceivedPackageId.Value : "")
@@ -49,9 +49,9 @@ namespace WB.UI.Capi.Syncronization.Pull
             return syncItemsMetaContainer.ChunksMeta;
         }
 
-        public async Task<Guid> GetChunkIdByTimestamp(long timestamp, string login, string password, CancellationToken ct)
+        public async Task<string> GetChunkIdByTimestamp(long timestamp, string login, string password, CancellationToken ct)
         {
-            var result = await webExecutor.ExecuteRestRequestAsync<Guid>(
+            var result = await webExecutor.ExecuteRestRequestAsync<string>(
                 "api/InterviewerSync/GetPacakgeIdByTimeStamp",
                 ct,
                 null,

@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.CapiDataSynchronizationServiceTests
 
             syncItem = new SyncItem
             {
-                Id = questionnaireId.Combine(version),
+                RootId = questionnaireId.Combine(version),
                 ItemType = SyncItemType.QuestionnaireAssembly,
                 IsCompressed = false,
                 Content = "some_content",

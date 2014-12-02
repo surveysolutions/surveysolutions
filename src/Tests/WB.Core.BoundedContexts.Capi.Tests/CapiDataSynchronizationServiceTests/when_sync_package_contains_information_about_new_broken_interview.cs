@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.CapiDataSynchronizationServiceTests
                 FeaturedQuestionsMeta = new FeaturedQuestionMeta[] { new FeaturedQuestionMeta(Guid.NewGuid(), "t1", "v1"), new FeaturedQuestionMeta(Guid.NewGuid(), "t2", "v2") }
             };
 
-            syncItem = new SyncItem() { ItemType = SyncItemType.Questionnare, IsCompressed = true, Content = "some content", MetaInfo = "some metadata", Id = Guid.NewGuid() };
+            syncItem = new SyncItem() { ItemType = SyncItemType.Questionnare, IsCompressed = true, Content = "some content", MetaInfo = "some metadata", RootId = Guid.NewGuid() };
 
             var jsonUtilsMock = new Mock<IJsonUtils>();
             jsonUtilsMock.Setup(x => x.Deserrialize<SharedKernel.Structures.Synchronization.InterviewMetaInfo>(syncItem.MetaInfo)).Returns(questionnaireMetadata);
@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.CapiDataSynchronizationServiceTests
         () =>
             changeLogManipulator.Verify(
                 x =>
-                    x.CreatePublicRecord(syncItem.Id),
+                    x.CreatePublicRecord(syncItem.RootId),
                 Times.Never);
 
         It should_throw_NullReferenceException = () =>
