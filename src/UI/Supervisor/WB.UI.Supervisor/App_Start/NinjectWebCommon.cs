@@ -199,8 +199,6 @@ namespace WB.UI.Supervisor.App_Start
             kernel.Bind<IDomainRepository>().To<DomainRepository>();
 
             CreateAndRegisterEventBus(kernel);
-
-            kernel.Bind<ISnapshotManager>().To<SnapshotManager>();
         }
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)

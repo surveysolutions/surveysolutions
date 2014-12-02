@@ -1,6 +1,7 @@
 ﻿using System;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
+using WB.Core.Infrastructure.Aggregates;
 
 namespace Ncqrs.Domain.Storage
 {
@@ -23,6 +24,6 @@ namespace Ncqrs.Domain.Storage
         /// </summary>
         /// <param name="aggregateRoot">Aggregate root instance.</param>
         /// <returns>Snapshot instance if aggregate root supports snapthotting. Otherwise null.</returns>
-        Snapshot TryTakeSnapshot(AggregateRoot aggregateRoot);
+        Snapshot TryTakeSnapshot(IAggregateRoot aggregateRoot);
     }
 }

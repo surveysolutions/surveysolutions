@@ -18,11 +18,10 @@ namespace Ncqrs.Eventing.Sourcing
         /// <summary>
         /// Gets the current version of the instance as it is known in the event store.
         /// </summary>
-        /// <value>An <see cref="long"/> representing the current version of this aggregate root.</value>
-        long Version
-        { 
-            get;
-        }
+        /// <value>
+        /// An <see cref="long"/> representing the current version of this aggregate root.
+        /// </value>
+        long Version { get; }
 
         /// <summary>
         /// Gets the initial version.
@@ -30,15 +29,12 @@ namespace Ncqrs.Eventing.Sourcing
         /// This represents the current version of this instance. When this instance was retrieved
         /// via history, it contains the version as it was at that time. For new instances this value is always 0.
         /// </para>
-        /// <para>
-        /// The version does not change until changes are accepted via the <see cref="IEventSource.AcceptChanges"/> method.
+        /// 	<para>
+        /// The version does not change until changes are accepted via the <see cref="AcceptChanges"/> method.
         /// </para>
         /// </summary>
         /// <value>The initial version.</value>
-        long InitialVersion
-        {
-            get;
-        }
+        long InitialVersion { get; }
 
         /// <summary>
         /// Initializes from history.

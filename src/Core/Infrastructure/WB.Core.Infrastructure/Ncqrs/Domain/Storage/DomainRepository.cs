@@ -4,6 +4,7 @@ using System.Reflection;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.Aggregates;
 
 namespace Ncqrs.Domain.Storage
 {
@@ -29,7 +30,7 @@ namespace Ncqrs.Domain.Storage
             return aggregate;
         }
 
-        public Snapshot TryTakeSnapshot(AggregateRoot aggregateRoot)
+        public Snapshot TryTakeSnapshot(IAggregateRoot aggregateRoot)
         {
             Snapshot snapshot = null;
             _aggregateSnapshotter.TryTakeSnapshot(aggregateRoot, out snapshot);
