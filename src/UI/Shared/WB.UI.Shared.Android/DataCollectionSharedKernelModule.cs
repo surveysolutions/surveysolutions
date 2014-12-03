@@ -80,7 +80,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .Handles<DeleteQuestionnaire>                   (aggregate => aggregate.DeleteQuestionnaire);
 
             CommandRegistry
-                .Setup<UserAR>()
+                .Setup<User>()
                 .InitializesWith<CreateUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.CreateUser(command.Email, command.IsLockedBySupervisor, command.IsLockedByHQ, command.Password, command.PublicKey, command.Roles, command.Supervisor, command.UserName))
                 .Handles<ChangeUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.ChangeUser(command.Email, command.IsLockedBySupervisor, command.IsLockedByHQ, command.Roles, command.PasswordHash, command.UserId))
                 .Handles<LockUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.Lock())

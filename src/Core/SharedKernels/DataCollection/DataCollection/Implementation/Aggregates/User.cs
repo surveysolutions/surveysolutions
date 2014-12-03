@@ -2,21 +2,20 @@
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.User;
 using Ncqrs.Domain;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.SharedKernels.DataCollection.Events.User;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 
-
-namespace WB.Core.SharedKernels.DataCollection.Aggregates
+namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public class UserAR : AggregateRootMappedByConvention
+    public class User : AggregateRootMappedByConvention, ISnapshotable<UserState>
     {
         private bool isUserLockedBySupervisor;
-
         private bool isUserLockedByHQ;
-        
-        public UserAR(){}
 
-        public UserAR(Guid publicKey, string userName, string password, string email, UserRoles[] roles, bool isLockedbySupervisor, 
+        public User(){}
+
+        public User(Guid publicKey, string userName, string password, string email, UserRoles[] roles, bool isLockedbySupervisor, 
             bool isLockedbyHQ, UserLight supervisor) : base(publicKey)
         {
             this.CreateUser(email, isLockedbySupervisor, isLockedbyHQ, password, publicKey, roles, supervisor, userName);
@@ -43,20 +42,20 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         {
             this.ApplyEvent(new UserChanged { Email = email, Roles = roles, PasswordHash = passwordHash});
 
-            if (isLockedBySupervisor.HasValue && isLockedBySupervisor.Value && !isUserLockedBySupervisor)
+            if (isLockedBySupervisor.HasValue && isLockedBySupervisor.Value && !this.isUserLockedBySupervisor)
             {
                 this.ApplyEvent(new UserLockedBySupervisor());
             }
-            else if (isLockedBySupervisor.HasValue && !isLockedBySupervisor.Value && isUserLockedBySupervisor)
+            else if (isLockedBySupervisor.HasValue && !isLockedBySupervisor.Value && this.isUserLockedBySupervisor)
             {
                 this.ApplyEvent(new UserUnlockedBySupervisor());
             }
 
-            if (isLockedByHQ && !isUserLockedByHQ)
+            if (isLockedByHQ && !this.isUserLockedByHQ)
             {
                 this.ApplyEvent(new UserLocked());
             }
-            else if (!isLockedByHQ && isUserLockedByHQ)
+            else if (!isLockedByHQ && this.isUserLockedByHQ)
             {
                 this.ApplyEvent(new UserUnlocked());
             }
@@ -110,6 +109,21 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         protected void OnUserChange(UserChanged e)
         {
+        }
+
+        public UserState CreateSnapshot()
+        {
+            return new UserState
+            {
+                IsUserLockedByHQ = this.isUserLockedByHQ,
+                IsUserLockedBySupervisor = this.isUserLockedBySupervisor
+            };
+        }
+
+        public void RestoreFromSnapshot(UserState snapshot)
+        {
+            this.isUserLockedByHQ = snapshot.IsUserLockedByHQ;
+            this.isUserLockedBySupervisor = snapshot.IsUserLockedBySupervisor;
         }
     }
 }

@@ -43,7 +43,7 @@ namespace WB.UI.Capi.Syncronization.Implementation
             }
         }
 
-        public Guid? GetLastStoredChunkId()
+        public string GetLastStoredChunkId()
         {
             using (var connection = connectionFactory.Create(FullPathToDataBase))
             {
@@ -53,18 +53,18 @@ namespace WB.UI.Capi.Syncronization.Implementation
                     return null;
                 }
 
-                return Guid.Parse(lastStoredChunkId.Id);
+                return lastStoredChunkId.Id;
             }
         }
 
-        public Guid? GetChunkBeforeChunkWithId(Guid? before)
+        public string GetChunkBeforeChunkWithId(string before)
         {
-            if (!before.HasValue)
+            if (string.IsNullOrWhiteSpace(before))
             {
                 return null;
             }
 
-            var stringId = before.FormatGuid();
+            var stringId = before;
             using (var connection = connectionFactory.Create(FullPathToDataBase))
             { 
                 SyncPackageId requestedSortIndex = connection.Table<SyncPackageId>().SingleOrDefault(x => x.Id == stringId);
@@ -80,7 +80,7 @@ namespace WB.UI.Capi.Syncronization.Implementation
                     return null;
                 }
 
-                return Guid.Parse(chunkBeforeChunkWithId.Id);
+                return chunkBeforeChunkWithId.Id;
             }
         }
     }
