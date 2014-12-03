@@ -4,14 +4,14 @@ using System.Globalization;
 using System.Threading;
 using Android.App;
 using Android.Content;
+using Android.Graphics;
 using Android.OS;
+using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Android.Content.PM;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
-using Java.Util.Logging;
 using Microsoft.Practices.ServiceLocation;
-using Ncqrs;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.GenericSubdomains.Logging;
@@ -58,6 +58,7 @@ namespace WB.UI.Capi
                     new DashboardInput(CapiApplication.Membership.CurrentUser.Id));
 
             this.llSurveyHolder = this.FindViewById<LinearLayout>(Resource.Id.llSurveyHolder);
+
             this.RunOnUiThread(() =>
                 {
                     this.llSurveyHolder.RemoveAllViews();
@@ -67,7 +68,29 @@ namespace WB.UI.Capi
                         this.AddSurveyItem(dashboardSurveyItem);
                     }
 
+                    if (this.currentDashboard.Surveys.Count == 0)
+                    {
+                        var noAssignmentsMessage = this.CreateNoAssignmentsMessageTextView(this.Resources.GetText(Resource.String.NoAssignments));
+                        this.llSurveyHolder.AddView(noAssignmentsMessage);
+                    }
                 });
+        }
+
+        private TextView CreateNoAssignmentsMessageTextView(string messge)
+        {
+            var layoutParameters = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent);
+            layoutParameters.SetMargins(15, 10, 15, 10);
+
+            var noAssignmentsMessage = new TextView(this)
+            {
+                Text = messge
+            };
+            noAssignmentsMessage.SetBackgroundDrawable(this.Resources.GetDrawable(Resource.Drawable.errorwarningstyle));
+            noAssignmentsMessage.SetPadding(10, 10, 10, 10);
+            noAssignmentsMessage.LayoutParameters = layoutParameters;
+            noAssignmentsMessage.SetTextColor(Color.Black);
+            noAssignmentsMessage.SetTextSize(ComplexUnitType.Dip, 20);
+            return noAssignmentsMessage;
         }
 
         private void AddSurveyItem(DashboardSurveyItem dashboardSurveyItem)
