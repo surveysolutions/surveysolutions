@@ -366,6 +366,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 currentState.Document.WasCompleted = true;
             }
 
+            if (!currentState.Document.WasCompleted && evnt.Payload.Status == InterviewStatus.RejectedBySupervisor)
+            {
+                currentState.Document.WasRejected = true;
+            }
+
             currentState.Sequence = evnt.EventSequence;
 
             var newStatus = evnt.Payload.Status;
@@ -374,7 +379,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             {
                 this.ResendInterviewInNewStatus(currentState.Document, newStatus, evnt.Payload.Comment, evnt.EventTimeStamp);
             }
-            else if (this.IsInterviewWithStatusNeedToBeDeletedOnCapi(newStatus))
+            else if (this.IsInterviewWithStatusNeedToBeDeletedOnCapi(newStatus, currentState.Document.CreatedOnClient, currentState.Document.WasRejected))
             {
                 this.syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, null, evnt.EventTimeStamp);
             }
@@ -387,9 +392,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return newStatus == InterviewStatus.RejectedBySupervisor;
         }
 
-        private bool IsInterviewWithStatusNeedToBeDeletedOnCapi(InterviewStatus newStatus)
+        private bool IsInterviewWithStatusNeedToBeDeletedOnCapi(InterviewStatus newStatus, bool wasCreatedOnClient, bool wasRejected)
         {
-            return newStatus == InterviewStatus.Completed || newStatus == InterviewStatus.Deleted;
+            return (newStatus == InterviewStatus.Completed || newStatus == InterviewStatus.Deleted) && (!wasCreatedOnClient || wasRejected);
         }
 
         public void ResendInterviewInNewStatus(InterviewData interview, InterviewStatus newStatus, string comments, DateTime timestamp)
@@ -420,7 +425,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             currentState.Document.ResponsibleRole = UserRoles.Operator;
             currentState.Sequence = evnt.EventSequence;
 
-            if (currentState.Document.Status != InterviewStatus.RejectedByHeadquarters)
+            if (currentState.Document.Status != InterviewStatus.RejectedByHeadquarters && !currentState.Document.CreatedOnClient)
             {
                 this.ResendInterviewForPerson(currentState.Document, evnt.Payload.InterviewerId, evnt.EventTimeStamp);
             }

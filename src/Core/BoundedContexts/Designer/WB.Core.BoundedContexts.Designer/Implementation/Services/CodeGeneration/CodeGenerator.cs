@@ -330,7 +330,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         {
                             Id = childAsIQuestion.PublicKey,
                             VariableName = varName,
-                            Conditions = childAsIQuestion.ConditionExpression,
+                            Conditions = childAsIQuestion.CascadeFromQuestionId.HasValue
+                                ? GetConditionForCascadingQuestion(questionnaireDoc, childAsIQuestion.PublicKey)
+                                : childAsIQuestion.ConditionExpression,
                             Validations = childAsIQuestion.ValidationExpression,
                             QuestionType = childAsIQuestion.QuestionType,
                             GeneratedTypeName = GenerateQuestionTypeName(childAsIQuestion),
@@ -346,7 +348,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                         currentScope.Questions.Add(question);
 
-                        allQuestions.Add(question);
+                        if (allQuestions.All(x => x.VariableName != question.VariableName))
+                        {
+                            allQuestions.Add(question);
+                        }
 
                         continue;
                     }
@@ -383,7 +388,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             };
 
                             rostersToProcess.Enqueue(new Tuple<IGroup, RosterScopeBaseModel>(childAsIGroup, roster));
-                            allRosters.Add(roster);
+
+                            if (allRosters.All(x => x.VariableName != roster.VariableName))
+                            {
+                                allRosters.Add(roster);
+                            }
+
                             currentScope.Rosters.Add(roster);
                         }
                         else
@@ -411,6 +421,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     }
                 }
             }
+        }
+
+        private string GetConditionForCascadingQuestion(QuestionnaireDocument questionnaireDocument, Guid cascadingQuestionId)
+        {
+            var childQuestion = questionnaireDocument.Find<SingleQuestion>(cascadingQuestionId);
+            var parentQuestion = questionnaireDocument.Find<SingleQuestion>(childQuestion.CascadeFromQuestionId.Value);
+
+            string childQuestionCondition = (string.IsNullOrWhiteSpace(childQuestion.ConditionExpression)
+                ? ""
+                : string.Format(" && {0}", childQuestion.ConditionExpression));
+
+            return string.Format("!IsAnswerEmpty({0})", parentQuestion.StataExportCaption) + childQuestionCondition;
         }
 
         private string GenerateQuestionTypeName(IQuestion question)
@@ -456,7 +478,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             Dictionary<string, Guid> variableNames)
         {
             var groupsWithConditions = questionnaireDocument.GetAllGroups().Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression));
-            var questionsWithCondition = questionnaireDocument.GetEntitiesByType<IQuestion>().Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression));
+            var questionsWithCondition = questionnaireDocument
+                .GetEntitiesByType<IQuestion>()
+                .Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression));
 
             Dictionary<Guid, List<Guid>> dependencies = groupsWithConditions.ToDictionary(
                 x => x.PublicKey,
@@ -467,6 +491,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 x => GetIdsOfQuestionsInvolvedInExpression(x.ConditionExpression, variableNames))
                 .ToList()
                 .ForEach(x => dependencies.Add(x.Key, x.Value));
+
+            var cascadingQuestions = questionnaireDocument
+                .GetEntitiesByType<SingleQuestion>()
+                .Where(x => x.CascadeFromQuestionId.HasValue);
+
+            foreach (var cascadingQuestion in cascadingQuestions)
+            {
+                if (dependencies.ContainsKey(cascadingQuestion.PublicKey))
+                {
+                    dependencies[cascadingQuestion.PublicKey].Add(cascadingQuestion.CascadeFromQuestionId.Value);
+                }
+                else
+                {
+                    dependencies.Add(cascadingQuestion.PublicKey, new List<Guid>{ cascadingQuestion.CascadeFromQuestionId.Value});
+                }
+            }
 
             return dependencies;
         }
