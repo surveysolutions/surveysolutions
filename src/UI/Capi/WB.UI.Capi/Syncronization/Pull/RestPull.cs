@@ -34,13 +34,13 @@ namespace WB.UI.Capi.Syncronization.Pull
         }
 
         public async Task<List<SynchronizationChunkMeta>> GetChuncksAsync(string login, string password, string deviceId,
-            Guid? lastReceivedPackageId, CancellationToken ct)
+            string lastReceivedPackageId, CancellationToken ct)
         {
             var syncItemsMetaContainer = await webExecutor.ExecuteRestRequestAsync<SyncItemsMetaContainer>(
                 GetARKeysPath, ct, null, login, password, "GET",
                 new KeyValuePair<string, object>("clientRegistrationId", deviceId),
                 new KeyValuePair<string, object>("lastSyncedPackageId",
-                    lastReceivedPackageId.HasValue ? (object) lastReceivedPackageId.Value : "")
+                    lastReceivedPackageId ?? "")
                 );
 
             if (syncItemsMetaContainer.ChunksMeta == null)

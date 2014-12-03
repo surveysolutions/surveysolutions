@@ -9,8 +9,8 @@ using Ncqrs;
 using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.User;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests
 {
@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
         public void Lock_When_called_Then_raised_UserLocked_event()
         {
             // arrange
-            UserAR user = CreateUserAR();
+            User user = CreateUserAR();
 
             // act
             user.Lock();
@@ -55,7 +55,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
         public void Lock_When_called_Then_raised_UserLockedBySupervisor_event()
         {
             // arrange
-            UserAR user = CreateUserAR();
+            User user = CreateUserAR();
 
             // act
             user.LockBySupervisor();
@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
         public void Unlock_When_called_Then_raised_UserUnlocked_event()
         {
             // arrange
-            UserAR user = CreateUserAR();
+            User user = CreateUserAR();
 
             // act
             user.Unlock();
@@ -82,7 +82,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
         public void Unlock_When_called_Then_raised_UserUnlockedBySupervisor_event()
         {
             // arrange
-            UserAR user = CreateUserAR();
+            User user = CreateUserAR();
 
             // act
             user.UnlockBySupervisor();
@@ -96,7 +96,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
         public void ChangeUser_When_is_locked_set_to_true_Then_raised_UserLockedBySupervisor_event()
         {
             // arrange
-            UserAR user = CreateUserAR();
+            User user = CreateUserAR();
             bool isLockedBySupervisor = true;
             bool isLockedByHQ = false;
 
@@ -111,7 +111,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
         public void ChangeUser_When_is_locked_by_hq_set_to_true_Then_raised_UserLocked_event()
         {
             // arrange
-            UserAR user = CreateUserAR();
+            User user = CreateUserAR();
             bool isLockedBySupervisor = false;
             bool isLockedByHQ = true;
 
@@ -126,7 +126,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
         public void ChangeUser_When_email_is_specified_Then_raised_UserChanged_event_with_specified_email()
         {
             // arrange
-            UserAR user = CreateUserAR();
+            User user = CreateUserAR();
             string specifiedEmail = "user@example.com";
 
             // act
@@ -140,7 +140,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
         public void ChangeUser_When_two_roles_are_specified_Then_raised_UserChanged_event_with_specified_roles()
         {
             // arrange
-            UserAR user = CreateUserAR();
+            User user = CreateUserAR();
             IEnumerable<UserRoles> twoSpecifedRoles = new [] { UserRoles.Administrator, UserRoles.User };
 
             // act
@@ -158,7 +158,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
             bool isLockedByHQ = false;
 
             // act
-            new UserAR(Guid.NewGuid(), "name", "pwd", "my@email.com", new UserRoles[] { }, isLockedBySupervisor, isLockedByHQ, null);
+            new User(Guid.NewGuid(), "name", "pwd", "my@email.com", new UserRoles[] { }, isLockedBySupervisor, isLockedByHQ, null);
 
             // assert
             Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().IsLockedBySupervisor, Is.EqualTo(true));
@@ -171,7 +171,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
             string specifiedName = "Green Lantern";
 
             // act
-            new UserAR(Guid.NewGuid(), specifiedName, "pwd", "my@email.com", new UserRoles[] { }, false, false, null);
+            new User(Guid.NewGuid(), specifiedName, "pwd", "my@email.com", new UserRoles[] { }, false, false, null);
 
             // assert
             Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().Name, Is.EqualTo(specifiedName));
@@ -184,7 +184,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
             string specifiedPassword = "hhg<8923s:0";
 
             // act
-            new UserAR(Guid.NewGuid(), "name", specifiedPassword, "my@email.com", new UserRoles[] { }, false, false, null);
+            new User(Guid.NewGuid(), "name", specifiedPassword, "my@email.com", new UserRoles[] { }, false, false, null);
 
             // assert
             Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().Password, Is.EqualTo(specifiedPassword));
@@ -197,7 +197,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
             string specifiedEmail = "gmail@chucknorris.com";
 
             // act
-            new UserAR(Guid.NewGuid(), "name", "pwd", specifiedEmail, new UserRoles[] { }, false, false, null);
+            new User(Guid.NewGuid(), "name", "pwd", specifiedEmail, new UserRoles[] { }, false, false, null);
 
             // assert
             Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().Email, Is.EqualTo(specifiedEmail));
@@ -210,7 +210,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
             Guid specifiedPublicKey = Guid.NewGuid();
 
             // act
-            new UserAR(specifiedPublicKey, "name", "pwd", "my@email.com", new UserRoles[] { }, false, false, null);
+            new User(specifiedPublicKey, "name", "pwd", "my@email.com", new UserRoles[] { }, false, false, null);
 
             // assert
             Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().PublicKey, Is.EqualTo(specifiedPublicKey));
@@ -223,16 +223,16 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
             IEnumerable<UserRoles> threeSpecifedRoles = new [] { UserRoles.Supervisor, UserRoles.Operator, UserRoles.User };
 
             // act
-            new UserAR(Guid.NewGuid(), "name", "pwd", "my@email.com", threeSpecifedRoles.ToArray(), false, false, null);
+            new User(Guid.NewGuid(), "name", "pwd", "my@email.com", threeSpecifedRoles.ToArray(), false, false, null);
 
             // assert
             Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().Roles, Is.EquivalentTo(threeSpecifedRoles));
         }
 
-        private static UserAR CreateUserAR()
+        private static User CreateUserAR()
         {
             Guid id = Guid.Parse("11111111111111111111111111111111");
-            return new UserAR(id, "name", "pwd", "e@example.com", new UserRoles[] { }, false, false, null);
+            return new User(id, "name", "pwd", "e@example.com", new UserRoles[] { }, false, false, null);
         }
 
         private T GetSingleRaisedEvent<T>()
