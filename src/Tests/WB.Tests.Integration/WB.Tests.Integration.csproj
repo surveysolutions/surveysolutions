@@ -79,7 +79,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
-    <Compile Include="CommandServiceTests\CommandServiceTestsContext.cs" />
+    <Compile Include="CommandServiceTests\when_executing_constructing_command_and_aggregate_root_does_not_exist_in_repository.cs" />
+    <Compile Include="CommandServiceTests\when_executing_not_constructing_command_and_aggregate_root_does_exist_in_repository.cs" />
+    <Compile Include="CommandServiceTests\when_executing_not_constructing_command_and_aggregate_root_does_not_exist_in_repository.cs" />
     <Compile Include="CommandServiceTests\when_executing_not_registered_command.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="Empty.cs" />
