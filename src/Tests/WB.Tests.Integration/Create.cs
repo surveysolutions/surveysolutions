@@ -5,8 +5,13 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Moq;
+using Ncqrs.Domain.Storage;
+using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Implementation.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -393,6 +398,11 @@ namespace WB.Tests.Integration
                 header = levels.ToDictionary((i) => i.LevelScopeVector, (i) => i);
             }
             return new QuestionnaireExportStructure() { HeaderToLevelMap = header };
+        }
+
+        public static CommandService CommandService()
+        {
+            return new CommandService(Mock.Of<IAggregateRootRepository>(), Mock.Of<IEventBus>(), Mock.Of<IAggregateSnapshotter>());
         }
     }
 }
