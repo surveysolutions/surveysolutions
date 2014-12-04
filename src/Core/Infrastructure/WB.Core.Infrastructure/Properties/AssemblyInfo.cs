@@ -33,3 +33,4 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("Ncqrs.Tests")]
 [assembly: InternalsVisibleTo("Ncqrs.Spec")]
 [assembly: InternalsVisibleTo("WB.Tests.Unit")]
+[assembly: InternalsVisibleTo("WB.Tests.Integration")]
