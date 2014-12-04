@@ -262,7 +262,7 @@ namespace WB.UI.Capi
              // initialize app if necessary
             MvxAndroidSetupSingleton.EnsureSingletonAvailable(this);
             MvxSingleton<MvxAndroidSetupSingleton>.Instance.EnsureInitialized();
-
+            NcqrsEnvironment.InitDefaults();
 
             var basePath = Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Personal))
                 ? Environment.GetFolderPath(Environment.SpecialFolder.Personal)
@@ -292,7 +292,6 @@ namespace WB.UI.Capi
             this.kernel.Bind<Context>().ToConstant(this);
 
             NcqrsEnvironment.SetDefault(ServiceLocator.Current.GetInstance<ILogger>());
-            NcqrsEnvironment.InitDefaults();
 
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
 
@@ -302,12 +301,12 @@ namespace WB.UI.Capi
 
             kernel.Bind<IDomainRepository>().To<DomainRepository>();
 
-            var bus = new InProcessEventBus(true, NcqrsEnvironment.Get<IEventStore>());
+            var bus = new InProcessEventBus(true, Kernel.Get<IEventStore>());
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
             kernel.Bind<IEventBus>().ToConstant(bus).Named("interviewViewBus");
 
             NcqrsEnvironment.SetDefault(Kernel.Get<ISnapshotStore>());
-            NcqrsEnvironment.SetDefault(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
+            NcqrsEnvironment.SetDefault(Kernel.Get<IEventStore>());
 
             this.kernel.Unbind<IAnswerOnQuestionCommandService>();
             this.kernel.Bind<IAnswerOnQuestionCommandService>().To<AnswerOnQuestionCommandService>().InSingletonScope();

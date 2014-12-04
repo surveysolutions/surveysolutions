@@ -59,13 +59,14 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
             IEnumerable<CommittedEvent> events = Enumerable.Empty<CommittedEvent>();
             
             WrapConnection(id, connection =>
-                {
-                    events = connection.Table<StoredEvent>()
-                        .Where(
-                            x => x.Sequence >= minVersion &&
-                                 x.Sequence <= maxVersion).ToList()
-                        .Select(x => x.ToCommitedEvent(id));
-                });
+            {
+                events = connection.Table<StoredEvent>()
+                    .Where(
+                        x => x.Sequence >= minVersion &&
+                                x.Sequence <= maxVersion).ToList()
+                    .Select(x => x.ToCommitedEvent(id));
+            });
+
             return new CommittedEventStream(id, events);
         }
 
