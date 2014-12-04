@@ -16,8 +16,8 @@ namespace WB.Tests.Integration.CommandServiceTests
 {
     internal class when_executing_constructing_command_and_aggregate_root_does_not_exist_in_repository
     {
-        private class ConstructingCommand : ICommand { public Guid CommandIdentifier { get; private set; } }
-        private class AggregateInitialized {}
+        private class Initialize : ICommand { public Guid CommandIdentifier { get; private set; } }
+        private class Initialized {}
 
         private class Aggregate : AggregateRoot
         {
@@ -25,7 +25,7 @@ namespace WB.Tests.Integration.CommandServiceTests
 
             public void Initialize()
             {
-                this.ApplyEvent(new AggregateInitialized());
+                this.ApplyEvent(new Initialized());
             }
         }
 
@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.CommandServiceTests
         {
             CommandRegistry
                 .Setup<Aggregate>()
-                .InitializesWith<ConstructingCommand>(_ => aggregateId, (command, aggregate) => aggregate.Initialize());
+                .InitializesWith<Initialize>(_ => aggregateId, (command, aggregate) => aggregate.Initialize());
 
             var repository = Mock.Of<IAggregateRootRepository>(_
                 => _.GetLatest(typeof(Aggregate), aggregateId) == null as Aggregate);
@@ -53,10 +53,10 @@ namespace WB.Tests.Integration.CommandServiceTests
         };
 
         Because of = () =>
-            commandService.Execute(new ConstructingCommand(), null);
+            commandService.Execute(new Initialize(), null);
 
         It should_publish_result_aggregate_root_event_to_event_bus = () =>
-            publishedEvents.Single().Payload.ShouldBeOfExactType<AggregateInitialized>();
+            publishedEvents.Single().Payload.ShouldBeOfExactType<Initialized>();
 
         It should_set_specified_aggregate_id_to_constructed_aggregate_root = () =>
             constructedAggregateId.ShouldEqual(aggregateId);

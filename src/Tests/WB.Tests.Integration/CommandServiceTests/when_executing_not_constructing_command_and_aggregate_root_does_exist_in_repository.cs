@@ -16,8 +16,8 @@ namespace WB.Tests.Integration.CommandServiceTests
 {
     internal class when_executing_not_constructing_command_and_aggregate_root_does_exist_in_repository
     {
-        private class NotConstructingCommand : ICommand { public Guid CommandIdentifier { get; private set; } }
-        private class AggregateUpdated { }
+        private class Update : ICommand { public Guid CommandIdentifier { get; private set; } }
+        private class Updated { }
 
         private class Aggregate : AggregateRoot
         {
@@ -25,7 +25,7 @@ namespace WB.Tests.Integration.CommandServiceTests
 
             public void Update()
             {
-                this.ApplyEvent(new AggregateUpdated());
+                this.ApplyEvent(new Updated());
             }
         }
 
@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.CommandServiceTests
         {
             CommandRegistry
                 .Setup<Aggregate>()
-                .Handles<NotConstructingCommand>(_ => aggregateId, (command, aggregate) => aggregate.Update());
+                .Handles<Update>(_ => aggregateId, (command, aggregate) => aggregate.Update());
 
             aggregateFromRepository = new Aggregate();
 
@@ -54,10 +54,10 @@ namespace WB.Tests.Integration.CommandServiceTests
         };
 
         Because of = () =>
-            commandService.Execute(new NotConstructingCommand(), null);
+            commandService.Execute(new Update(), null);
 
         It should_publish_result_aggregate_root_event_to_event_bus = () =>
-            publishedEvents.Single().Payload.ShouldBeOfExactType<AggregateUpdated>();
+            publishedEvents.Single().Payload.ShouldBeOfExactType<Updated>();
 
         It should_create_snapshot_of_aggregate_root_if_needed = () =>
             snapshooterMock.Verify(
