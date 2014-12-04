@@ -24,8 +24,8 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
+using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Snapshots;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
@@ -132,6 +132,7 @@ namespace WB.UI.Headquarters
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
                 new InfrastructureModule().AsNinject(),
+                new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false, basePath: basePath),
@@ -203,8 +204,6 @@ namespace WB.UI.Headquarters
             kernel.Bind<ISnapshotStore>().ToMethod(context => NcqrsEnvironment.Get<ISnapshotStore>());
             kernel.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
             kernel.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
-
-            kernel.Bind<IDomainRepository>().To<DomainRepository>();
 
             CreateAndRegisterEventBus(kernel);
         }

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
+using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Aggregates;
 
@@ -11,13 +12,20 @@ namespace Ncqrs.Domain.Storage
     public class DefaultAggregateSnapshotter : IAggregateSnapshotter
     {
         private readonly IAggregateRootCreationStrategy _aggregateRootCreator;
-
         private readonly IAggregateSupportsSnapshotValidator _snapshotValidator;
 
-        public DefaultAggregateSnapshotter(IAggregateRootCreationStrategy aggregateRootCreationStrategy, IAggregateSupportsSnapshotValidator snapshotValidator)
+        private readonly ISnapshottingPolicy snapshottingPolicy;
+        private readonly IDomainRepository repository;
+        private readonly ISnapshotStore snapshotStore;
+
+        public DefaultAggregateSnapshotter(IAggregateRootCreationStrategy aggregateRootCreationStrategy, IAggregateSupportsSnapshotValidator snapshotValidator,
+            ISnapshottingPolicy snapshottingPolicy, IDomainRepository repository, ISnapshotStore snapshotStore)
         {
             _aggregateRootCreator = aggregateRootCreationStrategy;
             _snapshotValidator = snapshotValidator;
+            this.snapshottingPolicy = snapshottingPolicy;
+            this.repository = repository;
+            this.snapshotStore = snapshotStore;
         }
 
         public bool TryLoadFromSnapshot(Type aggregateRootType, Snapshot snapshot, CommittedEventStream committedEventStream, out AggregateRoot aggregateRoot)
@@ -56,6 +64,19 @@ namespace Ncqrs.Domain.Storage
                 return true;
             }
             return false;
+        }
+
+        public void CreateSnapshotIfNeededAndPossible(IAggregateRoot aggregateRoot)
+        {
+            if (!this.snapshottingPolicy.ShouldCreateSnapshot(aggregateRoot))
+                return;
+
+            var snapshot = this.repository.TryTakeSnapshot(aggregateRoot);
+
+            if (snapshot == null)
+                return;
+
+            this.snapshotStore.SaveShapshot(snapshot);
         }
 
         private bool AggregateSupportsSnapshot(Type aggregateRootType, Type snapshotType)
