@@ -350,10 +350,10 @@
     <Content Include="Content\images\glyphicons-halflings.png" />
     <EmbeddedResource Include="Scripts\components\bindings.js" />
     <EmbeddedResource Include="Scripts\components\moment-duration-format.js" />
-    <EmbeddedResource Include="Scripts\viewmodels\pagebase.js" />
-    <EmbeddedResource Include="Scripts\viewmodels\pages\controlpanel\readside.js" />
-    <EmbeddedResource Include="Scripts\viewmodels\viewmodelbase.js" />
-    <EmbeddedResource Include="Scripts\viewmodels\designer.framework.js" />
+    <Content Include="Scripts\viewmodels\pagebase.js" />
+    <Content Include="Scripts\viewmodels\pages\controlpanel\readside.js" />
+    <Content Include="Scripts\viewmodels\viewmodelbase.js" />
+    <Content Include="Scripts\viewmodels\designer.framework.js" />
     <Content Include="UpdatedDesigner\content\wb-options-window.css" />
     <Content Include="Content\themes\base\images\animated-overlay.gif" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -427,7 +427,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootbox.min.js" />
-    <None Include="Scripts\jquery-2.1.0.intellisense.js" />
+    <Content Include="Scripts\jquery-2.1.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.1.0.js" />
@@ -594,7 +594,7 @@
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="fonts\FontAwesome.otf" />
-    <None Include="Scripts\amplify-vsdoc.js" />
+    <Content Include="Scripts\amplify-vsdoc.js" />
     <Content Include="PublicService.svc" />
     <Content Include="Scripts\amplify.js" />
     <Content Include="Scripts\amplify.min.js" />
@@ -611,7 +611,7 @@
     <Content Include="Scripts\jquery.pnotify.js" />
     <Content Include="Scripts\jquery.pnotify.min.js" />
     <Content Include="Scripts\jquery-2.1.0.min.map" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive-custom-for-bootstrap.js" />
