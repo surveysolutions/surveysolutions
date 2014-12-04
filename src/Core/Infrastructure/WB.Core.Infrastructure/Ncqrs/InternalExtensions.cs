@@ -21,7 +21,7 @@ namespace Ncqrs
         {
             if (source == null) throw new ArgumentNullException("source");
 
-            return (source.Count() == 0);
+            return !source.Any();
         }
 
         public static bool Implements<TInterfaceType>(this Type source)
