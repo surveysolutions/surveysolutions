@@ -38,8 +38,7 @@ namespace Ncqrs
             SetDefault<IAggregateRootCreationStrategy>(new SimpleAggregateRootCreationStrategy());
             SetDefault<IAggregateSupportsSnapshotValidator>(new AggregateSupportsSnapshotValidator());
             SetGetter<IAggregateSnapshotter>(() => new DefaultAggregateSnapshotter(
-                Get<IAggregateRootCreationStrategy>(), Get<IAggregateSupportsSnapshotValidator>(), Get<ISnapshottingPolicy>(),
-                Get<IDomainRepository>(), Get<ISnapshotStore>()));
+                Get<IAggregateRootCreationStrategy>(), Get<IAggregateSupportsSnapshotValidator>(), Get<ISnapshottingPolicy>(), Get<ISnapshotStore>()));
         }
 
         /// <summary>

@@ -13,18 +13,15 @@ namespace Ncqrs.Domain.Storage
     {
         private readonly IAggregateRootCreationStrategy _aggregateRootCreator;
         private readonly IAggregateSupportsSnapshotValidator _snapshotValidator;
-
         private readonly ISnapshottingPolicy snapshottingPolicy;
-        private readonly IDomainRepository repository;
         private readonly ISnapshotStore snapshotStore;
 
         public DefaultAggregateSnapshotter(IAggregateRootCreationStrategy aggregateRootCreationStrategy, IAggregateSupportsSnapshotValidator snapshotValidator,
-            ISnapshottingPolicy snapshottingPolicy, IDomainRepository repository, ISnapshotStore snapshotStore)
+            ISnapshottingPolicy snapshottingPolicy, ISnapshotStore snapshotStore)
         {
             _aggregateRootCreator = aggregateRootCreationStrategy;
             _snapshotValidator = snapshotValidator;
             this.snapshottingPolicy = snapshottingPolicy;
-            this.repository = repository;
             this.snapshotStore = snapshotStore;
         }
 
@@ -71,9 +68,10 @@ namespace Ncqrs.Domain.Storage
             if (!this.snapshottingPolicy.ShouldCreateSnapshot(aggregateRoot))
                 return;
 
-            var snapshot = this.repository.TryTakeSnapshot(aggregateRoot);
+            Snapshot snapshot;
+            bool wasSnapshotTaken = this.TryTakeSnapshot(aggregateRoot, out snapshot);
 
-            if (snapshot == null)
+            if (!wasSnapshotTaken)
                 return;
 
             this.snapshotStore.SaveShapshot(snapshot);

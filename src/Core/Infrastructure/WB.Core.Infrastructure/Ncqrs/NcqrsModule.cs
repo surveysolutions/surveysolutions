@@ -10,7 +10,6 @@ namespace WB.Core.Infrastructure.Ncqrs
         public void Load(IIocRegistry registry)
         {
             registry.Bind<IDomainRepository, DomainRepository>();
-            NcqrsEnvironment.SetGetter<IDomainRepository>(() => ServiceLocator.Current.GetInstance<IDomainRepository>());
         }
     }
 }
