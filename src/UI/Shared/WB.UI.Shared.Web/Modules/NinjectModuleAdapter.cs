@@ -3,11 +3,12 @@ using WB.Core.Infrastructure.Modularity;
 
 namespace WB.UI.Shared.Web.Modules
 {
-    public class NinjectModuleAdapter : NinjectModule, IIocRegistry
+    public class NinjectModuleAdapter<TModule> : NinjectModule, IIocRegistry
+        where TModule : IModule
     {
-        private readonly IModule module;
+        private readonly TModule module;
 
-        public NinjectModuleAdapter(IModule module)
+        public NinjectModuleAdapter(TModule module)
         {
             this.module = module;
         }

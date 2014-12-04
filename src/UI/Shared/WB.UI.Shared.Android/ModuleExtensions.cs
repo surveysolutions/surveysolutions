@@ -5,9 +5,10 @@ namespace WB.UI.Shared.Android
 {
     public static class ModuleExtensions
     {
-        public static NinjectModule AsNinject(this IModule module)
+        public static NinjectModule AsNinject<TModule>(this TModule module)
+            where TModule : IModule
         {
-            return new NinjectModuleAdapter(module);
+            return new NinjectModuleAdapter<TModule>(module);
         }
     }
 }
