@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding;
 using Ncqrs.Config;
 using Ncqrs.Domain;
@@ -36,7 +37,9 @@ namespace Ncqrs
             SetDefault<ISnapshottingPolicy>(new NoSnapshottingPolicy());
             SetDefault<IAggregateRootCreationStrategy>(new SimpleAggregateRootCreationStrategy());
             SetDefault<IAggregateSupportsSnapshotValidator>(new AggregateSupportsSnapshotValidator());
-            SetDefault<IAggregateSnapshotter>(new DefaultAggregateSnapshotter(Get<IAggregateRootCreationStrategy>(), Get<IAggregateSupportsSnapshotValidator>()));
+            SetGetter<IAggregateSnapshotter>(() => new DefaultAggregateSnapshotter(
+                Get<IAggregateRootCreationStrategy>(), Get<IAggregateSupportsSnapshotValidator>(), Get<ISnapshottingPolicy>(),
+                Get<IDomainRepository>(), Get<ISnapshotStore>()));
         }
 
         /// <summary>

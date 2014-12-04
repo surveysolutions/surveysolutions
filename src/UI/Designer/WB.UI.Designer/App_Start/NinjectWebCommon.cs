@@ -20,7 +20,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
-using WB.Core.Infrastructure.Snapshots;
+using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
@@ -77,6 +77,7 @@ namespace WB.UI.Designer.App_Start
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
                 new InfrastructureModule().AsNinject(),
+                new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
                 new RavenReadSideInfrastructureModule(ravenSettings, AppDomain.CurrentDomain.GetData("DataDirectory").ToString(), typeof(DesignerReportQuestionnaireListViewItem).Assembly),
@@ -108,8 +109,6 @@ namespace WB.UI.Designer.App_Start
             kernel.Bind<ISnapshotStore>().ToMethod(context => NcqrsEnvironment.Get<ISnapshotStore>());
             kernel.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
             kernel.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
-
-            kernel.Bind<IDomainRepository>().To<DomainRepository>();
 
             CreateAndRegisterEventBus(kernel);
         }

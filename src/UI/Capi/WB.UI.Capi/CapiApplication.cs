@@ -42,10 +42,10 @@ using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.Services;
+using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Services;
-using WB.Core.Infrastructure.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
@@ -275,6 +275,7 @@ namespace WB.UI.Capi
             this.kernel = new StandardKernel(
                 new ServiceLocationModule(),
                 new InfrastructureModule().AsNinject(),
+                new NcqrsModule().AsNinject(),
                 new CapiBoundedContextModule(),
                 new AndroidCoreRegistry(),
                 new RestAndroidModule(),
@@ -298,8 +299,6 @@ namespace WB.UI.Capi
             kernel.Bind<ISnapshottingPolicy>().ToMethod(context => NcqrsEnvironment.Get<ISnapshottingPolicy>());
             kernel.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
             kernel.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
-
-            kernel.Bind<IDomainRepository>().To<DomainRepository>();
 
             var bus = new InProcessEventBus(true, Kernel.Get<IEventStore>());
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
