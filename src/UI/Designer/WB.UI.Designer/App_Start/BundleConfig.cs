@@ -38,7 +38,7 @@ namespace WB.UI.Designer
                     "~/Scripts/common.js"));
 
             bundles.Add(
-                new ScriptBundle("~/readside").Include(
+                new ScriptBundle("~/readsidebundle").Include(
                     "~/Scripts/knockout-{version}.js",
                     "~/Scripts/lodash.underscore.js",
                     "~/Scripts/moment.js",

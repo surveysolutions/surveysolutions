@@ -223,7 +223,7 @@
         }
     </style>
 
-    @Scripts.Render("~/readside")
+    @Scripts.Render("~/readsidebundle")
     <script type="text/javascript">
         var updateRebuildStatusApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "GetReadSideStatus" })';
         var eventHandlersApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "GetAllAvailableHandlers" })';
