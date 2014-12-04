@@ -1,10 +1,10 @@
 ﻿using System;
+using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.Snapshots;
 
 namespace WB.Core.Infrastructure.Implementation.CommandBus
 {
@@ -12,9 +12,9 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
     {
         private readonly IAggregateRootRepository repository;
         private readonly IEventBus eventBus;
-        private readonly ISnapshooter snapshooter;
+        private readonly IAggregateSnapshotter snapshooter;
 
-        public CommandService(IAggregateRootRepository repository, IEventBus eventBus, ISnapshooter snapshooter)
+        public CommandService(IAggregateRootRepository repository, IEventBus eventBus, IAggregateSnapshotter snapshooter)
         {
             this.repository = repository;
             this.eventBus = eventBus;

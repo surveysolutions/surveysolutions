@@ -9,5 +9,6 @@ namespace Ncqrs.Domain.Storage
     {
         bool TryLoadFromSnapshot(Type aggregateRootType, Snapshot snapshot, CommittedEventStream committedEventStream, out AggregateRoot aggregateRoot);
         bool TryTakeSnapshot(IAggregateRoot aggregateRoot, out Snapshot snapshot);
+        void CreateSnapshotIfNeededAndPossible(IAggregateRoot aggregateRoot);
     }
 }
