@@ -400,9 +400,12 @@ namespace WB.Tests.Integration
             return new QuestionnaireExportStructure() { HeaderToLevelMap = header };
         }
 
-        public static CommandService CommandService()
+        public static CommandService CommandService(IAggregateRootRepository repository = null, IEventBus eventBus = null, IAggregateSnapshotter snapshooter = null)
         {
-            return new CommandService(Mock.Of<IAggregateRootRepository>(), Mock.Of<IEventBus>(), Mock.Of<IAggregateSnapshotter>());
+            return new CommandService(
+                repository ?? Mock.Of<IAggregateRootRepository>(),
+                eventBus ?? Mock.Of<IEventBus>(),
+                snapshooter ?? Mock.Of<IAggregateSnapshotter>());
         }
     }
 }

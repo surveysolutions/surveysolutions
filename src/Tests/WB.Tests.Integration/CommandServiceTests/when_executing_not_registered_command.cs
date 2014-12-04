@@ -2,10 +2,11 @@
 using Machine.Specifications;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Implementation.CommandBus;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
-    internal class when_executing_not_registered_command : CommandServiceTestsContext
+    internal class when_executing_not_registered_command
     {
         private class NotRegisteredCommand : ICommand { public Guid CommandIdentifier { get; private set; } }
 
