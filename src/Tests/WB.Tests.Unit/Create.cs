@@ -20,6 +20,7 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
 using WB.UI.Designer.Api;
@@ -236,6 +237,11 @@ namespace WB.Tests.Unit
                 QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
                 QuestionnaireVersion = questionnaireVersion ?? 1
             };
+        }
+
+        public static InterviewItemId InterviewItemId(Guid id, decimal[] rosterVector = null)
+        {
+            return new InterviewItemId(id, rosterVector);
         }
     }
 }

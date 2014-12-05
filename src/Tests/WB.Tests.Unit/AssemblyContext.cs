@@ -3,6 +3,8 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Tests.Unit
 {
@@ -23,6 +25,8 @@ namespace WB.Tests.Unit
             var serviceLocator = Stub<IServiceLocator>.WithNotEmptyValues;
 
             ServiceLocator.SetLocatorProvider(() => serviceLocator);
+
+            Setup.InstanceToMockedServiceLocator<ISubstitutionService>(new SubstitutionService());
 
             NcqrsEnvironment.SetGetter<ILogger>(Mock.Of<ILogger>);
             NcqrsEnvironment.SetGetter<IUniqueIdentifierGenerator>(Mock.Of<IUniqueIdentifierGenerator>);
