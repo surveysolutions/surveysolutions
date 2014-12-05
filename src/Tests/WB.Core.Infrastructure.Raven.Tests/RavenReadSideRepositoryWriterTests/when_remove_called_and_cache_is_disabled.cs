@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
+using Raven.Client;
 using Raven.Client.Document;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 
@@ -29,6 +30,6 @@ namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideRepositoryWriterTests
         private static RavenReadSideRepositoryWriter<View> ravenReadSideRepositoryWriter;
         private static string viewId = "view id";
         private static View storedView;
-        private static DocumentStore documentStore;
+        private static IDocumentStore documentStore;
     }
 }
