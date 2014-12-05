@@ -27,7 +27,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
         /// </summary>
         private readonly int pageSize = 1024;
 
-        private const int Timeout = 180;
+        private readonly TimeSpan Timeout = TimeSpan.FromSeconds(180);
 
         public RavenDBEventStore(IDocumentStore externalDocumentStore, int pageSize, 
             FailoverBehavior failoverBehavior = FailoverBehavior.FailImmediately, 
@@ -36,21 +36,16 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
             externalDocumentStore.UpdateStoreConventions("Events", failoverBehavior);
             this.DocumentStore = externalDocumentStore;
 
-            this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
-            {
-                e.Request.Timeout = 30*60*1000; /*ms*/
-            };
             this.pageSize = pageSize;
             this.useStreamingForAllEvents = useStreamingForAllEvents;
-            IndexCreation.CreateIndexes(typeof (UniqueEventsIndex).Assembly, this.DocumentStore);
 
+            IndexCreation.CreateIndexes(typeof (UniqueEventsIndex).Assembly, this.DocumentStore);
             IndexCreation.CreateIndexes(typeof (EventsByTimeStampAndSequenceIndex).Assembly, this.DocumentStore);
         }
 
         public static CommittedEvent ToCommittedEvent(StoredEvent x)
         {
-            return new CommittedEvent(
-                x.CommitId, x.Origin, x.EventIdentifier, x.EventSourceId, x.EventSequence, x.EventTimeStamp, x.Data, x.Version);
+            return new CommittedEvent(x.CommitId, x.Origin, x.EventIdentifier, x.EventSourceId, x.EventSequence, x.EventTimeStamp, x.Data, x.Version);
         }
 
         public IEnumerable<CommittedEvent> GetEventStream()
@@ -65,7 +60,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
                 {
                     List<UniqueEventsResults> chunk = session
                         .Query<StoredEvent, UniqueEventsIndex>()
-                        .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(Timeout)))
+                        .Customize(x => x.WaitForNonStaleResults(Timeout))
                         .ProjectFromIndexFieldsInto<UniqueEventsResults>().OrderBy(x => x.EventTimeStamp)
                         .Skip(page*this.pageSize)
                         .Take(this.pageSize)
@@ -127,7 +122,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
             using (IDocumentSession session = this.DocumentStore.OpenSession())
             {
                 var lastEvent = session.Query<StoredEvent, EventsByTimeStampAndSequenceIndex>()
-                    .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(Timeout)))
+                    .Customize(x => x.WaitForNonStaleResults(Timeout))
                     .Where(x => x.EventSourceId == id).OrderByDescending(x => x.EventSequence).Take(1).ToList()[0];
 
                 if (lastEvent == null)
@@ -200,7 +195,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
                 {
                     List<StoredEvent> chunk = session
                         .Query<StoredEvent, Event_ByEventSource>()
-                        .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(Timeout)))
+                        .Customize(x => x.WaitForNonStaleResults(Timeout))
                         .Where(query).OrderBy(e => e.EventSequence)
                         .Skip(page*this.pageSize)
                         .Take(this.pageSize)
