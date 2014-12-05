@@ -337,7 +337,10 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         {
             const string DefaultIndexName = "Raven/DocumentsByEntityName";
             if (this.ravenStore.DatabaseCommands.GetIndex(DefaultIndexName) != null)
-                this.ravenStore.DatabaseCommands.DeleteByIndex(DefaultIndexName, new IndexQuery() { Query = string.Format("Tag: *{0}*", global::Raven.Client.Util.Inflector.Pluralize(ViewName)) }, false).WaitForCompletion();
+                this.ravenStore.DatabaseCommands.DeleteByIndex(DefaultIndexName, new IndexQuery()
+                {
+                    Query = string.Format("Tag: *{0}*", global::Raven.Client.Util.Inflector.Pluralize(ViewName))
+                }, new BulkOperationOptions {AllowStale = false}).WaitForCompletion();
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System;
-using Raven.Client.Document;
+using Raven.Abstractions.Replication;
 
 namespace WB.Core.Infrastructure.Storage.Raven
 {
