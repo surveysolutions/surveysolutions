@@ -348,8 +348,8 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
-    <EmbeddedResource Include="Scripts\components\bindings.js" />
-    <EmbeddedResource Include="Scripts\components\moment-duration-format.js" />
+    <Content Include="Scripts\components\bindings.js" />
+    <Content Include="Scripts\components\moment-duration-format.js" />
     <Content Include="Scripts\viewmodels\pagebase.js" />
     <Content Include="Scripts\viewmodels\pages\controlpanel\readside.js" />
     <Content Include="Scripts\viewmodels\viewmodelbase.js" />
