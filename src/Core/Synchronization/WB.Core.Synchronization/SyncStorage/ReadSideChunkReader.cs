@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
 using Raven.Client.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -19,15 +18,15 @@ namespace WB.Core.Synchronization.SyncStorage
         }
 
 
-        public SyncItem ReadChunk(Guid id)
+        public SyncItem ReadChunk(string id)
         {
-            var item = queryableStorage.GetById(id);
+            SynchronizationDelta item = queryableStorage.GetById(id);
             if (item == null)
                 throw new ArgumentException("chunk is absent");
 
             return new SyncItem
                 {
-                    Id = item.PublicKey,
+                    RootId = item.RootId,
                     IsCompressed = item.IsCompressed,
                     ItemType = item.ItemType,
                     Content = item.Content,
@@ -35,13 +34,61 @@ namespace WB.Core.Synchronization.SyncStorage
                 };
         }
 
-        public IEnumerable<SynchronizationChunkMeta> GetChunkMetaDataCreatedAfter(DateTime timestamp, IEnumerable<Guid> users)
+        public IEnumerable<SynchronizationChunkMeta> GetChunkMetaDataCreatedAfter(string lastSyncedPackageId, IEnumerable<Guid> users)
         {
-            return
-                queryableStorage.QueryAll(
-                    d => d.Timestamp > timestamp && (d.UserId.HasValue && d.UserId.Value.In(users) || !d.UserId.HasValue))
-                                .OrderBy(o => o.Timestamp)
-                                .Select(s => new SynchronizationChunkMeta(s.PublicKey, s.Timestamp.Ticks)).ToList();
+            var userIds = users.Concat(new[] { Guid.Empty });
+
+            if (lastSyncedPackageId == null)
+            {
+                var fullStreamDeltas = queryableStorage.Query(_ => _.Where(x => x.UserId.In(userIds))
+                                                                    .OrderBy(x => x.SortIndex)
+                                                                    .ToList());
+
+                var fullListResult = fullStreamDeltas.Select(s => new SynchronizationChunkMeta(s.PublicKey))
+                                                     .ToList();
+                return fullListResult; 
+            }
+
+            SynchronizationDelta lastSyncedPackage = queryableStorage.Query(_ => _.FirstOrDefault(x => x.PublicKey == lastSyncedPackageId));
+
+            if (lastSyncedPackage == null)
+            {
+                throw new SyncPackageNotFoundException(string.Format("Sync package with id {0} was not found on server", lastSyncedPackageId));
+            }
+
+            var deltas = queryableStorage.Query(_ => _.Where(x => x.SortIndex > lastSyncedPackage.SortIndex && x.UserId.In(userIds))
+                                                      .OrderBy(x => x.SortIndex)
+                                                      .ToList());
+
+            var result = deltas.Select(s => new SynchronizationChunkMeta(s.PublicKey))
+                               .ToList();
+            return result; 
         }
+
+        public SynchronizationChunkMeta GetChunkMetaDataByTimestamp(DateTime timestamp)
+        {
+            var meta = this.queryableStorage.Query(_ => _.Where(x => timestamp >= x.Timestamp)
+                                                         .ToList()
+                                                         .OrderBy(x => x.SortIndex)
+                                                         .Last());
+            return new SynchronizationChunkMeta(meta.PublicKey);
+        }
+    }
+
+    [Serializable]
+    public class SyncPackageNotFoundException : Exception
+    {
+        public SyncPackageNotFoundException() {}
+
+        public SyncPackageNotFoundException(string message)
+            : base(message) {}
+
+        public SyncPackageNotFoundException(string message, Exception inner)
+            : base(message, inner) {}
+
+        protected SyncPackageNotFoundException(
+            SerializationInfo info,
+            StreamingContext context)
+            : base(info, context) {}
     }
 }

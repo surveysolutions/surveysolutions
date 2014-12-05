@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 {
@@ -23,21 +23,21 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             this.CreatedBy = createdBy;
             this.IsPublic = isPublic;
         }
-
+         
         /// <summary>
         /// Gets the creation date.
         /// </summary>
-        public DateTime CreationDate { get; private set; }
+        public DateTime CreationDate { get; set; }
 
         /// <summary>
         /// Gets the id.
         /// </summary>
-        public Guid PublicId { get; private set; }
+        public Guid PublicId { get; set; }
 
         /// <summary>
         /// Gets the last entry date.
         /// </summary>
-        public DateTime LastEntryDate { get; private set; }
+        public DateTime LastEntryDate { get; set; }
 
         /// <summary>
         /// Gets or sets the title.
@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         /// <summary>
         /// Gets the creator id.
         /// </summary>
-        public Guid? CreatedBy { get; private set; }
+        public Guid? CreatedBy { get; set; }
 
         /// <summary>
         /// Gets or sets the creator name.
@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         /// </summary>
         public bool IsPublic { get; set; }
 
-        public List<Guid> SharedPersons { get; private set; }
+        public List<Guid> SharedPersons { get; set; }
 
         public string Owner { get; set; }
     }

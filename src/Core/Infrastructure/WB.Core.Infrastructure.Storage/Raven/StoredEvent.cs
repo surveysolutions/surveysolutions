@@ -5,7 +5,7 @@ using Raven.Imports.Newtonsoft.Json.Converters;
 
 namespace WB.Core.Infrastructure.Storage.Raven
 {
-    [DebuggerDisplay("StoredEvent {Data.GetType().Name}")]
+    [DebuggerDisplay("StoredEvent {Data.GetType().Name}, Id = {EventIdentifier}, EventTimeStamp = {EventTimeStamp}, EventSequence = {EventSequence}")]
     public class StoredEvent
     {
         public string Id { get; set; }
@@ -16,9 +16,9 @@ namespace WB.Core.Infrastructure.Storage.Raven
         public Guid EventIdentifier { get; set; }
         public DateTime EventTimeStamp { get; set; }
         
-
         [JsonConverter(typeof(VersionConverter))]
         public Version Version { get; set; }
+
         [JsonProperty(TypeNameHandling = TypeNameHandling.All)]
         public object Data { get; set; }
 

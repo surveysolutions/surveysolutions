@@ -11,18 +11,22 @@ using Main.Core.Events;
 using Moq;
 using Moq.Protected;
 using Ncqrs.Commanding;
-using Ncqrs.Commanding.ServiceModel;
+
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Files.Implementation.FileSystem;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSynchronizerTests.Push
@@ -82,7 +86,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
                 logger: loggerMock.Object,
                 jsonUtils: jsonUtils,
                 httpMessageHandler: () => httpMessageHandler,
-                commandService: commandServiceMock.Object);
+                commandService: commandServiceMock.Object,
+                archiver: archiver);
         };
 
         Because of = () =>
@@ -98,16 +103,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
             contentSentToHq.ShouldEqual(syncItemJson);
 
         It should_set_sync_item_content_to_compressed_events_json = () =>
-            PackageHelper.DecompressString(syncItem.Content).ShouldEqual(eventsJson);
+            archiver.DecompressString(syncItem.Content).ShouldEqual(eventsJson);
 
         It should_set_sync_item_meta_info_to_metadata_json = () =>
-            PackageHelper.DecompressString(syncItem.MetaInfo).ShouldEqual(metadataJson);
+            archiver.DecompressString(syncItem.MetaInfo).ShouldEqual(metadataJson);
 
         It should_set_sync_item_compression_flag_to_true = () =>
             syncItem.IsCompressed.ShouldBeTrue();
 
-        It should_set_sync_item_id_to_interview_id = () =>
-            syncItem.Id.ShouldEqual(interviewId);
+        It should_set_sync_item_id_to_interview_id_with_sort_index = () =>
+            syncItem.RootId.ShouldEqual(interviewId);
 
         It should_set_sync_item_type_to_questionnaire = () =>
             syncItem.ItemType.ShouldEqual("q");
@@ -132,6 +137,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
         private static Guid userId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid interviewId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static Mock<ILogger> loggerMock = new Mock<ILogger>();
+        private static IArchiveUtils archiver = new ZipArchiveUtils(Mock.Of<IFileSystemAccessor>());
         private static Exception lastLoggedException;
         private static string contentSentToHq;
         private static string syncItemJson = "sync item json";

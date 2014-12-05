@@ -50,18 +50,21 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Machine.Specifications.Should.0.7.1\lib\net45\Machine.Specifications.Should.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis">
-      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.Common.0.7.4091001-beta\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+    <Reference Include="Microsoft.CodeAnalysis, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.Common.1.0.0-beta1-20141031-01\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp">
-      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.CSharp.0.7.4091001-beta\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.CSharp.1.0.0-beta1-20141031-01\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp.Desktop">
-      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.CSharp.0.7.4091001-beta\lib\net45\Microsoft.CodeAnalysis.CSharp.Desktop.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp.Desktop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.CSharp.1.0.0-beta1-20141031-01\lib\net45\Microsoft.CodeAnalysis.CSharp.Desktop.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.Desktop">
-      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.Common.0.7.4091001-beta\lib\net45\Microsoft.CodeAnalysis.Desktop.dll</HintPath>
+    <Reference Include="Microsoft.CodeAnalysis.Desktop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.Common.1.0.0-beta1-20141031-01\lib\net45\Microsoft.CodeAnalysis.Desktop.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -79,40 +82,42 @@
       <HintPath>..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Collections.Immutable">
-      <HintPath>..\..\..\packages\Microsoft.Bcl.Immutable.1.1.20-beta\lib\portable-net45+win8\System.Collections.Immutable.dll</HintPath>
+    <Reference Include="System.Collections.Immutable, Version=1.1.32.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\System.Collections.Immutable.1.1.32-beta\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
     </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Reflection.Metadata">
-      <HintPath>..\..\..\packages\Microsoft.Bcl.Metadata.1.0.12-alpha\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+    <Reference Include="System.Reflection.Metadata, Version=1.0.17.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\System.Reflection.Metadata.1.0.17-beta\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.1.1\lib\net45\System.Web.Helpers.dll</HintPath>
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Web.Mvc, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Web.Mvc, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.AspNet.Mvc.5.1.1\lib\net45\System.Web.Mvc.dll</HintPath>
+      <HintPath>..\..\..\packages\Microsoft.AspNet.Mvc.5.2.2\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.AspNet.Razor.3.1.1\lib\net45\System.Web.Razor.dll</HintPath>
+      <HintPath>..\..\..\packages\Microsoft.AspNet.Razor.3.2.2\lib\net45\System.Web.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.1.1\lib\net45\System.Web.WebPages.dll</HintPath>
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.1.1\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.1.1\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml.Linq" />
@@ -144,77 +149,6 @@
     <Compile Include="AccountTests\when_updating_account.cs" />
     <Compile Include="AccountViewFactoryTests\AccountViewFactoryTestsContext.cs" />
     <Compile Include="AccountViewFactoryTests\when_loading_view_filtered_by_account_name__ADMIN__and_repository_has_account_with_name__admin__.cs" />
-    <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_all_parameters_is_specified.cs" />
-    <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_enablementCondition_contains_2_id_references_and_1_of_them_invalid.cs" />
-    <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_it_is_prefilled_to_group_under_roster.cs" />
-    <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_question_already_exists.cs" />
-    <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_title_contains_substitution_to_invalid_question.cs" />
-    <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_title_contains_substitution_to_question_from_roster.cs" />
-    <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_title_contains_substitution_to_question_with_not_supported_type.cs" />
-    <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_title_contains_substitution_to_self.cs" />
-    <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_title_is_empty.cs" />
-    <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_title_is_too_long.cs" />
-    <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_user_dont_have_permissions.cs" />
-    <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_variable_name_contains_invalid_characters.cs" />
-    <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_variable_name_contains_keyword.cs" />
-    <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_variable_name_is_empty.cs" />
-    <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_variable_name_is_null.cs" />
-    <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_variable_name_is_too_long.cs" />
-    <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_variable_name_not_unique.cs" />
-    <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_variable_name_start_with_digit.cs" />
-    <Compile Include="AddGpsCoordinatesQuestionHandlerTests\when_adding_gps_coordinates_question_and_all_parameters_is_specified.cs" />
-    <Compile Include="AddGpsCoordinatesQuestionHandlerTests\when_adding_gps_coordinates_question_and_enablementCondition_contains_2_id_references_and_1_of_them_invalid.cs" />
-    <Compile Include="AddGpsCoordinatesQuestionHandlerTests\when_adding_gps_coordinates_question_and_question_already_exists.cs" />
-    <Compile Include="AddGpsCoordinatesQuestionHandlerTests\when_adding_gps_coordinates_question_and_title_contains_substitution_to_invalid_question.cs" />
-    <Compile Include="AddGpsCoordinatesQuestionHandlerTests\when_adding_gps_coordinates_question_and_title_contains_substitution_to_question_from_roster.cs" />
-    <Compile Include="AddGpsCoordinatesQuestionHandlerTests\when_adding_gps_coordinates_question_and_title_contains_substitution_to_question_with_not_supported_type.cs" />
-    <Compile Include="AddGpsCoordinatesQuestionHandlerTests\when_adding_gps_coordinates_question_and_title_contains_substitution_to_self.cs" />
-    <Compile Include="AddGpsCoordinatesQuestionHandlerTests\when_adding_gps_coordinates_question_and_title_is_empty.cs" />
-    <Compile Include="AddGpsCoordinatesQuestionHandlerTests\when_adding_gps_coordinates_question_and_user_dont_have_permissions.cs" />
-    <Compile Include="AddGpsCoordinatesQuestionHandlerTests\when_adding_gps_coordinates_question_and_variable_name_contains_invalid_characters.cs" />
-    <Compile Include="AddGpsCoordinatesQuestionHandlerTests\when_adding_gps_coordinates_question_and_variable_name_contains_keyword.cs" />
-    <Compile Include="AddGpsCoordinatesQuestionHandlerTests\when_adding_gps_coordinates_question_and_variable_name_is_empty.cs" />
-    <Compile Include="AddGpsCoordinatesQuestionHandlerTests\when_adding_gps_coordinates_question_and_variable_name_is_null.cs" />
-    <Compile Include="AddGpsCoordinatesQuestionHandlerTests\when_adding_gps_coordinates_question_and_variable_name_is_too_long.cs" />
-    <Compile Include="AddGpsCoordinatesQuestionHandlerTests\when_adding_gps_coordinates_question_and_variable_name_not_unique.cs" />
-    <Compile Include="AddGpsCoordinatesQuestionHandlerTests\when_adding_gps_coordinates_question_and_variable_name_start_with_digit.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_all_parameters_is_specified.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_enablementCondition_contains_2_id_references_and_1_of_them_invalid.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_question_already_exists.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_title_contains_substitution_to_invalid_question.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_title_contains_substitution_to_question_from_roster.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_title_contains_substitution_to_question_with_not_supported_type.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_title_contains_substitution_to_self.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_title_is_empty.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_user_dont_have_permissions.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_variable_name_contains_invalid_characters.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_variable_name_contains_keyword.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_variable_name_is_empty.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_variable_name_is_null.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_variable_name_is_too_long.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_variable_name_not_unique.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_variable_name_start_with_digit.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_that_is_linked_and_referecing_question_not_under_roster.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_that_is_linked_and_referencing_question_has_not_supported_type.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_that_is_linked_and_referencing_question_is_missing.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_max_allowed_answers_less_than_2.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_with_1_option.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_with_empty_options.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_with_linkedQuestion_and_supervisor_scope.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_with_not_null_linkedQuestion_and_with_options.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_with_options_set_in_null.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_with_options_with_empty_option_title.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_with_options_with_empty_option_value.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_with_options_with_not_digital_option_value.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_with_options_with_not_unique_option_title.cs" />
-    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_with_options_with_not_unique_option_value.cs" />
-    <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_in_roster_with_title_which_contains_roster_title_as_substitution_reference.cs" />
-    <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_with_title_which_contains_roster_title_as_substitution_reference.cs" />
-    <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_with_variable_name_roster_title.cs" />
-    <Compile Include="AddQrBarcodeQuestionHandlerTests\when_adding_qr_barcode_question_and_variable_name_is_null.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_filtered_combobox_question_and_all_parameters_is_specified.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_and_variable_name_is_null.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_with_linkedQuestion_and_supervisor_scope.cs" />
     <Compile Include="AddStaticTextHandlerTests\when_adding_static_text_and_parent_does_not_exists.cs" />
     <Compile Include="AddTextQuestionHandlerTests\when_adding_text_question_and_enablementCondition_reference_existing_roster.cs" />
     <Compile Include="AddTextQuestionHandlerTests\when_adding_text_question_and_enablementCondition_reference_not_existing_roster.cs" />
@@ -229,19 +163,7 @@
     <Compile Include="ChapterInfoViewDenormalizerTests\when_StaticTextAdded_event_received.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_StaticTextCloned_event_received.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_StaticTextUpdated_event_received.cs" />
-    <Compile Include="CloneDateTimeQuestionHandlerTests\when_cloning_datetime_question_and_variable_name_is_null.cs" />
-    <Compile Include="CloneGpsCoordinatesQuestionHandlerTests\when_cloning_gps_coordinates_question_and_variable_name_is_null.cs" />
     <Compile Include="CloneGroupTests\when_cloning_roster_group.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_variable_name_is_null.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_with_linkedQuestion_and_supervisor_scope.cs" />
-    <Compile Include="CloneQrBarcodeQuestionHandlerTests\when_cloning_qr_barcode_question_and_variable_name_is_null.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_and_variable_name_is_null.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_with_linkedQuestion_and_supervisor_scope.cs" />
-    <Compile Include="CloneStaticTextHandlerTests\when_cloning_static_text_and_all_parameters_specified.cs" />
-    <Compile Include="CloneStaticTextHandlerTests\when_cloning_static_text_and_entity_with_same_id_already_exists.cs" />
-    <Compile Include="CloneStaticTextHandlerTests\when_cloning_static_text_and_entity_does_not_exists.cs" />
-    <Compile Include="CloneStaticTextHandlerTests\when_cloning_static_text_and_user_dont_have_permissions.cs" />
-    <Compile Include="CloneTextQuestionHandlerTests\when_cloning_text_question_and_variable_name_is_null.cs" />
     <Compile Include="CodeGenerationModelTests\CodeGenerationModelTestsContext.cs" />
     <Compile Include="CodeGenerationModelTests\when_getting_ordered_list_by_condition_dependency.cs" />
     <Compile Include="CodeGenerationTests\when_expression_state_processes_condition_expressions_on_scope_roster.cs" />
@@ -255,6 +177,7 @@
     <Compile Include="EventExtensions.cs" />
     <Compile Include="Execute.cs" />
     <Compile Include="InterviewCompilerTests\InterviewCompilerTestsContext.cs" />
+    <Compile Include="InterviewCompilerTests\when_generating_assembly_as_string_with_deep_stack.cs" />
     <Compile Include="InterviewCompilerTests\when_generating_assembly_as_string_with_error.cs" />
     <Compile Include="InterviewCompilerTests\when_generating_assembly_as_string.cs" />
     <Compile Include="MoveStaticTextHandlerTests\when_moving_static_text_and_all_parameters_specified.cs" />
@@ -275,6 +198,7 @@
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_StaticTextCloned_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_StaticTextUpdated_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_StaticTextAdded_event.cs" />
+    <Compile Include="QuestionnaireExtensions.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_cascading_question_edit_view.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_fixed_roster_edit_view_and_fixed_roster_inside_list_one.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_fixed_roster_edit_view_and_fixed_roster_inside_list_one_that_was_fixed_previously.cs" />
@@ -370,8 +294,6 @@
     <Compile Include="AddStaticTextHandlerTests\when_adding_static_text_and_user_dont_have_permissions.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_GroupStoppedBeingARoster_event_received.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_GroupBecameARoster_event_received.cs" />
-    <Compile Include="CloneNumericQuestionHandlerTests\when_cloning_numeric_question_with_title_which_contains_roster_title_as_substitution_reference.cs" />
-    <Compile Include="CloneNumericQuestionHandlerTests\when_cloning_numeric_question_with_variable_name_roster_title.cs" />
     <Compile Include="CodeGenerationTests\CodeGenerationTestsContext.cs" />
     <Compile Include="CodeGenerationTests\when_expression_state_processes_validation_expressions.cs" />
     <Compile Include="CodeGenerationTests\when_generating_assembly_with_evaluatorgenerator.cs" />
@@ -389,35 +311,6 @@
     <Compile Include="QuestionnaireTests\when_updating_group_and_roster_become_a_group_with_question_with_rostertitle_in_substitution.cs" />
     <Compile Include="UpdateNumericQuestionHandlerTests\when_updating_numeric_question_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="UpdateNumericQuestionHandlerTests\when_updating_numeric_question_with_variable_name_roster_title.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_that_is_linked_and_prefilled.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_that_is_linked_and_referecing_question_not_under_roster.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_that_is_linked_and_referencing_question_has_not_supported_type.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_that_is_linked_and_referencing_question_is_missing.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_with_1_option.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_with_empty_options.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_with_not_null_linkedQuestion_and_with_options.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_and_all_parameters_is_specified.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_and_enablementCondition_contains_2_id_references_and_1_of_them_invalid.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_and_it_is_prefilled_to_group_under_roster.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_and_question_already_exists.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_and_title_contains_substitution_to_invalid_question.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_and_title_contains_substitution_to_question_from_roster.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_and_title_contains_substitution_to_question_with_not_supported_type.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_and_title_contains_substitution_to_self.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_and_title_is_empty.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_and_user_dont_have_permissions.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_and_variable_name_contains_invalid_characters.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_and_variable_name_contains_keyword.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_and_variable_name_is_empty.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_and_variable_name_is_too_long.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_and_variable_name_not_unique.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_and_variable_name_start_with_digit.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_with_options_set_in_null.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_with_options_with_empty_option_title.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_with_options_with_empty_option_value.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_with_options_with_not_digital_option_value.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_with_options_with_not_unique_option_title.cs" />
-    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_with_options_with_not_unique_option_value.cs" />
     <Compile Include="AddTextQuestionHandlerTests\when_adding_text_question_and_all_parameters_is_specified.cs" />
     <Compile Include="AddTextQuestionHandlerTests\when_adding_text_question_and_enablementCondition_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="AddTextQuestionHandlerTests\when_adding_text_question_and_it_is_prefilled_to_group_under_roster.cs" />
@@ -436,9 +329,6 @@
     <Compile Include="AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_start_with_digit.cs" />
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\ChaptersInfoViewDenormalizerTestContext.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_with_1_option.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_with_max_allowed_answers_less_than_2.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_with_1_option.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_GroupCloned_event_received_and_new_group_is_chapter.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_NewGroupAdded_event_received_and_parent_of_group_does_not_exists.cs" />
@@ -468,112 +358,6 @@
     <Compile Include="ChapterInfoViewDenormalizerTests\when_QuestionnaireCloned_event_received.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_TemplateImported_event_received.cs" />
     <Compile Include="ChapterInfoViewFactoryTests\when_loading_view_and_chapter_is_absent.cs" />
-    <Compile Include="CloneDateTimeQuestionHandlerTests\when_cloning_datetime_question_and_all_parameters_is_specified.cs" />
-    <Compile Include="CloneDateTimeQuestionHandlerTests\when_cloning_datetime_question_and_condition_contains_2_id_references_and_1_of_them_invalid.cs" />
-    <Compile Include="CloneDateTimeQuestionHandlerTests\when_cloning_datetime_question_and_question_already_exists.cs" />
-    <Compile Include="CloneDateTimeQuestionHandlerTests\when_cloning_datetime_question_and_title_contains_substitution_to_invalid_question.cs" />
-    <Compile Include="CloneDateTimeQuestionHandlerTests\when_cloning_datetime_question_and_title_contains_substitution_to_question_from_roster.cs" />
-    <Compile Include="CloneDateTimeQuestionHandlerTests\when_cloning_datetime_question_and_title_contains_substitution_to_question_with_not_supported_type.cs" />
-    <Compile Include="CloneDateTimeQuestionHandlerTests\when_cloning_datetime_question_and_title_contains_substitution_to_self.cs" />
-    <Compile Include="CloneDateTimeQuestionHandlerTests\when_cloning_datetime_question_and_title_is_empty.cs" />
-    <Compile Include="CloneDateTimeQuestionHandlerTests\when_cloning_datetime_question_and_user_dont_have_permissions.cs" />
-    <Compile Include="CloneDateTimeQuestionHandlerTests\when_cloning_datetime_question_and_validation_contains_2_id_references_and_1_of_them_invalid.cs" />
-    <Compile Include="CloneDateTimeQuestionHandlerTests\when_cloning_datetime_question_and_variable_name_contains_invalid_characters.cs" />
-    <Compile Include="CloneDateTimeQuestionHandlerTests\when_cloning_datetime_question_and_variable_name_contains_keyword.cs" />
-    <Compile Include="CloneDateTimeQuestionHandlerTests\when_cloning_datetime_question_and_variable_name_is_empty.cs" />
-    <Compile Include="CloneDateTimeQuestionHandlerTests\when_cloning_datetime_question_and_variable_name_is_too_long.cs" />
-    <Compile Include="CloneDateTimeQuestionHandlerTests\when_cloning_datetime_question_and_variable_name_not_unique.cs" />
-    <Compile Include="CloneDateTimeQuestionHandlerTests\when_cloning_datetime_question_and_variable_name_start_with_digit.cs" />
-    <Compile Include="CloneGpsCoordinatesQuestionHandlerTests\when_cloning_gps_coordinates_question_and_all_parameters_is_specified.cs" />
-    <Compile Include="CloneGpsCoordinatesQuestionHandlerTests\when_cloning_gps_coordinates_question_and_condition_contains_2_id_references_and_1_of_them_invalid.cs" />
-    <Compile Include="CloneGpsCoordinatesQuestionHandlerTests\when_cloning_gps_coordinates_question_and_question_already_exists.cs" />
-    <Compile Include="CloneGpsCoordinatesQuestionHandlerTests\when_cloning_gps_coordinates_question_and_title_contains_substitution_to_invalid_question.cs" />
-    <Compile Include="CloneGpsCoordinatesQuestionHandlerTests\when_cloning_gps_coordinates_question_and_title_contains_substitution_to_question_from_roster.cs" />
-    <Compile Include="CloneGpsCoordinatesQuestionHandlerTests\when_cloning_gps_coordinates_question_and_title_contains_substitution_to_question_with_not_supported_type.cs" />
-    <Compile Include="CloneGpsCoordinatesQuestionHandlerTests\when_cloning_gps_coordinates_question_and_title_contains_substitution_to_self.cs" />
-    <Compile Include="CloneGpsCoordinatesQuestionHandlerTests\when_cloning_gps_coordinates_question_and_title_is_empty.cs" />
-    <Compile Include="CloneGpsCoordinatesQuestionHandlerTests\when_cloning_gps_coordinates_question_and_user_dont_have_permissions.cs" />
-    <Compile Include="CloneGpsCoordinatesQuestionHandlerTests\when_cloning_gps_coordinates_question_and_variable_name_contains_invalid_characters.cs" />
-    <Compile Include="CloneGpsCoordinatesQuestionHandlerTests\when_cloning_gps_coordinates_question_and_variable_name_contains_keyword.cs" />
-    <Compile Include="CloneGpsCoordinatesQuestionHandlerTests\when_cloning_gps_coordinates_question_and_variable_name_is_empty.cs" />
-    <Compile Include="CloneGpsCoordinatesQuestionHandlerTests\when_cloning_gps_coordinates_question_and_variable_name_is_too_long.cs" />
-    <Compile Include="CloneGpsCoordinatesQuestionHandlerTests\when_cloning_gps_coordinates_question_and_variable_name_not_unique.cs" />
-    <Compile Include="CloneGpsCoordinatesQuestionHandlerTests\when_cloning_gps_coordinates_question_and_variable_name_start_with_digit.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_group_and_source_group_does_not_exist.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_group_and_group_already_exists.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_all_parameters_is_specified.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_condition_contains_2_id_references_and_1_of_them_invalid.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_question_already_exists.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_title_contains_substitution_to_invalid_question.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_title_contains_substitution_to_question_from_roster.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_title_contains_substitution_to_question_with_not_supported_type.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_title_contains_substitution_to_self.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_title_is_empty.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_group_and_user_dont_have_permissions.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_user_dont_have_permissions.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_validation_contains_2_id_references_and_1_of_them_invalid.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_variable_name_contains_invalid_characters.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_variable_name_contains_keyword.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_variable_name_is_empty.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_variable_name_is_too_long.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_variable_name_not_unique.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_variable_name_start_with_digit.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_that_is_linked_and_referecing_question_not_under_roster.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_that_is_linked_and_referencing_question_has_not_supported_type.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_that_is_linked_and_referencing_question_is_missing.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_with_empty_options.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_with_not_null_linkedQuestion_and_with_options.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_with_options_set_in_null.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_with_options_with_empty_option_title.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_with_options_with_empty_option_value.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_with_options_with_not_digital_option_value.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_with_options_with_not_unique_option_title.cs" />
-    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_with_options_with_not_unique_option_value.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_and_all_parameters_is_specified.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_and_condition_contains_2_id_references_and_1_of_them_invalid.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_and_question_already_exists.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_and_title_contains_substitution_to_invalid_question.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_and_title_contains_substitution_to_question_from_roster.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_and_title_contains_substitution_to_question_with_not_supported_type.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_and_title_contains_substitution_to_self.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_and_title_is_empty.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_and_user_dont_have_permissions.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_and_validation_contains_2_id_references_and_1_of_them_invalid.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_and_variable_name_contains_invalid_characters.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_and_variable_name_contains_keyword.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_and_variable_name_is_empty.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_and_variable_name_is_too_long.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_and_variable_name_not_unique.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_and_variable_name_start_with_digit.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_that_is_linked_and_prefilled.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_that_is_linked_and_referecing_question_not_under_roster.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_that_is_linked_and_referencing_question_has_not_supported_type.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_that_is_linked_and_referencing_question_is_missing.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_with_empty_options.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_with_not_null_linkedQuestion_and_with_options.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_with_options_set_in_null.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_with_options_with_empty_option_title.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_with_options_with_empty_option_value.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_with_options_with_not_digital_option_value.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_with_options_with_not_unique_option_title.cs" />
-    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_with_options_with_not_unique_option_value.cs" />
-    <Compile Include="CloneTextQuestionHandlerTests\when_cloning_text_question_that_is_prefilled_under_roster.cs" />
-    <Compile Include="CloneTextQuestionHandlerTests\when_cloning_text_question_and_all_parameters_is_specified.cs" />
-    <Compile Include="CloneTextQuestionHandlerTests\when_cloning_text_question_and_condition_contains_2_id_references_and_1_of_them_invalid.cs" />
-    <Compile Include="CloneTextQuestionHandlerTests\when_cloning_text_question_and_question_already_exists.cs" />
-    <Compile Include="CloneTextQuestionHandlerTests\when_cloning_text_question_and_title_contains_substitution_to_invalid_question.cs" />
-    <Compile Include="CloneTextQuestionHandlerTests\when_cloning_text_question_and_title_contains_substitution_to_question_from_roster.cs" />
-    <Compile Include="CloneTextQuestionHandlerTests\when_cloning_text_question_and_title_contains_substitution_to_question_with_not_supported_type.cs" />
-    <Compile Include="CloneTextQuestionHandlerTests\when_cloning_text_question_and_title_contains_substitution_to_self.cs" />
-    <Compile Include="CloneTextQuestionHandlerTests\when_cloning_text_question_and_title_is_empty.cs" />
-    <Compile Include="CloneTextQuestionHandlerTests\when_cloning_text_question_and_user_dont_have_permissions.cs" />
-    <Compile Include="CloneTextQuestionHandlerTests\when_cloning_text_question_and_validation_contains_2_id_references_and_1_of_them_invalid.cs" />
-    <Compile Include="CloneTextQuestionHandlerTests\when_cloning_text_question_and_variable_name_contains_invalid_characters.cs" />
-    <Compile Include="CloneTextQuestionHandlerTests\when_cloning_text_question_and_variable_name_contains_keyword.cs" />
-    <Compile Include="CloneTextQuestionHandlerTests\when_cloning_text_question_and_variable_name_is_empty.cs" />
-    <Compile Include="CloneTextQuestionHandlerTests\when_cloning_text_question_and_variable_name_is_too_long.cs" />
-    <Compile Include="CloneTextQuestionHandlerTests\when_cloning_text_question_and_variable_name_not_unique.cs" />
-    <Compile Include="CloneTextQuestionHandlerTests\when_cloning_text_question_and_variable_name_start_with_digit.cs" />
     <Compile Include="EventContextExtenstions.cs" />
     <Compile Include="JsonExportServiceTests\JsonExportServiceTestContext.cs" />
     <Compile Include="JsonExportServiceTests\when_getting_template_info.cs" />
@@ -623,24 +407,15 @@
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_NumericQuestionChanged_event_and_max_value_is_specified.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_NumericQuestionCloned_event_and_max_value_is_specified.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_QuestionCloned_event_and_triggers_are_not_empty.cs" />
-    <Compile Include="QuestionnaireDenormalizerTests\when_handling_QuestionnaireCloned_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_RosterChanged_event.cs" />
-    <Compile Include="QuestionnaireDenormalizerTests\when_handling_TemplateImported_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_TextListQuestionAdded_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_TextListQuestionChanged_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_TextListQuestionCloned_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_moving_group_to_another_group_by_id_and_there_are_3_groups_with_same_id_in_initial_group.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_moving_question_to_another_group_by_id_and_there_are_4_questions_with_same_id_in_initial_group.cs" />
-    <Compile Include="QuestionnaireDenormalizerTests\when_QuestionChangeEvent_with_Autopropagate_question_type_is_come.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_updating_group_by_id_and_there_are_2_groups_with_same_id.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_updating_question_by_id_and_there_are_3_questions_with_same_id.cs" />
     <Compile Include="QuestionnaireDocumentExtensions.cs" />
-    <Compile Include="QuestionnaireDocumentUpgraderTests\QuestionnaireDocumentUpgraderTestsContext.cs" />
-    <Compile Include="QuestionnaireDocumentUpgraderTests\when_cleaning_expression_caches_and_initial_document_has_2_questions_each_with_filled_caches.cs" />
-    <Compile Include="QuestionnaireDocumentUpgraderTests\when_translating_propagating_properties_to_roster_properties_and_propagating_question_references_3_groups_by_3_triggers___.cs" />
-    <Compile Include="QuestionnaireDocumentUpgraderTests\when_translating_propagating_properties_to_roster_properties_and_questionnaire_has_2_rosters_and_1_head_question.cs" />
-    <Compile Include="QuestionnaireDocumentUpgraderTests\when_translating_propagating_properties_to_roster_properties_and_questionnaire_has_2_propagating_questions.cs" />
-    <Compile Include="QuestionnaireDocumentUpgraderTests\when_translating_propagating_properties_to_roster_properties.cs" />
     <Compile Include="ChapterInfoViewFactoryTests\ChapterInfoViewFactoryContext.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\QuestionnaireInfoFactoryTestContext.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_group_edit_view.cs" />
@@ -687,21 +462,6 @@
     <Compile Include="QuestionnaireTests\when_cloning_roster_group_and_roster_title_question_is_under_deeper_roster.cs" />
     <Compile Include="QuestionnaireTests\when_moving_group_with_roster_size_question_from_top_level_to_parent_roster.cs" />
     <Compile Include="QuestionnaireTests\when_updating_roster_group_and_roster_title_question_is_under_deeper_roster.cs" />
-    <Compile Include="CloneQrBarcodeQuestionHandlerTests\when_cloning_qr_barcode_question_and_variable_name_start_with_digit.cs" />
-    <Compile Include="CloneQrBarcodeQuestionHandlerTests\when_cloning_qr_barcode_question_and_variable_name_not_unique.cs" />
-    <Compile Include="CloneQrBarcodeQuestionHandlerTests\when_cloning_qr_barcode_question_and_variable_name_is_too_long.cs" />
-    <Compile Include="CloneQrBarcodeQuestionHandlerTests\when_cloning_qr_barcode_question_and_variable_name_is_empty.cs" />
-    <Compile Include="CloneQrBarcodeQuestionHandlerTests\when_cloning_qr_barcode_question_and_variable_name_contains_keyword.cs" />
-    <Compile Include="CloneQrBarcodeQuestionHandlerTests\when_cloning_qr_barcode_question_and_variable_name_contains_invalid_characters.cs" />
-    <Compile Include="CloneQrBarcodeQuestionHandlerTests\when_cloning_qr_barcode_question_and_user_dont_have_permissions.cs" />
-    <Compile Include="CloneQrBarcodeQuestionHandlerTests\when_cloning_qr_barcode_question_and_title_is_empty.cs" />
-    <Compile Include="CloneQrBarcodeQuestionHandlerTests\when_cloning_qr_barcode_question_and_title_contains_substitution_to_self.cs" />
-    <Compile Include="CloneQrBarcodeQuestionHandlerTests\when_cloning_qr_barcode_question_and_title_contains_substitution_to_question_with___.cs" />
-    <Compile Include="CloneQrBarcodeQuestionHandlerTests\when_cloning_qr_barcode_question_and_title_contains_substitution_to_question_from_roster.cs" />
-    <Compile Include="CloneQrBarcodeQuestionHandlerTests\when_cloning_qr_barcode_question_and_title_contains_substitution_to_invalid_question.cs" />
-    <Compile Include="CloneQrBarcodeQuestionHandlerTests\when_cloning_qr_barcode_question_and_question_already_exists.cs" />
-    <Compile Include="CloneQrBarcodeQuestionHandlerTests\when_cloning_qr_barcode_question_and_condition_contains_2_id_references_and_1_of_them_invalid.cs" />
-    <Compile Include="CloneQrBarcodeQuestionHandlerTests\when_cloning_qr_barcode_question_and_all_parameters_is_specified.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_roster_group_and_roster_size_question_is_in_paralell_roster_scope.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_roster_group_and_roster_size_question_is_under_deeper_level.cs" />
     <Compile Include="QuestionnaireTests\when_moving_group_with_roster_form_roster_to_chapter_but_size_question_in_roster.cs" />
@@ -814,25 +574,9 @@
     <Compile Include="UpdateQrBarcodeQuestionHandlerTests\when_updating_qr_barcode_question_and_more_than_one_question_with_same_id_already_exists.cs" />
     <Compile Include="UpdateQrBarcodeQuestionHandlerTests\when_updating_qr_barcode_question_and_condition_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="UpdateQrBarcodeQuestionHandlerTests\when_updating_qr_barcode_question_and_all_parameters_is_specified.cs" />
-    <Compile Include="AddQrBarcodeQuestionHandlerTests\when_adding_qr_barcode_question_and_all_parameters_is_specified.cs" />
-    <Compile Include="AddQrBarcodeQuestionHandlerTests\when_adding_qr_barcode_question_and_title_contains_substitution_to_question_from_roster.cs" />
-    <Compile Include="AddQrBarcodeQuestionHandlerTests\when_adding_qr_barcode_question_and_title_contains_substitution_to_question_with___.cs" />
-    <Compile Include="AddQrBarcodeQuestionHandlerTests\when_adding_qr_barcode_question_and_title_contains_substitution_to_invalid_question.cs" />
-    <Compile Include="AddQrBarcodeQuestionHandlerTests\when_adding_qr_barcode_question_and_title_contains_substitution_to_self.cs" />
-    <Compile Include="AddQrBarcodeQuestionHandlerTests\when_adding_qr_barcode_question_and_condition_contains_2_id_references_and_1_of_them_invalid.cs" />
-    <Compile Include="AddQrBarcodeQuestionHandlerTests\when_adding_qr_barcode_question_and_variable_name_contains_keyword.cs" />
-    <Compile Include="AddQrBarcodeQuestionHandlerTests\when_adding_qr_barcode_question_and_variable_name_not_unique.cs" />
-    <Compile Include="AddQrBarcodeQuestionHandlerTests\when_adding_qr_barcode_question_and_variable_name_start_with_digit.cs" />
-    <Compile Include="AddQrBarcodeQuestionHandlerTests\when_adding_qr_barcode_question_and_variable_name_contains_invalid_characters.cs" />
-    <Compile Include="AddQrBarcodeQuestionHandlerTests\when_adding_qr_barcode_question_and_variable_name_is_too_long.cs" />
-    <Compile Include="AddQrBarcodeQuestionHandlerTests\when_adding_qr_barcode_question_and_variable_name_is_empty.cs" />
-    <Compile Include="AddQrBarcodeQuestionHandlerTests\when_adding_qr_barcode_question_and_title_is_empty.cs" />
-    <Compile Include="AddQrBarcodeQuestionHandlerTests\when_adding_qr_barcode_question_and_user_dont_have_permissions.cs" />
-    <Compile Include="AddQrBarcodeQuestionHandlerTests\when_adding_qr_barcode_question_and_question_already_exists.cs" />
     <Compile Include="QuestionnaireTests\when_updating_empty_roster_making_it_a_group_and_another_roster_has_roster_title_question_inside_it.cs" />
     <Compile Include="QuestionnaireTests\when_updating_group_and_group_become_a_roster_with_roster_size_question_inside.cs" />
     <Compile Include="QuestionnaireTests\when_moving_group_to_root_of_questionnaire.cs" />
-    <Compile Include="AddNumericQuestionHandlerTests\when_adding_prefilled_numeric_question_to_group_under_roster.cs" />
     <Compile Include="QuestionnaireTests\when_moving_prefilled_question_to_group_under_roster.cs" />
     <Compile Include="QuestionnaireTests\when_moving_group_from_roster_with_roster_title_question_to_group_in_roster_by_roster_size.cs" />
     <Compile Include="QuestionnaireTests\when_moving_group_from_roster_with_roster_title_question_to_roster_that_has_different_roster_size__.cs" />
@@ -851,11 +595,9 @@
     <Compile Include="QuestionnaireTests\when_adding_roster_under_roster.cs" />
     <Compile Include="QuestionnaireTests\when_adding_roster_group_and_size_source_is_text_list_question_and_roster_title_specified.cs" />
     <Compile Include="QuestionnaireTests\when_adding_roster_group_referencing_text_list_question_as_roster_size_source.cs" />
-    <Compile Include="QuestionnaireTests\when_adding_text_list_question_and_max_answer_count_is_specified.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_roster_group_and_size_source_is_text_list_question_and_roster_title_specified.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_roster_group_by_fixed_titles_and_have_more_than_250_titles.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_roster_group_referencing_text_list_question_as_roster_size_source.cs" />
-    <Compile Include="QuestionnaireTests\when_cloning_text_list_question_and_max_answer_count_is_specified.cs" />
     <Compile Include="QuestionnaireTests\when_updating_roster_group_and_roster_size_question_is_in_paralell_roster_scope.cs" />
     <Compile Include="QuestionnaireTests\when_updating_roster_group_and_roster_size_question_is_under_deeper_level.cs" />
     <Compile Include="QuestionnaireTests\when_updating_roster_group_and_size_source_is_text_list_question_and_roster_title_specified.cs" />
@@ -918,9 +660,6 @@
     <Compile Include="QuestionnaireTests\when_adding_roster_group_by_question_and_roster_size_question_is_numeric_but_not_integer.cs" />
     <Compile Include="QuestionnaireTests\when_adding_roster_group_by_question_and_roster_size_question_is_under_another_roster.cs" />
     <Compile Include="QuestionnaireTests\when_adding_group_under_roster.cs" />
-    <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_and_max_value_is_not_specified.cs" />
-    <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_and_max_value_is_specified.cs" />
-    <Compile Include="AddNumericQuestionHandlerTests\when_adding_prefilled_numeric_question_under_roster.cs" />
     <Compile Include="QuestionnaireTests\when_adding_prefilled_question_under_roster.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_roster_group_by_question_and_roster_size_question_id_is_not_specified.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_roster_group_by_question_and_roster_size_question_id_is_specified.cs" />
@@ -929,9 +668,6 @@
     <Compile Include="QuestionnaireTests\when_cloning_roster_group_by_question_and_roster_size_question_is_numeric_but_not_integer.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_roster_group_by_question_and_roster_size_question_is_under_another_roster.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_group_targeting_it_under_roster.cs" />
-    <Compile Include="QuestionnaireTests\when_cloning_numeric_question_and_max_value_is_not_specified.cs" />
-    <Compile Include="QuestionnaireTests\when_cloning_numeric_question_and_max_value_is_specified.cs" />
-    <Compile Include="QuestionnaireTests\when_cloning_prefilled_numeric_question_under_roster.cs" />
     <Compile Include="QuestionnaireTests\when_deleting_question_and_question_is_referenced_as_roster_size_question.cs" />
     <Compile Include="QuestionnaireTests\when_moving_group_under_roster.cs" />
     <Compile Include="QuestionnaireTests\when_moving_prefilled_question_under_roster.cs" />
@@ -1012,14 +748,6 @@
       <Project>{AA90754B-CA47-429E-BDC8-2A83E94179B7}</Project>
       <Name>Ncqrs.Spec</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
-      <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
-      <Name>Ncqrs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
-      <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
-      <Name>Main.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj">
       <Project>{DCBFC3F0-8E8C-4529-B474-B6A79225450E}</Project>
       <Name>WB.Core.BoundedContexts.Designer</Name>
@@ -1036,10 +764,6 @@
       <Project>{6ac3a080-ceca-4974-9ca1-c239695ed8f8}</Project>
       <Name>WB.Core.Infrastructure.Files</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
-      <Project>{e7d429a7-1c9f-4f25-9c23-686ef9c2d60a}</Project>
-      <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
@@ -1048,9 +772,9 @@
       <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
       <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
-      <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>
-      <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
+    <ProjectReference Include="..\..\Core\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
+      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
+      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>

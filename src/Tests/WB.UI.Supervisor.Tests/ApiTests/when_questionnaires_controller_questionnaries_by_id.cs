@@ -1,7 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
-using Main.Core.View;
 using Moq;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;

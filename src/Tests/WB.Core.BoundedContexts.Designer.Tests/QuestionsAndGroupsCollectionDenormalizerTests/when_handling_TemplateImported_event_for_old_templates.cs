@@ -87,17 +87,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
                 }
             };
 
-            var oldImportedDocument = new QuestionnaireDocument();
-            evnt = CreateTemplateImportedEvent(oldImportedDocument);
-
-            var upgrader = new Mock<IQuestionnaireDocumentUpgrader>();
-            upgrader.Setup(x => x.TranslatePropagatePropertiesToRosterProperties(oldImportedDocument))
-                .Returns(questionnaire);
+            evnt = CreateTemplateImportedEvent(questionnaire);
 
             denormalizer = CreateQuestionnaireInfoDenormalizer(
                 questionDetailsViewMapper: questionDetailsFactoryMock.Object,
-                questionnaireEntityFactory: questionFactoryMock.Object,
-                upgrader: upgrader.Object);
+                questionnaireEntityFactory: questionFactoryMock.Object);
         };
 
         Because of = () =>

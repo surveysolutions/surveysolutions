@@ -43,13 +43,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             interview = CreateInterview(questionnaireId: questionnaireId);
 
-            interview.Apply(new TextListQuestionAnswered(userId, textListQuestionId, new decimal[] { }, DateTime.Now, previousAnswer)); 
-            interview.Apply(new RosterRowAdded(rosterAId, emptyRosterVector, 1, sortIndex: null));
-            interview.Apply(new RosterRowAdded(rosterAId, emptyRosterVector, 2, sortIndex: null));
-            interview.Apply(new RosterRowAdded(rosterAId, emptyRosterVector, 3, sortIndex: null));
-            interview.Apply(new RosterRowAdded(rosterBId, emptyRosterVector, 1, sortIndex: null));
-            interview.Apply(new RosterRowAdded(rosterBId, emptyRosterVector, 2, sortIndex: null));
-            interview.Apply(new RosterRowAdded(rosterBId, emptyRosterVector, 3, sortIndex: null));
+            interview.Apply(new TextListQuestionAnswered(userId, textListQuestionId, new decimal[] { }, DateTime.Now, previousAnswer));
+            interview.Apply(Create.Events.RosterInstancesAdded(rosterAId, emptyRosterVector, 1, sortIndex: null));
+            interview.Apply(Create.Events.RosterInstancesAdded(rosterAId, emptyRosterVector, 2, sortIndex: null));
+            interview.Apply(Create.Events.RosterInstancesAdded(rosterAId, emptyRosterVector, 3, sortIndex: null));
+            interview.Apply(Create.Events.RosterInstancesAdded(rosterBId, emptyRosterVector, 1, sortIndex: null));
+            interview.Apply(Create.Events.RosterInstancesAdded(rosterBId, emptyRosterVector, 2, sortIndex: null));
+            interview.Apply(Create.Events.RosterInstancesAdded(rosterBId, emptyRosterVector, 3, sortIndex: null));
 
             eventContext = new EventContext();
         };
@@ -61,13 +61,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext.ShouldContainEvent<TextListQuestionAnswered>();
 
         It should_not_raise_RosterRowAdded_events = () =>
-           eventContext.ShouldContainEvents<RosterRowAdded>(count: 0);
+           eventContext.ShouldContainEvents<RosterInstancesAdded>(count: 0);
 
         It should_not_raise_any_RosterRowRemoved_events = () =>
-          eventContext.ShouldContainEvents<RosterRowRemoved>(count: 0);
+          eventContext.ShouldContainEvents<RosterInstancesRemoved>(count: 0);
 
         It should_not_raise_RosterRowTitleChanged_events = () =>
-            eventContext.ShouldContainEvents<RosterRowTitleChanged>(count: 0);
+            eventContext.ShouldContainEvents<RosterInstancesTitleChanged>(count: 0);
 
         Cleanup stuff = () =>
         {

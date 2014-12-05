@@ -1,12 +1,10 @@
 ﻿using System;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
-    [MapsToAggregateRootConstructor(typeof (Implementation.Aggregates.Interview))]
     public class CreateInterviewCreatedOnClientCommand : InterviewCommand
     {
         public Guid Id { get; private set; }

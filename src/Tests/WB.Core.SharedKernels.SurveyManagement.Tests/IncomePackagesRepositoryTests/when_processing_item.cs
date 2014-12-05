@@ -7,11 +7,13 @@ using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.IncomePackagesRepositoryTests
@@ -27,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.IncomePackagesRepositoryT
 
             var fileSystemAccessor = Mock.Of<IFileSystemAccessor>(_
                 => _.IsFileExists(Moq.It.IsAny<string>()) == true
-                && _.ReadAllText(Moq.It.IsAny<string>()) == PackageHelper.CompressString("x"));
+                && _.ReadAllText(Moq.It.IsAny<string>()) == new ZipArchiveUtils(Mock.Of<IFileSystemAccessor>()).CompressString("x"));
 
             var eventStore = Mock.Of<IStreamableEventStore>();
             Mock.Get(eventStore)

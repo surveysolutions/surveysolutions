@@ -78,11 +78,18 @@
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="Raven.Abstractions">
+      <HintPath>..\..\..\packages\RavenDB.Client.2.5.2907\lib\net45\Raven.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Lightweight">
+      <HintPath>..\..\..\packages\RavenDB.Client.2.5.2907\lib\net45\Raven.Client.Lightweight.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.1.20.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.Bcl.Immutable.1.1.20-beta\lib\portable-net45+win8\System.Collections.Immutable.dll</HintPath>
+      <HintPath>..\..\..\packages\System.Collections.Immutable.1.1.32-beta\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
     </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
@@ -94,31 +101,34 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.1.1\lib\net45\System.Web.Helpers.dll</HintPath>
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Http, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Microsoft.AspNet.WebApi.Core.5.1.1\lib\net45\System.Web.Http.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Mvc, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Web.Mvc, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.AspNet.Mvc.5.1.1\lib\net45\System.Web.Mvc.dll</HintPath>
+      <HintPath>..\..\..\packages\Microsoft.AspNet.Mvc.5.2.2\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.AspNet.Razor.3.1.1\lib\net45\System.Web.Razor.dll</HintPath>
+      <HintPath>..\..\..\packages\Microsoft.AspNet.Razor.3.2.2\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.1.1\lib\net45\System.Web.WebPages.dll</HintPath>
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.1.1\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.1.1\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -189,9 +199,6 @@
     <Compile Include="BoundedContexts\Designer\EnumerableExtensions.cs" />
     <Compile Include="BoundedContexts\Designer\NCalcToCSharpConverterTests\when_converting__a_plus_b_gt_c_plus_d__to_roslyn_and_a_is_mapped_to_x_and_b_is_mapped_to_y.cs" />
     <Compile Include="BoundedContexts\Designer\NCalcToCSharpConverterTests\when_converting_different_ncalc_expressions_to_roslyn.cs" />
-    <Compile Include="BoundedContexts\Designer\NCalcToSharpControllerTests\when_getting_status.cs" />
-    <Compile Include="BoundedContexts\Designer\NCalcToSharpControllerTests\when_migrating_all_questionnaires_and_3_questionnaires_are_not_migrated_to_csharp.cs" />
-    <Compile Include="BoundedContexts\Designer\NCalcToSharpControllerTests\when_migrating_one_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\PdfQuestionnaireViewTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\when_adding_entity_and_root_id_is_used_as_parent_group_id.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\when_adding_group_specifying_root_id_as_parent.cs" />
@@ -239,6 +246,8 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\QuestionnaireVerifierTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_validating_questionnaire_with_empty_variable_names.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_empty_questionnaire.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_group_with_condition_expression_with_more_than_10000_chars_length.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_question_with_validation_expression_with_more_than_10000_chars_length.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_question_with_variable_name_which_contains_unicode_symbols.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_roster_with_empty_variable_name.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_roster_with_invalid_variable_name.cs" />
@@ -260,8 +269,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_2_rosters_inside_roster_and_second_roster_has_roster_size_question_from_first_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_2_rosters_inside_roster_and_second_roster_has_roster_size_question_that_used_with__.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_3_questions_with_invalid_validation_expression_and_2_with_correct.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_autopropagate_group.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_autopropagate_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_categorical_linked_one_answer_question_without_options.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_categorical_multi_answers_question_that_has_max_allowed_answers_count_more___.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_categorical_multi_answers_question_that_has_max_allowed_answers_less_than_2.cs" />
@@ -362,10 +369,31 @@
     <Compile Include="BoundedContexts\Designer\RoslynExpressionProcessorTests\when_getting_identifiers_from_different_expressions.cs" />
     <Compile Include="BoundedContexts\Supervisor\AtomFeedReaderTests\when_reading_feed_from_specified_entry_and_such_entry_is_absent_in_feed.cs" />
     <Compile Include="Create.cs" />
+    <Compile Include="GenericSubdomains\Utils\when_sorting_by_property_from_parent_class_with_OrderBy_from_QueryableExtensions.cs" />
     <Compile Include="GenericSubdomains\Utils\StringExtensionsTests.cs" />
+    <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\AbstractFunctionalEventHandlerTestContext.cs" />
+    <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\TestableFunctionalEventHandler.cs" />
+    <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\when_batch_of_different_events_are_published_on_event_handler.cs" />
+    <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\when_CleanWritersByEventSource_is_called.cs" />
+    <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\when_CleanWritersByEventSource_is_called_and_handler_has_more_then_one_writer.cs" />
+    <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\when_CleanWritersByEventSource_is_called_and_handler_has_no_writers.cs" />
+    <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\when_CleanWritersByEventSource_is_called_and_handler_has_writer_which_doesnt_support_cleaning.cs" />
+    <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\when_delete_handler_is_called.cs" />
+    <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\when_view_is_deleted_by_update_handler.cs" />
+    <Compile Include="Infrastructure\Events\EventMergeUtilsTest.cs" />
+    <Compile Include="Infrastructure\InMemoryViewWriterTests\InMemoryViewWriterTestContext.cs" />
+    <Compile Include="Infrastructure\InMemoryViewWriterTests\when_disposing_inmemroywriter_after_view_was_created_in_memory.cs" />
+    <Compile Include="Infrastructure\InMemoryViewWriterTests\when_disposing_inmemroywriter_after_view_was_deleted_in_memory.cs" />
+    <Compile Include="Infrastructure\InMemoryViewWriterTests\when_disposing_inmemroywriter_after_view_was_updated_in_memory.cs" />
+    <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\NcqrCompatibleEventDispatcherTestContext.cs" />
+    <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\whent_publish_0_events_on_bus_with_functional_style_denormalizer_registred.cs" />
+    <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\whent_publish_10_events_on_bus_with_functional_style_denormalizer_registred.cs" />
+    <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\whent_publish_10_events_on_bus_with_ncqrs_style_denormalizer_registred.cs" />
+    <Compile Include="Infrastructure\View.cs" />
     <Compile Include="MockExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceHelper.cs" />
+    <Compile Include="SharedKernels\DataCollection\GeoPositionTests\when_parsing_string_i_order_to_create_GeoPosition_object.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewExpressionStateTests\MetodInfo.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewExpressionStateTests\MetodInfoExtensions.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewExpressionStateTests\when_getting_methods_of_IInterviewExpressionState.cs" />
@@ -373,8 +401,6 @@
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_cascading_question_parent_value.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_cascading_question_parent_value_which_is_not_decimal.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_cascading_question_parent_value_for_text_list_question.cs" />
-    <Compile Include="SharedKernels\ExpressionProcessor\ExpressionProcessorTests\ExpressionProcessorTestsContext.cs" />
-    <Compile Include="SharedKernels\ExpressionProcessor\ExpressionProcessorTests\when_getting_identifiers_used_in_expression__a_or_colon_b_and_c_colon__.cs" />
     <Compile Include="SharedKernels\ExpressionProcessor\KeywordsProviderTests\KeywordsProviderTestContext.cs" />
     <Compile Include="SharedKernels\ExpressionProcessor\KeywordsProviderTests\when_getting_all_reserved_keywords.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\ChartStatisticsViewFactoryTestsContext.cs" />
@@ -397,6 +423,9 @@
     <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\InterviewControllerTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\when_getting_interview_details_under_headquarter_user.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\when_getting_interview_details_which_belong_to_another_supervisor.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireDenormalizerTests\QuestionnaireDenormalizerTestsContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireDenormalizerTests\when_questionnaire_is_deleted_and_all_interviews_deleted.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireDenormalizerTests\when_questionnaire_is_deleted_but_interviews_still_exists.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireUpgradeServiceTests\QuestionnaireUpgradeServiceTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireUpgradeServiceTests\when_CreateRostersVariableName_called_for_QuestionnaireDocument_with_invalid_roster_variable_name.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ResourceControllerTests\when_getting_interview_file_which_is_absent.cs" />
@@ -405,12 +434,10 @@
     <Compile Include="SharedKernels\SurveyManagement\ResourceControllerTests\ResourceControllerTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\CommandTransformatorTests\CommandTransformatorTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\CommandTransformatorTests\when_need_to_transform_CreateInterviewControllerCommand.cs" />
+    <Compile Include="SharedKernels\SurveySolutions\Documents\QuestionnaireDocumentTests.cs" />
     <Compile Include="SharedKernels\Synchronization\DefaultBackupManagerTests.cs" />
-    <Compile Include="SharedKernels\Synchronization\ReadSideChunkReaderTests.cs" />
-    <Compile Include="SharedKernels\Synchronization\ReadSideChunkWriterTests.cs" />
-    <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests.cs" />
-    <Compile Include="SharedKernels\Synchronization\SyncManagerTests\SyncManagerTests.cs" />
-    <Compile Include="SharedKernels\Synchronization\SyncProviderTests\SyncProviderTests.cs" />
+    <Compile Include="SharedKernels\Synchronization\when_chunk_with_same_guid_is_present.cs" />
+    <Compile Include="SharedKernels\Synchronization\when_content_is_not_empty.cs" />
     <Compile Include="Shared\Web\LocalOrDevelopmentAccessOnlyAttributeTests\LocalOrDevelopmentAccessOnlyAttributeTestsContext.cs" />
     <Compile Include="Shared\Web\LocalOrDevelopmentAccessOnlyAttributeTests\when_action_executing_and_web_site_called_by_localhost.cs" />
     <Compile Include="Shared\Web\LocalOrDevelopmentAccessOnlyAttributeTests\when_action_executing_and_web_site_in_development.cs" />
@@ -418,6 +445,8 @@
     <Compile Include="ShouldExtentions.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Stub.cs" />
+    <Compile Include="Utils\RavenMockUtils.cs" />
+    <Compile Include="Utils\ReflectionUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Applications\Designer\CommandUtilsTests\" />
@@ -425,21 +454,12 @@
     <Folder Include="Applications\Supervisor\" />
     <Folder Include="BoundedContexts\Headquarters\" />
     <Folder Include="GenericSubdomains\Logging\" />
-    <Folder Include="Infrastructure\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
-      <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
-      <Name>Ncqrs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
-      <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
-      <Name>Main.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj">
       <Project>{DCBFC3F0-8E8C-4529-B474-B6A79225450E}</Project>
       <Name>WB.Core.BoundedContexts.Designer</Name>
@@ -472,10 +492,6 @@
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
-      <Project>{D55B9582-70FD-4340-A3BC-55A33D49B2E6}</Project>
-      <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\SurveyManagement\SurveyManagement.Web\WB.Core.SharedKernels.SurveyManagement.Web.csproj">
       <Project>{E96A3629-18F6-4B7C-9920-FC9A1B3892C1}</Project>
       <Name>WB.Core.SharedKernels.SurveyManagement.Web</Name>
@@ -483,6 +499,10 @@
     <ProjectReference Include="..\..\Core\SharedKernels\SurveyManagement\SurveyManagement\WB.Core.SharedKernels.SurveyManagement.csproj">
       <Project>{29A132B5-A573-40D2-9E8F-2871E95D7766}</Project>
       <Name>WB.Core.SharedKernels.SurveyManagement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
+      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
+      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>

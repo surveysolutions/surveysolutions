@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using WB.Core.Infrastructure.ReadSide.Repository;
+using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 {

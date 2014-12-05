@@ -9,7 +9,7 @@ using Raven.Abstractions.Extensions;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
+using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
@@ -47,27 +47,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
     {
         private readonly IQuestionDetailsViewMapper questionDetailsViewMapper;
         private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;
-        private readonly IQuestionnaireDocumentUpgrader questionnaireUpgrader;
 
         public QuestionsAndGroupsCollectionDenormalizer(
             IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView> readsideRepositoryWriter,
-            IQuestionDetailsViewMapper questionDetailsViewMapper, IQuestionnaireEntityFactory questionnaireEntityFactory,
-            IQuestionnaireDocumentUpgrader questionnaireUpgrader)
+            IQuestionDetailsViewMapper questionDetailsViewMapper, IQuestionnaireEntityFactory questionnaireEntityFactory)
             : base(readsideRepositoryWriter)
         {
             this.questionDetailsViewMapper = questionDetailsViewMapper;
             this.questionnaireEntityFactory = questionnaireEntityFactory;
-            this.questionnaireUpgrader = questionnaireUpgrader;
-        }
-
-        public override Type[] UsesViews
-        {
-            get { return new Type[0]; }
-        }
-
-        public override Type[] BuildsViews
-        {
-            get { return base.BuildsViews.Union(new[] { typeof (QuestionsAndGroupsCollectionView) }).ToArray(); }
         }
 
         public QuestionsAndGroupsCollectionView Create(IPublishedEvent<NewQuestionnaireCreated> evnt)
@@ -443,14 +430,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
         private QuestionsAndGroupsCollectionView CreateStateWithAllQuestions(QuestionnaireDocument questionnaire)
         {
-            var convertedDocument = this.questionnaireUpgrader.TranslatePropagatePropertiesToRosterProperties(questionnaire);
-            convertedDocument.ConnectChildrenWithParent();
-            var questions = convertedDocument.GetEntitiesByType<IQuestion>()
+            questionnaire.ConnectChildrenWithParent();
+            var questions = questionnaire.GetEntitiesByType<IQuestion>()
                 .Select(question => this.questionDetailsViewMapper.Map(question, question.GetParent().PublicKey))
                 .Where(q => q != null)
                 .ToList();
 
-            var groups = convertedDocument.GetAllGroups()
+            var groups = questionnaire.GetAllGroups()
                 .Select(g => new GroupAndRosterDetailsView
                 {
                     Id = g.PublicKey,
@@ -460,14 +446,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                     RosterSizeQuestionId = g.RosterSizeQuestionId,
                     RosterSizeSourceType = g.RosterSizeSource,
                     RosterTitleQuestionId = g.RosterTitleQuestionId,
-                    ParentGroupId = g.GetParent().PublicKey == convertedDocument.PublicKey ? Guid.Empty : g.GetParent().PublicKey,
+                    ParentGroupId = g.GetParent().PublicKey == questionnaire.PublicKey ? Guid.Empty : g.GetParent().PublicKey,
                     EnablementCondition = g.ConditionExpression,
                     VariableName = g.VariableName
                 })
                 .ToList();
 
             var staticTexts =
-                convertedDocument.GetEntitiesByType<IStaticText>().Select(staticText => new StaticTextDetailsView()
+                questionnaire.GetEntitiesByType<IStaticText>().Select(staticText => new StaticTextDetailsView()
                 {
                     Id = staticText.PublicKey,
                     ParentGroupId = staticText.GetParent().PublicKey,

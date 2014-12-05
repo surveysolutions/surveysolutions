@@ -11,7 +11,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
@@ -115,8 +115,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IGroup>(RosterSizeSourceQuestionTypeIsIncorrect, "WB0023", VerificationMessages.WB0023_RosterSizeSourceQuestionTypeIsIncorrect),
                     Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldNotBeEmpty, "WB0025", VerificationMessages.WB0025_RosterSizeQuestionMaxValueCouldNotBeEmpty),
                     Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldBeInRange1And40, "WB0026", VerificationMessages.WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And40),
-                    Verifier<IGroup>(QuestionnaireHaveAutopropagatedGroups, "WB0027", VerificationMessages.WB0027_QuestionnaireHaveAutopropagatedGroups),
-                    Verifier<IQuestion>(QuestionnaireHaveAutopropagatedQuestions, "WB0028", VerificationMessages.WB0028_QuestionnaireHaveAutopropagatedQuestions),
                     Verifier<IQuestion>(PrefilledQuestionCantBeInsideOfRoster, "WB0030", VerificationMessages.WB0030_PrefilledQuestionCantBeInsideOfRoster),
                     Verifier<IGroup>(GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles, "WB0032", VerificationMessages.WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles),
                     Verifier<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion, "WB0033", VerificationMessages.WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion),
@@ -194,9 +192,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private bool hasExceededLimitByValidationExpresssionCharactersLength = false;
         private bool ValidationExpresssionHasLengthMoreThan10000Characters(IQuestion question)
         {
-            return !string.IsNullOrEmpty(question.ValidationExpression) &&
-                   (hasExceededLimitByValidationExpresssionCharactersLength =
-                       (question.ValidationExpression.Length > maxExpressionLength));
+            if (string.IsNullOrEmpty(question.ValidationExpression))
+                return false;
+
+            var exedded = question.ValidationExpression.Length > maxExpressionLength;
+            hasExceededLimitByValidationExpresssionCharactersLength = hasExceededLimitByValidationExpresssionCharactersLength || exedded;
+
+            return exedded;
         }
 
         private bool hasExceededLimitByConditionExpresssionCharactersLength = false;
@@ -204,9 +206,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             var customEnablementCondition = GetCustomEnablementCondition(groupOrQuestion);
 
-            return !string.IsNullOrEmpty(customEnablementCondition) &&
-                   (hasExceededLimitByConditionExpresssionCharactersLength =
-                       (customEnablementCondition.Length > maxExpressionLength));
+            if (string.IsNullOrEmpty(customEnablementCondition))
+                return false;
+
+            var exedded = customEnablementCondition.Length > maxExpressionLength;
+            hasExceededLimitByConditionExpresssionCharactersLength = hasExceededLimitByConditionExpresssionCharactersLength || exedded;
+
+            return exedded;
         }
 
         private bool CascadingQuestionHasValidationExpresssion(SingleQuestion question)
@@ -219,7 +225,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return question.CascadeFromQuestionId.HasValue && !string.IsNullOrWhiteSpace(question.ConditionExpression);
         }
 
-       
         private IEnumerable<QuestionnaireVerificationError> ErrorsByConditionAndValidationExpressions(QuestionnaireDocument questionnaire)
         {
             if(hasExceededLimitByConditionExpresssionCharactersLength || hasExceededLimitByValidationExpresssionCharactersLength)
@@ -229,10 +234,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             if (compilationResult.Success)
                 yield break;
-            
-            foreach (var location in compilationResult.Diagnostics.Select(x=>x.Location).Distinct())
+
+            foreach (var locationOfExpressionError in compilationResult.Diagnostics.Select(x => x.Location).Distinct())
             {
-                yield return CreateExpressionSyntaxError(new ExpressionLocation(location));
+                yield return CreateExpressionSyntaxError(new ExpressionLocation(locationOfExpressionError));
             }
         }
         
@@ -258,7 +263,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private bool CascadingQuestionHasMoreThanAllowedOptions(SingleQuestion question)
         {
-            return question.CascadeFromQuestionId.HasValue && question.Answers != null && question.Answers.Count > 100000;
+            return question.CascadeFromQuestionId.HasValue && question.Answers != null && question.Answers.Count > 10000;
         }
 
         private static EntityVerificationResult<SingleQuestion> CascadingHasCircularReference(SingleQuestion question, QuestionnaireDocument questionnaire)
@@ -640,16 +645,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool PrefilledQuestionCantBeInsideOfRoster(IQuestion question, QuestionnaireDocument questionnaire)
         {
             return IsPreFilledQuestion(question) && GetAllParentGroupsForQuestion(question, questionnaire).Any(IsRosterGroup);
-        }
-
-        private static bool QuestionnaireHaveAutopropagatedQuestions(IQuestion question, QuestionnaireDocument questionnaire)
-        {
-            return questionnaire.Find<IAutoPropagateQuestion>(_ => true).Any();
-        }
-
-        private static bool QuestionnaireHaveAutopropagatedGroups(IGroup group, QuestionnaireDocument questionnaire)
-        {
-            return questionnaire.Find<IGroup>(IsGroupPropagatable).Any();
         }
 
         private static bool TextListQuestionCannotBePrefilled(ITextListQuestion question)
@@ -1159,7 +1154,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 entity.PublicKey);
         }
 
-        
         private bool QuestionHasValidationExpressionWithoutValidationMessage(IQuestion question)
         {
             if (string.IsNullOrWhiteSpace(question.ValidationExpression) || question.QuestionType == QuestionType.QRBarcode)
@@ -1440,24 +1434,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static QuestionnaireVerificationError CreateExpressionSyntaxError(ExpressionLocation expressionLocation)
         {
-            if(expressionLocation.ExpressionType == ExpressionType.General)
+            if(expressionLocation.ExpressionType == ExpressionLocationType.General)
             {
                 return new QuestionnaireVerificationError("WB0096", VerificationMessages.WB0096_GeneralCompilationError);
             }
 
-            var referense = new QuestionnaireVerificationReference(
-                expressionLocation.ItemType == ItemType.Question ? 
+            var reference = new QuestionnaireVerificationReference(
+                expressionLocation.ItemType == ExpressionLocationItemType.Question ? 
                     QuestionnaireVerificationReferenceType.Question : 
                     QuestionnaireVerificationReferenceType.Group, expressionLocation.Id);
 
-            if(expressionLocation.ExpressionType == ExpressionType.Validations)
+            if(expressionLocation.ExpressionType == ExpressionLocationType.Validation)
             {
-                return new QuestionnaireVerificationError("WB0002", VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax, referense);
+                return new QuestionnaireVerificationError("WB0002", VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax, reference);
             }
-            else //(expressionLocation.ExpressionType == ExpressionType.Conditions)
+            else 
             {
                 return new QuestionnaireVerificationError("WB0003",
-                    VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax, referense);
+                    VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax, reference);
             }
         }
 
@@ -1483,11 +1477,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool NoQuestionsExist(QuestionnaireDocument questionnaire)
         {
             return !questionnaire.Find<IQuestion>(_ => true).Any();
-        }
-
-        private static bool IsGroupPropagatable(IGroup group)
-        {
-            return group.Propagated == Propagate.AutoPropagated;
         }
 
         private static bool IsRosterGroup(IGroup group)

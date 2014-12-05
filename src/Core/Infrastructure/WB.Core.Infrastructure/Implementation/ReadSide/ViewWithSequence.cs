@@ -1,0 +1,16 @@
+using WB.Core.SharedKernels.SurveySolutions.Documents;
+
+namespace WB.Core.Infrastructure.Implementation.ReadSide
+{
+    public class ViewWithSequence<T> : IView
+    {
+        public ViewWithSequence(T document, long sequence)
+        {
+            this.Document = document;
+            this.Sequence = sequence;
+        }
+
+        public T Document { get; private set; }
+        public long Sequence { get; set; }
+    }
+}

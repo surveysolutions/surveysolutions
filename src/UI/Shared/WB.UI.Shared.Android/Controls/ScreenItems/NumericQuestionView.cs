@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Threading.Tasks;
 using Android.Content;
 using Android.Text;
 using Android.Views;
@@ -8,10 +9,11 @@ using Android.Widget;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Java.Util.Logging;
 using Microsoft.Practices.ServiceLocation;
-using Ncqrs.Commanding.ServiceModel;
+
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace WB.UI.Shared.Android.Controls.ScreenItems{
@@ -105,12 +107,16 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
             return newCursorPosition;
         }
 
-        void etAnswer_FocusChange(object sender, View.FocusChangeEventArgs e)
+        async void etAnswer_FocusChange(object sender, View.FocusChangeEventArgs e)
         {
             if (e.HasFocus)
             {
+                this.ShowKeyboard(this.etAnswer);
                 return;
             }
+
+            if (!this.IsCommentsEditorFocused)
+                this.HideKeyboard(this.etAnswer);
 
             string newAnswer = this.etAnswer.Text.Trim();
 
@@ -134,16 +140,18 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
                 }
                 return;
             }
-
-            if (!this.IsCommentsEditorFocused)
-                this.HideKeyboard(this.etAnswer);
-
-            this.SaveAnswer(newAnswer, this.CreateAnswerQuestionCommand(answer));
+            var command = await this.CreateAnswerQuestionCommand(answer);
+            if (command == null)
+            {
+                this.PutAnswerStoredInModelToUI();
+                return;
+            }
+            this.SaveAnswer(newAnswer, command);
         }
 
         protected abstract bool IsParseAnswerStringSucceeded(string newAnswer, out T answer);
 
-        protected abstract AnswerQuestionCommand CreateAnswerQuestionCommand(T answer);
+        protected abstract  Task<AnswerQuestionCommand> CreateAnswerQuestionCommand(T answer);
 
         protected override string GetAnswerStoredInModelAsString()
         {
@@ -157,12 +165,12 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
 
         void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)
         {
-            this.etAnswer.ClearFocus();
+            if(e.ActionId == ImeAction.Done)
+                this.etAnswer.ClearFocus();
         }
         void NumericQuestionView_Click(object sender, EventArgs e)
         {
             this.etAnswer.RequestFocus();
-            this.ShowKeyboard(this.etAnswer);
         }
 
         protected TextView tvTitle

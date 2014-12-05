@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Utility;
 using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;

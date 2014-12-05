@@ -7,7 +7,6 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
@@ -40,19 +39,19 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 && _.IsQuestionMandatory(singleQuestion2Id) == true
             );
 
-            var expressionProcessor =
-                Mock.Of<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>(
-                    x =>
-                        x.EvaluateBooleanExpression(validationExpression, Moq.It.IsAny<Func<string, object>>()) == true &&
-                        x.EvaluateBooleanExpression(enablementCondition, Moq.It.IsAny<Func<string, object>>()) == true &&
-                        x.GetIdentifiersUsedInExpression(validationExpression) == new []{ singleQuestion1Id.ToString()} &&
-                        x.GetIdentifiersUsedInExpression(enablementCondition) == new[] { singleQuestion1Id.ToString() });
+//            var expressionProcessor =
+//                Mock.Of<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>(
+//                    x =>
+////                        x.EvaluateBooleanExpression(validationExpression, Moq.It.IsAny<Func<string, object>>()) == true &&
+////                        x.EvaluateBooleanExpression(enablementCondition, Moq.It.IsAny<Func<string, object>>()) == true &&
+//                        x.GetIdentifiersUsedInExpression(validationExpression) == new []{ singleQuestion1Id.ToString()} &&
+//                        x.GetIdentifiersUsedInExpression(enablementCondition) == new[] { singleQuestion1Id.ToString() });
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);
 
             SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(questionnaireRepository);
 
-            SetupInstanceToMockedServiceLocator<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>(expressionProcessor);
+            //SetupInstanceToMockedServiceLocator<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>(expressionProcessor);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
             interview.Apply(new SingleOptionQuestionAnswered(userId: userId, questionId: singleQuestion1Id,

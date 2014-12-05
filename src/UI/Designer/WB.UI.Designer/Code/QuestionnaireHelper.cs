@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using Main.Core.View;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.Membership;

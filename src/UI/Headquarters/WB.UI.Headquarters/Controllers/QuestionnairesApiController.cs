@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Main.Core.Entities;
-using Main.Core.View;
-using Ncqrs.Commanding.ServiceModel;
 using System.Linq;
 using System.Web.Http;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;

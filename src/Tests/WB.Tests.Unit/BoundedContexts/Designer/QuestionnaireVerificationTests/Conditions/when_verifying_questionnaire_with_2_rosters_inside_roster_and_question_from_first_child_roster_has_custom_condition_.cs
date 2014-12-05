@@ -8,8 +8,8 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.CustomEnablementConditions
@@ -83,10 +83,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
             });
 
             var expressionProcessor = new Mock<IExpressionProcessor>();
-
-            expressionProcessor
-                .Setup(x => x.IsSyntaxValid(Moq.It.IsAny<string>()))
-                .Returns(true);
 
             expressionProcessor
                 .Setup(x => x.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()))

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -30,7 +27,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
                     PublicKey = rosterSizeQuestionId,
                     QuestionType = QuestionType.Numeric
                 },
-                new Group()
+                new Group
                 {
                     PublicKey = rosterGroupId1,
                     IsRoster = true,

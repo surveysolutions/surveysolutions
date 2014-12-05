@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Utility;
 using Newtonsoft.Json;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.Synchronization.MetaInfo;
 
 namespace WB.Core.Synchronization.SyncStorage
@@ -35,11 +36,16 @@ namespace WB.Core.Synchronization.SyncStorage
             this.metaBuilder = metaBuilder;
         }
 
+        public void Clear()
+        {
+            chunkStorageWriter.Clear();
+        }
+
         public void SaveInterview(InterviewSynchronizationDto doc, Guid responsibleId, DateTime timestamp)
         {
             var syncItem = new SyncItem
                 {
-                    Id = doc.Id,
+                    RootId = doc.Id,
                     ItemType = SyncItemType.Questionnare,
                     IsCompressed = UseCompression,
                     Content = GetItemAsContent(doc),
@@ -52,7 +58,7 @@ namespace WB.Core.Synchronization.SyncStorage
         {
             var syncItem = new SyncItem
             {
-                Id = id,
+                RootId = id,
                 ItemType = SyncItemType.DeleteQuestionnare,
                 IsCompressed = UseCompression,
                 Content = id.ToString()
@@ -65,7 +71,7 @@ namespace WB.Core.Synchronization.SyncStorage
             doc.IsDeleted = false;
             var syncItem = new SyncItem
             {
-                Id = doc.PublicKey.Combine(version),
+                RootId = doc.PublicKey.Combine(version),
                 ItemType = SyncItemType.Template,
                 IsCompressed = UseCompression,
                 Content = GetItemAsContent(doc),
@@ -78,30 +84,11 @@ namespace WB.Core.Synchronization.SyncStorage
         {
             var syncItem = new SyncItem
             {
-                Id = questionnaireId.Combine(questionnaireVersion),
+                RootId = questionnaireId.Combine(questionnaireVersion),
                 ItemType = SyncItemType.DeleteTemplate,
                 IsCompressed = UseCompression,
                 Content = questionnaireId.ToString(),
                 MetaInfo = GetItemAsContent(new QuestionnaireMetadata(questionnaireId, questionnaireVersion, false)),
-            };
-            chunkStorageWriter.StoreChunk(syncItem, null, timestamp);
-        }
-
-        public void SaveImage(Guid publicKey, string title, string desc, string origData, DateTime timestamp)
-        {
-            var fileDescription = new FileSyncDescription()
-                {
-                    Description = desc,
-                    OriginalFile = origData,
-                    PublicKey = publicKey,
-                    Title = title
-                };
-            var syncItem = new SyncItem
-            {
-                Id = publicKey,
-                ItemType = SyncItemType.File,
-                IsCompressed = UseCompressionForFiles,
-                Content = GetItemAsContent(fileDescription)
             };
             chunkStorageWriter.StoreChunk(syncItem, null, timestamp);
         }
@@ -114,17 +101,17 @@ namespace WB.Core.Synchronization.SyncStorage
             }
         }
        
-        public SyncItem GetLatestVersion(Guid id)
+        public SyncItem GetLatestVersion(string id)
         {
             var result = chunkStorageReader.ReadChunk(id);
             return result;
         }
 
-        public IEnumerable<SynchronizationChunkMeta> GetChunkPairsCreatedAfter(DateTime timestamp, Guid userId)
+        public IEnumerable<SynchronizationChunkMeta> GetChunkPairsCreatedAfter(string lastSyncedPackageId, Guid userId)
         {
             var users = GetUserTeamates(userId);
             return
-                chunkStorageReader.GetChunkMetaDataCreatedAfter(timestamp, users);
+                chunkStorageReader.GetChunkMetaDataCreatedAfter(lastSyncedPackageId, users);
         }
 
         private IEnumerable<Guid> GetUserTeamates(Guid userId)
@@ -147,7 +134,7 @@ namespace WB.Core.Synchronization.SyncStorage
         {
             var syncItem = new SyncItem
             {
-                Id = doc.PublicKey,
+                RootId = doc.PublicKey,
                 ItemType = SyncItemType.User,
                 IsCompressed = UseCompression,
                 Content = GetItemAsContent(doc)
@@ -163,7 +150,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
             var syncItem = new SyncItem
             {
-                Id = publicKey.Combine(AssemblySeed).Combine(version),
+                RootId = publicKey.Combine(AssemblySeed).Combine(version),
                 ItemType = SyncItemType.QuestionnaireAssembly,
                 IsCompressed = UseCompressionForFiles,
                 Content = assemblyAsBase64String,
@@ -172,7 +159,10 @@ namespace WB.Core.Synchronization.SyncStorage
             chunkStorageWriter.StoreChunk(syncItem, null, timestamp);
         }
 
-        #region from sync provider
+        public SynchronizationChunkMeta GetChunkInfoByTimestamp(DateTime timestamp)
+        {
+            return this.chunkStorageReader.GetChunkMetaDataByTimestamp(timestamp);
+        }
 
         private static string GetItemAsContent(object item)
         {
@@ -184,6 +174,22 @@ namespace WB.Core.Synchronization.SyncStorage
 
             return  JsonConvert.SerializeObject(item, Formatting.None, settings);
         }
-        #endregion
+
+        public void EnableCache()
+        {
+            chunkStorageWriter.EnableCache();
+        }
+
+        public void DisableCache()
+        {
+            chunkStorageWriter.DisableCache();
+        }
+
+        public string GetReadableStatus()
+        {
+            return chunkStorageWriter.GetReadableStatus();
+        }
+
+        public Type ViewType { get { return chunkStorageWriter.ViewType; } }
     }
 }

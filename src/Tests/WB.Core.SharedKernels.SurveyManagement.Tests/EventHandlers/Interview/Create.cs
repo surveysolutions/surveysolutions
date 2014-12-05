@@ -4,13 +4,40 @@ using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview
 {
     internal static class Create
     {
+        public static RosterInstancesAdded RosterInstancesAdded(Guid? rosterGroupId = null)
+        {
+            return new RosterInstancesAdded(new[]
+                {
+                    new AddedRosterInstance(rosterGroupId ?? Guid.NewGuid(), new decimal[0], 0.0m, null)
+                });
+        }
+
+        public static RosterInstancesRemoved RosterInstancesRemoved(Guid? rosterGroupId = null)
+        {
+            return new RosterInstancesRemoved(new[]
+                {
+                    new RosterInstance(rosterGroupId ?? Guid.NewGuid(), new decimal[0], 0.0m)
+                });
+        }
+
+        public static RosterInstancesTitleChanged RosterInstancesTitleChanged(Guid? rosterId = null, string rosterTitle = null)
+        {
+            return new RosterInstancesTitleChanged(
+                new[]
+                {
+                    new ChangedRosterInstanceTitleDto(new RosterInstance(rosterId ?? Guid.NewGuid(), new decimal[0], 0.0m), rosterTitle ?? "title")
+                });
+        }
+
         private static IPublishedEvent<T> ToPublishedEvent<T>(T @event)
             where T : class
         {
@@ -49,9 +76,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview
                     questionnaireId: GetGuidIdByStringId(questionnaireId), questionnaireVersion: questionnaireVersion));
         }
 
-        public static IPublishedEvent<InterviewStatusChanged> InterviewStatusChangedEvent(InterviewStatus status, string comment = null)
+        public static IPublishedEvent<InterviewStatusChanged> InterviewStatusChangedEvent(InterviewStatus status, 
+            string comment = null,
+            Guid? interviewId= null)
         {
-            return ToPublishedEvent(new InterviewStatusChanged(status, comment));
+            return ToPublishedEvent(new InterviewStatusChanged(status, comment), interviewId ?? Guid.NewGuid());
         }
 
         public static IPublishedEvent<SupervisorAssigned> SupervisorAssignedEvent(string userId = null,
@@ -128,6 +157,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview
         private static Guid GetGuidIdByStringId(string stringId)
         {
             return string.IsNullOrEmpty(stringId) ? Guid.NewGuid() : Guid.Parse(stringId);
+        }
+
+        public static InterviewData InterviewData(bool createdOnClient = false,
+            InterviewStatus status = InterviewStatus.Created,
+            Guid? interviewId = null)
+        {
+            var result = new InterviewData();
+            result.CreatedOnClient = createdOnClient;
+            result.Status = status;
+            result.InterviewId = interviewId.GetValueOrDefault();
+            return result;
         }
     }
 }

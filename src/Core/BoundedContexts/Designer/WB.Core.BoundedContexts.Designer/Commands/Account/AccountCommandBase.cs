@@ -1,6 +1,5 @@
 ﻿using System;
 using Ncqrs.Commanding;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Account
 {
@@ -11,7 +10,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Account
             this.AccountId = accountId;
         }
 
-        [AggregateRootId]
         public Guid AccountId { get; private set; }
     }
 }

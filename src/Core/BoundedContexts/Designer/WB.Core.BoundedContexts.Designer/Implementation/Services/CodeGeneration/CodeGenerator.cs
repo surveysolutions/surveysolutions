@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CsQuery.ExtensionMethods;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -10,7 +11,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Mo
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Templates;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
+using WB.Core.GenericSubdomains.Utils.Implementation;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
@@ -42,13 +43,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             generatedClasses.Add(new ExpressionLocation
             {
-                ItemType = ItemType.Questionnaire,
-                ExpressionType = ExpressionType.General,
+                ItemType = ExpressionLocationItemType.Questionnaire,
+                ExpressionType = ExpressionLocationType.General,
                 Id = questionnaire.PublicKey
             }.ToString(), template.TransformText());
 
             //generating partial classes
-            GenerateQuestionnaryLevelExpressionClasses(questionnaireTemplateStructure, generatedClasses);
+            GenerateQuestionnaireLevelExpressionClasses(questionnaireTemplateStructure, generatedClasses);
             GenerateRostersPartialClasses(questionnaireTemplateStructure, generatedClasses);
 
             return generatedClasses;
@@ -57,25 +58,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         private static void GenerateRostersPartialClasses(QuestionnaireExecutorTemplateModel questionnaireTemplateStructure,
             Dictionary<string, string> generatedClasses)
         {
-            foreach (var grouppedRosters in questionnaireTemplateStructure.RostersGroupedByScope)
+            foreach (var groupedRosters in questionnaireTemplateStructure.RostersGroupedByScope)
             {
-                foreach (
-                    QuestionTemplateModel questionTemplateModel in grouppedRosters.Value.SelectMany(r => r.Questions))
+                foreach (QuestionTemplateModel questionTemplateModel in groupedRosters.Value.SelectMany(roster => roster.Questions))
                 {
                     if (!string.IsNullOrWhiteSpace(questionTemplateModel.Conditions))
                     {
                         var methodTemplate = new ExpressionMethodTemplate(new ExpressionMethodModel
                         {
                             ExpressionString = questionTemplateModel.Conditions,
-                            GeneratedClassName = grouppedRosters.Key,
+                            GeneratedClassName = groupedRosters.Key,
                             GeneratedMethodName = questionTemplateModel.GeneratedConditionsMethodName
                         });
 
                         generatedClasses.Add(
                             new ExpressionLocation
                             {
-                                ItemType = ItemType.Question,
-                                ExpressionType = ExpressionType.Conditions,
+                                ItemType = ExpressionLocationItemType.Question,
+                                ExpressionType = ExpressionLocationType.Condition,
                                 Id = questionTemplateModel.Id
                             }.ToString(), methodTemplate.TransformText());
                     }
@@ -85,56 +85,56 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         var methodTemplate = new ExpressionMethodTemplate(new ExpressionMethodModel
                         {
                             ExpressionString = questionTemplateModel.Validations,
-                            GeneratedClassName = grouppedRosters.Key,
+                            GeneratedClassName = groupedRosters.Key,
                             GeneratedMethodName = questionTemplateModel.GeneratedValidationsMethodName
                         });
 
                         generatedClasses.Add(new ExpressionLocation
                         {
-                            ItemType = ItemType.Question,
-                            ExpressionType = ExpressionType.Validations,
+                            ItemType = ExpressionLocationItemType.Question,
+                            ExpressionType = ExpressionLocationType.Validation,
                             Id = questionTemplateModel.Id
                         }.ToString(), methodTemplate.TransformText());
                     }
                 }
 
-                foreach (GroupTemplateModel groupTemplateModel in grouppedRosters.Value.SelectMany(r => r.Groups))
+                foreach (GroupTemplateModel groupTemplateModel in groupedRosters.Value.SelectMany(roster => roster.Groups))
                 {
                     if (!string.IsNullOrWhiteSpace(groupTemplateModel.Conditions))
                     {
                         var methodTemplate = new ExpressionMethodTemplate(new ExpressionMethodModel
                         {
                             ExpressionString = groupTemplateModel.Conditions,
-                            GeneratedClassName = grouppedRosters.Key,
+                            GeneratedClassName = groupedRosters.Key,
                             GeneratedMethodName = groupTemplateModel.GeneratedConditionsMethodName
                         });
 
                         generatedClasses.Add(
                             new ExpressionLocation
                             {
-                                ItemType = ItemType.Group,
-                                ExpressionType = ExpressionType.Conditions,
+                                ItemType = ExpressionLocationItemType.Group,
+                                ExpressionType = ExpressionLocationType.Condition,
                                 Id = groupTemplateModel.Id
                             }.ToString(), methodTemplate.TransformText());
                     }
                 }
 
-                foreach (RosterTemplateModel rosterTemplateModel in grouppedRosters.Value)
+                foreach (RosterTemplateModel rosterTemplateModel in groupedRosters.Value)
                 {
                     if (!string.IsNullOrWhiteSpace(rosterTemplateModel.Conditions))
                     {
                         var methodTemplate = new ExpressionMethodTemplate(new ExpressionMethodModel
                         {
                             ExpressionString = rosterTemplateModel.Conditions,
-                            GeneratedClassName = grouppedRosters.Key,
+                            GeneratedClassName = groupedRosters.Key,
                             GeneratedMethodName = rosterTemplateModel.GeneratedConditionsMethodName
                         });
 
                         generatedClasses.Add(
                             new ExpressionLocation
                             {
-                                ItemType = ItemType.Roster,
-                                ExpressionType = ExpressionType.Conditions,
+                                ItemType = ExpressionLocationItemType.Roster,
+                                ExpressionType = ExpressionLocationType.Condition,
                                 Id = rosterTemplateModel.Id
                             }.ToString(), methodTemplate.TransformText());
                     }
@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }
         }
 
-        private static void GenerateQuestionnaryLevelExpressionClasses(
+        private static void GenerateQuestionnaireLevelExpressionClasses(
             QuestionnaireExecutorTemplateModel questionnaireTemplateStructure, Dictionary<string, string> generatedClasses)
         {
             foreach (QuestionTemplateModel questionTemplateModel in questionnaireTemplateStructure.QuestionnaireLevelModel.Questions)
@@ -159,8 +159,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     generatedClasses.Add(
                         new ExpressionLocation
                         {
-                            ItemType = ItemType.Question,
-                            ExpressionType = ExpressionType.Conditions,
+                            ItemType = ExpressionLocationItemType.Question,
+                            ExpressionType = ExpressionLocationType.Condition,
                             Id = questionTemplateModel.Id
                         }.ToString(), methodTemplate.TransformText());
                 }
@@ -177,8 +177,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     generatedClasses.Add(
                         new ExpressionLocation
                         {
-                            ItemType = ItemType.Question,
-                            ExpressionType = ExpressionType.Validations,
+                            ItemType = ExpressionLocationItemType.Question,
+                            ExpressionType = ExpressionLocationType.Validation,
                             Id = questionTemplateModel.Id
                         }.ToString(), methodTemplate.TransformText());
                 }
@@ -198,8 +198,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     generatedClasses.Add(
                         new ExpressionLocation
                         {
-                            ItemType = ItemType.Group,
-                            ExpressionType = ExpressionType.Conditions,
+                            ItemType = ExpressionLocationItemType.Group,
+                            ExpressionType = ExpressionLocationType.Condition,
                             Id = groupTemplateModel.Id
                         }.ToString(), methodTemplate.TransformText());
                 }
@@ -241,6 +241,36 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             Dictionary<Guid, List<Guid>> conditionalDependencies = BuildConditionalDependencies(questionnaire,
                 variableNames);
 
+            var mergedDependencies = new Dictionary<Guid, List<Guid>>();
+
+            var allIdsInvolvedInExpressions = structuralDependencies.Select(x => x.Key)
+                .Union(structuralDependencies.SelectMany(x => x.Value))
+                .Union(conditionalDependencies.Select(x => x.Key))
+                .Union(conditionalDependencies.SelectMany(x => x.Value))
+                .Distinct();
+
+            allIdsInvolvedInExpressions.ForEach(x => mergedDependencies.Add(x, new List<Guid>()));
+
+            structuralDependencies.ForEach(x => mergedDependencies[x.Key].AddRange(x.Value));
+
+            foreach (var conditionalDependency in conditionalDependencies)
+            {
+                foreach (var dependency in conditionalDependency.Value)
+                {
+                    if (mergedDependencies.ContainsKey(dependency) && !mergedDependencies[dependency].Contains(conditionalDependency.Key))
+                    {
+                        mergedDependencies[dependency].Add(conditionalDependency.Key);
+                    }
+                    if (!mergedDependencies.ContainsKey(dependency))
+                    {
+                        mergedDependencies.Add(dependency, new List<Guid> { conditionalDependency.Key });
+                    }
+                }
+            }
+
+            var sorter = new TopologicalSorter<Guid>();
+            IEnumerable<Guid> listOfOrderedContitions = sorter.Sort(mergedDependencies.ToDictionary(x => x.Key, x => x.Value.ToArray()));
+
             template.Id = questionnaire.PublicKey;
             template.AllQuestions = allQuestions;
             template.AllGroups = allGroups;
@@ -250,6 +280,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             template.RostersGroupedByScope = rostersGroupedByScope;
             template.ConditionalDependencies = conditionalDependencies;
             template.StructuralDependencies = structuralDependencies;
+            template.ConditionsPlayOrder = listOfOrderedContitions.ToList();
             template.QuestionnaireLevelModel = questionnaireLevelModel;
             template.VariableNames = variableNames;
 
@@ -297,7 +328,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         {
                             Id = childAsIQuestion.PublicKey,
                             VariableName = varName,
-                            Conditions = childAsIQuestion.ConditionExpression,
+                            Conditions = childAsIQuestion.CascadeFromQuestionId.HasValue
+                                ? GetConditionForCascadingQuestion(questionnaireDoc, childAsIQuestion.PublicKey)
+                                : childAsIQuestion.ConditionExpression,
                             Validations = childAsIQuestion.ValidationExpression,
                             QuestionType = childAsIQuestion.QuestionType,
                             GeneratedTypeName = GenerateQuestionTypeName(childAsIQuestion),
@@ -313,7 +346,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                         currentScope.Questions.Add(question);
 
-                        allQuestions.Add(question);
+                        if (allQuestions.All(x => x.VariableName != question.VariableName))
+                        {
+                            allQuestions.Add(question);
+                        }
 
                         continue;
                     }
@@ -327,7 +363,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                                 ? childAsIGroup.PublicKey
                                 : childAsIGroup.RosterSizeQuestionId.Value;
 
-                            List<Guid> currentRosterScope = currentScope.RosterScope.Select(t => t).ToList();
+                            List<Guid> currentRosterScope = currentScope.RosterScope.ToList();
                             currentRosterScope.Add(currentScopeId);
 
                             string varName = !String.IsNullOrWhiteSpace(childAsIGroup.VariableName)
@@ -350,7 +386,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             };
 
                             rostersToProcess.Enqueue(new Tuple<IGroup, RosterScopeBaseModel>(childAsIGroup, roster));
-                            allRosters.Add(roster);
+
+                            if (allRosters.All(x => x.VariableName != roster.VariableName))
+                            {
+                                allRosters.Add(roster);
+                            }
+
                             currentScope.Rosters.Add(roster);
                         }
                         else
@@ -378,6 +419,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     }
                 }
             }
+        }
+
+        private string GetConditionForCascadingQuestion(QuestionnaireDocument questionnaireDocument, Guid cascadingQuestionId)
+        {
+            var childQuestion = questionnaireDocument.Find<SingleQuestion>(cascadingQuestionId);
+            var parentQuestion = questionnaireDocument.Find<SingleQuestion>(childQuestion.CascadeFromQuestionId.Value);
+
+            string childQuestionCondition = (string.IsNullOrWhiteSpace(childQuestion.ConditionExpression)
+                ? ""
+                : string.Format(" && {0}", childQuestion.ConditionExpression));
+
+            return string.Format("!IsAnswerEmpty({0})", parentQuestion.StataExportCaption) + childQuestionCondition;
         }
 
         private string GenerateQuestionTypeName(IQuestion question)
@@ -422,17 +475,36 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         private Dictionary<Guid, List<Guid>> BuildConditionalDependencies(QuestionnaireDocument questionnaireDocument,
             Dictionary<string, Guid> variableNames)
         {
-            Dictionary<Guid, List<Guid>> dependencies = questionnaireDocument.GetAllGroups()
-                .Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression))
-                .ToDictionary(x => x.PublicKey,
-                    x => GetIdsOfQuestionsInvolvedInExpression(x.ConditionExpression, variableNames));
+            var groupsWithConditions = questionnaireDocument.GetAllGroups().Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression));
+            var questionsWithCondition = questionnaireDocument
+                .GetEntitiesByType<IQuestion>()
+                .Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression));
 
-            questionnaireDocument.GetEntitiesByType<IQuestion>()
-                .Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression))
-                .ToDictionary(x => x.PublicKey,
-                    x => GetIdsOfQuestionsInvolvedInExpression(x.ConditionExpression, variableNames))
+            Dictionary<Guid, List<Guid>> dependencies = groupsWithConditions.ToDictionary(
+                x => x.PublicKey,
+                x => GetIdsOfQuestionsInvolvedInExpression(x.ConditionExpression, variableNames));
+
+            questionsWithCondition.ToDictionary(
+                x => x.PublicKey,
+                x => GetIdsOfQuestionsInvolvedInExpression(x.ConditionExpression, variableNames))
                 .ToList()
                 .ForEach(x => dependencies.Add(x.Key, x.Value));
+
+            var cascadingQuestions = questionnaireDocument
+                .GetEntitiesByType<SingleQuestion>()
+                .Where(x => x.CascadeFromQuestionId.HasValue);
+
+            foreach (var cascadingQuestion in cascadingQuestions)
+            {
+                if (dependencies.ContainsKey(cascadingQuestion.PublicKey))
+                {
+                    dependencies[cascadingQuestion.PublicKey].Add(cascadingQuestion.CascadeFromQuestionId.Value);
+                }
+                else
+                {
+                    dependencies.Add(cascadingQuestion.PublicKey, new List<Guid>{ cascadingQuestion.CascadeFromQuestionId.Value});
+                }
+            }
 
             return dependencies;
         }
@@ -440,15 +512,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         private List<Guid> GetIdsOfQuestionsInvolvedInExpression(string conditionExpression,
             Dictionary<string, Guid> variableNames)
         {
+            var identifiersUsedInExpression = ExpressionProcessor.GetIdentifiersUsedInExpression(conditionExpression);
+
             return new List<Guid>(
-                from variable in ExpressionProcessor.GetIdentifiersUsedInExpression(conditionExpression)
+                from variable in identifiersUsedInExpression
                 where variableNames.ContainsKey(variable)
                 select variableNames[variable]);
         }
 
         private static bool IsRosterGroup(IGroup group)
         {
-            return group.IsRoster || group.Propagated == Propagate.AutoPropagated;
+            return group.IsRoster;
         }
 
         private string GenerateTypeNameByScope(IEnumerable<Guid> currentRosterScope,

@@ -1,18 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.Serialization.Json;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
-using Newtonsoft.Json;
-using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using It = Machine.Specifications.It;
 
@@ -43,7 +36,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                         Create.Option(text: "parent option 1", value: "1"),
                         Create.Option(text: "parent option 2", value: "2")
                     }),
-                    Create.Roster(topRosterId, 
+                    Create.Roster(topRosterId,
                         variable: "roster",
                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
                         fixedTitles: new[] { "a", "b" },
@@ -62,7 +55,11 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
                 Interview interview = SetupInterview(questionnaire, new List<object>
                 {
-                    Create.Event.SingleOptionQuestionAnswered(questionId: parentSingleOptionQuestionId, answer: 1, propagationVector: new decimal[] { })
+                    Create.Event.SingleOptionQuestionAnswered(questionId: parentSingleOptionQuestionId, answer: 1, propagationVector: new decimal[] { }),
+                    Create.Event.QuestionsEnabled(
+                        Create.Identity(childCascadedComboboxId, new decimal[] { 0 }),
+                        Create.Identity(childCascadedComboboxId, new decimal[] { 0 }))
+
                 });
 
                 using (var eventContext = new EventContext())

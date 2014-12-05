@@ -1,5 +1,6 @@
 using System.Configuration.Provider;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
 using WB.UI.Designer.Code;
 
 namespace WB.UI.Designer.Controllers
@@ -9,9 +10,6 @@ namespace WB.UI.Designer.Controllers
     using System.Linq;
     using System.Web.Mvc;
     using System.Web.Security;
-
-    using Main.Core.Utility;
-
     using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
     using WB.UI.Designer.Extensions;
     using WB.UI.Designer.Models;

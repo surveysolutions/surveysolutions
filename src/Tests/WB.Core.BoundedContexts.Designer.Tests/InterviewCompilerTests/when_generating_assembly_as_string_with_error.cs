@@ -21,17 +21,17 @@ namespace WB.Core.BoundedContexts.Designer.Tests.InterviewCompilerTests
             generatedClasses = classes;
         };
 
-        private Because of = () =>
+        Because of = () =>
             emitResult = compiler.GenerateAssemblyAsString(id, generatedClasses, new string[0], out resultAssembly);
 
 
-        private It should_faled = () =>
+        It should_faled = () =>
             emitResult.Success.ShouldEqual(false);
 
-        private It should_diagnostics_count_equal_1 = () =>
+        It should_diagnostics_count_equal_1 = () =>
             emitResult.Diagnostics.Count().ShouldEqual(1);
 
-        private It should_diagnostics_FilePath_equals_fileName = () =>
+        It should_diagnostics_FilePath_equals_fileName = () =>
             emitResult.Diagnostics.First().Location.SourceTree.FilePath.ShouldEqual(fileName);
         
 

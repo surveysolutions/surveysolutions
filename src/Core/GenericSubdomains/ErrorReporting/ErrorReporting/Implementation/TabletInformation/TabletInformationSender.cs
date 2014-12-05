@@ -2,13 +2,13 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.CapiInformationService;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.TabletInformation;
-using WB.Core.SharedKernel.Utils.Serialization;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformation
 {
@@ -77,33 +77,41 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformat
 
             this.ExitIfCanceled();
 
-            this.CancelIfException(() => { this.pathToInfoArchive = this.capiInformationService.CreateInformationPackage(); });
-
-            if (string.IsNullOrEmpty(this.pathToInfoArchive) || !this.fileSystemAccessor.IsFileExists(this.pathToInfoArchive))
+            try
             {
-                this.OnProcessFinished();
-                return;
-            }
+                this.pathToInfoArchive = this.capiInformationService.CreateInformationPackage();
 
-            this.OnInformationPackageCreated(this.pathToInfoArchive, this.fileSystemAccessor.GetFileSize(this.pathToInfoArchive));
 
-            this.ExitIfCanceled();
+                if (string.IsNullOrEmpty(this.pathToInfoArchive) || !this.fileSystemAccessor.IsFileExists(this.pathToInfoArchive))
+                {
+                    this.OnProcessFinished();
+                    return;
+                }
 
-            this.CancelIfException(() =>
-            {
+                this.OnInformationPackageCreated(this.pathToInfoArchive, this.fileSystemAccessor.GetFileSize(this.pathToInfoArchive));
+
+                this.ExitIfCanceled();
+
                 var content = this.fileSystemAccessor.ReadAllBytes(this.pathToInfoArchive);
 
-                var tabletInformationPackage = new TabletInformationPackage(this.fileSystemAccessor.GetFileName(this.pathToInfoArchive), content,
+                var tabletInformationPackage = new TabletInformationPackage(this.fileSystemAccessor.GetFileName(this.pathToInfoArchive),
+                    content,
                     this.androidId, this.registrationKeyName);
 
-                var result = this.webExecutor.ExecuteRestRequestAsync<bool>(PostInfoPackagePath, this.ct,
-                    this.jsonUtils.GetItemAsContent(tabletInformationPackage), null, null, null);
+                var result = this.webExecutor.ExecuteRestRequestAsync<bool>(PostInfoPackagePath, this.ct, this.jsonUtils.GetItemAsContent(tabletInformationPackage), null, null, null)
+                                             .Result;
 
                 this.fileSystemAccessor.DeleteFile(this.pathToInfoArchive);
 
                 if (!result)
                     throw new TabletInformationSendException("server didn't get information package");
-            });
+            }
+            catch (Exception e)
+            {
+                this.Logger.Error("Error occurred during the process. Process is being canceled.", e);
+                this.Cancel();
+                throw;
+            }
 
             this.OnProcessFinished();
             this.DeleteInfoPackageIfExists();
@@ -138,20 +146,6 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformat
         {
             if (this.ct.IsCancellationRequested)
                 this.ct.ThrowIfCancellationRequested();
-        }
-
-        private void CancelIfException(Action action)
-        {
-            try
-            {
-                action();
-            }
-            catch (Exception exc)
-            {
-                this.Logger.Error("Error occurred during the process. Process is being canceled.", exc);
-                this.Cancel();
-                throw;
-            }
         }
 
         private void CancelInternal()

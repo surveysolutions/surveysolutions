@@ -1,4 +1,5 @@
 ﻿using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -6,9 +7,6 @@ namespace WB.UI.Designer.Controllers
     using System.Web.Mvc;
     using System.Web.Security;
     using System.Web.UI;
-
-    using Main.Core.Utility;
-
     using Recaptcha;
 
     using WB.UI.Designer.Extensions;

@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.View.User;
-using Ncqrs.Commanding;
-using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 {
@@ -103,7 +102,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             if (this.users.GetById(userDetails.PublicKey) == null)
             {
                 userCommand = new CreateUserCommand(userDetails.PublicKey, userDetails.UserName, userDetails.Password, userDetails.Email,
-                    userRoles, userDetails.isLockedBySupervisor, userShouldBeLockedByHq, userDetails.Supervisor);
+                    userRoles, userDetails.IsLockedBySupervisor, userShouldBeLockedByHq, userDetails.Supervisor);
             }
             else
             {

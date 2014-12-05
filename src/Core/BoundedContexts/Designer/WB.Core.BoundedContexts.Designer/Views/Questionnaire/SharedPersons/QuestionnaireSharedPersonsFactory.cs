@@ -1,5 +1,4 @@
-using System.Linq;
-using Main.Core.View;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons

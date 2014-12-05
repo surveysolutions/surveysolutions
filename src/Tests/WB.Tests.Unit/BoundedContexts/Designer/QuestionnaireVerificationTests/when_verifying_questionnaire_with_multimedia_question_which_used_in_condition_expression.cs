@@ -6,8 +6,8 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
@@ -18,9 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         {
             var conditionExpression = "[var]==1";
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
-                =>
-                processor.IsSyntaxValid(conditionExpression) == true &&
-                    processor.GetIdentifiersUsedInExpression(conditionExpression) == new[] { "var" });
+                => processor.GetIdentifiersUsedInExpression(conditionExpression) == new[] { "var" });
 
             questionnaire = CreateQuestionnaireDocument(new MultimediaQuestion()
             {

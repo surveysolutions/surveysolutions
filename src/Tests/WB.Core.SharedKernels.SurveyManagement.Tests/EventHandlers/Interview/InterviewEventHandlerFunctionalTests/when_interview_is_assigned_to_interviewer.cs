@@ -3,7 +3,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
+using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -19,8 +19,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         Establish context = () =>
         {
             viewState = CreateViewWithSequenceOfInterviewData();
-            synchronizationDataStorage = new Mock<ISynchronizationDataStorage>();
-            interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional(synchronizationDataStorage.Object);
+            interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional();
             viewState.Document.Status = InterviewStatus.ReadyForInterview;
 
             interviewerId = Guid.NewGuid();
@@ -29,7 +28,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
 
         Because of = () => interviewEventHandlerFunctional.Update(viewState, interviewerAssignedEvent);
 
-        It should_sent_interview_to_CAPI = () => synchronizationDataStorage.Verify(x => x.SaveInterview(Moq.It.IsAny<InterviewSynchronizationDto>(), interviewerId, Moq.It.IsAny<DateTime>()), Times.Once);
 
         It should_change_responsible_to_interviewer = () => viewState.Document.ResponsibleId.ShouldEqual(interviewerId);
 
@@ -38,7 +36,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
 
         static InterviewEventHandlerFunctional interviewEventHandlerFunctional;
         static ViewWithSequence<InterviewData> viewState;
-        static Mock<ISynchronizationDataStorage> synchronizationDataStorage;
         static Guid interviewerId;
         static IPublishedEvent<InterviewerAssigned> interviewerAssignedEvent;
     }

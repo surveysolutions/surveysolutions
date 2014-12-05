@@ -4,10 +4,10 @@ using System.ServiceModel;
 using System.Web;
 using System.Web.Http;
 using Main.Core.Documents;
-using Main.Core.Utility;
-using Ncqrs.Commanding.ServiceModel;
+
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Template;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Headquarters.PublicService;
 using WB.UI.Shared.Web.Filters;
 
@@ -69,7 +70,7 @@ namespace WB.UI.Headquarters.Controllers
                         Filter: data.Request.Filter,
                         PageIndex: data.Pager.Page,
                         PageSize: data.Pager.PageSize,
-                        SortOrder: StringUtil.GetOrderRequestString(data.SortOrder)));
+                        SortOrder: data.SortOrder.GetOrderRequestString()));
 
             return new DesignerQuestionnairesView()
                 {

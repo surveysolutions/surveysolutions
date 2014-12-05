@@ -43,25 +43,30 @@
     <Reference Include="HtmlSanitizer">
       <HintPath>..\..\..\..\..\packages\HtmlSanitizer.1.1.5297.28403\lib\net40\HtmlSanitizer.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis">
-      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.Common.0.7.4091001-beta\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.CodeAnalysis, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.Common.1.0.0-beta1-20141031-01\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp">
-      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.CSharp.0.7.4091001-beta\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.CSharp.1.0.0-beta1-20141031-01\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp.Desktop">
-      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.CSharp.0.7.4091001-beta\lib\net45\Microsoft.CodeAnalysis.CSharp.Desktop.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp.Desktop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.CSharp.1.0.0-beta1-20141031-01\lib\net45\Microsoft.CodeAnalysis.CSharp.Desktop.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.Desktop">
-      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.Common.0.7.4091001-beta\lib\net45\Microsoft.CodeAnalysis.Desktop.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.CodeAnalysis.Desktop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.Common.1.0.0-beta1-20141031-01\lib\net45\Microsoft.CodeAnalysis.Desktop.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="NCalc, Version=1.3.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\ncalc.1.3.8\lib\NCalc.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -80,15 +85,15 @@
       <HintPath>..\..\..\..\..\packages\RavenDB.Client.2.5.2907\lib\net45\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Collections.Immutable, Version=1.1.20.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+    <Reference Include="System.Collections.Immutable, Version=1.1.32.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Immutable.1.1.20-beta\lib\portable-net45+win8\System.Collections.Immutable.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\System.Collections.Immutable.1.1.32-beta\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Reflection.Metadata, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+    <Reference Include="System.Reflection.Metadata, Version=1.0.17.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Metadata.1.0.12-alpha\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\System.Reflection.Metadata.1.0.17-beta\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
@@ -122,10 +127,7 @@
     <Compile Include="Commands\CommandUtils.cs" />
     <Compile Include="Commands\Questionnaire\Base\AbstractUpdateQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\AbstractQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Base\AbstractAddQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Base\AbstractCloneQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\FullGroupDataCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Base\FullQuestionDataCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\GroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\QuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireEntityAddCommand.cs" />
@@ -137,36 +139,21 @@
     <Compile Include="Commands\Questionnaire\AddSharedPersonToQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\CloneGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\CloneQuestionByIdCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\DateTime\AddDateTimeQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\DateTime\CloneDateTimeQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\DateTime\UpdateDateTimeQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\GpsCoordinates\AddGpsCoordinatesQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\GpsCoordinates\CloneGpsCoordinatesQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\GpsCoordinates\UpdateGpsCoordinatesQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateDateTimeQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateGpsCoordinatesQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\MigrateExpressionsToCSharp.cs" />
-    <Compile Include="Commands\Questionnaire\Question\Mulimedia\UpdateMultimediaQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\MultiOption\AddMultiOptionQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\MultiOption\CloneMultiOptionQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\MultiOption\UpdateMultiOptionQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\SingleOption\AddSingleOptionQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\SingleOption\CloneSingleOptionQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\SingleOption\UpdateCascadingComboboxOptionsCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\SingleOption\UpdateFilteredComboboxOptionsCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\SingleOption\UpdateSingleOptionQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\TextList\CloneTextListQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\QRBarcode\AddQRBarcodeQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\QRBarcode\CloneQRBarcodeQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\QRBarcode\UpdateQRBarcodeQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\TextList\UpdateTextListQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\TextList\AddTextListQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\Numeric\AddNumericQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\Numeric\CloneNumericQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateMultimediaQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateMultiOptionQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateCascadingComboboxOptionsCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateFilteredComboboxOptionsCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateSingleOptionQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateQRBarcodeQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateTextListQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\DeleteQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\MoveQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\Numeric\UpdateNumericQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\Text\AddTextQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\Text\CloneTextQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\Text\UpdateTextQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateNumericQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\AddDefaultTypeQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateTextQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\RemoveSharedPersonFromQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\DeleteQuestionnaireCommand.cs" />
@@ -177,15 +164,12 @@
     <Compile Include="Commands\Questionnaire\Group\UpdateGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\ImportQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\AddQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\CloneQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\DeleteStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\AddStaticTextCommand.cs" />
-    <Compile Include="Commands\Questionnaire\StaticText\CloneStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\MoveStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\UpdateStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
+    <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="Events\Questionnaire\ExpressionsMigratedToCSharp.cs" />
     <Compile Include="Events\Questionnaire\MultimediaQuestionUpdated.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\DefaultDynamicCompillerSettings.cs" />
@@ -216,6 +200,7 @@
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplateExt.cs" />
     <Compile Include="Implementation\Services\INCalcToCSharpConverter.cs" />
+    <Compile Include="Implementation\Services\KeywordsProvider.cs" />
     <Compile Include="Implementation\Services\NCalcToCSharpConverter.cs" />
     <Compile Include="Implementation\Services\QuestionnaireVerifier.cs" />
     <Compile Include="Implementation\Services\WbHtmlSanitizer.cs" />
@@ -294,8 +279,10 @@
     <Compile Include="Services\CodeGeneration\IDynamicCompiler.cs" />
     <Compile Include="Services\CodeGeneration\IDynamicCompilerSettings.cs" />
     <Compile Include="Services\ExpressionLocation.cs" />
+    <Compile Include="Services\ExpressionLocationType.cs" />
     <Compile Include="Services\GenerationResult.cs" />
     <Compile Include="Services\ICodeGenerator.cs" />
+    <Compile Include="Services\IExpressionProcessor.cs" />
     <Compile Include="Services\IExpressionProcessorGenerator.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\QuestionnireExpressionProcessorGenerator.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.cs">
@@ -310,11 +297,10 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplateExt.cs" />
+    <Compile Include="Services\IKeywordsProvider .cs" />
     <Compile Include="Services\IQuestionnaireVerifier.cs" />
-    <Compile Include="Services\IQuestionnaireWrapper.cs" />
     <Compile Include="Implementation\Services\QuestionnaireExportService .cs" />
     <Compile Include="Implementation\Services\QuestionnaireDocumentUpgrader.cs" />
-    <Compile Include="Implementation\Services\QuestionnaireDocumentWrapper.cs" />
     <Compile Include="Implementation\Services\QuestionnaireVersioner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Roster.Designer.cs">
@@ -331,6 +317,7 @@
     <Compile Include="Services\IQuestionnaireExportService .cs" />
     <Compile Include="Services\IQuestionnaireDocumentUpgrader.cs" />
     <Compile Include="Services\IQuestionnaireVersioner.cs" />
+    <Compile Include="Services\ExpressionLocationItemType.cs" />
     <Compile Include="Services\TemplateInfo.cs" />
     <Compile Include="ValueObjects\InconsistentVersionException.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationError.cs" />
@@ -357,16 +344,15 @@
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\StaticTextInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\QuestionInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\ChaptersInfoViewDenormalizer.cs" />
-    <Compile Include="Views\Questionnaire\Edit\EditStaticTextView.cs" />
     <Compile Include="Views\Questionnaire\Edit\GroupDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\IChapterInfoViewFactory.cs" />
+    <Compile Include="Views\Questionnaire\Edit\ICompositeView.cs" />
     <Compile Include="Views\Questionnaire\Edit\IQuestionnaireInfoFactory.cs" />
     <Compile Include="Views\Questionnaire\Edit\DropdownQuestionView.cs" />
     <Compile Include="Views\Questionnaire\Edit\NewEditGroupView.cs" />
     <Compile Include="Views\Questionnaire\Edit\NewEditQuestionView.cs" />
     <Compile Include="Views\Questionnaire\Edit\NewEditRosterView.cs" />
     <Compile Include="Views\Questionnaire\Edit\NewEditStaticTextView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionBrief.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\CategoricalOption.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\DateTimeDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\DescendantItemView.cs" />
@@ -391,13 +377,7 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\ChapterInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\IQuestionnaireInfoViewFactory.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoViewFactory.cs" />
-    <Compile Include="Views\Questionnaire\Edit\EditAnswerView.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Views\Questionnaire\Edit\EditGroupView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\Edit\EditQuestionnaireView.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireEntityNode.cs" />
@@ -458,9 +438,6 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireViewInputModel.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\Questionnaire\Edit\EditQuestionView.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Views\Questionnaire\SharedPersons\QuestionnaireSharedPersons.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -478,18 +455,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\ExpressionEvaluator\Evaluant.Calculator\NCalc.csproj">
-      <Project>{5f014003-50d8-49e0-8afe-91d38dccc97c}</Project>
-      <Name>NCalc</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
-      <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
-      <Name>Ncqrs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
-      <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
-      <Name>Main.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
       <Name>WB.UI.Shared.Web</Name>
@@ -502,10 +467,6 @@
       <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
       <Name>WB.Core.GenericSubdomains.Utils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
-      <Project>{e7d429a7-1c9f-4f25-9c23-686ef9c2d60a}</Project>
-      <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
@@ -514,9 +475,9 @@
       <Project>{553b4fc2-5fc7-4256-b14d-82758d64a3bd}</Project>
       <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
-      <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>
-      <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
+    <ProjectReference Include="..\..\..\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
+      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
+      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -561,6 +522,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

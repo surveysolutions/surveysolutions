@@ -70,6 +70,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WB.Core.SharedKernels.ExpressionProcessor, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Core\SharedKernels\SurveyManagement\SurveyManagement\bin\Debug\WB.Core.SharedKernels.ExpressionProcessor.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
@@ -78,9 +82,6 @@
     <Compile Include="EventContextExtenstions.cs" />
     <Compile Include="Execute.cs" />
     <Compile Include="Factories\QuestionnaireRosterStructureFactoryTests\QuestionnaireRosterStructureFactoryTestContext.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Factories\QuestionnaireRosterStructureFactoryTests\when_creating_roster_structure_factory_for_questionnarie_which_has_capital_question_inside_autopropagate_.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Factories\QuestionnaireRosterStructureFactoryTests\when_creating_roster_structure_factory_for_questionnarie_which_has_capital_question_inside_roster.cs">
@@ -106,14 +107,15 @@
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_1_2.cs" />
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_2_1.cs" />
     <Compile Include="InterviewItemIdTests\when_parsing_interview_item_id_with_guid_and_propagation_vector.cs" />
+    <Compile Include="InterviewTests\Synchronization\when_interview_is_canceled_by_hq_in_completed_state.cs" />
     <Compile Include="InterviewTests\when_creating_interview_with_preloaded_data_with_real_question.cs" />
+    <Compile Include="InterviewTests\when_restore_interview_with_nested_rosters.cs" />
     <Compile Include="QuestionnaireAssemblyFileAccessorTests\QuestionnaireAssemblyFileAccessorTestsContext.cs" />
     <Compile Include="QuestionnaireAssemblyFileAccessorTests\when_getting_full_path_to_assembly.cs" />
     <Compile Include="QuestionnaireAssemblyFileAccessorTests\when_getting_assembly_as_byte_array.cs" />
     <Compile Include="QuestionnaireAssemblyFileAccessorTests\when_getting_assembly_as_base_64_string.cs" />
     <Compile Include="QuestionnaireAssemblyFileAccessorTests\when_storing_assembly.cs" />
     <Compile Include="Setup.cs" />
-    <Compile Include="StronglyTypedInterviewEvaluator.cs" />
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_with_comments_from_HQ.cs" />
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_from_HQ.cs" />
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_in_deleted_state.cs" />
@@ -238,8 +240,6 @@
     <Compile Include="QuestionnaireTests\when_questionnaire_has_nested_roster_inside_nested_group_of_other_roster_and_GetNestedRostersOfGroupById_called_for_parent_roster.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_has_nested_rosters_and_GetNestedRostersOfRosterById_called_for_parent_roster.cs" />
     <Compile Include="QuestionnaireTests\when_deleting_questionnaire_and_user_is_not_the_creator_of_this_questionaire.cs" />
-    <Compile Include="QuestionnaireTests\when_questionnaire_have_autopropagate_question_with_not_existing_group_in_triggers_then_GetRosterGroupsByRosterSizeQuestion_should_t___.cs" />
-    <Compile Include="QuestionnaireTests\when_questionnaire_have_autopropagate_groups_and_GetRosterGroupsByRosterSizeQuestion_return_them.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_has_multi_question_and_its_type_does_not_support_GetMaxSelectedAnswerOptions_method.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_has_multi_question_and_we_can_get_max_answers_number_for_it.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_have_nested_roster_group_with_not_empty_RosterSizeQuestionId_and_GetRosterGroupsByRosterSizeQuestion_called.cs" />
@@ -257,13 +257,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionnaireTests\ImportQuestionnaireTests.cs" />
     <Compile Include="QuestionnaireTests\QuestionnaireTestsContext.cs" />
-    <Compile Include="StronglyTypedInterviewEvaluatorTests\when_answering_int_question_with_var_equals_age_for_the_third_time.cs" />
-    <Compile Include="StronglyTypedInterviewEvaluatorTests\when_answering_int_question_with_var_equals_age.cs" />
-    <Compile Include="StronglyTypedInterviewEvaluatorTests\when_answering_int_question_with_var_equals_age_for_the_second_time.cs" />
-    <Compile Include="StronglyTypedInterviewEvaluatorTests\when_answering_single_option_question_with_var_equals_has_job.cs" />
-    <Compile Include="StronglyTypedInterviewEvaluatorTests\when_answering_single_option_question_with_var_equals_marital_status.cs" />
-    <Compile Include="StronglyTypedInterviewEvaluatorTests\when_answering_text_question_with_var_equals_persons_count.cs" />
-    <Compile Include="StronglyTypedInterviewEvaluatorTests\when_answering_text_question_with_var__equals_name.cs" />
+    <Compile Include="StronglyTypedInterviewEvaluator.cs" />
     <Compile Include="UserARTests.cs" />
     <Compile Include="ValueVectorTests\when_call_ToString_for_ValueVector_with_empty_vector_inside.cs" />
     <Compile Include="ValueVectorTests\when_call_ToString_for_ValueVector_with_not_empty_vector_inside.cs" />
@@ -281,6 +275,7 @@
     <Compile Include="Views\View.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -288,13 +283,9 @@
       <Project>{AA90754B-CA47-429E-BDC8-2A83E94179B7}</Project>
       <Name>Ncqrs.Spec</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
-      <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
-      <Name>Ncqrs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
-      <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
-      <Name>Main.Core</Name>
+    <ProjectReference Include="..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
+      <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
+      <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
       <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
@@ -316,9 +307,9 @@
       <Project>{89b14b50-5305-45e2-9835-7a05bd0b97a9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
-      <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>
-      <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
+    <ProjectReference Include="..\..\Core\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
+      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
+      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

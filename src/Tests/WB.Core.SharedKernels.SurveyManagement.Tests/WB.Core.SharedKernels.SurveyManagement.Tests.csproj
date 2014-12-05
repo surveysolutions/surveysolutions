@@ -133,7 +133,6 @@
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_GrpupPropagated_event_recived_and_new_roster_row_need_to_be_removed.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_handling_answer_for_roster_title_text_question_that_is_title_.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_InterviewCreated_event_recived.cs" />
-    <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_InterviewHardDeleted_event_recived.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_InterviewOnClientCreated_event_recived.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_interview_is_assigned_to_interviewer.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_interview_is_assigned_to_interviewer_in_RejectedByHQ_status.cs" />
@@ -263,6 +262,10 @@
     <Compile Include="ServiceTests\DataExport\SqlDataExportWriterTests\when_delete_interview_method_is_called.cs" />
     <Compile Include="ServiceTests\DataExport\SqlToTabDataExportServiceTests\SqlToTabDataExportServiceTestContext.cs" />
     <Compile Include="ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_creating_template_for_preloading_from_questionnaire_export_structure.cs" />
+    <Compile Include="SynchronizationDenormalizerTests\when_interview_created_on_client_and_assigned_to_interviewer.cs" />
+    <Compile Include="SynchronizationDenormalizerTests\SynchronizationDenormalizerTestsContext.cs" />
+    <Compile Include="SynchronizationDenormalizerTests\when_interview_is_created_on_client_and_sent_to_supervisor.cs" />
+    <Compile Include="SynchronizationDenormalizerTests\when_interview_is_created_on_client_rejected_and_completed.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\Create.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\InterviewDetailsDataProcessorTestsContext.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\when_process_2_capi_packages_and_max_per_process_is_1.cs" />
@@ -295,7 +298,6 @@
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_2_rosters_triggered_by_1_TextListQuestion.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_fixed_roster_and_MultyOptionLinkedQuestion_to_header.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_multy_options_roster_size_question_and_multy_option___.cs" />
-    <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_roster_max_2_rows_and_MultyOptionLinkedQuestion.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_roter_triggered_by_TextListQuestion.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_with_no_rosters_but_roster_is_present_in_roster_stucture.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_view_factory_from_containing_nested_group_inside_roster.cs" />
@@ -381,8 +383,6 @@
     <Compile Include="QuestionDataParserTests\when_building_answer_from_string_array_for_numeric_qustion.cs" />
     <Compile Include="QuestionDataParserTests\when_building_answer_from_string_array_for_textlist_question.cs" />
     <Compile Include="QuestionDataParserTests\when_parsing_empty_string_as_an_answer.cs" />
-    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_autopropagated_question.cs" />
-    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_autopropagated_question_and_answer_cant_be_parsed.cs" />
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_datetime_question.cs" />
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_datetime_question_and_answer_cant_be_parsed.cs" />
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_geolocation_question.cs" />
@@ -436,14 +436,6 @@
     <Compile Include="ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\when_load_interview_summary.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
-      <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
-      <Name>Ncqrs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
-      <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
-      <Name>Main.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
@@ -452,9 +444,9 @@
       <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
       <Name>WB.Core.GenericSubdomains.Utils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
-      <Project>{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}</Project>
-      <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Files\WB.Core.Infrastructure.Files.csproj">
+      <Project>{6AC3A080-CECA-4974-9CA1-C239695ED8F8}</Project>
+      <Name>WB.Core.Infrastructure.Files</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
@@ -464,13 +456,13 @@
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
-      <Project>{D55B9582-70FD-4340-A3BC-55A33D49B2E6}</Project>
-      <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\SurveyManagement\SurveyManagement\WB.Core.SharedKernels.SurveyManagement.csproj">
       <Project>{29a132b5-a573-40d2-9e8f-2871e95d7766}</Project>
       <Name>WB.Core.SharedKernels.SurveyManagement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
+      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
+      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}</Project>

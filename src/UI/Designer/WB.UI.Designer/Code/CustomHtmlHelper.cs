@@ -1,11 +1,11 @@
-﻿namespace WB.UI.Designer
+﻿using WB.Core.GenericSubdomains.Utils;
+
+namespace WB.UI.Designer
 {
     using System;
     using System.Security.Policy;
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
-
-    using Main.Core.Utility;
 
     /// <summary>
     /// The custom html helper.

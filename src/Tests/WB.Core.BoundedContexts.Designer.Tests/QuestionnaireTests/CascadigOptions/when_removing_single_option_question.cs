@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests.CascadigOpti
             });
         };
 
-        private Because of = () => exception = Catch.Exception(() => questionnaire.NewDeleteQuestion(parentQuestionId, responsibleId));
+        private Because of = () => exception = Catch.Exception(() => questionnaire.DeleteQuestion(parentQuestionId, responsibleId));
 
         private It should_not_allow_removal = () =>
         {

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
+using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -22,7 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
 
             interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional(questionnaireRosterStructure);
             viewState = interviewEventHandlerFunctional.Update(viewState,
-                CreatePublishableEvent(new RosterRowAdded(rosterGroupId, new decimal[0], 0, null)));
+                CreatePublishableEvent(new RosterInstancesAdded(new[] { new AddedRosterInstance(rosterGroupId, new decimal[0], 0.0m, null) })));
         };
 
         Because of = () =>

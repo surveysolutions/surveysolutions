@@ -4,7 +4,6 @@ using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using It = Machine.Specifications.It;
@@ -95,7 +94,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
         It should_not_declare_child_as_valid = () =>
             results.WasChildDeclaredValid.ShouldBeFalse();
 
-        It should_declare_child_as_invalid = () =>
+        It should_not_declare_child_as_invalid = () =>
             results.WasChildDeclaredInvalid.ShouldBeTrue();
 
         It should_enable_child_question_because_of_condition_is_true = () =>

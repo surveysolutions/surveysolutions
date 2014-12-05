@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
-using Main.Core;
-using Main.Core.View;
 using System;
 using System.Linq;
 using System.Net;
@@ -11,6 +9,8 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Designer.Api.Attributes;
@@ -27,6 +27,7 @@ namespace WB.UI.Designer.Api
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IQuestionnaireExportService exportService;
         private readonly ILogger logger;
+        private readonly IArchiveUtils archiver;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
 
@@ -40,13 +41,15 @@ namespace WB.UI.Designer.Api
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IQuestionnaireExportService exportService,
             IExpressionProcessorGenerator expressionProcessorGenerator,
-            ILogger logger)
+            ILogger logger,
+            IArchiveUtils archiver)
         {
             this.userHelper = userHelper;
             this.exportService = exportService;
             this.sharedPersonsViewFactory = sharedPersonsViewFactory;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.logger = logger;
+            this.archiver = archiver;
             this.questionnaireHelper = questionnaireHelper;
             this.questionnaireVerifier = questionnaireVerifier;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
@@ -174,7 +177,7 @@ namespace WB.UI.Designer.Api
                 return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, TesterApiController.Questionnaire_verification_failed);
             }
             
-            var template = PackageHelper.CompressString(templateInfo.Source);
+            var template = archiver.CompressString(templateInfo.Source);
             var questionnaireSyncPackage = new QuestionnaireCommunicationPackage
             {
                 Questionnaire = template,

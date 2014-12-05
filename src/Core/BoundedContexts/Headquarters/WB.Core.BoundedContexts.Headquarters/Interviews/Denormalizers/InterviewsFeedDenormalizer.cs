@@ -3,7 +3,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Raven.Client.Linq;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
+using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
@@ -30,6 +30,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
             this.writer = writer;
             this.interviews = interviews;
             this.interviewInterviewSummaryes = interviewInterviewSummaryes;
+        }
+
+        public override object[] Writers
+        {
+            get { return new object[] { writer}; }
+        }
+
+        public override object[] Readers
+        {
+            get { return new object[] { interviews, interviewInterviewSummaryes }; }
         }
 
         public void Handle(IPublishedEvent<SupervisorAssigned> evnt)
@@ -110,11 +120,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
                 EntryId = evnt.EventIdentifier.FormatGuid(),
                 UserId = evnt.Payload.UserId.FormatGuid()
             }, evnt.EventIdentifier);
-        }
-
-        public override Type[] BuildsViews
-        {
-            get { return new[] { typeof (InterviewFeedEntry) }; }
         }
     }
 }

@@ -4,15 +4,15 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Machine.Specifications;
-using Main.Core.View.User;
 using Moq;
 using Moq.Protected;
-using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.Users.HeadquartersLoginServiceTests
@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Users.HeadquartersLoginServic
             {
                 PublicKey = Guid.NewGuid(),
                 Email = "test@test.com",
-                isLockedBySupervisor = false,
+                IsLockedBySupervisor = false,
                 IsLockedByHQ = false,
                 Password = "password"
             };
@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Users.HeadquartersLoginServic
                 command.UserName == HeadquartersUser.UserName &&
                 command.Email == HeadquartersUser.Email &&
                 command.IsLockedByHQ == HeadquartersUser.IsLockedByHQ &&
-                command.IsLockedBySupervisor == HeadquartersUser.isLockedBySupervisor),
+                command.IsLockedBySupervisor == HeadquartersUser.IsLockedBySupervisor),
             Moq.It.IsAny<string>()));
 
         static HeadquartersLoginService service;

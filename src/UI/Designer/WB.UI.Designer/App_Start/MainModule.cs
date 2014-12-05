@@ -1,17 +1,14 @@
-﻿using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+﻿using System.Web.Mvc;
+using Ninject.Modules;
+using Ninject.Web.Mvc.FilterBindingSyntax;
+using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
-using WB.UI.Designer.Controllers;
+using WB.Core.SharedKernels.SurveySolutions.Services;
+using WB.UI.Designer.Exceptions;
+using WB.UI.Shared.Web.Membership;
 
-namespace WB.UI.Designer.App_Start
+namespace WB.UI.Designer
 {
-    using System.Web.Mvc;
-    using Ninject.Modules;
-    using Ninject.Web.Mvc.FilterBindingSyntax;
-    using WB.Core.SharedKernel.Utils.Compression;
-    
-    using WB.UI.Designer.Exceptions;
-    using WB.UI.Shared.Web.Membership;
-
     /// <summary>
     /// The main module.
     /// </summary>

@@ -2,10 +2,10 @@
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.CommandDeserialization;

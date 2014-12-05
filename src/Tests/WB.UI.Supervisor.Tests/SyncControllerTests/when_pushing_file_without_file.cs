@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Formatting;
 using System.Web;
 using Machine.Specifications;
-using Main.Core.View;
-using Main.Core.View.User;
 using Moq;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
 using It = Machine.Specifications.It;
 
 namespace WB.UI.Supervisor.Tests.SyncControllerTests

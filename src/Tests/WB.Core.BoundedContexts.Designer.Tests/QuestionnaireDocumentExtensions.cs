@@ -73,11 +73,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests
                 case QuestionType.DateTime:
                     question = new DateTimeQuestion();
                     break;
-                case QuestionType.AutoPropagate:
-                    question = new AutoPropagateQuestion();
-                    (question as AutoPropagateQuestion).Triggers = triggers;
-                    (question as AutoPropagateQuestion).MaxValue = maxValue;
-                    break;
                 case QuestionType.SingleOption:
                     question = new SingleQuestion();
                     break;

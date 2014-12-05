@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
+using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.Tests.Unit.SharedKernels.ExpressionProcessor.KeywordsProviderTests
 {

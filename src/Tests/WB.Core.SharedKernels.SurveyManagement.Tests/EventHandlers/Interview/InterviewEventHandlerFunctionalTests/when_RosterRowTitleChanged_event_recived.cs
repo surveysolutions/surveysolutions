@@ -1,6 +1,6 @@
 ﻿using System;
 using Machine.Specifications;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
+using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         
         Because of = () =>
             viewState = interviewEventHandlerFunctional.Update(viewState,
-                CreatePublishableEvent(new RosterRowTitleChanged(rosterGroupId, new decimal[0], 0, rosterTitle)));
+                CreatePublishableEvent(Create.RosterInstancesTitleChanged(rosterGroupId, rosterTitle: rosterTitle)));
 
 
         It should_roster_title_be_equal_to_rosterTitle = () =>

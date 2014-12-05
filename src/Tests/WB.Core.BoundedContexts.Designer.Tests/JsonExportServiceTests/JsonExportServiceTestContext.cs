@@ -1,9 +1,9 @@
 ﻿using Main.Core.Documents;
-using Main.Core.View;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.JsonExportServiceTests
 {

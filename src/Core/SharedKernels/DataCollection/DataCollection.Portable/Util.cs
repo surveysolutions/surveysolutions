@@ -34,7 +34,8 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public static string GetSiblingsKey(Identity[] rosterKey)
         {
-            return GetSiblingsKey(rosterKey.Shrink(), rosterKey.Last().Id);
+            var parentRosterKey = rosterKey.Shrink().Select(x => new Identity(x.Id, x.RosterVector.Shrink())).ToArray();
+            return GetSiblingsKey(parentRosterKey, rosterKey.Last().Id);
         }
 
 

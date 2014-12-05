@@ -22,6 +22,13 @@ namespace WB.UI.Shared.Web.Extensions
             return Int32.TryParse(value, out result) ? result : @default;
         }
 
+        public static bool IsDecimal(this string value)
+        {
+            decimal result;
+
+            return Decimal.TryParse(value, out result);
+        }
+
         public static bool ToBool(this string value, bool @default)
         {
             bool result;

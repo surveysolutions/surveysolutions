@@ -13,7 +13,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
@@ -36,17 +35,17 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                                                         && _.GetQuestionType(conditionallyInvalidQuestionId)==QuestionType.Text
                                                         && _.IsCustomValidationDefined(conditionallyInvalidQuestionId) == true);
 
-            var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
+            //var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
 
             //setup expression processor throw exception
-            expressionProcessor.Setup(x => x.EvaluateBooleanExpression(Moq.It.IsAny<string>(), Moq.It.IsAny<Func<string, object>>()))
-                .Returns(false);
+//            expressionProcessor.Setup(x => x.EvaluateBooleanExpression(Moq.It.IsAny<string>(), Moq.It.IsAny<Func<string, object>>()))
+//                .Returns(false);
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                                                                                                 questionaire);
 
             SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(questionnaireRepository);
-            SetupInstanceToMockedServiceLocator<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>(expressionProcessor.Object);
+            //SetupInstanceToMockedServiceLocator<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>(expressionProcessor.Object);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
             interview.AnswerTextQuestion(userId, conditionallyInvalidQuestionId, new decimal[0], DateTime.Now, "answer");

@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using Moq.Protected;
-using Ncqrs.Commanding.ServiceModel;
+
 using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using It = Machine.Specifications.It;
 

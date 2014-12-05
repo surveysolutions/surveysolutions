@@ -7,9 +7,10 @@ using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
-using Ncqrs.Commanding.ServiceModel;
+
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.UI.Shared.Android.Controls.MaskedEditTextControl;
 
@@ -65,8 +66,12 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         {
             if (e.HasFocus)
             {
+                this.ShowKeyboard(this.etAnswer);
                 return;
             }
+
+            if (!this.IsCommentsEditorFocused)
+                this.HideKeyboard(this.etAnswer);
 
             if (isInputMasked && !this.maskedWatcher.IsTextMaskMatched())
             {
@@ -78,9 +83,6 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
             if (newAnswer != this.Model.AnswerString)
             {
-                if (!this.IsCommentsEditorFocused)
-                    this.HideKeyboard(this.etAnswer);
-
                 this.SaveAnswer(newAnswer,
                     new AnswerTextQuestionCommand(
                         this.QuestionnairePublicKey, this.Membership.CurrentUser.Id, this.Model.PublicKey.Id,
@@ -104,13 +106,15 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)
         {
-            this.etAnswer.ClearFocus();
+            if (e.ActionId == ImeAction.Done)
+            {
+                this.etAnswer.ClearFocus();
+            }
         }
 
         private void TextQuestionView_Click(object sender, EventArgs e)
         {
             this.etAnswer.RequestFocus();
-            this.ShowKeyboard(this.etAnswer);
         }
 
         protected EditText etAnswer { get; set; }

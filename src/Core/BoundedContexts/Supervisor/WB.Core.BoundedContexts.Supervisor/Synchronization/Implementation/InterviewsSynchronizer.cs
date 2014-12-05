@@ -9,7 +9,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
 using Ncqrs.Commanding;
-using Ncqrs.Commanding.ServiceModel;
+
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Raven.Client.Linq;
@@ -20,6 +20,8 @@ using WB.Core.BoundedContexts.Supervisor.Questionnaires;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -30,10 +32,13 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 {
@@ -55,6 +60,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter;
         private readonly Func<HttpMessageHandler> httpMessageHandler;
         private readonly IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage;
+        private readonly IArchiveUtils archiver;
 
         public InterviewsSynchronizer(
             IAtomFeedReader feedReader,
@@ -71,7 +77,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             IJsonUtils jsonUtils,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter,
             IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter,
-            Func<HttpMessageHandler> httpMessageHandler, IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage)
+            Func<HttpMessageHandler> httpMessageHandler, IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage,
+            IArchiveUtils archiver)
         {
             if (feedReader == null) throw new ArgumentNullException("feedReader");
             if (settings == null) throw new ArgumentNullException("settings");
@@ -85,6 +92,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             if (headquartersPushContext == null) throw new ArgumentNullException("headquartersPushContext");
             if (eventStore == null) throw new ArgumentNullException("eventStore");
             if (jsonUtils == null) throw new ArgumentNullException("jsonUtils");
+            if (archiver == null) throw new ArgumentNullException("archiver");
             if (interviewSummaryRepositoryWriter == null) throw new ArgumentNullException("interviewSummaryRepositoryWriter");
             if (readyToSendInterviewsRepositoryWriter == null) throw new ArgumentNullException("readyToSendInterviewsRepositoryWriter");
             if (httpMessageHandler == null) throw new ArgumentNullException("httpMessageHandler");
@@ -105,6 +113,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.readyToSendInterviewsRepositoryWriter = readyToSendInterviewsRepositoryWriter;
             this.httpMessageHandler = httpMessageHandler;
             this.interviewSynchronizationFileStorage = interviewSynchronizationFileStorage;
+            this.archiver = archiver;
         }
 
         public void PullInterviewsForSupervisors(Guid[] supervisorIds)
@@ -332,7 +341,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             Guid userIdGuid = Guid.Parse(userId);
 
             this.headquartersPullContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Interview__0__was_canceled_by_HQFormat, interviewId));
-            this.executeCommand(new CancelInterviewByHQSynchronizationCommand(interviewId: interviewIdGuid, userId: userIdGuid));
+            this.executeCommand(new CancelInterviewByHqSynchronizationCommand(interviewId: interviewIdGuid, userId: userIdGuid));
         }
 
         private void HardDeleteInterview(string interviewId, string userId)
@@ -432,11 +441,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             var syncItem = new SyncItem
             {
-                Content = PackageHelper.CompressString(this.jsonUtils.GetItemAsContent(eventsToSend)),
+                Content = archiver.CompressString(this.jsonUtils.GetItemAsContent(eventsToSend)),
                 IsCompressed = true,
                 ItemType = SyncItemType.Questionnare,
-                MetaInfo = PackageHelper.CompressString(this.jsonUtils.GetItemAsContent(metadata)),
-                Id = interviewId
+                MetaInfo = archiver.CompressString(this.jsonUtils.GetItemAsContent(metadata)),
+                RootId = interviewId
             };
 
             return this.jsonUtils.GetItemAsContent(syncItem);
