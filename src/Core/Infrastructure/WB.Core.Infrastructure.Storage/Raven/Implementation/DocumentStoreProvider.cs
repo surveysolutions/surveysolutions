@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using Ninject.Activation;
+using Raven.Abstractions.Json;
+using Raven.Abstractions.Replication;
+using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Embedded;
 using Raven.Client.Extensions;
@@ -9,7 +13,7 @@ using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation
 {
-    internal class DocumentStoreProvider : Provider<DocumentStore>
+    internal class DocumentStoreProvider : Provider<IDocumentStore>
     {
         private readonly RavenConnectionSettings settings;
         
@@ -27,31 +31,33 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation
         /// This is needed because event store substitutes conventions and substituted are not compatible with read side.
         /// Always creates a new instance, so should be called only once per app.
         /// </summary>
-        public DocumentStore CreateSeparateInstanceForEventStore()
+        public IDocumentStore CreateSeparateInstanceForEventStore()
         {
+            //externalDocumentStore.Conventions = CreateStoreConventions(CollectionName, failoverBehavior);
+
             return this.settings.IsEmbedded
-                ? this.CreateEmbeddedStorage()
+                ? (IDocumentStore) this.CreateEmbeddedStorage()
                 : this.CreateServerStorage(this.settings.EventsDatabase);
         }
 
-        public DocumentStore CreateInstanceForPlainStorage()
+        public IDocumentStore CreateInstanceForPlainStorage()
         {
             return this.CreateServerStorage(this.settings.PlainDatabase);
         }
 
-        protected override DocumentStore CreateInstance(IContext context)
+        protected override IDocumentStore CreateInstance(IContext context)
         {
             return this.CreateInstanceForReadSideStore();
         }
 
-        private DocumentStore CreateInstanceForReadSideStore()
+        private IDocumentStore CreateInstanceForReadSideStore()
         {
             return this.settings.IsEmbedded
                 ? this.GetOrCreateEmbeddedStorage()
                 : this.GetOrCreateServerStorage(this.settings.ViewsDatabase);
         }
 
-        private DocumentStore GetOrCreateServerStorage(string databaseName)
+        private IDocumentStore GetOrCreateServerStorage(string databaseName)
         {
             return this.serverStorage ?? (this.serverStorage = this.CreateServerStorage(databaseName));
         }
@@ -123,6 +129,45 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation
             store.Initialize();
 
             return store;
+        }
+
+        protected internal static DocumentConvention CreateStoreConventions(string ravenCollectionName, FailoverBehavior failoverBehavior = FailoverBehavior.FailImmediately)
+        {
+            return new DocumentConvention
+            {
+                FailoverBehavior = failoverBehavior,
+                JsonContractResolver = new PropertiesOnlyContractResolver(),
+                FindTypeTagName = x => ravenCollectionName,
+                CustomizeJsonSerializer = CustomizeJsonSerializer,
+            };
+        }
+
+        private static void CustomizeJsonSerializer(JsonSerializer serializer)
+        {
+            SetupSerializerToIgnoreAssemblyNameForEvents(serializer);
+        }
+
+
+        private static void SetupSerializerToIgnoreAssemblyNameForEvents(JsonSerializer serializer)
+        {
+            serializer.Binder = new IgnoreAssemblyNameForEventsSerializationBinder();
+
+            // if we want to perform serialized type name substitution
+            // then JsonDynamicConverter should be removed
+            // that is because JsonDynamicConverter handles System.Object types
+            // and it by itself does not recognized substituted type
+            // and does not allow our custom serialization binder to work
+            RemoveJsonDynamicConverter(serializer.Converters);
+        }
+
+        private static void RemoveJsonDynamicConverter(JsonConverterCollection converters)
+        {
+            JsonConverter jsonDynamicConverter = converters.SingleOrDefault(converter => converter is JsonDynamicConverter);
+
+            if (jsonDynamicConverter != null)
+            {
+                converters.Remove(jsonDynamicConverter);
+            }
         }
     }
 }

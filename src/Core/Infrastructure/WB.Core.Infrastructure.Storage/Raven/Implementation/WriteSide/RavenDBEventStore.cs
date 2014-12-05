@@ -5,18 +5,15 @@ using System.Linq;
 using System.Linq.Expressions;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using Raven.Abstractions.Replication;
 using Raven.Client;
-using Raven.Client.Document;
 using Raven.Client.Indexes;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide.Indexes;
-using StoredEvent = WB.Core.Infrastructure.Storage.Raven.StoredEvent;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
 {
-    internal class RavenDBEventStore : RavenWriteSideStore, IStreamableEventStore
+    internal class RavenDBEventStore :  IStreamableEventStore
     {
-        private const string CollectionName = "Events";
-
         protected readonly IDocumentStore DocumentStore;
 
         private bool useAsyncSave = false; // research: in the embedded mode true is not valid.
@@ -30,29 +27,11 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
 
         private readonly int timeout = 180;
 
-        public RavenDBEventStore(string ravenUrl, int pageSize, bool useStreamingForAllEvents = true, FailoverBehavior failoverBehavior = FailoverBehavior.FailImmediately, string activeBundles = null)
+        public RavenDBEventStore(IDocumentStore externalDocumentStore, int pageSize, 
+            FailoverBehavior failoverBehavior = FailoverBehavior.FailImmediately, 
+            bool useStreamingForAllEvents = true)
         {
-            this.DocumentStore = new DocumentStore
-            {
-                Url = ravenUrl,
-                Conventions = CreateStoreConventions(CollectionName, failoverBehavior)
-            }.Initialize();
-           
-            this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
-            {
-                e.Request.Timeout = 30*60*1000; /*ms*/
-            };
-            this.pageSize = pageSize;
-            this.useStreamingForAllEvents = useStreamingForAllEvents;
             
-            this.DocumentStore.ActivateBundles(activeBundles);
-            IndexCreation.CreateIndexes(typeof (UniqueEventsIndex).Assembly, this.DocumentStore);
-            IndexCreation.CreateIndexes(typeof (EventsByTimeStampAndSequenceIndex).Assembly, this.DocumentStore);
-        }
-
-        public RavenDBEventStore(DocumentStore externalDocumentStore, int pageSize, FailoverBehavior failoverBehavior = FailoverBehavior.FailImmediately, bool useStreamingForAllEvents = true)
-        {
-            externalDocumentStore.Conventions = CreateStoreConventions(CollectionName, failoverBehavior);
             this.DocumentStore = externalDocumentStore;
 
             this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
@@ -85,7 +64,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
                     List<UniqueEventsResults> chunk = session
                         .Query<StoredEvent, UniqueEventsIndex>()
                         .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(this.timeout)))
-                        .AsProjection<UniqueEventsResults>().OrderBy(x => x.EventTimeStamp)
+                        .ProjectFromIndexFieldsInto<UniqueEventsResults>().OrderBy(x => x.EventTimeStamp)
                         .Skip(page*this.pageSize)
                         .Take(this.pageSize)
                         .ToList();
