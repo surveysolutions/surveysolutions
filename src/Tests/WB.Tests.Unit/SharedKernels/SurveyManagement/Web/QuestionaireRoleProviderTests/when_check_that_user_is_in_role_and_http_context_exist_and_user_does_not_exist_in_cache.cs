@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using It = Machine.Specifications.It;
 
-namespace Questionnaire.Core.Web.Security.Tests.QuestionaireRoleProviderTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.QuestionaireRoleProviderTests
 {
     internal class when_check_that_user_is_in_role_and_http_context_exist_and_user_does_not_exist_in_cache : QuestionnaireRoleProviderTestsContext
     {

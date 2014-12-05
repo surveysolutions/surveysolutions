@@ -1,6 +1,6 @@
 ﻿using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 
-namespace Questionnaire.Core.Web.Security.Tests.QuestionaireRoleProviderTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.QuestionaireRoleProviderTests
 {
     internal class QuestionnaireRoleProviderTestsContext
     {
