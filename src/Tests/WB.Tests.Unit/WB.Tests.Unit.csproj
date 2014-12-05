@@ -90,6 +90,7 @@
       <HintPath>..\..\..\packages\System.Collections.Immutable.1.1.32-beta\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
@@ -99,6 +100,7 @@
     </Reference>
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.Helpers.dll</HintPath>
@@ -434,6 +436,10 @@
     <Compile Include="SharedKernels\SurveyManagement\ResourceControllerTests\ResourceControllerTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\CommandTransformatorTests\CommandTransformatorTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\CommandTransformatorTests\when_need_to_transform_CreateInterviewControllerCommand.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\QuestionaireRoleProviderTests\QuestionnaireRoleProviderTestsContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\QuestionaireRoleProviderTests\when_check_that_user_is_in_role_and_http_context_exist_and_user_does_not_exist_in_cache.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\QuestionnaireMembershipProviderTests\QuestionnaireMembershipProviderTestsContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\QuestionnaireMembershipProviderTests\when_initialize_and_all_provider_params_specified.cs" />
     <Compile Include="SharedKernels\SurveySolutions\Documents\QuestionnaireDocumentTests.cs" />
     <Compile Include="SharedKernels\Synchronization\DefaultBackupManagerTests.cs" />
     <Compile Include="SharedKernels\Synchronization\when_chunk_with_same_guid_is_present.cs" />

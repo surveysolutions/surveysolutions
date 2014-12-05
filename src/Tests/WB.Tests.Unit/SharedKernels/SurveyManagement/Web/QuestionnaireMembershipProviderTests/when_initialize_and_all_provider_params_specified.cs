@@ -3,7 +3,7 @@ using Machine.Specifications;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using It = Machine.Specifications.It;
 
-namespace Questionnaire.Core.Web.Security.Tests.QuestionnaireMembershipProviderTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.QuestionnaireMembershipProviderTests
 {
     internal class when_initialize_and_all_provider_params_specified : QuestionnaireMembershipProviderTestsContext
     {
