@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Practices.ServiceLocation;
 using Ninject.Modules;
 using NinjectAdapter;

@@ -37,6 +37,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.A
         private static IReadSideRepositoryWriter<InterviewBrief> interviewBriefStorage;
         private static IReadSideRepositoryWriter<QuestionnaireQuestionsInfo> variablesStorage;
         private static AnswersByVariableDenormalizer denormalizer;
-        private static IPublishedEvent<AnswerRemoved> evnt;
+        private static IPublishedEvent<AnswersRemoved> evnt;
     }
 }

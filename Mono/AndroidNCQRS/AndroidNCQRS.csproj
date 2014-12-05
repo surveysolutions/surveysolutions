@@ -80,95 +80,8 @@
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\ITransactionService.cs">
       <Link>Commanding\CommandExecution\ITransactionService.cs</Link>
     </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\Attributes\AggregateRootIdAttribute.cs">
-      <Link>Commanding\CommandExecution\Mapping\Attributes\AggregateRootIdAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\Attributes\AttributeBasedCommandMapper.cs">
-      <Link>Commanding\CommandExecution\Mapping\Attributes\AttributeBasedCommandMapper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\Attributes\AttributePropertyMappingStrategy.cs">
-      <Link>Commanding\CommandExecution\Mapping\Attributes\AttributePropertyMappingStrategy.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\Attributes\CommandServiceExtensions.cs">
-      <Link>Commanding\CommandExecution\Mapping\Attributes\CommandServiceExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\Attributes\ExcludeInMappingAttribute.cs">
-      <Link>Commanding\CommandExecution\Mapping\Attributes\ExcludeInMappingAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\Attributes\IMappingAttributeHandler.cs">
-      <Link>Commanding\CommandExecution\Mapping\Attributes\IMappingAttributeHandler.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootConstructorAttribute.cs">
-      <Link>Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootConstructorAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootConstructorAttributeHandler.cs">
-      <Link>Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootConstructorAttributeHandler.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootMethodAttribute.cs">
-      <Link>Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootMethodAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootMethodAttributeHandler.cs">
-      <Link>Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootMethodAttributeHandler.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootMethodOrConstructorAttribute.cs">
-      <Link>Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootMethodOrConstructorAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootMethodOrConstructorAttributeHandler.cs">
-      <Link>Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootMethodOrConstructorAttributeHandler.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootStaticCreateAttribute.cs">
-      <Link>Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootStaticCreateAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootStaticCreateAttributeHandler.cs">
-      <Link>Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootStaticCreateAttributeHandler.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\Attributes\ParameterAttribute.cs">
-      <Link>Commanding\CommandExecution\Mapping\Attributes\ParameterAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\Attributes\TransactionalAttribute.cs">
-      <Link>Commanding\CommandExecution\Mapping\Attributes\TransactionalAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\CommandMappingException.cs">
-      <Link>Commanding\CommandExecution\Mapping\CommandMappingException.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\Fluent\Map.cs">
-      <Link>Commanding\CommandExecution\Mapping\Fluent\Map.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\Fluent\MappedCommand.cs">
-      <Link>Commanding\CommandExecution\Mapping\Fluent\MappedCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\Fluent\MappedCommandToAggregateRoot.cs">
-      <Link>Commanding\CommandExecution\Mapping\Fluent\MappedCommandToAggregateRoot.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\Fluent\MappedCommandToAggregateRootConstructor.cs">
-      <Link>Commanding\CommandExecution\Mapping\Fluent\MappedCommandToAggregateRootConstructor.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\Fluent\MappedCommandToAggregateRootMethod.cs">
-      <Link>Commanding\CommandExecution\Mapping\Fluent\MappedCommandToAggregateRootMethod.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\Fluent\MappedCommandToAggregateRootMethodOrConstructor.cs">
-      <Link>Commanding\CommandExecution\Mapping\Fluent\MappedCommandToAggregateRootMethodOrConstructor.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\ICommandMapper.cs">
-      <Link>Commanding\CommandExecution\Mapping\ICommandMapper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\MappingNotFoundException.cs">
-      <Link>Commanding\CommandExecution\Mapping\MappingNotFoundException.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\PropertiesToMethodMapper.cs">
-      <Link>Commanding\CommandExecution\Mapping\PropertiesToMethodMapper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\PropertyToParameterMappingInfo.cs">
-      <Link>Commanding\CommandExecution\Mapping\PropertyToParameterMappingInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\Mapping\UoWMappedCommandExecutor.cs">
-      <Link>Commanding\CommandExecution\Mapping\UoWMappedCommandExecutor.cs</Link>
-    </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\TransactionalCommandExecutorWrapper.cs">
       <Link>Commanding\CommandExecution\TransactionalCommandExecutorWrapper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\ICommand.cs">
-      <Link>Commanding\ICommand.cs</Link>
     </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\IKnownCommandsEnumerator.cs">
       <Link>Commanding\IKnownCommandsEnumerator.cs</Link>
@@ -179,11 +92,14 @@
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\ServiceModel\CommandService.cs">
       <Link>Commanding\ServiceModel\CommandService.cs</Link>
     </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\ServiceModel\ICommandService.cs">
-      <Link>Commanding\ServiceModel\ICommandService.cs</Link>
-    </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\ServiceModel\ICommandServiceInterceptor.cs">
       <Link>Commanding\ServiceModel\ICommandServiceInterceptor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\CommandListSupplier.cs">
+      <Link>CommandListSupplier.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\ConcurrencyResolveCommandService.cs">
+      <Link>ConcurrencyResolveCommandService.cs</Link>
     </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Config\IEnvironmentConfiguration.cs">
       <Link>Config\IEnvironmentConfiguration.cs</Link>
@@ -202,12 +118,6 @@
     </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Domain\AggregateRootMappedByConvention.cs">
       <Link>Domain\AggregateRootMappedByConvention.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Domain\AggregateRootMappedWithAttributes.cs">
-      <Link>Domain\AggregateRootMappedWithAttributes.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Domain\AggregateRootMappedWithExpressions.cs">
-      <Link>Domain\AggregateRootMappedWithExpressions.cs</Link>
     </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Domain\Entity.cs">
       <Link>Domain\Entity.cs</Link>
@@ -272,6 +182,9 @@
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Domain\UnitOfWorkFactory.cs">
       <Link>Domain\UnitOfWorkFactory.cs</Link>
     </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\AggregateRootEvent.cs">
+      <Link>Eventing\AggregateRootEvent.cs</Link>
+    </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\CommittedEvent.cs">
       <Link>Eventing\CommittedEvent.cs</Link>
     </Compile>
@@ -280,6 +193,9 @@
     </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Event.cs">
       <Link>Eventing\Event.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\EventMergeUtils.cs">
+      <Link>Eventing\EventMergeUtils.cs</Link>
     </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\EventNotHandledException.cs">
       <Link>Eventing\EventNotHandledException.cs</Link>
@@ -335,32 +251,14 @@
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Sourcing\ISourcedEventHandler.cs">
       <Link>Eventing\Sourcing\ISourcedEventHandler.cs</Link>
     </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Sourcing\Mapping\AttributeBasedEventHandlerMappingStrategy.cs">
-      <Link>Eventing\Sourcing\Mapping\AttributeBasedEventHandlerMappingStrategy.cs</Link>
-    </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Sourcing\Mapping\ConventionBasedEventHandlerMappingStrategy.cs">
       <Link>Eventing\Sourcing\Mapping\ConventionBasedEventHandlerMappingStrategy.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Sourcing\Mapping\EventHandlerAttribute.cs">
-      <Link>Eventing\Sourcing\Mapping\EventHandlerAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Sourcing\Mapping\ExpressionBasedEventHandlerMappingStrategy.cs">
-      <Link>Eventing\Sourcing\Mapping\ExpressionBasedEventHandlerMappingStrategy.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Sourcing\Mapping\ExpressionHandler.cs">
-      <Link>Eventing\Sourcing\Mapping\ExpressionHandler.cs</Link>
     </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Sourcing\Mapping\IEventHandlerMappingStrategy.cs">
       <Link>Eventing\Sourcing\Mapping\IEventHandlerMappingStrategy.cs</Link>
     </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Sourcing\Mapping\InvalidEventHandlerMappingException.cs">
-      <Link>Eventing\Sourcing\Mapping\InvalidEventHandlerMappingException.cs</Link>
-    </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Sourcing\Mapping\MappedAggregateRoot.cs">
       <Link>Eventing\Sourcing\Mapping\MappedAggregateRoot.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Sourcing\Mapping\NoEventHandlerAttribute.cs">
-      <Link>Eventing\Sourcing\Mapping\NoEventHandlerAttribute.cs</Link>
     </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Eventing\Sourcing\Snapshotting\ISnapshot.cs">
       <Link>Eventing\Sourcing\Snapshotting\ISnapshot.cs</Link>
@@ -473,6 +371,9 @@
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\IClock.cs">
       <Link>IClock.cs</Link>
     </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\ICommandListSupplier.cs">
+      <Link>ICommandListSupplier.cs</Link>
+    </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\InternalExtensions.cs">
       <Link>InternalExtensions.cs</Link>
     </Compile>
@@ -494,12 +395,35 @@
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\NcqrsEnvironmentException.cs">
       <Link>NcqrsEnvironmentException.cs</Link>
     </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\NCQRSInit.cs">
+      <Link>NCQRSInit.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\SilverlightHacks.cs">
+      <Link>SilverlightHacks.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\_WB\AggregateRootRepository.cs">
+      <Link>_WB\AggregateRootRepository.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\_WB\EventPublisher.cs">
+      <Link>_WB\EventPublisher.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\_WB\SnapshotManager.cs">
+      <Link>_WB\SnapshotManager.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidNinject\AndroidNinject.csproj">
+      <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>
+      <Name>AndroidNinject</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

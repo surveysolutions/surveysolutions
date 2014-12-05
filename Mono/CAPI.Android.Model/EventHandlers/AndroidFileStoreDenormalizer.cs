@@ -1,8 +1,8 @@
-using Main.Core.Documents;
-using Main.Core.EventHandlers;
 using Main.Core.Events.File;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.EventHandler;
+using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {

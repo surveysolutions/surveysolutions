@@ -5,18 +5,14 @@ using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.ExpressionProcessor;
-using WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views
 {
@@ -103,10 +99,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
 
         private static bool IsRoster(IGroup currentGroup)
         {
-                    //### old questionnaires supporting
-            return currentGroup.Propagated == Propagate.AutoPropagated ||
-                   //### roster
-                   (currentGroup.IsRoster);
+            return (currentGroup.IsRoster);
         }
 
         private InterviewLevel GetRootLevel(InterviewData interview)

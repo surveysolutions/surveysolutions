@@ -8,9 +8,8 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
+using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
@@ -45,26 +44,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         IUpdateHandler<GroupInfoView, GroupBecameARoster>,
         IUpdateHandler<GroupInfoView, GroupStoppedBeingARoster>
     {
-        private readonly IExpressionProcessor expressionProcessor;
-        private IQuestionnaireDocumentUpgrader questionnaireUpgrader;
 
-        public ChaptersInfoViewDenormalizer(IReadSideRepositoryWriter<GroupInfoView> writer,
-            IExpressionProcessor expressionProcessor,
-            IQuestionnaireDocumentUpgrader questionnaireUpgrader)
+        public ChaptersInfoViewDenormalizer(IReadSideRepositoryWriter<GroupInfoView> writer)
             : base(writer)
         {
-            this.expressionProcessor = expressionProcessor;
-            this.questionnaireUpgrader = questionnaireUpgrader;
-        }
-
-        public override Type[] UsesViews
-        {
-            get { return new Type[0]; }
-        }
-
-        public override Type[] BuildsViews
-        {
-            get { return base.BuildsViews.Union(new[] { typeof(GroupInfoView) }).ToArray(); }
         }
 
         public GroupInfoView Create(IPublishedEvent<NewQuestionnaireCreated> evnt)
@@ -90,10 +73,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         private void BuildQuestionnaireFrom(QuestionnaireDocument questionnaireDocument, GroupInfoView questionnaire)
         {
-            QuestionnaireDocument sourceQuestionnaireOrGroup =
-                this.questionnaireUpgrader.TranslatePropagatePropertiesToRosterProperties(questionnaireDocument);
-            sourceQuestionnaireOrGroup.ConnectChildrenWithParent();
-            this.AddQuestionnaireItem(currentState: questionnaire, sourceQuestionnaireOrGroup: sourceQuestionnaireOrGroup);
+            questionnaireDocument.ConnectChildrenWithParent();
+            this.AddQuestionnaireItem(currentState: questionnaire, sourceQuestionnaireOrGroup: questionnaireDocument);
         }
 
         public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<NewGroupAdded> evnt)
@@ -465,10 +446,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 return;
             }
 
-            var questionsUsedInConditionExpression = string.IsNullOrEmpty(questionConditionExpression)
-                        ? new string[0]
-                        : expressionProcessor.GetIdentifiersUsedInExpression(questionConditionExpression);
-
             var questionInfoView = new QuestionInfoView()
             {
                 ItemId = questionId,
@@ -501,10 +478,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
             if (questionView == null)
                 return;
-
-            var questionsUsedInConditionExpression = string.IsNullOrEmpty(questionConditionExpression)
-                        ? new string[0]
-                        : expressionProcessor.GetIdentifiersUsedInExpression(questionConditionExpression);
 
             questionView.Title = questionTitle;
             questionView.Type = questionType;

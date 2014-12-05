@@ -102,8 +102,9 @@ namespace WB.UI.Shared.Android.Controls.Roster
         {
             if (disposing)
             {
+#if DEBUG
                 Console.WriteLine(string.Format("disposing roster question '{0}'", this.Model.Text));
-
+#endif
                 this.ClearAllBindings();
 
                 if (this.dialog != null)

@@ -30,6 +30,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.A
         private static Mock<IReadSideRepositoryWriter<AnswersByVariableCollection>> answersByVariableStorageMock;
         private static IReadSideRepositoryWriter<InterviewBrief> interviewBriefStorage;
         private static AnswersByVariableDenormalizer denormalizer;
-        private static IPublishedEvent<AnswerRemoved> evnt;
+        private static IPublishedEvent<AnswersRemoved> evnt;
     }
 }

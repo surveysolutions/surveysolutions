@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Strings {
+    public class Strings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.SharedKernels.SurveyManagement.Web.Properties.Strings", typeof(Strings).Assembly);
@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,9 +61,36 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account information succesfully updated.
+        /// </summary>
+        public static string HQ_AccountController_AccountUpdatedSuccessfully {
+            get {
+                return ResourceManager.GetString("HQ_AccountController_AccountUpdatedSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage account.
+        /// </summary>
+        public static string HQ_Views_Manage_Title {
+            get {
+                return ResourceManager.GetString("HQ_Views_Manage_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Approved by Headquarters.
         /// </summary>
-        internal static string InterviewStatus_ApprovedByHeadquarters {
+        public static string InterviewStatus_ApprovedByHeadquarters {
             get {
                 return ResourceManager.GetString("InterviewStatus_ApprovedByHeadquarters", resourceCulture);
             }
@@ -72,7 +99,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Approved by Supervisor.
         /// </summary>
-        internal static string InterviewStatus_ApprovedBySupervisor {
+        public static string InterviewStatus_ApprovedBySupervisor {
             get {
                 return ResourceManager.GetString("InterviewStatus_ApprovedBySupervisor", resourceCulture);
             }
@@ -81,7 +108,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Completed.
         /// </summary>
-        internal static string InterviewStatus_Completed {
+        public static string InterviewStatus_Completed {
             get {
                 return ResourceManager.GetString("InterviewStatus_Completed", resourceCulture);
             }
@@ -90,7 +117,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Created.
         /// </summary>
-        internal static string InterviewStatus_Created {
+        public static string InterviewStatus_Created {
             get {
                 return ResourceManager.GetString("InterviewStatus_Created", resourceCulture);
             }
@@ -99,7 +126,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Deleted.
         /// </summary>
-        internal static string InterviewStatus_Deleted {
+        public static string InterviewStatus_Deleted {
             get {
                 return ResourceManager.GetString("InterviewStatus_Deleted", resourceCulture);
             }
@@ -108,7 +135,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Interviewer assigned.
         /// </summary>
-        internal static string InterviewStatus_InterviewerAssigned {
+        public static string InterviewStatus_InterviewerAssigned {
             get {
                 return ResourceManager.GetString("InterviewStatus_InterviewerAssigned", resourceCulture);
             }
@@ -117,7 +144,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Ready for interview.
         /// </summary>
-        internal static string InterviewStatus_ReadyForInterview {
+        public static string InterviewStatus_ReadyForInterview {
             get {
                 return ResourceManager.GetString("InterviewStatus_ReadyForInterview", resourceCulture);
             }
@@ -126,7 +153,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Rejected by Headquarters.
         /// </summary>
-        internal static string InterviewStatus_RejectedByHeadquarters {
+        public static string InterviewStatus_RejectedByHeadquarters {
             get {
                 return ResourceManager.GetString("InterviewStatus_RejectedByHeadquarters", resourceCulture);
             }
@@ -135,7 +162,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Rejected by Supervisor.
         /// </summary>
-        internal static string InterviewStatus_RejectedBySupervisor {
+        public static string InterviewStatus_RejectedBySupervisor {
             get {
                 return ResourceManager.GetString("InterviewStatus_RejectedBySupervisor", resourceCulture);
             }
@@ -144,7 +171,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Restarted.
         /// </summary>
-        internal static string InterviewStatus_Restarted {
+        public static string InterviewStatus_Restarted {
             get {
                 return ResourceManager.GetString("InterviewStatus_Restarted", resourceCulture);
             }
@@ -153,7 +180,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Restored.
         /// </summary>
-        internal static string InterviewStatus_Restored {
+        public static string InterviewStatus_Restored {
             get {
                 return ResourceManager.GetString("InterviewStatus_Restored", resourceCulture);
             }
@@ -162,7 +189,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Sent to Capi.
         /// </summary>
-        internal static string InterviewStatus_SentToCapi {
+        public static string InterviewStatus_SentToCapi {
             get {
                 return ResourceManager.GetString("InterviewStatus_SentToCapi", resourceCulture);
             }
@@ -171,9 +198,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Supervisor assigned.
         /// </summary>
-        internal static string InterviewStatus_SupervisorAssigned {
+        public static string InterviewStatus_SupervisorAssigned {
             get {
                 return ResourceManager.GetString("InterviewStatus_SupervisorAssigned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage account.
+        /// </summary>
+        public static string SurverManagement_MainMenu_ManageAccount {
+            get {
+                return ResourceManager.GetString("SurverManagement_MainMenu_ManageAccount", resourceCulture);
             }
         }
     }

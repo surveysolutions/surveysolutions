@@ -79,8 +79,8 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation
                     JsonContractResolver = new PropertiesOnlyContractResolver(),
                     CustomizeJsonSerializer = serializer =>
                     {
-                        serializer.TypeNameHandling =
-                            TypeNameHandling.All;
+                        serializer.TypeNameHandling = TypeNameHandling.All;
+                        serializer.NullValueHandling = NullValueHandling.Ignore;
                     }
                 }
             };

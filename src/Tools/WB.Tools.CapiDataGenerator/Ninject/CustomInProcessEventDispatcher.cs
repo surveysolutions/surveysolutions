@@ -5,16 +5,17 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Events.User;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Storage;
+using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tools.CapiDataGenerator.Ninject
 {
     public class CustomInProcessEventDispatcher : InProcessEventBus, IEventDispatcher
     {
-        public CustomInProcessEventDispatcher(bool useTransactionScope)
-            : base(useTransactionScope) {}
+        public CustomInProcessEventDispatcher(bool useTransactionScope, IEventStore eventStore)
+            : base(useTransactionScope, eventStore) { }
 
         public override void RegisterHandler<TEvent>(IEventHandler<TEvent> handler)
         {

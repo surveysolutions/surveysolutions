@@ -13,6 +13,8 @@
     <AssemblyName>AndroidNcqrs.Eventing.Storage.SQLite.Tests</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <AndroidUseLatestPlatformSdk />
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -58,6 +60,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\MvvmCross.HotTuna.Plugin.Sqlite.3.0.10\lib\MonoAndroid16\Cirrious.MvvmCross.Plugins.Sqlite.Droid.dll</HintPath>
     </Reference>
+    <Reference Include="FluentAssertions">
+      <HintPath>..\..\packages\FluentAssertions.Xamarin.3.2.1\lib\monoandroid\FluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentAssertions.Core">
+      <HintPath>..\..\packages\FluentAssertions.3.2.1\lib\portable-monotouch+monoandroid\FluentAssertions.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
@@ -83,24 +91,17 @@
     <Compile Include="Fakes\CustomerNameChanged.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MvvmCrossSqliteEventStoreTests.cs" />
+    <Compile Include="SqlFactoryMock.cs" />
     <Compile Include="SqliteTestsContext.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AndroidFluentAssertions\AndroidFluentAssertions.csproj">
-      <Project>{667b05ae-cf79-4a4b-b9f8-dcc0999a729b}</Project>
-      <Name>AndroidFluentAssertions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AndroidMoq\AndroidMoq.csproj">
-      <Project>{b1606f2f-da6a-400d-9313-f7822d326931}</Project>
-      <Name>AndroidMoq</Name>
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidNcqrs.Eventing.Storage.SQLite\AndroidNcqrs.Eventing.Storage.SQLite.csproj">
       <Project>{F9A0B560-A8BF-4914-88FB-7D98DF4242EF}</Project>
       <Name>AndroidNcqrs.Eventing.Storage.SQLite</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AndroidNCQRS\AndroidNCQRS.csproj">
-      <Project>{1b9537f5-8650-467a-a280-df6ea396d6c5}</Project>
-      <Name>AndroidNCQRS</Name>
     </ProjectReference>
     <ProjectReference Include="..\NUnitLite.MonoDroid\NUnitLite.MonoDroid.csproj">
       <Project>{26327C81-7655-443D-9E04-443AC07BD6CC}</Project>

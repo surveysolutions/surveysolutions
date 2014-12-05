@@ -10,7 +10,6 @@ using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
@@ -23,7 +22,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    internal class InterviewHistoryDenormalizer : IEventHandler<InterviewApprovedByHQ>,
+    internal class InterviewHistoryDenormalizer : BaseDenormalizer, IEventHandler<InterviewApprovedByHQ>,
         IEventHandler<SupervisorAssigned>,
         IEventHandler<InterviewerAssigned>,
         IEventHandler<InterviewStatusChanged>,
@@ -34,7 +33,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<MultipleOptionsQuestionAnswered>,
         IEventHandler<SingleOptionQuestionAnswered>,
         IEventHandler<NumericRealQuestionAnswered>,
-        IEventHandler<NumericQuestionAnswered>,
         IEventHandler<NumericIntegerQuestionAnswered>,
         IEventHandler<DateTimeQuestionAnswered>,
         IEventHandler<GeoLocationQuestionAnswered>,
@@ -43,22 +41,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<TextListQuestionAnswered>,
         IEventHandler<QRBarcodeQuestionAnswered>,
         IEventHandler<PictureQuestionAnswered>,
-        IEventHandler<AnswerCommented>,
-
-        IEventHandler
+        IEventHandler<AnswerCommented>
     {
-        public string Name { get { return this.GetType().Name; } }
-
-        public Type[] UsesViews
-        {
-            get { return new Type[] { typeof(InterviewData), typeof(UserDocument), typeof(InterviewHistoricalRecord) }; }
-        }
-
-        public Type[] BuildsViews
-        {
-            get { return new Type[] { typeof(InterviewHistoricalRecord) }; }
-        }
-
         private readonly IReadSideRepositoryWriter<InterviewHistoricalRecord> interviewHistoryStore;
 
         public InterviewHistoryDenormalizer(IReadSideRepositoryWriter<InterviewHistoricalRecord> interviewHistoryStore)
@@ -160,13 +144,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
               CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.Answer), evnt.Payload.PropagationVector));
         }
 
-        public void Handle(IPublishedEvent<NumericQuestionAnswered> evnt)
-        {
-            AddInterviewAction(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.AnswerTime, InterviewHistoricalAction.AnswerSet,
-              evnt.Payload.UserId,
-              CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.Answer), evnt.Payload.PropagationVector));
-        }
-
         public void Handle(IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
         {
             AddInterviewAction(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.AnswerTime, InterviewHistoricalAction.AnswerSet,
@@ -255,6 +232,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 result.Add("roster", string.Join(",", propagationVector));
             }
             return result;
+        }
+
+        public override object[] Writers
+        {
+            get { return new[] { interviewHistoryStore }; }
         }
     }
 }

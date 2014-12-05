@@ -1,5 +1,5 @@
 /**
- * ng-context-menu - v1.0.0 - An AngularJS directive to display a context menu
+ * ng-context-menu - v1.0.1 - An AngularJS directive to display a context menu
  * when a right-click event is triggered
  *
  * @author Ian Kennington Walter (http://ianvonwalter.com)
@@ -20,7 +20,8 @@ angular
         restrict: 'A',
         scope: {
           'callback': '&contextMenu',
-          'disabled': '&contextMenuDisabled'
+          'disabled': '&contextMenuDisabled',
+          'closeCallback': '&contextMenuClose'
         },
         link: function($scope, $element, $attrs) {
           var opened = false;
@@ -57,6 +58,11 @@ angular
 
           function close(menuElement) {
             menuElement.removeClass('open');
+
+            if (opened) {
+              $scope.closeCallback();
+            }
+
             opened = false;
           }
 

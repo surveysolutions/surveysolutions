@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
-    [MapsToAggregateRootConstructor(typeof(Implementation.Aggregates.Interview))]
     public class CreateInterviewOnClientCommand : InterviewCommand
     {
         public Guid Id { get; private set; }

@@ -1,19 +1,21 @@
 ﻿using System;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Utility;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class StatisticsDenormalizer : IEventHandler,
+    public class StatisticsDenormalizer : BaseDenormalizer,
                                           IEventHandler<InterviewCreated>,
                                           IEventHandler<InterviewFromPreloadedDataCreated>,
                                           IEventHandler<InterviewOnClientCreated>,
@@ -41,7 +43,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.interviewBriefStorage = interviewBriefStorage;
             this.questionnaires = questionnaires;
         }
-        
+
+
+        public override object[] Writers
+        {
+            get { return new object[] { statisticsStorage, interviewBriefStorage }; }
+        }
+
+        public override object[] Readers
+        {
+            get { return new object[] { questionnaires, users }; }
+        }
+
         private void HandleCreation(Guid eventSourceId, Guid responsibleId, Guid questionnaireId, long questionnaireVersion)
         {
             var interviewBriefItem = this.interviewBriefStorage.GetById(eventSourceId);
@@ -250,21 +263,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             var key = GetCombinedStatisticKey(interviewBriefItem);
             this.statisticsStorage.Store(statistics, key);
-        }
-
-        public string Name
-        {
-            get { return this.GetType().Name; }
-        }
-
-        public Type[] UsesViews
-        {
-            get { return new Type[] { typeof(UserDocument), typeof(QuestionnaireBrowseItem) }; }
-        }
-
-        public Type[] BuildsViews
-        {
-            get { return new Type[] { typeof(StatisticsLineGroupedByUserAndTemplate), typeof(InterviewBrief) }; }
         }
 
         private void SetInterviewValidity(Guid interviewId, bool isValid)

@@ -1,29 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Hosting;
 using System.Web.Http;
-using System.Web.Security;
-using Main.Core.View;
-using Main.Core.View.User;
-using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 using WB.Core.SharedKernels.SurveyManagement.Web.Resources;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
+using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
@@ -32,7 +33,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly ILogger logger;
         private readonly ISyncManager syncManager;
         private readonly IViewFactory<UserViewInputModel, UserView> viewFactory;
-        private readonly Func<string, string, bool> checkIfUserIsInRole;
         private readonly ISupportedVersionProvider versionProvider;
         private readonly IPlainInterviewFileStorage plainFileRepository;
         private readonly IGlobalInfoProvider globalInfo;
@@ -40,26 +40,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         private string ResponseInterviewerFileName = "interviewer.apk";
         private string CapiFileName = "wbcapi.apk";
-        private string pathToSearchVersions = ("~/App_Data/Capi");
+        private string pathToSearchVersions = ("~/Client/");
 
-        public InterviewerSyncController(ICommandService commandService, IGlobalInfoProvider globalInfo,
+
+        public InterviewerSyncController(ICommandService commandService, 
+            IGlobalInfoProvider globalInfo,
             ISyncManager syncManager,
-            ILogger logger, IViewFactory<UserViewInputModel, UserView> viewFactory,
-            ISupportedVersionProvider versionProvider, IPlainInterviewFileStorage plainFileRepository,
-            IFileSystemAccessor fileSystemAccessor)
-            : this(commandService, globalInfo, syncManager, logger, viewFactory, versionProvider,
-                Roles.IsUserInRole, plainFileRepository, fileSystemAccessor)
-        {
-        }
-
-        public InterviewerSyncController(ICommandService commandService, IGlobalInfoProvider globalInfo,
-            ISyncManager syncManager,ILogger logger,
-            IViewFactory<UserViewInputModel, UserView> viewFactory, ISupportedVersionProvider versionProvider,
-            Func<string, string, bool> checkIfUserIsInRole,IPlainInterviewFileStorage plainFileRepository,
+            ILogger logger,
+            IViewFactory<UserViewInputModel, UserView> viewFactory, 
+            ISupportedVersionProvider versionProvider,
+            IPlainInterviewFileStorage plainFileRepository,
             IFileSystemAccessor fileSystemAccessor)
             : base(commandService, globalInfo, logger)
         {
-            this.checkIfUserIsInRole = checkIfUserIsInRole;
+            
             this.plainFileRepository = plainFileRepository;
             this.versionProvider = versionProvider;
             this.syncManager = syncManager;
@@ -132,7 +126,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpGet]
         [ApiBasicAuth]
-        public HttpResponseMessage GetSyncPackage(Guid aRKey, long aRTimestamp, string clientRegistrationId)
+        public HttpResponseMessage GetSyncPackage(string packageId, string clientRegistrationId)
         {
             Guid clientRegistrationKey;
             if (!Guid.TryParse(clientRegistrationId, out clientRegistrationKey))
@@ -142,7 +136,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             
             try
             {
-                SyncPackage package = syncManager.ReceiveSyncPackage(clientRegistrationKey, aRKey, new DateTime(aRTimestamp));
+                SyncPackage package = syncManager.ReceiveSyncPackage(clientRegistrationKey, packageId);
 
                 if (package == null)
                     return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable,
@@ -161,7 +155,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpGet]
         [ApiBasicAuth]
-        public HttpResponseMessage GetARKeys(string clientRegistrationId, string sequence)
+        public HttpResponseMessage GetARKeys(string clientRegistrationId, string lastSyncedPackageId)
         {
             UserView user = GetUser(globalInfo.GetCurrentUser().Name);
             if (user == null)
@@ -173,26 +167,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, InterviewerSyncControllerMessages.InvalidDeviceIdentifier);
             }
 
-            long clientSequence;
-            if (!string.IsNullOrWhiteSpace(sequence))
-            {
-                if (!long.TryParse(sequence, out clientSequence))
-                {
-                    return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, InterviewerSyncControllerMessages.InvalidSequenceIdentifier);
-                }
-            }
-            else
-            {
-                clientSequence = 0;
-            }
-
             try
             {
-                IEnumerable<SynchronizationChunkMeta> package =
-                    syncManager.GetAllARIdsWithOrder(user.PublicKey, clientRegistrationKey, new DateTime(clientSequence));
-                var result = new SyncItemsMetaContainer {ChunksMeta = package.ToList()};
+                IEnumerable<SynchronizationChunkMeta> package = syncManager.GetAllARIdsWithOrder(user.PublicKey, 
+                    clientRegistrationKey, 
+                    lastSyncedPackageId.NullIfEmptyOrWhiteSpace());
+
+                var result = new SyncItemsMetaContainer
+                {
+                    ChunksMeta = package.ToList()
+                };
 
                 return Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            catch (SyncPackageNotFoundException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Gone, ex);
             }
             catch (Exception ex)
             {
@@ -202,6 +192,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable,
                     InterviewerSyncControllerMessages.ServerError);
             }
+        }
+
+        [HttpGet]
+        [ApiBasicAuth]
+        public HttpResponseMessage GetPacakgeIdByTimeStamp(long timestamp)
+        {
+            var result = this.syncManager.GetPackageIdByTimestamp(new DateTime(timestamp));
+            return Request.CreateResponse(HttpStatusCode.OK, result);
         }
 
         [HttpPost]
@@ -272,16 +270,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpGet]
         public HttpResponseMessage GetLatestVersion()
         {
-            int maxVersion = GetLastVersionNumber();
-
-            if (maxVersion <= 0)
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, InterviewerSyncControllerMessages.FileWasNotFound);
-
-
-            string targetToSearchVersions = HostingEnvironment.MapPath(pathToSearchVersions);
-
-            string path = fileSystemAccessor.CombinePath(targetToSearchVersions, maxVersion.ToString(CultureInfo.InvariantCulture));
-            string pathToFile = fileSystemAccessor.CombinePath(path, CapiFileName);
+            string pathToFile = fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(pathToSearchVersions), CapiFileName);
 
             if (fileSystemAccessor.IsFileExists(pathToFile))
             {
@@ -301,34 +290,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             
             return Request.CreateErrorResponse(HttpStatusCode.NotFound, InterviewerSyncControllerMessages.FileWasNotFound);
         }
-
-        private int GetLastVersionNumber()
-        {
-            int maxVersion = 0;
-
-            string targetToSearchVersions = HostingEnvironment.MapPath(pathToSearchVersions);
-            
-            if (fileSystemAccessor.IsDirectoryExists(targetToSearchVersions))
-            {
-                var containingDirectories = fileSystemAccessor.GetDirectoriesInDirectory(targetToSearchVersions);
-                
-                foreach (var directoryInfo in containingDirectories)
-                {
-                    int value;
-                    if (int.TryParse(fileSystemAccessor.GetFileName(directoryInfo), out value))
-                        if (maxVersion < value)
-                            maxVersion = value;
-                }
-            }
-
-            return maxVersion;
-        }
-
+        
         [HttpGet]
         public HttpResponseMessage CheckNewVersion(int versionCode)
         {
-            int maxVersion = GetLastVersionNumber();
-            return Request.CreateResponse(HttpStatusCode.OK, (maxVersion != 0 && maxVersion > versionCode));
+            string targetToSearchCapi = fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(pathToSearchVersions), CapiFileName);
+
+            int? supervisorRevisionNumber = versionProvider.GetApplicationBuildNumber();
+
+            bool newVersionExists = fileSystemAccessor.IsFileExists(targetToSearchCapi) &&
+                                    supervisorRevisionNumber.HasValue &&
+                                    (supervisorRevisionNumber.Value > versionCode);
+
+            return Request.CreateResponse(HttpStatusCode.OK, newVersionExists);
         }
     }
 }

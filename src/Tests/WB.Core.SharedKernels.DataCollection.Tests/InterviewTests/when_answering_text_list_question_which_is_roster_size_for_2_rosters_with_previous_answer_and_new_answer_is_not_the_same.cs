@@ -43,12 +43,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             interview = CreateInterview(questionnaireId: questionnaireId);
 
             interview.Apply(new TextListQuestionAnswered(userId, textListQuestionId, new decimal[] { }, DateTime.Now, previousAnswer));
-            interview.Apply(new RosterRowAdded(rosterAId, emptyRosterVector, 1, sortIndex: 1));
-            interview.Apply(new RosterRowAdded(rosterAId, emptyRosterVector, 2, sortIndex: 2));
-            interview.Apply(new RosterRowAdded(rosterAId, emptyRosterVector, 3, sortIndex: 3));
-            interview.Apply(new RosterRowAdded(rosterBId, emptyRosterVector, 1, sortIndex: 1));
-            interview.Apply(new RosterRowAdded(rosterBId, emptyRosterVector, 2, sortIndex: 2));
-            interview.Apply(new RosterRowAdded(rosterBId, emptyRosterVector, 3, sortIndex: 3));
+            interview.Apply(Create.Events.RosterInstancesAdded(rosterAId, emptyRosterVector, 1, sortIndex: 1));
+            interview.Apply(Create.Events.RosterInstancesAdded(rosterAId, emptyRosterVector, 2, sortIndex: 2));
+            interview.Apply(Create.Events.RosterInstancesAdded(rosterAId, emptyRosterVector, 3, sortIndex: 3));
+            interview.Apply(Create.Events.RosterInstancesAdded(rosterBId, emptyRosterVector, 1, sortIndex: 1));
+            interview.Apply(Create.Events.RosterInstancesAdded(rosterBId, emptyRosterVector, 2, sortIndex: 2));
+            interview.Apply(Create.Events.RosterInstancesAdded(rosterBId, emptyRosterVector, 3, sortIndex: 3));
 
             eventContext = new EventContext();
         };
@@ -116,12 +116,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 .ShouldContainOnly(rosterAId, rosterBId);
 
         It should_set_empty_outer_roster_vector_to_all_RosterRowTitleChanged_events = () =>
-            eventContext.GetEvents<RosterRowTitleChanged>()
-                .ShouldEachConformTo(@event => Enumerable.SequenceEqual(@event.OuterRosterVector, emptyRosterVector));
+            eventContext.GetEvents<RosterInstancesTitleChanged>()
+                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.RosterInstance.OuterRosterVector.SequenceEqual(emptyRosterVector)));
 
         It should_set_title_to__Answer_4__in_all_RosterRowTitleChanged_events_with_roster_instance_id_equals_to_5 = () =>
-            eventContext.GetEvents<RosterRowTitleChanged>().Where(@event => @event.RosterInstanceId == 5).Select(@event => @event.Title)
-                .ShouldEachConformTo(title => title == "Answer 4");
+            eventContext.GetEvents<RosterInstancesTitleChanged>().First(@event => @event.ChangedInstances.Any(x => x.RosterInstance.RosterInstanceId == 5))
+                .ChangedInstances
+                .ShouldEachConformTo(@event => @event.Title == "Answer 4");
 
         Cleanup stuff = () =>
         {

@@ -1,27 +1,17 @@
 ﻿using System.Web.Mvc;
-using Microsoft.Practices.ServiceLocation;
-using WB.Core.Infrastructure.ReadSide;
+using System.Web.Security;
+using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.Filters;
+using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Controllers
 {
     [LocalOrDevelopmentAccessOnly]
-    public class ControlPanelController : Controller
+    public class ControlPanelController : BaseController
     {
-        private readonly IServiceLocator serviceLocator;
-
-        public ControlPanelController(IServiceLocator serviceLocator)
+        public ControlPanelController(IMembershipUserService userHelper)
+            : base(userHelper)
         {
-            this.serviceLocator = serviceLocator;
-        }
-
-        /// <remarks>
-        /// Getting dependency via service location ensures that parts of control panel not using it will always work.
-        /// E.g. If Raven connection fails to be established then NConfig info still be available.
-        /// </remarks>
-        private IReadSideAdministrationService ReadSideAdministrationService
-        {
-            get { return this.serviceLocator.GetInstance<IReadSideAdministrationService>(); }
         }
 
         public ActionResult Index()
@@ -34,45 +24,66 @@ namespace WB.UI.Designer.Controllers
             return this.View();
         }
 
-        public ActionResult ReadLayer()
-        {
-            return this.RedirectToActionPermanent("ReadSide");
-        }
-
         public ActionResult ReadSide()
         {
-            return this.View(this.ReadSideAdministrationService.GetAllAvailableHandlers());
+            return this.View();
         }
 
-        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
-        public string GetReadSideStatus()
-        {
-            return this.ReadSideAdministrationService.GetReadableStatus();
-        }
-
-        public ActionResult RebuildReadSidePartially(string[] handlers)
-        {
-            this.ReadSideAdministrationService.RebuildViewsAsync(handlers);
-            this.TempData["CheckedHandlers"] = handlers;
-            return this.RedirectToAction("ReadSide");
-        }
-
-        public ActionResult RebuildReadSide()
-        {
-            this.ReadSideAdministrationService.RebuildAllViewsAsync();
-
-            return this.RedirectToAction("ReadSide");
-        }
-
-        public ActionResult StopReadSideRebuilding()
-        {
-            this.ReadSideAdministrationService.StopAllViewsRebuilding();
-
-            return this.RedirectToAction("ReadSide");
-        }
-
+        
         public ActionResult NCalcToCSharp()
         {
+            return this.View();
+        }
+
+        public ActionResult ExpressionGeneration()
+        {
+            return this.View();
+        }
+
+        public ActionResult MakeAdmin()
+        {
+            return this.View();
+        }
+
+        [HttpPost]
+        public ActionResult MakeAdmin(MakeAdminViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var account = Membership.GetUser(model.Login);
+                if (account == null)
+                {
+                    this.Error(string.Format("Account '{0}' does not exists", model.Login));
+                }
+                else
+                {
+                    if (model.IsAdmin)
+                    {
+                        if (Roles.IsUserInRole(model.Login, UserHelper.ADMINROLENAME))
+                        {
+                            this.Error(string.Format("Account '{0}' has administrator role", model.Login));
+                        }
+                        else
+                        {
+                            Roles.AddUserToRole(account.ProviderUserKey.ToString(), UserHelper.ADMINROLENAME);
+                            this.Success(string.Format("Administrator role for '{0}' successfully added", model.Login));   
+                        }
+                    }
+                    else
+                    {
+                        if (!Roles.IsUserInRole(model.Login, UserHelper.ADMINROLENAME))
+                        {
+                            this.Error(string.Format("Account '{0}' is not in administrator role", model.Login));
+                        }
+                        else
+                        {
+                            Roles.RemoveUserFromRole(model.Login, UserHelper.ADMINROLENAME);
+                            this.Success(string.Format("Administrator role for '{0}' successfully removed", model.Login));    
+                        }
+                    }
+                }
+            }
+
             return this.View();
         }
     }

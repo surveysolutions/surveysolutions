@@ -10,21 +10,23 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Quartz.Util;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     internal class InterviewExportedDataDenormalizer : 
+        BaseDenormalizer, IAtomicEventHandler,
         IEventHandler<InterviewApprovedByHQ>, 
         IEventHandler<SupervisorAssigned>,
         IEventHandler<InterviewerAssigned>,
@@ -39,7 +41,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<MultipleOptionsQuestionAnswered>,
         IEventHandler<SingleOptionQuestionAnswered>,
         IEventHandler<NumericRealQuestionAnswered>,
-        IEventHandler<NumericQuestionAnswered>,
         IEventHandler<NumericIntegerQuestionAnswered>,
         IEventHandler<DateTimeQuestionAnswered>,
         IEventHandler<GeoLocationQuestionAnswered>,
@@ -48,9 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<TextListQuestionAnswered>,
         IEventHandler<QRBarcodeQuestionAnswered>,
         IEventHandler<PictureQuestionAnswered>,
-        IEventHandler<InterviewRestored>,
-
-        IEventHandler
+        IEventHandler<InterviewRestored>
     {
         private readonly InterviewExportedAction[] listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded = new[] { InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restarted };
         private readonly IReadSideRepositoryWriter<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewWriter;
@@ -68,14 +67,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.interviewSummaryStorage = interviewSummaryStorage;
         }
 
-        public string Name { get { return this.GetType().Name; } }
-
-        public Type[] UsesViews
+        public override object[] Writers
         {
-            get { return new Type[] { typeof(InterviewData), typeof(UserDocument), typeof(RecordFirstAnswerMarkerView), typeof(QuestionnaireExportStructure) }; }
+            get { return new object[] { dataExportWriter, recordFirstAnswerMarkerViewWriter }; }
         }
 
-        public Type[] BuildsViews { get { return new Type[] { typeof(InterviewDataExportView), typeof(RecordFirstAnswerMarkerView) }; } }
+        public void CleanWritersByEventSource(Guid eventSourceId)
+        {
+            this.dataExportWriter.DeleteInterview(eventSourceId);
+            this.recordFirstAnswerMarkerViewWriter.Remove(eventSourceId);
+        }
+
+        public override object[] Readers
+        {
+            get { return new object[] { users, interviewSummaryStorage }; }
+        }
 
         public void Handle(IPublishedEvent<InterviewApprovedByHQ> evnt)
         {
@@ -166,11 +172,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         }
 
         public void Handle(IPublishedEvent<NumericRealQuestionAnswered> evnt)
-        {
-            this.RecordFirstAnswerIfNeeded(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTime);
-        }
-
-        public void Handle(IPublishedEvent<NumericQuestionAnswered> evnt)
         {
             this.RecordFirstAnswerIfNeeded(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTime);
         }

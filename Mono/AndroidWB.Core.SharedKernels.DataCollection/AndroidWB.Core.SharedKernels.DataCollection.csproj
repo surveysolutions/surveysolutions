@@ -14,6 +14,8 @@
     <FileAlignment>512</FileAlignment>
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <AndroidUseLatestPlatformSdk />
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -114,6 +116,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\Base\QuestionCommand.cs">
       <Link>Commands\Interview\Base\QuestionCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\CancelInterviewByHqSynchronizationCommand.cs">
+      <Link>Commands\Interview\CancelInterviewByHqSynchronizationCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\CommentAnswerCommand.cs">
       <Link>Commands\Interview\CommentAnswerCommand.cs</Link>
     </Compile>
@@ -156,6 +161,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\RejectInterviewCommand.cs">
       <Link>Commands\Interview\RejectInterviewCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\RejectInterviewFromHeadquartersCommand.cs">
+      <Link>Commands\Interview\RejectInterviewFromHeadquartersCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\RemoveFlagFromAnswerCommand.cs">
       <Link>Commands\Interview\RemoveFlagFromAnswerCommand.cs</Link>
     </Compile>
@@ -174,12 +182,6 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\SynchronizeInterviewFromHeadquarters.cs">
       <Link>Commands\Interview\SynchronizeInterviewFromHeadquarters.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs">
-      <Link>Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs">
-      <Link>Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs</Link>
-    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Questionnaire\DeleteQuestionnaire.cs">
       <Link>Commands\Questionnaire\DeleteQuestionnaire.cs</Link>
     </Compile>
@@ -191,6 +193,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Questionnaire\ImportFromSupervisor.cs">
       <Link>Commands\Questionnaire\ImportFromSupervisor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Questionnaire\QuestionnaireCommand.cs">
+      <Link>Commands\Questionnaire\QuestionnaireCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Questionnaire\RegisterPlainQuestionnaire.cs">
       <Link>Commands\Questionnaire\RegisterPlainQuestionnaire.cs</Link>
@@ -213,9 +218,6 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\User\UnlockUserCommand.cs">
       <Link>Commands\User\UnlockUserCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\DataCollectionSharedKernelModule.cs">
-      <Link>DataCollectionSharedKernelModule.cs</Link>
-    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\DataTransferObjects\Preloading\PreloadedDataDto.cs">
       <Link>DataTransferObjects\Preloading\PreloadedDataDto.cs</Link>
     </Compile>
@@ -234,20 +236,20 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\DataTransferObjects\Synchronization\RosterSynchronizationDto.cs">
       <Link>DataTransferObjects\Synchronization\RosterSynchronizationDto.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\EventHandler\QuestionnaireDenormalizer.cs">
-      <Link>EventHandler\QuestionnaireDenormalizer.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\EventHandler\FileStoreDenormalizer.cs">
+      <Link>EventHandler\FileStoreDenormalizer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\File\FileDeleted.cs">
+      <Link>Events\File\FileDeleted.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\File\FileMetaUpdated.cs">
+      <Link>Events\File\FileMetaUpdated.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\File\FileUploaded.cs">
+      <Link>Events\File\FileUploaded.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\AnswerCommented.cs">
       <Link>Events\Interview\AnswerCommented.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\AnswerDeclaredInvalid.cs">
-      <Link>Events\Interview\AnswerDeclaredInvalid.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\AnswerDeclaredValid.cs">
-      <Link>Events\Interview\AnswerDeclaredValid.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\AnswerRemoved.cs">
-      <Link>Events\Interview\AnswerRemoved.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\AnswersDeclaredInvalid.cs">
       <Link>Events\Interview\AnswersDeclaredInvalid.cs</Link>
@@ -308,12 +310,6 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\GeoLocationQuestionAnswered.cs">
       <Link>Events\Interview\GeoLocationQuestionAnswered.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\GroupDisabled.cs">
-      <Link>Events\Interview\GroupDisabled.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\GroupEnabled.cs">
-      <Link>Events\Interview\GroupEnabled.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\GroupPropagated.cs">
       <Link>Events\Interview\GroupPropagated.cs</Link>
@@ -390,9 +386,6 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\NumericIntegerQuestionAnswered.cs">
       <Link>Events\Interview\NumericIntegerQuestionAnswered.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\NumericQuestionAnswered.cs">
-      <Link>Events\Interview\NumericQuestionAnswered.cs</Link>
-    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\NumericRealQuestionAnswered.cs">
       <Link>Events\Interview\NumericRealQuestionAnswered.cs</Link>
     </Compile>
@@ -401,12 +394,6 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\QRBarcodeQuestionAnswered.cs">
       <Link>Events\Interview\QRBarcodeQuestionAnswered.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\QuestionDisabled.cs">
-      <Link>Events\Interview\QuestionDisabled.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\QuestionEnabled.cs">
-      <Link>Events\Interview\QuestionEnabled.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\QuestionsDisabled.cs">
       <Link>Events\Interview\QuestionsDisabled.cs</Link>
@@ -422,15 +409,6 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\RosterInstancesTitleChanged.cs">
       <Link>Events\Interview\RosterInstancesTitleChanged.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\RosterRowAdded.cs">
-      <Link>Events\Interview\RosterRowAdded.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\RosterRowRemoved.cs">
-      <Link>Events\Interview\RosterRowRemoved.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\RosterRowTitleChanged.cs">
-      <Link>Events\Interview\RosterRowTitleChanged.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\SingleOptionLinkedQuestionAnswered.cs">
       <Link>Events\Interview\SingleOptionLinkedQuestionAnswered.cs</Link>
@@ -462,8 +440,23 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Questionnaire\TemplateImported.cs">
       <Link>Events\Questionnaire\TemplateImported.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\User\NewUserCreated.cs">
+      <Link>Events\User\NewUserCreated.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\User\UserBaseEvent.cs">
+      <Link>Events\User\UserBaseEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\User\UserChanged.cs">
+      <Link>Events\User\UserChanged.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\User\UserLocked.cs">
+      <Link>Events\User\UserLocked.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\User\UserLockedBySupervisor.cs">
       <Link>Events\User\UserLockedBySupervisor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\User\UserUnlocked.cs">
+      <Link>Events\User\UserUnlocked.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\User\UserUnlockedBySupervisor.cs">
       <Link>Events\User\UserUnlockedBySupervisor.cs</Link>
@@ -597,9 +590,6 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Utils\RepositoryKeysHelper.cs">
       <Link>Utils\RepositoryKeysHelper.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Utils\TypeConverterUtils.cs">
-      <Link>Utils\TypeConverterUtils.cs</Link>
-    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\ValueObjects\Interview\InterviewItemId.cs">
       <Link>ValueObjects\Interview\InterviewItemId.cs</Link>
     </Compile>
@@ -611,6 +601,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Views\BinaryData\InterviewBinaryDataDescriptor.cs">
       <Link>Views\BinaryData\InterviewBinaryDataDescriptor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Views\FileDescription.cs">
+      <Link>Views\FileDescription.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Views\Interview\InterviewTextListAnswer.cs">
       <Link>Views\Interview\InterviewTextListAnswer.cs</Link>
@@ -657,9 +650,16 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Views\Questionnaire\RosterTitleQuestionDescription.cs">
       <Link>Views\Questionnaire\RosterTitleQuestionDescription.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Views\UserDocument.cs">
+      <Link>Views\UserDocument.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
+      <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
+      <Name>Ncqrs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
       <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
       <Name>WB.Core.GenericSubdomains.Utils</Name>
@@ -676,13 +676,9 @@
       <Project>{553b4fc2-5fc7-4256-b14d-82758d64a3bd}</Project>
       <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidMain.Core\AndroidMain.Core.csproj">
-      <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>
-      <Name>AndroidMain.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AndroidNCQRS\AndroidNCQRS.csproj">
-      <Project>{1b9537f5-8650-467a-a280-df6ea396d6c5}</Project>
-      <Name>AndroidNCQRS</Name>
+    <ProjectReference Include="..\..\src\Core\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
+      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
+      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidNinject\AndroidNinject.csproj">
       <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>

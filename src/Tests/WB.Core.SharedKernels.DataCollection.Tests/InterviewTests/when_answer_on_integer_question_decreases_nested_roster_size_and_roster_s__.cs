@@ -52,12 +52,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 .Returns(questionnaireRepository);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
-            interview.Apply(new RosterRowAdded(parentRosterGroupId, new decimal[0], 0, null));
-            interview.Apply(new RosterRowAdded(parentRosterGroupId, new decimal[0], 1, null));
+            interview.Apply(Create.Events.RosterInstancesAdded(parentRosterGroupId, new decimal[0], 0, null));
+            interview.Apply(Create.Events.RosterInstancesAdded(parentRosterGroupId, new decimal[0], 1, null));
             interview.Apply(new NumericIntegerQuestionAnswered(userId, questionWhichIncreasesRosterSizeId, new decimal[0], DateTime.Now,
                 1));
-            interview.Apply(new RosterRowAdded(rosterGroupId, new decimal[] { 0 }, 0, null));
-            interview.Apply(new RosterRowAdded(rosterGroupId, new decimal[] { 1 }, 0, null));
+            interview.Apply(Create.Events.RosterInstancesAdded(rosterGroupId, new decimal[] { 0 }, 0, null));
+            interview.Apply(Create.Events.RosterInstancesAdded(rosterGroupId, new decimal[] { 1 }, 0, null));
             eventContext = new EventContext();
         };
 

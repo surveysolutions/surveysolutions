@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Web;
-using System.Web.SessionState;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Main.Core.View;
-using Main.Core.View.User;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using It = Machine.Specifications.It;
 

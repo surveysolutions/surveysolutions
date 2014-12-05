@@ -21,42 +21,46 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.compilerSettings = compilerSettings;
             this.fileSystemAccessor = fileSystemAccessor;
         }
-
-        private IEnumerable<SyntaxTree> GetTrees(Dictionary<string, string> generatedClasses)
-        {
-            return generatedClasses.Select(generatedClass => SyntaxFactory.ParseSyntaxTree(generatedClass.Value, path: generatedClass.Key)).ToArray();
-        }
-
-        public EmitResult GenerateAssemblyAsString(Guid templateId, Dictionary<string, string> generatedClasses , string[] referencedPortableAssemblies,
+        
+        public EmitResult GenerateAssemblyAsString(Guid templateId, Dictionary<string, string> generatedClasses,
+            string[] referencedPortableAssemblies,
             out string generatedAssembly)
         {
-            var syntaxTrees = GetTrees(generatedClasses);
+            IEnumerable<SyntaxTree> syntaxTrees = generatedClasses.Select(
+                    generatedClass => SyntaxFactory.ParseSyntaxTree(generatedClass.Value, path: generatedClass.Key))
+                    .ToArray();
 
-            var metadataFileReference =
-                this.compilerSettings.DefaultReferencedPortableAssemblies.Select(
+            var metadataReferences = new List<PortableExecutableReference>
+            {
+                AssemblyMetadata.CreateFromFile(typeof (Identity).Assembly.Location).GetReference()
+            };
+
+            metadataReferences.AddRange(
+                compilerSettings.DefaultReferencedPortableAssemblies.Select(
                     defaultReferencedPortableAssembly =>
-                        new MetadataFileReference(
-                            fileSystemAccessor.CombinePath(this.compilerSettings.PortableAssembliesPath,
-                                defaultReferencedPortableAssembly))).ToList();
-            metadataFileReference.AddRange(
+                        AssemblyMetadata.CreateFromFile(
+                            fileSystemAccessor.CombinePath(compilerSettings.PortableAssembliesPath, defaultReferencedPortableAssembly))
+                            .GetReference()));
+
+            metadataReferences.AddRange(
                 referencedPortableAssemblies.Select(
                     defaultReferencedPortableAssembly =>
-                        new MetadataFileReference(
-                            fileSystemAccessor.CombinePath(this.compilerSettings.PortableAssembliesPath,
-                                defaultReferencedPortableAssembly))));
-            metadataFileReference.Add(new MetadataFileReference(typeof(Identity).Assembly.Location));
-
-            Guid uniqueAssemblySuffix = Guid.NewGuid();
-
-            var compilation = CSharpCompilation.Create(
-                String.Format("rules-{0}-{1}.dll", templateId, uniqueAssemblySuffix),
-                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, checkOverflow: true),
+                        AssemblyMetadata.CreateFromFile(
+                            fileSystemAccessor.CombinePath(compilerSettings.PortableAssembliesPath,
+                                defaultReferencedPortableAssembly)).GetReference()));
+            
+            CSharpCompilation compilation = CSharpCompilation.Create(
+                String.Format("rules-{0}-{1}.dll", templateId, Guid.NewGuid()),
+                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, 
+                    checkOverflow: true, 
+                    optimizationLevel: OptimizationLevel.Release, 
+                    assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default),
                 syntaxTrees: syntaxTrees,
-                references: metadataFileReference);
+                references: metadataReferences);
 
             EmitResult compileResult;
             generatedAssembly = string.Empty;
-
+           
             using (var stream = new MemoryStream())
             {
                 compileResult = compilation.Emit(stream);

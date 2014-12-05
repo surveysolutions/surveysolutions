@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Main.Core.Entities;
-using Main.Core.Utility;
+using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 {
@@ -33,19 +32,19 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
         {
             get
             {
-                return StringUtil.GetOrderRequestString(this.Orders);
+                return this.Orders.GetOrderRequestString();
             }
 
             set
             {
-                this.Orders = StringUtil.ParseOrderRequestString(value);
+                this.Orders = value.ParseOrderRequestString();
             }
         }
 
         /// <summary>
         /// Gets or sets the orders.
         /// </summary>
-        public List<OrderRequestItem> Orders { get; set; }
+        public IEnumerable<OrderRequestItem> Orders { get; set; }
 
         /// <summary>
         /// Gets or sets the page.

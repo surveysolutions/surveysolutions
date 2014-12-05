@@ -6,19 +6,18 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Providers.CQRS.Accounts;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 {
-    internal class QuestionnaireListViewItemDenormalizer : IEventHandler<NewQuestionnaireCreated>,
+    internal class QuestionnaireListViewItemDenormalizer : BaseDenormalizer,IAtomicEventHandler, IEventHandler<NewQuestionnaireCreated>,
         IEventHandler<QuestionnaireUpdated>,
         IEventHandler<QuestionnaireDeleted>,
         IEventHandler<TemplateImported>,
         IEventHandler<QuestionnaireCloned>,
         IEventHandler<SharedPersonToQuestionnaireAdded>,
-        IEventHandler<SharedPersonFromQuestionnaireRemoved>, IEventHandler
+        IEventHandler<SharedPersonFromQuestionnaireRemoved>
     {
         #region Fields
 
@@ -32,17 +31,29 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         /// </summary>
         private readonly IReadSideRepositoryWriter<AccountDocument> accountStorage;
 
-        private readonly IQuestionnaireDocumentUpgrader upgrader;
-
         public QuestionnaireListViewItemDenormalizer(IReadSideRepositoryWriter<QuestionnaireListViewItem> documentStorage,
-            IReadSideRepositoryWriter<AccountDocument> accountStorage, IQuestionnaireDocumentUpgrader upgrader)
+            IReadSideRepositoryWriter<AccountDocument> accountStorage)
         {
             this.documentStorage = documentStorage;
             this.accountStorage = accountStorage;
-            this.upgrader = upgrader;
         }
 
         #endregion
+
+        public override object[] Writers
+        {
+            get { return new object[] { documentStorage}; }
+        }
+
+        public void CleanWritersByEventSource(Guid eventSourceId)
+        {
+            documentStorage.Remove(eventSourceId);
+        }
+
+        public override object[] Readers
+        {
+            get { return new object[] { accountStorage}; }
+        }
 
         #region Implementation of IEventHandler<in NewQuestionnaireCreated>
 
@@ -95,24 +106,23 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            QuestionnaireDocument upgradedQuestionnaireDocument = upgrader.TranslatePropagatePropertiesToRosterProperties(evnt.Payload.Source);
-            this.CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(upgradedQuestionnaireDocument);
+            this.CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(evnt.Payload.Source, true);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireCloned> evnt)
         {
-            this.CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(evnt.Payload.QuestionnaireDocument);
+            this.CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(evnt.Payload.QuestionnaireDocument, false);
         }
 
-        private void CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(QuestionnaireDocument document)
+        private void CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(QuestionnaireDocument document, bool shouldPreserveSharedPersons)
         {
             var item = new QuestionnaireListViewItem(
-                document.PublicKey,
-                document.Title,
-                document.CreationDate,
-                document.LastEntryDate,
-                document.CreatedBy,
-                document.IsPublic);
+             document.PublicKey,
+             document.Title,
+             document.CreationDate,
+             document.LastEntryDate,
+             document.CreatedBy,
+             document.IsPublic);
             if (document.CreatedBy.HasValue)
             {
                 var user = this.accountStorage.GetById(document.CreatedBy.Value);
@@ -121,6 +131,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                     item.CreatorName = user.UserName;
                 }
             }
+
+            item.SharedPersons.AddRange(document.SharedPersons);
+
+            if (shouldPreserveSharedPersons)
+            {
+                var browseItem = this.documentStorage.GetById(document.PublicKey);
+                if (browseItem != null)
+                {
+                    foreach (var sharedPerson in browseItem.SharedPersons)
+                    {
+                        if (!item.SharedPersons.Contains(sharedPerson))
+                        {
+                            item.SharedPersons.Add(sharedPerson);
+                        }
+                    }
+                }
+            }
+
             this.documentStorage.Store(item, document.PublicKey);
         }
 
@@ -150,21 +178,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
                 this.documentStorage.Store(browseItem, evnt.EventSourceId);
             }
-        }
-
-        public string Name
-        {
-            get { return this.GetType().Name; }
-        }
-
-        public Type[] UsesViews
-        {
-            get { return new Type[] {typeof (AccountDocument)}; }
-        }
-
-        public Type[] BuildsViews
-        {
-            get { return new Type[] {typeof (QuestionnaireListViewItem)}; }
         }
     }
 }

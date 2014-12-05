@@ -1,5 +1,4 @@
 ﻿using System;
-using Main.Core.Domain;
 using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using Moq;

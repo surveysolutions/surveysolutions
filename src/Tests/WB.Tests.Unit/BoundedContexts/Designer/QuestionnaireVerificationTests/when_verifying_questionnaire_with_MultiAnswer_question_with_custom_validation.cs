@@ -7,7 +7,6 @@ using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
@@ -34,9 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                 PublicKey = textQuestionId
             });
 
-            var expressionProcessor = Mock.Of<IExpressionProcessor>(x => x.IsSyntaxValid(Moq.It.IsAny<string>())== true);
-
-            verifier = CreateQuestionnaireVerifier(expressionProcessor);
+            verifier = CreateQuestionnaireVerifier();
         };
 
         Because of = () =>

@@ -118,43 +118,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicGuidGeneratorSpecs.cs" />
-    <Compile Include="Commanding\CommandBasedTests.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\AttributeBasedCommandMapperTests.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\AttributeCommandMappingTests.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\AggregateRootIdAttributeTests.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\TestMappedCommandExecutor.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\Fluent\FluentCommandMappingTests.cs" />
-    <Compile Include="Commanding\CommandExecution\Mapping\MappingForCommandNotFoundExceptionTests.cs" />
-    <Compile Include="Commanding\CommandExecution\TransactionalCommandExecutorWrapperTests.cs" />
-    <Compile Include="Commanding\CommandExecutorBaseTests.cs" />
-    <Compile Include="Commanding\ExecutorForCommandNotFoundExceptionTests.cs" />
-    <Compile Include="Commanding\ServiceModel\CommandServiceBaseTests.cs" />
-    <Compile Include="Commanding\TransactionalCommandExecutorWrapperTests.cs" />
     <Compile Include="Config\InstanceNotFoundInEnvironmentConfigurationExceptionTests.cs" />
-    <Compile Include="Domain\AggregateRootMappedByConventionTests.cs" />
-    <Compile Include="Domain\AggregateRootMappedWithAttributesTests.cs" />
     <Compile Include="Domain\AggregateRootTests.cs" />
-    <Compile Include="Domain\AggregateRootMappedByExpressionTests.cs" />
     <Compile Include="Domain\EntityTests.cs" />
     <Compile Include="Domain\EventNotHandledExceptionTests.cs" />
     <Compile Include="Domain\Storage\SimpleAggregateRootCreationStrategyTests.cs" />
-    <Compile Include="Domain\UnitOfWorkTests.cs" />
     <Compile Include="Eventing\CommittedEventStreamTests.cs" />
-    <Compile Include="Eventing\Sourcing\Mapping\AttributeBasedDomainEventHandlerMappingStrategyTests.cs" />
-    <Compile Include="Eventing\Sourcing\Mapping\ConventionBasedDomainEventHandlerMappingStrategyTests.cs" />
-    <Compile Include="Eventing\Sourcing\Mapping\ExpressionBasedDomainEventHandlerMappingStrategyTests.cs" />
-    <Compile Include="Eventing\Sourcing\Mapping\InvalidEventHandlerMappingExceptionTests.cs" />
     <Compile Include="Domain\NoUnitOfWorkAvailableInThisContextExceptionTests.cs" />
     <Compile Include="Domain\Storage\AggregateRootCreationExceptionTests.cs" />
     <Compile Include="Eventing\Storage\AttributeEventTypeResolverTests.cs" />
-    <Compile Include="Eventing\Storage\BaseExceptionTests.cs" />
-    <Compile Include="Eventing\Storage\ConcurrencyExceptionSpecs.cs" />
-    <Compile Include="Eventing\Storage\DuplicateCommitExceptionTests.cs" />
     <Compile Include="Eventing\Storage\PropertyBagConverterTests.cs" />
     <Compile Include="Eventing\Storage\PropertyBagTests.cs" />
-    <Compile Include="Eventing\Storage\Serialization\EventConverterTests.cs" />
-    <Compile Include="Eventing\Storage\Serialization\JsonEventFormatterTests.cs" />
-    <Compile Include="Eventing\Storage\Serialization\StringEventTranslatorTests.cs" />
     <Compile Include="Eventing\Storage\SimpleEventTypeResolverTests.cs" />
     <Compile Include="Eventing\UncommittedEventStreamTests.cs" />
     <Compile Include="GuidCombGenerator.cs" />
@@ -173,13 +147,13 @@
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ncqrs.Spec\Ncqrs.Spec.csproj">
       <Project>{AA90754B-CA47-429E-BDC8-2A83E94179B7}</Project>
       <Name>Ncqrs.Spec</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ncqrs\Ncqrs.csproj">
-      <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
-      <Name>Ncqrs</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +161,10 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Eventing\Sourcing\" />
+    <Folder Include="Eventing\Storage\Serialization\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

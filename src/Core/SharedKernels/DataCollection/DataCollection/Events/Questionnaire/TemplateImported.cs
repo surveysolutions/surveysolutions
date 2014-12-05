@@ -1,6 +1,7 @@
 ﻿using System;
 using Main.Core.Documents;
 
+// ReSharper disable once CheckNamespace
 namespace Main.Core.Events.Questionnaire
 {
     public class TemplateImported

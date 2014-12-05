@@ -1,13 +1,16 @@
 ﻿using System;
 using Machine.Specifications;
 using Moq;
-using Ncqrs.Commanding.ServiceModel;
+
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.IncomePackagesRepositoryTests
@@ -28,18 +31,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.IncomePackagesRepositoryT
 
             fileSystemAccessorMock = CreateDefaultFileSystemAccessorMock();
 
-            incomePackagesRepository = CreateIncomePackagesRepository(jsonMock.Object, fileSystemAccessorMock.Object, commandServiceMock.Object);
+            incomePackagesRepository = CreateIncomePackagesRepository(jsonMock.Object, fileSystemAccessorMock.Object,
+                commandServiceMock.Object, archiver: new ZipArchiveUtils(Mock.Of<IFileSystemAccessor>()));
         };
 
         Because of = () =>
             incomePackagesRepository.StoreIncomingItem(syncItem);
 
         It should_write_text_file_to_error_folder = () =>
-          fileSystemAccessorMock.Verify(x => x.WriteAllText(GetPathToSynchItemInErrorFolder(syncItem.Id), contentOfSyncItem), Times.Once);
+          fileSystemAccessorMock.Verify(x => x.WriteAllText(GetPathToSynchItemInErrorFolder(syncItem.RootId), contentOfSyncItem), Times.Once);
 
         private static IncomePackagesRepository incomePackagesRepository;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
-        private static SyncItem syncItem = new SyncItem() { Content = "some content", Id = Guid.NewGuid() };
+        private static SyncItem syncItem = new SyncItem() { Content = "some content", RootId = Guid.NewGuid() };
         private static Mock<IJsonUtils> jsonMock;
         private static string contentOfSyncItem = "content of sync item";
         private static Mock<ICommandService> commandServiceMock;

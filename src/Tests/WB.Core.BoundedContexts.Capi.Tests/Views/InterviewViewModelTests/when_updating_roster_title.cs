@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -32,6 +33,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
                     IsRoster = true,
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     RosterTitleQuestionId = rosterTitleQuestionId,
+                    Title = groupTitle,
                     Children = new List<IComposite> { new NumericQuestion() { PublicKey = rosterTitleQuestionId } }
                 });
 
@@ -52,6 +54,9 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
         It should_roster_title_be_equal_set_title = () =>
             ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(rosterGroupId, new decimal[] { 0 })]).ScreenName.ShouldEqual(rosterTitle);
 
+        It should_create_numeric_question_with_triggered_roster_titles_filled = () =>
+            interviewViewModel.FindQuestion(q => q.PublicKey.Id == rosterSizeQuestionId).First().TriggeredRosters.ShouldEqual(new[] { groupTitle });
+
         private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;
         private static QuestionnaireRosterStructure rosterStructure;
@@ -60,5 +65,6 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
         private static Guid rosterTitleQuestionId;
         private static InterviewSynchronizationDto interviewSynchronizationDto;
         private static string rosterTitle = "roster title";
+        private static string groupTitle = "group Title";
     }
 }

@@ -32,6 +32,7 @@ using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide.Indexes;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveySolutions;
 using StoredEvent = WB.Core.Infrastructure.Storage.Raven.StoredEvent;
 
 namespace WB.Tools.DatabaseCleaner

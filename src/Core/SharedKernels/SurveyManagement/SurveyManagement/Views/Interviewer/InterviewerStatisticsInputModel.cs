@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Main.Core.Entities;
-using Main.Core.Utility;
+using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
 {
@@ -15,7 +14,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
         /// <summary>
         /// The _orders.
         /// </summary>
-        private List<OrderRequestItem> orders = new List<OrderRequestItem>();
+        private IEnumerable<OrderRequestItem> orders = new List<OrderRequestItem>();
 
         #endregion
 
@@ -41,19 +40,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
         {
             get
             {
-                return StringUtil.GetOrderRequestString(this.orders);
+                return this.orders.GetOrderRequestString();
             }
 
             set
             {
-                this.orders = StringUtil.ParseOrderRequestString(value);
+                this.orders = value.ParseOrderRequestString();
             }
         }
 
         /// <summary>
         /// Gets or sets the orders.
         /// </summary>
-        public List<OrderRequestItem> Orders
+        public IEnumerable<OrderRequestItem> Orders
         {
             get
             {

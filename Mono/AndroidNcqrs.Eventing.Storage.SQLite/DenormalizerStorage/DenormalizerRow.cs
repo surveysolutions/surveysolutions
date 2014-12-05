@@ -1,5 +1,5 @@
 using Cirrious.MvvmCross.Plugins.Sqlite;
-using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
 {

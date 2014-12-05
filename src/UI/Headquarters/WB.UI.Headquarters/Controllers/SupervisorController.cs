@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Web;
 using System.Web.Mvc;
-using Main.Core.View;
-using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -18,7 +18,8 @@ namespace WB.UI.Headquarters.Controllers
         public SupervisorController(ICommandService commandService, 
                               IGlobalInfoProvider globalInfo, 
                               ILogger logger,
-                              IViewFactory<UserViewInputModel, UserView> userViewFactory, IPasswordHasher passwordHasher)
+                              IViewFactory<UserViewInputModel, UserView> userViewFactory,
+                              IPasswordHasher passwordHasher)
             : base(commandService, globalInfo, logger, userViewFactory, passwordHasher)
         {
             
@@ -57,12 +58,9 @@ namespace WB.UI.Headquarters.Controllers
             return this.View();
         }
 
-        public ActionResult Edit(Guid? id)
+        public ActionResult Edit(Guid id)
         {
-            if (!id.HasValue)
-                return this.RedirectToAction("Edit", "Supervisor", new {id = GlobalInfo.GetCurrentUser().Id});
-
-            var user = this.GetUserById(id.Value);
+            var user = this.GetUserById(id);
 
             if(user == null) throw new HttpException(404, string.Empty);
 
@@ -84,7 +82,7 @@ namespace WB.UI.Headquarters.Controllers
                 var user = this.GetUserById(model.Id);
                 if (user != null)
                 {
-                    this.UpdateSupervisorOrInterviewer(user: user, editModel: model);
+                    this.UpdateAccount(user: user, editModel: model);
                     this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
                     return this.RedirectToAction("Index");
                 }

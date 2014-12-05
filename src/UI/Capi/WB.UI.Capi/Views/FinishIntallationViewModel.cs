@@ -1,6 +1,6 @@
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using Cirrious.MvvmCross.ViewModels;
-using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.ValueObjects;
@@ -43,9 +43,11 @@ namespace WB.UI.Capi.Views
 
         public FinishIntallationViewModel()
         {
-            this.SyncEndpoint = "https://";
+            this.SyncEndpoint = "";
 #if DEBUG
-            this.SyncEndpoint = "http://192.168.173.1/headquarters";
+            this.SyncEndpoint = "http://192.168.88.226/headquarters";
+            this.Login = "int";
+            this.Password = "1";
 #endif
         }
 
@@ -69,11 +71,11 @@ namespace WB.UI.Capi.Views
                 this.CanSetSyncEndpoint = false;
                 return;
             }
-            
-            NavigationService.NavigateTo(CapiPages.Synchronization, new NameValueCollection
+
+            NavigationService.NavigateTo(CapiPages.Synchronization, new Dictionary<string, string>
             {
-                {"Login", Login},
-                {"PasswordHash", passwordHasher.Hash(Password)}
+                { "Login", Login },
+                { "PasswordHash", passwordHasher.Hash(Password) }
             });
         }
     }

@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Capi;
 using WB.UI.Shared.Android.Extensions;
@@ -11,7 +12,6 @@ namespace WB.UI.QuestionnaireTester.Authentication
         public UserInfo RemoteUser { get; private set; }
 
         private UserLight currentUser; 
-    
         
         UserLight IAuthentication.CurrentUser {
             get { return currentUser; }
@@ -24,9 +24,10 @@ namespace WB.UI.QuestionnaireTester.Authentication
             get { return RemoteUser != null; }
         }
 
-        public bool LogOn(string userName, string password, CancellationToken cancellationToken)
+        public async Task<bool> LogOnAsync(string userName, string password, CancellationToken cancellationToken)
         {
-            if (CapiTesterApplication.DesignerServices.Login(userName, password, cancellationToken))
+            var loggedIn = await CapiTesterApplication.DesignerServices.Login(userName, password, cancellationToken);
+            if (loggedIn)
             {
                 RemoteUser = new UserInfo(userName, password);
                 currentUser = new UserLight(Guid.NewGuid(), userName);
@@ -35,9 +36,9 @@ namespace WB.UI.QuestionnaireTester.Authentication
             return false;
         }
 
-        public bool LogOn(string userName, string password, bool wasPasswordHashed = false)
+        public async Task<bool> LogOnAsync(string userName, string password, bool wasPasswordHashed = false)
         {
-            return LogOn(userName, password, new CancellationToken());
+            return await this.LogOnAsync(userName, password, new CancellationToken());
         }
 
         public void LogOff()

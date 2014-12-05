@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             new Interview(interviewId, userId, questionnaireId, 1, answersToFeaturedQuestions, answersTime, supervisorId);
 
         It should_not_raise_QuestionDisabled_event = () =>
-            eventContext.ShouldNotContainEvent<QuestionDisabled>();
+            eventContext.ShouldNotContainEvent<QuestionsDisabled>();
 
         Cleanup stuff = () =>
         {

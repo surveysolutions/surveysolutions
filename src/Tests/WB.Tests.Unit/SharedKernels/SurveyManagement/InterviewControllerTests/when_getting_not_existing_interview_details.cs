@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Web.Mvc;
 using Machine.Specifications;
-using Main.Core.View;
 using Moq;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using It = Machine.Specifications.It;

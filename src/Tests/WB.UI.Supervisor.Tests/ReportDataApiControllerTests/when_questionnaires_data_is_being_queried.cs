@@ -1,11 +1,9 @@
 ﻿using Machine.Specifications;
-using Main.Core.View;
 using Moq;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
-using WB.UI.Supervisor.Controllers;
 using It = Machine.Specifications.It;
 
 namespace WB.UI.Supervisor.Tests.ReportDataApiControllerTests

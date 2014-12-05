@@ -2,6 +2,7 @@ using System.Linq;
 using Android.Content;
 using Android.Net;
 using WB.Core.GenericSubdomains.Rest;
+using WB.Core.GenericSubdomains.Utils.Rest;
 
 namespace WB.Core.GenericSubdomains.Rest.Android
 {

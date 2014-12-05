@@ -1,7 +1,7 @@
 {
   "name": "angular-block-ui",
   "description": "An AngularJS module that allows you to block user interaction on AJAX requests.",
-  "version": "0.1.0-beta.5",
+  "version": "0.1.1",
   "keywords": [
     "angular",
     "angularjs",
@@ -59,14 +59,14 @@
     }
   },
   "homepage": "https://github.com/McNull/angular-block-ui",
-  "_release": "0.1.0-beta.5",
+  "_release": "0.1.1",
   "_resolution": {
     "type": "version",
-    "tag": "v0.1.0-beta.5",
-    "commit": "9edcb07cb9d145d849d68c321a1b353cd0353411"
+    "tag": "v0.1.1",
+    "commit": "da99254be59b61907956501cdda7479fb43be0f4"
   },
   "_source": "git://github.com/McNull/angular-block-ui.git",
-  "_target": "0.1.0-beta.5",
+  "_target": "~0.1.1",
   "_originalSource": "angular-block-ui",
   "_direct": true
 }

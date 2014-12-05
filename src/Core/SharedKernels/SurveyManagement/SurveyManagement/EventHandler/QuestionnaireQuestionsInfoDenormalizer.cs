@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class QuestionnaireQuestionsInfoDenormalizer : IEventHandler, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>
+    public class QuestionnaireQuestionsInfoDenormalizer : BaseDenormalizer, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireQuestionsInfo> questionnaires;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
@@ -24,19 +24,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
         }
 
-        public string Name
+        public override object[] Writers
         {
-            get { return this.GetType().Name; }
-        }
-
-        public Type[] UsesViews
-        {
-            get { return new Type[0]; }
-        }
-
-        public Type[] BuildsViews
-        {
-            get { return new[] { typeof(QuestionnaireQuestionsInfo) }; }
+            get { return new[] { questionnaires }; }
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)

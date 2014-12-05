@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Utility;
-using Main.Core.View;
 using Raven.Client;
-using Raven.Client.Document;
-using Raven.Client.Linq;
+using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;

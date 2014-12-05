@@ -11,15 +11,14 @@ using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Main.Core.Utility;
-using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding;
-using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
-using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
+using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -73,14 +72,6 @@ namespace CapiDataGenerator
             }
         }
 
-        private IReadSideRepositoryWriterRegistry writerRegistry
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<IReadSideRepositoryWriterRegistry>();
-            }
-        }
-
         private IChangeLogManipulator changeLogManipulator
         {
             get
@@ -94,6 +85,14 @@ namespace CapiDataGenerator
             get
             {
                 return ServiceLocator.Current.GetInstance<IPlainQuestionnaireRepository>();
+            }
+        }
+
+        private IEventDispatcher eventDispatcher
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<IEventDispatcher>();
             }
         }
 
@@ -112,7 +111,7 @@ namespace CapiDataGenerator
 
         private void EnableCacheInAllRepositoryWriters()
         {
-            foreach (IReadSideRepositoryWriter writer in this.writerRegistry.GetAll())
+            foreach (IReadSideRepositoryWriter writer in this.eventDispatcher.GetAllRegistredEventHandlers().SelectMany(x => x.Writers.OfType<IReadSideRepositoryWriter>()))
             {
                 writer.EnableCache();
             }
@@ -120,7 +119,7 @@ namespace CapiDataGenerator
 
         private void DisableCacheInAllRepositoryWriters()
         {
-            foreach (IReadSideRepositoryWriter writer in this.writerRegistry.GetAll())
+            foreach (IReadSideRepositoryWriter writer in this.eventDispatcher.GetAllRegistredEventHandlers().SelectMany(x => x.Writers.OfType<IReadSideRepositoryWriter>()))
             {
                 writer.DisableCache();
             }
@@ -782,9 +781,6 @@ namespace CapiDataGenerator
 
                 case QuestionType.Text:
                     return "value " + _rand.Next();
-
-                case QuestionType.AutoPropagate:
-                    return new decimal(_rand.Next(((IAutoPropagate) question).MaxValue));
             }
 
             return null;

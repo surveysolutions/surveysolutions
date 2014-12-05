@@ -2,8 +2,9 @@
 using System.Net;
 using System.ServiceModel.Security;
 using System.Web.Mvc;
-using Ncqrs.Commanding.ServiceModel;
+
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Views.Template;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;

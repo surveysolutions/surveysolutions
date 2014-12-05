@@ -125,7 +125,7 @@ namespace WB.Tools.EventsMigrator
             else
             {
                 assemblies.Add(typeof (DataCollectionSharedKernelModule).Assembly);
-                assemblies.Add(typeof(CapiBoundedContextModule).Assembly);
+                assemblies.Add(typeof(IAuthentication).Assembly);
                 assemblies.Add(typeof(SurveyManagementSharedKernelModule).Assembly);
             }
 

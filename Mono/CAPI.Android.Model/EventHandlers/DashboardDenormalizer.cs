@@ -5,9 +5,7 @@ using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
-using Main.Core.Utility;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -37,13 +35,12 @@ namespace CAPI.Android.Core.Model.EventHandlers
                                       IEventHandler<MultipleOptionsQuestionAnswered>,
                                       IEventHandler<SingleOptionQuestionAnswered>,
                                       IEventHandler<NumericRealQuestionAnswered>,
-                                      IEventHandler<NumericQuestionAnswered>,
                                       IEventHandler<NumericIntegerQuestionAnswered>,
                                       IEventHandler<DateTimeQuestionAnswered>,
                                       IEventHandler<GeoLocationQuestionAnswered>,
                                       IEventHandler<QRBarcodeQuestionAnswered>,
 
-                                      IEventHandler<AnswerRemoved>,
+                                      IEventHandler<AnswersRemoved>,
 
                                       IEventHandler<InterviewOnClientCreated>,
                                       IEventHandler<InterviewerAssigned>,
@@ -64,6 +61,16 @@ namespace CAPI.Android.Core.Model.EventHandlers
             this.surveyDtoDocumentStorage = surveyDTOdocumentStorage;
             this.questionnaireStorage = questionnaireStorage;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+        }
+
+        public override object[] Writers
+        {
+            get { return new object[] { questionnaireDtOdocumentStorage, surveyDtoDocumentStorage}; }
+        }
+
+        public override object[] Readers
+        {
+            get { return new object[] { questionnaireDtOdocumentStorage}; }
         }
 
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
@@ -220,11 +227,6 @@ namespace CAPI.Android.Core.Model.EventHandlers
             return status == InterviewStatus.Completed || status == InterviewStatus.Restarted;
         }
 
-        public override Type[] BuildsViews
-        {
-            get { return new Type[] { typeof(QuestionnaireDTO) }; }
-        }
-
         public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
         {
             //do nothing
@@ -296,11 +298,6 @@ namespace CAPI.Android.Core.Model.EventHandlers
             AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
         }
 
-        public void Handle(IPublishedEvent<NumericQuestionAnswered> evnt)
-        {
-            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
-        }
-
         public void Handle(IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
         {
             AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
@@ -324,11 +321,13 @@ namespace CAPI.Android.Core.Model.EventHandlers
             AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
         }
 
-        public void Handle(IPublishedEvent<AnswerRemoved> evnt)
+        public void Handle(IPublishedEvent<AnswersRemoved> evnt)
         {
-            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, string.Empty);
+            foreach (var question in evnt.Payload.Questions)
+            {
+                AnswerQuestion(evnt.EventSourceId, question.Id, string.Empty);
+            }
         }
-
 
         private void StoreSurveyDto(Guid id, QuestionnaireDocument questionnaireDocument, long version, bool allowCensusMode)
         {

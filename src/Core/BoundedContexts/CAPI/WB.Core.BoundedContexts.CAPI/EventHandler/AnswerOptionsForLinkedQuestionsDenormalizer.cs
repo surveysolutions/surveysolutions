@@ -10,12 +10,10 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 namespace WB.Core.BoundedContexts.Capi.EventHandler
 {
     public class AnswerOptionsForLinkedQuestionsDenormalizer :
-        IEventHandler<AnswerRemoved>,
         IEventHandler<AnswersRemoved>,
         IEventHandler<TextQuestionAnswered>,
         IEventHandler<NumericIntegerQuestionAnswered>,
         IEventHandler<NumericRealQuestionAnswered>,
-        IEventHandler<NumericQuestionAnswered>,
         IEventHandler<DateTimeQuestionAnswered>
     {
         private readonly IReadSideRepositoryWriter<InterviewViewModel> interviewStorage;
@@ -25,11 +23,6 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         {
             this.interviewStorage = interviewStorage;
             this.logger = logger;
-        }
-
-        public void Handle(IPublishedEvent<AnswerRemoved> @event)
-        {
-            this.RemoveAnswerOptionForLinkedQuestions(@event.EventSourceId, @event.Payload.QuestionId, @event.Payload.PropagationVector);
         }
 
         public void Handle(IPublishedEvent<AnswersRemoved> @event)
@@ -51,11 +44,6 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         }
 
         public void Handle(IPublishedEvent<NumericRealQuestionAnswered> @event)
-        {
-            this.AddAnswerOptionForLinkedQuestions(@event.EventSourceId, @event.Payload.QuestionId, @event.Payload.PropagationVector);
-        }
-
-        public void Handle(IPublishedEvent<NumericQuestionAnswered> @event)
         {
             this.AddAnswerOptionForLinkedQuestions(@event.EventSourceId, @event.Payload.QuestionId, @event.Payload.PropagationVector);
         }

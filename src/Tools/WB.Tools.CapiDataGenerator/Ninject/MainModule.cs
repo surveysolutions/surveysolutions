@@ -4,7 +4,6 @@ using System.IO;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
 using AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage;
-using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.EventHandlers;
 using CAPI.Android.Core.Model.ReadSideStore;
 using CAPI.Android.Core.Model.Synchronization;
@@ -12,13 +11,9 @@ using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
-using Main.Core;
-using Main.Core.Commands;
 using Main.Core.Documents;
-using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
@@ -26,17 +21,21 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
 using NinjectAdapter;
-using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
-using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.ChangeLog;
+using WB.Core.BoundedContexts.Capi.ChangeLog;
+using WB.Core.BoundedContexts.Capi.Implementation.ChangeLog;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.FunctionalDenormalization;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
+using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Implementation.EventDispatcher;
+using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage.EventStore;
 using WB.Core.Infrastructure.Storage.EventStore.Implementation;
@@ -45,13 +44,13 @@ using WB.Core.Infrastructure.Storage.Raven.Implementation;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
-using WB.Core.SharedKernels.DataCollection.EventHandler;
 using WB.Core.SharedKernels.DataCollection.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.Tools.CapiDataGenerator.Ninject;
 using WB.UI.Shared.Web.Settings;
 using UserDenormalizer = CAPI.Android.Core.Model.EventHandlers.UserDenormalizer;
@@ -89,7 +88,13 @@ namespace CapiDataGenerator
             var publicStore = new SqliteReadSideRepositoryAccessor<PublicChangeSetDTO>(denormalizerStore);
             var plainQuestionnaireStore = new SqlitePlainStorageAccessor<QuestionnaireDocument>(plainStore);
             var interviewMetaInfoFactory = new InterviewMetaInfoFactory(questionnaireStore);
-            var changeLogStore = new FileChangeLogStore(interviewMetaInfoFactory);
+
+            var environmentalPersonalFolderPath = "";
+            var changeLogStore = new FileChangeLogStore(
+                interviewMetaInfoFactory,
+                this.Kernel.Get<IArchiveUtils>(),
+                this.Kernel.Get<IFileSystemAccessor>(),
+                environmentalPersonalFolderPath);
 
             var capiTemplateWriter = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>();
             this.capiTemplateVersionedWriter = new VersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>(capiTemplateWriter);
@@ -101,6 +106,7 @@ namespace CapiDataGenerator
             var headquartersEventStore = this.GetHeadquartersEventStore();
 
             var eventStore = new CapiDataGeneratorEventStore(capiEvenStore, supervisorEventStore, headquartersEventStore);
+           
 
             this.Bind<IEventStore>().ToConstant(eventStore);
             this.Bind<IStreamableEventStore>().ToConstant(eventStore);
@@ -129,18 +135,15 @@ namespace CapiDataGenerator
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(Kernel));
             this.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
-            var commandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
-            NcqrsEnvironment.SetDefault(commandService);
-            NcqrsInit.InitializeCommandService(Kernel.Get<ICommandListSupplier>(), commandService);
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
 
-            var snpshotStore = new InMemoryEventStore();
-            // key param for storing im memory
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(snpshotStore);
+            this.Bind<ISnapshottingPolicy>().ToMethod(context => NcqrsEnvironment.Get<ISnapshottingPolicy>());
+            this.Bind<ISnapshotStore>().ToMethod(context => NcqrsEnvironment.Get<ISnapshotStore>());
+            this.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
+            this.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
 
-            var inProcessEventDispatcher = new CustomInProcessEventDispatcher(true);
-
-            var bus = new NcqrCompatibleEventDispatcher(() => inProcessEventDispatcher);
+            var bus = new NcqrCompatibleEventDispatcher(eventStore);
 
             this.Bind<IEventDispatcher>().ToConstant(bus);
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
@@ -153,8 +156,6 @@ namespace CapiDataGenerator
                 bus.Register(handler as IEventHandler);
             }
 
-            this.Bind<ICommandService>().ToConstant(NcqrsEnvironment.Get<ICommandService>());
-            
             #region register handlers
 
             InitCapiTemplateStorage(bus);
@@ -165,10 +166,6 @@ namespace CapiDataGenerator
 
 
             #endregion
-
-            var repository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(), NcqrsEnvironment.Get<IAggregateSnapshotter>());
-            this.Bind<IDomainRepository>().ToConstant(repository);
-            this.Bind<ISnapshotStore>().ToConstant(NcqrsEnvironment.Get<ISnapshotStore>());
         }
 
         private IEventStore GetHeadquartersEventStore()
@@ -253,7 +250,7 @@ namespace CapiDataGenerator
 
         private void InitCapiTemplateStorage(NcqrCompatibleEventDispatcher bus)
         {
-            var fileSorage = new QuestionnaireDenormalizer(this.capiTemplateVersionedWriter, this.Kernel.Get<IPlainQuestionnaireRepository>());
+            var fileSorage = new WB.Core.BoundedContexts.Capi.EventHandler.QuestionnaireDenormalizer(this.capiTemplateVersionedWriter, this.Kernel.Get<IPlainQuestionnaireRepository>());
             bus.Register(fileSorage);
         }
 

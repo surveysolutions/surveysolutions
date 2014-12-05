@@ -7,7 +7,8 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
-using Ncqrs.Commanding.ServiceModel;
+
+using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using System.Collections.Generic;
@@ -17,6 +18,9 @@ using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom.Implementation;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
 using WB.UI.Designer.Api;
 
@@ -24,6 +28,27 @@ namespace WB.Tests.Unit
 {
     internal static class Create
     {
+        public static IPublishedEvent<T> ToPublishedEvent<T>(this T @event, Guid eventSourceId)
+         where T : class
+        {
+            return Mock.Of<IPublishedEvent<T>>(publishedEvent
+                => publishedEvent.Payload == @event
+                && publishedEvent.EventSourceId == eventSourceId);
+        }
+
+        public static class Event
+        {
+            public static IPublishedEvent<QuestionnaireDeleted> QuestionnaireDeleted(Guid? questionnaireId = null, long? version = null)
+            {
+                var questionnaireDeleted = new QuestionnaireDeleted
+                {
+
+                    QuestionnaireVersion = version ?? 1
+                }.ToPublishedEvent(questionnaireId ?? Guid.NewGuid());
+                return questionnaireDeleted;
+            }
+        }
+
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
         {
             return new QuestionnaireDocument
@@ -52,7 +77,12 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static IQuestion Question(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, bool isMandatory = false)
+        public static IQuestion Question(Guid? id = null,
+            string variable = null,
+            string enablementCondition = null,
+            string validationExpression = null, 
+            bool isMandatory = false,
+            string validationMessage = null)
         {
             return new TextQuestion("Question X")
             {
@@ -61,6 +91,7 @@ namespace WB.Tests.Unit
                 StataExportCaption = variable,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
                 Mandatory = isMandatory
             };
         }
@@ -78,8 +109,10 @@ namespace WB.Tests.Unit
                 StataExportCaption = variable
             };
         }
-                public static Group Roster(Guid? id = null, string title = "Roster X", string variable = null, string enablementCondition = null,
-            string[] fixedTitles = null, IEnumerable<IComposite> children = null, RosterSizeSourceType rosterSizeSourceType = RosterSizeSourceType.FixedTitles,
+
+        public static Group Roster(Guid? id = null, string title = "Roster X", string variable = null, string enablementCondition = null,
+            string[] fixedTitles = null, IEnumerable<IComposite> children = null,
+            RosterSizeSourceType rosterSizeSourceType = RosterSizeSourceType.FixedTitles,
             Guid? rosterSizeQuestionId = null, Guid? rosterTitleQuestionId = null)
         {
             Group group = Create.Group(
@@ -92,7 +125,7 @@ namespace WB.Tests.Unit
             group.IsRoster = true;
             group.RosterSizeSource = rosterSizeSourceType;
             if (rosterSizeSourceType == RosterSizeSourceType.FixedTitles)
-                group.RosterFixedTitles = fixedTitles ?? new[] {"Roster X-1", "Roster X-2", "Roster X-3"};
+                group.RosterFixedTitles = fixedTitles ?? new[] { "Roster X-1", "Roster X-2", "Roster X-3" };
             group.RosterSizeQuestionId = rosterSizeQuestionId;
             group.RosterTitleQuestionId = rosterTitleQuestionId;
 
@@ -184,28 +217,9 @@ namespace WB.Tests.Unit
             return new NCalcToCSharpConverter();
         }
 
-        public static NCalcToSharpController NCalcToSharpController(ICommandService commandService = null,
-            IQuestionnaireInfoViewFactory questionnaireInfoViewFactory = null)
-        {
-            return new NCalcToSharpController(
-                Mock.Of<ILogger>(),
-                commandService ?? Mock.Of<ICommandService>(),
-                questionnaireInfoViewFactory ?? Mock.Of<IQuestionnaireInfoViewFactory>(),
-                Create.SyncAsyncExecutor())
-            {
-                Request = new HttpRequestMessage(),
-                Configuration = new HttpConfiguration(),
-            };
-        }
-
         public static IAsyncExecutor SyncAsyncExecutor()
         {
             return new SyncAsyncExecutorStub();
-        }
-
-        public static NCalcToSharpController.OneQuestionnaireModel OneQuestionnaireModel(Guid id)
-        {
-            return new NCalcToSharpController.OneQuestionnaireModel { Id = id };
         }
 
         public static AtomFeedReader AtomFeedReader(Func<HttpMessageHandler> messageHandler = null, IHeadquartersSettings settings = null)
@@ -213,6 +227,15 @@ namespace WB.Tests.Unit
             return new AtomFeedReader(
                 messageHandler ?? Mock.Of<Func<HttpMessageHandler>>(),
                 settings ?? Mock.Of<IHeadquartersSettings>());
+        }
+
+        public static InterviewSummary InterviewSummary(Guid? questionnaireId = null, long? questionnaireVersion = null)
+        {
+            return new InterviewSummary()
+            {
+                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
+                QuestionnaireVersion = questionnaireVersion ?? 1
+            };
         }
     }
 }

@@ -2,9 +2,10 @@
 using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
+
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
@@ -108,7 +109,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 
             int errorCountOccuredOnInterviewsCreaition = 0;
 
-            var commandInvoker = NcqrsEnvironment.Get<ICommandService>();
+            var commandInvoker = ServiceLocator.Current.GetInstance<ICommandService>();
             for (int i = 0; i < interviewForCreate.Length; i++)
             {
                 try

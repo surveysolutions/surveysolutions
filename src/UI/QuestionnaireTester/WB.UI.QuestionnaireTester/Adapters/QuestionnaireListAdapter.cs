@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Graphics.Drawables;
@@ -27,17 +28,18 @@ namespace WB.UI.QuestionnaireTester.Adapters
 
             this.activity = activity;
 
-            activity.WaitForLongOperation(UploadQuestionnairesFromDesigner);
+            activity.WaitForLongOperation((ct)=>this.UploadQuestionnairesFromDesigner(ct));
         }
 
-        protected void UploadQuestionnairesFromDesigner(CancellationToken cancellationToken)
+        protected async Task UploadQuestionnairesFromDesigner(CancellationToken cancellationToken)
         {
             if (CapiTesterApplication.DesignerMembership.IsLoggedIn)
             {
                 try
                 {
                     QuestionnaireListCommunicationPackage questionnaireListPackage =
-                    CapiTesterApplication.DesignerServices.GetQuestionnaireListForCurrentUser(CapiTesterApplication.DesignerMembership.RemoteUser, cancellationToken);
+                        await CapiTesterApplication.DesignerServices.GetQuestionnaireListForCurrentUser(
+                            CapiTesterApplication.DesignerMembership.RemoteUser, cancellationToken);
 
                     unfilteredList = items = questionnaireListPackage.Items;
                 }
@@ -71,7 +73,7 @@ namespace WB.UI.QuestionnaireTester.Adapters
 
         public void Update()
         {
-            activity.WaitForLongOperation(UploadQuestionnairesFromDesigner, false);
+            activity.WaitForLongOperation((ct) => UploadQuestionnairesFromDesigner(ct), false);
         }
 
         public void Query(string searchQuery)

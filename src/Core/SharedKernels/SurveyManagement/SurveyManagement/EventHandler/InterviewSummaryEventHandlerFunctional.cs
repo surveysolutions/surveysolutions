@@ -4,12 +4,14 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
+using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
@@ -24,12 +26,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewSummary, MultipleOptionsQuestionAnswered>,
         IUpdateHandler<InterviewSummary, SingleOptionQuestionAnswered>,
         IUpdateHandler<InterviewSummary, NumericRealQuestionAnswered>,
-        IUpdateHandler<InterviewSummary, NumericQuestionAnswered>,
         IUpdateHandler<InterviewSummary, NumericIntegerQuestionAnswered>,
         IUpdateHandler<InterviewSummary, DateTimeQuestionAnswered>,
         IUpdateHandler<InterviewSummary, GeoLocationQuestionAnswered>,
         IUpdateHandler<InterviewSummary, QRBarcodeQuestionAnswered>,
-        IUpdateHandler<InterviewSummary, AnswerRemoved>,
         IUpdateHandler<InterviewSummary, AnswersRemoved>,
         IUpdateHandler<InterviewSummary, InterviewerAssigned>,
         IUpdateHandler<InterviewSummary, InterviewDeleted>,
@@ -48,11 +48,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaires;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
-         
-        public override Type[] UsesViews
-        {
-            get { return new Type[] { typeof(UserDocument), typeof(QuestionnaireBrowseItem) }; }
-        }
 
         public InterviewSummaryEventHandlerFunctional(IReadSideRepositoryWriter<InterviewSummary> interviewSummary,
             IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaires, IReadSideRepositoryWriter<UserDocument> users)
@@ -62,6 +57,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.users = users;
         }
 
+        public override object[] Readers
+        {
+            get { return new object[] { questionnaires, users }; }
+        }
 
         private InterviewSummary UpdateInterviewSummary(InterviewSummary interviewSummary, DateTime updateDateTime, Action<InterviewSummary> update)
         {
@@ -192,11 +191,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString(CultureInfo.InvariantCulture), evnt.EventTimeStamp);
         }
 
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<NumericQuestionAnswered> evnt)
-        {
-            return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString(CultureInfo.InvariantCulture), evnt.EventTimeStamp);
-        }
-
         public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
         {
             return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString(CultureInfo.InvariantCulture), evnt.EventTimeStamp);
@@ -216,17 +210,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<QRBarcodeQuestionAnswered> evnt)
         {
             return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.EventTimeStamp);
-        }
-
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<AnswerRemoved> evnt)
-        {
-            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
-            {
-                if (interview.AnswersToFeaturedQuestions.ContainsKey(evnt.Payload.QuestionId))
-                {
-                    interview.AnswersToFeaturedQuestions[evnt.Payload.QuestionId].Answer = string.Empty;
-                }
-            });
         }
 
         public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<AnswersRemoved> evnt)

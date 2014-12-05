@@ -1,8 +1,8 @@
 using Moq;
-using Ncqrs.Commanding.ServiceModel;
 using Quartz;
 using WB.Core.BoundedContexts.Supervisor.Synchronization;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Supervisor.Controllers;

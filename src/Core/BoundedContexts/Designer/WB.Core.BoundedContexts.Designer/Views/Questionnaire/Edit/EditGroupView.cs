@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using Main.Core.View;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 

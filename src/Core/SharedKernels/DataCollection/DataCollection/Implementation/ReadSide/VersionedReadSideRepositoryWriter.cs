@@ -1,34 +1,35 @@
 ﻿using System;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.ReadSide
 {
-    internal class VersionedReadSideRepositoryWriter<TEntity> : IVersionedReadSideRepositoryWriter<TEntity> where TEntity : class, IVersionedView
+    internal class VersionedReadSideRepositoryWriter<TEntity> : IReadSideRepositoryCleaner, IReadSideRepositoryWriter, IVersionedReadSideRepositoryWriter<TEntity> where TEntity : class, IVersionedView
     {
-        private readonly IReadSideRepositoryWriter<TEntity> internalRepositoryWroter;
+        private readonly IReadSideRepositoryWriter<TEntity> internalRepositoryWriter;
 
         private static ILogger Logger
         {
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
         }
 
-        public VersionedReadSideRepositoryWriter(IReadSideRepositoryWriter<TEntity> internalRepositoryWroter)
+        public VersionedReadSideRepositoryWriter(IReadSideRepositoryWriter<TEntity> internalRepositoryWriter)
         {
-            this.internalRepositoryWroter = internalRepositoryWroter;
+            this.internalRepositoryWriter = internalRepositoryWriter;
         }
 
         public TEntity GetById(string id)
         {
-            return internalRepositoryWroter.GetById(id);
+            return this.internalRepositoryWriter.GetById(id);
         }
 
         public void Remove(string id)
         {
-            internalRepositoryWroter.Remove(id);
+            this.internalRepositoryWriter.Remove(id);
         }
 
         public void Store(TEntity view, string id)
@@ -36,7 +37,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.ReadSide
             TEntity previousEntity = null;
             try
             {
-                previousEntity = internalRepositoryWroter.GetById(id);
+                previousEntity = this.internalRepositoryWriter.GetById(id);
             }
             catch (Exception e)
             {
@@ -44,17 +45,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.ReadSide
             }
             if (previousEntity != null)
             {
-                internalRepositoryWroter.Store(previousEntity, RepositoryKeysHelper.GetVersionedKey(id, previousEntity.Version));
+                this.internalRepositoryWriter.Store(previousEntity, RepositoryKeysHelper.GetVersionedKey(id, previousEntity.Version));
             }
-            internalRepositoryWroter.Store(view, id);
+            this.internalRepositoryWriter.Store(view, id);
         }
 
         public TEntity GetById(string id, long version)
         {
-            var entity = internalRepositoryWroter.GetById(RepositoryKeysHelper.GetVersionedKey(id, version));
+            var entity = this.internalRepositoryWriter.GetById(RepositoryKeysHelper.GetVersionedKey(id, version));
             if (entity != null)
                 return entity;
-            entity = internalRepositoryWroter.GetById(id);
+            entity = this.internalRepositoryWriter.GetById(id);
             if (entity == null)
                 return null;
             if (entity.Version == version)
@@ -64,26 +65,57 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.ReadSide
 
         public void Remove(string id, long version)
         {
-            internalRepositoryWroter.Remove(RepositoryKeysHelper.GetVersionedKey(id, version));
-            TEntity currentEntity = internalRepositoryWroter.GetById(id);
+            this.internalRepositoryWriter.Remove(RepositoryKeysHelper.GetVersionedKey(id, version));
+            TEntity currentEntity = this.internalRepositoryWriter.GetById(id);
 
             if (currentEntity != null && currentEntity.Version == version)
             {
-                internalRepositoryWroter.Remove(id);
+                this.internalRepositoryWriter.Remove(id);
 
                 var newVersion = version - 1;
 
                 while (newVersion > 0)
                 {
-                    var previousVersion = internalRepositoryWroter.GetById(RepositoryKeysHelper.GetVersionedKey(id, version));
+                    var previousVersion = this.internalRepositoryWriter.GetById(RepositoryKeysHelper.GetVersionedKey(id, version));
                     if (previousVersion != null)
                     {
-                        internalRepositoryWroter.Store(previousVersion, id);
+                        this.internalRepositoryWriter.Store(previousVersion, id);
                         break;
                     }
                     newVersion--;
                 }
             }
         }
+
+        public void Clear()
+        {
+            var readSideRepositoryCleaner = internalRepositoryWriter as IReadSideRepositoryCleaner;
+            if(readSideRepositoryCleaner!=null)
+                readSideRepositoryCleaner.Clear();
+        }
+
+        public void EnableCache()
+        {
+            var readSideRepositoryWriter = internalRepositoryWriter as IReadSideRepositoryWriter;
+            if (readSideRepositoryWriter != null)
+                readSideRepositoryWriter.EnableCache();
+        }
+
+        public void DisableCache()
+        {
+            var readSideRepositoryWriter = internalRepositoryWriter as IReadSideRepositoryWriter;
+            if (readSideRepositoryWriter != null)
+                readSideRepositoryWriter.DisableCache();
+        }
+
+        public string GetReadableStatus()
+        {
+            var readSideRepositoryWriter = internalRepositoryWriter as IReadSideRepositoryWriter;
+            if (readSideRepositoryWriter != null)
+                return readSideRepositoryWriter.GetReadableStatus();
+            return "";
+        }
+
+        public Type ViewType { get { return typeof (TEntity); } }
     }
 }

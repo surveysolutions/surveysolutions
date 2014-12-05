@@ -16,7 +16,7 @@
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <AndroidUseLatestPlatformSdk>
     </AndroidUseLatestPlatformSdk>
-    <TargetFrameworkVersion>v4.4</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -54,14 +54,8 @@
     <Compile Include="..\WB.Core.SharedKernel.Utils\Compression\GZipJsonCompressor.cs">
       <Link>Compression\GZipJsonCompressor.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.SharedKernel.Utils\Compression\IStringCompressor.cs">
-      <Link>Compression\IStringCompressor.cs</Link>
-    </Compile>
     <Compile Include="..\WB.Core.SharedKernel.Utils\FileSizeUtils.cs">
       <Link>FileSizeUtils.cs</Link>
-    </Compile>
-    <Compile Include="..\WB.Core.SharedKernel.Utils\Serialization\IJsonUtils.cs">
-      <Link>Serialization\IJsonUtils.cs</Link>
     </Compile>
     <Compile Include="..\WB.Core.SharedKernel.Utils\Serialization\NewtonJsonUtils.cs">
       <Link>Serialization\NewtonJsonUtils.cs</Link>
@@ -70,6 +64,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
+      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
+      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>

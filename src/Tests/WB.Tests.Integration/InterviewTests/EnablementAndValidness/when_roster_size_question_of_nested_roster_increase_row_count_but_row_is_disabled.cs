@@ -28,9 +28,10 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var nestedRosterSizeQuestionId = Guid.Parse("22222222222222222222222222222222");
                 var rosterId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
                 var nestedRosterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-                
+
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
-                    Create.Roster(rosterId, children: new IComposite[]
+                    Create.Roster(rosterId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedTitles: new[] { "1" },
+                        children: new IComposite[]
                         {
                             Create.NumericIntegerQuestion(nestedRosterSizeQuestionId, variable: "a"),
                             Create.Roster(nestedRosterId, rosterSizeSourceType: RosterSizeSourceType.Question, enablementCondition: "a > 1",
@@ -41,13 +42,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         })
                     );
 
-                var interview = SetupInterview(questionnaireDocument, new InterviewPassiveEvent[]
-                {
-                    Create.Event.RosterInstancesAdded(new[]
-                    {
-                        Create.AddedRosterInstance(rosterId)
-                    })
-                });
+                var interview = SetupInterview(questionnaireDocument);
 
                 using (var eventContext = new EventContext())
                 {
@@ -55,18 +50,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                     return new InvokeResults()
                     {
-                        NestedRosterEnabled = HasEvent<GroupsEnabled>(eventContext.Events, where =>
-                            where.Groups.Any(
-                                group =>
-                                    group.Id == nestedRosterId && group.RosterVector.Length == 2 &&
-                                    group.RosterVector[0] == 0 && group.RosterVector[1] == 0)),
-                        NestedRosterDisabled =
-                            HasEvent<GroupsDisabled>(eventContext.Events,
-                                where =>
-                                    where.Groups.Any(
-                                        group =>
-                                            group.Id == nestedRosterId && group.RosterVector.Length == 2 &&
-                                            group.RosterVector[0] == 0 && group.RosterVector[1] == 0))
+                        NestedRosterEnabled = eventContext.AnyEvent<GroupsEnabled>(e => e.Groups.Any(q => q.Id == nestedRosterId)),
+                        NestedRosterDisabled = eventContext.AnyEvent<GroupsDisabled>(e => e.Groups.Any(q => q.Id == nestedRosterId))
                     };
                 }
             });

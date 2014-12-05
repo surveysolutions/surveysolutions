@@ -1,4 +1,5 @@
-﻿using System;
+﻿using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.Infrastructure.EventBus
 {
@@ -6,17 +7,14 @@ namespace WB.Core.Infrastructure.EventBus
     {
         public virtual string Name
         {
-            get { return this.GetType().FullName; }
+            get { return this.GetType().Name; }
         }
 
-        public virtual Type[] UsesViews
+        public virtual object[] Readers
         {
-            get
-            {
-                return new Type[]{};
-            }
+            get { return new object[0]; }
         }
-
-        public abstract Type[] BuildsViews { get; }
+        
+        public abstract object[] Writers { get; }
     }
 }

@@ -21,9 +21,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireFeedEntry> questionnaireFeed;
 
-        public override Type[] BuildsViews
+        public override object[] Writers
         {
-            get { return new Type[] { typeof(QuestionnaireFeedEntry) }; }
+            get { return new object[] { questionnaireFeed}; }
         }
 
         public QuestionnaireFeedDenormalizer(IReadSideRepositoryWriter<QuestionnaireFeedEntry> questionnaireFeed)

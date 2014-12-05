@@ -21,13 +21,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                                .ToList();
         }
 
-        public QuestionnaireStataMapView(EditQuestionnaireView doc)
-        {
-            this.StataMap = doc.Questions
-                               .Select(q => new KeyValuePair<Guid, string>(q.Id, q.Alias))
-                               .ToList();
-        }
-
         public QuestionnaireStataMapView(QuestionsAndGroupsCollectionView questionnaireView)
         {
             this.StataMap = questionnaireView.Questions

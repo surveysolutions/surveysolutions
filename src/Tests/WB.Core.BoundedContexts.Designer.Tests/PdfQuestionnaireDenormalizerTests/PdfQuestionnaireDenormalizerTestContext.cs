@@ -20,10 +20,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.PdfQuestionnaireDenormalizerTes
     {
         protected static PdfQuestionnaireDenormalizer CreatePdfQuestionnaireDenormalizer(
             IReadSideRepositoryWriter<PdfQuestionnaireView> documentStorage = null,
-            ILogger logger = null,
-            IQuestionnaireDocumentUpgrader upgrader = null)
+            ILogger logger = null)
         {
-            return new PdfQuestionnaireDenormalizer(documentStorage, logger, null, upgrader);
+            return new PdfQuestionnaireDenormalizer(documentStorage, logger, null);
         }
 
         protected static IPublishedEvent<T> CreatePublishedEvent<T>(T @event)

@@ -59,8 +59,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 .Returns(questionnaireRepository);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
-            interview.Apply(new RosterRowAdded(firstLevelRosterId, new decimal[0], 0, null));
-            interview.Apply(new RosterRowAdded(secondLevelRosterId, new decimal[]{0}, 0, null));
+            interview.Apply(Create.Events.RosterInstancesAdded(firstLevelRosterId, new decimal[0], 0, null));
+            interview.Apply(Create.Events.RosterInstancesAdded(secondLevelRosterId, new decimal[] { 0 }, 0, null));
             eventContext = new EventContext();
         };
 

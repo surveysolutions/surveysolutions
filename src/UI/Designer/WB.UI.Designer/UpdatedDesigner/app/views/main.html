@@ -1,51 +1,44 @@
 <section id="header" class="row">
     <a class="designer-logo" href="../../"></a>
     <div class="header-line">
-        <div class="breadcrumbs">
-            <ul>
-                <li>
-                    <a href="../../">My Questionnaires</a>
-                </li>
-                <li><a href="../../public">Public Questionnaires</a></li>
-            </ul>
-        </div>
         <div class="header-menu">
             This document is <strong>{{questionnaire.isPublic ? 'public' : 'private'}}</strong><span ng-repeat="q in getPersonsSharedWith(questionnaire)">
-                <span ng-if="$first">
-                    , shared with <a href="mailto:{{q.email}}">{{q.email}}</a>
-                </span>
-                <span ng-if="!$first && $last">
-                    and <a href="javascript:void(0);" ng-click="showShareInfo()">{{$index}} other</a>
-                </span>
-            </span>
+                                                                                                   <span ng-if="$first">
+                                                                                                       , shared with <a href="mailto:{{q.email}}">{{q.email}}</a>
+                                                                                                   </span>
+                                                                                                   <span ng-if="!$first && $last">
+                                                                                                       and <a href="javascript:void(0);" ng-click="showShareInfo()">{{$index}} other</a>
+                                                                                                   </span>
+                                                                                               </span>
             <div class="buttons">
                 <button class="btn" type="button" ng-click="showShareInfo()">Settings</button>
                 <a class="btn" href="../../account/logoff">LOG OUT</a>
             </div>
         </div>
-    </div>
-    <div class="questionnarie-title">
-        <div class="title">
-            <div class="questionnarie-title-text">
-                {{questionnaire.title}}
-            </div>
-            <div class="questionnarie-title-buttons">
-                <span class="text-muted">({{questionnaire.questionsCount}}Q, {{questionnaire.groupsCount}}G, {{questionnaire.rostersCount}}R)</span>
-                <input id="verification-btn" type="button" class="btn" value="VERIFY" ng-click="verify()" />
-                <span id="verify-btn" data-toggle="modal" ng-show="verificationStatus.errorsCount" class="error-message ng-hide">
-                    <a href="javascript:void(0);"
-                       ng-click="verify()"
-                       ng-pluralize
-                       count="verificationStatus.errorsCount"
-                       when="{'1': '{} error',
-                          '20' : '{}+ errors',
+        <div class="questionnarie-title">
+            <div class="title">
+                <div class="questionnarie-title-text">
+                    {{questionnaire.title}}
+                </div>
+                <div class="questionnarie-title-buttons">
+                    <span class="text-muted">({{questionnaire.questionsCount}}Q, {{questionnaire.groupsCount}}G, {{questionnaire.rostersCount}}R)</span>
+                    <input id="verification-btn" type="button" class="btn" value="VERIFY" ng-click="verify()" />
+                    <span id="verify-btn" data-toggle="modal" ng-show="verificationStatus.errorsCount" class="error-message ng-hide">
+                        <a href="javascript:void(0);"
+                           ng-click="verify()"
+                           ng-pluralize
+                           count="verificationStatus.errorsCount"
+                           when="{'1': '{} error',
+                          '100' : '{}+ errors',
                           'other': '{} errors'}">
-                    </a>
-                </span>
-                <span class="text-success" ng-show="verificationStatus.errorsCount === 0">OK<em>, saved at <span>{{verificationStatus.time | date:'H:mm'}}</span></em></span>
+                        </a>
+                    </span>
+                    <span class="text-success" ng-show="verificationStatus.errorsCount === 0">OK<em>, saved at <span>{{verificationStatus.time | date:'H:mm'}}</span></em></span>
+                </div>
             </div>
         </div>
     </div>
+
 </section>
 
 <section id="spacer" class="row">
@@ -96,7 +89,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Verification: <span ng-pluralize count="verificationStatus.errorsCount" when="{'1': '{} error found', '20': '{}+ errors found', 'other': '{} errors found'}"></span></h3>
+                <h3 class="modal-title">Verification: <span ng-pluralize count="verificationStatus.errorsCount" when="{'1': '{} error found', '100': '{}+ errors found', 'other': '{} errors found'}"></span></h3>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><!--&times;--></button>
             </div>
             <div class="modal-body">

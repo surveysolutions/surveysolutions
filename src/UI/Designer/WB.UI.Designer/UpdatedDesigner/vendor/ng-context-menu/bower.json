@@ -1,6 +1,6 @@
 {
   "name": "ng-context-menu",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An AngularJS directive to display a context menu when a right-click event is triggered",
   "keywords": [
     "ng-context-menu",

@@ -78,7 +78,8 @@
       <HintPath>..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Helpers">
-      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebHelpers.3.1.1\lib\net45\Microsoft.Web.Helpers.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebHelpers.3.2.0-rc\lib\net45\Microsoft.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Web.Mvc, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -98,6 +99,10 @@
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Extensions.Conventions, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Ninject.Extensions.Conventions.3.2.0.0\lib\net45-full\Ninject.Extensions.Conventions.dll</HintPath>
     </Reference>
     <Reference Include="Ninject.Extensions.Wcf">
       <HintPath>..\..\..\..\packages\Ninject.Extensions.Wcf.3.2.0.0\lib\net45-full\Ninject.Extensions.Wcf.dll</HintPath>
@@ -147,9 +152,9 @@
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.3.1.1\lib\net45\System.Web.Helpers.dll</HintPath>
+    <Reference Include="System.Web.Helpers">
+      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Http, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -159,10 +164,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebApi.WebHost.5.1.1\lib\net45\System.Web.Http.WebHost.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Mvc, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Web.Mvc, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Microsoft.AspNet.Mvc.5.1.1\lib\net45\System.Web.Mvc.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\..\..\packages\Microsoft.AspNet.Mvc.5.2.2\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -170,19 +174,19 @@
     </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Microsoft.AspNet.Razor.3.1.1\lib\net45\System.Web.Razor.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Microsoft.AspNet.Razor.3.2.2\lib\net45\System.Web.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.3.1.1\lib\net45\System.Web.WebPages.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.3.1.1\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.3.1.1\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
@@ -212,15 +216,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.Data.3.1.1\lib\net45\WebMatrix.Data.dll</HintPath>
     </Reference>
-    <Reference Include="WebMatrix.WebData, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.WebData.3.1.1\lib\net45\WebMatrix.WebData.dll</HintPath>
+    <Reference Include="WebMatrix.WebData">
+      <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.WebData.3.2.0-rc\lib\net45\WebMatrix.WebData.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\Attributes\ApiBasicAuthAttribute.cs" />
     <Compile Include="Api\CommandController.cs" />
-    <Compile Include="Api\NCalcToSharpController.cs" />
+    <Compile Include="Api\ControlPanelApiController.cs" />
+    <Compile Include="Api\ExpressionGenerationController.cs" />
     <Compile Include="Api\QuestionnaireController.cs" />
     <Compile Include="App_GlobalResources\TesterApiController.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -287,17 +292,19 @@
     <Compile Include="Mailers\ISystemMailer.cs" />
     <Compile Include="Mailers\SystemMailer.cs" />
     <Compile Include="Models\AccountListViewItemModel.cs" />
+    <Compile Include="Models\MakeAdminViewModel.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\ActionItem.cs" />
     <Compile Include="Models\JsonQuestionnaireResult.cs" />
     <Compile Include="Models\JsonAddSharedUserToQuestionnaireSuccessResult.cs" />
     <Compile Include="Models\EmailConfirmationModel.cs" />
     <Compile Include="Models\JsonSuccessResult.cs" />
+    <Compile Include="Models\RebuildReadSideInputViewModel.cs" />
+    <Compile Include="Models\RebuildReadSideType.cs" />
     <Compile Include="Models\VerificationError.cs" />
     <Compile Include="Models\VerificationErrors.cs" />
     <Compile Include="Models\VerificationResult.cs" />
     <Compile Include="Models\PasswordModel.cs" />
-    <Compile Include="Models\QuestionnaireEditView.cs" />
     <Compile Include="Models\QuestionnairePublicListViewModel.cs" />
     <Compile Include="Models\ResetPasswordConfirmationModel.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />
@@ -341,6 +348,12 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
+    <EmbeddedResource Include="Scripts\components\bindings.js" />
+    <EmbeddedResource Include="Scripts\components\moment-duration-format.js" />
+    <Content Include="Scripts\viewmodels\pagebase.js" />
+    <Content Include="Scripts\viewmodels\pages\controlpanel\readside.js" />
+    <Content Include="Scripts\viewmodels\viewmodelbase.js" />
+    <Content Include="Scripts\viewmodels\designer.framework.js" />
     <Content Include="UpdatedDesigner\content\wb-options-window.css" />
     <Content Include="Content\themes\base\images\animated-overlay.gif" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -414,10 +427,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootbox.min.js" />
-    <None Include="Scripts\jquery-2.1.0.intellisense.js" />
+    <Content Include="Scripts\jquery-2.1.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\details\model.staticText.js" />
     <Content Include="Scripts\jquery-2.1.0.js" />
     <Content Include="Scripts\jquery-2.1.0.min.js" />
     <Content Include="Scripts\jquery-ui-1.10.2.js" />
@@ -517,9 +529,6 @@
     </Content>
     <Content Include="UpdatedDesigner\data\editGroup\manualListRoster.json" />
     <Content Include="UpdatedDesigner\content\designer-editor\animations.less" />
-    <Content Include="UpdatedDesigner\content\designer-editor\animations.css.map">
-      <DependentUpon>animations.css</DependentUpon>
-    </Content>
     <Content Include="UpdatedDesigner\content\vendor.css.less" />
     <Content Include="UpdatedDesigner\content\designer-editor\wb-question-editor.css.less" />
     <Content Include="UpdatedDesigner\data\editQuestion\746c323e5bf49176f1594a4719327ea8.json" />
@@ -530,16 +539,6 @@
     <Content Include="UpdatedDesigner\data\editQuestion\0be767d337cc4b6ba9a49be314f98eb9.json" />
     <Content Include="UpdatedDesigner\data\editGroup\dd45293c816e982d482334b1222ec41f.json" />
     <Content Include="UpdatedDesigner\data\editGroup\ddfaab0f37394a679f088add19325cfe.json" />
-    <Content Include="UpdatedDesigner\content\vendor.css.css.map">
-      <DependentUpon>vendor.css.css</DependentUpon>
-    </Content>
-    <Content Include="UpdatedDesigner\content\lib\wb-vars.css.css.map" />
-    <Content Include="UpdatedDesigner\content\designer-editor\wb-designer-editor.css.css.map">
-      <DependentUpon>wb-designer-editor.css.css</DependentUpon>
-    </Content>
-    <Content Include="UpdatedDesigner\content\designer-editor\wb-designer-verify-popover.css.css.map">
-      <DependentUpon>wb-designer-verify-popover.css.css</DependentUpon>
-    </Content>
     <None Include="UpdatedDesigner\data\editQuestion\d6c5faeed9fe43338b76e7a3ef184f5a.json" />
     <Content Include="UpdatedDesigner\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="UpdatedDesigner\app\index.html" />
@@ -590,41 +589,16 @@
     <Content Include="Configuration\ANK.Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Configuration\DPA.Designer.Web.config" />
+    <Content Include="Configuration\Dima.Designer.Web.config" />
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="fonts\FontAwesome.otf" />
-    <None Include="Scripts\amplify-vsdoc.js" />
+    <Content Include="Scripts\amplify-vsdoc.js" />
     <Content Include="PublicService.svc" />
     <Content Include="Scripts\amplify.js" />
     <Content Include="Scripts\amplify.min.js" />
     <Content Include="Scripts\common.js" />
-    <Content Include="Scripts\details\binder.js" />
-    <Content Include="Scripts\details\config.js" />
-    <Content Include="Scripts\details\model.error.js" />
-    <Content Include="Scripts\details\dataprimer.js" />
-    <Content Include="Scripts\details\expressionParser.js" />
-    <Content Include="Scripts\details\model.sharePerson.js" />
-    <Content Include="Scripts\details\model.statistic.js" />
-    <Content Include="Scripts\details\datacontext.js" />
-    <Content Include="Scripts\details\dataservice.js" />
-    <Content Include="Scripts\details\ko.bindingHandlers.js" />
-    <Content Include="Scripts\details\ko.debug.helpers.js" />
-    <Content Include="Scripts\details\model.answerOption.js" />
-    <Content Include="Scripts\details\model.group.js" />
-    <Content Include="Scripts\details\model.js" />
-    <Content Include="Scripts\details\model.mapper.js" />
-    <Content Include="Scripts\details\model.question.js" />
-    <Content Include="Scripts\details\model.questionnaire.js" />
-    <Content Include="Scripts\details\presenter.js" />
-    <Content Include="Scripts\details\route-config.js" />
-    <Content Include="Scripts\details\route-mediator.js" />
-    <Content Include="Scripts\details\router.js" />
-    <Content Include="Scripts\details\utils.js" />
-    <Content Include="Scripts\details\validator.js" />
-    <Content Include="Scripts\details\vm.js" />
-    <Content Include="Scripts\details\vm.questionnaire.js" />
     <Content Include="Scripts\html5shiv.js" />
     <Content Include="Scripts\infuser-amd.js" />
     <Content Include="Scripts\infuser-amd.min.gz.js" />
@@ -637,7 +611,7 @@
     <Content Include="Scripts\jquery.pnotify.js" />
     <Content Include="Scripts\jquery.pnotify.min.js" />
     <Content Include="Scripts\jquery-2.1.0.min.map" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive-custom-for-bootstrap.js" />
@@ -824,14 +798,61 @@
     <Content Include="UpdatedDesigner\vendor\angular\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular\README.md" />
     <Content Include="UpdatedDesigner\vendor\bootstrap-select\.bower.json" />
-    <Content Include="UpdatedDesigner\vendor\bootstrap-select\bootstrap-select.css" />
     <Content Include="UpdatedDesigner\vendor\bootstrap-select\bootstrap-select.jquery.json" />
-    <Content Include="UpdatedDesigner\vendor\bootstrap-select\bootstrap-select.js" />
-    <Content Include="UpdatedDesigner\vendor\bootstrap-select\bootstrap-select.min.css" />
-    <Content Include="UpdatedDesigner\vendor\bootstrap-select\bootstrap-select.min.js" />
     <Content Include="UpdatedDesigner\vendor\bootstrap-select\bower.json" />
     <Content Include="UpdatedDesigner\vendor\bootstrap-select\composer.json" />
     <Content Include="UpdatedDesigner\vendor\bootstrap-select\CONTRIBUTING.md" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\css\bootstrap-select.css" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\css\bootstrap-select.min.css" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\bootstrap-select.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\bootstrap-select.min.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-cs_CZ.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-cs_CZ.min.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-de_DE.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-de_DE.min.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-en_US.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-en_US.min.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-es_CL.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-es_CL.min.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-eu.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-eu.min.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-fr_FR.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-fr_FR.min.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-it_IT.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-it_IT.min.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-nl_NL.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-nl_NL.min.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-pl_PL.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-pl_PL.min.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-pt_BR.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-pt_BR.min.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-ro_RO.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-ro_RO.min.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-ru_RU.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-ru_RU.min.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-ua_UA.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-ua_UA.min.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-zh_CN.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-zh_CN.min.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-zh_TW.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\i18n\defaults-zh_TW.min.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\Gruntfile.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\js\bootstrap-select.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\js\i18n\defaults-cs_CZ.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\js\i18n\defaults-de_DE.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\js\i18n\defaults-en_US.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\js\i18n\defaults-es_CL.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\js\i18n\defaults-eu.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\js\i18n\defaults-fr_FR.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\js\i18n\defaults-it_IT.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\js\i18n\defaults-nl_NL.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\js\i18n\defaults-pl_PL.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\js\i18n\defaults-pt_BR.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\js\i18n\defaults-ro_RO.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\js\i18n\defaults-ru_RU.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\js\i18n\defaults-ua_UA.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\js\i18n\defaults-zh_CN.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\js\i18n\defaults-zh_TW.js" />
     <Content Include="UpdatedDesigner\vendor\bootstrap-select\package.json" />
     <Content Include="UpdatedDesigner\vendor\bootstrap-select\README.md" />
     <Content Include="UpdatedDesigner\vendor\bootstrap-select\test.html" />
@@ -1147,13 +1168,11 @@
     <Content Include="Views\Shared\_html5shiv.cshtml" />
     <Content Include="Views\Shared\Create.cshtml" />
     <Content Include="Views\Shared\Details.cshtml" />
-    <Content Include="Views\Questionnaire\Edit.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Shared\Edit.cshtml" />
     <Content Include="Views\Error\AccessDenied.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
-    <Content Include="Views\Questionnaire\_QuestionTypes.cshtml" />
     <Content Include="Views\Pdf\_RenderChild.cshtml" />
     <Content Include="Views\Questionnaire\Clone.cshtml" />
     <Content Include="Views\Pdf\_RenderQuestionDetails.cshtml" />
@@ -1174,13 +1193,8 @@
     <Content Include="Views\Shared\_trackers.cshtml" />
     <Content Include="Views\Pdf\RenderTitlePage.cshtml" />
     <Content Include="Views\Pdf\_RenderTitlePage.cshtml" />
-    <Content Include="Views\Questionnaire\_QuestionDetails.cshtml" />
-    <Content Include="Views\Questionnaire\_GroupDetails.cshtml" />
-    <Content Include="Views\Questionnaire\_QuestionnaireDetails.cshtml" />
-    <Content Include="Views\Questionnaire\_QuestionnaireDetailsForOwner.cshtml" />
     <Content Include="Views\ControlPanel\ReadSide.cshtml" />
     <Content Include="Views\ControlPanel\NConfig.cshtml" />
-    <Content Include="Views\App\Index.cshtml" />
     <Content Include="UpdatedDesigner\content\css-reset.css.less" />
     <Content Include="UpdatedDesigner\content\designer-editor\wb-context-menu.css.less" />
     <Content Include="UpdatedDesigner\content\designer-editor\wb-custom-scrollbar.css.less" />
@@ -1195,9 +1209,6 @@
     <Content Include="UpdatedDesigner\content\lib\wb-fontstyles.css.less" />
     <Content Include="UpdatedDesigner\content\lib\wb-mixins.css.less" />
     <Content Include="UpdatedDesigner\content\lib\wb-vars.css.less" />
-    <Content Include="UpdatedDesigner\content\markup.css.css.map">
-      <DependentUpon>markup.css.less</DependentUpon>
-    </Content>
     <Content Include="UpdatedDesigner\content\markup.css.less" />
     <Content Include="UpdatedDesigner\content\wb-init.css.less" />
     <Content Include="UpdatedDesigner\.bowerrc" />
@@ -1231,9 +1242,6 @@
     <Content Include="UpdatedDesigner\vendor\angular-ui-utils\.travis.yml" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-utils\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-utils\CHANGELOG.md" />
-    <Content Include="UpdatedDesigner\content\designer-editor\wb-question-list.css.css.map">
-      <DependentUpon>wb-question-list.css.css</DependentUpon>
-    </Content>
     <Content Include="UpdatedDesigner\fonts\Roboto300.woff" />
     <Content Include="UpdatedDesigner\content\lib\controls\wb-modal.css.less" />
     <Content Include="UpdatedDesigner\content\lib\wb-customfonts.css.less" />
@@ -1325,7 +1333,14 @@
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.js.map" />
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.min.js.map" />
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\README.md" />
-    <Content Include="Views\ControlPanel\NCalcToCSharp.cshtml" />
+    <Content Include="UpdatedDesigner\package.json" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\css\bootstrap-select.css.map" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\dist\js\bootstrap-select.js.map" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\less\bootstrap-select.less" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\less\variables.less" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap-select\LICENSE" />
+    <Content Include="Views\ControlPanel\ExpressionGeneration.cshtml" />
+    <Content Include="Views\ControlPanel\MakeAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1337,14 +1352,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
-      <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
-      <Name>Ncqrs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
-      <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
-      <Name>Main.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.NLog\WB.Core.GenericSubdomains.Logging.NLog.csproj">
       <Project>{afed8c20-0e91-4605-adb5-35a7f0c0dd0a}</Project>
       <Name>WB.Core.GenericSubdomains.Logging.NLog</Name>
@@ -1360,10 +1367,6 @@
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Files\WB.Core.Infrastructure.Files.csproj">
       <Project>{6AC3A080-CECA-4974-9CA1-C239695ED8F8}</Project>
       <Name>WB.Core.Infrastructure.Files</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
-      <Project>{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}</Project>
-      <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Storage\WB.Core.Infrastructure.Storage.csproj">
       <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
@@ -1381,9 +1384,9 @@
       <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
       <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
-      <Project>{D55B9582-70FD-4340-A3BC-55A33D49B2E6}</Project>
-      <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
+      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
+      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
@@ -1423,7 +1426,7 @@
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>8011</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/Designer</IISUrl>
+          <IISUrl>https://localhost/Designer</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

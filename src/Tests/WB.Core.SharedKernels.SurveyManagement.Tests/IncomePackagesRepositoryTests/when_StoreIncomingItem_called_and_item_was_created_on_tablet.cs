@@ -2,13 +2,16 @@
 using Machine.Specifications;
 using Main.Core;
 using Moq;
-using Ncqrs.Commanding.ServiceModel;
+
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.IncomePackagesRepositoryTests
@@ -20,8 +23,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.IncomePackagesRepositoryT
             syncItem = new SyncItem()
             {
                 Content = "some content",
-                Id = Guid.NewGuid(),
-                MetaInfo = PackageHelper.CompressString("some string")
+                RootId = Guid.NewGuid(),
+                MetaInfo = new ZipArchiveUtils(Mock.Of<IFileSystemAccessor>()).CompressString("some string")
             };
 
             jsonMock = new Mock<IJsonUtils>();

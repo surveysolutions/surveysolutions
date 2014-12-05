@@ -10,13 +10,12 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.CascadingDropdownTests
 {
-    internal class when_cascading_question_form_roster_references_parent_from_parent_roster : QuestionnaireVerifierTestsContext
+    internal class when_cascading_question_from_roster_references_parent_from_parent_roster : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
-           questionnaire = Create.QuestionnaireDocument(Guid.NewGuid(),
-
-                Create.Roster(Guid.NewGuid(),
+            questionnaire = Create.QuestionnaireDocument(
+                children: Create.Roster(
                     variable: "roster1",
                     rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
                     fixedTitles: new[] { "a", "b" },
@@ -27,7 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
                             Create.Option(text: "parent option 1", value: "1"),
                             Create.Option(text: "parent option 2", value: "2")
                         }),
-                        Create.Roster(Guid.NewGuid(),
+                        Create.Roster(
                             variable: "roster2",
                             rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
                             fixedTitles: new[] { "a", "b" },

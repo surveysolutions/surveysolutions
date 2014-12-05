@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                 {
                     if (child is IGroup)
                     {
-                        if (!skipPropagateGroups || ((IGroup) child).Propagated == Propagate.None && !((IGroup) child).IsRoster)
+                        if (!skipPropagateGroups || !((IGroup) child).IsRoster)
                         {
                             treeStack.Push(child);
                         }

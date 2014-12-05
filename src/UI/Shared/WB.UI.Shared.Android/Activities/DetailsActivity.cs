@@ -1,25 +1,17 @@
 using System;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
-using Android.App;
 using Android.Content.Res;
-using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Support.V4.App;
 using Android.Support.V4.View;
 using Android.Support.V4.Widget;
 using Android.Views;
 using Android.Widget;
-using Cirrious.MvvmCross.Droid.Fragging;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Shared.Android.Adapters;
 using WB.UI.Shared.Android.Controls;
-
-using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Events;
-using WB.UI.Shared.Android.Frames;
 
 namespace WB.UI.Shared.Android.Activities
 {
@@ -92,7 +84,7 @@ namespace WB.UI.Shared.Android.Activities
             this.adapter = this.CreateFrameAdapter(this.screenId);
             this.VpContent.Adapter = this.adapter;
             this.VpContent.PageSelected += this.VpContentPageSelected;
-
+            
             this.drawerToggle = new ActionBarDrawerToggle(this, this.llContainer, Android.Resource.Drawable.ic_drawer_dark,
                 Resource.String.drawer_open,
                 Resource.String.drawer_close);

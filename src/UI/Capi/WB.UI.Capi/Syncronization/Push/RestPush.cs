@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using WB.Core.GenericSubdomains.Rest;
+using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Utils.Rest;
 
 namespace WB.UI.Capi.Syncronization.Push
 {
@@ -15,25 +16,25 @@ namespace WB.UI.Capi.Syncronization.Push
             this.webExecutor = webExecutor;
         }
 
-        public void PushChunck(string login, string password, string content, CancellationToken ct)
+        public async Task PushChunck(string login, string password, string content, CancellationToken ct)
         {
             if (string.IsNullOrEmpty(content))
                 throw new InvalidOperationException("container is empty");
 
-            var result = this.webExecutor.ExecuteRestRequestAsync<bool>(PostPackagePath, ct, content, login, password, null);
+            var result = await this.webExecutor.ExecuteRestRequestAsync<bool>(PostPackagePath, ct, content, login, password, null);
 
             if (!result)
                 throw new RestException(Properties.Resource.PushFailed);
         }
 
-        public void PushBinary(string login, string password, byte[] data, string fileName, Guid interviewId, CancellationToken ct)
+        public async Task PushBinary(string login, string password, byte[] data, string fileName, Guid interviewId, CancellationToken ct)
         {
             if (data == null)
                 throw new InvalidOperationException("data is empty");
 
             var pathToPostFile = string.Format(PostFilePath, interviewId);
 
-            var result = this.webExecutor.ExecuteRestRequestAsync<bool>(pathToPostFile, 
+            bool result = await this.webExecutor.ExecuteRestRequestAsync<bool>(pathToPostFile, 
                 new []{new KeyValuePair<string, object>("interviewId", interviewId)}, 
                 ct,
                 data, fileName, login, password, null, 

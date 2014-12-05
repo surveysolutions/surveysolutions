@@ -116,13 +116,13 @@ namespace WB.UI.QuestionnaireTester
                 return;
 
             progressDialog.Show();
-            Task.Factory.StartNew(LoginAsync, this.cancellationToken);
+            Task.Factory.StartNew(this.LoginAsync, this.cancellationToken);
         
         }
 
-        private void LoginAsync()
+        private async void LoginAsync()
         {
-            bool result = CapiTesterApplication.DesignerMembership.LogOn(this.teLogin.Text, this.tePassword.Text, cancellationToken);
+            bool result = await CapiTesterApplication.DesignerMembership.LogOnAsync(this.teLogin.Text, this.tePassword.Text, cancellationToken);
             this.RunOnUiThread(() =>
             {
                 progressDialog.Hide();

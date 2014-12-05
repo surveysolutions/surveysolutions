@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 {
     using Main.Core.Entities;
 
-    internal class QuestionnaireDenormalizer :
+    internal class QuestionnaireDenormalizer :BaseDenormalizer,
         IEventHandler<NewQuestionnaireCreated>,
         IEventHandler<ExpressionsMigratedToCSharp>,
 
@@ -52,22 +52,23 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<StaticTextAdded>,
         IEventHandler<StaticTextUpdated>,
         IEventHandler<StaticTextCloned>,
-        IEventHandler<StaticTextDeleted>,
-
-        IEventHandler
+        IEventHandler<StaticTextDeleted>
     {
-        private readonly IQuestionnaireDocumentUpgrader upgrader;
         private readonly IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage;
         private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;
         private readonly ILogger logger;
 
         public QuestionnaireDenormalizer(IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage,
-            IQuestionnaireEntityFactory questionnaireEntityFactory, ILogger logger, IQuestionnaireDocumentUpgrader upgrader)
+            IQuestionnaireEntityFactory questionnaireEntityFactory, ILogger logger)
         {
-            this.upgrader = upgrader;
             this.documentStorage = documentStorage;
             this.questionnaireEntityFactory = questionnaireEntityFactory;
             this.logger = logger;
+        }
+
+        public override object[] Writers
+        {
+            get { return new object[] { documentStorage}; }
         }
 
         public void Handle(IPublishedEvent<NewQuestionnaireCreated> evnt)
@@ -511,24 +512,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
         private void AddNewQuestionnaire(QuestionnaireDocument questionnaireDocument)
         {
-            questionnaireDocument = this.upgrader.TranslatePropagatePropertiesToRosterProperties(questionnaireDocument);
-            questionnaireDocument = this.upgrader.CleanExpressionCaches(questionnaireDocument);
             this.documentStorage.Store(questionnaireDocument, questionnaireDocument.PublicKey);
-        }
-
-        public string Name
-        {
-            get { return this.GetType().Name; }
-        }
-
-        public Type[] UsesViews
-        {
-            get { return new Type[0]; }
-        }
-
-        public Type[] BuildsViews
-        {
-            get { return new Type[] { typeof(QuestionnaireDocument) }; }
         }
     }
 }

@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
     public interface IChunkReader
     {
-        SyncItem ReadChunk(Guid id);
+        SyncItem ReadChunk(string id);
 
-        IEnumerable<SynchronizationChunkMeta> GetChunkMetaDataCreatedAfter(DateTime timestamp, IEnumerable<Guid> users);
+        IEnumerable<SynchronizationChunkMeta> GetChunkMetaDataCreatedAfter(string lastSyncedPackageId, IEnumerable<Guid> users);
+        SynchronizationChunkMeta GetChunkMetaDataByTimestamp(DateTime timestamp);
     }
 }

@@ -4,12 +4,12 @@ using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Raven.Abstractions.Extensions;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveySolutions;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
@@ -53,7 +53,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         }
     }
 
-    public class InterviewsChartDenormalizer : IEventHandler,
+    public class InterviewsChartDenormalizer : BaseDenormalizer,
         IEventHandler<InterviewCreated>,
         IEventHandler<InterviewFromPreloadedDataCreated>,
         IEventHandler<InterviewOnClientCreated>,
@@ -68,6 +68,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             this.interviewDetailsStorage = interviewDetailsStorage;
             this.statisticsStorage = statisticsStorage;
+        }
+
+        public override object[] Writers
+        {
+            get { return new object[] { interviewDetailsStorage, statisticsStorage }; }
         }
 
         private void HandleCreation(Guid eventSourceId, Guid questionnaireId, long questionnaireVersion, DateTime date)
@@ -224,28 +229,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private StatisticsGroupedByDateAndTemplate CreateEmptyStatisticsLine()
         {
             return new StatisticsGroupedByDateAndTemplate();
-        }
-
-        public string Name
-        {
-            get { return this.GetType().Name; }
-        }
-
-        public Type[] UsesViews
-        {
-            get { return new Type[] { }; }
-        }
-
-        public Type[] BuildsViews
-        {
-            get
-            {
-                return new[]
-                {
-                    typeof (StatisticsGroupedByDateAndTemplate), 
-                    typeof (InterviewDetailsForChart)
-                };
-            }
         }
     }
 

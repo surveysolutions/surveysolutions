@@ -15,24 +15,25 @@ using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using CAPI.Android.Settings;
 using Main.Core.Documents;
-using Main.Core.View;
+using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
-using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
-using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.ChangeLog;
-using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services;
-using WB.Core.BoundedContexts.Capi.Synchronization.Services;
-using WB.Core.BoundedContexts.Capi.Synchronization.Views.InterviewMetaInfo;
 using WB.Core.BoundedContexts.Capi;
+using WB.Core.BoundedContexts.Capi.ChangeLog;
+using WB.Core.BoundedContexts.Capi.Implementation.ChangeLog;
+using WB.Core.BoundedContexts.Capi.Implementation.Services;
+using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.BoundedContexts.Capi.Views.InterviewMetaInfo;
+using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace CAPI.Android.Core.Model
@@ -65,13 +66,21 @@ namespace CAPI.Android.Core.Model
             var plainQuestionnaireStore = new SqlitePlainStorageAccessor<QuestionnaireDocument>(plainStore);
             var fileSystem = new FileStorageService();
             var interviewMetaInfoFactory = new InterviewMetaInfoFactory(questionnaireStore);
-            var changeLogStore = new FileChangeLogStore(interviewMetaInfoFactory);
-            var syncCacher = new FileCapiSynchronizationCacheService();
+
+            var changeLogStore = new FileChangeLogStore(
+                interviewMetaInfoFactory, 
+                this.Kernel.Get<IArchiveUtils>(), 
+                this.Kernel.Get<IFileSystemAccessor>(),
+                this.basePath);
+
+            var syncCacher = new FileCapiSynchronizationCacheService(this.Kernel.Get<IFileSystemAccessor>(), this.basePath);
             var sharedPreferencesBackup = new SharedPreferencesBackupOperator();
             var templateStore = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>();
             var propagationStructureStore = new FileReadSideRepositoryWriter<QuestionnaireRosterStructure>();
 
             var bigSurveyStore = new BackupableInMemoryReadSideRepositoryAccessor<InterviewViewModel>();
+
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(snapshotStore);
 
             this.Bind<IEventStore>().ToConstant(evenStore);
             this.Bind<ISnapshotStore>().ToConstant(snapshotStore);
@@ -96,7 +105,9 @@ namespace CAPI.Android.Core.Model
             this.Bind<ICapiSynchronizationCacheService>().ToConstant(syncCacher);
             this.Bind<IViewFactory<DashboardInput, DashboardModel>>().To<DashboardFactory>();
             this.Bind<IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo>>().ToConstant(interviewMetaInfoFactory);
-            
+            this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope();
+            this.Bind<SqlitePlainStore>().ToConstant(plainStore);
+
             var backupable = new List<IBackupable>()
             {
                     evenStore, changeLogStore, fileSystem, denormalizerStore, plainStore,

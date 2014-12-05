@@ -65,15 +65,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
         protected static IInterviewExpressionStatePrototypeProvider CreateInterviewExpressionStateProviderStub()
         {
-            return new InterviewExpressionStateProviderForTests();
-        }
-
-        public class InterviewExpressionStateProviderForTests : IInterviewExpressionStatePrototypeProvider
-        {
-            public IInterviewExpressionState GetExpressionState(Guid questionnaireId, long questionnaireVersion)
-            {
-                return new StronglyTypedInterviewEvaluator();
-            }
+            var expresstionState = new StronglyTypedInterviewEvaluator();
+            var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(x => x.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == expresstionState);
+            return interviewExpressionStatePrototypeProvider;
         }
 
         protected static void SetupInstanceToMockedServiceLocator<TInstance>(TInstance instance)

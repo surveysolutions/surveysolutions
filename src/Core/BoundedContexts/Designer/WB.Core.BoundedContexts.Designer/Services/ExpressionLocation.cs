@@ -7,9 +7,9 @@ namespace WB.Core.BoundedContexts.Designer.Services
     {
         public Guid Id { set; get; }
 
-        public ItemType ItemType { set; get; }
+        public ExpressionLocationItemType ItemType { set; get; }
 
-        public ExpressionType ExpressionType { set; get; }
+        public ExpressionLocationType ExpressionType { set; get; }
 
         public ExpressionLocation()
         {
@@ -17,33 +17,21 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
         public ExpressionLocation(string stringValue)
         {
-            var expressionLocation = stringValue.Split(':');
-            if(expressionLocation.Length != 3)
+            string[] expressionLocation = stringValue.Split(':');
+            if (expressionLocation.Length != 3)
                 throw new ArgumentException("stringValue");
 
-            this.ItemType = (ItemType) Enum.Parse(typeof (ItemType), expressionLocation[0], true);
-            this.ExpressionType = (ExpressionType)Enum.Parse(typeof(ExpressionType), expressionLocation[1], true);
-            this.Id = Guid.Parse(expressionLocation[2]);
+            ItemType =
+                (ExpressionLocationItemType)
+                    Enum.Parse(typeof (ExpressionLocationItemType), expressionLocation[0], true);
+            ExpressionType =
+                (ExpressionLocationType) Enum.Parse(typeof (ExpressionLocationType), expressionLocation[1], true);
+            Id = Guid.Parse(expressionLocation[2]);
         }
 
         public override string ToString()
         {
             return String.Format("{0}:{1}:{2}", ItemType, ExpressionType, Id);
         }
-    }
-
-    public enum ItemType
-    {
-        Questionnaire = 0,
-        Question = 1,
-        Group = 2,
-        Roster = 4,
-    }
-
-    public enum ExpressionType
-    {
-        General = 0,
-        Conditions = 1,
-        Validations = 2
     }
 }

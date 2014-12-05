@@ -4,7 +4,6 @@ using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -12,7 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class QuestionnaireRosterStructureEventHandler : IEventHandler, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted> 
+    public class QuestionnaireRosterStructureEventHandler : BaseDenormalizer, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted> 
     {
         private readonly IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
@@ -27,14 +26,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.readsideRepositoryWriter = readsideRepositoryWriter;
         }
 
-        public string Name { get { return this.GetType().Name; } }
-
-        public Type[] UsesViews
+        public override object[] Writers
         {
-            get { return new Type[0]; }
+            get { return new[] { readsideRepositoryWriter }; }
         }
-
-        public Type[] BuildsViews { get { return new Type[] { typeof(QuestionnaireRosterStructure) }; } }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {

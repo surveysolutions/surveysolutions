@@ -5,18 +5,13 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
     internal class RoslynExpressionProcessor : IExpressionProcessor
     {
-        public bool IsSyntaxValid(string expression)
-        {
-            throw new NotImplementedException("Separate engine is now used for syntax validation.");
-        }
-
         public IEnumerable<string> GetIdentifiersUsedInExpression(string expression)
         {
             string code = string.Format("class a {{ bool b() {{ return ({0}); }} }} ", expression);
@@ -31,11 +26,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 .Select(token => token.ToString())
                 .Except(string.IsNullOrEmpty)
                 .Distinct();
-        }
-
-        public bool EvaluateBooleanExpression(string expression, Func<string, object> getValueForIdentifier)
-        {
-            throw new NotImplementedException("Separate engine is now used for evaluation.");
         }
 
         private static bool IsIdentifierToken(SyntaxNodeOrToken nodeOrToken)

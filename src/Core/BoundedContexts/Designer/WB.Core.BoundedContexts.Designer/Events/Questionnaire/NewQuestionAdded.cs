@@ -9,7 +9,5 @@
     [EventName("RavenQuestionnaire.Core:Events:NewQuestionAdded")]
     public class NewQuestionAdded : FullQuestionDataEvent
     {
-        [Obsolete]
-        public Guid TargetGroupKey { get; set; }
     }
 }

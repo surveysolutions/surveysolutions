@@ -23,5 +23,7 @@ namespace CAPI.Android.Settings
         public const string INSTALLATION = "INSTALLATION";
 
         public const string LastTimestamp = "LastTimestamp";
+
+        public static readonly string ReceivedChunkIds = "ReceivedChunkIds";
     }
 }

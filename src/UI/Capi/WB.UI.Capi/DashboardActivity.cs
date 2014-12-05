@@ -4,15 +4,18 @@ using System.Globalization;
 using System.Threading;
 using Android.App;
 using Android.Content;
+using Android.Graphics;
 using Android.OS;
+using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Android.Content.PM;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
-using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
+using Microsoft.Practices.ServiceLocation;
 using Ninject;
-using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
+using WB.Core.BoundedContexts.Capi.ChangeLog;
+using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Controls;
@@ -33,6 +36,11 @@ namespace WB.UI.Capi
         private IChangeLogManipulator logManipulator = CapiApplication.Kernel.Get<IChangeLogManipulator>();
         private IPlainInterviewFileStorage plainInterviewFileStorage = CapiApplication.Kernel.Get<IPlainInterviewFileStorage>();
 
+        private ILogger Logger
+        {
+            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
+        }
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -50,6 +58,7 @@ namespace WB.UI.Capi
                     new DashboardInput(CapiApplication.Membership.CurrentUser.Id));
 
             this.llSurveyHolder = this.FindViewById<LinearLayout>(Resource.Id.llSurveyHolder);
+
             this.RunOnUiThread(() =>
                 {
                     this.llSurveyHolder.RemoveAllViews();
@@ -59,7 +68,29 @@ namespace WB.UI.Capi
                         this.AddSurveyItem(dashboardSurveyItem);
                     }
 
+                    if (this.currentDashboard.Surveys.Count == 0)
+                    {
+                        var noAssignmentsMessage = this.CreateNoAssignmentsMessageTextView(this.Resources.GetText(Resource.String.NoAssignments));
+                        this.llSurveyHolder.AddView(noAssignmentsMessage);
+                    }
                 });
+        }
+
+        private TextView CreateNoAssignmentsMessageTextView(string messge)
+        {
+            var layoutParameters = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent);
+            layoutParameters.SetMargins(15, 10, 15, 10);
+
+            var noAssignmentsMessage = new TextView(this)
+            {
+                Text = messge
+            };
+            noAssignmentsMessage.SetBackgroundDrawable(this.Resources.GetDrawable(Resource.Drawable.errorwarningstyle));
+            noAssignmentsMessage.SetPadding(10, 10, 10, 10);
+            noAssignmentsMessage.LayoutParameters = layoutParameters;
+            noAssignmentsMessage.SetTextColor(Color.Black);
+            noAssignmentsMessage.SetTextSize(ComplexUnitType.Dip, 20);
+            return noAssignmentsMessage;
         }
 
         private void AddSurveyItem(DashboardSurveyItem dashboardSurveyItem)
@@ -144,15 +175,35 @@ namespace WB.UI.Capi
             Guid interviewUserId = CapiApplication.Membership.CurrentUser.Id;
             Guid supervisorId = CapiApplication.Membership.SupervisorId;
 
-            NcqrsEnvironment.Get<ICommandService>().Execute(new CreateInterviewOnClientCommand(interviewKey, interviewUserId,
-                questionnaireId, questionnaireVersion, DateTime.UtcNow, supervisorId));
+            try
+            {
+                ServiceLocator.Current.GetInstance<ICommandService>()
+                    .Execute(new CreateInterviewOnClientCommand(interviewKey, interviewUserId,
+                        questionnaireId, questionnaireVersion, DateTime.UtcNow, supervisorId));
 
-            logManipulator.CreatePublicRecord(interviewKey);
-        
+                logManipulator.CreatePublicRecord(interviewKey);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message, ex);
+                ShowErrorMessage();
+                return;
+            }
+
             var intent = new Intent(this, typeof(CreateInterviewActivity));
             intent.PutExtra("publicKey", interviewKey.ToString());
             intent.AddFlags(ActivityFlags.NoHistory);
             this.StartActivity(intent);
+        }
+
+        private void ShowErrorMessage()
+        {
+            var alertBuilder = new AlertDialog.Builder(this);
+            
+            alertBuilder.SetTitle(Resources.GetText(Resource.String.Warning));
+            alertBuilder.SetMessage(Resources.GetText(Resource.String.Oops));
+            
+            alertBuilder.Show();
         }
 
         private void RequestData(Action restore)

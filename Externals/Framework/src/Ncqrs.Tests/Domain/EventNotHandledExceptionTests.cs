@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using FluentAssertions;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -18,6 +16,7 @@ namespace Ncqrs.Tests.Domain
         public void SetUp()
         {
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            NcqrsEnvironment.InitDefaults();
         }
 
         public class FooEvent : Event
@@ -55,27 +54,6 @@ namespace Ncqrs.Tests.Domain
             var target = new EventNotHandledException(aEvent, aMessage, theInnerException);
 
             target.InnerException.Should().Be(theInnerException);
-        }
-
-        [Test]
-        public void It_should_be_serializable()
-        {
-            var aMessage = "Hello world";
-            IEvent aEvent = new FooEvent();
-
-            var theException = new EventNotHandledException(aEvent, aMessage);
-            EventNotHandledException deserializedException = null;
-
-            using (var buffer = new MemoryStream())
-            {
-                var formatter = new BinaryFormatter();
-                formatter.Serialize(buffer, theException);
-
-                buffer.Seek(0, SeekOrigin.Begin);
-                deserializedException = (EventNotHandledException)formatter.Deserialize(buffer);
-            }
-
-            deserializedException.Should().NotBeNull();
         }
     }
 }
