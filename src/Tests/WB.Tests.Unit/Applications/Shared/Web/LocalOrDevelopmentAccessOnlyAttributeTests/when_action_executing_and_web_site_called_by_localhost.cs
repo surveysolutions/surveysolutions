@@ -8,9 +8,9 @@ using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Filters;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Shared.Web.LocalOrDevelopmentAccessOnlyAttributeTests
+namespace WB.Tests.Unit.Applications.Shared.Web.LocalOrDevelopmentAccessOnlyAttributeTests
 {
-    internal class when_action_executing_and_web_site_in_development : LocalOrDevelopmentAccessOnlyAttributeTestsContext
+    internal class when_action_executing_and_web_site_called_by_localhost : LocalOrDevelopmentAccessOnlyAttributeTestsContext
     {
         Establish context = () =>
         {
@@ -28,9 +28,9 @@ namespace WB.Tests.Unit.Shared.Web.LocalOrDevelopmentAccessOnlyAttributeTests
             exception.ShouldBeNull();
         
         private static LocalOrDevelopmentAccessOnlyAttribute filter;
-        private static ActionExecutingContext actionExecutingContext = CreateFilterContext(IsLocalhost);
         private static Exception exception;
-        private static bool IsWebsiteUnderDevelopment = true;
-        private static bool IsLocalhost = false;
+        private static bool IsWebsiteUnderDevelopment = false;
+        private static bool IsLocalhost = true;
+        private static ActionExecutingContext actionExecutingContext = CreateFilterContext(IsLocalhost);
     }
 }

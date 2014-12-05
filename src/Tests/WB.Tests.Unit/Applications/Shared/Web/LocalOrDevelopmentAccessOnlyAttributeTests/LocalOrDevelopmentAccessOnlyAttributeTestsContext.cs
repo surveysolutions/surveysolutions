@@ -6,7 +6,7 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.UI.Shared.Web.Filters;
 
-namespace WB.Tests.Unit.Shared.Web.LocalOrDevelopmentAccessOnlyAttributeTests
+namespace WB.Tests.Unit.Applications.Shared.Web.LocalOrDevelopmentAccessOnlyAttributeTests
 {
     internal class LocalOrDevelopmentAccessOnlyAttributeTestsContext
     {
