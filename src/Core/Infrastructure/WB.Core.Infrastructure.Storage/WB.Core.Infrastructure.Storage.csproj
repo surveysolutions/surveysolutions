@@ -78,6 +78,7 @@
     <Compile Include="Raven\Implementation\PlainStorage\RavenPlainStorageProvider.cs" />
     <Compile Include="Raven\Implementation\PlainStorage\RavenQueryablePlainStorageAccessor.cs" />
     <Compile Include="Raven\Implementation\WriteSide\Indexes\EventsByTimeStampAndSequenceIndex.cs" />
+    <Compile Include="Raven\Implementation\WriteSide\RavenConventionsExtensions.cs" />
     <Compile Include="Raven\PlainStorage\IRavenPlainStorageProvider.cs" />
     <Compile Include="Raven\RavenConnectionSettings.cs" />
     <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryAccessor.cs" />

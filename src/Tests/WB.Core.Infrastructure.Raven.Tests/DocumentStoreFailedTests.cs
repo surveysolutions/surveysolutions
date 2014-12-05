@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using NUnit.Framework;
 using Raven.Abstractions.Indexing;
+using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Embedded;
 using Raven.Client.Indexes;
@@ -16,7 +17,7 @@ namespace WB.Core.Infrastructure.Raven.Tests
     [TestFixture]
     public class DocumentStoreFailedTests
     {
-        protected DocumentStore _documentStore;
+        protected IDocumentStore _documentStore;
         private string path;
         [Test]
         public void Query_IndexWithBool_BoolNotFiltered()
@@ -44,7 +45,8 @@ namespace WB.Core.Infrastructure.Raven.Tests
                 Assert.That(queryWithBool.Count(), Is.EqualTo(1));
             }
         }
-        private DocumentStore NewDocumentStore()
+
+        private IDocumentStore NewDocumentStore()
         {
             path = Path.GetDirectoryName(Assembly.GetAssembly(typeof(RavenDBEventStoreTests)).CodeBase);
             path = Path.Combine(path, "TestRavenDb").Substring(6);
