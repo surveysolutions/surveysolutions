@@ -1,8 +1,6 @@
-﻿using System.IO;
-using System.Reflection;
-using log4net.Config;
+﻿using log4net.Config;
 using NUnit.Framework;
-using Raven.Client.Document;
+using Raven.Client;
 using Raven.Client.Embedded;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
 
@@ -10,32 +8,31 @@ namespace WB.Core.Infrastructure.Raven.Tests
 {
     public abstract class RavenDBTestBase
     {
-        protected DocumentStore _documentStore;
+        protected IDocumentStore DocumentStore;
 
         [SetUp]
         public void SetUpDocumentStore()
         {
             XmlConfigurator.Configure();
             //_documentStore = ConnectToDocumentStore();
-            _documentStore = NewDocumentStore();
+            this.DocumentStore = NewDocumentStore();
         }
 
         [TearDown]
         public void TearDownDocumentStore()
         {
-            if (_documentStore != null)
+            if (this.DocumentStore != null)
             {
-                _documentStore.Dispose();
+                this.DocumentStore.Dispose();
             }
         }
 
-        private DocumentStore NewDocumentStore()
+        private IDocumentStore NewDocumentStore()
         {
-            var documentStore = new EmbeddableDocumentStore
-                                    {
-                                        RunInMemory = true,
-                                        Conventions = RavenWriteSideStore.CreateStoreConventions("Snapshots"),
+            var documentStore = new EmbeddableDocumentStore {
+                                        RunInMemory = true
                                     };
+            documentStore.UpdateStoreConventions("Snapshots");
             documentStore.Initialize();
             return documentStore;
         }

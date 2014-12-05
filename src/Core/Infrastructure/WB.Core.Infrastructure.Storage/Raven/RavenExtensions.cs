@@ -27,7 +27,7 @@ namespace WB.Core.Infrastructure.Storage.Raven
                 var httpJsonRequest = serverClient.CreateRequest("DELETE", relativeUrl);
                 httpJsonRequest.ExecuteRequest();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception(string.Format("Failed to delete '{0}' database", databaseName), ex);
             }
@@ -44,12 +44,12 @@ namespace WB.Core.Infrastructure.Storage.Raven
 
                 throw new Exception(string.Format("Failed to create '{0}' database", databaseName), ex);
             }
-            
+
         }
 
         public static void ActivateBundles(this IDocumentStore documentStore, string activeBundles, string database = null)
         {
-            if(string.IsNullOrEmpty(activeBundles))
+            if (string.IsNullOrEmpty(activeBundles))
                 return;
             var bundles = activeBundles.Split(';');
             foreach (var bundle in bundles)
@@ -63,7 +63,7 @@ namespace WB.Core.Infrastructure.Storage.Raven
             using (var session = documentStore.OpenSession())
             {
                 var databaseDocument = session.Load<DatabaseDocument>("Raven/Databases/" + databaseName);
-                if(databaseDocument==null)
+                if (databaseDocument == null)
                     return;
                 var databaseDocumentSettings = databaseDocument.Settings;
                 var activeBundles = databaseDocumentSettings.ContainsKey(Constants.ActiveBundles) ? databaseDocumentSettings[Constants.ActiveBundles] : null;
