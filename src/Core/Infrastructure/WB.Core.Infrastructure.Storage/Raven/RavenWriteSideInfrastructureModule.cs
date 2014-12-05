@@ -1,7 +1,7 @@
 ﻿using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using Ninject;
-using Raven.Client.Document;
+using Raven.Abstractions.Replication;
 using WB.Core.Infrastructure.Storage.Raven.Implementation;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
 
