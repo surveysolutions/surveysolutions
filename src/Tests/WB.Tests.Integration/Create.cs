@@ -6,9 +6,12 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
+using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Implementation.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -142,20 +145,6 @@ namespace WB.Tests.Integration
             }
         }
 
-        private static IPublishedEvent<T> ToPublishedEvent<T>(T @event)
-            where T : class
-        {
-            return ToPublishedEvent<T>(@event, Guid.NewGuid());
-        }
-
-        private static IPublishedEvent<T> ToPublishedEvent<T>(T @event, Guid eventSourceId)
-            where T : class
-        {
-            return Mock.Of<IPublishedEvent<T>>(publishedEvent
-                => publishedEvent.Payload == @event &&
-                   publishedEvent.EventSourceId == eventSourceId);
-        }
-
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
         {
             return new QuestionnaireDocument
@@ -196,6 +185,32 @@ namespace WB.Tests.Integration
                 Answers = linkedToQuestionId.HasValue ? null : new List<Answer>(answers ?? new Answer[] {}),
                 LinkedToQuestionId = linkedToQuestionId,
                 StataExportCaption = variable
+            };
+        }
+
+        public static TextListQuestion ListQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, bool isMandatory = false)
+        {
+            return new TextListQuestion
+            {
+                QuestionType = QuestionType.TextList,
+                PublicKey = id ?? Guid.NewGuid(),
+                StataExportCaption = variable,
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+                Mandatory = isMandatory
+            };
+        }
+
+        public static TextQuestion TextQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, bool isMandatory = false)
+        {
+            return new TextQuestion
+            {
+                QuestionType = QuestionType.Text,
+                PublicKey = id ?? Guid.NewGuid(),
+                StataExportCaption = variable,
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+                Mandatory = isMandatory
             };
         }
 
@@ -383,6 +398,14 @@ namespace WB.Tests.Integration
                 header = levels.ToDictionary((i) => i.LevelScopeVector, (i) => i);
             }
             return new QuestionnaireExportStructure() { HeaderToLevelMap = header };
+        }
+
+        public static CommandService CommandService(IAggregateRootRepository repository = null, IEventBus eventBus = null, IAggregateSnapshotter snapshooter = null)
+        {
+            return new CommandService(
+                repository ?? Mock.Of<IAggregateRootRepository>(),
+                eventBus ?? Mock.Of<IEventBus>(),
+                snapshooter ?? Mock.Of<IAggregateSnapshotter>());
         }
     }
 }

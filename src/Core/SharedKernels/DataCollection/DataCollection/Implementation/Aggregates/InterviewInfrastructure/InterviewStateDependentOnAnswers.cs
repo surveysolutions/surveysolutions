@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -83,7 +84,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.RemoveAnswers(Events.Interview.Dtos.Identity.ToEventIdentities(rosterCalculationData.AnswersToRemoveByDecreasedRosterSize));
             }
 
-            rosterCalculationData.RosterInstantiatesFromNestedLevels.ForEach(rosterData => ApplyRosterData(rosterData));
+            rosterCalculationData.RosterInstantiatesFromNestedLevels.ForEach(this.ApplyRosterData);
         }
 
         public void ApplyEnablementChanges(EnablementChanges enablementChanges)

@@ -13,6 +13,7 @@ using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization.Update;
@@ -32,11 +33,10 @@ namespace WB.UI.Capi
         private CancellationTokenSource cancelSource;
 
         protected EventHandler<EventArgs> versionCheckEventHandler;
-        protected ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
+        protected ILogger Logger = ServiceLocator.Current.GetInstance<ILogger>();
 
-        const string syncGetlatestversion = "api/InterviewerSync/GetLatestVersion";
-
-        const string defaultTemplate = "http://";
+        const string ApplicationFileName = "interviewer.apk";
+        const string SyncGetlatestVersion = "/api/InterviewerSync/GetLatestVersion";
 
         protected override void OnStart()
         {
@@ -60,10 +60,7 @@ namespace WB.UI.Capi
             this.btnVersion.Text = string.Format("Version: {0}. Check for a new version.", SettingsManager.AppVersionName());
             
             this.geoservice = new GeoService(this);
-
-            string addressPoint = SettingsManager.GetSyncAddressPoint();
-            this.editSettingsSync.Text = string.IsNullOrEmpty(addressPoint) ? defaultTemplate : addressPoint;
-
+            this.editSettingsSync.Text = SettingsManager.GetSyncAddressPoint();
             this.textMem.Text = this.GetResourceUsage();
         }
 
@@ -166,7 +163,7 @@ namespace WB.UI.Capi
             }
             catch (Exception exc)
             {
-                this.logger.Error("Error on new version check.", exc);
+                this.Logger.Error("Error on new version check.", exc);
             }
 
             this.RunOnUiThread(() =>
@@ -203,29 +200,30 @@ namespace WB.UI.Capi
 
         private void btnUpdateConfirmed_Click(object sender, DialogClickEventArgs e)
         {
-            var fileName = "wbcapi.apk";
             var updater = new UpdateProcessor(CapiApplication.Kernel.Get<IRestServiceWrapperFactory>());
-
             this.progress = ProgressDialog.Show(this, "Downloading", "Please Wait...", true, true);
 
             Task.Factory.StartNew(() => 
             {
                 try
                 {
-                    updater.GetLatestVersion(SettingsManager.GetSyncAddressPoint() + syncGetlatestversion, fileName);
-                    updater.StartUpdate(fileName);
+                    var uri = new Uri(new Uri(SettingsManager.GetSyncAddressPoint()), SyncGetlatestVersion);
+                    updater.GetLatestVersion(uri, ApplicationFileName);
+                    updater.StartUpdate(ApplicationFileName);
                 }
                 catch (Exception ex)
                 {
-                    this.logger.Error("Error on application update", ex);
+                    this.Logger.Error("Error on application update", ex);
                 }
-                
-                this.RunOnUiThread(() =>
+                finally
+                {
+                    this.RunOnUiThread(() =>
                     {
                         // hide the progress bar
                         if (this.progress != null)
                             this.progress.Dismiss();
                     });
+                }
             });
         }
         

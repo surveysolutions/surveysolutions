@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Web;
 using System.Web.Mvc;
-using Main.Core.View;
-using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -16,7 +16,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public InterviewerController(ICommandService commandService, 
                               IGlobalInfoProvider globalInfo, 
                               ILogger logger,
-                              IViewFactory<UserViewInputModel, UserView> userViewFactory, IPasswordHasher passwordHasher)
+                              IViewFactory<UserViewInputModel, UserView> userViewFactory,
+                              IPasswordHasher passwordHasher)
             : base(commandService, globalInfo, logger, userViewFactory, passwordHasher)
         {
         }
@@ -82,7 +83,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 var user = this.GetUserById(model.Id);
                 if (user != null)
                 {
-                    this.UpdateSupervisorOrInterviewer(user: user, editModel: model);
+                    this.UpdateAccount(user: user, editModel: model);
                     this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
                     return this.Back(user.Supervisor.Id);
                 }

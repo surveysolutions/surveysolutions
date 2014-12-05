@@ -1,22 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Web;
 using System.Web.Configuration;
-using System.Web.Http;
 using System.Web.Mvc;
-using Main.Core;
-using Main.Core.Commands;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
-using Ninject.Extensions.Quartz;
 using Ninject.Web.Common;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
@@ -24,16 +16,15 @@ using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Synchronization;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.FunctionalDenormalization;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
+using WB.Core.Infrastructure.Implementation.EventDispatcher;
+using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Accessors;
-using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
-using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
@@ -42,7 +33,6 @@ using WB.Core.SharedKernels.SurveyManagement.Web;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Core.Synchronization;
-using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using WB.UI.Shared.Web.MembershipProvider.Settings;
@@ -147,12 +137,13 @@ namespace WB.UI.Supervisor.App_Start
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
+                new InfrastructureModule().AsNinject(),
+                new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath),
-                new ExpressionProcessorModule(),
                 new QuestionnaireUpgraderModule(),
-                new RavenReadSideInfrastructureModule(ravenSettings, typeof (SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly),
+                new RavenReadSideInfrastructureModule(ravenSettings, basePath, typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly),
                 new RavenPlainStorageInfrastructureModule(ravenSettings),
                 new FileInfrastructureModule(),
                 new SupervisorCoreRegistry(),
@@ -160,12 +151,15 @@ namespace WB.UI.Supervisor.App_Start
                 new SurveyManagementWebModule(),
                 new SupervisorBoundedContextModule(headquartersSettings, schedulerSettings));
 
+            NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
+            NcqrsEnvironment.InitDefaults();
+
             var eventStoreModule = ModulesFactory.GetEventStoreModule();
             var overrideReceivedEventTimeStamp = CoreSettings.EventStoreProvider == StoreProviders.Raven;
 
             kernel.Load(
                 eventStoreModule,
-                new SurveyManagementSharedKernelModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
+                new SurveyManagementSharedKernelModule(basePath,
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]), isDebug,
@@ -177,11 +171,6 @@ namespace WB.UI.Supervisor.App_Start
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             
             PrepareNcqrsInfrastucture(kernel);
-
-            var repository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(),
-                NcqrsEnvironment.Get<IAggregateSnapshotter>());
-            kernel.Bind<IDomainRepository>().ToConstant(repository);
-            kernel.Bind<ISnapshotStore>().ToConstant(NcqrsEnvironment.Get<ISnapshotStore>());
 
             ServiceLocator.Current.GetInstance<BackgroundSyncronizationTasks>().Configure();
 
@@ -200,19 +189,20 @@ namespace WB.UI.Supervisor.App_Start
 
         private static void PrepareNcqrsInfrastucture(StandardKernel kernel)
         {
-            var commandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
-            NcqrsEnvironment.SetDefault(commandService);
-            NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>(), commandService);
-            kernel.Bind<ICommandService>().ToConstant(commandService);
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
+
+            kernel.Bind<ISnapshottingPolicy>().ToMethod(context => NcqrsEnvironment.Get<ISnapshottingPolicy>());
+            kernel.Bind<ISnapshotStore>().ToMethod(context => NcqrsEnvironment.Get<ISnapshotStore>());
+            kernel.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
+            kernel.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
 
             CreateAndRegisterEventBus(kernel);
         }
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
-            var bus = new NcqrCompatibleEventDispatcher();
+            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>());
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
             kernel.Bind<IEventBus>().ToConstant(bus);
             kernel.Bind<IEventDispatcher>().ToConstant(bus);

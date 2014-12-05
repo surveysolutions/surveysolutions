@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core;
 using Main.Core.Events;
 using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
@@ -18,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository
@@ -35,11 +35,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
         private readonly SyncSettings syncSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IJsonUtils jsonUtils;
+        private readonly IArchiveUtils archiver;
         private IStreamableEventStore eventStore;
         private IEventDispatcher eventBus;
 
         public IncomePackagesRepository(ILogger logger, SyncSettings syncSettings, ICommandService commandService,
-            IFileSystemAccessor fileSystemAccessor, IJsonUtils jsonUtils,
+            IFileSystemAccessor fileSystemAccessor, IJsonUtils jsonUtils, IArchiveUtils archiver,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter, bool overrideReceivedEventTimeStamp, string origin)
         {
             this.logger = logger;
@@ -47,6 +48,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             this.commandService = commandService;
             this.fileSystemAccessor = fileSystemAccessor;
             this.jsonUtils = jsonUtils;
+            this.archiver = archiver;
             this.interviewSummaryRepositoryWriter = interviewSummaryRepositoryWriter;
             this.overrideReceivedEventTimeStamp = overrideReceivedEventTimeStamp;
             this.origin = origin;
@@ -88,7 +90,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
 
             try
             { 
-                var meta = this.jsonUtils.Deserrialize<InterviewMetaInfo>(PackageHelper.DecompressString(item.MetaInfo));
+                var meta = this.jsonUtils.Deserrialize<InterviewMetaInfo>(archiver.DecompressString(item.MetaInfo));
                 if (meta.CreatedOnClient.HasValue && meta.CreatedOnClient.Value && this.interviewSummaryRepositoryWriter.GetById(meta.PublicKey)==null)
                 {
                     AnsweredQuestionSynchronizationDto[] prefilledQuestions = null;
@@ -113,7 +115,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             catch (Exception ex)
             {
                 this.logger.Error("error on handling incoming package,", ex);
-                this.fileSystemAccessor.WriteAllText(this.GetItemFileNameForErrorStorage(item.Id),this.jsonUtils.GetItemAsContent(item));
+                this.fileSystemAccessor.WriteAllText(this.GetItemFileNameForErrorStorage(item.RootId),this.jsonUtils.GetItemAsContent(item));
             }
         }
 
@@ -152,7 +154,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
 
             var fileContent = this.fileSystemAccessor.ReadAllText(fileName);
 
-            var items = this.jsonUtils.Deserrialize<AggregateRootEvent[]>(PackageHelper.DecompressString(fileContent));
+            var items = this.jsonUtils.Deserrialize<AggregateRootEvent[]>(archiver.DecompressString(fileContent));
             if (items.Length > 0)
             {
                 if (this.EventStore == null)

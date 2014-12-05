@@ -1,4 +1,5 @@
 using System.IO;
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace WB.Core.BoundedContexts.Capi.ModelUtils
@@ -10,7 +11,8 @@ namespace WB.Core.BoundedContexts.Capi.ModelUtils
             var data = JsonConvert.SerializeObject(payload, Formatting.None,
                                                    new JsonSerializerSettings
                                                    {
-                                                       TypeNameHandling = TypeNameHandling.Objects, NullValueHandling = NullValueHandling.Ignore
+                                                       TypeNameHandling = TypeNameHandling.Objects,
+                                                       NullValueHandling = NullValueHandling.Ignore
                                                    });
             return data;
         }
@@ -18,7 +20,7 @@ namespace WB.Core.BoundedContexts.Capi.ModelUtils
         public static T GetObject<T>(string json)
         {
             var type = typeof (T);
-            if (type.IsValueType)
+            if (type.GetTypeInfo().IsValueType)
                 return JSONDeserialize<T>(json);
             return JsonConvert.DeserializeObject<T>(json,
                                                     new JsonSerializerSettings
@@ -35,17 +37,17 @@ namespace WB.Core.BoundedContexts.Capi.ModelUtils
 
         private static T JSONDeserialize<T>(string jsonText)
         {
+            var jsonSerializer = new JsonSerializer
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                ObjectCreationHandling = ObjectCreationHandling.Replace,
+                MissingMemberHandling = MissingMemberHandling.Ignore,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            };
 
-            Newtonsoft.Json.JsonSerializer json = new Newtonsoft.Json.JsonSerializer();
-
-            json.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-            json.ObjectCreationHandling = Newtonsoft.Json.ObjectCreationHandling.Replace;
-            json.MissingMemberHandling = Newtonsoft.Json.MissingMemberHandling.Ignore;
-            json.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-
-            StringReader sr = new StringReader(jsonText);
-            Newtonsoft.Json.JsonTextReader reader = new JsonTextReader(sr);
-            object result = json.Deserialize(reader, typeof (T));
+            var sr = new StringReader(jsonText);
+            var reader = new JsonTextReader(sr);
+            var result = jsonSerializer.Deserialize(reader, typeof (T));
             reader.Close();
 
             return (T) result;

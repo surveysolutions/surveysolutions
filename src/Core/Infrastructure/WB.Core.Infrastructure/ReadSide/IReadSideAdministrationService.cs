@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.Infrastructure.Implementation.ReadSide;
 
 namespace WB.Core.Infrastructure.ReadSide
 {
-    public interface IReadSideAdministrationService
+    public interface IReadSideAdministrationService : IReadSideStatusService
     {
-        string GetReadableStatus();
-
         void RebuildAllViewsAsync(int skipEvents = 0);
 
-        void RebuildViewsAsync(string[] handlerNames);
+        void RebuildViewsAsync(string[] handlerNames, int skipEvents = 0);
+
+        void RebuildViewForEventSourcesAsync(string[] handlerNames, Guid[] eventSourceIds);
 
         void StopAllViewsRebuilding();
 
-        IEnumerable<EventHandlerDescription> GetAllAvailableHandlers();
+        IEnumerable<ReadSideEventHandlerDescription> GetAllAvailableHandlers();
+        ReadSideStatus GetRebuildStatus();
     }
 }

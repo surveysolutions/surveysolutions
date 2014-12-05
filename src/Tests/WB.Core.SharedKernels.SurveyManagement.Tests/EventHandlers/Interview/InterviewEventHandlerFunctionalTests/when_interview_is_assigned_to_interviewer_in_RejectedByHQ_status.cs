@@ -1,7 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 using Moq;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
+using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         {
             viewState = CreateViewWithSequenceOfInterviewData();
             synchronizationDataStorage = new Mock<ISynchronizationDataStorage>();
-            interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional(synchronizationDataStorage.Object);
+            interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional();
             viewState.Document.Status = InterviewStatus.RejectedByHeadquarters;
         };
 

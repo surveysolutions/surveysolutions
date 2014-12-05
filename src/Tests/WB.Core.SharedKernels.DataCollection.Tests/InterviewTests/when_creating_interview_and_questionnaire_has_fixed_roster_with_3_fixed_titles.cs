@@ -75,12 +75,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext.ShouldContainEvents<RosterInstancesTitleChanged>(count: 1);
 
         It should_set_roster_id_to_all_RosterRowTitleChanged_events = () =>
-            eventContext.GetEvents<RosterRowTitleChanged>()
-                .ShouldEachConformTo(@event => @event.GroupId == fixedRosterId);
+            eventContext.GetEvents<RosterInstancesTitleChanged>()
+                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.RosterInstance.GroupId == fixedRosterId));
 
         It should_set_empty_outer_roster_vector_to_all_RosterRowTitleChanged_events = () =>
-            eventContext.GetEvents<RosterRowTitleChanged>()
-                .ShouldEachConformTo(@event => @event.OuterRosterVector.Length == 0);
+            eventContext.GetEvents<RosterInstancesTitleChanged>()
+                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.RosterInstance.OuterRosterVector.Length == 0));
 
         It should__0__or__1__or_2__as_roster_instance_ids_in_RosterRowsTitleChanged_event = () =>
           eventContext.GetEvents<RosterInstancesTitleChanged>().SelectMany(@event => @event.ChangedInstances.Select(r => r.RosterInstance.RosterInstanceId)).ToArray()

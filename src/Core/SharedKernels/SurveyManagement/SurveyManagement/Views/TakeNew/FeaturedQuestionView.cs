@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Main.Core.View;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.TakeNew
 {
-    public class FeaturedQuestionView : ICompositeView
+    public class FeaturedQuestionView 
     {
         public FeaturedQuestionView(IQuestion doc, Guid? parentId)
         {
@@ -32,18 +31,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TakeNew
             this.Triggers = null;
 
             this.Answers = doc.Answers.Select(a => new FeaturedAnswerView(a)).ToArray();
-
-
-            var autoQuestion = doc as IAutoPropagate;
-
-            if (autoQuestion != null)
-            {
-                this.MaxValue = autoQuestion.MaxValue;
-                if (autoQuestion.Triggers != null)
-                {
-                    this.Triggers = autoQuestion.Triggers.ToList();
-                }
-            }
 
             var numericQuestion = doc as INumericQuestion;
             if (numericQuestion != null)

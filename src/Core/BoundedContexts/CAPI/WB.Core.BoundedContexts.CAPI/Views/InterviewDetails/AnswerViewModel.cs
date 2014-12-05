@@ -31,4 +31,9 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         #endregion
     }
+
+    public interface ICloneable
+    {
+        object Clone();
+    }
 }

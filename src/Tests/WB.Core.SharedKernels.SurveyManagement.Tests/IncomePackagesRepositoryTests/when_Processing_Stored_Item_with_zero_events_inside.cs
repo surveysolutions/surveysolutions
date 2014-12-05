@@ -8,11 +8,13 @@ using Main.Core;
 using Main.Core.Events;
 using Moq;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.IncomePackagesRepositoryTests
@@ -49,6 +51,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.IncomePackagesRepositoryT
         private static IncomePackagesRepository incomePackagesRepository;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
         private static Guid interviewId = Guid.NewGuid();
-        private static string packageContent = PackageHelper.CompressString("random content");
+        private static string packageContent = new ZipArchiveUtils(Mock.Of<IFileSystemAccessor>()).CompressString("random content");
     }
 }

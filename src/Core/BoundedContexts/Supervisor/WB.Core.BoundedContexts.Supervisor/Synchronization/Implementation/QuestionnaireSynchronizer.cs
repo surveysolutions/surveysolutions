@@ -5,11 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Ncqrs.Commanding;
-using Ncqrs.Commanding.ServiceModel;
+
 using WB.Core.BoundedContexts.Supervisor.Questionnaires;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -149,6 +150,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private void DeleteQuestionnaire(Guid id, long version)
         {
+            this.headquartersPullContext.PushMessage(string.Format("Deleting questionnaire '{0}' version '{1}'", id, version));
+
             var interviewByQuestionnaire =
                               interviews.QueryAll(i => !i.IsDeleted && i.QuestionnaireId == id && i.QuestionnaireVersion == version);
 
@@ -159,7 +162,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 try
                 {
                     if (interviewSummary.WasCreatedOnClient)
+                    {
+                        this.headquartersPullContext.PushMessage(string.Format("Hard deleting interview '{0}' for '{1}' because {2} questionnaire deleted",
+                                interviewSummary.InterviewId, interviewSummary.ResponsibleName, id));
+
                         this.executeCommand(new HardDeleteInterview(interviewSummary.InterviewId, interviewSummary.ResponsibleId));
+                    }
                 }
                 catch (Exception e)
                 {
@@ -169,10 +177,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             if (interviewDeletionErrors.Any())
                 throw new AggregateException(
-                    string.Format(
-                        "Failed to delete one or more interviews which were created from questionnaire {0} version {1}.",
-                        id.FormatGuid(), version),
-                    interviewDeletionErrors);
+                    string.Format("Failed to delete one or more interviews which were created from questionnaire {0} version {1}.", id.FormatGuid(), version), interviewDeletionErrors);
 
             this.executeCommand(new DeleteQuestionnaire(id, version, null));
             this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(id, version);

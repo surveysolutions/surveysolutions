@@ -13,7 +13,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
@@ -34,11 +33,11 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                                                         /*_.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new Guid[] { conditionallyRecentlyEnabledMandatoryQuestionId }
                                                         &&*/ _.GetAllMandatoryQuestions() == new Guid[] { conditionallyRecentlyEnabledMandatoryQuestionId });
 
-            var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
+            //var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
 
             //setup expression processor throw exception
-            expressionProcessor.Setup(x => x.EvaluateBooleanExpression(Moq.It.IsAny<string>(), Moq.It.IsAny<Func<string, object>>()))
-                .Returns(true);
+//            expressionProcessor.Setup(x => x.EvaluateBooleanExpression(Moq.It.IsAny<string>(), Moq.It.IsAny<Func<string, object>>()))
+//                .Returns(true);
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                                                                                                 questionaire);
@@ -47,13 +46,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
                 .Returns(questionnaireRepository);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>())
-                .Returns(expressionProcessor.Object);
+            //Mock.Get(ServiceLocator.Current)
+            //    .Setup(locator => locator.GetInstance<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>())
+            //    .Returns(expressionProcessor.Object);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
 
-            interview.Apply(new QuestionDisabled(conditionallyRecentlyEnabledMandatoryQuestionId, new decimal[0]));
+            interview.Apply(Create.Events.QuestionsDisabled(conditionallyRecentlyEnabledMandatoryQuestionId));
             interview.Apply(new NumericIntegerQuestionAnswered(userId, conditionallyRecentlyEnabledMandatoryQuestionId, new decimal[0],
                 DateTime.Now, 2));
             eventContext = new EventContext();

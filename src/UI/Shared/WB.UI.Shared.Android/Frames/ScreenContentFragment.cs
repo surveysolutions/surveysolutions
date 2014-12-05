@@ -11,6 +11,7 @@ using WB.UI.Shared.Android.Controls;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Events;
 using WB.UI.Shared.Android.Extensions;
+using WB.UI.Shared.Android.Helpers;
 
 namespace WB.UI.Shared.Android.Frames
 {
@@ -63,6 +64,8 @@ namespace WB.UI.Shared.Android.Frames
             this.llContent.DescendantFocusability = DescendantFocusability.BeforeDescendants;
             this.llContent.ItemsCanFocus = true;
             this.llContent.ScrollingCacheEnabled = false;
+            this.llContent.AttachCheckAndClearFocusForPanel(this.Activity);
+
             this.llContent.ChildViewRemoved += this.llContent_ChildViewRemoved;
            
             return this.top;

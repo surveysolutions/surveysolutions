@@ -3,7 +3,6 @@ using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -12,7 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     [Obsolete("Remove it when HQ is a separate application")]
-    public class QuestionnaireBrowseItemEventHandler : IEventHandler, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted> 
+    public class QuestionnaireBrowseItemEventHandler : BaseDenormalizer, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted> 
     {
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> readsideRepositoryWriter;
@@ -23,14 +22,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.readsideRepositoryWriter = readsideRepositoryWriter;
         }
 
-        public string Name { get { return this.GetType().Name; } }
-
-        public Type[] UsesViews
+        public override object[] Writers
         {
-            get { return new Type[0]; }
+            get { return new[] { readsideRepositoryWriter }; }
         }
-
-        public Type[] BuildsViews { get { return new Type[] { typeof(QuestionnaireBrowseItem) }; } }
 
         private  QuestionnaireBrowseItem CreateBrowseItem(long version, QuestionnaireDocument questionnaireDocument, bool allowCensusMode)
         {

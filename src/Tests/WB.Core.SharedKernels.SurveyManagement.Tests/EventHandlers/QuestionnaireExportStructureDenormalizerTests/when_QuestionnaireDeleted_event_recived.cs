@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Questionnai
             dataExportService = new Mock<IDataExportRepositoryWriter>();
 
             questionnaireExportStructureDenormalizer = new QuestionnaireExportStructureDenormalizer(
-                questionnaireExportStructureMock.Object, dataExportService.Object, Mock.Of<IExportViewFactory>(), Mock.Of<IPlainQuestionnaireRepository>(), Mock.Of<IQuestionnaireUpgradeService>());
+                questionnaireExportStructureMock.Object, dataExportService.Object, Mock.Of<IExportViewFactory>(), Mock.Of<IPlainQuestionnaireRepository>());
         };
 
         Because of = () =>

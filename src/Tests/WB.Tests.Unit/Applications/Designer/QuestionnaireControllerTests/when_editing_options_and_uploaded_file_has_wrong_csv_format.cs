@@ -2,6 +2,7 @@ using System.IO;
 using System.Web;
 using Machine.Specifications;
 using Moq;
+using WB.UI.Designer.BootstrapSupport;
 using WB.UI.Designer.Controllers;
 using It = Machine.Specifications.It;
 
@@ -23,7 +24,7 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireControllerTests
         Because of = () => controller.EditOptions(postedFile);
 
         It should_add_error_message_to_temp_data = () =>
-            controller.TempData["error"].ShouldEqual("CSV-file has wrong format or file is corrupted.");
+            controller.TempData[Alerts.ERROR].ShouldEqual("CSV-file has wrong format or file is corrupted.");
 
         Cleanup stuff = () =>
         {

@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
+    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</ProjectGuid>
@@ -9,8 +10,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WB.Core.SharedKernels.DataCollection</RootNamespace>
     <AssemblyName>WB.Core.SharedKernels.DataCollection</AssemblyName>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,6 +37,9 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CsvHelper">
+      <HintPath>..\..\..\..\..\packages\CsvHelper.2.2.2\lib\net40-client\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -45,21 +51,20 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Accessors\QuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="Aggregates\IQuestionnaire.cs" />
-    <Compile Include="Aggregates\UserAR.cs" />
+    <Compile Include="Implementation\Aggregates\User.cs" />
+    <Compile Include="Implementation\Aggregates\Snapshots\UserState.cs" />
     <Compile Include="Commands\Interview\AnswerMultipleOptionsLinkedQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerNumericIntegerQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerPictureQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerTextListQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerQRBarcodeQuestionCommand.cs" />
-    <Compile Include="Commands\Interview\CancelInterviewByHQSynchronizationCommand.cs" />
+    <Compile Include="Commands\Interview\CancelInterviewByHqSynchronizationCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewCreatedOnClientCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewOnClientCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewWithPreloadedData.cs" />
@@ -70,11 +75,14 @@
     <Compile Include="Commands\Interview\MarkInterviewAsSentToHeadquarters.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\Interview\RejectInterviewFromHeadquartersCommand.cs" />
+    <Compile Include="Commands\Interview\RejectInterviewFromHeadquartersCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Commands\Interview\SynchronizeInterviewFromHeadquarters.cs" />
     <Compile Include="Commands\Questionnaire\DeleteQuestionnaire.cs" />
     <Compile Include="Commands\Questionnaire\ImportFromDesignerForTester.cs" />
     <Compile Include="Commands\Questionnaire\ImportFromSupervisor.cs" />
+    <Compile Include="Commands\Questionnaire\QuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\RegisterPlainQuestionnaire.cs" />
     <Compile Include="Commands\User\ChangeUserCommand.cs" />
     <Compile Include="Commands\User\CreateUserCommand.cs" />
@@ -88,7 +96,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DataTransferObjects\Synchronization\RosterSynchronizationDto.cs" />
-    <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
+    <Compile Include="EventHandler\FileStoreDenormalizer.cs" />
+    <Compile Include="Events\File\FileDeleted.cs" />
+    <Compile Include="Events\File\FileMetaUpdated.cs" />
+    <Compile Include="Events\File\FileUploaded.cs" />
     <Compile Include="Events\Interview\AnswersDeclaredInvalid.cs" />
     <Compile Include="Events\Interview\AnswersDeclaredValid.cs" />
     <Compile Include="Events\Interview\AnswersRemoved.cs" />
@@ -116,20 +127,21 @@
     <Compile Include="Events\Interview\InterviewForTestingCreated.cs" />
     <Compile Include="Events\Interview\MultipleOptionsLinkedQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericIntegerQuestionAnswered.cs" />
-    <Compile Include="Events\Interview\NumericQuestionAnswered.cs" />
     <Compile Include="Events\Interview\QuestionsDisabled.cs" />
     <Compile Include="Events\Interview\QuestionsEnabled.cs" />
-    <Compile Include="Events\Interview\RosterRowAdded.cs" />
-    <Compile Include="Events\Interview\RosterRowRemoved.cs" />
     <Compile Include="Events\Interview\RosterInstancesAdded.cs" />
     <Compile Include="Events\Interview\RosterInstancesRemoved.cs" />
     <Compile Include="Events\Interview\RosterInstancesTitleChanged.cs" />
-    <Compile Include="Events\Interview\RosterRowTitleChanged.cs" />
     <Compile Include="Events\Interview\TextListQuestionAnswered.cs" />
     <Compile Include="Events\Questionnaire\PlainQuestionnaireRegistered.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireDeleted.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireAssemblyImported.cs" />
+    <Compile Include="Events\User\NewUserCreated.cs" />
+    <Compile Include="Events\User\UserBaseEvent.cs" />
+    <Compile Include="Events\User\UserChanged.cs" />
+    <Compile Include="Events\User\UserLocked.cs" />
     <Compile Include="Events\User\UserLockedBySupervisor.cs" />
+    <Compile Include="Events\User\UserUnlocked.cs" />
     <Compile Include="Events\User\UserUnlockedBySupervisor.cs" />
     <Compile Include="Factories\IQuestionnaireFactory.cs" />
     <Compile Include="Factories\IQuestionnaireRosterStructureFactory.cs" />
@@ -172,17 +184,12 @@
     <Compile Include="Commands\Interview\SetFlagToAnswerCommand.cs" />
     <Compile Include="Commands\Interview\SynchronizeInterviewCommand.cs" />
     <Compile Include="Commands\Interview\ApplySynchronizationMetadata.cs" />
-    <Compile Include="Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs" />
     <Compile Include="Commands\Questionnaire\ImportFromDesigner.cs" />
     <Compile Include="DataTransferObjects\Synchronization\AnsweredQuestionSynchronizationDto.cs" />
     <Compile Include="DataTransferObjects\Synchronization\InterviewSynchronizationDto.cs" />
     <Compile Include="Events\Interview\AnswerCommented.cs" />
-    <Compile Include="Events\Interview\AnswerRemoved.cs" />
     <Compile Include="Events\Interview\Base\GroupPassiveEvent.cs" />
     <Compile Include="Events\Interview\Base\QuestionActiveEvent.cs" />
-    <Compile Include="Events\Interview\AnswerDeclaredInvalid.cs" />
-    <Compile Include="Events\Interview\AnswerDeclaredValid.cs" />
     <Compile Include="Events\Interview\Base\InterviewActiveEvent.cs" />
     <Compile Include="Events\Interview\Base\QuestionPassiveEvent.cs" />
     <Compile Include="Events\Interview\Base\InterviewPassiveEvent.cs" />
@@ -191,8 +198,6 @@
     <Compile Include="Events\Interview\FlagRemovedFromAnswer.cs" />
     <Compile Include="Events\Interview\FlagSetToAnswer.cs" />
     <Compile Include="Events\Interview\GeoLocationQuestionAnswered.cs" />
-    <Compile Include="Events\Interview\GroupDisabled.cs" />
-    <Compile Include="Events\Interview\GroupEnabled.cs" />
     <Compile Include="Events\Interview\GroupPropagated.cs" />
     <Compile Include="Events\Interview\InterviewApproved.cs" />
     <Compile Include="Events\Interview\InterviewCreated.cs" />
@@ -210,8 +215,6 @@
     <Compile Include="Events\Interview\InterviewStatusChanged.cs" />
     <Compile Include="Events\Interview\MultipleOptionsQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericRealQuestionAnswered.cs" />
-    <Compile Include="Events\Interview\QuestionDisabled.cs" />
-    <Compile Include="Events\Interview\QuestionEnabled.cs" />
     <Compile Include="Events\Interview\SingleOptionQuestionAnswered.cs" />
     <Compile Include="Events\Interview\SupervisorAssigned.cs" />
     <Compile Include="Events\Interview\TextQuestionAnswered.cs" />
@@ -235,7 +238,6 @@
     <Compile Include="Implementation\Repositories\PlainInterviewFileStorage.cs" />
     <Compile Include="Implementation\Repositories\PlainQuestionnaireRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DataCollectionSharedKernelModule.cs" />
     <Compile Include="ReadSide\IVersionedReadSideRepositoryReader.cs" />
     <Compile Include="ReadSide\IVersionedReadSideRepositoryWriter.cs" />
     <Compile Include="ReadSide\IVersionedView.cs" />
@@ -247,13 +249,14 @@
     <Compile Include="Repositories\IQuestionnaireRepository.cs" />
     <Compile Include="Utils\AnswerUtils.cs" />
     <Compile Include="Utils\LinkedQuestionUtils.cs" />
+    <Compile Include="Utils\LinqUtils.cs" />
     <Compile Include="Utils\QuestionnaireHelper.cs" />
     <Compile Include="Utils\RepositoryKeysHelper.cs" />
-    <Compile Include="Utils\TypeConverterUtils.cs" />
     <Compile Include="ValueObjects\Interview\InterviewStatus.cs" />
     <Compile Include="ValueObjects\Interview\InterviewItemId.cs" />
     <Compile Include="ValueObjects\ValueVector.cs" />
     <Compile Include="Views\BinaryData\InterviewBinaryDataDescriptor.cs" />
+    <Compile Include="Views\FileDescription.cs" />
     <Compile Include="Views\Interview\InterviewTextListAnswer.cs" />
     <Compile Include="Views\Interview\InterviewTextListAnswers.cs" />
     <Compile Include="Views\Questionnaire\FeaturedQuestionItem.cs">
@@ -277,16 +280,9 @@
     <Compile Include="Views\Questionnaire\RosterScopeDescription.cs" />
     <Compile Include="Views\Questionnaire\RosterScopeType.cs" />
     <Compile Include="Views\Questionnaire\RosterTitleQuestionDescription.cs" />
+    <Compile Include="Views\UserDocument.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
-      <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
-      <Name>Ncqrs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
-      <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
-      <Name>Main.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
@@ -299,8 +295,12 @@
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
+      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
+      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
-      <Project>{553b4fc2-5fc7-4256-b14d-82758d64a3bd}</Project>
+      <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
       <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
     </ProjectReference>
   </ItemGroup>
@@ -313,7 +313,7 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

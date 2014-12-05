@@ -1,5 +1,4 @@
 ﻿@model WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf.PdfQuestionView
-@using Main.Core.Entities.SubEntities
 @using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 <div class="question no-page-break">
     <span>
@@ -19,7 +18,7 @@
             @foreach (PdfAnswerView answer in this.Model.Answers.Take(20))
             {
                 <li>
-                    <input type="@(Model.QuestionType == QuestionType.MultyOption ? "checkbox" : "radio")" title="@answer.Title" disabled="disabled" />
+                    <input type="@(Model.QuestionType == Main.Core.Entities.SubEntities.QuestionType.MultyOption ? "checkbox" : "radio")" title="@answer.Title" disabled="disabled" />
                     <span class="answer-value">
                         @answer.AnswerValue
                     </span>
@@ -40,13 +39,14 @@
     else {
         switch (Model.QuestionType)
         {
-            case QuestionType.Text: {
+            case Main.Core.Entities.SubEntities.QuestionType.Text:
+                {
                 <div class="answer-placeholder">&nbsp;</div>
                 <div class="answer-placeholder">&nbsp;</div>
                 <div class="answer-placeholder">&nbsp;</div>
                     break;
                 }
-            case QuestionType.DateTime:
+            case Main.Core.Entities.SubEntities.QuestionType.DateTime:
                 {
                     <span class="no-line-break">
                         <span class="answer-placeholder date-answer-day"></span>/
@@ -55,7 +55,7 @@
                     </span>
                     break;
                 }
-            case QuestionType.Numeric:
+            case Main.Core.Entities.SubEntities.QuestionType.Numeric:
                 {
                     <span class="no-line-break">
                         @for (int i = 0; i < 10; i++) {

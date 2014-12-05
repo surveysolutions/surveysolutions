@@ -3,12 +3,12 @@ using System.Net;
 using System.Net.Http;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Main.Core.View;
-using Main.Core.View.User;
 using Moq;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using It = Machine.Specifications.It;
 

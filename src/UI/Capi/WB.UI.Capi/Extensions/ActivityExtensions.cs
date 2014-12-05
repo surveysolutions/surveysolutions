@@ -1,5 +1,4 @@
 using Android.App;
-using Android.Content;
 using Android.Widget;
 using WB.UI.Capi.Controls.Navigation;
 

@@ -57,26 +57,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractFunctionalEventHandlerTests\AbstractFunctionalEventHandlerTestContext.cs" />
-    <Compile Include="AbstractFunctionalEventHandlerTests\TestableFunctionalEventHandler.cs" />
-    <Compile Include="AbstractFunctionalEventHandlerTests\when_batch_of_10_events_is_published_on_event_handler.cs" />
     <Compile Include="AssemblyContext.cs" />
-    <Compile Include="InMemoryViewWriterTests\InMemoryViewWriterTestContext.cs" />
-    <Compile Include="InMemoryViewWriterTests\when_disposing_inmemroywriter_after_view_was_created_in_memory.cs" />
-    <Compile Include="InMemoryViewWriterTests\when_disposing_inmemroywriter_after_view_was_deleted_in_memory.cs" />
-    <Compile Include="InMemoryViewWriterTests\when_disposing_inmemroywriter_after_view_was_updated_in_memory.cs" />
-    <Compile Include="NcqrCompatibleEventDispatcherTests\NcqrCompatibleEventDispatcherTestContext.cs" />
-    <Compile Include="NcqrCompatibleEventDispatcherTests\whent_publish_0_events_on_bus_with_functional_style_denormalizer_registred.cs" />
-    <Compile Include="NcqrCompatibleEventDispatcherTests\whent_publish_10_events_on_bus_with_functional_style_denormalizer_registred.cs" />
-    <Compile Include="NcqrCompatibleEventDispatcherTests\whent_publish_10_events_on_bus_with_ncqrs_style_denormalizer_registred.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="View.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
+      <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
+      <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
       <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
@@ -85,6 +77,10 @@
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
       <Project>{e7d429a7-1c9f-4f25-9c23-686ef9c2d60a}</Project>
       <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
+      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
+      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
     </ProjectReference>
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

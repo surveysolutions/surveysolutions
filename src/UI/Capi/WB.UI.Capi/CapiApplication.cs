@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using Android.App;
 using Android.Content;
 using Android.Runtime;
@@ -8,48 +11,53 @@ using CAPI.Android.Core.Model.EventHandlers;
 using CAPI.Android.Core.Model.FileStorage;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.Login;
+using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.Droid.Platform;
-using Main.Core;
-using Main.Core.Documents;
 using Main.Core.Events.File;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Events.User;
-using Main.Core.View;
 using Main.DenormalizerStorage;
 using Microsoft.Practices.ServiceLocation;
 using Mono.Android.Crasher;
 using Mono.Android.Crasher.Attributes;
 using Mono.Android.Crasher.Data.Submit;
 using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
-using WB.Core.BoundedContexts.Capi;
+using Ninject.Modules;
 using WB.Core.BoundedContexts.Capi.EventHandler;
+using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.BoundedContexts.Capi.Services;
-using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services;
-using WB.Core.BoundedContexts.Capi.Synchronization.Services;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.BoundedContexts.Supervisor.Factories;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Rest.Android;
 using WB.Core.GenericSubdomains.ErrorReporting;
 using WB.Core.GenericSubdomains.Logging.AndroidLogger;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Files;
+using WB.Core.Infrastructure.Implementation.Services;
+using WB.Core.Infrastructure.Ncqrs;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.EventHandler;
+using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.ExpressionProcessor;
+using WB.Core.SharedKernels.SurveyManagement;
 using WB.UI.Capi.Implementations.Navigation;
 using WB.UI.Capi.Injections;
+using WB.UI.Capi.Syncronization;
+using WB.UI.Capi.Syncronization.Implementation;
+using WB.UI.Shared.Android;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Extensions;
 
@@ -63,6 +71,15 @@ namespace WB.UI.Capi
     [Crasher(UseCustomData = false)]
     public class CapiApplication : Application
     {
+        public class ServiceLocationModule : NinjectModule
+        {
+            public override void Load()
+            {
+                ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.Kernel));
+                this.Kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
+            }
+        }
+
         #region static properties
 
         public static TOutput LoadView<TInput, TOutput>(TInput input)
@@ -74,7 +91,7 @@ namespace WB.UI.Capi
 
         public static ICommandService CommandService
         {
-            get { return NcqrsEnvironment.Get<ICommandService>(); }
+            get { return Kernel.Get<ICommandService>(); }
         }
 
         public static IDataCollectionAuthentication Membership
@@ -115,52 +132,38 @@ namespace WB.UI.Capi
             bus.RegisterHandler(eventHandler, typeof (MultipleOptionsQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (NumericIntegerQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (NumericRealQuestionAnswered));
-            bus.RegisterHandler(eventHandler, typeof (NumericQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (TextQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (TextListQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (SingleOptionQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (DateTimeQuestionAnswered));
-            bus.RegisterHandler(eventHandler, typeof (GroupDisabled));
-            bus.RegisterHandler(eventHandler, typeof (GroupEnabled));
             bus.RegisterHandler(eventHandler, typeof (GroupsDisabled));
             bus.RegisterHandler(eventHandler, typeof (GroupsEnabled));
-            bus.RegisterHandler(eventHandler, typeof (QuestionDisabled));
-            bus.RegisterHandler(eventHandler, typeof (QuestionEnabled));
             bus.RegisterHandler(eventHandler, typeof (QuestionsDisabled));
             bus.RegisterHandler(eventHandler, typeof (QuestionsEnabled));
-            bus.RegisterHandler(eventHandler, typeof (AnswerDeclaredInvalid));
-            bus.RegisterHandler(eventHandler, typeof (AnswerDeclaredValid));
             bus.RegisterHandler(eventHandler, typeof (AnswersDeclaredInvalid));
             bus.RegisterHandler(eventHandler, typeof (AnswersDeclaredValid));
             bus.RegisterHandler(eventHandler, typeof(AnswerCommented));
             bus.RegisterHandler(eventHandler, typeof(InterviewCompleted));
             bus.RegisterHandler(eventHandler, typeof(InterviewRestarted));
             bus.RegisterHandler(eventHandler, typeof(GroupPropagated));
-            bus.RegisterHandler(eventHandler, typeof(RosterRowAdded));
-            bus.RegisterHandler(eventHandler, typeof(RosterRowRemoved));
             bus.RegisterHandler(eventHandler, typeof(RosterInstancesAdded));
             bus.RegisterHandler(eventHandler, typeof(RosterInstancesRemoved));
             bus.RegisterHandler(eventHandler, typeof(SynchronizationMetadataApplied));
             bus.RegisterHandler(eventHandler, typeof(GeoLocationQuestionAnswered));
-            bus.RegisterHandler(eventHandler, typeof(AnswerRemoved));
             bus.RegisterHandler(eventHandler, typeof(AnswersRemoved));
             bus.RegisterHandler(eventHandler, typeof(SingleOptionLinkedQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(MultipleOptionsLinkedQuestionAnswered));
-            bus.RegisterHandler(eventHandler, typeof(RosterRowTitleChanged));
             bus.RegisterHandler(eventHandler, typeof(RosterInstancesTitleChanged));
             bus.RegisterHandler(eventHandler, typeof(QRBarcodeQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(PictureQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(TextListQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(InterviewOnClientCreated));
 
-            bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(AnswerRemoved));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(AnswersRemoved));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(TextQuestionAnswered));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(NumericIntegerQuestionAnswered));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(NumericRealQuestionAnswered));
-            bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(NumericQuestionAnswered));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(DateTimeQuestionAnswered));
-
 
             bus.RegisterHandler(answerOptionsForCascadingQuestionsDenormalizer, typeof(AnswersRemoved));
             bus.RegisterHandler(answerOptionsForCascadingQuestionsDenormalizer, typeof(SingleOptionQuestionAnswered));
@@ -229,10 +232,27 @@ namespace WB.UI.Capi
             bus.RegisterHandler(dashboardeventHandler, typeof (NumericRealQuestionAnswered));
             bus.RegisterHandler(dashboardeventHandler, typeof(NumericIntegerQuestionAnswered));
             bus.RegisterHandler(dashboardeventHandler, typeof(DateTimeQuestionAnswered));
-            bus.RegisterHandler(dashboardeventHandler, typeof(AnswerRemoved));
         }
 
-        
+        internal static void RegisterEventHandlers(InProcessEventBus bus, IKernel kernel)
+        {
+            IEnumerable<object> handlers = Enumerable.Distinct<object>(kernel.GetAll(typeof(IEventHandler<>))).ToList();
+            foreach (object handler in handlers)
+            {
+                IEnumerable<Type> ieventHandlers = handler.GetType().GetInterfaces().Where(IsIEventHandlerInterface);
+                foreach (Type ieventHandler in ieventHandlers)
+                {
+                    bus.RegisterHandler(handler, ieventHandler.GenericTypeArguments[0]);
+                }
+            }
+        }
+
+        private static bool IsIEventHandlerInterface(Type type)
+        {
+            var typeInfo = type.GetTypeInfo();
+            return typeInfo.IsInterface && typeInfo.IsGenericType && typeInfo.GetGenericTypeDefinition() == typeof(IEventHandler<>);
+        }
+
         public override void OnCreate()
         {
             base.OnCreate();
@@ -241,11 +261,11 @@ namespace WB.UI.Capi
 
              // initialize app if necessary
             MvxAndroidSetupSingleton.EnsureSingletonAvailable(this);
-            MvxAndroidSetupSingleton.Instance.EnsureInitialized();
+            MvxSingleton<MvxAndroidSetupSingleton>.Instance.EnsureInitialized();
+            NcqrsEnvironment.InitDefaults();
 
-
-            var basePath = Directory.Exists(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal))
-                ? System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal)
+            var basePath = Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Personal))
+                ? Environment.GetFolderPath(Environment.SpecialFolder.Personal)
                 : Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
             
             const string SynchronizationFolder = "SYNC";
@@ -253,50 +273,54 @@ namespace WB.UI.Capi
             const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
 
             this.kernel = new StandardKernel(
+                new ServiceLocationModule(),
+                new InfrastructureModule().AsNinject(),
+                new NcqrsModule().AsNinject(),
                 new CapiBoundedContextModule(),
                 new AndroidCoreRegistry(),
                 new RestAndroidModule(),
                 new FileInfrastructureModule(),
+                new AndroidLoggingModule(),
                 new AndroidModelModule(basePath, new[] { SynchronizationFolder, InterviewFilesFolder, QuestionnaireAssembliesFolder }),
                 new ErrorReportingModule(basePath),
-                new AndroidLoggingModule(),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath, 
                     syncDirectoryName: SynchronizationFolder, dataDirectoryName: InterviewFilesFolder, 
-                    questionnaireAssembliesFolder : QuestionnaireAssembliesFolder),
-                new ExpressionProcessorModule());
+                    questionnaireAssembliesFolder : QuestionnaireAssembliesFolder));
 
             CrashManager.Initialize(this);
             CrashManager.AttachSender(() => new FileReportSender("Interviewer", this.kernel.Get<IInfoFileSupplierRegistry>()));
          
             this.kernel.Bind<Context>().ToConstant(this);
-            ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
-            this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
-            
-            NcqrsInit.Init(this.kernel);
-       
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());
-            NcqrsEnvironment.SetDefault(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
-            var domainrepository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(), NcqrsEnvironment.Get<IAggregateSnapshotter>());
-            this.kernel.Bind<IDomainRepository>().ToConstant(domainrepository);
-            this.kernel.Bind<ICommandService>().ToConstant(CommandService);
+
+            NcqrsEnvironment.SetDefault(ServiceLocator.Current.GetInstance<ILogger>());
+
+            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
+
+            kernel.Bind<ISnapshottingPolicy>().ToMethod(context => NcqrsEnvironment.Get<ISnapshottingPolicy>());
+            kernel.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
+            kernel.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
+
+            var bus = new InProcessEventBus(true, Kernel.Get<IEventStore>());
+            NcqrsEnvironment.SetDefault<IEventBus>(bus);
+            kernel.Bind<IEventBus>().ToConstant(bus).Named("interviewViewBus");
+
+            NcqrsEnvironment.SetDefault(Kernel.Get<ISnapshotStore>());
+            NcqrsEnvironment.SetDefault(Kernel.Get<IEventStore>());
 
             this.kernel.Unbind<IAnswerOnQuestionCommandService>();
             this.kernel.Bind<IAnswerOnQuestionCommandService>().To<AnswerOnQuestionCommandService>().InSingletonScope();
             this.kernel.Bind<IAnswerProgressIndicator>().To<AnswerProgressIndicator>().InSingletonScope();
             this.kernel.Bind<IQuestionViewFactory>().To<DefaultQuestionViewFactory>();
             this.kernel.Bind<INavigationService>().To<NavigationService>().InSingletonScope();
+            this.kernel.Bind<ISyncPackageIdsStorage>().To<SyncPackageIdsStorage>().InSingletonScope();
+
 
             this.kernel.Unbind<ISyncPackageRestoreService>();
             this.kernel.Bind<ISyncPackageRestoreService>().To<SyncPackageRestoreService>().InSingletonScope();
 
-            this.kernel.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope();
+            this.kernel.Bind<IWaitService>().To<WaitService>().InSingletonScope();
             
             #region register handlers
-
-            var interviewViewBus = new InProcessEventBus();
-            this.kernel.Bind<IEventBus>().ToConstant(interviewViewBus).Named("interviewViewBus");
-
-            var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
 
             var eventHandler =
                 new InterviewViewModelDenormalizer(
@@ -312,12 +336,6 @@ namespace WB.UI.Capi
                 bus, 
                 eventHandler, 
                 answerOptionsForLinkedQuestionsDenormalizer, 
-                answerOptionsForCascadingQuestionsDenormalizer);
-            
-            this.RegisterInterviewHandlerInBus(
-                interviewViewBus, 
-                eventHandler, 
-                answerOptionsForLinkedQuestionsDenormalizer,
                 answerOptionsForCascadingQuestionsDenormalizer);
 
             this.InitTemplateStorage(bus);
@@ -340,7 +358,6 @@ namespace WB.UI.Capi
         {
             if (disposing)
             {
-
                 AndroidEnvironment.UnhandledExceptionRaiser -= this.AndroidEnvironmentUnhandledExceptionRaiser;
             }
 

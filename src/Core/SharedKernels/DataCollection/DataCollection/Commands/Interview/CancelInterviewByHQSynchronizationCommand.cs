@@ -1,13 +1,11 @@
 ﻿using System;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
-    [MapsToAggregateRootMethod(typeof(Implementation.Aggregates.Interview), "CancelByHQSynchronization")]
-    public class CancelInterviewByHQSynchronizationCommand : InterviewCommand
+    public class CancelInterviewByHqSynchronizationCommand : InterviewCommand
     {
-        public CancelInterviewByHQSynchronizationCommand(Guid interviewId, Guid userId)
+        public CancelInterviewByHqSynchronizationCommand(Guid interviewId, Guid userId)
             : base(interviewId, userId) {}
     }
 }

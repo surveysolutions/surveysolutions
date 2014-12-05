@@ -1,0 +1,104 @@
+﻿@{
+    this.Layout = "~/Views/Shared/Layout.admin.cshtml";
+    this.ViewBag.Title = "Control Panel: Expression Generation";
+}
+
+
+<h3>Questionnaire Expression Generation</h3>
+
+<div class="well">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="questionnaireId" class="col-xs-3 control-label">Questionnaire identifier</label>
+            <div class="col-xs-9">
+                <input id="questionnaireId" type="text" class="form-control" value="00000000-0000-0000-0000-000000000000" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-offset-3 col-xs-9">
+                <button id="generate" type="button" class="btn ">Generate single class</button>
+                <button id="getPartial" type="button" class="btn ">Get a list</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-offset-3 col-xs-9">
+                <button id="getAssembly" type="button" class="btn ">Get Assembly</button>
+            </div>
+        </div>
+        <pre id="outputResult" class="help-block"></pre>
+    </form>
+</div>
+
+<pre id="resultArea" style="height: 400px; overflow-y: scroll;"></pre>
+
+@section scripts
+{
+    <script type="text/javascript">
+
+    $(function () {
+
+        $('#generate').click(function () {
+            performPrettyAjaxRequest($('#outputResult'), {
+                type: 'GET',
+                url: '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ExpressionGeneration", action = "GenerateExpressionsClass" })',
+                data: { id: $('#questionnaireId').val() },
+            });
+        });
+
+        $('#getPartial').click(function () {
+            performPrettyAjaxRequest($('#outputResult'), {
+                type: 'GET',
+                url: '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ExpressionGeneration", action = "GetAllClasses" })',
+                data: { id: $('#questionnaireId').val() },
+            });
+        });
+
+        $('#getAssembly').click(function () {
+            $('#outputResult').text("sending request...");
+            $('#resultArea').text("");
+            downloadURL('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ExpressionGeneration", action = "GetAssembly" })' + '?id=' + $('#questionnaireId').val())
+        });
+
+
+        function performPrettyAjaxRequest($output, ajaxSettings) {
+            $('button').attr('disabled', 'disabled');
+
+            $output.text("sending request...");
+
+            $.ajax(ajaxSettings
+            ).done(function (result) {
+                $('#resultArea').text(result);
+                $output.text("done");
+            }).fail(function (xhr, status, error) {
+                $output.text("failed: " + error + "\r\n" + getExceptionDetails(xhr));
+            }).always(function () {
+                $('button').removeAttr('disabled');
+            });
+        }
+
+        function getExceptionDetails(xhr) {
+            try {
+                return xhr.responseJSON.Message;
+            } catch (e1) {
+                return xhr.responseText;
+            }
+        }
+
+        var downloadURL = function downloadURL(url) {
+            var hiddenIFrameID = 'hiddenDownloader',
+                iframe = document.getElementById(hiddenIFrameID);
+            if (iframe === null) {
+                iframe = document.createElement('iframe');
+                iframe.id = hiddenIFrameID;
+                iframe.style.display = 'none';
+                document.body.appendChild(iframe);
+            }
+            iframe.src = url;
+        };
+
+
+    });
+
+</script>
+}
+

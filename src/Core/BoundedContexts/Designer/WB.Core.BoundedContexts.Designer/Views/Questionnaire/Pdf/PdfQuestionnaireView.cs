@@ -4,11 +4,11 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
-    public class PdfQuestionnaireView : PdfEntityView, IView
+    public class PdfQuestionnaireView : PdfEntityView, IReadSideRepositoryEntity
     {
         public string CreatedBy { get; set; }
 

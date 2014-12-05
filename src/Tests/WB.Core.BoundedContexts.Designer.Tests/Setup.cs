@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.BoundedContexts.Designer.Tests
 {
@@ -31,10 +30,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests
         public static void SimpleQuestionnaireDocumentUpgraderToMockedServiceLocator()
         {
             var questionnaireDocumentUpgrader = Mock.Of<IQuestionnaireDocumentUpgrader>();
-
-            Mock.Get(questionnaireDocumentUpgrader)
-                .Setup(upgrader => upgrader.TranslatePropagatePropertiesToRosterProperties(It.IsAny<QuestionnaireDocument>()))
-                .Returns<QuestionnaireDocument>(questionnaireDocument => questionnaireDocument);
 
             Setup.InstanceToMockedServiceLocator(questionnaireDocumentUpgrader);
         }

@@ -5,25 +5,22 @@ using System.Text;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Main.Core.Entities.SubEntities;
-using Main.Core.View;
-using Ncqrs.Commanding.ServiceModel;
 using System;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using Raven.Imports.Newtonsoft.Json.Utilities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.SingleOption;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
@@ -37,36 +34,28 @@ namespace WB.UI.Designer.Controllers
     {
         private readonly ICommandService commandService;
         private readonly IQuestionnaireHelper questionnaireHelper;
-        private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
-
-
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
-        private readonly IViewFactory<QuestionnaireViewInputModel, EditQuestionnaireView> editQuestionnaireViewFactory;
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
-
         private readonly ILogger logger;
 
         public QuestionnaireController(
             ICommandService commandService,
             IMembershipUserService userHelper,
-            IQuestionnaireVerifier questionnaireVerifier,
             IQuestionnaireHelper questionnaireHelper,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
-            ILogger logger, IViewFactory<QuestionnaireViewInputModel, EditQuestionnaireView> editQuestionnaireViewFactory,
+            ILogger logger,
             IQuestionnaireInfoFactory questionnaireInfoFactory,
             IExpressionProcessorGenerator expressionProcessorGenerator)
             : base(userHelper)
         {
             this.commandService = commandService;
-            this.questionnaireVerifier = questionnaireVerifier;
             this.questionnaireHelper = questionnaireHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.sharedPersonsViewFactory = sharedPersonsViewFactory;
             this.logger = logger;
-            this.editQuestionnaireViewFactory = editQuestionnaireViewFactory;
             this.questionnaireInfoFactory = questionnaireInfoFactory;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
         }
@@ -78,41 +67,7 @@ namespace WB.UI.Designer.Controllers
                 this.View(
                     new QuestionnaireCloneModel { Title = string.Format("Copy of {0}", model.Title), Id = model.PublicKey });
         }
-
-        [HttpPost]
-        public JsonResult Verify(Guid id)
-        {
-            var questionnaireDocument = this.GetQuestionnaire(id).Source;
-            var questoinnaireErrors = questionnaireVerifier.Verify(questionnaireDocument).ToArray();
-            
-            if (!questoinnaireErrors.Any())
-            {
-                GenerationResult generationResult;
-                try
-                {
-                    string resultAssembly;
-                    generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, out resultAssembly);
-                }
-                catch (Exception)
-                {
-                    generationResult = new GenerationResult()
-                    {
-                        Success = false,
-                        Diagnostics = new List<GenerationDiagnostic>() { new GenerationDiagnostic("Common verifier error", "Error", "unknown", GenerationDiagnosticSeverity.Error) }
-                    };
-                }
-                //errors shouldn't be displayed as is 
-                questoinnaireErrors = generationResult.Success
-                    ? new QuestionnaireVerificationError[0]
-                    : generationResult.Diagnostics.Select(d => new QuestionnaireVerificationError("WB1001", d.Message, new QuestionnaireVerificationReference[0])).ToArray();
-            }
-
-            return this.Json(new VerificationResult
-            {
-                Errors = questoinnaireErrors
-            });
-        }
-
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Clone(QuestionnaireCloneModel model)
@@ -194,32 +149,6 @@ namespace WB.UI.Designer.Controllers
             }
 
             return this.Redirect(this.Request.UrlReferrer.ToString());
-        }
-
-        public ActionResult Edit(Guid id)
-        {
-            EditQuestionnaireView questionnaire = this.editQuestionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
-
-            if(questionnaire == null)
-                throw new HttpException(404, string.Empty);
-
-            QuestionnaireSharedPersons questionnaireSharedPersons =
-                this.sharedPersonsViewFactory.Load(new QuestionnaireSharedPersonsInputModel() { QuestionnaireId = id });
-
-            var isUserIsOwnerOrAdmin = questionnaire.CreatedBy == UserHelper.WebUser.UserId || UserHelper.WebUser.IsAdmin;
-            var isQuestionnaireIsSharedWithThisPerson = (questionnaireSharedPersons != null) && questionnaireSharedPersons.SharedPersons.Any(x => x.Id == this.UserHelper.WebUser.UserId);
-
-            if (isUserIsOwnerOrAdmin || isQuestionnaireIsSharedWithThisPerson)
-            {
-                this.ReplaceGuidsInValidationAndConditionRules(questionnaire);
-            }
-            else
-            {
-                throw new HttpException(403, string.Empty);
-            }
-
-            return
-                View(new QuestionnaireEditView(questionaire: questionnaire, questionnaireSharedPersons: questionnaireSharedPersons, isOwner: questionnaire.CreatedBy == UserHelper.WebUser.UserId));
         }
 
         public ActionResult Index(int? p, string sb, int? so, string f)
@@ -495,24 +424,7 @@ namespace WB.UI.Designer.Controllers
                 filter: filter,
                 viewerId: UserHelper.WebUser.UserId);
         }
-
-        private void ReplaceGuidsInValidationAndConditionRules(EditQuestionnaireView model)
-        {
-            var expressionReplacer = new ExpressionReplacer(model);
-            foreach (EditQuestionView question in model.Questions)
-            {
-                question.ConditionExpression =
-                       expressionReplacer.ReplaceGuidsWithStataCaptions(question.ConditionExpression, model.Id);
-                question.ValidationExpression =
-                    expressionReplacer.ReplaceGuidsWithStataCaptions(question.ValidationExpression, model.Id);
-            }
-
-            foreach (EditGroupView group in model.Groups)
-            {
-                group.ConditionExpression = expressionReplacer.ReplaceGuidsWithStataCaptions(group.ConditionExpression, model.Id);
-            }
-        }
-
+        
         private void SaveRequest(int? pageIndex, ref string sortBy, int? sortOrder, string filter)
         {
             this.ViewBag.PageIndex = pageIndex;

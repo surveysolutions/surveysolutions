@@ -5,21 +5,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class QuestionnaireLevelTemplateModel : RosterScopeBaseModel
     {
-        public QuestionnaireLevelTemplateModel(QuestionnaireExecutorTemplateModel executorModel, bool generateEmbeddedExpressionMethods)
+        public QuestionnaireLevelTemplateModel(QuestionnaireExecutorTemplateModel executorModel,bool generateEmbeddedExpressionMethods)
+            : base(generateEmbeddedExpressionMethods, null, "@__questionnaire_scope", "QuestionnaireTopLevel",
+                new List<GroupTemplateModel>(), new List<QuestionTemplateModel>(), new List<RosterTemplateModel>(), new List<Guid>())
         {
-            this.GeneratedTypeName = "QuestionnaireTopLevel";
-            this.GeneratedRosterScopeName = "@__questionnaire_scope";
-
-            this.Questions = new List<QuestionTemplateModel>();
-            this.Groups = new List<GroupTemplateModel>();
-            this.Rosters = new List<RosterTemplateModel>();
-
-            this.ParentScope = null;
-            this.RosterScope = new List<Guid>();
-
-            this.ExecutorModel = executorModel;
-
-            this.GenerateEmbeddedExpressionMethods = generateEmbeddedExpressionMethods;
+            ExecutorModel = executorModel;
         }
 
         public QuestionnaireExecutorTemplateModel ExecutorModel { private set; get; }

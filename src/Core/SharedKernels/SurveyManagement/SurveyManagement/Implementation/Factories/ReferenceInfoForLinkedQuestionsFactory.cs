@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             while (questionParent != null)
             {
                 var group = questionParent as IGroup;
-                if (group != null && (group.Propagated != Propagate.None || group.IsRoster))
+                if (group != null && (group.IsRoster))
                 {
                     result.Add(groupsMappedOnPropagatableQuestion[group.PublicKey]);
                 }
@@ -64,16 +64,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
         private IDictionary<Guid, Guid> GetAllRosterScopesGroupedByRosterId(QuestionnaireDocument template)
         {
             var result = new Dictionary<Guid, Guid>();
-
-            foreach (var scope in template.Find<IAutoPropagateQuestion>(
-                question =>
-                    question.QuestionType == QuestionType.Numeric || question.QuestionType == QuestionType.AutoPropagate))
-            {
-                foreach (var triggarableGroup in scope.Triggers)
-                {
-                    result.Add(triggarableGroup, scope.PublicKey);
-                }
-            }
 
             foreach (var roster in template.Find<IGroup>(group => group.IsRoster && group.RosterSizeSource == RosterSizeSourceType.Question))
             {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
@@ -100,5 +99,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetCascadingQuestionsThatDirectlyDependUponQuestion(Guid id);
 
         IEnumerable<Guid> GetAllChildCascadingQuestions();
+
+        bool DoesCascadingQuestionHaveOptionsForParentValue(Guid questionId, decimal parentValue);
     }
 }

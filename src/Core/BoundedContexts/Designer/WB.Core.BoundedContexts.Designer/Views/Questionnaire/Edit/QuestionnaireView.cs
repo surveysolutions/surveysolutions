@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.View;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
 {

@@ -59,7 +59,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aggregates\ClientDeviceAR.cs" />
     <Compile Include="ClientIdentifier.cs" />
+    <Compile Include="Commands\CreateClientDeviceCommand.cs" />
+    <Compile Include="Documents\ClientDeviceDocument.cs" />
+    <Compile Include="Documents\SyncDeviceRegisterDocument.cs" />
+    <Compile Include="EventHandler\DeviceDenormalizer.cs" />
+    <Compile Include="Events\Sync\ClientDeviceLastSyncItemUpdated.cs" />
+    <Compile Include="Events\Sync\NewClientDeviceCreated.cs" />
+    <Compile Include="Events\Sync\NewDeviceRegistered.cs" />
+    <Compile Include="Events\Sync\UpdateRegisteredDevice.cs" />
     <Compile Include="IBackupManager.cs" />
     <Compile Include="IIncomePackagesRepository.cs" />
     <Compile Include="Implementation\ImportManager\DefaultBackupManager.cs" />
@@ -73,18 +82,11 @@
     <Compile Include="SyncProvider\ISyncEventHandler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SyncProvider\ISyncProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="SyncProvider\SyncEventHandler.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SyncProvider\SyncProvider.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SyncSettings.cs" />
     <Compile Include="SyncStorage\IChunkReader.cs" />
-    <Compile Include="SyncStorage\InMemoryChunkStorage.cs" />
     <Compile Include="SyncStorage\ReadSideChunkReader.cs" />
     <Compile Include="SyncStorage\ReadSideChunkWriter.cs" />
     <Compile Include="SyncStorage\SimpleSynchronizationDataStorage.cs" />
@@ -96,21 +98,21 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
-      <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
-      <Name>Ncqrs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
-      <Project>{e7d429a7-1c9f-4f25-9c23-686ef9c2d60a}</Project>
-      <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
+    <ProjectReference Include="..\..\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
+      <Project>{b9af365d-f3c9-423a-86e2-9c3e0c1ac402}</Project>
+      <Name>WB.Core.GenericSubdomains.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
       <Project>{89b14b50-5305-45e2-9835-7a05bd0b97a9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
+      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
+      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
@@ -120,15 +122,12 @@
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
-      <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
-      <Name>Main.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
       <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
       <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

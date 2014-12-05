@@ -4,18 +4,15 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Utility;
-using Main.Core.View.User;
-using Ncqrs.Commanding;
-using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Supervisor.Extensions;
-using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 
 namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
 {
@@ -38,7 +35,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
             if (logger == null) throw new ArgumentNullException("logger");
             if (commandService == null) throw new ArgumentNullException("commandService");
             if (headquartersSettings == null) throw new ArgumentNullException("headquartersSettings");
-            if(passwordHasher == null) throw  new ArgumentNullException("passwordHasher");
+            if(passwordHasher == null) throw new ArgumentNullException("passwordHasher");
 
             this.logger = logger;
             this.executeCommand = command => commandService.Execute(command, origin: Constants.HeadquartersSynchronizationOrigin);
@@ -84,7 +81,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
                             userDocument.Password,
                             userDocument.Email,
                             new[] { UserRoles.Supervisor },
-                            userDocument.isLockedBySupervisor,
+                            userDocument.IsLockedBySupervisor,
                             userDocument.IsLockedByHQ,
                             null);
 

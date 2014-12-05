@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
-using WB.Core.GenericSubdomains.Rest;
+using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.UI.Capi.Syncronization.Pull
@@ -11,42 +11,52 @@ namespace WB.UI.Capi.Syncronization.Pull
     {
         private readonly IRestServiceWrapper webExecutor;
 
-        private const string getChunckPath = "api/InterviewerSync/GetSyncPackage";
-        private const string getARKeysPath = "api/InterviewerSync/GetARKeys";
+        private const string GetChunckPath = "api/InterviewerSync/GetSyncPackage";
+        private const string GetARKeysPath = "api/InterviewerSync/GetARKeys";
 
         public RestPull(IRestServiceWrapper webExecutor)
         {
             this.webExecutor = webExecutor;
         }
 
-        public SyncItem RequestChunck(string login, string password, Guid id, long timestamp, string deviceId,
+        public async Task<SyncItem> RequestChunckAsync(string login, string password, string id, string deviceId,
             CancellationToken ct)
         {
-            var package = webExecutor.ExecuteRestRequestAsync<SyncPackage>(getChunckPath, ct, null,
+            var package = await webExecutor.ExecuteRestRequestAsync<SyncPackage>(GetChunckPath, ct, null,
                 login, password, "GET",
-                new KeyValuePair<string, object>("aRKey", id),
-                new KeyValuePair<string, object>("aRTimestamp", timestamp),
+                new KeyValuePair<string, object>("packageId", id),
                 new KeyValuePair<string, object>("clientRegistrationId", deviceId));
 
             if (package.ItemsContainer == null || package.ItemsContainer.Count == 0)
                 throw new RestException("Content is absent.");
-            
+
             return package.ItemsContainer[0];
         }
 
-        public IDictionary<SynchronizationChunkMeta, bool> GetChuncks(string login, string password, string deviceId,
-            string sequence, CancellationToken ct)
+        public async Task<List<SynchronizationChunkMeta>> GetChuncksAsync(string login, string password, string deviceId,
+            string lastReceivedPackageId, CancellationToken ct)
         {
-            var syncItemsMetaContainer = webExecutor.ExecuteRestRequestAsync<SyncItemsMetaContainer>(
-                getARKeysPath, ct, null, login, password, "GET",
+            var syncItemsMetaContainer = await webExecutor.ExecuteRestRequestAsync<SyncItemsMetaContainer>(
+                GetARKeysPath, ct, null, login, password, "GET",
                 new KeyValuePair<string, object>("clientRegistrationId", deviceId),
-                new KeyValuePair<string, object>("sequence", sequence)
+                new KeyValuePair<string, object>("lastSyncedPackageId",
+                    lastReceivedPackageId ?? "")
                 );
 
             if (syncItemsMetaContainer.ChunksMeta == null)
                 throw new RestException(Properties.Resource.ErrorOnItemListReceiving);
 
-            return syncItemsMetaContainer.ChunksMeta.ToDictionary(s => s, s => false);
+            return syncItemsMetaContainer.ChunksMeta;
+        }
+
+        public async Task<string> GetChunkIdByTimestamp(long timestamp, string login, string password, CancellationToken ct)
+        {
+            var result = await webExecutor.ExecuteRestRequestAsync<string>(
+                "api/InterviewerSync/GetPacakgeIdByTimeStamp",
+                ct,
+                null,
+                login, password, "GET", new KeyValuePair<string, object>("timestamp", timestamp));
+            return result;
         }
     }
 }

@@ -2,15 +2,15 @@
 using System.Net.Http;
 using System.Text;
 using System.Web.Http;
-using Main.Core.View;
-using Main.Core.View.User;
 using Moq;
-using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
 
@@ -64,7 +64,6 @@ namespace WB.UI.Supervisor.Tests.SyncControllerTests
                 logger ?? Mock.Of<ILogger>(),
                 viewFactory ?? Mock.Of<IViewFactory<UserViewInputModel, UserView>>(),
                 versionProvider ?? Mock.Of<ISupportedVersionProvider>(), 
-                (login, role) => true, 
                 plainFileRepository ?? Mock.Of<IPlainInterviewFileStorage>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>());
 

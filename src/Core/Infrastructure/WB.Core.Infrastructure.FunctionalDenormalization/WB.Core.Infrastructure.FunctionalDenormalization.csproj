@@ -46,24 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DispatcherRegistryHelper.cs" />
-    <Compile Include="EventHandlers\AbstractFunctionalEventHandler.cs" />
-    <Compile Include="EventHandlers\ICreateHandler.cs" />
-    <Compile Include="EventHandlers\IDeleteHandler.cs" />
-    <Compile Include="EventHandlers\IFunctionalEventHandler.cs" />
-    <Compile Include="EventHandlers\IUpdateHandler.cs" />
-    <Compile Include="IEventDispatcher.cs" />
-    <Compile Include="Implementation\EventDispatcher\EventHandlerWrapper.cs" />
-    <Compile Include="Implementation\EventDispatcher\NcqrCompatibleEventDispatcher.cs" />
-    <Compile Include="Implementation\ReadSide\ReadSideRepositoryReaderWithSequence.cs" />
-    <Compile Include="Implementation\ReadSide\ViewWithSequence.cs" />
-    <Compile Include="Implementation\StorageStrategy\InMemoryViewWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
-      <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
-      <Name>Ncqrs</Name>
+    <ProjectReference Include="..\..\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
+      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
+      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
     </ProjectReference>
     <ProjectReference Include="..\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>

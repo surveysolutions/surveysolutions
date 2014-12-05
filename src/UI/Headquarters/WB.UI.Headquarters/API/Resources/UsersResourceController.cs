@@ -4,10 +4,10 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
-using Main.Core.View;
-using Main.Core.View.User;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
 using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Shared.Web.Filters;
 

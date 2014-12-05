@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Views;
@@ -7,14 +8,16 @@ using Android.Widget;
 using Cirrious.MvvmCross.Binding.BindingContext;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Microsoft.Practices.ServiceLocation;
-using Ncqrs.Commanding.ServiceModel;
+
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.UI.Shared.Android.Events;
 using WB.UI.Shared.Android.Extensions;
+using Exception = System.Exception;
 
 namespace WB.UI.Shared.Android.Controls.ScreenItems
 {
@@ -46,8 +49,9 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
             if (disposing)
             {
+#if DEBUG
                 Console.WriteLine(string.Format("disposing question '{0}'", this.Model.Text));
-
+#endif
                 this.ClearAllBindings();
 
                 if (this.instructionDialog != null)
@@ -95,18 +99,10 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             this.etComments.ImeOptions = ImeAction.Done;
             this.etComments.FocusChange += this.etComments_FocusChange;
             this.llWrapper.LongClick += this.AbstractQuestionView_LongClick;
-            this.llWrapper.FocusChange += this.llWrapper_FocusChange;
             this.llWrapper.Clickable = true;
-            
-            /*llWrapper.Focusable = true;
-            llWrapper.FocusableInTouchMode = true;*/
         }
 
-        void llWrapper_FocusChange(object sender, View.FocusChangeEventArgs e)
-        {
-            
-        }
-
+        
         protected void SaveAnswer(string newAnswer, AnswerQuestionCommand saveAnswerCommand)
         {
             this.ExecuteSaveAnswerCommand(saveAnswerCommand);
@@ -130,14 +126,21 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private void AbstractQuestionView_LongClick(object sender, LongClickEventArgs e)
         {
-            this.IsCommentsEditorFocused = true;
             this.SetEditCommentsVisibility(true);
             this.etComments.RequestFocus();
-            this.ShowKeyboard(this.etComments);
         }
 
         void etComments_FocusChange(object sender, View.FocusChangeEventArgs e)
         {
+            if (!e.HasFocus)
+            {
+                HideKeyboard(this.etComments);
+                this.SaveComment();
+            }
+            else
+                this.ShowKeyboard(this.etComments);
+
+
             this.IsCommentsEditorFocused = e.HasFocus;
         }
 
@@ -155,14 +158,10 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 this.tvComments.Text = newComments;
 
             }
-            this.SetEditCommentsVisibility(false);
-            this.etComments.Text = this.tvComments.Text;
-
         }
 
         protected void ExecuteSaveAnswerCommand(AnswerQuestionCommand command)
         {
-            //HideAllErrorMessages();
             this.AnswerCommandService.AnswerOnQuestion(command, this.SaveAnswerErrorHandler, this.SaveAnswerSuccessHandler);
         }
 
@@ -229,27 +228,23 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private void etComments_EditorAction(object sender, TextView.EditorActionEventArgs e)
         {
-            this.SaveComment();
-            this.etComments.ClearFocus();
-            this.HideKeyboard(this.etComments);
+            if (e.ActionId == ImeAction.Done)
+            {
+                this.etComments.ClearFocus();
+            }
         }
 
         protected void HideKeyboard(EditText editor)
         {
-            InputMethodManager imm
-                = (InputMethodManager) this.Context.GetSystemService(
-                    Context.InputMethodService);
+            InputMethodManager imm = (InputMethodManager) this.Context.GetSystemService(Context.InputMethodService);
             imm.HideSoftInputFromWindow(editor.WindowToken, 0);
         }
 
         protected void ShowKeyboard(EditText editor)
         {
-            InputMethodManager imm
-                = (InputMethodManager) this.Context.GetSystemService(
-                    Context.InputMethodService);
+            InputMethodManager imm = (InputMethodManager) this.Context.GetSystemService(Context.InputMethodService);
             imm.ShowSoftInput(editor, 0);
         }
-
 
         private void SetEditCommentsVisibility(bool visible)
         {
@@ -339,6 +334,29 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             wrapper.AddView(textView);
 
             this.llWrapper.AddView(wrapper);
+        }
+
+        protected virtual async Task<bool> ConfirmRosterDecreaseAsync(string[] rosterTitles, int countOfRemovedRows)
+        {
+            if (rosterTitles.Length == 0 || countOfRemovedRows < 1)
+                return true;
+
+            var result = false;
+
+            var alert = new AlertDialog.Builder(this.Context);
+           
+            alert.SetTitle(Resources.GetText(Resource.String.Warning));
+            alert.SetMessage(string.Format(Resources.GetText(Resource.String.AreYouSureYouWantToRemoveRowFromRosterFormat), countOfRemovedRows));
+            alert.SetPositiveButton(Resources.GetText(Resource.String.Yes), (e, s) =>{result = true;});
+            alert.SetNegativeButton(Resources.GetText(Resource.String.No), (EventHandler<DialogClickEventArgs>)null);
+
+            var dialog = alert.Create();
+
+            dialog.Show();
+
+            await dialog.Confirmation();
+
+            return result;
         }
     }
 }

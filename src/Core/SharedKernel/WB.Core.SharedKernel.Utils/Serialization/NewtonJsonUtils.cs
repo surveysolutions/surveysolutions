@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.SharedKernel.Utils.Serialization
 {
-    public  class NewtonJsonUtils : IJsonUtils
+    public class NewtonJsonUtils : IJsonUtils
     {
         private JsonSerializerSettings JsonSerializerSettings
         {

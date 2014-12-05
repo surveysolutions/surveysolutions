@@ -1,7 +1,8 @@
 using System;
 using Machine.Specifications;
 using Ncqrs.Commanding;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Text;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
+using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests

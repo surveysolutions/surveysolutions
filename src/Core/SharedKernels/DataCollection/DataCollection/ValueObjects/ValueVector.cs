@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.ValueObjects
 {
-    public class ValueVector<T> : IList<T>
+    public class ValueVector<T> : IList<T> where T : struct
     {
         private readonly List<T> values;
 
@@ -134,13 +129,14 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects
            
             var values = value.Split(',');
 
-            var result = values.Select(v =>
+            var result = (IEnumerable<T>) values.Select(v =>
             {
                 try
                 {
-                    var converter = TypeConverterUtils.SafeSelectTypeConverter<T>();
+                    if (typeof (T) == typeof (Guid))
+                        return Guid.Parse(v);
 
-                    return (T) converter.ConvertFromString(v);
+                    throw new Exception("Not supported type");
                 }
                 catch (Exception e)
                 {

@@ -9,8 +9,7 @@ using Moq;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
-using WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
+using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
@@ -64,8 +63,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         {
             Questionnaire questionnaire = CreateQuestionnaireWithOneGroupAndQuestionInIt(questionId: questionKey,
                 responsibleId: responsibleId);
-
-            questionnaire.UploadImage(questionKey, "image title", "image description", imageKey);
 
             return questionnaire;
         }
@@ -283,20 +280,19 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 return;
             }
             questionnaire.AddTextQuestion(
-                questionId, 
-                groupId, 
+                questionId,
+                groupId,
                 "Title",
-                alias, null, 
+                alias, null,
                 false,
                 false,
-                QuestionScope.Interviewer, 
-                condition, 
-                validation, 
-                "", 
+                QuestionScope.Interviewer,
+                condition,
+                validation,
+                "",
                 "", null,
                 responsible);
         }
-
 
         public static bool AreOptionsRequiredByQuestionType(QuestionType type)
         {
@@ -325,6 +321,27 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             questionnaire.AddGroup(Guid.NewGuid(),
                 responsibleId: responsibleId, title: "New group", variableName: null, rosterSizeQuestionId: null, description: null, condition: null,
                 parentGroupId: groupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
+
+            return questionnaire;
+        }
+
+        public static Questionnaire CreateQuestionnaireWithChapterWithRegularAndRosterGroup(Guid rosterGroupId, Guid regularGroupId, Guid responsibleId)
+        {
+            var chapterId = Guid.NewGuid();
+
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(questionnaireId: Guid.NewGuid(), groupId: chapterId, responsibleId: responsibleId);
+
+            Guid rosterSizeQuestionId = Guid.NewGuid();
+            questionnaire.AddGroup(regularGroupId, responsibleId: responsibleId, title: "regularGroup", variableName: null, rosterSizeQuestionId: null,
+                description: null, condition: null, parentGroupId: chapterId, isRoster: false,
+                rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
+            questionnaire.AddMultiOptionQuestion(rosterSizeQuestionId, regularGroupId, "rosterSizeQuestion",
+                "rosterSizeQuestion", null, false, QuestionScope.Interviewer, "", "", "", "", responsibleId,
+                new[] { new Option(Guid.NewGuid(), "1", "opt1"), new Option(Guid.NewGuid(), "2", "opt2") }, null,
+                false, null);
+            questionnaire.AddGroup(rosterGroupId, responsibleId: responsibleId, title: "autoPropagateGroup", variableName: null,
+                rosterSizeQuestionId: rosterSizeQuestionId, description: null, condition: null, parentGroupId: chapterId, isRoster: true,
+                rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             return questionnaire;
         }

@@ -7,7 +7,6 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using It = Machine.Specifications.It;
 
@@ -26,9 +25,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             Guid groupId = Guid.Parse("22220000FFFFFFFFFFFFFFFFFFFFFFFF");
 
-            var questionaire = Mock.Of<IQuestionnaire>(_
-                => /*_.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new[] { groupId }
-                &&*/ _.IsRosterGroup(groupId) == true);
+            var questionaire = Mock.Of<IQuestionnaire>(_ => _.IsRosterGroup(groupId) == true);
 
             var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
@@ -44,7 +41,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             new Interview(interviewId, userId, questionnaireId, 1, answersToFeaturedQuestions, answersTime, supervisorId);
 
         It should_not_raise_GroupDisabled_event = () =>
-            eventContext.ShouldNotContainEvent<GroupDisabled>();
+            eventContext.ShouldNotContainEvent<GroupsDisabled>();
 
         Cleanup stuff = () =>
         {
@@ -52,12 +49,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext = null;
         };
 
-        private static EventContext eventContext;
-        private static Guid interviewId;
-        private static Guid userId;
-        private static Guid questionnaireId;
-        private static Dictionary<Guid, object> answersToFeaturedQuestions;
-        private static DateTime answersTime;
-        private static Guid supervisorId;
+        static EventContext eventContext;
+        static Guid interviewId;
+        static Guid userId;
+        static Guid questionnaireId;
+        static Dictionary<Guid, object> answersToFeaturedQuestions;
+        static DateTime answersTime;
+        static Guid supervisorId;
     }
 }

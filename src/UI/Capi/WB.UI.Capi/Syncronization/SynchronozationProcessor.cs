@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Globalization;
 using System.Security.Authentication;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,9 +9,10 @@ using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
 using CAPI.Android.Settings;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.Capi.Synchronization.Services;
-using WB.Core.GenericSubdomains.Rest;
+using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Rest;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Settings;
@@ -26,40 +27,44 @@ namespace WB.UI.Capi.Syncronization
     {
         private readonly ILogger logger;
         private readonly Context context;
-        private CancellationToken ct;
-        private CancellationTokenSource tokenSource2;
-        private Task task;
-
-        #region rest comunicators
-
+        private CancellationTokenSource cancellationSource;
+        
         private readonly RestPull pull;
         private readonly RestHandshake handshake;
         private readonly RestPush push;
 
-        #endregion
-
         private readonly ICapiDataSynchronizationService dataProcessor;
         private readonly ICapiCleanUpService cleanUpExecutor;
         private readonly IInterviewSynchronizationFileStorage fileSyncRepository;
-        private IDictionary<SynchronizationChunkMeta, bool> remoteChuncksForDownload;
+        private readonly ISyncPackageIdsStorage packageIdStorage;
 
         private readonly ISyncAuthenticator authentificator;
         private SyncCredentials credentials;
 
-        private string clientRegistrationId 
+        private string clientRegistrationId
         {
-            set { SettingsManager.SetSetting(SettingsNames.RegistrationKeyName, value);}
-            get { return SettingsManager.GetSetting(SettingsNames.RegistrationKeyName);}
+            set { SettingsManager.SetSetting(SettingsNames.RegistrationKeyName, value); }
+            get { return SettingsManager.GetSetting(SettingsNames.RegistrationKeyName); }
         }
 
-        private string lastTimestamp
+        private string lastReceivedPackageId
         {
             set { SettingsManager.SetSetting(SettingsNames.LastTimestamp, value); }
             get { return SettingsManager.GetSetting(SettingsNames.LastTimestamp); }
         }
 
-        public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, ICapiDataSynchronizationService dataProcessor,
-            ICapiCleanUpService cleanUpExecutor, IRestServiceWrapperFactory restServiceWrapperFactory, IInterviewSynchronizationFileStorage fileSyncRepository)
+        public event EventHandler<SynchronizationEventArgs> StatusChanged;
+        public event EventHandler ProcessFinished;
+        public event EventHandler ProcessCanceling;
+        public event EventHandler<SynchronizationCanceledEventArgs> ProcessCanceled;
+
+        public SynchronozationProcessor(Context context, 
+            ISyncAuthenticator authentificator, 
+            ICapiDataSynchronizationService dataProcessor,
+            ICapiCleanUpService cleanUpExecutor, 
+            IRestServiceWrapperFactory restServiceWrapperFactory, 
+            IInterviewSynchronizationFileStorage fileSyncRepository,
+            ISyncPackageIdsStorage packageIdStorage)
         {
             this.context = context;
 
@@ -67,6 +72,7 @@ namespace WB.UI.Capi.Syncronization
             this.authentificator = authentificator;
             this.cleanUpExecutor = cleanUpExecutor;
             this.fileSyncRepository = fileSyncRepository;
+            this.packageIdStorage = packageIdStorage;
 
             var executor = restServiceWrapperFactory.CreateRestServiceWrapper(SettingsManager.GetSyncAddressPoint());
             this.pull = new RestPull(executor);
@@ -78,178 +84,183 @@ namespace WB.UI.Capi.Syncronization
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
-        #region operations
-        
-        private void Pull()
+        private async Task PullAsync()
         {
             this.ExitIfCanceled();
-            this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", Operation.Pull, true, 0));
+            this.OnStatusChanged(new SynchronizationEventArgsWithPercent("Pulling", Operation.Pull, true, 0));
 
-            this.CancelIfException(() =>
+            var cancellationToken = this.cancellationSource.Token;
+            await this.MigrateOldSyncTimestampToId(cancellationToken);
+
+            var remoteChuncksForDownload = new List<SynchronizationChunkMeta>();
+
+            bool foundNeededPackages = false;
+            var lastKnownPackageId = this.packageIdStorage.GetLastStoredChunkId();
+            int returnedBackCount = 0;
+
+            do
+            {
+                try
                 {
-                    this.remoteChuncksForDownload = this.pull.GetChuncks(this.credentials.Login, this.credentials.Password, this.clientRegistrationId, this.lastTimestamp, this.ct);
-                    
-                    int progressCounter = 0;
-                    foreach (var chunckId in this.remoteChuncksForDownload.Keys.ToList())
-                    {
-                        if (this.ct.IsCancellationRequested)
-                            return;
+                    this.OnStatusChanged(new SynchronizationEventArgsWithPercent("Receiving list of packageIdStorage to download", Operation.Pull, true, 0));
+                    remoteChuncksForDownload = await this.pull.GetChuncksAsync(this.credentials.Login,
+                        this.credentials.Password,
+                        this.clientRegistrationId,
+                        lastKnownPackageId,
+                        cancellationToken);
+                    foundNeededPackages = true;
+                }
+                catch (GoneException)
+                {
+                    returnedBackCount++;
+                    this.OnStatusChanged(new SynchronizationEventArgsWithPercent(
+                        string.Format("Last known package not found on server. Searching for previous. Tried {0} packageIdStorage", returnedBackCount), 
+                        Operation.Pull, true, 0));
+                    lastKnownPackageId = this.packageIdStorage.GetChunkBeforeChunkWithId(lastKnownPackageId);
+                }
+            } while (!foundNeededPackages);
+                
+            int progressCounter = 0;
+            foreach (SynchronizationChunkMeta chunckId in remoteChuncksForDownload)
+            {
+                if (cancellationToken.IsCancellationRequested)
+                    return;
 
-                        try
-                        {
-                            var data = this.pull.RequestChunck(this.credentials.Login, this.credentials.Password, chunckId.Id, chunckId.Timestamp, this.clientRegistrationId, this.ct);
+                try
+                {
+                    SyncItem data = await this.pull.RequestChunckAsync(this.credentials.Login, 
+                        this.credentials.Password, 
+                        chunckId.Id, 
+                        this.clientRegistrationId, 
+                        cancellationToken);
 
-                            this.dataProcessor.SavePulledItem(data);
-                            this.remoteChuncksForDownload[chunckId] = true;
-                            
-                            //save last handled item
-                            this.lastTimestamp = chunckId.Timestamp.ToString();
-                        }
-                        catch (Exception e)
-                        {
-                            this.logger.Error(string.Format("chunk {0} wasn't processed", chunckId), e);
-                            
-                            throw;
-                        }
+                    this.dataProcessor.SavePulledItem(data);
 
-                        this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", Operation.Pull, true,
-                                                                                ((progressCounter++) * 100) / this.remoteChuncksForDownload.Count));
-                    }
-                });
+                    this.packageIdStorage.Append(chunckId.Id);
+                }
+                catch (Exception e)
+                {
+                    this.logger.Error(string.Format("Chunk {0} wasn't processed", chunckId), e);
+                    throw;
+                }
+
+                this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", Operation.Pull, true,
+                    ((progressCounter++) * 100) / remoteChuncksForDownload.Count));
+            }
         }
 
-        private void Push()
+        private async Task MigrateOldSyncTimestampToId(CancellationToken cancellationToken)
         {
+            if (!string.IsNullOrEmpty(this.lastReceivedPackageId))
+            {
+                long lastReceivedPackageIdOfLongType;
+                if (!long.TryParse(lastReceivedPackageId, out lastReceivedPackageIdOfLongType))
+                    return;
+                this.OnStatusChanged(new SynchronizationEventArgs("Tablet had old installation. Migrating pacakge timestamp to it's id", Operation.Pull, true));
+                string lastReceivedChunkId = await this.pull.GetChunkIdByTimestamp(lastReceivedPackageIdOfLongType, this.credentials.Login, this.credentials.Password, cancellationToken);
+                this.packageIdStorage.Append(lastReceivedChunkId);
+                this.lastReceivedPackageId = null;
+            }
+        }
 
+        private async Task PushAsync()
+        {
             this.ExitIfCanceled();
             this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", Operation.Push, true, 0));
 
-            this.CancelIfException(() =>
-                {
-                    var dataByChuncks = this.dataProcessor.GetItemsForPush();
-                    int i = 1;
-                    foreach (var chunckDescription in dataByChuncks)
-                    {
-                        this.ExitIfCanceled();
+            var dataByChuncks = this.dataProcessor.GetItemsForPush();
+            int chunksCounter = 1;
+            foreach (var chunckDescription in dataByChuncks)
+            {
+                this.ExitIfCanceled();
 
-                        this.push.PushChunck(this.credentials.Login, this.credentials.Password, chunckDescription.Content, this.ct);
+                await this.push.PushChunck(this.credentials.Login, this.credentials.Password, chunckDescription.Content, this.cancellationSource.Token);
 
-                        this.fileSyncRepository.MoveInterviewsBinaryDataToSyncFolder(chunckDescription.EventSourceId);
-                        //fix method
-                        cleanUpExecutor.DeleteInterview(chunckDescription.EventSourceId);
+                this.fileSyncRepository.MoveInterviewsBinaryDataToSyncFolder(chunckDescription.EventSourceId);
 
-                        this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", Operation.Push, true, (i * 100) / dataByChuncks.Count));
-                        i++;
-                    }
-                });
+                this.cleanUpExecutor.DeleteInterview(chunckDescription.EventSourceId);
+
+                this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", Operation.Push, true, (chunksCounter * 100) / dataByChuncks.Count));
+                chunksCounter++;
+            }
 
             this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing binary data", Operation.Push, true, 0));
-            this.CancelIfException(() =>
+
+            var binaryDatas = this.fileSyncRepository.GetBinaryFilesFromSyncFolder();
+            int binaryDataCounter = 1;
+            foreach (var binaryData in binaryDatas)
             {
-                var binaryDatas = this.fileSyncRepository.GetBinaryFilesFromSyncFolder();
-                int i = 1;
-                foreach (var binaryData in binaryDatas)
+                this.ExitIfCanceled();
+
+                try
                 {
-                    this.ExitIfCanceled();
+                    await this.push.PushBinary(this.credentials.Login, this.credentials.Password, binaryData.GetData(), binaryData.FileName,
+                        binaryData.InterviewId, this.cancellationSource.Token);
 
-                    try
-                    {
-                        this.push.PushBinary(this.credentials.Login, this.credentials.Password, binaryData.GetData(), binaryData.FileName,
-                            binaryData.InterviewId, this.ct);
-
-                        this.fileSyncRepository.RemoveBinaryDataFromSyncFolder(binaryData.InterviewId, binaryData.FileName);
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error(e.Message, e);
-                    }
-
-                    this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing binary data", Operation.Push, true, (i * 100) / binaryDatas.Count));
-                    i++;
+                    this.fileSyncRepository.RemoveBinaryDataFromSyncFolder(binaryData.InterviewId, binaryData.FileName);
                 }
-            });
+                catch (Exception e)
+                {
+                    this.logger.Error(e.Message, e);
+                }
+
+                this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing binary data", Operation.Push, true, (binaryDataCounter * 100) / binaryDatas.Count));
+                binaryDataCounter++;
+            }
         }
 
         private void Handshake()
         {
             this.ExitIfCanceled();
 
-            this.CancelIfException(() =>
-                {
-                    var androidId = SettingsManager.AndroidId;
-                    var appId = SettingsManager.InstallationId;
-                    var userCredentials = this.authentificator.RequestCredentials();
-                    this.ExitIfCanceled();
+            var androidId = SettingsManager.AndroidId;
+            var appId = SettingsManager.InstallationId;
+            var userCredentials = this.authentificator.RequestCredentials();
+            this.ExitIfCanceled();
 
-                    if (!userCredentials.HasValue)
-                        throw new AuthenticationException("User wasn't authenticated.");
-                    this.credentials = userCredentials.Value;
+            if (!userCredentials.HasValue)
+                throw new AuthenticationException("User wasn't authenticated.");
+            this.credentials = userCredentials.Value;
 
 
-                    //string message = string.Format("handshake app {0}, device {1}", appId, androidId);
-                    string message = "connecting...";
-                    this.OnStatusChanged(
-                        new SynchronizationEventArgs(message, Operation.Handshake, true));
-                    var registrationKey = SettingsManager.GetSetting(SettingsNames.RegistrationKeyName);
-                    this.clientRegistrationId = this.handshake.Execute(this.credentials.Login, this.credentials.Password, androidId, appId, this.clientRegistrationId);
-                });
+            //string message = string.Format("handshake app {0}, device {1}", appId, androidId);
+            this.OnStatusChanged(
+                new SynchronizationEventArgs("Connecting...", Operation.Handshake, true));
+                
+            this.clientRegistrationId = this.handshake.Execute(this.credentials.Login, this.credentials.Password, androidId, appId, this.clientRegistrationId);
         }
-
-        #endregion
 
         public void Run()
         {
-            this.tokenSource2 = new CancellationTokenSource();
-            this.ct = this.tokenSource2.Token;
-            this.task = Task.Factory.StartNew(this.RunInternal, this.ct);
+            this.cancellationSource = new CancellationTokenSource();
+            Task.Run(() => this.RunInternalAsync());
         }
 
-        private void RunInternal()
+        private async Task RunInternalAsync()
         {
-            this.Handshake();
-            this.Push();
-            this.Pull();
-            
-
-            this.OnProcessFinished();
-        }
-
-        public void Cancel()
-        {
-            if(this.tokenSource2.IsCancellationRequested)
-                return;
-            Task.Factory.StartNew(this.CancelInternal);
-        }
-
-        private void CancelInternal()
-        {
-            this.OnProcessCanceling();
-
-            this.tokenSource2.Cancel();
-           
-            List<Exception> exceptions = new List<Exception>();
             try
             {
-                Task.WaitAll(this.task);
+                this.Handshake();
+                await this.PushAsync();
+                await this.PullAsync();
+
+                this.OnProcessFinished();
             }
-            catch (AggregateException e)
+            catch (Exception e)
             {
-                exceptions = e.InnerExceptions.ToList();
+               this.OnProcessCanceled(new List<Exception>(){e});
             }
-            exceptions.Add(new Exception("Synchronization wasn't completed"));
-            this.OnProcessCanceled(exceptions);
         }
 
-        #region events
-
-        public event EventHandler<SynchronizationEventArgs> StatusChanged;
-        public event EventHandler ProcessFinished;
-        public event EventHandler ProcessCanceling;
-        public event EventHandler<SynchronizationCanceledEventArgs> ProcessCanceled;
+        public void Cancel(Exception exception = null)
+        {
+            this.OnStatusChanged(new SynchronizationEventArgs("Cancelling", Operation.Pull, false));
+            this.cancellationSource.Cancel();
+        }
 
         protected void OnProcessFinished()
         {
-            if(this.tokenSource2.IsCancellationRequested)
+            if (this.cancellationSource.IsCancellationRequested)
                 return;
             var handler = this.ProcessFinished;
             if (handler != null)
@@ -269,52 +280,31 @@ namespace WB.UI.Capi.Syncronization
         }
         protected void OnStatusChanged(SynchronizationEventArgs evt)
         {
-            if(this.tokenSource2.IsCancellationRequested)
+            if (this.cancellationSource.IsCancellationRequested)
                 return;
             var handler = this.StatusChanged;
             if (handler != null)
                 handler(this, evt);
         }
-        #endregion
 
- 
         protected void Preparation()
         {
-            
             if (!SettingsManager.CheckSyncPoint())
             {
-                
                 throw new InvalidOperationException("Sync point is set incorrect.");
-                return;
             }
 
             if (!NetworkHelper.IsNetworkEnabled(this.context))
             {
-                
                 throw new InvalidOperationException("Network is not available.");
-                return;
             }
         }
 
         private void ExitIfCanceled()
         {
-            if (this.ct.IsCancellationRequested)
-                this.ct.ThrowIfCancellationRequested();
+            var cancellationToken1 = this.cancellationSource.Token;
+            if (cancellationToken1.IsCancellationRequested)
+                cancellationToken1.ThrowIfCancellationRequested();
         }
-
-        private void CancelIfException(Action action)
-        {
-            try
-            {
-                action();
-            }
-            catch (Exception exc)
-            {
-                this.logger.Error("Error occurred during the process. Process is being canceled.", exc);
-                this.Cancel();
-                throw;
-            }
-        }
-
     }
 }

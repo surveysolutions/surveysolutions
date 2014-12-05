@@ -3,6 +3,7 @@ using System.Linq;
 using Machine.Specifications;
 using Ncqrs.Commanding;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
+using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests

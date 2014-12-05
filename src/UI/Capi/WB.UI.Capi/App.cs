@@ -11,14 +11,7 @@ namespace WB.UI.Capi
     {
         public App()
         {
-            if (string.IsNullOrWhiteSpace(SettingsManager.GetSetting(SettingsNames.RegistrationKeyName)))
-            {
-                Mvx.RegisterSingleton<IMvxAppStart>(new MvxAppStart<FinishIntallationViewModel>());
-            }
-            else
-            {
-                Mvx.RegisterSingleton<IMvxAppStart>(new MvxAppStart<LoginViewModel>());
-            }
+            Mvx.RegisterSingleton<IMvxAppStart>(new MvxAppStart<LoginViewModel>());
         }
     }
 }

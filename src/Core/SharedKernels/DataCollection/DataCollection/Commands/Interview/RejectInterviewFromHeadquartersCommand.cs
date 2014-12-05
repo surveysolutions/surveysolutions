@@ -1,11 +1,9 @@
 using System;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
-    [MapsToAggregateRootMethod(typeof(Implementation.Aggregates.Interview), "RejectInterviewFromHeadquarters")]
     public class RejectInterviewFromHeadquartersCommand : InterviewCommand
     {
         public Guid? InterviewerId { get; set; }

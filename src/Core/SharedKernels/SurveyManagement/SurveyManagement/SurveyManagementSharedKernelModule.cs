@@ -4,8 +4,7 @@ using Ninject.Modules;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.FunctionalDenormalization;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
+using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
@@ -119,6 +118,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 this.Kernel.RegisterDenormalizer<InterviewExportedDataDenormalizer>();
                 this.Kernel.RegisterDenormalizer<QuestionnaireExportStructureDenormalizer>();
             }
+
+            this.Kernel.RegisterDenormalizer<SynchronizationDenormalizer>();
 
             this.Bind<IIncomePackagesRepository>()
                 .To<IncomePackagesRepository>()

@@ -6,19 +6,19 @@ using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.User;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.UserDenormalizerTests
 {
     internal class UserDenormalizerContext
     {
-        protected static UserDenormalizer CreateUserDenormalizer(IReadSideRepositoryWriter<UserDocument> users = null, 
-            ISynchronizationDataStorage syncStorage = null)
+        protected static UserDenormalizer CreateUserDenormalizer(IReadSideRepositoryWriter<UserDocument> users = null)
         {
             return new UserDenormalizer(
-                users ?? Mock.Of<IReadSideRepositoryWriter<UserDocument>>(),
-                syncStorage ?? new Mock<ISynchronizationDataStorage>().Object);
+                users ?? Mock.Of<IReadSideRepositoryWriter<UserDocument>>());
         }
 
         protected static IPublishedEvent<T> ToPublishedEvent<T>(T @event, Guid eventSourceId) where T : class
@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.UserDenorma
         
         protected static IPublishedEvent<UserLockedBySupervisor> CreateUserLockedBySupervisor(Guid executorId, Guid eventSourceId)
         {
-            var evnt = ToPublishedEvent(new UserLockedBySupervisor(executorId), eventSourceId);
+            var evnt = ToPublishedEvent(new UserLockedBySupervisor(), eventSourceId);
             return evnt;
         }
 
@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.UserDenorma
 
         protected static IPublishedEvent<UserUnlockedBySupervisor> CreateUserUnlockedBySupervisor(Guid executorId, Guid eventSourceId)
         {
-            return ToPublishedEvent(new UserUnlockedBySupervisor(executorId), eventSourceId);
+            return ToPublishedEvent(new UserUnlockedBySupervisor(), eventSourceId);
         }
 
         protected static IPublishedEvent<UserUnlocked> CreateUserUnlocked(Guid eventSourceId)

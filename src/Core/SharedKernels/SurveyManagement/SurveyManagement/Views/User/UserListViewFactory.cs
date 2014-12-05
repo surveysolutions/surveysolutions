@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Utility;
-using Main.Core.View;
+using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.User
 {

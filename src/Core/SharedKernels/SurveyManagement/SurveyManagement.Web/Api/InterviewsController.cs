@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Net;
 using System.Web.Http;
-using Main.Core.View;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;

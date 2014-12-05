@@ -22,35 +22,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Factories
 
             var groupsMappedOnPropagatableQuestion = this.GetAllRosterScopesGroupedByRosterId(questionnaire);
 
-            this.AddRosterScopesByAutoPropagatedQuestionsBackwardCompatibility(questionnaire, groupsMappedOnPropagatableQuestion, result.RosterScopes);
             this.AddRosterScopes(questionnaire, groupsMappedOnPropagatableQuestion, result.RosterScopes);
            
             return result;
-        }
-
-        private void AddRosterScopesByAutoPropagatedQuestionsBackwardCompatibility(QuestionnaireDocument questionnaire, IDictionary<Guid, Guid> groupsMappedOnPropagatableQuestion, Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes)
-        {
-            var autoPropagatebleQuestions =
-                questionnaire.Find<IAutoPropagateQuestion>(
-                    question =>
-                        question.QuestionType == QuestionType.Numeric || question.QuestionType == QuestionType.AutoPropagate);
-
-            foreach (var autoPropagatebleQuestion in autoPropagatebleQuestions)
-            {
-                var rosterIdMappedOfRosterTitleQuestionId = this.GetRosterIdToRosterTitleQuestionIdMapByAutopropagatedQuestion(questionnaire, autoPropagatebleQuestion);
-                var scopeVectorsOfTriggers = autoPropagatebleQuestion.Triggers.Select(
-                    trigger =>
-                        this.GetScopeOfQuestionnaireItem(questionnaire.FirstOrDefault<IGroup>(g => g.PublicKey == trigger),
-                            groupsMappedOnPropagatableQuestion)).GroupBy(k=>k);
-                foreach (var scopeVectorsOfTrigger in scopeVectorsOfTriggers)
-                {
-
-                    var rosterDescription = new RosterScopeDescription(scopeVectorsOfTrigger.Key, string.Empty, RosterScopeType.Numeric,
-                        rosterIdMappedOfRosterTitleQuestionId);
-
-                    rosterScopes.Add(scopeVectorsOfTrigger.Key, rosterDescription);
-                }
-            }
         }
 
         private void AddRosterScopes(QuestionnaireDocument questionnaire, IDictionary<Guid, Guid> groupsMappedOnPropagatableQuestion,
@@ -114,16 +88,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Factories
         {
             var result = new Dictionary<Guid, Guid>();
 
-            foreach (var scope in template.Find<IAutoPropagateQuestion>(
-                question =>
-                    question.QuestionType == QuestionType.Numeric || question.QuestionType == QuestionType.AutoPropagate))
-            {
-                foreach (var triggarableGroup in scope.Triggers)
-                {
-                    result.Add(triggarableGroup, scope.PublicKey);
-                }
-            }
-
             foreach (var roster in template.Find<IGroup>(group => group.IsRoster && group.RosterSizeSource == RosterSizeSourceType.Question))
             {
                 result.Add(roster.PublicKey, roster.RosterSizeQuestionId.Value);
@@ -146,7 +110,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Factories
             while (questionParent != null)
             {
                 var group = questionParent as IGroup;
-                if (group != null && (group.Propagated != Propagate.None || group.IsRoster))
+                if (group != null && (group.IsRoster))
                 {
                     result.Add(groupsMappedOnPropagatableQuestion[group.PublicKey]);
                 }
@@ -167,22 +131,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Factories
                             ? this.CreateRosterTitleQuestionDescription(
                                 questionnaire.FirstOrDefault<IQuestion>(question => question.PublicKey == roster.RosterTitleQuestionId.Value))
                             : capitalQuestion);
-        }
-
-        private Dictionary<Guid, RosterTitleQuestionDescription> GetRosterIdToRosterTitleQuestionIdMapByAutopropagatedQuestion(QuestionnaireDocument questionnaire, IAutoPropagateQuestion autoPropagateQuestion)
-        {
-            IEnumerable<IGroup> groupsFromAutoPropagatedQuestionScope =
-                questionnaire.Find<IGroup>(group => autoPropagateQuestion.Triggers.Contains(group.PublicKey));
-
-            RosterTitleQuestionDescription capitalQuestion = this.GetRosterTitleQuestionDescriptionBasedOnCapitalQuestionsInsideGroups(groupsFromAutoPropagatedQuestionScope);
-
-            var rosterGroupsWithTitleQuestionPairs = new Dictionary<Guid, RosterTitleQuestionDescription>();
-
-            foreach (var rosterGroup in groupsFromAutoPropagatedQuestionScope)
-            {
-                rosterGroupsWithTitleQuestionPairs.Add(rosterGroup.PublicKey, capitalQuestion);
-            }
-            return rosterGroupsWithTitleQuestionPairs;
         }
 
         private RosterTitleQuestionDescription GetRosterTitleQuestionDescriptionBasedOnCapitalQuestionsInsideGroups(IEnumerable<IGroup> groups)

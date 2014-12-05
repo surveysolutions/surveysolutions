@@ -11,14 +11,23 @@ using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class AnswersByVariableDenormalizer :
+    public class AnswersByVariableDenormalizer :BaseDenormalizer,
         IEventHandler<GeoLocationQuestionAnswered>,
-        IEventHandler<AnswerRemoved>,
-        IEventHandler
+        IEventHandler<AnswersRemoved>
     {
         private readonly IReadSideRepositoryWriter<AnswersByVariableCollection> answersByVariableStorage;
         private readonly IReadSideRepositoryWriter<InterviewBrief> interviewBriefStorage;
         private readonly IReadSideRepositoryWriter<QuestionnaireQuestionsInfo> variablesStorage;
+
+        public override object[] Writers
+        {
+            get { return new[] { answersByVariableStorage }; }
+        }
+
+        public override object[] Readers
+        {
+            get { return new object[] { interviewBriefStorage, variablesStorage }; }
+        }
 
         public AnswersByVariableDenormalizer(IReadSideRepositoryWriter<InterviewBrief> interviewBriefStorage,
             IReadSideRepositoryWriter<QuestionnaireQuestionsInfo> variablesStorage,
@@ -29,13 +38,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.answersByVariableStorage = answersByVariableStorage;
         }
 
-        public void Handle(IPublishedEvent<AnswerRemoved> evnt)
+        public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> evnt)
         {
-            Guid interviewId = evnt.EventSourceId;
-            Guid questionId = evnt.Payload.QuestionId;
-            decimal[] propagationVector = evnt.Payload.PropagationVector;
+            var answerString = string.Format("{0};{1}", evnt.Payload.Latitude, evnt.Payload.Longitude);
 
-             var interviewBrief = this.interviewBriefStorage.GetById(interviewId);
+            this.UpdateAnswerCollection(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector, answerString);
+        }
+
+        public void Handle(IPublishedEvent<AnswersRemoved> evnt)
+        {
+            foreach (var question in evnt.Payload.Questions)
+            {
+                this.HandleSingleRemove(evnt.EventSourceId, question.Id, question.RosterVector);
+            }
+        }
+
+        public void HandleSingleRemove(Guid interviewId, Guid questionId, decimal[] propagationVector)
+        {
+            var interviewBrief = this.interviewBriefStorage.GetById(interviewId);
 
             if (interviewBrief == null) return;
 
@@ -61,13 +81,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             collectedAnswers.Answers[interviewId].Remove(levelId);
             this.answersByVariableStorage.Store(collectedAnswers, variableByQuestionnaireKey);
-        }
-
-        public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> evnt)
-        {
-            var answerString = string.Format("{0};{1}", evnt.Payload.Latitude, evnt.Payload.Longitude);
-
-            this.UpdateAnswerCollection(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector, answerString);
         }
 
         private void UpdateAnswerCollection(Guid interviewId, Guid questionId, decimal[] propagationVector, string answerString)
@@ -109,21 +122,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private string CreateLevelIdFromPropagationVector(decimal[] vector)
         {
             return vector.Length == 0 ? "#" : EventHandlerUtils.CreateLeveKeyFromPropagationVector(vector);
-        }
-
-        public string Name
-        {
-            get { return this.GetType().Name; }
-        }
-
-        public Type[] UsesViews
-        {
-            get { return new Type[0]; }
-        }
-
-        public Type[] BuildsViews
-        {
-            get { return new Type[] { typeof (InterviewBrief), typeof (SynchronizationDelta) }; }
         }
     }
 }

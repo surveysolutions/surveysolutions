@@ -13,6 +13,8 @@
     <AssemblyName>WB.Core.GenericSubdomains.Logging.AndroidLogger</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <AndroidUseLatestPlatformSdk />
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,6 +36,9 @@
   <ItemGroup>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
+    <Reference Include="Ninject">
+      <HintPath>..\..\..\..\..\packages\Portable.Ninject.3.3\lib\monoandroid\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,18 +51,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Mono\AndroidNinject.Extensions.Conventions\AndroidNinject.Extensions.Conventions.csproj">
-      <Project>{e21bc003-84b5-41be-928c-75874418acd2}</Project>
-      <Name>AndroidNinject.Extensions.Conventions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\Mono\AndroidNinject.Extensions.Factory\AndroidNinject.Extensions.Factory.csproj">
-      <Project>{1a39ea94-3a3c-4c3c-8dc5-af21268a3c1b}</Project>
-      <Name>AndroidNinject.Extensions.Factory</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\Mono\AndroidNinject\AndroidNinject.csproj">
-      <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>
-      <Name>AndroidNinject</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\ErrorReporting\ErrorReporting.Android\WB.Core.GenericSubdomains.ErrorReporting.Android.csproj">
       <Project>{04ff9769-ab98-416e-8aa9-89271724582e}</Project>
       <Name>WB.Core.GenericSubdomains.ErrorReporting.Android</Name>
@@ -69,6 +62,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Values\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

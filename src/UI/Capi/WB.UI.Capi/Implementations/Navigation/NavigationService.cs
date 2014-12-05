@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using Android.Content;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Droid.Platform;
@@ -21,13 +20,13 @@ namespace WB.UI.Capi.Implementations.Navigation
            { CapiPages.Synchronization, typeof(SynchronizationActivity)}
         };
 
-        public void NavigateTo(CapiPages navigateToPage, NameValueCollection pageParameters)
+        public void NavigateTo(CapiPages navigateToPage, Dictionary<string, string> pageParameters)
         {
             var activityContext = Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
 
             var targetActivity = new Intent(activityContext, PageToTypeMapping[navigateToPage]);
 
-            foreach (var parameterName in pageParameters.AllKeys)
+            foreach (var parameterName in pageParameters.Keys)
             {
                 targetActivity.PutExtra(parameterName, pageParameters[parameterName]);
             }

@@ -3,11 +3,11 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
-using Main.Core.View;
-using Main.Core.View.User;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
 {
@@ -50,7 +50,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
         {
             get
             {
-                return NcqrsEnvironment.Get<ICommandService>(); /*KernelLocator.Kernel.Get<ICommandInvoker>()*/
+                return ServiceLocator.Current.GetInstance<ICommandService>(); /*KernelLocator.Kernel.Get<ICommandInvoker>()*/
             }
         }
 

@@ -4,12 +4,12 @@ using Main.Core.Events.Sync;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Synchronization.Documents;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class ClientDeviceDenormalizer : IEventHandler<NewClientDeviceCreated>,
-                                            IEventHandler<ClientDeviceLastSyncItemUpdated>,
-                                            IEventHandler
+    public class ClientDeviceDenormalizer : BaseDenormalizer, IEventHandler<NewClientDeviceCreated>,
+                                            IEventHandler<ClientDeviceLastSyncItemUpdated>
     {
         private readonly IReadSideRepositoryWriter<ClientDeviceDocument> devices;
 
@@ -43,19 +43,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.devices.Store(item, item.PublicKey);
         }
 
-        public string Name
+        public override object[] Writers
         {
-            get { return this.GetType().Name; }
-        }
-
-        public Type[] UsesViews
-        {
-            get { return new Type[0]; }
-        }
-
-        public Type[] BuildsViews
-        {
-            get { return new Type[] {typeof (ClientDeviceDocument)}; }
+            get { return new[] { devices }; }
         }
     }
 }

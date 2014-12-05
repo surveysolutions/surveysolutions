@@ -81,13 +81,17 @@
       <Project>{64ff78f2-775b-4728-9d8a-d3a7b9a7344c}</Project>
       <Name>WB.Core.GenericSubdomains.ErrorReporting</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\GenericSubdomains\Rest\Rest\WB.Core.GenericSubdomains.Rest.csproj">
-      <Project>{877d263d-c2fe-4a95-b98e-6017843d0746}</Project>
-      <Name>WB.Core.GenericSubdomains.Rest</Name>
+    <ProjectReference Include="..\..\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
+      <Project>{b9af365d-f3c9-423a-86e2-9c3e0c1ac402}</Project>
+      <Name>WB.Core.GenericSubdomains.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
+      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
+      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
       <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>

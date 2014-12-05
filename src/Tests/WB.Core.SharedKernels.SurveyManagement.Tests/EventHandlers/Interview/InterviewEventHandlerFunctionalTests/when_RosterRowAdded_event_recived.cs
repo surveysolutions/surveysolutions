@@ -1,7 +1,8 @@
 ﻿using System;
 using Machine.Specifications;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
+using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -21,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
 
         Because of = () =>
             viewState = interviewEventHandlerFunctional.Update(viewState,
-                CreatePublishableEvent(new RosterRowAdded(rosterGroupId, new decimal[0], 0.0m,null)));
+                CreatePublishableEvent(new RosterInstancesAdded(new[] { new AddedRosterInstance(rosterGroupId, new decimal[0], 0.0m, null) })));
 
         It should_interview_levels_count_be_equal_to_2 = () =>
             viewState.Document.Levels.Keys.Count.ShouldEqual(2);

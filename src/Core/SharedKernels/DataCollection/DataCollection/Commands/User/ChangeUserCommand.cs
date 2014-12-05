@@ -1,14 +1,9 @@
 ﻿using System;
-using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Commanding;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.User
 {
-    [Serializable]
-    [MapsToAggregateRootMethod(typeof(UserAR), "ChangeUser")]
     public class ChangeUserCommand : CommandBase
     {
         public ChangeUserCommand()
@@ -38,7 +33,6 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.User
 
         public string PasswordHash { get; set; }
 
-        [AggregateRootId]
         public Guid PublicKey { get; set; }
 
         public UserRoles[] Roles { get; set; }

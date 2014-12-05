@@ -152,7 +152,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     "Cannot return answer options for question with id '{0}' because it's type {1} does not support answer options.",
                     questionId, question.QuestionType));
 
-            return question.Answers.Select(answer => this.ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)).ToList();
+            return question.Answers.Select(answer => ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)).ToList();
         }
 
         public string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue)
@@ -169,7 +169,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             return question
                 .Answers
-                .Single(answer => answerOptionValue == this.ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId))
+                .Single(answer => answerOptionValue == ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId))
                 .AnswerText;
         }
 
@@ -187,7 +187,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             var stringParentAnswer = question
                 .Answers
-                .Single(answer => answerOptionValue == this.ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId))
+                .Single(answer => answerOptionValue == ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId))
                 .ParentValue;
 
             decimal parsedValue;
@@ -257,22 +257,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (!this.DoesQuestionSupportRoster(questionId))
                 return Enumerable.Empty<Guid>();
 
-            //### old questionnaires supporting
-            IQuestion question = this.GetQuestionOrThrow(questionId);
-            var autoPropagatingQuestion = question as IAutoPropagateQuestion;
-            if (autoPropagatingQuestion != null)
-            {
-                foreach (Guid groupId in autoPropagatingQuestion.Triggers)
-                {
-                    this.ThrowIfGroupDoesNotExist(groupId,
-                        string.Format("Propagating question with id '{0}' references missing group.",
-                            FormatQuestionForException(autoPropagatingQuestion)));
-                }
-
-                return autoPropagatingQuestion.Triggers.ToList();
-            }
-
-            //### roster
             return this.GetAllGroups().Where(x => x.RosterSizeQuestionId == questionId && x.IsRoster).Select(x => x.PublicKey);
         }
 
@@ -281,12 +265,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IQuestion question = this.GetQuestionOrThrow(questionId);
             this.ThrowIfQuestionDoesNotSupportRoster(question.PublicKey);
 
-            //### old questionnaires supporting
-            var autoPropagatingQuestion = question as IAutoPropagateQuestion;
-            if (autoPropagatingQuestion != null)
-                return autoPropagatingQuestion.MaxValue;
-
-            //### roster
             var numericQuestion = question as INumericQuestion;
             if (numericQuestion != null)
                 return numericQuestion.MaxValue;
@@ -409,12 +387,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
-            //### old questionnaires supporting
-            var autoPropagateQuestion = question as IAutoPropagate;
-            if (autoPropagateQuestion != null)
-                return true;
-
-            //### roster
             var numericQuestion = question as INumericQuestion;
             if (numericQuestion == null)
                 throw new QuestionnaireException(string.Format("Question with id '{0}' must be numeric.", questionId));
@@ -540,6 +512,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 }).Select(x => x.PublicKey);
         }
 
+        public bool DoesCascadingQuestionHaveOptionsForParentValue(Guid questionId, decimal parentValue)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            bool questionTypeDoesNotSupportAnswerOptions
+                = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
+
+            if (questionTypeDoesNotSupportAnswerOptions)
+                throw new QuestionnaireException(string.Format(
+                    "Cannot check does question with id '{0}' have options for parent value because it's type {1} does not support answer options.",
+                    questionId, question.QuestionType));
+
+            List<decimal> parentValuesFromQuestion = question
+                .Answers
+                .Select(answer => answer.ParentValue)
+                .Where(answerParentValue => answerParentValue != null)
+                .Select(answerParentValue => ParseAnswerOptionParentValueOrThrow(answerParentValue, questionId))
+                .Distinct()
+                .ToList();
+
+            return parentValuesFromQuestion.Contains(parentValue);
+        }
+
         public IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId)
         {
             if (!this.cacheOfUnderlyingMandatoryQuestions.ContainsKey(groupId))
@@ -629,13 +624,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return parentGroups;
         }
 
-        private decimal ParseAnswerOptionValueOrThrow(string value, Guid questionId)
+        private static decimal ParseAnswerOptionValueOrThrow(string value, Guid questionId)
         {
             decimal parsedValue;
 
             if (!decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out parsedValue))
                 throw new QuestionnaireException(string.Format(
                     "Cannot parse answer option value '{0}' as decimal. Question id: '{1}'.",
+                    value, questionId));
+
+            return parsedValue;
+        }
+
+        private static decimal ParseAnswerOptionParentValueOrThrow(string value, Guid questionId)
+        {
+            decimal parsedValue;
+
+            if (!decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out parsedValue))
+                throw new QuestionnaireException(string.Format(
+                    "Cannot parse answer option parent value '{0}' as decimal. Question id: '{1}'.",
                     value, questionId));
 
             return parsedValue;
@@ -655,18 +662,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private static bool DoesQuestionSupportRoster(IQuestion question)
         {
-            //### roster
             return question.QuestionType == QuestionType.Numeric
                 || question.QuestionType == QuestionType.MultyOption
-                || question.QuestionType == QuestionType.TextList
-                //### old questionnaires supporting
-                || (question.QuestionType == QuestionType.AutoPropagate && question is IAutoPropagateQuestion);
+                || question.QuestionType == QuestionType.TextList;
         }
 
         private static bool IsRosterGroup(IGroup group)
         {
-            //### old questionnaires supporting                    //### roster
-            return group.Propagated == Propagate.AutoPropagated || group.IsRoster;
+            return  group.IsRoster;
         }
 
         private void ThrowIfQuestionDoesNotSupportRoster(Guid questionId)
@@ -721,121 +724,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private static void InitializeQuestionnaireDocument(QuestionnaireDocument source)
         {
             source.ConnectChildrenWithParent();
-
-            if (source.IsCacheWarmed)
-                return;
-
-            var groups = source
-                .Find<IGroup>(_ => true)
-                .ToDictionary(
-                    @group => @group.PublicKey,
-                    @group => @group);
-
-            var questions = source
-                .Find<IQuestion>(_ => true)
-                .ToDictionary(
-                    question => question.PublicKey,
-                    question => question);
-
-            var questionWarmingUpMethods = new Action<Guid>[]
-            {
-                questionId =>
-                {
-                    IQuestion question = GetQuestionOrThrow(questions, questionId);
-                    question.QuestionIdsInvolvedInCustomValidationOfQuestion =
-                        GetQuestionsInvolvedInExpression(questions, question.PublicKey, question.ValidationExpression).ToList();
-                },
-
-                questionId => SetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questions, questionId),
-                questionId => SetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(questions, questionId),
-                questionId => SetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questions, questionId),
-                questionId => SetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questions, groups, questionId)
-            };
-
-            foreach (IGroup @group in groups.Values)
-            {
-                try
-                {
-                    SetQuestionsInvolvedInCustomEnablementConditionOfGroup(questions, groups, @group.PublicKey);
-                }
-                catch { }
-            }
-
-            foreach (Action<Guid> method in questionWarmingUpMethods)
-            {
-                foreach (IQuestion question in questions.Values)
-                {
-
-                    try
-                    {
-                        method.Invoke(question.PublicKey);
-                    }
-                    catch { }
-                }
-            }
-
-            source.IsCacheWarmed = true;
-        }
-
-        #region warmup caches
-
-        private static void SetQuestionsInvolvedInCustomEnablementConditionOfQuestion(Dictionary<Guid, IQuestion> questions, Guid questionId)
-        {
-            IQuestion question = GetQuestionOrThrow(questions, questionId);
-            question.QuestionIdsInvolvedInCustomEnablementConditionOfQuestion =
-                GetQuestionsInvolvedInExpression(questions, question.PublicKey, question.ConditionExpression).ToList();
-        }
-
-        private static void SetQuestionsInvolvedInCustomEnablementConditionOfGroup(Dictionary<Guid, IQuestion> questions,
-            Dictionary<Guid, IGroup> groups, Guid questionId)
-        {
-            IGroup group = GetGroup(groups, questionId);
-            group.QuestionIdsInvolvedInCustomEnablementConditionOfGroup =
-                GetQuestionsInvolvedInExpression(questions, group.PublicKey, group.ConditionExpression).ToList();
-        }
-
-        private static void SetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(Dictionary<Guid, IQuestion> questions, Guid questionId)
-        {
-            var targetQuestion = GetQuestion(questions, questionId);
-            targetQuestion.QuestionsWhichCustomValidationDependsOnQuestion = Enumerable.ToList(
-                from question in questions.Values
-                where
-                    DoesQuestionCustomValidationDependOnSpecifiedQuestion(questions, question.PublicKey,
-                        specifiedQuestionId: questionId)
-                        && questionId != question.PublicKey
-                select question.PublicKey
-                );
-        }
-
-        private static void SetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Dictionary<Guid, IQuestion> questions,
-            Guid questionId)
-        {
-            var targetQuestion = GetQuestion(questions, questionId);
-            targetQuestion.ConditionalDependentQuestions = Enumerable.ToList(
-                from question in questions.Values
-                where
-                    DoesQuestionCustomEnablementDependOnSpecifiedQuestion(questions, question.PublicKey,
-                        specifiedQuestionId: questionId)
-                        && questionId != question.PublicKey
-                select question.PublicKey
-                );
-        }
-
-        private static void SetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Dictionary<Guid, IQuestion> questions,
-            Dictionary<Guid, IGroup> groups, Guid questionId)
-        {
-            var targetQuestion = GetQuestion(questions, questionId);
-            targetQuestion.ConditionalDependentGroups = Enumerable.ToList(
-                from @group in groups.Values
-                where DoesGroupCustomEnablementDependOnSpecifiedQuestion(groups, @group.PublicKey, specifiedQuestionId: questionId)
-                select @group.PublicKey
-                );
-        }
-
-        private static IEnumerable<Guid> GetQuestionsInvolvedInExpression(Dictionary<Guid, IQuestion> questions, Guid contextQuestionId,
-            string expression)
-        {
-            return Enumerable.Empty<Guid>();
         }
 
         private static IQuestion GetQuestionOrThrow(Dictionary<Guid, IQuestion> questions, Guid questionId)
@@ -866,44 +754,5 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             return questions.Values.FirstOrDefault(q => q.StataExportCaption == identifier);
         }
-
-        private static bool DoesQuestionCustomValidationDependOnSpecifiedQuestion(Dictionary<Guid, IQuestion> questions, Guid questionId,
-            Guid specifiedQuestionId)
-        {
-            var question = GetQuestion(questions, questionId);
-
-            IEnumerable<Guid> involvedQuestions = question.QuestionIdsInvolvedInCustomValidationOfQuestion;
-
-            bool isSpecifiedQuestionInvolved = involvedQuestions.Contains(specifiedQuestionId);
-
-            return isSpecifiedQuestionInvolved;
-        }
-
-        private static bool DoesQuestionCustomEnablementDependOnSpecifiedQuestion(Dictionary<Guid, IQuestion> questions, Guid questionId,
-            Guid specifiedQuestionId)
-        {
-            var question = GetQuestion(questions, questionId);
-
-            IEnumerable<Guid> involvedQuestions = question.QuestionIdsInvolvedInCustomEnablementConditionOfQuestion;
-
-            bool isSpecifiedQuestionInvolved = involvedQuestions.Contains(specifiedQuestionId);
-
-            return isSpecifiedQuestionInvolved;
-        }
-
-        private static bool DoesGroupCustomEnablementDependOnSpecifiedQuestion(Dictionary<Guid, IGroup> groups, Guid groupId,
-            Guid specifiedQuestionId)
-        {
-            var group = GetGroup(groups, groupId);
-
-            IEnumerable<Guid> involvedQuestions = group.QuestionIdsInvolvedInCustomEnablementConditionOfGroup;
-
-            bool isSpecifiedQuestionInvolved = involvedQuestions.Contains(specifiedQuestionId);
-
-            return isSpecifiedQuestionInvolved;
-        }
-
-        #endregion
-
     }
 }

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Utility;
-using Main.Core.View;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Indexes;
+using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList

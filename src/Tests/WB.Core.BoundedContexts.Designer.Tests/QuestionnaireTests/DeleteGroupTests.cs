@@ -1,13 +1,14 @@
 ﻿using System;
-using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using Ncqrs;
 using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
@@ -19,6 +20,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         {
             var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+
+            NcqrsEnvironment.SetGetter<ILogger>(Mock.Of<ILogger>);
+            NcqrsEnvironment.SetGetter<IUniqueIdentifierGenerator>(Mock.Of<IUniqueIdentifierGenerator>);
+            NcqrsEnvironment.SetGetter<IClock>(Mock.Of<IClock>);
         }
 
         [Test]
@@ -204,6 +209,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
+        [Ignore("KP-3758 Remove old designer-related code")]
         public void DeleteGroup_When_Some_Groups_Id_Of_Question_used_as_roster_title_question_of_another_groups_Then_DomainException_should_be_thrown()
         {
             // arrange

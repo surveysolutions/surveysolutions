@@ -1,9 +1,6 @@
 ﻿using System;
 using AppDomainToolkit;
 using Machine.Specifications;
-using Moq;
-using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewExpressionStatePrototypeProviderTests
@@ -23,6 +20,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewExpressionStatePro
 
                 var path = typeof (IInterviewExpressionState).Assembly.Location;
 
+                SetupMockedServiceLocator();
+
                 var questionnareAssemblyFileAccessorMock = CreateIQuestionnareAssemblyFileAccessorMock(path);
 
                 var interviewExpressionStatePrototype = CreateInterviewExpressionStatePrototype(questionnareAssemblyFileAccessorMock.Object);
@@ -39,7 +38,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewExpressionStatePro
             appDomainContext = null;
         };
 
-        private static AppDomainContext appDomainContext;
-        private static bool isResultNotNull;
+        static AppDomainContext appDomainContext;
+        static bool isResultNotNull;
     }
 }

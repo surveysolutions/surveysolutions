@@ -11,12 +11,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     {
         private readonly QuestionnaireStataMapView variableMap;
 
-
-        public ExpressionReplacer(EditQuestionnaireView questionnaireView)
-        {
-             this.variableMap = new QuestionnaireStataMapView(questionnaireView);
-        }
-
         public ExpressionReplacer(IQuestionnaireDocument questionnaire)
         {
             var questionnaireDocument = questionnaire as QuestionnaireDocument;

@@ -6,8 +6,8 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.QRBarcode
@@ -30,8 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
             });
 
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
-                => processor.IsSyntaxValid(Moq.It.IsAny<string>()) == true
-                && processor.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()) == new[] { barcodeQuestionId.ToString() });
+                => processor.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()) == new[] { barcodeQuestionId.ToString() });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor);
         };

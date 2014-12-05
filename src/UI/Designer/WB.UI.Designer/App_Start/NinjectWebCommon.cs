@@ -1,12 +1,10 @@
 using System;
 using System.Web;
 using System.Web.Configuration;
-using Main.Core;
-using Main.Core.Commands;
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
@@ -16,12 +14,14 @@ using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Indexes;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Files;
-using WB.Core.Infrastructure.FunctionalDenormalization;
-using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
+using WB.Core.Infrastructure.Implementation.EventDispatcher;
+using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.Storage.Raven;
-using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.CommandDeserialization;
@@ -76,18 +76,21 @@ namespace WB.UI.Designer.App_Start
 
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
+                new InfrastructureModule().AsNinject(),
+                new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
-                new RavenReadSideInfrastructureModule(ravenSettings, typeof (DesignerReportQuestionnaireListViewItem).Assembly),
+                new RavenReadSideInfrastructureModule(ravenSettings, AppDomain.CurrentDomain.GetData("DataDirectory").ToString(), typeof(DesignerReportQuestionnaireListViewItem).Assembly),
                 new DesignerRegistry(),
                 new DesignerCommandDeserializationModule(),
-                new ExpressionProcessorModule(),
                 new DesignerBoundedContextModule(dynamicCompilerSettings),
                 new QuestionnaireVerificationModule(),
                 new MembershipModule(),
                 new MainModule(),
                 new FileInfrastructureModule()
                 );
+            NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
+            NcqrsEnvironment.InitDefaults();
             kernel.Load(ModulesFactory.GetEventStoreModule());
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
@@ -99,12 +102,13 @@ namespace WB.UI.Designer.App_Start
 
         private static void PrepareNcqrsInfrastucture(StandardKernel kernel)
         {
-            var commandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
-            NcqrsEnvironment.SetDefault(commandService);
-            NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>(), commandService);
-            kernel.Bind<ICommandService>().ToConstant(commandService);
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
+
+            kernel.Bind<ISnapshottingPolicy>().ToMethod(context => NcqrsEnvironment.Get<ISnapshottingPolicy>());
+            kernel.Bind<ISnapshotStore>().ToMethod(context => NcqrsEnvironment.Get<ISnapshotStore>());
+            kernel.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
+            kernel.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
 
             CreateAndRegisterEventBus(kernel);
         }
@@ -123,7 +127,7 @@ namespace WB.UI.Designer.App_Start
 
         private static NcqrCompatibleEventDispatcher CreateEventBus(StandardKernel kernel)
         {
-            var bus = new NcqrCompatibleEventDispatcher();
+            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>());
 
             foreach (var handler in kernel.GetAll(typeof (IEventHandler)))
             {

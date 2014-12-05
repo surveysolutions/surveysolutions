@@ -1,16 +1,18 @@
 ﻿using System;
 using System.IO;
 using Moq;
-using Ncqrs.Commanding.ServiceModel;
+
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.Core.Synchronization;
 using Newtonsoft.Json;
 
@@ -25,13 +27,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.IncomePackagesRepositoryT
 
         protected static IncomePackagesRepository CreateIncomePackagesRepository(IJsonUtils jsonUtils = null,
             IFileSystemAccessor fileSystemAccessor = null, ICommandService commandService = null, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryStorage=null,
-            IStreamableEventStore eventStore = null)
+            IStreamableEventStore eventStore = null, IArchiveUtils archiver = null)
         {
             return new IncomePackagesRepository(logger: Mock.Of<ILogger>(),
                 syncSettings: new SyncSettings(true, appDataDirectory, incomingCapiPackagesDirectoryName, incomingCapiPackagesWithErrorsDirectoryName, incomingCapiPackageFileNameExtension),
                 commandService: commandService ?? Mock.Of<ICommandService>(),
                 fileSystemAccessor: fileSystemAccessor ?? CreateDefaultFileSystemAccessorMock().Object,
                 jsonUtils: jsonUtils ?? Mock.Of<IJsonUtils>(),
+                archiver: archiver ?? Mock.Of<IArchiveUtils>(),
                 interviewSummaryRepositoryWriter: interviewSummaryStorage ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(), overrideReceivedEventTimeStamp: false, origin: "capi-sync")
             {
                 EventStore = eventStore ?? Mock.Of<IStreamableEventStore>(),

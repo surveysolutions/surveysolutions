@@ -5,21 +5,15 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class DummyEventHandler :
+    public class DummyEventHandler :BaseDenormalizer,
         IEventHandler<AnswerCommented>,
         IEventHandler<FlagRemovedFromAnswer>,
         IEventHandler<FlagSetToAnswer>,
-        IEventHandler<AnswerDeclaredValid>,
-        IEventHandler<AnswerDeclaredInvalid>,
         IEventHandler<AnswersDeclaredValid>,
         IEventHandler<AnswersDeclaredInvalid>,
         IEventHandler<GroupPropagated>,
-        IEventHandler<QuestionEnabled>,
-        IEventHandler<QuestionDisabled>,
         IEventHandler<QuestionsEnabled>,
         IEventHandler<QuestionsDisabled>,
-        IEventHandler<GroupDisabled>,
-        IEventHandler<GroupEnabled>,
         IEventHandler<GroupsDisabled>,
         IEventHandler<GroupsEnabled>,
         IEventHandler<InterviewSynchronized>,
@@ -32,22 +26,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         //IEventHandler<SynchronizationMetadataApplied>,
         IEventHandler<InterviewApproved>,
         IEventHandler<InterviewRejected>,
-        IEventHandler<InterviewDeclaredInvalid>,
-    IEventHandler
+        IEventHandler<InterviewDeclaredInvalid>
     {
-        public void Handle(IPublishedEvent<AnswerDeclaredValid> evnt) {}
-
-        public void Handle(IPublishedEvent<AnswerDeclaredInvalid> evnt) { }
-
         public void Handle(IPublishedEvent<AnswersDeclaredValid> evnt) { }
 
         public void Handle(IPublishedEvent<AnswersDeclaredInvalid> evnt) { }
 
         public void Handle(IPublishedEvent<GroupPropagated> evnt) { }
-
-        public void Handle(IPublishedEvent<QuestionEnabled> evnt) {}
-
-        public void Handle(IPublishedEvent<QuestionDisabled> evnt) {}
 
         public void Handle(IPublishedEvent<QuestionsEnabled> evnt) {}
 
@@ -60,10 +45,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<FlagRemovedFromAnswer> evnt) {}
 
         public void Handle(IPublishedEvent<FlagSetToAnswer> evnt) {}
-
-        public void Handle(IPublishedEvent<GroupDisabled> evnt) { }
-
-        public void Handle(IPublishedEvent<GroupEnabled> evnt) { }
 
         public void Handle(IPublishedEvent<GroupsDisabled> evnt) { }
 
@@ -83,19 +64,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void Handle(IPublishedEvent<InterviewApproved> evnt) { }
 
-        public string Name
+        public override string Name
         {
             get { return "Dummy event handler"; }
         }
 
-        public Type[] UsesViews
+        public override object[] Writers
         {
-            get { return new Type[0]; }
-        }
-
-        public Type[] BuildsViews
-        {
-            get { return new Type[0]; }
+            get { return new object[0]; }
         }
 
         public void Handle(IPublishedEvent<InterviewRestarted> evnt){}

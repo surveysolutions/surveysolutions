@@ -18,12 +18,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public GenerationResult GenerateProcessorStateAssembly(QuestionnaireDocument questionnaire, out string generatedAssembly)
         {
-            Dictionary<string, string> genertedEvaluator = this.codeGenerator.GenerateEvaluator(questionnaire);
+            var generatedEvaluator = this.codeGenerator.GenerateEvaluator(questionnaire);
 
-            var emmitResult = this.codeCompiler.GenerateAssemblyAsString(questionnaire.PublicKey, genertedEvaluator, new string[] { },
+            var emmitResult = this.codeCompiler.GenerateAssemblyAsString(questionnaire.PublicKey, generatedEvaluator, new string[] { },
                 out generatedAssembly);
 
             return new GenerationResult(emmitResult.Success, emmitResult.Diagnostics);
+        }
+
+        public Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire)
+        {
+            return this.codeGenerator.GenerateEvaluator(questionnaire);
+        }
+
+        public string GenerateProcessorStateSingleClass(QuestionnaireDocument questionnaire)
+        {
+            return this.codeGenerator.Generate(questionnaire);
         }
     }
 }
