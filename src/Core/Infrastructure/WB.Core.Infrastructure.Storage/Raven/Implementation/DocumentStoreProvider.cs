@@ -95,11 +95,10 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation
             {
                 store.Credentials = new NetworkCredential(this.settings.Username, this.settings.Password);
             }
-            store.Initialize();
+            store.Initialize(true);
 
             if (!string.IsNullOrWhiteSpace(databaseName))
             {
-                store.DatabaseCommands.EnsureDatabaseExists(databaseName);
                 var systemStorage = new DocumentStore
                 {
                     Url = this.settings.StoragePath
