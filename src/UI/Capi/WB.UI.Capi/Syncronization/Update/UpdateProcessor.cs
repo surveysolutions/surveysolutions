@@ -13,7 +13,6 @@ namespace WB.UI.Capi.Syncronization.Update
     {
         private const string DownloadFolder = "download";
         private readonly string pathToFolder = Path.Combine(global::Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, DownloadFolder);
-        private readonly IRestServiceWrapperFactory restServiceWrapperFactory;
         private readonly ILogger logger;
 
         public UpdateProcessor(IRestServiceWrapperFactory restServiceWrapperFactory)

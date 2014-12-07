@@ -8,6 +8,7 @@ using Android.Views;
 using Android.Widget;
 using Android.Content.PM;
 using Cirrious.MvvmCross.Droid.Simple;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Views.Login;
 using WB.Core.GenericSubdomains.Utils.Services.Rest;
 using WB.UI.Shared.Android.Extensions;
@@ -143,7 +144,7 @@ namespace WB.UI.QuestionnaireTester
         {
             if (loginClickCount < RequiredAmountOfClick || passwordClickCount < RequiredAmountOfClick)
                 return;
-            tePathToDesigner.Text = CapiTesterApplication.GetPathToDesigner();
+            tePathToDesigner.Text = ServiceLocator.Current.GetInstance<IRestServiceSettings>().BaseAddress();
             llDesignerPath.Visibility = ViewStates.Visible;
         }
 

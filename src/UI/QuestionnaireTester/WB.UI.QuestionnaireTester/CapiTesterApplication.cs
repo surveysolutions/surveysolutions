@@ -94,13 +94,6 @@ namespace WB.UI.QuestionnaireTester
 
         private const string DesignerPath = "DesignerPath";
 
-        public static string GetPathToDesigner()
-        {
-            ISharedPreferences prefs = Context.GetSharedPreferences(Context.Resources.GetString(Resource.String.ApplicationName),
-                FileCreationMode.Private);
-            return prefs.GetString(DesignerPath, Context.Resources.GetString(Resource.String.DesignerPath));
-        }
-
         public static void SetPathToDesigner(string path)
         {
             ISharedPreferences prefs = Application.Context.GetSharedPreferences(Context.Resources.GetString(Resource.String.ApplicationName),
@@ -228,10 +221,10 @@ namespace WB.UI.QuestionnaireTester
                 new NcqrsModule().AsNinject(),
                 new CapiTesterCoreRegistry(),
                 new CapiBoundedContextModule(),
+                new GenericSubdomainsModule(),
                 new TesterLoggingModule(),
                 new AndroidTesterModelModule(),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false, basePath: basePath),
-                new RestAndroidModule(),
                 new FileInfrastructureModule());
 
             this.kernel.Bind<IAuthentication, DesignerAuthentication>().ToConstant(new DesignerAuthentication());

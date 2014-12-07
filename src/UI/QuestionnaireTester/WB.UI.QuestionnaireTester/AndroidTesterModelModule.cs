@@ -42,6 +42,7 @@ namespace WB.UI.QuestionnaireTester
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
             this.Bind<IWaitService>().To<WaitService>().InSingletonScope();
             this.Bind<IPlainStorageAccessor<QuestionnaireDocument>>().ToConstant(plainQuestionnaireStore);
+            this.Bind<IRestServiceSettings>().To<RestServiceSettings>().InSingletonScope();
         }
     }
 }
