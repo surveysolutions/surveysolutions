@@ -17,6 +17,9 @@ using Quartz;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
+using WB.Core.GenericSubdomains.Utils.Implementation.Services.Rest;
+using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Utils.Services.Rest;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
@@ -39,6 +42,7 @@ using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Injections;
+using WB.UI.Headquarters.Views;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using WB.UI.Shared.Web.MembershipProvider.Settings;
@@ -176,8 +180,6 @@ namespace WB.UI.Headquarters
                .WhenControllerHas<HeadquarterFeatureOnlyAttribute>();
 
             kernel.Bind(typeof(InMemoryReadSideRepositoryAccessor<>)).ToSelf().InSingletonScope();
-
-
 
             ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
             ServiceLocator.Current.GetInstance<IScheduler>().Start();

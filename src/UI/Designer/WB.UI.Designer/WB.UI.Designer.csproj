@@ -227,6 +227,7 @@
     <Compile Include="Api\CommandController.cs" />
     <Compile Include="Api\ControlPanelApiController.cs" />
     <Compile Include="Api\ExpressionGenerationController.cs" />
+    <Compile Include="Api\ImportController.cs" />
     <Compile Include="Api\QuestionnaireController.cs" />
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -288,6 +289,7 @@
     <Compile Include="Mailers\ISystemMailer.cs" />
     <Compile Include="Mailers\SystemMailer.cs" />
     <Compile Include="Models\AccountListViewItemModel.cs" />
+    <Compile Include="Models\DownloadQuestionnaireRequest.cs" />
     <Compile Include="Models\MakeAdminViewModel.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\ActionItem.cs" />
