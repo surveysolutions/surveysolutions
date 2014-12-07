@@ -12,12 +12,12 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 using WB.Core.SharedKernels.SurveyManagement.Web.Resources;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
@@ -34,6 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IPlainInterviewFileStorage plainFileRepository;
         private readonly IGlobalInfoProvider globalInfo;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly ITabletInformationService tabletInformationService;
 
         private string ResponseInterviewerFileName = "interviewer.apk";
         private string CapiFileName = "wbcapi.apk";
@@ -47,7 +48,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IViewFactory<UserViewInputModel, UserView> viewFactory, 
             ISupportedVersionProvider versionProvider,
             IPlainInterviewFileStorage plainFileRepository,
-            IFileSystemAccessor fileSystemAccessor)
+            IFileSystemAccessor fileSystemAccessor,
+            ITabletInformationService tabletInformationService)
             : base(commandService, globalInfo, logger)
         {
             
@@ -58,6 +60,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.viewFactory = viewFactory;
             this.globalInfo = globalInfo;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.tabletInformationService = tabletInformationService;
         }
 
         protected UserView GetUser(string login)

@@ -279,11 +279,12 @@ namespace WB.UI.Capi
                 new RestAndroidModule(),
                 new FileInfrastructureModule(),
                 new AndroidLoggingModule(),
-                new AndroidModelModule(basePath, new[] { SynchronizationFolder, InterviewFilesFolder, QuestionnaireAssembliesFolder }),
-                new ErrorReportingModule(basePath),
-                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath, 
-                    syncDirectoryName: SynchronizationFolder, dataDirectoryName: InterviewFilesFolder, 
-                    questionnaireAssembliesFolder : QuestionnaireAssembliesFolder));
+                new AndroidModelModule(basePath,
+                    new[] {SynchronizationFolder, InterviewFilesFolder, QuestionnaireAssembliesFolder}),
+                new ErrorReportingModule(pathToTemporaryFolder: basePath),
+                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath,
+                    syncDirectoryName: SynchronizationFolder, dataDirectoryName: InterviewFilesFolder,
+                    questionnaireAssembliesFolder: QuestionnaireAssembliesFolder));
 
             CrashManager.Initialize(this);
             CrashManager.AttachSender(() => new FileReportSender("Interviewer", this.kernel.Get<IInfoFileSupplierRegistry>()));

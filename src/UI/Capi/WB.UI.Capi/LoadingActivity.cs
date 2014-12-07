@@ -1,6 +1,5 @@
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
@@ -8,14 +7,11 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using Microsoft.Practices.ServiceLocation;
-using Ninject;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
-using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernel.Utils;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.UI.Capi.Controls;
 using WB.UI.Capi.Implementations.Activities;
@@ -29,8 +25,6 @@ namespace WB.UI.Capi
     {
         private CancellationTokenSource cancellationToken;
         private ISyncPackageRestoreService packageRestoreService = ServiceLocator.Current.GetInstance<ISyncPackageRestoreService>();
-        protected ITabletInformationSender tabletInformationSender;
-        protected ITabletInformationSenderFactory tabletInformationSenderFactory;
         protected ProgressDialog progressDialog;
 
         protected TabletInformationReportButton btnSendTabletInfo
