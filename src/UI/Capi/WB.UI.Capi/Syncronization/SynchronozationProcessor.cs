@@ -13,6 +13,7 @@ using WB.Core.GenericSubdomains.Utils.Implementation.Services.Rest;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.UI.Capi.Services;
 using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization.Handshake;
 using WB.UI.Capi.Syncronization.Pull;
@@ -50,7 +51,6 @@ namespace WB.UI.Capi.Syncronization
             ISyncAuthenticator authentificator, 
             ICapiDataSynchronizationService dataProcessor,
             ICapiCleanUpService cleanUpExecutor, 
-            IRestServiceWrapperFactory restServiceWrapperFactory, 
             IInterviewSynchronizationFileStorage fileSyncRepository,
             ISyncPackageIdsStorage packageIdStorage,
             ILogger logger,

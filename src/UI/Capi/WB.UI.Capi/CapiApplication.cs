@@ -277,7 +277,7 @@ namespace WB.UI.Capi
                 new NcqrsModule().AsNinject(),
                 new CapiBoundedContextModule(),
                 new AndroidCoreRegistry(),
-                new RestAndroidModule(),
+                new GenericSubdomainsModule(),
                 new FileInfrastructureModule(),
                 new AndroidLoggingModule(),
                 new AndroidModelModule(basePath,

@@ -131,6 +131,7 @@
     <Compile Include="Bindings\ValidationMessageBinding.cs" />
     <Compile Include="Bindings\VisibilityBinding.cs" />
     <Compile Include="Bootstrap\PictureChooserPluginBootstrap.cs" />
+    <Compile Include="GenericSubdomainsModule.cs" />
     <Compile Include="CapiBoundedContextModule.cs" />
     <Compile Include="Controls\AlertDialogAsyncExtension.cs" />
     <Compile Include="Controls\Breadcrumbs.cs" />
@@ -189,6 +190,7 @@
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CapiSharedSetup.cs" />
+    <Compile Include="Services\AndroidNetworkService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
