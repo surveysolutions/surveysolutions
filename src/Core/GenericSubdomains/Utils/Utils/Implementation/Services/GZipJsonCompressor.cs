@@ -1,12 +1,11 @@
 using System;
-using WB.Core.SharedKernels.SurveySolutions.Services;
+using System.IO;
+using System.IO.Compression;
+using System.Text;
+using WB.Core.GenericSubdomains.Utils.Services;
 
-namespace WB.Core.SharedKernel.Utils.Compression
+namespace WB.Core.GenericSubdomains.Utils.Implementation.Services
 {
-    using System.IO;
-    using System.IO.Compression;
-    using System.Text;
-
     public class GZipJsonCompressor : IStringCompressor
     {
         private readonly IJsonUtils jsonSerrializer;
@@ -68,7 +67,8 @@ namespace WB.Core.SharedKernel.Utils.Compression
                 {
                     gs.CopyTo(mso);
                 }
-                var stringData = Encoding.Unicode.GetString(mso.ToArray());
+                var arrayOfData = mso.ToArray();
+                var stringData = Encoding.Unicode.GetString(arrayOfData, 0, arrayOfData.Length);
                 return this.jsonSerrializer.Deserrialize<T>(stringData);
             }
         }
@@ -97,7 +97,8 @@ namespace WB.Core.SharedKernel.Utils.Compression
                 {
                     gs.CopyTo(mso);
                 }
-                return Encoding.Unicode.GetString(mso.ToArray());
+                var arrayOfData = mso.ToArray();
+                return Encoding.Unicode.GetString(arrayOfData, 0, arrayOfData.Length);
             }
         }
     }

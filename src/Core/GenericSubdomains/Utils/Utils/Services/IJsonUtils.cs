@@ -1,8 +1,9 @@
-﻿namespace WB.Core.SharedKernels.SurveySolutions.Services
+﻿namespace WB.Core.GenericSubdomains.Utils.Services
 {
     public interface IJsonUtils
     {
         string GetItemAsContent(object item);
         T Deserrialize<T>(string payload);
+        byte[] Serialize(object payload);
     }
 }

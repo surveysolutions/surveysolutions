@@ -9,6 +9,7 @@ using Android.Widget;
 using Android.Content.PM;
 using Cirrious.MvvmCross.Droid.Simple;
 using WB.Core.BoundedContexts.Capi.Views.Login;
+using WB.Core.GenericSubdomains.Utils.Services.Rest;
 using WB.UI.Shared.Android.Extensions;
 
 namespace WB.UI.QuestionnaireTester

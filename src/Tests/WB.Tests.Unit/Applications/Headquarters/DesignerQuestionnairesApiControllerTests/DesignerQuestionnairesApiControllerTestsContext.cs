@@ -3,11 +3,10 @@ using Machine.Specifications;
 using Moq;
 
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.PublicService;
 

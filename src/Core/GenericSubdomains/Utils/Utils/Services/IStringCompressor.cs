@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace WB.Core.SharedKernels.SurveySolutions.Services
+namespace WB.Core.GenericSubdomains.Utils.Services
 {
     /// <summary>
     /// The StringCompressor interface.

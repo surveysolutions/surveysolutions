@@ -1,11 +1,11 @@
 ﻿using Newtonsoft.Json;
-using WB.Core.SharedKernels.SurveySolutions.Services;
+using WB.Core.GenericSubdomains.Utils.Services;
 
-namespace WB.Core.SharedKernel.Utils.Serialization
+namespace WB.Core.GenericSubdomains.Utils.Implementation.Services
 {
     public class NewtonJsonUtils : IJsonUtils
     {
-        private JsonSerializerSettings JsonSerializerSettings
+        static JsonSerializerSettings JsonSerializerSettings
         {
             get
             {
@@ -25,6 +25,14 @@ namespace WB.Core.SharedKernel.Utils.Serialization
         public T Deserrialize<T>(string payload)
         {
             return JsonConvert.DeserializeObject<T>(payload, JsonSerializerSettings);
+        }
+
+        public byte[] Serialize(object payload)
+        {
+            var output = new System.IO.MemoryStream();
+            using (var writer = new System.IO.StreamWriter(output))
+                JsonConvert.SerializeObject(payload, Formatting.Indented, JsonSerializerSettings);
+            return output.ToArray();
         }
     }
 }
