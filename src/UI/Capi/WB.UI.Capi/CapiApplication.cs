@@ -53,6 +53,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.UI.Capi.Implementations.Navigation;
 using WB.UI.Capi.Injections;
+using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization;
 using WB.UI.Capi.Syncronization.Implementation;
 using WB.UI.Shared.Android;

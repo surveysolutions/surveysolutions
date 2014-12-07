@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using Android.Content;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
-using CAPI.Android.Settings;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
@@ -26,6 +24,8 @@ namespace WB.UI.Capi.Syncronization
     public class SynchronozationProcessor
     {
         private readonly ILogger logger;
+        private readonly ISynchronizationService synchronizationService;
+        private readonly IInterviewerSettings interviewerSettings;
         private readonly Context context;
         private CancellationTokenSource cancellationSource;
         
@@ -40,19 +40,7 @@ namespace WB.UI.Capi.Syncronization
 
         private readonly ISyncAuthenticator authentificator;
         private SyncCredentials credentials;
-
-        private string clientRegistrationId
-        {
-            set { SettingsManager.SetSetting(SettingsNames.RegistrationKeyName, value); }
-            get { return SettingsManager.GetSetting(SettingsNames.RegistrationKeyName); }
-        }
-
-        private string lastReceivedPackageId
-        {
-            set { SettingsManager.SetSetting(SettingsNames.LastTimestamp, value); }
-            get { return SettingsManager.GetSetting(SettingsNames.LastTimestamp); }
-        }
-
+        
         public event EventHandler<SynchronizationEventArgs> StatusChanged;
         public event EventHandler ProcessFinished;
         public event EventHandler ProcessCanceling;
@@ -64,7 +52,10 @@ namespace WB.UI.Capi.Syncronization
             ICapiCleanUpService cleanUpExecutor, 
             IRestServiceWrapperFactory restServiceWrapperFactory, 
             IInterviewSynchronizationFileStorage fileSyncRepository,
-            ISyncPackageIdsStorage packageIdStorage)
+            ISyncPackageIdsStorage packageIdStorage,
+            ILogger logger,
+            ISynchronizationService synchronizationService,
+            IInterviewerSettings interviewerSettings)
         {
             this.context = context;
 
@@ -73,15 +64,10 @@ namespace WB.UI.Capi.Syncronization
             this.cleanUpExecutor = cleanUpExecutor;
             this.fileSyncRepository = fileSyncRepository;
             this.packageIdStorage = packageIdStorage;
-
-            var executor = restServiceWrapperFactory.CreateRestServiceWrapper(SettingsManager.GetSyncAddressPoint());
-            this.pull = new RestPull(executor);
-            this.push = new RestPush(executor);
-            this.handshake = new RestHandshake(executor);
-
+            this.logger = logger;
+            this.synchronizationService = synchronizationService;
+            this.interviewerSettings = interviewerSettings;
             this.dataProcessor = dataProcessor;
-
-            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
         private async Task PullAsync()
@@ -151,10 +137,10 @@ namespace WB.UI.Capi.Syncronization
 
         private async Task MigrateOldSyncTimestampToId(CancellationToken cancellationToken)
         {
-            if (!string.IsNullOrEmpty(this.lastReceivedPackageId))
+            if (!string.IsNullOrEmpty(this.interviewerSettings.GetLastReceivedPackageId()))
             {
                 long lastReceivedPackageIdOfLongType;
-                if (!long.TryParse(lastReceivedPackageId, out lastReceivedPackageIdOfLongType))
+                if (!long.TryParse(this.interviewerSettings.GetLastReceivedPackageId(), out lastReceivedPackageIdOfLongType))
                     return;
                 this.OnStatusChanged(new SynchronizationEventArgs("Tablet had old installation. Migrating pacakge timestamp to it's id", Operation.Pull, true));
                 string lastReceivedChunkId = await this.pull.GetChunkIdByTimestamp(lastReceivedPackageIdOfLongType, this.credentials.Login, this.credentials.Password, cancellationToken);
@@ -213,8 +199,6 @@ namespace WB.UI.Capi.Syncronization
         {
             this.ExitIfCanceled();
 
-            var androidId = SettingsManager.AndroidId;
-            var appId = SettingsManager.InstallationId;
             var userCredentials = this.authentificator.RequestCredentials();
             this.ExitIfCanceled();
 
@@ -289,11 +273,6 @@ namespace WB.UI.Capi.Syncronization
 
         protected void Preparation()
         {
-            if (!SettingsManager.CheckSyncPoint())
-            {
-                throw new InvalidOperationException("Sync point is set incorrect.");
-            }
-
             if (!NetworkHelper.IsNetworkEnabled(this.context))
             {
                 throw new InvalidOperationException("Network is not available.");

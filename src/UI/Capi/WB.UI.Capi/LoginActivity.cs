@@ -8,6 +8,7 @@ using CAPI.Android.Settings;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Droid.Views;
 using Cirrious.MvvmCross.ViewModels;
+using Ninject;
 using WB.Core.BoundedContexts.Capi.Views.Login;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
@@ -55,7 +56,7 @@ namespace WB.UI.Capi
             this.SetContentView(Resource.Layout.Login);
             this.btnLogin.Click += this.btnLogin_Click;
 
-            if (string.IsNullOrWhiteSpace(SettingsManager.GetSetting(SettingsNames.RegistrationKeyName)))
+            if (string.IsNullOrWhiteSpace(CapiApplication.Kernel.Get<IInterviewerSettings>().GetClientRegistrationId()))
             {
                 this.ClearAllBackStack<FinishInstallationActivity>();
                 this.Finish();
