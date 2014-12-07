@@ -87,12 +87,13 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformat
                     content,
                     this.errorReportingSettings.GetDeviceId(), this.errorReportingSettings.GetClientRegistrationId());
 
-                var result = this.webExecutor.ExecuteRestRequestAsync<bool>(PostInfoPackagePath, this.ct, this.jsonUtils.GetItemAsContent(tabletInformationPackage), null, null, null)
-                                             .Result;
-
-                this.fileSystemAccessor.DeleteFile(this.pathToInfoArchive);
-
-                if (!result)
+                try
+                {
+                    this.restService.PostAsync(url: "InterviewerSyncApi/PostInfoPackage", token: this.ct,
+                        requestData: tabletInformationPackage);
+                }
+                catch
+                {
                     throw new TabletInformationSendException("server didn't get information package");
                 }
                 finally
