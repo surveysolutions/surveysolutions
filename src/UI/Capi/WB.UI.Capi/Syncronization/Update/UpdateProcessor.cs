@@ -2,10 +2,9 @@ using System;
 using System.IO;
 using Android.App;
 using Android.Content;
-using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Utils.Rest;
+using WB.Core.GenericSubdomains.Utils.Services.Rest;
+using WB.UI.Capi.Services;
 using WB.UI.Capi.Settings;
 
 namespace WB.UI.Capi.Syncronization.Update

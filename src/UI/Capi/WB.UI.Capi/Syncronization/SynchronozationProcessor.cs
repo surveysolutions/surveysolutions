@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Security.Authentication;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,8 +10,9 @@ using CAPI.Android.Settings;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Utils.Rest;
-using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Utils.Implementation.Services.Rest;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Settings;

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Threading;
-using System.Threading.Tasks;
 using Moq;
 using WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformation;
+using WB.Core.GenericSubdomains.ErrorReporting.Services;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.CapiInformationService;
-using WB.Core.GenericSubdomains.Utils.Rest;
+using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Utils.Services.Rest;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Tests.Unit.GenericSubdomains.ErrorReporting.TabletInformationSenderTests
 {

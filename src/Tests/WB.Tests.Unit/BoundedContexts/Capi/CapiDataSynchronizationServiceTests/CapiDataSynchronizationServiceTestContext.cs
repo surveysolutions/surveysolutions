@@ -4,13 +4,11 @@ using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.Login;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernel.Utils.Compression;
-using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
 {
