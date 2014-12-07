@@ -14,7 +14,9 @@ using Ninject.Modules;
 using Ninject.Syntax;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.GenericSubdomains.Utils.Implementation.Services;
+using WB.Core.GenericSubdomains.Utils.Implementation.Services.Rest;
 using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Utils.Services.Rest;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.Services;
@@ -24,6 +26,7 @@ using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
+using WB.UI.Headquarters.Views;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Injections
@@ -209,6 +212,10 @@ namespace WB.UI.Headquarters.Injections
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
             this.Bind<IStringCompressor>().To<GZipJsonCompressor>();
             this.Bind<IWaitService>().To<WaitService>().InSingletonScope();
+
+            this.Bind<INetworkService>().ToConstant(default(INetworkService));
+            this.Bind<IRestServiceSettings>().To<DesignerQuestionnaireApiRestServiceSettings>().InSingletonScope();
+            this.Bind<IRestService>().To<RestService>().InSingletonScope();
         }
     }
 }

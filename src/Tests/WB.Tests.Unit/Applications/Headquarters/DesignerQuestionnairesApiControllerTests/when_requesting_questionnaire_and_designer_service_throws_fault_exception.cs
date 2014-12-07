@@ -1,12 +1,14 @@
 using System;
-using System.ServiceModel;
+using System.Threading;
 using Machine.Specifications;
 using Moq;
+using WB.Core.GenericSubdomains.Utils.Implementation.Services.Rest;
+using WB.Core.GenericSubdomains.Utils.Services.Rest;
+using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Controllers;
-using WB.UI.Headquarters.PublicService;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiControllerTests
@@ -26,15 +28,14 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
             var versionProvider = new Mock<ISupportedVersionProvider>();
             versionProvider.Setup(x => x.GetSupportedQuestionnaireVersion()).Returns(supportedVerstion);
 
-            var service = new Mock<IPublicService>();
+            var service = new Mock<IRestService>();
 
             service
-                .Setup(x => x.DownloadQuestionnaire(Moq.It.IsAny<DownloadQuestionnaireRequest>()))
-                .Callback((DownloadQuestionnaireRequest r) => downloadRequest = r)
-                .Throws(new FaultException(someFaultReason));
+                .Setup(x => x.PostAsync<QuestionnaireCommunicationPackage>(Moq.It.IsAny<string>(), Moq.It.IsAny<object>(), Moq.It.IsAny<RestCredentials>(), Moq.It.IsAny<CancellationToken>()))
+                .Throws(new RestException(someFaultReason));
 
             controller = CreateDesignerQuestionnairesApiController(
-                getDesignerService: x => service.Object,
+                restService: service.Object,
                 supportedVersionProvider: versionProvider.Object);
         };
 
@@ -47,21 +48,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
         It should_handle_exception_and_set_ImportError_in_someFaultReason = () =>
             response.ImportError.ShouldEqual(someFaultReason);
 
-        It should_set_questionnaireId_in_downloadRequest = () =>
-            downloadRequest.QuestionnaireId.ShouldEqual(questionnaireId);
-
-        It should_set_Major_in_1_for_supportedQuestionnaireVersion_in_downloadRequest= () =>
-            downloadRequest.SupportedQuestionnaireVersion.Major.ShouldEqual(1);
-
-        It should_set_Minor_in_2_for_supportedQuestionnaireVersion_in_downloadRequest = () =>
-            downloadRequest.SupportedQuestionnaireVersion.Minor.ShouldEqual(2);
-
-        It should_set_Patch_in_3_for_supportedQuestionnaireVersion_in_downloadRequest = () =>
-            downloadRequest.SupportedQuestionnaireVersion.Patch.ShouldEqual(3);
-
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static string someFaultReason = "some fault reason";
-        private static DownloadQuestionnaireRequest downloadRequest;
+        private static dynamic downloadRequest;
         private static DesignerQuestionnairesApiController controller;
         private static ImportQuestionnaireRequest request;
         private static QuestionnaireVerificationResponse response;

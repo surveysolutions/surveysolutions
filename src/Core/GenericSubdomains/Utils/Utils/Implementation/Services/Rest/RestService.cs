@@ -36,7 +36,7 @@ namespace WB.Core.GenericSubdomains.Utils.Implementation.Services.Rest
         private async Task<T> SendRequest<T>(string url, HttpMethod verb, dynamic requestData = null,
             RestCredentials credentials = null, CancellationToken token = default(CancellationToken))
         {
-            if (!this.networkService.IsNetworkEnabled())
+            if (this.networkService != null && !this.networkService.IsNetworkEnabled())
             {
                 throw new RestException("Network is unavailable");
             }

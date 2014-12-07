@@ -1,25 +1,29 @@
 ﻿using System;
 using System.Net;
+using System.Security.Authentication;
 using System.ServiceModel.Security;
 using System.Web.Mvc;
-
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Implementation.Services.Rest;
+using WB.Core.GenericSubdomains.Utils.Services.Rest;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Views.Template;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
-using WB.UI.Headquarters.PublicService;
 
 namespace WB.UI.Headquarters.Controllers
 {
     [Authorize(Roles = "Headquarter")]
     public class TemplateController : BaseController
     {
-        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger)
+        private readonly IRestService designerQuestionnaireApiRestService;
+
+        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger, IRestService designerQuestionnaireApiRestService)
             : base(commandService, globalInfo, logger)
         {
+            this.designerQuestionnaireApiRestService = designerQuestionnaireApiRestService;
             this.ViewBag.ActivePage = MenuItem.Administration;
 
             if (AppSettings.Instance.AcceptUnsignedCertificate)
@@ -30,16 +34,16 @@ namespace WB.UI.Headquarters.Controllers
         }
 
 
-        private PublicServiceClient DesignerServiceClient
+        private RestCredentials designerUserCredentials
         {
-            get { return (PublicServiceClient) this.Session[this.GlobalInfo.GetCurrentUser().Name]; }
+            get { return (RestCredentials)this.Session[this.GlobalInfo.GetCurrentUser().Name]; }
 
             set { this.Session[this.GlobalInfo.GetCurrentUser().Name] = value; }
         }
 
         public ActionResult Import(QuestionnaireListInputModel model)
         {
-            if (this.DesignerServiceClient == null)
+            if (this.designerUserCredentials == null)
             {
                 return this.RedirectToAction("LoginToDesigner");
             }
@@ -60,21 +64,17 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                var service = new PublicServiceClient();
-                service.ClientCredentials.UserName.UserName = model.UserName;
-                service.ClientCredentials.UserName.Password = model.Password;
+                var designerUserCredentials = new RestCredentials {Login = model.UserName, Password = model.Password};
 
                 try
                 {
-                    service.Dummy();
+                    var isUserExistAndLockedOut = this.designerQuestionnaireApiRestService.PostAsync<bool>(url: "validatecredentials", credentials: designerUserCredentials).Result;
+                    if (!isUserExistAndLockedOut)
+                        throw new AuthenticationException();
 
-                    this.DesignerServiceClient = service;
+                    this.designerUserCredentials = designerUserCredentials;
 
                     return this.RedirectToAction("Import");
-                }
-                catch (MessageSecurityException)
-                {
-                    this.Error("Incorrect UserName/Password");
                 }
                 catch (Exception ex)
                 {
