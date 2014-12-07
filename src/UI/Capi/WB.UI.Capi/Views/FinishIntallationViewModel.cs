@@ -13,21 +13,21 @@ namespace WB.UI.Capi.Views
     {
         private INavigationService NavigationService
         {
-            get
-            {
-                return  ServiceLocator.Current.GetInstance<INavigationService>();
-            }
+            get { return ServiceLocator.Current.GetInstance<INavigationService>(); }
         }
 
         private IPasswordHasher passwordHasher
         {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<IPasswordHasher>();
-            }
+            get { return ServiceLocator.Current.GetInstance<IPasswordHasher>(); }
+        }
+
+        private IInterviewerSettings interviewerSettings
+        {
+            get { return ServiceLocator.Current.GetInstance<IInterviewerSettings>(); }
         }
 
         private bool canSetSyncEndpoint = true;
+
         public bool CanSetSyncEndpoint
         {
             get { return canSetSyncEndpoint; }
@@ -37,6 +37,7 @@ namespace WB.UI.Capi.Views
                 RaisePropertyChanged(() => CanSetSyncEndpoint);
             }
         }
+
         public string SyncEndpoint { get; private set; }
         public string Login { get; private set; }
         public string Password { get; private set; }
@@ -66,17 +67,19 @@ namespace WB.UI.Capi.Views
 
         private void StartSynchronization()
         {
-            if (!SettingsManager.SetSyncAddressPoint(this.SyncEndpoint))
+            try
+            {
+                this.interviewerSettings.SetSyncAddressPoint(this.SyncEndpoint);
+                NavigationService.NavigateTo(CapiPages.Synchronization, new Dictionary<string, string>
+                {
+                    {"Login", Login},
+                    {"PasswordHash", passwordHasher.Hash(Password)}
+                });
+            }
+            catch
             {
                 this.CanSetSyncEndpoint = false;
-                return;
             }
-
-            NavigationService.NavigateTo(CapiPages.Synchronization, new Dictionary<string, string>
-            {
-                { "Login", Login },
-                { "PasswordHash", passwordHasher.Hash(Password) }
-            });
         }
     }
 }
