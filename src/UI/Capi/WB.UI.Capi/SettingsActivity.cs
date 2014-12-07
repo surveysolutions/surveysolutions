@@ -49,6 +49,11 @@ namespace WB.UI.Capi
             get { return ServiceLocator.Current.GetInstance<ISynchronizationService>(); }
         }
 
+        private INetworkService networkService
+        {
+            get { return ServiceLocator.Current.GetInstance<INetworkService>(); }
+        }
+
         const string ApplicationFileName = "interviewer.apk";
         const string SyncGetlatestVersion = "/api/InterviewerSync/GetLatestVersion";
 
@@ -158,7 +163,7 @@ namespace WB.UI.Capi
 
         private void btnVersion_Click(object sender, EventArgs evnt)
         {
-            if (!NetworkHelper.IsNetworkEnabled(this))
+            if (!this.networkService.IsNetworkEnabled())
             {
                 Toast.MakeText(this, "Network is unavailable", ToastLength.Long).Show();
                 return;

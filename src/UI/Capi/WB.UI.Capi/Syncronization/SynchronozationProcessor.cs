@@ -3,19 +3,15 @@ using System.Collections.Generic;
 using System.Security.Authentication;
 using System.Threading;
 using System.Threading.Tasks;
-using Android.Content;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation.Services.Rest;
-using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Services;
 using WB.UI.Capi.Settings;
-using WB.UI.Capi.Utils;
 
 namespace WB.UI.Capi.Syncronization
 {
@@ -24,7 +20,6 @@ namespace WB.UI.Capi.Syncronization
         private readonly ILogger logger;
         private readonly ISynchronizationService synchronizationService;
         private readonly IInterviewerSettings interviewerSettings;
-        private readonly Context context;
         private CancellationTokenSource cancellationSource;
         
         private readonly ICapiDataSynchronizationService dataProcessor;
@@ -40,7 +35,7 @@ namespace WB.UI.Capi.Syncronization
         public event EventHandler ProcessCanceling;
         public event EventHandler<SynchronizationCanceledEventArgs> ProcessCanceled;
 
-        public SynchronozationProcessor(Context context, 
+        public SynchronozationProcessor(
             ISyncAuthenticator authentificator, 
             ICapiDataSynchronizationService dataProcessor,
             ICapiCleanUpService cleanUpExecutor, 
@@ -50,9 +45,6 @@ namespace WB.UI.Capi.Syncronization
             ISynchronizationService synchronizationService,
             IInterviewerSettings interviewerSettings)
         {
-            this.context = context;
-
-            this.Preparation();
             this.authentificator = authentificator;
             this.cleanUpExecutor = cleanUpExecutor;
             this.fileSyncRepository = fileSyncRepository;
@@ -267,14 +259,6 @@ namespace WB.UI.Capi.Syncronization
             var handler = this.StatusChanged;
             if (handler != null)
                 handler(this, evt);
-        }
-
-        protected void Preparation()
-        {
-            if (!NetworkHelper.IsNetworkEnabled(this.context))
-            {
-                throw new InvalidOperationException("Network is not available.");
-            }
         }
 
         private void ExitIfCanceled()
