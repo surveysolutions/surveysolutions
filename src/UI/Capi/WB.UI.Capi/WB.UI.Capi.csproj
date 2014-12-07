@@ -187,6 +187,7 @@
     <Compile Include="Implementations\Fragments\DataCollectionStatisticsContentFragment.cs" />
     <Compile Include="Implementations\Fragments\PrefilledScreenContentFragment.cs" />
     <Compile Include="Implementations\Navigation\NavigationService.cs" />
+    <Compile Include="Implementations\Services\SynchronizationService.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
     <Compile Include="FinishInstallationActivity.cs" />
     <Compile Include="Properties\Resource.Designer.cs">
@@ -209,11 +210,8 @@
     <Compile Include="Setup.cs" />
     <Compile Include="SplashScreen.cs" />
     <Compile Include="SynchronizationActivity.cs" />
-    <Compile Include="Syncronization\Handshake\RestHandshake.cs" />
     <Compile Include="Syncronization\Implementation\SyncPackageIdsStorage.cs" />
     <Compile Include="Syncronization\ISyncPackageIdsStorage.cs" />
-    <Compile Include="Syncronization\Pull\RestPull.cs" />
-    <Compile Include="Syncronization\Push\RestPush.cs" />
     <Compile Include="Syncronization\RestAuthenticator.cs" />
     <Compile Include="Syncronization\SynchronizationCanceledEventArgs.cs" />
     <Compile Include="Syncronization\SynchronizationEventArgs.cs" />
@@ -221,7 +219,6 @@
     <Compile Include="Syncronization\SynchronizationException.cs" />
     <Compile Include="Syncronization\SynchronozationProcessor.cs" />
     <Compile Include="Syncronization\Implementation\SyncPackageId.cs" />
-    <Compile Include="Syncronization\Update\RestVersionUpdate.cs" />
     <Compile Include="Syncronization\Update\UpdateProcessor.cs" />
     <Compile Include="Utils\BooleanToTextColorValueConverter.cs" />
     <Compile Include="Utils\NetworkHelper.cs" />
