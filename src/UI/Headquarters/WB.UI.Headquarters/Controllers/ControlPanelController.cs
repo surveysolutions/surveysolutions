@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.ServiceModel;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
@@ -10,12 +8,9 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
-using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
-using WB.UI.Headquarters.PublicService;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
@@ -33,57 +28,6 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.userViewFactory = userViewFactory;
             this.passwordHasher = passwordHasher;
-        }
-
-        public ActionResult Designer()
-        {
-            return this.Designer(null, null);
-        }
-
-        [HttpPost]
-        public ActionResult Designer(string login, string password)
-        {
-            return this.View(model: this.DiagnoseDesignerConnection(login, password));
-        }
-   
-        private string DiagnoseDesignerConnection(string login, string password)
-        {
-            if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(password))
-                return "Please provide login and password to continue...";
-
-            var service = new PublicServiceClient();
-
-            service.ClientCredentials.UserName.UserName = login;
-            service.ClientCredentials.UserName.Password = password;
-
-            try
-            {
-                service.Dummy();
-
-                return string.Format("Login to {0} succeeded!", service.Endpoint.Address.Uri);
-            }
-            catch (Exception exception)
-            {
-                return string.Format("Login to {1} failed.{0}{0}{2}", Environment.NewLine,
-                    service.Endpoint.Address.Uri,
-                    FormatDesignerConnectionException(exception));
-            }
-        }
-
-        private static string FormatDesignerConnectionException(Exception exception)
-        {
-            var faultException = exception.InnerException as FaultException;
-
-            if (faultException != null)
-                return string.Format("Fault code: [ predefined: {1}, sender: {2}, receiver: {3}, subcode: {4}, name: {5} ]{0}{0}{6}", Environment.NewLine,
-                    faultException.Code.IsPredefinedFault,
-                    faultException.Code.IsSenderFault,
-                    faultException.Code.IsReceiverFault,
-                    faultException.Code.SubCode,
-                    faultException.Code.Name,
-                    exception);
-
-            return exception.ToString();
         }
 
         public ActionResult CreateHeadquarters()

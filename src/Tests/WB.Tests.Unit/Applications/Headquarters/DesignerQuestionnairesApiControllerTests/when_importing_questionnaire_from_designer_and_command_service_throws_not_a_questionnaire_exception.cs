@@ -1,9 +1,16 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Machine.Specifications;
+using Main.Core.Documents;
 using Moq;
 using Ncqrs.Commanding;
 
+using WB.Core.GenericSubdomains.Utils.Implementation.Services.Rest;
+using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Utils.Services.Rest;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -15,7 +22,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
 {
     internal class when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception : DesignerQuestionnairesApiControllerTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             importRequest = new ImportQuestionnaireRequest();
 
@@ -35,8 +42,16 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
                 .Setup(cs => cs.Execute(it.IsAny<ICommand>(), it.IsAny<string>()))
                 .Throws(commandServiceException);
 
+            var zipUtilsMock = new Mock<IStringCompressor>();
+            zipUtilsMock.Setup(_ => _.DecompressString<QuestionnaireDocument>(Moq.It.IsAny<string>()))
+                .Returns(new QuestionnaireDocument());
+
+            var restServiceMock = new Mock<IRestService>();
+            restServiceMock.Setup(x => x.PostAsync<QuestionnaireCommunicationPackage>(Moq.It.IsAny<string>(), Moq.It.IsAny<object>(), Moq.It.IsAny<RestCredentials>(), Moq.It.IsAny<CancellationToken>()))
+                .Returns(() => new Task<QuestionnaireCommunicationPackage>(() => new QuestionnaireCommunicationPackage()));
+
             controller = CreateDesignerQuestionnairesApiController(commandService: commandService,
-                supportedVersionProvider: versionProvider.Object);
+                supportedVersionProvider: versionProvider.Object, zipUtils: zipUtilsMock.Object, restService: restServiceMock.Object);
         };
 
         Because of = () =>
