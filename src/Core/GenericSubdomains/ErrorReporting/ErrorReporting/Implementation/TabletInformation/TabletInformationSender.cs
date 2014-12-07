@@ -1,24 +1,19 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.ErrorReporting.Services;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.CapiInformationService;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Utils.Rest;
+using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Utils.Services.Rest;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.TabletInformation;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformation
 {
     internal class TabletInformationSender : ITabletInformationSender
     {
-        private ILogger Logger
-        {
-            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
-        }
-        
         private CancellationToken ct;
         private CancellationTokenSource tokenSource2;
         private Task task;
@@ -27,26 +22,20 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformat
         private readonly INetworkService networkService;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICapiInformationService capiInformationService;
-        private readonly IRestServiceWrapper webExecutor;
-
-        private readonly IJsonUtils jsonUtils;
-        private readonly string registrationKeyName;
-        private readonly string androidId;
-
-        private const string PostInfoPackagePath = "TabletReport/PostInfoPackage";
-
+        private readonly IRestService restService;
+        private readonly IErrorReportingSettings errorReportingSettings;
+        private readonly ILogger logger;
+        
         public TabletInformationSender(ICapiInformationService capiInformationService, INetworkService networkService,
-            IFileSystemAccessor fileSystemAccessor, IJsonUtils jsonUtils, string syncAddressPoint, string registrationKeyName, string androidId, IRestServiceWrapperFactory restServiceWrapperFactory)
+            IFileSystemAccessor fileSystemAccessor, IRestService restService, IErrorReportingSettings errorReportingSettings, ILogger logger)
         {
             this.capiInformationService = capiInformationService;
             this.networkService = networkService;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.jsonUtils = jsonUtils;
 
-            this.registrationKeyName = registrationKeyName;
-            this.androidId = androidId;
-
-            this.webExecutor = restServiceWrapperFactory.CreateRestServiceWrapper(syncAddressPoint);
+            this.restService = restService;
+            this.errorReportingSettings = errorReportingSettings;
+            this.logger = logger;
         }
 
         public event EventHandler<InformationPackageEventArgs> InformationPackageCreated;
@@ -96,7 +85,7 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformat
 
                 var tabletInformationPackage = new TabletInformationPackage(this.fileSystemAccessor.GetFileName(this.pathToInfoArchive),
                     content,
-                    this.androidId, this.registrationKeyName);
+                    this.errorReportingSettings.GetDeviceId(), this.errorReportingSettings.GetClientRegistrationId());
 
                 var result = this.webExecutor.ExecuteRestRequestAsync<bool>(PostInfoPackagePath, this.ct, this.jsonUtils.GetItemAsContent(tabletInformationPackage), null, null, null)
                                              .Result;
@@ -105,10 +94,15 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformat
 
                 if (!result)
                     throw new TabletInformationSendException("server didn't get information package");
+                }
+                finally
+                {
+                    this.fileSystemAccessor.DeleteFile(this.pathToInfoArchive);
+                }
             }
             catch (Exception e)
             {
-                this.Logger.Error("Error occurred during the process. Process is being canceled.", e);
+                this.logger.Error("Error occurred during the process. Process is being canceled.", e);
                 this.Cancel();
                 throw;
             }
@@ -160,7 +154,7 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformat
             {
                 foreach (var exception in e.InnerExceptions)
                 {
-                    this.Logger.Error("Error occurred during the process. Process is being canceled.", exception);
+                    this.logger.Error("Error occurred during the process. Process is being canceled.", exception);
                 }
             }
             this.OnProcessCanceled();

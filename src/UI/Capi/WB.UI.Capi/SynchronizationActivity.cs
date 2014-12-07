@@ -20,7 +20,6 @@ using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.Login;
-using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
@@ -32,6 +31,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Controls;
 using WB.UI.Capi.Extensions;
+using WB.UI.Capi.Services;
 using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization;
 using WB.UI.Capi.Utils;
@@ -76,8 +76,6 @@ namespace WB.UI.Capi
 
         protected ProgressDialog progressDialog;
         protected SynchronozationProcessor synchronizer;
-        protected ITabletInformationSender tabletInformationSender;
-        protected ITabletInformationSenderFactory tabletInformationSenderFactory;
         private ILogger Logger
         {
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
@@ -100,7 +98,6 @@ namespace WB.UI.Capi
 
             this.backupManager = CapiApplication.Kernel.Get<IBackup>();
             this.passwordHasher = CapiApplication.Kernel.Get<IPasswordHasher>();
-            this.tabletInformationSenderFactory = CapiApplication.Kernel.Get<ITabletInformationSenderFactory>();
             this.btnSync.Click += this.ButtonSyncClick;
             this.btnBackup.Click += this.btnBackup_Click;
             this.btnRestore.Click += this.btnRestore_Click;

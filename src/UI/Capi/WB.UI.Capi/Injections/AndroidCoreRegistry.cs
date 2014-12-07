@@ -141,6 +141,9 @@ namespace WB.UI.Capi.Injections
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
             this.Bind<IStringCompressor>().To<GZipJsonCompressor>();
             this.Bind<IViewFactory<LoginViewInput, LoginView>>().To<LoginViewFactory>();
+
+            this.Bind<IRestServiceSettings>().To<RestServiceSettings>().InSingletonScope();
+            this.Bind<IErrorReportingSettings>().To<ErrorReportingSettings>().InSingletonScope();
         }
     }
 }
