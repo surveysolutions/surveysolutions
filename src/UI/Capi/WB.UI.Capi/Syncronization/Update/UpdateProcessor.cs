@@ -14,11 +14,12 @@ namespace WB.UI.Capi.Syncronization.Update
         private const string DownloadFolder = "download";
         private readonly string pathToFolder = Path.Combine(global::Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, DownloadFolder);
         private readonly ILogger logger;
+        private readonly ISynchronizationService synchronizationService;
 
-        public UpdateProcessor(IRestServiceWrapperFactory restServiceWrapperFactory)
+        public UpdateProcessor(ILogger logger, ISynchronizationService synchronizationService)
         {
-            this.restServiceWrapperFactory = restServiceWrapperFactory;
-            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
+            this.logger = logger;
+            this.synchronizationService = synchronizationService;
 
             if (!Directory.Exists(this.pathToFolder))
             {
@@ -61,9 +62,15 @@ namespace WB.UI.Capi.Syncronization.Update
 
         public bool? CheckNewVersion()
         {
-            var executor = restServiceWrapperFactory.CreateRestServiceWrapper(SettingsManager.GetSyncAddressPoint());
-            var checker = new RestVersionUpdate(executor);
-            return checker.Execute(SettingsManager.AppVersionCode());
+            bool? newVersionAvailableOrNullIfThrow = null;
+            try
+            {
+                newVersionAvailableOrNullIfThrow = this.synchronizationService.NewVersionAvailableAsync().Result;
+            }
+            catch
+            {
+            }
+            return newVersionAvailableOrNullIfThrow;
         }
     }
 }
