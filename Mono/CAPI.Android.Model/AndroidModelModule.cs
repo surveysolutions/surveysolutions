@@ -55,7 +55,7 @@ namespace CAPI.Android.Core.Model
         public override void Load()
         {
             var evenStore = new MvvmCrossSqliteEventStore(EventStoreDatabaseName);
-            var snapshotStore = new FileBasedSnapshotStore();
+            var snapshotStore = new FileBasedSnapshotStore(this.Kernel.Get<IJsonUtils>());
             var denormalizerStore = new SqliteDenormalizerStore(ProjectionStoreName);
             var plainStore = new SqlitePlainStore(PlainStoreName);
             var loginStore = new SqliteReadSideRepositoryAccessor<LoginDTO>(denormalizerStore);
@@ -71,12 +71,13 @@ namespace CAPI.Android.Core.Model
                 interviewMetaInfoFactory, 
                 this.Kernel.Get<IArchiveUtils>(), 
                 this.Kernel.Get<IFileSystemAccessor>(),
+                this.Kernel.Get<IJsonUtils>(),
                 this.basePath);
 
             var syncCacher = new FileCapiSynchronizationCacheService(this.Kernel.Get<IFileSystemAccessor>(), this.basePath);
             var sharedPreferencesBackup = new SharedPreferencesBackupOperator();
-            var templateStore = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>();
-            var propagationStructureStore = new FileReadSideRepositoryWriter<QuestionnaireRosterStructure>();
+            var templateStore = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>(this.Kernel.Get<IJsonUtils>());
+            var propagationStructureStore = new FileReadSideRepositoryWriter<QuestionnaireRosterStructure>(this.Kernel.Get<IJsonUtils>());
 
             var bigSurveyStore = new BackupableInMemoryReadSideRepositoryAccessor<InterviewViewModel>();
 

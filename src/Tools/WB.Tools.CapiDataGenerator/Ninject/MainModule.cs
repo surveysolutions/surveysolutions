@@ -94,9 +94,10 @@ namespace CapiDataGenerator
                 interviewMetaInfoFactory,
                 this.Kernel.Get<IArchiveUtils>(),
                 this.Kernel.Get<IFileSystemAccessor>(),
+                this.Kernel.Get<IJsonUtils>(),
                 environmentalPersonalFolderPath);
 
-            var capiTemplateWriter = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>();
+            var capiTemplateWriter = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>(this.Kernel.Get<IJsonUtils>());
             this.capiTemplateVersionedWriter = new VersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>(capiTemplateWriter);
             
             ClearCapiDb(capiEvenStore, denormalizerStore, plainStore, changeLogStore, capiTemplateWriter);

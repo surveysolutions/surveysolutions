@@ -124,7 +124,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
             
             questionnaireDtOdocumentStorage.Store(
                 new QuestionnaireDTO(interviewId, responsibleId, questionnaireId, status,
-                                     items, questionnaireTemplate.Version, comments, createdOnClient, canBeDeleted), interviewId);
+                                     items.ToArray(), questionnaireTemplate.Version, comments, createdOnClient, canBeDeleted), interviewId);
         }
 
         private FeaturedItem CreateFeaturedItem(IQuestion featuredQuestion, object answer)
@@ -216,7 +216,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
             QuestionnaireDTO questionnaire = questionnaireDtOdocumentStorage.GetById(evnt.EventSourceId);
             if (questionnaire == null)
                 return;
-            questionnaire.Status = (int)evnt.Payload.Status;
+            questionnaire.Status = evnt.Payload.Status;
             questionnaire.Comments = evnt.Payload.Comment;
 
             questionnaireDtOdocumentStorage.Store(questionnaire, evnt.EventSourceId);
@@ -241,21 +241,15 @@ namespace CAPI.Android.Core.Model.EventHandlers
         {
             QuestionnaireDTO questionnaire = questionnaireDtOdocumentStorage.GetById(interviewId);
 
-            if (questionnaire == null)
-                return;
+            if (questionnaire == null) return;
 
-            var properties = questionnaire.GetProperties();
-            int keyIndex = Array.FindIndex(properties, w => w.PublicKey == questionId);
+            var preFilledQuestion = questionnaire.PrefilledQuestions.FirstOrDefault(question => question.PublicKey == questionId);
 
-            if (keyIndex >= 0)
-            {
-                var featuredQuestion = properties[keyIndex];
+            if (preFilledQuestion == null) return;
 
-                featuredQuestion.Value = getAnswer(featuredQuestion, answer);
+            preFilledQuestion.Value = getAnswer(preFilledQuestion, answer);
 
-                questionnaire.SetProperties(properties);
-                questionnaireDtOdocumentStorage.Store(questionnaire, interviewId);
-            }
+            questionnaireDtOdocumentStorage.Store(questionnaire, interviewId);
         }
 
         private string getAnswer(FeaturedItem featuredQuestion, object answer)

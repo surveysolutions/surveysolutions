@@ -10,12 +10,14 @@ namespace CAPI.Android.Core.Model.SnapshotStore
 {
     public class FileBasedSnapshotStore : ISnapshotStore, IBackupable
     {
+        private readonly IJsonUtils jsonUtils;
         private Dictionary<Guid, Snapshot> snapshots = new Dictionary<Guid, Snapshot>();
         private const string PersistingFolder = "SnapshotStore";
         private readonly string basePath;
 
-        public FileBasedSnapshotStore()
+        public FileBasedSnapshotStore(IJsonUtils jsonUtils)
         {
+            this.jsonUtils = jsonUtils;
             this.basePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), PersistingFolder);
             if (!Directory.Exists(this.basePath))
             {
@@ -35,7 +37,7 @@ namespace CAPI.Android.Core.Model.SnapshotStore
             var snapshot = this.snapshots[eventSourceId];
             try
             {
-                SaveItem(eventSourceId, JsonUtils.GetJsonData(snapshot));
+                SaveItem(eventSourceId, this.jsonUtils.GetItemAsContent(snapshot));
             }
             catch (Exception)
             {
@@ -72,7 +74,7 @@ namespace CAPI.Android.Core.Model.SnapshotStore
             {
                 try
                 {
-                    snapshot = JsonUtils.GetObject<Snapshot>(item);
+                    snapshot = this.jsonUtils.Deserrialize<Snapshot>(item);
                 }
                 catch (Exception)
                 {

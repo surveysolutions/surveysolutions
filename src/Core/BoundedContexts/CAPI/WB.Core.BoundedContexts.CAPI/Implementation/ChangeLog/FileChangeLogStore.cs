@@ -16,16 +16,19 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.ChangeLog
         private readonly IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> metaInfoFactory;
         private readonly IArchiveUtils archiver;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IJsonUtils jsonUtils;
 
         public FileChangeLogStore(
             IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> metaInfoFactory,
             IArchiveUtils archiver, 
             IFileSystemAccessor fileSystemAccessor,
+            IJsonUtils jsonUtils,
             string environmentalPersonalFolderPath)
         {
             this.metaInfoFactory = metaInfoFactory;
             this.archiver = archiver;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.jsonUtils = jsonUtils;
             this.changelogPath = fileSystemAccessor.CombinePath(environmentalPersonalFolderPath, ChangelogFolder);
             if (!fileSystemAccessor.IsDirectoryExists(this.changelogPath))
             {
@@ -44,15 +47,13 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.ChangeLog
 
             var syncItem = new SyncItem()
                 {
-                    Content = this.archiver.CompressString(JsonUtils.GetJsonData(recordData)),
+                    Content = this.archiver.CompressString(this.jsonUtils.GetItemAsContent(recordData)),
                     IsCompressed = true,
                     ItemType = SyncItemType.Questionnare,
-                    MetaInfo = this.archiver.CompressString(
-                        JsonUtils.GetJsonData(
-                            metaData)),
+                    MetaInfo = this.archiver.CompressString(this.jsonUtils.GetItemAsContent(metaData)),
                     RootId = eventSourceId
                 };
-            fileSystemAccessor.WriteAllText(path, JsonUtils.GetJsonData(syncItem));
+            fileSystemAccessor.WriteAllText(path, this.jsonUtils.GetItemAsContent(syncItem));
         }
 
         public string GetChangesetContent(Guid recordId)
