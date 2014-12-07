@@ -55,7 +55,8 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             IViewFactory<UserViewInputModel, UserView> viewFactory = null,
             ISupportedVersionProvider versionProvider = null, 
             IPlainInterviewFileStorage plainFileRepository = null,
-            IFileSystemAccessor fileSystemAccessor = null)
+            IFileSystemAccessor fileSystemAccessor = null,
+            ITabletInformationService tabletInformationService = null)
         {
             var controller = new InterviewerSyncController(
                 commandService ?? Mock.Of<ICommandService>(), 
@@ -65,7 +66,8 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
                 viewFactory ?? Mock.Of<IViewFactory<UserViewInputModel, UserView>>(),
                 versionProvider ?? Mock.Of<ISupportedVersionProvider>(), 
                 plainFileRepository ?? Mock.Of<IPlainInterviewFileStorage>(),
-                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>());
+                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                tabletInformationService ?? Mock.Of<ITabletInformationService>());
 
             return controller;
         }

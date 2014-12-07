@@ -69,20 +69,17 @@
     <Compile Include="..\ErrorReporting\Implementation\TabletInformation\TabletInformationSender.cs">
       <Link>Implementation\TabletInformation\TabletInformationSender.cs</Link>
     </Compile>
-    <Compile Include="..\ErrorReporting\Implementation\TabletInformation\TabletInformationSenderFactory.cs">
-      <Link>Implementation\TabletInformation\TabletInformationSenderFactory.cs</Link>
-    </Compile>
     <Compile Include="..\ErrorReporting\Services\CapiInformationService\ICapiInformationService.cs">
       <Link>Services\CapiInformationService\ICapiInformationService.cs</Link>
+    </Compile>
+    <Compile Include="..\ErrorReporting\Services\IErrorReportingSettings.cs">
+      <Link>Services\IErrorReportingSettings.cs</Link>
     </Compile>
     <Compile Include="..\ErrorReporting\Services\TabletInformationSender\InformationPackageEventArgs.cs">
       <Link>Services\TabletInformationSender\InformationPackageEventArgs.cs</Link>
     </Compile>
     <Compile Include="..\ErrorReporting\Services\TabletInformationSender\ITabletInformationSender.cs">
       <Link>Services\TabletInformationSender\ITabletInformationSender.cs</Link>
-    </Compile>
-    <Compile Include="..\ErrorReporting\Services\TabletInformationSender\ITabletInformationSenderFactory.cs">
-      <Link>Services\TabletInformationSender\ITabletInformationSenderFactory.cs</Link>
     </Compile>
     <Compile Include="..\ErrorReporting\Services\TabletInformationSender\TabletInformationSendException.cs">
       <Link>Services\TabletInformationSender\TabletInformationSendException.cs</Link>
@@ -127,7 +124,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="64ff78f2-775b-4728-9d8a-d3a7b9a7344c" />
+      <UserProperties ProjectLinkReference="64ff78f2-775b-4728-9d8a-d3a7b9a7344c" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
