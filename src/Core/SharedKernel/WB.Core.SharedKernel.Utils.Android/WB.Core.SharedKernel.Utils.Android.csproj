@@ -51,14 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\WB.Core.SharedKernel.Utils\Compression\GZipJsonCompressor.cs">
-      <Link>Compression\GZipJsonCompressor.cs</Link>
-    </Compile>
     <Compile Include="..\WB.Core.SharedKernel.Utils\FileSizeUtils.cs">
       <Link>FileSizeUtils.cs</Link>
-    </Compile>
-    <Compile Include="..\WB.Core.SharedKernel.Utils\Serialization\NewtonJsonUtils.cs">
-      <Link>Serialization\NewtonJsonUtils.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
