@@ -80,6 +80,10 @@ namespace WB.UI.Capi
         {
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
         }
+        private INetworkService networkService
+        {
+            get { return ServiceLocator.Current.GetInstance<INetworkService>(); }
+        }
 
         private Operation? currentOperation;
         private IBackup backupManager;
@@ -256,7 +260,7 @@ namespace WB.UI.Capi
 
         private void StartSynctionization(ISyncAuthenticator authenticator, EventHandler synchronizerProcessFinished)
         {
-            if (!NetworkHelper.IsNetworkEnabled(this))
+            if (!this.networkService.IsNetworkEnabled())
             {
                 Toast.MakeText(this, "Network is unavailable", ToastLength.Long).Show();
                 return;
@@ -271,7 +275,6 @@ namespace WB.UI.Capi
                 var plainFileRepository = CapiApplication.Kernel.Get<IPlainInterviewFileStorage>();
                 var cleaner = new CapiCleanUpService(changeLogManipulator, plainFileRepository);
                 this.synchronizer = new SynchronozationProcessor(
-                    this,
                     authenticator,
                     new CapiDataSynchronizationService(
                         changeLogManipulator,

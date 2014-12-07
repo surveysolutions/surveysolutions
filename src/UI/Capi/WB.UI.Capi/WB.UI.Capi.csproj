@@ -221,7 +221,6 @@
     <Compile Include="Syncronization\Implementation\SyncPackageId.cs" />
     <Compile Include="Syncronization\Update\UpdateProcessor.cs" />
     <Compile Include="Utils\BooleanToTextColorValueConverter.cs" />
-    <Compile Include="Utils\NetworkHelper.cs" />
     <Compile Include="Views\FinishIntallationViewModel.cs" />
     <Compile Include="Views\Login\LoginViewFactory.cs" />
   </ItemGroup>
