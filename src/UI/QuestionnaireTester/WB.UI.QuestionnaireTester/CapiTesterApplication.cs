@@ -228,7 +228,7 @@ namespace WB.UI.QuestionnaireTester
                 new FileInfrastructureModule());
 
             this.kernel.Bind<IAuthentication, DesignerAuthentication>().ToConstant(new DesignerAuthentication());
-            this.kernel.Bind<DesignerService>().ToConstant(new DesignerService());
+            this.kernel.Bind<DesignerService>().ToConstant(new DesignerService(kernel.Get<IRestService>()));
             
             this.kernel.Bind<Context>().ToConstant(this);
 
