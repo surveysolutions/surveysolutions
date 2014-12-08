@@ -9,7 +9,7 @@
    </parameter>
    <parameter name="The RavenDB instance address"
       description="Provide the address for RavenDB instance"
-      defaultValue="http://localhost:8080">
+      defaultValue="http://localhost:8081">
    <parameterEntry kind="XmlFile" 
       scope="\\web.config$" 
       match="/configuration/appSettings/add[@key='Raven.DocumentStore']/@value" />
