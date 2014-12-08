@@ -140,7 +140,8 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
 
         public Assembly LoadAssembly(string assemblyFile)
         {
-            //please don't use LoadFile here
+            //please don't use LoadFile here, but use LoadFrom
+            //dependent assemblies could not be resolved
             return Assembly.LoadFrom(assemblyFile); 
         }
 
