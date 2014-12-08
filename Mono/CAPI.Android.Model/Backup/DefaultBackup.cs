@@ -57,9 +57,8 @@ namespace CAPI.Android.Core.Model.Backup
             foreach (var backupable in backupables)
             {
                 var path = backupable.GetPathToBackupFile();
-                if(string.IsNullOrEmpty(path))
-                    continue;
-                if (fileSystemAccessor.IsFileExists(path) || fileSystemAccessor.IsDirectoryExists(path))
+                
+                if ((!string.IsNullOrEmpty(path)) && (fileSystemAccessor.IsFileExists(path) || fileSystemAccessor.IsDirectoryExists(path)))
                     fileSystemAccessor.CopyFileOrDirectory(path, backupFolderPath);
             }
             var backupArchiveName = fileSystemAccessor.CombinePath(backupPath, backupFolderName + zipExtension);
