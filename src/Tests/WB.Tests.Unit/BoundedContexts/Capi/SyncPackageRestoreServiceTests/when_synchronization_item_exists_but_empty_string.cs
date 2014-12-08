@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.SyncPackageRestoreServiceTests
             syncPackageRestoreService = CreateSyncPackageRestoreService(capiSynchronizationCacheServiceMock.Object);
         };
 
-        Because of = () => result = syncPackageRestoreService.CheckAndApplySyncPackage(Guid.NewGuid());
+        Because of = () => syncPackageRestoreService.CheckAndApplySyncPackage(Guid.NewGuid());
 
         It should_result_be_false = () => result.ShouldBeFalse();
 
