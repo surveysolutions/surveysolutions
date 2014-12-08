@@ -117,29 +117,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasicGuidGeneratorSpecs.cs" />
-    <Compile Include="Config\InstanceNotFoundInEnvironmentConfigurationExceptionTests.cs" />
-    <Compile Include="Domain\AggregateRootTests.cs" />
-    <Compile Include="Domain\EntityTests.cs" />
-    <Compile Include="Domain\EventNotHandledExceptionTests.cs" />
-    <Compile Include="Domain\Storage\SimpleAggregateRootCreationStrategyTests.cs" />
-    <Compile Include="Eventing\CommittedEventStreamTests.cs" />
-    <Compile Include="Domain\NoUnitOfWorkAvailableInThisContextExceptionTests.cs" />
-    <Compile Include="Domain\Storage\AggregateRootCreationExceptionTests.cs" />
-    <Compile Include="Eventing\Storage\AttributeEventTypeResolverTests.cs" />
-    <Compile Include="Eventing\Storage\PropertyBagConverterTests.cs" />
-    <Compile Include="Eventing\Storage\PropertyBagTests.cs" />
-    <Compile Include="Eventing\Storage\SimpleEventTypeResolverTests.cs" />
-    <Compile Include="Eventing\UncommittedEventStreamTests.cs" />
-    <Compile Include="GuidCombGenerator.cs" />
-    <Compile Include="InternalExtensionsTests.cs" />
-    <Compile Include="NcqrsEnvironmentConfigurationExceptionSpecs.cs" />
-    <Compile Include="NcqrsEnvironmentSpecs.cs" />
-    <Compile Include="DateTimeBasedClockSpecs.cs" />
-    <Compile Include="Domain\TypeThresholdedActionBasedInternalEventHandlerSpecs.cs" />
-    <Compile Include="Eventing\EventBaseSpecs.cs" />
-    <Compile Include="Eventing\ServiceModel\Bus\InProcessEventBusSpecs.cs" />
-    <Compile Include="Eventing\Storage\InMemoryEventStoreSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -162,10 +139,7 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Eventing\Sourcing\" />
-    <Folder Include="Eventing\Storage\Serialization\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

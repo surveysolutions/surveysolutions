@@ -53,6 +53,13 @@
     <Reference Include="Cirrious.MvvmCross.Wpf">
       <HintPath>..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.1.1\lib\net45\Cirrious.MvvmCross.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="FluentAssertions">
+      <HintPath>..\..\..\packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentAssertions.Core">
+      <HintPath>..\..\..\packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Machine.Specifications">
       <HintPath>..\..\..\packages\Machine.Specifications.0.8.1\lib\net45\Machine.Specifications.dll</HintPath>
     </Reference>
@@ -97,6 +104,10 @@
     </Reference>
     <Reference Include="Raven.Client.Lightweight">
       <HintPath>..\..\..\packages\RavenDB.Client.2.5.2907\lib\net45\Raven.Client.Lightweight.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks">
+      <HintPath>..\..\..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.1.32.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -1131,6 +1142,31 @@
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\whent_publish_0_events_on_bus_with_functional_style_denormalizer_registred.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\whent_publish_10_events_on_bus_with_functional_style_denormalizer_registred.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\whent_publish_10_events_on_bus_with_ncqrs_style_denormalizer_registred.cs" />
+    <Compile Include="Infrastructure\Ncqrs\BasicGuidGeneratorSpecs.cs" />
+    <Compile Include="Infrastructure\Ncqrs\Config\InstanceNotFoundInEnvironmentConfigurationExceptionTests.cs" />
+    <Compile Include="Infrastructure\Ncqrs\DateTimeBasedClockSpecs.cs" />
+    <Compile Include="Infrastructure\Ncqrs\Domain\AggregateRootTests.cs" />
+    <Compile Include="Infrastructure\Ncqrs\Domain\EntityTests.cs" />
+    <Compile Include="Infrastructure\Ncqrs\Domain\EventNotHandledExceptionTests.cs" />
+    <Compile Include="Infrastructure\Ncqrs\Domain\NoUnitOfWorkAvailableInThisContextExceptionTests.cs" />
+    <Compile Include="Infrastructure\Ncqrs\Domain\Storage\AggregateRootCreationExceptionTests.cs" />
+    <Compile Include="Infrastructure\Ncqrs\Domain\Storage\SimpleAggregateRootCreationStrategyTests.cs" />
+    <Compile Include="Infrastructure\Ncqrs\Domain\TypeThresholdedActionBasedInternalEventHandlerSpecs.cs" />
+    <Compile Include="Infrastructure\Ncqrs\EventContext.cs" />
+    <Compile Include="Infrastructure\Ncqrs\Eventing\CommittedEventStreamTests.cs" />
+    <Compile Include="Infrastructure\Ncqrs\Eventing\EventBaseSpecs.cs" />
+    <Compile Include="Infrastructure\Ncqrs\Eventing\ServiceModel\Bus\InProcessEventBusSpecs.cs" />
+    <Compile Include="Infrastructure\Ncqrs\Eventing\Storage\AttributeEventTypeResolverTests.cs" />
+    <Compile Include="Infrastructure\Ncqrs\Eventing\Storage\InMemoryEventStoreSpecs.cs" />
+    <Compile Include="Infrastructure\Ncqrs\Eventing\Storage\PropertyBagConverterTests.cs" />
+    <Compile Include="Infrastructure\Ncqrs\Eventing\Storage\PropertyBagTests.cs" />
+    <Compile Include="Infrastructure\Ncqrs\Eventing\Storage\SimpleEventTypeResolverTests.cs" />
+    <Compile Include="Infrastructure\Ncqrs\Eventing\UncommittedEventStreamTests.cs" />
+    <Compile Include="Infrastructure\Ncqrs\GuidCombGenerator.cs" />
+    <Compile Include="Infrastructure\Ncqrs\InternalExtensionsTests.cs" />
+    <Compile Include="Infrastructure\Ncqrs\NcqrsEnvironmentConfigurationExceptionSpecs.cs" />
+    <Compile Include="Infrastructure\Ncqrs\NcqrsEnvironmentSpecs.cs" />
+    <Compile Include="Infrastructure\Ncqrs\Prepare.cs" />
     <Compile Include="Infrastructure\View.cs" />
     <Compile Include="MockExtensions.cs" />
     <Compile Include="NcqrsEnvironmentConfiguration.cs" />
