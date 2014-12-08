@@ -70,6 +70,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Moq.4.2.1402.2112\lib\net40\Moq.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -100,8 +104,10 @@
     <Compile Include="Create.cs" />
     <Compile Include="InterviewViewModelDenormalizerTests\InterviewViewModelDenormalizerTests.cs" />
     <Compile Include="InterviewViewModelDenormalizerTests\InterviewViewModelDenormalizerTestsContext.cs" />
+    <Compile Include="InterviewViewModelDenormalizerTests\TextListQuestionViewModelTestContext.cs" />
     <Compile Include="InterviewViewModelDenormalizerTests\when_handle_PictureQuestionAnswered_event.cs" />
     <Compile Include="InterviewViewModelDenormalizerTests\when_handle_QRBarcodeQuestionAnswered_event.cs" />
+    <Compile Include="InterviewViewModelDenormalizerTests\when_json_deserialization_of_object_value_sucks_and_we_should_set_this_as_text_list_answer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionnaireBrowseItemDenormalizerTests\QuestionnaireBrowseItemDenormalizerTestContext.cs" />
     <Compile Include="QuestionnaireBrowseItemDenormalizerTests\when_PlainQuestionnaireRegistered_event_arrived.cs" />
