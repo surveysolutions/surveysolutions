@@ -4,6 +4,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using NSubstitute;
 using Raven.Client.Linq;
 using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
+using WB.Tests.Unit.BoundedContexts.Headquarters;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -11,14 +12,14 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
-namespace WB.Core.BoundedContexts.Headquarters.Tests.Interviews.InterviewsFeedDenormalizerTests
+namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsFeedDenormalizerTests
 {
     [Subject(typeof (InterviewsFeedDenormalizer))]
     public class when_interview_rejected
     {
         Establish context = () =>
         {
-            interviewRejectedEvent = Create.PublishedEvent(Guid.NewGuid(), new InterviewRejectedByHQ(Guid.NewGuid(), "comment"));
+            interviewRejectedEvent = new InterviewRejectedByHQ(Guid.NewGuid(), "comment").ToPublishedEvent(Guid.NewGuid());
 
             writer = Substitute.For<IReadSideRepositoryWriter<InterviewFeedEntry>>();
             var interviews = Substitute.For<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>();

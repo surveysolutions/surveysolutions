@@ -7,6 +7,7 @@ using Machine.Specifications;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NSubstitute;
 using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
+using WB.Tests.Unit.BoundedContexts.Headquarters;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -14,7 +15,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
-namespace WB.Core.BoundedContexts.Headquarters.Tests.Interviews.InterviewsFeedDenormalizerTests
+namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsFeedDenormalizerTests
 {
     [Subject(typeof(InterviewsFeedDenormalizer))]
     internal class when_supervisor_assigned_on_interview_on_hq
@@ -23,7 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.Interviews.InterviewsFeedDe
         {
             userId = Guid.NewGuid();
             supervisorId = Guid.NewGuid();
-            supervisorAssignedEvent = Create.PublishedEvent(Guid.NewGuid(), new SupervisorAssigned(userId, supervisorId));
+            supervisorAssignedEvent = new SupervisorAssigned(userId, supervisorId).ToPublishedEvent(Guid.NewGuid());
 
             writer = Substitute.For<IReadSideRepositoryWriter<InterviewFeedEntry>>();
             var interviews = Substitute.For<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>();

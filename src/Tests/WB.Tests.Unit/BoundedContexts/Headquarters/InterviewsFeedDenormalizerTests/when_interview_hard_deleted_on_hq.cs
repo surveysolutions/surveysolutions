@@ -7,13 +7,14 @@ using Machine.Specifications;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NSubstitute;
 using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
+using WB.Tests.Unit.BoundedContexts.Headquarters;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
-namespace WB.Core.BoundedContexts.Headquarters.Tests.Interviews.InterviewsFeedDenormalizerTests
+namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsFeedDenormalizerTests
 {
     [Subject(typeof(InterviewsFeedDenormalizer))]
     internal class when_interview_hard_deleted_on_hq
@@ -22,7 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.Interviews.InterviewsFeedDe
         {
             userId = Guid.NewGuid();
             supervisorId = Guid.NewGuid();
-            interviewDeletedEvent = Create.PublishedEvent(Guid.NewGuid(), new InterviewHardDeleted(userId));
+            interviewDeletedEvent = new InterviewHardDeleted(userId).ToPublishedEvent(Guid.NewGuid());
 
             writer = Substitute.For<IReadSideRepositoryWriter<InterviewFeedEntry>>();
 
