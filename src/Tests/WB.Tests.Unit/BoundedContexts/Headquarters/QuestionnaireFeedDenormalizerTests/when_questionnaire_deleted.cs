@@ -4,12 +4,14 @@ using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NSubstitute;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers;
+using WB.Tests.Unit.BoundedContexts.Headquarters;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
+using QuestionnaireDeleted = WB.Core.SharedKernels.DataCollection.Events.Questionnaire.QuestionnaireDeleted;
 
-namespace WB.Core.BoundedContexts.Headquarters.Tests.Questionnaire.QuestionnaireFeedDenormalizerTests
+namespace WB.Tests.Unit.BoundedContexts.Headquarters.QuestionnaireFeedDenormalizerTests
 {
     [Subject(typeof (QuestionnaireFeedDenormalizer))]
     public class when_questionnaire_deleted
@@ -18,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.Questionnaire.Questionnaire
         {
             questionnaireId = Guid.NewGuid();
 
-            questionnaireDeleted = Create.PublishedEvent(questionnaireId, new QuestionnaireDeleted() { QuestionnaireVersion = 1});
+            questionnaireDeleted = new QuestionnaireDeleted() { QuestionnaireVersion = 1}.ToPublishedEvent(questionnaireId);
 
             writer = Substitute.For<IReadSideRepositoryWriter<QuestionnaireFeedEntry>>();
 
