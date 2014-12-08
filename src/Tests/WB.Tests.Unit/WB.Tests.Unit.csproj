@@ -1245,10 +1245,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Externals\Framework\src\Ncqrs.Spec\Ncqrs.Spec.csproj">
-      <Project>{AA90754B-CA47-429E-BDC8-2A83E94179B7}</Project>
-      <Name>Ncqrs.Spec</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.Capi.csproj">
       <Project>{c6ed30a9-4d14-48d1-8311-c2267dfd424f}</Project>
       <Name>WB.Core.BoundedContexts.Capi</Name>
