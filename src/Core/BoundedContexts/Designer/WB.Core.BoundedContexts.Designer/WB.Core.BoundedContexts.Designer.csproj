@@ -173,7 +173,7 @@
     <Compile Include="Events\Questionnaire\ExpressionsMigratedToCSharp.cs" />
     <Compile Include="Events\Questionnaire\MultimediaQuestionUpdated.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\DefaultDynamicCompillerSettings.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\InterviewCompiler.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\RoslynCompiler.cs" />
     <Compile Include="Events\Users\AccountConfirmed.cs" />
     <Compile Include="Events\Users\AccountDeleted.cs" />
     <Compile Include="Events\Users\AccountLocked.cs" />
