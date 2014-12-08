@@ -6,6 +6,7 @@ using Ncqrs.Config;
 using Ncqrs.Domain;
 using NUnit.Framework;
 using Ncqrs.Eventing;
+using WB.Tests.Unit;
 
 namespace Ncqrs.Tests.Domain
 {
@@ -15,7 +16,7 @@ namespace Ncqrs.Tests.Domain
         [SetUp]
         public void SetUp()
         {
-            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            AssemblyContext.SetupServiceLocator();
             NcqrsEnvironment.InitDefaults();
         }
 

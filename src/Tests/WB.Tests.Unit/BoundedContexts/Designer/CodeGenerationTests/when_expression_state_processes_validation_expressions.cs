@@ -24,8 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
                 Guid questionId = Guid.Parse("11111111111111111111111111111112");
                 Guid rosterId = Guid.Parse("21111111111111111111111111111112");
 
-                var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
-                ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+                AssemblyContext.SetupServiceLocator();
 
                 QuestionnaireDocument questionnaireDocument = CreateQuestionnaireDocumenteWithOneNumericIntegerQuestionAndRosters(questionnaireId, questionId, rosterId);
                 IInterviewExpressionState state = GetInterviewExpressionState(questionnaireDocument);

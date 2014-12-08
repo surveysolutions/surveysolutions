@@ -127,5 +127,12 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
                 }
             };
         }
+
+        protected static QuestionViewModel GetQuestion(InterviewViewModel interviewViewModel, Guid questionId, decimal[] rosterVector)
+        {
+            QuestionViewModel question = interviewViewModel.FindQuestion(q => q.PublicKey == Create.InterviewItemId(questionId, rosterVector)).FirstOrDefault();
+
+            return question;
+        }
     }
 }

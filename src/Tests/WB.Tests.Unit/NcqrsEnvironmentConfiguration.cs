@@ -23,7 +23,7 @@ namespace WB.Tests.Unit
 
         public static void Configure()
         {
-            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            AssemblyContext.SetupServiceLocator();
 
             if (NcqrsEnvironment.IsConfigured)
             {

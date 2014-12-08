@@ -27,8 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
                 Guid question2Id = Guid.Parse("11111111111111111111111111111113");
                 Guid group2Id = Guid.Parse("63232323232323232323232323232111");
 
-                var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
-                ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+                AssemblyContext.SetupServiceLocator();
 
                 QuestionnaireDocument questionnaireDocument = CreateQuestionnairDocumenteHavingNestedRosterWithConditions(questionnaireId, question1Id, group1Id, question2Id, group2Id);
                 IInterviewExpressionState state = GetInterviewExpressionState(questionnaireDocument);

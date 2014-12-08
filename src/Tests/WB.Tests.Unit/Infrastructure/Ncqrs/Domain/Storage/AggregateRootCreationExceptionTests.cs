@@ -4,6 +4,7 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Domain.Storage;
 using NUnit.Framework;
+using WB.Tests.Unit;
 
 namespace Ncqrs.Tests.Domain.Storage
 {
@@ -13,7 +14,7 @@ namespace Ncqrs.Tests.Domain.Storage
         [SetUp]
         public void SetUp()
         {
-            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            AssemblyContext.SetupServiceLocator();
         }
 
         [Test]

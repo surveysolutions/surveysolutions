@@ -23,8 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
                 Guid id = Guid.Parse("11111111111111111111111111111111");
                 string resultAssembly;
 
-                var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
-                ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+                AssemblyContext.SetupServiceLocator();
 
                 var expressionProcessorGenerator = CreateExpressionProcessorGenerator();
 

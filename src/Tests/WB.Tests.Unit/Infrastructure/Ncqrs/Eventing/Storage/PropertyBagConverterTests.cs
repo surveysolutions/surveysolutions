@@ -5,6 +5,7 @@ using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
 using FluentAssertions;
+using WB.Tests.Unit;
 
 namespace Ncqrs.Tests.Eventing.Storage
 {
@@ -14,7 +15,7 @@ namespace Ncqrs.Tests.Eventing.Storage
         [SetUp]
         public void SetUp()
         {
-            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            AssemblyContext.SetupServiceLocator();
         }
 
         public class TestEvent

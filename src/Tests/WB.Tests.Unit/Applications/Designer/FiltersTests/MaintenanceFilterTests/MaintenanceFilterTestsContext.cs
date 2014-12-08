@@ -14,11 +14,7 @@ namespace WB.Tests.Unit.Applications.Designer.FiltersTests.MaintenanceFilterTest
     {
         protected static MaintenanceFilter Create(IReadSideStatusService readSideStatusService = null)
         {
-            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
-            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
-
-            serviceLocatorMock.Setup(_ => _.GetInstance<IReadSideStatusService>())
-                .Returns(readSideStatusService ?? Mock.Of<IReadSideStatusService>());
+            Setup.InstanceToMockedServiceLocator<IReadSideStatusService>(readSideStatusService ?? Mock.Of<IReadSideStatusService>());
 
             return new MaintenanceFilter();
         }
