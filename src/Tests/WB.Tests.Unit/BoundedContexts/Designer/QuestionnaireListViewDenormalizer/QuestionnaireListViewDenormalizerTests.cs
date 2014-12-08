@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormaliz
         public void Handle_When_SnapshotLoaded_event_template_is_absent_Then_new_document_is_added()
         {
             // arrange
-            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            AssemblyContext.SetupServiceLocator();
 
             Guid questionnaireId = Guid.NewGuid();
             string newtitle = "newTitle";
@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormaliz
         public void Handle_When_SnapshotLoadedEventTemplateIsPresent_Then_OldTemplateReplaced()
         {
             // arrange
-            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            AssemblyContext.SetupServiceLocator();
 
             Guid questionnaireId = Guid.NewGuid();
 

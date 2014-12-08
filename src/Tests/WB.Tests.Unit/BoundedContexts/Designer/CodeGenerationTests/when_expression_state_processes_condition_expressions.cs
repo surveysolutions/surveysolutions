@@ -24,8 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
                 Guid questionId = Guid.Parse("11111111111111111111111111111112");
                 Guid group1Id = Guid.Parse("23232323232323232323232323232111");
 
-                var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
-                ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+                AssemblyContext.SetupServiceLocator();
 
                 QuestionnaireDocument questionnaireDocument = CreateQuestionnairDocumenteWithTwoNumericIntegerQuestionAndConditionalGroup(questionnaireId,
                     questionId, group1Id);

@@ -18,12 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         [SetUp]
         public void SetUp()
         {
-            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
-            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
-
-            NcqrsEnvironment.SetGetter<ILogger>(Mock.Of<ILogger>);
-            NcqrsEnvironment.SetGetter<IUniqueIdentifierGenerator>(Mock.Of<IUniqueIdentifierGenerator>);
-            NcqrsEnvironment.SetGetter<IClock>(Mock.Of<IClock>);
+            AssemblyContext.SetupServiceLocator();
         }
 
         [Test]

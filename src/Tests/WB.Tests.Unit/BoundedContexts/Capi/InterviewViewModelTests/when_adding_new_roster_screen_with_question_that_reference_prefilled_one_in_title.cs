@@ -52,16 +52,11 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
             interviewViewModel = CreateInterviewViewModel(questionnarie, rosterStructure, interviewSynchronizationDto);
         };
 
-        private Because of = () =>
+        Because of = () =>
              PropagateScreen(interviewViewModel, firstLevelRosterId, 0, new decimal[0]);
 
         It should_substitute_title_of_question_in_first_roster_row_with_answer_on_prefilled_question = () =>
-            GetQuestion(questionInRosterReferencePrefilledNumericId, new decimal[] { 0 }).Text.ShouldEqual("Example 2");
-
-        private static QuestionViewModel GetQuestion(Guid questionId, decimal[] rosterVector)
-        {
-            return interviewViewModel.FindQuestion(q => q.PublicKey == Create.InterviewItemId(questionId, rosterVector)).FirstOrDefault();
-        }
+            GetQuestion(interviewViewModel, questionInRosterReferencePrefilledNumericId, new decimal[] { 0 }).Text.ShouldEqual("Example 2");
 
         private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;

@@ -3,6 +3,7 @@ using FluentAssertions;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
+using WB.Tests.Unit;
 
 namespace Ncqrs.Tests
 {
@@ -12,7 +13,7 @@ namespace Ncqrs.Tests
         [SetUp]
         public void SetUp()
         {
-            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            AssemblyContext.SetupServiceLocator();
         }
 
         [Test]

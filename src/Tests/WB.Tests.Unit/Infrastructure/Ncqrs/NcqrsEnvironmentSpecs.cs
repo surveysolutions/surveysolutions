@@ -5,6 +5,7 @@ using Moq;
 using Ncqrs.Config;
 using NUnit.Framework;
 using Rhino.Mocks;
+using WB.Tests.Unit;
 using MockRepository = Rhino.Mocks.MockRepository;
 
 namespace Ncqrs.Tests
@@ -24,7 +25,7 @@ namespace Ncqrs.Tests
         [SetUp]
         public void SetUp()
         {
-            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            AssemblyContext.SetupServiceLocator();
         }
 
         [TearDown]

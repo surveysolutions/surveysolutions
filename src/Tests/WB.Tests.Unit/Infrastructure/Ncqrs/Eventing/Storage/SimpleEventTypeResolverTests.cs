@@ -4,6 +4,7 @@ using Moq;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Tests.Unit;
 
 namespace Ncqrs.Tests.Eventing.Storage
 {
@@ -13,7 +14,7 @@ namespace Ncqrs.Tests.Eventing.Storage
         [SetUp]
         public void SetUp()
         {
-            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            AssemblyContext.SetupServiceLocator();
         }
 
         private SimpleEventTypeResolver resolver = new SimpleEventTypeResolver();
