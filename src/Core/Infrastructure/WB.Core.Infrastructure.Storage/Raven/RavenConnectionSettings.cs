@@ -5,11 +5,10 @@ namespace WB.Core.Infrastructure.Storage.Raven
 {
     public class RavenConnectionSettings
     {
-        public RavenConnectionSettings(string storagePath, bool isEmbedded = false,
+        public RavenConnectionSettings(string storagePath,
             string username = null, string password = null, string eventsDatabase = "Events", string viewsDatabase = "Views",
             string plainDatabase = "PlainStorage", string failoverBehavior = null, string activeBundles = null)
         {
-            this.IsEmbedded = isEmbedded;
             this.Username = username;
             this.Password = password;
             this.StoragePath = storagePath;
@@ -25,7 +24,6 @@ namespace WB.Core.Infrastructure.Storage.Raven
             this.ActiveBundles = activeBundles;
         }
 
-        public bool IsEmbedded { get; private set; }
         public string Username { get; private set; }
         public string Password { get; private set; }
         public string StoragePath { get; private set; }
