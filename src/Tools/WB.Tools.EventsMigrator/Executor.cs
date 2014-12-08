@@ -104,11 +104,10 @@ namespace WB.Tools.EventsMigrator
         {
             var ravenConnectionSettings = new RavenConnectionSettings(
                    settings.ServerAddress,
-                   isEmbedded: false,
                    eventsDatabase: settings.RavenDatabaseName);
 
             var instance = new DocumentStoreProvider(ravenConnectionSettings);
-            DocumentStore separateInstanceForEventStore = instance.CreateSeparateInstanceForEventStore();
+            IDocumentStore separateInstanceForEventStore = instance.CreateSeparateInstanceForEventStore();
             var store = new RavenDBEventStore(separateInstanceForEventStore, 1000, useStreamingForAllEvents: true);
             return store;
         }

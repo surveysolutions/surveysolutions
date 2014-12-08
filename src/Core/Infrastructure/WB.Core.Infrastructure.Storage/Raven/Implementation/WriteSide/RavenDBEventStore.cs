@@ -5,11 +5,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
-using Raven.Abstractions.Json;
 using Raven.Abstractions.Replication;
 using Raven.Client;
 using Raven.Client.Indexes;
-using Raven.Imports.Newtonsoft.Json;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide.Indexes;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
@@ -17,8 +15,6 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
     internal class RavenDBEventStore :  IStreamableEventStore
     {
         protected readonly IDocumentStore DocumentStore;
-
-        private bool useAsyncSave = false; // research: in the embedded mode true is not valid.
 
         private readonly bool useStreamingForAllEvents;
 
@@ -135,31 +131,15 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
         {
             try
             {
-                if (this.useAsyncSave)
+                using (IDocumentSession session = this.DocumentStore.OpenSession())
                 {
-                    using (IAsyncDocumentSession session = this.DocumentStore.OpenAsyncSession())
+                    session.Advanced.UseOptimisticConcurrency = true;
+                    foreach (UncommittedEvent uncommittedEvent in eventStream)
                     {
-                        session.Advanced.UseOptimisticConcurrency = true;
-                        foreach (UncommittedEvent uncommittedEvent in eventStream)
-                        {
-                            session.StoreAsync(ToStoredEvent(eventStream.CommitId, uncommittedEvent));
-                        }
-
-                        session.SaveChangesAsync();
+                        session.Store(ToStoredEvent(eventStream.CommitId, uncommittedEvent));
                     }
-                }
-                else
-                {
-                    using (IDocumentSession session = this.DocumentStore.OpenSession())
-                    {
-                        session.Advanced.UseOptimisticConcurrency = true;
-                        foreach (UncommittedEvent uncommittedEvent in eventStream)
-                        {
-                            session.Store(ToStoredEvent(eventStream.CommitId, uncommittedEvent));
-                        }
 
-                        session.SaveChanges();
-                    }
+                    session.SaveChanges();
                 }
             }
             catch (global::Raven.Abstractions.Exceptions.ConcurrencyException cex)
