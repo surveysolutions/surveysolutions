@@ -6,6 +6,12 @@
   </PropertyGroup>
   <Target Name="AddCustomSkipRules">
     <ItemGroup>
+      <MsDeploySkipRules Include="SkipAppDataFolder">
+        <SkipAction>Delete</SkipAction>
+        <ObjectName>dirPath</ObjectName>
+        <AbsolutePath>\\App_Data$</AbsolutePath>
+        <XPath></XPath>
+      </MsDeploySkipRules>
       <MsDeploySkipRules Include="SkipExportedData">
         <SkipAction>Delete</SkipAction>
         <ObjectName>filePath</ObjectName>
