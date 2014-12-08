@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 
@@ -50,7 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                                 defaultReferencedPortableAssembly)).GetReference()));
             
             CSharpCompilation compilation = CSharpCompilation.Create(
-                String.Format("rules-{0}-{1}.dll", templateId, Guid.NewGuid()),
+                String.Format("rules-{0}-{1}.dll", templateId.FormatGuid(), Guid.NewGuid().FormatGuid()),
                 options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, 
                     checkOverflow: true, 
                     optimizationLevel: OptimizationLevel.Release, 
