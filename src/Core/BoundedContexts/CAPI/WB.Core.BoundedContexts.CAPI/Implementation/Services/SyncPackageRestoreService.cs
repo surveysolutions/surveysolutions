@@ -56,17 +56,13 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             itemsInProcess.TryRemove(id, out dummyBool);
         }
 
-        public bool CheckAndApplySyncPackage(Guid itemKey)
+        public void CheckAndApplySyncPackage(Guid itemKey)
         {
             if (!this.WaitUntilItemCanBeProcessed(itemKey))
-                return false;
-
-            bool isAppliedSuccesfully = false;
+                throw new TimeoutException(string.Format("Can't put interview '{0}' in possessing line", itemKey));
             try
             {
-                if (!this.capiSynchronizationCacheService.DoesCachedItemExist(itemKey))
-                    isAppliedSuccesfully = true;
-                else
+                if (this.capiSynchronizationCacheService.DoesCachedItemExist(itemKey))
                 {
                     var item = this.capiSynchronizationCacheService.LoadItem(itemKey);
 
@@ -78,8 +74,6 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
                         this.commandService.Execute(new SynchronizeInterviewCommand(interview.Id, interview.UserId, interview));
 
                         this.capiSynchronizationCacheService.DeleteItem(itemKey);
-
-                        isAppliedSuccesfully = true;
                     }
                 }
             }
@@ -87,14 +81,12 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             {
                 //if state is saved as event but denormalizer failed we won't delete file
                 this.logger.Error("Error occured during applying interview after synchronization", e);
-                isAppliedSuccesfully = false;
+                throw;
             }
             finally
             {
                 this.ReleaseItem(itemKey);
             }
-
-            return isAppliedSuccesfully;
         }
     }
 }
