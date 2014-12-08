@@ -4,13 +4,13 @@
   
   <string name="Send">Send</string>
   <string name="Cancel">Cancel</string>
-  
+   <string name="DetailsFormat">Details: {0}</string>
   <string name="Oops">Oops, something went wrong! You can help up to solve this issue faster if you send an information about your tablet.</string>
   <string name="InterviewLoadingError">Interview loading error</string>
-
+  <string name="InterviewWithIdIsAbsentFormat">Interview with id is absent \'{0}\'</string>
  <string name="InformationPackageIsSuccessfullySent">Information package is successfully sent.</string>
  <string name="ThankYouForPackage">Thank you! We\'ll try to fix your issue as soon as we can. We are sorry for inconvenience.</string>
- <string name="SendingOfInformationPackageIsCanceled">Sending of information package is canceled.</string> 
+ <string name="SendingOfInformationPackageIsCanceled">Sending of information package is cancelled.</string> 
  
   <string name="InformationPackage">Information package</string>
   <string name="CreatingInformationPackage">Creating information package</string>
