@@ -8,6 +8,7 @@ using NUnit.Framework;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Rhino.Mocks;
 using Ncqrs.Domain;
+using WB.Tests.Unit;
 using MockRepository = Rhino.Mocks.MockRepository;
 
 namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
@@ -18,7 +19,7 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
         [SetUp]
         public void SetUp()
         {
-            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            AssemblyContext.SetupServiceLocator();
         }
 
         public class ADomainEvent

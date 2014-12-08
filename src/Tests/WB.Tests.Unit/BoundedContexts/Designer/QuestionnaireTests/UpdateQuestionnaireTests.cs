@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         [SetUp]
         public void SetUp()
         {
-            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            AssemblyContext.SetupServiceLocator();
         }
 
         [TestCase("")]

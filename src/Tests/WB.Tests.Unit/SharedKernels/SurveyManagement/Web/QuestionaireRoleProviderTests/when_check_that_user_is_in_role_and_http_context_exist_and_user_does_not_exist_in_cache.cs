@@ -22,7 +22,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.QuestionaireRoleProvi
 
             var serviceLocatorMock = new Mock<IServiceLocator> {DefaultValue = DefaultValue.Mock};
             serviceLocatorMock.Setup(_ =>_.GetInstance<IViewFactory<UserViewInputModel, UserView>>()).Returns(userViewFactoryMock.Object);
-            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+
+            AssemblyContext.SetupServiceLocator();
 
             HttpContext.Current = new HttpContext(new HttpRequest(null, "http://tempuri.org", null), new HttpResponse(null));
             

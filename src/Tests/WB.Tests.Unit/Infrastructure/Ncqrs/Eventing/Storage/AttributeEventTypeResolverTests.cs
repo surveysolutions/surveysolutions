@@ -5,6 +5,7 @@ using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
+using WB.Tests.Unit;
 
 namespace Ncqrs.Tests.Eventing.Storage
 {
@@ -16,7 +17,7 @@ namespace Ncqrs.Tests.Eventing.Storage
         [SetUp]
         public void Setup()
         {
-	        ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            AssemblyContext.SetupServiceLocator();
             resolver = new AttributeEventTypeResolver();
         }
 

@@ -23,8 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
             {
                 string resultAssembly;
 
-                var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
-                ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+                AssemblyContext.SetupServiceLocator();
 
                 IExpressionProcessorGenerator expressionProcessorGenerator = CreateExpressionProcessorGenerator();
 

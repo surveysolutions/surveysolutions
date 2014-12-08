@@ -10,6 +10,7 @@ using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Spec;
 using Rhino.Mocks;
 using NUnit.Framework;
+using WB.Tests.Unit;
 using MockRepository = Rhino.Mocks.MockRepository;
 
 namespace Ncqrs.Tests.Domain
@@ -20,7 +21,7 @@ namespace Ncqrs.Tests.Domain
         [SetUp]
         public void SetUp()
         {
-            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            AssemblyContext.SetupServiceLocator();
             var generator = MockRepository.GenerateMock<IUniqueIdentifierGenerator>();
             NcqrsEnvironment.SetDefault<IUniqueIdentifierGenerator>(generator);
         }
