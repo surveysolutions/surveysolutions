@@ -34,18 +34,19 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.SyncPackageRestoreServiceTests
             commandServiceMock.Setup(x => x.Execute(Moq.It.IsAny<SynchronizeInterviewCommand>(), null)).Throws<NullReferenceException>();
             syncPackageRestoreService = CreateSyncPackageRestoreService(capiSynchronizationCacheServiceMock.Object, jsonUtilsMock.Object, commandServiceMock.Object);
         };
+        Because of = () =>
+            exception = Catch.Exception(() =>
+                syncPackageRestoreService.CheckAndApplySyncPackage(interviewSynchronizationDto.Id));
 
-        Because of = () => result = syncPackageRestoreService.CheckAndApplySyncPackage(interviewSynchronizationDto.Id);
-
-        It should_result_be_false = () => result.ShouldBeFalse();
+        It should_result_be_false = () => exception.ShouldNotBeNull();
 
         It should_synchronization_item_be_not_deleted = () => capiSynchronizationCacheServiceMock.Verify(x => x.DeleteItem(interviewSynchronizationDto.Id), Times.Never);
 
         private static SyncPackageRestoreService syncPackageRestoreService;
-        private static bool result;
         private static InterviewSynchronizationDto interviewSynchronizationDto;
         private static Mock<ICapiSynchronizationCacheService> capiSynchronizationCacheServiceMock;
         private static Mock<IJsonUtils> jsonUtilsMock;
         private static Mock<ICommandService> commandServiceMock;
+        private static Exception exception;
     }
 }

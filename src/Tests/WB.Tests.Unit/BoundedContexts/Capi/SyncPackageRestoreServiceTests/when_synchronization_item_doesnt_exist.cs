@@ -11,11 +11,14 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.SyncPackageRestoreServiceTests
             syncPackageRestoreService = CreateSyncPackageRestoreService();
         };
         
-        Because of = () => result = syncPackageRestoreService.CheckAndApplySyncPackage(Guid.NewGuid());
-        
-        It should_result_be_true = () => result.ShouldBeTrue();
+        Because of = () =>
+             exception =
+                    Catch.Exception(
+                        () => syncPackageRestoreService.CheckAndApplySyncPackage(Guid.NewGuid()));
+
+        It should_not_rise_any_exception = () => exception.ShouldBeNull();
 
         private static SyncPackageRestoreService syncPackageRestoreService;
-        private static bool result;
+        static Exception exception;
     }
 }
