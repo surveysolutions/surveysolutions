@@ -8,7 +8,7 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 
-namespace WB.Core.BoundedContexts.Designer.Tests
+namespace WB.Tests.Unit
 {
     public class AssemblyContext : IAssemblyContext
     {

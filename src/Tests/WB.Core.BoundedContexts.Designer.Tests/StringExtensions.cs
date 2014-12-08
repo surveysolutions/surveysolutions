@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WB.Core.BoundedContexts.Designer.Tests
+namespace WB.Tests.Unit
 {
     internal static class StringExtensions
     {
