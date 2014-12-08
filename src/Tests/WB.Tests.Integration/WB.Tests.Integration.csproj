@@ -85,6 +85,7 @@
     <Compile Include="CommandServiceTests\when_executing_not_registered_command.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="Empty.cs" />
+    <Compile Include="EventContext.cs" />
     <Compile Include="EventContextExtensions.cs" />
     <Compile Include="EventHandler\when_event_handlers_are_created.cs" />
     <Compile Include="Execute.cs" />
