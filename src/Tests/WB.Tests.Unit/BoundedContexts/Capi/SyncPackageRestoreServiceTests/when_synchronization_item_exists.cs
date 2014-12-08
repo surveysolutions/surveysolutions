@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.SyncPackageRestoreServiceTests
             syncPackageRestoreService = CreateSyncPackageRestoreService(capiSynchronizationCacheServiceMock.Object, jsonUtilsMock.Object, commandServiceMock.Object);
         };
 
-        Because of = () => result = syncPackageRestoreService.CheckAndApplySyncPackage(interviewSynchronizationDto.Id);
+        Because of = () => syncPackageRestoreService.CheckAndApplySyncPackage(interviewSynchronizationDto.Id);
 
         It should_SynchronizeInterviewCommand_be_called =
             () =>
@@ -48,12 +48,9 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.SyncPackageRestoreServiceTests
                                         param.SynchronizedInterview == interviewSynchronizationDto &&
                                         param.UserId == interviewSynchronizationDto.UserId), null), Times.Once);
 
-        It should_result_be_true = () => result.ShouldBeTrue();
-
         It should_synchronization_item_be_deleted = () => capiSynchronizationCacheServiceMock.Verify(x => x.DeleteItem(interviewSynchronizationDto.Id), Times.Once);
 
         private static SyncPackageRestoreService syncPackageRestoreService;
-        private static bool result;
         private static InterviewSynchronizationDto interviewSynchronizationDto;
         private static Mock<ICapiSynchronizationCacheService> capiSynchronizationCacheServiceMock;
         private static Mock<IJsonUtils> jsonUtilsMock;

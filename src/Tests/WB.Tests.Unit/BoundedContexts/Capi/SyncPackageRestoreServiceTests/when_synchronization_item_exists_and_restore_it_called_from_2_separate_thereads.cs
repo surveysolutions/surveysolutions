@@ -39,10 +39,21 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.SyncPackageRestoreServiceTests
 
         Because of = () =>
         {
-            Task task1 = Task.Factory.StartNew(() => {
-                result1 = syncPackageRestoreService.CheckAndApplySyncPackage(interviewSynchronizationDto.Id); });
+            Task task1 = Task.Factory.StartNew(() =>
+            {
+                exception1 =
+                    Catch.Exception(
+                        () =>
+                            syncPackageRestoreService.CheckAndApplySyncPackage(
+                                interviewSynchronizationDto.Id));
+            });
+
             Task task2 = Task.Factory.StartNew(() => {
-                result2 = syncPackageRestoreService.CheckAndApplySyncPackage(interviewSynchronizationDto.Id);
+                exception2 =
+                  Catch.Exception(
+                      () =>
+                          syncPackageRestoreService.CheckAndApplySyncPackage(
+                              interviewSynchronizationDto.Id));
             });
 
             task1.Wait();
@@ -60,13 +71,13 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.SyncPackageRestoreServiceTests
                                         param.SynchronizedInterview == interviewSynchronizationDto &&
                                         param.UserId == interviewSynchronizationDto.UserId), null), Times.Once);
 
-        It should_return_true_for_first_thread = () => (result1 ^ result2).ShouldBeTrue();
+        It should_rise_exception_for_first_or_second_thread = () => (exception1!=null ^ exception2!=null).ShouldBeTrue();
 
         It should_delete_synchronization_item = () => capiSynchronizationCacheServiceMock.DeleteCallCount.ShouldEqual(1);
 
         static SyncPackageRestoreService syncPackageRestoreService;
-        static bool result1;
-        static bool result2;
+        static Exception exception1;
+        static Exception exception2;
         static InterviewSynchronizationDto interviewSynchronizationDto;
         static CapiSynchronizationCacheServiceMock capiSynchronizationCacheServiceMock;
         static Mock<IJsonUtils> jsonUtilsMock;
