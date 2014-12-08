@@ -165,10 +165,7 @@ namespace WB.UI.QuestionnaireTester
             {
                 Logger.Error(e.Message, e);
                 additionalMassage = Resources.GetText(Resource.String.TemplateIsNotValidForCurrentVersionOfTester);
-#if DEBUG
                 additionalMassage += Environment.NewLine + e.Message;
-#endif
-                
                 return false;
             }
 
