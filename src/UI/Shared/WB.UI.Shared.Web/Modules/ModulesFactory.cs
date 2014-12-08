@@ -37,7 +37,7 @@ namespace WB.UI.Shared.Web.Modules
                     ? WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"]
                     : WebConfigurationManager.AppSettings["Raven.DocumentStore"];
 
-                var ravenSettings = new RavenConnectionSettings(storePath, isEmbeded, WebConfigurationManager.AppSettings["Raven.Username"],
+                var ravenSettings = new RavenConnectionSettings(storePath, WebConfigurationManager.AppSettings["Raven.Username"],
                     WebConfigurationManager.AppSettings["Raven.Password"], WebConfigurationManager.AppSettings["Raven.Databases.Events"],
                     WebConfigurationManager.AppSettings["Raven.Databases.Views"],
                     WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"],
