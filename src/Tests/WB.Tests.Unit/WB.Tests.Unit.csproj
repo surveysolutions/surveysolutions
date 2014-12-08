@@ -86,6 +86,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NSubstitute">
+      <HintPath>..\..\..\packages\NSubstitute.1.7.2.0\lib\NET45\NSubstitute.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -1094,6 +1097,15 @@
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_variable_name_is_too_long.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_variable_name_not_unique.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_variable_name_start_with_digit.cs" />
+    <Compile Include="BoundedContexts\Headquarters\InterviewsFeedDenormalizerTests\when_interview_approved_by_hq.cs" />
+    <Compile Include="BoundedContexts\Headquarters\InterviewsFeedDenormalizerTests\when_interview_deleted_on_hq.cs" />
+    <Compile Include="BoundedContexts\Headquarters\InterviewsFeedDenormalizerTests\when_interview_hard_deleted_on_hq.cs" />
+    <Compile Include="BoundedContexts\Headquarters\InterviewsFeedDenormalizerTests\when_interview_rejected.cs" />
+    <Compile Include="BoundedContexts\Headquarters\InterviewsFeedDenormalizerTests\when_supervisor_assigned_on_interview_on_capi_client.cs" />
+    <Compile Include="BoundedContexts\Headquarters\InterviewsFeedDenormalizerTests\when_supervisor_assigned_on_interview_on_hq.cs" />
+    <Compile Include="BoundedContexts\Headquarters\QuestionnaireFeedDenormalizerTests\when_questionnaire_deleted.cs" />
+    <Compile Include="BoundedContexts\Headquarters\QuestionnaireFeedDenormalizerTests\when_template_imported.cs" />
+    <Compile Include="BoundedContexts\Headquarters\QuestionnaireFeedDenormalizerTests\when_template_imported_with_not_empty_version.cs" />
     <Compile Include="BoundedContexts\Supervisor\AtomFeedReaderTests\when_reading_feed_from_specified_entry_and_such_entry_is_absent_in_feed.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="EnumerableExtensions.cs" />
@@ -1190,7 +1202,6 @@
     <Folder Include="Applications\Designer\CommandUtilsTests\" />
     <Folder Include="Applications\Headquarters\" />
     <Folder Include="Applications\Supervisor\" />
-    <Folder Include="BoundedContexts\Headquarters\" />
     <Folder Include="GenericSubdomains\Logging\" />
   </ItemGroup>
   <ItemGroup>
@@ -1210,6 +1221,10 @@
       <Project>{DCBFC3F0-8E8C-4529-B474-B6A79225450E}</Project>
       <Name>WB.Core.BoundedContexts.Designer</Name>
       <Aliases>global,designer</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj">
+      <Project>{3017ec6d-ae4a-4c19-a653-352999592a7e}</Project>
+      <Name>WB.Core.BoundedContexts.Headquarters</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\WB.Core.BoundedContexts.Supervisor.csproj">
       <Project>{755CA607-6B50-487F-98A0-34A98973593D}</Project>
