@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
 using Machine.Specifications;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStateTests;
 
@@ -45,6 +49,46 @@ namespace WB.Tests.Unit
             question.GeneratedValidationsMethodName.ShouldEqual(generatedValidationsMethodName);
             question.GeneratedMandatoryMethodName.ShouldEqual(generatedMandatoryMethodName);
             question.GeneratedConditionsMethodName.ShouldEqual(generatedConditionsMethodName);
+        }
+
+        public static void ShouldContainEvents<TEvent>(this EventContext eventContext, int count)
+        {
+            eventContext.Events.Count(e => e.Payload is TEvent).ShouldEqual(count);
+        }
+
+        public static void ShouldContainEvent<TEvent>(this EventContext eventContext, Func<TEvent, bool> condition = null)
+        {
+            if (condition == null)
+            {
+                eventContext.Events.ShouldContain(@event
+                    => @event.Payload is TEvent);
+            }
+            else
+            {
+                eventContext.Events.ShouldContain(@event
+                    => @event.Payload is TEvent
+                        && condition.Invoke((TEvent)@event.Payload));
+            }
+        }
+
+        public static void ShouldNotContainEvent<TEvent>(this EventContext eventContext, Func<TEvent, bool> condition = null)
+        {
+            if (condition == null)
+            {
+                eventContext.Events.ShouldNotContain(@event
+                    => @event.Payload is TEvent);
+            }
+            else
+            {
+                eventContext.Events.ShouldNotContain(@event
+                    => @event.Payload is TEvent
+                        && condition.Invoke((TEvent)@event.Payload));
+            }
+        }
+
+        public static void ShouldContainGroup(this QuestionnaireDocument questionnaireDocument, Expression<Func<IGroup, bool>> condition)
+        {
+            questionnaireDocument.GetAllGroups().ShouldContain(condition);
         }
     }
 }
