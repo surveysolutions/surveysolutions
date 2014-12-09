@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Ninject.Modules;
+using Raven.Client;
 using Raven.Client.Document;
 using WB.Core.Infrastructure.Storage.Raven.Implementation;
 
@@ -21,12 +22,12 @@ namespace WB.Core.Infrastructure.Storage.Raven
 
             var storeProvider = new DocumentStoreProvider(this.settings);
             this.Bind<DocumentStoreProvider>().ToConstant(storeProvider);
-            this.Bind<DocumentStore>().ToProvider<DocumentStoreProvider>();
+            this.Bind<IDocumentStore>().ToProvider<DocumentStoreProvider>();
         }
 
         private bool IsDocumentStoreAlreadyBound()
         {
-            return this.Kernel.GetBindings(typeof(DocumentStore)).Any();
+            return this.Kernel.GetBindings(typeof(IDocumentStore)).Any();
         }
     }
 }

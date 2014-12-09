@@ -92,7 +92,7 @@ namespace WB.Core.Infrastructure.Raven.Tests
         [Test]
         public void Event_saving_smoke_test()
         {
-            var targetStore = new RavenDBEventStore(_documentStore, 100);
+            var targetStore = new RavenDBEventStore(this.DocumentStore, 100);
             var id = Guid.NewGuid();
 
             int sequenceCounter = 0;
@@ -119,7 +119,7 @@ namespace WB.Core.Infrastructure.Raven.Tests
         [Test]
         public void Saving_event_source_while_there_is_a_newer_event_source_should_throw_concurency_exception()
         {
-            var targetStore = new RavenDBEventStore(_documentStore, 100);
+            var targetStore = new RavenDBEventStore(this.DocumentStore, 100);
             var id = Guid.NewGuid();
 
             int sequenceCounter = 0;
@@ -154,7 +154,7 @@ namespace WB.Core.Infrastructure.Raven.Tests
         [Test]
         public void Retrieving_all_events_should_return_the_same_as_added()
         {
-            var targetStore = new RavenDBEventStore(_documentStore, 100);
+            var targetStore = new RavenDBEventStore(this.DocumentStore, 100);
             var id = Guid.NewGuid();
 
             int sequenceCounter = 0;

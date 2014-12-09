@@ -36,7 +36,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
                 return new JsonSerializerSettings
                 {
                     TypeNameHandling = TypeNameHandling.All,
-                    ContractResolver = ravenStore.Conventions.JsonContractResolver,
+                    ContractResolver = this.RavenStore.Conventions.JsonContractResolver,
                     DefaultValueHandling = DefaultValueHandling.Ignore,
                     MissingMemberHandling = MissingMemberHandling.Ignore,
                     NullValueHandling = NullValueHandling.Ignore
@@ -44,7 +44,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             }
         }
 
-        public RavenReadSideRepositoryWriter(DocumentStore ravenStore, IFileSystemAccessor fileSystemAccessor, string basePath)
+        public RavenReadSideRepositoryWriter(IDocumentStore ravenStore, IFileSystemAccessor fileSystemAccessor, string basePath)
             : base(ravenStore)
         {
             this.fileSystemAccessor = fileSystemAccessor;
@@ -266,7 +266,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         private void StoreAllCachedEntitiesToRepository()
         {
-            using (var session = this.ravenStore.BulkInsert())
+            using (var session = this.RavenStore.BulkInsert())
             {
                 var restOfCaches = cache.Keys.ToList();
 
@@ -336,8 +336,11 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         public void Clear()
         {
             const string DefaultIndexName = "Raven/DocumentsByEntityName";
-            if (this.ravenStore.DatabaseCommands.GetIndex(DefaultIndexName) != null)
-                this.ravenStore.DatabaseCommands.DeleteByIndex(DefaultIndexName, new IndexQuery() { Query = string.Format("Tag: *{0}*", global::Raven.Client.Util.Inflector.Pluralize(ViewName)) }, false).WaitForCompletion();
+            if (this.RavenStore.DatabaseCommands.GetIndex(DefaultIndexName) != null)
+                this.RavenStore.DatabaseCommands.DeleteByIndex(DefaultIndexName, new IndexQuery()
+                {
+                    Query = string.Format("Tag: *{0}*", global::Raven.Client.Util.Inflector.Pluralize(ViewName))
+                }, new BulkOperationOptions {AllowStale = false}).WaitForCompletion();
         }
     }
 }

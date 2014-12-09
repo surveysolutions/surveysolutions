@@ -11,11 +11,11 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 {
     internal class RavenReadSideRepositoryIndexAccessor : IReadSideRepositoryIndexAccessor
     {
-        private readonly DocumentStore ravenStore;
+        private readonly IDocumentStore ravenStore;
         private readonly Assembly[] assembliesWithIndexes;
         private bool wereIndexesCreated = false;
 
-        public RavenReadSideRepositoryIndexAccessor(DocumentStore ravenStore, Assembly[] assembliesWithIndexes)
+        public RavenReadSideRepositoryIndexAccessor(IDocumentStore ravenStore, Assembly[] assembliesWithIndexes)
         {
             this.ravenStore = ravenStore;
             this.assembliesWithIndexes = assembliesWithIndexes;

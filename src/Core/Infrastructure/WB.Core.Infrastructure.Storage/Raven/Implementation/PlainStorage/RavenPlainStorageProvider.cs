@@ -6,9 +6,9 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.PlainStorage
 {
     internal class RavenPlainStorageProvider : IRavenPlainStorageProvider
     {
-        private readonly DocumentStore documentStore;
+        private readonly IDocumentStore documentStore;
 
-        public RavenPlainStorageProvider(DocumentStore documentStore)
+        public RavenPlainStorageProvider(IDocumentStore documentStore)
         {
             this.documentStore = documentStore;
         }

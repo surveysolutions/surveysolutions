@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
                 : items.Where(x => x.TeamLeadId == input.ViewerId);
 
             var totalCount = items.Count();
-            var seachIndexContents = this.DefineOrderBy(items.AsProjection<InterviewSummary>(), input)
+            var seachIndexContents = this.DefineOrderBy(items.ProjectFromIndexFieldsInto<InterviewSummary>(), input)
                                          .Skip((input.Page - 1) * input.PageSize)
                                          .Take(input.PageSize)
                                          .ToList();

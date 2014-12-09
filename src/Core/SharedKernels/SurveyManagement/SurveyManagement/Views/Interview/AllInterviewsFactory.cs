@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 items = items.Where(x => x.QuestionnaireVersion == input.QuestionnaireVersion);
             }
 
-            List<InterviewSummary> interviewItems = this.DefineOrderBy(items.AsProjection<InterviewSummary>(), input)
+            List<InterviewSummary> interviewItems = this.DefineOrderBy(items.ProjectFromIndexFieldsInto<InterviewSummary>(), input)
                             .Skip((input.Page - 1) * input.PageSize)
                             .Take(input.PageSize)
                             .ToList();
