@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireControllerTests
         Because of = () => controller.EditCascadingOptions(postedFile);
 
         It should_add_error_message_to_temp_data = () =>
-            controller.TempData["error"].ShouldEqual("Only .csv (comma-separated values) files are accepted");
+            controller.TempData["error"].ShouldEqual("Only tab- or comma-separated values files are accepted");
 
         Cleanup stuff = () =>
         {

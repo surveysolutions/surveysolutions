@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireControllerTests
         Because of = () => controller.EditCascadingOptions(null);
 
         It should_add_error_message_to_temp_data = () =>
-            controller.TempData["error"].ShouldEqual("Choose .csv (comma-separated values) file to upload, please");
+            controller.TempData["error"].ShouldEqual("Choose tab- or comma-separated values file to upload, please");
 
         private static QuestionnaireController controller;
     }
