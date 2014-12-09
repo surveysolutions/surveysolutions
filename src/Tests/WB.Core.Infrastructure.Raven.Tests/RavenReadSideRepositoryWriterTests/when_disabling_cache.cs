@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
+using Raven.Client;
 using Raven.Client.Document;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
@@ -41,6 +42,6 @@ namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideRepositoryWriterTests
         private static RavenReadSideRepositoryWriter<View> ravenReadSideRepositoryWriter;
         private static FileSystemIOAccessor fileSystemAccessor;
         private static long cahceLimit = 256;
-        private static DocumentStore documentStore;
+        private static IDocumentStore documentStore;
     }
 }

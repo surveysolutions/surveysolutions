@@ -101,7 +101,7 @@ namespace WB.UI.Supervisor.App_Start
                 ? WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"]
                 : WebConfigurationManager.AppSettings["Raven.DocumentStore"];
 
-            var ravenSettings = new RavenConnectionSettings(storePath, isEmbedded: isEmbeded,
+            var ravenSettings = new RavenConnectionSettings(storePath,
                 username: WebConfigurationManager.AppSettings["Raven.Username"],
                 password: WebConfigurationManager.AppSettings["Raven.Password"],
                 eventsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Events"],

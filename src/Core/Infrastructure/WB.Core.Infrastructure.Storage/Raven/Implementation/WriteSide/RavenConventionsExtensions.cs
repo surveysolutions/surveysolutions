@@ -1,27 +1,26 @@
 ﻿using System.Linq;
 using Raven.Abstractions.Json;
-using Raven.Client.Document;
+using Raven.Abstractions.Replication;
+using Raven.Client;
 using Raven.Imports.Newtonsoft.Json;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
 {
-    internal class RavenWriteSideStore
+    public static class RavenConventionsExtensions
     {
-        protected internal static DocumentConvention CreateStoreConventions(string ravenCollectionName, FailoverBehavior failoverBehavior = FailoverBehavior.FailImmediately)
+        public static void UpdateStoreConventions(this IDocumentStore store, string ravenCollectionName, FailoverBehavior failoverBehavior = FailoverBehavior.FailImmediately)
         {
-            return new DocumentConvention
-            {
-                FailoverBehavior = failoverBehavior,
-                JsonContractResolver = new PropertiesOnlyContractResolver(),
-                FindTypeTagName = x => ravenCollectionName,
-                CustomizeJsonSerializer = CustomizeJsonSerializer,
-            };
+            store.Conventions.FailoverBehavior = failoverBehavior;
+            store.Conventions.JsonContractResolver = new PropertiesOnlyContractResolver();
+            store.Conventions.FindTypeTagName = x => ravenCollectionName;
+            store.Conventions.CustomizeJsonSerializer = CustomizeJsonSerializer;
         }
 
-        private static void CustomizeJsonSerializer(JsonSerializer serializer)
+        private static void CustomizeJsonSerializer(JsonSerializer jsonSerializer)
         {
-            SetupSerializerToIgnoreAssemblyNameForEvents(serializer);
+            SetupSerializerToIgnoreAssemblyNameForEvents(jsonSerializer);
         }
+
 
         private static void SetupSerializerToIgnoreAssemblyNameForEvents(JsonSerializer serializer)
         {
@@ -43,6 +42,6 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
             {
                 converters.Remove(jsonDynamicConverter);
             }
-        }
+        } 
     }
 }

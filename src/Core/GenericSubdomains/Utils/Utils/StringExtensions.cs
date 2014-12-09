@@ -6,6 +6,11 @@ namespace WB.Core.GenericSubdomains.Utils
 {
     public static class StringExtensions
     {
+        public static bool IsNullOrEmpty(this string input)
+        {
+            return string.IsNullOrEmpty(input);
+        }
+
         public static string ToCamelCase(this string input)
         {
             if ((input == null || input.Length < 2))
