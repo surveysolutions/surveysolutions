@@ -15,7 +15,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
     {
         private readonly IReadSideStatusService readSideStatusService;
 
-        public RavenReadSideRepositoryReader(DocumentStore ravenStore, IReadSideStatusService readSideStatusService)
+        public RavenReadSideRepositoryReader(IDocumentStore ravenStore, IReadSideStatusService readSideStatusService)
             : base(ravenStore)
         {
             this.readSideStatusService = readSideStatusService;

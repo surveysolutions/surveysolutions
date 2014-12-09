@@ -1,7 +1,7 @@
 ﻿using Machine.Specifications;
 
 using Moq;
-
+using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Embedded;
 using WB.Core.Infrastructure.FileSystem;
@@ -18,15 +18,15 @@ namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideRepositoryWriterTests
     internal class RavenReadSideRepositoryWriterTestsContext
     {
         internal static RavenReadSideRepositoryWriter<View> CreateRavenReadSideRepositoryWriter(
-            DocumentStore ravenStore = null, IFileSystemAccessor fileSystemAccessor=null)
+            IDocumentStore ravenStore = null, IFileSystemAccessor fileSystemAccessor=null)
         {
             return new RavenReadSideRepositoryWriter<View>(
                 ravenStore ?? CreateEmbeddableDocumentStore(), fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), "");
         }
 
-        protected static DocumentStore CreateEmbeddableDocumentStore()
+        protected static IDocumentStore CreateEmbeddableDocumentStore()
         {
-            var ravenStore = new EmbeddableDocumentStore
+            IDocumentStore ravenStore = new EmbeddableDocumentStore
             {
                 RunInMemory = true
             };
@@ -34,7 +34,7 @@ namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideRepositoryWriterTests
             return ravenStore;
         }
 
-        protected static void StoreView(DocumentStore ravenStore, View viewToStore, string viewId)
+        protected static void StoreView(IDocumentStore ravenStore, View viewToStore, string viewId)
         {
             using (var session = ravenStore.OpenSession())
             {
