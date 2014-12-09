@@ -248,7 +248,7 @@ namespace WB.UI.Designer.Controllers
             {
                 if (csvFile == null)
                 {
-                    this.Error("Choose .csv (comma-separated values) file to upload, please");
+                    this.Error("Choose tab- or comma-separated values file to upload, please");
                 }
                 else if (csvFile.FileName.EndsWith(".csv"))
                 {
@@ -256,7 +256,7 @@ namespace WB.UI.Designer.Controllers
                 }
                 else
                 {
-                    this.Error("Only .csv (comma-separated values) files are accepted");
+                    this.Error("Only tab- or comma-separated values files are accepted");
                 }
             }
         }
