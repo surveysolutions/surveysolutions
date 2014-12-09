@@ -470,7 +470,6 @@
     <Content Include="UpdatedDesigner\app\scripts\directives\directives.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\help.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\itemBreadcrumbs.js" />
-    <Content Include="UpdatedDesigner\app\scripts\fixtures\no-backend.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\authorizationinterceptor.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\commandService.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\confirmService.js" />
@@ -528,19 +527,12 @@
     <Content Include="UpdatedDesigner\content\vendor.css.min.css">
       <DependentUpon>vendor.css.css</DependentUpon>
     </Content>
-    <Content Include="UpdatedDesigner\data\editGroup\manualListRoster.json" />
     <Content Include="UpdatedDesigner\content\designer-editor\animations.less" />
     <Content Include="UpdatedDesigner\content\vendor.css.less" />
     <Content Include="UpdatedDesigner\content\designer-editor\wb-question-editor.css.less" />
-    <Content Include="UpdatedDesigner\data\editQuestion\746c323e5bf49176f1594a4719327ea8.json" />
-    <Content Include="UpdatedDesigner\data\chapter\b33dc986d65048a8a11b4578bae23515.json" />
-    <Content Include="UpdatedDesigner\data\chapter\883f24bcf1484e73aada2b5023cfa5bf.json" />
-    <Content Include="UpdatedDesigner\data\editQuestion\90c1f14f18294f2aa324f02d84b6bed9.json" />
-    <Content Include="UpdatedDesigner\data\editQuestion\beb6b8328fc74c90a7dbec96bd1bb8e3.json" />
-    <Content Include="UpdatedDesigner\data\editQuestion\0be767d337cc4b6ba9a49be314f98eb9.json" />
-    <Content Include="UpdatedDesigner\data\editGroup\dd45293c816e982d482334b1222ec41f.json" />
-    <Content Include="UpdatedDesigner\data\editGroup\ddfaab0f37394a679f088add19325cfe.json" />
-    <None Include="UpdatedDesigner\data\editQuestion\d6c5faeed9fe43338b76e7a3ef184f5a.json" />
+    <Content Include="UpdatedDesigner\content\markup.css.css.map">
+      <DependentUpon>markup.css.css</DependentUpon>
+    </Content>
     <Content Include="UpdatedDesigner\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="UpdatedDesigner\app\index.html" />
     <Content Include="UpdatedDesigner\content\designer-editor\wb-question-list.css.css">
@@ -671,7 +663,6 @@
     <Content Include="UpdatedDesigner\app\views\question.html" />
     <Content Include="UpdatedDesigner\app\views\roster.html" />
     <Content Include="UpdatedDesigner\gulpfile.js" />
-    <Content Include="UpdatedDesigner\test.html" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\angular-animate.js" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\angular-animate.min.js" />
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.css" />
@@ -1214,14 +1205,8 @@
     <Content Include="UpdatedDesigner\content\wb-init.css.less" />
     <Content Include="UpdatedDesigner\.bowerrc" />
     <Content Include="UpdatedDesigner\bower.json" />
-    <Content Include="UpdatedDesigner\data\chapter\34e31f00cdbff703a680db5fa66bf8b5.json" />
-    <Content Include="UpdatedDesigner\data\chapter\6e240642274c4bdea937baa78cd4ad6f.json" />
-    <Content Include="UpdatedDesigner\data\editQuestion\20ec89157c0e41e49d77db46e929db5d.json" />
-    <Content Include="UpdatedDesigner\data\questionnaire\7c97b1925b0244b782ed6741a5035fae.json" />
     <Content Include="UpdatedDesigner\.jscsrc" />
     <Content Include="UpdatedDesigner\.jshintrc" />
-    <Content Include="UpdatedDesigner\data\verify\no-errors.json" />
-    <Content Include="UpdatedDesigner\data\verify\with-errors.json" />
     <Content Include="Views\Shared\_commonFooter.cshtml" />
     <Content Include="UpdatedDesigner\vendor\angular-bootstrap\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-bootstrap\bower.json" />
@@ -1272,9 +1257,7 @@
     <Content Include="UpdatedDesigner\vendor\angular-ui-router\LICENSE" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-router\README.md" />
     <Content Include="UpdatedDesigner\vendor\jquery-cookie\.bower.json" />
-    <Content Include="UpdatedDesigner\data\questionnaire\empty.json" />
     <Content Include="Views\Pdf\_RenderStaticTextDetails.cshtml" />
-    <Content Include="UpdatedDesigner\data\editQuestion\3c0ff7a6d1614aa2b9af21aaa40cdb47.json" />
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-hotkeys\.bower.json" />
@@ -1293,9 +1276,7 @@
     <Content Include="UpdatedDesigner\vendor\angular-ui-utils\ui-utils.min.js.map">
       <DependentUpon>ui-utils.min.js</DependentUpon>
     </Content>
-    <Content Include="UpdatedDesigner\data\questionnaire\dc89d22b9e78480da5756806d2466637.json" />
     <Content Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
-    <Content Include="UpdatedDesigner\data\editRoster\547ae6ee75a44751bd63147fbb9f3e4f.json" />
     <Content Include="UpdatedDesigner\vendor\console-shim\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\console-shim\.npmignore" />
     <Content Include="UpdatedDesigner\vendor\console-shim\console-shim.map" />
@@ -1305,7 +1286,6 @@
     <Content Include="UpdatedDesigner\vendor\angular-elastic\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-elastic\package.json" />
     <Content Include="UpdatedDesigner\vendor\angular-elastic\README.md" />
-    <Content Include="UpdatedDesigner\data\editStaticText\0000f14f18294f2aa324f02d84b6bed9.json" />
     <Content Include="UpdatedDesigner\vendor\angular-resource\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-resource\angular-resource.min.js.map" />
     <Content Include="UpdatedDesigner\vendor\angular-resource\bower.json" />
@@ -1345,7 +1325,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="UpdatedDesigner\test\spec\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
