@@ -20,10 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.QuestionaireRoleProvi
             userViewFactoryMock.Setup(_ => _.Load(Moq.It.IsAny<UserViewInputModel>()))
                 .Returns(new UserView() {Roles = new List<UserRoles>()});
 
-            var serviceLocatorMock = new Mock<IServiceLocator> {DefaultValue = DefaultValue.Mock};
-            serviceLocatorMock.Setup(_ =>_.GetInstance<IViewFactory<UserViewInputModel, UserView>>()).Returns(userViewFactoryMock.Object);
-
-            AssemblyContext.SetupServiceLocator();
+            Setup.InstanceToMockedServiceLocator<IViewFactory<UserViewInputModel, UserView>>(userViewFactoryMock.Object);
 
             HttpContext.Current = new HttpContext(new HttpRequest(null, "http://tempuri.org", null), new HttpResponse(null));
             
