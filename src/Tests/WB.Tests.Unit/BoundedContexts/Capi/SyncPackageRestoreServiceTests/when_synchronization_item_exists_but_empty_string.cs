@@ -20,10 +20,9 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.SyncPackageRestoreServiceTests
 
         Because of = () => syncPackageRestoreService.CheckAndApplySyncPackage(Guid.NewGuid());
 
-        It should_result_be_false = () => result.ShouldBeFalse();
+        It should_call_LoadItem_once = () => capiSynchronizationCacheServiceMock.Verify(x => x.LoadItem(Moq.It.IsAny<Guid>()), Times.Once);
 
         private static SyncPackageRestoreService syncPackageRestoreService;
-        private static bool result;
         private static Mock<ICapiSynchronizationCacheService> capiSynchronizationCacheServiceMock;
     }
 }
