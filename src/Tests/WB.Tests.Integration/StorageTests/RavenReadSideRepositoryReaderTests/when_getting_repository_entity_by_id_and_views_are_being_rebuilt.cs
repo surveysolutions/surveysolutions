@@ -10,7 +10,7 @@ using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAcc
 using WB.Core.SharedKernels.SurveySolutions;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Infrastructure.Storage.RavenReadSideRepositoryReaderTests
+namespace WB.Tests.Integration.StorageTests.RavenReadSideRepositoryReaderTests
 {
     internal class when_getting_repository_entity_by_id_and_views_are_being_rebuilt : RavenReadSideRepositoryReaderTestsContext
     {

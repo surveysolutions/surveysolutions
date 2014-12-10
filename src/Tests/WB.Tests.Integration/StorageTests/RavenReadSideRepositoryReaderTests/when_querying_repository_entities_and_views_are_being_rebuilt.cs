@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using Machine.Specifications;
 
@@ -10,9 +11,9 @@ using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAcc
 using WB.Core.SharedKernels.SurveySolutions;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Infrastructure.Storage.RavenReadSideRepositoryReaderTests
+namespace WB.Tests.Integration.StorageTests.RavenReadSideRepositoryReaderTests
 {
-    internal class when_counting_repository_entities_and_views_are_being_rebuilt : RavenReadSideRepositoryReaderTestsContext
+    internal class when_querying_repository_entities_and_views_are_being_rebuilt : RavenReadSideRepositoryReaderTestsContext
     {
         Establish context = () =>
         {
@@ -24,7 +25,7 @@ namespace WB.Tests.Unit.Infrastructure.Storage.RavenReadSideRepositoryReaderTest
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                reader.Count());
+                reader.Query(queryable => queryable.FirstOrDefault()));
 
         It should_throw_maintenance_exception = () =>
             exception.ShouldBeOfExactType<MaintenanceException>();

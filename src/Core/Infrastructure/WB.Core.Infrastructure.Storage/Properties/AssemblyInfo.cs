@@ -46,3 +46,4 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("WB.Tools.QuestionnaireDocumentsConverter")]
 [assembly: InternalsVisibleTo("WB.Tools.EventsMigrator")]
 [assembly: InternalsVisibleTo("WB.Tests.Unit")]
+[assembly: InternalsVisibleTo("WB.Tests.Integration")]

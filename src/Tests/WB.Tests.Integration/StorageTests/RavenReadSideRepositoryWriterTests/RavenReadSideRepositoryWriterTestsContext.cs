@@ -12,7 +12,7 @@ using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAcc
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using it = Moq.It;
 
-namespace WB.Tests.Unit.Infrastructure.Storage.RavenReadSideRepositoryWriterTests
+namespace WB.Tests.Integration.StorageTests.RavenReadSideRepositoryWriterTests
 {
     [Subject(typeof(RavenReadSideRepositoryWriter<>))]
     internal class RavenReadSideRepositoryWriterTestsContext

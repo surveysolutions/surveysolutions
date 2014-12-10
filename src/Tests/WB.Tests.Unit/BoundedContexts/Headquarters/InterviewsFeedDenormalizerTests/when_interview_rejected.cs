@@ -2,7 +2,6 @@
 using Machine.Specifications;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NSubstitute;
-using Raven.Client.Linq;
 using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
 using WB.Tests.Unit.BoundedContexts.Headquarters;
 using WB.Core.GenericSubdomains.Utils;

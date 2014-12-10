@@ -4,7 +4,7 @@ using Raven.Client;
 using Raven.Client.Embedded;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
 
-namespace WB.Tests.Unit.Infrastructure.Storage
+namespace WB.Tests.Integration.StorageTests
 {
     public abstract class RavenDBTestBase
     {

@@ -8,9 +8,9 @@ using Raven.Client;
 using Raven.Client.Document;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 
-namespace WB.Tests.Unit.Infrastructure.Storage.RavenReadSideRepositoryWriterTests
+namespace WB.Tests.Integration.StorageTests.RavenReadSideRepositoryWriterTests
 {
-    internal class when_remove_called_and_cache_is_disabled : RavenReadSideRepositoryWriterTestsContext
+    internal class when_get_by_id_called_and_cache_is_disabled : RavenReadSideRepositoryWriterTestsContext
     {
         Establish context = () =>
         {
@@ -22,13 +22,14 @@ namespace WB.Tests.Unit.Infrastructure.Storage.RavenReadSideRepositoryWriterTest
         };
 
         Because of = () =>
-            ravenReadSideRepositoryWriter.Remove(viewId);
+            result = ravenReadSideRepositoryWriter.GetById(viewId);
 
-        It should_remove_stored_item_from_repository = () =>
-            ravenReadSideRepositoryWriter.GetById(viewId).ShouldBeNull();
+        It should_return_stored_in_cache_view = () =>
+            result.Version.ShouldEqual(18);
 
         private static RavenReadSideRepositoryWriter<View> ravenReadSideRepositoryWriter;
         private static string viewId = "view id";
+        private static View result;
         private static View storedView;
         private static IDocumentStore documentStore;
     }
