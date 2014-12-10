@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 
-namespace WB.Core.Infrastructure.Tests.FileSystemIOAccessorTests
+namespace WB.Tests.Unit.Infrastructure.FileSystemIOAccessorTests
 {
     [Subject(typeof(FileSystemIOAccessor))]
     internal class when_file_name_is_null

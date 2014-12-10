@@ -1194,6 +1194,8 @@
     <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\when_delete_handler_is_called.cs" />
     <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\when_view_is_deleted_by_update_handler.cs" />
     <Compile Include="Infrastructure\Events\EventMergeUtilsTest.cs" />
+    <Compile Include="Infrastructure\FileSystemIOAccessorTests\when_file_name_contains_invalid_characters.cs" />
+    <Compile Include="Infrastructure\FileSystemIOAccessorTests\when_file_name_is_null.cs" />
     <Compile Include="Infrastructure\InMemoryViewWriterTests\InMemoryViewWriterTestContext.cs" />
     <Compile Include="Infrastructure\InMemoryViewWriterTests\when_disposing_inmemroywriter_after_view_was_created_in_memory.cs" />
     <Compile Include="Infrastructure\InMemoryViewWriterTests\when_disposing_inmemroywriter_after_view_was_deleted_in_memory.cs" />
@@ -1227,6 +1229,10 @@
     <Compile Include="Infrastructure\Ncqrs\NcqrsEnvironmentConfigurationExceptionSpecs.cs" />
     <Compile Include="Infrastructure\Ncqrs\NcqrsEnvironmentSpecs.cs" />
     <Compile Include="Infrastructure\Ncqrs\Prepare.cs" />
+    <Compile Include="Infrastructure\ReadSideRepositoryReaderExtensionsTests\when_getting_view_by_guid_id.cs" />
+    <Compile Include="Infrastructure\ReadSideRepositoryWriterExtensionsTests\when_getting_view_by_guid_id.cs" />
+    <Compile Include="Infrastructure\ReadSideRepositoryWriterExtensionsTests\when_removing_view_by_guid_id.cs" />
+    <Compile Include="Infrastructure\ReadSideRepositoryWriterExtensionsTests\when_storing_view_by_guid_id.cs" />
     <Compile Include="Infrastructure\ReadSideServiceTests\ReadSideServiceTestContext.cs" />
     <Compile Include="Infrastructure\ReadSideServiceTests\when_get_list_of_all_available_handlers.cs" />
     <Compile Include="Infrastructure\ReadSideServiceTests\when_rebuild_all_views.cs" />
