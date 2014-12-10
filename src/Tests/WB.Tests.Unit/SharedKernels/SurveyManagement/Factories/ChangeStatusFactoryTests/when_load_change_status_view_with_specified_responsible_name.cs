@@ -26,6 +26,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ChangeStatusFac
 
         private static ChangeStatusFactory factory;
         private static ChangeStatusView viewModel;
-        private static string responsibleName;
+        private static string responsibleName = "responsible";
     }
 }
