@@ -63,14 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
-    <Compile Include="CapiInformationServiceTests\CapiInformationServiceTestContext.cs" />
-    <Compile Include="CapiInformationServiceTests\when_creating_information_package.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TabletInformationSenderTests\TabletInformationSenderTestContext.cs" />
-    <Compile Include="TabletInformationSenderTests\when_archive_is_missing.cs" />
-    <Compile Include="TabletInformationSenderTests\when_archive_wasnt_sent_successfully_to_supervisor.cs" />
-    <Compile Include="TabletInformationSenderTests\when_archive_was_sent_successfully_to_supervisor.cs" />
-    <Compile Include="TabletInformationSenderTests\when_network_is_disabled.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
