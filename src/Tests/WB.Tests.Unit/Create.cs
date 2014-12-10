@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Spec;
 using NSubstitute;
+using Quartz;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -48,8 +49,10 @@ using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Designer.Api;
+using WB.UI.Supervisor.Controllers;
 using QuestionnaireDeleted = WB.Core.SharedKernels.DataCollection.Events.Questionnaire.QuestionnaireDeleted;
 
 namespace WB.Tests.Unit
@@ -1026,6 +1029,20 @@ namespace WB.Tests.Unit
                 Mock.Of<IQuestionnaireSynchronizer>(),
                 HeadquartersPullContext(),
                 HeadquartersPushContext());
+        }
+        public static HQSyncController HQSyncController(
+            ISynchronizer synchronizer = null,
+            IGlobalInfoProvider globalInfoProvider = null,
+            HeadquartersPushContext headquartersPushContext = null)
+        {
+            return new HQSyncController(
+                Mock.Of<ICommandService>(),
+                Mock.Of<ILogger>(),
+                HeadquartersPullContext(),
+                headquartersPushContext ?? HeadquartersPushContext(),
+                Mock.Of<IScheduler>(),
+                synchronizer ?? Mock.Of<ISynchronizer>(),
+                globalInfoProvider ?? Mock.Of<IGlobalInfoProvider>());
         }
     }
 }

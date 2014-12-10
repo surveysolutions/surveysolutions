@@ -46,3 +46,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyInformationalVersion("1.0.0 (build 1)")]
 
 [assembly: InternalsVisibleTo("WB.UI.Supervisor.Tests")]
+[assembly: InternalsVisibleTo("WB.Tests.Unit")]
