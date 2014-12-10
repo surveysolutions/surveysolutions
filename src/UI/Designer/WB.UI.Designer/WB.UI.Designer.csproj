@@ -523,12 +523,7 @@
     <Content Include="UpdatedDesigner\content\markup.css.min.css">
       <DependentUpon>markup.css.css</DependentUpon>
     </Content>
-    <Content Include="UpdatedDesigner\content\vendor.css.css" />
-    <Content Include="UpdatedDesigner\content\vendor.css.min.css">
-      <DependentUpon>vendor.css.css</DependentUpon>
-    </Content>
     <Content Include="UpdatedDesigner\content\designer-editor\animations.less" />
-    <Content Include="UpdatedDesigner\content\vendor.css.less" />
     <Content Include="UpdatedDesigner\content\designer-editor\wb-question-editor.css.less" />
     <Content Include="UpdatedDesigner\content\markup.css.css.map">
       <DependentUpon>markup.css.css</DependentUpon>
