@@ -204,6 +204,14 @@
     <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_store_called_cache_is_enabled_and_cache_limit_is_reached.cs" />
     <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_store_called_cache_is_enabled_and_view_stored_at_file_system.cs" />
     <Compile Include="StringExtensions.cs" />
+    <Compile Include="SurveyManagement\RavenIndexes\RavenIndexesTestContext.cs" />
+    <Compile Include="SurveyManagement\RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_4_misc_questionnaire_browse_items.cs" />
+    <Compile Include="SurveyManagement\RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_approve_statuses.cs" />
+    <Compile Include="SurveyManagement\RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_complete_statuses.cs" />
+    <Compile Include="SurveyManagement\RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_error_statuses.cs" />
+    <Compile Include="SurveyManagement\RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_initial_statuses.cs" />
+    <Compile Include="SurveyManagement\RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_redo_statuses.cs" />
+    <Compile Include="SurveyManagement\RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_unassigned_statuses.cs" />
     <Compile Include="ZipUtilsTests\ZipUtilsTestsFixture.cs" />
   </ItemGroup>
   <ItemGroup>

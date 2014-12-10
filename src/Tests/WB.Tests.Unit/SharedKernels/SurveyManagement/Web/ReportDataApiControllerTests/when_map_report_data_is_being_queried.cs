@@ -27,8 +27,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ReportDataApiControll
         It should_return_same_view_as_was_setted_up = () =>
             resultView.ShouldBeTheSameAs(view);
 
-        private static MapReportInputModel input;
-        private static MapReportView view;
+        private static MapReportInputModel input = new MapReportInputModel();
+        private static MapReportView view = new MapReportView();
         private static MapReportView resultView;
         private static ReportDataApiController controller;
         private static Mock<IViewFactory<MapReportInputModel, MapReportView>> mapReportFactoryMock;
