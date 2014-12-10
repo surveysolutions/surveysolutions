@@ -49,9 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MonadsTests\MonadsTests.cs" />
-    <Compile Include="PasswordHasherTests\PasswordHasherTestContext.cs" />
-    <Compile Include="PasswordHasherTests\when_hashing__hello_world__password.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
