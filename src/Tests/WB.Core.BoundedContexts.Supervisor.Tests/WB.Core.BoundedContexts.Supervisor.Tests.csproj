@@ -98,54 +98,8 @@
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="Create.cs" />
-    <Compile Include="EventHandlers\ReadyToSendToHeadquartersInterviewDenormalizerTests\InterviewEventHandlerFunctionalTestContext.cs" />
-    <Compile Include="EventHandlers\ReadyToSendToHeadquartersInterviewDenormalizerTests\when_status_changed_to_any_which_is_not_approved_by_supervisor.cs" />
-    <Compile Include="EventHandlers\ReadyToSendToHeadquartersInterviewDenormalizerTests\when_status_changed_to_approved_by_supervisor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceHelper.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Pull\when_pulling_entity_with_unknown_type.cs" />
-    <Compile Include="TestPlainStorage.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\InterviewsSynchronizerTestsContext.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Pull\when_interview_is_unassigned_after_assignment.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Pull\when_pulling_canceled_interview_which_is_absent_on_supervisor.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Pull\when_pulling_deleted_interview_which_is_absent_on_supervisor.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Pull\when_pulling_deleted_interview_which_is_present_on_supervisor.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Pull\when_pulling_hard_deleted_by_hq_interview_in_light_delete_state_at_supervisor.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Pull\when_pulling_new_interview_created_but_interview_but_insterviewer_is_absent_for_now.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Pull\when_pulling_new_interview_created_but_interview_details_is_absen_on_hq.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Pull\when_pulling_rejected_by_hq_interview_absent_on_hq.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Pull\when_pulling_rejected_by_hq_interview_but_insterviewer_is_absent_for_now.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Pull\when_pulling_rejected_by_hq_interview_created_on_client_and_interview_were_present_before_at_supervisor.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Pull\when_pulling_new_interview.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Pull\when_pulling_new_interview_created_by_deleted_questionnaire.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Pull\when_pulling_rejected_by_hq_interview_created_by_deleted_questionnaire.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Pull\when_pulling_rejected_by_hq_interview_created_on_client.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Pull\when_pulling_canceled_interview_which_is_present_on_supervisor.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Pull\when_pulling_rejected_by_hq_interview_in_light_delete_state_at_supervisor.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Push\when_pushing_file_without_errors.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Push\when_pushing_file_with_unsuccessful_response_from_server.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Push\when_pushing_interviews_and_no_interviews_are_ready.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Push\when_pushing_interviews_and_one_interview_is_ready_and_has_different_events.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Push\when_pushing_interview_and_interview_has_prefilled_question_and_was_client_created.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Push\when_pushing_interview_and_interview_has_one_event_with_empty_origin.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Push\when_pushing_one_interview_with_all_events_having_hq_synchronization_origin.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\Push\when_pushing_one_interview_with_one_event_and_headquarters_returns_negative_response.cs" />
-    <Compile Include="Synchronization\MockHelpers.cs" />
-    <Compile Include="Synchronization\QuestionnaireSynchronizerTests\HeadquartersPullContextStub.cs" />
-    <Compile Include="Synchronization\QuestionnaireSynchronizerTests\QuestionnaireSynchronizerTestContext.cs" />
-    <Compile Include="Synchronization\QuestionnaireSynchronizerTests\when_pull_delete_questionnaire_entity_and_interviews_created_by_this_template_are_present.cs" />
-    <Compile Include="Synchronization\QuestionnaireSynchronizerTests\when_pull_deletes_questionnaire_entity_and_some_interview_by_this_template_cant_be_deleted.cs" />
-    <Compile Include="Synchronization\QuestionnaireSynchronizerTests\when_pull_questionnaire_templates_2_invalid_entity_arrived_one_new_and_one_existing.cs" />
-    <Compile Include="Synchronization\SynchronizerTests\SynchronizerTestsContext.cs" />
-    <Compile Include="Synchronization\SynchronizerTests\when_pushing_interviews_to_headquarters.cs" />
-    <Compile Include="Synchronization\UserChangedFeedReaderTests\when_no_events_stored_yet.cs" />
-    <Compile Include="Synchronization\UserChangedFeedReaderTests\when_recent_feed_contains_one_new_event.cs" />
-    <Compile Include="Synchronization\UserChangedFeedReaderTests\when_recent_feed_has_no_last_stored_event.cs" />
-    <Compile Include="Users\HeadquartersLoginServiceTests\when_hq_service_fails.cs" />
-    <Compile Include="Users\HeadquartersLoginServiceTests\when_invalid_credentials_provided.cs" />
-    <Compile Include="Users\HeadquartersLoginServiceTests\when_valid_credentials_provided.cs" />
-    <Compile Include="WebClientExtensionsTests\when_auth_token_is_empty.cs" />
-    <Compile Include="WebClientExtensionsTests\when_auth_token_provided.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -194,12 +148,6 @@
       <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
       <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Synchronization\UserChangedFeedReaderTests\Simplefeed.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Synchronization\UserChangedFeedReaderTests\SimpleArchiveFeed.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
