@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Reflection;
 
-namespace WB.Core.BoundedContexts.Supervisor.Tests
+namespace WB.Tests.Unit.BoundedContexts.Supervisor
 {
     public static class ResourceHelper
     {
