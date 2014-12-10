@@ -14,11 +14,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttrib
     {
         protected static InstallationAttribute Create(IIdentityManager identityManager = null)
         {
-            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
-            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
-
-            serviceLocatorMock.Setup(_ => _.GetInstance<IIdentityManager>())
-                .Returns(identityManager ?? Mock.Of<IIdentityManager>());
+            Setup.InstanceToMockedServiceLocator<IIdentityManager>(identityManager ?? Mock.Of<IIdentityManager>());
 
             return new InstallationAttribute();
         }
