@@ -110,18 +110,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Quartz.2.2.3\lib\net40\Quartz.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Abstractions, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\RavenDB.Client.3.0.3528\lib\net45\Raven.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.Embedded">
-      <HintPath>..\..\UI\Headquarters\WB.UI.Headquarters\Bin\Raven.Client.Embedded.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.Lightweight, Version=3.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\RavenDB.Client.3.0.3528\lib\net45\Raven.Client.Lightweight.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Rhino.Mocks">
       <HintPath>..\..\..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
       <Private>True</Private>
@@ -1244,23 +1232,6 @@
     <Compile Include="Infrastructure\ReadSideServiceTests\when_rebuild_all_views.cs" />
     <Compile Include="Infrastructure\ReadSideServiceTests\when_rebuild_selected_views.cs" />
     <Compile Include="Infrastructure\ReadSideServiceTests\when_rebuild_selected_views_by_selected_event_sources.cs" />
-    <Compile Include="Infrastructure\Storage\DocumentStoreFailedTests.cs" />
-    <Compile Include="Infrastructure\Storage\RavenDBEventStoreTests.cs" />
-    <Compile Include="Infrastructure\Storage\RavenDBTestBase.cs" />
-    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryReaderTests\RavenReadSideRepositoryReaderTestsContext.cs" />
-    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryReaderTests\when_counting_repository_entities_and_views_are_being_rebuilt.cs" />
-    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryReaderTests\when_getting_repository_entity_by_id_and_views_are_being_rebuilt.cs" />
-    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryReaderTests\when_querying_repository_entities_and_views_are_being_rebuilt.cs" />
-    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryWriterTests\RavenReadSideRepositoryWriterTestsContext.cs" />
-    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryWriterTests\when_disabling_cache.cs" />
-    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryWriterTests\when_get_by_id_called_and_cache_is_disabled.cs" />
-    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryWriterTests\when_get_by_id_called_and_cache_is_enabled.cs" />
-    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryWriterTests\when_get_by_id_called_cache_is_enabled_and_view_stored_at_file_system.cs" />
-    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryWriterTests\when_remove_called_and_cache_is_disabled.cs" />
-    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryWriterTests\when_remove_called_and_cache_is_enabled.cs" />
-    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryWriterTests\when_remove_called_cache_is_enabled_and_view_stored_at_file_system.cs" />
-    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryWriterTests\when_store_called_cache_is_enabled_and_cache_limit_is_reached.cs" />
-    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryWriterTests\when_store_called_cache_is_enabled_and_view_stored_at_file_system.cs" />
     <Compile Include="Infrastructure\View.cs" />
     <Compile Include="MockExtensions.cs" />
     <Compile Include="NcqrsEnvironmentConfiguration.cs" />
@@ -1325,7 +1296,6 @@
     <Compile Include="ShouldExtentions.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Stub.cs" />
-    <Compile Include="RavenMockUtils.cs" />
     <Compile Include="ReflectionUtils.cs" />
     <Compile Include="TestPlainStorage.cs" />
   </ItemGroup>

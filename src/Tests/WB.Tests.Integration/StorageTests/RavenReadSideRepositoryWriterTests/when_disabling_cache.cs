@@ -12,7 +12,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Infrastructure.Storage.RavenReadSideRepositoryWriterTests
+namespace WB.Tests.Integration.StorageTests.RavenReadSideRepositoryWriterTests
 {
     internal class when_disabling_cache : RavenReadSideRepositoryWriterTestsContext
     {

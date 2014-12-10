@@ -14,7 +14,7 @@ using Rhino.Mocks;
 using Ncqrs.Eventing.Sourcing;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
 
-namespace WB.Tests.Unit.Infrastructure.Storage
+namespace WB.Tests.Integration.StorageTests
 {
     [TestFixture]
     public class RavenDBEventStoreTests : RavenDBTestBase

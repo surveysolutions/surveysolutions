@@ -12,7 +12,7 @@ using Raven.Client.Embedded;
 using Raven.Client.Indexes;
 using log4net.Config;
 
-namespace WB.Tests.Unit.Infrastructure.Storage
+namespace WB.Tests.Integration.StorageTests
 {
     [TestFixture]
     public class DocumentStoreFailedTests
