@@ -60,7 +60,7 @@
       ]
     },
     "angular": {
-      "main": "angular.min.js"
+      "main": ["angular.min.js", "angular-csp.css"]
     }
   }
 }
