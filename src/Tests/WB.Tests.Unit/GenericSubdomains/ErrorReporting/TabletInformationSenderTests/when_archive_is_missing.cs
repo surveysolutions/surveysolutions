@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformation;
 
-namespace WB.Core.GenericSubdomains.ErrorReporting.Tests.TabletInformationSenderTests
+namespace WB.Tests.Unit.GenericSubdomains.ErrorReporting.TabletInformationSenderTests
 {
-    class when_archive_was_sent_successfully_to_supervisor : TabletInformationSenderTestContext
+    internal class when_archive_is_missing : TabletInformationSenderTestContext
     {
         Establish context = () =>
         {
-            tabletInformationSender = CreateTabletInformationSender(true, "archive", true);
+            tabletInformationSender = CreateTabletInformationSender();
         };
 
         Because of = () => isOperationCanceled = WaitUntilOperationEndsReturnFalseIfCanceled(tabletInformationSender, t => t.Run());

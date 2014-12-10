@@ -1,7 +1,7 @@
 ﻿using Machine.Specifications;
 using WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformation;
 
-namespace WB.Core.GenericSubdomains.ErrorReporting.Tests.TabletInformationSenderTests
+namespace WB.Tests.Unit.GenericSubdomains.ErrorReporting.TabletInformationSenderTests
 {
     internal class when_archive_wasnt_sent_successfully_to_supervisor : TabletInformationSenderTestContext
     {

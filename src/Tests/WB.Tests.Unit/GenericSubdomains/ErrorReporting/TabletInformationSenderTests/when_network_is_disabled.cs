@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformation;
 
-namespace WB.Core.GenericSubdomains.ErrorReporting.Tests.TabletInformationSenderTests
+namespace WB.Tests.Unit.GenericSubdomains.ErrorReporting.TabletInformationSenderTests
 {
-    internal class when_archive_is_missing : TabletInformationSenderTestContext
+    internal class when_network_is_disabled : TabletInformationSenderTestContext
     {
         Establish context = () =>
         {
-            tabletInformationSender = CreateTabletInformationSender();
+            tabletInformationSender = CreateTabletInformationSender(false);
         };
 
         Because of = () => isOperationCanceled = WaitUntilOperationEndsReturnFalseIfCanceled(tabletInformationSender, t => t.Run());
 
-        It should_operation_be_finished = () => isOperationCanceled.ShouldEqual(true);
+        It should_operation_be_canceled = () => isOperationCanceled.ShouldEqual(false);
 
         private static TabletInformationSender tabletInformationSender;
         private static bool isOperationCanceled;
