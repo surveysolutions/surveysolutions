@@ -70,6 +70,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         private static Guid staticTextId = Guid.Parse("55555555555555555555555555555555");
         private static Guid interviewId = Guid.Parse("33333333333333333333333333333333");
         private static string nestedGroupTitle = "nested Group";
-        private static string staticText;
+        private static string staticText = "static text";
     }
 }
