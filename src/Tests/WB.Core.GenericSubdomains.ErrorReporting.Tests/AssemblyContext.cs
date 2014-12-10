@@ -2,7 +2,7 @@
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 
-namespace WB.Core.GenericSubdomains.ErrorReporting.Tests
+namespace WB.Tests.Unit.GenericSubdomains.ErrorReporting
 {
     public class AssemblyContext : IAssemblyContext
     {

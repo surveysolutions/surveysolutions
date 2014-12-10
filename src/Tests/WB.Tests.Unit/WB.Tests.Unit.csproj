@@ -1178,6 +1178,13 @@
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="EventContextExtenstions.cs" />
     <Compile Include="Execute.cs" />
+    <Compile Include="GenericSubdomains\ErrorReporting\CapiInformationServiceTests\CapiInformationServiceTestContext.cs" />
+    <Compile Include="GenericSubdomains\ErrorReporting\CapiInformationServiceTests\when_creating_information_package.cs" />
+    <Compile Include="GenericSubdomains\ErrorReporting\TabletInformationSenderTests\TabletInformationSenderTestContext.cs" />
+    <Compile Include="GenericSubdomains\ErrorReporting\TabletInformationSenderTests\when_archive_is_missing.cs" />
+    <Compile Include="GenericSubdomains\ErrorReporting\TabletInformationSenderTests\when_archive_wasnt_sent_successfully_to_supervisor.cs" />
+    <Compile Include="GenericSubdomains\ErrorReporting\TabletInformationSenderTests\when_archive_was_sent_successfully_to_supervisor.cs" />
+    <Compile Include="GenericSubdomains\ErrorReporting\TabletInformationSenderTests\when_network_is_disabled.cs" />
     <Compile Include="GenericSubdomains\Utils\when_sorting_by_property_from_parent_class_with_OrderBy_from_QueryableExtensions.cs" />
     <Compile Include="GenericSubdomains\Utils\StringExtensionsTests.cs" />
     <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\AbstractFunctionalEventHandlerTestContext.cs" />
@@ -1321,6 +1328,10 @@
     <ProjectReference Include="..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\WB.Core.BoundedContexts.Supervisor.csproj">
       <Project>{755CA607-6B50-487F-98A0-34A98973593D}</Project>
       <Name>WB.Core.BoundedContexts.Supervisor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\GenericSubdomains\ErrorReporting\ErrorReporting\WB.Core.GenericSubdomains.ErrorReporting.csproj">
+      <Project>{64FF78F2-775B-4728-9D8A-D3A7B9A7344C}</Project>
+      <Name>WB.Core.GenericSubdomains.ErrorReporting</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>

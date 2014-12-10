@@ -9,7 +9,7 @@ using WB.Core.GenericSubdomains.ErrorReporting.Implementation.CapiInformation;
 using WB.Core.Infrastructure.FileSystem;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.GenericSubdomains.ErrorReporting.Tests.CapiInformationServiceTests
+namespace WB.Tests.Unit.GenericSubdomains.ErrorReporting.CapiInformationServiceTests
 {
     internal class when_creating_information_package : CapiInformationServiceTestContext
     {
