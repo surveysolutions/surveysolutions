@@ -23,7 +23,12 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         private static object GetObject(string json)
         {
             return JsonConvert.DeserializeObject(
-                json, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+                json, new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.All,
+                    NullValueHandling = NullValueHandling.Ignore,
+                    FloatParseHandling = FloatParseHandling.Decimal
+                });
         }
     }
 }
