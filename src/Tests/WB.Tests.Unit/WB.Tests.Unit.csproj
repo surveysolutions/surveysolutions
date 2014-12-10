@@ -64,6 +64,9 @@
     <Reference Include="FluentAssertions.Core">
       <HintPath>..\..\..\packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.Core.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Machine.Specifications">
       <HintPath>..\..\..\packages\Machine.Specifications.0.8.1\lib\net45\Machine.Specifications.dll</HintPath>
     </Reference>
@@ -110,6 +113,9 @@
     <Reference Include="Raven.Abstractions, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\RavenDB.Client.3.0.3528\lib\net45\Raven.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Embedded">
+      <HintPath>..\..\UI\Headquarters\WB.UI.Headquarters\Bin\Raven.Client.Embedded.dll</HintPath>
     </Reference>
     <Reference Include="Raven.Client.Lightweight, Version=3.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -1233,6 +1239,28 @@
     <Compile Include="Infrastructure\Ncqrs\NcqrsEnvironmentConfigurationExceptionSpecs.cs" />
     <Compile Include="Infrastructure\Ncqrs\NcqrsEnvironmentSpecs.cs" />
     <Compile Include="Infrastructure\Ncqrs\Prepare.cs" />
+    <Compile Include="Infrastructure\ReadSideServiceTests\ReadSideServiceTestContext.cs" />
+    <Compile Include="Infrastructure\ReadSideServiceTests\when_get_list_of_all_available_handlers.cs" />
+    <Compile Include="Infrastructure\ReadSideServiceTests\when_rebuild_all_views.cs" />
+    <Compile Include="Infrastructure\ReadSideServiceTests\when_rebuild_selected_views.cs" />
+    <Compile Include="Infrastructure\ReadSideServiceTests\when_rebuild_selected_views_by_selected_event_sources.cs" />
+    <Compile Include="Infrastructure\Storage\DocumentStoreFailedTests.cs" />
+    <Compile Include="Infrastructure\Storage\RavenDBEventStoreTests.cs" />
+    <Compile Include="Infrastructure\Storage\RavenDBTestBase.cs" />
+    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryReaderTests\RavenReadSideRepositoryReaderTestsContext.cs" />
+    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryReaderTests\when_counting_repository_entities_and_views_are_being_rebuilt.cs" />
+    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryReaderTests\when_getting_repository_entity_by_id_and_views_are_being_rebuilt.cs" />
+    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryReaderTests\when_querying_repository_entities_and_views_are_being_rebuilt.cs" />
+    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryWriterTests\RavenReadSideRepositoryWriterTestsContext.cs" />
+    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryWriterTests\when_disabling_cache.cs" />
+    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryWriterTests\when_get_by_id_called_and_cache_is_disabled.cs" />
+    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryWriterTests\when_get_by_id_called_and_cache_is_enabled.cs" />
+    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryWriterTests\when_get_by_id_called_cache_is_enabled_and_view_stored_at_file_system.cs" />
+    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryWriterTests\when_remove_called_and_cache_is_disabled.cs" />
+    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryWriterTests\when_remove_called_and_cache_is_enabled.cs" />
+    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryWriterTests\when_remove_called_cache_is_enabled_and_view_stored_at_file_system.cs" />
+    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryWriterTests\when_store_called_cache_is_enabled_and_cache_limit_is_reached.cs" />
+    <Compile Include="Infrastructure\Storage\RavenReadSideRepositoryWriterTests\when_store_called_cache_is_enabled_and_view_stored_at_file_system.cs" />
     <Compile Include="Infrastructure\View.cs" />
     <Compile Include="MockExtensions.cs" />
     <Compile Include="NcqrsEnvironmentConfiguration.cs" />
@@ -1347,6 +1375,10 @@
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Files\WB.Core.Infrastructure.Files.csproj">
       <Project>{6ac3a080-ceca-4974-9ca1-c239695ed8f8}</Project>
       <Name>WB.Core.Infrastructure.Files</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Storage\WB.Core.Infrastructure.Storage.csproj">
+      <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
+      <Name>WB.Core.Infrastructure.Storage</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
