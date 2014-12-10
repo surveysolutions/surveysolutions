@@ -9,7 +9,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Infrastructure.Storage.RavenReadSideRepositoryWriterTests
+namespace WB.Tests.Integration.StorageTests.RavenReadSideRepositoryWriterTests
 {
     internal class when_store_called_cache_is_enabled_and_view_stored_at_file_system : RavenReadSideRepositoryWriterTestsContext
     {

@@ -5,7 +5,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
-namespace WB.Tests.Unit.Infrastructure.Storage.RavenReadSideRepositoryReaderTests
+namespace WB.Tests.Integration.StorageTests.RavenReadSideRepositoryReaderTests
 {
     [Subject(typeof(RavenReadSideRepositoryReader<>))]
     internal class RavenReadSideRepositoryReaderTestsContext

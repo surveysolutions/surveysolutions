@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 
-namespace WB.Tests.Unit.Infrastructure.Storage.RavenReadSideRepositoryWriterTests
+namespace WB.Tests.Integration.StorageTests.RavenReadSideRepositoryWriterTests
 {
     internal class when_get_by_id_called_and_cache_is_enabled : RavenReadSideRepositoryWriterTestsContext
     {

@@ -4,7 +4,7 @@ using Moq;
 using Raven.Client;
 using Raven.Client.Linq;
 
-namespace WB.Tests.Unit.Utils
+namespace WB.Tests.Integration.Utils
 {
     public static class RavenMockUtils
     {
