@@ -120,6 +120,7 @@
       <HintPath>..\..\..\packages\System.Collections.Immutable.1.1.32-beta\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -132,6 +133,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\System.Reflection.Metadata.1.0.17-beta\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -236,6 +238,33 @@
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\VerificationErrorsMapperTestContext.cs" />
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\when_enriching_errors_with_empty_static_text.cs" />
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\when_enriching_errors_with_titles_from_questionnaire.cs" />
+    <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\DesignerQuestionnairesApiControllerTestsContext.cs" />
+    <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception.cs" />
+    <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\when_requesting_questionnaire_and_designer_service_throws_fault_exception.cs" />
+    <Compile Include="Applications\Headquarters\FilterTests\InstallationAttributeTests\InstallationAttributeTestsContext.cs" />
+    <Compile Include="Applications\Headquarters\FilterTests\InstallationAttributeTests\when_action_executing_and_control_panel_controller.cs" />
+    <Compile Include="Applications\Headquarters\FilterTests\InstallationAttributeTests\when_action_executing_and_hq_user_does_not_exists_and_install_controller.cs" />
+    <Compile Include="Applications\Headquarters\FilterTests\InstallationAttributeTests\when_action_executing_and_hq_user_does_not_exists_and_not_install_controller.cs" />
+    <Compile Include="Applications\Headquarters\FilterTests\InstallationAttributeTests\when_action_executing_and_hq_user_exists_and_install_controller.cs" />
+    <Compile Include="Applications\Headquarters\FilterTests\MaintenanceFilterTests\MaintenanceFilterTestsContext.cs" />
+    <Compile Include="Applications\Headquarters\FilterTests\MaintenanceFilterTests\when_action_executing_and_views_are_being_rebuilt_now.cs" />
+    <Compile Include="Applications\Headquarters\HQControllerTests\HQControllerTestContext.cs" />
+    <Compile Include="Applications\Headquarters\HQControllerTests\when_BatchUploadModel_model_contains_property__File__to_upload_file_data.cs" />
+    <Compile Include="Applications\Headquarters\HQControllerTests\when_hq_controller_gets_empty_file_while_batch_upload.cs" />
+    <Compile Include="Applications\Headquarters\InstallControllerTests\InstallControllerTestsContext.cs" />
+    <Compile Include="Applications\Headquarters\InstallControllerTests\when_finish_installation.cs" />
+    <Compile Include="Applications\Headquarters\InstallControllerTests\when_finish_installation_and_command_service_throws_exception.cs" />
+    <Compile Include="Applications\Supervisor\HQSyncControllerTests\HQSyncControllerTestsContext.cs" />
+    <Compile Include="Applications\Supervisor\HQSyncControllerTests\when_pushing_data_to_hq.cs" />
+    <Compile Include="Applications\Supervisor\HQSyncControllerTests\when_requesting_push_status.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\SyncControllerTestContext.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_checking_new_version_with_correct_paarams.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_handshaking_capi_with_supervisor_and_capi_version_is_greater.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_handshaking_capi_with_supervisor_and_capi_version_is_lesser.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_pushing_file_which_rise_exception_during_saving.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_pushing_file_without_file.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_pushing_file_with_invalid_credentions.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_pushing_file_with_valid_file.cs" />
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="BoundedContexts\Capi\CapiDataSynchronizationServiceTests\CapiDataSynchronizationServiceTestContext.cs" />
     <Compile Include="BoundedContexts\Capi\CapiDataSynchronizationServiceTests\when_GetItemsForPush_called.cs" />
@@ -1285,12 +1314,39 @@
     <Compile Include="SharedKernels\SurveyManagement\ResourceControllerTests\when_getting_interview_file_which_is_present.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\when_getting_not_existing_interview_details.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ResourceControllerTests\ResourceControllerTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\ApiTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_intervews_controller_interviews_filtered_with_empty_params.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_intervews_controller_interviews_filtered_with_not_empty_params.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_intervews_controller_interviews_with_not_empty_params.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_intervews_controller_interview_details_with_not_empty_params.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_questionnaires_controller_questionnaries_by_id.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_questionnaires_controller_questionnaries_statuses.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_questionnaires_controller_questionnaries_with_not_empty_params.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_users_controller_details_is_called_with_not_emty_params.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_users_controller_interviewers_is_called_with_not_elpty_params.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_users_controller_supervisors_is_called_with_not_empty_params.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\CommandTransformatorTests\CommandTransformatorTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\CommandTransformatorTests\when_need_to_transform_CreateInterviewControllerCommand.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ImportExportControllerTests\ImportExportControllerTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ImportExportControllerTests\when_GetExportedDataAsync_is_called_and_exception_occured.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ImportExportControllerTests\when_GetExportedDataAsync_is_called_with_empty_id.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ImportExportControllerTests\when_GetExportedDataAsync_is_called_with_not_empty_id.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ImportExportControllerTests\when_GetExportedFilesAsync_is_called.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ImportExportControllerTests\when_GetExportedFilesAsync_is_called_and_exception_occured.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\QuestionaireRoleProviderTests\QuestionnaireRoleProviderTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\QuestionaireRoleProviderTests\when_check_that_user_is_in_role_and_http_context_exist_and_user_does_not_exist_in_cache.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\QuestionnaireMembershipProviderTests\QuestionnaireMembershipProviderTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\QuestionnaireMembershipProviderTests\when_initialize_and_all_provider_params_specified.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ReportDataApiControllerTests\ReportDataApiControllerTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ReportDataApiControllerTests\when_map_report_data_is_being_queried.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ReportDataApiControllerTests\when_questionnaires_data_is_being_queried.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ReportDataApiControllerTests\when_question_info_data_is_being_queried.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\TabletReportControllerTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\when_info_package_requested.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\when_list_of_info_packages_is_requested.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\when_posting_info_package_is_caller_with_broken_content.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\when_posting_info_package_is_caller_with_empty_content.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\when_posting_info_package_is_caller_with_valid_content.cs" />
     <Compile Include="SharedKernels\SurveySolutions\Documents\QuestionnaireDocumentTests.cs" />
     <Compile Include="SharedKernels\Synchronization\DefaultBackupManagerTests.cs" />
     <Compile Include="SharedKernels\Synchronization\when_chunk_with_same_guid_is_present.cs" />
@@ -1307,8 +1363,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Applications\Designer\CommandUtilsTests\" />
-    <Folder Include="Applications\Headquarters\" />
-    <Folder Include="Applications\Supervisor\" />
     <Folder Include="GenericSubdomains\Logging\" />
   </ItemGroup>
   <ItemGroup>
@@ -1397,9 +1451,17 @@
       <Project>{3464F3AE-094C-4DEC-8725-59506328E597}</Project>
       <Name>WB.UI.Designer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj">
+      <Project>{d3efcc0c-4a50-484d-a9ff-252dc7916ecd}</Project>
+      <Name>WB.UI.Headquarters</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
       <Name>WB.UI.Shared.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UI\Supervisor\WB.UI.Supervisor\WB.UI.Supervisor.csproj">
+      <Project>{41E11B34-5BEB-48E6-B9B0-2DEA05CFA7FB}</Project>
+      <Name>WB.UI.Supervisor</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
