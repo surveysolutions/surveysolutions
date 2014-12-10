@@ -1,7 +1,7 @@
 ﻿using Machine.Specifications;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 
-namespace WB.Core.GenericSubdomains.Utils.Tests.PasswordHasherTests
+namespace WB.Tests.Unit.GenericSubdomains.Utils.PasswordHasherTests
 {
     internal class when_hashing__hello_world__password : PasswordHasherTestContext
     {

@@ -1185,6 +1185,9 @@
     <Compile Include="GenericSubdomains\ErrorReporting\TabletInformationSenderTests\when_archive_wasnt_sent_successfully_to_supervisor.cs" />
     <Compile Include="GenericSubdomains\ErrorReporting\TabletInformationSenderTests\when_archive_was_sent_successfully_to_supervisor.cs" />
     <Compile Include="GenericSubdomains\ErrorReporting\TabletInformationSenderTests\when_network_is_disabled.cs" />
+    <Compile Include="GenericSubdomains\Utils\MonadsTests\MonadsTests.cs" />
+    <Compile Include="GenericSubdomains\Utils\PasswordHasherTests\PasswordHasherTestContext.cs" />
+    <Compile Include="GenericSubdomains\Utils\PasswordHasherTests\when_hashing__hello_world__password.cs" />
     <Compile Include="GenericSubdomains\Utils\when_sorting_by_property_from_parent_class_with_OrderBy_from_QueryableExtensions.cs" />
     <Compile Include="GenericSubdomains\Utils\StringExtensionsTests.cs" />
     <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\AbstractFunctionalEventHandlerTestContext.cs" />

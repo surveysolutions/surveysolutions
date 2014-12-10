@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 
-namespace WB.Core.GenericSubdomains.Utils.Tests.PasswordHasherTests
+namespace WB.Tests.Unit.GenericSubdomains.Utils.PasswordHasherTests
 {
     internal class PasswordHasherTestContext
     {
