@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{AD7E0C01-7CD9-46FD-9DD7-3BC8A5C10ECF}"
 	ProjectSection(SolutionItems) = preProject
@@ -121,6 +121,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Capi", "Capi", "{37101C73-0BE5-4A0E-A956-92645542339B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.CAPI", "Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.CAPI.csproj", "{C6ED30A9-4D14-48D1-8311-C2267DFD424F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ErrorReporting", "ErrorReporting", "{4BFD5CA2-964D-4914-A1E8-28BEDB557796}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.GenericSubdomains.ErrorReporting", "Core\GenericSubdomains\ErrorReporting\ErrorReporting\WB.Core.GenericSubdomains.ErrorReporting.csproj", "{64FF78F2-775B-4728-9D8A-D3A7B9A7344C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -315,6 +319,12 @@ Global
 		{C6ED30A9-4D14-48D1-8311-C2267DFD424F}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
 		{C6ED30A9-4D14-48D1-8311-C2267DFD424F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6ED30A9-4D14-48D1-8311-C2267DFD424F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64FF78F2-775B-4728-9D8A-D3A7B9A7344C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64FF78F2-775B-4728-9D8A-D3A7B9A7344C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64FF78F2-775B-4728-9D8A-D3A7B9A7344C}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{64FF78F2-775B-4728-9D8A-D3A7B9A7344C}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{64FF78F2-775B-4728-9D8A-D3A7B9A7344C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64FF78F2-775B-4728-9D8A-D3A7B9A7344C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -371,5 +381,7 @@ Global
 		{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD} = {75A97AF9-A98A-4E73-85C4-DA5D19C91CCE}
 		{37101C73-0BE5-4A0E-A956-92645542339B} = {E3404571-E3D0-47E8-94FC-001982D11D59}
 		{C6ED30A9-4D14-48D1-8311-C2267DFD424F} = {37101C73-0BE5-4A0E-A956-92645542339B}
+		{4BFD5CA2-964D-4914-A1E8-28BEDB557796} = {6B7FFF83-E2B8-43F7-8469-D2D69537F00B}
+		{64FF78F2-775B-4728-9D8A-D3A7B9A7344C} = {4BFD5CA2-964D-4914-A1E8-28BEDB557796}
 	EndGlobalSection
 EndGlobal

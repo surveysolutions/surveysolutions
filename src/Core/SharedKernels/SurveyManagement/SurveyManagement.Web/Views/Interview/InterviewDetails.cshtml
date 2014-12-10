@@ -30,7 +30,7 @@
 
     settings.Urls.CommandExecution = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "Execute" })';
     settings.Urls.InterviewDetails = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "InterviewDetails" })';
-    settings.Urls.Interviews = '@(GlobalInfo.IsSupervisor ? Url.Action("Interviews", "Survey") : @Url.Action("Interviews", "HQ", new {area=""}))';
+    settings.Urls.Interviews = '@(GlobalInfo.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ", new {area=""}))';
     settings.Urls.ChangeStateHistory = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "ChangeStateHistory" })';
 
     settings.Urls.InterviewFile = '@Url.RouteUrl("Default", new { httproute = "", controller = "Resource", action = "InterviewFile" })';
@@ -48,7 +48,7 @@
                 <div data-bind="ifnot: (isFilteredCombobox || isCascade)">
                     <div data-bind="foreach: options">
                         <label class="radio" data-bind='attr: { "for": optionFor }'>
-                            <input type="radio" data-bind="attr: { value: value, name: $parent.variable, id: optionFor }, checked : $parent.selectedOption" disabled="disabled">
+                            <input type="radio" data-bind="value: value, attr: { name: $parent.variable, id: optionFor, checked: isSelected }" disabled="disabled" />
                             <span data-bind="html: label"></span>
                         </label>
                     </div>
