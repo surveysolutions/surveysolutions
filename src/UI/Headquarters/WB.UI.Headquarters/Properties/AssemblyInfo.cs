@@ -36,3 +36,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyInformationalVersion("1.0.0 (build 1)")]
 
 [assembly: InternalsVisibleTo("WB.UI.Headquarters.Tests")]
+[assembly: InternalsVisibleTo("WB.Tests.Unit")]
