@@ -4,7 +4,7 @@ using Moq;
 using Ncqrs;
 using WB.Core.GenericSubdomains.Logging;
 
-namespace WB.Core.BoundedContexts.Supervisor.Tests
+namespace WB.Tests.Unit.BoundedContexts.Supervisor
 {
     public class AssemblyContext : IAssemblyContext
     {
