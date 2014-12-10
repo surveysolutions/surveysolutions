@@ -696,10 +696,6 @@
     <Content Include="UpdatedDesigner\vendor\angular-loading-bar\Gruntfile.js" />
     <Content Include="UpdatedDesigner\vendor\angular-loading-bar\src\loading-bar.css" />
     <Content Include="UpdatedDesigner\vendor\angular-loading-bar\src\loading-bar.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-mocks\.bower.json" />
-    <Content Include="UpdatedDesigner\vendor\angular-mocks\angular-mocks.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-mocks\bower.json" />
-    <Content Include="UpdatedDesigner\vendor\angular-mocks\README.md" />
     <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\dependencies\jquery.mousewheel.js" />
     <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\dependencies\perfect-scrollbar.css" />
     <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\dependencies\perfect-scrollbar.js" />
