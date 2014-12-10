@@ -1,6 +1,7 @@
 ﻿using Machine.Specifications;
+using WB.Core.GenericSubdomains.Utils;
 
-namespace WB.Core.GenericSubdomains.Utils.Tests.MonadsTests
+namespace WB.Tests.Unit.GenericSubdomains.Utils.MonadsTests
 {
     public class MonadsTests
     {
