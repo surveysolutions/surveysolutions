@@ -26,8 +26,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ReportDataApiControll
         It should_return_same_view_as_was_setted_up = () =>
             resultView.ShouldBeTheSameAs(view);
 
-        private static QuestionnaireQuestionInfoInputModel input;
-        private static QuestionnaireQuestionInfoView view;
+        private static QuestionnaireQuestionInfoInputModel input = new QuestionnaireQuestionInfoInputModel();
+        private static QuestionnaireQuestionInfoView view = new QuestionnaireQuestionInfoView();
         private static QuestionnaireQuestionInfoView resultView;
         private static ReportDataApiController controller;
         private static Mock<IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView>> questionInforFactory;
