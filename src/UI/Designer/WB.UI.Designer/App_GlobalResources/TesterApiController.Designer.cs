@@ -61,11 +61,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have an old version of application that supports version {0} but current version is {1}. Please update application to continue..
+        ///   Looks up a localized string similar to Failed to open questionnaire. Requested questionnaire &quot;{0}&quot; has {2} version. Tester application supports version up to {1}.
         /// </summary>
-        internal static string ClientVersionLessThenDocument {
+        internal static string ClientVersionLessThenDocumentFormat {
             get {
-                return ResourceManager.GetString("ClientVersionLessThenDocument", resourceCulture);
+                return ResourceManager.GetString("ClientVersionLessThenDocumentFormat", resourceCulture);
             }
         }
         
@@ -79,11 +79,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire is invalid. Please Verify it on Designer..
+        ///   Looks up a localized string similar to Failed to open questionnaire. Requested questionnaire &quot;{0}&quot; has errors. Please verify and fix them on Designer..
         /// </summary>
-        internal static string Questionnaire_verification_failed {
+        internal static string Questionnaire_verification_failed_Format {
             get {
-                return ResourceManager.GetString("Questionnaire_verification_failed", resourceCulture);
+                return ResourceManager.GetString("Questionnaire_verification_failed_Format", resourceCulture);
             }
         }
         
