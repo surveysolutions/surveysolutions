@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
@@ -17,6 +19,8 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
 {
     internal class RavenReadSideService : IReadSideStatusService, IReadSideAdministrationService
     {
+        private static int instanceCount = 0;
+
         private const int MaxAllowedFailedEvents = 100;
 
         private static readonly object RebuildAllViewsLockObject = new object();
@@ -43,6 +47,11 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
         public RavenReadSideService(IStreamableEventStore eventStore, IEventDispatcher eventBus, DocumentStore ravenStore, ILogger logger,
             IReadSideRepositoryWriterRegistry writerRegistry, IReadSideRepositoryCleanerRegistry cleanerRegistry)
         {
+            if (instanceCount > 0)
+                throw new Exception(string.Format("Trying to create a new instance of RavenReadSideService when following count of instances exists: {0}.", instanceCount));
+
+            Interlocked.Increment(ref instanceCount);
+
             this.eventStore = eventStore;
             this.eventBus = eventBus;
             this.ravenStore = ravenStore;
@@ -368,17 +377,19 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
 
             DateTime republishStarted = DateTime.Now;
             UpdateStatusMessage(
-                "Acquiring first portion of events. "
+                "Acquiring first portion of events."
+                + Environment.NewLine
                 + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
 
-            foreach (CommittedEvent[] eventBulk in this.eventStore.GetAllEvents(skipEvents: skipEventsCount))
+            foreach (CommittedEvent[] eventBulk in this.GetAllEventsInBulks(skipEventsCount))
             {
                 foreach (CommittedEvent @event in eventBulk)
                 {
                     ThrowIfShouldStopViewsRebuilding(GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
 
                     UpdateStatusMessage(
-                        string.Format("Publishing event {0}. ", processedEventsCount + 1)
+                        string.Format("Publishing event {0} {1} {2}.", processedEventsCount + 1, @event.Payload.GetType().Name, @event.EventIdentifier.FormatGuid())
+                        + Environment.NewLine
                         + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
 
                     try
@@ -402,16 +413,38 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
                 }
 
                 UpdateStatusMessage(
-                    "Acquiring next portion of events. "
+                    "Acquiring next portion of events."
+                    + Environment.NewLine
                     + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
             }
 
             this.logger.Info(String.Format("Processed {0} events, failed {1}", processedEventsCount, failedEventsCount));
 
-            UpdateStatusMessage(string.Format("All events were republished. "
+            UpdateStatusMessage(string.Format("All events were republished."
+                + Environment.NewLine
                 + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount)));
 
             return GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount);
+        }
+
+        private IEnumerable<CommittedEvent[]> GetAllEventsInBulks(int skipEventsCount)
+        {
+            bool somethingReturned;
+            int returnedEventsCount = 0;
+
+            do
+            {
+                somethingReturned = false;
+                IEnumerable<CommittedEvent[]> bulks = this.eventStore.GetAllEvents(skipEvents: skipEventsCount + returnedEventsCount);
+
+                foreach (var bulk in bulks)
+                {
+                    yield return bulk;
+                    somethingReturned = true;
+                    returnedEventsCount += bulk.Length;
+                }
+
+            } while (somethingReturned);
         }
 
         private static string GetReadablePublishingDetails(DateTime republishStarted,
