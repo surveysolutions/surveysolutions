@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using System.Web.Security;
+using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 {
@@ -112,7 +113,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
         private void Challenge(HttpActionContext actionContext)
         {
             string host = actionContext.Request.RequestUri.DnsSafeHost;
-            actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
+            actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, FieldsAndValidations.InvalidUser);
             actionContext.Response.Headers.Add("WWW-Authenticate", string.Format("Basic realm=\"{0}\"", host));
         }
 

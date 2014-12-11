@@ -117,26 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ClientVersionIsObsolete" xml:space="preserve">
-    <value>Your application is incompatible with the Supervisor. Please, remove your copy and download the correct version.</value>
+  <data name="InterviewerApplicationHasHigherVersion_thanSupervisor_Format" xml:space="preserve">
+    <value>Synchronization is failed. Interviewer application has higher version '{0}' than Supervisor '{1}'.</value>
   </data>
   <data name="InvalidDeviceIdentifier" xml:space="preserve">
-    <value>Invalid device identifier</value>
+    <value>Invalid device identifier. Something have happend with the client app installation, please send tablet infromation.</value>
   </data>
   <data name="InvalidUser" xml:space="preserve">
-    <value>Invalid user</value>
+    <value>Syncronization is failed. User is not autorized</value>
   </data>
   <data name="NoClientIdentifier" xml:space="preserve">
-    <value>Client Identifier was not provided</value>
+    <value>Installation identifier is missing. Please reinstall application.</value>
   </data>
-  <data name="OldVersionOfClient" xml:space="preserve">
-    <value>You must update your CAPI application before synchronizing with the Supervisor</value>
+  <data name="InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication" xml:space="preserve">
+    <value>Synchronization is failed. Interviewer application  has version '{0}' but Supervisor has '{1}'. Please update Interviewer application</value>
   </data>
   <data name="ServerError" xml:space="preserve">
-    <value>Error occurred. Try again later</value>
+    <value>Internal server error occurred. Please try again later</value>
   </data>
   <data name="FileWasNotFound" xml:space="preserve">
-    <value>File was not found</value>
+    <value>File with latest version was not found</value>
   </data>
   <data name="IncorrectFilesCount" xml:space="preserve">
     <value>Incorrect files count</value>
@@ -145,6 +145,9 @@
     <value>Incorrect media type</value>
   </data>
   <data name="InvalidSequenceIdentifier" xml:space="preserve">
-    <value>Invalid sequence identifier</value>
+    <value>Invalid sequence identifier. Something have happend with the client app installation, please send tablet infromation.</value>
+  </data>
+  <data name="Sync_package_with_id__0__was_not_found_on_serverFormat" xml:space="preserve">
+    <value> Sync package with id '{0}' was not found on server</value>
   </data>
 </root>
