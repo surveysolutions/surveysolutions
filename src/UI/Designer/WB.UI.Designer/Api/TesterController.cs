@@ -15,6 +15,7 @@ using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Designer.Api.Attributes;
 using WB.UI.Designer.Code;
+using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Api
@@ -60,7 +61,7 @@ namespace WB.UI.Designer.Api
             if (user == null)
             {
                 logger.Warn("Unauthorized request to the questionnaire list");
-                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, TesterApiController.TesterController_ValidateCredentials_Not_authirized);
+                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, TesterApiMessages.TesterController_ValidateCredentials_Not_authirized);
             }
             
             var questionnaireItemList = new List<QuestionnaireListItem>();
@@ -95,7 +96,7 @@ namespace WB.UI.Designer.Api
         public HttpResponseMessage ValidateCredentials()
         {
             if (this.userHelper.WebUser == null)
-                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, TesterApiController.TesterController_ValidateCredentials_Not_authirized);
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, TesterApiMessages.TesterController_ValidateCredentials_Not_authirized);
 
             return Request.CreateResponse(HttpStatusCode.OK, !this.userHelper.WebUser.MembershipUser.IsLockedOut);
         }
@@ -107,10 +108,10 @@ namespace WB.UI.Designer.Api
             if (user == null)
             {
                 logger.Warn("Unauthorized request to the questionnaire " + id);
-                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, TesterApiController.TesterController_ValidateCredentials_Not_authirized);
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, TesterApiMessages.TesterController_ValidateCredentials_Not_authirized);
             }
 
-            return Request.CreateErrorResponse(HttpStatusCode.Gone, TesterApiController.OldClientPleaseUpdate);
+            return Request.CreateErrorResponse(HttpStatusCode.Gone, TesterApiMessages.OldClientPleaseUpdate);
         }
 
         [HttpGet]
@@ -120,37 +121,37 @@ namespace WB.UI.Designer.Api
             if (user == null)
             {
                 logger.Warn("Unauthorized request to the questionnaire " + id);
-                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, TesterApiController.TesterController_ValidateCredentials_Not_authirized);
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, TesterApiMessages.TesterController_ValidateCredentials_Not_authirized);
             }
 
             QuestionnaireVersion supportedQuestionnaireVersion;
             if (!QuestionnaireVersion.TryParse(maxSupportedVersion, out supportedQuestionnaireVersion))
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, TesterApiController.VersionParameterIsIncorrect);
+                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, TesterApiMessages.VersionParameterIsIncorrect);
             }
 
             var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
             if (questionnaireView == null)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, string.Format(TesterApiController.TemplateWasNotFound, id));
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, string.Format(TesterApiMessages.TemplateWasNotFound, id));
             }
 
             if (!ValidateAccessPermissions(questionnaireView, user.UserId))
             {
                 logger.Error(String.Format("Non permitted resource was requested by user [{0}]", user.UserId));
-                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, TesterApiController.TesterController_ValidateCredentials_Not_authirized);
+                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, TesterApiMessages.TesterController_ValidateCredentials_Not_authirized);
             }
             
             var templateInfo = this.exportService.GetQuestionnaireTemplateInfo(questionnaireView.Source);
             if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, string.Format(TesterApiController.TemplateWasNotFound, id));
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, string.Format(TesterApiMessages.TemplateWasNotFound, id));
             }
 
             if (templateInfo.Version > supportedQuestionnaireVersion)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
-                    string.Format(TesterApiController.ClientVersionLessThenDocumentFormat, templateInfo.Title, supportedQuestionnaireVersion, templateInfo.Version));
+                    string.Format(TesterApiMessages.ClientVersionLessThenDocumentFormat, templateInfo.Title, supportedQuestionnaireVersion, templateInfo.Version));
             }
 
             string resultAssembly;
@@ -158,20 +159,20 @@ namespace WB.UI.Designer.Api
             {
                 if (questionnaireVerifier.Verify(questionnaireView.Source).ToArray().Any())
                 {
-                    return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, string.Format(TesterApiController.Questionnaire_verification_failed_Format, templateInfo.Title));
+                    return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, string.Format(TesterApiMessages.Questionnaire_verification_failed_Format, templateInfo.Title));
                 }
 
                 GenerationResult generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireView.Source, out resultAssembly);
 
                 if (!generationResult.Success || String.IsNullOrWhiteSpace(resultAssembly))
                 {
-                    return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, string.Format(TesterApiController.Questionnaire_verification_failed_Format, templateInfo.Title));
+                    return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, string.Format(TesterApiMessages.Questionnaire_verification_failed_Format, templateInfo.Title));
                 }
             }
             catch (Exception exc)
             {
                 logger.Error("Error template verification.", exc);
-                return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, string.Format(TesterApiController.Questionnaire_verification_failed_Format, templateInfo.Title));
+                return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, string.Format(TesterApiMessages.Questionnaire_verification_failed_Format, templateInfo.Title));
             }
             
             var template = PackageHelper.CompressString(templateInfo.Source);
