@@ -315,6 +315,11 @@
     <Compile Include="Pdf\PdfOutput.cs" />
     <Compile Include="Pdf\TitlePageDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\HeadquarterApiMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HeadquarterApiMessages.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\TesterApiMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1400,6 +1405,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\HeadquarterApiMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>HeadquarterApiMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\TesterApiMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>TesterApiMessages.Designer.cs</LastGenOutput>
