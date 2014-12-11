@@ -5,6 +5,7 @@ using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.Synchronization.Resources;
 using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.SyncProvider
@@ -83,7 +84,7 @@ namespace WB.Core.Synchronization.SyncProvider
             if (identifier.ClientRegistrationKey.HasValue)
             {
                 if (identifier.ClientRegistrationKey.Value == Guid.Empty)
-                    throw new ArgumentException("Unknown device.");
+                    throw new ArgumentException(SyncProviderMessages.Client_registration_key_can_t_be_empty);
 
                 device = devices.GetById(identifier.ClientRegistrationKey.Value);
                 if (device == null)
@@ -91,7 +92,7 @@ namespace WB.Core.Synchronization.SyncProvider
                     //keys were provided but we can't find device
                     //probably device has been synchronized with other supervisor application
 
-                    throw new Exception("Device was not found. It could be linked to other system.");
+                    throw new Exception(SyncProviderMessages.Device_was_not_found__It_could_be_linked_to_other_system);
                 }
 
                 //old sync devices are already in use
@@ -103,7 +104,7 @@ namespace WB.Core.Synchronization.SyncProvider
                 }
                 else if (device.SupervisorKey != identifier.SupervisorPublicKey)
                 {
-                    throw new Exception("Device was assigned to another Supervisor.");
+                    throw new Exception(SyncProviderMessages.Device_was_assigned_to_another_Supervisor);
                 }
 
                 //TODO: check device validity

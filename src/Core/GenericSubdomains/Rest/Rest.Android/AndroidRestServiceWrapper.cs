@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -162,37 +163,62 @@ namespace WB.Core.GenericSubdomains.Rest.Android
             if (response.ErrorException != null)
             {
                 this.logger.Error("Error occured during synchronization. Response contains exception. Message: " + response.ErrorMessage, response.ErrorException);
-                throw new RestException("Error occurred on communication. Please, check settings or try again later");
             }
 
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                if (response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
-                    throw new AuthenticationException("Not autorized");
+                this.logger.Error(string.Format("Error at responce handling. Status: {0}. {1}", response.StatusDescription, response.ErrorMessage), response.ErrorException); 
+                
+                if (response.ErrorException != null)
+                    throw response.ErrorException;
 
-                this.logger.Error(string.Format("Sync error. Status: {0}. {1}", response.StatusDescription, response.Content));
-
-                var exceptionMessage = string.IsNullOrWhiteSpace(response.Content) 
-                    ? string.Format("Target returned unexpected result. Status: {0}", response.StatusDescription) 
-                    : this.jsonUtils.Deserrialize<ErrorMessage>(response.Content).Message;
-
-                throw new RestException(exceptionMessage);
+                string exceptionMessage;
+                if (string.IsNullOrWhiteSpace(response.Content))
+                {
+                    exceptionMessage = GetErrorMessageFromResponce(response);
+                }
+                else
+                {
+                    try
+                    {
+                        exceptionMessage = this.jsonUtils.Deserrialize<ErrorMessage>(response.Content).Message;
+                    }
+                    catch (Exception e)
+                    {
+                        this.logger.Error(e.Message, e);
+                        exceptionMessage = GetErrorMessageFromResponce(response);
+                    }
+                }
+                throw new RestException(exceptionMessage, (int)response.StatusCode);
             }
 
             if (string.IsNullOrWhiteSpace(response.Content))
             {
-                this.logger.Error("Sync error. Empty content was returned.");
-                throw new RestException(string.Format("Target returned unexpected result."));
+                var message = string.Format("Empty content was returned, but expected content of type '{0}'", typeof (T).Name);
+                this.logger.Error(message);
+                throw new RestException(message);
             }
-
-            var syncItemsMetaContainer = this.jsonUtils.Deserrialize<T>(response.Content);
-
-            if (syncItemsMetaContainer == null)
+            try
             {
-                throw new RestException("Elements to be synchronized are not found.");
-            }
+                var syncItemsMetaContainer = this.jsonUtils.Deserrialize<T>(response.Content);
 
-            return syncItemsMetaContainer;
+                return syncItemsMetaContainer;
+            }
+            catch (Exception e)
+            {
+                this.logger.Error(string.Format("Returned content '{0}' can't be deserrialized with Type '{1}'", response.Content,
+                    typeof(T).Name), e);
+                throw new RestException(string.Format("Returned content can't be deserrialized with Type '{0}'", 
+                    typeof(T).Name), e);
+            }
+        }
+
+        private string GetErrorMessageFromResponce(IRestResponse response)
+        {
+            if (!string.IsNullOrWhiteSpace(response.ErrorMessage))
+                return response.ErrorMessage;
+
+            return string.Format("Status: '{0}'", response.StatusDescription);
         }
 
         private RestRequest BuildRequest(string url, IEnumerable<KeyValuePair<string, object>> additionalParams, object requestBody, RestSharp.Method method)
