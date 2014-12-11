@@ -167,7 +167,9 @@ namespace WB.Core.GenericSubdomains.Rest.Android
 
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                this.logger.Error(string.Format("Error at responce handling. Status: {0}. {1}", response.StatusDescription, response.ErrorMessage), response.ErrorException); 
+                this.logger.Error(
+                    string.Format("Error at responce handling. Status: {0}, StatusCode: {1}, Content: '{2}'. {3}",
+                        response.StatusDescription, response.StatusCode, response.Content, response.ErrorMessage), response.ErrorException);
                 
                 if (response.ErrorException != null)
                     throw response.ErrorException;
