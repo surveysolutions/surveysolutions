@@ -150,7 +150,7 @@ namespace WB.UI.Designer.Api
             if (templateInfo.Version > supportedQuestionnaireVersion)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
-                    string.Format(TesterApiController.ClientVersionLessThenDocument, supportedQuestionnaireVersion, templateInfo.Version));
+                    string.Format(TesterApiController.ClientVersionLessThenDocumentFormat, templateInfo.Title, supportedQuestionnaireVersion, templateInfo.Version));
             }
 
             string resultAssembly;
@@ -158,20 +158,20 @@ namespace WB.UI.Designer.Api
             {
                 if (questionnaireVerifier.Verify(questionnaireView.Source).ToArray().Any())
                 {
-                    return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, TesterApiController.Questionnaire_verification_failed);
+                    return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, string.Format(TesterApiController.Questionnaire_verification_failed_Format, templateInfo.Title));
                 }
 
                 GenerationResult generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireView.Source, out resultAssembly);
 
                 if (!generationResult.Success || String.IsNullOrWhiteSpace(resultAssembly))
                 {
-                    return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, TesterApiController.Questionnaire_verification_failed);
+                    return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, string.Format(TesterApiController.Questionnaire_verification_failed_Format, templateInfo.Title));
                 }
             }
             catch (Exception exc)
             {
                 logger.Error("Error template verification.", exc);
-                return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, TesterApiController.Questionnaire_verification_failed);
+                return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, string.Format(TesterApiController.Questionnaire_verification_failed_Format, templateInfo.Title));
             }
             
             var template = PackageHelper.CompressString(templateInfo.Source);
