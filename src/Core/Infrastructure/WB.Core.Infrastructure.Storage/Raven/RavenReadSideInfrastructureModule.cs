@@ -23,10 +23,12 @@ namespace WB.Core.Infrastructure.Storage.Raven
         {
             this.BindDocumentStore();
 
-            this.Bind<IReadSideStatusService>().To<RavenReadSideService>().InSingletonScope();
             this.Bind<IReadSideRepositoryIndexAccessor>().To<RavenReadSideRepositoryIndexAccessor>().InSingletonScope()
                 .WithConstructorArgument("assembliesWithIndexes", this.assembliesWithIndexes);
-            this.Bind<IReadSideAdministrationService>().To<RavenReadSideService>().InSingletonScope();
+
+            this.Bind<RavenReadSideService>().ToSelf().InSingletonScope();
+            this.Bind<IReadSideStatusService>().ToMethod(context => this.Kernel.Get<RavenReadSideService>());
+            this.Bind<IReadSideAdministrationService>().ToMethod(context => this.Kernel.Get<RavenReadSideService>());
 
             this.Bind<IReadSideRepositoryWriterRegistry>().To<ReadSideRepositoryWriterRegistry>().InSingletonScope();
 
