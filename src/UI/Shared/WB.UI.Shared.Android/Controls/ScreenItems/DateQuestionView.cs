@@ -16,6 +16,10 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 {
     public class DateQuestionView : AbstractQuestionView
     {
+        private TextView dateDisplay;
+        private DatePickerDialog dialog;
+        private DateTime selectedDate;
+
         public DateQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey,
             ICommandService commandService,
             IAnswerOnQuestionCommandService answerCommandService,
@@ -23,8 +27,6 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             : base(context, bindingActivity, source, questionnairePublicKey, commandService, answerCommandService, membership)
         {
         }
-
-        #region Overrides of AbstractQuestionView
 
         protected override void Initialize()
         {
@@ -48,11 +50,6 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 PutAnswerStoredInModelToUI();
         }
 
-        private void ShowDateTimePicker(object sender, EventArgs e)
-        {
-            this.dialog.Show();
-        }
-
         protected override string GetAnswerStoredInModelAsString()
         {
             return this.Model.AnswerString;
@@ -64,6 +61,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         }
 
         // the event received when the user "sets" the date in the dialog
+
         void OnDateSet(object sender, DatePickerDialog.DateSetEventArgs e)
         {
             if (e.Date != this.selectedDate)
@@ -71,17 +69,19 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 selectedDate = e.Date;
                 PutAnswerStoredInModelToUI();
 
-                this.SaveAnswer(
-                    this.dateDisplay.Text,
-                    new AnswerDateTimeQuestionCommand(this.QuestionnairePublicKey, this.Membership.CurrentUser.Id,
-                        this.Model.PublicKey.Id, this.Model.PublicKey.InterviewItemPropagationVector, DateTime.UtcNow, e.Date));
+                this.SaveAnswer(this.dateDisplay.Text,
+                    new AnswerDateTimeQuestionCommand(this.QuestionnairePublicKey, 
+                        this.Membership.CurrentUser.Id, 
+                        this.Model.PublicKey.Id, 
+                        this.Model.PublicKey.InterviewItemPropagationVector, 
+                        DateTime.UtcNow, 
+                        e.Date));
             }
         }
 
-        #endregion
-
-        private TextView dateDisplay;
-        private DatePickerDialog dialog;
-        private DateTime selectedDate;
+        private void ShowDateTimePicker(object sender, EventArgs e)
+        {
+            this.dialog.Show();
+        }
     }
 }
