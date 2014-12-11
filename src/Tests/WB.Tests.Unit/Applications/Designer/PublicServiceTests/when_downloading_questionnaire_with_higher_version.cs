@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
             exception.ShouldBeOfExactType<FaultException>();
 
         It should_throw_exception_that_contains_such_words = () =>
-            (new[] { "requested questionnaire", "supports versions" }).Each(x => (exception as FaultException).Message.ToLower().ShouldContain(x));
+            (exception as FaultException).Message.ShouldEqual("Failed to import questionnaire. Requested questionnaire \"aaaa.tmpl\" has 1.0.0 version. Headquarters application supports version up to 0.0.1");
 
         private static QuestionnaireVersion version = new QuestionnaireVersion(1,0,0);
         private static DownloadQuestionnaireRequest request;
