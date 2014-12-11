@@ -11,7 +11,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
-    [Ignore("by TLK temporary")]
     internal class when_verifying_questionnaire_with_question_with_incorrect_syntax_in_validation_and_condition : QuestionnaireVerifierTestsContext
     {
         private Establish context = () =>
@@ -36,11 +35,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_2_errors = () =>
             resultErrors.Count().ShouldEqual(2);
 
-        It should_return_first_error_with_code__WB0003__ = () =>
-            resultErrors.ElementAt(0).Code.ShouldEqual("WB0003");
+        It should_return_error_with_code__WB0003__ = () =>
+            resultErrors.Select(error => error.Code).ShouldContain("WB0003");
 
-        It should_return_second_error_with_code__WB0002__ = () =>
-            resultErrors.ElementAt(1).Code.ShouldEqual("WB0002");
+        It should_return_error_with_code__WB0002__ = () =>
+            resultErrors.Select(error => error.Code).ShouldContain("WB0002");
 
         It should_return_error_with_single_reference = () =>
             resultErrors.ShouldEachConformTo(error=>error.References.Count() == 1);
