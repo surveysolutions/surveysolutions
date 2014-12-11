@@ -49,16 +49,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
                     Mock.Of<IPlainInterviewFileStorage>(
                         _ => _.GetBinaryFilesForInterview(Moq.It.IsAny<Guid>()) == new List<InterviewBinaryDataDescriptor>()),
                 Mock.Of<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>(
-                    _ => _.GetById(It.IsAny<string>()) == new ViewWithSequence<InterviewData>(interviewData??new InterviewData(), 1)),
+                    _ => _.GetById(It.IsAny<string>()) == new ViewWithSequence<InterviewData>(interviewData ?? new InterviewData(), 1)),
                 Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>>(
                     _ => _.GetById(It.IsAny<string>(), It.IsAny<long>()) == new QuestionnaireExportStructure()),
-                Mock.Of<IReadSideRepositoryWriter<UserDocument>>(_ => _.GetById(It.IsAny<string>()) == user), interviewSummaryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
+                Mock.Of<IReadSideRepositoryWriter<UserDocument>>(_ => _.GetById(It.IsAny<string>()) == user),
+                interviewSummaryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
                 Mock.Of<IExportViewFactory>(
                     _ =>
                         _.CreateInterviewDataExportView(It.IsAny<QuestionnaireExportStructure>(), It.IsAny<InterviewData>()) ==
                             (interviewDataExportView ??
                                 new InterviewDataExportView(Guid.NewGuid(), Guid.NewGuid(), 1, new InterviewDataExportLevelView[0]))),
-                filebasedExportedDataAccessor ?? Mock.Of<IFilebasedExportedDataAccessor>());
+                filebasedExportedDataAccessor ?? Mock.Of<IFilebasedExportedDataAccessor>(), 256);
         }
 
         protected static void AddLevelToExportStructure(QuestionnaireExportStructure questionnaireExportStructure, Guid levelId,

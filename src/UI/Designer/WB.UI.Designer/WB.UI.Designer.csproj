@@ -228,11 +228,6 @@
     <Compile Include="Api\ControlPanelApiController.cs" />
     <Compile Include="Api\ExpressionGenerationController.cs" />
     <Compile Include="Api\QuestionnaireController.cs" />
-    <Compile Include="App_GlobalResources\TesterApiController.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TesterApiController.resx</DependentUpon>
-    </Compile>
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -328,6 +323,16 @@
     <Compile Include="Pdf\PdfOutput.cs" />
     <Compile Include="Pdf\TitlePageDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\HeadquarterApiMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HeadquarterApiMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\TesterApiMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TesterApiMessages.resx</DependentUpon>
+    </Compile>
     <Compile Include="ServiceLocationModule.cs" />
     <Compile Include="WebServices\IPublicService.cs" />
     <Compile Include="WebServices\PublicService.cs" />
@@ -757,6 +762,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="App_GlobalResources\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
@@ -814,11 +820,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_GlobalResources\TesterApiController.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>TesterApiController.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </Content>
+    <EmbeddedResource Include="Resources\HeadquarterApiMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>HeadquarterApiMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TesterApiMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TesterApiMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

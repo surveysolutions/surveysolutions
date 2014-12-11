@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
@@ -16,6 +18,8 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
     {
         private int totalEventsToRebuildCount = 0;
         private int failedEventsCount = 0;
+        private static int instanceCount = 0;
+
         private int processedEventsCount = 0;
         private int skippedEventsCount = 0;
         private DateTime lastRebuildDate = DateTime.Now;
@@ -42,6 +46,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
         public ReadSideService(IStreamableEventStore eventStore, IEventDispatcher eventBus, ILogger logger)
         {
+            if (instanceCount > 0)
+                throw new Exception(string.Format("Trying to create a new instance of RavenReadSideService when following count of instances exists: {0}.", instanceCount));
+
+            Interlocked.Increment(ref instanceCount);
+
             this.eventStore = eventStore;
             this.eventBus = eventBus;
             this.logger = logger;
@@ -401,12 +410,20 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             this.lastRebuildDate = DateTime.Now;
             UpdateStatusMessage("Acquiring first portion of events.");
 
+            DateTime republishStarted = DateTime.Now;
+            UpdateStatusMessage(
+                "Acquiring first portion of events."
+                + Environment.NewLine
+                + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
 
             foreach (CommittedEvent @event in eventStream)
             {
                 ThrowIfShouldStopViewsRebuilding();
 
-                UpdateStatusMessage(string.Format("Publishing event {0}. ", this.processedEventsCount + 1));
+                    UpdateStatusMessage(
+                        string.Format("Publishing event {0} {1} {2}.", processedEventsCount + 1, @event.Payload.GetType().Name, @event.EventIdentifier.FormatGuid())
+                        + Environment.NewLine
+                        + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
 
                 try
                 {
@@ -431,6 +448,29 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     UpdateStatusMessage(message);
                     throw new Exception(message);
                 }
+            UpdateStatusMessage(string.Format("All events were republished."
+                + Environment.NewLine
+                + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount)));
+        }
+
+        private IEnumerable<CommittedEvent[]> GetAllEventsInBulks(int skipEventsCount)
+        {
+            bool somethingReturned;
+            int returnedEventsCount = 0;
+
+            do
+            {
+                somethingReturned = false;
+                IEnumerable<CommittedEvent[]> bulks = this.eventStore.GetAllEvents(skipEvents: skipEventsCount + returnedEventsCount);
+
+                foreach (var bulk in bulks)
+                {
+                    yield return bulk;
+                    somethingReturned = true;
+                    returnedEventsCount += bulk.Length;
+                }
+
+            } while (somethingReturned);
             }
 
             UpdateStatusMessage("Acquiring next portion of events.");

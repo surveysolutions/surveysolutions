@@ -163,7 +163,9 @@ namespace WB.UI.Supervisor.App_Start
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]), isDebug,
-                    applicationBuildVersion, interviewDetailsDataLoaderSettings, overrideReceivedEventTimeStamp, Constants.CapiSynchronizationOrigin, false));
+                    applicationBuildVersion, interviewDetailsDataLoaderSettings, overrideReceivedEventTimeStamp,
+                    Constants.CapiSynchronizationOrigin, false,
+                    int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"])));
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
