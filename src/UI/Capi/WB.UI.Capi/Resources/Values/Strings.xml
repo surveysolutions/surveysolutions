@@ -27,5 +27,10 @@
   <item  type="id"  name="AnswerId" />
   <item  type="id"  name="Index" />
   <item  type="id"  name="ElementId" />
-  
-</resources>
+  <string name="PleaseCheckURLInSettingsFormat"><![CDATA[Synchronization is failed. Synchronization point <a href=\'{0}\'>{0}</a> appears to be wrong. Please check URL in Settings. If URL is correct then check Network Connection. {1}]]></string>
+  <string name="WebErrorWithStatus">Synchronization is failed. Error \'{0}\' with status \'{1}\'</string>
+  <string name="NowYouareConnectedToMobileNetwork">Now you are connected mobile network</string>
+  <string name="YouAreNotConnectedToAnyNetwork">You are not connected to any network</string>
+  <string name="NowYouareConnectedToWifiNetwork"> Now you are connected to wi-fi network: {0}</string>
+  <string name="NewHtmlLine"> <![CDATA[<br/>]]></string>
+ </resources>

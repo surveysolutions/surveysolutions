@@ -35,8 +35,7 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             result.StatusCode.ShouldEqual(HttpStatusCode.NotAcceptable);
         
         It should_return_error_message_that_contains_specific_words = () =>
-            new[] { "application", "is incompatible with", "supervisor", "remove your copy", "download the correct version" }.ShouldEachConformTo(
-                keyword => result.Content.ReadAsStringAsync().Result.ToLower().Contains(keyword));
+            result.Content.ReadAsStringAsync().Result.ShouldEqual("{\"Message\":\"Synchronization is failed. Interviewer application has higher version '18' than Supervisor '13'.\"}");
 
         private static InterviewerSyncController controller;
         private static HttpResponseMessage result;
