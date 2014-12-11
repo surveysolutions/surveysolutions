@@ -22,14 +22,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         public bool Selected { get;  set; }
         public int AnswerOrder { get; set; }
 
-        #region Implementation of ICloneable
-
         public object Clone()
         {
             return new AnswerViewModel(this.PublicKey, this.Title, this.Value.ToString(), this.Selected, this.ImagePublicKey);
         }
-
-        #endregion
     }
 
     public interface ICloneable
