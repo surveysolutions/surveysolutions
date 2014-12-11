@@ -25,10 +25,11 @@ namespace WB.Core.Infrastructure.Storage.Raven
         {
             this.BindDocumentStore();
 
-            this.Bind<IReadSideStatusService>().To<ReadSideService>().InSingletonScope();
             this.Bind<IReadSideRepositoryIndexAccessor>().To<RavenReadSideRepositoryIndexAccessor>().InSingletonScope()
                 .WithConstructorArgument("assembliesWithIndexes", this.assembliesWithIndexes);
             this.Bind<IReadSideAdministrationService>().To<ReadSideService>().InSingletonScope();
+            this.Bind<RavenReadSideService>().ToSelf().InSingletonScope();
+            this.Bind<IReadSideAdministrationService>().ToMethod(context => this.Kernel.Get<RavenReadSideService>());
 
             // each repository writer should exist in one instance because it might use caching
             this.Kernel.Bind(typeof(RavenReadSideRepositoryWriter<>)).ToSelf().InSingletonScope().WithConstructorArgument("basePath", basePath);

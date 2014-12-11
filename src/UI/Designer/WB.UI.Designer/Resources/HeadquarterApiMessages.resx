@@ -117,37 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="InterviewerApplicationHasHigherVersion_thanSupervisor_Format" xml:space="preserve">
-    <value>Synchronization is failed. Interviewer application has higher version '{0}' than Supervisor '{1}'.</value>
+  <data name="RequestedQuestionnaireId0WasNotFoundFormat" xml:space="preserve">
+    <value>Requested questionnaire id={0} was not found</value>
   </data>
-  <data name="InvalidDeviceIdentifier" xml:space="preserve">
-    <value>Invalid device identifier. Something have happend with the client app installation, please send tablet infromation.</value>
+  <data name="Requested_questionnaire___0___has_version__1___but_Headquarters_application_supports_versions_up_to__2__onlyFormat" xml:space="preserve">
+    <value>Failed to import questionnaire. Requested questionnaire "{0}" has {1} version. Headquarters application supports version up to {2}</value>
   </data>
-  <data name="InvalidUser" xml:space="preserve">
-    <value>Syncronization is failed. User is not autorized</value>
-  </data>
-  <data name="NoClientIdentifier" xml:space="preserve">
-    <value>Installation identifier is missing. Please reinstall application.</value>
-  </data>
-  <data name="InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication" xml:space="preserve">
-    <value>Synchronization is failed. Interviewer application  has version '{0}' but Supervisor has '{1}'. Please update Interviewer application</value>
-  </data>
-  <data name="ServerError" xml:space="preserve">
-    <value>Internal server error occurred. Please try again later</value>
-  </data>
-  <data name="FileWasNotFound" xml:space="preserve">
-    <value>File with latest version was not found</value>
-  </data>
-  <data name="IncorrectFilesCount" xml:space="preserve">
-    <value>Incorrect files count</value>
-  </data>
-  <data name="IncorrectMediaType" xml:space="preserve">
-    <value>Incorrect media type</value>
-  </data>
-  <data name="InvalidSequenceIdentifier" xml:space="preserve">
-    <value>Invalid sequence identifier. Something have happend with the client app installation, please send tablet infromation.</value>
-  </data>
-  <data name="Sync_package_with_id__0__was_not_found_on_serverFormat" xml:space="preserve">
-    <value> Sync package with id '{0}' was not found on server</value>
+  <data name="Requested_questionnaire___0___has_errors__Please_verify_and_fix_them_on_DesignerFormat" xml:space="preserve">
+    <value>Failed to import questionnaire. Requested questionnaire "{0}" has errors. Please verify and fix them on Designer.</value>
   </data>
 </root>
