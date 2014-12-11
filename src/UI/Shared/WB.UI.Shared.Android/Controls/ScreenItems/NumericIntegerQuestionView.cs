@@ -40,7 +40,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected override async Task<AnswerQuestionCommand> CreateAnswerQuestionCommand(int answer)
         {
-            bool result = await ConfirmRosterDecreaseAsync(Model.TriggeredRosters, ParseCurrentAnswerString() - answer);
+            bool result = await ConfirmRosterDecreaseAsync(Model.TriggeredRosters, ParseCurrentAnswerString() - Math.Max(0, answer));
 
             if (!result)
             {
