@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -29,8 +30,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         public string Mask = null;
         public int? CountOfDecimalPlaces = null;
 
-        #region Overrides of QuestionViewModel
-
         public override IQuestionnaireItemViewModel Clone(decimal[] propagationVector)
         {
             return new ValueQuestionViewModel(new InterviewItemId(this.PublicKey.Id, propagationVector), this.QuestionRosterScope,
@@ -40,14 +39,16 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 this.Mandatory, this.ValidationMessage, this.Variable, this.SubstitutionReferences, this.IsInteger,
                 this.CountOfDecimalPlaces, this.TriggeredRosters);
         }
+        
         public override string AnswerString
         {
             get
             {
+
                 if (this.AnswerObject == null)
                     return "";
                 if (this.QuestionType != QuestionType.Numeric)
-                    return this.AnswerObject.ToString();
+                    return AnswerUtils.AnswerToString(this.AnswerObject);
                 if (this.AnswerObject is int)
                     return string.Format(CultureInfo.CurrentCulture, "{0:n0}", (int)this.AnswerObject);
                 if (this.AnswerObject is decimal)
@@ -55,6 +56,5 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 return this.AnswerObject.ToString();
             }
         }
-        #endregion
     }
 }
