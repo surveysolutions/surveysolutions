@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using System.Web.Security;
+using Resources;
 
 namespace WB.UI.Designer.Api.Attributes
 {
@@ -84,7 +85,7 @@ namespace WB.UI.Designer.Api.Attributes
         private void Challenge(HttpActionContext actionContext)
         {
             var host = actionContext.Request.RequestUri.DnsSafeHost;
-            actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
+            actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, TesterApiController.TesterController_ValidateCredentials_Not_authirized);
             actionContext.Response.Headers.Add("WWW-Authenticate", string.Format("Basic realm=\"{0}\"", host));
         }
 
