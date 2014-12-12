@@ -145,7 +145,7 @@ function BuildSolutions($BuildConfiguration,  [switch] $ClearBinAndObjFoldersBef
 
 
 function GetProjectsWithTests() {
-    return Get-ChildItem -Filter *Test*.csproj -Recurse -ErrorAction SilentlyContinue | %{ GetPathRelativeToCurrectLocation $_.FullName }
+    return Get-ChildItem -Filter '*Tests*.csproj' -Recurse -ErrorAction SilentlyContinue | %{ GetPathRelativeToCurrectLocation $_.FullName }
 }
 
 function GetOutputAssembly($Project, $BuildConfiguration) {
@@ -182,10 +182,6 @@ function RunTestsFromProject($Project, $BuildConfiguration) {
         $resultXml = (Get-Item $assembly).BaseName + '.NUnit-Result.xml'
         .\packages\NUnit.Runners.2.6.2\tools\nunit-console.exe $assembly /result=$resultXml /nologo /nodots | Write-Host
         Write-Host "##teamcity[importData type='nunit' path='$resultXml']"
-
-        .\packages\Machine.Specifications.0.7.0\tools\mspec-clr4.exe --teamcity $assembly | Write-Host
-
-        Write-Host "##teamcity[progressFinish 'Running tests from $assembly']"
     }
 
     Write-Host "##teamcity[blockClosed name='$Project']"
@@ -197,6 +193,18 @@ function RunTests($BuildConfiguration) {
     $projects = GetProjectsWithTests
 
     if ($projects -ne $null) {
+        $parallelRunner = Get-ChildItem '.\packages\' | 
+                                    Where-Object { $_.Name -like 'Machine.Specifications.TeamCityParallelRunner.*'} | 
+                                    Select -First 1
+        if ($parallelRunner) {
+            $assemblies = $projects | ForEach-Object -Process {GetOutputAssembly $_ $BuildConfiguration} | Where-Object {(Test-Path $_) -and ($_ -notlike "*Mono*")}
+            $assembliesJoined = [string]::Join(" ", $assemblies)
+
+            $command = Join-Path ".\packages\$parallelRunner" "\tools\mspec-teamcity-prunner.exe --threads 3 $assembliesJoined"
+            Write-Host $command
+            iex $command | Write-Host
+        }
+
         foreach ($project in $projects) {
             RunTestsFromProject $project $BuildConfiguration
         }
