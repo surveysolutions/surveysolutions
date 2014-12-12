@@ -16,9 +16,10 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 {
     public class ReadSideService : IReadSideAdministrationService
     {
+        internal static int InstanceCount = 0;
+
         private int totalEventsToRebuildCount = 0;
         private int failedEventsCount = 0;
-        private static int instanceCount = 0;
 
         private int processedEventsCount = 0;
         private int skippedEventsCount = 0;
@@ -46,10 +47,10 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
         public ReadSideService(IStreamableEventStore eventStore, IEventDispatcher eventBus, ILogger logger)
         {
-            if (instanceCount > 0)
-                throw new Exception(string.Format("Trying to create a new instance of RavenReadSideService when following count of instances exists: {0}.", instanceCount));
+            if (InstanceCount > 0)
+                throw new Exception(string.Format("Trying to create a new instance of RavenReadSideService when following count of instances exists: {0}.", InstanceCount));
 
-            Interlocked.Increment(ref instanceCount);
+            Interlocked.Increment(ref InstanceCount);
 
             this.eventStore = eventStore;
             this.eventBus = eventBus;

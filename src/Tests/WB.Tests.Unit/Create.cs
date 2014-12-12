@@ -17,7 +17,6 @@ using Ncqrs.Eventing.Storage;
 using Ncqrs.Spec;
 using NSubstitute;
 using Quartz;
-using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -41,9 +40,13 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -56,6 +59,8 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Designer.Api;
 using WB.UI.Supervisor.Controllers;
+using Identity = WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos.Identity;
+using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
 using QuestionnaireDeleted = WB.Core.SharedKernels.DataCollection.Events.Questionnaire.QuestionnaireDeleted;
 
 namespace WB.Tests.Unit
@@ -145,15 +150,50 @@ namespace WB.Tests.Unit
                 };
             }
 
-            public static Answer Option(Guid? id = null, string text = null, string value = null, string parentValue = null)
+            public static GroupsDisabled GroupsDisabled(Guid? id = null, decimal[] rosterVector = null)
             {
-                return new Answer
+                var identities = new[]
                 {
-                    PublicKey = id ?? Guid.NewGuid(),
-                    AnswerText = text ?? "text",
-                    AnswerValue = value ?? "1",
-                    ParentValue = parentValue
+                    new Identity(id ?? Guid.NewGuid(), rosterVector ?? new decimal[0]), 
                 };
+                return new GroupsDisabled(identities);
+            }
+
+            public static QuestionsDisabled QuestionsDisabled(Guid? id = null, decimal[] rosterVector = null)
+            {
+                var identities = new[]
+                {
+                    new Identity(id ?? Guid.NewGuid(), rosterVector ?? new decimal[0]), 
+                };
+                return new QuestionsDisabled(identities);
+            }
+
+            public static RosterInstancesAdded RosterInstancesAdded(Guid? rosterGroupId = null,
+                decimal[] rosterVector = null,
+                decimal? rosterInstanceId = null,
+                int? sortIndex = null)
+            {
+                return new RosterInstancesAdded(new[]
+                {
+                    new AddedRosterInstance(rosterGroupId ?? Guid.NewGuid(), rosterVector ?? new decimal[0], rosterInstanceId ?? 0.0m, sortIndex)
+                });
+            }
+
+            public static RosterInstancesRemoved RosterInstancesRemoved(Guid? rosterGroupId = null)
+            {
+                return new RosterInstancesRemoved(new[]
+                {
+                    new RosterInstance(rosterGroupId ?? Guid.NewGuid(), new decimal[0], 0.0m)
+                });
+            }
+
+            public static RosterInstancesTitleChanged RosterInstancesTitleChanged(Guid? rosterId = null)
+            {
+                return new RosterInstancesTitleChanged(
+                    new[]
+                {
+                    new ChangedRosterInstanceTitleDto(new RosterInstance(rosterId ?? Guid.NewGuid(), new decimal[0], 0.0m), "title")
+                });
             }
         }
 
@@ -1190,6 +1230,48 @@ namespace WB.Tests.Unit
             result.Status = status;
             result.InterviewId = interviewId.GetValueOrDefault();
             return result;
+        }
+
+        public static WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire Questionnaire(Guid creatorId, QuestionnaireDocument document)
+        {
+            return new WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire(new Guid(), document, false, string.Empty);
+        }
+
+        public static EnablementChanges EnablementChanges(List<Core.SharedKernels.DataCollection.Identity> groupsToBeDisabled = null, List<Core.SharedKernels.DataCollection.Identity> groupsToBeEnabled = null,
+            List<Core.SharedKernels.DataCollection.Identity> questionsToBeDisabled = null, List<Core.SharedKernels.DataCollection.Identity> questionsToBeEnabled = null)
+        {
+            return new EnablementChanges(
+                groupsToBeDisabled ?? new List<Core.SharedKernels.DataCollection.Identity>(),
+                groupsToBeEnabled ?? new List<Core.SharedKernels.DataCollection.Identity>(),
+                questionsToBeDisabled ?? new List<Core.SharedKernels.DataCollection.Identity>(),
+                questionsToBeEnabled ?? new List<Core.SharedKernels.DataCollection.Identity>());
+        }
+
+        public static InterviewState InterviewState(InterviewStatus? status = null, List<AnswerComment> answerComments = null)
+        {
+            return new InterviewState(Guid.NewGuid(), 1, status ?? InterviewStatus.SupervisorAssigned, new Dictionary<string, object>(),
+                new Dictionary<string, Tuple<Guid, decimal[], decimal[]>>(), new Dictionary<string, Tuple<Guid, decimal[], decimal[][]>>(),
+                new Dictionary<string, Tuple<decimal, string>[]>(), new HashSet<string>(),
+                answerComments ?? new List<AnswerComment>(),
+                new HashSet<string>(),
+                new HashSet<string>(), new Dictionary<string, DistinctDecimalList>(),
+                new HashSet<string>(), new HashSet<string>(), true, Mock.Of<IInterviewExpressionState>());
+        }
+
+        public static Core.SharedKernels.DataCollection.Identity Identity(Guid id, decimal[] rosterVector)
+        {
+            return new Core.SharedKernels.DataCollection.Identity(id, rosterVector);
+        }
+
+        public static IQuestionnaireRepository QuestionnaireRepositoryStubWithOneQuestionnaire(
+            Guid questionnaireId, IQuestionnaire questionaire = null)
+        {
+            questionaire = questionaire ?? Mock.Of<IQuestionnaire>();
+
+            return Mock.Of<IQuestionnaireRepository>(repository
+                => repository.GetQuestionnaire(questionnaireId) == questionaire
+                && repository.GetHistoricalQuestionnaire(questionnaireId, questionaire.Version) == questionaire
+                && repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionaire);
         }
     }
 }
