@@ -64,9 +64,6 @@ namespace WB.UI.Shared.Android.Controls
             var boundChild = e.Child as IMvxBindingContextOwner;
             if (boundChild != null)
             {
-#if DEBUG
-                Console.WriteLine("clean up binding from roster");
-#endif
                 boundChild.ClearAllBindings();
             }
         }
@@ -112,12 +109,13 @@ namespace WB.UI.Shared.Android.Controls
 
         private View CreateRosterCellView(Guid headerId, QuestionnairePropagatedScreenViewModel rosterItem)
         {
-            var rowModel =
-                rosterItem.Items.FirstOrDefault(q => q.PublicKey.Id == headerId);
+            var rowModel = rosterItem.Items.FirstOrDefault(q => q.PublicKey.Id == headerId);
 
             var questionRowModel = rowModel as QuestionViewModel;
-            if(questionRowModel!=null)
+            if (questionRowModel != null)
+            {
                 return new RosterQuestionView(this.Context, questionRowModel, this.questionnaireId, this.questionViewFactory);
+            }
 
             var groupRowModel = rowModel as QuestionnaireNavigationPanelItem;
             if (groupRowModel != null)
@@ -147,8 +145,7 @@ namespace WB.UI.Shared.Android.Controls
 
         private void AlignTableCell(View view)
         {
-            view.LayoutParameters = new LinearLayout.LayoutParams(0,
-                                                                  ViewGroup.LayoutParams.FillParent, 1);
+            view.LayoutParameters = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.FillParent, 1);
         }
     }
 }
