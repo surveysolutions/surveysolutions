@@ -61,7 +61,6 @@ namespace WB.UI.Shared.Android.Frames
 
             this.llContent.Adapter = new ScreenContentAdapter(this.Model, this.Activity, this.Model.QuestionnaireId,
                this.GetInterviewStatus(), this.groupView_ScreenChanged, this.GetQuestionViewFactory());
-            this.llContent.DescendantFocusability = DescendantFocusability.BeforeDescendants;
             this.llContent.ItemsCanFocus = true;
             this.llContent.ScrollingCacheEnabled = false;
             this.llContent.AttachCheckAndClearFocusForPanel(this.Activity);

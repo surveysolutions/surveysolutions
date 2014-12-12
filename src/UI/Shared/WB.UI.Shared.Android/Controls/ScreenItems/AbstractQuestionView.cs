@@ -128,18 +128,15 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         {
             this.SetEditCommentsVisibility(true);
             this.etComments.RequestFocus();
+            this.ShowKeyboard(this.etComments);
         }
 
         void etComments_FocusChange(object sender, View.FocusChangeEventArgs e)
         {
             if (!e.HasFocus)
             {
-                HideKeyboard(this.etComments);
                 this.SaveComment();
             }
-            else
-                this.ShowKeyboard(this.etComments);
-
 
             this.IsCommentsEditorFocused = e.HasFocus;
         }
@@ -231,6 +228,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             if (e.ActionId == ImeAction.Done)
             {
                 this.etComments.ClearFocus();
+                HideKeyboard(this.etComments);
             }
         }
 
