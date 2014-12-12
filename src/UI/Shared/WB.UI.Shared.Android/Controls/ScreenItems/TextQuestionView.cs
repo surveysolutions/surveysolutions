@@ -1,8 +1,6 @@
 using System;
 using Android.Content;
-using Android.Graphics;
 using Android.Text;
-using Android.Util;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
@@ -45,7 +43,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             {
                 maskedWatcher = new MaskedWatcher(TypedMode.Mask, etAnswer);
                 etAnswer.AddTextChangedListener(maskedWatcher);
-                this.etAnswer.InputType = InputTypes.TextFlagNoSuggestions;
+                this.etAnswer.InputType = InputTypes.TextVariationVisiblePassword; //fix for samsung 
             }
             
             this.etAnswer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent);
@@ -66,12 +64,8 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         {
             if (e.HasFocus)
             {
-                this.ShowKeyboard(this.etAnswer);
                 return;
             }
-
-            if (!this.IsCommentsEditorFocused)
-                this.HideKeyboard(this.etAnswer);
 
             if (isInputMasked && !this.maskedWatcher.IsTextMaskMatched())
             {
@@ -109,6 +103,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             if (e.ActionId == ImeAction.Done)
             {
                 this.etAnswer.ClearFocus();
+                this.HideKeyboard(this.etAnswer);
             }
         }
 
