@@ -100,11 +100,11 @@ namespace WB.UI.Shared.Android.Controls
         private static void UpdateCounters(QuestionnaireScreenViewModel dataItem, TextView tvCount)
         {
             tvCount.Text = string.Format("{0}/{1}", dataItem.Answered, dataItem.Total);
-            if (dataItem.Total == dataItem.Answered)
-                tvCount.SetBackgroundResource(Resource.Drawable.donecountershape);
-            else
-                tvCount.SetBackgroundResource(Resource.Drawable.CounterRoundShape);
+            tvCount.SetBackgroundResource(dataItem.Total == dataItem.Answered
+                ? Resource.Drawable.donecountershape
+                : Resource.Drawable.CounterRoundShape);
         }
+
         public event EventHandler<ScreenChangedEventArgs> ScreenChanged;
         private InterviewViewModel model;
 

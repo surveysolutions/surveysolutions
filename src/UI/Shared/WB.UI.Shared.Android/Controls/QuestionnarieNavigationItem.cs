@@ -43,11 +43,9 @@ namespace WB.UI.Shared.Android.Controls
         private void UpdateCounters()
         {
             this.tvCount.Text = string.Format("{0}/{1}", this.model.Answered, this.model.Total);
-            if (this.model.Total == this.model.Answered)
-                this.tvCount.SetBackgroundResource(Resource.Drawable.donecountershape);
-            else
-                this.tvCount.SetBackgroundResource(Resource.Drawable.CounterRoundShape);
+            this.tvCount.SetBackgroundResource(this.model.Total == this.model.Answered
+                ? Resource.Drawable.donecountershape
+                : Resource.Drawable.CounterRoundShape);
         }
-
     }
 }

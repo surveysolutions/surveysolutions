@@ -156,41 +156,44 @@ namespace WB.UI.Shared.Android
 			// aapt resource value: 0x7f060001
 			public static int QuestionnaireId = 2131099649;
 			
-			// aapt resource value: 0x7f060016
-			public static int RelativeLayout1 = 2131099670;
+			// aapt resource value: 0x7f060018
+			public static int RelativeLayout1 = 2131099672;
 			
 			// aapt resource value: 0x7f060002
 			public static int ScreenId = 2131099650;
 			
-			// aapt resource value: 0x7f06001e
-			public static int btnAnswered = 2131099678;
+			// aapt resource value: 0x7f060014
+			public static int btGroup = 2131099668;
 			
-			// aapt resource value: 0x7f060022
-			public static int btnComplete = 2131099682;
+			// aapt resource value: 0x7f060020
+			public static int btnAnswered = 2131099680;
+			
+			// aapt resource value: 0x7f060024
+			public static int btnComplete = 2131099684;
 			
 			// aapt resource value: 0x7f060008
 			public static int btnInstructions = 2131099656;
 			
-			// aapt resource value: 0x7f060021
-			public static int btnInvalid = 2131099681;
+			// aapt resource value: 0x7f060023
+			public static int btnInvalid = 2131099683;
 			
-			// aapt resource value: 0x7f06001f
-			public static int btnUnanswered = 2131099679;
+			// aapt resource value: 0x7f060021
+			public static int btnUnanswered = 2131099681;
 			
 			// aapt resource value: 0x7f06000f
 			public static int etComments = 2131099663;
 			
-			// aapt resource value: 0x7f060019
-			public static int flashButton = 2131099673;
+			// aapt resource value: 0x7f06001b
+			public static int flashButton = 2131099675;
 			
-			// aapt resource value: 0x7f06001c
-			public static int llButtom = 2131099676;
+			// aapt resource value: 0x7f06001e
+			public static int llButtom = 2131099678;
 			
 			// aapt resource value: 0x7f060010
 			public static int llContainer = 2131099664;
 			
-			// aapt resource value: 0x7f06001b
-			public static int llContent = 2131099675;
+			// aapt resource value: 0x7f06001d
+			public static int llContent = 2131099677;
 			
 			// aapt resource value: 0x7f060012
 			public static int llNavigationHolder = 2131099666;
@@ -198,17 +201,17 @@ namespace WB.UI.Shared.Android
 			// aapt resource value: 0x7f060007
 			public static int llRoot = 2131099655;
 			
-			// aapt resource value: 0x7f06001a
-			public static int llTop = 2131099674;
+			// aapt resource value: 0x7f06001c
+			public static int llTop = 2131099676;
 			
 			// aapt resource value: 0x7f060009
 			public static int llWrapper = 2131099657;
 			
-			// aapt resource value: 0x7f060018
-			public static int overlayImage = 2131099672;
+			// aapt resource value: 0x7f06001a
+			public static int overlayImage = 2131099674;
 			
-			// aapt resource value: 0x7f060017
-			public static int preview_view = 2131099671;
+			// aapt resource value: 0x7f060019
+			public static int preview_view = 2131099673;
 			
 			// aapt resource value: 0x7f06000d
 			public static int tvComments = 2131099661;
@@ -216,23 +219,26 @@ namespace WB.UI.Shared.Android
 			// aapt resource value: 0x7f06000e
 			public static int tvCommentsTitle = 2131099662;
 			
+			// aapt resource value: 0x7f060017
+			public static int tvCount = 2131099671;
+			
 			// aapt resource value: 0x7f060015
-			public static int tvCount = 2131099669;
+			public static int tvCounterText = 2131099669;
 			
 			// aapt resource value: 0x7f06000b
 			public static int tvError = 2131099659;
 			
-			// aapt resource value: 0x7f060020
-			public static int tvErrorWarning = 2131099680;
+			// aapt resource value: 0x7f060022
+			public static int tvErrorWarning = 2131099682;
 			
-			// aapt resource value: 0x7f060014
-			public static int tvITem = 2131099668;
+			// aapt resource value: 0x7f060016
+			public static int tvITem = 2131099670;
 			
 			// aapt resource value: 0x7f06000a
 			public static int tvMError = 2131099658;
 			
-			// aapt resource value: 0x7f06001d
-			public static int tvText = 2131099677;
+			// aapt resource value: 0x7f06001f
+			public static int tvText = 2131099679;
 			
 			// aapt resource value: 0x7f06000c
 			public static int tvTitle = 2131099660;
@@ -266,22 +272,25 @@ namespace WB.UI.Shared.Android
 			public static int FilteredComboboxRowLayout = 2130903043;
 			
 			// aapt resource value: 0x7f030004
-			public static int list_navigation_item = 2130903044;
+			public static int GroupView = 2130903044;
 			
 			// aapt resource value: 0x7f030005
-			public static int RosterQuestion = 2130903045;
+			public static int list_navigation_item = 2130903045;
 			
 			// aapt resource value: 0x7f030006
-			public static int scanner = 2130903046;
+			public static int RosterQuestion = 2130903046;
 			
 			// aapt resource value: 0x7f030007
-			public static int ScreenContentFragment = 2130903047;
+			public static int scanner = 2130903047;
 			
 			// aapt resource value: 0x7f030008
-			public static int StaticTextView = 2130903048;
+			public static int ScreenContentFragment = 2130903048;
 			
 			// aapt resource value: 0x7f030009
-			public static int StatisticsContent = 2130903049;
+			public static int StaticTextView = 2130903049;
+			
+			// aapt resource value: 0x7f03000a
+			public static int StatisticsContent = 2130903050;
 			
 			static Layout()
 			{

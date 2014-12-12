@@ -71,6 +71,7 @@ namespace WB.UI.Capi
 			global::WB.UI.Shared.Android.Resource.Id.QuestionnaireId = global::WB.UI.Capi.Resource.Id.QuestionnaireId;
 			global::WB.UI.Shared.Android.Resource.Id.RelativeLayout1 = global::WB.UI.Capi.Resource.Id.RelativeLayout1;
 			global::WB.UI.Shared.Android.Resource.Id.ScreenId = global::WB.UI.Capi.Resource.Id.ScreenId;
+			global::WB.UI.Shared.Android.Resource.Id.btGroup = global::WB.UI.Capi.Resource.Id.btGroup;
 			global::WB.UI.Shared.Android.Resource.Id.btnAnswered = global::WB.UI.Capi.Resource.Id.btnAnswered;
 			global::WB.UI.Shared.Android.Resource.Id.btnComplete = global::WB.UI.Capi.Resource.Id.btnComplete;
 			global::WB.UI.Shared.Android.Resource.Id.btnInstructions = global::WB.UI.Capi.Resource.Id.btnInstructions;
@@ -90,6 +91,7 @@ namespace WB.UI.Capi
 			global::WB.UI.Shared.Android.Resource.Id.tvComments = global::WB.UI.Capi.Resource.Id.tvComments;
 			global::WB.UI.Shared.Android.Resource.Id.tvCommentsTitle = global::WB.UI.Capi.Resource.Id.tvCommentsTitle;
 			global::WB.UI.Shared.Android.Resource.Id.tvCount = global::WB.UI.Capi.Resource.Id.tvCount;
+			global::WB.UI.Shared.Android.Resource.Id.tvCounterText = global::WB.UI.Capi.Resource.Id.tvCounterText;
 			global::WB.UI.Shared.Android.Resource.Id.tvError = global::WB.UI.Capi.Resource.Id.tvError;
 			global::WB.UI.Shared.Android.Resource.Id.tvErrorWarning = global::WB.UI.Capi.Resource.Id.tvErrorWarning;
 			global::WB.UI.Shared.Android.Resource.Id.tvITem = global::WB.UI.Capi.Resource.Id.tvITem;
@@ -101,6 +103,7 @@ namespace WB.UI.Capi
 			global::WB.UI.Shared.Android.Resource.Layout.CascadingComboboxRowLayout = global::WB.UI.Capi.Resource.Layout.CascadingComboboxRowLayout;
 			global::WB.UI.Shared.Android.Resource.Layout.Details = global::WB.UI.Capi.Resource.Layout.Details;
 			global::WB.UI.Shared.Android.Resource.Layout.FilteredComboboxRowLayout = global::WB.UI.Capi.Resource.Layout.FilteredComboboxRowLayout;
+			global::WB.UI.Shared.Android.Resource.Layout.GroupView = global::WB.UI.Capi.Resource.Layout.GroupView;
 			global::WB.UI.Shared.Android.Resource.Layout.list_navigation_item = global::WB.UI.Capi.Resource.Layout.list_navigation_item;
 			global::WB.UI.Shared.Android.Resource.Layout.RosterQuestion = global::WB.UI.Capi.Resource.Layout.RosterQuestion;
 			global::WB.UI.Shared.Android.Resource.Layout.scanner = global::WB.UI.Capi.Resource.Layout.scanner;
@@ -325,6 +328,9 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f05004a
 			public const int btnComplete = 2131034186;
 			
+			// aapt resource value: 0x7f050049
+			public const int btnComplete = 2131034185;
+			
 			// aapt resource value: 0x7f05000a
 			public const int btnInstructions = 2131034122;
 			
@@ -471,6 +477,9 @@ namespace WB.UI.Capi
 			
 			// aapt resource value: 0x7f05002c
 			public const int tvCount = 2131034156;
+			
+			// aapt resource value: 0x7f050027
+			public const int tvCounterText = 2131034151;
 			
 			// aapt resource value: 0x7f05000d
 			public const int tvError = 2131034125;
@@ -672,11 +681,26 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f060010
 			public const int ThankYouForPackage = 2131099664;
 			
+			// aapt resource value: 0x7f06000b
+			public const int NowYouareConnectedToMobileNetwork = 2131099659;
+			
+			// aapt resource value: 0x7f06000d
+			public const int NowYouareConnectedToWifiNetwork = 2131099661;
+			
+			// aapt resource value: 0x7f060009
+			public const int PleaseCheckURLInSettingsFormat = 2131099657;
+			
 			// aapt resource value: 0x7f060001
 			public const int Warning = 2131099649;
 			
+			// aapt resource value: 0x7f06000a
+			public const int WebErrorWithStatus = 2131099658;
+			
 			// aapt resource value: 0x7f060002
 			public const int Yes = 2131099650;
+			
+			// aapt resource value: 0x7f06000c
+			public const int YouAreNotConnectedToAnyNetwork = 2131099660;
 			
 			// aapt resource value: 0x7f060006
 			public const int drawer_close = 2131099654;
