@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Android.Content;
 using Android.Graphics;
@@ -62,10 +61,15 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         private void TextAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)
         {
             var editor = sender as EditText;
-            if (editor != null)
-                editor.ClearFocus();
-        }
+            if (editor == null) 
+                return;
+            if (e.ActionId != ImeAction.Done) 
+                return;
 
+            this.HideKeyboard(editor);
+            editor.ClearFocus();
+        }
+        
         private async void RemoveTextListItemButton_Click(object sender, EventArgs e)
         {
             var button = sender as Button;
@@ -107,17 +111,12 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 return;
 
             string newAnswer = editor.Text.Trim();
-
             if (e.HasFocus)
             {
-                this.ShowKeyboard(editor);
                 this.valueBeforeEditing = newAnswer;
                 return;
             }
-
-            if (!IsCommentsEditorFocused)
-                HideKeyboard(editor);
-
+            
             string tagName = editor.GetTag(Resource.Id.AnswerId).ToString();
             decimal answerValue = decimal.Parse(tagName);
             
@@ -167,6 +166,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             if (newEditor != null)
             {
                 newEditor.RequestFocus();
+                this.ShowKeyboard(newEditor);
             }
 
             ItemsCountInUI++;

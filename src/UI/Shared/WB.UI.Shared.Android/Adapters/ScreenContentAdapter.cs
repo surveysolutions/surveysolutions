@@ -56,7 +56,7 @@ namespace WB.UI.Shared.Android.Adapters
 
                 var layoutParams = new ListView.LayoutParams(ViewGroup.LayoutParams.FillParent,
                     ViewGroup.LayoutParams.WrapContent);
-                //layoutParams.SetMargins(0, 0, 0, 10);
+                
                 groupView.LayoutParameters = layoutParams;
                 groupView.ScreenChanged += this.screenChangeEventHandler;
                 result = groupView;

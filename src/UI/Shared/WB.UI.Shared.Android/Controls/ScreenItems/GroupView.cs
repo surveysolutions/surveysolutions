@@ -1,7 +1,5 @@
 using System;
 using Android.Content;
-using Android.Graphics;
-using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
@@ -11,17 +9,17 @@ using WB.UI.Shared.Android.Events;
 
 namespace WB.UI.Shared.Android.Controls.ScreenItems
 {
-    public class GroupView : RelativeLayout 
+    public class GroupView : RelativeLayout  
     {
         protected QuestionnaireNavigationPanelItem Model { get; private set; }
-        protected Button GroupButton { get; private set; }
+        protected TextView GroupButton { get; private set; }
         protected TextView CounterText { get; private set; }
         protected int? IconId { get; private set; }
         public GroupView(Context context, QuestionnaireNavigationPanelItem model)
             : base(context)
         {
             this.Model = model;
-            this.Initialize();
+            this.Initialize(context);
         }
 
         public GroupView(Context context, QuestionnaireNavigationPanelItem model, int iconId)
@@ -29,34 +27,33 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         {
             this.IconId = iconId;
             this.Model = model;
-            this.Initialize();
+            this.Initialize(context);
         }
         public GroupView(Context context, IAttributeSet attrs, QuestionnaireNavigationPanelItem model)
             : base(context, attrs)
         {
             this.Model = model;
-            this.Initialize();
+            this.Initialize(context);
         }
 
         public GroupView(Context context, IAttributeSet attrs, int defStyle, QuestionnaireNavigationPanelItem model)
             : base(context, attrs, defStyle)
         {
             this.Model = model;
-            this.Initialize();
+            this.Initialize(context);
         }
-
-        protected GroupView(IntPtr javaReference, JniHandleOwnership transfer, QuestionnaireNavigationPanelItem model)
-            : base(javaReference, transfer)
+        
+        protected void Initialize(Context context)
         {
-            this.Model = model;
-            this.Initialize();
-        }
-        protected virtual void Initialize()
-        {
-            this.AddButton();
 
-            this.AddCounterText();
+            LayoutInflater layoutInflater = (LayoutInflater)context.GetSystemService(Context.LayoutInflaterService);
+            
+            var view = layoutInflater.Inflate(Resource.Layout.GroupView, null);
+            this.GroupButton = view.FindViewById<TextView>(Resource.Id.btGroup);
+            this.CounterText = view.FindViewById<TextView>(Resource.Id.tvCounterText);
 
+            this.AddView(view);
+            
             if (this.Model != null)
             {
                 this.GroupButton.Text = this.Model.Text;
@@ -66,7 +63,6 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 if (this.IconId.HasValue)
                 {
                     var img = this.Context.Resources.GetDrawable(this.IconId.Value);
-                    //img.SetBounds(0, 0, 45, 45);
                     this.GroupButton.SetCompoundDrawablesWithIntrinsicBounds(img, null, img, null);
                 }
                 else
@@ -93,40 +89,15 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
             base.Dispose(disposing);
         }
-
-        private void AddCounterText()
-        {
-            this.CounterText = new TextView(this.Context);
-            var counterParameters = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);
-            
-            counterParameters.AddRule(LayoutRules.AlignParentRight);
-
-            this.CounterText.LayoutParameters = counterParameters;
-
-            this.CounterText.SetPadding(3, 3, 3, 3);
-            this.CounterText.SetTextColor(Color.Black);
-            this.CounterText.SetBackgroundResource(Resource.Drawable.CounterRoundShape);
-            this.AddView(this.CounterText);
-        }
-
-        private void AddButton()
-        {
-            this.GroupButton = new Button(this.Context);
-            var buttonParameters = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FillParent,
-                                                                   ViewGroup.LayoutParams.WrapContent);
-            this.GroupButton.LayoutParameters = buttonParameters;
-            this.AddView(this.GroupButton);
-        }
-
-
+        
         public void UpdateCounter()
         {
             this.CounterText.Text = string.Format("{0}/{1}", this.Model.Answered, this.Model.Total);
-            if (this.Model.Total == this.Model.Answered)
-                this.CounterText.SetBackgroundResource(Resource.Drawable.donecountershape);
-            else
-                this.CounterText.SetBackgroundResource(Resource.Drawable.CounterRoundShape);
+            this.CounterText.SetBackgroundResource(this.Model.Total == this.Model.Answered
+                ? Resource.Drawable.donecountershape
+                : Resource.Drawable.CounterRoundShape);
         }
+
         protected override void OnAttachedToWindow()
         {
             base.OnAttachedToWindow();
@@ -141,11 +112,11 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 this.CounterText.Visibility = this.Model.Enabled ? ViewStates.Visible : ViewStates.Gone;
                 return;
             }
-            if (e.PropertyName == "Answered" || e.PropertyName == "Total")
-            {
-                this.UpdateCounter();
+            if (e.PropertyName != "Answered" && e.PropertyName != "Total") 
                 return;
-            }
+            
+            this.UpdateCounter();
+            
         }
 
         void GroupButton_Click(object sender, EventArgs e)
