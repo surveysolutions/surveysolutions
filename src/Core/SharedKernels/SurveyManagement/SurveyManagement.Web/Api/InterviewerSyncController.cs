@@ -139,7 +139,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
                 if (package == null)
                     return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable,
-                        string.Format(InterviewerSyncControllerMessages.Sync_package_with_id__0__was_not_found_on_serverFormat, aRKey));
+                        string.Format(InterviewerSyncControllerMessages.Sync_package_with_id__0__was_not_found_on_serverFormat, packageId));
 
                 return Request.CreateResponse(HttpStatusCode.OK, package);
             }

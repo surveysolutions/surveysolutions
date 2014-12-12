@@ -420,10 +420,8 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             {
                 ThrowIfShouldStopViewsRebuilding();
 
-                    UpdateStatusMessage(
-                        string.Format("Publishing event {0} {1} {2}.", processedEventsCount + 1, @event.Payload.GetType().Name, @event.EventIdentifier.FormatGuid())
-                        + Environment.NewLine
-                        + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
+                UpdateStatusMessage(string.Format("Publishing event {0}. ", this.processedEventsCount + 1));
+
 
                 try
                 {
@@ -448,29 +446,6 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     UpdateStatusMessage(message);
                     throw new Exception(message);
                 }
-            UpdateStatusMessage(string.Format("All events were republished."
-                + Environment.NewLine
-                + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount)));
-        }
-
-        private IEnumerable<CommittedEvent[]> GetAllEventsInBulks(int skipEventsCount)
-        {
-            bool somethingReturned;
-            int returnedEventsCount = 0;
-
-            do
-            {
-                somethingReturned = false;
-                IEnumerable<CommittedEvent[]> bulks = this.eventStore.GetAllEvents(skipEvents: skipEventsCount + returnedEventsCount);
-
-                foreach (var bulk in bulks)
-                {
-                    yield return bulk;
-                    somethingReturned = true;
-                    returnedEventsCount += bulk.Length;
-                }
-
-            } while (somethingReturned);
             }
 
             UpdateStatusMessage("Acquiring next portion of events.");
@@ -478,7 +453,33 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             this.logger.Info(String.Format("Processed {0} events, failed {1}", this.processedEventsCount, this.failedEventsCount));
 
             UpdateStatusMessage("All events were republished.");
+
         }
+
+        private static string GetReadablePublishingDetails(DateTime republishStarted,
+           int processedEventsCount, int allEventsCount, int failedEventsCount, int skippedEventsCount)
+        {
+            int republishedEventsCount = processedEventsCount - skippedEventsCount;
+
+            TimeSpan republishTimeSpent = DateTime.Now - republishStarted;
+
+            int speedInEventsPerMinute = (int)(
+                republishTimeSpent.TotalSeconds == 0
+                ? 0
+                : 60 * republishedEventsCount / republishTimeSpent.TotalSeconds);
+
+            TimeSpan estimatedTotalRepublishTime = TimeSpan.FromMilliseconds(
+                republishedEventsCount == 0
+                ? 0
+                : republishTimeSpent.TotalMilliseconds / republishedEventsCount * allEventsCount);
+
+            return string.Format(
+                "Processed events: {1}. Total events: {2}. Skipped events: {3} Failed events: {4}.{0}Time spent republishing: {5}. Speed: {6} events per minute. Estimated time: {7}.",
+                Environment.NewLine,
+                processedEventsCount, allEventsCount, skippedEventsCount, failedEventsCount,
+                republishTimeSpent.ToString(@"hh\:mm\:ss"), speedInEventsPerMinute, estimatedTotalRepublishTime.ToString(@"hh\:mm\:ss"));
+        }
+
 
         private static void ThrowIfShouldStopViewsRebuilding()
         {
