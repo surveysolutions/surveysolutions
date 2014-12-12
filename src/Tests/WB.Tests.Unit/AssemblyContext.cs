@@ -5,6 +5,8 @@ using Ncqrs;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.Files.Implementation.FileSystem;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 
@@ -30,6 +32,7 @@ namespace WB.Tests.Unit
 
             Setup.InstanceToMockedServiceLocator<ISubstitutionService>(new SubstitutionService());
             Setup.InstanceToMockedServiceLocator<IKeywordsProvider>(new KeywordsProvider(new SubstitutionService()));
+            Setup.InstanceToMockedServiceLocator<IFileSystemAccessor>(new FileSystemIOAccessor());
 
             NcqrsEnvironment.SetGetter<ILogger>(Mock.Of<ILogger>);
             NcqrsEnvironment.SetGetter<IUniqueIdentifierGenerator>(Mock.Of<IUniqueIdentifierGenerator>);

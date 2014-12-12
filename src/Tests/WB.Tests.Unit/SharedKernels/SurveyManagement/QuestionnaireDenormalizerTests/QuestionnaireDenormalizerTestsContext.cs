@@ -1,5 +1,8 @@
+using System;
 using Machine.Specifications;
 using Moq;
+using Ncqrs.Eventing;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
@@ -14,14 +17,31 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireDenormalizer
     [Subject(typeof(QuestionnaireDenormalizer))]
     public class QuestionnaireDenormalizerTestsContext
     {
-        protected static QuestionnaireDenormalizer CreateDenormalizer(IQueryableReadSideRepositoryWriter<InterviewSummary> interviews = null,
-            IQuestionnaireAssemblyFileAccessor assemblyFileAccessor = null)
+        protected static QuestionnaireDenormalizer CreateDenormalizer(
+            IQueryableReadSideRepositoryWriter<InterviewSummary> interviews = null,
+            IQuestionnaireAssemblyFileAccessor assemblyFileAccessor = null,
+            IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireDocumentStorage = null,
+            IPlainQuestionnaireRepository plainQuestionnaireRepository = null)
         {
-            return new QuestionnaireDenormalizer(Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>(),
+            return new QuestionnaireDenormalizer(
+                questionnaireDocumentStorage ?? Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>(),
                 Mock.Of<IQuestionnaireCacheInitializer>(),
-                Mock.Of<IPlainQuestionnaireRepository>(),
+                plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 assemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
                 interviews ?? Mock.Of<IQueryableReadSideRepositoryWriter<InterviewSummary>>());
+        }
+
+        protected static IPublishedEvent<T> CreatePublishedEvent<T>(Guid questionnaireId, T evnt)
+        {
+            IPublishedEvent<T> e = new PublishedEvent<T>(new UncommittedEvent(Guid.NewGuid(),
+                questionnaireId,
+                1,
+                1,
+                DateTime.Now,
+                evnt,
+                new Version(1, 0))
+                );
+            return e;
         }
     }
 }
