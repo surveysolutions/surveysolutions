@@ -30,9 +30,12 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         private const string AddListItemText = "+";
         private const string RemoveListItemText = "-";
 
-        public TextListQuestionView(Context context, IMvxAndroidBindingContext bindingActivity,
-            QuestionViewModel source, Guid questionnairePublicKey,
-            ICommandService commandService, IAnswerOnQuestionCommandService answerCommandService,
+        public TextListQuestionView(Context context, 
+            IMvxAndroidBindingContext bindingActivity,
+            QuestionViewModel source, 
+            Guid questionnairePublicKey,
+            ICommandService commandService, 
+            IAnswerOnQuestionCommandService answerCommandService,
             IAuthentication membership)
             : base(context, bindingActivity, source, questionnairePublicKey, commandService, answerCommandService,
                 membership)
