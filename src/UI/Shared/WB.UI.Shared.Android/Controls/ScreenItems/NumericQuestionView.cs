@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using System.Threading.Tasks;
 using Android.Content;
 using Android.Text;
@@ -7,7 +6,6 @@ using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
-using Java.Util.Logging;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Capi;
@@ -110,12 +108,8 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
         {
             if (e.HasFocus)
             {
-                this.ShowKeyboard(this.etAnswer);
                 return;
             }
-
-            if (!this.IsCommentsEditorFocused)
-                this.HideKeyboard(this.etAnswer);
 
             string newAnswer = this.etAnswer.Text.Trim();
 
@@ -133,7 +127,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
 
             if (this.Model.AnswerObject != null && answer.Equals(this.Model.AnswerObject))
             {
-                if (this.etComments.Visibility!=ViewStates.Visible)
+                if (this.etComments.Visibility != ViewStates.Visible)
                 {
                     base.FireAnswerSavedEvent();
                 }
@@ -164,8 +158,12 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
 
         void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)
         {
-            if(e.ActionId == ImeAction.Done)
+            if (e.ActionId == ImeAction.Done)
+            {
                 this.etAnswer.ClearFocus();
+                this.HideKeyboard(this.etAnswer);
+            }
+            
         }
         void NumericQuestionView_Click(object sender, EventArgs e)
         {

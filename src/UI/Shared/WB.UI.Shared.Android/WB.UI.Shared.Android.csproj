@@ -192,7 +192,9 @@
     <AndroidResource Include="Resources\Layout\StatisticsContent.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\ScreenContentFragment.axml" />
+    <AndroidResource Include="Resources\Layout\ScreenContentFragment.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\Layout\RosterQuestion.axml" />
     <AndroidResource Include="Resources\Layout\AbstractQuestionView.axml">
       <SubType>Designer</SubType>
@@ -207,6 +209,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\CascadingComboboxRowLayout.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\GroupView.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
@@ -279,7 +284,9 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\donecountershape.xml" />
+    <AndroidResource Include="Resources\Drawable\donecountershape.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\grid_headerItem.xml" />

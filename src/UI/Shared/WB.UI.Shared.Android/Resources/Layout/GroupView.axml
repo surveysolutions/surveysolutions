@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res/CAPI.Android"
+    android:id="@+id/MyLayout"
+    android:layout_marginTop="10dp"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+  <TextView
+        android:id="@+id/btGroup"
+        android:layout_alignParentLeft="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/btn_default"
+        android:padding="3px"
+        android:gravity="center"
+        android:textSize="20dip"/>
+  <TextView
+        android:id="@+id/tvCounterText"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="3px"
+        android:textSize="16dip"/>
+</RelativeLayout>
