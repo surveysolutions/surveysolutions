@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Net;
-using System.Net.Http;
+using System.Web;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
 using It = Machine.Specifications.It;

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Moq;
 using WB.Core.GenericSubdomains.ErrorReporting;
 using WB.Core.GenericSubdomains.ErrorReporting.Implementation.CapiInformation;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Tests.Unit.GenericSubdomains.ErrorReporting.CapiInformationServiceTests

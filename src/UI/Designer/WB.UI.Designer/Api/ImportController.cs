@@ -7,13 +7,14 @@ using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Api.Attributes;
-using WB.UI.Designer.Models;
-using WB.UI.Shared.Web.Extensions;
+using WB.UI.Designer.Code;
 using WB.UI.Shared.Web.Membership;
+using QuestionnaireVersion = WB.Core.SharedKernels.DataCollection.QuestionnaireVersion;
 
 namespace WB.UI.Designer.Api
 {

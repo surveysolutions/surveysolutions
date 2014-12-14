@@ -1,7 +1,6 @@
 using System;
 using Main.Core.Events;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
-using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.BoundedContexts.Capi.Views.InterviewMetaInfo;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.FileSystem;

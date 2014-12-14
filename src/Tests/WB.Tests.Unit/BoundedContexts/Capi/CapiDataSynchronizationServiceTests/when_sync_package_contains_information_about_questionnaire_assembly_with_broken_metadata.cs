@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernel.Utils.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using It = Machine.Specifications.It;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.InfoFileSupplierRegistry
 {

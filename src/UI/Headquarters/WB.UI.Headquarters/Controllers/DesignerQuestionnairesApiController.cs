@@ -6,11 +6,11 @@ using Main.Core.Documents;
 
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Implementation.Services.Rest;
 using WB.Core.GenericSubdomains.Utils.Services;
-using WB.Core.GenericSubdomains.Utils.Services.Rest;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Core.SharedKernel.Utils.Implementation.Services;
+using WB.Core.SharedKernel.Utils.Services.Rest;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveyManagement.Services;
