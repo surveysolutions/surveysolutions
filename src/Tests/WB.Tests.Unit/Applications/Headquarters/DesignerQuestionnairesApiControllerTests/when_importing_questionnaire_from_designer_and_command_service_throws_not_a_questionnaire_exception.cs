@@ -6,11 +6,12 @@ using Main.Core.Documents;
 using Moq;
 using Ncqrs.Commanding;
 
-using WB.Core.GenericSubdomains.Utils.Implementation.Services.Rest;
 using WB.Core.GenericSubdomains.Utils.Services;
-using WB.Core.GenericSubdomains.Utils.Services.Rest;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Core.SharedKernel.Utils.Implementation.Services;
+using WB.Core.SharedKernel.Utils.Services;
+using WB.Core.SharedKernel.Utils.Services.Rest;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;

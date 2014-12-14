@@ -5,10 +5,10 @@ using WB.Core.GenericSubdomains.ErrorReporting.Services;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.CapiInformationService;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Utils.Services;
-using WB.Core.GenericSubdomains.Utils.Services.Rest;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.TabletInformation;
+using WB.Core.SharedKernel.Utils.Services;
+using WB.Core.SharedKernel.Utils.Services.Rest;
 
 namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformation
 {

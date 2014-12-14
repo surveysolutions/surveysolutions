@@ -1,4 +1,6 @@
-﻿namespace WB.Core.GenericSubdomains.ErrorReporting.Services
+﻿using System;
+
+namespace WB.Core.GenericSubdomains.ErrorReporting.Services
 {
     public interface IErrorReportingSettings
     {

@@ -3,7 +3,6 @@ using Android.App;
 using Android.Content;
 using CAPI.Android.Settings;
 using Java.Util;
-using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.UI.Capi.Settings
 {
