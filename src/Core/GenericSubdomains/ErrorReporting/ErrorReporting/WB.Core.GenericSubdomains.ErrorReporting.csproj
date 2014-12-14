@@ -50,7 +50,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IInfoFileSupplierRegistry.cs" />
     <Compile Include="Implementation\CapiInformation\CapiInformationService.cs" />
     <Compile Include="Implementation\InfoFileSupplierRegistry\DefaultInfoFileSupplierRegistry.cs" />
     <Compile Include="Implementation\TabletInformation\TabletInformationSender.cs" />
@@ -63,6 +62,7 @@
     <Compile Include="Services\TabletInformationSender\TabletInformationSendException.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
