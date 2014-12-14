@@ -10,7 +10,7 @@ using Android.Content.PM;
 using Cirrious.MvvmCross.Droid.Simple;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Views.Login;
-using WB.Core.GenericSubdomains.Utils.Services.Rest;
+using WB.Core.SharedKernel.Utils.Services.Rest;
 using WB.UI.Shared.Android.Extensions;
 
 namespace WB.UI.QuestionnaireTester

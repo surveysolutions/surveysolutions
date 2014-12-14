@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.IO.Compression;
 using NUnit.Framework;
-using WB.Core.GenericSubdomains.Utils.Implementation.Services;
+using WB.Core.SharedKernel.Utils.Implementation.Services;
 
 namespace WB.Tests.Integration.ZipUtilsTests
 {

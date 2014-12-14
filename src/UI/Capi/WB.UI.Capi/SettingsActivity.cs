@@ -12,7 +12,7 @@ using Android.Content.PM;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.SharedKernel.Utils.Services;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Services;
 using WB.UI.Capi.Settings;

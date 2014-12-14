@@ -5,14 +5,14 @@ using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Implementation.Services;
 using WB.Core.GenericSubdomains.Utils.Services;
-using WB.Core.GenericSubdomains.Utils.Services.Rest;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Implementation.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Services;
+using WB.Core.SharedKernel.Utils.Implementation.Services;
+using WB.Core.SharedKernel.Utils.Services.Rest;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.UI.QuestionnaireTester

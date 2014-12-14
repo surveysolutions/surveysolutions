@@ -1,11 +1,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using WB.Core.GenericSubdomains.Utils.Implementation.Services.Rest;
-using WB.Core.GenericSubdomains.Utils.Services.Rest;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Core.SharedKernel.Utils.Implementation.Services;
+using WB.Core.SharedKernel.Utils.Services.Rest;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.QuestionnaireTester.Authentication;
+using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion;
 
 namespace WB.UI.QuestionnaireTester.Services
 {

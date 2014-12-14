@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
-using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.Backup;
 

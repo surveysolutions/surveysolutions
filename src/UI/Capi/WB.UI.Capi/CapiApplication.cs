@@ -36,6 +36,7 @@ using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.ErrorReporting;
 using WB.Core.GenericSubdomains.Logging.AndroidLogger;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Files;
@@ -52,13 +53,16 @@ using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.UI.Capi.Implementations.Navigation;
+using WB.UI.Capi.Implementations.Services;
 using WB.UI.Capi.Injections;
+using WB.UI.Capi.Services;
 using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization;
 using WB.UI.Capi.Syncronization.Implementation;
 using WB.UI.Shared.Android;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Extensions;
+using IInfoFileSupplierRegistry = WB.Core.GenericSubdomains.Logging.IInfoFileSupplierRegistry;
 
 namespace WB.UI.Capi
 {

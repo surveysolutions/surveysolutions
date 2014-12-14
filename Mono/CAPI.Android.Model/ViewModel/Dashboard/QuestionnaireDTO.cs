@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.Dashboard

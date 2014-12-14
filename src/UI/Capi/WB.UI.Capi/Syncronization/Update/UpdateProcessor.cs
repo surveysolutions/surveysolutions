@@ -3,7 +3,6 @@ using System.IO;
 using Android.App;
 using Android.Content;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Utils.Services.Rest;
 using WB.UI.Capi.Services;
 using WB.UI.Capi.Settings;
 

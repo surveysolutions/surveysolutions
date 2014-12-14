@@ -1,8 +1,10 @@
 ﻿using System.Web.Mvc;
 using Ninject.Modules;
 using Ninject.Web.Mvc.FilterBindingSyntax;
-using WB.Core.GenericSubdomains.Utils.Implementation.Services;
 using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.SharedKernel.Utils.Implementation.Services;
+using WB.Core.SharedKernel.Utils.Services;
+using WB.UI.Designer.Code;
 using WB.UI.Designer.Exceptions;
 using WB.UI.Shared.Web.Membership;
 

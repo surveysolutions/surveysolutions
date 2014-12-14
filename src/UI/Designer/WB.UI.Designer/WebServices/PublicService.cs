@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
-using WB.UI.Designer.Resources;
 using WB.UI.Designer.WebServices.Questionnaire;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Membership;

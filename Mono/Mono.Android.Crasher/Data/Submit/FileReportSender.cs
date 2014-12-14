@@ -1,16 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-
 using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using WB.Core.GenericSubdomains.ErrorReporting;
+using WB.Core.GenericSubdomains.Logging;
 using Environment = Android.OS.Environment;
 
 namespace Mono.Android.Crasher.Data.Submit

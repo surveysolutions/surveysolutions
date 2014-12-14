@@ -9,7 +9,6 @@ using Android.Content;
 using Android.Graphics.Drawables;
 using Android.Views;
 using Android.Widget;
-using Org.Apache.Http.Authentication;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Shared.Android.Helpers;
 

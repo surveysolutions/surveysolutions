@@ -1,4 +1,4 @@
-using WB.Core.GenericSubdomains.Utils.Services.Rest;
+using WB.Core.SharedKernel.Utils.Services.Rest;
 using WB.UI.Shared.Web.Configuration;
 
 namespace WB.UI.Headquarters.Views

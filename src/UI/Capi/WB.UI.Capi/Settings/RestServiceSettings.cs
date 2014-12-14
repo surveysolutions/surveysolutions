@@ -1,4 +1,4 @@
-using WB.Core.GenericSubdomains.Utils.Services.Rest;
+using WB.Core.SharedKernel.Utils.Services.Rest;
 
 namespace WB.UI.Capi.Settings
 {
