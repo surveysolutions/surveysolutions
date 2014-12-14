@@ -36,6 +36,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
@@ -45,6 +46,9 @@
     </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
+    <Reference Include="RestSharp.MonoDroid">
+      <HintPath>..\..\..\..\ExternalsMonodroid\RestSharp.MonoDroid.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -53,6 +57,36 @@
   <ItemGroup>
     <Compile Include="..\WB.Core.SharedKernel.Utils\FileSizeUtils.cs">
       <Link>FileSizeUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.SharedKernel.Utils\Implementation\Services\GZipJsonCompressor.cs">
+      <Link>Implementation\Services\GZipJsonCompressor.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.SharedKernel.Utils\Implementation\Services\NewtonJsonUtils.cs">
+      <Link>Implementation\Services\NewtonJsonUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.SharedKernel.Utils\Implementation\Services\RestCredentials.cs">
+      <Link>Implementation\Services\RestCredentials.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.SharedKernel.Utils\Implementation\Services\RestDeserializer.cs">
+      <Link>Implementation\Services\RestDeserializer.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.SharedKernel.Utils\Implementation\Services\RestException.cs">
+      <Link>Implementation\Services\RestException.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.SharedKernel.Utils\Implementation\Services\RestSerializer.cs">
+      <Link>Implementation\Services\RestSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.SharedKernel.Utils\Implementation\Services\RestService.cs">
+      <Link>Implementation\Services\RestService.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.SharedKernel.Utils\Services\INetworkService.cs">
+      <Link>Services\INetworkService.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.SharedKernel.Utils\Services\Rest\IRestService.cs">
+      <Link>Services\Rest\IRestService.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.SharedKernel.Utils\Services\Rest\IRestServiceSettings.cs">
+      <Link>Services\Rest\IRestServiceSettings.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -64,11 +98,19 @@
       <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
       <Name>WB.Core.SharedKernels.SurveySolutions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
+      <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
+      <Name>WB.Core.GenericSubdomains.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
+      <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
+      <Name>WB.Core.GenericSubdomains.Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="39aebc09-5a81-47c8-b68d-4984199ae1fe" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="39aebc09-5a81-47c8-b68d-4984199ae1fe" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

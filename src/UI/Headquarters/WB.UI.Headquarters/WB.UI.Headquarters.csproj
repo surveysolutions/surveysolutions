@@ -238,7 +238,6 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Configuration\Dima.Headquarters.Web.config" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\ko.datepicker.js" />
@@ -430,13 +429,6 @@
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\PublicService\PublicService.disco" />
-    <None Include="Service References\PublicService\configuration91.svcinfo" />
-    <None Include="Service References\PublicService\configuration.svcinfo" />
-    <None Include="Service References\PublicService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -498,12 +490,8 @@
     </Compile>
     <Compile Include="Injections\HeadquartersRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service References\PublicService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="ServiceLocationModule.cs" />
+    <Compile Include="Views\DesignerQuestionnaireApiRestServiceSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -511,31 +499,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <None Include="Service References\PublicService\PublicService.wsdl" />
-    <None Include="Service References\PublicService\PublicService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\PublicService\PublicService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\PublicService\PublicService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\PublicService\PublicService3.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\PublicService\PublicService4.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="Service References\PublicService\WB.UI.Headquarters.PublicService.QuestionnaireListViewItemMessage.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\PublicService\WB.UI.Headquarters.PublicService.QuestionnaireListViewMessage.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\PublicService\WB.UI.Headquarters.PublicService.RemoteFileInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -611,12 +574,6 @@
       <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
       <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Service References\PublicService\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_GlobalResources\MainMenu.resx">

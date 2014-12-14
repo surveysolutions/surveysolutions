@@ -257,6 +257,10 @@
       <Project>{b9af365d-f3c9-423a-86e2-9c3e0c1ac402}</Project>
       <Name>WB.Core.GenericSubdomains.Utils</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils.Android\WB.Core.SharedKernel.Utils.Android.csproj">
+      <Project>{5F8613D4-A556-4826-8D69-9918808B113E}</Project>
+      <Name>WB.Core.SharedKernel.Utils.Android</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\answer_progress_indicator.png" />
