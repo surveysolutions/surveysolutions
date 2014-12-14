@@ -80,6 +80,10 @@
       <Project>{04ff9769-ab98-416e-8aa9-89271724582e}</Project>
       <Name>WB.Core.GenericSubdomains.ErrorReporting.Android</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
+      <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
+      <Name>WB.Core.GenericSubdomains.Logging</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -187,7 +187,8 @@
     <Compile Include="Implementations\Fragments\DataCollectionStatisticsContentFragment.cs" />
     <Compile Include="Implementations\Fragments\PrefilledScreenContentFragment.cs" />
     <Compile Include="Implementations\Navigation\NavigationService.cs" />
-    <Compile Include="Implementations\Services\SynchronizationService.cs" />
+    <Compile Include="Implementations\Services\InterviewerSynchronizationService.cs" />
+    <Compile Include="Implementations\Services\LocalizationService.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
     <Compile Include="FinishInstallationActivity.cs" />
     <Compile Include="Properties\Resource.Designer.cs">
@@ -387,6 +388,7 @@
     <EmbeddedResource Include="Properties\Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

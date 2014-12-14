@@ -229,6 +229,11 @@
     <Compile Include="Api\ExpressionGenerationController.cs" />
     <Compile Include="Api\ImportController.cs" />
     <Compile Include="Api\QuestionnaireController.cs" />
+    <Compile Include="App_GlobalResources\Strings.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -240,6 +245,7 @@
     <Compile Include="Code\DefaultAttribute.cs" />
     <Compile Include="Code\ICommandPreprocessor.cs" />
     <Compile Include="Code\Implementation\CommandPreprocessor.cs" />
+    <Compile Include="Code\LocalizationService.cs" />
     <Compile Include="Code\MessageHandlers\BasicAuthMessageHandler.cs" />
     <Compile Include="Code\MessageHandlers\HttpsVerifier.cs" />
     <Compile Include="Code\DesignerMembershipProvider.cs" />
@@ -250,7 +256,6 @@
     <Compile Include="Code\VerificationErrorsMapper.cs" />
     <Compile Include="CommandDeserialization\DesignerCommandDeserializationModule.cs" />
     <Compile Include="CommandDeserialization\DesignerCommandDeserializer.cs" />
-    <Compile Include="Api\TesterController.cs" />
     <Compile Include="Controllers\AppController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\MaintenanceController.cs" />
@@ -289,7 +294,6 @@
     <Compile Include="Mailers\ISystemMailer.cs" />
     <Compile Include="Mailers\SystemMailer.cs" />
     <Compile Include="Models\AccountListViewItemModel.cs" />
-    <Compile Include="Models\DownloadQuestionnaireRequest.cs" />
     <Compile Include="Models\MakeAdminViewModel.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\ActionItem.cs" />
@@ -822,14 +826,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\HeadquarterApiMessages.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>HeadquarterApiMessages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\TesterApiMessages.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>TesterApiMessages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <Content Include="App_GlobalResources\Strings.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Strings.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

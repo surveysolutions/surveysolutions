@@ -57,9 +57,6 @@
     <Compile Include="..\ErrorReporting\ErrorReportingModule.cs">
       <Link>ErrorReportingModule.cs</Link>
     </Compile>
-    <Compile Include="..\ErrorReporting\IInfoFileSupplierRegistry.cs">
-      <Link>IInfoFileSupplierRegistry.cs</Link>
-    </Compile>
     <Compile Include="..\ErrorReporting\Implementation\CapiInformation\CapiInformationService.cs">
       <Link>Implementation\CapiInformation\CapiInformationService.cs</Link>
     </Compile>
@@ -114,6 +111,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\ErrorReporting\app.config">
+      <Link>app.config</Link>
+    </None>
     <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
   </ItemGroup>

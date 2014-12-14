@@ -34,6 +34,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -41,11 +42,24 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\..\packages\Newtonsoft.Json.6.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\..\..\..\packages\RestSharp.105.0.1\lib\net4\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileSizeUtils.cs" />
+    <Compile Include="Implementation\Services\GZipJsonCompressor.cs" />
+    <Compile Include="Implementation\Services\NewtonJsonUtils.cs" />
+    <Compile Include="Implementation\Services\RestCredentials.cs" />
+    <Compile Include="Implementation\Services\RestException.cs" />
+    <Compile Include="Implementation\Services\RestDeserializer.cs" />
+    <Compile Include="Implementation\Services\RestSerializer.cs" />
+    <Compile Include="Implementation\Services\RestService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\INetworkService.cs" />
+    <Compile Include="Services\Rest\IRestService.cs" />
+    <Compile Include="Services\Rest\IRestServiceSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
@@ -53,6 +67,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
+      <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
+      <Name>WB.Core.GenericSubdomains.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
+      <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
+      <Name>WB.Core.GenericSubdomains.Utils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
       <Project>{b73e686b-a06b-4fd5-9baf-b321a0d33dbd}</Project>
       <Name>WB.Core.SharedKernels.SurveySolutions</Name>
