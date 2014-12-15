@@ -29,11 +29,8 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             
         };
 
-        Because of = () => result = controller.PostFile(interviewId).Result;
-
-        It should_have_NotAcceptable_status_code = () =>
-            result.StatusCode.ShouldEqual(HttpStatusCode.OK);
-
+        Because of = () => controller.PostFile(new PostFileRequest(){InterviewId = interviewId, FileName = fileName, Base64BinaryData = string.Empty});
+        
         It should_file_be_Saved_in_plain_file_storage = () =>
             plainFileRepository.Verify(x => x.StoreInterviewBinaryData(interviewId, fileName, Moq.It.IsAny<byte[]>()), Times.Once);
 

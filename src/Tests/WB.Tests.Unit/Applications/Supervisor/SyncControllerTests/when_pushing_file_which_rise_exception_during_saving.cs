@@ -1,8 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Net;
-using System.Web;
-using System.Web.Http;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.ReadSide;
@@ -29,13 +26,13 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
         };
 
         Because of = () =>
-            result = controller.PostFile(interviewId ).Result;
+            exception = Catch.Exception(() => controller.PostFile(new PostFileRequest() { InterviewId = interviewId, FileName = fileName, Base64BinaryData = string.Empty }));
 
-        It should_have_ServiceUnavailable_status_code = () =>
-            result.StatusCode.ShouldEqual(HttpStatusCode.ServiceUnavailable);
+        It should_exception_not_be_null = () =>
+            exception.ShouldNotBeNull();
 
 
-        private static HttpResponseMessage result;
+        private static Exception exception;
         private static InterviewerSyncController controller;
         private static Mock<IPlainInterviewFileStorage> plainFileRepository;
         private static string fileName = "file name";
