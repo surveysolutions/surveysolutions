@@ -1,7 +1,7 @@
 using System;
 using System.Net;
 
-namespace WB.Core.GenericSubdomains.Utils.Implementation.Services.Rest
+namespace WB.Core.SharedKernel.Utils.Implementation.Services
 {
     public class RestException : Exception
     {

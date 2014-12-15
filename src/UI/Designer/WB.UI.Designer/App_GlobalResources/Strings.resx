@@ -117,16 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="PushFailed" xml:space="preserve">
-    <value>Push failed. Try again later.</value>
+  <data name="ClientVersionLessThenDocument" xml:space="preserve">
+    <value>You have an old version of application that supports version {0} but current version is {1}. Please update application to continue.</value>
   </data>
-  <data name="PushBinaryDataFailed" xml:space="preserve">
-    <value>Push of binary data failed. Try again later.</value>
+  <data name="TemplateNotFound" xml:space="preserve">
+    <value>Questionnaire with id={0} cannot be found</value>
   </data>
-  <data name="ErrorOnItemListReceiving" xml:space="preserve">
-    <value>Error on item list receiving.</value>
+  <data name="Questionnaire_verification_failed" xml:space="preserve">
+    <value>Questionnaire is invalid. Please Verify it on Designer.</value>
   </data>
-  <data name="GetSyncPackageExceptionMessage" xml:space="preserve">
-    <value>Error when getting synchronizaton package. Bad internet connection or internal server error. Try again. If the problem persists, please, contact to your supervisor.</value>
+  <data name="User_Not_authirized" xml:space="preserve">
+    <value>Not authorized</value>
   </data>
 </root>

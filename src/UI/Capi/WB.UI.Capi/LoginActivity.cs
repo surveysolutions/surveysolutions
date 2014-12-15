@@ -52,11 +52,10 @@ namespace WB.UI.Capi
             this.SetContentView(Resource.Layout.Login);
             this.btnLogin.Click += this.btnLogin_Click;
 
-            if (string.IsNullOrWhiteSpace(CapiApplication.Kernel.Get<IInterviewerSettings>().GetClientRegistrationId()))
-            {
-                this.ClearAllBackStack<FinishInstallationActivity>();
-                this.Finish();
-            }
+            if (ServiceLocator.Current.GetInstance<IInterviewerSettings>().GetClientRegistrationId() != null) return;
+
+            this.ClearAllBackStack<FinishInstallationActivity>();
+            this.Finish();
         }
 
         private async void btnLogin_Click(object sender, EventArgs e)

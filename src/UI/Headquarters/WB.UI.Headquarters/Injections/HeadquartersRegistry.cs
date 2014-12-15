@@ -214,9 +214,8 @@ namespace WB.UI.Headquarters.Injections
             this.Bind<IStringCompressor>().To<GZipJsonCompressor>();
             this.Bind<IWaitService>().To<WaitService>().InSingletonScope();
 
-            this.Bind<INetworkService>().ToConstant(default(INetworkService));
             this.Bind<IRestServiceSettings>().To<DesignerQuestionnaireApiRestServiceSettings>().InSingletonScope();
-            this.Bind<IRestService>().To<RestService>().InSingletonScope();
+            this.Bind<IRestService>().To<RestService>().WithConstructorArgument("networkService", _ => null);
         }
     }
 }

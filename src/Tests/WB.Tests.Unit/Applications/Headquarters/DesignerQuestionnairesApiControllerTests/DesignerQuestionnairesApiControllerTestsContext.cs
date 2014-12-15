@@ -6,7 +6,6 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Utils.Implementation.Services;
-using WB.Core.SharedKernel.Utils.Services;
 using WB.Core.SharedKernel.Utils.Services.Rest;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;

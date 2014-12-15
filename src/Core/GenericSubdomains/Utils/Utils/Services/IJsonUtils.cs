@@ -4,6 +4,5 @@
     {
         string GetItemAsContent(object item);
         T Deserrialize<T>(string payload);
-        byte[] Serialize(object payload);
     }
 }

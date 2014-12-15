@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace WB.Core.GenericSubdomains.ErrorReporting
+namespace WB.Core.GenericSubdomains.Logging
 {
     public interface IInfoFileSupplierRegistry
     {

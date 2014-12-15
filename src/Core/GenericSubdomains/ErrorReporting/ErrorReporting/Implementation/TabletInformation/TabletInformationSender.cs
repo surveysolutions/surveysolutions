@@ -19,18 +19,16 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformat
         private Task task;
         private string pathToInfoArchive = null;
 
-        private readonly INetworkService networkService;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICapiInformationService capiInformationService;
         private readonly IRestService restService;
         private readonly IErrorReportingSettings errorReportingSettings;
         private readonly ILogger logger;
         
-        public TabletInformationSender(ICapiInformationService capiInformationService, INetworkService networkService,
+        public TabletInformationSender(ICapiInformationService capiInformationService,
             IFileSystemAccessor fileSystemAccessor, IRestService restService, IErrorReportingSettings errorReportingSettings, ILogger logger)
         {
             this.capiInformationService = capiInformationService;
-            this.networkService = networkService;
             this.fileSystemAccessor = fileSystemAccessor;
 
             this.restService = restService;
@@ -53,19 +51,11 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformat
         {
             if (this.tokenSource2.IsCancellationRequested)
                 return;
-            Task.Factory.StartNew(this.CancelInternal);
+            Task.Factory.StartNew(this.CancelInternal, ct);
         }
 
-        private void RunInternal()
+        private async void RunInternal()
         {
-            if (!this.networkService.IsNetworkEnabled())
-            {
-                this.Cancel();
-                return;
-            }
-
-            this.ExitIfCanceled();
-
             try
             {
                 this.pathToInfoArchive = this.capiInformationService.CreateInformationPackage();
@@ -81,16 +71,17 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformat
 
                 this.ExitIfCanceled();
 
-                var content = this.fileSystemAccessor.ReadAllBytes(this.pathToInfoArchive);
-
-                var tabletInformationPackage = new TabletInformationPackage(this.fileSystemAccessor.GetFileName(this.pathToInfoArchive),
-                    content,
-                    this.errorReportingSettings.GetDeviceId(), this.errorReportingSettings.GetClientRegistrationId());
-
                 try
                 {
-                    this.restService.PostAsync(url: "InterviewerSyncApi/PostInfoPackage", token: this.ct,
-                        requestData: tabletInformationPackage);
+                    await this.restService.PostAsync(
+                        url: "api/InterviewerSync/PostInfoPackage", 
+                        token: this.ct,
+                        requestQueryString: new TabletInformationPackage()
+                        {
+                            Content = Convert.ToBase64String(this.fileSystemAccessor.ReadAllBytes(this.pathToInfoArchive)),
+                            AndroidId = this.errorReportingSettings.GetDeviceId(),
+                            ClientRegistrationId = this.errorReportingSettings.GetClientRegistrationId()
+                        });
                 }
                 catch
                 {
