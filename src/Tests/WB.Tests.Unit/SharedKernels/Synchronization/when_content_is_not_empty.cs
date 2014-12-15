@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
             someContent = "some content";
             querableStorageMock = new InMemoryReadSideRepositoryAccessor<SynchronizationDelta>();
             var archiever = Mock.Of<IArchiveUtils>();
-            target = new ReadSideChunkWriter(querableStorageMock, archiver: archiever);
+            target = new ReadSideChunkWriter(querableStorageMock, archiver: archiever, storageReader: querableStorageMock);
             
         };
 

@@ -984,7 +984,7 @@ namespace WB.Tests.Unit
 
         public static InterviewsSynchronizer InterviewsSynchronizer(
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter = null,
-            IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter = null,
+            IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter = null,
             Func<HttpMessageHandler> httpMessageHandler = null,
             IEventStore eventStore = null,
             ILogger logger = null,
@@ -1014,7 +1014,7 @@ namespace WB.Tests.Unit
                 eventStore ?? Mock.Of<IEventStore>(),
                 jsonUtils ?? Mock.Of<IJsonUtils>(),
                 interviewSummaryRepositoryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
-                readyToSendInterviewsRepositoryWriter ?? Mock.Of<IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview>>(),
+                readyToSendInterviewsRepositoryWriter ?? Mock.Of<IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview>>(),
                 httpMessageHandler ?? Mock.Of<Func<HttpMessageHandler>>(),
                 interviewSynchronizationFileStorage ??
                     Mock.Of<IInterviewSynchronizationFileStorage>(

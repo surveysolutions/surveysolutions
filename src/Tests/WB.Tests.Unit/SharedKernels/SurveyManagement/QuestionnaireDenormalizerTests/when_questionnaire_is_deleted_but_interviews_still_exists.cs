@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireDenormalizer
             questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionnaireVersion = 5;
 
-            IQueryableReadSideRepositoryWriter<InterviewSummary> interviews = new InMemoryReadSideRepositoryAccessor<InterviewSummary>();
+            IReadSideRepositoryWriter<InterviewSummary> interviews = new InMemoryReadSideRepositoryAccessor<InterviewSummary>();
             interviews.Store(Create.InterviewSummary(questionnaireId, questionnaireVersion), "1");
 
             denormalizer = CreateDenormalizer(

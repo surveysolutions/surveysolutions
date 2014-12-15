@@ -4,6 +4,7 @@ using Moq;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Embedded;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository;
@@ -21,7 +22,7 @@ namespace WB.Tests.Integration.StorageTests.RavenReadSideRepositoryWriterTests
             IDocumentStore ravenStore = null, IFileSystemAccessor fileSystemAccessor=null)
         {
             return new RavenReadSideRepositoryWriter<View>(
-                ravenStore ?? CreateEmbeddableDocumentStore(), fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), "");
+                ravenStore ?? CreateEmbeddableDocumentStore(), fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), "", Mock.Of<ILogger>());
         }
 
         protected static IDocumentStore CreateEmbeddableDocumentStore()

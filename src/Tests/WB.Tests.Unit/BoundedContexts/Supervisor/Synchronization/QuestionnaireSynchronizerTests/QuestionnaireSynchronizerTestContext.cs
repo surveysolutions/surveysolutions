@@ -29,14 +29,14 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.Questionnaire
             IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry> plainStorage = null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
             IHeadquartersQuestionnaireReader headquartersQuestionnaireReader = null, HeadquartersPullContext headquartersPullContext = null,
-            IQueryableReadSideRepositoryWriter<InterviewSummary> interviews = null, ICommandService commandService=null)
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviews = null, ICommandService commandService = null)
         {
             return new QuestionnaireSynchronizer(atomFeedReader ?? Mock.Of<IAtomFeedReader>(), Create.HeadquartersSettings(questionnaireDetailsEndpoint: "http://localhost", questionnaireAssemblyEndpoint: "http://localhost"),
                 headquartersPullContext ?? new HeadquartersPullContext(Mock.Of<IPlainStorageAccessor<SynchronizationStatus>>()),
                 plainStorage ?? Mock.Of<IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry>>(), Mock.Of<ILogger>(),
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(), commandService ?? Mock.Of<ICommandService>(),
                 headquartersQuestionnaireReader ?? Mock.Of<IHeadquartersQuestionnaireReader>(),
-                interviews ?? Mock.Of<IQueryableReadSideRepositoryWriter<InterviewSummary>>());
+                interviews ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>());
 
         }
 

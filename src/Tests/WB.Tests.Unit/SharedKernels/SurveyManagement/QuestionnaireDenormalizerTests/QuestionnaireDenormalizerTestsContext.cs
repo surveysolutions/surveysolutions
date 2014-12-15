@@ -17,8 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireDenormalizer
     [Subject(typeof(QuestionnaireDenormalizer))]
     public class QuestionnaireDenormalizerTestsContext
     {
-        protected static QuestionnaireDenormalizer CreateDenormalizer(
-            IQueryableReadSideRepositoryWriter<InterviewSummary> interviews = null,
+        protected static QuestionnaireDenormalizer CreateDenormalizer(IReadSideRepositoryWriter<InterviewSummary> interviews = null,
             IQuestionnaireAssemblyFileAccessor assemblyFileAccessor = null,
             IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireDocumentStorage = null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null)
@@ -28,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireDenormalizer
                 Mock.Of<IQuestionnaireCacheInitializer>(),
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 assemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
-                interviews ?? Mock.Of<IQueryableReadSideRepositoryWriter<InterviewSummary>>());
+                interviews ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>());
         }
 
         protected static IPublishedEvent<T> CreatePublishedEvent<T>(Guid questionnaireId, T evnt)
