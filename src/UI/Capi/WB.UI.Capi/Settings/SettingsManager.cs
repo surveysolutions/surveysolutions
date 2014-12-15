@@ -80,6 +80,8 @@ namespace WB.UI.Capi.Settings
         /// </returns>
         public static bool SetSyncAddressPoint(string syncPoint)
         {
+            syncPoint = syncPoint.Trim();
+
             if (!ValidateAddress(syncPoint))
             {
                 return false;
