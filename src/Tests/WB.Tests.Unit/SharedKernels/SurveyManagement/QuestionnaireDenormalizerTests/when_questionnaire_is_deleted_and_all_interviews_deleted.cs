@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireDenormalizer
         Because of = () => denormalizer.Handle(Create.Event.QuestionnaireDeleted(questionnaireId: questionnaireId, version: questionnaireVersion));
 
         It should_not_remove_assembly_if_interviews_still_exist_in_the_system = () =>
-            assemblyFileAccessor.Verify(x => x.RemoveAssembly(questionnaireId, questionnaireVersion), Times.Once);
+            assemblyFileAccessor.Verify(x => x.RemoveAssembly(questionnaireId, questionnaireVersion), Times.Never);
 
         static QuestionnaireDenormalizer denormalizer;
         static Mock<IQuestionnaireAssemblyFileAccessor> assemblyFileAccessor;
