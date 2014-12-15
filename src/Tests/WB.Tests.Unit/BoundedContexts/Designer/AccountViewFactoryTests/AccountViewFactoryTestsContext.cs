@@ -16,9 +16,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AccountViewFactoryTests
             return new AccountViewInputModel(accountName, null, null, null);
         }
 
-        protected static AccountViewFactory CreateAccountViewFactory(IQueryableReadSideRepositoryWriter<AccountDocument> accountsRepository = null)
+        protected static AccountViewFactory CreateAccountViewFactory(IQueryableReadSideRepositoryReader<AccountDocument> accountsRepository = null)
         {
-            return new AccountViewFactory(accountsRepository ?? Mock.Of<IQueryableReadSideRepositoryWriter<AccountDocument>>());
+            return new AccountViewFactory(accountsRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<AccountDocument>>());
         }
     }
 }

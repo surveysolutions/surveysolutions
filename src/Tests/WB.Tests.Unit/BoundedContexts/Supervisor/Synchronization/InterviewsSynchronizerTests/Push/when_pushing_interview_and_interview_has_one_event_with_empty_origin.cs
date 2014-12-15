@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 .Callback<HttpRequestMessage, CancellationToken>((message, token) =>
                     contentSentToHq = message.Content.ReadAsStringAsync().Result);
 
-            var readyToSendInterviewsRepositoryWriter = Mock.Of<IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview>>(writer
+            var readyToSendInterviewsRepositoryWriter = Mock.Of<IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview>>(writer
                 => writer.QueryAll(Moq.It.IsAny<Expression<Func<ReadyToSendToHeadquartersInterview, bool>>>()) == new [] { new ReadyToSendToHeadquartersInterview(interviewId) });
 
             interviewEvent = Create.CommittedEvent(eventSourceId: interviewId, origin: null);

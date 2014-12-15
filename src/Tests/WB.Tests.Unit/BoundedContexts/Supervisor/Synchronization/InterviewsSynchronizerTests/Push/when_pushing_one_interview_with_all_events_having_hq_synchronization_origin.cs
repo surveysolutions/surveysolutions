@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             var eventStore = Mock.Of<IEventStore>(store
                 => store.ReadFrom(interviewId, 0, Moq.It.IsAny<long>()) == eventStream);
 
-            var readyToSendInterviewsRepositoryWriter = Mock.Of<IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview>>(writer
+            var readyToSendInterviewsRepositoryWriter = Mock.Of<IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview>>(writer
                 => writer.QueryAll(Moq.It.IsAny<Expression<Func<ReadyToSendToHeadquartersInterview, bool>>>()) == new[] { new ReadyToSendToHeadquartersInterview(interviewId) });
 
             fileSyncRepository.Setup(x => x.GetBinaryFilesFromSyncFolder()).Returns(new List<InterviewBinaryDataDescriptor>());

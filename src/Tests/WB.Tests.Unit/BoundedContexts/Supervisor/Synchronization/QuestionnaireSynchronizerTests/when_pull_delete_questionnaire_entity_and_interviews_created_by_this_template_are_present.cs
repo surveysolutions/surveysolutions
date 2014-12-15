@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.Questionnaire
 
             headquartersPullContext = new HeadquartersPullContextStub();
 
-            var interviewsMock = new Mock<IQueryableReadSideRepositoryWriter<InterviewSummary>>();
+            var interviewsMock = new Mock<IQueryableReadSideRepositoryReader<InterviewSummary>>();
             interviewsMock.Setup(x => x.QueryAll(Moq.It.IsAny<Expression<Func<InterviewSummary, bool>>>())).Returns(new[]
             {
                 new InterviewSummary() { WasCreatedOnClient = true, InterviewId = censusModeInterviewId },

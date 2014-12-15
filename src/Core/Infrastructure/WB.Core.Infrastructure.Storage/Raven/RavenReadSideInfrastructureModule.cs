@@ -38,7 +38,6 @@ namespace WB.Core.Infrastructure.Storage.Raven
             this.Kernel.Bind(typeof(IReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);
             this.Kernel.Bind(typeof(IQueryableReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);
             this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(this.GetReadSideRepositoryWriter);
-            this.Kernel.Bind(typeof(IQueryableReadSideRepositoryWriter<>)).ToMethod(this.GetReadSideRepositoryWriter);
         }
 
         protected object GetReadSideRepositoryWriter(IContext context)

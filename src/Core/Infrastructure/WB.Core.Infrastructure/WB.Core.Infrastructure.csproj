@@ -174,7 +174,6 @@
     <Compile Include="ReadSide\IViewFactory.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IFilterableReadSideRepositoryReader.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IFilterableReadSideRepositoryWriter.cs" />
-    <Compile Include="ReadSide\Repository\Accessors\IQueryableReadSideRepositoryWriter.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IQueryableReadSideRepositoryReader.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryCleaner.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryIndexAccessor.cs" />

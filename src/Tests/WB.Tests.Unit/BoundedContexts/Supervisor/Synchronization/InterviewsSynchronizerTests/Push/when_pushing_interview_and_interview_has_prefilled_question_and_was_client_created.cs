@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                     contentSentToHq = message.Content.ReadAsStringAsync().Result);
 
             var readyToSendInterviewsRepositoryWriter =
-                Mock.Of<IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview>>(writer
+                Mock.Of<IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview>>(writer
                     =>
                     writer.QueryAll(Moq.It.IsAny<Expression<Func<ReadyToSendToHeadquartersInterview, bool>>>()) ==
                         new[] { new ReadyToSendToHeadquartersInterview(interviewId) });
