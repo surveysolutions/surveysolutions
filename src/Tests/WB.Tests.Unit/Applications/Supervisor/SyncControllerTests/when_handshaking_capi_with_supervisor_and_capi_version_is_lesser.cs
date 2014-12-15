@@ -1,7 +1,5 @@
 using System;
 using System.Net;
-using System.Net.Http;
-using System.Web;
 using System.Web.Http;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -31,16 +29,16 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
         };
 
         Because of = () =>
-            result = controller.GetHandshakePackage("some client id", Guid.NewGuid().FormatGuid(), Guid.NewGuid(), capiVersion);
+            exception = Catch.Exception(()=> controller.GetHandshakePackage(new HandshakePackageRequest(){ClientId = Guid.NewGuid(), AndroidId  = Guid.NewGuid().FormatGuid(), ClientRegistrationId = Guid.NewGuid(), Version = capiVersion}));
 
-        It should_have_NotAcceptable_status_code = () =>
-            result.StatusCode.ShouldEqual(HttpStatusCode.NotAcceptable);
+        It should_exception_by_type_of_HttpResponseException = () =>
+            exception.ShouldBeOfExactType<HttpResponseException>();
 
-        It should_return_error_message_that_contains_specific_words = () =>
-            result.Content.ReadAsStringAsync().Result.ShouldEqual("{\"Message\":\"Synchronization is failed. Interviewer application  has version '10' but Supervisor has '13'. Please update Interviewer application\"}");
+        It should_exception_have_notacceptable_error_code= () =>
+            ((HttpResponseException)exception).Response.StatusCode.ShouldEqual(HttpStatusCode.NotAcceptable);
 
         private static InterviewerSyncController controller;
-        private static HttpResponseMessage result;
+        private static Exception exception;
         private static int capiVersion = 10;
         private static int supervisorVersion = 13;
     }

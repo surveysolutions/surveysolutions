@@ -18,7 +18,6 @@ namespace WB.Tests.Unit.GenericSubdomains.ErrorReporting.TabletInformationSender
         {
             return new TabletInformationSender(
                 Mock.Of<ICapiInformationService>(_ => _.CreateInformationPackage() == pathToInfoArchive),
-                Mock.Of<INetworkService>(_ => _.IsNetworkEnabled() == isNetworkEnabled),
                 Mock.Of<IFileSystemAccessor>(_ =>
                     _.IsFileExists(It.IsAny<string>()) == true
                     && _.ReadAllBytes(It.IsAny<string>()) == new byte[0]),

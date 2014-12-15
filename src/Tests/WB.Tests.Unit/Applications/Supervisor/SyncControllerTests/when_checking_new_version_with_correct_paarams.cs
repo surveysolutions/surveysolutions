@@ -26,15 +26,12 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
 
         Because of = () => 
             result = controller.CheckNewVersion(currentVersion);
-
-        It should_return_OK_status_response = () =>
-            result.StatusCode.ShouldEqual(HttpStatusCode.OK);
-
+        
         It should_return_true = () =>
-            result.Content.ReadAsStringAsync().Result.ShouldBeEqualIgnoringCase("true");
+            result.ShouldBeTrue();
 
 
-        private static HttpResponseMessage result;
+        private static bool result;
         private static InterviewerSyncController controller;
         private static int currentVersion = 3;
         private static int versionShouldBeFound = 5;
