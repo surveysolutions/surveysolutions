@@ -26,6 +26,7 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernel.Utils.Implementation.Services;
 using WB.Core.SharedKernel.Utils.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -407,6 +408,7 @@ namespace WB.UI.Capi
                     this.DestroyDialog();
                     if (evt.Exceptions != null && evt.Exceptions.Count > 0)
                     {
+                        var settingsManager = ServiceLocator.Current.GetInstance<IInterviewerSettings>();
                         var sb = new StringBuilder();
                         foreach (var exception in evt.Exceptions)
                         {
@@ -420,7 +422,7 @@ namespace WB.UI.Capi
                                         sb.AppendLine(
                                             string.Format(
                                                 Resources.GetString(Resource.String.PleaseCheckURLInSettingsFormat),
-                                                SettingsManager.GetSyncAddressPoint(), GetNetworkDescription()));
+                                                settingsManager.GetSyncAddressPoint(), GetNetworkDescription()));
                                         break;
                                     default:
                                         sb.AppendLine(restException.Message);
@@ -440,7 +442,7 @@ namespace WB.UI.Capi
                                         sb.AppendLine(
                                             string.Format(
                                                 Resources.GetString(Resource.String.PleaseCheckURLInSettingsFormat),
-                                                SettingsManager.GetSyncAddressPoint(), GetNetworkDescription()));
+                                                settingsManager.GetSyncAddressPoint(), GetNetworkDescription()));
                                         break;
                                     default:
                                         sb.AppendLine(string.Format(Resources.GetString(Resource.String.WebErrorWithStatus), webException.Message,

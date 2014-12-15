@@ -6,7 +6,6 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernel.Utils.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Designer.WebServices;
 using WB.UI.Designer.WebServices.Questionnaire;
@@ -22,7 +21,8 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
             IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory = null,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory = null,
             IQuestionnaireVerifier questionnaireVerifier = null,
-            IExpressionProcessorGenerator expressionProcessorGenerator = null)
+            IExpressionProcessorGenerator expressionProcessorGenerator = null,
+            ILocalizationService localizationService = null)
         {
             return new PublicService(exportService ?? Mock.Of<IQuestionnaireExportService>(),
                 zipUtils ?? Mock.Of<IStringCompressor>(),
@@ -30,7 +30,8 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
                 viewFactory ?? Mock.Of<IViewFactory<QuestionnaireListInputModel, QuestionnaireListView>>(),
                 questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),
                 questionnaireVerifier ?? Mock.Of<IQuestionnaireVerifier>(),
-                expressionProcessorGenerator ?? Mock.Of<IExpressionProcessorGenerator>());
+                expressionProcessorGenerator ?? Mock.Of<IExpressionProcessorGenerator>(),
+                localizationService: localizationService ?? Mock.Of<ILocalizationService>());
         }
 
         protected static TemplateInfo CreateTemplateInfo(QuestionnaireVersion version)

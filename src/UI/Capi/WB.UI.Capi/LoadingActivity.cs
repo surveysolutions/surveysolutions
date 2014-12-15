@@ -49,7 +49,7 @@ namespace WB.UI.Capi
 
         private IChangeLogManipulator LogManipulator
         {
-            get { return CapiApplication.Kernel.Get<IChangeLogManipulator>(); }
+            get { return ServiceLocator.Current.GetInstance<IChangeLogManipulator>(); }
         }
 
         protected override void OnCreate(Bundle bundle)

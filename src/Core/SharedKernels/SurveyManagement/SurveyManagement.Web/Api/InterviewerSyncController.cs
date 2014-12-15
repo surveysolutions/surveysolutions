@@ -107,7 +107,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             if (request == null) throw new ArgumentNullException("request");
 
-            return syncManager.ReceiveSyncPackage(request.ClientRegistrationId, request.ARKey);
+            return syncManager.ReceiveSyncPackage(request.ClientRegistrationId, request.PackageId);
         }
 
         [HttpPost]
@@ -131,7 +131,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpGet]
         [ApiBasicAuth]
-        public Guid GetPacakgeIdByTimeStamp(long timestamp)
+        public string GetPacakgeIdByTimeStamp(long timestamp)
         {
             return this.syncManager.GetPackageIdByTimestamp(new DateTime(timestamp));
         }

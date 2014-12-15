@@ -8,14 +8,18 @@ using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using System.Web.Security;
-using Resources;
-using WB.UI.Designer.Resources;
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.UI.Designer.Api.Attributes
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false)]
     public class ApiBasicAuthAttribute : AuthorizationFilterAttribute
     {
+        private ILocalizationService localizationService
+        {
+            get { return ServiceLocator.Current.GetInstance<ILocalizationService>(); }
+        }
         private readonly Func<string, string, bool> validateUserCredentials;
 
         public ApiBasicAuthAttribute()
@@ -86,7 +90,7 @@ namespace WB.UI.Designer.Api.Attributes
         private void Challenge(HttpActionContext actionContext)
         {
             var host = actionContext.Request.RequestUri.DnsSafeHost;
-            actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, TesterApiMessages.TesterController_ValidateCredentials_Not_authirized);
+            actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, this.localizationService.GetString("User_Not_authirized"));
             actionContext.Response.Headers.Add("WWW-Authenticate", string.Format("Basic realm=\"{0}\"", host));
         }
 
