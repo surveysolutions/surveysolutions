@@ -34,7 +34,6 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
         It should_file_be_Saved_in_plain_file_storage = () =>
             plainFileRepository.Verify(x => x.StoreInterviewBinaryData(interviewId, fileName, Moq.It.IsAny<byte[]>()), Times.Once);
 
-        private static HttpResponseMessage result;
         private static InterviewerSyncController controller;
         
         private static Mock<IPlainInterviewFileStorage> plainFileRepository;

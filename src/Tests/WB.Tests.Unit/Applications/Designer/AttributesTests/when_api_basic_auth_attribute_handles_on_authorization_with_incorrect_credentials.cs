@@ -6,7 +6,9 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Routing;
 using Machine.Specifications;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.UI.Designer.Api.Attributes;
 using It = Machine.Specifications.It;
 
@@ -33,6 +35,17 @@ namespace WB.Tests.Unit.Applications.Designer.AttributesTests
             filterContext = new HttpActionContext(controllerContext, actionDescriptor.Object);
 
             Func<string, string, bool> validateUserCredentials = (s, s1) => false;
+
+            var localizationServiceMock = new Mock<ILocalizationService>();
+            localizationServiceMock.Setup(_ => _.GetString(Moq.It.IsAny<string>())).Returns(string.Empty);
+            
+            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
+
+            serviceLocatorMock
+                .Setup(locator => locator.GetInstance<ILocalizationService>())
+                .Returns(localizationServiceMock.Object);
+
+            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
 
             attribute = CreateApiBasicAuthAttribute(validateUserCredentials);
         };

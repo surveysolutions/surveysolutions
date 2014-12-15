@@ -25,6 +25,7 @@ namespace WB.UI.Designer.WebServices
 
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
+        private readonly ILocalizationService localizationService;
 
         public PublicService(
             IQuestionnaireExportService exportService,
@@ -33,7 +34,8 @@ namespace WB.UI.Designer.WebServices
             IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
-            IExpressionProcessorGenerator expressionProcessorGenerator)
+            IExpressionProcessorGenerator expressionProcessorGenerator,
+            ILocalizationService localizationService)
         {
             this.exportService = exportService;
             this.zipUtils = zipUtils;
@@ -42,6 +44,7 @@ namespace WB.UI.Designer.WebServices
             this.questionnaireVerifier = questionnaireVerifier;
             this.questionnaireViewFactory = questionnaireViewFactory; 
             this.expressionProcessorGenerator = expressionProcessorGenerator;
+            this.localizationService = localizationService;
         }
 
         public RemoteFileInfo DownloadQuestionnaire(DownloadQuestionnaireRequest request)
@@ -49,7 +52,7 @@ namespace WB.UI.Designer.WebServices
             var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(request.QuestionnaireId));
             if (questionnaireView == null)
             {
-                var message = String.Format(HeadquarterApiMessages.RequestedQuestionnaireId0WasNotFoundFormat, request.QuestionnaireId);
+                var message = String.Format(this.localizationService.GetString("TemplateNotFound"), request.QuestionnaireId);
                 throw new FaultException(message, new FaultCode("TemplateNotFound"));
             }
 
@@ -57,7 +60,7 @@ namespace WB.UI.Designer.WebServices
 
             if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
             {
-                var message = String.Format(HeadquarterApiMessages.RequestedQuestionnaireId0WasNotFoundFormat, request.QuestionnaireId);
+                var message = String.Format(this.localizationService.GetString("TemplateNotFound"), request.QuestionnaireId);
 
                 throw new FaultException(message, new FaultCode("TemplateProcessingError"));
             }
@@ -66,7 +69,7 @@ namespace WB.UI.Designer.WebServices
 
             if (templateInfo.Version > request.SupportedQuestionnaireVersion)
             {
-                var message = String.Format(HeadquarterApiMessages.Requested_questionnaire___0___has_version__1___but_Headquarters_application_supports_versions_up_to__2__onlyFormat,
+                var message = String.Format(this.localizationService.GetString("NotSupportedQuestionnaireVersion"),
                         templateTitle,
                         templateInfo.Version,
                         request.SupportedQuestionnaireVersion);
@@ -78,7 +81,7 @@ namespace WB.UI.Designer.WebServices
 
             if (questoinnaireErrors.Any())
             {
-                var message = String.Format(HeadquarterApiMessages.Requested_questionnaire___0___has_errors__Please_verify_and_fix_them_on_DesignerFormat,
+                var message = String.Format(this.localizationService.GetString("Questionnaire_verification_failed"),
                         templateInfo.Title);
 
                 throw new FaultException(message, new FaultCode("InvalidQuestionnaire"));
@@ -102,8 +105,8 @@ namespace WB.UI.Designer.WebServices
 
             if (!generationResult.Success || String.IsNullOrWhiteSpace(resultAssembly))
             {
-                var message = String.Format(HeadquarterApiMessages.Requested_questionnaire___0___has_errors__Please_verify_and_fix_them_on_DesignerFormat,
-                    templateInfo.Title);
+                var message = String.Format(this.localizationService.GetString("Questionnaire_verification_failed"),
+                        templateInfo.Title);
 
                 throw new FaultException(message, new FaultCode("InvalidQuestionnaire"));
             }
