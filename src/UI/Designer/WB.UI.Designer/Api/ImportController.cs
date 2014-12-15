@@ -117,7 +117,7 @@ namespace WB.UI.Designer.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
                 {
-                    ReasonPhrase = this.localizationService.GetString("Questionnaire_verification_failed")
+                    ReasonPhrase = string.Format(this.localizationService.GetString("Questionnaire_verification_failed"), templateInfo.Title)
                 });
             }
 
@@ -141,7 +141,7 @@ namespace WB.UI.Designer.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
                 {
-                    ReasonPhrase = this.localizationService.GetString("Questionnaire_verification_failed")
+                    ReasonPhrase = string.Format(this.localizationService.GetString("Questionnaire_verification_failed"), templateInfo.Title)
                 });
             }
 
