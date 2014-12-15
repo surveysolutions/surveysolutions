@@ -88,15 +88,7 @@ namespace WB.UI.Headquarters
         {
             Global.Initialize(); // pinging global.asax to perform it's part of static initialization
 
-            bool isEmbeded;
-            if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.IsEmbeded"], out isEmbeded))
-            {
-                isEmbeded = false;
-            }
-
-            string storePath = isEmbeded
-                ? WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"]
-                : WebConfigurationManager.AppSettings["Raven.DocumentStore"];
+           string storePath = WebConfigurationManager.AppSettings["Raven.DocumentStore"];
 
             Func<bool> isDebug = () => AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
             Version applicationBuildVersion = typeof(SyncController).Assembly.GetName().Version;

@@ -91,15 +91,8 @@ namespace WB.UI.Supervisor.App_Start
 #warning TLK: delete this when NCQRS initialization moved to Global.asax
             MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
 
-            bool isEmbeded;
-            if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.IsEmbeded"], out isEmbeded))
-            {
-                isEmbeded = false;
-            }
 
-            string storePath = isEmbeded
-                ? WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"]
-                : WebConfigurationManager.AppSettings["Raven.DocumentStore"];
+            string storePath = WebConfigurationManager.AppSettings["Raven.DocumentStore"];
 
             var ravenSettings = new RavenConnectionSettings(storePath,
                 username: WebConfigurationManager.AppSettings["Raven.Username"],
