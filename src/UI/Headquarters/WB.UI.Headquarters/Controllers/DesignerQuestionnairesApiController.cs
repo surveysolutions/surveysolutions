@@ -67,10 +67,10 @@ namespace WB.UI.Headquarters.Controllers
 
         public DesignerQuestionnairesView QuestionnairesList(DesignerQuestionnairesListViewModel data)
         {
-            var list = this.restService.GetAsync<QuestionnaireListByPagesCommunicationPackage>(
-                url: "questionnairelist",
+            var list = this.restService.PostAsync<PagedQuestionnaireCommunicationPackage>(
+                url: "pagedquestionnairelist",
                 credentials: this.designerUserCredentials, 
-                requestData: new QuestionnaireListRequest()
+                requestQueryString: new QuestionnaireListRequest()
                 {
                     Filter = data.Request.Filter,
                     PageIndex = data.Pager.Page,
@@ -91,13 +91,21 @@ namespace WB.UI.Headquarters.Controllers
         {
             try
             {
+                var supportedVersion = this.supportedVersionProvider.GetSupportedQuestionnaireVersion();
+
                 var docSource = this.restService.PostAsync<QuestionnaireCommunicationPackage>(
                     url: "questionnaire",
                     credentials: designerUserCredentials,
-                    requestData: new 
+                    requestBody: new DownloadQuestionnaireRequest()
                     {
                         QuestionnaireId = request.QuestionnaireId,
-                        SupportedQuestionnaireVersion = this.supportedVersionProvider.GetSupportedQuestionnaireVersion()
+                        SupportedQuestionnaireVersion =
+                            new QuestionnaireVersion()
+                            {
+                                Major = supportedVersion.SupportedQuestionnaireVersionMajor,
+                                Minor = supportedVersion.SupportedQuestionnaireVersionMinor,
+                                Patch = supportedVersion.SupportedQuestionnaireVersionPatch
+                            }
                     }).Result;
 
                 var document = this.zipUtils.DecompressString<QuestionnaireDocument>(docSource.Questionnaire);
@@ -109,17 +117,13 @@ namespace WB.UI.Headquarters.Controllers
 
                 return new QuestionnaireVerificationResponse();
             }
-            catch (RestException ex)
-            {
-                this.Logger.Error(
-                    string.Format("Designer: error when importing template #{0}", request.QuestionnaireId), ex);
-
-                return new QuestionnaireVerificationResponse() {ImportError = ex.Message};
-            }
             catch (Exception ex)
             {
                 var domainEx = ex.GetSelfOrInnerAs<QuestionnaireException>();
                 if (domainEx != null) return new QuestionnaireVerificationResponse() {ImportError = domainEx.Message};
+
+                var restEx = ex.GetSelfOrInnerAs<RestException>();
+                if (restEx != null) return new QuestionnaireVerificationResponse() {ImportError = restEx.Message};
 
                 this.Logger.Error(
                     string.Format("Designer: error when importing template #{0}", request.QuestionnaireId), ex);

@@ -9,8 +9,8 @@ namespace WB.UI.Capi.Services
 {
     public interface ISynchronizationService
     {
-        Task<string> HandshakeAsync(SyncCredentials credentials, CancellationToken token = default(CancellationToken));
-        Task<List<SynchronizationChunkMeta>> GetChunksAsync(SyncCredentials credentials, CancellationToken token);
+        Task<Guid> HandshakeAsync(SyncCredentials credentials, CancellationToken token = default(CancellationToken));
+        Task<IEnumerable<SynchronizationChunkMeta>> GetChunksAsync(SyncCredentials credentials, CancellationToken token, Guid? lastKnownPackageId);
         Task<SyncItem> RequestChunkAsync(SyncCredentials credentials, Guid chunkId, CancellationToken token);
         Task PushChunkAsync(SyncCredentials credentials, string chunkAsString, CancellationToken token);
         Task PushBinaryAsync(SyncCredentials credentials, Guid interviewId, string fileName, byte[] fileData, CancellationToken token);

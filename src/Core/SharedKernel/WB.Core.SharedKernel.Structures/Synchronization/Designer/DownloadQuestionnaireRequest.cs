@@ -1,7 +1,6 @@
 ﻿using System;
-using WB.Core.SharedKernels.DataCollection;
 
-namespace WB.UI.Designer.Models
+namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
 {
     public class DownloadQuestionnaireRequest
     {

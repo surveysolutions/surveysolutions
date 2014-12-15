@@ -35,8 +35,6 @@ namespace WB.UI.QuestionnaireTester
 			global::MWBarcodeScanner.Resource.Id.preview_view = global::WB.UI.QuestionnaireTester.Resource.Id.preview_view;
 			global::MWBarcodeScanner.Resource.Layout.scanner = global::WB.UI.QuestionnaireTester.Resource.Layout.scanner;
 			global::MWBarcodeScanner.Resource.String.library_name = global::WB.UI.QuestionnaireTester.Resource.String.library_name;
-			global::WB.Core.GenericSubdomains.ErrorReporting.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
-			global::WB.Core.GenericSubdomains.ErrorReporting.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 			global::WB.Core.Infrastructure.Files.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
 			global::WB.Core.Infrastructure.Files.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 			global::WB.UI.Shared.Android.Resource.Attribute.MvxBind = global::WB.UI.QuestionnaireTester.Resource.Attribute.MvxBind;

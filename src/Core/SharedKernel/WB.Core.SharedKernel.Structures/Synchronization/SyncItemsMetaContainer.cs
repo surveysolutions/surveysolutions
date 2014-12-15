@@ -1,16 +1,10 @@
-using System;
 using System.Collections.Generic;
 
 namespace WB.Core.SharedKernel.Structures.Synchronization
 {
-    public class SyncItemsMetaContainer : BasePackage
+    public class SyncItemsMetaContainer
     {
-        public SyncItemsMetaContainer()
-        {
-            ChunksMeta = new List<SynchronizationChunkMeta>();
-        }
-
-        public List<SynchronizationChunkMeta> ChunksMeta { set; get; }
+        public IEnumerable<SynchronizationChunkMeta> ChunksMeta { set; get; }
 
     }
 

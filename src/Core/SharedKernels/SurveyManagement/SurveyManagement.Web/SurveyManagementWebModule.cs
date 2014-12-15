@@ -13,6 +13,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
         {
             this.Bind<ICommandDeserializer>().To<SurveyManagementCommandDeserializer>();
             this.Bind<IRevalidateInterviewsAdministrationService>().To<RevalidateInterviewsAdministrationService>().InSingletonScope();
+            this.Bind<ILocalizationService>().To<LocalizationService>().InSingletonScope();
         }
     }
 }

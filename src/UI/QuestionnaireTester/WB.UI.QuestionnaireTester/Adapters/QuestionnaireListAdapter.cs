@@ -40,7 +40,7 @@ namespace WB.UI.QuestionnaireTester.Adapters
                         await CapiTesterApplication.DesignerServices.GetQuestionnaireListForCurrentUser(
                             CapiTesterApplication.DesignerMembership.RemoteUser, cancellationToken);
 
-                    unfilteredList = items = questionnaireListPackage.Items;
+                    unfilteredList = items = questionnaireListPackage.Items.ToArray();
                 }
                 catch (Exception exc) 
                 {

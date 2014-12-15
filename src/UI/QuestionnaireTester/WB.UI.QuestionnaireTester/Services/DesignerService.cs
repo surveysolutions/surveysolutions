@@ -23,12 +23,10 @@ namespace WB.UI.QuestionnaireTester.Services
         {
             try
             {
-                await
-                    restService.PostAsync(url: "ValidateCredentials", token: cancellationToken,
-                        credentials: new RestCredentials() {Login = userName, Password = password});
+                await restService.GetAsync(url: "validatecredentials", token: cancellationToken, credentials: new RestCredentials() {Login = userName, Password = password});
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return false;
             }
@@ -36,23 +34,31 @@ namespace WB.UI.QuestionnaireTester.Services
 
         public async Task<QuestionnaireListCommunicationPackage> GetQuestionnaireListForCurrentUser(UserInfo remoteUser, CancellationToken cancellationToken)
         {
-            return
-                await
-                    restService.GetAsync<QuestionnaireListCommunicationPackage>(url: "GetAllTemplates",
-                        token: cancellationToken,
-                        credentials: new RestCredentials() {Login = remoteUser.UserName, Password = remoteUser.Password});
+            return await restService.GetAsync<QuestionnaireListCommunicationPackage>(
+                url: "questionnairelist",
+                token: cancellationToken,
+                credentials: new RestCredentials() {Login = remoteUser.UserName, Password = remoteUser.Password});
 
         }
 
-        public async Task<QuestionnaireCommunicationPackage> GetTemplateForCurrentUser(UserInfo remoteUser, Guid id, CancellationToken cancellationToken)
+        public Task<QuestionnaireCommunicationPackage> GetTemplateForCurrentUser(UserInfo remoteUser, Guid id, CancellationToken cancellationToken)
         {
-            return
-                await
-                    restService.PostAsync<QuestionnaireCommunicationPackage>(url: "GetTemplate", token: cancellationToken,
-                        credentials: new RestCredentials() {Login = remoteUser.UserName, Password = remoteUser.Password},
-                        requestData:
-                            new {id = id, maxSupportedVersion = QuestionnaireVersionProvider.GetCurrentEngineVersion()});
+            var supportedVersion = QuestionnaireVersionProvider.GetCurrentEngineVersion();
 
+            return this.restService.PostAsync<QuestionnaireCommunicationPackage>(
+                url: "questionnaire",
+                credentials: new RestCredentials() {Login = remoteUser.UserName, Password = remoteUser.Password},
+                requestBody: new DownloadQuestionnaireRequest()
+                {
+                    QuestionnaireId = id,
+                    SupportedQuestionnaireVersion =
+                        new QuestionnaireVersion()
+                        {
+                            Major = supportedVersion.Major,
+                            Minor = supportedVersion.Minor,
+                            Patch = supportedVersion.Patch
+                        }
+                }, token: cancellationToken);
         }
     }
 }

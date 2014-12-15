@@ -51,8 +51,8 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
                         surveyDto.SurveyTitle,
                         interviews.Select(
                             i =>
-                                new DashboardQuestionnaireItem(Guid.Parse(i.Id), Guid.Parse(i.Survey), i.Status,
-                                    i.PrefilledQuestions, surveyDto.SurveyTitle, i.Comments, i.CreatedOnClient,
+                                new DashboardQuestionnaireItem(Guid.Parse(i.Id), Guid.Parse(i.Survey), (InterviewStatus)i.Status,
+                                    i.GetProperties(), surveyDto.SurveyTitle, i.Comments, i.CreatedOnClient,
                                     i.JustInitilized.HasValue && i.JustInitilized.Value)),
                         surveyDto.AllowCensusMode));
                 }

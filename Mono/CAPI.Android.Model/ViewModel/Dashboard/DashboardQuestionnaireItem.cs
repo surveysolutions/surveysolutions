@@ -6,11 +6,11 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 {
     public class DashboardQuestionnaireItem
     {
-        public DashboardQuestionnaireItem(Guid publicKey, Guid surveyKey, InterviewStatus status, IList<FeaturedItem> properties,
+        public DashboardQuestionnaireItem(Guid publicKey, Guid surveyKey, InterviewStatus status, IEnumerable<FeaturedItem> properties,
             string title, string comments, bool? createdOnClient = false, bool canBeDeleted = false)
         {
             this.PublicKey = publicKey;
-            this.status = status;
+            this.Status = status;
             this.Properties = properties;
             this.SurveyKey = surveyKey;
             this.Title = title;
@@ -19,7 +19,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
             this.CanBeDeleted = canBeDeleted;
         }
 
-        public IList<FeaturedItem> Properties { get; private set; }
+        public IEnumerable<FeaturedItem> Properties { get; private set; }
 
         public Guid PublicKey { get; private set; }
 
@@ -31,11 +31,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 
         public bool CanBeDeleted { get; set; }
 
-        private InterviewStatus status;
-        public InterviewStatus Status
-        {
-            get { return this.status; }
-        }
+        public InterviewStatus Status { get; private set; }
 
         public string Comments { get; private set; }
     }

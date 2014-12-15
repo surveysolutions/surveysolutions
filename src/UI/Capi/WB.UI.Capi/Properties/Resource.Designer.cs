@@ -70,6 +70,15 @@ namespace WB.UI.Capi.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error when getting synchronizaton package. Bad internet connection or internal server error. Try again. If the problem persists, please, contact to your supervisor..
+        /// </summary>
+        internal static string GetSyncPackageExceptionMessage {
+            get {
+                return ResourceManager.GetString("GetSyncPackageExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Push of binary data failed. Try again later..
         /// </summary>
         internal static string PushBinaryDataFailed {

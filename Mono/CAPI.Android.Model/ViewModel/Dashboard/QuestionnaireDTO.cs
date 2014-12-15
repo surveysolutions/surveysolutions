@@ -10,27 +10,33 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 {
     public class QuestionnaireDTO : DenormalizerRow
     {
-        public QuestionnaireDTO(Guid id, Guid responsible, Guid survey, InterviewStatus status, FeaturedItem[] prefilledQuestions,
+        private IJsonUtils jsonUtils
+        {
+            get { return ServiceLocator.Current.GetInstance<IJsonUtils>(); }
+        }
+
+        public QuestionnaireDTO(Guid id, Guid responsible, Guid survey, InterviewStatus status, IEnumerable<FeaturedItem> properties,
             long surveyVersion, string comments, bool? createdOnClient = false, bool justInitilized = false)
         {
             this.Id = id.FormatGuid();
-            this.Status = status;
+            this.Status = (int)status;
             this.Responsible = responsible.FormatGuid();
             this.Survey = survey.FormatGuid();
-            this.PrefilledQuestions = prefilledQuestions ?? new FeaturedItem[0];
             this.CreatedOnClient = createdOnClient;
             this.JustInitilized = justInitilized;
             this.SurveyVersion = surveyVersion;
             this.Comments = comments;
+
+            this.jsonUtils.GetItemAsContent(properties);
         }
 
-        public QuestionnaireDTO() {}
+        public QuestionnaireDTO() { }
 
-        public InterviewStatus Status { get; set; }
+        public int Status { get; set; }
         public string Responsible { get; set; }
         public string Survey { get; set; }
 
-        public FeaturedItem[] PrefilledQuestions { get; set; }
+        public string Properties { get; set; }
 
         public string Comments { get; set; }
         public bool Valid { get; set; }
@@ -38,5 +44,12 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         public bool? JustInitilized { get; set; }
         public bool? CreatedOnClient { get; set; }
         public long SurveyVersion { get; set; }
+
+        public IEnumerable<FeaturedItem> GetProperties()
+        {
+            return string.IsNullOrEmpty(this.Properties)
+                ? new FeaturedItem[0]
+                : jsonUtils.Deserrialize<IEnumerable<FeaturedItem>>(this.Properties);
+        }
     }
 }

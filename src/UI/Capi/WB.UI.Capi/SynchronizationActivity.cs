@@ -258,7 +258,7 @@ namespace WB.UI.Capi
             this.CreateActionBar();
         }
 
-        private void StartSynctionization(ISyncAuthenticator authenticator, EventHandler synchronizerProcessFinished)
+        private async void StartSynctionization(ISyncAuthenticator authenticator, EventHandler synchronizerProcessFinished)
         {
             if (!this.networkService.IsNetworkEnabled())
             {
@@ -308,7 +308,7 @@ namespace WB.UI.Capi
 
             this.CreateDialog(ProgressDialogStyle.Spinner, "Initializing", false, this.progressDialog_Cancel);
 
-            this.synchronizer.Run();
+            await this.synchronizer.Run();
         }
 
 

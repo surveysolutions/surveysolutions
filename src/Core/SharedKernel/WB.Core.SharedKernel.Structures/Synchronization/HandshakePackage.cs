@@ -1,8 +1,8 @@
-﻿namespace WB.Core.SharedKernel.Structures.Synchronization
-{
-    using System;
+﻿using System;
 
-    public class HandshakePackage : BasePackage
+namespace WB.Core.SharedKernel.Structures.Synchronization
+{
+    public class HandshakePackage
     {
         public Guid SyncProcessKey;
         public Guid ClientInstanceKey;

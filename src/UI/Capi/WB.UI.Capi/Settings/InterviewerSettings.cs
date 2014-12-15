@@ -14,19 +14,22 @@ namespace WB.UI.Capi.Settings
                 Android.Provider.Settings.Secure.AndroidId);
         }
 
-        public string GetInstallationId()
+        public Guid GetInstallationId()
         {
             var installationId = GetSetting(SettingsNames.INSTALLATION);
-            if (!string.IsNullOrEmpty(installationId)) return installationId;
-
-            installationId = UUID.RandomUUID().ToString();
-            SetSetting(SettingsNames.INSTALLATION, installationId);
-            return installationId;
+            if (string.IsNullOrEmpty(installationId))
+            {
+                installationId = UUID.RandomUUID().ToString();
+                SetSetting(SettingsNames.INSTALLATION, installationId);    
+            }
+            return Guid.Parse(installationId);
         }
 
-        public string GetClientRegistrationId()
+        public Guid? GetClientRegistrationId()
         {
-            return GetSetting(SettingsNames.RegistrationKeyName);
+            var sClientRegistrationId = GetSetting(SettingsNames.RegistrationKeyName);
+
+            return string.IsNullOrEmpty(sClientRegistrationId) ? (Guid?) null : Guid.Parse(sClientRegistrationId);
         }
 
         public string GetLastReceivedPackageId()
@@ -54,9 +57,10 @@ namespace WB.UI.Capi.Settings
             return global::Android.OS.Build.VERSION.Release;
         }
 
-        public void SetClientRegistrationId(string clientRegistrationId)
+        public void SetClientRegistrationId(Guid? clientRegistrationId)
         {
-            SetSetting(SettingsNames.RegistrationKeyName, clientRegistrationId);
+            SetSetting(SettingsNames.RegistrationKeyName,
+                clientRegistrationId.HasValue ? clientRegistrationId.ToString() : string.Empty);
         }
 
         public void SetLastReceivedPackageId(string lastReceivedPackageId)
@@ -72,7 +76,7 @@ namespace WB.UI.Capi.Settings
                 throw new ArgumentException();
             }
 
-            SetSetting(SettingsNames.SyncAddressSettingsName, syncAddressPoint);
+            SetSetting(SettingsNames.SyncAddressSettingsName, syncAddressPoint.Trim());
         }
 
 

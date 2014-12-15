@@ -124,7 +124,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
             
             questionnaireDtOdocumentStorage.Store(
                 new QuestionnaireDTO(interviewId, responsibleId, questionnaireId, status,
-                                     items.ToArray(), questionnaireTemplate.Version, comments, createdOnClient, canBeDeleted), interviewId);
+                                     items, questionnaireTemplate.Version, comments, createdOnClient, canBeDeleted), interviewId);
         }
 
         private FeaturedItem CreateFeaturedItem(IQuestion featuredQuestion, object answer)
@@ -216,7 +216,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
             QuestionnaireDTO questionnaire = questionnaireDtOdocumentStorage.GetById(evnt.EventSourceId);
             if (questionnaire == null)
                 return;
-            questionnaire.Status = evnt.Payload.Status;
+            questionnaire.Status = (int)evnt.Payload.Status;
             questionnaire.Comments = evnt.Payload.Comment;
 
             questionnaireDtOdocumentStorage.Store(questionnaire, evnt.EventSourceId);
@@ -243,7 +243,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
             if (questionnaire == null) return;
 
-            var preFilledQuestion = questionnaire.PrefilledQuestions.FirstOrDefault(question => question.PublicKey == questionId);
+            var preFilledQuestion = questionnaire.GetProperties().FirstOrDefault(question => question.PublicKey == questionId);
 
             if (preFilledQuestion == null) return;
 

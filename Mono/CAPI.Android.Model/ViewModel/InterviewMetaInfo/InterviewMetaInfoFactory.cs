@@ -27,7 +27,7 @@ namespace CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo
                 return null;
 
             var featuredQuestionList = interview.CreatedOnClient != null && interview.CreatedOnClient.Value
-                ? interview.PrefilledQuestions
+                ? interview.GetProperties()
                     .Select(
                         featuredQuestion =>
                             new FeaturedQuestionMeta(featuredQuestion.PublicKey, featuredQuestion.Title, featuredQuestion.Value)).ToList()

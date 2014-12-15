@@ -1,3 +1,4 @@
+using System;
 using WB.Core.GenericSubdomains.ErrorReporting.Services;
 
 namespace WB.UI.Capi.Settings
@@ -16,9 +17,12 @@ namespace WB.UI.Capi.Settings
             return this.interviewerSettings.GetDeviceId();
         }
 
-        public string GetClientRegistrationId()
+        public Guid GetClientRegistrationId()
         {
-            return this.interviewerSettings.GetClientRegistrationId();
+            if (!this.interviewerSettings.GetClientRegistrationId().HasValue)
+                throw new NullReferenceException("ClientRegistrationId is not registered. Synchronize application with server first.");
+
+            return this.interviewerSettings.GetClientRegistrationId().Value;
         }
     }
 }
