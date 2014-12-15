@@ -50,7 +50,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
 
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static string someFaultReason = "some fault reason";
-        private static dynamic downloadRequest;
         private static DesignerQuestionnairesApiController controller;
         private static ImportQuestionnaireRequest request;
         private static QuestionnaireVerificationResponse response;

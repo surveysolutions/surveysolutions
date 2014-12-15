@@ -10,11 +10,11 @@ namespace WB.UI.Capi.Services
     public interface ISynchronizationService
     {
         Task<Guid> HandshakeAsync(SyncCredentials credentials, CancellationToken token = default(CancellationToken));
-        Task<IEnumerable<SynchronizationChunkMeta>> GetChunksAsync(SyncCredentials credentials, CancellationToken token, Guid? lastKnownPackageId);
-        Task<SyncItem> RequestChunkAsync(SyncCredentials credentials, Guid chunkId, CancellationToken token);
+        Task<IEnumerable<SynchronizationChunkMeta>> GetChunksAsync(SyncCredentials credentials, CancellationToken token, string lastKnownPackageId);
+        Task<SyncItem> RequestChunkAsync(SyncCredentials credentials, string chunkId, CancellationToken token);
         Task PushChunkAsync(SyncCredentials credentials, string chunkAsString, CancellationToken token);
         Task PushBinaryAsync(SyncCredentials credentials, Guid interviewId, string fileName, byte[] fileData, CancellationToken token);
-        Task<Guid> GetChunkIdByTimestamp(SyncCredentials credentials, long timestamp, CancellationToken token);
+        Task<string> GetChunkIdByTimestamp(SyncCredentials credentials, long timestamp, CancellationToken token);
         Task<bool> NewVersionAvailableAsync(CancellationToken token = default(CancellationToken));
     }
 }

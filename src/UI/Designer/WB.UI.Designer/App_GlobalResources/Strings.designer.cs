@@ -70,7 +70,25 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire is invalid. Please Verify it on Designer..
+        ///   Looks up a localized string similar to Failed to import questionnaire. Requested questionnaire &quot;{0}&quot; has {1} version. Headquarters application supports version up to {2}.
+        /// </summary>
+        internal static string NotSupportedQuestionnaireVersion {
+            get {
+                return ResourceManager.GetString("NotSupportedQuestionnaireVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have an obsolete version of application. Please update application to continue..
+        /// </summary>
+        internal static string OldClientPleaseUpdate {
+            get {
+                return ResourceManager.GetString("OldClientPleaseUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to import questionnaire. Requested questionnaire &quot;{0}&quot; has errors. Please verify and fix them on Designer..
         /// </summary>
         internal static string Questionnaire_verification_failed {
             get {
@@ -79,7 +97,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire with id={0} cannot be found.
+        ///   Looks up a localized string similar to Requested questionnaire id={0} was not found.
         /// </summary>
         internal static string TemplateNotFound {
             get {
@@ -93,6 +111,15 @@ namespace Resources {
         internal static string User_Not_authirized {
             get {
                 return ResourceManager.GetString("User_Not_authirized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max supporter version of questionnaire was not correctly provided..
+        /// </summary>
+        internal static string VersionParameterIsIncorrect {
+            get {
+                return ResourceManager.GetString("VersionParameterIsIncorrect", resourceCulture);
             }
         }
     }

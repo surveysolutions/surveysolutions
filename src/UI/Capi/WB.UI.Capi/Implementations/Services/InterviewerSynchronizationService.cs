@@ -43,7 +43,7 @@ namespace WB.UI.Capi.Implementations.Services
             return package.ClientRegistrationKey;
         }
 
-        public async Task<IEnumerable<SynchronizationChunkMeta>> GetChunksAsync(SyncCredentials credentials, CancellationToken token, Guid? lastKnownPackageId)
+        public async Task<IEnumerable<SynchronizationChunkMeta>> GetChunksAsync(SyncCredentials credentials, CancellationToken token, string lastKnownPackageId)
         {
             var syncItemsMetaContainer = await restService.PostAsync<SyncItemsMetaContainer>(
                 url: "api/InterviewerSync/GetARKeys",
@@ -61,7 +61,7 @@ namespace WB.UI.Capi.Implementations.Services
             return syncItemsMetaContainer.ChunksMeta;
         }
 
-        public async Task<SyncItem> RequestChunkAsync(SyncCredentials credentials, Guid chunkId, CancellationToken token)
+        public async Task<SyncItem> RequestChunkAsync(SyncCredentials credentials, string chunkId, CancellationToken token)
         {
             var package = await restService.PostAsync<SyncPackage>(
                 url: "api/InterviewerSync/GetSyncPackage",
@@ -69,7 +69,7 @@ namespace WB.UI.Capi.Implementations.Services
                 token: token,
                 requestQueryString: new SyncPackageRequest()
                     {
-                        ARKey = chunkId,
+                        PackageId = chunkId,
                         ClientRegistrationId = this.interviewerSettings.GetClientRegistrationId().Value
                     });
 
@@ -119,9 +119,9 @@ namespace WB.UI.Capi.Implementations.Services
             }
         }
 
-        public Task<Guid> GetChunkIdByTimestamp(SyncCredentials credentials, long timestamp, CancellationToken token)
+        public Task<string> GetChunkIdByTimestamp(SyncCredentials credentials, long timestamp, CancellationToken token)
         {
-            return this.restService.GetAsync<Guid>(
+            return this.restService.GetAsync<string>(
                 url: "api/InterviewerSync/GetPacakgeIdByTimeStamp",
                 credentials: new RestCredentials() {Login = credentials.Login, Password = credentials.Password},
                 token: token,

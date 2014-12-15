@@ -259,7 +259,6 @@
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_handshaking_capi_with_supervisor_and_capi_version_is_greater.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_handshaking_capi_with_supervisor_and_capi_version_is_lesser.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_pushing_file_which_rise_exception_during_saving.cs" />
-    <Compile Include="Applications\Supervisor\SyncControllerTests\when_pushing_file_without_file.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_pushing_file_with_invalid_credentions.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_pushing_file_with_valid_file.cs" />
     <Compile Include="AssemblyContext.cs" />
@@ -1203,9 +1202,7 @@
     <Compile Include="GenericSubdomains\ErrorReporting\CapiInformationServiceTests\when_creating_information_package.cs" />
     <Compile Include="GenericSubdomains\ErrorReporting\TabletInformationSenderTests\TabletInformationSenderTestContext.cs" />
     <Compile Include="GenericSubdomains\ErrorReporting\TabletInformationSenderTests\when_archive_is_missing.cs" />
-    <Compile Include="GenericSubdomains\ErrorReporting\TabletInformationSenderTests\when_archive_wasnt_sent_successfully_to_supervisor.cs" />
     <Compile Include="GenericSubdomains\ErrorReporting\TabletInformationSenderTests\when_archive_was_sent_successfully_to_supervisor.cs" />
-    <Compile Include="GenericSubdomains\ErrorReporting\TabletInformationSenderTests\when_network_is_disabled.cs" />
     <Compile Include="GenericSubdomains\Utils\MonadsTests\MonadsTests.cs" />
     <Compile Include="GenericSubdomains\Utils\PasswordHasherTests\PasswordHasherTestContext.cs" />
     <Compile Include="GenericSubdomains\Utils\PasswordHasherTests\when_hashing__hello_world__password.cs" />
@@ -1837,9 +1834,6 @@
     <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\TabletReportControllerTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\when_info_package_requested.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\when_list_of_info_packages_is_requested.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\when_posting_info_package_is_caller_with_broken_content.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\when_posting_info_package_is_caller_with_empty_content.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\when_posting_info_package_is_caller_with_valid_content.cs" />
     <Compile Include="SharedKernels\SurveySolutions\Documents\QuestionnaireDocumentTests.cs" />
     <Compile Include="SharedKernels\Synchronization\DefaultBackupManagerTests.cs" />
     <Compile Include="SharedKernels\Synchronization\when_chunk_with_same_guid_is_present.cs" />
