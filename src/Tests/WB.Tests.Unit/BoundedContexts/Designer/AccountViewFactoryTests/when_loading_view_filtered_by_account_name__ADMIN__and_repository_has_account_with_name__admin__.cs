@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AccountViewFactoryTests
         {
             inputWithFilterByAccountName = CreateAccountViewInputModel(accountName: "ADMIN");
 
-            var accountsRepositoryMock = new Mock<IQueryableReadSideRepositoryWriter<AccountDocument>>();
+            var accountsRepositoryMock = new Mock<IQueryableReadSideRepositoryReader<AccountDocument>>();
 
             var repositoryDocuments = new[] { CreateAccountDocument(userName: "admin") }.AsQueryable();
 

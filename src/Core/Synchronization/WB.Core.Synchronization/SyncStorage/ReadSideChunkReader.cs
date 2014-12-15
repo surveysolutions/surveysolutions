@@ -10,9 +10,9 @@ namespace WB.Core.Synchronization.SyncStorage
 {
     internal class ReadSideChunkReader : IChunkReader
     {
-        private readonly IQueryableReadSideRepositoryWriter<SynchronizationDelta> queryableStorage;
+        private readonly IQueryableReadSideRepositoryReader<SynchronizationDelta> queryableStorage;
 
-        public ReadSideChunkReader(IQueryableReadSideRepositoryWriter<SynchronizationDelta> queryableStorage)
+        public ReadSideChunkReader(IQueryableReadSideRepositoryReader<SynchronizationDelta> queryableStorage)
         {
             this.queryableStorage = queryableStorage;
         }
