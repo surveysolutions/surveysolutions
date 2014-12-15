@@ -57,7 +57,9 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             ISupportedVersionProvider versionProvider = null, 
             IPlainInterviewFileStorage plainFileRepository = null,
             IFileSystemAccessor fileSystemAccessor = null,
-            ITabletInformationService tabletInformationService = null)
+            ITabletInformationService tabletInformationService = null,
+            ILocalizationService localizationService = null,
+            IJsonUtils jsonUtils = null)
         {
             var controller = new InterviewerSyncController(
                 commandService ?? Mock.Of<ICommandService>(), 
@@ -68,7 +70,9 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
                 versionProvider ?? Mock.Of<ISupportedVersionProvider>(), 
                 plainFileRepository ?? Mock.Of<IPlainInterviewFileStorage>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                tabletInformationService ?? Mock.Of<ITabletInformationService>());
+                tabletInformationService ?? Mock.Of<ITabletInformationService>(),
+                localizationService ?? Mock.Of<ILocalizationService>(),
+                jsonUtils ?? Mock.Of<IJsonUtils>());
 
             return controller;
         }

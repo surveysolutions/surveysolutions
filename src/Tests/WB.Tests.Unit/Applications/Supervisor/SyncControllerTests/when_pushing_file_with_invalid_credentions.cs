@@ -23,12 +23,15 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
         };
 
         Because of = () =>
-            result = controller.PostFile(Guid.NewGuid()).Result;
+            exception = Catch.Exception(()=> controller.PostFile(new PostFileRequest()));
 
-        It should_have_NotAcceptable_status_code = () =>
-            result.StatusCode.ShouldEqual(HttpStatusCode.NotAcceptable);
+        It should_exception_be_type_of_http_exception = () =>
+            exception.ShouldBeOfExactType<HttpException>();
 
-        private static HttpResponseMessage result;
+        It should_exception_error_code_be_equal_to_notacceptable = () =>
+            ((HttpException)exception).GetHttpCode().ShouldEqual((int)HttpStatusCode.NotAcceptable);
+
+        private static Exception exception;
         private static InterviewerSyncController controller;
     }
 }
