@@ -62,7 +62,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult LoginToDesigner(LogOnModel model)
+        public async Task<ActionResult> LoginToDesigner(LogOnModel model)
         {
             if (this.ModelState.IsValid)
             {
@@ -70,10 +70,8 @@ namespace WB.UI.Headquarters.Controllers
 
                 try
                 {
-                    var isUserExistAndLockedOut = this.designerQuestionnaireApiRestService.PostAsync<bool>(url: "validatecredentials", credentials: designerUserCredentials).Result;
-                    if (!isUserExistAndLockedOut)
-                        throw new AuthenticationException();
-
+                    await this.designerQuestionnaireApiRestService.GetAsync(url: "validatecredentials", credentials: designerUserCredentials);
+                    
                     this.designerUserCredentials = designerUserCredentials;
 
                     return this.RedirectToAction("Import");

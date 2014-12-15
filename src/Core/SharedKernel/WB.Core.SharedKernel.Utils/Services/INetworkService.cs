@@ -1,4 +1,4 @@
-namespace WB.Core.GenericSubdomains.Utils.Services
+namespace WB.Core.SharedKernel.Utils.Services
 {
     public interface INetworkService
     {

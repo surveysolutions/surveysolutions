@@ -1,6 +1,6 @@
 ﻿namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
 {
-    public class QuestionnaireListByPagesCommunicationPackage : QuestionnaireListCommunicationPackage
+    public class PagedQuestionnaireCommunicationPackage : QuestionnaireListCommunicationPackage
     {
         public string Order { get; set; }
         public int Page { get; set; }

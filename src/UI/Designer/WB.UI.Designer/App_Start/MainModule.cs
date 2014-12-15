@@ -37,6 +37,7 @@ namespace WB.UI.Designer
                         x.Inject<IMembershipWebUser>(),
                         x.Inject<IMembershipWebServiceUser>()))
                 .InSingletonScope();
+            this.Bind<ILocalizationService>().To<LocalizationService>().InSingletonScope();
         }
     }
 }
