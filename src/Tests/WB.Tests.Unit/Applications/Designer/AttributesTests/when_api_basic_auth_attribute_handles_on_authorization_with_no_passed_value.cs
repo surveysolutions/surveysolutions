@@ -30,13 +30,7 @@ namespace WB.Tests.Unit.Applications.Designer.AttributesTests
             var localizationServiceMock = new Mock<ILocalizationService>();
             localizationServiceMock.Setup(_ => _.GetString(Moq.It.IsAny<string>())).Returns(string.Empty);
 
-            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
-
-            serviceLocatorMock
-                .Setup(locator => locator.GetInstance<ILocalizationService>())
-                .Returns(localizationServiceMock.Object);
-
-            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+            Setup.InstanceToMockedServiceLocator<ILocalizationService>(localizationServiceMock.Object);
 
             attribute = CreateApiBasicAuthAttribute();
         };
