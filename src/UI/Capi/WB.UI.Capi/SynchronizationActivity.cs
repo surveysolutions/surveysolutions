@@ -261,13 +261,13 @@ namespace WB.UI.Capi
 
         private async void StartSynctionization(ISyncAuthenticator authenticator, EventHandler synchronizerProcessFinished)
         {
+            if (this.progressDialog != null) return;
+
             if (!this.networkService.IsNetworkEnabled())
             {
                 Toast.MakeText(this, "Network is unavailable", ToastLength.Long).Show();
                 return;
             }
-
-            this.ThrowExeptionIfDialogIsOpened();
 
             this.PrepareUI();
             try
@@ -371,12 +371,6 @@ namespace WB.UI.Capi
         private void PrepareUI()
         {
             this.tvSyncResult.Text = string.Empty;
-        }
-
-        private void ThrowExeptionIfDialogIsOpened()
-        {
-            if (this.progressDialog != null)
-                throw new InvalidOperationException();
         }
 
         private void synchronizer_ProcessFinished(object sender, EventArgs e)
