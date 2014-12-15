@@ -17,8 +17,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     internal class QuestionnaireVerifier : IQuestionnaireVerifier
     {
-        #region Constants
-
         private const int maxExpressionErrorsCount = 10;
         private const int maxExpressionLength = 10000;
 
@@ -72,10 +70,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             QuestionType.MultyOption
         };
 
-        #endregion
-
-        #region Types
-
         private struct EntityVerificationResult<TReferencedEntity>
             where TReferencedEntity : class, IComposite
         {
@@ -83,7 +77,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             public IEnumerable<TReferencedEntity> ReferencedEntities { get; set; }
         }
 
-        #endregion
+        private bool hasExceededLimitByValidationExpresssionCharactersLength = false;
+        private bool hasExceededLimitByConditionExpresssionCharactersLength = false;
 
         private readonly IExpressionProcessor expressionProcessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -189,30 +184,28 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
         }
 
-        private bool hasExceededLimitByValidationExpresssionCharactersLength = false;
         private bool ValidationExpresssionHasLengthMoreThan10000Characters(IQuestion question)
         {
             if (string.IsNullOrEmpty(question.ValidationExpression))
                 return false;
 
-            var exedded = question.ValidationExpression.Length > maxExpressionLength;
-            hasExceededLimitByValidationExpresssionCharactersLength = hasExceededLimitByValidationExpresssionCharactersLength || exedded;
+            var exceeded = question.ValidationExpression.Length > maxExpressionLength;
+            hasExceededLimitByValidationExpresssionCharactersLength = hasExceededLimitByValidationExpresssionCharactersLength || exceeded;
 
-            return exedded;
+            return exceeded;
         }
 
-        private bool hasExceededLimitByConditionExpresssionCharactersLength = false;
         private bool ConditionExpresssionHasLengthMoreThan10000Characters(IComposite groupOrQuestion)
         {
             var customEnablementCondition = GetCustomEnablementCondition(groupOrQuestion);
-
+            
             if (string.IsNullOrEmpty(customEnablementCondition))
                 return false;
 
-            var exedded = customEnablementCondition.Length > maxExpressionLength;
-            hasExceededLimitByConditionExpresssionCharactersLength = hasExceededLimitByConditionExpresssionCharactersLength || exedded;
+            var exceeded = customEnablementCondition.Length > maxExpressionLength;
+            hasExceededLimitByConditionExpresssionCharactersLength = hasExceededLimitByConditionExpresssionCharactersLength || exceeded;
 
-            return exedded;
+            return exceeded;
         }
 
         private bool CascadingQuestionHasValidationExpresssion(SingleQuestion question)
@@ -224,7 +217,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return question.CascadeFromQuestionId.HasValue && !string.IsNullOrWhiteSpace(question.ConditionExpression);
         }
-
+       
         private IEnumerable<QuestionnaireVerificationError> ErrorsByConditionAndValidationExpressions(QuestionnaireDocument questionnaire)
         {
             if(hasExceededLimitByConditionExpresssionCharactersLength || hasExceededLimitByValidationExpresssionCharactersLength)
@@ -429,8 +422,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public IEnumerable<QuestionnaireVerificationError> Verify(QuestionnaireDocument questionnaire)
         {
-            questionnaire.ConnectChildrenWithParent();
+            hasExceededLimitByConditionExpresssionCharactersLength = false;
+            hasExceededLimitByValidationExpresssionCharactersLength = false;
 
+            questionnaire.ConnectChildrenWithParent();
+            
             return
                 from verifier in this.AtomicVerifiers
                 let errors = verifier.Invoke(questionnaire)
