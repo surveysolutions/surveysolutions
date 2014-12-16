@@ -152,7 +152,7 @@ namespace WB.UI.Capi.Syncronization
 
                 this.cleanUpExecutor.DeleteInterview(chunckDescription.EventSourceId);
 
-                this.OnStatusChanged(new SynchronizationEventArgsWithPercent("Pushing interview data", Operation.Push, true, (chunksCounter * 100) / dataByChuncks.Count));
+                this.OnStatusChanged(new SynchronizationEventArgsWithPercent(string.Format("Pushing chunk {0} out of {1}", chunksCounter, dataByChuncks.Count), Operation.Push, true, (chunksCounter * 100) / dataByChuncks.Count));
                 chunksCounter++;
             }
 
