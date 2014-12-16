@@ -152,11 +152,11 @@ namespace WB.UI.Capi.Syncronization
 
                 this.cleanUpExecutor.DeleteInterview(chunckDescription.EventSourceId);
 
-                this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", Operation.Push, true, (chunksCounter * 100) / dataByChuncks.Count));
+                this.OnStatusChanged(new SynchronizationEventArgsWithPercent("Pushing interview data", Operation.Push, true, (chunksCounter * 100) / dataByChuncks.Count));
                 chunksCounter++;
             }
 
-            this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing binary data", Operation.Push, true, 0));
+            this.OnStatusChanged(new SynchronizationEventArgsWithPercent("Pushing binary data", Operation.Push, true, 0));
 
             var binaryDatas = this.fileSyncRepository.GetBinaryFilesFromSyncFolder();
             int binaryDataCounter = 1;
