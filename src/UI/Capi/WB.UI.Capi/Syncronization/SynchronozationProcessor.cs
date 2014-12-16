@@ -138,7 +138,7 @@ namespace WB.UI.Capi.Syncronization
         private async Task Push()
         {
             this.ExitIfCanceled();
-            this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", Operation.Push, true, 0));
+            this.OnStatusChanged(new SynchronizationEventArgsWithPercent("Pushing interview data", Operation.Push, true, 0));
 
             var dataByChuncks = this.dataProcessor.GetItemsForPush();
             int chunksCounter = 1;
