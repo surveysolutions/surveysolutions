@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Controllers
 
                 try
                 {
-                    await this.designerQuestionnaireApiRestService.GetAsync(url: "validatecredentials", credentials: designerUserCredentials);
+                    await this.designerQuestionnaireApiRestService.PostAsync(url: "validatecredentials", credentials: designerUserCredentials);
                     
                     this.designerUserCredentials = designerUserCredentials;
 

@@ -40,17 +40,20 @@
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Newtonsoft.Json.6.0.1\lib\portable-net40+sl5+wp80+win8+monotouch+monoandroid\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
-    <Reference Include="RestSharp.MonoDroid">
-      <HintPath>..\..\..\..\ExternalsMonodroid\RestSharp.MonoDroid.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Newtonsoft.Json.6.0.5\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp.Portable">
+      <HintPath>..\..\..\..\packages\FubarCoder.RestSharp.Portable.2.0.0\lib\MonoAndroid10\RestSharp.Portable.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -63,6 +66,9 @@
     </Compile>
     <Compile Include="..\WB.Core.SharedKernel.Utils\Implementation\Services\NewtonJsonUtils.cs">
       <Link>Implementation\Services\NewtonJsonUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.SharedKernel.Utils\Implementation\Services\RestAttachment.cs">
+      <Link>Implementation\Services\RestAttachment.cs</Link>
     </Compile>
     <Compile Include="..\WB.Core.SharedKernel.Utils\Implementation\Services\RestCredentials.cs">
       <Link>Implementation\Services\RestCredentials.cs</Link>
@@ -91,6 +97,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\WB.Core.SharedKernel.Utils\app.config">
+      <Link>app.config</Link>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

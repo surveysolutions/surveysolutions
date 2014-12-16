@@ -101,13 +101,12 @@ namespace WB.UI.Designer.Api
                 });
             }
 
-            if (templateInfo.Version >
-                new QuestionnaireVersion(request.SupportedQuestionnaireVersion.Major,
-                    request.SupportedQuestionnaireVersion.Minor, request.SupportedQuestionnaireVersion.Patch))
+            var supportedClientVersion = new QuestionnaireVersion(request.SupportedVersionMajor, request.SupportedVersionMinor, request.SupportedVersionPatch);
+            if (templateInfo.Version > supportedClientVersion)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
                 {
-                    ReasonPhrase = string.Format(this.localizationService.GetString("ClientVersionLessThenDocument"), request.SupportedQuestionnaireVersion, templateInfo.Version)
+                    ReasonPhrase = string.Format(this.localizationService.GetString("ClientVersionLessThenDocument"), supportedClientVersion, templateInfo.Version)
                 });
             }
 

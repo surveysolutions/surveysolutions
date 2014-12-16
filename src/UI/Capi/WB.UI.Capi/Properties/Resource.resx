@@ -129,4 +129,10 @@
   <data name="GetSyncPackageExceptionMessage" xml:space="preserve">
     <value>Error when getting synchronizaton package. Bad internet connection or internal server error. Try again. If the problem persists, please, contact to your supervisor.</value>
   </data>
+  <data name="NoConnection" xml:space="preserve">
+    <value>No connection</value>
+  </data>
+  <data name="NoNetwork" xml:space="preserve">
+    <value>Network is unavailable</value>
+  </data>
 </root>

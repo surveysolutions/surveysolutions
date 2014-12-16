@@ -186,6 +186,12 @@
   <data name="NoClientIdentifier" xml:space="preserve">
     <value>Client Identifier was not provided</value>
   </data>
+  <data name="NoConnection" xml:space="preserve">
+    <value>No connection</value>
+  </data>
+  <data name="NoNetwork" xml:space="preserve">
+    <value>Network is unavailable</value>
+  </data>
   <data name="OldVersionOfClient" xml:space="preserve">
     <value>You must update your CAPI application before synchronizing with the Supervisor</value>
   </data>

@@ -268,6 +268,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No connection.
+        /// </summary>
+        public static string NoConnection {
+            get {
+                return ResourceManager.GetString("NoConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Network is unavailable.
+        /// </summary>
+        public static string NoNetwork {
+            get {
+                return ResourceManager.GetString("NoNetwork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You must update your CAPI application before synchronizing with the Supervisor.
         /// </summary>
         public static string OldVersionOfClient {

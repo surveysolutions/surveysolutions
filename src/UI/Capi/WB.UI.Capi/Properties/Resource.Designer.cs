@@ -79,6 +79,24 @@ namespace WB.UI.Capi.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No connection.
+        /// </summary>
+        internal static string NoConnection {
+            get {
+                return ResourceManager.GetString("NoConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Network is unavailable.
+        /// </summary>
+        internal static string NoNetwork {
+            get {
+                return ResourceManager.GetString("NoNetwork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Push of binary data failed. Try again later..
         /// </summary>
         internal static string PushBinaryDataFailed {

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Formatting;
+using System.Web;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -25,17 +26,18 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             var user = new UserView();
             var userFactory = Mock.Of<IViewFactory<UserViewInputModel, UserView>>(x => x.Load(Moq.It.IsAny<UserViewInputModel>()) == user);
             plainFileRepository = new Mock<IPlainInterviewFileStorage>();
+            
             controller = CreateSyncControllerWithFile(viewFactory: userFactory, stream: new MemoryStream(), plainFileRepository: plainFileRepository.Object, fileName: fileName, globalInfo: globalInfo);
             
         };
 
-        Because of = () => controller.PostFile(new PostFileRequest(){InterviewId = interviewId, FileName = fileName, Base64BinaryData = string.Empty});
+        Because of = () => controller.PostFile(new PostFileRequest() { InterviewId = interviewId });
         
         It should_file_be_Saved_in_plain_file_storage = () =>
             plainFileRepository.Verify(x => x.StoreInterviewBinaryData(interviewId, fileName, Moq.It.IsAny<byte[]>()), Times.Once);
 
         private static InterviewerSyncController controller;
-        
+
         private static Mock<IPlainInterviewFileStorage> plainFileRepository;
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static string fileName = "file.test";

@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
             var service = new Mock<IRestService>();
 
             service
-                .Setup(x => x.PostAsync<QuestionnaireCommunicationPackage>(Moq.It.IsAny<string>(), Moq.It.IsAny<object>(), Moq.It.IsAny<object>(), Moq.It.IsAny<RestCredentials>(), Moq.It.IsAny<CancellationToken>()))
+                .Setup(x => x.PostAsync<QuestionnaireCommunicationPackage>(Moq.It.IsAny<string>(), Moq.It.IsAny<object>(), Moq.It.IsAny<RestCredentials>(), Moq.It.IsAny<CancellationToken>()))
                 .Throws(new RestException(someFaultReason));
 
             controller = CreateDesignerQuestionnairesApiController(
@@ -39,8 +39,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
                 supportedVersionProvider: versionProvider.Object);
         };
 
-        Because of = () =>
-            response = controller.GetQuestionnaire(request);
+        Because of = async () =>
+            response = await controller.GetQuestionnaire(request);
 
         It should_handle_exception_and_set_response_status_IsSuccess_in_true = () => 
             response.IsSuccess.ShouldBeTrue();
