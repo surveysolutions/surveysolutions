@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using Main.Core.Documents;
@@ -65,18 +66,18 @@ namespace WB.UI.Headquarters.Controllers
             HttpContext.Current.Session[globalInfoProvider.GetCurrentUser().Name] = designerUserCredentials;
         }
 
-        public DesignerQuestionnairesView QuestionnairesList(DesignerQuestionnairesListViewModel data)
+        public async Task<DesignerQuestionnairesView> QuestionnairesList(DesignerQuestionnairesListViewModel data)
         {
-            var list = this.restService.PostAsync<PagedQuestionnaireCommunicationPackage>(
+            var list = await this.restService.PostAsync<PagedQuestionnaireCommunicationPackage>(
                 url: "pagedquestionnairelist",
                 credentials: this.designerUserCredentials, 
-                requestQueryString: new QuestionnaireListRequest()
+                request: new QuestionnaireListRequest()
                 {
                     Filter = data.Request.Filter,
                     PageIndex = data.Pager.Page,
                     PageSize = data.Pager.PageSize,
                     SortOrder = data.SortOrder.GetOrderRequestString()
-                }).Result;
+                });
 
             return new DesignerQuestionnairesView()
                 {
@@ -87,26 +88,22 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        public QuestionnaireVerificationResponse GetQuestionnaire(ImportQuestionnaireRequest request)
+        public async Task<QuestionnaireVerificationResponse> GetQuestionnaire(ImportQuestionnaireRequest request)
         {
             try
             {
                 var supportedVersion = this.supportedVersionProvider.GetSupportedQuestionnaireVersion();
 
-                var docSource = this.restService.PostAsync<QuestionnaireCommunicationPackage>(
+                var docSource = await this.restService.PostAsync<QuestionnaireCommunicationPackage>(
                     url: "questionnaire",
                     credentials: designerUserCredentials,
-                    requestBody: new DownloadQuestionnaireRequest()
+                    request: new DownloadQuestionnaireRequest()
                     {
                         QuestionnaireId = request.QuestionnaireId,
-                        SupportedQuestionnaireVersion =
-                            new QuestionnaireVersion()
-                            {
-                                Major = supportedVersion.SupportedQuestionnaireVersionMajor,
-                                Minor = supportedVersion.SupportedQuestionnaireVersionMinor,
-                                Patch = supportedVersion.SupportedQuestionnaireVersionPatch
-                            }
-                    }).Result;
+                        SupportedVersionMajor = supportedVersion.SupportedQuestionnaireVersionMajor,
+                        SupportedVersionMinor = supportedVersion.SupportedQuestionnaireVersionMinor,
+                        SupportedVersionPatch = supportedVersion.SupportedQuestionnaireVersionPatch
+                    });
 
                 var document = this.zipUtils.DecompressString<QuestionnaireDocument>(docSource.Questionnaire);
 
