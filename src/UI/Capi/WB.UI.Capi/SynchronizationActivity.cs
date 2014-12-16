@@ -257,6 +257,7 @@ namespace WB.UI.Capi
         {
             base.OnStart();
             this.CreateActionBar();
+            this.PrepareUI();
         }
 
         private async void StartSynctionization(ISyncAuthenticator authenticator, EventHandler synchronizerProcessFinished)
