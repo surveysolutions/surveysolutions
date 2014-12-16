@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using CAPI.Android.Core.Model.Authorization;
@@ -32,7 +33,7 @@ namespace WB.UI.Capi.Implementations.Services
                 url: "api/InterviewerSync/GetHandshakePackage",
                 credentials: new RestCredentials() {Login = credentials.Login, Password = credentials.Password},
                 token: token,
-                requestQueryString: new HandshakePackageRequest()
+                request: new HandshakePackageRequest()
                 {
                     ClientId = this.interviewerSettings.GetInstallationId(),
                     Version = this.interviewerSettings.GetApplicationVersionCode(),
@@ -49,7 +50,7 @@ namespace WB.UI.Capi.Implementations.Services
                 url: "api/InterviewerSync/GetARKeys",
                 credentials: new RestCredentials() {Login = credentials.Login, Password = credentials.Password},
                 token: token,
-                requestQueryString: new SyncItemsMetaContainerRequest()
+                request: new SyncItemsMetaContainerRequest()
                 {
                     ClientRegistrationId = this.interviewerSettings.GetClientRegistrationId().Value,
                     LastSyncedPackageId = lastKnownPackageId
@@ -67,7 +68,7 @@ namespace WB.UI.Capi.Implementations.Services
                 url: "api/InterviewerSync/GetSyncPackage",
                 credentials: new RestCredentials() {Login = credentials.Login, Password = credentials.Password},
                 token: token,
-                requestQueryString: new SyncPackageRequest()
+                request: new SyncPackageRequest()
                     {
                         PackageId = chunkId,
                         ClientRegistrationId = this.interviewerSettings.GetClientRegistrationId().Value
@@ -88,7 +89,7 @@ namespace WB.UI.Capi.Implementations.Services
                 await this.restService.PostAsync(
                     url: "api/InterviewerSync/PostPackage",
                     credentials: new RestCredentials() {Login = credentials.Login, Password = credentials.Password},
-                    requestQueryString: new PostPackageRequest() {SynchronizationPackage = synchronizationPackage},
+                    request: new PostPackageRequest() {SynchronizationPackage = synchronizationPackage},
                     token: token);
             }
             catch (Exception ex)
@@ -102,18 +103,17 @@ namespace WB.UI.Capi.Implementations.Services
             if (fileData == null) throw new ArgumentNullException("fileData");
             try
             {
-                await this.restService.PostAsync(
+                await this.restService.PostWithAttachmentsAsync(
                     url: "api/InterviewerSync/PostFile", 
                     token: token,
                     credentials: new RestCredentials() {Login = credentials.Login, Password = credentials.Password},
-                    requestBody: new PostFileRequest()
+                    request: new PostFileRequest()
                     {
-                        InterviewId = interviewId,
-                        FileName = fileName,
-                        Base64BinaryData = Convert.ToBase64String(fileData)
-                    });
+                        InterviewId = interviewId
+                    },
+                    attachments: new [] { new RestAttachment(){AttachmentName = "attachment", FileName = fileName, Data = fileData} });
             }
-            catch
+            catch(Exception ex)
             {
                 throw new RestException(this.localizationService.GetString("PushBinaryDataFailed"));
             }
@@ -125,14 +125,14 @@ namespace WB.UI.Capi.Implementations.Services
                 url: "api/InterviewerSync/GetPacakgeIdByTimeStamp",
                 credentials: new RestCredentials() {Login = credentials.Login, Password = credentials.Password},
                 token: token,
-                requestQueryString: timestamp);
+                request: timestamp);
         }
 
         public Task<bool> NewVersionAvailableAsync(CancellationToken token = default(CancellationToken))
         {
             return this.restService.GetAsync<bool>(
                 url: "api/InterviewerSync/CheckNewVersion",
-                requestQueryString: new {versionCode = this.interviewerSettings.GetApplicationVersionCode()},
+                request: new {versionCode = this.interviewerSettings.GetApplicationVersionCode()},
                 token: token);
         }
     }

@@ -1,5 +1,5 @@
-﻿using RestSharp;
-using RestSharp.Deserializers;
+﻿using RestSharp.Portable;
+using RestSharp.Portable.Deserializers;
 using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.Core.SharedKernel.Utils.Implementation.Services
@@ -15,11 +15,7 @@ namespace WB.Core.SharedKernel.Utils.Implementation.Services
 
         public T Deserialize<T>(IRestResponse response)
         {
-            return this.jsonUtils.Deserrialize<T>(response.Content);
+            return this.jsonUtils.Deserrialize<T>(response.RawBytes);
         }
-
-        public string RootElement { get; set; }
-        public string Namespace { get; set; }
-        public string DateFormat { get; set; }
     }
 }

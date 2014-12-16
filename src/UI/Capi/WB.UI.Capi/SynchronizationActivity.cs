@@ -35,7 +35,6 @@ using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Services;
 using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization;
-using WB.UI.Capi.Utils;
 using WB.UI.Shared.Android.Extensions;
 
 namespace WB.UI.Capi
@@ -263,12 +262,6 @@ namespace WB.UI.Capi
         private async void StartSynctionization(ISyncAuthenticator authenticator, EventHandler synchronizerProcessFinished)
         {
             if (this.progressDialog != null) return;
-
-            if (!this.networkService.IsNetworkEnabled())
-            {
-                Toast.MakeText(this, "Network is unavailable", ToastLength.Long).Show();
-                return;
-            }
 
             this.PrepareUI();
             try

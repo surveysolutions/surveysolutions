@@ -121,9 +121,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Adapters\QuestionnaireListAdapter.cs" />
+    <Compile Include="Properties\Resource.Designer.cs">
+      <DependentUpon>Resource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="QuestionnareAssemblyTesterFileAccessor.cs" />
     <Compile Include="Bootstrap\PictureChooserPluginBootstrap.cs" />
     <Compile Include="RestServiceSettings.cs" />
+    <Compile Include="Services\LocalizationService.cs" />
     <Compile Include="TesterLoggingModule.cs" />
     <Compile Include="AndroidTesterModelModule.cs" />
     <Compile Include="App.cs" />
@@ -247,6 +253,13 @@
       <Project>{b9af365d-f3c9-423a-86e2-9c3e0c1ac402}</Project>
       <Name>WB.Core.GenericSubdomains.Utils</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

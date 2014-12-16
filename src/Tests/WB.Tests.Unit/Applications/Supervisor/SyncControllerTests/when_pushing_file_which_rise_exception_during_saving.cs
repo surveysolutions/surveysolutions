@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Web;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.ReadSide;
@@ -20,13 +21,13 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             plainFileRepository = new Mock<IPlainInterviewFileStorage>();
             plainFileRepository.Setup(x => x.StoreInterviewBinaryData(interviewId, Moq.It.IsAny<string>(), Moq.It.IsAny<byte[]>()))
                 .Throws<ArgumentException>();
-
+            
             controller = CreateSyncControllerWithFile(viewFactory: userFactory, stream: new MemoryStream(), plainFileRepository: plainFileRepository.Object, fileName: fileName);
         
         };
 
         Because of = () =>
-            exception = Catch.Exception(() => controller.PostFile(new PostFileRequest() { InterviewId = interviewId, FileName = fileName, Base64BinaryData = string.Empty }));
+            exception = Catch.Exception(() => controller.PostFile(new PostFileRequest() { InterviewId = interviewId }));
 
         It should_exception_not_be_null = () =>
             exception.ShouldNotBeNull();

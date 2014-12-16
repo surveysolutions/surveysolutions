@@ -14,6 +14,7 @@ using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernel.Utils.Implementation.Services;
 using WB.Core.SharedKernel.Utils.Services.Rest;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.UI.QuestionnaireTester.Services;
 
 namespace WB.UI.QuestionnaireTester
 {
@@ -43,6 +44,7 @@ namespace WB.UI.QuestionnaireTester
             this.Bind<IWaitService>().To<WaitService>().InSingletonScope();
             this.Bind<IPlainStorageAccessor<QuestionnaireDocument>>().ToConstant(plainQuestionnaireStore);
             this.Bind<IRestServiceSettings>().To<RestServiceSettings>().InSingletonScope();
+            this.Bind<ILocalizationService>().To<LocalizationService>().InSingletonScope();
         }
     }
 }

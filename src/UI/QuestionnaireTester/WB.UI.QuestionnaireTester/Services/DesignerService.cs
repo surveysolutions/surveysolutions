@@ -6,7 +6,6 @@ using WB.Core.SharedKernel.Utils.Implementation.Services;
 using WB.Core.SharedKernel.Utils.Services.Rest;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.QuestionnaireTester.Authentication;
-using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion;
 
 namespace WB.UI.QuestionnaireTester.Services
 {
@@ -48,16 +47,13 @@ namespace WB.UI.QuestionnaireTester.Services
             return this.restService.PostAsync<QuestionnaireCommunicationPackage>(
                 url: "questionnaire",
                 credentials: new RestCredentials() {Login = remoteUser.UserName, Password = remoteUser.Password},
-                requestBody: new DownloadQuestionnaireRequest()
+                request: new DownloadQuestionnaireRequest()
                 {
                     QuestionnaireId = id,
-                    SupportedQuestionnaireVersion =
-                        new QuestionnaireVersion()
-                        {
-                            Major = supportedVersion.Major,
-                            Minor = supportedVersion.Minor,
-                            Patch = supportedVersion.Patch
-                        }
+                    SupportedVersionMajor = supportedVersion.Major,
+                    SupportedVersionMinor = supportedVersion.Minor,
+                    SupportedVersionPatch = supportedVersion.Patch
+
                 }, token: cancellationToken);
         }
     }

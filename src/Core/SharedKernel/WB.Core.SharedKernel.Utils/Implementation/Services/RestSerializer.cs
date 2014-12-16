@@ -1,4 +1,6 @@
-﻿using RestSharp.Serializers;
+﻿using System.Net.Http.Headers;
+using System.Text;
+using RestSharp.Portable.Serializers;
 using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.Core.SharedKernel.Utils.Implementation.Services
@@ -10,18 +12,14 @@ namespace WB.Core.SharedKernel.Utils.Implementation.Services
         public RestSerializer(IJsonUtils jsonUtils)
         {
             this.jsonUtils = jsonUtils;
-            this.ContentType = "application/json";
-            this.RootElement = "request";
+            this.ContentType = new MediaTypeHeaderValue("application/json") {CharSet = Encoding.UTF8.WebName};
         }
 
-        public string Serialize(object payload)
+        public byte[] Serialize(object payload)
         {
-            return this.jsonUtils.GetItemAsContent(payload);
+            return this.jsonUtils.SerializeToByteArray(payload);
         }
 
-        public string RootElement { get; set; }
-        public string Namespace { get; set; }
-        public string DateFormat { get; set; }
-        public string ContentType { get; set; }
+        public MediaTypeHeaderValue ContentType { get; set; }
     }
 }

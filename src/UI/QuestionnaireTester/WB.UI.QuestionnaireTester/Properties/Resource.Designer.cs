@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WB.UI.Capi.Properties {
+namespace WB.UI.QuestionnaireTester.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace WB.UI.Capi.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Capi.Properties.Resource", typeof(Resource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.QuestionnaireTester.Properties.Resource", typeof(Resource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,24 +61,6 @@ namespace WB.UI.Capi.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error on item list receiving..
-        /// </summary>
-        internal static string ErrorOnItemListReceiving {
-            get {
-                return ResourceManager.GetString("ErrorOnItemListReceiving", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error when getting synchronizaton package. Bad internet connection or internal server error. Try again. If the problem persists, please, contact to your supervisor..
-        /// </summary>
-        internal static string GetSyncPackageExceptionMessage {
-            get {
-                return ResourceManager.GetString("GetSyncPackageExceptionMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to No connection.
         /// </summary>
         internal static string NoConnection {
@@ -93,24 +75,6 @@ namespace WB.UI.Capi.Properties {
         internal static string NoNetwork {
             get {
                 return ResourceManager.GetString("NoNetwork", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Push of binary data failed. Try again later..
-        /// </summary>
-        internal static string PushBinaryDataFailed {
-            get {
-                return ResourceManager.GetString("PushBinaryDataFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Push failed. Try again later..
-        /// </summary>
-        internal static string PushFailed {
-            get {
-                return ResourceManager.GetString("PushFailed", resourceCulture);
             }
         }
     }

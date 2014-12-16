@@ -1,30 +1,51 @@
-﻿using Newtonsoft.Json;
+﻿using System.IO;
+using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.Core.SharedKernel.Utils.Implementation.Services
 {
     public class NewtonJsonUtils : IJsonUtils
     {
-        static JsonSerializerSettings JsonSerializerSettings
+        private readonly JsonSerializer jsonSerializer;
+        private readonly JsonSerializerSettings jsonSerializerSetings;
+
+        public NewtonJsonUtils()
         {
-            get
+            this.jsonSerializerSetings = new JsonSerializerSettings
             {
-                return new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.Objects,
-                    NullValueHandling = NullValueHandling.Ignore,
-                    FloatParseHandling = FloatParseHandling.Decimal
-                };
-            }
+                TypeNameHandling = TypeNameHandling.Objects,
+                NullValueHandling = NullValueHandling.Ignore,
+                FloatParseHandling = FloatParseHandling.Decimal
+            };
+
+            this.jsonSerializer = JsonSerializer.Create(this.jsonSerializerSetings);
         }
+
         public string GetItemAsContent(object item)
         {
-            return JsonConvert.SerializeObject(item, Formatting.None, JsonSerializerSettings);
+            return JsonConvert.SerializeObject(item, Formatting.None, this.jsonSerializerSetings);
+        }
+
+        public byte[] SerializeToByteArray(object payload)
+        {
+            var output = new MemoryStream();
+            using (var writer = new StreamWriter(output))
+                jsonSerializer.Serialize(writer, payload);
+            return output.ToArray();
         }
 
         public T Deserrialize<T>(string payload)
         {
-            return JsonConvert.DeserializeObject<T>(payload, JsonSerializerSettings);
+            return JsonConvert.DeserializeObject<T>(payload, this.jsonSerializerSetings);
+        }
+
+        public T Deserrialize<T>(byte[] payload)
+        {
+            var input = new MemoryStream(payload);
+            using (var reader = new StreamReader(input))
+            {
+                return jsonSerializer.Deserialize<T>(new JsonTextReader(reader));
+            }
         }
     }
 }

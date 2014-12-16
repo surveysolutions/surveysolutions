@@ -259,7 +259,6 @@
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_handshaking_capi_with_supervisor_and_capi_version_is_greater.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_handshaking_capi_with_supervisor_and_capi_version_is_lesser.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_pushing_file_which_rise_exception_during_saving.cs" />
-    <Compile Include="Applications\Supervisor\SyncControllerTests\when_pushing_file_with_invalid_credentions.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_pushing_file_with_valid_file.cs" />
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="BoundedContexts\Capi\CapiDataSynchronizationServiceTests\CapiDataSynchronizationServiceTestContext.cs" />

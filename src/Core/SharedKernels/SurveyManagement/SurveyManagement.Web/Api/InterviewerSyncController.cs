@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Web;
 using System.Web.Hosting;
 using System.Web.Http;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
@@ -138,12 +141,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpPost]
         [ApiBasicAuth]
-        public void PostFile(PostFileRequest request)
+        public async void PostFile([FromUri]PostFileRequest request)
         {
             if (request == null) throw new ArgumentNullException("request");
 
-            byte[] buffer = Convert.FromBase64String(request.Base64BinaryData);
-            plainFileRepository.StoreInterviewBinaryData(request.InterviewId, request.FileName, buffer);
+            var provider = new MultipartMemoryStreamProvider();
+            await Request.Content.ReadAsMultipartAsync(provider);
+            foreach (var file in provider.Contents)
+            {
+                var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
+                var buffer = await file.ReadAsByteArrayAsync();
+
+                plainFileRepository.StoreInterviewBinaryData(request.InterviewId, filename, buffer);
+            }
+            
         }
 
         [HttpPost]
