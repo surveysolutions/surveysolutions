@@ -1928,10 +1928,6 @@
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
-      <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
-      <Name>WB.Core.SharedKernel.Utils</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\Synchronization\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
       <Project>{75d70eb8-1e56-4bfe-816c-5231112f64c0}</Project>
       <Name>WB.Core.Synchronization</Name>

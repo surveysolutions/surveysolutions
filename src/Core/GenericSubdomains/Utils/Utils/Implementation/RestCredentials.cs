@@ -1,4 +1,4 @@
-namespace WB.Core.SharedKernel.Utils.Implementation.Services
+namespace WB.Core.GenericSubdomains.Utils.Implementation
 {
     public class RestCredentials
     {

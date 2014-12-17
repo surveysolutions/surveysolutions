@@ -2,7 +2,7 @@
 using RestSharp.Portable.Deserializers;
 using WB.Core.GenericSubdomains.Utils.Services;
 
-namespace WB.Core.SharedKernel.Utils.Implementation.Services
+namespace WB.Core.GenericSubdomains.Utils.Implementation
 {
     internal class RestDeserializer : IDeserializer
     {
