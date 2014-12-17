@@ -94,6 +94,16 @@ namespace WB.UI.QuestionnaireTester
 
         private const string DesignerPath = "DesignerPath";
 
+        public static string GetPathToDesigner()
+        {
+            ISharedPreferences prefs = Context.GetSharedPreferences(Context.Resources.GetString(Resource.String.ApplicationName), FileCreationMode.Private);
+            var pathToDesigner = prefs.GetString(DesignerPath, Context.Resources.GetString(Resource.String.DesignerPath));
+            #if DEBUG
+            //pathToDesigner = "http://172.29.124.72/Designer/api/tester";
+            #endif
+            return pathToDesigner;
+        }
+
         public static void SetPathToDesigner(string path)
         {
             ISharedPreferences prefs = Application.Context.GetSharedPreferences(Context.Resources.GetString(Resource.String.ApplicationName),
