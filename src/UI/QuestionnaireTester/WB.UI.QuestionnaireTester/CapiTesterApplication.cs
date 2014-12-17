@@ -229,7 +229,7 @@ namespace WB.UI.QuestionnaireTester
                 new NcqrsModule().AsNinject(),
                 new CapiTesterCoreRegistry(),
                 new CapiBoundedContextModule(),
-                new GenericSubdomainsModule(),
+                new AndroidSharedModule(),
                 new TesterLoggingModule(),
                 new AndroidTesterModelModule(),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false, basePath: basePath),
