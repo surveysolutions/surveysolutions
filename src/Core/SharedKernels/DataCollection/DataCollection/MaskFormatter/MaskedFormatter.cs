@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
+namespace WB.Core.SharedKernels.DataCollection.MaskFormatter
 {
     public class MaskedFormatter : IMaskedFormatter
     {
@@ -24,8 +24,8 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
             this.mask = mask;
             this.PlaceholderCharacter = placeholderCharacter;
             this.Placeholder = placeholder;
-            this.InvalidCharacters = invalidCharacters ?? placeholderCharacter.ToString();
-            this.ValidCharacters = validCharacters;
+            this.invalidCharacters = invalidCharacters ?? placeholderCharacter.ToString();
+            this.validCharacters = validCharacters;
             this.UpdateInternalMask();
         }
 
@@ -34,24 +34,21 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
             get { return this.mask; }
         }
 
-        public string ValidCharacters { get;private set; }
+        private readonly string validCharacters;
+        private readonly string invalidCharacters;
+        private string Placeholder { get; set; }
+        private char PlaceholderCharacter { get; set; }
 
-        public string InvalidCharacters { get; private set; }
-
-        public string Placeholder { get; private set; }
-
-        public char PlaceholderCharacter { get; private set; }
-
-        public string FormatValue(string value, ref int oldCursorPosition)
+        public string FormatValue(string value, ref int cursorPosition)
         {
-            bool isIncreasing = IsIncreasedValue(value);
+            bool isIncreasing = this.IsIncreasedValue(value);
 
             if (isIncreasing)
             {
-                oldCursorPosition = FixCursorPosition(value, oldCursorPosition);
+                cursorPosition = this.FixCursorPosition(value, cursorPosition);
             }
 
-            value = AddMaskedCharacters(value, isIncreasing, oldCursorPosition);
+            value = this.AddMaskedCharacters(value, isIncreasing, cursorPosition);
 
             var result = new StringBuilder();
 
@@ -65,7 +62,7 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
                 }
             }
 
-            oldCursorPosition = GetNewCursorPosition(value, isIncreasing, oldCursorPosition);
+            cursorPosition = this.GetNewCursorPosition(value, isIncreasing, cursorPosition);
 
             return result.ToString();
         }
@@ -75,7 +72,7 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
             if (value.Length > 0 && oldCursorPosition == 0)
                 return value.Length;
 
-            return oldCursorPosition;
+            return Math.Min(oldCursorPosition, this.maskChars.Length);
         }
 
         private bool IsIncreasedValue(string value)
@@ -161,26 +158,26 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
                     {
                         case DigitKey:
                         {
-                            temp.Add(new DigitMaskCharacter(this.InvalidCharacters, this.PlaceholderCharacter,
-                                this.ValidCharacters));
+                            temp.Add(new DigitMaskCharacter(this.invalidCharacters, this.PlaceholderCharacter,
+                                this.validCharacters));
                             break;
                         }
                         case CharacterKey:
                         {
-                            temp.Add(new CharCharacter(this.InvalidCharacters, this.PlaceholderCharacter,
-                                this.ValidCharacters));
+                            temp.Add(new CharCharacter(this.invalidCharacters, this.PlaceholderCharacter,
+                                this.validCharacters));
                             break;
                         }
                         case AnythingKey:
                         {
-                            temp.Add(new MaskCharacter(InvalidCharacters, this.PlaceholderCharacter,
-                                this.ValidCharacters));
+                            temp.Add(new MaskCharacter(this.invalidCharacters, this.PlaceholderCharacter,
+                                this.validCharacters));
                             break;
                         }
                         default:
                         {
-                            temp.Add(new LiteralCharacter(this.InvalidCharacters, this.PlaceholderCharacter,
-                                this.ValidCharacters, maskChar));
+                            temp.Add(new LiteralCharacter(this.invalidCharacters, this.PlaceholderCharacter,
+                                this.validCharacters, maskChar));
                             break;
                         }
                     }

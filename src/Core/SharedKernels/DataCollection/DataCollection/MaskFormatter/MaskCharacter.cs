@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
+namespace WB.Core.SharedKernels.DataCollection.MaskFormatter
 {
     internal class MaskCharacter
     {

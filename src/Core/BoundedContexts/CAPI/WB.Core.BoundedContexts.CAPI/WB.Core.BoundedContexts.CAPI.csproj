@@ -96,10 +96,6 @@
     <Compile Include="Services\ICapiSynchronizationCacheService.cs" />
     <Compile Include="Services\INavigationService.cs" />
     <Compile Include="Services\ISyncPackageRestoreService.cs" />
-    <Compile Include="UI\MaskFormatter\EmptyMaskFormatter.cs" />
-    <Compile Include="UI\MaskFormatter\IMaskedFormatter.cs" />
-    <Compile Include="UI\MaskFormatter\MaskCharacter.cs" />
-    <Compile Include="UI\MaskFormatter\MaskedFormatter.cs" />
     <Compile Include="ValueObjects\CapiPages.cs" />
     <Compile Include="Views\InterviewDetails\AnswerViewModel.cs" />
     <Compile Include="Views\InterviewDetails\BreadCrumbsUtils.cs" />
