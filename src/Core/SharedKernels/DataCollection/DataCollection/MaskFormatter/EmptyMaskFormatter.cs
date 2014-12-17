@@ -1,4 +1,4 @@
-namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
+namespace WB.Core.SharedKernels.DataCollection.MaskFormatter
 {
     public class EmptyMaskFormatter : IMaskedFormatter
     {

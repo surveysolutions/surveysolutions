@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
+namespace WB.Core.SharedKernels.DataCollection.MaskFormatter
 {
     public class MaskedFormatter : IMaskedFormatter
     {
@@ -41,14 +41,14 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
 
         public string FormatValue(string value, ref int cursorPosition)
         {
-            bool isIncreasing = IsIncreasedValue(value);
+            bool isIncreasing = this.IsIncreasedValue(value);
 
             if (isIncreasing)
             {
-                cursorPosition = FixCursorPosition(value, cursorPosition);
+                cursorPosition = this.FixCursorPosition(value, cursorPosition);
             }
 
-            value = AddMaskedCharacters(value, isIncreasing, cursorPosition);
+            value = this.AddMaskedCharacters(value, isIncreasing, cursorPosition);
 
             var result = new StringBuilder();
 
@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
                 }
             }
 
-            cursorPosition = GetNewCursorPosition(value, isIncreasing, cursorPosition);
+            cursorPosition = this.GetNewCursorPosition(value, isIncreasing, cursorPosition);
 
             return result.ToString();
         }
@@ -170,7 +170,7 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
                         }
                         case AnythingKey:
                         {
-                            temp.Add(new MaskCharacter(invalidCharacters, this.PlaceholderCharacter,
+                            temp.Add(new MaskCharacter(this.invalidCharacters, this.PlaceholderCharacter,
                                 this.validCharacters));
                             break;
                         }

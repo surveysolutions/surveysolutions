@@ -1,10 +1,9 @@
-using System;
 using Android.Text;
 using Android.Widget;
 using Java.Lang;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.Capi.UI.MaskFormatter;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.MaskFormatter;
 using String = System.String;
 
 namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
