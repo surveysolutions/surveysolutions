@@ -19,6 +19,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CascadingComboboxTests
             cascadingCombobox = CreateCascadingComboboxQuestionViewModel(getAnswerOptions);
 
             cascadingCombobox.HandleAnswerListChange();
+            cascadingCombobox.PropertyChanged += cascadingCombobox_PropertyChanged;
         };
 
         Because of = () =>
@@ -30,6 +31,17 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CascadingComboboxTests
         It should_set_answered_status = () =>
             cascadingCombobox.Status.ShouldEqual(QuestionStatus.Answered | QuestionStatus.Enabled | QuestionStatus.ParentEnabled | QuestionStatus.Valid);
 
+        It should_raise_status_changed = () =>
+           statusChangedRaised.ShouldBeTrue();
+
         private static CascadingComboboxQuestionViewModel cascadingCombobox;
+
+        private static bool statusChangedRaised = false;
+
+        private static void cascadingCombobox_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Status")
+                statusChangedRaised = true;
+        }
     }
 }

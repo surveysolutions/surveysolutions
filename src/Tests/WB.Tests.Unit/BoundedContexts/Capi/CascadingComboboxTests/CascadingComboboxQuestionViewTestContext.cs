@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CascadingComboboxTests
     {
         protected static CascadingComboboxQuestionViewModel CreateCascadingComboboxQuestionViewModel(Func<decimal[], object, IEnumerable<AnswerViewModel>> getAnswerOptions)
         {
-            return new CascadingComboboxQuestionViewModel(
+            var model= new CascadingComboboxQuestionViewModel(
                 new InterviewItemId(Guid.NewGuid()),
                 new ValueVector<Guid>(), 
                 "Hello",
@@ -24,6 +24,10 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CascadingComboboxTests
                 "Validation Message",
                 "variable",
                 new string[0]);
+
+            model.ShouldAlwaysRaiseInpcOnUserInterfaceThread(false);
+
+            return model;
         }
     }
 }
