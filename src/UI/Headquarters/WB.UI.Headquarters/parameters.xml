@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <parameters>
    <parameter name="The Event Store Provider"
       description="Where application will store events"
@@ -75,7 +75,7 @@
    <parameter name="Designer Endpoint Address" description="Please provide Designer address from which do import templates" defaultValue="https://localhost/Designer/PublicService.svc" tags="">
     <parameterEntry kind="XmlFile" 
       scope="\\web.config$" 
-      match="//system.serviceModel/client/endpoint/@address" />
+      match="/configuration/appSettings/[add[@key='DesignerAddress']/@value" />
   </parameter>
    <parameter name="Allow supervisor access"
       description="Hybrid mode with embedded supervison functionality"
