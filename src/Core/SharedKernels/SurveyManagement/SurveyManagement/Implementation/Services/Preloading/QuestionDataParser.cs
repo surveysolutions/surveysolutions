@@ -6,7 +6,7 @@ using System.Net.Mime;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Capi.UI.MaskFormatter;
+using WB.Core.SharedKernels.DataCollection.MaskFormatter;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects;
 
