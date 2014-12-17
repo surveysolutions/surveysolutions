@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
 using WB.UI.Shared.Web.Filters;
+using WB.UI.Shared.Web.Settings;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -23,8 +24,8 @@ namespace WB.UI.Headquarters.Controllers
 
         public ControlPanelController(IServiceLocator serviceLocator, IIncomePackagesRepository incomePackagesRepository,
             ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
-            IViewFactory<UserViewInputModel, UserView> userViewFactory, IPasswordHasher passwordHasher)
-            : base(serviceLocator, incomePackagesRepository, commandService, globalInfo, logger)
+            IViewFactory<UserViewInputModel, UserView> userViewFactory, IPasswordHasher passwordHasher, ISettingsProvider settingsProvider)
+            : base(serviceLocator, incomePackagesRepository, commandService, globalInfo, logger, settingsProvider)
         {
             this.userViewFactory = userViewFactory;
             this.passwordHasher = passwordHasher;

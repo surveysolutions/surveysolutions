@@ -2,6 +2,7 @@
     this.Layout = "~/Views/Shared/_ControlPanelLayout.cshtml";
     this.ViewBag.Title = "Control Panel: Settings";
 }
+@model IEnumerable<WB.UI.Shared.Web.Settings.ApplicationSetting>
 
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -13,7 +14,7 @@
                 <th>Key</th>
                 <th>Value</th>
             </tr>
-            @foreach (var setting in WB.UI.Shared.Web.Settings.SettingsProvider.GetSettings())
+            @foreach (var setting in Model)
             {
                 <tr>
                     <td>@setting.Name</td>

@@ -150,6 +150,8 @@ namespace WB.UI.Headquarters
                     int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"])));
 
 
+            kernel.Bind<ISettingsProvider>().To<SettingsProvider>();
+
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();

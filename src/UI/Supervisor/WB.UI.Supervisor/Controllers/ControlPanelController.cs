@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
 using WB.UI.Shared.Web.Filters;
+using WB.UI.Shared.Web.Settings;
 
 namespace WB.UI.Supervisor.Controllers
 {
@@ -21,7 +22,7 @@ namespace WB.UI.Supervisor.Controllers
     public class ControlPanelController : WB.Core.SharedKernels.SurveyManagement.Web.Controllers.ControlPanelController
     {
         public ControlPanelController(IServiceLocator serviceLocator, IIncomePackagesRepository incomePackagesRepository,
-            ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger)
-            : base(serviceLocator, incomePackagesRepository, commandService, globalInfo, logger) {}
+            ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger, ISettingsProvider settingsProvider)
+            : base(serviceLocator, incomePackagesRepository, commandService, globalInfo, logger, settingsProvider) { }
     }
 }
