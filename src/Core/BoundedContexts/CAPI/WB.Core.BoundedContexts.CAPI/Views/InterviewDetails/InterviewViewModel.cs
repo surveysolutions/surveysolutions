@@ -908,8 +908,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         protected IEnumerable<QuestionnairePropagatedScreenViewModel> CollectPropagatedScreen(InterviewItemId rosterId)
         {
-            var allPropagatedScreens = this.Screens
-                .Select(s => s.Value)
+            var allPropagatedScreens = this.Screens.Values
+                .ToList()
                 .OfType<QuestionnairePropagatedScreenViewModel>()
                 .Where(
                     s =>

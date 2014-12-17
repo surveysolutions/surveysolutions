@@ -64,6 +64,8 @@ namespace WB.UI.Capi.Settings
         }
 
         public void SetLastReceivedPackageId(string lastReceivedPackageId)
+            syncPoint = syncPoint.Trim();
+
         {
             SetSetting(SettingsNames.LastTimestamp, lastReceivedPackageId);
         }

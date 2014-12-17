@@ -157,7 +157,7 @@
     <value>Provided value is null or empty</value>
   </data>
   <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
-    <value>Categorical question value not allowed.</value>
+    <value>[PL0014] Provided question value not allowed.</value>
   </data>
   <data name="PL0015_QuestionTypeIsIncorrect" xml:space="preserve">
     <value>[PL0015] Type of question is not correct.</value>
