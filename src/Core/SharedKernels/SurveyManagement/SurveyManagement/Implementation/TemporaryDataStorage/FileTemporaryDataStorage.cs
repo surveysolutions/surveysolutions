@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataSto
 
             lock (GetLockObject(path))
             {
-                File.WriteAllText(this.GetItemFileName(path, name), this.jsonSerrializer.GetItemAsContent(payload));
+                File.WriteAllText(this.GetItemFileName(path, name), this.jsonSerrializer.Serialize(payload));
             }
         }
 
@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataSto
                 fileContent = File.ReadAllText(fullFilePath);
                 
             }
-            return this.jsonSerrializer.Deserrialize<T>(fileContent);
+            return this.jsonSerrializer.Deserialize<T>(fileContent);
         }
 
         private static object GetLockObject(string path)

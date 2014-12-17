@@ -150,7 +150,7 @@ namespace WB.UI.QuestionnaireTester
             try 
             {
                 string content = Archive.DecompressString(template.Questionnaire);
-                var questionnaireDocument = ServiceLocator.Current.GetInstance<IJsonUtils>().Deserrialize<QuestionnaireDocument>(content);
+                var questionnaireDocument = ServiceLocator.Current.GetInstance<IJsonUtils>().Deserialize<QuestionnaireDocument>(content);
 
                 var assemblyFileAccessor = ServiceLocator.Current.GetInstance<IQuestionnaireAssemblyFileAccessor>();
                 assemblyFileAccessor.StoreAssembly(questionnaireDocument.PublicKey, 0, template.QuestionnaireAssembly);

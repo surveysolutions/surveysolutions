@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Cirrious.MvvmCross.ViewModels;
 using Microsoft.Practices.ServiceLocation;
@@ -75,7 +76,7 @@ namespace WB.UI.Capi.Views
                     {"PasswordHash", passwordHasher.Hash(Password)}
                 });
             }
-            catch
+            catch(ArgumentException ex)
             {
                 this.CanSetSyncEndpoint = false;
             }

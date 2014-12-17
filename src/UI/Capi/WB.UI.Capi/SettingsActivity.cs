@@ -342,7 +342,7 @@ namespace WB.UI.Capi
                     interviewerSettings.SetSyncAddressPoint(editSettingsSync.Text);
                     editSettingsSync.SetBackgroundColor(Color.LightGreen);
                 }
-                catch
+                catch(ArgumentException ex)
                 {
                     editSettingsSync.SetBackgroundColor(Color.Red);
                 }

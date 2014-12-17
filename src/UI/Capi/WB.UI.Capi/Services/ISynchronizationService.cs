@@ -14,7 +14,7 @@ namespace WB.UI.Capi.Services
         Task<SyncItem> RequestChunkAsync(SyncCredentials credentials, string chunkId, CancellationToken token);
         Task PushChunkAsync(SyncCredentials credentials, string chunkAsString, CancellationToken token);
         Task PushBinaryAsync(SyncCredentials credentials, Guid interviewId, string fileName, byte[] fileData, CancellationToken token);
-        Task<string> GetChunkIdByTimestamp(SyncCredentials credentials, long timestamp, CancellationToken token);
+        Task<string> GetChunkIdByTimestampAsync(SyncCredentials credentials, long timestamp, CancellationToken token);
         Task<bool> NewVersionAvailableAsync(CancellationToken token = default(CancellationToken));
     }
 }

@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomePackagesRepositoryT
             var @event = new AggregateRootEvent { EventTimeStamp = initialTimestamp };
 
             var jsonUtils = Mock.Of<IJsonUtils>(_
-                => _.Deserrialize<AggregateRootEvent[]>(Moq.It.IsAny<string>()) == new [] { @event });
+                => _.Deserialize<AggregateRootEvent[]>(Moq.It.IsAny<string>()) == new [] { @event });
 
             var fileSystemAccessor = Mock.Of<IFileSystemAccessor>(_
                 => _.IsFileExists(Moq.It.IsAny<string>()) == true

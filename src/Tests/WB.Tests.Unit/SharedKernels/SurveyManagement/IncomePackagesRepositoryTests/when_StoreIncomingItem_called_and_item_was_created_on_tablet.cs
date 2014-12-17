@@ -28,10 +28,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomePackagesRepositoryT
             };
 
             jsonMock = new Mock<IJsonUtils>();
-            jsonMock.Setup(x => x.Deserrialize<InterviewMetaInfo>(Moq.It.IsAny<string>()))
+            jsonMock.Setup(x => x.Deserialize<InterviewMetaInfo>(Moq.It.IsAny<string>()))
                 .Returns(interviewMetaInfo);
 
-            jsonMock.Setup(x => x.GetItemAsContent(syncItem)).Returns(contentOfSyncItem);
+            jsonMock.Setup(x => x.Serialize(syncItem)).Returns(contentOfSyncItem);
 
             commandServiceMock = new Mock<ICommandService>();
 

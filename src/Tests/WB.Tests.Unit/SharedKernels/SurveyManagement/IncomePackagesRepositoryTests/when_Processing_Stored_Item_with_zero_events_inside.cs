@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomePackagesRepositoryT
         Establish context = () =>
         {
             var jsonMock = new Mock<IJsonUtils>();
-            jsonMock.Setup(x => x.Deserrialize<AggregateRootEvent[]>(Moq.It.IsAny<string>())).Returns(new AggregateRootEvent[0]);
+            jsonMock.Setup(x => x.Deserialize<AggregateRootEvent[]>(Moq.It.IsAny<string>())).Returns(new AggregateRootEvent[0]);
 
             fileSystemAccessorMock = CreateDefaultFileSystemAccessorMock();
             fileSystemAccessorMock.Setup(x => x.IsFileExists(Moq.It.Is<string>(name => name.Contains(interviewId.ToString()))))

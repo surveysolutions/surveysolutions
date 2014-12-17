@@ -95,12 +95,12 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 => writer.GetById(interviewId.FormatGuid()) == Create.InterviewSummary());
 
             var jsonUtils = Mock.Of<IJsonUtils>(utils
-                => utils.GetItemAsContent(Moq.It.IsAny<InterviewMetaInfo>()) == "metadata json"
-                && utils.GetItemAsContent(Moq.It.IsAny<SyncItem>()) == "sync item json"
-                && utils.Deserrialize<bool>(positiveResponse) == true);
+                => utils.Serialize(Moq.It.IsAny<InterviewMetaInfo>()) == "metadata json"
+                && utils.Serialize(Moq.It.IsAny<SyncItem>()) == "sync item json"
+                && utils.Deserialize<bool>(positiveResponse) == true);
 
             Mock.Get(jsonUtils)
-                .Setup(utils => utils.GetItemAsContent(Moq.It.IsAny<AggregateRootEvent[]>()))
+                .Setup(utils => utils.Serialize(Moq.It.IsAny<AggregateRootEvent[]>()))
                 .Returns("events json")
                 .Callback<object>(entity => events = (AggregateRootEvent[]) entity);
 

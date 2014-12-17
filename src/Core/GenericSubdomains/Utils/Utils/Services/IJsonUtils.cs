@@ -2,9 +2,9 @@
 {
     public interface IJsonUtils
     {
-        string GetItemAsContent(object item);
+        string Serialize(object item);
         byte[] SerializeToByteArray(object item);
-        T Deserrialize<T>(string payload);
-        T Deserrialize<T>(byte[] payload);
+        T Deserialize<T>(string payload);
+        T Deserialize<T>(byte[] payload);
     }
 }

@@ -37,7 +37,7 @@ namespace CAPI.Android.Core.Model.SnapshotStore
             var snapshot = this.snapshots[eventSourceId];
             try
             {
-                SaveItem(eventSourceId, this.jsonUtils.GetItemAsContent(snapshot));
+                SaveItem(eventSourceId, this.jsonUtils.Serialize(snapshot));
             }
             catch (Exception)
             {
@@ -74,7 +74,7 @@ namespace CAPI.Android.Core.Model.SnapshotStore
             {
                 try
                 {
-                    snapshot = this.jsonUtils.Deserrialize<Snapshot>(item);
+                    snapshot = this.jsonUtils.Deserialize<Snapshot>(item);
                 }
                 catch (Exception)
                 {

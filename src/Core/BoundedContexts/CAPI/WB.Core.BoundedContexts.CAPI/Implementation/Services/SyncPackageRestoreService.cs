@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
                     if (!string.IsNullOrWhiteSpace(item))
                     {
                         string content = this.stringCompressor.DecompressString(item);
-                        var interview = this.jsonUtils.Deserrialize<InterviewSynchronizationDto>(content);
+                        var interview = this.jsonUtils.Deserialize<InterviewSynchronizationDto>(content);
 
                         this.commandService.Execute(new SynchronizeInterviewCommand(interview.Id, interview.UserId, interview));
 

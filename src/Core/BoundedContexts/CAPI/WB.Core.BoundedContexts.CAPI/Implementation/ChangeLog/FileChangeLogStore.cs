@@ -47,13 +47,13 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.ChangeLog
 
             var syncItem = new SyncItem()
                 {
-                    Content = this.archiver.CompressString(this.jsonUtils.GetItemAsContent(recordData)),
+                    Content = this.archiver.CompressString(this.jsonUtils.Serialize(recordData)),
                     IsCompressed = true,
                     ItemType = SyncItemType.Questionnare,
-                    MetaInfo = this.archiver.CompressString(this.jsonUtils.GetItemAsContent(metaData)),
+                    MetaInfo = this.archiver.CompressString(this.jsonUtils.Serialize(metaData)),
                     RootId = eventSourceId
                 };
-            fileSystemAccessor.WriteAllText(path, this.jsonUtils.GetItemAsContent(syncItem));
+            fileSystemAccessor.WriteAllText(path, this.jsonUtils.Serialize(syncItem));
         }
 
         public string GetChangesetContent(Guid recordId)

@@ -52,7 +52,7 @@ namespace CAPI.Android.Core.Model.ReadSideStore
                 var filePath = GetFileName(id);
                 if (!File.Exists(filePath))
                     return null;
-                memcache[id] = this.jsonUtils.Deserrialize<TEntity>(File.ReadAllText(filePath));
+                memcache[id] = this.jsonUtils.Deserialize<TEntity>(File.ReadAllText(filePath));
             }
             return memcache[id];
         }
@@ -67,7 +67,7 @@ namespace CAPI.Android.Core.Model.ReadSideStore
         public void Store(TEntity view, string id)
         {
             var path = GetFileName(id);
-            File.WriteAllText(path, this.jsonUtils.GetItemAsContent(view));
+            File.WriteAllText(path, this.jsonUtils.Serialize(view));
 
             memcache[id] = view;
         }
