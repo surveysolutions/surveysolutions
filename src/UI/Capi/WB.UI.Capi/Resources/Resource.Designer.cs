@@ -110,6 +110,7 @@ namespace WB.UI.Capi
 			global::WB.UI.Shared.Android.Resource.Layout.ScreenContentFragment = global::WB.UI.Capi.Resource.Layout.ScreenContentFragment;
 			global::WB.UI.Shared.Android.Resource.Layout.StaticTextView = global::WB.UI.Capi.Resource.Layout.StaticTextView;
 			global::WB.UI.Shared.Android.Resource.Layout.StatisticsContent = global::WB.UI.Capi.Resource.Layout.StatisticsContent;
+			global::WB.UI.Shared.Android.Resource.String.AnswerIsNotPresentInFilteredComboboxOptionsList = global::WB.UI.Capi.Resource.String.AnswerIsNotPresentInFilteredComboboxOptionsList;
 			global::WB.UI.Shared.Android.Resource.String.ApplicationName = global::WB.UI.Capi.Resource.String.ApplicationName;
 			global::WB.UI.Shared.Android.Resource.String.AreYouSureYouWantToRemoveRowFromRosterFormat = global::WB.UI.Capi.Resource.String.AreYouSureYouWantToRemoveRowFromRosterFormat;
 			global::WB.UI.Shared.Android.Resource.String.No = global::WB.UI.Capi.Resource.String.No;
@@ -630,6 +631,9 @@ namespace WB.UI.Capi
 		public partial class String
 		{
 			
+			// aapt resource value: 0x7f060005
+			public const int AnswerIsNotPresentInFilteredComboboxOptionsList = 2131099653;
+			
 			// aapt resource value: 0x7f060000
 			public const int ApplicationName = 2131099648;
 			
@@ -652,6 +656,9 @@ namespace WB.UI.Capi
 			public const int InformationPackage = 2131099666;
 			
 			// aapt resource value: 0x7f06000f
+			public const int NewHtmlLine = 2131099663;
+			
+			// aapt resource value: 0x7f06000f
 			public const int InformationPackageIsSuccessfullySent = 2131099663;
 			
 			// aapt resource value: 0x7f060014
@@ -669,6 +676,9 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f060003
 			public const int No = 2131099651;
 			
+			// aapt resource value: 0x7f06000c
+			public const int NowYouareConnectedToMobileNetwork = 2131099660;
+			
 			// aapt resource value: 0x7f060016
 			public const int NoAssignments = 2131099670;
 			
@@ -684,8 +694,8 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f060017
 			public const int PleaseCheckURLInSettingsFormat = 2131099671;
 			
-			// aapt resource value: 0x7f060009
-			public const int Send = 2131099657;
+			// aapt resource value: 0x7f06000a
+			public const int PleaseCheckURLInSettingsFormat = 2131099658;
 			
 			// aapt resource value: 0x7f060015
 			public const int SendingInformationPackage = 2131099669;
@@ -699,23 +709,23 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f060001
 			public const int Warning = 2131099649;
 			
-			// aapt resource value: 0x7f060018
-			public const int WebErrorWithStatus = 2131099672;
+			// aapt resource value: 0x7f06000b
+			public const int WebErrorWithStatus = 2131099659;
 			
 			// aapt resource value: 0x7f060002
 			public const int Yes = 2131099650;
 			
-			// aapt resource value: 0x7f06001a
-			public const int YouAreNotConnectedToAnyNetwork = 2131099674;
+			// aapt resource value: 0x7f06000d
+			public const int YouAreNotConnectedToAnyNetwork = 2131099661;
+			
+			// aapt resource value: 0x7f060007
+			public const int drawer_close = 2131099655;
 			
 			// aapt resource value: 0x7f060006
-			public const int drawer_close = 2131099654;
+			public const int drawer_open = 2131099654;
 			
-			// aapt resource value: 0x7f060005
-			public const int drawer_open = 2131099653;
-			
-			// aapt resource value: 0x7f060008
-			public const int library_name = 2131099656;
+			// aapt resource value: 0x7f060009
+			public const int library_name = 2131099657;
 			
 			static String()
 			{

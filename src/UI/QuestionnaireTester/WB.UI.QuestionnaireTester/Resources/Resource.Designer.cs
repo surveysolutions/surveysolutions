@@ -108,6 +108,7 @@ namespace WB.UI.QuestionnaireTester
 			global::WB.UI.Shared.Android.Resource.Layout.ScreenContentFragment = global::WB.UI.QuestionnaireTester.Resource.Layout.ScreenContentFragment;
 			global::WB.UI.Shared.Android.Resource.Layout.StaticTextView = global::WB.UI.QuestionnaireTester.Resource.Layout.StaticTextView;
 			global::WB.UI.Shared.Android.Resource.Layout.StatisticsContent = global::WB.UI.QuestionnaireTester.Resource.Layout.StatisticsContent;
+			global::WB.UI.Shared.Android.Resource.String.AnswerIsNotPresentInFilteredComboboxOptionsList = global::WB.UI.QuestionnaireTester.Resource.String.AnswerIsNotPresentInFilteredComboboxOptionsList;
 			global::WB.UI.Shared.Android.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
 			global::WB.UI.Shared.Android.Resource.String.AreYouSureYouWantToRemoveRowFromRosterFormat = global::WB.UI.QuestionnaireTester.Resource.String.AreYouSureYouWantToRemoveRowFromRosterFormat;
 			global::WB.UI.Shared.Android.Resource.String.No = global::WB.UI.QuestionnaireTester.Resource.String.No;
@@ -502,17 +503,20 @@ namespace WB.UI.QuestionnaireTester
 		public partial class String
 		{
 			
+			// aapt resource value: 0x7f060005
+			public const int AnswerIsNotPresentInFilteredComboboxOptionsList = 2131099653;
+			
 			// aapt resource value: 0x7f060000
 			public const int ApplicationName = 2131099648;
 			
 			// aapt resource value: 0x7f060004
 			public const int AreYouSureYouWantToRemoveRowFromRosterFormat = 2131099652;
 			
-			// aapt resource value: 0x7f060009
-			public const int DesignerPath = 2131099657;
+			// aapt resource value: 0x7f06000a
+			public const int DesignerPath = 2131099658;
 			
-			// aapt resource value: 0x7f060007
-			public const int Hello = 2131099655;
+			// aapt resource value: 0x7f060008
+			public const int Hello = 2131099656;
 			
 			// aapt resource value: 0x7f060003
 			public const int No = 2131099651;
@@ -538,14 +542,14 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f060002
 			public const int Yes = 2131099650;
 			
+			// aapt resource value: 0x7f060007
+			public const int drawer_close = 2131099655;
+			
 			// aapt resource value: 0x7f060006
-			public const int drawer_close = 2131099654;
+			public const int drawer_open = 2131099654;
 			
-			// aapt resource value: 0x7f060005
-			public const int drawer_open = 2131099653;
-			
-			// aapt resource value: 0x7f060008
-			public const int library_name = 2131099656;
+			// aapt resource value: 0x7f060009
+			public const int library_name = 2131099657;
 			
 			static String()
 			{

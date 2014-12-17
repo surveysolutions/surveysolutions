@@ -47,6 +47,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             this.filteredCombobox.ItemClick += filteredCombobox_ItemClick;
             this.filteredCombobox.FocusChange += this.filteredCombobox_FocusChange;
             this.filteredCombobox.KeyPress += FilteredComboboxOnKeyPress;
+            this.filteredCombobox.EditorAction += FilteredComboboxOnEditorAction;
             
 
             var adapter = new ArrayAdapter<String>(this.Context, Resource.Layout.FilteredComboboxRowLayout,
@@ -57,6 +58,18 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
             this.llWrapper.Focusable = true;
             this.llWrapper.FocusableInTouchMode = true;
+        }
+
+        private void FilteredComboboxOnEditorAction(object sender, TextView.EditorActionEventArgs editorActionEventArgs)
+        {
+            if (editorActionEventArgs.ActionId == ImeAction.Done)
+            {
+                this.filteredCombobox.ClearFocus();
+            }
+            else
+            {
+                editorActionEventArgs.Handled = false;
+            }
         }
 
         private void FilteredComboboxOnKeyPress(object sender, KeyEventArgs keyEventArgs)
@@ -74,15 +87,34 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             {
                 this.filteredCombobox.ShowDropDown();
             }
+            else
+            {
+                SaveAnswerOrShowErrorOnUi();
+            }
         }
 
         void filteredCombobox_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
         {
-            var answer = this.Answers.FirstOrDefault(option=> option.Title.Equals(this.filteredCombobox.Text));
+            this.filteredCombobox.ClearFocus();
+        }
+
+        private void SaveAnswerOrShowErrorOnUi()
+        {
+            var answer = FindSelectedAnswer();
             if (answer != null)
             {
                 this.SaveAnswer(this.GetAnswerTitle(answer), this.CreateSaveAnswerCommand(answer));
             }
+            else
+            {
+                var errorTemplate = Resources.GetText(Resource.String.AnswerIsNotPresentInFilteredComboboxOptionsList);
+                this.ShowErrorMessageOnUi(string.Format(errorTemplate, this.filteredCombobox.Text));
+            }
+        }
+
+        private AnswerViewModel FindSelectedAnswer()
+        {
+            return this.Answers.FirstOrDefault(option => option.Title.ToLower().Equals(this.filteredCombobox.Text.ToLower()));
         }
 
         protected override string GetAnswerStoredInModelAsString()
