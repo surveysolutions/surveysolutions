@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Http;
@@ -141,13 +142,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpPost]
         [ApiBasicAuth]
-        public async void PostFile([FromUri]PostFileRequest request)
+        public async Task PostFile([FromUri]PostFileRequest request)
         {
             if (request == null) throw new ArgumentNullException("request");
 
-            var provider = new MultipartMemoryStreamProvider();
-            await Request.Content.ReadAsMultipartAsync(provider);
-            foreach (var file in provider.Contents)
+            var multipartProvider = await Request.Content.ReadAsMultipartAsync();
+            foreach (var file in multipartProvider.Contents)
             {
                 var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
                 var buffer = await file.ReadAsByteArrayAsync();

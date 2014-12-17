@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
         };
 
         Because of = () =>
-            exception = Catch.Exception(() => controller.PostFile(new PostFileRequest() { InterviewId = interviewId }));
+            exception = Catch.Exception(() =>  controller.PostFile(new PostFileRequest() { InterviewId = interviewId }).GetAwaiter().GetResult());
 
         It should_exception_not_be_null = () =>
             exception.ShouldNotBeNull();
