@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             
         };
 
-        Because of = () => controller.PostFile(new PostFileRequest() { InterviewId = interviewId });
+        Because of = () => controller.PostFile(new PostFileRequest() { InterviewId = interviewId }).GetAwaiter().GetResult();
         
         It should_file_be_Saved_in_plain_file_storage = () =>
             plainFileRepository.Verify(x => x.StoreInterviewBinaryData(interviewId, fileName, Moq.It.IsAny<byte[]>()), Times.Once);
