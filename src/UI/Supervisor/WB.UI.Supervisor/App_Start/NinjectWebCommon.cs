@@ -147,6 +147,8 @@ namespace WB.UI.Supervisor.App_Start
             NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
             NcqrsEnvironment.InitDefaults();
 
+            kernel.Bind<ISettingsProvider>().To<SupervisorSettingsProvider>();
+
             var eventStoreModule = ModulesFactory.GetEventStoreModule();
             var overrideReceivedEventTimeStamp = CoreSettings.EventStoreProvider == StoreProviders.Raven;
 

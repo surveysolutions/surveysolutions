@@ -164,6 +164,7 @@
     <Compile Include="Modules\WebConfigurationModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\CoreSettings.cs" />
+    <Compile Include="Settings\ISettingsProvider.cs" />
     <Compile Include="Settings\SettingsProvider.cs" />
     <Compile Include="Settings\StoreProviders.cs" />
   </ItemGroup>

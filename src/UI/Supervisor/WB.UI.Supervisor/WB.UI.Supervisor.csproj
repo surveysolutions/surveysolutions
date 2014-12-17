@@ -333,6 +333,7 @@
     <Compile Include="Injections\SupervisorCoreRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceLocationModule.cs" />
+    <Compile Include="SupervisorSettingsProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.min.css" />

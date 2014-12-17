@@ -4,7 +4,7 @@ using System.Web.Configuration;
 
 namespace WB.UI.Shared.Web.Settings
 {
-    public class SettingsProvider
+    public class SettingsProvider : ISettingsProvider
     {
         private static List<string> settingsToSkip = new List<string>()
         {
@@ -12,7 +12,7 @@ namespace WB.UI.Shared.Web.Settings
             "EventStore.Password"
         };
 
-        public static IEnumerable<ApplicationSetting> GetSettings()
+        public virtual IEnumerable<ApplicationSetting> GetSettings()
         {
             foreach (string appSettingKey in WebConfigurationManager.AppSettings.AllKeys)
             {
@@ -39,7 +39,14 @@ namespace WB.UI.Shared.Web.Settings
 
     public class ApplicationSetting 
     {
+        public ApplicationSetting() {}
+        public ApplicationSetting(string name, object value)
+        {
+            this.Name = name;
+            this.Value = value;
+        }
+
         public string Name { get; set; }
-        public string Value { get; set; }
+        public object Value { get; set; }
     }
 }
