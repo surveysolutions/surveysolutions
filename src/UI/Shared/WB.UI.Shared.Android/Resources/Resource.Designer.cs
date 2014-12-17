@@ -305,6 +305,9 @@ namespace WB.UI.Shared.Android
 		public partial class String
 		{
 			
+			// aapt resource value: 0x7f040006
+			public static int AnswerIsNotPresentInFilteredComboboxOptionsList = 2130968582;
+			
 			// aapt resource value: 0x7f040001
 			public static int ApplicationName = 2130968577;
 			
@@ -320,11 +323,11 @@ namespace WB.UI.Shared.Android
 			// aapt resource value: 0x7f040003
 			public static int Yes = 2130968579;
 			
-			// aapt resource value: 0x7f040007
-			public static int drawer_close = 2130968583;
+			// aapt resource value: 0x7f040008
+			public static int drawer_close = 2130968584;
 			
-			// aapt resource value: 0x7f040006
-			public static int drawer_open = 2130968582;
+			// aapt resource value: 0x7f040007
+			public static int drawer_open = 2130968583;
 			
 			// aapt resource value: 0x7f040000
 			public static int library_name = 2130968576;
