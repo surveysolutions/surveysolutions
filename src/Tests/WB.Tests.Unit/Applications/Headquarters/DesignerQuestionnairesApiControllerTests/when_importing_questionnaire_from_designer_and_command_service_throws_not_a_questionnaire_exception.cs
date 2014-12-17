@@ -52,9 +52,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
                 supportedVersionProvider: versionProvider.Object, zipUtils: zipUtilsMock.Object, restService: restServiceMock.Object);
         };
 
-        Because of = () =>
-            exception = Catch.Exception(() =>
-                controller.GetQuestionnaire(importRequest));
+        Because of = () => exception = Catch.Exception(() => controller.GetQuestionnaire(importRequest).GetAwaiter().GetResult());
 
         It should_rethrow_command_service_exception = () =>
             exception.ShouldEqual(commandServiceException);
