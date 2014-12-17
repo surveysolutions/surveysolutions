@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net.Mime;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Capi.UI.MaskFormatter;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects;
 
@@ -31,6 +33,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             switch (question.QuestionType)
             {
                 case QuestionType.Text:
+                    var textQuestion = (TextQuestion)question;
+                     parsedValue = new KeyValuePair<Guid, object>(question.PublicKey, answer);
+                    if (!string.IsNullOrEmpty(textQuestion.Mask))
+                    {
+                        var formatter = new MaskedFormatter(textQuestion.Mask);
+                        bool maskMatches = formatter.IsTextMaskMatched(answer);
+                        if (!maskMatches)
+                        {
+                            return ValueParsingResult.ParsedValueIsNotAllowed;
+                        }
+                    }
+                   
+                    return ValueParsingResult.OK;
                 case QuestionType.QRBarcode:
                 case QuestionType.TextList:
                     parsedValue = new KeyValuePair<Guid, object>(question.PublicKey, answer);
@@ -104,7 +119,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     decimal decimalAnswerValue;
                     if (!decimal.TryParse(answer, out decimalAnswerValue))
                         return ValueParsingResult.AnswerAsDecimalWasNotParsed;
-                    if (!GetAnswerOptionsAsValues(question).Contains(decimalAnswerValue))
+                    if (!this.GetAnswerOptionsAsValues(question).Contains(decimalAnswerValue))
                         return ValueParsingResult.ParsedValueIsNotAllowed;
 
                     parsedValue = new KeyValuePair<Guid, object>(question.PublicKey, decimalAnswerValue);
@@ -118,7 +133,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     decimal answerValue;
                     if (!decimal.TryParse(answer, out answerValue))
                         return ValueParsingResult.AnswerAsDecimalWasNotParsed;
-                    if (!GetAnswerOptionsAsValues(question).Contains(answerValue))
+                    if (!this.GetAnswerOptionsAsValues(question).Contains(answerValue))
                         return ValueParsingResult.ParsedValueIsNotAllowed;
                     parsedValue = new KeyValuePair<Guid, object>(question.PublicKey, answerValue);
                     return ValueParsingResult.OK;                    
