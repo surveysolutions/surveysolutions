@@ -11,10 +11,8 @@ using RestSharp.Portable.Deserializers;
 using RestSharp.Portable.Serializers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils.Services;
-using WB.Core.SharedKernel.Utils.Services;
-using WB.Core.SharedKernel.Utils.Services.Rest;
 
-namespace WB.Core.SharedKernel.Utils.Implementation.Services
+namespace WB.Core.GenericSubdomains.Utils.Implementation
 {
     public class RestService : IRestService
     {
@@ -83,10 +81,14 @@ namespace WB.Core.SharedKernel.Utils.Implementation.Services
             if (request != null) clientRequest.AddObject(request);
             if (attachments != null)
             {
-                clientRequest.Parameters.Except(defaultParameters).ToList().ForEach(parameter => parameter.Type = ParameterType.QueryString);
-
-                attachments.ToList().ForEach(
-                    attachment => clientRequest.AddFile(attachment.AttachmentName, attachment.Data, attachment.FileName));
+                foreach (var requestParametr in clientRequest.Parameters.Except(defaultParameters))
+                {
+                    requestParametr.Type = ParameterType.QueryString;
+                }
+                foreach (var attachment in attachments)
+                {
+                    clientRequest.AddFile(attachment.AttachmentName, attachment.Data, attachment.FileName);
+                }
             }
 
             return clientRequest;

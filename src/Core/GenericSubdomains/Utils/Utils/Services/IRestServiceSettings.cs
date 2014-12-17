@@ -1,4 +1,4 @@
-namespace WB.Core.SharedKernel.Utils.Services.Rest
+namespace WB.Core.GenericSubdomains.Utils.Services
 {
     public interface IRestServiceSettings
     {

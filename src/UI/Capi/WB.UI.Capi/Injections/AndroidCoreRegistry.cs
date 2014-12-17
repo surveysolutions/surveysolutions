@@ -9,21 +9,18 @@ using System.Linq;
 using System.Reflection;
 using WB.Core.BoundedContexts.Capi.Views.Login;
 using WB.Core.GenericSubdomains.ErrorReporting.Services;
+using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernel.Utils.Implementation.Services;
-using WB.Core.SharedKernel.Utils.Services.Rest;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.UI.Capi.Settings;
 using WB.UI.Capi.Views.Login;
 using System;
 using Main.DenormalizerStorage;
-using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Modules;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.UI.Capi.Injections

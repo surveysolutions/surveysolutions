@@ -4,7 +4,6 @@ using System.IO;
 using System.Threading;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
-using WB.Core.SharedKernel.Utils.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataStorage
