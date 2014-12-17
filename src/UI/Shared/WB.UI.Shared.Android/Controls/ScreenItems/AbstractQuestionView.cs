@@ -199,17 +199,28 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private void SaveAnswerErrorHandlerImpl(Exception ex)
         {
+            var message = this.GetDeepestException(ex).Message;
+
+            if (ShowErrorMessageOnUi(message)) return;
+
+            var logger = ServiceLocator.Current.GetInstance<ILogger>();
+            logger.Error("Error on answer set.", ex);
+            logger.Error("Error message: " + this.tvError.Text);
+        }
+
+        protected bool ShowErrorMessageOnUi(string message)
+        {
             this.PutAnswerStoredInModelToUI();
             this.FireAnswerSetEvent(this.GetAnswerStoredInModelAsString());
 
             if (!this.Model.IsEnabled())
-                return;
+            {
+                return true;
+            }
 
-            var logger = ServiceLocator.Current.GetInstance<ILogger>();
-            logger.Error("Error on answer set.", ex);
             this.tvError.Visibility = ViewStates.Visible;
-            this.tvError.Text = this.GetDeepestException(ex).Message;
-            logger.Error("Error message: " + this.tvError.Text);
+            this.tvError.Text = message;
+            return false;
         }
 
         protected abstract string GetAnswerStoredInModelAsString();
