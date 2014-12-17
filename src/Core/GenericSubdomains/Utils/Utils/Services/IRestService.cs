@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using WB.Core.SharedKernel.Utils.Implementation.Services;
+using WB.Core.GenericSubdomains.Utils.Implementation;
 
-namespace WB.Core.SharedKernel.Utils.Services.Rest
+namespace WB.Core.GenericSubdomains.Utils.Services
 {
     public interface IRestService
     {

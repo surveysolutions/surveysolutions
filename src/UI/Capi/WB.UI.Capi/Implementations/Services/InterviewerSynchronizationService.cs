@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using CAPI.Android.Core.Model.Authorization;
+using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
-using WB.Core.SharedKernel.Utils.Implementation.Services;
-using WB.Core.SharedKernel.Utils.Services.Rest;
 using WB.UI.Capi.Services;
 using WB.UI.Capi.Settings;
 

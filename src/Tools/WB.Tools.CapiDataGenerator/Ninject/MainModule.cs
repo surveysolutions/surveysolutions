@@ -43,8 +43,6 @@ using WB.Core.Infrastructure.Storage.EventStore.Implementation;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.Infrastructure.Storage.Raven.Implementation;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
-using WB.Core.SharedKernel.Utils.Implementation.Services;
-using WB.Core.SharedKernel.Utils.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;

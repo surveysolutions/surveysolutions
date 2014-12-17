@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.SharedKernel.Utils
+namespace WB.Core.GenericSubdomains.Utils
 {
     public class FileSizeUtils
     {

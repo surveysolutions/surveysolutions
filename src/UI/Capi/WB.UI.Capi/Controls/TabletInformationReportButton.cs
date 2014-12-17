@@ -6,7 +6,7 @@ using Android.Util;
 using Android.Widget;
 using Ninject;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
-using WB.Core.SharedKernel.Utils;
+using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.UI.Capi.Controls
 {

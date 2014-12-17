@@ -1,7 +1,7 @@
 using System.Linq;
 using Android.Content;
 using Android.Net;
-using WB.Core.SharedKernel.Utils.Services;
+using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.UI.Shared.Android.Services
 {

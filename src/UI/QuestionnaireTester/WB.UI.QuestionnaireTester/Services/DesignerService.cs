@@ -1,9 +1,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.Core.SharedKernel.Utils.Implementation.Services;
-using WB.Core.SharedKernel.Utils.Services.Rest;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.QuestionnaireTester.Authentication;
 
