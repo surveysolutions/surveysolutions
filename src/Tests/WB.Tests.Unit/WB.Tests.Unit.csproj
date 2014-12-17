@@ -1706,6 +1706,8 @@
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_building_answer_from_string_array_for_textlist_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_parsing_answer_on_numeric_int_roster_size_question_and_answer_is_negative.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_parsing_empty_string_as_an_answer.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_parsing_masked_question.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_parsing_masked_question_with_invalid_answer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_datetime_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_datetime_question_and_answer_cant_be_parsed.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_geolocation_question.cs" />

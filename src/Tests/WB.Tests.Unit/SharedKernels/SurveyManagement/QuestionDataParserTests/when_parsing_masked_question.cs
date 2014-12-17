@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 {
     internal class when_parsing_masked_question_with_valid_answer : QuestionDataParserTestContext
     {
