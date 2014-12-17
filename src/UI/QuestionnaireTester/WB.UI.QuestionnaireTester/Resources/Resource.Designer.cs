@@ -521,20 +521,20 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f060003
 			public const int No = 2131099651;
 			
-			// aapt resource value: 0x7f06000b
-			public const int Oops = 2131099659;
-			
-			// aapt resource value: 0x7f06000a
-			public const int QuestionnaireLoadingError = 2131099658;
-			
 			// aapt resource value: 0x7f06000c
-			public const int ReasonFormat = 2131099660;
+			public const int Oops = 2131099660;
 			
-			// aapt resource value: 0x7f06000e
-			public const int TemplateIsMissing = 2131099662;
+			// aapt resource value: 0x7f06000b
+			public const int QuestionnaireLoadingError = 2131099659;
 			
 			// aapt resource value: 0x7f06000d
-			public const int TemplateIsNotValidForCurrentVersionOfTester = 2131099661;
+			public const int ReasonFormat = 2131099661;
+			
+			// aapt resource value: 0x7f06000f
+			public const int TemplateIsMissing = 2131099663;
+			
+			// aapt resource value: 0x7f06000e
+			public const int TemplateIsNotValidForCurrentVersionOfTester = 2131099662;
 			
 			// aapt resource value: 0x7f060001
 			public const int Warning = 2131099649;
