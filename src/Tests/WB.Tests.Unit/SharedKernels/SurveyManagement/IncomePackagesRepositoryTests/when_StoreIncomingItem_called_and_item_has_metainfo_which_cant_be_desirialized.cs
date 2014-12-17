@@ -15,8 +15,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomePackagesRepositoryT
         Establish context = () =>
         {
             jsonMock = new Mock<IJsonUtils>();
-            jsonMock.Setup(x => x.Deserrialize<InterviewMetaInfo>(Moq.It.IsAny<string>())).Throws(new Exception("random exception during depersonalization"));
-            jsonMock.Setup(x => x.GetItemAsContent(syncItem)).Returns(contentOfSyncItem);
+            jsonMock.Setup(x => x.Deserialize<InterviewMetaInfo>(Moq.It.IsAny<string>())).Throws(new Exception("random exception during depersonalization"));
+            jsonMock.Setup(x => x.Serialize(syncItem)).Returns(contentOfSyncItem);
 
             fileSystemAccessorMock=CreateDefaultFileSystemAccessorMock();
 

@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
             };
 
             var jsonUtilsMock = new Mock<IJsonUtils>();
-            jsonUtilsMock.Setup(x => x.Deserrialize<UserDocument>(Moq.It.IsAny<string>())).Returns(userDocument);
+            jsonUtilsMock.Setup(x => x.Deserialize<UserDocument>(Moq.It.IsAny<string>())).Returns(userDocument);
             syncItem = new SyncItem() { ItemType = SyncItemType.User, IsCompressed = false, Content = "some content", RootId = Guid.NewGuid() };
 
             commandService=new Mock<ICommandService>();

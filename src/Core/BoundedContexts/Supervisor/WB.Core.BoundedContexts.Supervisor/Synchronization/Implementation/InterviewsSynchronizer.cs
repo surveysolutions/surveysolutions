@@ -441,14 +441,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             var syncItem = new SyncItem
             {
-                Content = archiver.CompressString(this.jsonUtils.GetItemAsContent(eventsToSend)),
+                Content = archiver.CompressString(this.jsonUtils.Serialize(eventsToSend)),
                 IsCompressed = true,
                 ItemType = SyncItemType.Questionnare,
-                MetaInfo = archiver.CompressString(this.jsonUtils.GetItemAsContent(metadata)),
+                MetaInfo = archiver.CompressString(this.jsonUtils.Serialize(metadata)),
                 RootId = interviewId
             };
 
-            return this.jsonUtils.GetItemAsContent(syncItem);
+            return this.jsonUtils.Serialize(syncItem);
         }
 
         private void SendInterviewData(Guid interviewId, string interviewData)
@@ -472,7 +472,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                 try
                 {
-                    serverOperationSucceeded = this.jsonUtils.Deserrialize<bool>(result);
+                    serverOperationSucceeded = this.jsonUtils.Deserialize<bool>(result);
                 }
                 catch (Exception exception)
                 {

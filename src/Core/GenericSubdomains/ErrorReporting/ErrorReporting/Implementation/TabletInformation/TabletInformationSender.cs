@@ -70,32 +70,26 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformat
 
                 this.ExitIfCanceled();
 
-                try
-                {
-                    await this.restService.PostAsync(
-                        url: "api/InterviewerSync/PostInfoPackage", 
-                        token: this.ct,
-                        request: new TabletInformationPackage()
-                        {
-                            Content = Convert.ToBase64String(this.fileSystemAccessor.ReadAllBytes(this.pathToInfoArchive)),
-                            AndroidId = this.errorReportingSettings.GetDeviceId(),
-                            ClientRegistrationId = this.errorReportingSettings.GetClientRegistrationId()
-                        });
-                }
-                catch
-                {
-                    throw new TabletInformationSendException("server didn't get information package");
-                }
-                finally
-                {
-                    this.fileSystemAccessor.DeleteFile(this.pathToInfoArchive);
-                }
+                await this.restService.PostAsync(
+                    url: "api/InterviewerSync/PostInfoPackage",
+                    token: this.ct,
+                    request: new TabletInformationPackage()
+                    {
+                        Content = Convert.ToBase64String(this.fileSystemAccessor.ReadAllBytes(this.pathToInfoArchive)),
+                        AndroidId = this.errorReportingSettings.GetDeviceId(),
+                        ClientRegistrationId = this.errorReportingSettings.GetClientRegistrationId()
+                    });
+
             }
             catch (Exception e)
             {
                 this.logger.Error("Error occurred during the process. Process is being canceled.", e);
                 this.Cancel();
                 throw;
+            }
+            finally
+            {
+                this.fileSystemAccessor.DeleteFile(this.pathToInfoArchive);
             }
 
             this.OnProcessFinished();

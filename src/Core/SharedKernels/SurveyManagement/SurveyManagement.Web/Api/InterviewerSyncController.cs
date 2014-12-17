@@ -163,7 +163,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             if (request == null) throw new ArgumentNullException("request");
 
-            var syncItem = this.jsonUtils.Deserrialize<SyncItem>(request.SynchronizationPackage);
+            var syncItem = this.jsonUtils.Deserialize<SyncItem>(request.SynchronizationPackage);
 
             syncManager.SendSyncItem(syncItem);
         }

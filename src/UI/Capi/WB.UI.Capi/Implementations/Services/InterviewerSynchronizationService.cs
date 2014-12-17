@@ -55,7 +55,7 @@ namespace WB.UI.Capi.Implementations.Services
                 });
 
             if (syncItemsMetaContainer.ChunksMeta == null)
-                throw new RestException(this.localizationService.GetString("ErrorOnItemListReceiving"));
+                throw new Exception(this.localizationService.GetString("ErrorOnItemListReceiving"));
 
             return syncItemsMetaContainer.ChunksMeta;
         }
@@ -73,7 +73,7 @@ namespace WB.UI.Capi.Implementations.Services
                     });
 
             if (package == null || package.SyncItem == null)
-                throw new RestException(this.localizationService.GetString("GetSyncPackageExceptionMessage"));
+                throw new Exception(this.localizationService.GetString("GetSyncPackageExceptionMessage"));
 
             return package.SyncItem;
         }
@@ -92,7 +92,7 @@ namespace WB.UI.Capi.Implementations.Services
             }
             catch (Exception ex)
             {
-                throw new RestException(this.localizationService.GetString("PushFailed"));
+                throw new Exception(this.localizationService.GetString("PushFailed"), ex);
             }
         }
 
@@ -113,22 +113,22 @@ namespace WB.UI.Capi.Implementations.Services
             }
             catch(Exception ex)
             {
-                throw new RestException(this.localizationService.GetString("PushBinaryDataFailed"));
+                throw new Exception(this.localizationService.GetString("PushBinaryDataFailed"), ex);
             }
         }
 
-        public Task<string> GetChunkIdByTimestamp(SyncCredentials credentials, long timestamp, CancellationToken token)
+        public async Task<string> GetChunkIdByTimestampAsync(SyncCredentials credentials, long timestamp, CancellationToken token)
         {
-            return this.restService.GetAsync<string>(
+            return await this.restService.GetAsync<string>(
                 url: "api/InterviewerSync/GetPacakgeIdByTimeStamp",
                 credentials: new RestCredentials() {Login = credentials.Login, Password = credentials.Password},
                 token: token,
                 request: timestamp);
         }
 
-        public Task<bool> NewVersionAvailableAsync(CancellationToken token = default(CancellationToken))
+        public async Task<bool> NewVersionAvailableAsync(CancellationToken token = default(CancellationToken))
         {
-            return this.restService.GetAsync<bool>(
+            return await this.restService.GetAsync<bool>(
                 url: "api/InterviewerSync/CheckNewVersion",
                 request: new {versionCode = this.interviewerSettings.GetApplicationVersionCode()},
                 token: token);

@@ -73,7 +73,7 @@ namespace WB.UI.Capi.Settings
             Uri syncUrl;
             if (!(Uri.TryCreate(syncAddressPoint, UriKind.Absolute, out syncUrl) && (syncUrl.Scheme == "http" || syncUrl.Scheme == "https")))
             {
-                throw new ArgumentException();
+                throw new ArgumentException(@"Invalid url address", "syncAddressPoint");
             }
 
             SetSetting(SettingsNames.SyncAddressSettingsName, syncAddressPoint.Trim());

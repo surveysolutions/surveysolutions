@@ -90,7 +90,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
 
             try
             { 
-                var meta = this.jsonUtils.Deserrialize<InterviewMetaInfo>(archiver.DecompressString(item.MetaInfo));
+                var meta = this.jsonUtils.Deserialize<InterviewMetaInfo>(archiver.DecompressString(item.MetaInfo));
                 if (meta.CreatedOnClient.HasValue && meta.CreatedOnClient.Value && this.interviewSummaryRepositoryWriter.GetById(meta.PublicKey)==null)
                 {
                     AnsweredQuestionSynchronizationDto[] prefilledQuestions = null;
@@ -115,7 +115,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             catch (Exception ex)
             {
                 this.logger.Error("error on handling incoming package,", ex);
-                this.fileSystemAccessor.WriteAllText(this.GetItemFileNameForErrorStorage(item.RootId),this.jsonUtils.GetItemAsContent(item));
+                this.fileSystemAccessor.WriteAllText(this.GetItemFileNameForErrorStorage(item.RootId),this.jsonUtils.Serialize(item));
             }
         }
 
@@ -154,7 +154,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
 
             var fileContent = this.fileSystemAccessor.ReadAllText(fileName);
 
-            var items = this.jsonUtils.Deserrialize<AggregateRootEvent[]>(archiver.DecompressString(fileContent));
+            var items = this.jsonUtils.Deserialize<AggregateRootEvent[]>(archiver.DecompressString(fileContent));
             if (items.Length > 0)
             {
                 if (this.EventStore == null)

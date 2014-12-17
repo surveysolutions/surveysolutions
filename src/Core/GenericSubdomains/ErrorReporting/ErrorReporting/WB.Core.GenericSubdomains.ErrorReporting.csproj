@@ -59,7 +59,6 @@
     <Compile Include="Services\IErrorReportingSettings.cs" />
     <Compile Include="Services\TabletInformationSender\InformationPackageEventArgs.cs" />
     <Compile Include="Services\TabletInformationSender\ITabletInformationSender.cs" />
-    <Compile Include="Services\TabletInformationSender\TabletInformationSendException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
