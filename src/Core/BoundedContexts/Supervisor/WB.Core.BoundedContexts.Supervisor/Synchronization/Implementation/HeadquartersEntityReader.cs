@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 HttpResponseMessage response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
                 string resultString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-                var deserializedEntity = this.jsonUtils.Deserrialize<TEntity>(resultString);
+                var deserializedEntity = this.jsonUtils.Deserialize<TEntity>(resultString);
 
                 return deserializedEntity;
             }

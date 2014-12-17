@@ -219,7 +219,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
         {
             string stringData = this.ExtractStringData(initialString, isCompressed);
 
-            return this.jsonUtils.Deserrialize<TResult>(stringData);
+            return this.jsonUtils.Deserialize<TResult>(stringData);
         }
 
         private Guid ExtractGuid(string initialString, bool isCompressed)

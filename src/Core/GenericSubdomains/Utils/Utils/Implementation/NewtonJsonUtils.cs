@@ -21,7 +21,7 @@ namespace WB.Core.GenericSubdomains.Utils.Implementation
             this.jsonSerializer = JsonSerializer.Create(this.jsonSerializerSetings);
         }
 
-        public string GetItemAsContent(object item)
+        public string Serialize(object item)
         {
             return JsonConvert.SerializeObject(item, Formatting.None, this.jsonSerializerSetings);
         }
@@ -34,12 +34,12 @@ namespace WB.Core.GenericSubdomains.Utils.Implementation
             return output.ToArray();
         }
 
-        public T Deserrialize<T>(string payload)
+        public T Deserialize<T>(string payload)
         {
             return JsonConvert.DeserializeObject<T>(payload, this.jsonSerializerSetings);
         }
 
-        public T Deserrialize<T>(byte[] payload)
+        public T Deserialize<T>(byte[] payload)
         {
             var input = new MemoryStream(payload);
             using (var reader = new StreamReader(input))

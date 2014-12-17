@@ -34,13 +34,13 @@ namespace WB.Core.GenericSubdomains.Utils.Implementation
             this.jsonDeserializer = new RestDeserializer(jsonUtils);
         }
 
-        private async Task SendRequest(string url, HttpMethod verb, dynamic request = null, IEnumerable<RestAttachment> attachments = null,
+        private async Task SendRequestAsync(string url, HttpMethod verb, dynamic request = null, IEnumerable<RestAttachment> attachments = null,
             RestCredentials credentials = null, CancellationToken token = default(CancellationToken))
         {
-            await this.SendRequest<string>(url: url, verb: verb, request: request, attachments: attachments, credentials: credentials, token: token);
+            await this.SendRequestAsync<string>(url: url, verb: verb, request: request, attachments: attachments, credentials: credentials, token: token);
         }
 
-        private async Task<T> SendRequest<T>(string url, HttpMethod verb, object request = null, IEnumerable<RestAttachment> attachments = null,
+        private async Task<T> SendRequestAsync<T>(string url, HttpMethod verb, object request = null, IEnumerable<RestAttachment> attachments = null,
             RestCredentials credentials = null, CancellationToken token = default(CancellationToken))
         {
             var client = CreateRestClient(credentials);
@@ -58,12 +58,16 @@ namespace WB.Core.GenericSubdomains.Utils.Implementation
 
                 throw new RestException(response.StatusDescription, (int) response.StatusCode);
             }
+            catch (WebException ex)
+            {
+                throw new RestException(message: this.localizationService.GetString("NoConnection"), innerException: ex);
+            }
             catch (Exception ex)
             {
-                if (ex is RestException) throw;
-
-                this.logger.Error("REST Service: Unhandled exception", ex);
-                throw new RestException(this.localizationService.GetString("NoConnection"), (int) HttpStatusCode.ServiceUnavailable);
+                this.logger.Error(
+                    string.Format("REST Service: Unhandled exception when connect to {0}/{1}, method {2}",
+                        this.restServiceSettings.BaseAddress(), clientRequest.Resource, clientRequest.Method), ex);
+                throw;
             }
         }
 
@@ -112,28 +116,28 @@ namespace WB.Core.GenericSubdomains.Utils.Implementation
 
         public async Task<T> GetAsync<T>(string url, dynamic request = null, RestCredentials credentials = null, CancellationToken token = default(CancellationToken)) 
         {
-            return await SendRequest<T>(url: url, verb: HttpMethod.Get, request: request, credentials: credentials, token: token);
+            return await SendRequestAsync<T>(url: url, verb: HttpMethod.Get, request: request, credentials: credentials, token: token);
         }
 
         public async Task GetAsync(string url, dynamic request = null, RestCredentials credentials = null, CancellationToken token = new CancellationToken())
         {
-            await SendRequest(url: url, verb: HttpMethod.Get, request: request, credentials: credentials, token: token);
+            await SendRequestAsync(url: url, verb: HttpMethod.Get, request: request, credentials: credentials, token: token);
         }
 
         public async Task<T> PostAsync<T>(string url, dynamic request = null, RestCredentials credentials = null, CancellationToken token = default(CancellationToken))
         {
-            return await SendRequest<T>(url: url, verb: HttpMethod.Post, request: request, credentials: credentials, token: token);
+            return await SendRequestAsync<T>(url: url, verb: HttpMethod.Post, request: request, credentials: credentials, token: token);
         }
 
         public async Task PostAsync(string url, dynamic request = null, RestCredentials credentials = null, CancellationToken token = new CancellationToken())
         {
-            await SendRequest(url: url, verb: HttpMethod.Post, request: request, credentials: credentials, token: token);
+            await SendRequestAsync(url: url, verb: HttpMethod.Post, request: request, credentials: credentials, token: token);
         }
 
         public async Task PostWithAttachmentsAsync(string url, IEnumerable<RestAttachment> attachments = null, dynamic request = null,
             RestCredentials credentials = null, CancellationToken token = new CancellationToken())
         {
-            await SendRequest(url: url, verb: HttpMethod.Post, request: request, attachments: attachments, credentials: credentials, token: token);
+            await SendRequestAsync(url: url, verb: HttpMethod.Post, request: request, attachments: attachments, credentials: credentials, token: token);
         }
     }
 }

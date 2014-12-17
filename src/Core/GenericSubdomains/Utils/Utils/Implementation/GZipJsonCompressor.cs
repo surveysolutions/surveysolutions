@@ -38,14 +38,14 @@ namespace WB.Core.GenericSubdomains.Utils.Implementation
             {
                 using (var reader = new StreamReader(zip, Encoding.UTF8))
                 {
-                    return jsonSerrializer.Deserrialize<T>(reader.ReadToEnd());
+                    return jsonSerrializer.Deserialize<T>(reader.ReadToEnd());
                 }
             }
         }
 
         public string CompressObject(object s)
         {
-            var bytes = Encoding.Unicode.GetBytes(jsonSerrializer.GetItemAsContent(s));
+            var bytes = Encoding.Unicode.GetBytes(jsonSerrializer.Serialize(s));
             using (var msi = new MemoryStream(bytes))
             using (var mso = new MemoryStream())
             {
@@ -69,7 +69,7 @@ namespace WB.Core.GenericSubdomains.Utils.Implementation
                 }
                 var arrayOfData = mso.ToArray();
                 var stringData = Encoding.Unicode.GetString(arrayOfData, 0, arrayOfData.Length);
-                return this.jsonSerrializer.Deserrialize<T>(stringData);
+                return this.jsonSerrializer.Deserialize<T>(stringData);
             }
         }
 

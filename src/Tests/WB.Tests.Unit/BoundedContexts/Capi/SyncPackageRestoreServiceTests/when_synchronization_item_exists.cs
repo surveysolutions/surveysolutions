@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.SyncPackageRestoreServiceTests
             capiSynchronizationCacheServiceMock.Setup(x => x.LoadItem(Moq.It.IsAny<Guid>())).Returns("some string");
 
             jsonUtilsMock=new Mock<IJsonUtils>();
-            jsonUtilsMock.Setup(x => x.Deserrialize<InterviewSynchronizationDto>("some string")).Returns(interviewSynchronizationDto);
+            jsonUtilsMock.Setup(x => x.Deserialize<InterviewSynchronizationDto>("some string")).Returns(interviewSynchronizationDto);
 
             commandServiceMock=new Mock<ICommandService>();
 

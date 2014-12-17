@@ -78,9 +78,6 @@
     <Compile Include="..\ErrorReporting\Services\TabletInformationSender\ITabletInformationSender.cs">
       <Link>Services\TabletInformationSender\ITabletInformationSender.cs</Link>
     </Compile>
-    <Compile Include="..\ErrorReporting\Services\TabletInformationSender\TabletInformationSendException.cs">
-      <Link>Services\TabletInformationSender\TabletInformationSendException.cs</Link>
-    </Compile>
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -120,7 +117,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="64ff78f2-775b-4728-9d8a-d3a7b9a7344c" />
+      <UserProperties ProjectLinkReference="64ff78f2-775b-4728-9d8a-d3a7b9a7344c" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

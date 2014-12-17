@@ -15,7 +15,7 @@ namespace WB.Core.GenericSubdomains.Utils.Implementation
 
         public T Deserialize<T>(IRestResponse response)
         {
-            return this.jsonUtils.Deserrialize<T>(response.RawBytes);
+            return this.jsonUtils.Deserialize<T>(response.RawBytes);
         }
     }
 }

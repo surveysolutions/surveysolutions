@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                     contentSentToHq = message.Content.ReadAsStringAsync().Result);
 
             var jsonUtils = Mock.Of<IJsonUtils>(utils
-               => utils.Deserrialize<bool>(positiveResponse) == true);
+               => utils.Deserialize<bool>(positiveResponse) == true);
 
             interviewsSynchronizer = Create.InterviewsSynchronizer(
                 httpMessageHandler: () => httpMessageHandler,

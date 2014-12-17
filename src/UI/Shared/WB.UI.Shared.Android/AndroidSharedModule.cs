@@ -5,7 +5,7 @@ using WB.UI.Shared.Android.Services;
 
 namespace WB.UI.Shared.Android
 {
-    public class GenericSubdomainsModule : NinjectModule
+    public class AndroidSharedModule : NinjectModule
     {
         public override void Load()
         {

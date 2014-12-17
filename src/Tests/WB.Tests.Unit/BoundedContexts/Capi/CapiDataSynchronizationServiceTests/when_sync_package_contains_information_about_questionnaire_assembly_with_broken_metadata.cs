@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
             };
 
             var jsonUtilsMock = new Mock<IJsonUtils>();
-            jsonUtilsMock.Setup(x => x.Deserrialize<QuestionnaireAssemblyMetadata>(Moq.It.IsAny<string>())).Throws<NullReferenceException>();
+            jsonUtilsMock.Setup(x => x.Deserialize<QuestionnaireAssemblyMetadata>(Moq.It.IsAny<string>())).Throws<NullReferenceException>();
             
             changeLogManipulator = new Mock<IChangeLogManipulator>();
 
