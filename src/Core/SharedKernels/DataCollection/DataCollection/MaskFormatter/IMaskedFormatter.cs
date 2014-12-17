@@ -1,6 +1,4 @@
-using System;
-
-namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
+namespace WB.Core.SharedKernels.DataCollection.MaskFormatter
 {
     public interface IMaskedFormatter {
         string Mask { get; }

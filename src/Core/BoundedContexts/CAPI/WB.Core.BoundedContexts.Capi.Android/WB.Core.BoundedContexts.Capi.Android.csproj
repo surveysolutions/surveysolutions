@@ -138,18 +138,6 @@
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\Services\ISyncPackageRestoreService.cs">
       <Link>Services\ISyncPackageRestoreService.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.CAPI\UI\MaskFormatter\EmptyMaskFormatter.cs">
-      <Link>UI\MaskFormatter\EmptyMaskFormatter.cs</Link>
-    </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.CAPI\UI\MaskFormatter\IMaskedFormatter.cs">
-      <Link>UI\MaskFormatter\IMaskedFormatter.cs</Link>
-    </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.CAPI\UI\MaskFormatter\MaskCharacter.cs">
-      <Link>UI\MaskFormatter\MaskCharacter.cs</Link>
-    </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.CAPI\UI\MaskFormatter\MaskedFormatter.cs">
-      <Link>UI\MaskFormatter\MaskedFormatter.cs</Link>
-    </Compile>
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\ValueObjects\CapiPages.cs">
       <Link>ValueObjects\CapiPages.cs</Link>
     </Compile>
