@@ -239,7 +239,7 @@ namespace WB.UI.Designer.Controllers
 
         private void GetOptionsFromStream(HttpPostedFileBase csvFile, bool isCascade = false)
         {
-            var configuration = new CsvConfiguration { HasHeaderRecord = false, TrimFields = true, IgnoreQuotes = true };
+            var configuration = new CsvConfiguration { HasHeaderRecord = false, TrimFields = true, IgnoreQuotes = false, Delimiter = '\t'.ToString() };
             try
             {
                 this.questionWithOptionsViewModel.Options = this.ExtractOptionsFromStream(csvFile.InputStream, configuration, isCascade);
@@ -248,7 +248,7 @@ namespace WB.UI.Designer.Controllers
             {
                 if (csvFile == null)
                 {
-                    this.Error("Choose tab- or comma-separated values file to upload, please");
+                    this.Error("Choose tab-separated values file to upload, please");
                 }
                 else if (csvFile.FileName.EndsWith(".csv"))
                 {
@@ -256,7 +256,7 @@ namespace WB.UI.Designer.Controllers
                 }
                 else
                 {
-                    this.Error("Only tab- or comma-separated values files are accepted");
+                    this.Error("Only tab-separated values files are accepted");
                 }
             }
         }
@@ -337,7 +337,7 @@ namespace WB.UI.Designer.Controllers
             csvReader.Configuration.HasHeaderRecord = false;
             csvReader.Configuration.TrimFields = configuration.TrimFields;
             csvReader.Configuration.IgnoreQuotes = configuration.IgnoreQuotes;
-            
+            csvReader.Configuration.Delimiter = configuration.Delimiter;
             using (csvReader)
             {
                 while (csvReader.Read())
