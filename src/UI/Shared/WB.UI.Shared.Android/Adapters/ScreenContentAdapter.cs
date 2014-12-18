@@ -45,8 +45,7 @@ namespace WB.UI.Shared.Android.Adapters
                 {
                     questionView.EnableDisableView(false);
                 }
-                questionView.Clickable = true;
-                questionView.Focusable = true;
+                
                 result = questionView;
             }
             var group = questionnaireItemViewModel as QuestionnaireNavigationPanelItem;
