@@ -61,9 +61,6 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             this.cascadingCombobox.Adapter = this.adapter;
             
             this.llWrapper.AddView(this.cascadingCombobox);
-
-            this.llWrapper.Focusable = true;
-            this.llWrapper.FocusableInTouchMode = true;
         }
 
         private void cascadingCombobox_FocusChange(object sender, FocusChangeEventArgs e)
