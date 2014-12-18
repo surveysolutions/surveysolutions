@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Resources;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
@@ -19,6 +20,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
@@ -239,7 +241,7 @@ namespace WB.UI.Designer.Controllers
 
         private void GetOptionsFromStream(HttpPostedFileBase csvFile, bool isCascade = false)
         {
-            var configuration = new CsvConfiguration { HasHeaderRecord = false, TrimFields = true, IgnoreQuotes = false, Delimiter = '\t'.ToString() };
+            var configuration = ExtractOptionsFromStream();
             try
             {
                 this.questionWithOptionsViewModel.Options = this.ExtractOptionsFromStream(csvFile.InputStream, configuration, isCascade);
@@ -248,17 +250,18 @@ namespace WB.UI.Designer.Controllers
             {
                 if (csvFile == null)
                 {
-                    this.Error("Choose tab-separated values file to upload, please");
-                }
-                else if (csvFile.FileName.EndsWith(".csv"))
-                {
-                    this.Error("CSV-file has wrong format or file is corrupted.");
+                    this.Error(Resources.QuestionnaireController.Choose_tab_separated_values_file_to_upload__please);
                 }
                 else
                 {
-                    this.Error("Only tab-separated values files are accepted");
+                    this.Error(Resources.QuestionnaireController.Only_tab_separated_values_files_are_accepted);
                 }
             }
+        }
+
+        private CsvConfiguration ExtractOptionsFromStream()
+        {
+            return new CsvConfiguration { HasHeaderRecord = false, TrimFields = true, IgnoreQuotes = false, Delimiter = "\t" };
         }
 
         public JsonResult ApplyOptions()
