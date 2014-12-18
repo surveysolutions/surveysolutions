@@ -1,5 +1,6 @@
 using System;
 using Android.Content;
+using Android.OS;
 using Android.Text;
 using Android.Views;
 using Android.Views.InputMethods;
@@ -50,13 +51,14 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             this.etAnswer.SetSelectAllOnFocus(true);
             this.etAnswer.ImeOptions = ImeAction.Done;
             this.etAnswer.SetSingleLine(true);
+            this.etAnswer.Id = Guid.NewGuid().GetHashCode();
+
             this.etAnswer.EditorAction += this.etAnswer_EditorAction;
             this.etAnswer.FocusChange += this.etAnswer_FocusChange;
+            this.PutAnswerStoredInModelToUI();
+            
             this.llWrapper.Click += this.TextQuestionView_Click;
             this.llWrapper.AddView(this.etAnswer);
-
-            this.PutAnswerStoredInModelToUI();
-
         }
 
         private void etAnswer_FocusChange(object sender, View.FocusChangeEventArgs e)
@@ -66,13 +68,19 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 return;
             }
 
+            var newAnswer = etAnswer.Text.Trim();
+
             if (isInputMasked && !this.maskedWatcher.IsTextMaskMatched())
             {
-                this.PutAnswerStoredInModelToUI();
+
+                if (newAnswer != this.Model.AnswerString)
+                {
+                    if (Build.VERSION.SdkInt <= BuildVersionCodes.Kitkat) //temp fix Android Lollipop issue with scroll
+                        this.PutAnswerStoredInModelToUI();
+                }
+
                 return;
             }
-            
-            var newAnswer = etAnswer.Text.Trim();
 
             if (newAnswer != this.Model.AnswerString)
             {
