@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireControllerTests
         Because of = () => controller.EditOptions(postedFile);
 
         It should_add_error_message_to_temp_data = () =>
-            controller.TempData[Alerts.ERROR].ShouldEqual("CSV-file has wrong format or file is corrupted.");
+            controller.TempData[Alerts.ERROR].ShouldEqual("Only tab-separated values files are accepted");
 
         Cleanup stuff = () =>
         {
