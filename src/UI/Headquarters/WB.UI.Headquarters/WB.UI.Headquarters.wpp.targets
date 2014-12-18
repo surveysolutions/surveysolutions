@@ -2,6 +2,8 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <DeployManagedPipelineMode>Integrated</DeployManagedPipelineMode>
+	<EnableMSDeployAppOffline>true</EnableMSDeployAppOffline>
+	<MSDeployUseChecksum>true</MSDeployUseChecksum>
     <OnBeforePackageUsingManifest>AddCustomSkipRules</OnBeforePackageUsingManifest>
   </PropertyGroup>
   <Target Name="AddCustomSkipRules">
