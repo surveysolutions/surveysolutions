@@ -135,4 +135,7 @@
   <data name="NoNetwork" xml:space="preserve">
     <value>Network is unavailable</value>
   </data>
+  <data name="InvalidSyncPointAddressUrl" xml:space="preserve">
+    <value>Synchronization point address is invalid. Make sure that you entered correct url address.</value>
+  </data>
 </root>

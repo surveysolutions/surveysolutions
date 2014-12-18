@@ -79,6 +79,15 @@ namespace WB.UI.Capi.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Synchronization point address is invalid. Make sure that you entered correct url address..
+        /// </summary>
+        internal static string InvalidSyncPointAddressUrl {
+            get {
+                return ResourceManager.GetString("InvalidSyncPointAddressUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No connection.
         /// </summary>
         internal static string NoConnection {
