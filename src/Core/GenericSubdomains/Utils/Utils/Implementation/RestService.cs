@@ -45,7 +45,7 @@ namespace WB.Core.GenericSubdomains.Utils.Implementation
         {
             var client = CreateRestClient(credentials);
             var clientRequest = CreateRestRequest(url: url, verb: verb, request: request, attachments: attachments);
-
+            
             try
             {
                 var response = await client.Execute<T>(clientRequest, token);
@@ -58,6 +58,14 @@ namespace WB.Core.GenericSubdomains.Utils.Implementation
 
                 throw new RestException(response.StatusDescription, (int) response.StatusCode);
             }
+            catch (HttpRequestException ex)
+            {
+                this.logger.Error(
+                    string.Format("REST Service: Request exception when connect to {0}/{1}, method {2}",
+                        this.restServiceSettings.BaseAddress(), clientRequest.Resource, clientRequest.Method), ex);
+
+                throw new RestException(message: this.localizationService.GetString("NoConnection"), innerException: ex);
+            }
             catch (WebException ex)
             {
                 throw new RestException(message: this.localizationService.GetString("NoConnection"), innerException: ex);
@@ -67,6 +75,7 @@ namespace WB.Core.GenericSubdomains.Utils.Implementation
                 this.logger.Error(
                     string.Format("REST Service: Unhandled exception when connect to {0}/{1}, method {2}",
                         this.restServiceSettings.BaseAddress(), clientRequest.Resource, clientRequest.Method), ex);
+
                 throw;
             }
         }
