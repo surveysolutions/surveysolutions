@@ -116,7 +116,10 @@
         });
     });
 
-    self.selectedVariable.subscribe(function () {
+    self.selectedVariable.subscribe(function (value) {
+        if (_.isUndefined(value))
+            return;
+
         if (self.questionnaireVariables().length === 1) {
             self.showPointsOnMap();
         }
