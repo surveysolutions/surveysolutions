@@ -103,7 +103,10 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             var answer = FindSelectedAnswer();
             if (answer != null)
             {
-                this.SaveAnswer(this.GetAnswerTitle(answer), this.CreateSaveAnswerCommand(answer));
+                if (GetAnswerTitle(answer) != this.Model.AnswerString)
+                {
+                    this.SaveAnswer(this.GetAnswerTitle(answer), this.CreateSaveAnswerCommand(answer));
+                }
             }
             else
             {
