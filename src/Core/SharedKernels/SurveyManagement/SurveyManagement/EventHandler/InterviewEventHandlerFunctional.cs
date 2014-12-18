@@ -366,7 +366,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 currentState.Document.WasCompleted = true;
             }
 
-            if (!currentState.Document.WasCompleted && evnt.Payload.Status == InterviewStatus.RejectedBySupervisor)
+            if (!currentState.Document.WasRejected && evnt.Payload.Status == InterviewStatus.RejectedBySupervisor)
             {
                 currentState.Document.WasRejected = true;
             }
