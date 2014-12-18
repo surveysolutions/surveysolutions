@@ -75,7 +75,7 @@
    <parameter name="Designer Endpoint Address" description="Please provide Designer address from which do import templates" defaultValue="https://solutions.worldbank.org/api/import" tags="">
     <parameterEntry kind="XmlFile" 
       scope="\\web.config$" 
-      match="/configuration/appSettings/[add[@key='DesignerAddress']/@value" />
+      match="/configuration/appSettings/add[@key='DesignerAddress']/@value" />
   </parameter>
    <parameter name="Allow supervisor access"
       description="Hybrid mode with embedded supervison functionality"
