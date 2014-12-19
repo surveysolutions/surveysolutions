@@ -639,17 +639,20 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f060008
 			public const int Hello = 2131099656;
 			
-			// aapt resource value: 0x7f06000f
-			public const int NewHtmlLine = 2131099663;
+			// aapt resource value: 0x7f06000c
+			public const int NetworkStatus = 2131099660;
+			
+			// aapt resource value: 0x7f060010
+			public const int NewHtmlLine = 2131099664;
 			
 			// aapt resource value: 0x7f060003
 			public const int No = 2131099651;
 			
-			// aapt resource value: 0x7f06000c
-			public const int NowYouareConnectedToMobileNetwork = 2131099660;
+			// aapt resource value: 0x7f06000d
+			public const int NowYouareConnectedToMobileNetwork = 2131099661;
 			
-			// aapt resource value: 0x7f06000e
-			public const int NowYouareConnectedToWifiNetwork = 2131099662;
+			// aapt resource value: 0x7f06000f
+			public const int NowYouareConnectedToWifiNetwork = 2131099663;
 			
 			// aapt resource value: 0x7f06000a
 			public const int PleaseCheckURLInSettingsFormat = 2131099658;
@@ -663,8 +666,8 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f060002
 			public const int Yes = 2131099650;
 			
-			// aapt resource value: 0x7f06000d
-			public const int YouAreNotConnectedToAnyNetwork = 2131099661;
+			// aapt resource value: 0x7f06000e
+			public const int YouAreNotConnectedToAnyNetwork = 2131099662;
 			
 			// aapt resource value: 0x7f060007
 			public const int drawer_close = 2131099655;

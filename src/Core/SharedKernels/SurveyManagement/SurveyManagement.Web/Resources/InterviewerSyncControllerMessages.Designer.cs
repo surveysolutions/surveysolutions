@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File with latest version was not found.
+        ///   Looks up a localized string similar to System error. Please contact supervisor. File with latest version was not found.
         /// </summary>
         internal static string FileWasNotFound {
             get {
@@ -71,7 +71,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Incorrect files count.
+        ///   Looks up a localized string similar to System error. Please contact developers. Incorrect files count.
         /// </summary>
         internal static string IncorrectFilesCount {
             get {
@@ -80,7 +80,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Incorrect media type.
+        ///   Looks up a localized string similar to System error. Please contact developers. Incorrect media type.
         /// </summary>
         internal static string IncorrectMediaType {
             get {
@@ -89,7 +89,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synchronization failed. Interviewer application has higher version &apos;{0}&apos; than Supervisor &apos;{1}&apos;..
+        ///   Looks up a localized string similar to Synchronization failed. Interviewer and Supervisor versions are different. Interviewer application has higher version &apos;{0}&apos; than Supervisor &apos;{1}&apos;. Please contact your supervisor..
         /// </summary>
         internal static string InterviewerApplicationHasHigherVersion_thanSupervisor_Format {
             get {
@@ -98,7 +98,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synchronization failed. Interviewer application has version &apos;{0}&apos; but Supervisor has &apos;{1}&apos;. Please update Interviewer application.
+        ///   Looks up a localized string similar to Synchronization failed. Interviewer and Supervisor versions are different. Interviewer application has version &apos;{0}&apos; but Supervisor has &apos;{1}&apos;. Update Interviewer application.
         /// </summary>
         internal static string InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication {
             get {
@@ -108,7 +108,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid device identifier. Something has happened with the client app installation, please send tablet information..
+        ///   Looks up a localized string similar to Invalid device identifier. Something has happened with the client app installation, press &quot;Send tablet information&quot; button..
         /// </summary>
         internal static string InvalidDeviceIdentifier {
             get {
@@ -117,7 +117,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid sequence identifier. Something has happened with the client app installation, please send tablet information..
+        ///   Looks up a localized string similar to Invalid sequence identifier. Something has happened with the client app installation, press &quot;Send tablet information&quot; button..
         /// </summary>
         internal static string InvalidSequenceIdentifier {
             get {
@@ -126,7 +126,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synchronization failed. User is not authorized.
+        ///   Looks up a localized string similar to Synchronization failed. User is not authorized. Check your login and password..
         /// </summary>
         internal static string InvalidUser {
             get {
@@ -135,7 +135,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Installation identifier is missing. Please reinstall application..
+        ///   Looks up a localized string similar to System error. Please reinstall application. Installation identifier is missing..
         /// </summary>
         internal static string NoClientIdentifier {
             get {
@@ -144,7 +144,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Internal server error occurred. Please try again later.
+        ///   Looks up a localized string similar to Internal server error occurred. Please contact developers..
         /// </summary>
         internal static string ServerError {
             get {
@@ -153,7 +153,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sync package with id &apos;{0}&apos; was not found on server.
+        ///   Looks up a localized string similar to System error. Please contact developers. Sync package with id &apos;{0}&apos; was not found on server.
         /// </summary>
         internal static string Sync_package_with_id__0__was_not_found_on_serverFormat {
             get {

@@ -271,6 +271,7 @@
     <EmbeddedResource Include="Resources\InterviewerSyncControllerMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>InterviewerSyncControllerMessages.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\web.config" />
   </ItemGroup>
