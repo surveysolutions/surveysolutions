@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using RestSharp.Portable;
 using RestSharp.Portable.Authenticators;
 using RestSharp.Portable.Deserializers;
+using RestSharp.Portable.Encodings;
 using RestSharp.Portable.Serializers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils.Services;
@@ -117,6 +118,8 @@ namespace WB.Core.GenericSubdomains.Utils.Implementation
             var client = new RestClient(this.restServiceSettings.BaseAddress());
 
             client.AddHandler(this.jsonSerializer.ContentType.MediaType, this.jsonDeserializer);
+            client.AddEncoding("gzip", new GzipEncoding());
+            client.AddEncoding("deflate", new DeflateEncoding());
 
             if (credentials != null)
                 client.Authenticator = new HttpBasicAuthenticator(credentials.Login, credentials.Password);
