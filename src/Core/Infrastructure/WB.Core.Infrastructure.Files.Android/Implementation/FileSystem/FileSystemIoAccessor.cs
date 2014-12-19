@@ -134,7 +134,7 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             }
             else
             {
-                this.CopyFile(sourceDir, targetDir);
+                this.BackupFile(sourceDir, targetDir);
             }
         }
 
@@ -145,9 +145,9 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             return Assembly.LoadFrom(assemblyFile); 
         }
 
-        public string GetTempFolder()
+        public string GetTempFile()
         {
-            return Path.GetTempPath();
+            return Path.GetTempFileName();
         }
 
         private string RemoveNonAscii(string s)
@@ -155,12 +155,17 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             return Regex.Replace(s, @"[^\u0000-\u007F]", string.Empty);
         }
 
-        private void CopyFile(string sourcePath, string backupFolderPath)
+        private void BackupFile(string sourcePath, string backupFolderPath)
         {
             var sourceFileName = GetFileName(sourcePath);
             if (sourceFileName == null)
                 return;
             File.Copy(sourcePath, CombinePath(backupFolderPath, sourceFileName), true);
+        }
+
+        public void CopyFile(string sourceFile, string destFile)
+        {
+            File.Copy(sourceFile, destFile, true);
         }
     }
 }
