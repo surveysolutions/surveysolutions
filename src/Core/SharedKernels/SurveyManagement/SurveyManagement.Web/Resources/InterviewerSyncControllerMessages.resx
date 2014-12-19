@@ -118,36 +118,36 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="InterviewerApplicationHasHigherVersion_thanSupervisor_Format" xml:space="preserve">
-    <value>Synchronization failed. Interviewer application has higher version '{0}' than Supervisor '{1}'.</value>
+    <value>Synchronization failed. Interviewer and Supervisor versions are different. Interviewer application has higher version '{0}' than Supervisor '{1}'. Please contact your supervisor.</value>
   </data>
   <data name="InvalidDeviceIdentifier" xml:space="preserve">
-    <value>Invalid device identifier. Something has happened with the client app installation, please send tablet information.</value>
+    <value>Invalid device identifier. Something has happened with the client app installation, press "Send tablet information" button.</value>
   </data>
   <data name="InvalidUser" xml:space="preserve">
-    <value>Synchronization failed. User is not authorized</value>
+    <value>Synchronization failed. User is not authorized. Check your login and password.</value>
   </data>
   <data name="NoClientIdentifier" xml:space="preserve">
-    <value>Installation identifier is missing. Please reinstall application.</value>
+    <value>System error. Please reinstall application. Installation identifier is missing.</value>
   </data>
   <data name="InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication" xml:space="preserve">
-    <value>Synchronization failed. Interviewer application has version '{0}' but Supervisor has '{1}'. Please update Interviewer application</value>
+    <value>Synchronization failed. Interviewer and Supervisor versions are different. Interviewer application has version '{0}' but Supervisor has '{1}'. Update Interviewer application</value>
   </data>
   <data name="ServerError" xml:space="preserve">
-    <value>Internal server error occurred. Please try again later</value>
+    <value>Internal server error occurred. Please contact developers.</value>
   </data>
   <data name="FileWasNotFound" xml:space="preserve">
-    <value>File with latest version was not found</value>
+    <value>System error. Please contact supervisor. File with latest version was not found</value>
   </data>
   <data name="IncorrectFilesCount" xml:space="preserve">
-    <value>Incorrect files count</value>
+    <value>System error. Please contact developers. Incorrect files count</value>
   </data>
   <data name="IncorrectMediaType" xml:space="preserve">
-    <value>Incorrect media type</value>
+    <value>System error. Please contact developers. Incorrect media type</value>
   </data>
   <data name="InvalidSequenceIdentifier" xml:space="preserve">
-    <value>Invalid sequence identifier. Something has happened with the client app installation, please send tablet information.</value>
+    <value>Invalid sequence identifier. Something has happened with the client app installation, press "Send tablet information" button.</value>
   </data>
   <data name="Sync_package_with_id__0__was_not_found_on_serverFormat" xml:space="preserve">
-    <value>Sync package with id '{0}' was not found on server</value>
+    <value>System error. Please contact developers. Sync package with id '{0}' was not found on server</value>
   </data>
 </root>

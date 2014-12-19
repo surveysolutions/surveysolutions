@@ -434,41 +434,18 @@ namespace WB.UI.Capi
                             var restException = exception as RestException;
                             if (restException != null)
                             {
-                                switch (restException.StatusCode)
-                                {
-                                    case 404:
-                                    case 408:
-                                        sb.AppendLine(
-                                            string.Format(
-                                                Resources.GetString(Resource.String.PleaseCheckURLInSettingsFormat),
-                                                SettingsManager.GetSyncAddressPoint(), GetNetworkDescription()));
-                                        break;
-                                    default:
-                                        sb.AppendLine(restException.Message);
-                                        break;
-                                }
-
+                                sb.AppendLine(restException.Message);
                                 sb.AppendLine(Resources.GetString(Resource.String.NewHtmlLine));
                                 continue;
                             }
                             var webException = exception as WebException;
                             if (webException != null)
                             {
-                                switch (webException.Status)
-                                {
-                                    case WebExceptionStatus.ConnectFailure:
-                                    case WebExceptionStatus.Timeout:
-                                        sb.AppendLine(
-                                            string.Format(
-                                                Resources.GetString(Resource.String.PleaseCheckURLInSettingsFormat),
-                                                SettingsManager.GetSyncAddressPoint(), GetNetworkDescription()));
-                                        break;
-                                    default:
-                                        sb.AppendLine(string.Format(Resources.GetString(Resource.String.WebErrorWithStatus), webException.Message,
-                                            webException.Status));
-                                        break;
-                                }
-
+                                sb.AppendLine(
+                                    string.Format(
+                                        Resources.GetString(Resource.String.PleaseCheckURLInSettingsFormat),
+                                        SettingsManager.GetSyncAddressPoint(), GetNetworkDescription(), GetNetworkStatus(webException.Status)));
+                                
                                 sb.AppendLine(Resources.GetString(Resource.String.NewHtmlLine));
                                 continue;
                             }
@@ -481,6 +458,11 @@ namespace WB.UI.Capi
                     }
                 });
             this.DestroySynchronizer();
+        }
+
+        private string GetNetworkStatus(WebExceptionStatus status)
+        {
+            return string.Format(Resources.GetString(Resource.String.NetworkStatus), status);
         }
 
         private string GetNetworkDescription()

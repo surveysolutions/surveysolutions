@@ -61,7 +61,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to open questionnaire. Requested questionnaire &quot;{0}&quot; has {2} version. Tester application supports version up to {1}.
+        ///   Looks up a localized string similar to Failed to open questionnaire. Requested questionnaire &quot;{0}&quot; has {2} version. Tester application supports version up to {1}. Please update Tester..
         /// </summary>
         internal static string ClientVersionLessThenDocumentFormat {
             get {
@@ -79,7 +79,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to open questionnaire. Requested questionnaire &quot;{0}&quot; has errors. Please verify and fix them on Designer..
+        ///   Looks up a localized string similar to Failed to open questionnaire. Requested questionnaire &quot;{0}&quot; has errors. Please verify the questionnaire on Designer..
         /// </summary>
         internal static string Questionnaire_verification_failed_Format {
             get {
@@ -88,7 +88,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire with id={0} cannot be found.
+        ///   Looks up a localized string similar to Questionnaire with id={0} cannot be found. Please return to Dashboard and check the list of available questionnaires..
         /// </summary>
         internal static string TemplateWasNotFound {
             get {
@@ -97,7 +97,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Not authorized.
+        ///   Looks up a localized string similar to User is not authorized. Check your login and password..
         /// </summary>
         internal static string TesterController_ValidateCredentials_Not_authirized {
             get {
@@ -106,7 +106,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max supporter version of questionnaire was not correctly provided..
+        ///   Looks up a localized string similar to Max supporter version of questionnaire was not correctly provided. Please contact developers..
         /// </summary>
         internal static string VersionParameterIsIncorrect {
             get {
