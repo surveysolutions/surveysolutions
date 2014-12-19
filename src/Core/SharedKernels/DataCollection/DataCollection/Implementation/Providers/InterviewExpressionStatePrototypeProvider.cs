@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Practices.ServiceLocation;
@@ -11,10 +9,8 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 {
-    internal class InterviewExpressionStatePrototypeProvider : IInterviewExpressionStatePrototypeProvider, IDisposable
+    internal class InterviewExpressionStatePrototypeProvider : IInterviewExpressionStatePrototypeProvider
     {
-        private readonly Dictionary<string, string> tempAssemblies = new Dictionary<string, string>(); 
-
         private static ILogger Logger
         {
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
@@ -22,14 +18,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly string tempFolder;
 
         public InterviewExpressionStatePrototypeProvider(IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor, IFileSystemAccessor fileSystemAccessor)
         {
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
             this.fileSystemAccessor = fileSystemAccessor;
-
-            this.tempFolder = this.fileSystemAccessor.GetTempFolder();
         }
 
         public IInterviewExpressionState GetExpressionState(Guid questionnaireId, long questionnaireVersion)
@@ -38,26 +31,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 
             if (!fileSystemAccessor.IsFileExists(assemblyFile))
             {
-                Logger.Fatal(String.Format("Assembly was not found. Questionnaire={0}, version={1}, search={2}",
+                Logger.Fatal(String.Format("Assembly was not found. Questionnaire={0}, version={1}, search={2}", 
                     questionnaireId, questionnaireVersion, assemblyFile));
                 throw new InterviewException("Interview loading error. Code EC0003");
             }
 
-            if (!this.tempAssemblies.ContainsKey(assemblyFile))
-            {
-                var pathOfCopiedAssembly = this.fileSystemAccessor.CombinePath(tempFolder, this.fileSystemAccessor.GetFileName(assemblyFile));
-                this.fileSystemAccessor.CopyFileOrDirectory(assemblyFile, Path.GetDirectoryName(pathOfCopiedAssembly));
-                this.tempAssemblies[assemblyFile] = pathOfCopiedAssembly;
-            }
-
             try
             {
-                // path is cached
-                // if assembly was loaded from this path it won't be loaded again 
-                var compiledAssembly = fileSystemAccessor.LoadAssembly(this.tempAssemblies[assemblyFile]);
-
+                //path is cached
+                //if assembly was loaded from this path it won't be loaded again 
+                var compiledAssembly = fileSystemAccessor.LoadAssembly(assemblyFile);
+                    
                 TypeInfo interviewExpressionStateTypeInfo = compiledAssembly.DefinedTypes.
-                    SingleOrDefault(x => !(x.IsAbstract || x.IsGenericTypeDefinition || x.IsInterface) && x.ImplementedInterfaces.Contains(typeof(IInterviewExpressionState)));
+                    SingleOrDefault(x => !(x.IsAbstract || x.IsGenericTypeDefinition || x.IsInterface) && x.ImplementedInterfaces.Contains(typeof (IInterviewExpressionState)));
 
                 if (interviewExpressionStateTypeInfo == null)
                     throw new Exception("Type implementing IInterviewExpressionState was not found");
@@ -84,28 +70,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                 //hide original one
                 throw new InterviewException("Interview loading error. Code EC0001");
             }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-        
-        ~InterviewExpressionStatePrototypeProvider()
-        {
-            Dispose(false);
-        }
-       
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                // free managed resources
-                
-            }
-
-            this.fileSystemAccessor.DeleteDirectory(tempFolder);
         }
     }
 }
