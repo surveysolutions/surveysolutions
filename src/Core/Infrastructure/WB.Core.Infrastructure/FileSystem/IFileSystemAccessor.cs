@@ -33,5 +33,6 @@ namespace WB.Core.Infrastructure.FileSystem
 
         void CopyFileOrDirectory(string sourceDir, string targetDir);
         Assembly LoadAssembly(string assemblyFile);
+        string GetTempFolder();
     }
 }
