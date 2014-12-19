@@ -22,7 +22,7 @@ namespace WB.UI.QuestionnaireTester.Services
         {
             try
             {
-                await restService.GetAsync(url: "validatecredentials", token: cancellationToken, credentials: new RestCredentials() {Login = userName, Password = password});
+                await restService.PostAsync(url: "validatecredentials", token: cancellationToken, credentials: new RestCredentials() {Login = userName, Password = password});
                 return true;
             }
             catch (Exception ex)
