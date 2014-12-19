@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
             exception.ShouldBeOfExactType<FaultException>();
 
         It should_throw_exception_that_contains_such_words = () =>
-            (new[] { "requested questionnaire", "please verify template" }).Each(x => (exception as FaultException).Message.ToLower().ShouldContain(x));
+            (exception as FaultException).Message.ShouldEqual("Failed to import questionnaire. Requested questionnaire \"aaaa\" has errors. Please verify and fix them on Designer.");
 
         private static DownloadQuestionnaireRequest request;
         private static IPublicService service;

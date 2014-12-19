@@ -93,12 +93,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
             if (supervisorRevisionNumber.HasValue && version > supervisorRevisionNumber.Value)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, InterviewerSyncControllerMessages.ClientVersionIsObsolete);
+                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, string.Format(InterviewerSyncControllerMessages.InterviewerApplicationHasHigherVersion_thanSupervisor_Format, version, supervisorRevisionNumber));
             }
 
             if (supervisorRevisionNumber.HasValue && version < supervisorRevisionNumber.Value)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, InterviewerSyncControllerMessages.OldVersionOfClient);
+                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, string.Format(InterviewerSyncControllerMessages.InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication, version, supervisorRevisionNumber));
             }
 
             if (!Guid.TryParse(clientId, out key))
@@ -127,8 +127,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 logger.Fatal(
                     string.Format("Sync Handshake Error. ClientId:{0}, AndroidId : {1}, ClientRegistrationId:{2}, version: {3}", clientId, androidId, clientRegistrationId, version), exc);
 
-                return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable,
-                    InterviewerSyncControllerMessages.ServerError);
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message);
             }
         }
 
@@ -148,15 +147,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
                 if (package == null)
                     return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable,
-                        "General error occurred. Try later");
+                        string.Format(InterviewerSyncControllerMessages.Sync_package_with_id__0__was_not_found_on_serverFormat, aRKey));
 
                 return Request.CreateResponse(HttpStatusCode.OK, package);
             }
             catch (Exception ex)
             {
-                logger.Fatal("Error on sync", ex);
-                logger.Fatal(ex.StackTrace);
-
+                logger.Error(ex.Message,ex);
                 return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable, InterviewerSyncControllerMessages.ServerError);
             }
         }
@@ -198,8 +195,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             }
             catch (Exception ex)
             {
-                logger.Fatal("Error on sync", ex);
-                logger.Fatal(ex.StackTrace);
+                logger.Error(ex.Message, ex);
 
                 return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable,
                     InterviewerSyncControllerMessages.ServerError);
@@ -233,9 +229,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             }
             catch (Exception ex)
             {
-                logger.Fatal("Error on Sync.", ex);
-                logger.Fatal("Exception message: " + ex.Message);
-                logger.Fatal("Stack: " + ex.StackTrace);
+                logger.Error(ex.Message, ex);
 
                 return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable, InterviewerSyncControllerMessages.ServerError);
             }
@@ -263,9 +257,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             }
             catch (Exception ex)
             {
-                logger.Fatal("Error on Sync.", ex);
-                logger.Fatal("Exception message: " + ex.Message);
-                logger.Fatal("Stack: " + ex.StackTrace);
+                logger.Error(ex.Message, ex);
 
                 return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable, InterviewerSyncControllerMessages.ServerError);
             }

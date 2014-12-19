@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
             exception.ShouldBeOfExactType<FaultException>();
 
         It should_throw_exception_that_contains_such_words = () =>
-            (new[] { "requested questionnaire", "cannot be processed" }).Each(x => (exception as FaultException).Message.ToLower().ShouldContain(x));
+            (exception as FaultException).Message.ShouldEqual("Requested questionnaire id=11111111-1111-1111-1111-111111111111 was not found");
 
         private static QuestionnaireVersion version = new QuestionnaireVersion(1,0,0);
         private static DownloadQuestionnaireRequest request;

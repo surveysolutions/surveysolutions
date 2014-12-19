@@ -117,22 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ClientVersionLessThenDocument" xml:space="preserve">
-    <value>You have an old version of application that supports version {0} but current version is {1}. Please update application to continue.</value>
-  </data>
-  <data name="VersionParameterIsIncorrect" xml:space="preserve">
-    <value>Max supporter version of questionnaire was not correctly provided.</value>
-  </data>
-  <data name="TemplateWasNotFound" xml:space="preserve">
-    <value>Questionnaire with id={0} cannot be found</value>
+  <data name="ClientVersionLessThenDocumentFormat" xml:space="preserve">
+    <value>Failed to open questionnaire. Requested questionnaire "{0}" has {2} version. Tester application supports version up to {1}. Please update Tester.</value>
   </data>
   <data name="OldClientPleaseUpdate" xml:space="preserve">
     <value>You have an obsolete version of application. Please update application to continue.</value>
   </data>
-  <data name="Questionnaire_verification_failed" xml:space="preserve">
-    <value>Questionnaire is invalid. Please Verify it on Designer.</value>
+  <data name="Questionnaire_verification_failed_Format" xml:space="preserve">
+    <value>Failed to open questionnaire. Requested questionnaire "{0}" has errors. Please verify the questionnaire on Designer.</value>
+  </data>
+  <data name="TemplateWasNotFound" xml:space="preserve">
+    <value>Questionnaire with id={0} cannot be found. Please return to Dashboard and check the list of available questionnaires.</value>
   </data>
   <data name="TesterController_ValidateCredentials_Not_authirized" xml:space="preserve">
-    <value>Not authorized</value>
+    <value>User is not authorized. Check your login and password.</value>
+  </data>
+  <data name="VersionParameterIsIncorrect" xml:space="preserve">
+    <value>Max supported version of questionnaire was not correctly provided. Please contact developers.</value>
   </data>
 </root>

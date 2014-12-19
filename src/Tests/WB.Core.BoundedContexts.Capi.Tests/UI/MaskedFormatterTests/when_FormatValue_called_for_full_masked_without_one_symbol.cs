@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
-using WB.Core.BoundedContexts.Capi.UI.MaskFormatter;
+using WB.Core.SharedKernels.DataCollection.MaskFormatter;
 
 namespace WB.Core.BoundedContexts.Capi.Tests.UI.MaskedFormatterTests
 {
