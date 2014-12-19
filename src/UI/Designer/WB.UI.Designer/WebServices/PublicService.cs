@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.SharedKernel.Utils.Compression;
+using WB.UI.Designer.Resources;
 using WB.UI.Designer.WebServices.Questionnaire;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Membership;
@@ -49,7 +50,7 @@ namespace WB.UI.Designer.WebServices
             var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(request.QuestionnaireId));
             if (questionnaireView == null)
             {
-                var message = String.Format("Requested questionnaire id={0} was not found", request.QuestionnaireId);
+                var message = String.Format(HeadquarterApiMessages.RequestedQuestionnaireId0WasNotFoundFormat, request.QuestionnaireId);
                 throw new FaultException(message, new FaultCode("TemplateNotFound"));
             }
 
@@ -57,7 +58,7 @@ namespace WB.UI.Designer.WebServices
 
             if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
             {
-                var message = String.Format("Requested questionnaire id={0} cannot be processed", request.QuestionnaireId);
+                var message = String.Format(HeadquarterApiMessages.RequestedQuestionnaireId0WasNotFoundFormat, request.QuestionnaireId);
 
                 throw new FaultException(message, new FaultCode("TemplateProcessingError"));
             }
@@ -66,7 +67,7 @@ namespace WB.UI.Designer.WebServices
 
             if (templateInfo.Version > request.SupportedQuestionnaireVersion)
             {
-                var message = String.Format("Requested questionnaire \"{0}\" has version {1}, but Headquarters application supports versions up to {2} only",
+                var message = String.Format(HeadquarterApiMessages.Requested_questionnaire___0___has_version__1___but_Headquarters_application_supports_versions_up_to__2__onlyFormat,
                         templateTitle,
                         templateInfo.Version,
                         request.SupportedQuestionnaireVersion);
@@ -78,7 +79,7 @@ namespace WB.UI.Designer.WebServices
 
             if (questoinnaireErrors.Any())
             {
-                var message = String.Format("Requested questionnaire \"{0}\" has errors. Please verify and fix them on Designer.",
+                var message = String.Format(HeadquarterApiMessages.Requested_questionnaire___0___has_errors__Please_verify_and_fix_them_on_DesignerFormat,
                         templateInfo.Title);
 
                 throw new FaultException(message, new FaultCode("InvalidQuestionnaire"));
@@ -102,7 +103,7 @@ namespace WB.UI.Designer.WebServices
 
             if (!generationResult.Success || String.IsNullOrWhiteSpace(resultAssembly))
             {
-                var message = String.Format("Requested questionnaire \"{0}\" has errors. Please verify template on Designer.",
+                var message = String.Format(HeadquarterApiMessages.Requested_questionnaire___0___has_errors__Please_verify_and_fix_them_on_DesignerFormat,
                     templateInfo.Title);
 
                 throw new FaultException(message, new FaultCode("InvalidQuestionnaire"));

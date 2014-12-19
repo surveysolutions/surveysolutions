@@ -44,15 +44,22 @@
   <TextView
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/tvComments" android:textStyle="italic"
-    android:textSize="15dip" local:MvxBind="Text Comments"/>
+    android:id="@+id/tvComments" 
+    android:textStyle="italic"
+    android:textSize="15dip" 
+    local:MvxBind="Text Comments"/>
   <TextView
    android:layout_width="fill_parent"
    android:layout_height="wrap_content"
    android:id="@+id/tvCommentsTitle"
-   android:textSize="15dip" android:text="Comments" android:visibility="gone"/>
+   android:textSize="15dip" 
+   android:text="Comments" 
+   android:visibility="gone"/>
   <EditText
    android:layout_width="fill_parent"
-   android:layout_height="wrap_content" android:textStyle="italic"
-   android:id="@+id/etComments" android:visibility="gone"  local:MvxBind="Text Comments, Mode=OneWay"/>
+   android:layout_height="wrap_content" 
+   android:textStyle="italic"
+   android:id="@+id/etComments" 
+   android:visibility="gone"  
+   local:MvxBind="Text Comments, Mode=OneWay"/>
 </LinearLayout>
