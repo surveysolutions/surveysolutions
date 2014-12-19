@@ -121,7 +121,7 @@
     <value>Synchronization is failed. Interviewer application has higher version '{0}' than Supervisor '{1}'.</value>
   </data>
   <data name="InvalidDeviceIdentifier" xml:space="preserve">
-    <value>Invalid device identifier. Something have happend with the client app installation, please send tablet infromation.</value>
+    <value>Invalid device identifier. Something has happend with the client app installation, please send tablet infromation.</value>
   </data>
   <data name="InvalidUser" xml:space="preserve">
     <value>Syncronization is failed. User is not autorized</value>
@@ -145,7 +145,7 @@
     <value>Incorrect media type</value>
   </data>
   <data name="InvalidSequenceIdentifier" xml:space="preserve">
-    <value>Invalid sequence identifier. Something have happend with the client app installation, please send tablet infromation.</value>
+    <value>Invalid sequence identifier. Something has happend with the client app installation, please send tablet infromation.</value>
   </data>
   <data name="Sync_package_with_id__0__was_not_found_on_serverFormat" xml:space="preserve">
     <value> Sync package with id '{0}' was not found on server</value>
