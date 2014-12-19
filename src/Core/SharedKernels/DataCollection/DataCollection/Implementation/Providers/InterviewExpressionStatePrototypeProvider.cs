@@ -22,12 +22,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly string tempFolder;
 
         public InterviewExpressionStatePrototypeProvider(IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor, IFileSystemAccessor fileSystemAccessor)
         {
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
             this.fileSystemAccessor = fileSystemAccessor;
 
+            this.tempFolder = this.fileSystemAccessor.GetTempFolder();
         }
 
         public IInterviewExpressionState GetExpressionState(Guid questionnaireId, long questionnaireVersion)
@@ -43,9 +45,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 
             if (!this.tempAssemblies.ContainsKey(assemblyFile))
             {
-                string tempFileName = this.fileSystemAccessor.GetTempFile();
-                this.fileSystemAccessor.CopyFile(assemblyFile, tempFileName);
-                this.tempAssemblies[assemblyFile] = tempFileName;
+                var pathOfCopiedAssembly = this.fileSystemAccessor.CombinePath(tempFolder, this.fileSystemAccessor.GetFileName(assemblyFile));
+                this.fileSystemAccessor.CopyFileOrDirectory(assemblyFile, Path.GetDirectoryName(pathOfCopiedAssembly));
+                this.tempAssemblies[assemblyFile] = pathOfCopiedAssembly;
             }
 
             try
@@ -54,11 +56,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                 // if assembly was loaded from this path it won't be loaded again 
                 var compiledAssembly = fileSystemAccessor.LoadAssembly(this.tempAssemblies[assemblyFile]);
 
-                var interviewExpressionStateTypeInfo = compiledAssembly.DefinedTypes.
+                TypeInfo interviewExpressionStateTypeInfo = compiledAssembly.DefinedTypes.
                     SingleOrDefault(x => !(x.IsAbstract || x.IsGenericTypeDefinition || x.IsInterface) && x.ImplementedInterfaces.Contains(typeof(IInterviewExpressionState)));
 
                 if (interviewExpressionStateTypeInfo == null)
-                    throw new InvalidOperationException("Type implementing " + typeof(IInterviewExpressionState) + "IInterviewExpressionState was not found in assembly " + assemblyFile);
+                    throw new Exception("Type implementing IInterviewExpressionState was not found");
 
                 Type interviewExpressionStateType = interviewExpressionStateTypeInfo.AsType();
                 try
@@ -103,10 +105,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                 
             }
 
-            foreach (var tempFolder in tempAssemblies.Values)
-            {
-                this.fileSystemAccessor.DeleteDirectory(tempFolder);
-            }
+            this.fileSystemAccessor.DeleteDirectory(tempFolder);
         }
     }
 }
