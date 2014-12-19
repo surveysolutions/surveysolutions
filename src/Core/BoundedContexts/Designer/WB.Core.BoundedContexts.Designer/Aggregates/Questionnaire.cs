@@ -2633,7 +2633,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.SelectorValueRequired, "Answer option value is required");
             }
 
-            if (options.Any(x => !x.Value.IsInteger()))
+            if (options.Any(x => !x.Value.IsDecimal()))
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.SelectorValueSpecialCharacters,
