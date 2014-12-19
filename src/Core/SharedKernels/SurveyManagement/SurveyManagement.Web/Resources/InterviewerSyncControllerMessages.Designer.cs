@@ -89,7 +89,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synchronization is failed. Interviewer application has higher version &apos;{0}&apos; than Supervisor &apos;{1}&apos;..
+        ///   Looks up a localized string similar to Synchronization failed. Interviewer application has higher version &apos;{0}&apos; than Supervisor &apos;{1}&apos;..
         /// </summary>
         internal static string InterviewerApplicationHasHigherVersion_thanSupervisor_Format {
             get {
@@ -98,7 +98,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synchronization is failed. Interviewer application  has version &apos;{0}&apos; but Supervisor has &apos;{1}&apos;. Please update Interviewer application.
+        ///   Looks up a localized string similar to Synchronization failed. Interviewer application has version &apos;{0}&apos; but Supervisor has &apos;{1}&apos;. Please update Interviewer application.
         /// </summary>
         internal static string InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication {
             get {
@@ -108,7 +108,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid device identifier. Something has happend with the client app installation, please send tablet infromation..
+        ///   Looks up a localized string similar to Invalid device identifier. Something has happened with the client app installation, please send tablet information..
         /// </summary>
         internal static string InvalidDeviceIdentifier {
             get {
@@ -117,7 +117,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid sequence identifier. Something has happend with the client app installation, please send tablet infromation..
+        ///   Looks up a localized string similar to Invalid sequence identifier. Something has happened with the client app installation, please send tablet information..
         /// </summary>
         internal static string InvalidSequenceIdentifier {
             get {
@@ -126,7 +126,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Syncronization is failed. User is not autorized.
+        ///   Looks up a localized string similar to Synchronization failed. User is not authorized.
         /// </summary>
         internal static string InvalidUser {
             get {
@@ -153,7 +153,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  Sync package with id &apos;{0}&apos; was not found on server.
+        ///   Looks up a localized string similar to Sync package with id &apos;{0}&apos; was not found on server.
         /// </summary>
         internal static string Sync_package_with_id__0__was_not_found_on_serverFormat {
             get {
