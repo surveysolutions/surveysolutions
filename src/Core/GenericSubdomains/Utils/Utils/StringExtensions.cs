@@ -131,10 +131,10 @@ namespace WB.Core.GenericSubdomains.Utils
             return (T)returnValue;
         }
 
-        public static bool IsInteger(this string source)
+        public static bool IsDecimal(this string source)
         {
-            int iSource;
-            return Int32.TryParse(source, out iSource);
+            decimal iSource;
+            return decimal.TryParse(source, out iSource);
         }
 
         public static string NullIfEmptyOrWhiteSpace(this string src)
