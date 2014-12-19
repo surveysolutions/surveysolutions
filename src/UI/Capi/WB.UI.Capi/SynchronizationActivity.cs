@@ -1,7 +1,12 @@
+using System.Net;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.Net;
+using Android.Net.Wifi;
 using Android.OS;
+using Android.Text;
+using Android.Text.Method;
 using Android.Views;
 using Android.Widget;
 using System;
@@ -421,27 +426,76 @@ namespace WB.UI.Capi
                     this.DestroyDialog();
 
 
-                    if (evt.Exceptions != null || evt.Exceptions.Count > 0)
+                    if (evt.Exceptions != null && evt.Exceptions.Count > 0)
                     {
-                        StringBuilder sb = new StringBuilder();
+                        var sb = new StringBuilder();
                         foreach (var exception in evt.Exceptions)
                         {
+                            var restException = exception as RestException;
+                            if (restException != null)
+                            {
+                                if (string.IsNullOrEmpty(restException.Message))
+                                {
+                                    sb.AppendLine(
+                                        string.Format(
+                                            Resources.GetString(Resource.String.PleaseCheckURLInSettingsFormat),
+                                            SettingsManager.GetSyncAddressPoint(), GetNetworkDescription(),
+                                            GetNetworkStatus(restException.StatusCode)));
+                                }
+                                else
+                                {
+                                    sb.AppendLine(restException.Message);
+                                }
+                                sb.AppendLine(Resources.GetString(Resource.String.NewHtmlLine));
+                                continue;
+                            }
+                            var webException = exception as WebException;
+                            if (webException != null)
+                            {
+                                sb.AppendLine(
+                                    string.Format(
+                                        Resources.GetString(Resource.String.PleaseCheckURLInSettingsFormat),
+                                        SettingsManager.GetSyncAddressPoint(), GetNetworkDescription(), GetNetworkStatus((int)webException.Status)));
+                                
+                                sb.AppendLine(Resources.GetString(Resource.String.NewHtmlLine));
+                                continue;
+                            }
                             sb.AppendLine(exception.Message);
 
-                            if (exception.InnerException != null)
-                            {
-                                sb.AppendLine(exception.InnerException.Message);
-
-                                if (exception.InnerException.InnerException != null)
-                                {
-                                    sb.AppendLine(exception.InnerException.InnerException.Message);
-                                }
-                            }
+                            sb.AppendLine(Resources.GetString(Resource.String.NewHtmlLine));
                         }
-                        this.tvSyncResult.Text = sb.ToString();
+                        tvSyncResult.MovementMethod = LinkMovementMethod.Instance;
+                        this.tvSyncResult.SetText(Html.FromHtml(sb.ToString()), TextView.BufferType.Spannable);
                     }
                 });
             this.DestroySynchronizer();
+        }
+
+        private string GetNetworkStatus(int status)
+        {
+            return string.Format(Resources.GetString(Resource.String.NetworkStatus), status);
+        }
+
+        private string GetNetworkDescription()
+        {
+            var connectivityManager = (ConnectivityManager)this.GetSystemService(ConnectivityService);
+
+            var networkInfo = connectivityManager.GetNetworkInfo(ConnectivityType.Wifi);
+            if (networkInfo.IsConnected)
+            {
+                var wifiManager = (WifiManager)this.GetSystemService(WifiService);
+                var connectionInfo = wifiManager.ConnectionInfo;
+                if (connectionInfo != null && !string.IsNullOrEmpty(connectionInfo.SSID))
+                {
+                    return string.Format(Resources.GetString(Resource.String.NowYouareConnectedToWifiNetwork), connectionInfo.SSID);
+                }
+            }
+            var mobileState = connectivityManager.GetNetworkInfo(ConnectivityType.Mobile).GetState();
+            if (mobileState == NetworkInfo.State.Connected)
+            {
+                return Resources.GetString(Resource.String.NowYouareConnectedToMobileNetwork);
+            }
+            return Resources.GetString(Resource.String.YouAreNotConnectedToAnyNetwork);
         }
 
         private void DestroySynchronizer()

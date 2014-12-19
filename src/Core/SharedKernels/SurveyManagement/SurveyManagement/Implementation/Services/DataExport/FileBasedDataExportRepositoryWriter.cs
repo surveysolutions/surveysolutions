@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
 
-        private readonly int maxCountOfCachedEntities;
+        private readonly FileBasedDataExportRepositorySettings settings;
         private bool isCacheEnabled = false;
         private readonly Dictionary<string, QuestionnaireExportEntity> cache = new Dictionary<string, QuestionnaireExportEntity>();
 
@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             IReadSideRepositoryWriterRegistry writerRegistry, IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewDataWriter,
             IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter,
             IReadSideRepositoryWriter<UserDocument> users, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter,
-            IExportViewFactory exportViewFactory, IFilebasedExportedDataAccessor filebasedExportedDataAccessor, int maxCountOfCachedEntities)
+            IExportViewFactory exportViewFactory, IFilebasedExportedDataAccessor filebasedExportedDataAccessor, FileBasedDataExportRepositorySettings settings)
         {
             this.dataExportWriter = dataExportWriter;
             this.environmentContentService = environmentContentService;
@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.interviewSummaryWriter = interviewSummaryWriter;
             this.exportViewFactory = exportViewFactory;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
-            this.maxCountOfCachedEntities = maxCountOfCachedEntities;
+            this.settings = settings;
 
             cleanerRegistry.Register(this);
             writerRegistry.Register(this);
@@ -198,7 +198,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         private bool IsCacheLimitReached(QuestionnaireExportEntity entity)
         {
-            return entity.InterviewIds.Count >= this.maxCountOfCachedEntities;
+            return entity.InterviewIds.Count >= this.settings.MaxCountOfCachedEntities;
         }
 
         private void ReduceCache(QuestionnaireExportEntity entity)
