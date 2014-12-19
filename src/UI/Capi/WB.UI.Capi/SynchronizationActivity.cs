@@ -434,7 +434,18 @@ namespace WB.UI.Capi
                             var restException = exception as RestException;
                             if (restException != null)
                             {
-                                sb.AppendLine(restException.Message);
+                                if (string.IsNullOrEmpty(restException.Message))
+                                {
+                                    sb.AppendLine(
+                                        string.Format(
+                                            Resources.GetString(Resource.String.PleaseCheckURLInSettingsFormat),
+                                            SettingsManager.GetSyncAddressPoint(), GetNetworkDescription(),
+                                            GetNetworkStatus(restException.StatusCode)));
+                                }
+                                else
+                                {
+                                    sb.AppendLine(restException.Message);
+                                }
                                 sb.AppendLine(Resources.GetString(Resource.String.NewHtmlLine));
                                 continue;
                             }
@@ -444,7 +455,7 @@ namespace WB.UI.Capi
                                 sb.AppendLine(
                                     string.Format(
                                         Resources.GetString(Resource.String.PleaseCheckURLInSettingsFormat),
-                                        SettingsManager.GetSyncAddressPoint(), GetNetworkDescription(), GetNetworkStatus(webException.Status)));
+                                        SettingsManager.GetSyncAddressPoint(), GetNetworkDescription(), GetNetworkStatus((int)webException.Status)));
                                 
                                 sb.AppendLine(Resources.GetString(Resource.String.NewHtmlLine));
                                 continue;
@@ -460,7 +471,7 @@ namespace WB.UI.Capi
             this.DestroySynchronizer();
         }
 
-        private string GetNetworkStatus(WebExceptionStatus status)
+        private string GetNetworkStatus(int status)
         {
             return string.Format(Resources.GetString(Resource.String.NetworkStatus), status);
         }
