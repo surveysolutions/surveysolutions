@@ -36,7 +36,7 @@ namespace WB.Core.GenericSubdomains.Rest.Android
                 return;
 
             if (response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
-                throw new AuthenticationException("Not autorized");
+                throw new AuthenticationException("Not authorized");
 
             this.logger.Error(string.Format("Sync error. Status: {0}, Response Uri: {1}, Url: {2} Method:{3}, Login: {4}, args: {5}",
                 response.StatusDescription, response.ResponseUri, url, method, login, 
@@ -103,7 +103,7 @@ namespace WB.Core.GenericSubdomains.Rest.Android
                 return;
 
             if (response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
-                throw new AuthenticationException("Not autorized");
+                throw new AuthenticationException("Not authorized");
 
             this.logger.Error(string.Format("Sync error. Response status: {0}. {1}", response.StatusCode, response.StatusDescription));
         
