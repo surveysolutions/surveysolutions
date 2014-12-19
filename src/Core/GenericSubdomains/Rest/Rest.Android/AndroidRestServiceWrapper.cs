@@ -220,20 +220,7 @@ namespace WB.Core.GenericSubdomains.Rest.Android
             if (!string.IsNullOrWhiteSpace(response.ErrorMessage))
                 return response.ErrorMessage;
 
-            WebExceptionStatus? webExceptionStatusFromRestStatus=null;
-            try
-            {
-                webExceptionStatusFromRestStatus = (WebExceptionStatus) (int) response.StatusCode;
-            }
-            catch (Exception e)
-            {
-                logger.Error(e.Message, e);
-            }
-
-            if (webExceptionStatusFromRestStatus.HasValue)
-                throw new WebException(response.StatusDescription, webExceptionStatusFromRestStatus.Value);
-
-            return string.Format("Status: {0}", response.StatusDescription);
+            return string.Empty;
         }
 
         private RestRequest BuildRequest(string url, IEnumerable<KeyValuePair<string, object>> additionalParams, object requestBody, RestSharp.Method method)
