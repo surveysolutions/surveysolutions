@@ -12,11 +12,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStatePro
     [Subject(typeof(InterviewExpressionStatePrototypeProvider))]
     internal class InterviewExpressionStatePrototypeProviderTestContext
     {
-        protected static InterviewExpressionStatePrototypeProvider CreateInterviewExpressionStatePrototype(IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
-            IFileSystemAccessor fileSystemAccessor = null)
+        protected static InterviewExpressionStatePrototypeProvider CreateInterviewExpressionStatePrototype(IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor)
         {
-            return new InterviewExpressionStatePrototypeProvider(questionnareAssemblyFileAccessor, 
-                fileSystemAccessor ?? ServiceLocator.Current.GetInstance<IFileSystemAccessor>());
+            return new InterviewExpressionStatePrototypeProvider(questionnareAssemblyFileAccessor, ServiceLocator.Current.GetInstance<IFileSystemAccessor>());
         }
 
         protected static Mock<IQuestionnaireAssemblyFileAccessor> CreateIQuestionnareAssemblyFileAccessorMock(string path)

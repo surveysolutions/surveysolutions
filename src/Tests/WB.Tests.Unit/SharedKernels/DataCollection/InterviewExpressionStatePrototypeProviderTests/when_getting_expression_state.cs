@@ -1,12 +1,7 @@
 ﻿using System;
-using System.IO;
 using AppDomainToolkit;
 using Machine.Specifications;
-using Moq;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStatePrototypeProviderTests
@@ -28,11 +23,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStatePro
 
                 AssemblyContext.SetupServiceLocator();
 
-                Mock<IQuestionnaireAssemblyFileAccessor> questionnareAssemblyFileAccessorMock = 
-                    CreateIQuestionnareAssemblyFileAccessorMock(path);
+                var questionnareAssemblyFileAccessorMock = CreateIQuestionnareAssemblyFileAccessorMock(path);
 
-                InterviewExpressionStatePrototypeProvider interviewExpressionStatePrototype = 
-                    CreateInterviewExpressionStatePrototype(questionnareAssemblyFileAccessorMock.Object);
+                var interviewExpressionStatePrototype = CreateInterviewExpressionStatePrototype(questionnareAssemblyFileAccessorMock.Object);
 
                 return interviewExpressionStatePrototype.GetExpressionState(id, version) != null;
             });
