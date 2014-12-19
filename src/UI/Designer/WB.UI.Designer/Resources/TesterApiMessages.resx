@@ -133,6 +133,6 @@
     <value>User is not authorized. Check your login and password.</value>
   </data>
   <data name="VersionParameterIsIncorrect" xml:space="preserve">
-    <value>Max supporter version of questionnaire was not correctly provided. Please contact developers.</value>
+    <value>Max supported version of questionnaire was not correctly provided. Please contact developers.</value>
   </data>
 </root>
