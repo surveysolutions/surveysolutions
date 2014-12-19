@@ -108,7 +108,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid device identifier. Something have happend with the client app installation, please send tablet infromation..
+        ///   Looks up a localized string similar to Invalid device identifier. Something has happend with the client app installation, please send tablet infromation..
         /// </summary>
         internal static string InvalidDeviceIdentifier {
             get {
@@ -117,7 +117,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid sequence identifier. Something have happend with the client app installation, please send tablet infromation..
+        ///   Looks up a localized string similar to Invalid sequence identifier. Something has happend with the client app installation, please send tablet infromation..
         /// </summary>
         internal static string InvalidSequenceIdentifier {
             get {
