@@ -51,7 +51,6 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             this.etAnswer.SetSelectAllOnFocus(true);
             this.etAnswer.ImeOptions = ImeAction.Done;
             this.etAnswer.SetSingleLine(true);
-            this.etAnswer.Id = Guid.NewGuid().GetHashCode();
 
             this.etAnswer.EditorAction += this.etAnswer_EditorAction;
             this.etAnswer.FocusChange += this.etAnswer_FocusChange;
