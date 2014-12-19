@@ -188,11 +188,6 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             return Assembly.LoadFrom(assemblyFile);
         }
 
-        public string GetTempFolder()
-        {
-            return Path.GetTempPath();
-        }
-
         private string RemoveNonAscii(string s)
         {
             return Regex.Replace(s, @"[^\u0000-\u007F]", string.Empty);
