@@ -106,7 +106,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max supporter version of questionnaire was not correctly provided. Please contact developers..
+        ///   Looks up a localized string similar to Max supported version of questionnaire was not correctly provided. Please contact developers..
         /// </summary>
         internal static string VersionParameterIsIncorrect {
             get {
