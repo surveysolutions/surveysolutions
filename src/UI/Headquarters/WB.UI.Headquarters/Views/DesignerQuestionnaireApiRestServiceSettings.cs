@@ -14,7 +14,7 @@ namespace WB.UI.Headquarters.Views
 
         public string BaseAddress()
         {
-            return configurationManager.AppSettings["DesignerQuestionnnaireApiBaseAddress"];
+            return configurationManager.AppSettings["DesignerAddress"];
         }
     }
 }
