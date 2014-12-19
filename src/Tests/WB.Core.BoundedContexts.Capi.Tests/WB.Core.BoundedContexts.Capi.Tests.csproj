@@ -119,6 +119,7 @@
     <Compile Include="UI\MaskedFormatterTests\when_FormatValue_called_for_full_masked_text_and_one_symbol_is_replaced.cs" />
     <Compile Include="UI\MaskedFormatterTests\when_FormatValue_called_for_full_masked_without_one_symbol.cs" />
     <Compile Include="UI\MaskedFormatterTests\when_FormatValue_called_for_text_with_deleted_symbol_before_literal.cs" />
+    <Compile Include="UI\MaskedFormatterTests\when_FormatValue_after_insert_value_longer_than_mask.cs" />
     <Compile Include="UI\MaskedFormatterTests\when_FormatValue_called_for_text_with_valid_symbol_before_dash.cs" />
     <Compile Include="UI\MaskedFormatterTests\when_FormatValue_called_for_text__ab___and_mask_with_any_char_and_dashes.cs" />
     <Compile Include="UI\MaskedFormatterTests\when_IsTextMaskMatched_called_for_invalid_text.cs" />
