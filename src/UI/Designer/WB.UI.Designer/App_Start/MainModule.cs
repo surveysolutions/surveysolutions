@@ -1,9 +1,9 @@
 ﻿using System.Web.Mvc;
 using Ninject.Modules;
 using Ninject.Web.Mvc.FilterBindingSyntax;
-using WB.Core.SharedKernel.Utils.Compression;
-using WB.Core.SharedKernel.Utils.Serialization;
-using WB.Core.SharedKernels.SurveySolutions.Services;
+using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.GenericSubdomains.Utils.Services;
+using WB.UI.Designer.Code;
 using WB.UI.Designer.Exceptions;
 using WB.UI.Shared.Web.Membership;
 
@@ -20,7 +20,7 @@ namespace WB.UI.Designer
             this.BindFilter<CustomHandleErrorFilter>(FilterScope.Global, 0).InSingletonScope();
             this.BindFilter<CustomAuthorizeFilter>(FilterScope.Controller, 0).WhenControllerHas<CustomAuthorizeAttribute>().InSingletonScope();
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
-            this.Bind<IStringCompressor>().To<GZipJsonCompressor>().InSingletonScope();
+            this.Bind<IStringCompressor>().To<JsonCompressor>().InSingletonScope();
             this.Bind<IMembershipHelper>().ToConstant(new MembershipHelper()).InSingletonScope();
             this.Bind<IMembershipWebUser>()
                 .ToConstructor(x => new MembershipWebUser(x.Inject<IMembershipHelper>()))
@@ -36,6 +36,7 @@ namespace WB.UI.Designer
                         x.Inject<IMembershipWebUser>(),
                         x.Inject<IMembershipWebServiceUser>()))
                 .InSingletonScope();
+            this.Bind<ILocalizationService>().To<LocalizationService>().InSingletonScope();
         }
     }
 }

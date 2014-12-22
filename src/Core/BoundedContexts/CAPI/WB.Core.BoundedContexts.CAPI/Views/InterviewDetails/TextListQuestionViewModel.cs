@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Capi.ModelUtils;
+using Newtonsoft.Json.Linq;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -51,7 +51,20 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
             if (typedAnswers == null)
             {
-                return;
+                var jContainer = answer as JContainer;
+
+                // Happens after interview rejection
+                if (jContainer != null)
+                {
+                    typedAnswers = jContainer
+                        .ToList()
+                        .Select(x => new Tuple<decimal, string>(decimal.Parse(x["Item1"].ToString()), x["Item2"].ToString()))
+                        .ToArray();
+                }
+                else
+                {
+                    return;
+                }
             }
 
             this.ListAnswers = typedAnswers.Select(item => new TextListAnswerViewModel(item.Item1, item.Item2)).ToArray();

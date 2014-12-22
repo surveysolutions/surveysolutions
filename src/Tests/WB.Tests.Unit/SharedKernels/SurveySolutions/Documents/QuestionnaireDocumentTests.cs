@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
+using WB.Tests.Unit;
 
 namespace Main.Core.Tests.Documents
 {
@@ -16,7 +17,7 @@ namespace Main.Core.Tests.Documents
         [SetUp]
         public void SetUp()
         {
-            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            AssemblyContext.SetupServiceLocator();
         }
 
         [Test]

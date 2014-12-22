@@ -91,17 +91,10 @@ namespace WB.UI.Supervisor.App_Start
 #warning TLK: delete this when NCQRS initialization moved to Global.asax
             MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
 
-            bool isEmbeded;
-            if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.IsEmbeded"], out isEmbeded))
-            {
-                isEmbeded = false;
-            }
 
-            string storePath = isEmbeded
-                ? WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"]
-                : WebConfigurationManager.AppSettings["Raven.DocumentStore"];
+            string storePath = WebConfigurationManager.AppSettings["Raven.DocumentStore"];
 
-            var ravenSettings = new RavenConnectionSettings(storePath, isEmbedded: isEmbeded,
+            var ravenSettings = new RavenConnectionSettings(storePath,
                 username: WebConfigurationManager.AppSettings["Raven.Username"],
                 password: WebConfigurationManager.AppSettings["Raven.Password"],
                 eventsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Events"],
@@ -154,6 +147,8 @@ namespace WB.UI.Supervisor.App_Start
             NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
             NcqrsEnvironment.InitDefaults();
 
+            kernel.Bind<ISettingsProvider>().To<SupervisorSettingsProvider>();
+
             var eventStoreModule = ModulesFactory.GetEventStoreModule();
             var overrideReceivedEventTimeStamp = CoreSettings.EventStoreProvider == StoreProviders.Raven;
 
@@ -163,7 +158,9 @@ namespace WB.UI.Supervisor.App_Start
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]), isDebug,
-                    applicationBuildVersion, interviewDetailsDataLoaderSettings, overrideReceivedEventTimeStamp, Constants.CapiSynchronizationOrigin, false));
+                    applicationBuildVersion, interviewDetailsDataLoaderSettings, overrideReceivedEventTimeStamp,
+                    Constants.CapiSynchronizationOrigin, false,
+                    int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"])));
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);

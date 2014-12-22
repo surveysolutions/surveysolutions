@@ -1,5 +1,4 @@
 ﻿@using System.Web.Optimization
-@using Newtonsoft.Json
 @using AppSettings = WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings
 @{
     ViewBag.Title = "MapReport";
@@ -22,15 +21,14 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="version">Variables</label>
+                        <label for="variable">Variables</label>
                         <div class="controls">
-                            <select class="form-control" id="version" data-bind="options: questionnaireVariables, value: selectedVariable, optionsText: 'Variable', optionsCaption : 'Select variable', enable : questionnaireVariables"></select>
+                            <select class="form-control" id="variable" data-bind="options: questionnaireVariables, value: selectedVariable, optionsText: 'Variable', optionsCaption : 'Select variable', enable : isVariablesEnabled"></select>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="controls">
-                            <button class="btn-block btn" data-bind="click: showPointsOnMap, enable : selectedVariable">Add markers on map</button>
-
+                            <button class="btn-block btn" id="showMarkersOnMap" data-bind="click: showPointsOnMap, enable : selectedVariable">Add markers on map</button>
                         </div>
                     </div>
                     <div class="currently-on-map" data-bind="visible: markersSetsInfo().length > 0">

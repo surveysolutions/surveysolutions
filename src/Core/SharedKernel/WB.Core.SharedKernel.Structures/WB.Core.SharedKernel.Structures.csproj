@@ -41,13 +41,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Synchronization\BasePackage.cs" />
+    <Compile Include="Synchronization\Designer\DownloadQuestionnaireRequest.cs" />
     <Compile Include="Synchronization\Designer\QuestionnaireListItem.cs" />
     <Compile Include="Synchronization\Designer\QuestionnaireListCommunicationPackage.cs" />
     <Compile Include="Synchronization\Designer\QuestionnaireCommunicationPackage.cs" />
+    <Compile Include="Synchronization\Designer\QuestionnaireListRequest.cs" />
+    <Compile Include="Synchronization\Designer\PagedQuestionnaireCommunicationPackage.cs" />
+    <Compile Include="Synchronization\Designer\QuestionnnaireVersion.cs" />
     <Compile Include="Synchronization\FileSyncDescription.cs" />
     <Compile Include="Synchronization\HandshakePackage.cs" />
     <Compile Include="Synchronization\InterviewMetaInfo.cs" />
+    <Compile Include="Synchronization\SurveyManagement\HandshakePackageRequest.cs" />
+    <Compile Include="Synchronization\SurveyManagement\PostPackageRequest.cs" />
+    <Compile Include="Synchronization\SurveyManagement\PostFileRequest.cs" />
+    <Compile Include="Synchronization\SurveyManagement\SyncItemsMetaContainerRequest.cs" />
+    <Compile Include="Synchronization\SurveyManagement\SyncPackageRequest.cs" />
     <Compile Include="Synchronization\SynchronizationChunkMeta.cs" />
     <Compile Include="Synchronization\SyncItem.cs" />
     <Compile Include="Synchronization\SyncItemsMetaContainer.cs" />

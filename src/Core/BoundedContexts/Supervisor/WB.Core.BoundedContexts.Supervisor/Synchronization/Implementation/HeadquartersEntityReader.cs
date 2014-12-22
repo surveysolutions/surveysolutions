@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Supervisor.Extensions;
-using WB.Core.SharedKernel.Utils.Serialization;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 HttpResponseMessage response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
                 string resultString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-                var deserializedEntity = this.jsonUtils.Deserrialize<TEntity>(resultString);
+                var deserializedEntity = this.jsonUtils.Deserialize<TEntity>(resultString);
 
                 return deserializedEntity;
             }

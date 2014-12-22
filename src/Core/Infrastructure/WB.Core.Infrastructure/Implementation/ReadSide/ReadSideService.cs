@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
@@ -14,8 +16,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 {
     public class ReadSideService : IReadSideAdministrationService
     {
+        internal static int InstanceCount = 0;
+
         private int totalEventsToRebuildCount = 0;
         private int failedEventsCount = 0;
+
         private int processedEventsCount = 0;
         private int skippedEventsCount = 0;
         private DateTime lastRebuildDate = DateTime.Now;
@@ -42,6 +47,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
         public ReadSideService(IStreamableEventStore eventStore, IEventDispatcher eventBus, ILogger logger)
         {
+            if (InstanceCount > 0)
+                throw new Exception(string.Format("Trying to create a new instance of RavenReadSideService when following count of instances exists: {0}.", InstanceCount));
+
+            Interlocked.Increment(ref InstanceCount);
+
             this.eventStore = eventStore;
             this.eventBus = eventBus;
             this.logger = logger;
@@ -401,12 +411,18 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             this.lastRebuildDate = DateTime.Now;
             UpdateStatusMessage("Acquiring first portion of events.");
 
+            DateTime republishStarted = DateTime.Now;
+            UpdateStatusMessage(
+                "Acquiring first portion of events."
+                + Environment.NewLine
+                + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
 
             foreach (CommittedEvent @event in eventStream)
             {
                 ThrowIfShouldStopViewsRebuilding();
 
                 UpdateStatusMessage(string.Format("Publishing event {0}. ", this.processedEventsCount + 1));
+
 
                 try
                 {
@@ -438,7 +454,33 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             this.logger.Info(String.Format("Processed {0} events, failed {1}", this.processedEventsCount, this.failedEventsCount));
 
             UpdateStatusMessage("All events were republished.");
+
         }
+
+        private static string GetReadablePublishingDetails(DateTime republishStarted,
+           int processedEventsCount, int allEventsCount, int failedEventsCount, int skippedEventsCount)
+        {
+            int republishedEventsCount = processedEventsCount - skippedEventsCount;
+
+            TimeSpan republishTimeSpent = DateTime.Now - republishStarted;
+
+            int speedInEventsPerMinute = (int)(
+                republishTimeSpent.TotalSeconds == 0
+                ? 0
+                : 60 * republishedEventsCount / republishTimeSpent.TotalSeconds);
+
+            TimeSpan estimatedTotalRepublishTime = TimeSpan.FromMilliseconds(
+                republishedEventsCount == 0
+                ? 0
+                : republishTimeSpent.TotalMilliseconds / republishedEventsCount * allEventsCount);
+
+            return string.Format(
+                "Processed events: {1}. Total events: {2}. Skipped events: {3} Failed events: {4}.{0}Time spent republishing: {5}. Speed: {6} events per minute. Estimated time: {7}.",
+                Environment.NewLine,
+                processedEventsCount, allEventsCount, skippedEventsCount, failedEventsCount,
+                republishTimeSpent.ToString(@"hh\:mm\:ss"), speedInEventsPerMinute, estimatedTotalRepublishTime.ToString(@"hh\:mm\:ss"));
+        }
+
 
         private static void ThrowIfShouldStopViewsRebuilding()
         {

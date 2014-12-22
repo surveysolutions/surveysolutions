@@ -5,21 +5,16 @@ using System.Linq;
 using System.Linq.Expressions;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using Raven.Abstractions.Replication;
 using Raven.Client;
-using Raven.Client.Document;
 using Raven.Client.Indexes;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide.Indexes;
-using StoredEvent = WB.Core.Infrastructure.Storage.Raven.StoredEvent;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
 {
-    internal class RavenDBEventStore : RavenWriteSideStore, IStreamableEventStore
+    internal class RavenDBEventStore :  IStreamableEventStore
     {
-        private const string CollectionName = "Events";
-
         protected readonly IDocumentStore DocumentStore;
-
-        private bool useAsyncSave = false; // research: in the embedded mode true is not valid.
 
         private readonly bool useStreamingForAllEvents;
 
@@ -28,48 +23,25 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
         /// </summary>
         private readonly int pageSize = 1024;
 
-        private readonly int timeout = 180;
+        private readonly TimeSpan Timeout = TimeSpan.FromSeconds(180);
 
-        public RavenDBEventStore(string ravenUrl, int pageSize, bool useStreamingForAllEvents = true, FailoverBehavior failoverBehavior = FailoverBehavior.FailImmediately, string activeBundles = null)
+        public RavenDBEventStore(IDocumentStore externalDocumentStore, int pageSize, 
+            FailoverBehavior failoverBehavior = FailoverBehavior.FailImmediately, 
+            bool useStreamingForAllEvents = true)
         {
-            this.DocumentStore = new DocumentStore
-            {
-                Url = ravenUrl,
-                Conventions = CreateStoreConventions(CollectionName, failoverBehavior)
-            }.Initialize();
-           
-            this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
-            {
-                e.Request.Timeout = 30*60*1000; /*ms*/
-            };
-            this.pageSize = pageSize;
-            this.useStreamingForAllEvents = useStreamingForAllEvents;
-            
-            this.DocumentStore.ActivateBundles(activeBundles);
-            IndexCreation.CreateIndexes(typeof (UniqueEventsIndex).Assembly, this.DocumentStore);
-            IndexCreation.CreateIndexes(typeof (EventsByTimeStampAndSequenceIndex).Assembly, this.DocumentStore);
-        }
-
-        public RavenDBEventStore(DocumentStore externalDocumentStore, int pageSize, FailoverBehavior failoverBehavior = FailoverBehavior.FailImmediately, bool useStreamingForAllEvents = true)
-        {
-            externalDocumentStore.Conventions = CreateStoreConventions(CollectionName, failoverBehavior);
+            externalDocumentStore.UpdateStoreConventions("Events", failoverBehavior);
             this.DocumentStore = externalDocumentStore;
 
-            this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
-            {
-                e.Request.Timeout = 30*60*1000; /*ms*/
-            };
             this.pageSize = pageSize;
             this.useStreamingForAllEvents = useStreamingForAllEvents;
-            IndexCreation.CreateIndexes(typeof (UniqueEventsIndex).Assembly, this.DocumentStore);
 
+            IndexCreation.CreateIndexes(typeof (UniqueEventsIndex).Assembly, this.DocumentStore);
             IndexCreation.CreateIndexes(typeof (EventsByTimeStampAndSequenceIndex).Assembly, this.DocumentStore);
         }
 
         public static CommittedEvent ToCommittedEvent(StoredEvent x)
         {
-            return new CommittedEvent(
-                x.CommitId, x.Origin, x.EventIdentifier, x.EventSourceId, x.EventSequence, x.EventTimeStamp, x.Data, x.Version);
+            return new CommittedEvent(x.CommitId, x.Origin, x.EventIdentifier, x.EventSourceId, x.EventSequence, x.EventTimeStamp, x.Data, x.Version);
         }
 
         public IEnumerable<CommittedEvent> GetEventStream()
@@ -84,8 +56,8 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
                 {
                     List<UniqueEventsResults> chunk = session
                         .Query<StoredEvent, UniqueEventsIndex>()
-                        .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(this.timeout)))
-                        .AsProjection<UniqueEventsResults>().OrderBy(x => x.EventTimeStamp)
+                        .Customize(x => x.WaitForNonStaleResults(Timeout))
+                        .ProjectFromIndexFieldsInto<UniqueEventsResults>().OrderBy(x => x.EventTimeStamp)
                         .Skip(page*this.pageSize)
                         .Take(this.pageSize)
                         .ToList();
@@ -146,7 +118,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
             using (IDocumentSession session = this.DocumentStore.OpenSession())
             {
                 var lastEvent = session.Query<StoredEvent, EventsByTimeStampAndSequenceIndex>()
-                    .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(this.timeout)))
+                    .Customize(x => x.WaitForNonStaleResults(Timeout))
                     .Where(x => x.EventSourceId == id).OrderByDescending(x => x.EventSequence).Take(1).ToList()[0];
 
                 if (lastEvent == null)
@@ -159,31 +131,15 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
         {
             try
             {
-                if (this.useAsyncSave)
+                using (IDocumentSession session = this.DocumentStore.OpenSession())
                 {
-                    using (IAsyncDocumentSession session = this.DocumentStore.OpenAsyncSession())
+                    session.Advanced.UseOptimisticConcurrency = true;
+                    foreach (UncommittedEvent uncommittedEvent in eventStream)
                     {
-                        session.Advanced.UseOptimisticConcurrency = true;
-                        foreach (UncommittedEvent uncommittedEvent in eventStream)
-                        {
-                            session.StoreAsync(ToStoredEvent(eventStream.CommitId, uncommittedEvent));
-                        }
-
-                        session.SaveChangesAsync();
+                        session.Store(ToStoredEvent(eventStream.CommitId, uncommittedEvent));
                     }
-                }
-                else
-                {
-                    using (IDocumentSession session = this.DocumentStore.OpenSession())
-                    {
-                        session.Advanced.UseOptimisticConcurrency = true;
-                        foreach (UncommittedEvent uncommittedEvent in eventStream)
-                        {
-                            session.Store(ToStoredEvent(eventStream.CommitId, uncommittedEvent));
-                        }
 
-                        session.SaveChanges();
-                    }
+                    session.SaveChanges();
                 }
             }
             catch (global::Raven.Abstractions.Exceptions.ConcurrencyException cex)
@@ -219,7 +175,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
                 {
                     List<StoredEvent> chunk = session
                         .Query<StoredEvent, Event_ByEventSource>()
-                        .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(this.timeout)))
+                        .Customize(x => x.WaitForNonStaleResults(Timeout))
                         .Where(query).OrderBy(e => e.EventSequence)
                         .Skip(page*this.pageSize)
                         .Take(this.pageSize)
@@ -321,7 +277,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
 
                 while (enumerator.MoveNext())
                 {
-                    yield return new CommittedEvent[] { ToCommittedEvent(enumerator.Current.Document) };
+                    yield return new[] { ToCommittedEvent(enumerator.Current.Document) };
                 }
             }
         }

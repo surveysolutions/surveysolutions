@@ -27,17 +27,9 @@ namespace WB.UI.Shared.Web.Modules
 
             if (storeProvider == StoreProviders.Raven)
             {
-                bool isEmbeded;
-                if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.IsEmbeded"], out isEmbeded))
-                {
-                    isEmbeded = false;
-                }
+                string storePath = WebConfigurationManager.AppSettings["Raven.DocumentStore"];
 
-                string storePath = isEmbeded
-                    ? WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"]
-                    : WebConfigurationManager.AppSettings["Raven.DocumentStore"];
-
-                var ravenSettings = new RavenConnectionSettings(storePath, isEmbeded, WebConfigurationManager.AppSettings["Raven.Username"],
+                var ravenSettings = new RavenConnectionSettings(storePath, WebConfigurationManager.AppSettings["Raven.Username"],
                     WebConfigurationManager.AppSettings["Raven.Password"], WebConfigurationManager.AppSettings["Raven.Databases.Events"],
                     WebConfigurationManager.AppSettings["Raven.Databases.Views"],
                     WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"],

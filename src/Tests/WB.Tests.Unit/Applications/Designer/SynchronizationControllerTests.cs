@@ -9,10 +9,9 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernel.Utils.Compression;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Designer.BootstrapSupport;
 using WB.UI.Designer.Controllers;
 using WB.UI.Shared.Web.Membership;
@@ -58,7 +57,7 @@ namespace WB.Tests.Unit.Applications.Designer
             file.Setup(x => x.ContentLength).Returns((int)inputStream.Length);
             file.Setup(x => x.InputStream).Returns(inputStream);
 
-            this.ZipUtilsMock.Setup(x => x.Decompress<IQuestionnaireDocument>(file.Object.InputStream))
+            this.ZipUtilsMock.Setup(x => x.DecompressGZip<IQuestionnaireDocument>(file.Object.InputStream))
                         .Returns(new QuestionnaireDocument());
             this.UserHelperMock.Setup(x => x.WebUser.UserId).Returns(Guid.NewGuid);
 

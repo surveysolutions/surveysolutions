@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireControllerTests
             controller = CreateQuestionnaireController();
             SetControllerContextWithSession(controller, "options", new QuestionnaireController.EditOptionsViewModel());
 
-            stream = GenerateStreamFromString(@"1,Street 1");
+            stream = GenerateStreamFromString("1\tStreet 1");
 
             stream.Position = 0;
             postedFile = Mock.Of<HttpPostedFileBase>(pf => pf.InputStream == stream && pf.FileName == "data.csv");

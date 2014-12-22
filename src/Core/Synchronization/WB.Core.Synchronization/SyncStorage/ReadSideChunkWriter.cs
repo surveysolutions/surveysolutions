@@ -10,15 +10,17 @@ namespace WB.Core.Synchronization.SyncStorage
 {
     internal class ReadSideChunkWriter : IChunkWriter
     {
-        private readonly IQueryableReadSideRepositoryWriter<SynchronizationDelta> storage;
+        private readonly IReadSideRepositoryWriter<SynchronizationDelta> storage;
+        private readonly IQueryableReadSideRepositoryReader<SynchronizationDelta> storageReader;
         private readonly IArchiveUtils archiver;
         private bool cacheEnabled = false;
         private static int currentSortIndex = 0;
 
-        public ReadSideChunkWriter(IQueryableReadSideRepositoryWriter<SynchronizationDelta> storage, IArchiveUtils archiver)
+        public ReadSideChunkWriter(IReadSideRepositoryWriter<SynchronizationDelta> storage, IArchiveUtils archiver, IQueryableReadSideRepositoryReader<SynchronizationDelta> storageReader)
         {
             this.storage = storage;
             this.archiver = archiver;
+            this.storageReader = storageReader;
         }
 
         public void StoreChunk(SyncItem syncItem, Guid? userId, DateTime timestamp)
@@ -34,7 +36,7 @@ namespace WB.Core.Synchronization.SyncStorage
             }
             else
             {
-                var query = storage.Query(_ => _.OrderByDescending(x => x.SortIndex).Select(x => x.SortIndex));
+                var query = storageReader.Query(_ => _.OrderByDescending(x => x.SortIndex).Select(x => x.SortIndex));
                 if (query.Any())
                     sortIndex = query.First() + 1;
             }

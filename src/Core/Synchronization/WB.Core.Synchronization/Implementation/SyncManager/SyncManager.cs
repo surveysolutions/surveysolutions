@@ -12,13 +12,13 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 {
     internal class SyncManager : ISyncManager
     {
-        private readonly IQueryableReadSideRepositoryWriter<ClientDeviceDocument> devices;
+        private readonly IReadSideRepositoryWriter<ClientDeviceDocument> devices;
         private readonly ISynchronizationDataStorage storage;
         private readonly IIncomePackagesRepository incomeRepository;
         private readonly ILogger logger;
         private readonly ICommandService commandService;
 
-        public SyncManager(IQueryableReadSideRepositoryWriter<ClientDeviceDocument> devices,
+        public SyncManager(IReadSideRepositoryWriter<ClientDeviceDocument> devices,
             ISynchronizationDataStorage storage, 
             IIncomePackagesRepository incomeRepository,
             ILogger logger, 
@@ -72,8 +72,6 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
         public SyncPackage ReceiveSyncPackage(Guid clientRegistrationId, string id)
         {
-            var syncPackage = new SyncPackage();
-
             SyncItem item = this.GetSyncItem(clientRegistrationId, id);
 
             if (item == null)
@@ -81,9 +79,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                 throw new Exception("Item was not found");
             }
 
-            syncPackage.ItemsContainer.Add(item);
-            
-            return syncPackage;
+            return new SyncPackage() {Id = Guid.NewGuid(), SyncItem = item};
         }
 
         public string GetPackageIdByTimestamp(DateTime timestamp)
