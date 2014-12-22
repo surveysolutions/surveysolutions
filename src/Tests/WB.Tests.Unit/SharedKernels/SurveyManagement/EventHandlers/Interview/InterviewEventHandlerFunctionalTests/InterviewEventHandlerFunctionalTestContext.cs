@@ -87,5 +87,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         {
             return new TextQuestionAnswered(Guid.NewGuid(), questionId, propagationVector, DateTime.Now, answer);
         }
+
+        protected static InterviewQuestion GetQuestion(Guid questionId, ViewWithSequence<InterviewData> viewData)
+        {
+            return viewData.Document.Levels["#"].GetAllQuestions().First(q => q.Id == questionId);
+        }
     }
 }
