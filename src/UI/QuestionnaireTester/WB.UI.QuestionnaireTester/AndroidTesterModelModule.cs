@@ -39,6 +39,7 @@ namespace WB.UI.QuestionnaireTester
             this.Bind<IReadSideRepositoryWriter<InterviewViewModel>>().ToConstant(bigSurveyStore);
             this.Bind<IReadSideRepositoryReader<InterviewViewModel>>().ToConstant(bigSurveyStore);
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
+            this.Bind<IStringCompressor>().To<JsonCompressor>();
             this.Bind<IWaitService>().To<WaitService>().InSingletonScope();
             this.Bind<IPlainStorageAccessor<QuestionnaireDocument>>().ToConstant(plainQuestionnaireStore);
             this.Bind<IRestServiceSettings>().To<RestServiceSettings>().InSingletonScope();

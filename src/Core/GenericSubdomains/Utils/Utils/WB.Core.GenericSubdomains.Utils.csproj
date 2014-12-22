@@ -41,11 +41,12 @@
     <Compile Include="FileSizeUtils.cs" />
     <Compile Include="IAsyncExecutor.cs" />
     <Compile Include="Implementation\AsyncExecutor.cs" />
-    <Compile Include="Implementation\GZipJsonCompressor.cs" />
+    <Compile Include="Implementation\JsonCompressor.cs" />
     <Compile Include="Implementation\NewtonJsonUtils.cs" />
     <Compile Include="Implementation\RestAttachment.cs" />
     <Compile Include="Implementation\RestCredentials.cs" />
     <Compile Include="Implementation\RestException.cs" />
+    <Compile Include="Implementation\RestSerializationException.cs" />
     <Compile Include="Implementation\RestService.cs" />
     <Compile Include="Implementation\RestExtensions.cs" />
     <Compile Include="Implementation\TopologicalSorter\StronglyConnectedComponent.cs" />

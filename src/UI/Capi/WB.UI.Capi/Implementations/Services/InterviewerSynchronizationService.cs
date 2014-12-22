@@ -25,12 +25,11 @@ namespace WB.UI.Capi.Implementations.Services
             this.localizationService = localizationService;
         }
 
-        public async Task<Guid> HandshakeAsync(SyncCredentials credentials, CancellationToken token = default(CancellationToken))
+        public async Task<Guid> HandshakeAsync(SyncCredentials credentials)
         {
             var package = await this.restService.PostAsync<HandshakePackage>(
                 url: "api/InterviewerSync/GetHandshakePackage",
                 credentials: new RestCredentials() {Login = credentials.Login, Password = credentials.Password},
-                token: token,
                 request: new HandshakePackageRequest()
                 {
                     ClientId = this.interviewerSettings.GetInstallationId(),
@@ -42,12 +41,11 @@ namespace WB.UI.Capi.Implementations.Services
             return package.ClientRegistrationKey;
         }
 
-        public async Task<IEnumerable<SynchronizationChunkMeta>> GetChunksAsync(SyncCredentials credentials, CancellationToken token, string lastKnownPackageId)
+        public async Task<IEnumerable<SynchronizationChunkMeta>> GetChunksAsync(SyncCredentials credentials, string lastKnownPackageId)
         {
             var syncItemsMetaContainer = await restService.PostAsync<SyncItemsMetaContainer>(
                 url: "api/InterviewerSync/GetARKeys",
                 credentials: new RestCredentials() {Login = credentials.Login, Password = credentials.Password},
-                token: token,
                 request: new SyncItemsMetaContainerRequest()
                 {
                     ClientRegistrationId = this.interviewerSettings.GetClientRegistrationId().Value,
@@ -60,12 +58,11 @@ namespace WB.UI.Capi.Implementations.Services
             return syncItemsMetaContainer.ChunksMeta;
         }
 
-        public async Task<SyncItem> RequestChunkAsync(SyncCredentials credentials, string chunkId, CancellationToken token)
+        public async Task<SyncItem> RequestChunkAsync(SyncCredentials credentials, string chunkId)
         {
             var package = await restService.PostAsync<SyncPackage>(
                 url: "api/InterviewerSync/GetSyncPackage",
                 credentials: new RestCredentials() {Login = credentials.Login, Password = credentials.Password},
-                token: token,
                 request: new SyncPackageRequest()
                     {
                         PackageId = chunkId,
@@ -78,7 +75,7 @@ namespace WB.UI.Capi.Implementations.Services
             return package.SyncItem;
         }
 
-        public async Task PushChunkAsync(SyncCredentials credentials, string synchronizationPackage, CancellationToken token)
+        public async Task PushChunkAsync(SyncCredentials credentials, string synchronizationPackage)
         {
             if (synchronizationPackage == null) throw new ArgumentNullException("synchronizationPackage");
 
@@ -87,8 +84,7 @@ namespace WB.UI.Capi.Implementations.Services
                 await this.restService.PostAsync(
                     url: "api/InterviewerSync/PostPackage",
                     credentials: new RestCredentials() {Login = credentials.Login, Password = credentials.Password},
-                    request: new PostPackageRequest() {SynchronizationPackage = synchronizationPackage},
-                    token: token);
+                    request: new PostPackageRequest() {SynchronizationPackage = synchronizationPackage});
             }
             catch (Exception ex)
             {
@@ -96,20 +92,20 @@ namespace WB.UI.Capi.Implementations.Services
             }
         }
 
-        public async Task PushBinaryAsync(SyncCredentials credentials, Guid interviewId, string fileName, byte[] fileData, CancellationToken token)
+        public async Task PushBinaryAsync(SyncCredentials credentials, Guid interviewId, string fileName, byte[] fileData)
         {
             if (fileData == null) throw new ArgumentNullException("fileData");
             try
             {
-                await this.restService.PostWithAttachmentsAsync(
-                    url: "api/InterviewerSync/PostFile", 
-                    token: token,
+                await this.restService.PostAsync(
+                    url: "api/InterviewerSync/PostFile",
                     credentials: new RestCredentials() {Login = credentials.Login, Password = credentials.Password},
                     request: new PostFileRequest()
                     {
-                        InterviewId = interviewId
-                    },
-                    attachments: new [] { new RestAttachment(){AttachmentName = "attachment", FileName = fileName, Data = fileData} });
+                        InterviewId = interviewId,
+                        FileName = fileName, 
+                        Data = Convert.ToBase64String(fileData)
+                    });
             }
             catch(Exception ex)
             {
@@ -117,21 +113,19 @@ namespace WB.UI.Capi.Implementations.Services
             }
         }
 
-        public async Task<string> GetChunkIdByTimestampAsync(SyncCredentials credentials, long timestamp, CancellationToken token)
+        public async Task<string> GetChunkIdByTimestampAsync(SyncCredentials credentials, long timestamp)
         {
             return await this.restService.GetAsync<string>(
                 url: "api/InterviewerSync/GetPacakgeIdByTimeStamp",
                 credentials: new RestCredentials() {Login = credentials.Login, Password = credentials.Password},
-                token: token,
-                request: timestamp);
+                queryString: timestamp);
         }
 
-        public async Task<bool> NewVersionAvailableAsync(CancellationToken token = default(CancellationToken))
+        public async Task<bool> NewVersionAvailableAsync()
         {
             return await this.restService.GetAsync<bool>(
                 url: "api/InterviewerSync/CheckNewVersion",
-                request: new {versionCode = this.interviewerSettings.GetApplicationVersionCode()},
-                token: token);
+                queryString: new {versionCode = this.interviewerSettings.GetApplicationVersionCode()});
         }
     }
 }

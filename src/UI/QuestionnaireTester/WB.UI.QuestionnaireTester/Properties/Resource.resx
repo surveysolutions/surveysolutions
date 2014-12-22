@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BadConnection" xml:space="preserve">
+    <value>Bad connection</value>
+  </data>
+  <data name="BadRequest" xml:space="preserve">
+    <value>Need to update the application</value>
+  </data>
   <data name="NoConnection" xml:space="preserve">
     <value>No connection</value>
   </data>

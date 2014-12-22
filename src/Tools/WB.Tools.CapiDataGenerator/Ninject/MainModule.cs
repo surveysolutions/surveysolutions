@@ -75,7 +75,7 @@ namespace CapiDataGenerator
         public override void Load()
         {
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
-            this.Bind<IStringCompressor>().To<GZipJsonCompressor>();
+            this.Bind<IStringCompressor>().To<JsonCompressor>();
             var capiEvenStore = new MvvmCrossSqliteEventStore(EventStoreDatabaseName);
             var denormalizerStore = new SqliteDenormalizerStore(ProjectionStoreName);
             var plainStore = new SqlitePlainStore(PlainStoreName);

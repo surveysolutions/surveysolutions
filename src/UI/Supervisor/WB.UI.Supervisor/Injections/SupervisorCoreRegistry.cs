@@ -205,7 +205,7 @@ namespace WB.UI.Supervisor.Injections
             RegisterViewFactories();
 
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
-            this.Bind<IStringCompressor>().To<GZipJsonCompressor>();
+            this.Bind<IStringCompressor>().To<JsonCompressor>();
             this.Bind<IWaitService>().To<WaitService>().InSingletonScope();
         }
     }

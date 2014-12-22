@@ -55,24 +55,13 @@ namespace WB.UI.Designer.Api
             this.localizationService = localizationService;
         }
 
-        [HttpPost]
-        public void ValidateCredentials()
-        {
-            if (this.userHelper.WebUser == null || this.userHelper.WebUser.MembershipUser.IsLockedOut)
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized)
-                {
-                    ReasonPhrase = this.localizationService.GetString("User_Not_authirized")
-                });
-            }
-        }
+        [HttpGet]
+        public void Login() { }
 
         [HttpPost]
         public QuestionnaireCommunicationPackage Questionnaire(DownloadQuestionnaireRequest request)
         {
             if (request == null) throw new ArgumentNullException("request");
-
-            this.ValidateCredentials();
 
             var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(request.QuestionnaireId));
             if (questionnaireView == null)
@@ -87,7 +76,7 @@ namespace WB.UI.Designer.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden)
                 {
-                    ReasonPhrase = this.localizationService.GetString("User_Not_authirized")
+                    ReasonPhrase = this.localizationService.GetString("User_Not_authorized")
                 });
             }
 
@@ -101,7 +90,7 @@ namespace WB.UI.Designer.Api
                 });
             }
 
-            var supportedClientVersion = new QuestionnaireVersion(request.SupportedVersionMajor, request.SupportedVersionMinor, request.SupportedVersionPatch);
+            var supportedClientVersion = new QuestionnaireVersion(request.SupportedVersion.Major, request.SupportedVersion.Minor, request.SupportedVersion.Patch);
             if (templateInfo.Version > supportedClientVersion)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
@@ -156,8 +145,6 @@ namespace WB.UI.Designer.Api
         {
             if(request == null) throw new ArgumentNullException("request");
 
-            this.ValidateCredentials();
-
             var questionnaireListView = this.viewFactory.Load(
                 new QuestionnaireListInputModel
                 {
@@ -188,8 +175,6 @@ namespace WB.UI.Designer.Api
         [HttpGet]
         public QuestionnaireListCommunicationPackage QuestionnaireList()
         {
-            this.ValidateCredentials();
-
             var questionnaireItemList = new List<QuestionnaireListItem>();
             int pageIndex = 1;
             while (true)

@@ -22,7 +22,7 @@ namespace WB.UI.QuestionnaireTester.Services
         {
             try
             {
-                await restService.PostAsync(url: "validatecredentials", token: cancellationToken, credentials: new RestCredentials() {Login = userName, Password = password});
+                await restService.GetAsync(url: "login", credentials: new RestCredentials() {Login = userName, Password = password});
                 return true;
             }
             catch (Exception ex)
@@ -35,7 +35,6 @@ namespace WB.UI.QuestionnaireTester.Services
         {
             return await restService.GetAsync<QuestionnaireListCommunicationPackage>(
                 url: "questionnairelist",
-                token: cancellationToken,
                 credentials: new RestCredentials() {Login = remoteUser.UserName, Password = remoteUser.Password});
 
         }
@@ -50,11 +49,13 @@ namespace WB.UI.QuestionnaireTester.Services
                 request: new DownloadQuestionnaireRequest()
                 {
                     QuestionnaireId = id,
-                    SupportedVersionMajor = supportedVersion.Major,
-                    SupportedVersionMinor = supportedVersion.Minor,
-                    SupportedVersionPatch = supportedVersion.Patch
-
-                }, token: cancellationToken);
+                    SupportedVersion = new QuestionnnaireVersion()
+                    {
+                        Major = supportedVersion.Major,
+                        Minor = supportedVersion.Minor,
+                        Patch = supportedVersion.Patch
+                    }
+                });
         }
     }
 }

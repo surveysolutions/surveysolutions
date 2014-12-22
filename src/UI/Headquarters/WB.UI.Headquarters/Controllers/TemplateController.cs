@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Net;
-using System.Security.Authentication;
-using System.ServiceModel.Security;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.SurveyManagement.Views.Template;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -70,11 +67,15 @@ namespace WB.UI.Headquarters.Controllers
 
                 try
                 {
-                    await this.designerQuestionnaireApiRestService.PostAsync(url: "validatecredentials", credentials: designerUserCredentials);
-                    
+                    await this.designerQuestionnaireApiRestService.GetAsync(url: "login", credentials: designerUserCredentials);
+
                     this.designerUserCredentials = designerUserCredentials;
 
                     return this.RedirectToAction("Import");
+                }
+                catch (RestException ex)
+                {
+                    this.Error(ex.Message);
                 }
                 catch (Exception ex)
                 {

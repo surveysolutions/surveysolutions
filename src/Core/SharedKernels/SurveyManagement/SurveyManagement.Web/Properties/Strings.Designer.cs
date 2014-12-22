@@ -61,6 +61,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bad connection.
+        /// </summary>
+        public static string BadConnection {
+            get {
+                return ResourceManager.GetString("BadConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Need to update the application.
+        /// </summary>
+        public static string BadRequest {
+            get {
+                return ResourceManager.GetString("BadRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
@@ -250,7 +268,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There was an error with your Interviewer name/Password combination. Please try again..
+        ///   Looks up a localized string similar to There was an error with your Login/Password combination. Please try again..
         /// </summary>
         public static string InvalidUser {
             get {

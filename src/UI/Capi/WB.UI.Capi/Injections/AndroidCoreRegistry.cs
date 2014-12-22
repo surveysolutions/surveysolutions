@@ -135,7 +135,7 @@ namespace WB.UI.Capi.Injections
             base.Load();
             
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
-            this.Bind<IStringCompressor>().To<GZipJsonCompressor>();
+            this.Bind<IStringCompressor>().To<JsonCompressor>();
             this.Bind<IViewFactory<LoginViewInput, LoginView>>().To<LoginViewFactory>();
 
             this.Bind<IRestServiceSettings>().To<RestServiceSettings>().InSingletonScope();

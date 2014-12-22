@@ -126,8 +126,8 @@
   <data name="Questionnaire_verification_failed" xml:space="preserve">
     <value>Failed to import questionnaire. Requested questionnaire "{0}" has errors. Please verify and fix them on Designer.</value>
   </data>
-  <data name="User_Not_authirized" xml:space="preserve">
-    <value>Not authorized</value>
+  <data name="User_Not_authorized" xml:space="preserve">
+    <value>There was an error with your Login/Password combination. Please try again.</value>
   </data>
   <data name="OldClientPleaseUpdate" xml:space="preserve">
     <value>You have an obsolete version of application. Please update application to continue.</value>
@@ -137,5 +137,8 @@
   </data>
   <data name="NotSupportedQuestionnaireVersion" xml:space="preserve">
     <value>Failed to import questionnaire. Requested questionnaire "{0}" has {1} version. Headquarters application supports version up to {2}</value>
+  </data>
+  <data name="UserLockedOut" xml:space="preserve">
+    <value>Your account is locked out. Please, contact to the administrator of Designer to unlock it.</value>
   </data>
 </root>

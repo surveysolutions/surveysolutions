@@ -61,6 +61,24 @@ namespace WB.UI.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bad connection.
+        /// </summary>
+        internal static string BadConnection {
+            get {
+                return ResourceManager.GetString("BadConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Need to update the application.
+        /// </summary>
+        internal static string BadRequest {
+            get {
+                return ResourceManager.GetString("BadRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No connection.
         /// </summary>
         internal static string NoConnection {
