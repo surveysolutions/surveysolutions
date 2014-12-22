@@ -99,9 +99,12 @@ namespace WB.UI.Headquarters.Controllers
                     request: new DownloadQuestionnaireRequest()
                     {
                         QuestionnaireId = request.QuestionnaireId,
-                        SupportedVersionMajor = supportedVersion.SupportedQuestionnaireVersionMajor,
-                        SupportedVersionMinor = supportedVersion.SupportedQuestionnaireVersionMinor,
-                        SupportedVersionPatch = supportedVersion.SupportedQuestionnaireVersionPatch
+                        SupportedVersion = new QuestionnnaireVersion()
+                        {
+                            Major = supportedVersion.SupportedQuestionnaireVersionMajor,
+                            Minor = supportedVersion.SupportedQuestionnaireVersionMinor,
+                            Patch = supportedVersion.SupportedQuestionnaireVersionPatch
+                        }
                     });
 
                 var document = this.zipUtils.DecompressString<QuestionnaireDocument>(docSource.Questionnaire);

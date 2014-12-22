@@ -106,11 +106,20 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Not authorized.
+        ///   Looks up a localized string similar to Your account is locked out. Please, contact to the administrator of Designer to unlock it..
         /// </summary>
-        internal static string User_Not_authirized {
+        internal static string UserLockedOut {
             get {
-                return ResourceManager.GetString("User_Not_authirized", resourceCulture);
+                return ResourceManager.GetString("UserLockedOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was an error with your Login/Password combination. Please try again..
+        /// </summary>
+        internal static string User_Not_authorized {
+            get {
+                return ResourceManager.GetString("User_Not_authorized", resourceCulture);
             }
         }
         

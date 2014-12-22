@@ -5,12 +5,12 @@ namespace WB.Core.GenericSubdomains.Utils.Implementation
 {
     public class RestException : Exception
     {
-        public RestException(string message, int statusCode = (int) HttpStatusCode.ServiceUnavailable, Exception innerException = null)
+        public RestException(string message, HttpStatusCode statusCode = HttpStatusCode.ServiceUnavailable, Exception innerException = null)
             : base(message, innerException)
         {
             this.StatusCode = statusCode;
         }
 
-        public int StatusCode { get; private set; }
+        public HttpStatusCode StatusCode { get; private set; }
     }
 }

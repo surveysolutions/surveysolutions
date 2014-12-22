@@ -10,6 +10,7 @@ using System.Web.Http.Filters;
 using System.Web.Security;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils.Services;
+using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Api.Attributes
 {
@@ -19,6 +20,11 @@ namespace WB.UI.Designer.Api.Attributes
         private ILocalizationService localizationService
         {
             get { return ServiceLocator.Current.GetInstance<ILocalizationService>(); }
+        }
+
+        private IMembershipUserService userHelper
+        {
+            get { return ServiceLocator.Current.GetInstance<IMembershipUserService>(); }
         }
         private readonly Func<string, string, bool> validateUserCredentials;
 
@@ -35,13 +41,13 @@ namespace WB.UI.Designer.Api.Attributes
             var credentials = ParseCredentials(actionContext);
             if (credentials == null)
             {
-                this.Challenge(actionContext);
+                this.ThrowUnathorizedException(actionContext);
                 return;
             }
 
             if (!this.Authorize(credentials.Username, credentials.Password))
             {
-                this.Challenge(actionContext);
+                this.ThrowUnathorizedException(actionContext);
                 return;
             }
 
@@ -54,9 +60,14 @@ namespace WB.UI.Designer.Api.Attributes
                 HttpContext.Current.User = principal;
             }
 
+            if (IsAccountLockedOut())
+            {
+                this.ThrowLockedOutException(actionContext);
+                return;
+            }
+
             base.OnAuthorization(actionContext);
         }
-
 
         private static BasicCredentials ParseCredentials(HttpActionContext actionContext)
         {
@@ -87,16 +98,26 @@ namespace WB.UI.Designer.Api.Attributes
             public string Password { get; set; }
         }
 
-        private void Challenge(HttpActionContext actionContext)
+        private void ThrowUnathorizedException(HttpActionContext actionContext)
         {
             var host = actionContext.Request.RequestUri.DnsSafeHost;
-            actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, this.localizationService.GetString("User_Not_authirized"));
+            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized){ReasonPhrase = this.localizationService.GetString("User_Not_authorized")};
             actionContext.Response.Headers.Add("WWW-Authenticate", string.Format("Basic realm=\"{0}\"", host));
+        }
+
+        private void ThrowLockedOutException(HttpActionContext actionContext)
+        {
+            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = this.localizationService.GetString("UserLockedOut") };
         }
 
         private bool Authorize(string username, string password)
         {
             return validateUserCredentials(username, password);
+        }
+
+        private bool IsAccountLockedOut()
+        {
+            return this.userHelper.WebUser == null || this.userHelper.WebUser.MembershipUser.IsLockedOut;
         }
     }
 }

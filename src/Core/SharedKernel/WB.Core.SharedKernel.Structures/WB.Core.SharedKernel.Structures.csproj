@@ -47,6 +47,7 @@
     <Compile Include="Synchronization\Designer\QuestionnaireCommunicationPackage.cs" />
     <Compile Include="Synchronization\Designer\QuestionnaireListRequest.cs" />
     <Compile Include="Synchronization\Designer\PagedQuestionnaireCommunicationPackage.cs" />
+    <Compile Include="Synchronization\Designer\QuestionnnaireVersion.cs" />
     <Compile Include="Synchronization\FileSyncDescription.cs" />
     <Compile Include="Synchronization\HandshakePackage.cs" />
     <Compile Include="Synchronization\InterviewMetaInfo.cs" />
