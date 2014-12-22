@@ -241,21 +241,15 @@ namespace CAPI.Android.Core.Model.EventHandlers
         {
             QuestionnaireDTO questionnaire = questionnaireDtOdocumentStorage.GetById(interviewId);
 
-            if (questionnaire == null)
-                return;
+            if (questionnaire == null) return;
 
-            var properties = questionnaire.GetProperties();
-            int keyIndex = Array.FindIndex(properties, w => w.PublicKey == questionId);
+            var preFilledQuestion = questionnaire.GetProperties().FirstOrDefault(question => question.PublicKey == questionId);
 
-            if (keyIndex >= 0)
-            {
-                var featuredQuestion = properties[keyIndex];
+            if (preFilledQuestion == null) return;
 
-                featuredQuestion.Value = getAnswer(featuredQuestion, answer);
+            preFilledQuestion.Value = getAnswer(preFilledQuestion, answer);
 
-                questionnaire.SetProperties(properties);
-                questionnaireDtOdocumentStorage.Store(questionnaire, interviewId);
-            }
+            questionnaireDtOdocumentStorage.Store(questionnaire, interviewId);
         }
 
         private string getAnswer(FeaturedItem featuredQuestion, object answer)

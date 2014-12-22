@@ -30,7 +30,7 @@
 
     settings.Urls.CommandExecution = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "Execute" })';
     settings.Urls.InterviewDetails = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "InterviewDetails" })';
-    settings.Urls.Interviews = '@(GlobalInfo.IsSupervisor ? Url.Action("Interviews", "Survey") : @Url.Action("Interviews", "HQ", new {area=""}))';
+    settings.Urls.Interviews = '@(GlobalInfo.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ", new {area=""}))';
     settings.Urls.ChangeStateHistory = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "ChangeStateHistory" })';
 
     settings.Urls.InterviewFile = '@Url.RouteUrl("Default", new { httproute = "", controller = "Resource", action = "InterviewFile" })';
@@ -48,7 +48,7 @@
                 <div data-bind="ifnot: (isFilteredCombobox || isCascade)">
                     <div data-bind="foreach: options">
                         <label class="radio" data-bind='attr: { "for": optionFor }'>
-                            <input type="radio" data-bind="attr: { value: value, name: $parent.variable, id: optionFor }, checked : $parent.selectedOption" disabled="disabled">
+                            <input type="radio" data-bind="value: value, attr: { name: $parent.variable, id: optionFor, checked: isSelected }" disabled="disabled" />
                             <span data-bind="html: label"></span>
                         </label>
                     </div>
@@ -376,7 +376,7 @@
                                             <div class="btn-group btn-group-xs" data-bind="css : {hidden : !((comments().length == 0) || isFlagged() == false || isReadonly == false)}">
                                                 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-cog"></i><span class="caret"></span></a>
                                                 <ul class="dropdown-menu pull-right">
-                                                    <li data-bind="visible: isReadonly == false"><a href="#" data-bind="    click: $root.showDetails">Answer</a></li>
+                                                    <li data-bind="visible: isReadonly == false && isEnabled"><a href="#" data-bind="click: $root.showDetails">Answer</a></li>
                                                     <li><a href="#" data-bind="click: $root.showDetails">Comment</a></li>
                                                     <li data-bind="visible: isFlagged() == false"><a data-bind="    click: $root.flagAnswer">Flag</a></li>
                                                 </ul>
@@ -387,7 +387,7 @@
                                             <a class="btn  btn-xs btn-info" data-bind="click: $root.flagAnswer, visible: isFlagged()">
                                                 <i class="glyphicon glyphicon-flag"></i>
                                             </a>
-                                            <a class="btn  btn-xs btn-primary" href="#" data-bind="click: $root.showDetails, visible: isReadonly == false">answer</a>
+                                            <a class="btn  btn-xs btn-primary" href="#" data-bind="click: $root.showDetails, visible: isReadonly == false && isEnabled">answer</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -408,19 +408,19 @@
                 <div class="panel-body">
                     @if (GlobalInfo.IsHeadquarter)
                     {
-                        <!-- ko if: scope == 'Headquarter' -->
+                        <!-- ko if: scope == 'Headquarter' && isEnabled -->
                         <div data-bind="template: { name: questionType + 'Full' }"></div>
                         <!-- /ko -->
-                        <!-- ko ifnot: scope == 'Headquarter' -->
+                        <!-- ko ifnot: scope == 'Headquarter' && isEnabled -->
                         <div data-bind="template: { name: questionType + 'ReadOnly' }"></div>
                         <!-- /ko -->
                     }
                     else
                     {
-                        <!-- ko if: scope == 'Supervisor' -->
+                        <!-- ko if: scope == 'Supervisor' && isEnabled -->
                         <div data-bind="template: { name: questionType + 'Full' }"></div>
                         <!-- /ko -->
-                        <!-- ko ifnot: scope == 'Supervisor' -->
+                        <!-- ko ifnot: scope == 'Supervisor' && isEnabled -->
                         <div data-bind="template: { name: questionType + 'ReadOnly' }"></div>
                         <!-- /ko -->
                     }

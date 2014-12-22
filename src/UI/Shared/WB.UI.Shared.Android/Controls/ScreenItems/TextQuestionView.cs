@@ -1,8 +1,7 @@
 using System;
 using Android.Content;
-using Android.Graphics;
+using Android.OS;
 using Android.Text;
-using Android.Util;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
@@ -45,7 +44,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             {
                 maskedWatcher = new MaskedWatcher(TypedMode.Mask, etAnswer);
                 etAnswer.AddTextChangedListener(maskedWatcher);
-                this.etAnswer.InputType = InputTypes.TextFlagNoSuggestions;
+                this.etAnswer.InputType = InputTypes.TextVariationVisiblePassword; //fix for samsung 
             }
             
             this.etAnswer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent);
@@ -53,33 +52,35 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             this.etAnswer.SetSelectAllOnFocus(true);
             this.etAnswer.ImeOptions = ImeAction.Done;
             this.etAnswer.SetSingleLine(true);
+
             this.etAnswer.EditorAction += this.etAnswer_EditorAction;
             this.etAnswer.FocusChange += this.etAnswer_FocusChange;
+            this.PutAnswerStoredInModelToUI();
+            
             this.llWrapper.Click += this.TextQuestionView_Click;
             this.llWrapper.AddView(this.etAnswer);
-
-            this.PutAnswerStoredInModelToUI();
-
         }
 
         private void etAnswer_FocusChange(object sender, View.FocusChangeEventArgs e)
         {
             if (e.HasFocus)
             {
-                this.ShowKeyboard(this.etAnswer);
                 return;
             }
 
-            if (!this.IsCommentsEditorFocused)
-                this.HideKeyboard(this.etAnswer);
+            var newAnswer = etAnswer.Text.Trim();
 
             if (isInputMasked && !this.maskedWatcher.IsTextMaskMatched())
             {
-                this.PutAnswerStoredInModelToUI();
+
+                if (newAnswer != this.Model.AnswerString)
+                {
+                    if (Build.VERSION.SdkInt <= BuildVersionCodes.Kitkat) //temp fix Android Lollipop issue with scroll
+                        this.PutAnswerStoredInModelToUI();
+                }
+
                 return;
             }
-            
-            var newAnswer = etAnswer.Text.Trim();
 
             if (newAnswer != this.Model.AnswerString)
             {
@@ -109,6 +110,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             if (e.ActionId == ImeAction.Done)
             {
                 this.etAnswer.ClearFocus();
+                this.HideKeyboard(this.etAnswer);
             }
         }
 

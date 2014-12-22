@@ -6,6 +6,11 @@ namespace WB.Core.GenericSubdomains.Utils
 {
     public static class StringExtensions
     {
+        public static bool IsNullOrEmpty(this string input)
+        {
+            return string.IsNullOrEmpty(input);
+        }
+
         public static string ToCamelCase(this string input)
         {
             if ((input == null || input.Length < 2))
@@ -126,10 +131,10 @@ namespace WB.Core.GenericSubdomains.Utils
             return (T)returnValue;
         }
 
-        public static bool IsInteger(this string source)
+        public static bool IsDecimal(this string source)
         {
-            int iSource;
-            return Int32.TryParse(source, out iSource);
+            decimal iSource;
+            return decimal.TryParse(source, out iSource);
         }
 
         public static string NullIfEmptyOrWhiteSpace(this string src)

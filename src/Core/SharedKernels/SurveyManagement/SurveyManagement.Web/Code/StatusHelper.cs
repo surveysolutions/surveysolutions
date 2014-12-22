@@ -16,6 +16,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             InterviewStatus.ReadyForInterview,
             InterviewStatus.Restarted,
             InterviewStatus.SentToCapi,
+            InterviewStatus.Restored,
             InterviewStatus.Deleted
         };
 

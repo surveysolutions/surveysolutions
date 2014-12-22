@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
+using global::Android.Views;
 
 namespace WB.UI.Shared.Android.Controls.ScreenItems
 {
@@ -44,21 +45,79 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             this.filteredCombobox.SetSelectAllOnFocus(true);
             this.filteredCombobox.SetSingleLine(true);
             this.filteredCombobox.ItemClick += filteredCombobox_ItemClick;
+            this.filteredCombobox.FocusChange += this.filteredCombobox_FocusChange;
+            this.filteredCombobox.KeyPress += FilteredComboboxOnKeyPress;
+            this.filteredCombobox.EditorAction += FilteredComboboxOnEditorAction;
+            
 
             var adapter = new ArrayAdapter<String>(this.Context, Resource.Layout.FilteredComboboxRowLayout,
                 this.Answers.Select(option => option.Title).ToList());
             this.filteredCombobox.Adapter = adapter;
             
             this.llWrapper.AddView(this.filteredCombobox);
+
+            this.llWrapper.Focusable = true;
+            this.llWrapper.FocusableInTouchMode = true;
+        }
+
+        private void FilteredComboboxOnEditorAction(object sender, TextView.EditorActionEventArgs editorActionEventArgs)
+        {
+            if (editorActionEventArgs.ActionId == ImeAction.Done)
+            {
+                this.filteredCombobox.ClearFocus();
+            }
+            else
+            {
+                editorActionEventArgs.Handled = false;
+            }
+        }
+
+        private void FilteredComboboxOnKeyPress(object sender, KeyEventArgs keyEventArgs)
+        {
+            keyEventArgs.Handled = false;
+            if (keyEventArgs.KeyCode == Keycode.Del && string.IsNullOrEmpty(this.filteredCombobox.Text))
+            {
+                this.filteredCombobox.ShowDropDown();
+            }
+        }
+
+        private void filteredCombobox_FocusChange(object sender, FocusChangeEventArgs e)
+        {
+            if (e.HasFocus)
+            {
+                this.filteredCombobox.ShowDropDown();
+            }
+            else
+            {
+                SaveAnswerOrShowErrorOnUi();
+            }
         }
 
         void filteredCombobox_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
         {
-            var answer = this.Answers.FirstOrDefault(option=> option.Title.Equals(this.filteredCombobox.Text));
+            this.filteredCombobox.ClearFocus();
+        }
+
+        private void SaveAnswerOrShowErrorOnUi()
+        {
+            var answer = FindSelectedAnswer();
             if (answer != null)
             {
-                this.SaveAnswer(this.GetAnswerTitle(answer), this.CreateSaveAnswerCommand(answer));
+                if (GetAnswerTitle(answer) != this.Model.AnswerString)
+                {
+                    this.SaveAnswer(this.GetAnswerTitle(answer), this.CreateSaveAnswerCommand(answer));
+                }
             }
+            else
+            {
+                var errorTemplate = Resources.GetText(Resource.String.AnswerIsNotPresentInFilteredComboboxOptionsList);
+                this.ShowErrorMessageOnUi(string.Format(errorTemplate, this.filteredCombobox.Text));
+            }
+        }
+
+        private AnswerViewModel FindSelectedAnswer()
+        {
+            return this.Answers.FirstOrDefault(option => option.Title.ToLower().Equals(this.filteredCombobox.Text.ToLower()));
         }
 
         protected override string GetAnswerStoredInModelAsString()

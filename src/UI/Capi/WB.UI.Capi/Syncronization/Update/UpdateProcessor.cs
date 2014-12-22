@@ -2,10 +2,8 @@ using System;
 using System.IO;
 using Android.App;
 using Android.Content;
-using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Utils.Rest;
+using WB.UI.Capi.Services;
 using WB.UI.Capi.Settings;
 
 namespace WB.UI.Capi.Syncronization.Update
@@ -14,13 +12,13 @@ namespace WB.UI.Capi.Syncronization.Update
     {
         private const string DownloadFolder = "download";
         private readonly string pathToFolder = Path.Combine(global::Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, DownloadFolder);
-        private readonly IRestServiceWrapperFactory restServiceWrapperFactory;
         private readonly ILogger logger;
+        private readonly ISynchronizationService synchronizationService;
 
-        public UpdateProcessor(IRestServiceWrapperFactory restServiceWrapperFactory)
+        public UpdateProcessor(ILogger logger, ISynchronizationService synchronizationService)
         {
-            this.restServiceWrapperFactory = restServiceWrapperFactory;
-            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
+            this.logger = logger;
+            this.synchronizationService = synchronizationService;
 
             if (!Directory.Exists(this.pathToFolder))
             {
@@ -63,9 +61,15 @@ namespace WB.UI.Capi.Syncronization.Update
 
         public bool? CheckNewVersion()
         {
-            var executor = restServiceWrapperFactory.CreateRestServiceWrapper(SettingsManager.GetSyncAddressPoint());
-            var checker = new RestVersionUpdate(executor);
-            return checker.Execute(SettingsManager.AppVersionCode());
+            bool? newVersionAvailableOrNullIfThrow = null;
+            try
+            {
+                newVersionAvailableOrNullIfThrow = this.synchronizationService.NewVersionAvailableAsync().Result;
+            }
+            catch
+            {
+            }
+            return newVersionAvailableOrNullIfThrow;
         }
     }
 }

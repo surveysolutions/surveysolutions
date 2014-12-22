@@ -25,12 +25,12 @@ namespace WB.UI.Headquarters.Controllers
     public class QuestionnairesApiController : BaseApiController
     {
         private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory;
-        private readonly IQueryableReadSideRepositoryWriter<InterviewSummary> interviews;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
 
         public QuestionnairesApiController(
             ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
-            IQueryableReadSideRepositoryWriter<InterviewSummary> interviews)
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviews)
             : base(commandService, globalInfo, logger)
         {
             this.interviews = interviews;

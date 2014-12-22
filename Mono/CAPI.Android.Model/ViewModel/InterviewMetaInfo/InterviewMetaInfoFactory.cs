@@ -26,8 +26,6 @@ namespace CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo
             if (interview == null)
                 return null;
 
-            var status = (InterviewStatus) interview.Status;
-
             var featuredQuestionList = interview.CreatedOnClient != null && interview.CreatedOnClient.Value
                 ? interview.GetProperties()
                     .Select(
@@ -39,7 +37,7 @@ namespace CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo
             {
                 PublicKey = input.InterviewId,
                 ResponsibleId = Guid.Parse(interview.Responsible),
-                Status = (int) status,
+                Status = (int) interview.Status,
                 TemplateId = Guid.Parse(interview.Survey),
                 Comments = interview.Comments,
                 Valid = interview.Valid,

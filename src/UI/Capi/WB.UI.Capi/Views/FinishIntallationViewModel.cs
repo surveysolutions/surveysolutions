@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using Cirrious.MvvmCross.ViewModels;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Services;
@@ -13,21 +13,21 @@ namespace WB.UI.Capi.Views
     {
         private INavigationService NavigationService
         {
-            get
-            {
-                return  ServiceLocator.Current.GetInstance<INavigationService>();
-            }
+            get { return ServiceLocator.Current.GetInstance<INavigationService>(); }
         }
 
         private IPasswordHasher passwordHasher
         {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<IPasswordHasher>();
-            }
+            get { return ServiceLocator.Current.GetInstance<IPasswordHasher>(); }
+        }
+
+        private IInterviewerSettings interviewerSettings
+        {
+            get { return ServiceLocator.Current.GetInstance<IInterviewerSettings>(); }
         }
 
         private bool canSetSyncEndpoint = true;
+
         public bool CanSetSyncEndpoint
         {
             get { return canSetSyncEndpoint; }
@@ -37,6 +37,7 @@ namespace WB.UI.Capi.Views
                 RaisePropertyChanged(() => CanSetSyncEndpoint);
             }
         }
+
         public string SyncEndpoint { get; private set; }
         public string Login { get; private set; }
         public string Password { get; private set; }
@@ -45,9 +46,9 @@ namespace WB.UI.Capi.Views
         {
             this.SyncEndpoint = "";
 #if DEBUG
-            this.SyncEndpoint = "http://192.168.88.226/headquarters";
-            this.Login = "int";
-            this.Password = "1";
+            this.SyncEndpoint = "http://172.29.124.72/headquarters";
+            this.Login = "inter";
+            this.Password = "Qwerty1234";
 #endif
         }
 
@@ -66,17 +67,19 @@ namespace WB.UI.Capi.Views
 
         private void StartSynchronization()
         {
-            if (!SettingsManager.SetSyncAddressPoint(this.SyncEndpoint))
+            try
+            {
+                this.interviewerSettings.SetSyncAddressPoint(this.SyncEndpoint);
+                NavigationService.NavigateTo(CapiPages.Synchronization, new Dictionary<string, string>
+                {
+                    {"Login", Login},
+                    {"PasswordHash", passwordHasher.Hash(Password)}
+                });
+            }
+            catch(ArgumentException ex)
             {
                 this.CanSetSyncEndpoint = false;
-                return;
             }
-
-            NavigationService.NavigateTo(CapiPages.Synchronization, new Dictionary<string, string>
-            {
-                { "Login", Login },
-                { "PasswordHash", passwordHasher.Hash(Password) }
-            });
         }
     }
 }

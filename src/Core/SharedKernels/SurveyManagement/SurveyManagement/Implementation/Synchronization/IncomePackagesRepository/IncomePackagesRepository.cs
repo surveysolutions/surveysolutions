@@ -7,12 +7,12 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -90,7 +90,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
 
             try
             { 
-                var meta = this.jsonUtils.Deserrialize<InterviewMetaInfo>(archiver.DecompressString(item.MetaInfo));
+                var meta = this.jsonUtils.Deserialize<InterviewMetaInfo>(archiver.DecompressString(item.MetaInfo));
                 if (meta.CreatedOnClient.HasValue && meta.CreatedOnClient.Value && this.interviewSummaryRepositoryWriter.GetById(meta.PublicKey)==null)
                 {
                     AnsweredQuestionSynchronizationDto[] prefilledQuestions = null;
@@ -115,7 +115,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             catch (Exception ex)
             {
                 this.logger.Error("error on handling incoming package,", ex);
-                this.fileSystemAccessor.WriteAllText(this.GetItemFileNameForErrorStorage(item.RootId),this.jsonUtils.GetItemAsContent(item));
+                this.fileSystemAccessor.WriteAllText(this.GetItemFileNameForErrorStorage(item.RootId),this.jsonUtils.Serialize(item));
             }
         }
 
@@ -154,7 +154,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
 
             var fileContent = this.fileSystemAccessor.ReadAllText(fileName);
 
-            var items = this.jsonUtils.Deserrialize<AggregateRootEvent[]>(archiver.DecompressString(fileContent));
+            var items = this.jsonUtils.Deserialize<AggregateRootEvent[]>(archiver.DecompressString(fileContent));
             if (items.Length > 0)
             {
                 if (this.EventStore == null)

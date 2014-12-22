@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Linq;
-using System.ServiceModel;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using Main.Core.Documents;
 
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernel.Utils.Compression;
+using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -16,8 +18,6 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Template;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
-using WB.Core.SharedKernels.SurveySolutions.Services;
-using WB.UI.Headquarters.PublicService;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
@@ -26,51 +26,57 @@ namespace WB.UI.Headquarters.Controllers
     [ApiValidationAntiForgeryToken]
     public class DesignerQuestionnairesApiController : BaseApiController
     {
-        internal IPublicService DesignerService
+        internal RestCredentials designerUserCredentials
         {
-            get { return this.getDesignerService(this.GlobalInfo); }
-            set { SetDesignerService(this.GlobalInfo, value); }
+            get { return this.getDesignerUserCredentials(this.GlobalInfo); }
+            set { SetDesignerUserCredentials(this.GlobalInfo, value); }
         }
 
+        private readonly IRestService restService;
         private readonly IStringCompressor zipUtils;
         private readonly ISupportedVersionProvider supportedVersionProvider;
-        private readonly Func<IGlobalInfoProvider, IPublicService> getDesignerService;
+        private readonly Func<IGlobalInfoProvider, RestCredentials> getDesignerUserCredentials;
 
         public DesignerQuestionnairesApiController(
             ISupportedVersionProvider supportedVersionProvider,
-            ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger)
-            : this(supportedVersionProvider, commandService, globalInfo, zipUtils, logger, GetDesignerService) { }
+            ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger, IRestService restService)
+            : this(supportedVersionProvider, commandService, globalInfo, zipUtils, logger, GetDesignerUserCredentials, restService)
+        {
+        }
 
-        internal DesignerQuestionnairesApiController(
-            ISupportedVersionProvider supportedVersionProvider,
+        internal DesignerQuestionnairesApiController(ISupportedVersionProvider supportedVersionProvider,
             ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger,
-            Func<IGlobalInfoProvider, IPublicService> getDesignerService)
+            Func<IGlobalInfoProvider, RestCredentials> getDesignerUserCredentials, IRestService restService)
             : base(commandService, globalInfo, logger)
         {
             this.zipUtils = zipUtils;
-            this.getDesignerService = getDesignerService;
+            this.getDesignerUserCredentials = getDesignerUserCredentials;
             this.supportedVersionProvider = supportedVersionProvider;
+            this.restService = restService;
         }
 
-        private static IPublicService GetDesignerService(IGlobalInfoProvider globalInfoProvider)
+        private static RestCredentials GetDesignerUserCredentials(IGlobalInfoProvider globalInfoProvider)
         {
-            return (IPublicService)HttpContext.Current.Session[globalInfoProvider.GetCurrentUser().Name];
+            return (RestCredentials)HttpContext.Current.Session[globalInfoProvider.GetCurrentUser().Name];
         }
 
-        private static void SetDesignerService(IGlobalInfoProvider globalInfoProvider, IPublicService publicService)
+        private static void SetDesignerUserCredentials(IGlobalInfoProvider globalInfoProvider, RestCredentials designerUserCredentials)
         {
-            HttpContext.Current.Session[globalInfoProvider.GetCurrentUser().Name] = publicService;
+            HttpContext.Current.Session[globalInfoProvider.GetCurrentUser().Name] = designerUserCredentials;
         }
 
-        public DesignerQuestionnairesView QuestionnairesList(DesignerQuestionnairesListViewModel data)
+        public async Task<DesignerQuestionnairesView> QuestionnairesList(DesignerQuestionnairesListViewModel data)
         {
-            QuestionnaireListViewMessage list =
-                this.DesignerService.GetQuestionnaireList(
-                    new QuestionnaireListRequest(
-                        Filter: data.Request.Filter,
-                        PageIndex: data.Pager.Page,
-                        PageSize: data.Pager.PageSize,
-                        SortOrder: data.SortOrder.GetOrderRequestString()));
+            var list = await this.restService.PostAsync<PagedQuestionnaireCommunicationPackage>(
+                url: "pagedquestionnairelist",
+                credentials: this.designerUserCredentials, 
+                request: new QuestionnaireListRequest()
+                {
+                    Filter = data.Request.Filter,
+                    PageIndex = data.Pager.Page,
+                    PageSize = data.Pager.PageSize,
+                    SortOrder = data.SortOrder.GetOrderRequestString()
+                });
 
             return new DesignerQuestionnairesView()
                 {
@@ -81,41 +87,42 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        public QuestionnaireVerificationResponse GetQuestionnaire(ImportQuestionnaireRequest request)
+        public async Task<QuestionnaireVerificationResponse> GetQuestionnaire(ImportQuestionnaireRequest request)
         {
             try
             {
-                var supportedVerstion = this.supportedVersionProvider.GetSupportedQuestionnaireVersion();
+                var supportedVersion = this.supportedVersionProvider.GetSupportedQuestionnaireVersion();
 
-                RemoteFileInfo docSource =
-                    this.DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(request.QuestionnaireId,
-                        new QuestionnaireVersion
+                var docSource = await this.restService.PostAsync<QuestionnaireCommunicationPackage>(
+                    url: "questionnaire",
+                    credentials: designerUserCredentials,
+                    request: new DownloadQuestionnaireRequest()
+                    {
+                        QuestionnaireId = request.QuestionnaireId,
+                        SupportedVersion = new QuestionnnaireVersion()
                         {
-                            Major = supportedVerstion.SupportedQuestionnaireVersionMajor,
-                            Minor = supportedVerstion.SupportedQuestionnaireVersionMinor,
-                            Patch = supportedVerstion.SupportedQuestionnaireVersionPatch
-                        }));
+                            Major = supportedVersion.SupportedQuestionnaireVersionMajor,
+                            Minor = supportedVersion.SupportedQuestionnaireVersionMinor,
+                            Patch = supportedVersion.SupportedQuestionnaireVersionPatch
+                        }
+                    });
 
-                var document = this.zipUtils.Decompress<QuestionnaireDocument>(docSource.FileByteStream);
+                var document = this.zipUtils.DecompressString<QuestionnaireDocument>(docSource.Questionnaire);
 
-                var supportingAssembly = docSource.SupportingAssembly;
+                var supportingAssembly = docSource.QuestionnaireAssembly;
 
                 this.CommandService.Execute(new ImportFromDesigner(this.GlobalInfo.GetCurrentUser().Id, document,
                     request.AllowCensusMode, supportingAssembly));
 
                 return new QuestionnaireVerificationResponse();
             }
-            catch (FaultException ex)
-            {
-                this.Logger.Error(
-                    string.Format("Designer: error when importing template #{0}", request.QuestionnaireId), ex);
-
-                return new QuestionnaireVerificationResponse() {ImportError = ex.Reason.ToString()};
-            }
             catch (Exception ex)
             {
                 var domainEx = ex.GetSelfOrInnerAs<QuestionnaireException>();
                 if (domainEx != null) return new QuestionnaireVerificationResponse() {ImportError = domainEx.Message};
+
+                var restEx = ex.GetSelfOrInnerAs<RestException>();
+                if (restEx != null) return new QuestionnaireVerificationResponse() {ImportError = restEx.Message};
 
                 this.Logger.Error(
                     string.Format("Designer: error when importing template #{0}", request.QuestionnaireId), ex);

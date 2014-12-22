@@ -35,8 +35,6 @@ namespace WB.UI.QuestionnaireTester
 			global::MWBarcodeScanner.Resource.Id.preview_view = global::WB.UI.QuestionnaireTester.Resource.Id.preview_view;
 			global::MWBarcodeScanner.Resource.Layout.scanner = global::WB.UI.QuestionnaireTester.Resource.Layout.scanner;
 			global::MWBarcodeScanner.Resource.String.library_name = global::WB.UI.QuestionnaireTester.Resource.String.library_name;
-			global::WB.Core.GenericSubdomains.ErrorReporting.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
-			global::WB.Core.GenericSubdomains.ErrorReporting.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 			global::WB.Core.Infrastructure.Files.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
 			global::WB.Core.Infrastructure.Files.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 			global::WB.UI.Shared.Android.Resource.Attribute.MvxBind = global::WB.UI.QuestionnaireTester.Resource.Attribute.MvxBind;
@@ -71,6 +69,7 @@ namespace WB.UI.QuestionnaireTester
 			global::WB.UI.Shared.Android.Resource.Id.QuestionnaireId = global::WB.UI.QuestionnaireTester.Resource.Id.QuestionnaireId;
 			global::WB.UI.Shared.Android.Resource.Id.RelativeLayout1 = global::WB.UI.QuestionnaireTester.Resource.Id.RelativeLayout1;
 			global::WB.UI.Shared.Android.Resource.Id.ScreenId = global::WB.UI.QuestionnaireTester.Resource.Id.ScreenId;
+			global::WB.UI.Shared.Android.Resource.Id.btGroup = global::WB.UI.QuestionnaireTester.Resource.Id.btGroup;
 			global::WB.UI.Shared.Android.Resource.Id.btnAnswered = global::WB.UI.QuestionnaireTester.Resource.Id.btnAnswered;
 			global::WB.UI.Shared.Android.Resource.Id.btnComplete = global::WB.UI.QuestionnaireTester.Resource.Id.btnComplete;
 			global::WB.UI.Shared.Android.Resource.Id.btnInstructions = global::WB.UI.QuestionnaireTester.Resource.Id.btnInstructions;
@@ -90,6 +89,7 @@ namespace WB.UI.QuestionnaireTester
 			global::WB.UI.Shared.Android.Resource.Id.tvComments = global::WB.UI.QuestionnaireTester.Resource.Id.tvComments;
 			global::WB.UI.Shared.Android.Resource.Id.tvCommentsTitle = global::WB.UI.QuestionnaireTester.Resource.Id.tvCommentsTitle;
 			global::WB.UI.Shared.Android.Resource.Id.tvCount = global::WB.UI.QuestionnaireTester.Resource.Id.tvCount;
+			global::WB.UI.Shared.Android.Resource.Id.tvCounterText = global::WB.UI.QuestionnaireTester.Resource.Id.tvCounterText;
 			global::WB.UI.Shared.Android.Resource.Id.tvError = global::WB.UI.QuestionnaireTester.Resource.Id.tvError;
 			global::WB.UI.Shared.Android.Resource.Id.tvErrorWarning = global::WB.UI.QuestionnaireTester.Resource.Id.tvErrorWarning;
 			global::WB.UI.Shared.Android.Resource.Id.tvITem = global::WB.UI.QuestionnaireTester.Resource.Id.tvITem;
@@ -101,12 +101,14 @@ namespace WB.UI.QuestionnaireTester
 			global::WB.UI.Shared.Android.Resource.Layout.CascadingComboboxRowLayout = global::WB.UI.QuestionnaireTester.Resource.Layout.CascadingComboboxRowLayout;
 			global::WB.UI.Shared.Android.Resource.Layout.Details = global::WB.UI.QuestionnaireTester.Resource.Layout.Details;
 			global::WB.UI.Shared.Android.Resource.Layout.FilteredComboboxRowLayout = global::WB.UI.QuestionnaireTester.Resource.Layout.FilteredComboboxRowLayout;
+			global::WB.UI.Shared.Android.Resource.Layout.GroupView = global::WB.UI.QuestionnaireTester.Resource.Layout.GroupView;
 			global::WB.UI.Shared.Android.Resource.Layout.list_navigation_item = global::WB.UI.QuestionnaireTester.Resource.Layout.list_navigation_item;
 			global::WB.UI.Shared.Android.Resource.Layout.RosterQuestion = global::WB.UI.QuestionnaireTester.Resource.Layout.RosterQuestion;
 			global::WB.UI.Shared.Android.Resource.Layout.scanner = global::WB.UI.QuestionnaireTester.Resource.Layout.scanner;
 			global::WB.UI.Shared.Android.Resource.Layout.ScreenContentFragment = global::WB.UI.QuestionnaireTester.Resource.Layout.ScreenContentFragment;
 			global::WB.UI.Shared.Android.Resource.Layout.StaticTextView = global::WB.UI.QuestionnaireTester.Resource.Layout.StaticTextView;
 			global::WB.UI.Shared.Android.Resource.Layout.StatisticsContent = global::WB.UI.QuestionnaireTester.Resource.Layout.StatisticsContent;
+			global::WB.UI.Shared.Android.Resource.String.AnswerIsNotPresentInFilteredComboboxOptionsList = global::WB.UI.QuestionnaireTester.Resource.String.AnswerIsNotPresentInFilteredComboboxOptionsList;
 			global::WB.UI.Shared.Android.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
 			global::WB.UI.Shared.Android.Resource.String.AreYouSureYouWantToRemoveRowFromRosterFormat = global::WB.UI.QuestionnaireTester.Resource.String.AreYouSureYouWantToRemoveRowFromRosterFormat;
 			global::WB.UI.Shared.Android.Resource.String.No = global::WB.UI.QuestionnaireTester.Resource.String.No;
@@ -265,8 +267,8 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f050000
 			public const int MvxBindingTagUnique = 2131034112;
 			
-			// aapt resource value: 0x7f05001a
-			public const int MyLayout = 2131034138;
+			// aapt resource value: 0x7f050019
+			public const int MyLayout = 2131034137;
 			
 			// aapt resource value: 0x7f050003
 			public const int PrpagationKey = 2131034115;
@@ -274,26 +276,29 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f050001
 			public const int QuestionnaireId = 2131034113;
 			
-			// aapt resource value: 0x7f050027
-			public const int RelativeLayout1 = 2131034151;
+			// aapt resource value: 0x7f050029
+			public const int RelativeLayout1 = 2131034153;
 			
 			// aapt resource value: 0x7f050002
 			public const int ScreenId = 2131034114;
 			
-			// aapt resource value: 0x7f05002f
-			public const int btnAnswered = 2131034159;
+			// aapt resource value: 0x7f05001a
+			public const int btGroup = 2131034138;
 			
-			// aapt resource value: 0x7f050033
-			public const int btnComplete = 2131034163;
+			// aapt resource value: 0x7f050031
+			public const int btnAnswered = 2131034161;
+			
+			// aapt resource value: 0x7f050035
+			public const int btnComplete = 2131034165;
 			
 			// aapt resource value: 0x7f050008
 			public const int btnInstructions = 2131034120;
 			
-			// aapt resource value: 0x7f050032
-			public const int btnInvalid = 2131034162;
+			// aapt resource value: 0x7f050034
+			public const int btnInvalid = 2131034164;
 			
-			// aapt resource value: 0x7f050023
-			public const int btnLogin = 2131034147;
+			// aapt resource value: 0x7f050025
+			public const int btnLogin = 2131034149;
 			
 			// aapt resource value: 0x7f050012
 			public const int btnLogout = 2131034130;
@@ -301,14 +306,14 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f050015
 			public const int btnNext = 2131034133;
 			
-			// aapt resource value: 0x7f050026
-			public const int btnSave = 2131034150;
+			// aapt resource value: 0x7f050028
+			public const int btnSave = 2131034152;
 			
-			// aapt resource value: 0x7f050019
-			public const int btnStart = 2131034137;
+			// aapt resource value: 0x7f05001c
+			public const int btnStart = 2131034140;
 			
-			// aapt resource value: 0x7f050030
-			public const int btnUnanswered = 2131034160;
+			// aapt resource value: 0x7f050032
+			public const int btnUnanswered = 2131034162;
 			
 			// aapt resource value: 0x7f05000f
 			public const int etComments = 2131034127;
@@ -316,71 +321,71 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f050014
 			public const int flFragmentHolder = 2131034132;
 			
-			// aapt resource value: 0x7f05002a
-			public const int flashButton = 2131034154;
+			// aapt resource value: 0x7f05002c
+			public const int flashButton = 2131034156;
 			
-			// aapt resource value: 0x7f05001f
-			public const int footer = 2131034143;
+			// aapt resource value: 0x7f050021
+			public const int footer = 2131034145;
 			
-			// aapt resource value: 0x7f05001e
-			public const int header = 2131034142;
+			// aapt resource value: 0x7f050020
+			public const int header = 2131034144;
 			
 			// aapt resource value: 0x7f050010
 			public const int imgAnswerProgress = 2131034128;
 			
-			// aapt resource value: 0x7f05002d
-			public const int llButtom = 2131034157;
+			// aapt resource value: 0x7f05002f
+			public const int llButtom = 2131034159;
 			
 			// aapt resource value: 0x7f050016
 			public const int llContainer = 2131034134;
 			
-			// aapt resource value: 0x7f05002c
-			public const int llContent = 2131034156;
+			// aapt resource value: 0x7f05002e
+			public const int llContent = 2131034158;
 			
-			// aapt resource value: 0x7f050024
-			public const int llDesignerPath = 2131034148;
+			// aapt resource value: 0x7f050026
+			public const int llDesignerPath = 2131034150;
 			
 			// aapt resource value: 0x7f050018
 			public const int llNavigationHolder = 2131034136;
 			
-			// aapt resource value: 0x7f050034
-			public const int llQuestionnairie = 2131034164;
+			// aapt resource value: 0x7f050036
+			public const int llQuestionnairie = 2131034166;
 			
 			// aapt resource value: 0x7f050007
 			public const int llRoot = 2131034119;
 			
-			// aapt resource value: 0x7f05002b
-			public const int llTop = 2131034155;
+			// aapt resource value: 0x7f05002d
+			public const int llTop = 2131034157;
 			
 			// aapt resource value: 0x7f050009
 			public const int llWrapper = 2131034121;
 			
-			// aapt resource value: 0x7f050020
-			public const int loginForm = 2131034144;
+			// aapt resource value: 0x7f050022
+			public const int loginForm = 2131034146;
 			
-			// aapt resource value: 0x7f050029
-			public const int overlayImage = 2131034153;
+			// aapt resource value: 0x7f05002b
+			public const int overlayImage = 2131034155;
 			
-			// aapt resource value: 0x7f050028
-			public const int preview_view = 2131034152;
+			// aapt resource value: 0x7f05002a
+			public const int preview_view = 2131034154;
 			
 			// aapt resource value: 0x7f050013
 			public const int svQuery = 2131034131;
 			
-			// aapt resource value: 0x7f050021
-			public const int teLogin = 2131034145;
+			// aapt resource value: 0x7f050023
+			public const int teLogin = 2131034147;
 			
-			// aapt resource value: 0x7f050022
-			public const int tePassword = 2131034146;
+			// aapt resource value: 0x7f050024
+			public const int tePassword = 2131034148;
 			
-			// aapt resource value: 0x7f050025
-			public const int tePathToDesigner = 2131034149;
+			// aapt resource value: 0x7f050027
+			public const int tePathToDesigner = 2131034151;
 			
-			// aapt resource value: 0x7f05001d
-			public const int topView = 2131034141;
+			// aapt resource value: 0x7f05001f
+			public const int topView = 2131034143;
 			
-			// aapt resource value: 0x7f050035
-			public const int tvArrow = 2131034165;
+			// aapt resource value: 0x7f050037
+			public const int tvArrow = 2131034167;
 			
 			// aapt resource value: 0x7f05000d
 			public const int tvComments = 2131034125;
@@ -388,23 +393,26 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f05000e
 			public const int tvCommentsTitle = 2131034126;
 			
-			// aapt resource value: 0x7f05001c
-			public const int tvCount = 2131034140;
+			// aapt resource value: 0x7f05001e
+			public const int tvCount = 2131034142;
+			
+			// aapt resource value: 0x7f05001b
+			public const int tvCounterText = 2131034139;
 			
 			// aapt resource value: 0x7f05000b
 			public const int tvError = 2131034123;
 			
-			// aapt resource value: 0x7f050031
-			public const int tvErrorWarning = 2131034161;
+			// aapt resource value: 0x7f050033
+			public const int tvErrorWarning = 2131034163;
 			
-			// aapt resource value: 0x7f05001b
-			public const int tvITem = 2131034139;
+			// aapt resource value: 0x7f05001d
+			public const int tvITem = 2131034141;
 			
 			// aapt resource value: 0x7f05000a
 			public const int tvMError = 2131034122;
 			
-			// aapt resource value: 0x7f05002e
-			public const int tvText = 2131034158;
+			// aapt resource value: 0x7f050030
+			public const int tvText = 2131034160;
 			
 			// aapt resource value: 0x7f05000c
 			public const int tvTitle = 2131034124;
@@ -450,34 +458,37 @@ namespace WB.UI.QuestionnaireTester
 			public const int FilteredComboboxRowLayout = 2130903046;
 			
 			// aapt resource value: 0x7f030007
-			public const int Home = 2130903047;
+			public const int GroupView = 2130903047;
 			
 			// aapt resource value: 0x7f030008
-			public const int list_navigation_item = 2130903048;
+			public const int Home = 2130903048;
 			
 			// aapt resource value: 0x7f030009
-			public const int Login = 2130903049;
+			public const int list_navigation_item = 2130903049;
 			
 			// aapt resource value: 0x7f03000a
-			public const int RosterQuestion = 2130903050;
+			public const int Login = 2130903050;
 			
 			// aapt resource value: 0x7f03000b
-			public const int scanner = 2130903051;
+			public const int RosterQuestion = 2130903051;
 			
 			// aapt resource value: 0x7f03000c
-			public const int ScreenContentFragment = 2130903052;
+			public const int scanner = 2130903052;
 			
 			// aapt resource value: 0x7f03000d
-			public const int SplashScreen = 2130903053;
+			public const int ScreenContentFragment = 2130903053;
 			
 			// aapt resource value: 0x7f03000e
-			public const int StaticTextView = 2130903054;
+			public const int SplashScreen = 2130903054;
 			
 			// aapt resource value: 0x7f03000f
-			public const int StatisticsContent = 2130903055;
+			public const int StaticTextView = 2130903055;
 			
 			// aapt resource value: 0x7f030010
-			public const int template_list_item = 2130903056;
+			public const int StatisticsContent = 2130903056;
+			
+			// aapt resource value: 0x7f030011
+			public const int template_list_item = 2130903057;
 			
 			static Layout()
 			{
@@ -492,35 +503,38 @@ namespace WB.UI.QuestionnaireTester
 		public partial class String
 		{
 			
+			// aapt resource value: 0x7f060005
+			public const int AnswerIsNotPresentInFilteredComboboxOptionsList = 2131099653;
+			
 			// aapt resource value: 0x7f060000
 			public const int ApplicationName = 2131099648;
 			
 			// aapt resource value: 0x7f060004
 			public const int AreYouSureYouWantToRemoveRowFromRosterFormat = 2131099652;
 			
-			// aapt resource value: 0x7f060009
-			public const int DesignerPath = 2131099657;
+			// aapt resource value: 0x7f06000a
+			public const int DesignerPath = 2131099658;
 			
-			// aapt resource value: 0x7f060007
-			public const int Hello = 2131099655;
+			// aapt resource value: 0x7f060008
+			public const int Hello = 2131099656;
 			
 			// aapt resource value: 0x7f060003
 			public const int No = 2131099651;
 			
-			// aapt resource value: 0x7f06000b
-			public const int Oops = 2131099659;
-			
-			// aapt resource value: 0x7f06000a
-			public const int QuestionnaireLoadingError = 2131099658;
-			
 			// aapt resource value: 0x7f06000c
-			public const int ReasonFormat = 2131099660;
+			public const int Oops = 2131099660;
 			
-			// aapt resource value: 0x7f06000e
-			public const int TemplateIsMissing = 2131099662;
+			// aapt resource value: 0x7f06000b
+			public const int QuestionnaireLoadingError = 2131099659;
 			
 			// aapt resource value: 0x7f06000d
-			public const int TemplateIsNotValidForCurrentVersionOfTester = 2131099661;
+			public const int ReasonFormat = 2131099661;
+			
+			// aapt resource value: 0x7f06000f
+			public const int TemplateIsMissing = 2131099663;
+			
+			// aapt resource value: 0x7f06000e
+			public const int TemplateIsNotValidForCurrentVersionOfTester = 2131099662;
 			
 			// aapt resource value: 0x7f060001
 			public const int Warning = 2131099649;
@@ -528,14 +542,14 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f060002
 			public const int Yes = 2131099650;
 			
+			// aapt resource value: 0x7f060007
+			public const int drawer_close = 2131099655;
+			
 			// aapt resource value: 0x7f060006
-			public const int drawer_close = 2131099654;
+			public const int drawer_open = 2131099654;
 			
-			// aapt resource value: 0x7f060005
-			public const int drawer_open = 2131099653;
-			
-			// aapt resource value: 0x7f060008
-			public const int library_name = 2131099656;
+			// aapt resource value: 0x7f060009
+			public const int library_name = 2131099657;
 			
 			static String()
 			{

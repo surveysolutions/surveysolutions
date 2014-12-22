@@ -4,6 +4,7 @@ using System.Linq;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 {
@@ -44,11 +45,15 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
                 }
                 if (interviews.Any() || surveyDto.AllowCensusMode)
                 {
-                    result.Surveys.Add(new DashboardSurveyItem(surveyDto.Id, 
-                        surveyDto.QuestionnaireId, 
+                    result.Surveys.Add(new DashboardSurveyItem(surveyDto.Id,
+                        surveyDto.QuestionnaireId,
                         surveyDto.QuestionnaireVersion,
-                        surveyDto.SurveyTitle, 
-                        interviews.Select(i => i.GetDashboardItem(i.Survey, surveyDto.SurveyTitle, i.Comments)),
+                        surveyDto.SurveyTitle,
+                        interviews.Select(
+                            i =>
+                                new DashboardQuestionnaireItem(Guid.Parse(i.Id), Guid.Parse(i.Survey), (InterviewStatus)i.Status,
+                                    i.GetProperties(), surveyDto.SurveyTitle, i.Comments, i.CreatedOnClient,
+                                    i.JustInitilized.HasValue && i.JustInitilized.Value)),
                         surveyDto.AllowCensusMode));
                 }
             }

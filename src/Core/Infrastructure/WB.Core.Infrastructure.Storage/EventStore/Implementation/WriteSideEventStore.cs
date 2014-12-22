@@ -11,6 +11,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.GenericSubdomains.Utils;
 using Newtonsoft.Json.Converters;
 
@@ -105,11 +106,11 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public void Store(UncommittedEventStream eventStream)
         {
-            using (var transaction = connection.StartTransactionAsync(EventsPrefix + eventStream.SourceId, ExpectedVersion.Any, this.credentials).Result)
+            using (var transaction = connection.StartTransactionAsync(EventsPrefix + eventStream.SourceId, ExpectedVersion.Any, this.credentials).WaitAndUnwrapException())
             {
                 this.SaveStream(eventStream, connection);
 
-                transaction.CommitAsync().Wait(defaultTimeout);
+                transaction.CommitAsync().WaitAndUnwrapException();
             }
         }
 

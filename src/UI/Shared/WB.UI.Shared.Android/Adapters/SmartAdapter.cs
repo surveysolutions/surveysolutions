@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Android.Views;
 using Android.Widget;
+using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Extensions;
 
 namespace WB.UI.Shared.Android.Adapters
@@ -20,23 +21,14 @@ namespace WB.UI.Shared.Android.Adapters
 
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
-
             var dataItem = this[position];
 
-            if (convertView == null)
+            if (convertView != null)
             {
-                convertView = this.CreateViewElement(dataItem, position);
+                convertView.TryClearBindingsIfPossible();
             }
-            else
-            {
-                var elementId = Convert.ToInt32(convertView.GetTag(Resource.Id.ElementId).ToString());
-                if (elementId != position)
-                {
-                    convertView.TryClearBindingsIfPossible();
 
-                    convertView = this.CreateViewElement(dataItem, position);
-                }
-            }
+            convertView = this.CreateViewElement(dataItem, position);
 
             return convertView;
         }
@@ -45,6 +37,7 @@ namespace WB.UI.Shared.Android.Adapters
         {
             View convertView;
             convertView = this.BuildViewItem(dataItem, position);
+           
             convertView.SetTag(Resource.Id.ElementId, position.ToString());
             return convertView;
         }

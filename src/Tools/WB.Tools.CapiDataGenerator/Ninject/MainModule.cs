@@ -26,6 +26,7 @@ using WB.Core.BoundedContexts.Capi.Implementation.ChangeLog;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Backup;
@@ -42,15 +43,12 @@ using WB.Core.Infrastructure.Storage.EventStore.Implementation;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.Infrastructure.Storage.Raven.Implementation;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
-using WB.Core.SharedKernel.Utils.Compression;
-using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.Tools.CapiDataGenerator.Ninject;
 using WB.UI.Shared.Web.Settings;
 using UserDenormalizer = CAPI.Android.Core.Model.EventHandlers.UserDenormalizer;
@@ -77,7 +75,7 @@ namespace CapiDataGenerator
         public override void Load()
         {
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
-            this.Bind<IStringCompressor>().To<GZipJsonCompressor>();
+            this.Bind<IStringCompressor>().To<JsonCompressor>();
             var capiEvenStore = new MvvmCrossSqliteEventStore(EventStoreDatabaseName);
             var denormalizerStore = new SqliteDenormalizerStore(ProjectionStoreName);
             var plainStore = new SqlitePlainStore(PlainStoreName);
@@ -94,9 +92,10 @@ namespace CapiDataGenerator
                 interviewMetaInfoFactory,
                 this.Kernel.Get<IArchiveUtils>(),
                 this.Kernel.Get<IFileSystemAccessor>(),
+                this.Kernel.Get<IJsonUtils>(),
                 environmentalPersonalFolderPath);
 
-            var capiTemplateWriter = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>();
+            var capiTemplateWriter = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>(this.Kernel.Get<IJsonUtils>());
             this.capiTemplateVersionedWriter = new VersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>(capiTemplateWriter);
             
             ClearCapiDb(capiEvenStore, denormalizerStore, plainStore, changeLogStore, capiTemplateWriter);

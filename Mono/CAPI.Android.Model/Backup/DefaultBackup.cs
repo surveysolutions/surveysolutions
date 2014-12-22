@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.ErrorReporting;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.FileSystem;
 using Environment = Android.OS.Environment;
@@ -57,9 +58,8 @@ namespace CAPI.Android.Core.Model.Backup
             foreach (var backupable in backupables)
             {
                 var path = backupable.GetPathToBackupFile();
-                if(string.IsNullOrEmpty(path))
-                    continue;
-                if (fileSystemAccessor.IsFileExists(path) || fileSystemAccessor.IsDirectoryExists(path))
+                
+                if ((!string.IsNullOrEmpty(path)) && (fileSystemAccessor.IsFileExists(path) || fileSystemAccessor.IsDirectoryExists(path)))
                     fileSystemAccessor.CopyFileOrDirectory(path, backupFolderPath);
             }
             var backupArchiveName = fileSystemAccessor.CombinePath(backupPath, backupFolderName + zipExtension);

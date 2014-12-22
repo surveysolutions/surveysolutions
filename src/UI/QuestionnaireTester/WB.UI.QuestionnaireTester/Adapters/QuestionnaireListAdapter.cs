@@ -9,7 +9,6 @@ using Android.Content;
 using Android.Graphics.Drawables;
 using Android.Views;
 using Android.Widget;
-using Org.Apache.Http.Authentication;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Shared.Android.Helpers;
 
@@ -28,7 +27,7 @@ namespace WB.UI.QuestionnaireTester.Adapters
 
             this.activity = activity;
 
-            activity.WaitForLongOperation((ct)=>this.UploadQuestionnairesFromDesigner(ct));
+            activity.WaitForLongOperation(async (ct)=>await this.UploadQuestionnairesFromDesigner(ct));
         }
 
         protected async Task UploadQuestionnairesFromDesigner(CancellationToken cancellationToken)
@@ -41,7 +40,7 @@ namespace WB.UI.QuestionnaireTester.Adapters
                         await CapiTesterApplication.DesignerServices.GetQuestionnaireListForCurrentUser(
                             CapiTesterApplication.DesignerMembership.RemoteUser, cancellationToken);
 
-                    unfilteredList = items = questionnaireListPackage.Items;
+                    unfilteredList = items = questionnaireListPackage.Items.ToArray();
                 }
                 catch (Exception exc) 
                 {

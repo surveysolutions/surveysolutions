@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Ninject;
-using WB.Core.GenericSubdomains.Utils.Rest;
+using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.QuestionnaireTester.Authentication;
@@ -12,21 +11,21 @@ namespace WB.UI.QuestionnaireTester.Services
 {
     public class DesignerService
     {
-        private readonly IRestServiceWrapperFactory restUtilsFactory;
+        private readonly IRestService restService;
 
-        public DesignerService()
+        public DesignerService(IRestService restService)
         {
-            restUtilsFactory = CapiTesterApplication.Kernel.Get<IRestServiceWrapperFactory>();
+            this.restService = restService;
         }
 
         public async Task<bool> Login(string userName, string password, CancellationToken cancellationToken)
         {
-            var webExecutor = restUtilsFactory.CreateRestServiceWrapper(CapiTesterApplication.GetPathToDesigner());
             try
             {
-                return await webExecutor.ExecuteRestRequestAsync<bool>("ValidateCredentials", cancellationToken, null, userName, password, "POST");
+                await restService.GetAsync(url: "login", credentials: new RestCredentials() {Login = userName, Password = password});
+                return true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 return false;
             }
@@ -34,30 +33,29 @@ namespace WB.UI.QuestionnaireTester.Services
 
         public async Task<QuestionnaireListCommunicationPackage> GetQuestionnaireListForCurrentUser(UserInfo remoteUser, CancellationToken cancellationToken)
         {
-            var webExecutor = restUtilsFactory.CreateRestServiceWrapper(CapiTesterApplication.GetPathToDesigner());
-            return await webExecutor.ExecuteRestRequestAsync<QuestionnaireListCommunicationPackage>(
-                    "GetAllTemplates", 
-                    cancellationToken, 
-                    null, 
-                    remoteUser.UserName,
-                    remoteUser.Password, 
-                    "GET");
-            
+            return await restService.GetAsync<QuestionnaireListCommunicationPackage>(
+                url: "questionnairelist",
+                credentials: new RestCredentials() {Login = remoteUser.UserName, Password = remoteUser.Password});
+
         }
 
-        public async Task<QuestionnaireCommunicationPackage> GetTemplateForCurrentUser(UserInfo remoteUser, Guid id, CancellationToken cancellationToken)
+        public Task<QuestionnaireCommunicationPackage> GetTemplateForCurrentUser(UserInfo remoteUser, Guid id, CancellationToken cancellationToken)
         {
-            var webExecutor = restUtilsFactory.CreateRestServiceWrapper(CapiTesterApplication.GetPathToDesigner());
-            return await webExecutor.ExecuteRestRequestAsync<QuestionnaireCommunicationPackage>(
-                    "GetTemplate", 
-                    cancellationToken, 
-                    null, 
-                    remoteUser.UserName,
-                    remoteUser.Password, 
-                    "GET",
-                    new KeyValuePair<string, object>("id", id),
-                    new KeyValuePair<string, object>("maxSupportedVersion", QuestionnaireVersionProvider.GetCurrentEngineVersion().ToString()));
-                
+            var supportedVersion = QuestionnaireVersionProvider.GetCurrentEngineVersion();
+
+            return this.restService.PostAsync<QuestionnaireCommunicationPackage>(
+                url: "questionnaire",
+                credentials: new RestCredentials() {Login = remoteUser.UserName, Password = remoteUser.Password},
+                request: new DownloadQuestionnaireRequest()
+                {
+                    QuestionnaireId = id,
+                    SupportedVersion = new QuestionnnaireVersion()
+                    {
+                        Major = supportedVersion.Major,
+                        Minor = supportedVersion.Minor,
+                        Patch = supportedVersion.Patch
+                    }
+                });
         }
     }
 }

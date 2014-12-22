@@ -20,12 +20,12 @@ using WB.Core.BoundedContexts.Supervisor.Questionnaires;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly IEventStore eventStore;
         private readonly IJsonUtils jsonUtils;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter;
-        private readonly IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter;
+        private readonly IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter;
         private readonly Func<HttpMessageHandler> httpMessageHandler;
         private readonly IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage;
         private readonly IArchiveUtils archiver;
@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             IEventStore eventStore,
             IJsonUtils jsonUtils,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter,
-            IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter,
+            IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter,
             Func<HttpMessageHandler> httpMessageHandler, IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage,
             IArchiveUtils archiver)
         {
@@ -441,14 +441,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             var syncItem = new SyncItem
             {
-                Content = archiver.CompressString(this.jsonUtils.GetItemAsContent(eventsToSend)),
+                Content = archiver.CompressString(this.jsonUtils.Serialize(eventsToSend)),
                 IsCompressed = true,
                 ItemType = SyncItemType.Questionnare,
-                MetaInfo = archiver.CompressString(this.jsonUtils.GetItemAsContent(metadata)),
+                MetaInfo = archiver.CompressString(this.jsonUtils.Serialize(metadata)),
                 RootId = interviewId
             };
 
-            return this.jsonUtils.GetItemAsContent(syncItem);
+            return this.jsonUtils.Serialize(syncItem);
         }
 
         private void SendInterviewData(Guid interviewId, string interviewData)
@@ -472,7 +472,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                 try
                 {
-                    serverOperationSucceeded = this.jsonUtils.Deserrialize<bool>(result);
+                    serverOperationSucceeded = this.jsonUtils.Deserialize<bool>(result);
                 }
                 catch (Exception exception)
                 {

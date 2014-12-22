@@ -30,16 +30,15 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public InterviewViewModel Load(QuestionnaireScreenInput input)
         {
-            InterviewViewModel result = null;
-
-            result = this.documentStorage.GetById(input.QuestionnaireId);
+            InterviewViewModel result = this.documentStorage.GetById(input.QuestionnaireId);
 
             if (result != null)
                 return result;
             
             this.PublishEventsToFillMemoryStorage(input.QuestionnaireId);
-            result = this.documentStorage.GetById(input.QuestionnaireId);
 
+            result = this.documentStorage.GetById(input.QuestionnaireId);
+            
             return result;
         }
 
@@ -47,26 +46,9 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             lock (this.syncLock)
             {
-                /*var item = syncCacher.LoadItem(publicKey);
-                if (!string.IsNullOrWhiteSpace(item))
-                    RestoreFromSyncPackage(item);
-                else*/
-                    this.RestoreFromEventStream(publicKey);
+                this.RestoreFromEventStream(publicKey);
             }
         }
-
-
-        /*private void RestoreFromSyncPackage(string item)
-        {
-            string content = PackageHelper.DecompressString(item);
-            var interview = JsonUtils.GetObject<InterviewSynchronizationDto>(content);
-
-            commandService.Execute(new SynchronizeInterviewCommand(interview.Id, interview.UserId, interview));
-            syncCacher.DeleteItem(interview.Id);
-
-
-            //CapiApplication.Kernel.Get<IChangeLogManipulator>().CreateOrReopenDraftRecord(interview.Id);
-        }*/
 
         private void RestoreFromEventStream(Guid publicKey)
         {
@@ -81,7 +63,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             catch (Exception e)
             {
                 this.logger.Error("Rebuild Error", e);
-                //logger.Error("Event: " + JsonUtils.GetJsonData(committedEvent.Payload));
                 throw;
             }
             

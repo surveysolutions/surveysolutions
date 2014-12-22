@@ -8,20 +8,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using WB.Core.BoundedContexts.Capi.Views.Login;
+using WB.Core.GenericSubdomains.ErrorReporting.Services;
+using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernel.Utils.Compression;
-using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
-using WB.Core.SharedKernels.SurveySolutions.Services;
+using WB.UI.Capi.Settings;
 using WB.UI.Capi.Views.Login;
 using System;
 using Main.DenormalizerStorage;
-using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Modules;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.UI.Capi.Injections
@@ -76,7 +75,6 @@ namespace WB.UI.Capi.Injections
             this.Kernel.Bind(typeof(IReadSideRepositoryReader<>)).ToMethod(this.GetInMemoryReadSideRepositoryAccessor);
             this.Kernel.Bind(typeof(IQueryableReadSideRepositoryReader<>)).ToMethod(this.GetInMemoryReadSideRepositoryAccessor);
             this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(this.GetInMemoryReadSideRepositoryAccessor);
-            this.Kernel.Bind(typeof(IQueryableReadSideRepositoryWriter<>)).ToMethod(this.GetInMemoryReadSideRepositoryAccessor);
         }
 
         protected object GetInMemoryReadSideRepositoryAccessor(IContext context)
@@ -137,8 +135,11 @@ namespace WB.UI.Capi.Injections
             base.Load();
             
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
-            this.Bind<IStringCompressor>().To<GZipJsonCompressor>();
+            this.Bind<IStringCompressor>().To<JsonCompressor>();
             this.Bind<IViewFactory<LoginViewInput, LoginView>>().To<LoginViewFactory>();
+
+            this.Bind<IRestServiceSettings>().To<RestServiceSettings>().InSingletonScope();
+            this.Bind<IErrorReportingSettings>().To<ErrorReportingSettings>().InSingletonScope();
         }
     }
 }

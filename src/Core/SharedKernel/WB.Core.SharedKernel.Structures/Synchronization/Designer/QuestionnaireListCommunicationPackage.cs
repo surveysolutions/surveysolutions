@@ -2,8 +2,8 @@
 
 namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
 {
-    public class QuestionnaireListCommunicationPackage : BasePackage
+    public class QuestionnaireListCommunicationPackage
     {
-        public List<QuestionnaireListItem> Items { get; set; }
+        public IEnumerable<QuestionnaireListItem> Items { get; set; }
     }
 }

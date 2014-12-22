@@ -2,12 +2,11 @@ using System;
 using System.Collections.Concurrent;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.Infrastructure;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.BoundedContexts.Capi.Implementation.Services
 {
@@ -56,30 +55,24 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             itemsInProcess.TryRemove(id, out dummyBool);
         }
 
-        public bool CheckAndApplySyncPackage(Guid itemKey)
+        public void CheckAndApplySyncPackage(Guid itemKey)
         {
             if (!this.WaitUntilItemCanBeProcessed(itemKey))
-                return false;
-
-            bool isAppliedSuccesfully = false;
+                throw new TimeoutException(string.Format("Can't put interview '{0}' in possessing line", itemKey));
             try
             {
-                if (!this.capiSynchronizationCacheService.DoesCachedItemExist(itemKey))
-                    isAppliedSuccesfully = true;
-                else
+                if (this.capiSynchronizationCacheService.DoesCachedItemExist(itemKey))
                 {
                     var item = this.capiSynchronizationCacheService.LoadItem(itemKey);
 
                     if (!string.IsNullOrWhiteSpace(item))
                     {
                         string content = this.stringCompressor.DecompressString(item);
-                        var interview = this.jsonUtils.Deserrialize<InterviewSynchronizationDto>(content);
+                        var interview = this.jsonUtils.Deserialize<InterviewSynchronizationDto>(content);
 
                         this.commandService.Execute(new SynchronizeInterviewCommand(interview.Id, interview.UserId, interview));
 
                         this.capiSynchronizationCacheService.DeleteItem(itemKey);
-
-                        isAppliedSuccesfully = true;
                     }
                 }
             }
@@ -87,14 +80,12 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             {
                 //if state is saved as event but denormalizer failed we won't delete file
                 this.logger.Error("Error occured during applying interview after synchronization", e);
-                isAppliedSuccesfully = false;
+                throw;
             }
             finally
             {
                 this.ReleaseItem(itemKey);
             }
-
-            return isAppliedSuccesfully;
         }
     }
 }

@@ -128,18 +128,15 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         {
             this.SetEditCommentsVisibility(true);
             this.etComments.RequestFocus();
+            this.ShowKeyboard(this.etComments);
         }
 
         void etComments_FocusChange(object sender, View.FocusChangeEventArgs e)
         {
             if (!e.HasFocus)
             {
-                HideKeyboard(this.etComments);
                 this.SaveComment();
             }
-            else
-                this.ShowKeyboard(this.etComments);
-
 
             this.IsCommentsEditorFocused = e.HasFocus;
         }
@@ -202,17 +199,28 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private void SaveAnswerErrorHandlerImpl(Exception ex)
         {
+            var message = this.GetDeepestException(ex).Message;
+
+            if (ShowErrorMessageOnUi(message)) return;
+
+            var logger = ServiceLocator.Current.GetInstance<ILogger>();
+            logger.Error("Error on answer set.", ex);
+            logger.Error("Error message: " + this.tvError.Text);
+        }
+
+        protected bool ShowErrorMessageOnUi(string message)
+        {
             this.PutAnswerStoredInModelToUI();
             this.FireAnswerSetEvent(this.GetAnswerStoredInModelAsString());
 
             if (!this.Model.IsEnabled())
-                return;
+            {
+                return true;
+            }
 
-            var logger = ServiceLocator.Current.GetInstance<ILogger>();
-            logger.Error("Error on answer set.", ex);
             this.tvError.Visibility = ViewStates.Visible;
-            this.tvError.Text = this.GetDeepestException(ex).Message;
-            logger.Error("Error message: " + this.tvError.Text);
+            this.tvError.Text = message;
+            return false;
         }
 
         protected abstract string GetAnswerStoredInModelAsString();
@@ -231,6 +239,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             if (e.ActionId == ImeAction.Done)
             {
                 this.etComments.ClearFocus();
+                HideKeyboard(this.etComments);
             }
         }
 

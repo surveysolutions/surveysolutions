@@ -1,10 +1,9 @@
-using System;
 using Android.Text;
 using Android.Widget;
 using Java.Lang;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.Capi.UI.MaskFormatter;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.MaskFormatter;
 using String = System.String;
 
 namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
@@ -41,18 +40,20 @@ namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
 
         public void AfterTextChanged(IEditable s)
         {
-            if (previousValue == editor.Text)
+            string newValue = s.ToString();
+            
+            if (previousValue == newValue)
                 return;
             try
             {
                 int cursorPosition = editor.SelectionEnd;
-                var filtered = this.maskFormatter.FormatValue(editor.Text ?? "", ref cursorPosition);
-                if (!string.Equals(editor.Text, filtered))
-                {
-                    previousValue = filtered;
-                    s.Replace(0, s.Length(), filtered);
-                    editor.SetSelection(cursorPosition);
-                }
+                var filtered = this.maskFormatter.FormatValue(newValue ?? "", ref cursorPosition);
+                if (string.Equals(newValue, filtered)) 
+                    return;
+                
+                previousValue = filtered;
+                s.Replace(0, s.Length(), filtered);
+                editor.SetSelection(cursorPosition);    
             }
             catch (System.Exception e)
             {

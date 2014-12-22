@@ -10,7 +10,7 @@
             <div class="form-group col-xs-7">
                 <label for="edit-group-title" class="wb-label">Question Type</label><br>
                 <div class="btn-group type-container-dropdown" dropdown>
-                    <button id="questionTypeBtn" class="btn btn-default dropdown-toggle form-control" type="button">
+                    <button id="questionTypeBtn" class="btn btn-default form-control" dropdown-toggle type="button">
                         <i class="icon {{answerTypeClass[activeQuestion.type]}}"></i>
                         <span class="vertical-line"></span>
                         {{activeQuestion.typeName}}
@@ -29,14 +29,14 @@
             </div>
 
             <div class="form-group input-variable-name col-xs-4 pull-right">
-                <label for="edit-group-title" class="wb-label">Variable name<help key="variableName" /></label><br>
+                <label for="edit-question-variable-name" class="wb-label">Variable name<help key="variableName" /></label><br/>
                 <input id="edit-question-variable-name" type="text" ng-model="activeQuestion.variable" spellcheck="false"
                        class="form-control" maxlength="32">
             </div>
         </div>
 
         <div class="form-group">
-            <label for="edit-group-title" class="wb-label">Variable label<help key="variableLabel" /></label><br>
+            <label for="edit-variable-label" class="wb-label">Variable label<help key="variableLabel" /></label><br>
             <input id="edit-variable-label" type="text" ng-model="activeQuestion.variableLabel" class="form-control" maxlength="80">
         </div>
 
@@ -103,7 +103,7 @@
                 <div class="form-group col-xs-7" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'|| activeQuestion.type == 'Multimedia' || activeQuestion.type == 'GpsCoordinates' || activeQuestion.isCascade == true || activeQuestion.isLinked == true">
                     <label for="Question-scope">Question scope&nbsp;</label>
                     <div class="btn-group dropup" dropdown>
-                        <button class="btn dropdown-toggle" id="Question-scope" type="button">
+                        <button class="btn dropdown-toggle" id="Question-scope" dropdown-toggle type="button">
                             {{ activeQuestion.questionScope }}
                             <span class="dropdown-arrow"></span>
                         </button>
@@ -139,7 +139,7 @@
                             <input type="text" ng-model="option.title" class="form-control">
                         </div>
                         <div class="column-4">
-                            <a href ng:click="removeOption($index)" class="btn"></a>
+                            <a href ng:click="removeOption($index)" class="btn" tabindex="-1"></a>
                         </div>
                     </div>
                 </div>
@@ -206,7 +206,7 @@
                 <input type="hidden" name="linkedToQuestion" ng-model="activeQuestion.linkedToQuestion" ng-required="true" />
                 <label for="linkedQuestionSource">Bind to question from roster group</label>
                 <div class="btn-group" dropdown>
-                    <button class="btn dropdown-toggle" id="linkedQuestionSource" type="button">
+                    <button class="btn dropdown-toggle" dropdown-toggle id="linkedQuestionSource" type="button">
                         <span class="select-placeholder" ng-if="(activeQuestion.linkedToQuestion.title || '') == ''">Select question</span>
 
                         <span class="selected-item" ng-if="(activeQuestion.linkedToQuestion.title || '') !== ''">
@@ -241,7 +241,7 @@
                 <input type="hidden" name="cascadeFromQuestionId" ng-model="activeQuestion.cascadeFromQuestionId" ng-update-hidden ng-required="true" />
                 <label for="singleOptionQuestionSource">Select parent question</label>
                 <div class="btn-group" dropdown>
-                    <button class="btn dropdown-toggle" id="singleOptionQuestionSource" type="button">
+                    <button class="btn dropdown-toggle" dropdown-toggle id="singleOptionQuestionSource" type="button">
                         <span class="select-placeholder" ng-if="(activeQuestion.cascadeFromQuestion.title || '') == ''">Select question</span>
 
                         <span class="selected-item" ng-if="(activeQuestion.cascadeFromQuestion.title || '') !== ''">

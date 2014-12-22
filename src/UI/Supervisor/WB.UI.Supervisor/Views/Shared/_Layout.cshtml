@@ -96,10 +96,12 @@
         var setMinHeight = function () {
             var windowHeight = $(window).height();
             var navigationHeight = $('.navbar.navbar-fixed-top').height();
-            $('#content').css('min-height', (windowHeight - navigationHeight) + 'px');
+            var bodyTopPadding = $('body').css('paddingTop').replace("px", "") * 1;
+            var footerHeight = $('#footer-block').outerHeight();
+            var minHeight = windowHeight - navigationHeight - footerHeight - bodyTopPadding;
+            $('#content').css('min-height', (minHeight > 1 ? minHeight : 1) + 'px');
             $('#wrapper').css('margin-top', navigationHeight + 'px');
             $('#umbrella').css('top', navigationHeight + 'px');
-
         };
 
         $(document).ready(function () {

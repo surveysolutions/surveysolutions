@@ -9,7 +9,7 @@
                     '"*" - Represents an alphanumeric character (A-Z,a-z,0-9). ' +
                     '"##/##/####" - date, ' +
                     '"(###) ###-####" - phone number, ' +
-                    '"AA####" - flight number operated by American AireLines or ' +
+                    '"AA####" - flight number operated by American AirLines or ' +
                     '"~*-###-~###"',
                 'variableName': 'Variable names may be 1 to 32 characters long and must start with a-z, A-Z, or _, and the remaining characters may be a-z, A-Z, _, or 0-9.',
                 'titleQuestion': 'Titles of rows',

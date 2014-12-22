@@ -25,7 +25,7 @@ using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class InterviewEventHandlerFunctional : 
+    public class InterviewEventHandlerFunctional :
         AbstractFunctionalEventHandler<ViewWithSequence<InterviewData>>,
         ICreateHandler<ViewWithSequence<InterviewData>, InterviewCreated>,
         ICreateHandler<ViewWithSequence<InterviewData>, InterviewFromPreloadedDataCreated>,
@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures;
-      
+
 
         public override object[] Readers
         {
@@ -312,10 +312,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public ViewWithSequence<InterviewData> Create(IPublishedEvent<InterviewOnClientCreated> evnt)
         {
-           return this.CreateViewWithSequence(evnt.Payload.UserId, evnt.EventSourceId,
-                evnt.EventTimeStamp, evnt.Payload.QuestionnaireId,
-                evnt.Payload.QuestionnaireVersion, 
-                evnt.EventSequence, true);
+            return this.CreateViewWithSequence(evnt.Payload.UserId, evnt.EventSourceId,
+                 evnt.EventTimeStamp, evnt.Payload.QuestionnaireId,
+                 evnt.Payload.QuestionnaireVersion,
+                 evnt.EventSequence, true);
         }
 
         private ViewWithSequence<InterviewData> CreateViewWithSequence(Guid userId, Guid eventSourceId, DateTime eventTimeStamp,
@@ -349,7 +349,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             }
 
             currentState.Sequence = evnt.EventSequence;
-        
+
             return currentState;
         }
 
@@ -424,7 +424,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             }
             else
             {
-                Dictionary<string,Guid[]> keysOfLevelToBeDeleted =
+                Dictionary<string, Guid[]> keysOfLevelToBeDeleted =
                     keysOfLevelsByScope.Skip(evnt.Payload.Count)
                         .Take(countOfLevelByScope - evnt.Payload.Count)
                         .ToDictionary(keyOfLevelsByScope => keyOfLevelsByScope, keyOfLevelsByScope => scopeOfCurrentGroup.RosterIdToRosterTitleQuestionIdMap.Keys.ToArray());
@@ -500,7 +500,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<GeoLocationQuestionAnswered> evnt)
         {
             return new ViewWithSequence<InterviewData>(this.SaveAnswer(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-                    new GeoPosition(evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy, evnt.Payload.Altitude, 
+                    new GeoPosition(evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy, evnt.Payload.Altitude,
                         evnt.Payload.Timestamp)), evnt.EventSequence);
         }
 
@@ -598,9 +598,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<FlagRemovedFromAnswer> evnt)
         {
             return
-                new ViewWithSequence<InterviewData>(
-                    ChangeQuestionConditionValidity(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, false),
-                    evnt.EventSequence);
+               new ViewWithSequence<InterviewData>(
+                   SetFlagStateForQuestion(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, false),
+                   evnt.EventSequence);
         }
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<FlagSetToAnswer> evnt)

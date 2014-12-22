@@ -5,6 +5,7 @@ using Machine.Specifications.Utility;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Designer.WebServices;
 using WB.UI.Designer.WebServices.Questionnaire;
@@ -26,8 +27,11 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
 
             exportService = Mock.Of<IQuestionnaireExportService>(x => x.GetQuestionnaireTemplateInfo(Moq.It.IsAny<QuestionnaireDocument>()) == templateInfo);
 
+            var localizationServiceMock = new Mock<ILocalizationService>();
+            localizationServiceMock.Setup(_ => _.GetString(Moq.It.IsAny<string>())).Returns(errorMessage);
+
             var questionnaireViewFactory = CreateQuestionnaireViewFactory(questionnaireId);            
-            service = CreatePublicService(exportService: exportService, questionnaireViewFactory: questionnaireViewFactory);
+            service = CreatePublicService(exportService: exportService, questionnaireViewFactory: questionnaireViewFactory, localizationService: localizationServiceMock.Object);
         };
 
         Because of = () => 
@@ -37,12 +41,13 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
             exception.ShouldBeOfExactType<FaultException>();
 
         It should_throw_exception_that_contains_such_words = () =>
-            (new[] { "requested questionnaire", "supports versions" }).Each(x => (exception as FaultException).Message.ToLower().ShouldContain(x));
+            (exception as FaultException).Message.ShouldEqual(errorMessage);
 
         private static QuestionnaireVersion version = new QuestionnaireVersion(1,0,0);
         private static DownloadQuestionnaireRequest request;
         private static IQuestionnaireExportService exportService;
         private static IPublicService service;
         private static Exception exception;
+        private static string errorMessage = "Failed to import questionnaire. Requested questionnaire \"aaaa.tmpl\" has 1.0.0 version. Headquarters application supports version up to 0.0.1";
     }
 }

@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<QuestionnaireDeleted>
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> documentStorage;
-        private readonly IQueryableReadSideRepositoryWriter<InterviewSummary> interviews;
+        private readonly IReadSideRepositoryWriter<InterviewSummary> interviews;
         private readonly IQuestionnaireCacheInitializer questionnaireCacheInitializer;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             IQuestionnaireCacheInitializer questionnaireCacheInitializer,
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
-            IQueryableReadSideRepositoryWriter<InterviewSummary> interviews)
+            IReadSideRepositoryWriter<InterviewSummary> interviews)
         {
             this.documentStorage = documentStorage;
             this.questionnaireCacheInitializer = questionnaireCacheInitializer;
@@ -71,12 +71,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             this.documentStorage.Remove(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
 
-            var anyInterviewExists =
+         /*   var anyInterviewExists =
                         interviews.Query(_ => _.Any(i =>!i.IsDeleted && i.QuestionnaireId == evnt.EventSourceId && i.QuestionnaireVersion == evnt.Payload.QuestionnaireVersion));
             if (!anyInterviewExists)
             {
                 this.questionnareAssemblyFileAccessor.RemoveAssembly(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
-            }
+            }*/
         }
 
         private void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument, bool allowCensusMode, DateTime timestamp)

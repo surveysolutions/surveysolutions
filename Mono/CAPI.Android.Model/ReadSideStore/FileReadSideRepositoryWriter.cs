@@ -1,18 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using WB.Core.BoundedContexts.Capi.ModelUtils;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.Backup;
-using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 using Environment = System.Environment;
@@ -22,10 +12,12 @@ namespace CAPI.Android.Core.Model.ReadSideStore
     public class FileReadSideRepositoryWriter<TEntity> : IReadSideRepositoryWriter<TEntity>, IBackupable
         where TEntity : class, IReadSideRepositoryEntity
     {
+        private readonly IJsonUtils jsonUtils;
         private Dictionary<string, TEntity> memcache = new Dictionary<string, TEntity>();
 
-        public FileReadSideRepositoryWriter()
+        public FileReadSideRepositoryWriter(IJsonUtils jsonUtils)
         {
+            this.jsonUtils = jsonUtils;
             if (!Directory.Exists(StoreDirPath))
                 Directory.CreateDirectory(StoreDirPath);
         }
@@ -60,7 +52,7 @@ namespace CAPI.Android.Core.Model.ReadSideStore
                 var filePath = GetFileName(id);
                 if (!File.Exists(filePath))
                     return null;
-                memcache[id] = JsonUtils.GetObject<TEntity>(File.ReadAllText(filePath));
+                memcache[id] = this.jsonUtils.Deserialize<TEntity>(File.ReadAllText(filePath));
             }
             return memcache[id];
         }
@@ -75,7 +67,7 @@ namespace CAPI.Android.Core.Model.ReadSideStore
         public void Store(TEntity view, string id)
         {
             var path = GetFileName(id);
-            File.WriteAllText(path, JsonUtils.GetJsonData(view));
+            File.WriteAllText(path, this.jsonUtils.Serialize(view));
 
             memcache[id] = view;
         }

@@ -8,12 +8,19 @@ using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using System.Web.Security;
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false)]
     public class ApiBasicAuthAttribute : AuthorizationFilterAttribute
     {
+        private ILocalizationService localizationService
+        {
+            get { return ServiceLocator.Current.GetInstance<ILocalizationService>(); }
+        }
+
         private readonly Func<string, string, bool> validateUserCredentials;
 
         private static readonly string[] emptyArray = new string[0];
@@ -112,7 +119,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
         private void Challenge(HttpActionContext actionContext)
         {
             string host = actionContext.Request.RequestUri.DnsSafeHost;
-            actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
+            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized)
+            {
+                ReasonPhrase = this.localizationService.GetString("InvalidUser")
+            };
             actionContext.Response.Headers.Add("WWW-Authenticate", string.Format("Basic realm=\"{0}\"", host));
         }
 

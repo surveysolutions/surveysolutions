@@ -141,6 +141,7 @@ namespace Ncqrs
         {
             _instance = null;
             _defaults.Clear();
+            _getters.Clear();
 
             InitDefaults();
         }

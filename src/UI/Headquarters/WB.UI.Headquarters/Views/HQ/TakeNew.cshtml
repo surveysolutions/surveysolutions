@@ -18,6 +18,11 @@
 @section styles
 {
     @Styles.Render("~/css/interview-new")
+    <style type="text/css">
+        .form-group .control-label {
+            font-weight: normal;
+        }
+    </style>
 }
 
 @section scripts
@@ -48,7 +53,7 @@
     </script>
     <script type="text/html" id="SingleOptionRegular">
         <div class="form-group" data-bind="validationElement: selectedOption">
-            <label class="col-sm-2 control-label" data-bind="text: title"></label>
+            <label class="col-sm-2 control-label" data-bind="html: title"></label>
             <div class="col-sm-2">
                 <!-- ko foreach: options -->
                 <div class="radio">
@@ -65,7 +70,7 @@
     </script>
     <script type="text/html" id="SingleOptionFiltered">
         <div class="form-group" data-bind="validationElement: value">
-            <label class="col-sm-2 control-label" data-bind="text: title"></label>
+            <label class="col-sm-2 control-label" data-bind="html: title"></label>
             <div class="col-sm-2">
                 <input class="form-control" type="text" data-bind="typeahead: options, id: selectedOption, value: value, valueUpdate: 'afterkeydown'" />
                 <span class="help-block" data-bind="validationMessage: value"></span>
@@ -74,7 +79,7 @@
     </script>
     <script type="text/html" id="MultyOption">
         <div class="form-group" data-bind="validationElement: selectedOptions">
-            <label class="col-sm-2 control-label" data-bind="text: title"></label>
+            <label class="col-sm-2 control-label" data-bind="html: title"></label>
             <div class="col-sm-2">
                 <!-- ko foreach: options -->
                 <div class="checkbox">
@@ -90,7 +95,7 @@
     </script>
     <script type="text/html" id="Numeric">
         <div class="form-group" data-bind="validationElement: selectedOption">
-            <label class="col-sm-2 control-label" data-bind="text: title"></label>
+            <label class="col-sm-2 control-label" data-bind="html: title"></label>
             <div class="col-sm-2">
                 <div class="input-group">
                     <span class="input-group-addon">#</span>
@@ -103,7 +108,7 @@
     </script>
     <script type="text/html" id="DateTime">
         <div class="form-group" data-bind="validationElement: selectedOption">
-            <label class="col-sm-2 control-label" data-bind="text: title"></label>
+            <label class="col-sm-2 control-label" data-bind="html: title"></label>
             <div class="col-sm-2">
                 <div class="input-group">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
@@ -116,7 +121,7 @@
     </script>
     <script type="text/html" id="AutoPropagate">
         <div class="form-group" data-bind="validationElement: selectedOption">
-            <label class="col-sm-2 control-label" data-bind="text: title"></label>
+            <label class="col-sm-2 control-label" data-bind="html: title"></label>
             <div class="col-sm-2">
                 <div class="input-group">
                     <span class="input-group-addon">#</span>
@@ -129,7 +134,7 @@
     </script>
     <script type="text/html" id="Text">
         <div class="form-group" data-bind="validationElement: selectedOption">
-            <label class="col-sm-2 control-label" data-bind="text: title"></label>
+            <label class="col-sm-2 control-label" data-bind="html: title"></label>
             <div class="col-sm-2">
                 <div class="input-group">
                     <span class="input-group-addon">T</span>
@@ -141,7 +146,7 @@
     </script>
     <script type="text/html" id="GpsCoordinates">
         <div class="form-group" data-bind="validationElement: selectedOption">
-            <label class="col-sm-2 control-label" data-bind="text: title"></label>
+            <label class="col-sm-2 control-label" data-bind="html: title"></label>
             <div class="col-sm-2">
                 <div class="input-prepend">
                     <span class="add-on">T</span>

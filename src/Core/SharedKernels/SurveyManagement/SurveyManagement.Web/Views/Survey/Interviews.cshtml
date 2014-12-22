@@ -54,8 +54,7 @@
         <thead>
             <tr>
                 <th>
-                    <input type="checkbox"
-                           data-bind="checked: !IsNothingSelected(), click: $root.selectAll($element)" />
+                    <input type="checkbox" data-bind="click: $root.selectAll($element)" />
                 </th>
                 <!-- ko if:SelectedTemplate() == '' -->
                 <th>Pre-filled Questions</th>

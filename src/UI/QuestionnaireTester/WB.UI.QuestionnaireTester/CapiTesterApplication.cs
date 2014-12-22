@@ -26,9 +26,7 @@ using WB.Core.BoundedContexts.Capi.EventHandler;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Rest.Android;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Ncqrs;
@@ -96,9 +94,12 @@ namespace WB.UI.QuestionnaireTester
 
         public static string GetPathToDesigner()
         {
-            ISharedPreferences prefs = Context.GetSharedPreferences(Context.Resources.GetString(Resource.String.ApplicationName),
-                FileCreationMode.Private);
-            return prefs.GetString(DesignerPath, Context.Resources.GetString(Resource.String.DesignerPath));
+            ISharedPreferences prefs = Context.GetSharedPreferences(Context.Resources.GetString(Resource.String.ApplicationName), FileCreationMode.Private);
+            var pathToDesigner = prefs.GetString(DesignerPath, Context.Resources.GetString(Resource.String.DesignerPath));
+            #if DEBUG
+            //pathToDesigner = "http://172.29.124.72/Designer/api/tester";
+            #endif
+            return pathToDesigner;
         }
 
         public static void SetPathToDesigner(string path)
@@ -228,14 +229,14 @@ namespace WB.UI.QuestionnaireTester
                 new NcqrsModule().AsNinject(),
                 new CapiTesterCoreRegistry(),
                 new CapiBoundedContextModule(),
+                new AndroidSharedModule(),
                 new TesterLoggingModule(),
                 new AndroidTesterModelModule(),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false, basePath: basePath),
-                new RestAndroidModule(),
                 new FileInfrastructureModule());
 
             this.kernel.Bind<IAuthentication, DesignerAuthentication>().ToConstant(new DesignerAuthentication());
-            this.kernel.Bind<DesignerService>().ToConstant(new DesignerService());
+            this.kernel.Bind<DesignerService>().ToSelf();
             
             this.kernel.Bind<Context>().ToConstant(this);
 
@@ -330,7 +331,6 @@ namespace WB.UI.QuestionnaireTester
             this.Kernel.Bind(typeof(IReadSideRepositoryReader<>)).ToMethod(this.GetInMemoryReadSideRepositoryAccessor);
             this.Kernel.Bind(typeof(IQueryableReadSideRepositoryReader<>)).ToMethod(this.GetInMemoryReadSideRepositoryAccessor);
             this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(this.GetInMemoryReadSideRepositoryAccessor);
-            this.Kernel.Bind(typeof(IQueryableReadSideRepositoryWriter<>)).ToMethod(this.GetInMemoryReadSideRepositoryAccessor);
         }
 
         protected object GetInMemoryReadSideRepositoryAccessor(IContext context)

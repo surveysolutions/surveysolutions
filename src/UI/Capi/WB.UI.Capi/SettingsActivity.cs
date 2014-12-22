@@ -10,14 +10,12 @@ using Android.Views;
 using Android.Widget;
 using Android.Content.PM;
 using Microsoft.Practices.ServiceLocation;
-using Ninject;
-using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Utils.Rest;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.UI.Capi.Extensions;
+using WB.UI.Capi.Services;
 using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization.Update;
-using WB.UI.Capi.Utils;
 using WB.UI.Shared.Android.GeolocationServices;
 using Xamarin.Geolocation;
 
@@ -33,7 +31,26 @@ namespace WB.UI.Capi
         private CancellationTokenSource cancelSource;
 
         protected EventHandler<EventArgs> versionCheckEventHandler;
-        protected ILogger Logger = ServiceLocator.Current.GetInstance<ILogger>();
+
+        private ILogger logger
+        {
+            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
+        }
+
+        private IInterviewerSettings interviewerSettings
+        {
+            get { return ServiceLocator.Current.GetInstance<IInterviewerSettings>(); }
+        }
+
+        private ISynchronizationService synchronizationService
+        {
+            get { return ServiceLocator.Current.GetInstance<ISynchronizationService>(); }
+        }
+
+        private INetworkService networkService
+        {
+            get { return ServiceLocator.Current.GetInstance<INetworkService>(); }
+        }
 
         const string ApplicationFileName = "interviewer.apk";
         const string SyncGetlatestVersion = "/api/InterviewerSync/GetLatestVersion";
@@ -57,10 +74,10 @@ namespace WB.UI.Capi
             this.llContainer.Click += this.llContainer_Click;
             this.btnWhereAmI.Click += this.btnWhereAmI_Click;
             this.btnVersion.Click += this.btnVersion_Click;
-            this.btnVersion.Text = string.Format("Version: {0}. Check for a new version.", SettingsManager.AppVersionName());
+            this.btnVersion.Text = string.Format("Version: {0}. Check for a new version.", interviewerSettings.GetApplicationVersionName());
             
             this.geoservice = new GeoService(this);
-            this.editSettingsSync.Text = SettingsManager.GetSyncAddressPoint();
+            this.editSettingsSync.Text = interviewerSettings.GetSyncAddressPoint();
             this.textMem.Text = this.GetResourceUsage();
         }
 
@@ -144,7 +161,7 @@ namespace WB.UI.Capi
 
         private void btnVersion_Click(object sender, EventArgs evnt)
         {
-            if (!NetworkHelper.IsNetworkEnabled(this))
+            if (!this.networkService.IsNetworkEnabled())
             {
                 Toast.MakeText(this, "Network is unavailable", ToastLength.Long).Show();
                 return;
@@ -158,12 +175,12 @@ namespace WB.UI.Capi
             bool? newVersionExists = null;
             try
             {
-                var updater = new UpdateProcessor(CapiApplication.Kernel.Get<IRestServiceWrapperFactory>());
+                var updater = new UpdateProcessor(logger: this.logger, synchronizationService: this.synchronizationService);
                 newVersionExists = updater.CheckNewVersion();
             }
             catch (Exception exc)
             {
-                this.Logger.Error("Error on new version check.", exc);
+                this.logger.Error("Error on new version check.", exc);
             }
 
             this.RunOnUiThread(() =>
@@ -200,20 +217,20 @@ namespace WB.UI.Capi
 
         private void btnUpdateConfirmed_Click(object sender, DialogClickEventArgs e)
         {
-            var updater = new UpdateProcessor(CapiApplication.Kernel.Get<IRestServiceWrapperFactory>());
+            var updater = new UpdateProcessor(logger: this.logger, synchronizationService: this.synchronizationService);
             this.progress = ProgressDialog.Show(this, "Downloading", "Please Wait...", true, true);
 
             Task.Factory.StartNew(() => 
             {
                 try
                 {
-                    var uri = new Uri(new Uri(SettingsManager.GetSyncAddressPoint()), SyncGetlatestVersion);
+                    var uri = new Uri(new Uri(interviewerSettings.GetSyncAddressPoint()), SyncGetlatestVersion);
                     updater.GetLatestVersion(uri, ApplicationFileName);
                     updater.StartUpdate(ApplicationFileName);
                 }
                 catch (Exception ex)
                 {
-                    this.Logger.Error("Error on application update", ex);
+                    this.logger.Error("Error on application update", ex);
                 }
                 finally
                 {
@@ -320,11 +337,12 @@ namespace WB.UI.Capi
             var editSettingsSync = this.FindViewById<EditText>(Resource.Id.editSettingsSyncPoint);
             if (editSettingsSync != null)
             {
-                if (SettingsManager.SetSyncAddressPoint(editSettingsSync.Text))
+                try
                 {
+                    interviewerSettings.SetSyncAddressPoint(editSettingsSync.Text);
                     editSettingsSync.SetBackgroundColor(Color.LightGreen);
                 }
-                else
+                catch(ArgumentException ex)
                 {
                     editSettingsSync.SetBackgroundColor(Color.Red);
                 }

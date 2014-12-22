@@ -17,6 +17,7 @@ using System;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
@@ -149,7 +150,7 @@ namespace WB.UI.QuestionnaireTester
             try 
             {
                 string content = Archive.DecompressString(template.Questionnaire);
-                var questionnaireDocument = JsonUtils.GetObject<QuestionnaireDocument>(content);
+                var questionnaireDocument = ServiceLocator.Current.GetInstance<IJsonUtils>().Deserialize<QuestionnaireDocument>(content);
 
                 var assemblyFileAccessor = ServiceLocator.Current.GetInstance<IQuestionnaireAssemblyFileAccessor>();
                 assemblyFileAccessor.StoreAssembly(questionnaireDocument.PublicKey, 0, template.QuestionnaireAssembly);
@@ -165,10 +166,7 @@ namespace WB.UI.QuestionnaireTester
             {
                 Logger.Error(e.Message, e);
                 additionalMassage = Resources.GetText(Resource.String.TemplateIsNotValidForCurrentVersionOfTester);
-#if DEBUG
                 additionalMassage += Environment.NewLine + e.Message;
-#endif
-                
                 return false;
             }
 

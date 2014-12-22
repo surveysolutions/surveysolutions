@@ -34,9 +34,9 @@ using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Rest.Android;
 using WB.Core.GenericSubdomains.ErrorReporting;
 using WB.Core.GenericSubdomains.Logging.AndroidLogger;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
@@ -54,12 +54,16 @@ using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.UI.Capi.Implementations.Navigation;
+using WB.UI.Capi.Implementations.Services;
 using WB.UI.Capi.Injections;
+using WB.UI.Capi.Services;
+using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization;
 using WB.UI.Capi.Syncronization.Implementation;
 using WB.UI.Shared.Android;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Extensions;
+using IInfoFileSupplierRegistry = WB.Core.GenericSubdomains.Logging.IInfoFileSupplierRegistry;
 
 namespace WB.UI.Capi
 {
@@ -278,14 +282,15 @@ namespace WB.UI.Capi
                 new NcqrsModule().AsNinject(),
                 new CapiBoundedContextModule(),
                 new AndroidCoreRegistry(),
-                new RestAndroidModule(),
+                new AndroidSharedModule(),
                 new FileInfrastructureModule(),
                 new AndroidLoggingModule(),
-                new AndroidModelModule(basePath, new[] { SynchronizationFolder, InterviewFilesFolder, QuestionnaireAssembliesFolder }),
-                new ErrorReportingModule(basePath),
-                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath, 
-                    syncDirectoryName: SynchronizationFolder, dataDirectoryName: InterviewFilesFolder, 
-                    questionnaireAssembliesFolder : QuestionnaireAssembliesFolder));
+                new AndroidModelModule(basePath,
+                    new[] {SynchronizationFolder, InterviewFilesFolder, QuestionnaireAssembliesFolder}),
+                new ErrorReportingModule(pathToTemporaryFolder: basePath),
+                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath,
+                    syncDirectoryName: SynchronizationFolder, dataDirectoryName: InterviewFilesFolder,
+                    questionnaireAssembliesFolder: QuestionnaireAssembliesFolder));
 
             CrashManager.Initialize(this);
             CrashManager.AttachSender(() => new FileReportSender("Interviewer", this.kernel.Get<IInfoFileSupplierRegistry>()));
@@ -319,6 +324,9 @@ namespace WB.UI.Capi
             this.kernel.Bind<ISyncPackageRestoreService>().To<SyncPackageRestoreService>().InSingletonScope();
 
             this.kernel.Bind<IWaitService>().To<WaitService>().InSingletonScope();
+            this.kernel.Bind<ILocalizationService>().To<LocalizationService>().InSingletonScope();
+            this.kernel.Bind<IInterviewerSettings>().To<InterviewerSettings>().InSingletonScope();
+            this.kernel.Bind<ISynchronizationService>().To<InterviewerSynchronizationService>().InSingletonScope();
             
             #region register handlers
 

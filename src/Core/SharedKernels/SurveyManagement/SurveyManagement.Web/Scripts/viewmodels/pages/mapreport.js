@@ -56,7 +56,6 @@
 
         function centerMap(center) {
             self.map.setCenter(center);
-           
         }
     };
 
@@ -75,14 +74,27 @@
 
     self.questionnaireVariables = ko.observableArray(null);
 
+    self.isVariablesEnabled = ko.observable(false);
 
     self.selectedQuestionnaire.subscribe(function () {
-        self.selectedVersion(undefined);
+        if (!_.isUndefined(self.selectedQuestionnaire()) && self.selectedQuestionnaire().Versions.length === 1) {
+            self.selectedVersion(self.selectedQuestionnaire().Versions[0]);
+            self.selectedVersion.valueHasMutated();
+        } else {
+            self.selectedVersion(undefined);
+        }
         self.selectedVariable(undefined);
+        self.isVariablesEnabled(false);
+        self.questionnaireVariables([]);
     });
 
     self.selectedVersion.subscribe(function (value) {
-        self.questionnaireVariables(null);
+        self.questionnaireVariables([]);
+        self.isVariablesEnabled(false);
+        self.selectedVariable(undefined);
+
+        if (_.isUndefined(value))
+            return;
 
         var params = {
             QuestionType: 'GpsCoordinates',
@@ -92,7 +104,25 @@
 
         self.SendRequest(self.questionsUrl, params, function (data) {
             self.questionnaireVariables(data.Variables);
+            if (self.questionnaireVariables().length > 0) {
+                self.isVariablesEnabled(true);
+                if (self.questionnaireVariables().length === 1) {
+                    self.selectedVariable(self.questionnaireVariables()[0]);
+                }
+            } else {
+                self.isVariablesEnabled(false);
+                self.ShowNotification("No Geo Location question", "Where is no any Geo Location questions in chosen questionnaire");
+            }
         });
+    });
+
+    self.selectedVariable.subscribe(function (value) {
+        if (_.isUndefined(value))
+            return;
+
+        if (self.questionnaireVariables().length === 1) {
+            self.showPointsOnMap();
+        }
     });
   
     self.TotalCount = ko.observable();
@@ -114,6 +144,9 @@
         self.SendRequest(self.questionnaireUrl, params, function (data) {
             self.questionnaires(data.Items);
             self.TotalCount(data.TotalCount);
+            if (self.questionnaires.length === 1) {
+                self.selectedQuestionnaire(self.questionnaires()[0]);
+            }
         });
     };
 
@@ -189,7 +222,7 @@
                     questionnaireId: self.selectedQuestionnaire().QuestionnaireId,
                     count: markers.length
                 });
-            });
+            }, true);
         }
     };
     self.removeMarkersSet = function (markerSet) {

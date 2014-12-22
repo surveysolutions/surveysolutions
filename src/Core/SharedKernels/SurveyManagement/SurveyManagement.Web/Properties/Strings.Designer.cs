@@ -61,11 +61,47 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bad connection.
+        /// </summary>
+        public static string BadConnection {
+            get {
+                return ResourceManager.GetString("BadConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Need to update the application.
+        /// </summary>
+        public static string BadRequest {
+            get {
+                return ResourceManager.GetString("BadRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your application is incompatible with the Supervisor. Please, remove your copy and download the correct version..
+        /// </summary>
+        public static string ClientVersionIsObsolete {
+            get {
+                return ResourceManager.GetString("ClientVersionIsObsolete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File was not found.
+        /// </summary>
+        public static string FileWasNotFound {
+            get {
+                return ResourceManager.GetString("FileWasNotFound", resourceCulture);
             }
         }
         
@@ -84,6 +120,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         public static string HQ_Views_Manage_Title {
             get {
                 return ResourceManager.GetString("HQ_Views_Manage_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Incorrect files count.
+        /// </summary>
+        public static string IncorrectFilesCount {
+            get {
+                return ResourceManager.GetString("IncorrectFilesCount", resourceCulture);
             }
         }
         
@@ -201,6 +246,69 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         public static string InterviewStatus_SupervisorAssigned {
             get {
                 return ResourceManager.GetString("InterviewStatus_SupervisorAssigned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid device identifier.
+        /// </summary>
+        public static string InvalidDeviceIdentifier {
+            get {
+                return ResourceManager.GetString("InvalidDeviceIdentifier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid sequence identifier.
+        /// </summary>
+        public static string InvalidSequenceIdentifier {
+            get {
+                return ResourceManager.GetString("InvalidSequenceIdentifier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was an error with your Login/Password combination. Please try again..
+        /// </summary>
+        public static string InvalidUser {
+            get {
+                return ResourceManager.GetString("InvalidUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Client Identifier was not provided.
+        /// </summary>
+        public static string NoClientIdentifier {
+            get {
+                return ResourceManager.GetString("NoClientIdentifier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No connection.
+        /// </summary>
+        public static string NoConnection {
+            get {
+                return ResourceManager.GetString("NoConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Network is unavailable.
+        /// </summary>
+        public static string NoNetwork {
+            get {
+                return ResourceManager.GetString("NoNetwork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must update your CAPI application before synchronizing with the Supervisor.
+        /// </summary>
+        public static string OldVersionOfClient {
+            get {
+                return ResourceManager.GetString("OldVersionOfClient", resourceCulture);
             }
         }
         

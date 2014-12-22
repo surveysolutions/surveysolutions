@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Logging;
@@ -7,6 +8,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
 using WB.UI.Shared.Web.Filters;
+using WB.UI.Shared.Web.Settings;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
@@ -15,13 +17,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     {
         private readonly IServiceLocator serviceLocator;
         private readonly IIncomePackagesRepository incomePackagesRepository;
+        private readonly ISettingsProvider settingsProvider;
 
-        public ControlPanelController(IServiceLocator serviceLocator, IIncomePackagesRepository incomePackagesRepository,
-            ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger)
+        public ControlPanelController(IServiceLocator serviceLocator, 
+            IIncomePackagesRepository incomePackagesRepository,
+            ICommandService commandService, 
+            IGlobalInfoProvider globalInfo, 
+            ILogger logger,
+            ISettingsProvider settingsProvider)
             : base(commandService: commandService, globalInfo: globalInfo, logger: logger)
         {
             this.serviceLocator = serviceLocator;
             this.incomePackagesRepository = incomePackagesRepository;
+            this.settingsProvider = settingsProvider;
         }
 
         private IRevalidateInterviewsAdministrationService RevalidateInterviewsAdministrationService
@@ -51,7 +59,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         
         public ActionResult Settings()
         {
-            return this.View();
+            IEnumerable<ApplicationSetting> settings = this.settingsProvider.GetSettings();
+            return this.View(settings);
         }
 
         public ActionResult ReadSide()
