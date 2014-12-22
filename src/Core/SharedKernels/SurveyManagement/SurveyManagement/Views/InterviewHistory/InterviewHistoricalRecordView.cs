@@ -9,11 +9,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
 {
     public class InterviewHistoricalRecordView
     {
-        public InterviewHistoricalRecordView(long index, InterviewHistoricalAction action, Guid originatorId, string originatorName, string originatorRole, Dictionary<string, string> parameters, DateTime timestamp)
+        public InterviewHistoricalRecordView(long index, InterviewHistoricalAction action, string originatorName, string originatorRole, Dictionary<string, string> parameters, DateTime timestamp)
         {
             this.Index = index;
             this.Action = action;
-            this.OriginatorId = originatorId;
             this.OriginatorName = originatorName;
             this.OriginatorRole = originatorRole;
             this.Parameters = parameters;
@@ -21,7 +20,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
         }
         public long  Index { get; private set; }
         public InterviewHistoricalAction Action { get; private set; }
-        public Guid OriginatorId { get; private set; }
         public string OriginatorName { get; private set; }
         public string OriginatorRole { get; private set; }
         public Dictionary<string, string> Parameters { get; private set; }

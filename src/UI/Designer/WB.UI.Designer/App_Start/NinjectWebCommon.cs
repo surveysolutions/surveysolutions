@@ -25,6 +25,7 @@ using WB.Core.Infrastructure.Storage.Raven;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.CommandDeserialization;
+using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Modules;
 using WebActivatorEx;
 
@@ -127,7 +128,11 @@ namespace WB.UI.Designer.App_Start
 
         private static NcqrCompatibleEventDispatcher CreateEventBus(StandardKernel kernel)
         {
-            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>());
+            var ignoredDenormalizersConfigSection =
+               (IgnoredDenormalizersConfigSection)WebConfigurationManager.GetSection("IgnoredDenormalizersSection");
+            Type[] handlersToIgnore = ignoredDenormalizersConfigSection == null ? new Type[0] : ignoredDenormalizersConfigSection.GetIgnoredTypes();
+
+            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(), handlersToIgnore);
 
             foreach (var handler in kernel.GetAll(typeof (IEventHandler)))
             {

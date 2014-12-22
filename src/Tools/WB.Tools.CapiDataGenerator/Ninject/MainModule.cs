@@ -142,7 +142,7 @@ namespace CapiDataGenerator
             this.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
             this.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
 
-            var bus = new NcqrCompatibleEventDispatcher(eventStore);
+            var bus = new NcqrCompatibleEventDispatcher(eventStore, new Type[0]);
 
             this.Bind<IEventDispatcher>().ToConstant(bus);
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
