@@ -33,6 +33,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Core.Synchronization;
+using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using WB.UI.Shared.Web.MembershipProvider.Settings;
@@ -199,7 +200,10 @@ namespace WB.UI.Supervisor.App_Start
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
-            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>());
+            var ignoredDenormalizersConfigSection =
+               (IgnoredDenormalizersConfigSection)WebConfigurationManager.GetSection("IgnoredDenormalizersSection");
+            Type[] handlersToIgnore = ignoredDenormalizersConfigSection == null ? new Type[0] : ignoredDenormalizersConfigSection.GetIgnoredTypes();
+            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(), handlersToIgnore);
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
             kernel.Bind<IEventBus>().ToConstant(bus);
             kernel.Bind<IEventDispatcher>().ToConstant(bus);

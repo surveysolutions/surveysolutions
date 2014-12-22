@@ -135,6 +135,7 @@
     <Compile Include="CommandDeserialization\CommandDeserializer.cs" />
     <Compile Include="CommandDeserialization\ICommandDeserializer.cs" />
     <Compile Include="Configuration\ConfigurationManager.cs" />
+    <Compile Include="Configuration\IgnoredDenormalizersConfigSection.cs" />
     <Compile Include="Configuration\IConfigurationManager.cs" />
     <Compile Include="DataAnnotations\PasswordRegularExpressionAttribute.cs" />
     <Compile Include="DataAnnotations\PasswordStringLengthAttribute.cs" />

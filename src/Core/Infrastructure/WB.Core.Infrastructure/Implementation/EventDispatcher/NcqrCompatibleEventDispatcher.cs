@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
+using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
@@ -14,19 +16,22 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
     public class NcqrCompatibleEventDispatcher : IEventDispatcher
     {
         private readonly Dictionary<Type, EventHandlerWrapper> registredHandlers = new Dictionary<Type, EventHandlerWrapper>();
+        private readonly Type[] handlersToIgnore;
         private readonly Func<InProcessEventBus> getInProcessEventBus;
         private readonly IEventStore eventStore;
 
-        public NcqrCompatibleEventDispatcher(IEventStore eventStore)
+        public NcqrCompatibleEventDispatcher(IEventStore eventStore, IEnumerable<Type> handlersToIgnore)
         {
             this.eventStore = eventStore;
+            this.handlersToIgnore = handlersToIgnore.ToArray();
             this.getInProcessEventBus = () => new InProcessEventBus(true, eventStore);
         }
 
-        internal NcqrCompatibleEventDispatcher(Func<InProcessEventBus> getInProcessEventBus, IEventStore eventStore)
+        internal NcqrCompatibleEventDispatcher(Func<InProcessEventBus> getInProcessEventBus, IEventStore eventStore, IEnumerable<Type> handlersToIgnore)
         {
             this.getInProcessEventBus = getInProcessEventBus;
             this.eventStore = eventStore;
+            this.handlersToIgnore = handlersToIgnore.ToArray();
         }
 
         public void Publish(IPublishableEvent eventMessage)
@@ -115,6 +120,9 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
         public void Register(IEventHandler handler)
         {
+            if (handlersToIgnore.Any(h => h.IsAssignableFrom(handler.GetType())))
+                return;
+
             var inProcessBus = this.getInProcessEventBus();
             IEnumerable<Type> ieventHandlers = handler.GetType().GetTypeInfo().ImplementedInterfaces.Where(IsIEventHandlerInterface);
             foreach (Type ieventHandler in ieventHandlers)

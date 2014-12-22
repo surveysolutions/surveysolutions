@@ -25,6 +25,7 @@ using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement
@@ -129,6 +130,11 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .InSingletonScope()
                 .WithConstructorArgument("overrideReceivedEventTimeStamp", overrideReceivedEventTimeStamp)
                 .WithConstructorArgument("origin", origin);
+
+            this.Bind<InterviewHistoryWriterSettings>().ToConstant(new InterviewHistoryWriterSettings(this.currentFolderPath));
+            this.Unbind<IReadSideRepositoryWriter<InterviewHistoryView>>();
+            this.Bind<IReadSideRepositoryWriter<InterviewHistoryView>>().To<InterviewHistoryWriter>().InSingletonScope();
+            this.Kernel.RegisterDenormalizer<InterviewHistoryDenormalizer>();
         }
 
         protected void AdditionalEventChecker(Guid interviewId)
