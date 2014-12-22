@@ -20,17 +20,41 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private readonly IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory;
         private readonly IViewFactory<InterviewHistoryInputModel, InterviewHistoryView> interviewHistoryViewFactory;
         private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
+        private readonly IInterviewDetailsViewFactory interviewDetailsViewFactory;
 
         public InterviewController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
             IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory,
-            IInterviewSummaryViewFactory interviewSummaryViewFactory, IViewFactory<InterviewHistoryInputModel, InterviewHistoryView> interviewHistoryViewFactory)
+            IInterviewSummaryViewFactory interviewSummaryViewFactory, IViewFactory<InterviewHistoryInputModel, InterviewHistoryView> interviewHistoryViewFactory, IInterviewDetailsViewFactory interviewDetailsViewFactory)
             : base(commandService, provider, logger)
         {
             this.changeStatusFactory = changeStatusFactory;
             this.revalidateInterviewViewFactory = revalidateInterviewViewFactory;
             this.interviewSummaryViewFactory = interviewSummaryViewFactory;
             this.interviewHistoryViewFactory = interviewHistoryViewFactory;
+            this.interviewDetailsViewFactory = interviewDetailsViewFactory;
+        }
+
+        public ActionResult Details(Guid id, string template, Guid? group, Guid? question, Guid? propagationKey)
+        {
+            this.ViewBag.ActivePage = MenuItem.Docs;
+
+            ChangeStatusView interviewInfo = this.changeStatusFactory.Load(new ChangeStatusInputModel() { InterviewId = id });
+            InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
+
+            if (interviewInfo == null || interviewSummary == null)
+                return HttpNotFound();
+
+            bool isAccessAllowed =
+                this.GlobalInfo.IsHeadquarter ||
+                (this.GlobalInfo.IsSurepvisor && this.GlobalInfo.GetCurrentUser().Id == interviewSummary.TeamLeadId);
+
+            if (!isAccessAllowed)
+                return HttpNotFound();
+
+            InterviewDetailsView interviewDetailsView = interviewDetailsViewFactory.GetInterviewDetails(id);
+
+            return View(interviewDetailsView);
         }
 
         public ActionResult InterviewDetails(Guid id, string template, Guid? group, Guid? question, Guid? propagationKey)
