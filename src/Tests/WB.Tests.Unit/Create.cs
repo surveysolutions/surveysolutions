@@ -1223,13 +1223,14 @@ namespace WB.Tests.Unit
         }
 
         public static InterviewData InterviewData(bool createdOnClient = false,
-            InterviewStatus status = InterviewStatus.Created,
+            InterviewStatus status = InterviewStatus.Created, bool wasRejected = false,
             Guid? interviewId = null)
         {
             var result = new InterviewData();
             result.CreatedOnClient = createdOnClient;
             result.Status = status;
             result.InterviewId = interviewId.GetValueOrDefault();
+            result.WasRejected = wasRejected;
             return result;
         }
 

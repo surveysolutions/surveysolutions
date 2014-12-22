@@ -1812,6 +1812,7 @@
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\SynchronizationDenormalizerTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_created_on_client_and_assigned_to_interviewer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_is_created_on_client_and_sent_to_supervisor.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_created_on_client_and_rejected_by_supervisor_is_assigned_to_interviewer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_is_created_on_client_rejected_and_completed.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationTests\SchedulersTests\Create.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\InterviewDetailsDataProcessorTestsContext.cs" />

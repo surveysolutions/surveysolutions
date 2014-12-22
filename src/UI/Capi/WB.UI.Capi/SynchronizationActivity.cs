@@ -408,7 +408,7 @@ namespace WB.UI.Capi
                                         string.Format(
                                             Resources.GetString(Resource.String.PleaseCheckURLInSettingsFormat),
                                             settingsManager.GetSyncAddressPoint(), GetNetworkDescription(),
-                                            GetNetworkStatus(restException.StatusCode)));
+                                            GetNetworkStatus((int)restException.StatusCode)));
                                 }
                                 else
                                 {
