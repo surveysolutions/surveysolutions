@@ -7,13 +7,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
     {
         private static ApplicationVersionSettings supportedQuestionnaireVersion;
         private static Func<bool> isDebugMode;
-        private static Version buildVersion;
+        private static int syncProtocolVersionNumber;
 
-        public SupportedVersionProvider(ApplicationVersionSettings settings, Func<bool> isDebug, Version applicationBuildVersion)
+        public SupportedVersionProvider(ApplicationVersionSettings settings, Func<bool> isDebug, int syncProtocolVersion)
         {
             supportedQuestionnaireVersion = settings;
             isDebugMode = isDebug;
-            buildVersion = applicationBuildVersion;
+            syncProtocolVersionNumber = syncProtocolVersion;
         }
 
         public ApplicationVersionSettings GetSupportedQuestionnaireVersion()
@@ -25,7 +25,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
         {
             if (isDebugMode())
                 return null;
-            return buildVersion.Revision;
+
+            return syncProtocolVersionNumber;
         }
     }
 }

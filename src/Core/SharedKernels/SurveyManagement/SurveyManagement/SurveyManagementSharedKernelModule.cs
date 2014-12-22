@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly int supportedQuestionnaireVersionPatch;
         private readonly Func<bool> isDebug;
         private readonly InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings;
-        private readonly Version applicationBuildVersion;
+        private readonly int syncProtocolVersionNumber;
         private readonly bool overrideReceivedEventTimeStamp;
         private readonly string origin;
         private readonly bool hqEnabled;
@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
         public SurveyManagementSharedKernelModule(string currentFolderPath,
             int supportedQuestionnaireVersionMajor, int supportedQuestionnaireVersionMinor, int supportedQuestionnaireVersionPatch,
-            Func<bool> isDebug, Version applicationBuildVersion,
+            Func<bool> isDebug, int syncProtocolVersionNumber,
             InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool overrideReceivedEventTimeStamp, string origin, bool hqEnabled, int maxCountOfCachedEntitiesForSqliteDb)
         {
             this.currentFolderPath = currentFolderPath;
@@ -55,7 +55,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.supportedQuestionnaireVersionPatch = supportedQuestionnaireVersionPatch;
             this.isDebug = isDebug;
             this.interviewDetailsDataLoaderSettings = interviewDetailsDataLoaderSettings;
-            this.applicationBuildVersion = applicationBuildVersion;
+            this.syncProtocolVersionNumber = syncProtocolVersionNumber;
             this.overrideReceivedEventTimeStamp = overrideReceivedEventTimeStamp;
             this.origin = origin;
             this.hqEnabled = hqEnabled;
@@ -88,7 +88,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             };
             this.Unbind<ISupportedVersionProvider>();
             this.Bind<ISupportedVersionProvider>()
-                .ToConstant(new SupportedVersionProvider(applicationVersionSettings, this.isDebug, this.applicationBuildVersion));
+                .ToConstant(new SupportedVersionProvider(applicationVersionSettings, this.isDebug, this.syncProtocolVersionNumber));
 
             this.Bind(typeof (ITemporaryDataStorage<>)).To(typeof (FileTemporaryDataStorage<>));
 
