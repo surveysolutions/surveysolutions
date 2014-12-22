@@ -266,6 +266,7 @@
     <Compile Include="ServiceTests\DataExport\SqlDataExportWriterTests\when_delete_interview_method_is_called.cs" />
     <Compile Include="ServiceTests\DataExport\SqlToTabDataExportServiceTests\SqlToTabDataExportServiceTestContext.cs" />
     <Compile Include="ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_creating_template_for_preloading_from_questionnaire_export_structure.cs" />
+    <Compile Include="SupportedVersionProviderTests\when_getting_supported_sync_protocol_version_number.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\Create.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\InterviewDetailsDataProcessorTestsContext.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\when_process_2_capi_packages_and_max_per_process_is_1.cs" />
