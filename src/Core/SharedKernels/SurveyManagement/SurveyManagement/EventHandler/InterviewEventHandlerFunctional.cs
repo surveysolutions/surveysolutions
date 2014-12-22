@@ -598,9 +598,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<FlagRemovedFromAnswer> evnt)
         {
             return
-                new ViewWithSequence<InterviewData>(
-                    ChangeQuestionConditionValidity(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, false),
-                    evnt.EventSequence);
+               new ViewWithSequence<InterviewData>(
+                   SetFlagStateForQuestion(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, false),
+                   evnt.EventSequence);
         }
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<FlagSetToAnswer> evnt)
