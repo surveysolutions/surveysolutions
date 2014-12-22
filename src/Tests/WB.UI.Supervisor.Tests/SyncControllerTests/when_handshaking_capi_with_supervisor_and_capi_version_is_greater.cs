@@ -24,7 +24,7 @@ namespace WB.UI.Supervisor.Tests.SyncControllerTests
 
             var user = new UserView();
             var userFactory = Mock.Of<IViewFactory<UserViewInputModel, UserView>>(x => x.Load(Moq.It.IsAny<UserViewInputModel>()) == user);
-            var versionProvider = Mock.Of<ISupportedVersionProvider>(x => x.GetApplicationBuildNumber() == supervisorVersion);
+            var versionProvider = Mock.Of<ISupportedVersionProvider>(x => x.GetSupportedSyncProtocolVersionNumber() == supervisorVersion);
             controller = CreateSyncController(viewFactory: userFactory, versionProvider: versionProvider, globalInfo: globalInfo);
         };
 

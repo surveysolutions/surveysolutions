@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             return supportedQuestionnaireVersion;
         }
 
-        public int? GetApplicationBuildNumber()
+        public int? GetSupportedSyncProtocolVersionNumber()
         {
             if (isDebugMode())
                 return null;
