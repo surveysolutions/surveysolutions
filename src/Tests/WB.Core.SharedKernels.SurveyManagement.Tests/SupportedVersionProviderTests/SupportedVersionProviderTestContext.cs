@@ -7,10 +7,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.SupportedVersionProviderT
     internal class SupportedVersionProviderTestContext
     {
         protected static SupportedVersionProvider CreateSupportedVersionProvider(ApplicationVersionSettings settings,
-            bool? isDebug = null, int? applicationVersion = null)
+            bool? isDebug = null, int? syncProtocolVersion = null)
         {
-            return new SupportedVersionProvider(settings, () => isDebug ?? false,
-                applicationVersion ?? 4);
+            return new SupportedVersionProvider(settings, () => isDebug ?? false, syncProtocolVersion ?? 4);
         }
     }
 }
