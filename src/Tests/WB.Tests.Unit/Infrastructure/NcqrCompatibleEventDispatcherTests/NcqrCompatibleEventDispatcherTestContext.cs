@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
     {
         protected static NcqrCompatibleEventDispatcher CreateNcqrCompatibleEventDispatcher()
         {
-            return new NcqrCompatibleEventDispatcher(Mock.Of<IEventStore>());
+            return new NcqrCompatibleEventDispatcher(Mock.Of<IEventStore>(), new Type[0]);
         }
 
         protected static IPublishableEvent CreatePublishableEvent(Guid eventSourceId)
