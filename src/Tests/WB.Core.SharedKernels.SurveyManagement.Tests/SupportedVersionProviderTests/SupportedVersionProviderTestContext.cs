@@ -7,10 +7,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.SupportedVersionProviderT
     internal class SupportedVersionProviderTestContext
     {
         protected static SupportedVersionProvider CreateSupportedVersionProvider(ApplicationVersionSettings settings,
-            bool? isDebug = null, Version applicationVersion = null)
+            bool? isDebug = null, int? applicationVersion = null)
         {
             return new SupportedVersionProvider(settings, () => isDebug ?? false,
-                applicationVersion ?? new Version(1, 2, 3, 4));
+                applicationVersion ?? 4);
         }
     }
 }

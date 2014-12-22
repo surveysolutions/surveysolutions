@@ -3,6 +3,7 @@ using Android.App;
 using Android.Content;
 using CAPI.Android.Settings;
 using Java.Util;
+using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.UI.Capi.Settings
 {
@@ -15,17 +16,9 @@ namespace WB.UI.Capi.Settings
             return GetSetting(SettingsNames.RegistrationKeyName);
         }
 
-        /// <summary>
-        /// The remote sync node.
-        /// </summary>
         private const string RemoteSyncNode = "";
-        //  "http://ec2-54-217-244-125.eu-west-1.compute.amazonaws.com/";
-        //"http://192.168.173.1:8000/";
-        // "http://217.12.197.135/DEV-Supervisor/";
-        
         // "http://10.0.2.2";  //access to hosted computer from emulator
 
-        
         #endregion
 
         #region Public Methods and Operators
@@ -35,8 +28,7 @@ namespace WB.UI.Capi.Settings
             get
             {
                 return global::Android.Provider.Settings.Secure.GetString(Application.Context.ContentResolver,
-                                                                          global::Android.Provider.Settings
-                                                                                .Secure.AndroidId);
+                                                                          global::Android.Provider.Settings.Secure.AndroidId);
             }
         }
 
@@ -48,36 +40,17 @@ namespace WB.UI.Capi.Settings
 
         public static int AppVersionCode()
         {
-            // in production this should be the same as supervisor build number
-            return Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0).VersionCode;
+            // in production this should be the same as supervisor protocol identifier
+            // return Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0).VersionCode;
+            return SyncProtocolVersionProvider.GetProtocolVersion();
         }
 
-
-        public static string AndroidVersion()
-        {
-            return global::Android.OS.Build.VERSION.Release;
-        }
-
-        /// <summary>
-        /// The get sync address point.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
+        
         public static string GetSyncAddressPoint()
         {
             return GetSetting(SettingsNames.SyncAddressSettingsName, RemoteSyncNode);
         }
 
-        /// <summary>
-        /// The set sync address point.
-        /// </summary>
-        /// <param name="syncPoint">
-        /// The sync point.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
         public static bool SetSyncAddressPoint(string syncPoint)
         {
             syncPoint = syncPoint.Trim();
@@ -148,7 +121,7 @@ namespace WB.UI.Capi.Settings
         #endregion
 
 
-        class Installation
+        private class Installation
         {
             private static String sID = null;
 
