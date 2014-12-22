@@ -838,7 +838,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Condition expresssion has length more than 10000 characters.
+        ///   Looks up a localized string similar to Condition expression has length more than 10000 characters.
         /// </summary>
         internal static string WB0094_ConditionExpresssionHasLengthMoreThan10000Characters {
             get {
@@ -847,7 +847,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation expresssion has length more than 10000 characters.
+        ///   Looks up a localized string similar to Validation expression has length more than 10000 characters.
         /// </summary>
         internal static string WB0095_ValidationExpresssionHasLengthMoreThan10000Characters {
             get {

@@ -4,8 +4,8 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.Infrastructure.EventHandlers;
-using WB.Core.Infrastructure.Implementation.ReadSide;
+using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
+using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -14,11 +14,9 @@ using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
@@ -34,12 +32,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<ViewWithSequence<InterviewData>, SupervisorAssigned>,
         IUpdateHandler<ViewWithSequence<InterviewData>, InterviewerAssigned>,
         IUpdateHandler<ViewWithSequence<InterviewData>, GroupPropagated>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowAdded>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowRemoved>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, RosterRowTitleChanged>,
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterInstancesTitleChanged>,
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterInstancesAdded>,
         IUpdateHandler<ViewWithSequence<InterviewData>, RosterInstancesRemoved>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswerCommented>,
         IUpdateHandler<ViewWithSequence<InterviewData>, MultipleOptionsQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, NumericRealQuestionAnswered>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, NumericQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, NumericIntegerQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, TextQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, TextListQuestionAnswered>,
@@ -50,11 +52,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<ViewWithSequence<InterviewData>, GeoLocationQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, QRBarcodeQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, PictureQuestionAnswered>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, AnswerRemoved>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswersRemoved>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, GroupDisabled>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, GroupEnabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, GroupsDisabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, GroupsEnabled>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, QuestionDisabled>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, QuestionEnabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, QuestionsDisabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, QuestionsEnabled>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, AnswerDeclaredInvalid>,
+        IUpdateHandler<ViewWithSequence<InterviewData>, AnswerDeclaredValid>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswersDeclaredInvalid>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswersDeclaredValid>,
         IUpdateHandler<ViewWithSequence<InterviewData>, FlagRemovedFromAnswer>,
@@ -65,11 +74,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures;
-      
+        private readonly ISynchronizationDataStorage syncStorage;
 
-        public override object[] Readers
+        public override Type[] UsesViews
         {
-            get { return new object[] { users, questionnriePropagationStructures }; }
+            get { return new Type[] { typeof(UserDocument), typeof(QuestionnaireRosterStructure) }; }
+        }
+
+        public override Type[] BuildsViews
+        {
+            get { return base.BuildsViews.Union(new[] { typeof (SynchronizationDelta) }).ToArray(); }
         }
 
         private static string CreateLevelIdFromPropagationVector(decimal[] vector)
@@ -198,6 +212,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             });
         }
 
+
+
         private static InterviewData ChangeQuestionConditionState(InterviewData interview, decimal[] vector, Guid questionId, bool newState)
         {
             return UpdateQuestion(interview, vector, questionId, (question) =>
@@ -287,11 +303,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewEventHandlerFunctional(IReadSideRepositoryWriter<UserDocument> users,
             IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures,
-            IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewData)
+            IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewData, 
+            ISynchronizationDataStorage syncStorage)
             : base(interviewData)
         {
             this.users = users;
             this.questionnriePropagationStructures = questionnriePropagationStructures;
+            this.syncStorage = syncStorage;
         }
 
         public ViewWithSequence<InterviewData> Create(IPublishedEvent<InterviewCreated> evnt)
@@ -348,9 +366,48 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 currentState.Document.WasCompleted = true;
             }
 
+            if (!currentState.Document.WasRejected && evnt.Payload.Status == InterviewStatus.RejectedBySupervisor)
+            {
+                currentState.Document.WasRejected = true;
+            }
+
             currentState.Sequence = evnt.EventSequence;
+
+            var newStatus = evnt.Payload.Status;
+
+            if (this.IsInterviewWithStatusNeedToBeResendToCapi(newStatus))
+            {
+                this.ResendInterviewInNewStatus(currentState.Document, newStatus, evnt.Payload.Comment, evnt.EventTimeStamp);
+            }
+            else if (this.IsInterviewWithStatusNeedToBeDeletedOnCapi(newStatus, currentState.Document.CreatedOnClient, currentState.Document.WasRejected))
+            {
+                this.syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, null, evnt.EventTimeStamp);
+            }
         
             return currentState;
+        }
+
+        private bool IsInterviewWithStatusNeedToBeResendToCapi(InterviewStatus newStatus)
+        {
+            return newStatus == InterviewStatus.RejectedBySupervisor;
+        }
+
+        private bool IsInterviewWithStatusNeedToBeDeletedOnCapi(InterviewStatus newStatus, bool wasCreatedOnClient, bool wasRejected)
+        {
+            return (newStatus == InterviewStatus.Completed || newStatus == InterviewStatus.Deleted) && (!wasCreatedOnClient || wasRejected);
+        }
+
+        public void ResendInterviewInNewStatus(InterviewData interview, InterviewStatus newStatus, string comments, DateTime timestamp)
+        {
+            var interviewSyncData = this.BuildSynchronizationDtoWhichIsAssignedToUser(interview, interview.ResponsibleId, newStatus, comments);
+
+            this.syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId, timestamp);
+        }
+
+        public void ResendInterviewForPerson(InterviewData interview, Guid responsibleId, DateTime timestamp)
+        {
+            InterviewSynchronizationDto interviewSyncData = this.BuildSynchronizationDtoWhichIsAssignedToUser(interview, responsibleId, InterviewStatus.InterviewerAssigned, null);
+            this.syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId, timestamp);
         }
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<SupervisorAssigned> evnt)
@@ -368,6 +425,36 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             currentState.Document.ResponsibleRole = UserRoles.Operator;
             currentState.Sequence = evnt.EventSequence;
 
+            if (currentState.Document.Status != InterviewStatus.RejectedByHeadquarters)
+            {
+                if (!currentState.Document.CreatedOnClient || currentState.Document.WasRejected)
+                {
+                    this.ResendInterviewForPerson(currentState.Document, evnt.Payload.InterviewerId, evnt.EventTimeStamp);
+                }
+            }
+             
+            return currentState;
+        }
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterRowAdded> evnt)
+        {
+            var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(currentState.Document, evnt.Payload.GroupId);
+
+            this.AddLevelToInterview(currentState.Document, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId, evnt.Payload.SortIndex, scopeOfCurrentGroup);
+
+            currentState.Sequence = evnt.EventSequence;
+            return currentState;
+        }
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterRowRemoved> evnt)
+        {
+            var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(currentState.Document, evnt.Payload.GroupId);
+
+            var newVector = this.CreateNewVector(evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId);
+            var levelKey = CreateLevelIdFromPropagationVector(newVector);
+            this.RemoveLevelFromInterview(currentState.Document, levelKey, new[] { evnt.Payload.GroupId }, scopeOfCurrentGroup.ScopeVector);
+
+            currentState.Sequence = evnt.EventSequence;
             return currentState;
         }
 
@@ -455,6 +542,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 evnt.Payload.Answer), evnt.EventSequence);
         }
 
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<NumericQuestionAnswered> evnt)
+        {
+            return new ViewWithSequence<InterviewData>(this.SaveAnswer(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+                     evnt.Payload.Answer), evnt.EventSequence);
+        }
+
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
         {
             return new ViewWithSequence<InterviewData>(this.SaveAnswer(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
@@ -516,6 +609,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 evnt.Payload.PictureFileName), evnt.EventSequence);
         }
 
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<AnswerRemoved> evnt)
+        {
+            return new ViewWithSequence<InterviewData>(
+                UpdateQuestion(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, question =>
+                {
+                    question.Answer = null;
+                    question.IsAnswered = false;
+                }),
+                evnt.EventSequence);
+        }
+
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<AnswersRemoved> evnt)
         {
             return new ViewWithSequence<InterviewData>(
@@ -526,6 +630,32 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                         updatedQuestion.Answer = null;
                         updatedQuestion.IsAnswered = false;
                     })),
+                evnt.EventSequence);
+        }
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<GroupDisabled> evnt)
+        {
+            return new ViewWithSequence<InterviewData>(
+                PreformActionOnLevel(currentState.Document, evnt.Payload.PropagationVector, level =>
+                {
+                    if (!level.DisabledGroups.Contains(evnt.Payload.GroupId))
+                    {
+                        level.DisabledGroups.Add(evnt.Payload.GroupId);
+                    }
+                }),
+                evnt.EventSequence);
+        }
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<GroupEnabled> evnt)
+        {
+            return new ViewWithSequence<InterviewData>(
+                PreformActionOnLevel(currentState.Document, evnt.Payload.PropagationVector, level =>
+                {
+                    if (level.DisabledGroups.Contains(evnt.Payload.GroupId))
+                    {
+                        level.DisabledGroups.Remove(evnt.Payload.GroupId);
+                    }
+                }),
                 evnt.EventSequence);
         }
 
@@ -559,6 +689,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 evnt.EventSequence);
         }
 
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<QuestionDisabled> evnt)
+        {
+            return
+                new ViewWithSequence<InterviewData>(
+                    ChangeQuestionConditionState(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+                        false), evnt.EventSequence);
+        }
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<QuestionEnabled> evnt)
+        {
+            return
+                new ViewWithSequence<InterviewData>(
+                    ChangeQuestionConditionState(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+               true), evnt.EventSequence);
+        }
+
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<QuestionsDisabled> evnt)
         {
             return new ViewWithSequence<InterviewData>(
@@ -574,6 +720,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 evnt.Payload.Questions.Aggregate(
                     currentState.Document,
                     (document, question) => ChangeQuestionConditionState(document, question.RosterVector, question.Id, true)),
+                evnt.EventSequence);
+        }
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<AnswerDeclaredInvalid> evnt)
+        {
+            return new ViewWithSequence<InterviewData>(
+                ChangeQuestionConditionValidity(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, false),
+                evnt.EventSequence);
+        }
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<AnswerDeclaredValid> evnt)
+        {
+            return new ViewWithSequence<InterviewData>(
+                ChangeQuestionConditionValidity(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, true),
                 evnt.EventSequence);
         }
 
@@ -598,9 +758,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<FlagRemovedFromAnswer> evnt)
         {
             return
-               new ViewWithSequence<InterviewData>(
-                   SetFlagStateForQuestion(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, false),
-                   evnt.EventSequence);
+                new ViewWithSequence<InterviewData>(
+                    ChangeQuestionConditionValidity(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, false),
+                    evnt.EventSequence);
         }
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<FlagSetToAnswer> evnt)
@@ -619,6 +779,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<InterviewDeclaredValid> evt)
         {
             return new ViewWithSequence<InterviewData>(this.SetInterviewValidity(currentState.Document, true), evt.EventSequence);
+        }
+
+        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterRowTitleChanged> evnt)
+        {
+            var newVector = this.CreateNewVector(evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId);
+
+            return
+                new ViewWithSequence<InterviewData>(PreformActionOnLevel(currentState.Document, newVector, (level) =>
+                {
+                    if (level.RosterRowTitles.ContainsKey(evnt.Payload.GroupId))
+                    {
+                        level.RosterRowTitles[evnt.Payload.GroupId] = evnt.Payload.Title;
+                    }
+                    else
+                    {
+                        level.RosterRowTitles.Add(evnt.Payload.GroupId, evnt.Payload.Title);
+                    }
+
+                }), evnt.EventSequence);
         }
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<RosterInstancesTitleChanged> evnt)
@@ -644,8 +823,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return new ViewWithSequence<InterviewData>(currentState.Document, evnt.EventSequence);
         }
 
+        private InterviewSynchronizationDto BuildSynchronizationDtoWhichIsAssignedToUser(InterviewData interview, Guid userId,
+            InterviewStatus status, string comments)
+        {
+            var factory = new InterviewSynchronizationDtoFactory(this.questionnriePropagationStructures);
+            return factory.BuildFrom(interview, userId, status, comments);
+        }
+
         public ViewWithSequence<InterviewData> Delete(ViewWithSequence<InterviewData> currentState, IPublishedEvent<InterviewHardDeleted> evnt)
         {
+            this.syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, currentState.Document.ResponsibleId, evnt.EventTimeStamp);
             return currentState;
         }
     }

@@ -118,22 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ClientVersionLessThenDocument" xml:space="preserve">
-    <value>You have an old version of application that supports version {0} but current version is {1}. Please update application to continue.</value>
+    <value>Failed to open questionnaire. Requested questionnaire "{0}" has {2} version. Application supports version up to {1}. Please update application.</value>
   </data>
   <data name="TemplateNotFound" xml:space="preserve">
-    <value>Requested questionnaire id={0} was not found</value>
+    <value>Questionnaire with id={0} cannot be found. Please check the list of available questionnaires.</value>
   </data>
   <data name="Questionnaire_verification_failed" xml:space="preserve">
-    <value>Failed to import questionnaire. Requested questionnaire "{0}" has errors. Please verify and fix them on Designer.</value>
+   <value>Requested questionnaire "{0}" has errors. Please verify the questionnaire on Designer.</value>
   </data>
   <data name="User_Not_authorized" xml:space="preserve">
-    <value>There was an error with your Login/Password combination. Please try again.</value>
+    <value>User is not authorized. Check your login and password.</value>
   </data>
   <data name="OldClientPleaseUpdate" xml:space="preserve">
     <value>You have an obsolete version of application. Please update application to continue.</value>
   </data>
   <data name="VersionParameterIsIncorrect" xml:space="preserve">
-    <value>Max supporter version of questionnaire was not correctly provided.</value>
+    <value>Max supported version of questionnaire was not correctly provided. Please contact developers.</value>
   </data>
   <data name="NotSupportedQuestionnaireVersion" xml:space="preserve">
     <value>Failed to import questionnaire. Requested questionnaire "{0}" has {1} version. Headquarters application supports version up to {2}</value>
