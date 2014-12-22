@@ -142,19 +142,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpPost]
         [ApiBasicAuth]
-        public async Task PostFile([FromUri]PostFileRequest request)
+        public void PostFile(PostFileRequest request)
         {
             if (request == null) throw new ArgumentNullException("request");
 
-            var multipartProvider = await Request.Content.ReadAsMultipartAsync();
-            foreach (var file in multipartProvider.Contents)
-            {
-                var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
-                var buffer = await file.ReadAsByteArrayAsync();
-
-                plainFileRepository.StoreInterviewBinaryData(request.InterviewId, filename, buffer);
-            }
-            
+            plainFileRepository.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data));
         }
 
         [HttpPost]

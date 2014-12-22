@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BadConnection" xml:space="preserve">
+    <value>Bad connection</value>
+  </data>
+  <data name="BadRequest" xml:space="preserve">
+    <value>Need to update the application</value>
+  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
@@ -181,7 +187,7 @@
     <value>Invalid sequence identifier</value>
   </data>
   <data name="InvalidUser" xml:space="preserve">
-    <value>There was an error with your Interviewer name/Password combination. Please try again.</value>
+    <value>There was an error with your Login/Password combination. Please try again.</value>
   </data>
   <data name="NoClientIdentifier" xml:space="preserve">
     <value>Client Identifier was not provided</value>

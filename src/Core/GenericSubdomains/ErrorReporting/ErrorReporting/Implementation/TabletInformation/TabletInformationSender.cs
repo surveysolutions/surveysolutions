@@ -72,7 +72,6 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformat
 
                 await this.restService.PostAsync(
                     url: "api/InterviewerSync/PostInfoPackage",
-                    token: this.ct,
                     request: new TabletInformationPackage()
                     {
                         Content = Convert.ToBase64String(this.fileSystemAccessor.ReadAllBytes(this.pathToInfoArchive)),

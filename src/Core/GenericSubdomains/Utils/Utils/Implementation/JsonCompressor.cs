@@ -6,11 +6,11 @@ using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.Core.GenericSubdomains.Utils.Implementation
 {
-    public class GZipJsonCompressor : IStringCompressor
+    public class JsonCompressor : IStringCompressor
     {
         private readonly IJsonUtils jsonSerrializer;
 
-        public GZipJsonCompressor(IJsonUtils jsonSerrializer)
+        public JsonCompressor(IJsonUtils jsonSerrializer)
         {
             this.jsonSerrializer = jsonSerrializer;
         }
@@ -32,7 +32,7 @@ namespace WB.Core.GenericSubdomains.Utils.Implementation
             return output;
         }
 
-        public T Decompress<T>(Stream stream) where T : class
+        public T DecompressGZip<T>(Stream stream)
         {
             using (var zip = new GZipStream(stream, CompressionMode.Decompress))
             {
@@ -40,6 +40,43 @@ namespace WB.Core.GenericSubdomains.Utils.Implementation
                 {
                     return jsonSerrializer.Deserialize<T>(reader.ReadToEnd());
                 }
+            }
+        }
+
+        public T DecompressDeflate<T>(Stream stream)
+        {
+            using (var zip = new DeflateStream(stream, CompressionMode.Decompress))
+            {
+                using (var reader = new StreamReader(zip, Encoding.UTF8))
+                {
+                    return jsonSerrializer.Deserialize<T>(reader.ReadToEnd());
+                }
+            }
+        }
+
+        public byte[] DecompressGZip(byte[] payload)
+        {
+            using (var msi = new MemoryStream(payload))
+            using (var mso = new MemoryStream())
+            {
+                using (var gs = new GZipStream(msi, CompressionMode.Decompress))
+                {
+                    gs.CopyTo(mso);
+                }
+                return mso.ToArray();
+            }
+        }
+
+        public byte[] DecompressDeflate(byte[] payload)
+        {
+            using (var msi = new MemoryStream(payload))
+            using (var mso = new MemoryStream())
+            {
+                using (var gs = new DeflateStream(msi, CompressionMode.Decompress))
+                {
+                    gs.CopyTo(mso);
+                }
+                return mso.ToArray();
             }
         }
 

@@ -138,4 +138,10 @@
   <data name="InvalidSyncPointAddressUrl" xml:space="preserve">
     <value>Synchronization point address is invalid. Make sure that you entered correct url address.</value>
   </data>
+  <data name="BadConnection" xml:space="preserve">
+    <value>Bad connection</value>
+  </data>
+  <data name="BadRequest" xml:space="preserve">
+    <value>Need to update the application</value>
+  </data>
 </root>

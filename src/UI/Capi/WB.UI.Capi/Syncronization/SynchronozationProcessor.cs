@@ -75,8 +75,7 @@ namespace WB.UI.Capi.Syncronization
                     new SynchronizationEventArgsWithPercent("Receiving list of packageIdStorage to download",
                         Operation.Pull, true, 0));
 
-                remoteChuncksForDownload = await this.synchronizationService.GetChunksAsync(credentials: credentials,
-                    token: this.cancellationToken, lastKnownPackageId: lastKnownPackageId);
+                remoteChuncksForDownload = await this.synchronizationService.GetChunksAsync(credentials: credentials, lastKnownPackageId: lastKnownPackageId);
 
                 if (remoteChuncksForDownload == null)
                 {
@@ -101,10 +100,7 @@ namespace WB.UI.Capi.Syncronization
 
                 try
                 {
-                    SyncItem data = await this.synchronizationService.RequestChunkAsync(
-                        credentials: credentials, 
-                        chunkId: chunk.Id,
-                        token: this.cancellationToken);
+                    SyncItem data = await this.synchronizationService.RequestChunkAsync(credentials: credentials, chunkId: chunk.Id);
 
                     this.dataProcessor.SavePulledItem(data);
 
@@ -129,7 +125,7 @@ namespace WB.UI.Capi.Syncronization
                 if (!long.TryParse(this.interviewerSettings.GetLastReceivedPackageId(), out lastReceivedPackageIdOfLongType))
                     return;
                 this.OnStatusChanged(new SynchronizationEventArgs("Tablet had old installation. Migrating pacakge timestamp to it's id", Operation.Pull, true));
-                string lastReceivedChunkId = await this.synchronizationService.GetChunkIdByTimestampAsync(timestamp: lastReceivedPackageIdOfLongType, credentials: credentials, token: cancellationToken);
+                string lastReceivedChunkId = await this.synchronizationService.GetChunkIdByTimestampAsync(timestamp: lastReceivedPackageIdOfLongType, credentials: credentials);
                 this.packageIdStorage.Append(lastReceivedChunkId);
                 this.interviewerSettings.SetLastReceivedPackageId(null);
             }
@@ -146,7 +142,7 @@ namespace WB.UI.Capi.Syncronization
             {
                 this.ExitIfCanceled();
 
-                await this.synchronizationService.PushChunkAsync(credentials : credentials, chunkAsString: chunckDescription.Content, token: this.cancellationToken);
+                await this.synchronizationService.PushChunkAsync(credentials : credentials, chunkAsString: chunckDescription.Content);
 
                 this.fileSyncRepository.MoveInterviewsBinaryDataToSyncFolder(chunckDescription.EventSourceId);
 
@@ -170,8 +166,7 @@ namespace WB.UI.Capi.Syncronization
                         credentials: credentials,
                         fileData: binaryData.GetData(), 
                         fileName: binaryData.FileName,
-                        interviewId: binaryData.InterviewId, 
-                        token: this.cancellationToken);
+                        interviewId: binaryData.InterviewId);
 
                     this.fileSyncRepository.RemoveBinaryDataFromSyncFolder(binaryData.InterviewId, binaryData.FileName);
                 }
@@ -201,7 +196,7 @@ namespace WB.UI.Capi.Syncronization
             this.OnStatusChanged(
                 new SynchronizationEventArgs("Connecting...", Operation.Handshake, true));
 
-            var clientRegistrationId = await this.synchronizationService.HandshakeAsync(credentials : credentials, token: cancellationToken);
+            var clientRegistrationId = await this.synchronizationService.HandshakeAsync(credentials : credentials);
 
             this.interviewerSettings.SetClientRegistrationId(clientRegistrationId);
         }

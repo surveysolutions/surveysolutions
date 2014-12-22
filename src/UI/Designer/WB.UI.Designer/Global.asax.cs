@@ -38,6 +38,7 @@ namespace WB.UI.Designer
 
             DataAnnotationsConfig.RegisterAdapters();
 
+            ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
             //BundleTable.EnableOptimizations = true;
         }
 

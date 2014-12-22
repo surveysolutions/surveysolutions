@@ -404,8 +404,8 @@ namespace WB.UI.Capi
                             {
                                 switch (restException.StatusCode)
                                 {
-                                    case 404:
-                                    case 408:
+                                    case HttpStatusCode.NotFound:
+                                    case HttpStatusCode.RequestTimeout:
                                         sb.AppendLine(
                                             string.Format(
                                                 Resources.GetString(Resource.String.PleaseCheckURLInSettingsFormat),
