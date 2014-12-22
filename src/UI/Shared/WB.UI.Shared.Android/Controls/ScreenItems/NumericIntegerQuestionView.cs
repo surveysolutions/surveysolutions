@@ -29,8 +29,13 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected override string FormatString(string s)
         {
-            return string.Format(CultureInfo.CurrentCulture, "{0:n0}", 
-                int.Parse(s, NumberStyles.AllowThousands | NumberStyles.AllowLeadingSign, CultureInfo.CurrentCulture));
+            int parsedValue;
+            if (int.TryParse(s, NumberStyles.AllowThousands | NumberStyles.AllowLeadingSign, CultureInfo.CurrentCulture, out parsedValue))
+            {
+                return string.Format(CultureInfo.CurrentCulture, "{0:n0}", parsedValue);
+            }
+
+            return s;
         }
 
         protected override bool IsParseAnswerStringSucceeded(string newAnswer, out int answer)
@@ -40,7 +45,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected override async Task<AnswerQuestionCommand> CreateAnswerQuestionCommand(int answer)
         {
-            bool result = await ConfirmRosterDecreaseAsync(Model.TriggeredRosters, ParseCurrentAnswerString() - answer);
+            bool result = await ConfirmRosterDecreaseAsync(Model.TriggeredRosters, ParseCurrentAnswerString() - Math.Max(0, answer));
 
             if (!result)
             {

@@ -24,7 +24,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         {
             try
             {
-                return this.questionnaireStorage.GetById(input.QuestionnaireId);
+                var doc = this.questionnaireStorage.GetById(input.QuestionnaireId);
+                if (doc == null || doc.IsDeleted)
+                {
+                    return null;
+                }
+
+                return doc;
             }
             catch (InvalidOperationException)
             {

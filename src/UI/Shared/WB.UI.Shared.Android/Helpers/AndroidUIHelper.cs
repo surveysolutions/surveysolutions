@@ -2,8 +2,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Android.App;
+using Android.Content;
 using Android.Graphics;
 using Android.Views;
+using Android.Views.InputMethods;
 using Android.Widget;
 
 namespace WB.UI.Shared.Android.Helpers
@@ -81,9 +83,13 @@ namespace WB.UI.Shared.Android.Helpers
                     if (currentFocus != null)
                     {
                         currentFocus.ClearFocus();
+
+                        InputMethodManager imm = (InputMethodManager)activity.GetSystemService(Context.InputMethodService);
+                        imm.HideSoftInputFromWindow(view.WindowToken, 0);
                     }
                 }
             };
         }
+
     }
 }

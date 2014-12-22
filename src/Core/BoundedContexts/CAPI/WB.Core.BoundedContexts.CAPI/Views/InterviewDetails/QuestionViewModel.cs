@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveySolutions.Services;
@@ -77,7 +78,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             get
             {
-                return (this.AnswerObject ?? "").ToString();
+                return AnswerUtils.AnswerToString(this.AnswerObject);
             }
         }
 
@@ -119,9 +120,9 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             if (!this.Status.HasFlag(QuestionStatus.Answered))
             {
                 this.Status = this.Status | QuestionStatus.Answered;
-                this.RaisePropertyChanged("Status");
             }
 
+            this.RaisePropertyChanged("Status");
             this.RaisePropertyChanged("AnswerString");
             this.RaisePropertyChanged("IsMandatoryAndEmpty");
         }

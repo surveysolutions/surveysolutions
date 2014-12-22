@@ -13,11 +13,11 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
     public abstract class RavenReadSideRepositoryAccessor<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
     {
-        protected readonly DocumentStore ravenStore;
+        protected readonly IDocumentStore RavenStore;
 
-        protected RavenReadSideRepositoryAccessor(DocumentStore ravenStore)
+        protected RavenReadSideRepositoryAccessor(IDocumentStore ravenStore)
         {
-            this.ravenStore = ravenStore;
+            this.RavenStore = ravenStore;
         }
 
         protected abstract TResult QueryImpl<TResult>(Func<IRavenQueryable<TEntity>, TResult> query);
@@ -35,7 +35,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         protected IDocumentSession OpenSession()
         {
-            return this.ravenStore.OpenSession();
+            return this.RavenStore.OpenSession();
         }
 
         protected string ToRavenId(string id)
@@ -60,7 +60,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         private int MaxNumberOfRequestsPerSession
         {
-            get { return this.ravenStore.Conventions.MaxNumberOfRequestsPerSession; }
+            get { return this.RavenStore.Conventions.MaxNumberOfRequestsPerSession; }
         }
 
         private IEnumerable<IQueryable<TEntity>> GetAllDocuments(Expression<Func<TEntity, bool>> condition)

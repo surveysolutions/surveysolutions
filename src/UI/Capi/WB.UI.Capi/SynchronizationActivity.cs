@@ -1,7 +1,12 @@
+using System.Net;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.Net;
+using Android.Net.Wifi;
 using Android.OS;
+using Android.Text;
+using Android.Text.Method;
 using Android.Views;
 using Android.Widget;
 using System;
@@ -10,30 +15,25 @@ using System.Threading;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
 using Microsoft.Practices.ServiceLocation;
-using Ncqrs;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.Login;
-using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Rest;
+using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernel.Utils;
-using WB.Core.SharedKernel.Utils.Compression;
-using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Capi.Controls;
 using WB.UI.Capi.Extensions;
+using WB.UI.Capi.Services;
 using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization;
-using WB.UI.Capi.Utils;
 using WB.UI.Shared.Android.Extensions;
 
 namespace WB.UI.Capi
@@ -75,11 +75,13 @@ namespace WB.UI.Capi
 
         protected ProgressDialog progressDialog;
         protected SynchronozationProcessor synchronizer;
-        protected ITabletInformationSender tabletInformationSender;
-        protected ITabletInformationSenderFactory tabletInformationSenderFactory;
         private ILogger Logger
         {
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
+        }
+        private INetworkService networkService
+        {
+            get { return ServiceLocator.Current.GetInstance<INetworkService>(); }
         }
 
         private Operation? currentOperation;
@@ -99,7 +101,6 @@ namespace WB.UI.Capi
 
             this.backupManager = CapiApplication.Kernel.Get<IBackup>();
             this.passwordHasher = CapiApplication.Kernel.Get<IPasswordHasher>();
-            this.tabletInformationSenderFactory = CapiApplication.Kernel.Get<ITabletInformationSenderFactory>();
             this.btnSync.Click += this.ButtonSyncClick;
             this.btnBackup.Click += this.btnBackup_Click;
             this.btnRestore.Click += this.btnRestore_Click;
@@ -254,17 +255,12 @@ namespace WB.UI.Capi
         {
             base.OnStart();
             this.CreateActionBar();
+            this.PrepareUI();
         }
 
-        private void StartSynctionization(ISyncAuthenticator authenticator, EventHandler synchronizerProcessFinished)
+        private async void StartSynctionization(ISyncAuthenticator authenticator, EventHandler synchronizerProcessFinished)
         {
-            if (!NetworkHelper.IsNetworkEnabled(this))
-            {
-                Toast.MakeText(this, "Network is unavailable", ToastLength.Long).Show();
-                return;
-            }
-
-            this.ThrowExeptionIfDialogIsOpened();
+            if (this.progressDialog != null) return;
 
             this.PrepareUI();
             try
@@ -273,7 +269,6 @@ namespace WB.UI.Capi
                 var plainFileRepository = CapiApplication.Kernel.Get<IPlainInterviewFileStorage>();
                 var cleaner = new CapiCleanUpService(changeLogManipulator, plainFileRepository);
                 this.synchronizer = new SynchronozationProcessor(
-                    this,
                     authenticator,
                     new CapiDataSynchronizationService(
                         changeLogManipulator,
@@ -287,9 +282,11 @@ namespace WB.UI.Capi
                         CapiApplication.Kernel.Get<IJsonUtils>(),
                         CapiApplication.Kernel.Get<IQuestionnaireAssemblyFileAccessor>()),
                     cleaner,
-                    CapiApplication.Kernel.Get<IRestServiceWrapperFactory>(),
                     CapiApplication.Kernel.Get<IInterviewSynchronizationFileStorage>(),
-                    CapiApplication.Kernel.Get<ISyncPackageIdsStorage>());
+                    CapiApplication.Kernel.Get<ISyncPackageIdsStorage>(),
+                    CapiApplication.Kernel.Get<ILogger>(),
+                    CapiApplication.Kernel.Get<ISynchronizationService>(),
+                    CapiApplication.Kernel.Get<IInterviewerSettings>());
             }
             catch (Exception ex)
             {
@@ -305,7 +302,7 @@ namespace WB.UI.Capi
 
             this.CreateDialog(ProgressDialogStyle.Spinner, "Initializing", false, this.progressDialog_Cancel);
 
-            this.synchronizer.Run();
+            await this.synchronizer.Run();
         }
 
 
@@ -369,12 +366,6 @@ namespace WB.UI.Capi
             this.tvSyncResult.Text = string.Empty;
         }
 
-        private void ThrowExeptionIfDialogIsOpened()
-        {
-            if (this.progressDialog != null)
-                throw new InvalidOperationException();
-        }
-
         private void synchronizer_ProcessFinished(object sender, EventArgs e)
         {
             this.RunOnUiThread(() =>
@@ -402,29 +393,79 @@ namespace WB.UI.Capi
             this.RunOnUiThread(() =>
                 {
                     this.DestroyDialog();
-                    if (evt.Exceptions != null || evt.Exceptions.Count > 0)
+                    if (evt.Exceptions != null && evt.Exceptions.Count > 0)
                     {
-                        StringBuilder sb = new StringBuilder();
+                        var settingsManager = ServiceLocator.Current.GetInstance<IInterviewerSettings>();
+                        var sb = new StringBuilder();
                         foreach (var exception in evt.Exceptions)
                         {
+                            var restException = exception as RestException;
+                            if (restException != null)
+                            {
+                                if (string.IsNullOrEmpty(restException.Message))
+                                {
+                                    sb.AppendLine(
+                                        string.Format(
+                                            Resources.GetString(Resource.String.PleaseCheckURLInSettingsFormat),
+                                            settingsManager.GetSyncAddressPoint(), GetNetworkDescription(),
+                                            GetNetworkStatus((int)restException.StatusCode)));
+                                }
+                                else
+                                {
+                                    sb.AppendLine(restException.Message);
+                                }
+                                sb.AppendLine(Resources.GetString(Resource.String.NewHtmlLine));
+                                continue;
+                            }
+                            var webException = exception as WebException;
+                            if (webException != null)
+                            {
+                                sb.AppendLine(
+                                    string.Format(
+                                        Resources.GetString(Resource.String.PleaseCheckURLInSettingsFormat),
+                                        settingsManager.GetSyncAddressPoint(), GetNetworkDescription(), GetNetworkStatus((int)webException.Status)));
+                                
+                                sb.AppendLine(Resources.GetString(Resource.String.NewHtmlLine));
+                                continue;
+                            }
                             sb.AppendLine(exception.Message);
 
-                            if (exception.InnerException != null)
-                            {
-                                sb.AppendLine(exception.InnerException.Message);
-
-                                if (exception.InnerException.InnerException != null)
-                                {
-                                    sb.AppendLine(exception.InnerException.InnerException.Message);
-                                }
-                            }
+                            sb.AppendLine(Resources.GetString(Resource.String.NewHtmlLine));
                         }
-                        this.tvSyncResult.Text = sb.ToString();
+                        tvSyncResult.MovementMethod = LinkMovementMethod.Instance;
+                        this.tvSyncResult.SetText(Html.FromHtml(sb.ToString()), TextView.BufferType.Spannable);
                     }
                     remoteCommandDoneEvent.Set();
                 });
             remoteCommandDoneEvent.WaitOne();
             this.DestroySynchronizer();
+        }
+
+        private string GetNetworkStatus(int status)
+        {
+            return string.Format(Resources.GetString(Resource.String.NetworkStatus), status);
+        }
+
+        private string GetNetworkDescription()
+        {
+            var connectivityManager = (ConnectivityManager)this.GetSystemService(ConnectivityService);
+
+            var networkInfo = connectivityManager.GetNetworkInfo(ConnectivityType.Wifi);
+            if (networkInfo.IsConnected)
+            {
+                var wifiManager = (WifiManager)this.GetSystemService(WifiService);
+                var connectionInfo = wifiManager.ConnectionInfo;
+                if (connectionInfo != null && !string.IsNullOrEmpty(connectionInfo.SSID))
+                {
+                    return string.Format(Resources.GetString(Resource.String.NowYouareConnectedToWifiNetwork), connectionInfo.SSID);
+                }
+            }
+            var mobileState = connectivityManager.GetNetworkInfo(ConnectivityType.Mobile).GetState();
+            if (mobileState == NetworkInfo.State.Connected)
+            {
+                return Resources.GetString(Resource.String.NowYouareConnectedToMobileNetwork);
+            }
+            return Resources.GetString(Resource.String.YouAreNotConnectedToAnyNetwork);
         }
 
         private void DestroySynchronizer()

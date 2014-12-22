@@ -1,4 +1,5 @@
-﻿using Main.Core.Entities.SubEntities;
+﻿using System;
+using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
 {

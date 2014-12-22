@@ -43,6 +43,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
     <Reference Include="Ninject">
@@ -50,15 +57,19 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Extensions">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Net.Http.2.2.28\lib\monoandroid\System.Net.Http.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Net.Http.2.2.28\lib\monoandroid\System.Net.Http.Primitives.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\ErrorReporting\ErrorReportingModule.cs">
       <Link>ErrorReportingModule.cs</Link>
-    </Compile>
-    <Compile Include="..\ErrorReporting\IInfoFileSupplierRegistry.cs">
-      <Link>IInfoFileSupplierRegistry.cs</Link>
     </Compile>
     <Compile Include="..\ErrorReporting\Implementation\CapiInformation\CapiInformationService.cs">
       <Link>Implementation\CapiInformation\CapiInformationService.cs</Link>
@@ -69,23 +80,17 @@
     <Compile Include="..\ErrorReporting\Implementation\TabletInformation\TabletInformationSender.cs">
       <Link>Implementation\TabletInformation\TabletInformationSender.cs</Link>
     </Compile>
-    <Compile Include="..\ErrorReporting\Implementation\TabletInformation\TabletInformationSenderFactory.cs">
-      <Link>Implementation\TabletInformation\TabletInformationSenderFactory.cs</Link>
-    </Compile>
     <Compile Include="..\ErrorReporting\Services\CapiInformationService\ICapiInformationService.cs">
       <Link>Services\CapiInformationService\ICapiInformationService.cs</Link>
+    </Compile>
+    <Compile Include="..\ErrorReporting\Services\IErrorReportingSettings.cs">
+      <Link>Services\IErrorReportingSettings.cs</Link>
     </Compile>
     <Compile Include="..\ErrorReporting\Services\TabletInformationSender\InformationPackageEventArgs.cs">
       <Link>Services\TabletInformationSender\InformationPackageEventArgs.cs</Link>
     </Compile>
     <Compile Include="..\ErrorReporting\Services\TabletInformationSender\ITabletInformationSender.cs">
       <Link>Services\TabletInformationSender\ITabletInformationSender.cs</Link>
-    </Compile>
-    <Compile Include="..\ErrorReporting\Services\TabletInformationSender\ITabletInformationSenderFactory.cs">
-      <Link>Services\TabletInformationSender\ITabletInformationSenderFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\ErrorReporting\Services\TabletInformationSender\TabletInformationSendException.cs">
-      <Link>Services\TabletInformationSender\TabletInformationSendException.cs</Link>
     </Compile>
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -103,10 +108,6 @@
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Utils.Android\WB.Core.SharedKernel.Utils.Android.csproj">
-      <Project>{5f8613d4-a556-4826-8d69-9918808b113e}</Project>
-      <Name>WB.Core.SharedKernel.Utils.Android</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
@@ -117,6 +118,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\ErrorReporting\app.config">
+      <Link>app.config</Link>
+    </None>
     <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
   </ItemGroup>
@@ -127,9 +131,14 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="64ff78f2-775b-4728-9d8a-d3a7b9a7344c" />
+      <UserProperties ProjectLinkReference="64ff78f2-775b-4728-9d8a-d3a7b9a7344c" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
+  <Import Project="..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -9,9 +9,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
     public class UserViewFactory : IViewFactory<UserViewInputModel, UserView>
     {
         // in this case we use writer here because we want to make sure login is performed on the latest version of data and we understand that indexing may take some time
-        private readonly IQueryableReadSideRepositoryWriter<UserDocument> users;
+        private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
 
-        public UserViewFactory(IQueryableReadSideRepositoryWriter<UserDocument> users)
+        public UserViewFactory(IQueryableReadSideRepositoryReader<UserDocument> users)
         {
             this.users = users;
         }

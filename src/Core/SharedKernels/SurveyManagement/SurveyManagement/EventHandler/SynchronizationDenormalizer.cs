@@ -106,7 +106,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             var interview = interviewWithVersion.Document;
 
-            if (interview.Status != InterviewStatus.RejectedByHeadquarters && !interview.CreatedOnClient)
+            if (interview.Status != InterviewStatus.RejectedByHeadquarters && (!interview.CreatedOnClient || interview.WasRejected))
             {
                 this.ResendInterviewForPerson(interview, evnt.Payload.InterviewerId, evnt.EventTimeStamp);
             }

@@ -114,17 +114,13 @@ namespace WB.UI.Shared.Android.Controls
 
         private void AlignTableCell(View view)
         {
-            view.LayoutParameters = new LinearLayout.LayoutParams(0,
-                                                                  ViewGroup.LayoutParams.FillParent, 1);
+            view.LayoutParameters = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.FillParent, 1);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-#if DEBUG
-                Console.WriteLine("disposing roster PartOfRosterView");
-#endif
                 this.DisposeChildrenAndCleanUp();
             }
 

@@ -11,7 +11,6 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
-using Ninject.Activation;
 using Ninject.Web.Common;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
@@ -25,11 +24,7 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage.Raven;
-using WB.Core.SharedKernel.Utils.Compression;
-using WB.Core.SharedKernel.Utils.Serialization;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
@@ -44,6 +39,7 @@ using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Injections;
+using WB.UI.Headquarters.Views;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using WB.UI.Shared.Web.MembershipProvider.Settings;
@@ -92,20 +88,12 @@ namespace WB.UI.Headquarters
         {
             Global.Initialize(); // pinging global.asax to perform it's part of static initialization
 
-            bool isEmbeded;
-            if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.IsEmbeded"], out isEmbeded))
-            {
-                isEmbeded = false;
-            }
-
-            string storePath = isEmbeded
-                ? WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"]
-                : WebConfigurationManager.AppSettings["Raven.DocumentStore"];
+           string storePath = WebConfigurationManager.AppSettings["Raven.DocumentStore"];
 
             Func<bool> isDebug = () => AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
             Version applicationBuildVersion = typeof(SyncController).Assembly.GetName().Version;
 
-            var ravenSettings = new RavenConnectionSettings(storePath, isEmbeded, WebConfigurationManager.AppSettings["Raven.Username"],
+            var ravenSettings = new RavenConnectionSettings(storePath, WebConfigurationManager.AppSettings["Raven.Username"],
                 WebConfigurationManager.AppSettings["Raven.Password"], WebConfigurationManager.AppSettings["Raven.Databases.Events"],
                 WebConfigurationManager.AppSettings["Raven.Databases.Views"],
                 WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"],
@@ -158,8 +146,11 @@ namespace WB.UI.Headquarters
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]), isDebug,
-                    applicationBuildVersion, interviewDetailsDataLoaderSettings, overrideReceivedEventTimeStamp, Constants.SupervisorSynchronizationOrigin, true));
+                    applicationBuildVersion, interviewDetailsDataLoaderSettings, overrideReceivedEventTimeStamp, Constants.SupervisorSynchronizationOrigin, true, 
+                    int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"])));
 
+
+            kernel.Bind<ISettingsProvider>().To<SettingsProvider>();
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
@@ -180,8 +171,6 @@ namespace WB.UI.Headquarters
                .WhenControllerHas<HeadquarterFeatureOnlyAttribute>();
 
             kernel.Bind(typeof(InMemoryReadSideRepositoryAccessor<>)).ToSelf().InSingletonScope();
-
-
 
             ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
             ServiceLocator.Current.GetInstance<IScheduler>().Start();

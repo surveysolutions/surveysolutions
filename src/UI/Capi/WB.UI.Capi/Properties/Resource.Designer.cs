@@ -61,11 +61,65 @@ namespace WB.UI.Capi.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bad connection.
+        /// </summary>
+        internal static string BadConnection {
+            get {
+                return ResourceManager.GetString("BadConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Need to update the application.
+        /// </summary>
+        internal static string BadRequest {
+            get {
+                return ResourceManager.GetString("BadRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error on item list receiving..
         /// </summary>
         internal static string ErrorOnItemListReceiving {
             get {
                 return ResourceManager.GetString("ErrorOnItemListReceiving", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error when getting synchronizaton package. Bad internet connection or internal server error. Try again. If the problem persists, please, contact to your supervisor..
+        /// </summary>
+        internal static string GetSyncPackageExceptionMessage {
+            get {
+                return ResourceManager.GetString("GetSyncPackageExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronization point address is invalid. Make sure that you entered correct url address..
+        /// </summary>
+        internal static string InvalidSyncPointAddressUrl {
+            get {
+                return ResourceManager.GetString("InvalidSyncPointAddressUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No connection.
+        /// </summary>
+        internal static string NoConnection {
+            get {
+                return ResourceManager.GetString("NoConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Network is unavailable.
+        /// </summary>
+        internal static string NoNetwork {
+            get {
+                return ResourceManager.GetString("NoNetwork", resourceCulture);
             }
         }
         

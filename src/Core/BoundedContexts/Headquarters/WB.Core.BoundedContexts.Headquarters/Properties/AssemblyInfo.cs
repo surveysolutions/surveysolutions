@@ -38,3 +38,4 @@ using System.Runtime.InteropServices;
 
 [assembly: InternalsVisibleTo("WB.Core.BoundedContexts.Headquarters.Tests")]
 [assembly: InternalsVisibleTo("WB.UI.Headquarters.Tests")]
+[assembly: InternalsVisibleTo("WB.Tests.Unit")]

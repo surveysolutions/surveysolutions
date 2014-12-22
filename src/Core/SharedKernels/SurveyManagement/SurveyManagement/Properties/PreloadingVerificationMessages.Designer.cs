@@ -178,7 +178,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categorical question value not allowed..
+        ///   Looks up a localized string similar to [PL0014] Provided question value not allowed..
         /// </summary>
         internal static string PL0014_ParsedValueIsNotAllowed {
             get {

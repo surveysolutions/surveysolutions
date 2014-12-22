@@ -103,7 +103,7 @@ namespace WB.UI.Capi
 
             var btnNewInterview = view.FindViewById<Button>(Resource.Id.btnNewInterview);
             btnNewInterview.SetTag(Resource.Id.QuestionnaireId, dashboardSurveyItem.QuestionnaireId.ToString());
-            btnNewInterview.SetTag(Resource.Id.QuestionnaireVersion, dashboardSurveyItem.QuestionnaireVersion.ToString());
+            btnNewInterview.SetTag(Resource.Id.QuestionnaireVersion, dashboardSurveyItem.QuestionnaireVersion);
 
             btnNewInterview.Click += this.btnNewInterview_ButtonClick;
             if (!dashboardSurveyItem.AllowCensusMode)
@@ -167,43 +167,10 @@ namespace WB.UI.Capi
             if (target == null)
                 return;
 
-            var questionnaireId = Guid.Parse(target.GetTag(Resource.Id.QuestionnaireId).ToString());
-            var questionnaireVersion = long.Parse(target.GetTag(Resource.Id.QuestionnaireVersion).ToString());
-
-            var interviewKey = Guid.NewGuid();
-
-            Guid interviewUserId = CapiApplication.Membership.CurrentUser.Id;
-            Guid supervisorId = CapiApplication.Membership.SupervisorId;
-
-            try
-            {
-                ServiceLocator.Current.GetInstance<ICommandService>()
-                    .Execute(new CreateInterviewOnClientCommand(interviewKey, interviewUserId,
-                        questionnaireId, questionnaireVersion, DateTime.UtcNow, supervisorId));
-
-                logManipulator.CreatePublicRecord(interviewKey);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex.Message, ex);
-                ShowErrorMessage();
-                return;
-            }
-
-            var intent = new Intent(this, typeof(CreateInterviewActivity));
-            intent.PutExtra("publicKey", interviewKey.ToString());
-            intent.AddFlags(ActivityFlags.NoHistory);
+            var intent = new Intent(this, typeof(LoadingActivity));
+            intent.PutExtra("questionnaireId", target.GetTag(Resource.Id.QuestionnaireId).ToString());
+            intent.PutExtra("questionnaireVersion", target.GetTag(Resource.Id.QuestionnaireVersion).ToString());
             this.StartActivity(intent);
-        }
-
-        private void ShowErrorMessage()
-        {
-            var alertBuilder = new AlertDialog.Builder(this);
-            
-            alertBuilder.SetTitle(Resources.GetText(Resource.String.Warning));
-            alertBuilder.SetMessage(Resources.GetText(Resource.String.Oops));
-            
-            alertBuilder.Show();
         }
 
         private void RequestData(Action restore)

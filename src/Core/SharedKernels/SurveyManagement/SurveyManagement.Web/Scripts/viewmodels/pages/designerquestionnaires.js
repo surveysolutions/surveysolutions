@@ -23,7 +23,7 @@
 
         self.SendCommand(request, function (data) {
             if ((data.ImportError || "") != "") {
-                self.ImportFailMessage('Failed to import questionnaire. ' + data.ImportError);
+                self.ImportFailMessage(data.ImportError);
                 self.ShowOutput();
             }
             else if (!Supervisor.Framework.Objects.isUndefined(data.Errors) && !Supervisor.Framework.Objects.isNull(data.Errors) && data.Errors.length > 0) {

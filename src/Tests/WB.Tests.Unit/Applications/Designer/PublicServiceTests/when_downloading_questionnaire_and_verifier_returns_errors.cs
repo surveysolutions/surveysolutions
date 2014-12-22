@@ -7,6 +7,7 @@ using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Designer.WebServices;
 using WB.UI.Designer.WebServices.Questionnaire;
@@ -34,7 +35,10 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
             var questionnaireVerifier = new Mock<IQuestionnaireVerifier>();
             questionnaireVerifier.Setup(x => x.Verify(Moq.It.IsAny<QuestionnaireDocument>())).Returns(new List<QuestionnaireVerificationError>() { new QuestionnaireVerificationError("test", "t1", new QuestionnaireVerificationReference[0]) });
 
-            service = CreatePublicService(exportService: exportService.Object, questionnaireVerifier: questionnaireVerifier.Object, questionnaireViewFactory: questionnaireViewFactory);
+            var localizationServiceMock = new Mock<ILocalizationService>();
+            localizationServiceMock.Setup(_ => _.GetString(Moq.It.IsAny<string>())).Returns("requested questionnaire has errors");
+
+            service = CreatePublicService(exportService: exportService.Object, questionnaireVerifier: questionnaireVerifier.Object, questionnaireViewFactory: questionnaireViewFactory, localizationService: localizationServiceMock.Object);
         };
 
         Because of = () => 

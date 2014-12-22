@@ -22,7 +22,7 @@
     <JavaMaximumHeapSize />
     <JavaOptions />
     <AndroidUseLatestPlatformSdk />
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.4</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -116,6 +116,14 @@
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="Mono.Android.Export" />
     <Reference Include="mscorlib" />
@@ -138,6 +146,14 @@
     <Reference Include="System.Net">
       <Private>True</Private>
       <HintPath>..\..\..\..\packages\MvvmCross.PortableSupport.3.1.1\lib\MonoAndroid\System.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Extensions">
+      <HintPath>..\..\..\..\packages\Microsoft.Net.Http.2.2.28\lib\monoandroid\System.Net.Http.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives">
+      <HintPath>..\..\..\..\packages\Microsoft.Net.Http.2.2.28\lib\monoandroid\System.Net.Http.Primitives.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Windows">
       <Private>True</Private>
@@ -187,6 +203,8 @@
     <Compile Include="Implementations\Fragments\DataCollectionStatisticsContentFragment.cs" />
     <Compile Include="Implementations\Fragments\PrefilledScreenContentFragment.cs" />
     <Compile Include="Implementations\Navigation\NavigationService.cs" />
+    <Compile Include="Implementations\Services\InterviewerSynchronizationService.cs" />
+    <Compile Include="Implementations\Services\LocalizationService.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
     <Compile Include="FinishInstallationActivity.cs" />
     <Compile Include="Properties\Resource.Designer.cs">
@@ -194,6 +212,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\ISynchronizationService.cs" />
+    <Compile Include="Settings\IInterviewerSettings.cs" />
+    <Compile Include="Settings\InterviewerSettings.cs" />
+    <Compile Include="Settings\ErrorReportingSettings.cs" />
+    <Compile Include="Settings\RestServiceSettings.cs" />
     <Compile Include="Syncronization\CapiCleanUpService.cs" />
     <Compile Include="LoadingActivity.cs" />
     <Compile Include="LoginActivity.cs" />
@@ -201,15 +224,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="SettingsActivity.cs" />
-    <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="SplashScreen.cs" />
     <Compile Include="SynchronizationActivity.cs" />
-    <Compile Include="Syncronization\Handshake\RestHandshake.cs" />
     <Compile Include="Syncronization\Implementation\SyncPackageIdsStorage.cs" />
     <Compile Include="Syncronization\ISyncPackageIdsStorage.cs" />
-    <Compile Include="Syncronization\Pull\RestPull.cs" />
-    <Compile Include="Syncronization\Push\RestPush.cs" />
     <Compile Include="Syncronization\RestAuthenticator.cs" />
     <Compile Include="Syncronization\SynchronizationCanceledEventArgs.cs" />
     <Compile Include="Syncronization\SynchronizationEventArgs.cs" />
@@ -217,14 +236,13 @@
     <Compile Include="Syncronization\SynchronizationException.cs" />
     <Compile Include="Syncronization\SynchronozationProcessor.cs" />
     <Compile Include="Syncronization\Implementation\SyncPackageId.cs" />
-    <Compile Include="Syncronization\Update\RestVersionUpdate.cs" />
     <Compile Include="Syncronization\Update\UpdateProcessor.cs" />
     <Compile Include="Utils\BooleanToTextColorValueConverter.cs" />
-    <Compile Include="Utils\NetworkHelper.cs" />
     <Compile Include="Views\FinishIntallationViewModel.cs" />
     <Compile Include="Views\Login\LoginViewFactory.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -341,14 +359,6 @@
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Rest\Rest.Android\WB.Core.GenericSubdomains.Rest.Android.csproj">
-      <Project>{77572d67-d00d-4e26-b2e2-6b7faea92416}</Project>
-      <Name>WB.Core.GenericSubdomains.Rest.Android</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
-      <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
-      <Name>WB.Core.GenericSubdomains.Utils</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
       <Project>{a134f8e7-42c7-4804-8177-d11178600caa}</Project>
       <Name>WB.Core.Infrastructure.Backup</Name>
@@ -377,25 +387,29 @@
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils.Android\WB.Core.SharedKernel.Utils.Android.csproj">
-      <Project>{5f8613d4-a556-4826-8d69-9918808b113e}</Project>
-      <Name>WB.Core.SharedKernel.Utils.Android</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Shared\WB.UI.Shared.Android\WB.UI.Shared.Android.csproj">
       <Project>{596bdadc-eff5-474d-b028-2f5c60b59050}</Project>
       <Name>WB.UI.Shared.Android</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
+      <Project>{b9af365d-f3c9-423a-86e2-9c3e0c1ac402}</Project>
+      <Name>WB.Core.GenericSubdomains.Utils</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <Import Project="..\..\..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\..\..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\..\..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
      Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

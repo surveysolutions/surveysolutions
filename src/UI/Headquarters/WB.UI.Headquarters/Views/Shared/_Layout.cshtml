@@ -10,7 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="@Url.Content("~/Content/img/favicon.ico")" />
+    <link rel="shortcut icon" href="@Url.Content("~/Content/favicon.png")" />
     @Styles.Render("~/Content/main")
     @RenderSection("styles", false)
 </head>
@@ -114,10 +114,12 @@
         var setMinHeight = function () {
             var windowHeight = $(window).height();
             var navigationHeight = $('.navbar.navbar-fixed-top').height();
-            $('#content').css('min-height', (windowHeight - navigationHeight) + 'px');
+            var bodyTopPadding = $('body').css('paddingTop').replace("px", "") * 1;
+            var footerHeight = $('#footer-block').outerHeight();
+            var minHeight = windowHeight - navigationHeight - footerHeight - bodyTopPadding;
+            $('#content').css('min-height', (minHeight > 1 ? minHeight : 1) + 'px');
             $('#wrapper').css('margin-top', navigationHeight + 'px');
             $('#umbrella').css('top', navigationHeight + 'px');
-
         };
 
         $(document).ready(function () {

@@ -41,11 +41,12 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly bool overrideReceivedEventTimeStamp;
         private readonly string origin;
         private readonly bool hqEnabled;
+        private readonly int maxCountOfCachedEntitiesForSqliteDb;
 
         public SurveyManagementSharedKernelModule(string currentFolderPath,
             int supportedQuestionnaireVersionMajor, int supportedQuestionnaireVersionMinor, int supportedQuestionnaireVersionPatch,
             Func<bool> isDebug, Version applicationBuildVersion,
-            InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool overrideReceivedEventTimeStamp, string origin, bool hqEnabled)
+            InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool overrideReceivedEventTimeStamp, string origin, bool hqEnabled, int maxCountOfCachedEntitiesForSqliteDb)
         {
             this.currentFolderPath = currentFolderPath;
             this.supportedQuestionnaireVersionMajor = supportedQuestionnaireVersionMajor;
@@ -57,6 +58,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.overrideReceivedEventTimeStamp = overrideReceivedEventTimeStamp;
             this.origin = origin;
             this.hqEnabled = hqEnabled;
+            this.maxCountOfCachedEntitiesForSqliteDb = maxCountOfCachedEntitiesForSqliteDb;
         }
 
         public override void Load()
@@ -64,6 +66,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<ISampleImportService>().To<SampleImportService>();
             this.Bind<IFilebasedExportedDataAccessor>().To<FilebasedExportedDataAccessor>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IDataExportService>().To<SqlToTabDataExportService>();
+            this.Bind<FileBasedDataExportRepositorySettings>().ToConstant(new FileBasedDataExportRepositorySettings(maxCountOfCachedEntitiesForSqliteDb));
             this.Bind<IDataExportRepositoryWriter>().To<FileBasedDataExportRepositoryWriter>().InSingletonScope();
             this.Bind<IPreloadingTemplateService>().To<PreloadingTemplateService>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IPreloadedDataRepository>().To<FilebasedPreloadedDataRepository>().WithConstructorArgument("folderPath", this.currentFolderPath);

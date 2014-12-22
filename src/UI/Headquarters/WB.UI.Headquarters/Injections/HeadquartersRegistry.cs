@@ -13,20 +13,18 @@ using Ninject.Extensions.Conventions.BindingGenerators;
 using Ninject.Modules;
 using Ninject.Syntax;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Services;
-using WB.Core.SharedKernel.Utils.Compression;
-using WB.Core.SharedKernel.Utils.Serialization;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
-using WB.Core.SharedKernels.SurveySolutions.Services;
+using WB.UI.Headquarters.Views;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Injections
@@ -125,7 +123,6 @@ namespace WB.UI.Headquarters.Injections
             this.Kernel.Bind(typeof(IReadSideRepositoryReader<>)).ToMethod(this.GetInMemoryReadSideRepositoryAccessor);
             this.Kernel.Bind(typeof(IQueryableReadSideRepositoryReader<>)).ToMethod(this.GetInMemoryReadSideRepositoryAccessor);
             this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(this.GetInMemoryReadSideRepositoryAccessor);
-            this.Kernel.Bind(typeof(IQueryableReadSideRepositoryWriter<>)).ToMethod(this.GetInMemoryReadSideRepositoryAccessor);
         }
 
         protected object GetInMemoryReadSideRepositoryAccessor(IContext context)
@@ -210,8 +207,11 @@ namespace WB.UI.Headquarters.Injections
             this.RegisterViewFactories();
 
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
-            this.Bind<IStringCompressor>().To<GZipJsonCompressor>();
+            this.Bind<IStringCompressor>().To<JsonCompressor>();
             this.Bind<IWaitService>().To<WaitService>().InSingletonScope();
+
+            this.Bind<IRestServiceSettings>().To<DesignerQuestionnaireApiRestServiceSettings>().InSingletonScope();
+            this.Bind<IRestService>().To<RestService>().WithConstructorArgument("networkService", _ => null);
         }
     }
 }

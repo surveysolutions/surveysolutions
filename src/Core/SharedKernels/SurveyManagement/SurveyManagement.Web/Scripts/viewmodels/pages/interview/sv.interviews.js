@@ -36,7 +36,7 @@
     self.selectAll = function (checkbox) {
         var isCheckboxSelected = $(checkbox).is(":checked");
         ko.utils.arrayForEach(self.Items(), function (item) {
-            if (item.CanBeReassigned) {
+            if (item.CanBeReassigned()) {
                 item.IsSelected(isCheckboxSelected);
             }
         });

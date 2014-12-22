@@ -11,8 +11,8 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
-using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -130,7 +130,7 @@ namespace WB.Tests.Integration.InterviewTests
         protected static Interview SetupInterview(string questionnaireString, object[] events, IInterviewExpressionState precompiledState)
         {
             var json = new NewtonJsonUtils();
-            var questionnaireDocument = json.Deserrialize<QuestionnaireDocument>(questionnaireString);
+            var questionnaireDocument = json.Deserialize<QuestionnaireDocument>(questionnaireString);
             return SetupInterview(questionnaireDocument, events);
         }
 

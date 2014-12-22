@@ -1,8 +1,7 @@
 ﻿using System.IO;
 using System.IO.Compression;
 using NUnit.Framework;
-using WB.Core.SharedKernel.Utils.Compression;
-using WB.Core.SharedKernel.Utils.Serialization;
+using WB.Core.GenericSubdomains.Utils.Implementation;
 
 namespace WB.Tests.Integration.ZipUtilsTests
 {
@@ -13,7 +12,7 @@ namespace WB.Tests.Integration.ZipUtilsTests
         public void ZipDate_When_DataIsNotEmptyString_Then_FileIsCreatedWithUtf8Encodig()
         {
             // arrange
-            GZipJsonCompressor target = this.CreateZipUtils();
+            JsonCompressor target = this.CreateZipUtils();
 
             // act
             string helloworld = "helloworld";
@@ -33,9 +32,9 @@ namespace WB.Tests.Integration.ZipUtilsTests
 
         }
 
-        private GZipJsonCompressor CreateZipUtils()
+        private JsonCompressor CreateZipUtils()
         {
-            return new GZipJsonCompressor(new NewtonJsonUtils());
+            return new JsonCompressor(new NewtonJsonUtils());
         }
     }
 }
