@@ -89,7 +89,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, FieldsAndValidations.InvalidUser);
 
             Guid key;
-            int? supervisorRevisionNumber = versionProvider.GetApplicationBuildNumber();
+            int? supervisorRevisionNumber = versionProvider.GetSupportedSyncProtocolVersionNumber();
 
             if (supervisorRevisionNumber.HasValue && version > supervisorRevisionNumber.Value)
             {
@@ -292,7 +292,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             string targetToSearchCapi = fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(pathToSearchVersions), CapiFileName);
 
-            int? supervisorRevisionNumber = versionProvider.GetApplicationBuildNumber();
+            int? supervisorRevisionNumber = versionProvider.GetSupportedSyncProtocolVersionNumber();
 
             bool newVersionExists = fileSystemAccessor.IsFileExists(targetToSearchCapi) &&
                                     supervisorRevisionNumber.HasValue &&
