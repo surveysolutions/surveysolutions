@@ -1,10 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Web;
 using System.Web.Configuration;
-using System.Web.Http;
 using System.Web.Mvc;
 using Main.Core;
 using Main.Core.Commands;
@@ -16,7 +12,6 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
-using Ninject.Extensions.Quartz;
 using Ninject.Web.Common;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
@@ -29,10 +24,8 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Storage.Raven;
+using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Accessors;
-using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
@@ -42,14 +35,12 @@ using WB.Core.SharedKernels.SurveyManagement.Web;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Core.Synchronization;
-using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using WB.UI.Shared.Web.MembershipProvider.Settings;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
 using WB.UI.Supervisor.Code;
-using WB.UI.Supervisor.Controllers;
 using WB.UI.Supervisor.Injections;
 using WB.UI.Supervisor.App_Start;
 using WebActivatorEx;
@@ -60,8 +51,6 @@ using WebActivatorEx;
 namespace WB.UI.Supervisor.App_Start
 {
     using Microsoft.Practices.ServiceLocation;
-
-    using NinjectAdapter;
 
 
     /// <summary>
@@ -132,7 +121,7 @@ namespace WB.UI.Supervisor.App_Start
                     LegacyOptions.InterviewDetailsDataSchedulerNumberOfInterviewsProcessedAtTime);
 
             Func<bool> isDebug = () => AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
-            Version applicationBuildVersion = typeof (AccountController).Assembly.GetName().Version;
+            int syncProtocolVersionNumber = SyncProtocolVersionProvider.GetProtocolVersion();
 
             var synchronizationSettings = new SyncSettings(reevaluateInterviewWhenSynchronized: true,
                 appDataDirectory: AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
@@ -169,7 +158,7 @@ namespace WB.UI.Supervisor.App_Start
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]), isDebug,
-                    applicationBuildVersion, interviewDetailsDataLoaderSettings, overrideReceivedEventTimeStamp,
+                    syncProtocolVersionNumber, interviewDetailsDataLoaderSettings, overrideReceivedEventTimeStamp,
                     Constants.CapiSynchronizationOrigin, false,
                     int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"])));
 
