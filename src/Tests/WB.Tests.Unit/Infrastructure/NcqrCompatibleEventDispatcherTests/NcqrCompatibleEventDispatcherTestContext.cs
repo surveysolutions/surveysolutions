@@ -11,9 +11,9 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
     [Subject(typeof(NcqrCompatibleEventDispatcher))]
     internal class NcqrCompatibleEventDispatcherTestContext
     {
-        protected static NcqrCompatibleEventDispatcher CreateNcqrCompatibleEventDispatcher()
+        protected static NcqrCompatibleEventDispatcher CreateNcqrCompatibleEventDispatcher(Type[] handlersToIgnore = null)
         {
-            return new NcqrCompatibleEventDispatcher(Mock.Of<IEventStore>(), new Type[0]);
+            return new NcqrCompatibleEventDispatcher(Mock.Of<IEventStore>(), handlersToIgnore ?? new Type[0]);
         }
 
         protected static IPublishableEvent CreatePublishableEvent(Guid eventSourceId)
