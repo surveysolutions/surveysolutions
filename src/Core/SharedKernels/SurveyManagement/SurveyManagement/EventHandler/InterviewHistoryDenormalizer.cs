@@ -84,7 +84,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewApprovedByHQ> evnt)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.RejectedByHeadquarter, evnt.Payload.UserId, evnt.EventTimeStamp,
+            AddHistoricalRecord(view, InterviewHistoricalAction.ApproveByHeadquarter, evnt.Payload.UserId, evnt.EventTimeStamp,
                 CreateCommentParameters(evnt.Payload.Comment));
             
             return view;
