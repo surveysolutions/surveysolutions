@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Resources;
+using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -27,32 +28,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly Dictionary<string, InterviewHistoryView> cache = new Dictionary<string, InterviewHistoryView>();
-        private readonly InterviewHistoryWriterSettings settings;
-        private readonly string directoryPath;
+        private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private bool cacheEnabled = false;
 
         public InterviewHistoryWriter(ICsvWriterFactory csvWriterFactory, IFileSystemAccessor fileSystemAccessor,
-            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader, InterviewHistoryWriterSettings settings)
+            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader, IFilebasedExportedDataAccessor filebasedExportedDataAccessor)
         {
             this.csvWriterFactory = csvWriterFactory;
             this.fileSystemAccessor = fileSystemAccessor;
             this.interviewSummaryReader = interviewSummaryReader;
-            this.settings = settings;
-
-            this.directoryPath = fileSystemAccessor.CombinePath(settings.DirectoryPath, settings.ExportedDataFolderName);
-
-            if (!fileSystemAccessor.IsDirectoryExists(this.directoryPath))
-                fileSystemAccessor.CreateDirectory(this.directoryPath);
+            this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
         }
 
 
         public void Clear()
         {
-            if (fileSystemAccessor.IsDirectoryExists(this.directoryPath))
-            {
-                Array.ForEach(this.fileSystemAccessor.GetDirectoriesInDirectory(this.directoryPath), (s) => this.fileSystemAccessor.DeleteDirectory(s));
-                Array.ForEach(this.fileSystemAccessor.GetFilesInDirectory(this.directoryPath), (s) => this.fileSystemAccessor.DeleteFile(s));
-            }
+            filebasedExportedDataAccessor.CleanExportHistoryFolder();
         }
 
         public InterviewHistoryView GetById(string id)
@@ -126,8 +117,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
 
         private string GetPathToQuestionnaireFolder(Guid questionnaireId, long version)
         {
-            return fileSystemAccessor.CombinePath(directoryPath,
-                string.Format("{0}-{1}", questionnaireId.FormatGuid(), version));
+            return filebasedExportedDataAccessor.GetFolderPathOfHistoryByQuestionnaire(questionnaireId, version);
         }
 
         private string GetPathToInterviewHistoryFile(string interviewId, Guid questionnaireId, long version)

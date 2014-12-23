@@ -612,6 +612,7 @@
     <Content Include="App_GlobalResources\Dashboard.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Dashboard.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <PropertyGroup>

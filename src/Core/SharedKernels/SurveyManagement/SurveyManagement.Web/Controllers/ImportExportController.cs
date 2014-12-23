@@ -149,6 +149,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.File(result, "application/zip", fileDownloadName: Path.GetFileName(result));
         }
 
+        public void GetExportedHistoyAsync(Guid id, long version)
+        {
+            AsyncQuestionnaireUpdater.Update(
+                this.AsyncManager,
+                () =>
+                {
+                    try
+                    {
+                        this.AsyncManager.Parameters["result"] = this.exportDataAccessor.GetFilePathToExportedCompressedHistoryData(id, version);
+                    }
+                    catch (Exception exc)
+                    {
+                        this.logger.Error("Error occurred during export. " + exc.Message, exc);
+                        this.AsyncManager.Parameters["result"] = null;
+                    }
+                });
+        }
+
+        public ActionResult GetExportedHistoyCompleted(string result)
+        {
+            return this.File(result, "application/zip", fileDownloadName: Path.GetFileName(result));
+        }
+
         public void BackupAsync(Guid syncKey)
         {
             AsyncQuestionnaireUpdater.Update(

@@ -10,6 +10,7 @@
         var $getExportedDataUrl = '@Url.Action("GetExportedData", "ImportExport")';
         var $getExportedApprovedDataUrl = '@Url.Action("GetExportedApprovedData", "ImportExport")';
         var $getExportedFilesUrl = '@Url.Action("GetExportedFiles", "ImportExport")';
+        var $getExportedHistoryUrl = '@Url.Action("GetExportedHistoy", "ImportExport")';
         var $newInterviewUrl = '@Url.Action("TakeNew", "HQ")';
         var $batchUploadUrl = '@Url.Action("BatchUpload", "HQ")';
         var $importTemplateUrl = '@Url.Action("Import", "Template")';
@@ -118,6 +119,13 @@
                                     <i class="glyphicon glyphicon-download">
                                     </i> @Dashboard.BinaryData
                                 </a>
+                                @if (this.ViewBag.EnableInterviewHistory)
+                                {
+                                    <a data-bind="attr: { href: $getExportedHistoryUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
+                                        <i class="glyphicon glyphicon-download">
+                                        </i> @Dashboard.History
+                                    </a>
+                                }
                             </li>
                         </ul>
 

@@ -43,11 +43,12 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly string origin;
         private readonly bool hqEnabled;
         private readonly int maxCountOfCachedEntitiesForSqliteDb;
+        private readonly InterviewHistorySettings interviewHistorySettings;
 
         public SurveyManagementSharedKernelModule(string currentFolderPath,
             int supportedQuestionnaireVersionMajor, int supportedQuestionnaireVersionMinor, int supportedQuestionnaireVersionPatch,
             Func<bool> isDebug, Version applicationBuildVersion,
-            InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool overrideReceivedEventTimeStamp, string origin, bool hqEnabled, int maxCountOfCachedEntitiesForSqliteDb)
+            InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool overrideReceivedEventTimeStamp, string origin, bool hqEnabled, int maxCountOfCachedEntitiesForSqliteDb, InterviewHistorySettings interviewHistorySettings)
         {
             this.currentFolderPath = currentFolderPath;
             this.supportedQuestionnaireVersionMajor = supportedQuestionnaireVersionMajor;
@@ -60,6 +61,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.origin = origin;
             this.hqEnabled = hqEnabled;
             this.maxCountOfCachedEntitiesForSqliteDb = maxCountOfCachedEntitiesForSqliteDb;
+            this.interviewHistorySettings = interviewHistorySettings;
         }
 
         public override void Load()
@@ -131,10 +133,14 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .WithConstructorArgument("overrideReceivedEventTimeStamp", overrideReceivedEventTimeStamp)
                 .WithConstructorArgument("origin", origin);
 
-            this.Bind<InterviewHistoryWriterSettings>().ToConstant(new InterviewHistoryWriterSettings(this.currentFolderPath));
-            this.Unbind<IReadSideRepositoryWriter<InterviewHistoryView>>();
-            this.Bind<IReadSideRepositoryWriter<InterviewHistoryView>>().To<InterviewHistoryWriter>().InSingletonScope();
-            this.Kernel.RegisterDenormalizer<InterviewHistoryDenormalizer>();
+            this.Bind<InterviewHistorySettings>().ToConstant(interviewHistorySettings);
+
+            if (interviewHistorySettings.EnableInterviewHistory)
+            {
+                this.Unbind<IReadSideRepositoryWriter<InterviewHistoryView>>();
+                this.Bind<IReadSideRepositoryWriter<InterviewHistoryView>>().To<InterviewHistoryWriter>().InSingletonScope();
+                this.Kernel.RegisterDenormalizer<InterviewHistoryDenormalizer>();
+            }
         }
 
         protected void AdditionalEventChecker(Guid interviewId)

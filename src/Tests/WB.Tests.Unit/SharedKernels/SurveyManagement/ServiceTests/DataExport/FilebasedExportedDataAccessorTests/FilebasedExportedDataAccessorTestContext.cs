@@ -11,6 +11,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
+using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using It = Moq.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.FilebasedExportedDataAccessorTests
@@ -41,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
                         It.IsAny<Guid>(), It.IsAny<long>(), It.IsAny<string>()) == dataFiles),
                 Mock.Of<IEnvironmentContentService>(
                     _ => _.GetContentFilesForQuestionnaire(It.IsAny<Guid>(), It.IsAny<long>(), It.IsAny<string>()) == environmentFiles),
-                Mock.Of<ILogger>(), archiveUtilsMock.Object);
+                Mock.Of<ILogger>(), archiveUtilsMock.Object, new InterviewHistorySettings(string.Empty,false));
         }
 
         protected static Mock<IFileSystemAccessor> CreateFileSystemAccessorMock()

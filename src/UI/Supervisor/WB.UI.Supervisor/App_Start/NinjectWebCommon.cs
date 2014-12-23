@@ -29,6 +29,7 @@ using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
+using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Web;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
@@ -161,7 +162,8 @@ namespace WB.UI.Supervisor.App_Start
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]), isDebug,
                     applicationBuildVersion, interviewDetailsDataLoaderSettings, overrideReceivedEventTimeStamp,
                     Constants.CapiSynchronizationOrigin, false,
-                    int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"])));
+                    int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"]),
+                    new InterviewHistorySettings(basePath,false)));
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
