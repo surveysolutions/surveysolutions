@@ -241,7 +241,7 @@ namespace WB.UI.Designer.Controllers
 
         private void GetOptionsFromStream(HttpPostedFileBase csvFile, bool isCascade = false)
         {
-            var configuration = ExtractOptionsFromStream();
+            var configuration = CreateCsvConfiguration();
             try
             {
                 this.questionWithOptionsViewModel.Options = this.ExtractOptionsFromStream(csvFile.InputStream, configuration, isCascade);
@@ -259,7 +259,7 @@ namespace WB.UI.Designer.Controllers
             }
         }
 
-        private CsvConfiguration ExtractOptionsFromStream()
+        private CsvConfiguration CreateCsvConfiguration()
         {
             return new CsvConfiguration { HasHeaderRecord = false, TrimFields = true, IgnoreQuotes = false, Delimiter = "\t" };
         }
@@ -316,8 +316,8 @@ namespace WB.UI.Designer.Controllers
         public FileResult ExportOptions()
         {
             return
-                File(SaveOptionsToStream(this.questionWithOptionsViewModel.SourceOptions), "text/csv",
-                    string.Format("Options-in-question-{0}.csv",
+                File(SaveOptionsToStream(this.questionWithOptionsViewModel.SourceOptions, CreateCsvConfiguration()), "text/csv",
+                    string.Format("Options-in-question-{0}.txt",
                         this.questionWithOptionsViewModel.QuestionTitle.Length > 50
                             ? this.questionWithOptionsViewModel.QuestionTitle.Substring(0, 50)
                             : this.questionWithOptionsViewModel.QuestionTitle));
@@ -337,10 +337,7 @@ namespace WB.UI.Designer.Controllers
             var importedOptions = new List<Option>();
 
             var csvReader = new CsvReader(new StreamReader(inputStream));
-            csvReader.Configuration.HasHeaderRecord = false;
-            csvReader.Configuration.TrimFields = configuration.TrimFields;
-            csvReader.Configuration.IgnoreQuotes = configuration.IgnoreQuotes;
-            csvReader.Configuration.Delimiter = configuration.Delimiter;
+            SetCsvOptions(csvReader.Configuration, configuration);
             using (csvReader)
             {
                 while (csvReader.Read())
@@ -358,12 +355,21 @@ namespace WB.UI.Designer.Controllers
 
             return importedOptions;
         }
-        
-        private Stream SaveOptionsToStream(IEnumerable<Option> options)
+
+        private void SetCsvOptions(CsvConfiguration oldConfiguration, CsvConfiguration newConfiguration)
+        {
+            oldConfiguration.HasHeaderRecord = false;
+            oldConfiguration.TrimFields = newConfiguration.TrimFields;
+            oldConfiguration.IgnoreQuotes = newConfiguration.IgnoreQuotes;
+            oldConfiguration.Delimiter = newConfiguration.Delimiter;
+        }
+
+        private Stream SaveOptionsToStream(IEnumerable<Option> options, CsvConfiguration configuration)
         {
             var sb = new StringBuilder();
             using (var csvWriter = new CsvWriter(new StringWriter(sb)))
             {
+                SetCsvOptions(csvWriter.Configuration, configuration);
                 foreach (var option in options)
                 {
                     if (String.IsNullOrEmpty(option.ParentValue))
