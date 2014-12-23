@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
+using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
 {
@@ -17,16 +18,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly IArchiveUtils archiveUtils;
         private readonly IDataExportService dataExportService;
         private readonly IEnvironmentContentService environmentContentService;
-
+        private readonly InterviewHistorySettings interviewHistorySettings;
         private readonly ILogger logger;
 
         private const string ExportedDataFolderName = "ExportedData";
         private const string ExportedFilesFolderName = "ExportedFiles";
         private readonly string pathToExportedData;
         private readonly string pathToExportedFiles;
+        private readonly string pathToHistoryFiles;
 
         public FilebasedExportedDataAccessor(IFileSystemAccessor fileSystemAccessor,
-            string folderPath, IDataExportService dataExportService, IEnvironmentContentService environmentContentService, ILogger logger, IArchiveUtils archiveUtils)
+            string folderPath, IDataExportService dataExportService, IEnvironmentContentService environmentContentService, ILogger logger, IArchiveUtils archiveUtils, InterviewHistorySettings interviewHistorySettings)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportService = dataExportService;
@@ -42,6 +44,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             if (!fileSystemAccessor.IsDirectoryExists(this.pathToExportedFiles))
                 fileSystemAccessor.CreateDirectory(this.pathToExportedFiles);
+            
+            this.interviewHistorySettings = interviewHistorySettings;
+
+            if (interviewHistorySettings.EnableInterviewHistory)
+            {
+                this.pathToHistoryFiles = fileSystemAccessor.CombinePath(interviewHistorySettings.DirectoryPath,
+                    interviewHistorySettings.ExportedDataFolderName);
+
+                if (!fileSystemAccessor.IsDirectoryExists(this.pathToHistoryFiles))
+                    fileSystemAccessor.CreateDirectory(this.pathToHistoryFiles);
+            }
         }
 
         public string GetFolderPathOfDataByQuestionnaire(Guid questionnaireId, long version)
@@ -66,6 +79,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.ThrowArgumentExceptionIfFilesFolderMissing(questionnaireId, version, result);
 
             return result;
+        }
+
+        public string GetFolderPathOfHistoryByQuestionnaire(Guid questionnaireId, long version)
+        {
+            return fileSystemAccessor.CombinePath(pathToHistoryFiles,
+                string.Format("{0}-{1}", questionnaireId, version));
         }
 
         private string GetFolderPathOfFilesByQuestionnaireImpl(Guid questionnaireId, long version)
@@ -116,6 +135,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             Array.ForEach(this.fileSystemAccessor.GetFilesInDirectory(this.PathToExportedFiles), (s) => this.fileSystemAccessor.DeleteFile(s));
         }
 
+        public void CleanExportHistoryFolder()
+        {
+            if (fileSystemAccessor.IsDirectoryExists(this.pathToHistoryFiles))
+            {
+                Array.ForEach(this.fileSystemAccessor.GetDirectoriesInDirectory(this.pathToHistoryFiles), (s) => this.fileSystemAccessor.DeleteDirectory(s));
+                Array.ForEach(this.fileSystemAccessor.GetFilesInDirectory(this.pathToHistoryFiles), (s) => this.fileSystemAccessor.DeleteFile(s));
+            }
+        }
+
         private void CreateExportFolder(string folderPath)
         {
             var dataFolderForTemplatePath = folderPath;
@@ -152,6 +180,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             filesToArchive.AddRange(this.dataExportService.GetDataFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath));
             filesToArchive.AddRange(this.environmentContentService.GetContentFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath));
+
+            archiveUtils.ZipFiles(filesToArchive, new string[0], archiveFilePath);
+
+            return archiveFilePath;
+        }
+
+        public string GetFilePathToExportedCompressedHistoryData(Guid questionnaireId, long version)
+        {
+            var dataDirectoryPath = this.GetFolderPathOfHistoryByQuestionnaire(questionnaireId, version);
+
+            var archiveFilePath = this.fileSystemAccessor.CombinePath(pathToHistoryFiles, string.Format("exported_history_{0}_{1}.zip", questionnaireId, version));
+
+            if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
+                this.fileSystemAccessor.DeleteFile(archiveFilePath);
+
+            var filesToArchive = new List<string>();
+
+            if (fileSystemAccessor.IsDirectoryExists(dataDirectoryPath))
+                filesToArchive.AddRange(fileSystemAccessor.GetFilesInDirectory(dataDirectoryPath));
 
             archiveUtils.ZipFiles(filesToArchive, new string[0], archiveFilePath);
 

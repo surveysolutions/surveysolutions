@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
+using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
@@ -35,6 +36,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IPreloadedDataRepository preloadedDataRepository;
         private readonly IPreloadedDataVerifier preloadedDataVerifier;
         private readonly IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory;
+        private readonly InterviewHistorySettings interviewHistorySettings;
 
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory,
@@ -44,7 +46,7 @@ namespace WB.UI.Headquarters.Controllers
                 allUsersAndQuestionnairesFactory,
             IPreloadingTemplateService preloadingTemplateService, IPreloadedDataRepository preloadedDataRepository,
             IPreloadedDataVerifier preloadedDataVerifier,
-            IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory)
+            IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory, InterviewHistorySettings interviewHistorySettings)
             : base(commandService, provider, logger)
         {
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
@@ -54,12 +56,14 @@ namespace WB.UI.Headquarters.Controllers
             this.preloadedDataRepository = preloadedDataRepository;
             this.preloadedDataVerifier = preloadedDataVerifier;
             this.questionnaireBrowseItemFactory = questionnaireBrowseItemFactory;
+            this.interviewHistorySettings = interviewHistorySettings;
             this.supervisorsFactory = supervisorsFactory;
         }
 
         public ActionResult Index()
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
+            this.ViewBag.EnableInterviewHistory = interviewHistorySettings.EnableInterviewHistory;
             return this.View();
         }
 

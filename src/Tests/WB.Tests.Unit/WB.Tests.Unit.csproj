@@ -1850,6 +1850,14 @@
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationTests\SchedulersTests\InterviewDetailsDataSchedulerTests\InterviewDetailsDataSchedulerTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationTests\SchedulersTests\InterviewDetailsDataSchedulerTests\when_loading_interview_details_from_capi_package.cs" />
     <Compile Include="SharedKernels\SurveyManagement\TestInMemoryWriter.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewHistoryWriterTests\InterviewHistoryWriterTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewHistoryWriterTests\when_disable_cache.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewHistoryWriterTests\when_method_Clear_of_InterviewHistoryWriter_called.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewHistoryWriterTests\when_method_GetById_of_InterviewHistoryWriter_called_and_cache_is_disabled.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewHistoryWriterTests\when_method_GetById_of_InterviewHistoryWriter_called_and_cache_is_enabled.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewHistoryWriterTests\when_method_Remove_of_InterviewHistoryWriter_called_and_cache_is_enabled.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewHistoryWriterTests\when_method_Store_of_InterviewHistoryWriter_called_and_cache_is_disabled.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewHistoryWriterTests\when_method_Store_of_InterviewHistoryWriter_called_and_cache_is_enabled.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\InterviewSummaryViewFactoryTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\when_load_interview_summary.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\when_load_interview_summary_and_interview_has_deleted_status.cs" />
