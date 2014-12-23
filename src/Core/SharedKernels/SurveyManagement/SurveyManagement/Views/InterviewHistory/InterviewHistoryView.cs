@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
 {
-    public class InterviewHistoryView
+    public class InterviewHistoryView : IView
     {
         public InterviewHistoryView(Guid interviewId, List<InterviewHistoricalRecordView> records, Guid questionnaireId, long questionnaireVersion)
         {
@@ -20,5 +21,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
         public Guid QuestionnaireId { get; private set; }
         public long QuestionnaireVersion { get; private set; }
         public List<InterviewHistoricalRecordView> Records { get; private set; }
+    }
+
+    public enum InterviewHistoricalAction
+    {
+        SupervisorAssigned,
+        InterviewerAssigned,
+        AnswerSet,
+        CommentSet,
+        Completed,
+        Restarted,
+        ApproveBySupervisor,
+        ApproveByHeadquarter,
+        RejectedBySupervisor,
+        RejectedByHeadquarter,
+        Deleted,
+        Restored
     }
 }
