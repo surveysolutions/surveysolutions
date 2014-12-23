@@ -429,6 +429,7 @@
     <None Include="Properties\PublishProfiles\nastya.pubxml" />
     <Content Include="Views\ControlPanel\ResetHeadquartersPassword.cshtml" />
     <Content Include="Views\Shared\SupervisorMainMenu.cshtml" />
+    <Content Include="Views\Interview\Details.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>

@@ -5,9 +5,12 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
+using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {
+    
+
     [DebuggerDisplay("{Title} ({Id})")]
     public class InterviewQuestionView : InterviewEntityView
     {
@@ -47,27 +50,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 };
             }
 
-            var categoricalMultiQuestion = question as IMultyOptionsQuestion;
+            var categoricalMultiQuestion = question as MultyOptionsQuestion;
             if (categoricalMultiQuestion != null)
             {
-                this.Settings = new
+                this.Settings = new MultiQuestionSettings
                 {
                     AreAnswersOrdered = categoricalMultiQuestion.AreAnswersOrdered,
-                    MaxAllowedAnswers = categoricalMultiQuestion.MaxAllowedAnswers
+                    MaxAllowedAnswers = categoricalMultiQuestion.MaxAllowedAnswers,
+                    IsLinked = categoricalMultiQuestion.LinkedToQuestionId.HasValue
                 };
             }
 
             var categoricalSingleQuestion = question as SingleQuestion;
             if (categoricalSingleQuestion != null)
             {
-                this.Settings = new
+                this.Settings = new SingleQuestionSettings
                 {
                     IsFilteredCombobox = categoricalSingleQuestion.IsFilteredCombobox,
-                    IsCascade = categoricalSingleQuestion.CascadeFromQuestionId.HasValue
+                    IsCascade = categoricalSingleQuestion.CascadeFromQuestionId.HasValue,
+                    IsLinked = categoricalSingleQuestion.LinkedToQuestionId.HasValue
                 };
             }
 
             if (answeredQuestion == null) return;
+
 
             this.IsAnswered = answeredQuestion.IsAnswered;
             this.IsEnabled = !isParentGroupDisabled && answeredQuestion.Enabled;
@@ -109,6 +115,44 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             bool shouldBeValidByConvention = !this.IsEnabled;
 
             this.IsValid = shouldBeValidByConvention || answeredQuestion.Valid;
+            this.AnswerString = FormatAnswerAsString(answeredQuestion.Answer, question);
+        }
+
+        private string FormatAnswerAsString(object answer, IQuestion question)
+        {
+            if (answer == null) return "";
+            switch (QuestionType)
+            {
+                case QuestionType.SingleOption:
+                    if ((Settings as SingleQuestionSettings).IsLinked)
+                    {
+                        return AnswerUtils.AnswerToString(answer);
+                    }
+                    else
+                    {
+                        return AnswerUtils.AnswerToString(answer, x => Options.First(o => (decimal)o.Value == x).Label);
+                    }
+
+                case QuestionType.MultyOption:
+                    if ((Settings as MultiQuestionSettings).IsLinked)
+                    {
+                        return AnswerUtils.AnswerToString(answer);
+                    }
+                    else
+                    {
+                        return AnswerUtils.AnswerToString(answer, x => Options.First(o => (decimal)o.Value == x).Label);
+                    }
+
+                case QuestionType.GpsCoordinates:
+                case QuestionType.TextList:
+                case QuestionType.DateTime:
+                case QuestionType.Numeric:
+                case QuestionType.Text:
+                case QuestionType.QRBarcode:
+                case QuestionType.Multimedia:
+                    return AnswerUtils.AnswerToString(answer);
+            }
+            return "";
         }
 
         private static string GetTitleWithSubstitutedVariables(IQuestion question, Dictionary<string, string> answersForTitleSubstitution)
@@ -143,6 +187,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             return expression1;
         }
 
+        public string AnswerString { get; set; }
+
         public string Variable { get; set; }
 
         public List<QuestionOptionView> Options { get; set; }
@@ -172,6 +218,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public object Answer { get; set; }
 
         public dynamic Settings { get; set; }
+    }
+
+    public class MultiQuestionSettings
+    {
+        public bool AreAnswersOrdered { get; set; }
+
+        public int? MaxAllowedAnswers { get; set; }
+
+        public bool IsLinked { get; set; }
+    }
+
+    public class SingleQuestionSettings
+    {
+        public bool? IsFilteredCombobox { get; set; }
+
+        public bool IsCascade { get; set; }
+
+        public bool IsLinked { get; set; }
     }
 
     public class InterviewQuestionCommentView
