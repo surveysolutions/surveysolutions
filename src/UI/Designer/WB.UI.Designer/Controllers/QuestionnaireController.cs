@@ -190,7 +190,7 @@ namespace WB.UI.Designer.Controllers
 
             var options = editQuestionView != null
                 ? editQuestionView.Options.Select(
-                    option => new Option(Guid.NewGuid(), option.Value.ToString(CultureInfo.InvariantCulture), option.Title, option.ParentValue))
+                    option => new Option(Guid.NewGuid(), option.Value.ToString("G29",CultureInfo.InvariantCulture), option.Title, option.ParentValue))
                 : new Option[0];
 
             this.questionWithOptionsViewModel = new EditOptionsViewModel()
