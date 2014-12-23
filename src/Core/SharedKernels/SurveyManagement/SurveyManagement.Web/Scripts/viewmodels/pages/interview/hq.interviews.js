@@ -16,16 +16,8 @@
             commands: commands
         };
 
-        self.SendCommands(command, function (failedCommandIds) {
-            var deletedInterviews = ko.utils.arrayFilter(self.SelectedItems(), function(item) {
-                return $.inArray(item.InterviewId(), failedCommandIds) == -1;
-            });
-
-            for (var i = deletedInterviews.length - 1; i >= 0; i--) {
-                self.Items.remove(deletedInterviews[i]);
-            }
-
-            self.TotalCount(self.TotalCount() - deletedInterviews.length);
+        self.SendCommands(command, function () {
+            self.load();
         });
     };
 
