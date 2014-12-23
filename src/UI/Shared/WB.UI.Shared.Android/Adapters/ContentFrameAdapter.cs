@@ -1,24 +1,22 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="ContentFrameAdapter.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-using Android.Support.V4.App;
+﻿using Android.Support.V4.App;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Frames;
 
 namespace WB.UI.Shared.Android.Adapters
 {
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
     public abstract class ContentFrameAdapter : FragmentStatePagerAdapter
     {
+        public IAnswerOnQuestionCommandService AnswerOnQuestionCommandService
+        {
+            get { return ServiceLocator.Current.GetInstance<IAnswerOnQuestionCommandService>(); }
+        }
+
         private readonly InterviewViewModel questionnaire;
         private InterviewItemId? screenId;
         private bool isRoot;
@@ -62,7 +60,6 @@ namespace WB.UI.Shared.Android.Adapters
             }
             else
             {
-
                 var param = this.screensHolder[position];
                 var model = this.questionnaire.Screens[param];
                 var screenModel = model as QuestionnaireScreenViewModel;
@@ -75,6 +72,8 @@ namespace WB.UI.Shared.Android.Adapters
                     var grid = model as QuestionnaireGridViewModel;
                     if (grid != null)
                     {
+                        this.AnswerOnQuestionCommandService.ExecuteAllCommandsInRow();
+
                         fragment = this.CreateRosterScreen(grid.ScreenId, this.questionnaire.PublicKey);
                     }
                 }
