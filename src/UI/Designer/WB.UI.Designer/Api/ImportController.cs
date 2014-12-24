@@ -24,7 +24,7 @@ namespace WB.UI.Designer.Api
         private readonly IQuestionnaireExportService exportService;
         private readonly IStringCompressor zipUtils;
         private readonly IMembershipUserService userHelper;
-        private readonly IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory;
+        private readonly IQuestionnaireListViewFactory viewFactory;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
@@ -35,7 +35,7 @@ namespace WB.UI.Designer.Api
         public ImportController(IQuestionnaireExportService exportService,
             IStringCompressor zipUtils,
             IMembershipUserService userHelper,
-            IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory,
+            IQuestionnaireListViewFactory viewFactory,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,

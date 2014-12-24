@@ -19,7 +19,7 @@ namespace WB.UI.Designer.WebServices
         private readonly IQuestionnaireExportService exportService;
         private readonly IMembershipUserService userHelper;
         private readonly IStringCompressor zipUtils;
-        private readonly IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory;
+        private readonly IQuestionnaireListViewFactory viewFactory;
 
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
 
@@ -31,7 +31,7 @@ namespace WB.UI.Designer.WebServices
             IQuestionnaireExportService exportService,
             IStringCompressor zipUtils,
             IMembershipUserService userHelper,
-            IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory,
+            IQuestionnaireListViewFactory viewFactory,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,

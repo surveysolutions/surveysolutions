@@ -2,16 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Indexes;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 {
-    /// <summary>
-    /// The questionnaire browse view factory.
-    /// </summary>
-    /// 
-    internal class QuestionnaireListViewFactory : IViewFactory<QuestionnaireListInputModel, QuestionnaireListView>
+    internal class QuestionnaireListViewFactory : IQuestionnaireListViewFactory
     {
         private readonly IReadSideRepositoryIndexAccessor indexAccessor;
 
@@ -46,15 +41,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             QuestionnaireListInputModel input)
         {
             var result = questionnaire;
+            result = result.Where(x => x.IsDeleted == false);
             if (!string.IsNullOrEmpty(input.Filter))
-                result = result.Where((x) => 
-                  x.TitleIndexed.StartsWith(  input.Filter)
-                    || x.CreatorName.StartsWith(input.Filter));
+            {
+                result = result.Where(x => x.TitleIndexed.StartsWith(input.Filter) || x.CreatorName.StartsWith(input.Filter));
+            }
 
             if (input.IsAdminMode)
             {
                 if (!input.IsPublic)
+                {
                     result = result.Where(x => x.CreatedBy == input.ViewerId || x.SharedPersons.Any(person => person == input.ViewerId));
+                }
             }
             else
             {

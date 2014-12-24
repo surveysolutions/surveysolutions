@@ -47,6 +47,7 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<INCalcToCSharpConverter>().To<NCalcToCSharpConverter>();
             this.Bind<IKeywordsProvider>().To<KeywordsProvider>();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
+            this.Bind<IQuestionnaireListViewFactory>().To<QuestionnaireListViewFactory>();
 
             this.Bind<IAsyncExecutor>().To<AsyncExecutor>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
 
