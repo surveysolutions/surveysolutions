@@ -241,20 +241,19 @@ namespace WB.UI.Designer.Controllers
 
         private void GetOptionsFromStream(HttpPostedFileBase csvFile, bool isCascade = false)
         {
-            var configuration = CreateCsvConfiguration();
             try
             {
-                this.questionWithOptionsViewModel.Options = this.ExtractOptionsFromStream(csvFile.InputStream, configuration, isCascade);
+                this.questionWithOptionsViewModel.Options = this.ExtractOptionsFromStream(csvFile.InputStream, isCascade);
             }
             catch (Exception)
             {
                 if (csvFile == null)
                 {
-                    this.Error(Resources.QuestionnaireController.Choose_tab_separated_values_file_to_upload__please);
+                    this.Error(Resources.QuestionnaireController.SelectTabFile);
                 }
                 else
                 {
-                    this.Error(Resources.QuestionnaireController.Only_tab_separated_values_files_are_accepted);
+                    this.Error(Resources.QuestionnaireController.TabFilesOnly);
                 }
             }
         }
@@ -316,7 +315,7 @@ namespace WB.UI.Designer.Controllers
         public FileResult ExportOptions()
         {
             return
-                File(SaveOptionsToStream(this.questionWithOptionsViewModel.SourceOptions, CreateCsvConfiguration()), "text/csv",
+                File(SaveOptionsToStream(this.questionWithOptionsViewModel.SourceOptions), "text/csv",
                     string.Format("Options-in-question-{0}.txt",
                         this.questionWithOptionsViewModel.QuestionTitle.Length > 50
                             ? this.questionWithOptionsViewModel.QuestionTitle.Substring(0, 50)
@@ -332,12 +331,11 @@ namespace WB.UI.Designer.Controllers
             public string QuestionTitle { get; set; }
         }
 
-        private IEnumerable<Option> ExtractOptionsFromStream(Stream inputStream, CsvConfiguration configuration, bool isCascade)
+        private IEnumerable<Option> ExtractOptionsFromStream(Stream inputStream, bool isCascade)
         {
             var importedOptions = new List<Option>();
 
-            var csvReader = new CsvReader(new StreamReader(inputStream));
-            SetCsvOptions(csvReader.Configuration, configuration);
+            var csvReader = new CsvReader(new StreamReader(inputStream), this.CreateCsvConfiguration());
             using (csvReader)
             {
                 while (csvReader.Read())
@@ -356,20 +354,11 @@ namespace WB.UI.Designer.Controllers
             return importedOptions;
         }
 
-        private void SetCsvOptions(CsvConfiguration oldConfiguration, CsvConfiguration newConfiguration)
-        {
-            oldConfiguration.HasHeaderRecord = false;
-            oldConfiguration.TrimFields = newConfiguration.TrimFields;
-            oldConfiguration.IgnoreQuotes = newConfiguration.IgnoreQuotes;
-            oldConfiguration.Delimiter = newConfiguration.Delimiter;
-        }
-
-        private Stream SaveOptionsToStream(IEnumerable<Option> options, CsvConfiguration configuration)
+        private Stream SaveOptionsToStream(IEnumerable<Option> options)
         {
             var sb = new StringBuilder();
-            using (var csvWriter = new CsvWriter(new StringWriter(sb)))
+            using (var csvWriter = new CsvWriter(new StringWriter(sb),this.CreateCsvConfiguration()))
             {
-                SetCsvOptions(csvWriter.Configuration, configuration);
                 foreach (var option in options)
                 {
                     if (String.IsNullOrEmpty(option.ParentValue))
