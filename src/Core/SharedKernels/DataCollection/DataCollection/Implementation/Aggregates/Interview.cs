@@ -971,6 +971,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             InterviewSynchronizationDto interviewDto,
             DateTime synchronizationTime)
         {
+            ThrowIfInterviewHardDeleted();
+            this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.ApprovedBySupervisor, InterviewStatus.Deleted);
 
             var commentedAnswers = (
                 from answerDto in interviewDto.Answers
@@ -989,6 +991,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.ApplyEvent(new InterviewRestored(userId));
             }
+
 
             this.ApplyEvent(new InterviewRejectedByHQ(userId, interviewDto.Comments));
             this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: interviewDto.Comments));

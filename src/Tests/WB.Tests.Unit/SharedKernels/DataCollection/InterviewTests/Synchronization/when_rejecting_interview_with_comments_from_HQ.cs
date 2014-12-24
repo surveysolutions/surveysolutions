@@ -59,10 +59,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             interview = CreateInterview();
             interview.Apply(new AnswerCommented(userId, commentedQuestionId, new decimal[]{}, existingComment.Date, existingComment.Text));
 
+            interview.AssignInterviewer(supervisorId, userId);
+            interview.Complete(userId, string.Empty, DateTime.Now);
+            interview.Approve(userId, string.Empty);
+
             eventContext = new EventContext();
         };
 
-        Because of = () => interview.RejectInterviewFromHeadquarters(userId, Guid.NewGuid(), interviewerId, interviewSynchronizationDto, DateTime.Now);
+        Because of = () => interview.RejectInterviewFromHeadquarters(userId, supervisorId, interviewerId, interviewSynchronizationDto, DateTime.Now);
 
 
         It should_add_new_comments = () => eventContext.ShouldContainEvent<AnswerCommented>(@event => 
@@ -74,6 +78,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
         static Interview interview;
         static EventContext eventContext;
         static Guid userId = Guid.NewGuid();
+        static Guid supervisorId = Guid.NewGuid();
         private static Guid interviewerId = Guid.NewGuid();
         private static InterviewSynchronizationDto interviewSynchronizationDto ;
         private static Guid commentedQuestionId;

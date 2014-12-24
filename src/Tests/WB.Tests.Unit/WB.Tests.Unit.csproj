@@ -1320,6 +1320,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\InterviewTestsContext.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_creating_new_AnsweredQuestionSynchronizationDto_for_InterviewTextListAnswers.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_interview_is_canceled_by_hq_in_completed_state.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_rejecting_interview_by_HQ_in_any_other_state_then_Deleted_and_Approved_by_Supervisor.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_rejecting_interview_from_HQ.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_rejecting_interview_in_deleted_state.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_rejecting_interview_with_comments_from_HQ.cs" />
