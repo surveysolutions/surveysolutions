@@ -24,7 +24,7 @@ namespace Main.Core.Entities.SubEntities
         public Option(Guid id, string value, string title, decimal? parentValue)
             : this(id, value, title)
         {
-            this.ParentValue = parentValue.HasValue? parentValue.Value.ToString(CultureInfo.InvariantCulture) : null;
+            this.ParentValue = parentValue.HasValue ? parentValue.Value.ToString("G29", CultureInfo.InvariantCulture) : null;
         }
 
         public Guid Id { get; set; }
