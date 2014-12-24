@@ -20,7 +20,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewQuestionViewTest
             result =
                 new InterviewQuestionView(question: question, answeredQuestion: null,
                     variablesMap: new Dictionary<Guid, string>(),
-                    answersForTitleSubstitution: new Dictionary<string, string>(), isParentGroupDisabled: false);
+                    answersForTitleSubstitution: new Dictionary<string, string>(), isParentGroupDisabled: false,
+                    rosterVector: new decimal[0]);
 
         It should_set_enabled_flag_to_true = () =>
             result.IsEnabled.ShouldBeTrue();

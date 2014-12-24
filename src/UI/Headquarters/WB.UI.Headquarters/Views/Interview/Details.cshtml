@@ -1,4 +1,6 @@
-﻿@using Main.Core.Entities.SubEntities
+﻿@using System.Globalization
+@using System.Web.Mvc.Html
+@using Main.Core.Entities.SubEntities
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Views.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
@@ -122,7 +124,98 @@
                 <div class="question-clickable">
                     <span data-bind="css: markerStyle()" class="question-marker"></span>
                     <span>@entity.AnswerString</span>
-
+                    @switch (entity.QuestionType)
+                    {
+                        case QuestionType.SingleOption:
+                            var singleOptinSetting = entity.Settings as SingleQuestionSettings;
+                            if (singleOptinSetting.IsCascade || singleOptinSetting.IsFilteredCombobox)
+                            {
+                                <input class="form-control" type="text" value="@entity.Answer" />
+                            }
+                            else if (singleOptinSetting.IsLinked)
+                            {
+                                <div class="form-group">
+                                    <div class="controls">
+                                        @foreach (var option in entity.Options)
+                                        {
+                                            var radioName = string.Format("option-{0}-{1}", entity.Id, Stringify(entity.RosterVector));
+                                            <label class="radio">
+                                                @Html.RadioButton(radioName, Stringify((decimal[])option.Value), ((decimal[])entity.Answer).SequenceEqual((decimal[])option.Value))
+                                                <span>@option.Label</span>
+                                            </label>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-group">
+                                    <div class="controls">
+                                        @foreach (var option in entity.Options)
+                                        {
+                                            var radioName = string.Format("option-{0}-{1}", entity.Id, Stringify(entity.RosterVector));
+                                            <label class="radio">
+                                                @Html.RadioButton(radioName, Convert.ToDecimal(option.Value), Convert.ToDecimal(entity.Answer) == Convert.ToDecimal(option.Value))
+                                                <span>@option.Label</span>
+                                            </label>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            break;
+                        case QuestionType.MultyOption:
+                            var multiQuestionSettings = entity.Settings as MultiQuestionSettings;
+                            if (multiQuestionSettings.IsLinked)
+                            {
+                                <div class="form-group">
+                                    <div class="controls">
+                                        @foreach (var option in entity.Options)
+                                        {
+                                            var radioName = string.Format("option-{0}-{1}", entity.Id, Stringify(entity.RosterVector));
+                                            <label class="radio">
+                                                @Html.RadioButton(radioName, Stringify((decimal[])option.Value), ((decimal[])entity.Answer).SequenceEqual((decimal[])option.Value))
+                                                <span>@option.Label</span>
+                                            </label>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            else
+                            
+                            {
+                                <div class="form-group">
+                                    <div class="controls">
+                                        @foreach (var option in entity.Options)
+                                        {
+                                            var radioName = string.Format("option-{0}-{1}", entity.Id, Stringify(entity.RosterVector));
+                                            <label class="radio">
+                                                @Html.RadioButton(radioName, Convert.ToDecimal(option.Value), Convert.ToDecimal(entity.Answer) == Convert.ToDecimal(option.Value))
+                                                <span>@option.Label</span>
+                                            </label>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            break;
+                        case QuestionType.Numeric:
+                        <input class="form-control" type="number" value="@entity.Answer" />
+                            break;
+                        case QuestionType.DateTime:
+                            break;
+                        case QuestionType.GpsCoordinates:
+                            break;
+                        case QuestionType.Text:
+                        <input class="form-control" type="text" value="@entity.Answer" />
+                            break;
+                        case QuestionType.TextList:
+                            break;
+                        case QuestionType.QRBarcode:
+                        <input class="form-control" type="text" value="@entity.Answer" />
+                            break;
+                        case QuestionType.Multimedia:
+                        <img src="@Url.RouteUrl("Default", new { httproute = "", controller = "Resource", action = "InterviewFile", interviewid = Model.PublicKey, filename = entity.Answer})" />
+                            break;
+                    }
                     @if (!entity.IsValid)
                     {
                         <small class="text-error">@entity.ValidationExpression</small>
@@ -170,7 +263,13 @@
         </td>
     </tr>
 }
-
+@functions
+{
+    public string Stringify(decimal[] array)
+    {
+        return string.Join("_", array.Select(x => x.ToString(CultureInfo.InvariantCulture)));
+    }
+}
 @helper css(string style, bool shouldBeAdded = true)
 {
     @(shouldBeAdded ? style : string.Empty)
