@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
@@ -32,29 +33,38 @@ namespace WB.Core.GenericSubdomains.Utils.Implementation
 
             var responseContent = await responseMessage.Content.ReadAsByteArrayAsync();
 
-            IEnumerable<string> acceptedEncodings;
-            if (responseMessage.Content.Headers.TryGetValues("Content-Encoding", out acceptedEncodings))
+            var responseContentType = responseMessage.Content.Headers.ContentType.MediaType;
+
+            if (responseContentType.IndexOf("json", StringComparison.OrdinalIgnoreCase) > -1 || 
+                responseContentType.IndexOf("javascript", StringComparison.OrdinalIgnoreCase) > -1)
             {
-                if (acceptedEncodings.Contains("gzip"))
+                IEnumerable<string> acceptedEncodings;
+                if (responseMessage.Content.Headers.TryGetValues("Content-Encoding", out acceptedEncodings))
                 {
-                    responseContent = stringCompressor.DecompressGZip(responseContent);
+                    if (acceptedEncodings.Contains("gzip"))
+                    {
+                        responseContent = stringCompressor.DecompressGZip(responseContent);
+                    }
+
+                    if (acceptedEncodings.Contains("deflate"))
+                    {
+                        responseContent = stringCompressor.DecompressDeflate(responseContent);
+                    }
                 }
 
-                if (acceptedEncodings.Contains("deflate"))
+                try
                 {
-                    responseContent = stringCompressor.DecompressDeflate(responseContent);
-                }    
+                    return jsonUtils.Deserialize<T>(responseContent);
+                }
+                catch (JsonReaderException ex)
+                {
+                    throw new RestException(message: localizationService.GetString("UpdateRequired"),
+                        statusCode: HttpStatusCode.UpgradeRequired, innerException: ex);
+                }
             }
 
-            try
-            {
-                return jsonUtils.Deserialize<T>(responseContent);
-            }
-            catch (JsonReaderException ex)
-            {
-                throw new RestSerializationException(localizationService.GetString("BadRequest"), ex);
-            }
-            
+
+            throw new RestException(message: localizationService.GetString("CheckServerSettings"), statusCode: HttpStatusCode.Redirect);
         }
     }
 }
