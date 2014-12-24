@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewQuestionViewTest
         };
 
         Because of = () => textListQuestionView = new InterviewQuestionView(textListQuestionTemplate, textListQuestionData,
-               null, null, false);
+               null, null, false, new decimal[0]);
 
         It should_answer_be_null = () =>
             textListQuestionView.Answer.ShouldBeNull();

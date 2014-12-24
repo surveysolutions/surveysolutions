@@ -219,8 +219,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                         IsQuestionParentGroupDisabled(disabledGroups, currentGroup);
 
                     interviewEntity = question.LinkedToQuestionId.HasValue
-                        ? new InterviewLinkedQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution, (questionId) => getAvailableOptions(questionId, interviewLevel.RosterVector), isQustionsParentGroupDisabled)
-                        : new InterviewQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution, isQustionsParentGroupDisabled);
+                        ? new InterviewLinkedQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution, (questionId) => getAvailableOptions(questionId, interviewLevel.RosterVector), isQustionsParentGroupDisabled, interviewLevel.RosterVector)
+                        : new InterviewQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution, isQustionsParentGroupDisabled, interviewLevel.RosterVector);
     
                 }
 
