@@ -70,11 +70,11 @@ namespace WB.UI.Capi.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Need to update the application.
+        ///   Looks up a localized string similar to Check server settings .
         /// </summary>
-        internal static string BadRequest {
+        internal static string CheckServerSettings {
             get {
-                return ResourceManager.GetString("BadRequest", resourceCulture);
+                return ResourceManager.GetString("CheckServerSettings", resourceCulture);
             }
         }
         
@@ -138,6 +138,15 @@ namespace WB.UI.Capi.Properties {
         internal static string PushFailed {
             get {
                 return ResourceManager.GetString("PushFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Need to update the application.
+        /// </summary>
+        internal static string UpdateRequired {
+            get {
+                return ResourceManager.GetString("UpdateRequired", resourceCulture);
             }
         }
     }
