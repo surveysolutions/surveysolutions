@@ -117,10 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Choose_tab_separated_values_file_to_upload__please" xml:space="preserve">
+  <data name="SelectTabFile" xml:space="preserve">
     <value>Choose tab-separated values file to upload, please</value>
   </data>
-  <data name="Only_tab_separated_values_files_are_accepted" xml:space="preserve">
+  <data name="TabFilesOnly" xml:space="preserve">
     <value>Only tab-separated values files are accepted</value>
   </data>
 </root>
