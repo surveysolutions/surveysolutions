@@ -51,10 +51,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
 
             interview = CreateInterview();
 
+            interview.AssignInterviewer(supervisorId, userId);
+            interview.Complete(userId, string.Empty, DateTime.Now);
+            interview.Approve(userId, string.Empty);
+
             eventContext = new EventContext();
         };
 
-        Because of = () => interview.RejectInterviewFromHeadquarters(userId, Guid.NewGuid(), interviewerId, interviewSynchronizationDto, synchronizationTime);
+        Because of = () => interview.RejectInterviewFromHeadquarters(userId, supervisorId, interviewerId, interviewSynchronizationDto, synchronizationTime);
 
         It should_raise_InterviewRejectedByHQ_event = () => eventContext.ShouldContainEvent<InterviewRejectedByHQ>(@event => @event.UserId == userId);
         
@@ -74,6 +78,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
         static Interview interview;
         static EventContext eventContext;
         static Guid userId = Guid.NewGuid();
+        static Guid supervisorId = Guid.NewGuid();
         private static Guid interviewerId = Guid.NewGuid();
         private static InterviewSynchronizationDto interviewSynchronizationDto ;
         private static string rejectComment;

@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             interview.Apply(new InterviewStatusChanged(InterviewStatus.Deleted, null));
 
             eventContext = new EventContext();
-        };
+        }; 
 
         Because of = () => interview.RejectInterviewFromHeadquarters(userId, Guid.NewGuid(), Guid.NewGuid(), new InterviewSynchronizationDto(), DateTime.Now);
 
