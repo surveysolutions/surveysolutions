@@ -63,18 +63,18 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Choose tab-separated values file to upload, please.
         /// </summary>
-        internal static string Choose_tab_separated_values_file_to_upload__please {
+        internal static string SelectTabFile {
             get {
-                return ResourceManager.GetString("Choose_tab_separated_values_file_to_upload__please", resourceCulture);
+                return ResourceManager.GetString("SelectTabFile", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Only tab-separated values files are accepted.
         /// </summary>
-        internal static string Only_tab_separated_values_files_are_accepted {
+        internal static string TabFilesOnly {
             get {
-                return ResourceManager.GetString("Only_tab_separated_values_files_are_accepted", resourceCulture);
+                return ResourceManager.GetString("TabFilesOnly", resourceCulture);
             }
         }
     }
