@@ -11,9 +11,10 @@ namespace WB.UI.Designer.Code
     public class QuestionnaireHelper : IQuestionnaireHelper
     {
         private readonly IMembershipUserService userService;
-        private readonly IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory;
+        private readonly IQuestionnaireListViewFactory viewFactory;
 
-        public QuestionnaireHelper(IMembershipUserService userSevice, IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory)
+        public QuestionnaireHelper(IMembershipUserService userSevice,
+            IQuestionnaireListViewFactory viewFactory)
         {
             this.userService = userSevice;
             this.viewFactory = viewFactory;

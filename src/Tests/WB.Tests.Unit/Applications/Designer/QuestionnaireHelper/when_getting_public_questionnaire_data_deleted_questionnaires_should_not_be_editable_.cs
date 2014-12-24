@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireHelper
             var userHelperMock = Mock.Of<IMembershipUserService>(x =>
                 x.WebUser == user);
 
-            var userViewFactoryMock = Mock.Of<IViewFactory<QuestionnaireListInputModel, QuestionnaireListView>>(x =>
+            var userViewFactoryMock = Mock.Of<IQuestionnaireListViewFactory>(x =>
                 x.Load(Moq.It.IsAny<QuestionnaireListInputModel>()) == CreateQuestionnaireListView(user));
 
             questionnaireHelper = new UI.Designer.Code.QuestionnaireHelper(userHelperMock, userViewFactoryMock);

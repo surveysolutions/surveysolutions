@@ -431,6 +431,7 @@
     <Compile Include="Views\Questionnaire\Pdf\PdfQuestionView.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Views\Questionnaire\QuestionnaireList\IQuestionnaireListViewFactory.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireList\QuestionnaireListViewInputModel.cs">
       <SubType>Code</SubType>
     </Compile>
