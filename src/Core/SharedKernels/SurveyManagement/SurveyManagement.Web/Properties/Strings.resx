@@ -120,11 +120,11 @@
   <data name="BadConnection" xml:space="preserve">
     <value>Bad connection</value>
   </data>
-  <data name="BadRequest" xml:space="preserve">
-    <value>Need to update the application</value>
-  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
+  </data>
+  <data name="CheckServerSettings" xml:space="preserve">
+    <value>Check server settings </value>
   </data>
   <data name="ClientVersionIsObsolete" xml:space="preserve">
     <value>Your application is incompatible with the Supervisor. Please, remove your copy and download the correct version.</value>
@@ -203,5 +203,8 @@
   </data>
   <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
     <value>Manage account</value>
+  </data>
+  <data name="UpdateRequired" xml:space="preserve">
+    <value>Need to update the application</value>
   </data>
 </root>
