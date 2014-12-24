@@ -123,7 +123,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             switch (QuestionType)
             {
                 case QuestionType.SingleOption:
-                    if ((Settings as SingleQuestionSettings).IsLinked)
+                    if (Settings!=null && (Settings as SingleQuestionSettings).IsLinked)
                     {
                         return AnswerUtils.AnswerToString(answer);
                     }
