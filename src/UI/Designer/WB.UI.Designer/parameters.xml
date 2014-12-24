@@ -24,7 +24,7 @@
       scope="\\web.config$" 
       match="/configuration/appSettings/add[@key='EventStore.ServerIP']/@value" />
    </parameter>
-  <parameter name="Event store TPC port"
+  <parameter name="Event store TCP port"
       defaultValue="1113">
    <parameterValidation kind="AllowEmpty" />
    <parameterEntry kind="XmlFile" 
