@@ -8,6 +8,8 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewQuestionViewTests
 {
+    using System.Linq.Expressions;
+
     internal class when_creating_view_for_question_which_is_invalid_and_disabled
     {
         Establish context = () =>
@@ -18,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewQuestionViewTest
         };
 
         Because of = () =>
-            result = new InterviewQuestionView(question, answeredQuestion, new Dictionary<Guid, string>(), new Dictionary<string, string>(), isParentGroupDisabled: false);
+            result = new InterviewQuestionView(question, answeredQuestion, new Dictionary<Guid, string>(), new Dictionary<string, string>(), isParentGroupDisabled: false, rosterVector: new decimal[0]);
 
         It should_set_validity_flag_to_valid = () =>
             result.IsValid.ShouldBeTrue();

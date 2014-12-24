@@ -9,15 +9,13 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {
-    
-
     [DebuggerDisplay("{Title} ({Id})")]
     public class InterviewQuestionView : InterviewEntityView
     {
-        public InterviewQuestionView(IQuestion question, InterviewQuestion answeredQuestion,
-            Dictionary<Guid, string> variablesMap, Dictionary<string, string> answersForTitleSubstitution, bool isParentGroupDisabled)
+        public InterviewQuestionView(IQuestion question, InterviewQuestion answeredQuestion, Dictionary<Guid, string> variablesMap, Dictionary<string, string> answersForTitleSubstitution, bool isParentGroupDisabled, decimal[] rosterVector)
         {
             this.Id = question.PublicKey;
+            this.RosterVector = rosterVector;
             this.Title = GetTitleWithSubstitutedVariables(question, answersForTitleSubstitution);
             this.QuestionType = question.QuestionType;
             this.IsMandatory = question.Mandatory;
@@ -66,14 +64,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             {
                 this.Settings = new SingleQuestionSettings
                 {
-                    IsFilteredCombobox = categoricalSingleQuestion.IsFilteredCombobox,
+                    IsFilteredCombobox = categoricalSingleQuestion.IsFilteredCombobox ?? false,
                     IsCascade = categoricalSingleQuestion.CascadeFromQuestionId.HasValue,
                     IsLinked = categoricalSingleQuestion.LinkedToQuestionId.HasValue
                 };
             }
 
             if (answeredQuestion == null) return;
-
 
             this.IsAnswered = answeredQuestion.IsAnswered;
             this.IsEnabled = !isParentGroupDisabled && answeredQuestion.Enabled;
@@ -117,6 +114,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             this.IsValid = shouldBeValidByConvention || answeredQuestion.Valid;
             this.AnswerString = FormatAnswerAsString(answeredQuestion.Answer, question);
         }
+
+        public decimal[] RosterVector { get; set; }
 
         private string FormatAnswerAsString(object answer, IQuestion question)
         {
@@ -231,7 +230,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
     public class SingleQuestionSettings
     {
-        public bool? IsFilteredCombobox { get; set; }
+        public bool IsFilteredCombobox { get; set; }
 
         public bool IsCascade { get; set; }
 

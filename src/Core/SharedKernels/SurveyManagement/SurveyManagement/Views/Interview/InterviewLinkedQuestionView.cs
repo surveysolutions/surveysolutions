@@ -9,8 +9,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     {
         public InterviewLinkedQuestionView(IQuestion question, InterviewQuestion answeredQuestion,
             Dictionary<Guid, string> variablesMap, Dictionary<string, string> answersForTitleSubstitution,
-            Func<Guid, Dictionary<decimal[], string>> getAvailableOptions, bool isParentGroupDisabled)
-            : base(question, answeredQuestion, variablesMap, answersForTitleSubstitution, isParentGroupDisabled)
+            Func<Guid, Dictionary<decimal[], string>> getAvailableOptions, bool isParentGroupDisabled, decimal[] rosterVector)
+            : base(question, answeredQuestion, variablesMap, answersForTitleSubstitution, isParentGroupDisabled, rosterVector)
         {
             this.Options = getAvailableOptions(question.PublicKey).Select(a => new QuestionOptionView
                 {
