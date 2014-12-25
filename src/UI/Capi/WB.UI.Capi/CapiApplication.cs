@@ -40,6 +40,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.EventHandler;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -290,7 +291,8 @@ namespace WB.UI.Capi
             this.kernel.Bind<ISyncPackageRestoreService>().To<SyncPackageRestoreService>().InSingletonScope();
 
             this.kernel.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope();
-            
+
+            this.kernel.Bind<ISyncProtocolVersionProvider>().ToConstant(new SyncProtocolVersionProvider(() => false));
             #region register handlers
 
             var interviewViewBus = new InProcessEventBus();

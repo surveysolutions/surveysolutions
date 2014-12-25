@@ -7,6 +7,8 @@ using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
@@ -38,7 +40,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly int supportedQuestionnaireVersionPatch;
         private readonly Func<bool> isDebug;
         private readonly InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings;
-        private readonly int syncProtocolVersionNumber;
+        private readonly Version applicationBuildVersion;
         private readonly bool overrideReceivedEventTimeStamp;
         private readonly string origin;
         private readonly bool hqEnabled;
@@ -46,7 +48,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
         public SurveyManagementSharedKernelModule(string currentFolderPath,
             int supportedQuestionnaireVersionMajor, int supportedQuestionnaireVersionMinor, int supportedQuestionnaireVersionPatch,
-            Func<bool> isDebug, int syncProtocolVersionNumber,
+            Func<bool> isDebug, Version applicationBuildVersion,
             InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool overrideReceivedEventTimeStamp, string origin, bool hqEnabled, int maxCountOfCachedEntitiesForSqliteDb)
         {
             this.currentFolderPath = currentFolderPath;
@@ -55,7 +57,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.supportedQuestionnaireVersionPatch = supportedQuestionnaireVersionPatch;
             this.isDebug = isDebug;
             this.interviewDetailsDataLoaderSettings = interviewDetailsDataLoaderSettings;
-            this.syncProtocolVersionNumber = syncProtocolVersionNumber;
+            this.applicationBuildVersion = applicationBuildVersion;
             this.overrideReceivedEventTimeStamp = overrideReceivedEventTimeStamp;
             this.origin = origin;
             this.hqEnabled = hqEnabled;
@@ -88,7 +90,9 @@ namespace WB.Core.SharedKernels.SurveyManagement
             };
             this.Unbind<ISupportedVersionProvider>();
             this.Bind<ISupportedVersionProvider>()
-                .ToConstant(new SupportedVersionProvider(applicationVersionSettings, this.isDebug, this.syncProtocolVersionNumber));
+                .ToConstant(new SupportedVersionProvider(applicationVersionSettings, this.isDebug, this.applicationBuildVersion));
+
+            this.Bind<ISyncProtocolVersionProvider>().ToConstant(new SyncProtocolVersionProvider(this.isDebug));
 
             this.Bind(typeof (ITemporaryDataStorage<>)).To(typeof (FileTemporaryDataStorage<>));
 

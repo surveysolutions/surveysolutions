@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Hosting;
 using System.Web.Http;
@@ -16,6 +15,7 @@ using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
@@ -34,6 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IViewFactory<UserViewInputModel, UserView> viewFactory;
         private readonly Func<string, string, bool> checkIfUserIsInRole;
         private readonly ISupportedVersionProvider versionProvider;
+        private readonly ISyncProtocolVersionProvider syncVersionProvider;
         private readonly IPlainInterviewFileStorage plainFileRepository;
         private readonly IGlobalInfoProvider globalInfo;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -46,16 +47,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public InterviewerSyncController(ICommandService commandService, IGlobalInfoProvider globalInfo,
             ISyncManager syncManager,
             ILogger logger, IViewFactory<UserViewInputModel, UserView> viewFactory,
-            ISupportedVersionProvider versionProvider, IPlainInterviewFileStorage plainFileRepository,
+            ISupportedVersionProvider versionProvider, 
+            ISyncProtocolVersionProvider syncVersionProvider,
+            IPlainInterviewFileStorage plainFileRepository,
             IFileSystemAccessor fileSystemAccessor)
-            : this(commandService, globalInfo, syncManager, logger, viewFactory, versionProvider,
+            : this(commandService, globalInfo, syncManager, logger, viewFactory, versionProvider, syncVersionProvider,
                 Roles.IsUserInRole, plainFileRepository, fileSystemAccessor)
         {
         }
 
         public InterviewerSyncController(ICommandService commandService, IGlobalInfoProvider globalInfo,
             ISyncManager syncManager,ILogger logger,
-            IViewFactory<UserViewInputModel, UserView> viewFactory, ISupportedVersionProvider versionProvider,
+            IViewFactory<UserViewInputModel, UserView> viewFactory, 
+            ISupportedVersionProvider versionProvider,
+            ISyncProtocolVersionProvider syncVersionProvider,
             Func<string, string, bool> checkIfUserIsInRole,IPlainInterviewFileStorage plainFileRepository,
             IFileSystemAccessor fileSystemAccessor)
             : base(commandService, globalInfo, logger)
@@ -69,6 +74,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.viewFactory = viewFactory;
             this.globalInfo = globalInfo;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.syncVersionProvider = syncVersionProvider;
         }
 
         protected UserView GetUser(string login)
@@ -89,7 +95,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, FieldsAndValidations.InvalidUser);
 
             Guid key;
-            int? supervisorRevisionNumber = versionProvider.GetSupportedSyncProtocolVersionNumber();
+            int? supervisorRevisionNumber = syncVersionProvider.GetProtocolVersion();
 
             if (supervisorRevisionNumber.HasValue && version > supervisorRevisionNumber.Value)
             {
@@ -292,7 +298,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             string targetToSearchCapi = fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(pathToSearchVersions), CapiFileName);
 
-            int? supervisorRevisionNumber = versionProvider.GetSupportedSyncProtocolVersionNumber();
+            int? supervisorRevisionNumber = versionProvider.GetApplicationBuildNumber();
 
             bool newVersionExists = fileSystemAccessor.IsFileExists(targetToSearchCapi) &&
                                     supervisorRevisionNumber.HasValue &&

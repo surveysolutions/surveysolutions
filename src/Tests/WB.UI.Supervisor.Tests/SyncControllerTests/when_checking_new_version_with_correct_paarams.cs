@@ -18,7 +18,7 @@ namespace WB.UI.Supervisor.Tests.SyncControllerTests
             fileSystemAccessor.Setup(x => x.GetDirectoriesInDirectory(Moq.It.IsAny<string>())).Returns(new[] { "dummy" });
             fileSystemAccessor.Setup(x => x.IsFileExists(Moq.It.IsAny<string>())).Returns(true);
 
-            var versionProvider = Mock.Of<ISupportedVersionProvider>(x => x.GetSupportedSyncProtocolVersionNumber() == versionShouldBeFound);
+            var versionProvider = Mock.Of<ISupportedVersionProvider>(x => x.GetApplicationBuildNumber() == versionShouldBeFound);
 
             controller = CreateSyncControllerWithFile(fileSystemAccessor: fileSystemAccessor.Object, versionProvider: versionProvider);
         

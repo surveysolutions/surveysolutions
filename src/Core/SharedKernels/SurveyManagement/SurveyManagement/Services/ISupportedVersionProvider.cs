@@ -6,6 +6,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services
     {
         ApplicationVersionSettings GetSupportedQuestionnaireVersion();
 
-        int? GetSupportedSyncProtocolVersionNumber();
+        int? GetApplicationBuildNumber();
     }
 }

@@ -29,9 +29,11 @@ using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Extensions;
@@ -318,7 +320,8 @@ namespace WB.UI.Capi
                         CapiApplication.Kernel.Get<IQuestionnaireAssemblyFileAccessor>()),
                     cleaner,
                     CapiApplication.Kernel.Get<IRestServiceWrapperFactory>(),
-                    CapiApplication.Kernel.Get<IInterviewSynchronizationFileStorage>());
+                    CapiApplication.Kernel.Get<IInterviewSynchronizationFileStorage>(),
+                    CapiApplication.Kernel.Get<ISyncProtocolVersionProvider>());
             }
             catch (Exception ex)
             {
