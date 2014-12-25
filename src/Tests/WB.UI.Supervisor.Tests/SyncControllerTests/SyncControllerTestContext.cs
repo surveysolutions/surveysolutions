@@ -8,6 +8,8 @@ using Moq;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
@@ -37,11 +39,13 @@ namespace WB.UI.Supervisor.Tests.SyncControllerTests
             ISyncManager syncManager = null,
             ILogger logger = null,
             IViewFactory<UserViewInputModel, UserView> viewFactory = null,
-            ISupportedVersionProvider versionProvider = null, IPlainInterviewFileStorage plainFileRepository = null, 
+            ISupportedVersionProvider versionProvider = null,
+            ISyncProtocolVersionProvider syncVersionProvider = null,
+            IPlainInterviewFileStorage plainFileRepository = null, 
             Stream stream = null, string fileName = null,
             IFileSystemAccessor fileSystemAccessor = null)
         {
-            var controller = CreateSyncControllerImpl(commandService, globalInfo, syncManager, logger, viewFactory, versionProvider, plainFileRepository, fileSystemAccessor);
+            var controller = CreateSyncControllerImpl(commandService, globalInfo, syncManager, logger, viewFactory, versionProvider, syncVersionProvider, plainFileRepository, fileSystemAccessor);
             SetControllerContextWithFiles(controller, stream: stream, fileName: fileName);
 
             return controller;
@@ -53,7 +57,8 @@ namespace WB.UI.Supervisor.Tests.SyncControllerTests
             ISyncManager syncManager = null,
             ILogger logger = null,
             IViewFactory<UserViewInputModel, UserView> viewFactory = null,
-            ISupportedVersionProvider versionProvider = null, 
+            ISupportedVersionProvider versionProvider = null,
+            ISyncProtocolVersionProvider syncVersionProvider = null,
             IPlainInterviewFileStorage plainFileRepository = null,
             IFileSystemAccessor fileSystemAccessor = null)
         {
@@ -63,7 +68,8 @@ namespace WB.UI.Supervisor.Tests.SyncControllerTests
                 syncManager ?? Mock.Of<ISyncManager>(),
                 logger ?? Mock.Of<ILogger>(),
                 viewFactory ?? Mock.Of<IViewFactory<UserViewInputModel, UserView>>(),
-                versionProvider ?? Mock.Of<ISupportedVersionProvider>(), 
+                versionProvider ?? Mock.Of<ISupportedVersionProvider>(),
+                syncVersionProvider ?? Mock.Of<ISyncProtocolVersionProvider>(),
                 (login, role) => true, 
                 plainFileRepository ?? Mock.Of<IPlainInterviewFileStorage>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>());

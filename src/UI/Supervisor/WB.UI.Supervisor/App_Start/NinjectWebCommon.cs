@@ -43,6 +43,7 @@ using WB.UI.Shared.Web.Settings;
 using WB.UI.Supervisor.Code;
 using WB.UI.Supervisor.Injections;
 using WB.UI.Supervisor.App_Start;
+using WB.UI.Supervisor.Controllers;
 using WebActivatorEx;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
@@ -121,7 +122,7 @@ namespace WB.UI.Supervisor.App_Start
                     LegacyOptions.InterviewDetailsDataSchedulerNumberOfInterviewsProcessedAtTime);
 
             Func<bool> isDebug = () => AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
-            int syncProtocolVersionNumber = SyncProtocolVersionProvider.GetProtocolVersion();
+            Version applicationBuildVersion = typeof(AccountController).Assembly.GetName().Version;
 
             var synchronizationSettings = new SyncSettings(reevaluateInterviewWhenSynchronized: true,
                 appDataDirectory: AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
@@ -158,7 +159,7 @@ namespace WB.UI.Supervisor.App_Start
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]), isDebug,
-                    syncProtocolVersionNumber, interviewDetailsDataLoaderSettings, overrideReceivedEventTimeStamp,
+                    applicationBuildVersion, interviewDetailsDataLoaderSettings, overrideReceivedEventTimeStamp,
                     Constants.CapiSynchronizationOrigin, false,
                     int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"])));
 

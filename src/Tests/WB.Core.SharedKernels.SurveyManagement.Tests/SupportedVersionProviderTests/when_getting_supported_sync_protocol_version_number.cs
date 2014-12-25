@@ -1,3 +1,4 @@
+using System;
 using Machine.Specifications;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 
@@ -12,18 +13,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.SupportedVersionProviderT
                 SupportedQuestionnaireVersionMajor = 1,
                 SupportedQuestionnaireVersionMinor = 6,
                 SupportedQuestionnaireVersionPatch = 2
-            }, syncProtocolVersion: ProtocolVersion);
+            },applicationVersion:version );
         };
 
         Because of = () =>
-            protocolVersionResult = versionProvider.GetSupportedSyncProtocolVersionNumber();
+            protocolVersionResult = versionProvider.GetApplicationBuildNumber();
 
-        It should_protocolVersion_equals_provided = () =>
-            protocolVersionResult.ShouldEqual(ProtocolVersion);
+        It should_return_version_which_was_provided_to_constructor = () =>
+            protocolVersionResult.ShouldEqual(4);
 
         private static SupportedVersionProvider versionProvider;
 
-        private const int ProtocolVersion = 44;
+        private static Version version = new Version(1, 2, 3, 4);
 
         private static int? protocolVersionResult;
         

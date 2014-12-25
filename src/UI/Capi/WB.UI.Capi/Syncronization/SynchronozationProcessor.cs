@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Capi.Synchronization.Services;
 using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization.Handshake;
@@ -30,7 +31,7 @@ namespace WB.UI.Capi.Syncronization
         private CancellationTokenSource tokenSource2;
         private Task task;
 
-        #region rest comunicators
+        #region rest communicators
 
         private readonly RestPull pull;
         private readonly RestHandshake handshake;
@@ -59,7 +60,8 @@ namespace WB.UI.Capi.Syncronization
         }
 
         public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, ICapiDataSynchronizationService dataProcessor,
-            ICapiCleanUpService cleanUpExecutor, IRestServiceWrapperFactory restServiceWrapperFactory, IInterviewSynchronizationFileStorage fileSyncRepository)
+            ICapiCleanUpService cleanUpExecutor, IRestServiceWrapperFactory restServiceWrapperFactory, IInterviewSynchronizationFileStorage fileSyncRepository,
+            ISyncProtocolVersionProvider syncProtocolVersionProvider)
         {
             this.context = context;
 
@@ -71,7 +73,7 @@ namespace WB.UI.Capi.Syncronization
             var executor = restServiceWrapperFactory.CreateRestServiceWrapper(SettingsManager.GetSyncAddressPoint());
             this.pull = new RestPull(executor);
             this.push = new RestPush(executor);
-            this.handshake = new RestHandshake(executor);
+            this.handshake = new RestHandshake(executor, syncProtocolVersionProvider);
 
             this.dataProcessor = dataProcessor;
 

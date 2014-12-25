@@ -53,7 +53,6 @@
     <Compile Include="Synchronization\SyncItemsMetaContainer.cs" />
     <Compile Include="Synchronization\SyncItemType.cs" />
     <Compile Include="Synchronization\SyncPackage.cs" />
-    <Compile Include="Synchronization\SyncProtocolVersionProvider.cs" />
     <Compile Include="TabletInformation\TabletInformationPackage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

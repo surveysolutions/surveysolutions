@@ -3,7 +3,6 @@ using Android.App;
 using Android.Content;
 using CAPI.Android.Settings;
 using Java.Util;
-using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.UI.Capi.Settings
 {
@@ -27,8 +26,8 @@ namespace WB.UI.Capi.Settings
         {
             get
             {
-                return global::Android.Provider.Settings.Secure.GetString(Application.Context.ContentResolver,
-                                                                          global::Android.Provider.Settings.Secure.AndroidId);
+                return Android.Provider.Settings.Secure.GetString(Application.Context.ContentResolver,
+                                                                          Android.Provider.Settings.Secure.AndroidId);
             }
         }
 
@@ -40,9 +39,7 @@ namespace WB.UI.Capi.Settings
 
         public static int AppVersionCode()
         {
-            // in production this should be the same as supervisor protocol identifier
-            // return Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0).VersionCode;
-            return SyncProtocolVersionProvider.GetProtocolVersion();
+            return Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0).VersionCode;
         }
 
         
@@ -105,9 +102,9 @@ namespace WB.UI.Capi.Settings
 
         public static bool CheckSyncPoint()
         {
-            string syncPoint = SettingsManager.GetSyncAddressPoint();
+            string syncPoint = GetSyncAddressPoint();
 
-            if (!SettingsManager.ValidateAddress(syncPoint))
+            if (!ValidateAddress(syncPoint))
             {
                 return false;
             }
@@ -134,11 +131,11 @@ namespace WB.UI.Capi.Settings
                         {
                             try
                             {
-                                var id = SettingsManager.GetSetting(SettingsNames.INSTALLATION);
+                                var id = GetSetting(SettingsNames.INSTALLATION);
                                 if (string.IsNullOrEmpty(id))
                                 {
                                     id = UUID.RandomUUID().ToString();
-                                    SettingsManager.SetSetting(SettingsNames.INSTALLATION, id);
+                                    SetSetting(SettingsNames.INSTALLATION, id);
                                 }
                                 sID = id;
                             }
