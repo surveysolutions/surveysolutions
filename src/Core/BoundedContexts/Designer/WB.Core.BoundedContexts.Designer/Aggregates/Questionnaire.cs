@@ -1442,8 +1442,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var asTextQuestion = question as TextQuestion;
             var asMultioptions = question as IMultyOptionsQuestion;
+            var asNumeric = question as NumericQuestion;
+            var asListQuestion = question as TextListQuestion;
 
-            this.ApplyEvent(new QuestionCloned
+            var questionCloned = new QuestionCloned
             {
                 PublicKey = targetId,
 
@@ -1462,6 +1464,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ValidationMessage = question.ValidationMessage,
                 Instructions = question.Instructions,
 
+                IsInteger = asNumeric != null && asNumeric.IsInteger,
+
                 Answers = question.Answers.ToArray(),
                 SourceQuestionId = questionId,
                 TargetIndex =  parentGroup.Children.IndexOf(question) + 1,
@@ -1469,13 +1473,23 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 LinkedToQuestionId = question.LinkedToQuestionId,
 
                 AreAnswersOrdered = asMultioptions != null ? (bool?)asMultioptions.AreAnswersOrdered : null,
-                MaxAllowedAnswers = asMultioptions != null ? (int?)asMultioptions.MaxAllowedAnswers : null,
+               
 
                 Mask = asTextQuestion != null ? asTextQuestion.Mask : null,
 
                 CascadeFromQuestionId = question.CascadeFromQuestionId,
                 IsFilteredCombobox = question.IsFilteredCombobox
-            });
+            };
+            if (asListQuestion != null)
+            {
+                questionCloned.MaxAllowedAnswers = asListQuestion.MaxAnswerCount;
+            }
+            if (asMultioptions != null)
+            {
+                questionCloned.MaxAllowedAnswers = asMultioptions.MaxAllowedAnswers;
+            }
+
+            this.ApplyEvent(questionCloned);
         }
 
         public void AddDefaultTypeQuestion(AddDefaultTypeQuestionCommand command)
