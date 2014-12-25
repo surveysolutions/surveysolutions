@@ -5,12 +5,16 @@
             return {
                 restrict: 'E',
                 scope: {
-                    key: '@'
+                    key: '@',
+                    placement: '@?'
                 },
                 link: function(scope) {
                     scope.message = helpService.getHelpMessage(scope.key);
                 },
-                template: '<span tooltip="{{message}}" tooltip-append-to-body="true">(<a href="javascript:void(0);" tabindex="-1">?</a>)</span>',
+                controller: function($scope) {
+                    $scope.placement = $scope.placement || 'top';
+                },
+                template: '<span tooltip="{{message}}" tooltip-append-to-body="true" tooltip-placement="{{placement}}">(<a href="javascript:void(0);" tabindex="-1">?</a>)</span>',
                 replace: false //otherwise we are getting conflict with angular ui popover directive
             };
         }
