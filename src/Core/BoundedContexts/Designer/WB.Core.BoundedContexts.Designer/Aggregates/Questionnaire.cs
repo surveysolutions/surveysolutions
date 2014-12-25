@@ -2664,7 +2664,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.MaxAnswerCountNotInRange,
-                    "Maximum number of answers should be in range ftom 1 to 40");
+                    "Maximum number of answers should be in range from 1 to 40");
             }
         }
 
