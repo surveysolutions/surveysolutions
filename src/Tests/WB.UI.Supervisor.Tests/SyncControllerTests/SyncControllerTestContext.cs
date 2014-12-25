@@ -25,9 +25,10 @@ namespace WB.UI.Supervisor.Tests.SyncControllerTests
             IGlobalInfoProvider globalInfo = null,
             ISyncManager syncManager = null,
             ILogger logger = null, IViewFactory<UserViewInputModel, UserView> viewFactory = null,
-            ISupportedVersionProvider versionProvider = null)
+            ISupportedVersionProvider versionProvider = null,
+            ISyncProtocolVersionProvider syncVersionProvider = null)
         {
-            var controller = CreateSyncControllerImpl(commandService, globalInfo, syncManager, logger, viewFactory, versionProvider);
+            var controller = CreateSyncControllerImpl(commandService, globalInfo, syncManager, logger, viewFactory, versionProvider, syncVersionProvider);
             SetControllerContextWithStream(controller, stream: null);
             
             return controller;
