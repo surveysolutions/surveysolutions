@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             exception.Message.ToLower().ShouldContain("answers");
 
         It should_throw_exception_with_message_containting__from_1_to_40__ = () =>
-            exception.Message.ToLower().ShouldContain("ftom 1 to 40");
+            exception.Message.ToLower().ShouldContain("from 1 to 40");
 
         private static Exception exception;
         private static int maxAnswerCountValue;
