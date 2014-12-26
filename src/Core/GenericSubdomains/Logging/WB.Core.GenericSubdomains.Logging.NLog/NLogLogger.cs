@@ -1,6 +1,6 @@
 ﻿using System;
 using NLog;
-using NLog.Config;
+using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.Core.GenericSubdomains.Logging.NLog
 {

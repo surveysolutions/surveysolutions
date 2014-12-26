@@ -1,5 +1,5 @@
 ﻿using System.Web.Mvc;
-using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers

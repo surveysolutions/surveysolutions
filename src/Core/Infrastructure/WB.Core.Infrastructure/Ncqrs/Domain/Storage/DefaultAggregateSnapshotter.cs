@@ -4,7 +4,6 @@ using System.Reflection;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
-using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Aggregates;
 
 namespace Ncqrs.Domain.Storage
