@@ -299,7 +299,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                  GetValidAnswersCollection(e.Answers),
                 e.LinkedToQuestionId,
                 e.IsInteger,
-                null,
+                e.CountOfDecimalPlaces,
                 e.AreAnswersOrdered,
                 e.MaxAllowedAnswers,
                 e.MaxAnswerCount,

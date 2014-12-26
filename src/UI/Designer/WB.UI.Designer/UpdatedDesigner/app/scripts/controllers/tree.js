@@ -291,7 +291,7 @@
                     var cloneDeep = {
                         itemId: newId,
                         variable: '',
-                        title: 'Copy of - ' + clonnedItem.title,
+                        title: clonnedItem.title,
                             itemType: "Question",
                         type: clonnedItem.type
                     };

@@ -24,6 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.Clone
                 StataExportCaption = "varrr",
                 VariableLabel = "varlabel",
                 IsInteger = true,
+                CountOfDecimalPlaces = 4,
                 MaxAllowedValue = 50,
                 GroupPublicKey = groupId
             };
@@ -37,6 +38,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.Clone
         It should_clone_IsInteger_value = () => eventContext.ShouldContainEvent<QuestionCloned>(x => x.PublicKey == targetId && x.IsInteger.GetValueOrDefault());
 
         It should_clone_MaxAllowedValue_property = () => eventContext.ShouldContainEvent<QuestionCloned>(x => x.PublicKey == targetId && x.MaxValue == 50);
+
+        It should_should_clone_CountOfDecimalPlaces_value = () => eventContext.ShouldContainEvent<QuestionCloned>(x => x.PublicKey == targetId && x.CountOfDecimalPlaces == 4);
 
         static Questionnaire questionnaire;
         static Guid sourceQuestionId;
