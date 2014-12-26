@@ -295,14 +295,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 e.Instructions,
                 e.Mask,
                 e.Triggers,
-                null,
+                evnt.Payload.MaxValue,
                  GetValidAnswersCollection(e.Answers),
                 e.LinkedToQuestionId,
                 e.IsInteger,
                 null,
                 e.AreAnswersOrdered,
                 e.MaxAllowedAnswers,
-                null,
+                e.MaxAnswerCount,
                 e.IsFilteredCombobox,
                 e.CascadeFromQuestionId);
             return data;

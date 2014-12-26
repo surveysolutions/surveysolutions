@@ -1450,7 +1450,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 PublicKey = targetId,
 
                 GroupPublicKey = parentGroup.PublicKey,
-                QuestionText = "Copy of - " + question.QuestionText,
+                QuestionText = question.QuestionText,
                 QuestionType = question.QuestionType,
                 VariableLabel = question.VariableLabel,
 
@@ -1464,8 +1464,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ValidationMessage = question.ValidationMessage,
                 Instructions = question.Instructions,
 
-                IsInteger = asNumeric != null && asNumeric.IsInteger,
-
                 Answers = question.Answers.ToArray(),
                 SourceQuestionId = questionId,
                 TargetIndex =  parentGroup.Children.IndexOf(question) + 1,
@@ -1473,16 +1471,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 LinkedToQuestionId = question.LinkedToQuestionId,
 
                 AreAnswersOrdered = asMultioptions != null ? (bool?)asMultioptions.AreAnswersOrdered : null,
-               
-
+              
                 Mask = asTextQuestion != null ? asTextQuestion.Mask : null,
 
                 CascadeFromQuestionId = question.CascadeFromQuestionId,
                 IsFilteredCombobox = question.IsFilteredCombobox
             };
+            if (asNumeric != null)
+            {
+                questionCloned.IsInteger = asNumeric.IsInteger;
+                questionCloned.MaxValue = asNumeric.MaxValue.GetValueOrDefault();
+            }
             if (asListQuestion != null)
             {
-                questionCloned.MaxAllowedAnswers = asListQuestion.MaxAnswerCount;
+                questionCloned.MaxAnswerCount = asListQuestion.MaxAnswerCount;
             }
             if (asMultioptions != null)
             {

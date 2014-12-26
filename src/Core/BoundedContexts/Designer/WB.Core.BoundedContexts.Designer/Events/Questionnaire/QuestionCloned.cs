@@ -9,5 +9,7 @@ namespace Main.Core.Events.Questionnaire
         public Guid SourceQuestionId { get; set; }
 
         public int TargetIndex { get; set; }
+
+        public int? MaxAnswerCount { get; set; }
     }
 }
