@@ -11,5 +11,7 @@ namespace Main.Core.Events.Questionnaire
         public int TargetIndex { get; set; }
 
         public int? MaxAnswerCount { get; set; }
+
+        public int? CountOfDecimalPlaces { get; set; }
     }
 }
