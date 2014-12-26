@@ -623,6 +623,8 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CascadigOptions\when_updating_question_with_cascading_options_setting_linked_and_cascading.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CascadigOptions\when_updating_question_with_empty_cascading_options.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneGroupTests.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_numeric_question.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_text_list_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\ConstructorTests.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\DeleteGroupTests.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\DeleteQuestionTests.cs" />
