@@ -2650,6 +2650,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.SelectorValueRequired, "Answer option value is required");
             }
 
+            var tooLongValues = options.Where(option => option.Value.Length > 16).Select(option => option.Value).ToList();
+            if (tooLongValues.Any())
+            {
+                throw new QuestionnaireException(string.Format("Following option values are too long: {0}", string.Join(", ", tooLongValues)));
+            }
+
             if (options.Any(x => !x.Value.IsDecimal()))
             {
                 throw new QuestionnaireException(
