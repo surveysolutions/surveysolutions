@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             string.IsNullOrEmpty(e.StataExportCaption) &&
             e.PublicKey == questionId &&
             e.GroupPublicKey == questionnaire.EventSourceId &&
-            e.QuestionText == "Copy of - " + newQuestionAdded.QuestionText &&
+            e.QuestionText == newQuestionAdded.QuestionText &&
             e.VariableLabel == newQuestionAdded.VariableLabel &&
             e.Mandatory &&
             e.Featured &&
