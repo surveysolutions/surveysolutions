@@ -26,6 +26,7 @@ using WB.Core.BoundedContexts.Capi.Implementation.ChangeLog;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Aggregates;

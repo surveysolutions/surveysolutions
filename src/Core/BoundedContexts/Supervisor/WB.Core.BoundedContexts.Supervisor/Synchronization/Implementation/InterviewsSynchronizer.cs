@@ -18,7 +18,6 @@ using WB.Core.BoundedContexts.Supervisor.Interviews;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;
 using WB.Core.BoundedContexts.Supervisor.Questionnaires;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
-using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;

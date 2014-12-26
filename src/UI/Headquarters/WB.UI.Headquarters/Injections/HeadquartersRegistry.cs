@@ -14,6 +14,7 @@ using Ninject.Modules;
 using Ninject.Syntax;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;

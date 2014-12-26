@@ -5,6 +5,7 @@ using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Implementation.Services;

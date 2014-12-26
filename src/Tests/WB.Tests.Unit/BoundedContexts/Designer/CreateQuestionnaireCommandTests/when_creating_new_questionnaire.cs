@@ -6,7 +6,6 @@ using Moq;
 using Ncqrs;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.GenericSubdomains.Logging;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.CreateQuestionnaireCommandTests

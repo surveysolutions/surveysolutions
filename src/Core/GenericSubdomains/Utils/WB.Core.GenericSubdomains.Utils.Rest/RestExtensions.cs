@@ -6,9 +6,10 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
 using Newtonsoft.Json;
+using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 
-namespace WB.Core.GenericSubdomains.Utils.Implementation
+namespace WB.Core.GenericSubdomains.Utils.Rest
 {
     public static class RestExtensions
     {

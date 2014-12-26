@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.Storage;
-using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide;

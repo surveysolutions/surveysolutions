@@ -3,10 +3,10 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
-using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 
-namespace WB.Core.GenericSubdomains.Utils.Implementation
+namespace WB.Core.GenericSubdomains.Utils.Rest
 {
     public class RestService : IRestService
     {

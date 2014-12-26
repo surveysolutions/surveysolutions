@@ -1,6 +1,7 @@
 ﻿using Ninject.Modules;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.AndroidLogger;
+using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.UI.QuestionnaireTester
 {

@@ -10,8 +10,6 @@ using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.GenericSubdomains.Logging;
-
 using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests

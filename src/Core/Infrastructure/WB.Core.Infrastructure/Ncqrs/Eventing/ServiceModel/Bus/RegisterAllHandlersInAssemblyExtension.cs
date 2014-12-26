@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace Ncqrs.Eventing.ServiceModel.Bus
 {

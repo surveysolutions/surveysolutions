@@ -35,8 +35,6 @@ namespace WB.UI.Capi
 			global::MWBarcodeScanner.Resource.Id.preview_view = global::WB.UI.Capi.Resource.Id.preview_view;
 			global::MWBarcodeScanner.Resource.Layout.scanner = global::WB.UI.Capi.Resource.Layout.scanner;
 			global::MWBarcodeScanner.Resource.String.library_name = global::WB.UI.Capi.Resource.String.library_name;
-			global::WB.Core.GenericSubdomains.ErrorReporting.Resource.String.ApplicationName = global::WB.UI.Capi.Resource.String.ApplicationName;
-			global::WB.Core.GenericSubdomains.ErrorReporting.Resource.String.Hello = global::WB.UI.Capi.Resource.String.Hello;
 			global::WB.Core.Infrastructure.Files.Resource.String.ApplicationName = global::WB.UI.Capi.Resource.String.ApplicationName;
 			global::WB.Core.Infrastructure.Files.Resource.String.Hello = global::WB.UI.Capi.Resource.String.Hello;
 			global::WB.UI.Shared.Android.Resource.Attribute.MvxBind = global::WB.UI.Capi.Resource.Attribute.MvxBind;

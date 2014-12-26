@@ -9,7 +9,6 @@ using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.GenericSubdomains.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +20,7 @@ using Ncqrs;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 

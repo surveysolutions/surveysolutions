@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
-using WB.Core.GenericSubdomains.Logging;
 
 namespace Ncqrs.Eventing.Sourcing
 {

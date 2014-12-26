@@ -16,7 +16,7 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
-using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;

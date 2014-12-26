@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.Core.GenericSubdomains.Logging
+namespace WB.Core.GenericSubdomains.Utils.Services
 {
     public interface ILogger
     {

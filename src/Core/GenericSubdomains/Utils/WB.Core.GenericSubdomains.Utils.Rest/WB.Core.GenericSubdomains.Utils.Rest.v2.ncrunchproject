@@ -16,13 +16,10 @@
   <DetectStackOverflow>true</DetectStackOverflow>
   <IncludeStaticReferencesInWorkspace>true</IncludeStaticReferencesInWorkspace>
   <DefaultTestTimeout>60000</DefaultTestTimeout>
-  <UseBuildConfiguration></UseBuildConfiguration>
-  <UseBuildPlatform></UseBuildPlatform>
-  <ProxyProcessPath></ProxyProcessPath>
+  <UseBuildConfiguration />
+  <UseBuildPlatform />
+  <ProxyProcessPath />
   <UseCPUArchitecture>AutoDetect</UseCPUArchitecture>
   <MSTestThreadApartmentState>STA</MSTestThreadApartmentState>
   <BuildProcessArchitecture>x86</BuildProcessArchitecture>
-  <IgnoredTests>
-    <AllTestsSelector />
-  </IgnoredTests>
 </ProjectConfiguration>
