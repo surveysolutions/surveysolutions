@@ -2,6 +2,7 @@
 using NLog;
 using NLog.Config;
 using Ninject.Modules;
+using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.Core.GenericSubdomains.Logging.NLog
 {
