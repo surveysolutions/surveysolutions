@@ -234,6 +234,7 @@
     <Compile Include="Api\CommandController.cs" />
     <Compile Include="Api\ControlPanelApiController.cs" />
     <Compile Include="Api\ExpressionGenerationController.cs" />
+    <Compile Include="Api\TesterController.cs" />
     <Compile Include="Api\ImportController.cs" />
     <Compile Include="Api\QuestionnaireController.cs" />
     <Compile Include="App_GlobalResources\Strings.designer.cs">
