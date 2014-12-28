@@ -3,7 +3,7 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
-using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Tests.Unit;
 
 namespace Ncqrs.Tests.Eventing.Storage

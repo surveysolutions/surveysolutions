@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Utils.Services;
 
-namespace WB.Core.GenericSubdomains.Utils.Implementation
+namespace WB.Core.GenericSubdomains.Utils.Rest
 {
     public class NewtonJsonUtils : IJsonUtils
     {

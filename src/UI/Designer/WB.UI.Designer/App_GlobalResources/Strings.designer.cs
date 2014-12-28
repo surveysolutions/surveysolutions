@@ -61,7 +61,16 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have an old version of application that supports version {0} but current version is {1}. Please update application to continue..
+        ///   Looks up a localized string similar to Application update required.
+        /// </summary>
+        internal static string ApplicationUpdateRequired {
+            get {
+                return ResourceManager.GetString("ApplicationUpdateRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to open questionnaire. Requested questionnaire &quot;{0}&quot; has {2} version. Application supports version up to {1}. Please update application..
         /// </summary>
         internal static string ClientVersionLessThenDocument {
             get {
@@ -88,7 +97,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to import questionnaire. Requested questionnaire &quot;{0}&quot; has errors. Please verify and fix them on Designer..
+        ///   Looks up a localized string similar to Requested questionnaire &quot;{0}&quot; has errors. Please verify the questionnaire on Designer..
         /// </summary>
         internal static string Questionnaire_verification_failed {
             get {
@@ -97,7 +106,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Requested questionnaire id={0} was not found.
+        ///   Looks up a localized string similar to Questionnaire with id={0} cannot be found. Please check the list of available questionnaires..
         /// </summary>
         internal static string TemplateNotFound {
             get {
@@ -115,7 +124,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There was an error with your Login/Password combination. Please try again..
+        ///   Looks up a localized string similar to User is not authorized. Check your login and password..
         /// </summary>
         internal static string User_Not_authorized {
             get {
@@ -124,7 +133,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max supporter version of questionnaire was not correctly provided..
+        ///   Looks up a localized string similar to Max supported version of questionnaire was not correctly provided. Please contact developers..
         /// </summary>
         internal static string VersionParameterIsIncorrect {
             get {

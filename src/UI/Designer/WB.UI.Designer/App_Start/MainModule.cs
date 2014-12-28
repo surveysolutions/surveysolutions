@@ -2,6 +2,7 @@
 using Ninject.Modules;
 using Ninject.Web.Mvc.FilterBindingSyntax;
 using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Exceptions;

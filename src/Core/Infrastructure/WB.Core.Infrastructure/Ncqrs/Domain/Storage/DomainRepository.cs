@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
-using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Aggregates;
 
 namespace Ncqrs.Domain.Storage
