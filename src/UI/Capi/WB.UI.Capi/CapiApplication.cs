@@ -63,7 +63,7 @@ using WB.UI.Capi.Syncronization.Implementation;
 using WB.UI.Shared.Android;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Extensions;
-using IInfoFileSupplierRegistry = WB.Core.GenericSubdomains.Logging.IInfoFileSupplierRegistry;
+using IInfoFileSupplierRegistry = WB.Core.GenericSubdomains.Utils.Services.IInfoFileSupplierRegistry;
 
 namespace WB.UI.Capi
 {

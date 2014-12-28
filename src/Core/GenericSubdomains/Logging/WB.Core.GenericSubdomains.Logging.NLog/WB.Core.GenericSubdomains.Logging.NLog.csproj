@@ -57,9 +57,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
-      <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
-      <Name>WB.Core.GenericSubdomains.Logging</Name>
+    <ProjectReference Include="..\..\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
+      <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
+      <Name>WB.Core.GenericSubdomains.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Web.Mvc.Async;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Threading
 {

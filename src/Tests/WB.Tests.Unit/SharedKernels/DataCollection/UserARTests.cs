@@ -8,7 +8,6 @@ using Moq;
 using Ncqrs;
 using Ncqrs.Spec;
 using NUnit.Framework;
-using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 

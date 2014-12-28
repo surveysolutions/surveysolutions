@@ -141,7 +141,10 @@
   <data name="BadConnection" xml:space="preserve">
     <value>Bad connection</value>
   </data>
-  <data name="BadRequest" xml:space="preserve">
+  <data name="UpdateRequired" xml:space="preserve">
     <value>Need to update the application</value>
+  </data>
+  <data name="CheckServerSettings" xml:space="preserve">
+    <value>Check server settings </value>
   </data>
 </root>

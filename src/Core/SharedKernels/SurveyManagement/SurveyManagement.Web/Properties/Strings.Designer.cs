@@ -70,20 +70,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Need to update the application.
-        /// </summary>
-        public static string BadRequest {
-            get {
-                return ResourceManager.GetString("BadRequest", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check server settings .
+        /// </summary>
+        public static string CheckServerSettings {
+            get {
+                return ResourceManager.GetString("CheckServerSettings", resourceCulture);
             }
         }
         
@@ -318,6 +318,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         public static string SurverManagement_MainMenu_ManageAccount {
             get {
                 return ResourceManager.GetString("SurverManagement_MainMenu_ManageAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Need to update the application.
+        /// </summary>
+        public static string UpdateRequired {
+            get {
+                return ResourceManager.GetString("UpdateRequired", resourceCulture);
             }
         }
     }

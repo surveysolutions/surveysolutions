@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
-using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 
-namespace WB.Core.GenericSubdomains.Utils.Implementation
+namespace WB.Core.GenericSubdomains.Utils.Rest
 {
     public class RestService : IRestService
     {
@@ -45,17 +44,12 @@ namespace WB.Core.GenericSubdomains.Utils.Implementation
             {
                 return await request(restClient);
             }
-            catch (FlurlHttpTimeoutException ex)
-            {
-                logger.Error(ex.Message, ex);
-                throw new RestException(string.Empty, HttpStatusCode.RequestTimeout, innerException: ex);
-            }
             catch (FlurlHttpException ex)
             {
-                logger.Error(ex.Message, ex);
+                this.logger.Error(ex.Message, ex);
+
                 if (ex.Call.Response != null)
-                    throw new RestException(string.Empty,
-                        statusCode: ex.Call.Response.StatusCode, innerException: ex);
+                    throw new RestException(ex.Call.Response.ReasonPhrase, statusCode: ex.Call.Response.StatusCode, innerException: ex);
 
                 throw new RestException(message: this.localizationService.GetString("NoConnection"), innerException: ex);
             }

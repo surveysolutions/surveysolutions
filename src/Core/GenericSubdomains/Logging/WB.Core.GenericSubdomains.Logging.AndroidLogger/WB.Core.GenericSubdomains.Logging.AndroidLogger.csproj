@@ -43,18 +43,16 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
+    <ProjectReference Include="..\..\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
+      <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
+      <Name>WB.Core.GenericSubdomains.Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AndroidLoggingModule.cs" />
     <Compile Include="ExceptionExtension.cs" />
     <Compile Include="FileLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
-      <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
-      <Name>WB.Core.GenericSubdomains.Logging</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Values\" />

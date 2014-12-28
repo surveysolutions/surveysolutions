@@ -2,8 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
-
-using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;

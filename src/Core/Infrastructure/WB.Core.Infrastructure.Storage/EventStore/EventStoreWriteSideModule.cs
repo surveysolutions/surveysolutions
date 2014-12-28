@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Ninject;
 using Ninject.Modules;
 using WB.Core.Infrastructure.Storage.EventStore.Implementation;
+using ILogger = WB.Core.GenericSubdomains.Utils.Services.ILogger;
 
 namespace WB.Core.Infrastructure.Storage.EventStore
 {
@@ -39,7 +40,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore
 
         private void AddEventStoreProjections()
         {
-            var logger = Kernel.Get<GenericSubdomains.Logging.ILogger>();
+            var logger = Kernel.Get<ILogger>();
             var httpEndPoint = new IPEndPoint(IPAddress.Parse(settings.ServerIP), settings.ServerHttpPort);
             var manager = new ProjectionsManager(new EventStoreLogger(logger), httpEndPoint, TimeSpan.FromSeconds(2));
 
