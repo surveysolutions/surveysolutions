@@ -124,7 +124,7 @@
     <value>Questionnaire with id={0} cannot be found. Please check the list of available questionnaires.</value>
   </data>
   <data name="Questionnaire_verification_failed" xml:space="preserve">
-   <value>Requested questionnaire "{0}" has errors. Please verify the questionnaire on Designer.</value>
+    <value>Requested questionnaire "{0}" has errors. Please verify the questionnaire on Designer.</value>
   </data>
   <data name="User_Not_authorized" xml:space="preserve">
     <value>User is not authorized. Check your login and password.</value>
@@ -140,5 +140,8 @@
   </data>
   <data name="UserLockedOut" xml:space="preserve">
     <value>Your account is locked out. Please, contact to the administrator of Designer to unlock it.</value>
+  </data>
+  <data name="ApplicationUpdateRequired" xml:space="preserve">
+    <value>Application update required</value>
   </data>
 </root>
