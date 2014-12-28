@@ -4,7 +4,7 @@ using System.Web.Mvc;
 using Newtonsoft.Json;
 using Quartz;
 using WB.Core.BoundedContexts.Supervisor.Synchronization;
-using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;

@@ -1,5 +1,5 @@
 ﻿using Ninject.Modules;
-using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.UI.Shared.Android.Services;
 

@@ -70,11 +70,11 @@ namespace WB.UI.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Need to update the application.
+        ///   Looks up a localized string similar to Check server settings .
         /// </summary>
-        internal static string BadRequest {
+        internal static string CheckServerSettings {
             get {
-                return ResourceManager.GetString("BadRequest", resourceCulture);
+                return ResourceManager.GetString("CheckServerSettings", resourceCulture);
             }
         }
         
@@ -93,6 +93,15 @@ namespace WB.UI.QuestionnaireTester.Properties {
         internal static string NoNetwork {
             get {
                 return ResourceManager.GetString("NoNetwork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Need to update the application.
+        /// </summary>
+        internal static string UpdateRequired {
+            get {
+                return ResourceManager.GetString("UpdateRequired", resourceCulture);
             }
         }
     }

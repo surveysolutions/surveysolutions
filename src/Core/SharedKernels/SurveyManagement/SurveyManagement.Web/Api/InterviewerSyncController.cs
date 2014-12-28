@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Hosting;
 using System.Web.Http;
-using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
@@ -109,8 +104,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [ApiBasicAuth]
         public SyncPackage GetSyncPackage(SyncPackageRequest request)
         {
-            if (request == null) throw new ArgumentNullException("request");
-
             return syncManager.ReceiveSyncPackage(request.ClientRegistrationId, request.PackageId);
         }
 
@@ -118,8 +111,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [ApiBasicAuth]
         public SyncItemsMetaContainer GetARKeys(SyncItemsMetaContainerRequest request)
         {
-            if (request == null) throw new ArgumentNullException("request");
-
             try
             {
                 IEnumerable<SynchronizationChunkMeta> package = syncManager.GetAllARIdsWithOrder(this.GlobalInfo.GetCurrentUser().Id,
@@ -144,8 +135,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [ApiBasicAuth]
         public void PostFile(PostFileRequest request)
         {
-            if (request == null) throw new ArgumentNullException("request");
-
             plainFileRepository.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data));
         }
 
@@ -153,8 +142,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [ApiBasicAuth]
         public void PostPackage(PostPackageRequest request)
         {
-            if (request == null) throw new ArgumentNullException("request");
-
             var syncItem = this.jsonUtils.Deserialize<SyncItem>(request.SynchronizationPackage);
 
             syncManager.SendSyncItem(syncItem);

@@ -7,7 +7,6 @@ using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.GenericSubdomains.Logging;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
