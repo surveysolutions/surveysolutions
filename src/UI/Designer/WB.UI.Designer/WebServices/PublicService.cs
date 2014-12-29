@@ -50,7 +50,7 @@ namespace WB.UI.Designer.WebServices
             var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(request.QuestionnaireId));
             if (questionnaireView == null)
             {
-                var message = String.Format(Strings.TemplateNotFound, request.QuestionnaireId);
+                var message = String.Format(ErrorMessages.TemplateNotFound, request.QuestionnaireId);
                 throw new FaultException(message, new FaultCode("TemplateNotFound"));
             }
 
@@ -58,7 +58,7 @@ namespace WB.UI.Designer.WebServices
 
             if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
             {
-                var message = String.Format(Strings.TemplateNotFound, request.QuestionnaireId);
+                var message = String.Format(ErrorMessages.TemplateNotFound, request.QuestionnaireId);
 
                 throw new FaultException(message, new FaultCode("TemplateProcessingError"));
             }
@@ -67,7 +67,7 @@ namespace WB.UI.Designer.WebServices
 
             if (templateInfo.Version > request.SupportedQuestionnaireVersion)
             {
-                var message = String.Format(Strings.NotSupportedQuestionnaireVersion,
+                var message = String.Format(ErrorMessages.NotSupportedQuestionnaireVersion,
                         templateTitle,
                         templateInfo.Version,
                         request.SupportedQuestionnaireVersion);
@@ -79,7 +79,7 @@ namespace WB.UI.Designer.WebServices
 
             if (questoinnaireErrors.Any())
             {
-                var message = String.Format(Strings.Questionnaire_verification_failed,
+                var message = String.Format(ErrorMessages.Questionnaire_verification_failed,
                         templateInfo.Title);
 
                 throw new FaultException(message, new FaultCode("InvalidQuestionnaire"));
@@ -103,7 +103,7 @@ namespace WB.UI.Designer.WebServices
 
             if (!generationResult.Success || String.IsNullOrWhiteSpace(resultAssembly))
             {
-                var message = String.Format(Strings.Questionnaire_verification_failed, templateInfo.Title);
+                var message = String.Format(ErrorMessages.Questionnaire_verification_failed, templateInfo.Title);
 
                 throw new FaultException(message, new FaultCode("InvalidQuestionnaire"));
             }
