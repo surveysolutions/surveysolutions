@@ -237,7 +237,7 @@
     <Compile Include="Api\TesterController.cs" />
     <Compile Include="Api\ImportController.cs" />
     <Compile Include="Api\QuestionnaireController.cs" />
-    <Compile Include="App_GlobalResources\Strings.designer.cs">
+    <Compile Include="Resources\Strings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
@@ -253,7 +253,6 @@
     <Compile Include="Code\DefaultAttribute.cs" />
     <Compile Include="Code\ICommandPreprocessor.cs" />
     <Compile Include="Code\Implementation\CommandPreprocessor.cs" />
-    <Compile Include="Code\LocalizationService.cs" />
     <Compile Include="Code\MessageHandlers\BasicAuthMessageHandler.cs" />
     <Compile Include="Code\MessageHandlers\HttpsVerifier.cs" />
     <Compile Include="Code\DesignerMembershipProvider.cs" />
@@ -827,11 +826,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_GlobalResources\Strings.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Strings.designer.cs</LastGenOutput>
+    <EmbeddedResource Include="Resources\Strings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
-    </Content>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\QuestionnaireController.resx">

@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
+using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
@@ -31,7 +32,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IPlainInterviewFileStorage plainFileRepository;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ITabletInformationService tabletInformationService;
-        private readonly ILocalizationService localizationService;
         private readonly IJsonUtils jsonUtils;
 
         private string ResponseInterviewerFileName = "interviewer.apk";
@@ -48,7 +48,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IPlainInterviewFileStorage plainFileRepository,
             IFileSystemAccessor fileSystemAccessor,
             ITabletInformationService tabletInformationService,
-            ILocalizationService localizationService,
             IJsonUtils jsonUtils)
             : base(commandService, globalInfo, logger)
         {
@@ -59,7 +58,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.userInfoViewFactory = userInfoViewFactory;
             this.fileSystemAccessor = fileSystemAccessor;
             this.tabletInformationService = tabletInformationService;
-            this.localizationService = localizationService;
             this.jsonUtils = jsonUtils;
         }
 
@@ -73,7 +71,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable)
                 {
-                    ReasonPhrase = this.localizationService.GetString("ClientVersionIsObsolete")
+                    ReasonPhrase = Strings.ClientVersionIsObsolete
                 });
             }
 
@@ -81,7 +79,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable)
                 {
-                    ReasonPhrase = this.localizationService.GetString("OldVersionOfClient")
+                    ReasonPhrase = Strings.OldVersionOfClient
                 });
             }
 
@@ -168,7 +166,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 return response;
             }
             
-            return Request.CreateErrorResponse(HttpStatusCode.NotFound, this.localizationService.GetString("FileWasNotFound"));
+            return Request.CreateErrorResponse(HttpStatusCode.NotFound, Strings.FileWasNotFound);
         }
         
         [HttpGet]

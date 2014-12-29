@@ -26,12 +26,9 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
             var templateInfo = CreateTemplateInfo(version);
 
             exportService = Mock.Of<IQuestionnaireExportService>(x => x.GetQuestionnaireTemplateInfo(Moq.It.IsAny<QuestionnaireDocument>()) == templateInfo);
-
-            var localizationServiceMock = new Mock<ILocalizationService>();
-            localizationServiceMock.Setup(_ => _.GetString(Moq.It.IsAny<string>())).Returns(errorMessage);
-
+            
             var questionnaireViewFactory = CreateQuestionnaireViewFactory(questionnaireId);            
-            service = CreatePublicService(exportService: exportService, questionnaireViewFactory: questionnaireViewFactory, localizationService: localizationServiceMock.Object);
+            service = CreatePublicService(exportService: exportService, questionnaireViewFactory: questionnaireViewFactory);
         };
 
         Because of = () => 

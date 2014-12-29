@@ -129,22 +129,7 @@
   <data name="GetSyncPackageExceptionMessage" xml:space="preserve">
     <value>Error when getting synchronizaton package. Bad internet connection or internal server error. Try again. If the problem persists, please, contact to your supervisor.</value>
   </data>
-  <data name="NoConnection" xml:space="preserve">
-    <value>No connection</value>
-  </data>
-  <data name="NoNetwork" xml:space="preserve">
-    <value>Network is unavailable</value>
-  </data>
   <data name="InvalidSyncPointAddressUrl" xml:space="preserve">
     <value>Synchronization point address is invalid. Make sure that you entered correct url address.</value>
-  </data>
-  <data name="BadConnection" xml:space="preserve">
-    <value>Bad connection</value>
-  </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Need to update the application</value>
-  </data>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
   </data>
 </root>
