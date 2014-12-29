@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewHistoryDenormalizerTests
+namespace WB.Tests.Integration.EventHandler
 {
-    internal class when_all_available_descendants_of_QuestionAnswered_recived : InterviewHistoryDenormalizerTestContext
+    internal class when_all_available_descendants_of_QuestionAnswered_recived
     {
         Establish context = () =>
         {
@@ -38,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         It should_each_QuestionAnswered_descendant_be_handled_by_InterviewHistoryDenormalizer = () =>
             missingHandlers.ShouldBeEmpty();
 
-        private static HashSet<Type> missingHandlers = new Quartz.Collection.HashSet<Type>();
+        private static HashSet<Type> missingHandlers = new HashSet<Type>();
 
         private static List<Type> availableDescendants;
     }
