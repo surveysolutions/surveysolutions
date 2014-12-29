@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         };
 
         Because of = () =>
-          PublishEventsOnOnterviewExportedDataDenormalizer(statusEvents, interviewHistoryView, interviewExportedDataDenormalizer);
+          PublishEventsOnOnInterviewExportedDataDenormalizer(statusEvents, interviewHistoryView, interviewExportedDataDenormalizer);
 
         It should_action_of_1_record_be_InterviewerAssigned = () =>
             interviewHistoryView.Records[0].Action.ShouldEqual(InterviewHistoricalAction.InterviewerAssigned);

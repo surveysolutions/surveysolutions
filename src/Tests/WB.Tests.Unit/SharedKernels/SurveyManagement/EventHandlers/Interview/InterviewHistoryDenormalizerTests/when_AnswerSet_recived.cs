@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         };
 
          Because of =
-            () => PublishEventsOnOnterviewExportedDataDenormalizer(answerEvents, interviewHistoryView, interviewExportedDataDenormalizer);
+            () => PublishEventsOnOnInterviewExportedDataDenormalizer(answerEvents, interviewHistoryView, interviewExportedDataDenormalizer);
 
         It should_action_of_TextQuestionAnswered_be_AnswerSet = () =>
            interviewHistoryView.Records[0].Action.ShouldEqual(InterviewHistoricalAction.AnswerSet);
