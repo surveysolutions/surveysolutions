@@ -18,7 +18,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         Establish context = () =>
         {
             availableDescendants = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes()).Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(QuestionAnswered))).ToList();
+               .SelectMany(s => s.GetTypes())
+               .Where(eh => typeof(QuestionAnswered).IsAssignableFrom(eh) && !eh.IsAbstract && !eh.IsInterface).ToList();
         };
 
         Because of =
