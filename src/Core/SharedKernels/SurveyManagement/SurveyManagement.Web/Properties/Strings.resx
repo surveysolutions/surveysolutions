@@ -183,6 +183,9 @@
   <data name="InvalidUser" xml:space="preserve">
     <value>There was an error with your Login/Password combination. Please try again.</value>
   </data>
+  <data name="InvalidUserRole" xml:space="preserve">
+    <value>Your account does not have an interviewer role</value>
+  </data>
   <data name="NoClientIdentifier" xml:space="preserve">
     <value>Client Identifier was not provided</value>
   </data>
