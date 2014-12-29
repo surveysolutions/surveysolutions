@@ -12,7 +12,7 @@ namespace WB.UI.Designer.Api
         [HttpGet]
         public HttpResponseMessage GetAllTemplates()
         {
-            return Request.CreateErrorResponse(HttpStatusCode.UpgradeRequired, Strings.ApplicationUpdateRequired);
+            return Request.CreateErrorResponse(HttpStatusCode.UpgradeRequired, ErrorMessages.ApplicationUpdateRequired);
         }
 
         [HttpPost]

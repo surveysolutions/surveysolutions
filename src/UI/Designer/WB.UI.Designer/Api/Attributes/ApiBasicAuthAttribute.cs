@@ -96,13 +96,13 @@ namespace WB.UI.Designer.Api.Attributes
         private void ThrowUnathorizedException(HttpActionContext actionContext)
         {
             var host = actionContext.Request.RequestUri.DnsSafeHost;
-            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized){ReasonPhrase = Strings.User_Not_authorized};
+            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = ErrorMessages.User_Not_authorized };
             actionContext.Response.Headers.Add("WWW-Authenticate", string.Format("Basic realm=\"{0}\"", host));
         }
 
         private void ThrowLockedOutException(HttpActionContext actionContext)
         {
-            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = Strings.UserLockedOut };
+            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = ErrorMessages.UserLockedOut };
         }
 
         private bool Authorize(string username, string password)
