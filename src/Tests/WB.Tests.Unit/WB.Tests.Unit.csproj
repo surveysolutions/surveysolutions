@@ -1525,6 +1525,7 @@
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_TextListQuestionAnswered_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_TextQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewExportedDataEventHandlerTests\InterviewExportedDataEventHandlerTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_all_available_descendants_of_QuestionAnswered_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_AnswerCommented_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_AnswerSet_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_interview_Restored_event_recived_and_interview_summary_is_missing.cs" />
