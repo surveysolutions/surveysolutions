@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             };
         }
 
-        protected static void PublishEventsOnOnterviewExportedDataDenormalizer(List<object> eventsToPublish, InterviewHistoryView interviewHistoryView, InterviewHistoryDenormalizer interviewExportedDataDenormalizer)
+        protected static void PublishEventsOnOnInterviewExportedDataDenormalizer(List<object> eventsToPublish, InterviewHistoryView interviewHistoryView, InterviewHistoryDenormalizer interviewExportedDataDenormalizer)
         {
             foreach (var eventToPublish in eventsToPublish)
             {
