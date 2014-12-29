@@ -66,7 +66,7 @@ namespace WB.UI.Designer.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound)
                 {
-                    ReasonPhrase = string.Format(Strings.TemplateNotFound, request.QuestionnaireId)
+                    ReasonPhrase = string.Format(ErrorMessages.TemplateNotFound, request.QuestionnaireId)
                 });
             }
 
@@ -74,7 +74,7 @@ namespace WB.UI.Designer.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden)
                 {
-                    ReasonPhrase = Strings.User_Not_authorized
+                    ReasonPhrase = ErrorMessages.User_Not_authorized
                 });
             }
 
@@ -84,7 +84,7 @@ namespace WB.UI.Designer.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound)
                 {
-                    ReasonPhrase = string.Format(Strings.TemplateNotFound, request.QuestionnaireId)
+                    ReasonPhrase = string.Format(ErrorMessages.TemplateNotFound, request.QuestionnaireId)
                 });
             }
 
@@ -93,7 +93,7 @@ namespace WB.UI.Designer.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
                 {
-                    ReasonPhrase = string.Format(Strings.ClientVersionLessThenDocument, supportedClientVersion, templateInfo.Version)
+                    ReasonPhrase = string.Format(ErrorMessages.ClientVersionLessThenDocument, supportedClientVersion, templateInfo.Version)
                 });
             }
 
@@ -103,7 +103,7 @@ namespace WB.UI.Designer.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
                 {
-                    ReasonPhrase = string.Format(Strings.Questionnaire_verification_failed, templateInfo.Title)
+                    ReasonPhrase = string.Format(ErrorMessages.Questionnaire_verification_failed, templateInfo.Title)
                 });
             }
 
@@ -127,7 +127,7 @@ namespace WB.UI.Designer.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
                 {
-                    ReasonPhrase = string.Format(Strings.Questionnaire_verification_failed, templateInfo.Title)
+                    ReasonPhrase = string.Format(ErrorMessages.Questionnaire_verification_failed, templateInfo.Title)
                 });
             }
 
