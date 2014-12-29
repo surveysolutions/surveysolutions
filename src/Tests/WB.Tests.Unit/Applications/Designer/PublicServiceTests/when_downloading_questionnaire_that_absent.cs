@@ -6,7 +6,6 @@ using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Designer.WebServices;
@@ -32,10 +31,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
             var questionnaireViewFactory = new Mock<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>();
             questionnaireViewFactory.Setup(x => x.Load(Moq.It.IsAny<QuestionnaireViewInputModel>())).Returns((QuestionnaireView)null);
 
-            var localizationServiceMock = new Mock<ILocalizationService>();
-            localizationServiceMock.Setup(_ => _.GetString(Moq.It.IsAny<string>())).Returns("requested questionnaire was not found");
-
-            service = CreatePublicService(exportService: exportService, questionnaireViewFactory: questionnaireViewFactory.Object, localizationService: localizationServiceMock.Object);
+            service = CreatePublicService(exportService: exportService, questionnaireViewFactory: questionnaireViewFactory.Object);
         };
 
         Because of = () => 
@@ -45,7 +41,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
             exception.ShouldBeOfExactType<FaultException>();
 
         It should_throw_exception_that_contains_such_words = () =>
-            (new[] { "requested questionnaire", "was not found" }).Each(x => (exception as FaultException).Message.ToLower().ShouldContain(x));
+            (new[] { "questionnaire", "cannot be found" }).Each(x => (exception as FaultException).Message.ToLower().ShouldContain(x));
 
         private static QuestionnaireVersion version = new QuestionnaireVersion(1,0,0);
         private static DownloadQuestionnaireRequest request;

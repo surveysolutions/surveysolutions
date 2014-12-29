@@ -21,8 +21,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
             IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory = null,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory = null,
             IQuestionnaireVerifier questionnaireVerifier = null,
-            IExpressionProcessorGenerator expressionProcessorGenerator = null,
-            ILocalizationService localizationService = null)
+            IExpressionProcessorGenerator expressionProcessorGenerator = null)
         {
             return new PublicService(exportService ?? Mock.Of<IQuestionnaireExportService>(),
                 zipUtils ?? Mock.Of<IStringCompressor>(),
@@ -30,8 +29,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
                 viewFactory ?? Mock.Of<IViewFactory<QuestionnaireListInputModel, QuestionnaireListView>>(),
                 questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),
                 questionnaireVerifier ?? Mock.Of<IQuestionnaireVerifier>(),
-                expressionProcessorGenerator ?? Mock.Of<IExpressionProcessorGenerator>(),
-                localizationService: localizationService ?? Mock.Of<ILocalizationService>());
+                expressionProcessorGenerator ?? Mock.Of<IExpressionProcessorGenerator>());
         }
 
         protected static TemplateInfo CreateTemplateInfo(QuestionnaireVersion version)
