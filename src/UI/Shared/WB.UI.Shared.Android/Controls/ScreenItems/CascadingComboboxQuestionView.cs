@@ -1,5 +1,6 @@
 using System;
 using Android.Content;
+using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
@@ -53,6 +54,8 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             this.cascadingCombobox.SetSingleLine(true);
             this.cascadingCombobox.ItemClick += this.cascadingCombobox_ItemClick;
             this.cascadingCombobox.FocusChange += this.cascadingCombobox_FocusChange;
+            this.cascadingCombobox.KeyPress += CascadingComboboxOnKeyPress;
+            this.cascadingCombobox.EditorAction += CascadingComboboxOnEditorAction;
 
             this.adapter = new ArrayAdapter<String>(
                 this.Context, 
@@ -64,12 +67,64 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             this.llWrapper.AddView(this.cascadingCombobox);
         }
 
+        private void CascadingComboboxOnEditorAction(object sender, TextView.EditorActionEventArgs editorActionEventArgs)
+        {
+            if (editorActionEventArgs.ActionId == ImeAction.Done)
+            {
+                this.cascadingCombobox.ClearFocus();
+            }
+            else
+            {
+                editorActionEventArgs.Handled = false;
+            }
+        }
+
+        private void CascadingComboboxOnKeyPress(object sender, KeyEventArgs keyEventArgs)
+        {
+            keyEventArgs.Handled = false;
+            if (keyEventArgs.KeyCode == Keycode.Del && string.IsNullOrEmpty(this.cascadingCombobox.Text))
+            {
+                this.cascadingCombobox.ShowDropDown();
+            }
+        }
+
         private void cascadingCombobox_FocusChange(object sender, FocusChangeEventArgs e)
         {
             if (e.HasFocus)
             {
                 this.cascadingCombobox.ShowDropDown();
             }
+            else
+            {
+                SaveAnswerOrShowErrorOnUi();
+            }
+        }
+
+        void cascadingCombobox_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
+        {
+            this.cascadingCombobox.ClearFocus();
+        }
+
+        private void SaveAnswerOrShowErrorOnUi()
+        {
+            var answer = FindSelectedAnswer();
+            if (answer != null)
+            {
+                if (GetAnswerTitle(answer) != this.Model.AnswerString)
+                {
+                    this.SaveAnswer(this.GetAnswerTitle(answer), this.CreateSaveAnswerCommand(answer));
+                }
+            }
+            else
+            {
+                var errorTemplate = Resources.GetText(Resource.String.AnswerIsNotPresentInFilteredComboboxOptionsList);
+                this.ShowErrorMessageOnUi(string.Format(errorTemplate, this.cascadingCombobox.Text));
+            }
+        }
+
+        private AnswerViewModel FindSelectedAnswer()
+        {
+            return this.Answers.FirstOrDefault(option => option.Title.ToLower().Equals(this.cascadingCombobox.Text.ToLower()));
         }
 
         void Model_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -87,15 +142,6 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             if (answerRemovedChanged)
             {
                 this.cascadingCombobox.Text = string.Empty;
-            }
-        }
-
-        void cascadingCombobox_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
-        {
-            var answer = this.Answers.FirstOrDefault(option=> option.Title.Equals(this.cascadingCombobox.Text));
-            if (answer != null)
-            {
-                this.SaveAnswer(this.GetAnswerTitle(answer), this.CreateSaveAnswerCommand(answer));
             }
         }
 
