@@ -23,10 +23,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewHisto
         };
 
         Because of = () =>
-            result=interviewHistoryWriter.GetById(view.InterviewId.FormatGuid());
+            result = interviewHistoryWriter.GetById(view.InterviewId.FormatGuid());
 
         It should_return_cached_view = () =>
-            result.ShouldEqual(view);
+            result.ShouldBeTheSameAs(view);
 
         private static InterviewHistoryWriter interviewHistoryWriter;
         private static InterviewHistoryView view;

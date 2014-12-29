@@ -18,9 +18,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewHisto
     {
         Establish context = () =>
         {
-            interviewSummaryWriterMock=new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
+            var interviewSummaryWriterMock = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
             interviewSummaryWriterMock.Setup(x => x.GetById(Moq.It.IsAny<string>()))
-                .Returns(new InterviewSummary() { QuestionnaireId = questionnaireId, QuestionnaireVersion = questionnaireVersion, InterviewId = interviewId});
+                .Returns(new InterviewSummary()
+                {
+                    QuestionnaireId = questionnaireId,
+                    QuestionnaireVersion = questionnaireVersion,
+                    InterviewId = interviewId
+                });
+            
             interviewHistoryWriter = CreateInterviewHistoryWriter(interviewSummaryWriter: interviewSummaryWriterMock.Object);
         };
 
@@ -41,7 +47,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewHisto
 
         private static InterviewHistoryWriter interviewHistoryWriter;
         private static InterviewHistoryView result;
-        private static Mock<IReadSideRepositoryWriter<InterviewSummary>> interviewSummaryWriterMock;
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");
         private static long questionnaireVersion = 2;
