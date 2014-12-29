@@ -324,7 +324,6 @@ namespace WB.UI.Capi
             this.kernel.Bind<ISyncPackageRestoreService>().To<SyncPackageRestoreService>().InSingletonScope();
 
             this.kernel.Bind<IWaitService>().To<WaitService>().InSingletonScope();
-            this.kernel.Bind<ILocalizationService>().To<LocalizationService>().InSingletonScope();
             this.kernel.Bind<IInterviewerSettings>().To<InterviewerSettings>().InSingletonScope();
             this.kernel.Bind<ISynchronizationService>().To<InterviewerSynchronizationService>().InSingletonScope();
             

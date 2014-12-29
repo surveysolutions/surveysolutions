@@ -3,19 +3,12 @@ using Android.App;
 using Android.Content;
 using CAPI.Android.Settings;
 using Java.Util;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.UI.Capi.Properties;
 
 namespace WB.UI.Capi.Settings
 {
     internal class InterviewerSettings : IInterviewerSettings
     {
-        private readonly ILocalizationService localizationService;
-
-        public InterviewerSettings(ILocalizationService localizationService)
-        {
-            this.localizationService = localizationService;
-        }
-
         public string GetDeviceId()
         {
             return Android.Provider.Settings.Secure.GetString(Application.Context.ContentResolver,
@@ -83,7 +76,7 @@ namespace WB.UI.Capi.Settings
                 !(Uri.TryCreate(syncAddressPoint, UriKind.Absolute, out syncUrl) &&
                   (syncUrl.Scheme == "http" || syncUrl.Scheme == "https")))
             {
-                throw new ArgumentException(this.localizationService.GetString("InvalidSyncPointAddressUrl"), "syncAddressPoint");
+                throw new ArgumentException(Resources.InvalidSyncPointAddressUrl, "syncAddressPoint");
             }
 
             SetSetting(SettingsNames.SyncAddressSettingsName, syncAddressPoint.Trim());

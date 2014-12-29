@@ -57,7 +57,6 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             IPlainInterviewFileStorage plainFileRepository = null,
             IFileSystemAccessor fileSystemAccessor = null,
             ITabletInformationService tabletInformationService = null,
-            ILocalizationService localizationService = null,
             IJsonUtils jsonUtils = null)
         {
             var controller = new InterviewerSyncController(
@@ -70,7 +69,6 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
                 plainFileRepository ?? Mock.Of<IPlainInterviewFileStorage>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 tabletInformationService ?? Mock.Of<ITabletInformationService>(),
-                localizationService ?? Mock.Of<ILocalizationService>(),
                 jsonUtils ?? Mock.Of<IJsonUtils>());
 
             return controller;

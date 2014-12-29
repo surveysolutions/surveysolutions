@@ -9,7 +9,7 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using System.Web.Security;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Api.Attributes
@@ -17,11 +17,6 @@ namespace WB.UI.Designer.Api.Attributes
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false)]
     public class ApiBasicAuthAttribute : AuthorizationFilterAttribute
     {
-        private ILocalizationService localizationService
-        {
-            get { return ServiceLocator.Current.GetInstance<ILocalizationService>(); }
-        }
-
         private IMembershipUserService userHelper
         {
             get { return ServiceLocator.Current.GetInstance<IMembershipUserService>(); }
@@ -101,13 +96,13 @@ namespace WB.UI.Designer.Api.Attributes
         private void ThrowUnathorizedException(HttpActionContext actionContext)
         {
             var host = actionContext.Request.RequestUri.DnsSafeHost;
-            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized){ReasonPhrase = this.localizationService.GetString("User_Not_authorized")};
+            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized){ReasonPhrase = Strings.User_Not_authorized};
             actionContext.Response.Headers.Add("WWW-Authenticate", string.Format("Basic realm=\"{0}\"", host));
         }
 
         private void ThrowLockedOutException(HttpActionContext actionContext)
         {
-            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = this.localizationService.GetString("UserLockedOut") };
+            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = Strings.UserLockedOut };
         }
 
         private bool Authorize(string username, string password)

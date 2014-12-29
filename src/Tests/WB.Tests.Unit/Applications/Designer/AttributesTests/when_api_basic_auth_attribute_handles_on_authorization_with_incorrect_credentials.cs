@@ -36,11 +36,6 @@ namespace WB.Tests.Unit.Applications.Designer.AttributesTests
 
             Func<string, string, bool> validateUserCredentials = (s, s1) => false;
 
-            var localizationServiceMock = new Mock<ILocalizationService>();
-            localizationServiceMock.Setup(_ => _.GetString(Moq.It.IsAny<string>())).Returns(string.Empty);
-
-            Setup.InstanceToMockedServiceLocator<ILocalizationService>(localizationServiceMock.Object);
-
             attribute = CreateApiBasicAuthAttribute(validateUserCredentials);
         };
 
