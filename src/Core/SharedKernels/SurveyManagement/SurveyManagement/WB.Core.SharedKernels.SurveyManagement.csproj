@@ -236,9 +236,10 @@
     <Compile Include="Views\DataExport\InterviewExportedLevel.cs" />
     <Compile Include="Views\DataExport\RecordFirstAnswerMarkerView.cs" />
     <Compile Include="Views\Device\RegisterData.cs" />
+    <Compile Include="Views\InterviewHistory\IInterviewHistoryFactory.cs" />
+    <Compile Include="Views\InterviewHistory\InterviewHistoricalAction.cs" />
     <Compile Include="Views\InterviewHistory\InterviewHistoricalRecordView.cs" />
     <Compile Include="Views\InterviewHistory\InterviewHistoryFactory.cs" />
-    <Compile Include="Views\InterviewHistory\InterviewHistoryInputModel.cs" />
     <Compile Include="Views\DataExport\QuestionnaireExportStructure.cs" />
     <Compile Include="Views\Device\DeviceView.cs" />
     <Compile Include="Views\Device\DeviceViewFactory.cs" />

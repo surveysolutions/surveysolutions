@@ -15,11 +15,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     {
         private readonly IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory;
         private readonly IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsViewFactory;
-        private readonly IViewFactory<InterviewHistoryInputModel, InterviewHistoryView> interviewHistoryViewFactory;
+        private readonly IInterviewHistoryFactory interviewHistoryViewFactory;
 
         public InterviewsController(ILogger logger,
             IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory,
-            IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsViewFactory, IViewFactory<InterviewHistoryInputModel, InterviewHistoryView> interviewHistoryViewFactory)
+            IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsViewFactory, IInterviewHistoryFactory interviewHistoryViewFactory)
             : base(logger)
         {
             this.allInterviewsViewFactory = allInterviewsViewFactory;
@@ -89,9 +89,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [Route("apis/v1/interviews/{id:guid}/history")]
         public InterviewHistoryView InterviewHistory(Guid id)
         {
-            var inputModel = new InterviewHistoryInputModel(id);
-
-            var interview = this.interviewHistoryViewFactory.Load(inputModel);
+            var interview = this.interviewHistoryViewFactory.Load(id);
 
             if (interview == null)
             {

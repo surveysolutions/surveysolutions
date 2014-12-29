@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
@@ -16,37 +17,42 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
 {
-    public class InterviewHistoryFactory : IViewFactory<InterviewHistoryInputModel, InterviewHistoryView>
+    internal class InterviewHistoryFactory : IInterviewHistoryFactory
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireReader;
         private readonly IEventStore eventStore;
-        public InterviewHistoryFactory(IEventStore eventStore, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader, IReadSideRepositoryWriter<UserDocument> userReader, IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireReader)
+        private readonly ILogger logger;
+
+        public InterviewHistoryFactory(IEventStore eventStore, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
+            IReadSideRepositoryWriter<UserDocument> userReader,
+            IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireReader, ILogger logger)
         {
             this.eventStore = eventStore;
             this.interviewSummaryReader = interviewSummaryReader;
             this.userReader = userReader;
             this.questionnaireReader = questionnaireReader;
+            this.logger = logger;
         }
 
-        public InterviewHistoryView Load(InterviewHistoryInputModel input)
+        public InterviewHistoryView Load(Guid interviewId)
         {
-            return this.RestoreInterviewHistory(input);
+            return this.RestoreInterviewHistory(interviewId);
         }
 
-        private InterviewHistoryView RestoreInterviewHistory(InterviewHistoryInputModel input)
+        private InterviewHistoryView RestoreInterviewHistory(Guid interviewId)
         {
             var interviewHistoryReader = new InMemoryReadSideRepositoryAccessor<InterviewHistoryView>();
             var interviewHistoryDenormalizer =
                 new InterviewHistoryDenormalizer(interviewHistoryReader, interviewSummaryReader, userReader, questionnaireReader);
 
-            var events = this.eventStore.ReadFrom(input.InterviewId, 0, long.MaxValue);
+            var events = this.eventStore.ReadFrom(interviewId, 0, long.MaxValue);
             foreach (var @event in events)
             {
                 this.PublishToHandlers(@event, interviewHistoryDenormalizer);
             }
-            return interviewHistoryReader.GetById(input.InterviewId);
+            return interviewHistoryReader.GetById(interviewId);
         }
 
         private void PublishToHandlers(IPublishableEvent eventMessage, 
@@ -67,6 +73,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
             }
             catch (Exception exception)
             {
+                logger.Error(exception.Message, exception);
                 occurredExceptions.Add(exception);
             }
         }
