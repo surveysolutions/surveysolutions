@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,10 +19,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewHisto
     {
         Establish context = () =>
         {
+            var questionnaireId = Guid.Parse("22222222222222222222222222222222");
+            var questionnaireVersion = 2;
             fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
-            fileSystemAccessorMock.Setup(x => x.IsFileExists(Moq.It.IsAny<string>())).Returns(true);
+            fileSystemAccessorMock.Setup(x => x.IsFileExists(Moq.It.IsAny<string>())).Returns(true); 
+            fileSystemAccessorMock.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
+            .Returns<string, string>(Path.Combine);
 
-            interviewSummaryWriterMock = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
+
+            var interviewSummaryWriterMock = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
             interviewSummaryWriterMock.Setup(x => x.GetById(Moq.It.IsAny<string>()))
                 .Returns(new InterviewSummary() { QuestionnaireId = questionnaireId, QuestionnaireVersion = questionnaireVersion, InterviewId = interviewId });
             interviewHistoryWriter = CreateInterviewHistoryWriter(interviewSummaryWriter: interviewSummaryWriterMock.Object, fileSystemAccessor: fileSystemAccessorMock.Object);
@@ -32,13 +38,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewHisto
             interviewHistoryWriter.Remove(interviewId.FormatGuid());
 
         It should_delete_file_with_interview_history = () =>
-            fileSystemAccessorMock.Verify(x=>x.DeleteFile(Moq.It.IsAny<string>()), Times.Once);
+            fileSystemAccessorMock.Verify(x => x.DeleteFile(Moq.It.Is<string>(_ => _.Contains(interviewId.FormatGuid()))), Times.Once);
 
         private static InterviewHistoryWriter interviewHistoryWriter;
-        private static Mock<IReadSideRepositoryWriter<InterviewSummary>> interviewSummaryWriterMock;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
-        private static Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");
-        private static long questionnaireVersion = 2;
     }
 }

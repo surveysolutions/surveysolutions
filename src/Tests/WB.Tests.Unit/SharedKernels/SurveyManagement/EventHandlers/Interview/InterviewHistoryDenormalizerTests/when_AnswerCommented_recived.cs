@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewHistoryDenormalizerTests
 {
-    internal class when_AnswerComented_recived : InterviewHistoryDenormalizerTestContext
+    internal class when_AnswerCommented_recived : InterviewHistoryDenormalizerTestContext
     {
         Establish context = () =>
         {
