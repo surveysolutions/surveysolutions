@@ -259,6 +259,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your account does not have an interviewer role.
+        /// </summary>
+        public static string InvalidUserRole {
+            get {
+                return ResourceManager.GetString("InvalidUserRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Client Identifier was not provided.
         /// </summary>
         public static string NoClientIdentifier {

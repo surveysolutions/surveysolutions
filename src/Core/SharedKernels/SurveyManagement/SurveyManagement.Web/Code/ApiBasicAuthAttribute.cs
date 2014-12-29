@@ -8,6 +8,10 @@ using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using System.Web.Security;
+using Main.Core.Entities.SubEntities;
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
@@ -15,57 +19,44 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false)]
     public class ApiBasicAuthAttribute : AuthorizationFilterAttribute
     {
-        private readonly Func<string, string, bool> validateUserCredentials;
+        private readonly Func<string, string, bool> isUserValid;
 
-        private static readonly string[] emptyArray = new string[0];
-
-        private string[] rolesSplit = emptyArray;
-        private string roles;
-
-        public string Roles
+        private IViewFactory<UserViewInputModel, UserView> userViewFactory
         {
-            get { return roles ?? string.Empty; }
-            set
-            {
-                roles = value;
-                rolesSplit = SplitString(value);
-            }
+            get { return ServiceLocator.Current.GetInstance<IViewFactory<UserViewInputModel, UserView>>(); }
         }
 
         internal static string[] SplitString(string original)
         {
-            if (string.IsNullOrEmpty(original))
-                return emptyArray;
-
-            return original.Split(',');
+            return string.IsNullOrEmpty(original) ? new string[0] : original.Split(',');
         }
-
 
         public ApiBasicAuthAttribute() : this(Membership.ValidateUser)
         {
         }
 
-        internal ApiBasicAuthAttribute(Func<string, string, bool> validateUserCredentials)
+        internal ApiBasicAuthAttribute(Func<string, string, bool> isUserValid)
         {
-            this.validateUserCredentials = validateUserCredentials;
+            this.isUserValid = isUserValid;
         }
 
         public override void OnAuthorization(HttpActionContext actionContext)
         {
-            BasicCredentials credentials = ParseCredentials(actionContext);
-            if (credentials == null)
+            BasicCredentials basicCredentials = ParseCredentials(actionContext);
+            if (basicCredentials == null || !this.isUserValid(basicCredentials.Username, basicCredentials.Password))
             {
-                Challenge(actionContext);
+                this.ThrowUnauthorizeResponseIfUserNotExists(actionContext);
                 return;
             }
 
-            if (!Authorize(credentials.Username, credentials.Password))
+            var userInfo = this.userViewFactory.Load(new UserViewInputModel(UserName: basicCredentials.Username, UserEmail: null));
+            if (userInfo == null || !userInfo.Roles.Contains(UserRoles.Operator))
             {
-                Challenge(actionContext);
+                this.ThrowUnauthorizeResponseIfUserIsNotAnInterviewer(actionContext);
                 return;
             }
 
-            var identity = new GenericIdentity(credentials.Username, "Basic");
+            var identity = new GenericIdentity(basicCredentials.Username, "Basic");
             var principal = new GenericPrincipal(identity, null);
 
             Thread.CurrentPrincipal = principal;
@@ -110,19 +101,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             public string Password { get; set; }
         }
 
-        private void Challenge(HttpActionContext actionContext)
+        private void ThrowUnauthorizeResponseIfUserNotExists(HttpActionContext actionContext)
         {
-            string host = actionContext.Request.RequestUri.DnsSafeHost;
-            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized)
-            {
-                ReasonPhrase = Strings.InvalidUser
-            };
-            actionContext.Response.Headers.Add("WWW-Authenticate", string.Format("Basic realm=\"{0}\"", host));
+            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized){ReasonPhrase = Strings.InvalidUser};
+            actionContext.Response.Headers.Add("WWW-Authenticate", string.Format("Basic realm=\"{0}\"", actionContext.Request.RequestUri.DnsSafeHost));
         }
 
-        private bool Authorize(string username, string password)
+        private void ThrowUnauthorizeResponseIfUserIsNotAnInterviewer(HttpActionContext actionContext)
         {
-            return validateUserCredentials(username, password);
+            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = Strings.InvalidUserRole };
         }
     }
 }
