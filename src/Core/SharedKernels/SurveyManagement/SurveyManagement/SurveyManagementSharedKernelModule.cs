@@ -134,7 +134,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .WithConstructorArgument("origin", origin);
 
             this.Bind<InterviewHistorySettings>().ToConstant(interviewHistorySettings);
-
+            this.Bind<IInterviewHistoryFactory>().To<InterviewHistoryFactory>();
             if (interviewHistorySettings.EnableInterviewHistory)
             {
                 this.Unbind<IReadSideRepositoryWriter<InterviewHistoryView>>();

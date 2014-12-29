@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     {
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
         private readonly IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory;
-        private readonly IViewFactory<InterviewHistoryInputModel, InterviewHistoryView> interviewHistoryViewFactory;
+        private readonly IInterviewHistoryFactory interviewHistoryViewFactory;
         private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
         private readonly IInterviewDetailsViewFactory interviewDetailsViewFactory;
 
@@ -28,8 +28,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             ILogger logger,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
             IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory,
-            IInterviewSummaryViewFactory interviewSummaryViewFactory, 
-            IViewFactory<InterviewHistoryInputModel, InterviewHistoryView> interviewHistoryViewFactory, 
+            IInterviewSummaryViewFactory interviewSummaryViewFactory,
+            IInterviewHistoryFactory interviewHistoryViewFactory, 
             IInterviewDetailsViewFactory interviewDetailsViewFactory)
             : base(commandService, provider, logger)
         {
@@ -91,7 +91,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         public ActionResult InterviewHistory(Guid id)
         {
-            return this.View(interviewHistoryViewFactory.Load(new InterviewHistoryInputModel(id)));
+            return this.View(interviewHistoryViewFactory.Load(id));
         }
 
         [Authorize(Roles = "Headquarter, Supervisor")]

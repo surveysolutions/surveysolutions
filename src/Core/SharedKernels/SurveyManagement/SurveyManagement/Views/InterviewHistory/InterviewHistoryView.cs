@@ -22,20 +22,4 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
         public long QuestionnaireVersion { get; private set; }
         public List<InterviewHistoricalRecordView> Records { get; private set; }
     }
-
-    public enum InterviewHistoricalAction
-    {
-        SupervisorAssigned,
-        InterviewerAssigned,
-        AnswerSet,
-        CommentSet,
-        Completed,
-        Restarted,
-        ApproveBySupervisor,
-        ApproveByHeadquarter,
-        RejectedBySupervisor,
-        RejectedByHeadquarter,
-        Deleted,
-        Restored
-    }
 }

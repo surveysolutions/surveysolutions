@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewControllerTests
                 changeStatusFactory ?? Stub<IViewFactory<ChangeStatusInputModel, ChangeStatusView>>.WithNotEmptyValues,
                 revalidateInterviewViewFactory ?? Mock.Of<IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView>>(),
                 interviewSummaryViewFactory ?? Stub<IInterviewSummaryViewFactory>.WithNotEmptyValues,
-                Mock.Of<IViewFactory<InterviewHistoryInputModel, InterviewHistoryView>>(),
+                Mock.Of<IInterviewHistoryFactory>(),
                 interviewDetailsViewFactory ?? Mock.Of<IInterviewDetailsViewFactory>());
         }
     }
