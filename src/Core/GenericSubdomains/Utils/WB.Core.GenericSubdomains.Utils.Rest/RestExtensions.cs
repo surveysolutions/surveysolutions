@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.GenericSubdomains.Utils.Rest.Properties;
 using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.Core.GenericSubdomains.Utils.Rest
@@ -21,11 +22,6 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
         private static IJsonUtils jsonUtils
         {
             get { return ServiceLocator.Current.GetInstance<IJsonUtils>(); }
-        }
-
-        private static ILocalizationService localizationService
-        {
-            get { return ServiceLocator.Current.GetInstance<ILocalizationService>(); }
         }
 
         public static async Task<T> ReceiveCompressedJson<T>(this Task<HttpResponseMessage> response)
@@ -59,13 +55,12 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
                 }
                 catch (JsonReaderException ex)
                 {
-                    throw new RestException(message: localizationService.GetString("UpdateRequired"),
-                        statusCode: HttpStatusCode.UpgradeRequired, innerException: ex);
+                    throw new RestException(message: Resources.UpdateRequired, statusCode: HttpStatusCode.UpgradeRequired, innerException: ex);
                 }
             }
 
 
-            throw new RestException(message: localizationService.GetString("CheckServerSettings"), statusCode: HttpStatusCode.Redirect);
+            throw new RestException(message: Resources.CheckServerSettings, statusCode: HttpStatusCode.Redirect);
         }
     }
 }

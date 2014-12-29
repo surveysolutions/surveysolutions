@@ -7,7 +7,6 @@ using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Designer.WebServices;
 using WB.UI.Designer.WebServices.Questionnaire;
@@ -40,10 +39,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
             expressionProcessorGenerator.Setup(x => x.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), out assembly))
                 .Returns(new GenerationResult() { Success = false });
 
-            var localizationServiceMock = new Mock<ILocalizationService>();
-            localizationServiceMock.Setup(_ => _.GetString(Moq.It.IsAny<string>())).Returns(errorMessage);
-
-            service = CreatePublicService(exportService: exportService.Object, questionnaireVerifier: questionnaireVerifier.Object, questionnaireViewFactory: questionnaireViewFactory, expressionProcessorGenerator: expressionProcessorGenerator.Object, localizationService: localizationServiceMock.Object);
+            service = CreatePublicService(exportService: exportService.Object, questionnaireVerifier: questionnaireVerifier.Object, questionnaireViewFactory: questionnaireViewFactory, expressionProcessorGenerator: expressionProcessorGenerator.Object);
         };
 
         Because of = () => 
@@ -53,11 +49,10 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
             exception.ShouldBeOfExactType<FaultException>();
 
         It should_throw_exception_that_contains_such_words = () =>
-            (exception as FaultException).Message.ShouldEqual(errorMessage);
+             (new[] { "questionnaire", "has errors" }).Each(x => (exception as FaultException).Message.ToLower().ShouldContain(x));
 
         private static DownloadQuestionnaireRequest request;
         private static IPublicService service;
         private static Exception exception;
-        private static string errorMessage = "Failed to import questionnaire. Requested questionnaire \"aaaa\" has errors. Please verify and fix them on Designer.";
     }
 }

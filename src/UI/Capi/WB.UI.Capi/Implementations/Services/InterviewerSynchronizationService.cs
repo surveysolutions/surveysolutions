@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using CAPI.Android.Core.Model.Authorization;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
+using WB.UI.Capi.Properties;
 using WB.UI.Capi.Services;
 using WB.UI.Capi.Settings;
 
@@ -16,13 +16,11 @@ namespace WB.UI.Capi.Implementations.Services
     {
         private readonly IRestService restService;
         private readonly IInterviewerSettings interviewerSettings;
-        private readonly ILocalizationService localizationService;
 
-        public InterviewerSynchronizationService(IRestService restService, IInterviewerSettings interviewerSettings, ILocalizationService localizationService)
+        public InterviewerSynchronizationService(IRestService restService, IInterviewerSettings interviewerSettings)
         {
             this.restService = restService;
             this.interviewerSettings = interviewerSettings;
-            this.localizationService = localizationService;
         }
 
         public async Task<Guid> HandshakeAsync(SyncCredentials credentials)
@@ -53,7 +51,7 @@ namespace WB.UI.Capi.Implementations.Services
                 });
 
             if (syncItemsMetaContainer.ChunksMeta == null)
-                throw new Exception(this.localizationService.GetString("ErrorOnItemListReceiving"));
+                throw new Exception(Resources.ErrorOnItemListReceiving);
 
             return syncItemsMetaContainer.ChunksMeta;
         }
@@ -70,7 +68,7 @@ namespace WB.UI.Capi.Implementations.Services
                     });
 
             if (package == null || package.SyncItem == null)
-                throw new Exception(this.localizationService.GetString("GetSyncPackageExceptionMessage"));
+                throw new Exception(Resources.GetSyncPackageExceptionMessage);
 
             return package.SyncItem;
         }
@@ -88,7 +86,7 @@ namespace WB.UI.Capi.Implementations.Services
             }
             catch (Exception ex)
             {
-                throw new Exception(this.localizationService.GetString("PushFailed"), ex);
+                throw new Exception(Resources.PushFailed, ex);
             }
         }
 
@@ -109,7 +107,7 @@ namespace WB.UI.Capi.Implementations.Services
             }
             catch(Exception ex)
             {
-                throw new Exception(this.localizationService.GetString("PushBinaryDataFailed"), ex);
+                throw new Exception(Resources.PushBinaryDataFailed, ex);
             }
         }
 

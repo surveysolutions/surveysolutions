@@ -22,14 +22,14 @@ namespace WB.UI.Capi.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resource {
+    internal class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resource() {
+        internal Resources() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace WB.UI.Capi.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Capi.Properties.Resource", typeof(Resource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Capi.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,24 +57,6 @@ namespace WB.UI.Capi.Properties {
             }
             set {
                 resourceCulture = value;
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Bad connection.
-        /// </summary>
-        internal static string BadConnection {
-            get {
-                return ResourceManager.GetString("BadConnection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Check server settings .
-        /// </summary>
-        internal static string CheckServerSettings {
-            get {
-                return ResourceManager.GetString("CheckServerSettings", resourceCulture);
             }
         }
         
@@ -106,24 +88,6 @@ namespace WB.UI.Capi.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No connection.
-        /// </summary>
-        internal static string NoConnection {
-            get {
-                return ResourceManager.GetString("NoConnection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Network is unavailable.
-        /// </summary>
-        internal static string NoNetwork {
-            get {
-                return ResourceManager.GetString("NoNetwork", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Push of binary data failed. Try again later..
         /// </summary>
         internal static string PushBinaryDataFailed {
@@ -138,15 +102,6 @@ namespace WB.UI.Capi.Properties {
         internal static string PushFailed {
             get {
                 return ResourceManager.GetString("PushFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Need to update the application.
-        /// </summary>
-        internal static string UpdateRequired {
-            get {
-                return ResourceManager.GetString("UpdateRequired", resourceCulture);
             }
         }
     }
