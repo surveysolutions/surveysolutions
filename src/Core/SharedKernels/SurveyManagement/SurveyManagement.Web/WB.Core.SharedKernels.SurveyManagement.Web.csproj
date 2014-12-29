@@ -142,7 +142,6 @@
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
-    <Compile Include="Implementation\Services\LocalizationService.cs" />
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
     <Compile Include="Models\DeleteQuestionnaireRequestModel.cs" />
     <Compile Include="Models\AllQuestionnairesRequestModel.cs" />
@@ -497,6 +496,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\components\moment-duration-format.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Implementation\Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -117,14 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BadConnection" xml:space="preserve">
-    <value>Bad connection</value>
-  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
-  </data>
-  <data name="CheckServerSettings" xml:space="preserve">
-    <value>Check server settings </value>
   </data>
   <data name="ClientVersionIsObsolete" xml:space="preserve">
     <value>Your application is incompatible with the Supervisor. Please, remove your copy and download the correct version.</value>
@@ -192,19 +186,10 @@
   <data name="NoClientIdentifier" xml:space="preserve">
     <value>Client Identifier was not provided</value>
   </data>
-  <data name="NoConnection" xml:space="preserve">
-    <value>No connection</value>
-  </data>
-  <data name="NoNetwork" xml:space="preserve">
-    <value>Network is unavailable</value>
-  </data>
   <data name="OldVersionOfClient" xml:space="preserve">
     <value>You must update your CAPI application before synchronizing with the Supervisor</value>
   </data>
   <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
     <value>Manage account</value>
-  </data>
-  <data name="UpdateRequired" xml:space="preserve">
-    <value>Need to update the application</value>
   </data>
 </root>

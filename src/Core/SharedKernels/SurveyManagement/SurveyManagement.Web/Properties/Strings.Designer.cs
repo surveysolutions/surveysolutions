@@ -61,29 +61,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bad connection.
-        /// </summary>
-        public static string BadConnection {
-            get {
-                return ResourceManager.GetString("BadConnection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Check server settings .
-        /// </summary>
-        public static string CheckServerSettings {
-            get {
-                return ResourceManager.GetString("CheckServerSettings", resourceCulture);
             }
         }
         
@@ -286,24 +268,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No connection.
-        /// </summary>
-        public static string NoConnection {
-            get {
-                return ResourceManager.GetString("NoConnection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Network is unavailable.
-        /// </summary>
-        public static string NoNetwork {
-            get {
-                return ResourceManager.GetString("NoNetwork", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to You must update your CAPI application before synchronizing with the Supervisor.
         /// </summary>
         public static string OldVersionOfClient {
@@ -318,15 +282,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         public static string SurverManagement_MainMenu_ManageAccount {
             get {
                 return ResourceManager.GetString("SurverManagement_MainMenu_ManageAccount", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Need to update the application.
-        /// </summary>
-        public static string UpdateRequired {
-            get {
-                return ResourceManager.GetString("UpdateRequired", resourceCulture);
             }
         }
     }

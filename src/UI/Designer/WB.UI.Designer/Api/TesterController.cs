@@ -1,8 +1,8 @@
 ﻿using System.Net.Http;
 using System.Net;
 using System.Web.Http;
-using Resources;
 using WB.UI.Designer.Api.Attributes;
+using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Api
 {
