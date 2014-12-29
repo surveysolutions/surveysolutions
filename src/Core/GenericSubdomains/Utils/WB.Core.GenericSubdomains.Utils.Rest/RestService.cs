@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
 using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.GenericSubdomains.Utils.Rest.Properties;
 using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.Core.GenericSubdomains.Utils.Rest
@@ -13,15 +14,12 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
         private readonly IRestServiceSettings restServiceSettings;
         private readonly ILogger logger;
         private readonly INetworkService networkService;
-        private readonly ILocalizationService localizationService;
 
-
-        public RestService(IRestServiceSettings restServiceSettings, ILogger logger, INetworkService networkService, ILocalizationService localizationService)
+        public RestService(IRestServiceSettings restServiceSettings, ILogger logger, INetworkService networkService)
         {
             this.restServiceSettings = restServiceSettings;
             this.logger = logger;
             this.networkService = networkService;
-            this.localizationService = localizationService;
         }
 
         private async Task<HttpResponseMessage> ExecuteRequestAsync(string url, Func<FlurlClient, Task<HttpResponseMessage>> request,
@@ -29,7 +27,7 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
         {
             if (this.networkService != null && !this.networkService.IsNetworkEnabled())
             {
-                throw new RestException(this.localizationService.GetString("NoNetwork"));
+                throw new RestException(Resources.NoNetwork);
             }
 
             var restClient = this.restServiceSettings.BaseAddress()
@@ -51,7 +49,7 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
                 if (ex.Call.Response != null)
                     throw new RestException(ex.Call.Response.ReasonPhrase, statusCode: ex.Call.Response.StatusCode, innerException: ex);
 
-                throw new RestException(message: this.localizationService.GetString("NoConnection"), innerException: ex);
+                throw new RestException(message: Resources.NoConnection, innerException: ex);
             }
         }
 

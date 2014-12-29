@@ -13,6 +13,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Api.Attributes;
 using WB.UI.Designer.Code;
+using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Membership;
 using QuestionnaireVersion = WB.Core.SharedKernels.DataCollection.QuestionnaireVersion;
 
@@ -30,7 +31,6 @@ namespace WB.UI.Designer.Api
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireHelper questionnaireHelper;
-        private readonly ILocalizationService localizationService;
 
         public ImportController(IQuestionnaireExportService exportService,
             IStringCompressor zipUtils,
@@ -40,8 +40,7 @@ namespace WB.UI.Designer.Api
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
-            IQuestionnaireHelper questionnaireHelper,
-            ILocalizationService localizationService)
+            IQuestionnaireHelper questionnaireHelper)
         {
             this.exportService = exportService;
             this.zipUtils = zipUtils;
@@ -52,7 +51,6 @@ namespace WB.UI.Designer.Api
             this.questionnaireVerifier = questionnaireVerifier;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.questionnaireHelper = questionnaireHelper;
-            this.localizationService = localizationService;
         }
 
         [HttpGet]
@@ -68,7 +66,7 @@ namespace WB.UI.Designer.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound)
                 {
-                    ReasonPhrase = string.Format(this.localizationService.GetString("TemplateNotFound"), request.QuestionnaireId)
+                    ReasonPhrase = string.Format(Strings.TemplateNotFound, request.QuestionnaireId)
                 });
             }
 
@@ -76,7 +74,7 @@ namespace WB.UI.Designer.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden)
                 {
-                    ReasonPhrase = this.localizationService.GetString("User_Not_authorized")
+                    ReasonPhrase = Strings.User_Not_authorized
                 });
             }
 
@@ -86,7 +84,7 @@ namespace WB.UI.Designer.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound)
                 {
-                    ReasonPhrase = string.Format(this.localizationService.GetString("TemplateNotFound"), request.QuestionnaireId)
+                    ReasonPhrase = string.Format(Strings.TemplateNotFound, request.QuestionnaireId)
                 });
             }
 
@@ -95,7 +93,7 @@ namespace WB.UI.Designer.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
                 {
-                    ReasonPhrase = string.Format(this.localizationService.GetString("ClientVersionLessThenDocument"), supportedClientVersion, templateInfo.Version)
+                    ReasonPhrase = string.Format(Strings.ClientVersionLessThenDocument, supportedClientVersion, templateInfo.Version)
                 });
             }
 
@@ -105,7 +103,7 @@ namespace WB.UI.Designer.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
                 {
-                    ReasonPhrase = string.Format(this.localizationService.GetString("Questionnaire_verification_failed"), templateInfo.Title)
+                    ReasonPhrase = string.Format(Strings.Questionnaire_verification_failed, templateInfo.Title)
                 });
             }
 
@@ -129,7 +127,7 @@ namespace WB.UI.Designer.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
                 {
-                    ReasonPhrase = string.Format(this.localizationService.GetString("Questionnaire_verification_failed"), templateInfo.Title)
+                    ReasonPhrase = string.Format(Strings.Questionnaire_verification_failed, templateInfo.Title)
                 });
             }
 
