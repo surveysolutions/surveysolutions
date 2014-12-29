@@ -1525,40 +1525,17 @@
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_TextListQuestionAnswered_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_TextQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewExportedDataEventHandlerTests\InterviewExportedDataEventHandlerTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_AnswerComented_recived.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_AnswerCommented_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_AnswerSet_recived.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_ApprovedBySupervisor_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_interview_Restored_event_recived_and_interview_summary_is_missing.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_TextQuestionAnsweredRecived_recived_and_previous_action_is_completed.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_TextQuestionAnsweredRecived_recived_and_previous_action_is_interviewer_assigned.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_TextQuestionAnsweredRecived_recived_and_user_who_gave_answer_is_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\InterviewHistoryDenormalizerTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_Completed_recived.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_InterviewApproved_by_HQ_recived.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_InterviewApproved_recived.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_InterviewerAssigned_recived.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_interview_Deleted_event_recived.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_interview_hard_Deleted_recived.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_interview_Restored_event_recived.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_RejectedByHeadquarter_recived.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_RejectedBySupervisor_recived.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_Restarted_recived.cs">
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_status_changing_events_recived.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_SupervisorAssigned_recived.cs">
@@ -1848,7 +1825,7 @@
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationTests\SchedulersTests\InterviewDetailsDataSchedulerTests\when_loading_interview_details_from_capi_package.cs" />
     <Compile Include="SharedKernels\SurveyManagement\TestInMemoryWriter.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewHistoryWriterTests\InterviewHistoryWriterTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewHistoryWriterTests\when_disable_cache.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewHistoryWriterTests\when_cache_disabled.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewHistoryWriterTests\when_method_Clear_of_InterviewHistoryWriter_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewHistoryWriterTests\when_method_GetById_of_InterviewHistoryWriter_called_and_cache_is_disabled.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewHistoryWriterTests\when_method_GetById_of_InterviewHistoryWriter_called_and_cache_is_enabled.cs" />

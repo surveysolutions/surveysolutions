@@ -23,14 +23,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewHisto
         protected static InterviewHistoryWriter CreateInterviewHistoryWriter(ICsvWriterService csvWriterService = null,
             IFileSystemAccessor fileSystemAccessor = null, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter = null, IFilebasedExportedDataAccessor filebasedExportedDataAccessor=null)
         {
+            var filebasedExportedDataAccessorMock = new Mock<IFilebasedExportedDataAccessor>();
+            filebasedExportedDataAccessorMock.Setup(x => x.GetFolderPathOfHistoryByQuestionnaire(It.IsAny<Guid>(), It.IsAny<long>()))
+                .Returns<Guid, long>((id, v) => string.Format("{0}-{1}", id, v));
             return new InterviewHistoryWriter(Mock.Of<ICsvWriterFactory>(_=>_.OpenCsvWriter(It.IsAny<Stream>(),It.IsAny<string>())== Mock.Of<ICsvWriterService>()),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                interviewSummaryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(), filebasedExportedDataAccessor??Mock.Of<IFilebasedExportedDataAccessor>());
+                interviewSummaryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(), filebasedExportedDataAccessor ?? filebasedExportedDataAccessorMock.Object);
         }
 
-        protected static InterviewHistoryView CreateInterviewHistoryView()
+        protected static InterviewHistoryView CreateInterviewHistoryView(Guid? id=null)
         {
-            return new InterviewHistoryView(Guid.NewGuid(), new List<InterviewHistoricalRecordView>(), Guid.NewGuid(), 1);
+            return new InterviewHistoryView(id??Guid.NewGuid(), new List<InterviewHistoricalRecordView>(), Guid.NewGuid(), 1);
         }
 
         protected static InterviewHistoricalRecordView CreateInterviewHistoricalRecordView()

@@ -17,8 +17,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
     {
         Establish context = () =>
         {
-            interviewHistoryView = CreateInterviewHistoryView();
-            answerEvents = new List<QuestionAnswered>();
+            interviewHistoryView = CreateInterviewHistoryView(interviewId);
+            answerEvents = new List<object>();
             answerEvents.Add(new TextQuestionAnswered(userId, questionId, new decimal[]{1,2}, DateTime.Now, "hi"));
             answerEvents.Add(new MultipleOptionsQuestionAnswered(userId, questionId, new decimal[0], DateTime.Now, new decimal[] { 1, 2 }));
             answerEvents.Add(new SingleOptionQuestionAnswered(userId, questionId, new decimal[0], DateTime.Now, 1));
@@ -36,18 +36,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             interviewExportedDataDenormalizer = CreateInterviewHistoryDenormalizer(questionnaireDocument: CreateQuestionnaireDocument(questionId, variableName));
         };
 
-        private Because of = () =>
-        {
-            foreach (var questionAnswered in answerEvents)
-            {
-                var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(questionAnswered.GetType());
-                var handleMethod = typeof(InterviewHistoryDenormalizer).GetMethod("Update", new[] { typeof(InterviewHistoryView), publishedEventClosedType });
-
-                var publishedEvent = (PublishedEvent)Activator.CreateInstance(publishedEventClosedType, new CommittedEvent(Guid.NewGuid(),"",Guid.NewGuid(),interviewId,1,DateTime.Now,questionAnswered,new Version()));
-
-                interviewHistoryView = handleMethod.Invoke(interviewExportedDataDenormalizer, new object[] { interviewHistoryView, publishedEvent }) as InterviewHistoryView;
-            }
-        };
+         Because of =
+            () => PublishEventsOnOnterviewExportedDataDenormalizer(answerEvents, interviewHistoryView, interviewExportedDataDenormalizer);
 
         It should_action_of_TextQuestionAnswered_be_AnswerSet = () =>
            interviewHistoryView.Records[0].Action.ShouldEqual(InterviewHistoricalAction.AnswerSet);
@@ -131,6 +121,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static string variableName = "q1";
 
-        private static List<QuestionAnswered> answerEvents;
+        private static List<object> answerEvents;
     }
 }
