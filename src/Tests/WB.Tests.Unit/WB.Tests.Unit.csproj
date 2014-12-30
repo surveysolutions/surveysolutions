@@ -251,6 +251,13 @@
     <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\DesignerQuestionnairesApiControllerTestsContext.cs" />
     <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception.cs" />
     <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\when_requesting_questionnaire_and_designer_service_throws_fault_exception.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\QuestionnaireListViewItemDenormalizerTestContext.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_NewQuestionnaireCreated_recived.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_QuestionnaireDeleted_recived.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_QuestionnaireUpdated_recived.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_questionnaire_changing_event_recived.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_SharedPersonFromQuestionnaireRemoved_recived.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_SharedPersonToQuestionnaireAdded_received.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\ApiBasicAuthAttributeTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorization_and_request_header_has_bad_basic_auth_info.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorization_and_user_does_not_exists.cs" />
@@ -613,7 +620,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_getting_questionnaires_which_are_not_migrated_to_csharp_and_4_questionnaires_have_csharp_flag_and_5_do_not_have.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_loading_non_empty_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_loading_view.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizer\QuestionnaireListViewDenormalizerTests.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\QuestionnaireListViewDenormalizerOldTests.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\AddGroupTests.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CascadigOptions\when_removing_single_option_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CascadigOptions\when_updating_question_setting_to_cascade_from_non_existing_question.cs" />
