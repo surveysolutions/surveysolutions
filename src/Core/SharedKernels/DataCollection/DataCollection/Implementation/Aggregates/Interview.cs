@@ -965,48 +965,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return new List<decimal>(rosterVector) { value }.ToArray();
         }
 
-        public void RejectInterviewFromHeadquarters(Guid userId,
-            Guid supervisorId,
-            Guid? interviewerId,
-            InterviewSynchronizationDto interviewDto,
-            DateTime synchronizationTime)
-        {
-            ThrowIfInterviewHardDeleted();
-            this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.ApprovedBySupervisor, InterviewStatus.Deleted);
-
-            var commentedAnswers = (
-                from answerDto in interviewDto.Answers
-                from answerComment in answerDto.AllComments
-                where !this.interviewState.AnswerComments.Contains(new AnswerComment(answerComment.UserId, answerComment.Date, answerComment.Text, answerDto.Id, answerDto.QuestionPropagationVector))
-                select new
-                {
-                    UserId = answerComment.UserId,
-                    Date = answerComment.Date,
-                    Text = answerComment.Text,
-                    QuestionId = answerDto.Id,
-                    RosterVector = answerDto.QuestionPropagationVector
-                });
-
-            if (this.status == InterviewStatus.Deleted)
-            {
-                this.ApplyEvent(new InterviewRestored(userId));
-            }
-
-
-            this.ApplyEvent(new InterviewRejectedByHQ(userId, interviewDto.Comments));
-            this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: interviewDto.Comments));
-
-            if (interviewerId.HasValue)
-            {
-                this.ApplyEvent(new InterviewerAssigned(userId, interviewerId.Value));
-            }
-
-            foreach (var commentedAnswer in commentedAnswers)
-            {
-                this.ApplyEvent(new AnswerCommented(commentedAnswer.UserId, commentedAnswer.QuestionId, commentedAnswer.RosterVector, commentedAnswer.Date, commentedAnswer.Text));
-            }
-        }
-
         private static bool AreEqual(Identity identityA, Identity identityB)
         {
             return identityA.Id == identityB.Id
@@ -1641,10 +1599,50 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedByHeadquarters, comment));
         }
 
+
+        public void RejectInterviewFromHeadquarters(Guid userId,
+            Guid supervisorId,
+            Guid? interviewerId,
+            InterviewSynchronizationDto interviewDto,
+            DateTime synchronizationTime)
+        {
+            var commentedAnswers = (
+                from answerDto in interviewDto.Answers
+                from answerComment in answerDto.AllComments
+                where !this.interviewState.AnswerComments.Contains(new AnswerComment(answerComment.UserId, answerComment.Date, answerComment.Text, answerDto.Id, answerDto.QuestionPropagationVector))
+                select new
+                {
+                    UserId = answerComment.UserId,
+                    Date = answerComment.Date,
+                    Text = answerComment.Text,
+                    QuestionId = answerDto.Id,
+                    RosterVector = answerDto.QuestionPropagationVector
+                });
+
+            if (this.status == InterviewStatus.Deleted)
+            {
+                this.ApplyEvent(new InterviewRestored(userId));
+            }
+
+
+            this.ApplyEvent(new InterviewRejectedByHQ(userId, interviewDto.Comments));
+            this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: interviewDto.Comments));
+
+            if (interviewerId.HasValue)
+            {
+                this.ApplyEvent(new InterviewerAssigned(userId, interviewerId.Value));
+            }
+
+            foreach (var commentedAnswer in commentedAnswers)
+            {
+                this.ApplyEvent(new AnswerCommented(commentedAnswer.UserId, commentedAnswer.QuestionId, commentedAnswer.RosterVector, commentedAnswer.Date, commentedAnswer.Text));
+            }
+        }
+
         public void HqReject(Guid userId, string comment)
         {
             ThrowIfInterviewHardDeleted();
-            this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.ApprovedBySupervisor, InterviewStatus.ApprovedByHeadquarters);
+            this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.ApprovedBySupervisor, InterviewStatus.Deleted);
 
             this.ApplyEvent(new InterviewRejectedByHQ(userId, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, comment));
