@@ -149,10 +149,10 @@
     <Compile Include="Models\ImportQuestionnaireRequest.cs" />
     <Compile Include="Models\RebuildReadSideInputViewModel.cs" />
     <Compile Include="Models\RebuildReadSideType.cs" />
-    <Compile Include="Resources\Strings.Designer.cs">
+    <Compile Include="Resources\InterviewerSyncStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Strings.resx</DependentUpon>
+      <DependentUpon>InterviewerSyncStrings.resx</DependentUpon>
     </Compile>
     <Compile Include="Utils\Binding\GenericBinderResolver.cs" />
     <Compile Include="Utils\Binding\IModelBinder.cs" />
@@ -287,9 +287,9 @@
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Strings.resx">
+    <EmbeddedResource Include="Resources\InterviewerSyncStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <LastGenOutput>InterviewerSyncStrings.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\web.config" />

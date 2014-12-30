@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
             actionContext.Response.StatusCode.ShouldEqual(HttpStatusCode.Unauthorized);
 
         It should_response_reason_phrase_contains_specified_message = () =>
-            new[] { "error", "with", "login/password" }.ShouldEachConformTo(keyword => actionContext.Response.ReasonPhrase.ToLower().Contains(keyword));
+            actionContext.Response.ReasonPhrase.ShouldEqual("Synchronization failed. User is not autorized. Please check you login/password for http://hq.org.");
 
         private static ApiBasicAuthAttribute attribute;
         private static HttpActionContext actionContext;
