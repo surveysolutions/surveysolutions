@@ -44,8 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
                 interview.Apply(new InterviewStatusChanged(interviewStatus, null));
                 try
                 {
-                    interview.RejectInterviewFromHeadquarters(userId, Guid.NewGuid(), Guid.NewGuid(), new InterviewSynchronizationDto(),
-                        DateTime.Now);
+                    interview.HqReject(userId, "comment");
                 }
                 catch (InterviewException)
                 {

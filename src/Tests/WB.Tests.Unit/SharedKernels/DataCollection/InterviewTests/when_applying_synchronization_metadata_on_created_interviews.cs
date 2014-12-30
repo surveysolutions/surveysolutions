@@ -57,61 +57,61 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     catch {}
                 }
                 if (exceptionByStatuses.Any())
-                    interviewStatusesWhichWasChangedWithoutExcitation.Add(originalInterviewStatus, exceptionByStatuses.ToArray());
+                    interviewStatusesWhichWasChangedWithoutException.Add(originalInterviewStatus, exceptionByStatuses.ToArray());
             }
         };
 
         It should_count_of_interview_statuses_succefully_updated_be_equal_to_9 = () =>
-            interviewStatusesWhichWasChangedWithoutExcitation.Keys.Count().ShouldEqual(9);
+            interviewStatusesWhichWasChangedWithoutException.Keys.Count().ShouldEqual(9);
 
         It should_interview_in_status_Deleted_be_allowed_to_change_on_any_status = () =>
-            interviewStatusesWhichWasChangedWithoutExcitation[InterviewStatus.Deleted].Length.ShouldEqual(
+            interviewStatusesWhichWasChangedWithoutException[InterviewStatus.Deleted].Length.ShouldEqual(
                 Enum.GetValues(typeof (InterviewStatus)).Length);
 
         It should_interview_in_status_Restored_be_allowed_to_change_on_Completed_RejectedBySupervisor_InterviewerAssigned_recheck_this_one = () =>
-            interviewStatusesWhichWasChangedWithoutExcitation[InterviewStatus.Restored].ShouldContainOnly(new[]
+            interviewStatusesWhichWasChangedWithoutException[InterviewStatus.Restored].ShouldContainOnly(new[]
             {
                 InterviewStatus.InterviewerAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor
             });
 
         It should_interview_in_status_SupervisorAssigned_be_allowed_to_change_on_ApprovedBySupervisor_InterviewerAssigned_recheck_this_one  = () =>
-            interviewStatusesWhichWasChangedWithoutExcitation[InterviewStatus.SupervisorAssigned].ShouldContainOnly(new[]
+            interviewStatusesWhichWasChangedWithoutException[InterviewStatus.SupervisorAssigned].ShouldContainOnly(new[]
             {
                 InterviewStatus.InterviewerAssigned, InterviewStatus.ApprovedBySupervisor
             });
 
         It should_interview_in_status_InterviewerAssigned_be_allowed_to_change_on_Completed_RejectedBySupervisor_InterviewerAssigned_ApprovedBySupervisor_recheck_this_one = () =>
-            interviewStatusesWhichWasChangedWithoutExcitation[InterviewStatus.InterviewerAssigned].ShouldContainOnly(new[]
+            interviewStatusesWhichWasChangedWithoutException[InterviewStatus.InterviewerAssigned].ShouldContainOnly(new[]
             {
                 InterviewStatus.InterviewerAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.ApprovedBySupervisor
             });
 
         It should_interview_in_status_Completed_be_allowed_to_change_on_RejectedBySupervisor_recheck_this_one = () =>
-            interviewStatusesWhichWasChangedWithoutExcitation[InterviewStatus.Completed].ShouldContainOnly(new[]
+            interviewStatusesWhichWasChangedWithoutException[InterviewStatus.Completed].ShouldContainOnly(new[]
             {
                 InterviewStatus.RejectedBySupervisor
             });
 
         It should_interview_in_status_Restarted_be_allowed_to_change_on_Completed_RejectedBySupervisor_InterviewerAssigned_recheck_this_one = () =>
-             interviewStatusesWhichWasChangedWithoutExcitation[InterviewStatus.Restarted].ShouldContainOnly(new[]
+             interviewStatusesWhichWasChangedWithoutException[InterviewStatus.Restarted].ShouldContainOnly(new[]
              {
                 InterviewStatus.InterviewerAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor
              });
 
         It should_interview_in_status_RejectedBySupervisor_be_allowed_to_change_on_RejectedBySupervisor_recheck_this_one = () =>
-            interviewStatusesWhichWasChangedWithoutExcitation[InterviewStatus.RejectedBySupervisor].ShouldContainOnly(new[]
+            interviewStatusesWhichWasChangedWithoutException[InterviewStatus.RejectedBySupervisor].ShouldContainOnly(new[]
             {
                 InterviewStatus.InterviewerAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor
             });
 
         It should_interview_in_status_ApprovedBySupervisor_be_allowed_to_change_on_RejectedBySupervisor_recheck_this_one = () =>
-            interviewStatusesWhichWasChangedWithoutExcitation[InterviewStatus.ApprovedBySupervisor].ShouldContainOnly(new[]
+            interviewStatusesWhichWasChangedWithoutException[InterviewStatus.ApprovedBySupervisor].ShouldContainOnly(new[]
             {
                 InterviewStatus.RejectedBySupervisor
             });
 
         It should_interview_in_status_RejectedByHeadquarters_be_allowed_to_change_on_ApprovedBySupervisor_recheck_this_one = () =>
-            interviewStatusesWhichWasChangedWithoutExcitation[InterviewStatus.RejectedByHeadquarters].ShouldContainOnly(new[]
+            interviewStatusesWhichWasChangedWithoutException[InterviewStatus.RejectedByHeadquarters].ShouldContainOnly(new[]
             {
                 InterviewStatus.ApprovedBySupervisor
             });
@@ -121,7 +121,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static long questionnaireVersion = 18;
 
-        private static Dictionary<InterviewStatus, InterviewStatus[]> interviewStatusesWhichWasChangedWithoutExcitation =
+        private static Dictionary<InterviewStatus, InterviewStatus[]> interviewStatusesWhichWasChangedWithoutException =
             new Dictionary<InterviewStatus, InterviewStatus[]>();
     }
 }
