@@ -2,11 +2,10 @@ angular.module('designerApp')
     .controller('MainCtrl',
         function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal) {
 
-            var isIe9 = (navigator.appVersion.indexOf("MSIE 9.") != -1);
-
             $scope.verificationStatus = {
                 errorsCount: null,
                 errors: [],
+                visible: false,
                 time: new Date()
             };
 
@@ -16,6 +15,14 @@ angular.module('designerApp')
                 rostersCount: 0
             };
 
+            hotkeys.add({
+                combo: 'esc',
+                allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                callback: function () {
+                    $scope.verificationStatus.visible = false;
+                }
+            });
+
             $scope.questionnaireId = $state.params.questionnaireId;
 
             $scope.verify = function () {
@@ -24,22 +31,7 @@ angular.module('designerApp')
                     $scope.verificationStatus.errors = result.errors;
                     $scope.verificationStatus.errorsCount = result.errorsCount;
                     $scope.verificationStatus.time = new Date();
-
-                    var verificationModal = $('#verification-modal');
-
-                    if (isIe9) {
-                        verificationModal.addClass("ie9-backdrop");
-                    }
-
-                    if ($scope.verificationStatus.errorsCount > 0) {
-                        verificationModal.modal({
-                            backdrop: isIe9,
-                            show: true
-                        });
-                    } else {
-                        if (verificationModal.hasClass('in'))
-                            verificationModal.modal('toggle');
-                    }
+                    $scope.verificationStatus.visible = result.errorsCount > 0;
                 });
             };
 

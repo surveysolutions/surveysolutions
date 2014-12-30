@@ -25,7 +25,7 @@
                     <input id="verification-btn" type="button" class="btn" value="VERIFY" ng-click="verify()" />
                     <span id="verify-btn" data-toggle="modal" ng-show="verificationStatus.errorsCount" class="error-message ng-hide">
                         <a href="javascript:void(0);"
-                           ng-click="verify()"
+                           ng-click="verificationStatus.visible = true"
                            ng-pluralize
                            count="verificationStatus.errorsCount"
                            when="{'1': '{} error',
@@ -85,38 +85,39 @@
     <div class="questionnaire-tree" ui-view></div>
 </section>
 
-<div id="verification-modal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Verification: <span ng-pluralize count="verificationStatus.errorsCount" when="{'1': '{} error found', '100': '{}+ errors found', 'other': '{} errors found'}"></span></h3>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><!--&times;--></button>
-            </div>
-            <div class="modal-body">
-                <perfect-scrollbar class="scroller">
-                    <div id="verify-popover-content">
-                        <div class="question-list">
-                            <div ng-repeat="error in verificationStatus.errors">
-                                <div class="error-message"><span class="error-code">[{{error.code}}]:</span>{{error.message}}</div>
-                                <ul class="verification-items" ng-class="{singleError: !error.isGroupOfErrors}">
-                                    <li class="verification-item-container" ng-repeat="reference in error.references" ng-click="navigateTo(reference)">
-                                        <a class="verification-item" href="javascript:void(0);">
-                                            <span ng-if="reference.type == 'Question'" class="icon icon-error {{reference.questionType}}"></span>
-                                            <span ng-if="reference.type == 'StaticText'" class="icon icon-error icon-statictext"></span>
-                                            <span class="title">{{reference.title}}</span>
-                                            <span ng-if="reference.type == 'Question' || reference.type == 'Roster'" class="variable" ng-bind="reference.variable">aaaa</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
+<div id="verification-modal" ng-show="verificationStatus.visible">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                Verification: <span ng-pluralize count="verificationStatus.errorsCount"
+                                    when="{'1': '{} error found', '100': '{}+ errors found', 'other': '{} errors found'}"></span>
+            </h3>
+            <button type="button" class="close" ng-click="verificationStatus.visible = false" aria-hidden="true"> <!--&times;--> </button>
+        </div>
+        <div class="modal-body">
+            <perfect-scrollbar class="scroller">
+                <div id="verify-popover-content">
+                    <div class="question-list">
+                        <div ng-repeat="error in verificationStatus.errors">
+                            <div class="error-message"><span class="error-code">[{{error.code}}]:</span>{{error.message}}</div>
+                            <ul class="verification-items" ng-class="{singleError: !error.isGroupOfErrors}">
+                                <li class="verification-item-container" ng-repeat="reference in error.references" ng-click="navigateTo(reference)">
+                                    <a class="verification-item" href="javascript:void(0);">
+                                        <span ng-if="reference.type == 'Question'" class="icon icon-error {{reference.questionType}}"></span>
+                                        <span ng-if="reference.type == 'StaticText'" class="icon icon-error icon-statictext"></span>
+                                        <span class="title">{{reference.title}}</span>
+                                        <span ng-if="reference.type == 'Question' || reference.type == 'Roster'" class="variable" ng-bind="reference.variable">aaaa</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                </perfect-scrollbar>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-link" ng-click="verify()">REVERIFY</button>
-                <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">CLOSE</button>
-            </div>
+                </div>
+            </perfect-scrollbar>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-link" ng-click="verify()">REVERIFY</button>
+            <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">CLOSE</button>
         </div>
     </div>
 </div>
