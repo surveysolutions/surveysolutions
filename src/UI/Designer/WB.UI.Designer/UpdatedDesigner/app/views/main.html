@@ -25,7 +25,7 @@
                     <input id="verification-btn" type="button" class="btn" value="VERIFY" ng-click="verify()" />
                     <span id="verify-btn" data-toggle="modal" ng-show="verificationStatus.errorsCount" class="error-message ng-hide">
                         <a href="javascript:void(0);"
-                           ng-click="verify()"
+                           ng-click="verificationStatus.visible = true"
                            ng-pluralize
                            count="verificationStatus.errorsCount"
                            when="{'1': '{} error',
@@ -85,14 +85,14 @@
     <div class="questionnaire-tree" ui-view></div>
 </section>
 
-<div id="verification-modal" ng-show="verificationStatus.errorsCount > 0">
+<div id="verification-modal" ng-show="verificationStatus.visible">
     <div class="modal-content">
         <div class="modal-header">
             <h3 class="modal-title">
                 Verification: <span ng-pluralize count="verificationStatus.errorsCount"
                                     when="{'1': '{} error found', '100': '{}+ errors found', 'other': '{} errors found'}"></span>
             </h3>
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"> <!--&times;--> </button>
+            <button type="button" class="close" ng-click="verificationStatus.visible = false" aria-hidden="true"> <!--&times;--> </button>
         </div>
         <div class="modal-body">
             <perfect-scrollbar class="scroller">

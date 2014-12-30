@@ -8204,6 +8204,18 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   border-top-color: #dd2c2c;
   padding: 0 22px;
 }
+#verification-modal .modal-content .modal-header button.close {
+  position: absolute;
+  z-index: 100;
+  top: 12px;
+  right: 4px;
+  width: 40px;
+  height: 40px;
+  background: url(i/cross.png) 0 0 no-repeat;
+}
+#verification-modal .modal-content .modal-header button.close:hover {
+  background-position: 0 -40px;
+}
 #verification-modal .modal-content .modal-header h3 {
   line-height: 62px;
 }

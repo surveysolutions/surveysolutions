@@ -5,6 +5,7 @@ angular.module('designerApp')
             $scope.verificationStatus = {
                 errorsCount: null,
                 errors: [],
+                visible: false,
                 time: new Date()
             };
 
@@ -14,6 +15,14 @@ angular.module('designerApp')
                 rostersCount: 0
             };
 
+            hotkeys.add({
+                combo: 'esc',
+                allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                callback: function () {
+                    $scope.verificationStatus.visible = false;
+                }
+            });
+
             $scope.questionnaireId = $state.params.questionnaireId;
 
             $scope.verify = function () {
@@ -22,12 +31,7 @@ angular.module('designerApp')
                     $scope.verificationStatus.errors = result.errors;
                     $scope.verificationStatus.errorsCount = result.errorsCount;
                     $scope.verificationStatus.time = new Date();
-
-                    //if ($scope.verificationStatus.errorsCount > 0) {
-                    //    $("#verification-modal").show();
-                    //} else {
-                    //    $("#verification-modal").hide();
-                    //}
+                    $scope.verificationStatus.visible = result.errorsCount > 0;
                 });
             };
 
