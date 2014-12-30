@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
+using WB.Core.SharedKernels.SurveyManagement.Web.Resources;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
@@ -33,6 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ITabletInformationService tabletInformationService;
         private readonly IJsonUtils jsonUtils;
+
 
         private string ResponseInterviewerFileName = "interviewer.apk";
         private string CapiFileName = "wbcapi.apk";
@@ -71,7 +73,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable)
                 {
-                    ReasonPhrase = Strings.ClientVersionIsObsolete
+                    ReasonPhrase = string.Format(InterviewerSyncStrings.InterviewerApplicationHasHigherVersion_thanSupervisor_Format, request.Version, supervisorRevisionNumber.Value)
                 });
             }
 
@@ -79,7 +81,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable)
                 {
-                    ReasonPhrase = Strings.OldVersionOfClient
+                    ReasonPhrase = string.Format(InterviewerSyncStrings.InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication, request.Version, supervisorRevisionNumber.Value)
                 });
             }
 
@@ -93,16 +95,39 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 ClientRegistrationKey = request.ClientRegistrationId,
                 SupervisorPublicKey = interviewerInfo.Supervisor.Id
             };
+            try
+            {
+                return syncManager.ItitSync(identifier);
+            }
+            catch (Exception exc)
+            {
+                Logger.Fatal(
+                    string.Format("Sync Handshake Error. ClientId:{0}, AndroidId : {1}, ClientRegistrationId:{2}, version: {3}",
+                        request.ClientId, request.AndroidId, request.ClientRegistrationId, request.Version), exc);
 
-
-            return syncManager.ItitSync(identifier);
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    ReasonPhrase = exc.Message
+                });
+            }
         }
 
         [HttpPost]
         [ApiBasicAuth]
         public SyncPackage GetSyncPackage(SyncPackageRequest request)
         {
-            return syncManager.ReceiveSyncPackage(request.ClientRegistrationId, request.PackageId);
+            try
+            {
+                return syncManager.ReceiveSyncPackage(request.ClientRegistrationId, request.PackageId);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message, ex);
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
+                {
+                    ReasonPhrase = InterviewerSyncStrings.ServerError
+                });
+            }
         }
 
         [HttpPost]
@@ -116,9 +141,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
                 return new SyncItemsMetaContainer {ChunksMeta = package};
             }
-            catch (SyncPackageNotFoundException)
+            catch (SyncPackageNotFoundException ex)
             {
-                return null;
+                Logger.Error(ex.Message, ex);
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
+                {
+                    ReasonPhrase = InterviewerSyncStrings.ServerError
+                });
             }
         }
 
@@ -133,16 +162,38 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [ApiBasicAuth]
         public void PostFile(PostFileRequest request)
         {
-            plainFileRepository.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data));
+            try
+            {
+                plainFileRepository.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data));
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message, ex);
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
+                {
+                    ReasonPhrase = InterviewerSyncStrings.ServerError
+                });
+            }
         }
 
         [HttpPost]
         [ApiBasicAuth]
         public void PostPackage(PostPackageRequest request)
         {
-            var syncItem = this.jsonUtils.Deserialize<SyncItem>(request.SynchronizationPackage);
+            try
+            {
+                var syncItem = this.jsonUtils.Deserialize<SyncItem>(request.SynchronizationPackage);
 
-            syncManager.SendSyncItem(syncItem);
+                syncManager.SendSyncItem(syncItem);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message, ex);
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
+                {
+                    ReasonPhrase = InterviewerSyncStrings.ServerError
+                });
+            }
         }
 
         [HttpGet]
@@ -165,8 +216,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
                 return response;
             }
-            
-            return Request.CreateErrorResponse(HttpStatusCode.NotFound, Strings.FileWasNotFound);
+
+            return Request.CreateErrorResponse(HttpStatusCode.NotFound, InterviewerSyncStrings.FileWasNotFound);
         }
         
         [HttpGet]

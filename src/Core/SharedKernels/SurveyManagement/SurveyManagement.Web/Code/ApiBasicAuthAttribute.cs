@@ -13,6 +13,7 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
+using WB.Core.SharedKernels.SurveyManagement.Web.Resources;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 {
@@ -103,13 +104,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
         private void ThrowUnauthorizeResponseIfUserNotExists(HttpActionContext actionContext)
         {
-            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized){ReasonPhrase = Strings.InvalidUser};
+            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = string.Format(InterviewerSyncStrings.InvalidUserFormat, actionContext.Request.RequestUri.GetLeftPart(UriPartial.Authority)) };
             actionContext.Response.Headers.Add("WWW-Authenticate", string.Format("Basic realm=\"{0}\"", actionContext.Request.RequestUri.DnsSafeHost));
         }
 
         private void ThrowUnauthorizeResponseIfUserIsNotAnInterviewer(HttpActionContext actionContext)
         {
-            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = Strings.InvalidUserRole };
+            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = InterviewerSyncStrings.InvalidUserRole };
         }
     }
 }

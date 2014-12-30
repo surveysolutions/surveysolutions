@@ -123,8 +123,8 @@
   <data name="InvalidDeviceIdentifier" xml:space="preserve">
     <value>Invalid device identifier. Something has happened with the client app installation, press "Send tablet information" button.</value>
   </data>
-  <data name="InvalidUser" xml:space="preserve">
-    <value>Synchronization failed. User is not authorized. Check your login and password.</value>
+  <data name="InvalidUserFormat" xml:space="preserve">
+    <value>Synchronization failed. User is not autorized. Please check you login/password for {0}.</value>
   </data>
   <data name="NoClientIdentifier" xml:space="preserve">
     <value>System error. Please reinstall application. Installation identifier is missing.</value>
@@ -149,5 +149,8 @@
   </data>
   <data name="Sync_package_with_id__0__was_not_found_on_serverFormat" xml:space="preserve">
     <value>System error. Please contact developers. Sync package with id '{0}' was not found on server</value>
+  </data>
+  <data name="InvalidUserRole" xml:space="preserve">
+    <value>Your account does not have an interviewer role</value>
   </data>
 </root>
