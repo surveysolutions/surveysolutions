@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Machine.Specifications;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
@@ -10,14 +11,22 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewHistoryDenormalizerTests
 {
     [Subject(typeof(InterviewHistoryDenormalizer))]
-    [Ignore("temporary fix of failed build")]
     internal class when_all_available_descendants_of_QuestionAnswered_recived
     {
         Establish context = () =>
         {
-            availableDescendants = AppDomain.CurrentDomain.GetAssemblies()
-               .SelectMany(s => s.GetTypes())
-               .Where(eh => typeof(QuestionAnswered).IsAssignableFrom(eh) && !eh.IsAbstract && !eh.IsInterface).ToList();
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (var assembly in assemblies)
+            {
+                try
+                {
+                    availableDescendants.AddRange(
+                        assembly.GetTypes().Where(eh => typeof (QuestionAnswered).IsAssignableFrom(eh) && !eh.IsAbstract && !eh.IsInterface));
+                }
+                catch (ReflectionTypeLoadException)
+                {
+                }
+            }
         };
 
         Because of =
@@ -38,6 +47,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
         private static HashSet<Type> missingHandlers = new HashSet<Type>();
 
-        private static List<Type> availableDescendants;
+        private static List<Type> availableDescendants=new List<Type>();
     }
 }
