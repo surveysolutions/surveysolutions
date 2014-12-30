@@ -11,13 +11,41 @@ using WB.UI.Designer.Providers.CQRS.Accounts;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 {
-    internal class QuestionnaireListViewItemDenormalizer : BaseDenormalizer,IAtomicEventHandler, IEventHandler<NewQuestionnaireCreated>,
+    internal class QuestionnaireListViewItemDenormalizer : BaseDenormalizer, IAtomicEventHandler, 
+        IEventHandler<NewQuestionnaireCreated>,
         IEventHandler<QuestionnaireUpdated>,
         IEventHandler<QuestionnaireDeleted>,
         IEventHandler<TemplateImported>,
         IEventHandler<QuestionnaireCloned>,
         IEventHandler<SharedPersonToQuestionnaireAdded>,
-        IEventHandler<SharedPersonFromQuestionnaireRemoved>
+        IEventHandler<SharedPersonFromQuestionnaireRemoved>,
+
+        IEventHandler<NewGroupAdded>,
+        IEventHandler<GroupCloned>,
+        IEventHandler<QuestionnaireItemMoved>,
+        IEventHandler<QuestionDeleted>,
+        IEventHandler<NewQuestionAdded>,
+        IEventHandler<QuestionCloned>,
+        IEventHandler<QuestionChanged>,
+        IEventHandler<NumericQuestionAdded>,
+        IEventHandler<NumericQuestionCloned>,
+        IEventHandler<NumericQuestionChanged>,
+        IEventHandler<GroupDeleted>,
+        IEventHandler<GroupUpdated>,
+        IEventHandler<GroupBecameARoster>,
+        IEventHandler<RosterChanged>,
+        IEventHandler<GroupStoppedBeingARoster>,
+        IEventHandler<TextListQuestionAdded>,
+        IEventHandler<TextListQuestionCloned>,
+        IEventHandler<TextListQuestionChanged>,
+        IEventHandler<QRBarcodeQuestionAdded>,
+        IEventHandler<QRBarcodeQuestionUpdated>,
+        IEventHandler<QRBarcodeQuestionCloned>,
+        IEventHandler<MultimediaQuestionUpdated>,
+        IEventHandler<StaticTextAdded>,
+        IEventHandler<StaticTextUpdated>,
+        IEventHandler<StaticTextCloned>,
+        IEventHandler<StaticTextDeleted>
     {
         #region Fields
 
@@ -63,7 +91,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                 evnt.EventSourceId,
                 evnt.Payload.Title,
                 evnt.Payload.CreationDate,
-                DateTime.Now,
+                evnt.EventTimeStamp,
                 evnt.Payload.CreatedBy,
                 evnt.Payload.IsPublic);
             if (evnt.Payload.CreatedBy.HasValue)
@@ -88,6 +116,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             {
                 browseItem.Title = evnt.Payload.Title;
                 browseItem.IsPublic = evnt.Payload.IsPublic;
+                browseItem.LastEntryDate = evnt.EventTimeStamp;
                 this.documentStorage.Store(browseItem, evnt.EventSourceId);
             }
         }
@@ -106,23 +135,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            this.CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(evnt.Payload.Source, true);
+            this.CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(evnt.Payload.Source, true, evnt.Payload.Source.CreationDate, evnt.Payload.Source.LastEntryDate);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireCloned> evnt)
         {
-            this.CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(evnt.Payload.QuestionnaireDocument, false);
+            this.CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(evnt.Payload.QuestionnaireDocument, false, evnt.EventTimeStamp, evnt.EventTimeStamp);
         }
 
-        private void CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(QuestionnaireDocument document, bool shouldPreserveSharedPersons)
+        private void CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(QuestionnaireDocument document, bool shouldPreserveSharedPersons, DateTime creationTime, DateTime updateTime)
         {
             var item = new QuestionnaireListViewItem(
              document.PublicKey,
              document.Title,
-             document.CreationDate,
-             document.LastEntryDate,
+             creationTime,
+             updateTime,
              document.CreatedBy,
              document.IsPublic);
+
             if (document.CreatedBy.HasValue)
             {
                 var user = this.accountStorage.GetById(document.CreatedBy.Value);
@@ -161,6 +191,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                 {
                     browseItem.SharedPersons.Add(evnt.Payload.PersonId);
                 }
+                browseItem.LastEntryDate = evnt.EventTimeStamp;
                 this.documentStorage.Store(browseItem, evnt.EventSourceId);
             }
             
@@ -175,9 +206,149 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                 {
                     browseItem.SharedPersons.Remove(evnt.Payload.PersonId);
                 }
-
+                browseItem.LastEntryDate = evnt.EventTimeStamp;
                 this.documentStorage.Store(browseItem, evnt.EventSourceId);
             }
+        }
+
+        private void UpdateLastEntryDate(Guid questionnaireId, DateTime updateDate)
+        {
+            var browseItem = this.documentStorage.GetById(questionnaireId);
+            if (browseItem != null)
+            {
+                browseItem.LastEntryDate = updateDate;
+                this.documentStorage.Store(browseItem, questionnaireId);
+            }
+        }
+
+        public void Handle(IPublishedEvent<NewGroupAdded> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<GroupCloned> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<QuestionnaireItemMoved> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<QuestionDeleted> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<NewQuestionAdded> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<QuestionCloned> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<QuestionChanged> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<NumericQuestionAdded> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<NumericQuestionCloned> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<NumericQuestionChanged> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<GroupDeleted> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<GroupUpdated> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<GroupBecameARoster> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<RosterChanged> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<GroupStoppedBeingARoster> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<TextListQuestionAdded> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<TextListQuestionCloned> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<TextListQuestionChanged> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<QRBarcodeQuestionAdded> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<QRBarcodeQuestionUpdated> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<QRBarcodeQuestionCloned> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<MultimediaQuestionUpdated> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<StaticTextAdded> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<StaticTextUpdated> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<StaticTextCloned> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<StaticTextDeleted> evnt)
+        {
+            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
         }
     }
 }
