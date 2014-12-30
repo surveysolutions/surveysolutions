@@ -2,8 +2,6 @@ angular.module('designerApp')
     .controller('MainCtrl',
         function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal) {
 
-            var isIe9 = (navigator.appVersion.indexOf("MSIE 9.") != -1);
-
             $scope.verificationStatus = {
                 errorsCount: null,
                 errors: [],
@@ -25,21 +23,11 @@ angular.module('designerApp')
                     $scope.verificationStatus.errorsCount = result.errorsCount;
                     $scope.verificationStatus.time = new Date();
 
-                    var verificationModal = $('#verification-modal');
-
-                    if (isIe9) {
-                        verificationModal.addClass("ie9-backdrop");
-                    }
-
-                    if ($scope.verificationStatus.errorsCount > 0) {
-                        verificationModal.modal({
-                            backdrop: isIe9,
-                            show: true
-                        });
-                    } else {
-                        if (verificationModal.hasClass('in'))
-                            verificationModal.modal('toggle');
-                    }
+                    //if ($scope.verificationStatus.errorsCount > 0) {
+                    //    $("#verification-modal").show();
+                    //} else {
+                    //    $("#verification-modal").hide();
+                    //}
                 });
             };
 

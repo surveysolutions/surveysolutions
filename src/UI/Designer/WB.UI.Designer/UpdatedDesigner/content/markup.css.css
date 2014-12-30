@@ -8183,19 +8183,15 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   width: 50%;
   bottom: 0;
   position: fixed;
+  z-index: 1000;
   padding: 26px 24px 26px 76px;
 }
-#verification-modal .modal-dialog {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  position: relative;
-}
-#verification-modal .modal-dialog .modal-content {
+#verification-modal .modal-content {
   height: 100%;
   border: none;
+  position: relative;
 }
-#verification-modal .modal-dialog .modal-content .modal-header {
+#verification-modal .modal-content .modal-header {
   position: absolute;
   top: 0;
   width: 100%;
@@ -8208,17 +8204,17 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   border-top-color: #dd2c2c;
   padding: 0 22px;
 }
-#verification-modal .modal-dialog .modal-content .modal-header h3 {
+#verification-modal .modal-content .modal-header h3 {
   line-height: 62px;
 }
-#verification-modal .modal-dialog .modal-content .modal-header h3 span {
+#verification-modal .modal-content .modal-header h3 span {
   color: #dd2c2c;
 }
-#verification-modal .modal-dialog .modal-content .modal-body {
+#verification-modal .modal-content .modal-body {
   padding: 70px 0 44px;
   height: 100%;
 }
-#verification-modal .modal-dialog .modal-content .modal-body .error-message {
+#verification-modal .modal-content .modal-body .error-message {
   font-family: Georgia, serif;
   font-size: 16px;
   padding-left: 18px;
@@ -8226,20 +8222,20 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   margin-top: 10px;
   margin-bottom: 4px;
 }
-#verification-modal .modal-dialog .modal-content .modal-body .error-code {
+#verification-modal .modal-content .modal-body .error-code {
   font-family: "Lucida Console", Monaco, monospace;
   font-style: normal;
 }
-#verification-modal .modal-dialog .modal-content .modal-body .verification-items {
+#verification-modal .modal-content .modal-body .verification-items {
   list-style: none;
   margin: 0;
   padding: 0;
   margin-bottom: 20px;
 }
-#verification-modal .modal-dialog .modal-content .modal-body .verification-items .verification-item-container {
+#verification-modal .modal-content .modal-body .verification-items .verification-item-container {
   border-left: 4px solid #dd2c2c;
 }
-#verification-modal .modal-dialog .modal-content .modal-body .verification-items .verification-item {
+#verification-modal .modal-content .modal-body .verification-items .verification-item {
   margin-top: 3px;
   border-radius: 0 4px 4px 0;
   padding-left: 18px;
@@ -8252,21 +8248,21 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   display: block;
   color: #a60c22;
 }
-#verification-modal .modal-dialog .modal-content .modal-body .verification-items .verification-item span {
+#verification-modal .modal-content .modal-body .verification-items .verification-item span {
   display: inline-block;
 }
-#verification-modal .modal-dialog .modal-content .modal-body .verification-items .verification-item .icon {
+#verification-modal .modal-content .modal-body .verification-items .verification-item .icon {
   position: absolute;
   left: 18px;
   top: 7px;
 }
-#verification-modal .modal-dialog .modal-content .modal-body .verification-items .verification-item .title {
+#verification-modal .modal-content .modal-body .verification-items .verification-item .title {
   display: block;
   padding-left: 29px;
   line-height: 34px;
   overflow: hidden;
 }
-#verification-modal .modal-dialog .modal-content .modal-body .verification-items .verification-item .variable {
+#verification-modal .modal-content .modal-body .verification-items .verification-item .variable {
   position: absolute;
   right: 0;
   padding-right: 8px;
@@ -8274,7 +8270,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   color: #3da802;
   background: #f2f3f5;
 }
-#verification-modal .modal-dialog .modal-content .modal-body .verification-items .verification-item .variable:before {
+#verification-modal .modal-content .modal-body .verification-items .verification-item .variable:before {
   display: block;
   position: absolute;
   height: 100%;
@@ -8288,13 +8284,13 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00f2f3f5', endColorstr='#fff2f3f5', GradientType=1);
 }
-#verification-modal .modal-dialog .modal-content .modal-body .verification-items.singleError {
+#verification-modal .modal-content .modal-body .verification-items.singleError {
   border-left: 4px solid #dd2c2c;
 }
-#verification-modal .modal-dialog .modal-content .modal-body .verification-items.singleError .verification-item-container {
+#verification-modal .modal-content .modal-body .verification-items.singleError .verification-item-container {
   border-left: none;
 }
-#verification-modal .modal-dialog .modal-content .modal-footer {
+#verification-modal .modal-content .modal-footer {
   border-top: 2px solid #edeff1;
   position: absolute;
   bottom: 0;
@@ -8304,7 +8300,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   padding: 0 24px;
   line-height: 42px;
 }
-#verification-modal .modal-dialog .modal-content .modal-footer .btn-link {
+#verification-modal .modal-content .modal-footer .btn-link {
   padding-left: 0;
 }
 #verification-modal.ie9-backdrop {
