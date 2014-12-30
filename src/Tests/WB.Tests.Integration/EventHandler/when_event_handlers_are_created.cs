@@ -22,10 +22,21 @@ namespace WB.Tests.Integration.EventHandler
     {
         Establish context = () =>
         {
+
             var type = typeof(IEventHandler);
-            var types = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes())
-                .Where(eh => type.IsAssignableFrom(eh) && !eh.IsAbstract && !eh.IsInterface).ToArray();
+            var types = new List<Type>();
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (var assembly in assemblies)
+            {
+                try
+                {
+                    types.AddRange(
+                        assembly.GetTypes().Where(eh => type.IsAssignableFrom(eh) && !eh.IsAbstract && !eh.IsInterface));
+                }
+                catch (ReflectionTypeLoadException)
+                {
+                }
+            }
 
             foreach (var eventHandlerType in types)
             {
