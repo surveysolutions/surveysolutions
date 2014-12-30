@@ -251,6 +251,10 @@
     <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\DesignerQuestionnairesApiControllerTestsContext.cs" />
     <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception.cs" />
     <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\when_requesting_questionnaire_and_designer_service_throws_fault_exception.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\ApiBasicAuthAttributeTestsContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorization_and_request_header_has_bad_basic_auth_info.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorization_and_user_does_not_exists.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorization_and_user_not_interviewer.cs" />
     <Compile Include="Applications\Headquarters\FilterTests\InstallationAttributeTests\InstallationAttributeTestsContext.cs" />
     <Compile Include="Applications\Headquarters\FilterTests\InstallationAttributeTests\when_action_executing_and_control_panel_controller.cs" />
     <Compile Include="Applications\Headquarters\FilterTests\InstallationAttributeTests\when_action_executing_and_hq_user_does_not_exists_and_install_controller.cs" />
