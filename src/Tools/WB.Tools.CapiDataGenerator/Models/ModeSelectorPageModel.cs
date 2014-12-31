@@ -9,6 +9,7 @@ using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.Storage.Raven;
+using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.Synchronization;
@@ -95,7 +96,7 @@ namespace WB.Tools.CapiDataGenerator.Models
             new StandardKernel(
                 new InfrastructureModule().AsNinject(),
                 new NcqrsModule().AsNinject(),
-                new RavenReadSideInfrastructureModule(ravenSupervisorSettings, basePath),
+                new RavenReadSideInfrastructureModule(ravenSupervisorSettings, new RavenReadSideRepositoryWriterSettings(basePath, 1024)),
                 new SynchronizationModule(synchronizationSettings),
                 new RavenPlainStorageInfrastructureModule(ravenSupervisorSettings),
                 new CapiDataGeneratorRegistry(),
