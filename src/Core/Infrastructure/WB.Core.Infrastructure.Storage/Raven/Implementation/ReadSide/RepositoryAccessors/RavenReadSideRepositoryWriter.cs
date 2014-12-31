@@ -28,8 +28,8 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         private readonly ConcurrentDictionary<string, TEntity> cache = new ConcurrentDictionary<string, TEntity>();
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly string basePath;
-
+        private readonly RavenReadSideRepositoryWriterSettings settings;
+        private readonly string cachedViewsFolder;
         private readonly ILogger logger;
 
         private JsonSerializerSettings JsonSerializerSettings
@@ -47,15 +47,16 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             }
         }
 
-        public RavenReadSideRepositoryWriter(IDocumentStore ravenStore, IFileSystemAccessor fileSystemAccessor, string basePath, ILogger logger)
+        public RavenReadSideRepositoryWriter(IDocumentStore ravenStore, IFileSystemAccessor fileSystemAccessor, ILogger logger, RavenReadSideRepositoryWriterSettings settings)
             : base(ravenStore)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
+            this.settings = settings;
 
-            var readSideCacheFolderPath = GetFolderPathAndCreateIfAbsent(basePath, ReadSideCacheFolderName);
+            var readSideCacheFolderPath = GetFolderPathAndCreateIfAbsent(settings.BasePath, ReadSideCacheFolderName);
 
-            this.basePath = GetFolderPathAndCreateIfAbsent(readSideCacheFolderPath, ViewName);
+            this.cachedViewsFolder = GetFolderPathAndCreateIfAbsent(readSideCacheFolderPath, ViewName);
         }
 
         private string GetFolderPathAndCreateIfAbsent(string path, string folderName)
@@ -103,7 +104,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
             this.cacheFolderUniqueId = Guid.NewGuid().FormatGuid();
 
-            var cacheDirectory = fileSystemAccessor.CombinePath(basePath, this.cacheFolderUniqueId);
+            var cacheDirectory = fileSystemAccessor.CombinePath(cachedViewsFolder, this.cacheFolderUniqueId);
 
             if (fileSystemAccessor.IsDirectoryExists(cacheDirectory))
                 fileSystemAccessor.DeleteDirectory(cacheDirectory);
@@ -122,7 +123,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         public string GetReadableStatus()
         {
-            int cachedEntities = this.cache.Count+fileSystemAccessor.GetFilesInDirectory(fileSystemAccessor.CombinePath(basePath,cacheFolderUniqueId)).Length;
+            int cachedEntities = this.cache.Count + fileSystemAccessor.GetFilesInDirectory(fileSystemAccessor.CombinePath(cachedViewsFolder, cacheFolderUniqueId)).Length;
 
             int cachedEntitiesWhichNeedToBeStoredToRepository = this.cache.Count;
 
@@ -283,18 +284,18 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
                 throw;
             }
 
-            using (var session = this.RavenStore.BulkInsert(options: new BulkInsertOptions() { OverwriteExisting = true }))
-            {
-                var fileNamesWithCachedEntities =
-                    fileSystemAccessor.GetFilesInDirectory(fileSystemAccessor.CombinePath(basePath, cacheFolderUniqueId));
+            var fileNamesWithCachedEntities =
+                fileSystemAccessor.GetFilesInDirectory(fileSystemAccessor.CombinePath(cachedViewsFolder, cacheFolderUniqueId));
 
+            using (var session = this.RavenStore.BulkInsert(options: new BulkInsertOptions() { OverwriteExisting = true, BatchSize = settings.BulkInsertBatchSize }))
+            {
                 foreach (var fileNamesWithCachedEntity in fileNamesWithCachedEntities)
                 {
                     StoreCachedEntityToRepository(session, fileSystemAccessor.GetFileName(fileNamesWithCachedEntity),
                         this.Deserrialize(fileSystemAccessor.ReadAllText(fileNamesWithCachedEntity)));
                 }
             }
-            this.fileSystemAccessor.DeleteDirectory(fileSystemAccessor.CombinePath(basePath, this.cacheFolderUniqueId));
+            this.fileSystemAccessor.DeleteDirectory(fileSystemAccessor.CombinePath(cachedViewsFolder, this.cacheFolderUniqueId));
         }
 
         private void StoreCachedEntityToRepository(BulkInsertOperation bulkOperation, string id, TEntity entity)
@@ -307,7 +308,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         private string GetPathToEntity(string entityName)
         {
-            return fileSystemAccessor.CombinePath(fileSystemAccessor.CombinePath(basePath, cacheFolderUniqueId), entityName);
+            return fileSystemAccessor.CombinePath(fileSystemAccessor.CombinePath(cachedViewsFolder, cacheFolderUniqueId), entityName);
         }
 
         private string GetItemAsContent(TEntity item)

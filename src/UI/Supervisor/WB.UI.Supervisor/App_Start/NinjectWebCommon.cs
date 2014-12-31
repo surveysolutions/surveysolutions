@@ -25,6 +25,7 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.Storage.Raven;
+using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
@@ -105,6 +106,7 @@ namespace WB.UI.Supervisor.App_Start
                 failoverBehavior: WebConfigurationManager.AppSettings["Raven.Databases.FailoverBehavior"],
                 activeBundles: WebConfigurationManager.AppSettings["Raven.Databases.ActiveBundles"]);
 
+            
             var schedulerSettings = new SchedulerSettings(LegacyOptions.SchedulerEnabled,
                 int.Parse(WebConfigurationManager.AppSettings["Scheduler.HqSynchronizationInterval"]));
 
@@ -129,6 +131,8 @@ namespace WB.UI.Supervisor.App_Start
             var basePath = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
             const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
 
+            var ravenReadSideRepositoryWriterSettings = new RavenReadSideRepositoryWriterSettings(basePath, int.Parse(WebConfigurationManager.AppSettings["Raven.Readside.BulkInsertBatchSize"]));
+
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
@@ -138,7 +142,7 @@ namespace WB.UI.Supervisor.App_Start
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath),
                 new QuestionnaireUpgraderModule(),
-                new RavenReadSideInfrastructureModule(ravenSettings, basePath, typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly),
+                new RavenReadSideInfrastructureModule(ravenSettings, ravenReadSideRepositoryWriterSettings, typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly),
                 new RavenPlainStorageInfrastructureModule(ravenSettings),
                 new FileInfrastructureModule(),
                 new SupervisorCoreRegistry(),
