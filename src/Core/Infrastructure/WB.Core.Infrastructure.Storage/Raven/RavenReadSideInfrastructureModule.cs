@@ -12,13 +12,13 @@ namespace WB.Core.Infrastructure.Storage.Raven
     public class RavenReadSideInfrastructureModule : RavenInfrastructureModule
     {
         private readonly Assembly[] assembliesWithIndexes;
-        private readonly string basePath;
+        private readonly RavenReadSideRepositoryWriterSettings ravenReadSideRepositoryWriterSettings;
 
-        public RavenReadSideInfrastructureModule(RavenConnectionSettings settings, string basePath, params Assembly[] assembliesWithIndexes)
+        public RavenReadSideInfrastructureModule(RavenConnectionSettings settings,RavenReadSideRepositoryWriterSettings ravenReadSideRepositoryWriterSettings, params Assembly[] assembliesWithIndexes)
             : base(settings)
         {
             this.assembliesWithIndexes = assembliesWithIndexes;
-            this.basePath = basePath;
+            this.ravenReadSideRepositoryWriterSettings = ravenReadSideRepositoryWriterSettings;
         }
 
         public override void Load()
@@ -31,9 +31,11 @@ namespace WB.Core.Infrastructure.Storage.Raven
             this.Bind<ReadSideService>().ToSelf().InSingletonScope();
             this.Bind<IReadSideStatusService>().ToMethod(context => this.Kernel.Get<ReadSideService>());
             this.Bind<IReadSideAdministrationService>().ToMethod(context => this.Kernel.Get<ReadSideService>());
+           
+            this.Bind<RavenReadSideRepositoryWriterSettings>().ToConstant(ravenReadSideRepositoryWriterSettings);
 
             // each repository writer should exist in one instance because it might use caching
-            this.Kernel.Bind(typeof(RavenReadSideRepositoryWriter<>)).ToSelf().InSingletonScope().WithConstructorArgument("basePath", basePath);
+            this.Kernel.Bind(typeof(RavenReadSideRepositoryWriter<>)).ToSelf().InSingletonScope();
 
             this.Kernel.Bind(typeof(IReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);
             this.Kernel.Bind(typeof(IQueryableReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);
