@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Services;
 using WB.UI.Capi.Settings;
@@ -45,7 +46,8 @@ namespace WB.UI.Capi.Syncronization
             ISyncPackageIdsStorage packageIdStorage,
             ILogger logger,
             ISynchronizationService synchronizationService,
-            IInterviewerSettings interviewerSettings)
+            IInterviewerSettings interviewerSettings,
+            ISyncProtocolVersionProvider syncProtocolVersionProvider)
         {
             this.authentificator = authentificator;
             this.cleanUpExecutor = cleanUpExecutor;
