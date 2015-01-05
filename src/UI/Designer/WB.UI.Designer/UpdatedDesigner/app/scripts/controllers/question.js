@@ -57,7 +57,6 @@
                 $scope.setCascadeSource(question.cascadeFromQuestionId);
 
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = false;
-                $scope.questionForm.$setPristine();
             };
 
             var dataBind = function (result) {
@@ -67,7 +66,6 @@
                 $scope.sourceOfSingleQuestions = result.sourceOfSingleQuestions;
                 
                 bindQuestion(result);
-                $scope.questionForm.$setPristine();
             };
 
             $scope.loadQuestion = function () {
@@ -99,7 +97,6 @@
                             $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
                         }
 
-                        $scope.questionForm.$setPristine();
                         if (_.isFunction(callback)) {
                             callback();
                         }
@@ -161,7 +158,6 @@
             $scope.cancelQuestion = function () {
                 var temp = angular.copy($scope.initialQuestion);
                 bindQuestion(temp);
-                $scope.questionForm.$setPristine();
             };
 
             $scope.addOption = function () {

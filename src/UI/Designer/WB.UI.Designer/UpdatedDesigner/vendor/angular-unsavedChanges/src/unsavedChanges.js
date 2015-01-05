@@ -65,7 +65,7 @@ angular.module('unsavedChanges', ['resettable'])
 
             function translateIfAble(message) {
                 if ($injector.has('$translate') && useTranslateService) {
-                    return $injector.get('$translate')(message);
+                    return $injector.get('$translate').instant(message);
                 } else {
                     return false;
                 }
@@ -121,27 +121,21 @@ angular.module('unsavedChanges', ['resettable'])
     ];
 })
 
-.service('unsavedWarningSharedService', ['$rootScope', 'unsavedWarningsConfig', '$injector',
-    function($rootScope, unsavedWarningsConfig, $injector) {
+.service('unsavedWarningSharedService', ['$rootScope', 'unsavedWarningsConfig', '$injector', '$window',
+    function($rootScope, unsavedWarningsConfig, $injector, $window) {
 
         // Controller scopped variables
         var _this = this;
         var allForms = [];
         var areAllFormsClean = true;
-        var removeFunctions = [angular.noop];
+        var removeFunctions = [];
 
         // @note only exposed for testing purposes.
         this.allForms = function() {
             return allForms;
         };
 
-        // save shorthand reference to messages
-        var messages = {
-            navigate: unsavedWarningsConfig.navigateMessage,
-            reload: unsavedWarningsConfig.reloadMessage
-        };
-
-        // Check all registered forms 
+        // Check all registered forms
         // if any one is dirty function will return true
 
         function allFormsClean() {
@@ -167,7 +161,7 @@ angular.module('unsavedChanges', ['resettable'])
             var idx = allForms.indexOf(form);
 
             // this form is not present array
-            // @todo needs test coverage 
+            // @todo needs test coverage
             if (idx === -1) return;
 
             allForms.splice(idx, 1);
@@ -181,12 +175,13 @@ angular.module('unsavedChanges', ['resettable'])
             angular.forEach(removeFunctions, function(fn) {
                 fn();
             });
-            window.onbeforeunload = null;
+            removeFunctions = [];
+            $window.onbeforeunload = null;
         }
 
         // Function called when user tries to close the window
         this.confirmExit = function() {
-            if (!allFormsClean()) return messages.reload;
+            if (!allFormsClean()) return unsavedWarningsConfig.reloadMessage;
             $rootScope.$broadcast('resetResettables');
             tearDown();
         };
@@ -197,7 +192,7 @@ angular.module('unsavedChanges', ['resettable'])
         function setup() {
             unsavedWarningsConfig.log('Setting up');
 
-            window.onbeforeunload = _this.confirmExit;
+            $window.onbeforeunload = _this.confirmExit;
 
             var eventsToWatchFor = unsavedWarningsConfig.routeEvent;
 
@@ -205,12 +200,12 @@ angular.module('unsavedChanges', ['resettable'])
                 //calling this function later will unbind this, acting as $off()
                 var removeFn = $rootScope.$on(aEvent, function(event, next, current) {
                     unsavedWarningsConfig.log("user is moving with " + aEvent);
-                    // @todo this could be written a lot cleaner! 
+                    // @todo this could be written a lot cleaner!
                     if (!allFormsClean()) {
                         unsavedWarningsConfig.log("a form is dirty");
-                        if (!confirm(messages.navigate)) {
+                        if (!confirm(unsavedWarningsConfig.navigateMessage)) {
                             unsavedWarningsConfig.log("user wants to cancel leaving");
-                            event.preventDefault(); // user clicks cancel, wants to stay on page 
+                            event.preventDefault(); // user clicks cancel, wants to stay on page
                         } else {
                             unsavedWarningsConfig.log("user doesn't care about loosing stuff");
                             $rootScope.$broadcast('resetResettables');
@@ -246,8 +241,22 @@ angular.module('unsavedChanges', ['resettable'])
     function(unsavedWarningSharedService, $rootScope) {
         return {
             scope: {},
-            require: 'form',
+            require: '^form',
             link: function(scope, formElement, attrs, formCtrl) {
+
+                // @todo refactor, temp fix for issue #22
+                // where user might use form on element inside a form
+                // we shouldnt need isolate scope on this, but it causes the tests to fail
+                // traverse up parent elements to find the form.
+                // we need a form element since we bind to form events: submit, reset
+                var count = 0;
+                while(formElement[0].tagName !== 'FORM' && count < 3) {
+                    count++;
+                    formElement = formElement.parent();
+                }
+                if(count >= 3) {
+                    throw('unsavedWarningForm must be inside a form element');
+                }
 
                 // register this form
                 unsavedWarningSharedService.init(formCtrl);
@@ -265,20 +274,18 @@ angular.module('unsavedChanges', ['resettable'])
                 // do things like reset validation, present messages, etc.
                 formElement.bind('reset', function(event) {
                     event.preventDefault();
-                    // because we bind to `resetResettables` also when
-                    // dismissing alerts, we need to apply() in this 
-                    // instance to ensure the model view updates. 
-                    // @note for ngActiveResoruce, where the models
-                    // themselves do validation, we can't rely on just
-                    // setting the form to valid - we need to set each 
-                    // model value back to valid.
-                    scope.$apply($rootScope.$broadcast('resetResettables'));
+                    
+                    // trigger resettables within this form or element 
+                    var resettables = angular.element(formElement[0].querySelector('[resettable]'));
+                    if(resettables.length) {
+                        scope.$apply(resettables.triggerHandler('resetResettables'));    
+                    }
 
                     // sets for back to valid and pristine states
                     formCtrl.$setPristine();
                 });
 
-                // @todo check destroy on clear button too? 
+                // @todo check destroy on clear button too?
                 scope.$on('$destroy', function() {
                     unsavedWarningSharedService.removeForm(formCtrl);
                 });
@@ -300,6 +307,10 @@ angular.module('unsavedChanges', ['resettable'])
  * to original value.
  * --------------------------------------------
  *
+ * @note we don't create a seperate scope so the model value
+ * is still available onChange within the controller scope. 
+ * This fixes https://github.com/facultymatt/angular-unsavedChanges/issues/19
+ *
  */
 angular.module('resettable', [])
 
@@ -307,13 +318,12 @@ angular.module('resettable', [])
     function($parse, $compile, $rootScope) {
 
         return {
-            scope: true,
             restrict: 'A',
             link: function postLink(scope, elem, attr, ngModelCtrl) {
 
                 var setter, getter, originalValue;
 
-                // save getters and setters and store the original value. 
+                // save getters and setters and store the original value.
                 attr.$observe('ngModel', function(newValue) {
                     getter = $parse(attr.ngModel);
                     setter = getter.assign;
@@ -324,6 +334,8 @@ angular.module('resettable', [])
                 var resetFn = function() {
                     setter(scope, originalValue);
                 };
+
+                elem.on('resetResettables', resetFn);
 
                 // @note this doesn't work if called using
                 // $rootScope.on() and $rootScope.$emit() pattern

@@ -25,8 +25,6 @@
                     if ($scope.questionnaire && $scope.questionnaire.chapters && $scope.questionnaire.chapters.length)
                         $scope.activeGroup.isFirstChapter = $stateParams.itemId == $scope.questionnaire.chapters[0].itemId;
                 }
-
-                $scope.groupForm.$setPristine();
             };
 
             $scope.loadGroup = function () {
@@ -47,7 +45,6 @@
                             itemId: $scope.activeGroup.itemId,
                             title: $scope.activeGroup.title
                         });
-                        $scope.groupForm.$setPristine();
                     });
                 }
             };
