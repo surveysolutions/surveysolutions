@@ -81,9 +81,6 @@ angular.module('designerApp')
             };
 
             $scope.navigateTo = function (reference) {
-                if (isIe9) {
-                    $('#verification-modal').modal('hide');
-                }
                 $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
                     chapterId: reference.chapterId,
                     itemId: reference.itemId
