@@ -7,6 +7,8 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
@@ -23,9 +25,10 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             IGlobalInfoProvider globalInfo = null,
             ISyncManager syncManager = null,
             ILogger logger = null, IViewFactory<UserViewInputModel, UserView> viewFactory = null,
-            ISupportedVersionProvider versionProvider = null)
+            ISupportedVersionProvider versionProvider = null,
+            ISyncProtocolVersionProvider syncVersionProvider = null)
         {
-            var controller = CreateSyncControllerImpl(commandService, globalInfo, syncManager, logger, viewFactory, versionProvider);
+            var controller = CreateSyncControllerImpl(commandService, globalInfo, syncManager, logger, viewFactory, versionProvider, syncVersionProvider);
             SetControllerContextWithStream(controller, stream: null);
             
             return controller;
@@ -37,11 +40,13 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             ISyncManager syncManager = null,
             ILogger logger = null,
             IViewFactory<UserViewInputModel, UserView> viewFactory = null,
-            ISupportedVersionProvider versionProvider = null, IPlainInterviewFileStorage plainFileRepository = null, 
+            ISupportedVersionProvider versionProvider = null,
+            ISyncProtocolVersionProvider syncVersionProvider = null,
+            IPlainInterviewFileStorage plainFileRepository = null, 
             Stream stream = null, string fileName = null,
             IFileSystemAccessor fileSystemAccessor = null)
         {
-            var controller = CreateSyncControllerImpl(commandService, globalInfo, syncManager, logger, viewFactory, versionProvider, plainFileRepository, fileSystemAccessor);
+            var controller = CreateSyncControllerImpl(commandService, globalInfo, syncManager, logger, viewFactory, versionProvider, syncVersionProvider, plainFileRepository, fileSystemAccessor);
             SetControllerContextWithFiles(controller, stream: stream, fileName: fileName);
 
             return controller;
@@ -53,7 +58,8 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             ISyncManager syncManager = null,
             ILogger logger = null,
             IViewFactory<UserViewInputModel, UserView> viewFactory = null,
-            ISupportedVersionProvider versionProvider = null, 
+            ISupportedVersionProvider versionProvider = null,
+            ISyncProtocolVersionProvider syncVersionProvider = null,
             IPlainInterviewFileStorage plainFileRepository = null,
             IFileSystemAccessor fileSystemAccessor = null,
             ITabletInformationService tabletInformationService = null,
@@ -65,7 +71,8 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
                 syncManager ?? Mock.Of<ISyncManager>(),
                 logger ?? Mock.Of<ILogger>(),
                 viewFactory ?? Mock.Of<IViewFactory<UserViewInputModel, UserView>>(),
-                versionProvider ?? Mock.Of<ISupportedVersionProvider>(), 
+                versionProvider ?? Mock.Of<ISupportedVersionProvider>(),
+                syncVersionProvider ?? Mock.Of<ISyncProtocolVersionProvider>(),
                 plainFileRepository ?? Mock.Of<IPlainInterviewFileStorage>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 tabletInformationService ?? Mock.Of<ITabletInformationService>(),

@@ -46,6 +46,7 @@ using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Services;
+using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
@@ -326,7 +327,8 @@ namespace WB.UI.Capi
             this.kernel.Bind<IWaitService>().To<WaitService>().InSingletonScope();
             this.kernel.Bind<IInterviewerSettings>().To<InterviewerSettings>().InSingletonScope();
             this.kernel.Bind<ISynchronizationService>().To<InterviewerSynchronizationService>().InSingletonScope();
-            
+
+            this.kernel.Bind<ISyncProtocolVersionProvider>().ToConstant(new SyncProtocolVersionProvider(() => false));
             #region register handlers
 
             var eventHandler =

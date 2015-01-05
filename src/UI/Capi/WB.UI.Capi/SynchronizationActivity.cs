@@ -26,7 +26,9 @@ using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Controls;
@@ -285,6 +287,7 @@ namespace WB.UI.Capi
                     CapiApplication.Kernel.Get<IInterviewSynchronizationFileStorage>(),
                     CapiApplication.Kernel.Get<ISyncPackageIdsStorage>(),
                     CapiApplication.Kernel.Get<ILogger>(),
+                    CapiApplication.Kernel.Get<ISyncProtocolVersionProvider>());
                     CapiApplication.Kernel.Get<ISynchronizationService>(),
                     CapiApplication.Kernel.Get<IInterviewerSettings>());
             }
