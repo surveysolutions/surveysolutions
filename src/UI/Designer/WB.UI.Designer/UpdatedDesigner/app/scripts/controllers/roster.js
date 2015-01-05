@@ -38,7 +38,6 @@
                         return _.find($scope.activeRoster.rosterTypeOptions, { 'value': $scope.activeRoster.type }).text;
                     };
 
-                    $scope.editRosterForm.$setPristine();
                 };
 
                 var getSelected = function (collection, id) {
@@ -94,7 +93,6 @@
                                 variable: $scope.activeRoster.variableName,
                                 title: $scope.activeRoster.title
                             });
-                            $scope.editRosterForm.$setPristine();
                         });
                     }
                 };

@@ -44,8 +44,20 @@ Add to forms you want to register with directive. The module will only listen wh
 </form>
 ```
 
+Optionally, you can add to an element within a form:
+
+```
+<form name="testForm">
+	<div unsaved-warning-form>
+	</div>
+</form>
+```
+
+When used in this way, it must be no more then 3 levels nested within parent form.
+
+
 #### unsaved-warning-clear 
-Add to button or link that will disregard changes, preventing the messaging when user tries to navigate. Note that button type should be `reset` to work with `lazy-model` directive (outlined below).
+Add to button or link that will disregard changes, preventing the messaging when user tries to navigate. Note that button type should be `reset`.
 
 ```
 <form name="testForm" unsaved-warning-form>
@@ -61,6 +73,11 @@ Add to inputs that use `ng-model` to reset model values when user dismisses chan
 ```
 <input name="email" ng-model="email" resettable />
 ```
+
+Note that if you have multiple forms on the page, only the model values inside the form which was reset will be effected. 
+
+On page change or reload, all model values will be effected. 
+
 
 ### Provider Configuration 
 A number of options can be configured. The module uses the `Object.defineProperty` pattern. This avoids the need for custom getters and setters and allows us to treat configuration as pure JS objects. 
@@ -130,4 +147,29 @@ __Unit Tests__
 
 ## Build
 
-Run `$ grunt` to lint and minify the code. Also strips console logs. 
+Run `$ grunt` to lint and minify the code. Also strips console logs.
+
+
+## License
+
+The MIT License (MIT)
+
+Copyright (c) 2013-2014 Matt Miller
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
