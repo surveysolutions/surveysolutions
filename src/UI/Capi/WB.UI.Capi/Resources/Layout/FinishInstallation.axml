@@ -23,6 +23,7 @@
                 android:layout_marginTop="5dip"
                 android:layout_marginBottom="20dip"
                 android:singleLine="true"
+                android:inputType="textUri"
                 local:MvxBind="Text SyncEndpoint; TextColor CanSetSyncEndpoint, Converter=BooleanToTextColor" />
             <TextView
                 android:layout_width="fill_parent"
