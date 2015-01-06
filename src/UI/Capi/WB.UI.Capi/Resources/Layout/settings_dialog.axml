@@ -19,6 +19,7 @@
             android:layout_marginTop="5dip"
             android:layout_marginBottom="20dip"
             android:id="@+id/editSettingsSyncPoint"
+            android:inputType="textUri"
             android:singleLine="true" />
         <Button
             android:id="@+id/btnSyncPoint"
