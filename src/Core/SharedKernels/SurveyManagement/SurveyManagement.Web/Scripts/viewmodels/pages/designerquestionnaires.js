@@ -28,7 +28,7 @@
             }
             else if (!Supervisor.Framework.Objects.isUndefined(data.Errors) && !Supervisor.Framework.Objects.isNull(data.Errors) && data.Errors.length > 0) {
                 self.VerificationErrors.removeAll();
-                self.ImportFailMessage('Failed to import questionnaire: ' + data.QuestionnaireTitle);
+                self.ImportFailMessage(data.QuestionnaireTitle);
                 $.each(data.Errors, function (index, error) {
                     var uiReferences = $.map(error.References, function (item) {
                         return { title: item.Title, type: item.Type, id: item.Id };
