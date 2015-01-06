@@ -21,6 +21,7 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "AddGroup", typeof (AddGroupCommand) },
                     { "CloneGroupWithoutChildren", typeof (CloneGroupWithoutChildrenCommand) },
                     { "CloneGroup", typeof (CloneGroupCommand) },
+                    { "CloneStaticText", typeof (CloneStaticTextCommand) },
                     { "DeleteGroup", typeof (DeleteGroupCommand) },
                     { "MoveGroup", typeof (MoveGroupCommand) },
                     { "AddDefaultTypeQuestion", typeof (AddDefaultTypeQuestionCommand) },
