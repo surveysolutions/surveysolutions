@@ -135,6 +135,7 @@
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireEntityMoveCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireEntityCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireCommandBase.cs" />
+    <Compile Include="Commands\Questionnaire\StaticText\CloneStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\CloneQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\AddSharedPersonToQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\CloneGroupCommand.cs" />
