@@ -141,18 +141,14 @@
                 return !cmd.IsSuccess;
             });
 
-            var failedCommandIds = ko.utils.arrayMap(failedCommands, function (failedCommand) {
-                return failedCommand.CommandId;
-            });
-
-            if (failedCommandIds.length > 0) {
+            if (failedCommands.length > 0) {
                 var failedDomainExceptions = ko.utils.arrayMap(failedCommands, function(failedCommand) {
                     return failedCommand.DomainException;
                 });
                 self.ShowErrors(failedDomainExceptions);
             } else {
                 if (!Supervisor.Framework.Objects.isUndefined(onSuccess)) {
-                    onSuccess(failedCommandIds);
+                    onSuccess();
                 }
             }
         });
