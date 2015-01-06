@@ -10,6 +10,7 @@
                   allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                   callback: function (event) {
                       $scope.saveQuestion();
+                      $scope.questionForm.$setPristine();
                       event.preventDefault();
                   }
               });

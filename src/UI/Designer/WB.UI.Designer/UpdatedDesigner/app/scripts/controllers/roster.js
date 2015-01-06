@@ -17,6 +17,7 @@
                           allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                           callback: function (event) {
                               $scope.saveRoster();
+                              $scope.editRosterForm.$setPristine();
                               event.preventDefault();
                           }
                       });

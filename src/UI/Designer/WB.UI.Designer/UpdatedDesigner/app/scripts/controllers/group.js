@@ -9,6 +9,7 @@
                  allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                  callback: function (event) {
                      $scope.saveGroup();
+                     $scope.groupForm.$setPristine();
                      event.preventDefault();
                  }
              });
