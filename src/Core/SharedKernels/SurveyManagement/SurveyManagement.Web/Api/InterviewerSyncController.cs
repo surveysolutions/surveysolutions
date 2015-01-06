@@ -52,8 +52,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             ISyncProtocolVersionProvider syncVersionProvider,
             ITabletInformationService tabletInformationService,
             IJsonUtils jsonUtils)
-            ISupportedVersionProvider versionProvider,
-            ISyncProtocolVersionProvider syncVersionProvider,
             : base(commandService, globalInfo, logger)
         {
             

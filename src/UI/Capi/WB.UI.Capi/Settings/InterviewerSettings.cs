@@ -39,7 +39,10 @@ namespace WB.UI.Capi.Settings
         }
 
         public string GetSyncAddressPoint()
+        {
             return GetSetting(SettingsNames.SyncAddressSettingsName);
+        }
+
         public string GetApplicationVersionName()
         {
             return Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0).VersionName;
