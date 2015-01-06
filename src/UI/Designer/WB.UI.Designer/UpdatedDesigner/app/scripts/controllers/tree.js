@@ -66,7 +66,8 @@
             $scope.searchItem = function(item) {
                 if (!$scope.search.searchText) return true;
                 var variableMatches = item.variable && item.variable.toLowerCase().indexOf($scope.search.searchText.toLowerCase()) != -1;
-                var titleMatches = item.title && item.title.toLowerCase().indexOf($scope.search.searchText.toLowerCase()) != -1;
+                var titleMatches = item.title && item.title.toLowerCase().indexOf($scope.search.searchText.toLowerCase()) != -1 ||
+                                   item.text && item.text.toLowerCase().indexOf($scope.search.searchText.toLowerCase()) != -1;
 
                 var found = variableMatches || titleMatches;
 
