@@ -27,19 +27,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes
                                     Status = interview.Status,
                                     QuestionnaireVersion = interview.QuestionnaireVersion,
                                     UpdateDate = interview.UpdateDate,
-                                    QuestionnaireId = interview.QuestionnaireId
+                                    QuestionnaireId = interview.QuestionnaireId,
+                                    QuestionnaireTitle = interview.QuestionnaireTitle
                                 };
             
             Analyze(x => x.FeaturedQuestionsWithAnswers, "Lucene.Net.Analysis.Standard.StandardAnalyzer");
             Store(x => x.FeaturedQuestionsWithAnswers, FieldStorage.No);
             Index(x => x.FeaturedQuestionsWithAnswers, FieldIndexing.Analyzed);
-            Index(x => x.IsDeleted, FieldIndexing.NotAnalyzed);
+            Index(x => x.IsDeleted, FieldIndexing.Default);
             Index(x => x.TeamLeadId, FieldIndexing.NotAnalyzed);
             Index(x => x.ResponsibleId, FieldIndexing.NotAnalyzed);
             Index(x => x.Status, FieldIndexing.NotAnalyzed);
             Index(x => x.QuestionnaireVersion, FieldIndexing.NotAnalyzed);
             Index(x => x.UpdateDate, FieldIndexing.NotAnalyzed);
             Index(x => x.QuestionnaireId, FieldIndexing.NotAnalyzed);
+            Index(x => x.QuestionnaireTitle, FieldIndexing.NotAnalyzed);
 
             Sort(x => x.UpdateDate, SortOptions.String);
         }
