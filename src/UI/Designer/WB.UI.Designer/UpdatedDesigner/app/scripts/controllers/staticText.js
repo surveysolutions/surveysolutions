@@ -1,45 +1,50 @@
-﻿(function () {
-    'use strict';
+﻿angular.module('designerApp')
+    .controller('StaticTextCtrl',
+        function ($rootScope, $scope, $state, questionnaireService, commandService, hotkeys) {
+            "use strict";
 
-    angular.module('designerApp')
-        .controller('StaticTextCtrl', [
-            '$rootScope', '$scope', '$state', 'questionnaireService', 'commandService',
-            function ($rootScope, $scope, $state, questionnaireService, commandService) {
+            hotkeys.bindTo($scope)
+             .add({
+                 combo: 'ctrl+s',
+                 description: 'Save current question',
+                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                 callback: function (event) {
+                     $scope.saveStaticText();
+                     $scope.staticTextForm.$setPristine();
+                     event.preventDefault();
+                 }
+             });
 
-                var dataBind = function (result) {
-                    $scope.activeStaticText = $scope.activeStaticText || {};
-                    $scope.activeStaticText.breadcrumbs = result.breadcrumbs;
-                    $scope.activeStaticText.itemId = $state.params.itemId;
-                    $scope.activeStaticText.text = result.text;
+            var dataBind = function (result) {
+                $scope.activeStaticText = $scope.activeStaticText || {};
+                $scope.activeStaticText.breadcrumbs = result.breadcrumbs;
+                $scope.activeStaticText.itemId = $state.params.itemId;
+                $scope.activeStaticText.text = result.text;
+            };
 
-                    $scope.staticTextForm.$setPristine();
-                };
-
-                $scope.loadStaticText = function () {
-                    questionnaireService.getStaticTextDetailsById($state.params.questionnaireId, $state.params.itemId)
-                        .success(function (result) {
-                            $scope.initialStaticText = angular.copy(result);
-                            dataBind(result);
-                        });
-                };
-
-                $scope.saveStaticText = function () {
-                    commandService.updateStaticText($state.params.questionnaireId, $scope.activeStaticText).success(function () {
-                        $scope.initialStaticText = angular.copy($scope.activeStaticText);
-                        $rootScope.$emit('staticTextUpdated', {
-                            itemId: $scope.activeStaticText.itemId,
-                            text: $scope.activeStaticText.text
-                        });
-                        $scope.staticTextForm.$setPristine();
+            $scope.loadStaticText = function () {
+                questionnaireService.getStaticTextDetailsById($state.params.questionnaireId, $state.params.itemId)
+                    .success(function (result) {
+                        $scope.initialStaticText = angular.copy(result);
+                        dataBind(result);
                     });
-                };
+            };
 
-                $scope.cancelStaticText = function () {
-                    var temp = angular.copy($scope.initialStaticText);
-                    dataBind(temp);
-                };
+            $scope.saveStaticText = function () {
+                commandService.updateStaticText($state.params.questionnaireId, $scope.activeStaticText).success(function () {
+                    $scope.initialStaticText = angular.copy($scope.activeStaticText);
+                    $rootScope.$emit('staticTextUpdated', {
+                        itemId: $scope.activeStaticText.itemId,
+                        text: $scope.activeStaticText.text
+                    });
+                });
+            };
 
-                $scope.loadStaticText();
-            }
-        ]);
-}());
+            $scope.cancelStaticText = function () {
+                var temp = angular.copy($scope.initialStaticText);
+                dataBind(temp);
+            };
+
+            $scope.loadStaticText();
+        }
+    );
