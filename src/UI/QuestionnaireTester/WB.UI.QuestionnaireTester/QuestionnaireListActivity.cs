@@ -1,6 +1,5 @@
 using Android.Content;
 using Android.Content.PM;
-using Android.Graphics.Drawables;
 using Android.Views;
 using Android.Widget;
 using WB.UI.QuestionnaireTester.Adapters;
@@ -32,6 +31,10 @@ namespace WB.UI.QuestionnaireTester
             this.listView.Adapter = adapter = new QuestionnaireListAdapter(this);
             this.listView.ChoiceMode = ChoiceMode.Single;
             this.listView.ItemClick += listView_ItemClick;
+
+            this.listView.ChildViewRemoved += this.llContent_ChildViewRemoved;
+            this.listView.ScrollingCacheEnabled = false;
+
             this.AddContentView(listView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent));
         }
 
@@ -65,6 +68,30 @@ namespace WB.UI.QuestionnaireTester
         protected SearchView svQuery
         {
             get { return this.ActionBar.CustomView.FindViewById<SearchView>(Resource.Id.svQuery); }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (this.listView != null)
+                {
+                    this.listView.TryClearBindingsIfPossibleForChildren();
+
+                    if (this.listView.Adapter != null)
+                    {
+                        this.listView.Adapter.Dispose();
+                        this.listView.Adapter = null;
+                    }
+                }
+            }
+
+            base.Dispose(disposing);
+        }
+
+        void llContent_ChildViewRemoved(object sender, ViewGroup.ChildViewRemovedEventArgs e)
+        {
+            e.Child.Dispose();
         }
     }
 }

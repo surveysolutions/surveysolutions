@@ -26,6 +26,7 @@ using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
+using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
@@ -43,9 +44,9 @@ using WB.UI.Shared.Web.MembershipProvider.Settings;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
 using WB.UI.Supervisor.Code;
-using WB.UI.Supervisor.Controllers;
 using WB.UI.Supervisor.Injections;
 using WB.UI.Supervisor.App_Start;
+using WB.UI.Supervisor.Controllers;
 using WebActivatorEx;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
@@ -54,8 +55,6 @@ using WebActivatorEx;
 namespace WB.UI.Supervisor.App_Start
 {
     using Microsoft.Practices.ServiceLocation;
-
-    using NinjectAdapter;
 
 
     /// <summary>
@@ -120,7 +119,7 @@ namespace WB.UI.Supervisor.App_Start
                     LegacyOptions.InterviewDetailsDataSchedulerNumberOfInterviewsProcessedAtTime);
 
             Func<bool> isDebug = () => AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
-            Version applicationBuildVersion = typeof (AccountController).Assembly.GetName().Version;
+            Version applicationBuildVersion = typeof(AccountController).Assembly.GetName().Version;
 
             var synchronizationSettings = new SyncSettings(reevaluateInterviewWhenSynchronized: true,
                 appDataDirectory: AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),

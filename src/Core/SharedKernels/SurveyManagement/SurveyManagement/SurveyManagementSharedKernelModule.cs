@@ -6,6 +6,8 @@ using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
@@ -91,6 +93,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Unbind<ISupportedVersionProvider>();
             this.Bind<ISupportedVersionProvider>()
                 .ToConstant(new SupportedVersionProvider(applicationVersionSettings, this.isDebug, this.applicationBuildVersion));
+
+            this.Bind<ISyncProtocolVersionProvider>().ToConstant(new SyncProtocolVersionProvider(this.isDebug));
 
             this.Bind(typeof (ITemporaryDataStorage<>)).To(typeof (FileTemporaryDataStorage<>));
 
