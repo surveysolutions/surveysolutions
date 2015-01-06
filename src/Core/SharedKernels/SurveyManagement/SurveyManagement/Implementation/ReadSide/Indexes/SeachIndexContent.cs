@@ -35,5 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes
         public UserRoles ResponsibleRole { get; set; }
 
         public bool WasCreatedOnClient { get; set; }
+
+        public string QuestionnaireTitle { get; set; }
     }
 }
