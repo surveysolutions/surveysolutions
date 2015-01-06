@@ -72,9 +72,9 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
                 logger ?? Mock.Of<ILogger>(),
                 viewFactory ?? Mock.Of<IViewFactory<UserViewInputModel, UserView>>(),
                 versionProvider ?? Mock.Of<ISupportedVersionProvider>(),
-                syncVersionProvider ?? Mock.Of<ISyncProtocolVersionProvider>(),
                 plainFileRepository ?? Mock.Of<IPlainInterviewFileStorage>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                syncVersionProvider ?? Mock.Of<ISyncProtocolVersionProvider>(),
                 tabletInformationService ?? Mock.Of<ITabletInformationService>(),
                 jsonUtils ?? Mock.Of<IJsonUtils>());
 

@@ -287,9 +287,9 @@ namespace WB.UI.Capi
                     CapiApplication.Kernel.Get<IInterviewSynchronizationFileStorage>(),
                     CapiApplication.Kernel.Get<ISyncPackageIdsStorage>(),
                     CapiApplication.Kernel.Get<ILogger>(),
-                    CapiApplication.Kernel.Get<ISyncProtocolVersionProvider>());
                     CapiApplication.Kernel.Get<ISynchronizationService>(),
-                    CapiApplication.Kernel.Get<IInterviewerSettings>());
+                    CapiApplication.Kernel.Get<IInterviewerSettings>(),
+                    CapiApplication.Kernel.Get<ISyncProtocolVersionProvider>());
             }
             catch (Exception ex)
             {
