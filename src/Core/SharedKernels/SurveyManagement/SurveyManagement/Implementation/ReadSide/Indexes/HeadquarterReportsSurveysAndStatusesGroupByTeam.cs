@@ -2,6 +2,7 @@
 using System.Linq;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes
@@ -10,8 +11,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes
     {
         public HeadquarterReportsSurveysAndStatusesGroupByTeam()
         {
-            this.AddMap<StatisticsLineGroupedByUserAndTemplate>(docs => from doc in docs
-                                                                   where doc.TeamLeadId != null
+            this.AddMap<InterviewSummary>(docs => from doc in docs
+                                                  where !doc.IsDeleted
                                                                    select new StatisticsLineGroupedByUserAndTemplate
                                                                        {
                                                                            ResponsibleId = (Guid) doc.TeamLeadId,
@@ -24,20 +25,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes
                                                                            QuestionnaireVersion = doc.QuestionnaireVersion,
                                                                            QuestionnaireTitle = doc.QuestionnaireTitle,
 
-                                                                           CreatedCount = doc.CreatedCount,
-                                                                           SupervisorAssignedCount = doc.SupervisorAssignedCount,
-                                                                           InterviewerAssignedCount = doc.InterviewerAssignedCount,
-                                                                           SentToCapiCount = doc.SentToCapiCount,
-                                                                           CompletedCount = doc.CompletedCount,
-                                                                           ApprovedBySupervisorCount = doc.ApprovedBySupervisorCount,
-                                                                           RejectedBySupervisorCount = doc.RejectedBySupervisorCount,
-                                                                           ApprovedByHeadquartersCount = doc.ApprovedByHeadquartersCount,
-                                                                           RejectedByHeadquartersCount = doc.RejectedByHeadquartersCount,
-                                                                           RestoredCount = doc.RestoredCount,
-                                                                           TotalCount = doc.TotalCount
+                                                                           CreatedCount = doc.Status == InterviewStatus.Created ? 1 : 0,
+                                                                           SupervisorAssignedCount = doc.Status == InterviewStatus.SupervisorAssigned ? 1 : 0,
+                                                                           InterviewerAssignedCount = doc.Status == InterviewStatus.InterviewerAssigned ? 1 : 0,
+                                                                           SentToCapiCount = 0,
+                                                                           CompletedCount = doc.Status == InterviewStatus.Completed ? 1 : 0,
+                                                                           ApprovedBySupervisorCount = doc.Status == InterviewStatus.ApprovedBySupervisor ? 1 : 0,
+                                                                           RejectedBySupervisorCount = doc.Status == InterviewStatus.RejectedBySupervisor ? 1 : 0,
+
+                                                                           ApprovedByHeadquartersCount = doc.Status == InterviewStatus.ApprovedByHeadquarters ? 1 : 0,
+                                                                           RejectedByHeadquartersCount = doc.Status == InterviewStatus.RejectedByHeadquarters ? 1 : 0,
+
+                                                                           RestoredCount = doc.Status == InterviewStatus.Restored ? 1 : 0,
+                                                                           TotalCount = 1
                                                                        });
 
-            this.AddMap<StatisticsLineGroupedByUserAndTemplate>(docs => from doc in docs
+            this.AddMap<InterviewSummary>(docs => from doc in docs
+                                                  where !doc.IsDeleted
                                                                    select new StatisticsLineGroupedByUserAndTemplate
                                                                        {
                                                                            ResponsibleId = Guid.Empty,
@@ -50,17 +54,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes
                                                                            QuestionnaireVersion = doc.QuestionnaireVersion,
                                                                            QuestionnaireTitle = doc.QuestionnaireTitle,
 
-                                                                           CreatedCount = doc.CreatedCount,
-                                                                           SupervisorAssignedCount = doc.SupervisorAssignedCount,
-                                                                           InterviewerAssignedCount = doc.InterviewerAssignedCount,
-                                                                           SentToCapiCount = doc.SentToCapiCount,
-                                                                           CompletedCount = doc.CompletedCount,
-                                                                           ApprovedBySupervisorCount = doc.ApprovedBySupervisorCount,
-                                                                           RejectedBySupervisorCount = doc.RejectedBySupervisorCount,
-                                                                           ApprovedByHeadquartersCount = doc.ApprovedByHeadquartersCount,
-                                                                           RejectedByHeadquartersCount = doc.RejectedByHeadquartersCount,
-                                                                           RestoredCount = doc.RestoredCount,
-                                                                           TotalCount = doc.TotalCount
+                                                                           CreatedCount = doc.Status == InterviewStatus.Created ? 1 : 0,
+                                                                           SupervisorAssignedCount = doc.Status == InterviewStatus.SupervisorAssigned ? 1 : 0,
+                                                                           InterviewerAssignedCount = doc.Status == InterviewStatus.InterviewerAssigned ? 1 : 0,
+                                                                           SentToCapiCount = 0,
+                                                                           CompletedCount = doc.Status == InterviewStatus.Completed ? 1 : 0,
+                                                                           ApprovedBySupervisorCount = doc.Status == InterviewStatus.ApprovedBySupervisor ? 1 : 0,
+                                                                           RejectedBySupervisorCount = doc.Status == InterviewStatus.RejectedBySupervisor ? 1 : 0,
+
+                                                                           ApprovedByHeadquartersCount = doc.Status == InterviewStatus.ApprovedByHeadquarters ? 1 : 0,
+                                                                           RejectedByHeadquartersCount = doc.Status == InterviewStatus.RejectedByHeadquarters ? 1 : 0,
+
+                                                                           RestoredCount = doc.Status == InterviewStatus.Restored ? 1 : 0,
+                                                                           TotalCount = 1
                                                                        });
 
             this.Reduce = results => from result in results
