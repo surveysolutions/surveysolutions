@@ -121,7 +121,6 @@
     <Compile Include="EventHandler\QuestionnaireQuestionsInfoDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireRosterStructureEventHandler.cs" />
     <Compile Include="EventHandler\ReferenceInfoForLinkedQuestionsDenormalizer.cs" />
-    <Compile Include="EventHandler\StatisticsDenormalizer.cs" />
     <Compile Include="EventHandler\UserDenormalizer.cs" />
     <Compile Include="Factories\IExportViewFactory.cs" />
     <Compile Include="Factories\IInterviewSynchronizationDtoFactory.cs" />

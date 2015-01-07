@@ -17,10 +17,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler
     {
         private readonly IReadSideRepositoryWriter<AnswersByVariableCollection> answersByVariableStorage;
-        private readonly IReadSideRepositoryWriter<InterviewBrief> interviewBriefStorage;
+        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewBriefStorage;
         private readonly IReadSideRepositoryWriter<QuestionnaireQuestionsInfo> variablesStorage;
 
-        public AnswersByVariableDenormalizer(IReadSideRepositoryWriter<InterviewBrief> interviewBriefStorage,
+        public AnswersByVariableDenormalizer(IReadSideRepositoryWriter<InterviewSummary> interviewBriefStorage,
             IReadSideRepositoryWriter<QuestionnaireQuestionsInfo> variablesStorage,
             IReadSideRepositoryWriter<AnswersByVariableCollection> answersByVariableStorage)
         {

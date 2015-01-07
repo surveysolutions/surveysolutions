@@ -59,12 +59,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.A
         }
 
         protected static AnswersByVariableDenormalizer CreateAnswersByVariableDenormalizer(
-            IReadSideRepositoryWriter<InterviewBrief> interviewBriefStorage = null,
+            IReadSideRepositoryWriter<InterviewSummary> interviewBriefStorage = null,
             IReadSideRepositoryWriter<QuestionnaireQuestionsInfo> variablesStorage = null,
             IReadSideRepositoryWriter<AnswersByVariableCollection> answersByVariableStorage = null)
         {
             return new AnswersByVariableDenormalizer(
-                interviewBriefStorage ?? Mock.Of<IReadSideRepositoryWriter<InterviewBrief>>(),
+                interviewBriefStorage ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
                 variablesStorage ?? Mock.Of<IReadSideRepositoryWriter<QuestionnaireQuestionsInfo>>(),
                 answersByVariableStorage ?? Mock.Of<IReadSideRepositoryWriter<AnswersByVariableCollection>>()
                 );
