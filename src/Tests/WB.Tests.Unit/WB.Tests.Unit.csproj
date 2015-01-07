@@ -1586,10 +1586,6 @@
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_SupervisorAssigned_event.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_SupervisorAssigned_event_and_responsible_user_not_found.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_SynchronizationMetadataApplied_event_and_interview_was_created_on_capi.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\StatisticsDenormalizerTests\StatisticsDenormalizerTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\StatisticsDenormalizerTests\when_duplicate_creation_event_exists_in_event_stream.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\StatisticsDenormalizerTests\when_handling_interview_status_change_event.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\StatisticsDenormalizerTests\when_interview_hard_deleted_event_recived_.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\QuestionnaireExportStructureDenormalizerTests\when_QuestionnaireDeleted_event_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\QuestionnaireExportStructureDenormalizerTests\when_TemplateImported_event_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\QuestionnaireExportStructureDenormalizerTests\when_TemplateImported_event_recived_and_version_is_set.cs" />

@@ -12,7 +12,7 @@ namespace WB.Tests.Integration.SurveyManagement.RavenIndexes.SupervisorReportsSu
     {
         Establish context = () =>
         {
-            IEnumerable<StatisticsLineGroupedByUserAndTemplate> generateStatisticDocumentsWithUnassignedCounts = GenerateStatisticDocuments(
+            IEnumerable<InterviewSummary> generateStatisticDocumentsWithUnassignedCounts = InterviewSummaryDocuments(
                 new SummaryItemSketch { Complete = 2, ResponsibleSupervisor = SupervisorA, Responsible = SupervisorA, Template = Template1 },
                 new SummaryItemSketch { Complete = 7, ResponsibleSupervisor = SupervisorA, Responsible = InterviewerA1, Template = Template1 },
                 new SummaryItemSketch { Complete = 11, ResponsibleSupervisor = SupervisorA, Responsible = InterviewerA2, Template = Template1 },
