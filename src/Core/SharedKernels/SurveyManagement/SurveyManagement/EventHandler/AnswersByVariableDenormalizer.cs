@@ -11,12 +11,12 @@ using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class AnswersByVariableDenormalizer :BaseDenormalizer,
+    public class AnswersByVariableDenormalizer : BaseDenormalizer,
         IEventHandler<GeoLocationQuestionAnswered>,
         IEventHandler<AnswersRemoved>
     {
         private readonly IReadSideRepositoryWriter<AnswersByVariableCollection> answersByVariableStorage;
-        private readonly IReadSideRepositoryWriter<InterviewBrief> interviewBriefStorage;
+        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewBriefStorage;
         private readonly IReadSideRepositoryWriter<QuestionnaireQuestionsInfo> variablesStorage;
 
         public override object[] Writers
@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             get { return new object[] { interviewBriefStorage, variablesStorage }; }
         }
 
-        public AnswersByVariableDenormalizer(IReadSideRepositoryWriter<InterviewBrief> interviewBriefStorage,
+        public AnswersByVariableDenormalizer(IReadSideRepositoryWriter<InterviewSummary> interviewBriefStorage,
             IReadSideRepositoryWriter<QuestionnaireQuestionsInfo> variablesStorage,
             IReadSideRepositoryWriter<AnswersByVariableCollection> answersByVariableStorage)
         {
