@@ -13,13 +13,13 @@ namespace WB.Tests.Integration.SurveyManagement.RavenIndexes.SupervisorReportsSu
     {
         Establish context = () =>
         {
-            IEnumerable<StatisticsLineGroupedByUserAndTemplate> generateStatisticDocumentsWithUnassignedCounts = GenerateStatisticDocuments(
-                new SummaryItemSketch { RejectedBySupervisorCount = 2, ResponsibleSupervisor = SupervisorA, Responsible = SupervisorA, Template = Template1 },
-                new SummaryItemSketch { RejectedBySupervisorCount = 7, ResponsibleSupervisor = SupervisorA, Responsible = InterviewerA1, Template = Template1 },
-                new SummaryItemSketch { RejectedBySupervisorCount = 11, ResponsibleSupervisor = SupervisorA, Responsible = InterviewerA2, Template = Template1 },
-                new SummaryItemSketch { RejectedBySupervisorCount = 13, ResponsibleSupervisor = SupervisorB, Responsible = SupervisorB, Template = Template1 },
-                new SummaryItemSketch { RejectedBySupervisorCount = 23, ResponsibleSupervisor = SupervisorB, Responsible = InterviewerB1, Template = Template1 },
-                new SummaryItemSketch { RejectedBySupervisorCount = 0, ResponsibleSupervisor = SupervisorB, Responsible = InterviewerB2, Template = Template1 }
+            IEnumerable<InterviewSummary> generateStatisticDocumentsWithUnassignedCounts = InterviewSummaryDocuments(
+                new SummaryItemSketch { ApprovedBySupervisorCount = 2, ResponsibleSupervisor = SupervisorA, Responsible = SupervisorA, Template = Template1 },
+                new SummaryItemSketch { ApprovedBySupervisorCount = 7, ResponsibleSupervisor = SupervisorA, Responsible = InterviewerA1, Template = Template1 },
+                new SummaryItemSketch { ApprovedBySupervisorCount = 11, ResponsibleSupervisor = SupervisorA, Responsible = InterviewerA2, Template = Template1 },
+                new SummaryItemSketch { ApprovedBySupervisorCount = 13, ResponsibleSupervisor = SupervisorB, Responsible = SupervisorB, Template = Template1 },
+                new SummaryItemSketch { ApprovedBySupervisorCount = 23, ResponsibleSupervisor = SupervisorB, Responsible = InterviewerB1, Template = Template1 },
+                new SummaryItemSketch { ApprovedBySupervisorCount = 0, ResponsibleSupervisor = SupervisorB, Responsible = InterviewerB2, Template = Template1 }
             );
 
             documentStore = CreateDocumentStore(generateStatisticDocumentsWithUnassignedCounts);

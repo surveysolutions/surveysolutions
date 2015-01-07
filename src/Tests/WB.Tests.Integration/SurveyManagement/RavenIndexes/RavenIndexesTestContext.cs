@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Raven.Client.Embedded;
 using Raven.Client.Indexes;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -31,14 +32,14 @@ namespace WB.Tests.Integration.SurveyManagement.RavenIndexes
             public TestTemplate Template { get; set; }
             public int Total
             {
-                get { return this.SupervisorAssignedCount + this.InterviewerAssignedCount + this.Complete + this.RejectedBySupervisorCount + this.Error + this.Redo; }
+                get { return this.SupervisorAssignedCount + this.InterviewerAssignedCount + this.Complete + this.ApprovedBySupervisorCount + this.Error + this.Redo; }
             }
 
             public int InterviewerAssignedCount { get; set; }
 
             public int Complete { get; set; }
 
-            public int RejectedBySupervisorCount { get; set; }
+            public int ApprovedBySupervisorCount { get; set; }
 
             public int Error { get; set; }
 
@@ -54,7 +55,7 @@ namespace WB.Tests.Integration.SurveyManagement.RavenIndexes
         protected static readonly TestTemplate Template1 = new TestTemplate { Id = Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"), Title = "The first template" };
         protected static readonly TestTemplate Template2 = new TestTemplate { Id = Guid.Parse("EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE"), Title = "The second template" };
 
-        protected static EmbeddableDocumentStore CreateDocumentStore(IEnumerable<StatisticsLineGroupedByUserAndTemplate> documents = null, IEnumerable<QuestionnaireBrowseItem> questionnaireBrowseItems = null)
+        protected static EmbeddableDocumentStore CreateDocumentStore(IEnumerable<InterviewSummary> documents = null, IEnumerable<QuestionnaireBrowseItem> questionnaireBrowseItems = null)
         {
             var documentStore = new EmbeddableDocumentStore
                 {
@@ -83,7 +84,7 @@ namespace WB.Tests.Integration.SurveyManagement.RavenIndexes
             // Insert Documents from Abstract Property
             using (var bulkInsert = documentStore.BulkInsert())
             {
-                foreach (var document in (documents ?? new StatisticsLineGroupedByUserAndTemplate[0]))
+                foreach (var document in (documents ?? new InterviewSummary[0]))
                 {
                     bulkInsert.Store(document);
                 }
@@ -108,26 +109,47 @@ namespace WB.Tests.Integration.SurveyManagement.RavenIndexes
                 }
             
         }
-        
-        protected static IEnumerable<StatisticsLineGroupedByUserAndTemplate> GenerateStatisticDocuments(params SummaryItemSketch[] testSummaryItems)
+
+        private static InterviewSummary CreateInterviewSummaryInStatus(SummaryItemSketch summaryItemSketch, InterviewStatus status)
         {
-            return testSummaryItems.Select(x => new StatisticsLineGroupedByUserAndTemplate()
+            return new InterviewSummary()
+            {
+                InterviewId = Guid.NewGuid(),
+                QuestionnaireId = summaryItemSketch.Template.Id,
+                TeamLeadId = summaryItemSketch.ResponsibleSupervisor.Id,
+                ResponsibleId = summaryItemSketch.Responsible.Id,
+                Status = status
+            };
+        }
+
+        protected static IEnumerable<InterviewSummary> InterviewSummaryDocuments(params SummaryItemSketch[] testSummaryItems)
+        {
+            var result = new List<InterviewSummary>();
+            //new SummaryItemSketch { InterviewerAssignedCount = 2, ResponsibleSupervisor = SupervisorA, Responsible = SupervisorA, Template = Template1 }
+            foreach (var summaryItemSketch in testSummaryItems)
+            {
+                for (int i = 0; i < summaryItemSketch.InterviewerAssignedCount; i++)
                 {
-                    TotalCount = x.Total,
-                    SupervisorAssignedCount = x.SupervisorAssignedCount,
-                    InterviewerAssignedCount = x.InterviewerAssignedCount,
-                    CompletedCount = x.Complete,
-                    RejectedBySupervisorCount = x.Redo,
-                    //CompletedWithErrorsCount = x.Error, // not exists in StatisticsLineGroupedByUserAndTemplate
-                    ApprovedBySupervisorCount = x.RejectedBySupervisorCount,
-                    //DeletedInterviews = new HashSet<Guid>(),
-                    ResponsibleId = x.Responsible.Id,
-                    ResponsibleName = x.Responsible.Name,
-                    TeamLeadId = x.ResponsibleSupervisor.Id,
-                    TeamLeadName = x.ResponsibleSupervisor.Name,
-                    QuestionnaireId = x.Template.Id,
-                    QuestionnaireTitle = x.Template.Title
-                });
+                    result.Add(CreateInterviewSummaryInStatus(summaryItemSketch, InterviewStatus.InterviewerAssigned));
+                }
+                for (int i = 0; i < summaryItemSketch.Redo; i++)
+                {
+                    result.Add(CreateInterviewSummaryInStatus(summaryItemSketch, InterviewStatus.RejectedBySupervisor));
+                }
+                for (int i = 0; i < summaryItemSketch.Complete + summaryItemSketch.Error; i++)
+                {
+                    result.Add(CreateInterviewSummaryInStatus(summaryItemSketch, InterviewStatus.Completed));
+                }
+                for (int i = 0; i < summaryItemSketch.ApprovedBySupervisorCount; i++)
+                {
+                    result.Add(CreateInterviewSummaryInStatus(summaryItemSketch, InterviewStatus.ApprovedBySupervisor));
+                }
+                for (int i = 0; i < summaryItemSketch.SupervisorAssignedCount; i++)
+                {
+                    result.Add(CreateInterviewSummaryInStatus(summaryItemSketch, InterviewStatus.SupervisorAssigned));
+                }
+            }
+            return result;
         }
 
         protected static IEnumerable<StatisticsLineGroupedByUserAndTemplate> GetLineItemForTeam(IEnumerable<StatisticsLineGroupedByUserAndTemplate> lineItems, TestUser teamSupervisor)

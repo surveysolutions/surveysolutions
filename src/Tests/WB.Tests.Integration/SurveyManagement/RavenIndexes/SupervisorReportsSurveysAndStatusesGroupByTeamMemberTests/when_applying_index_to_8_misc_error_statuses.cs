@@ -12,7 +12,7 @@ namespace WB.Tests.Integration.SurveyManagement.RavenIndexes.SupervisorReportsSu
     {
         Establish context = () =>
         {
-            IEnumerable<StatisticsLineGroupedByUserAndTemplate> generateStatisticDocumentsWithUnassignedCounts = GenerateStatisticDocuments(
+            IEnumerable<InterviewSummary> generateStatisticDocumentsWithUnassignedCounts = InterviewSummaryDocuments(
                 new SummaryItemSketch { Error = 2, ResponsibleSupervisor = SupervisorA, Responsible = SupervisorA, Template = Template1 },
                 new SummaryItemSketch { Error = 7, ResponsibleSupervisor = SupervisorA, Responsible = InterviewerA1, Template = Template1 },
                 new SummaryItemSketch { Error = 11, ResponsibleSupervisor = SupervisorA, Responsible = InterviewerA2, Template = Template1 },
@@ -36,8 +36,8 @@ namespace WB.Tests.Integration.SurveyManagement.RavenIndexes.SupervisorReportsSu
         It should_set_0_to_Initial_property_for_all_line_items = () =>
             resultItems.ShouldEachConformTo(lineItem => lineItem.InterviewerAssignedCount == 0);
 
-        It should_set_0_to_Completed_property_for_all_line_items = () =>
-          resultItems.ShouldEachConformTo(lineItem => lineItem.CompletedCount == 0);
+      /*  It should_set_0_to_Completed_property_for_all_line_items = () =>
+          resultItems.ShouldEachConformTo(lineItem => lineItem.CompletedCount == 0);*/
 
         It should_set_0_to_Redo_property_for_all_line_items = () =>
             resultItems.ShouldEachConformTo(lineItem => lineItem.RejectedBySupervisorCount == 0);
@@ -45,9 +45,10 @@ namespace WB.Tests.Integration.SurveyManagement.RavenIndexes.SupervisorReportsSu
         It should_set_0_to_Approved_property_for_all_line_items = () =>
            resultItems.ShouldEachConformTo(lineItem => lineItem.ApprovedBySupervisorCount == 0);
 
-        /*It should_set_2x56_to_Error_property_for_sum_of_all_line_items = () =>
-            resultItems.Sum(lineItem => lineItem.CompletedWithErrorsCount).ShouldEqual(2*56);
+        It should_set_2x56_to_Error_property_for_sum_of_all_line_items = () =>
+            resultItems.Sum(lineItem => lineItem.CompletedCount).ShouldEqual(2 * 56);
 
+        /*
         It should_group_each_Totals_to_be_equal_Approved_property_for_line_items = () =>
            resultItems.ShouldEachConformTo(lineItem => lineItem.TotalCount == lineItem.CompletedWithErrorsCount);*/
 
