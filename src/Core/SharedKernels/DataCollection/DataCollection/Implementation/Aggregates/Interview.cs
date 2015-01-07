@@ -3188,7 +3188,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (answerExceedsMaxValue)
                 throw new InterviewException(string.Format(
-                    "Answer '{0}' for question {1} is incorrect because answer is greater than max value '{2}'.",
+                    "Answer '{0}' for question {1} is incorrect because answer is greater than Roster upper bound '{2}'.",
                     answer, FormatQuestionForException(questionId, questionnaire), maxValue.Value));
         }
 
