@@ -206,7 +206,6 @@
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_SupervisorAssigned_event_and_responsible_user_not_found.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_SupervisorAssigned_event.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewCreated_event.cs" />
-    <Compile Include="EventHandlers\Interview\StatisticsDenormalizerTests\when_interview_hard_deleted_event_recived_.cs" />
     <Compile Include="EventHandlers\QuestionnaireExportStructureDenormalizerTests\when_QuestionnaireDeleted_event_recived.cs" />
     <Compile Include="EventHandlers\QuestionnaireExportStructureDenormalizerTests\when_TemplateImported_event_recived_and_version_is_set.cs" />
     <Compile Include="EventHandlers\QuestionnaireQuestionsInfoDenormalizerTests\when_questionnaire_deleted_event_recived.cs" />
@@ -278,14 +277,11 @@
     <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataSchedulerTests\InterviewDetailsDataSchedulerTestsContext.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataSchedulerTests\when_loading_interview_details_from_capi_package.cs" />
     <Compile Include="TestInMemoryWriter.cs" />
-    <Compile Include="EventHandlers\Interview\StatisticsDenormalizerTests\when_duplicate_creation_event_exists_in_event_stream.cs" />
     <Compile Include="EventHandlers\QuestionnaireExportStructureDenormalizerTests\when_TemplateImported_event_recived.cs" />
     <Compile Include="EventHandlers\QuestionnaireQuestionsInfoDenormalizerTests\QuestionnaireQuestionsInfoDenormalizerTestContext.cs" />
     <Compile Include="EventHandlers\QuestionnaireQuestionsInfoDenormalizerTests\when_importing_questionnaire_with_7_numeric_questions_in_all_roster_types_with_neted_groups.cs" />
     <Compile Include="EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\ReferenceInfoForLinkedQuestionsDenormalizerTestContext.cs" />
     <Compile Include="EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\when_importing_questionnaire_with_fixed_roster_with_numeric_question_and_linked_.cs" />
-    <Compile Include="EventHandlers\Interview\StatisticsDenormalizerTests\StatisticsDenormalizerTestContext.cs" />
-    <Compile Include="EventHandlers\Interview\StatisticsDenormalizerTests\when_handling_interview_status_change_event.cs" />
     <Compile Include="EventHandlers\UserDenormalizerTests\UserDenormalizerContext.cs" />
     <Compile Include="EventHandlers\UserDenormalizerTests\when_UserUpdated_received.cs" />
     <Compile Include="EventHandlers\UserDenormalizerTests\when_UserLocked_received.cs" />
