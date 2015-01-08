@@ -172,10 +172,10 @@
     <value>Roster size source question is incorrect. Only numeric, categorical with multiple answers or text list questions can be used.</value>
   </data>
   <data name="WB0025_RosterSizeQuestionMaxValueCouldNotBeEmpty" xml:space="preserve">
-    <value>Max value for roster size question cannot be empty.</value>
+    <value>Roster upper bound for roster size question cannot be empty.</value>
   </data>
   <data name="WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And40" xml:space="preserve">
-    <value>Max value for roster size question must be in range [1, 40].</value>
+    <value>Roster upper bound for roster size question must be in range [1, 40].</value>
   </data>
   <data name="WB0027_QuestionnaireHaveAutopropagatedGroups" xml:space="preserve">
     <value />
