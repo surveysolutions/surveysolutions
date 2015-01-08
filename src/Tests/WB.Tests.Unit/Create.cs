@@ -195,6 +195,17 @@ namespace WB.Tests.Unit
                     new ChangedRosterInstanceTitleDto(new RosterInstance(rosterId ?? Guid.NewGuid(), new decimal[0], 0.0m), "title")
                 });
             }
+
+            public static StaticTextAdded StaticTextAdded(Guid? parentId = null, string text = null, Guid? responsibleId = null, Guid? publicKey = null)
+            {
+                return new StaticTextAdded
+                {
+                    EntityId = publicKey.GetValueOrDefault(Guid.NewGuid()),
+                    ResponsibleId = responsibleId ?? Guid.NewGuid(),
+                    ParentId =  parentId ?? Guid.NewGuid(),
+                    Text = text
+                };
+            }
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
