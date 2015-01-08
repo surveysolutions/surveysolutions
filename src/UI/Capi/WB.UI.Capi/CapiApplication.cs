@@ -329,7 +329,7 @@ namespace WB.UI.Capi
             this.kernel.Bind<IInterviewerSettings>().To<InterviewerSettings>().InSingletonScope();
             this.kernel.Bind<ISynchronizationService>().To<InterviewerSynchronizationService>().InSingletonScope();
 
-            this.kernel.Bind<ISyncProtocolVersionProvider>().ToConstant(new SyncProtocolVersionProvider(() => false));
+            this.kernel.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
             #region register handlers
 
             var eventHandler =

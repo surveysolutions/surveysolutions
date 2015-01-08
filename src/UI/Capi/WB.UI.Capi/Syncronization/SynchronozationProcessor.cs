@@ -46,8 +46,7 @@ namespace WB.UI.Capi.Syncronization
             ISyncPackageIdsStorage packageIdStorage,
             ILogger logger,
             ISynchronizationService synchronizationService,
-            IInterviewerSettings interviewerSettings,
-            ISyncProtocolVersionProvider syncProtocolVersionProvider)
+            IInterviewerSettings interviewerSettings)
         {
             this.authentificator = authentificator;
             this.cleanUpExecutor = cleanUpExecutor;

@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
+using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Capi.Properties;
 using WB.UI.Capi.Services;
 using WB.UI.Capi.Settings;
@@ -16,11 +17,13 @@ namespace WB.UI.Capi.Implementations.Services
     {
         private readonly IRestService restService;
         private readonly IInterviewerSettings interviewerSettings;
+        private readonly ISyncProtocolVersionProvider syncProtocolVersionProvider;
 
-        public InterviewerSynchronizationService(IRestService restService, IInterviewerSettings interviewerSettings)
+        public InterviewerSynchronizationService(IRestService restService, IInterviewerSettings interviewerSettings, ISyncProtocolVersionProvider syncProtocolVersionProvider)
         {
             this.restService = restService;
             this.interviewerSettings = interviewerSettings;
+            this.syncProtocolVersionProvider = syncProtocolVersionProvider;
         }
 
         public async Task<Guid> HandshakeAsync(SyncCredentials credentials)
@@ -31,7 +34,7 @@ namespace WB.UI.Capi.Implementations.Services
                 request: new HandshakePackageRequest()
                 {
                     ClientId = this.interviewerSettings.GetInstallationId(),
-                    Version = this.interviewerSettings.GetApplicationVersionCode(),
+                    Version = this.syncProtocolVersionProvider.GetProtocolVersion(),
                     ClientRegistrationId = this.interviewerSettings.GetClientRegistrationId(),
                     AndroidId = this.interviewerSettings.GetDeviceId()
                 });
