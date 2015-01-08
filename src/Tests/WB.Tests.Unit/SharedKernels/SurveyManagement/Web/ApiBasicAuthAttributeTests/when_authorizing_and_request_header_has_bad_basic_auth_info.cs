@@ -7,7 +7,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttributeTests
 {
-    internal class when_authorization_and_request_header_has_bad_basic_auth_info : ApiBasicAuthAttributeTestsContext
+    internal class when_authorizing_and_request_header_has_bad_basic_auth_info : ApiBasicAuthAttributeTestsContext
     {
         Establish context = () =>
         {
