@@ -71,21 +71,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [ApiBasicAuth]
         public HandshakePackage GetHandshakePackage(HandshakePackageRequest request)
         {
-            int? supervisorRevisionNumber = syncVersionProvider.GetProtocolVersion();
+            int supervisorRevisionNumber = syncVersionProvider.GetProtocolVersion();
 
-            if (supervisorRevisionNumber.HasValue && request.Version > supervisorRevisionNumber.Value)
+            if (request.Version > supervisorRevisionNumber)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable)
                 {
-                    ReasonPhrase = string.Format(InterviewerSyncStrings.InterviewerApplicationHasHigherVersion_thanSupervisor_Format, request.Version, supervisorRevisionNumber.Value)
+                    ReasonPhrase = string.Format(InterviewerSyncStrings.InterviewerApplicationHasHigherVersion_thanSupervisor_Format, request.Version, supervisorRevisionNumber)
                 });
             }
 
-            if (supervisorRevisionNumber.HasValue && request.Version < supervisorRevisionNumber.Value)
+            if (request.Version < supervisorRevisionNumber)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable)
                 {
-                    ReasonPhrase = string.Format(InterviewerSyncStrings.InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication, request.Version, supervisorRevisionNumber.Value)
+                    ReasonPhrase = string.Format(InterviewerSyncStrings.InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication, request.Version, supervisorRevisionNumber)
                 });
             }
 

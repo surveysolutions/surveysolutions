@@ -94,7 +94,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<ISupportedVersionProvider>()
                 .ToConstant(new SupportedVersionProvider(applicationVersionSettings, this.isDebug, this.applicationBuildVersion));
 
-            this.Bind<ISyncProtocolVersionProvider>().ToConstant(new SyncProtocolVersionProvider(this.isDebug));
+            this.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
 
             this.Bind(typeof (ITemporaryDataStorage<>)).To(typeof (FileTemporaryDataStorage<>));
 
