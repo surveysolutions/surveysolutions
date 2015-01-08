@@ -46,14 +46,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             BasicCredentials basicCredentials = ParseCredentials(actionContext);
             if (basicCredentials == null || !this.isUserValid(basicCredentials.Username, basicCredentials.Password))
             {
-                this.ThrowUnauthorizeResponseIfUserNotExists(actionContext);
+                this.RespondWithMessageThatUserDoesNotExists(actionContext);
                 return;
             }
 
             var userInfo = this.userViewFactory.Load(new UserViewInputModel(UserName: basicCredentials.Username, UserEmail: null));
             if (userInfo == null || !userInfo.Roles.Contains(UserRoles.Operator))
             {
-                this.ThrowUnauthorizeResponseIfUserIsNotAnInterviewer(actionContext);
+                this.RespondWithMessageThatUserIsNotAnInterviewer(actionContext);
                 return;
             }
 
@@ -102,13 +102,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             public string Password { get; set; }
         }
 
-        private void ThrowUnauthorizeResponseIfUserNotExists(HttpActionContext actionContext)
+        private void RespondWithMessageThatUserDoesNotExists(HttpActionContext actionContext)
         {
             actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = string.Format(InterviewerSyncStrings.InvalidUserFormat, actionContext.Request.RequestUri.GetLeftPart(UriPartial.Authority)) };
             actionContext.Response.Headers.Add("WWW-Authenticate", string.Format("Basic realm=\"{0}\"", actionContext.Request.RequestUri.DnsSafeHost));
         }
 
-        private void ThrowUnauthorizeResponseIfUserIsNotAnInterviewer(HttpActionContext actionContext)
+        private void RespondWithMessageThatUserIsNotAnInterviewer(HttpActionContext actionContext)
         {
             actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = InterviewerSyncStrings.InvalidUserRole };
         }

@@ -264,9 +264,9 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_SharedPersonToQuestionnaireAdded_received.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\ApiBasicAuthAttributeTestsContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorization_and_request_header_has_bad_basic_auth_info.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorization_and_user_does_not_exists.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorization_and_user_not_interviewer.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorizing_and_request_header_has_bad_basic_auth_info.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorizing_non_existant_user.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorizing_not_an_interviewer.cs" />
     <Compile Include="Applications\Headquarters\FilterTests\InstallationAttributeTests\InstallationAttributeTestsContext.cs" />
     <Compile Include="Applications\Headquarters\FilterTests\InstallationAttributeTests\when_action_executing_and_control_panel_controller.cs" />
     <Compile Include="Applications\Headquarters\FilterTests\InstallationAttributeTests\when_action_executing_and_hq_user_does_not_exists_and_install_controller.cs" />
