@@ -1,27 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Web.Http.Controllers;
 using Machine.Specifications;
-using Main.Core.Entities.SubEntities;
-using Moq;
-using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttributeTests
 {
-    internal class when_authorization_and_user_not_interviewer : ApiBasicAuthAttributeTestsContext
+    internal class when_authorizing_non_existant_user : ApiBasicAuthAttributeTestsContext
     {
         Establish context = () =>
         {
-            var userViewFactoryMock = new Mock<IViewFactory<UserViewInputModel, UserView>>();
-            userViewFactoryMock.Setup(_ => _.Load(Moq.It.IsAny<UserViewInputModel>()))
-                .Returns(new UserView() {Roles = new List<UserRoles>(new []{UserRoles.Supervisor})});
-
-            attribute = Create((userName, password)=> true, userViewFactoryMock.Object);
+            attribute = Create((userName, password)=> false);
 
             actionContext = CreateActionContext();
             actionContext.Request.Headers.Authorization = new AuthenticationHeaderValue("Basic", "QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
@@ -36,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
             actionContext.Response.StatusCode.ShouldEqual(HttpStatusCode.Unauthorized);
 
         It should_response_reason_phrase_contains_specified_message = () =>
-            new[] { "not", "interviewer" }.ShouldEachConformTo(keyword => actionContext.Response.ReasonPhrase.ToLower().Contains(keyword));
+           actionContext.Response.ReasonPhrase.ShouldEqual("Synchronization failed. User is not autorized. Please check you login/password for http://hq.org.");
 
         private static ApiBasicAuthAttribute attribute;
         private static HttpActionContext actionContext;
