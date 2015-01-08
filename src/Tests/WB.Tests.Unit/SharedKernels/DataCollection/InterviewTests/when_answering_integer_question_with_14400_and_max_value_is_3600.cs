@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             exception.Message.ToLower().ShouldContain("greater");
 
         It should_throw_exception_with_message_containting__max_value__ = () =>
-            exception.Message.ToLower().ShouldContain("max value");
+            exception.Message.ToLower().ShouldContain("roster upper bound");
 
         It should_throw_exception_with_message_containting__3600__ = () =>
             exception.Message.ToLower().ShouldContain("3600");

@@ -232,7 +232,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Value cannot be greater than the max value..
+        ///   Looks up a localized string similar to Value cannot be greater than the roster upper bound..
         /// </summary>
         internal static string PL0020_AnswerIsIncorrectBecauseIsGreaterThanMaxValue {
             get {
