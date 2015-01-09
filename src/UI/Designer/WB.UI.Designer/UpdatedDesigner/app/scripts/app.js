@@ -88,8 +88,5 @@
     }])
     .config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
         cfpLoadingBarProvider.spinnerTemplate = '<div id="loading-logo"></div>';
-    }])
-    .config(['$compileProvider', function ($compileProvider) {
-        $compileProvider.debugInfoEnabled(false);
     }]);
 }(jQuery));
