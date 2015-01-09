@@ -36,14 +36,6 @@
     <li class="@(page == MenuItem.Questionnaires ? "active" : "")">
         <a href="@Url.Action("Index", "HQ", new { area = "" })"><i class="glyphicon glyphicon-list-alt"></i> @MainMenu.Questionnaires</a>
     </li>
-    <li class="dropdown @(page == MenuItem.Administration ? "active" : "")">
-        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
-            @MainMenu.Administration <b class="caret"></b>
-        </a>
-        <ul class="dropdown-menu">
-            <li>@Html.ActionLink(MainMenu.Backup, "Index", "Backup")</li>
-        </ul>
-    </li>
 </ul>
 <ul class="nav navbar-nav navbar-right" role="menu">
     <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
