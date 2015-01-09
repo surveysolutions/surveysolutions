@@ -69,7 +69,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             QuestionType.MultyOption
         };
 
-        private struct VerificationState
+        private class VerificationState
         {
             public bool HasExceededLimitByValidationExpresssionCharactersLength { get; set; }
             public bool HasExceededLimitByConditionExpresssionCharactersLength { get; set; }

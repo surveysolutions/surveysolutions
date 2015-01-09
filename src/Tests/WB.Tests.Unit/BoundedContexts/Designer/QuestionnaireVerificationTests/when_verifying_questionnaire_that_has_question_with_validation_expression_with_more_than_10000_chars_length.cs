@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Text;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using It = Machine.Specifications.It;
 
@@ -27,8 +30,14 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                         validationMessage: "too long")
                 })
             });
-            
-            verifier = CreateQuestionnaireVerifier();
+
+            questionnireExpressionProcessorGeneratorMock = new Mock<IExpressionProcessorGenerator>();
+            string generationResult;
+            questionnireExpressionProcessorGeneratorMock.Setup(
+                _ => _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), out generationResult))
+                .Returns(new GenerationResult() { Success = true, Diagnostics = new List<GenerationDiagnostic>() });
+
+            verifier = CreateQuestionnaireVerifier(expressionProcessorGenerator: questionnireExpressionProcessorGeneratorMock.Object);
         };
 
         Because of = () =>
@@ -49,10 +58,17 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_error_with_one_references_with_id_equals_questionId = () =>
             resultErrors.First().References.First().Id.ShouldEqual(questionId);
 
+        private It should_not_call_GenerateProcessorStateAssembly = () =>
+            questionnireExpressionProcessorGeneratorMock.Verify(x => x.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), out generationResult), Times.Never);
+
+        
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+        private static Mock<IExpressionProcessorGenerator> questionnireExpressionProcessorGeneratorMock;
+        private static string generationResult;
     }
 }
