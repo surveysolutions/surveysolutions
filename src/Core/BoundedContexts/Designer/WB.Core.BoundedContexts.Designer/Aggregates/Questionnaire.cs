@@ -1034,9 +1034,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfExpressionContainsNotExistingQuestionReference(condition, variableName);
 
-            this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, isRoster: isRoster, rosterSizeSource: rosterSizeSource,
-                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: rosterFixedTitles,
-                rosterTitleQuestionId: rosterTitleQuestionId, rosterDepthFunc: () => this.GetQuestionnaireItemDepthAsVector(parentGroupId));
+            this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, 
+                isRoster: isRoster,
+                rosterSizeSource: rosterSizeSource,
+                rosterSizeQuestionId: rosterSizeQuestionId, 
+                rosterFixedTitles: rosterFixedTitles,
+                rosterTitleQuestionId: 
+                rosterTitleQuestionId, 
+                rosterDepthFunc: () => this.GetQuestionnaireItemDepthAsVector(parentGroupId));
 
             this.ApplyEvent(new GroupCloned
             {
@@ -1054,8 +1059,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (isRoster)
             {
                 this.ApplyEvent(new GroupBecameARoster(responsibleId, groupId));
-                this.ApplyEvent(new RosterChanged(responsibleId, groupId, rosterSizeQuestionId, rosterSizeSource, rosterFixedTitles,
-                    rosterTitleQuestionId));
+                this.ApplyEvent(new RosterChanged(responsibleId, groupId, rosterSizeQuestionId, rosterSizeSource, rosterFixedTitles, rosterTitleQuestionId));
             }
             else
             {
@@ -1096,13 +1100,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void FillGroup(Guid groupId, Guid? parentGroupId, Guid responsibleId, IGroup sourceGroup,
             int targetIndex)
         {
-            this.CloneGroupWithoutChildren(groupId: groupId, responsibleId: responsibleId, parentGroupId: parentGroupId,
-                sourceGroupId: sourceGroup.PublicKey, title: sourceGroup.Title, targetIndex: targetIndex,
-                description: sourceGroup.Description, condition: sourceGroup.ConditionExpression,
-                isRoster: sourceGroup.IsRoster, rosterSizeSource: sourceGroup.RosterSizeSource,
+            this.CloneGroupWithoutChildren(groupId: groupId, 
+                responsibleId: responsibleId, 
+                parentGroupId: parentGroupId,
+                sourceGroupId: sourceGroup.PublicKey, 
+                title: sourceGroup.Title, 
+                targetIndex: targetIndex,
+                description: sourceGroup.Description, 
+                condition: sourceGroup.ConditionExpression,
+                isRoster: sourceGroup.IsRoster, 
+                rosterSizeSource: sourceGroup.RosterSizeSource,
                 rosterSizeQuestionId: sourceGroup.RosterSizeQuestionId,
-                rosterTitleQuestionId: sourceGroup.RosterTitleQuestionId,
-                rosterFixedTitles: sourceGroup.RosterFixedTitles, variableName:sourceGroup.VariableName);
+                rosterTitleQuestionId: null,
+                rosterFixedTitles: sourceGroup.RosterFixedTitles,
+                variableName:sourceGroup.VariableName);
 
             foreach (var questionnaireItem in sourceGroup.Children)
             {
