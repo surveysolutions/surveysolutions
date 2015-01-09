@@ -23,7 +23,7 @@ namespace WB.UI.Headquarters.Controllers
             : base(commandService, globalInfo, logger)
         {
             this.designerQuestionnaireApiRestService = designerQuestionnaireApiRestService;
-            this.ViewBag.ActivePage = MenuItem.Administration;
+            this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
             if (AppSettings.Instance.AcceptUnsignedCertificate)
             {

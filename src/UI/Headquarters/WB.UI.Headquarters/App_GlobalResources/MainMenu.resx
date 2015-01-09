@@ -117,12 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Administration" xml:space="preserve">
-    <value>Administration</value>
-  </data>
-  <data name="Backup" xml:space="preserve">
-    <value>Backup</value>
-  </data>
   <data name="CumulativeChart" xml:space="preserve">
     <value>Cumulative Interview Chart</value>
   </data>

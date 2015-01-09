@@ -61,24 +61,6 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Administration.
-        /// </summary>
-        internal static string Administration {
-            get {
-                return ResourceManager.GetString("Administration", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Backup.
-        /// </summary>
-        internal static string Backup {
-            get {
-                return ResourceManager.GetString("Backup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cumulative Interview Chart.
         /// </summary>
         internal static string CumulativeChart {

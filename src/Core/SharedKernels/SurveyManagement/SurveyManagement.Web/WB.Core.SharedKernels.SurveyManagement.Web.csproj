@@ -172,7 +172,6 @@
     <Compile Include="Code\RevalidateInterviewsAdministrationService.cs" />
     <Compile Include="Code\StatusHelper.cs" />
     <Compile Include="Code\ValidateFileAttribute.cs" />
-    <Compile Include="Controllers\BackupController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CommandApiController.cs" />

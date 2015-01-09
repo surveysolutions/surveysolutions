@@ -6,7 +6,6 @@
         Interviewers,
         Statuses,
         Docs,
-        Administration,
         Logon,
         Devices,
         SyncLog,
