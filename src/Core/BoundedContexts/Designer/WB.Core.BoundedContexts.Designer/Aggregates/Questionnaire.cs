@@ -297,10 +297,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Answers,
                         e.LinkedToQuestionId,
                         e.IsInteger,
-                        e.CountOfDecimalPlaces,
+                        null,
                         e.AreAnswersOrdered,
                         e.MaxAllowedAnswers,
-                        e.MaxAnswerCount,
+                        null,
                         e.IsFilteredCombobox,
                         e.CascadeFromQuestionId));
 
@@ -769,9 +769,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private static int? DetermineActualMaxValueForGenericQuestion(QuestionType questionType, int legacyMaxValue)
         {
-            var result = (questionType == QuestionType.AutoPropagate || questionType == QuestionType.Numeric) ? legacyMaxValue as int? : null;
-
-            return result;
+            return questionType == QuestionType.AutoPropagate ? legacyMaxValue as int? : null;
         }
 
         private static int? DetermineActualMaxValueForNumericQuestion(bool isAutopropagating, int? legacyMaxValue, int? actualMaxValue)
