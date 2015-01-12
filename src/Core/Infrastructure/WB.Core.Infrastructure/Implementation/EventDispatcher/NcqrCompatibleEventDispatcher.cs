@@ -7,6 +7,7 @@ using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
@@ -58,7 +59,9 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
         public void Publish(IEnumerable<IPublishableEvent> eventMessages)
         {
-            if(!eventMessages.Any())
+            List<IPublishableEvent> events = eventMessages.ToList();
+
+            if(!events.Any())
                 return;
 
             var functionalHandlers =
@@ -67,18 +70,42 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             var oldStyleHandlers =
                this.registredHandlers.Values.Where(h => !(h.Handler is IFunctionalEventHandler)).ToList();
 
+            Guid firstEventSourceId = events.First().EventSourceId;
+
+            var errorsDuringHandling = new List<Exception>();
+
             foreach (var functionalEventHandler in functionalHandlers)
             {
-                functionalEventHandler.Handle(eventMessages, eventMessages.First().EventSourceId);
+                try
+                {
+                    functionalEventHandler.Handle(events, firstEventSourceId);
+                }
+                catch (Exception exception)
+                {
+                    errorsDuringHandling.Add(exception);
+                }
             }
 
-            foreach (var publishableEvent in eventMessages)
+            foreach (var publishableEvent in events)
             {
                 foreach (var handler in oldStyleHandlers)
                 {
-                    handler.Bus.Publish(publishableEvent);
+                    try
+                    {
+                        handler.Bus.Publish(publishableEvent);
+                    }
+                    catch (Exception exception)
+                    {
+                        errorsDuringHandling.Add(exception);
+                    }
                 }
             }
+
+            if (errorsDuringHandling.Count > 0)
+                throw new AggregateException(
+                    string.Format("One or more handlers failed when publishing {0} events. First event source id: {1}.",
+                        events.Count, firstEventSourceId.FormatGuid()),
+                    errorsDuringHandling);
         }
 
         public void PublishUncommitedEventsFromAggregateRoot(IAggregateRoot aggregateRoot, string origin)
