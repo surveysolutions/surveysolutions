@@ -75,6 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
                 android:layout_marginBottom="20dip"
+                android:inputType="textUri"
                 android:singleLine="true" />
             <Button
                 android:id="@+id/btnSave"
@@ -82,6 +83,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dip"
                 android:text="Save" />
-        </LinearLayout>        
+        </LinearLayout>
     </RelativeLayout>
 </ScrollView>

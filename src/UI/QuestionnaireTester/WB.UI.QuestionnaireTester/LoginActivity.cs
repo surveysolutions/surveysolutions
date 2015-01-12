@@ -5,6 +5,7 @@ using Android.App;
 using Android.Graphics;
 using Android.OS;
 using Android.Views;
+using Android.Views.InputMethods;
 using Android.Widget;
 using Android.Content.PM;
 using Cirrious.MvvmCross.Droid.Simple;
@@ -84,6 +85,27 @@ namespace WB.UI.QuestionnaireTester
             this.tePassword.Click += editText_Click;
             this.btnSave.Click += btnSave_Click;
             this.topView.Click += topView_Click;
+
+            this.tePassword.ImeOptions = ImeAction.Done;
+
+            this.tePassword.EditorAction += this.passwordEditorAction;
+            this.teLogin.EditorAction += this.loginEditorAction;
+        }
+
+        private void passwordEditorAction(object sender, TextView.EditorActionEventArgs e)
+        {
+            if (e.ActionId == ImeAction.Done)
+            {
+                btnLogin_Click(sender, e);
+            }
+        }
+
+        private void loginEditorAction(object sender, TextView.EditorActionEventArgs e)
+        {
+            if (e.ActionId == ImeAction.Next)
+            {
+                tePassword.RequestFocus();
+            }
         }
 
         void topView_Click(object sender, EventArgs e)
@@ -119,7 +141,6 @@ namespace WB.UI.QuestionnaireTester
 
             progressDialog.Show();
             Task.Factory.StartNew(this.LoginAsync, this.cancellationToken);
-        
         }
 
         private async void LoginAsync()
