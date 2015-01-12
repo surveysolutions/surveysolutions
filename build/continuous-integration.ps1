@@ -22,7 +22,6 @@ try {
 
 	CheckPrerequisites | %{ if (-not $_) { Exit } }
 	CleanBinAndObjFolders
-	& "src/.nuget/nuget.exe" restore 
 
 	if ($Deep) {
 		BuildSolutions $BuildConfiguration -ClearBinAndObjFoldersBeforeEachSolution | %{ if (-not $_) { Exit } }
