@@ -24,7 +24,7 @@ try {
 	CleanBinAndObjFolders
 
 	$restore = "src/.nuget/nuget.exe restore src/WB.sln"
-	Write-Host "Running package restore cmmand: '$restore'"
+	Write-Host "Running package restore: '$restore'"
 	iex $restore
 		
 

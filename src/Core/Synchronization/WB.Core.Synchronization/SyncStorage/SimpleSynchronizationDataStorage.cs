@@ -152,8 +152,8 @@ namespace WB.Core.Synchronization.SyncStorage
             {
                 RootId = publicKey.Combine(AssemblySeed).Combine(version),
                 ItemType = SyncItemType.QuestionnaireAssembly,
-                IsCompressed = UseCompressionForFiles,
-                Content = assemblyAsBase64String,
+                IsCompressed = UseCompression,
+                Content = GetItemAsContent(assemblyAsBase64String),
                 MetaInfo = GetItemAsContent(meta)
             };
             chunkStorageWriter.StoreChunk(syncItem, null, timestamp);
