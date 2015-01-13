@@ -221,12 +221,11 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
             var packageId = questionnarieId.Combine(SimpleSynchronizationDataStorage.AssemblySeed).Combine(version);
             var result = target.GetLatestVersion(packageId);
             var metaInformation = JsonConvert.DeserializeObject<QuestionnaireAssemblyMetadata>(result.MetaInfo);
-            string assembly = JsonConvert.DeserializeObject<string>(result.Content);
 
             Assert.That(result.ItemType, Is.EqualTo(SyncItemType.QuestionnaireAssembly));
             Assert.That(result.Id, Is.EqualTo(packageId));
-            Assert.That(result.IsCompressed, Is.EqualTo(true));
-            Assert.That(assembly, Is.EqualTo(assemblyAsBase64String));
+            Assert.That(result.IsCompressed, Is.EqualTo(false));
+            Assert.That(result.Content, Is.EqualTo(assemblyAsBase64String));
             Assert.That(metaInformation.Version, Is.EqualTo(version));
         }
 
