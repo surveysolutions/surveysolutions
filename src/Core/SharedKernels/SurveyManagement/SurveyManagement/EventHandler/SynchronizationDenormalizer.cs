@@ -79,36 +79,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
         {
             var newStatus = evnt.Payload.Status;
-            ViewWithSequence<InterviewData> interviewWithVersion = interviews.GetById(evnt.EventSourceId);
 
-            if (!interviewWithVersion.Document.WasRejected && newStatus == InterviewStatus.RejectedBySupervisor)
+            if (this.IsNewStatusRejectedBySupervisor(newStatus))
             {
-                interviewWithVersion.Document.WasRejected = true;
-                interviews.Store(interviewWithVersion, evnt.EventSourceId);
-            }
-
-            if (this.IsInterviewWithStatusNeedToBeResendToCapi(newStatus))
-            {
+                var interviewWithVersion = interviews.GetById(evnt.EventSourceId);
                 this.ResendInterviewInNewStatus(interviewWithVersion, newStatus, evnt.Payload.Comment, evnt.EventTimeStamp);
             }
-            else if (this.IsInterviewWithStatusNeedToBeDeletedOnCapi(newStatus, interviewWithVersion))
+            else
             {
-                this.syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, null, evnt.EventTimeStamp);
+                if (this.IsNewStatusCompletedOrDeleted(newStatus) && this.IsInterviewWereRejectedAtLeastOnceBeboreOrNotCreateOnClient(evnt.EventSourceId))
+                    this.syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, null, evnt.EventTimeStamp);
             }
         }
 
         public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
         {
-            var interviewWithVersion = interviews.GetById(evnt.EventSourceId);
-
-            if (interviewWithVersion == null)
-                return;
-
-            var interview = interviewWithVersion.Document;
-
-            if (interview.Status != InterviewStatus.RejectedByHeadquarters && (!interview.CreatedOnClient || interview.WasRejected))
+            if (this.IsInterviewWereRejectedAtLeastOnceBeboreOrNotCreateOnClient(evnt.EventSourceId))
             {
-                this.ResendInterviewForPerson(interview, evnt.Payload.InterviewerId, evnt.EventTimeStamp);
+                var interviewWithVersion = interviews.GetById(evnt.EventSourceId);
+                if (interviewWithVersion == null)
+                    return;
+
+                var interview = interviewWithVersion.Document;
+                if (interview.Status != InterviewStatus.RejectedByHeadquarters)
+                    this.ResendInterviewForPerson(interview, evnt.Payload.InterviewerId, evnt.EventTimeStamp);
             }
         }
 
@@ -230,15 +224,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId, timestamp);
         }
 
-        private bool IsInterviewWithStatusNeedToBeResendToCapi(InterviewStatus newStatus)
+        private bool IsNewStatusRejectedBySupervisor(InterviewStatus newStatus)
         {
             return newStatus == InterviewStatus.RejectedBySupervisor;
         }
 
-        private bool IsInterviewWithStatusNeedToBeDeletedOnCapi(InterviewStatus newStatus, ViewWithSequence<InterviewData> interviewData)
+        private bool IsNewStatusCompletedOrDeleted(InterviewStatus newStatus)
         {
-            var statusForcesPushToTablets = (newStatus == InterviewStatus.Completed || newStatus == InterviewStatus.Deleted);
-            return statusForcesPushToTablets && (!interviewData.Document.CreatedOnClient || interviewData.Document.WasRejected);
+            return newStatus == InterviewStatus.Completed || newStatus == InterviewStatus.Deleted;
+        }
+
+        private bool IsInterviewWereRejectedAtLeastOnceBeboreOrNotCreateOnClient(Guid interviewId)
+        {
+            var interviewSummary = interviewSummarys.GetById(interviewId);
+            if (interviewSummary == null)
+                return false;
+
+            return !interviewSummary.WasCreatedOnClient ||
+                interviewSummary.CommentedStatusesHistory.Any(s => s.Status == InterviewStatus.RejectedBySupervisor);
         }
     }
 }

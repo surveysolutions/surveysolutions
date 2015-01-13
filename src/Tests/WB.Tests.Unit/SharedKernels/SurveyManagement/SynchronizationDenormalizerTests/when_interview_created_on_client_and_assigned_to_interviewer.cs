@@ -18,14 +18,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
         {
             interviewId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-            InterviewData data = Create.InterviewData(createdOnClient: true);
-
-            var interviews = new Mock<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>();
-            interviews.SetReturnsDefault(new ViewWithSequence<InterviewData>(data, 1));
-
             syncStorage = new Mock<ISynchronizationDataStorage>();
 
-            denormalizer = CreateDenormalizer(interviews.Object, syncStorage.Object);
+            denormalizer = CreateDenormalizer(synchronizationDataStorage: syncStorage.Object);
         };
 
 

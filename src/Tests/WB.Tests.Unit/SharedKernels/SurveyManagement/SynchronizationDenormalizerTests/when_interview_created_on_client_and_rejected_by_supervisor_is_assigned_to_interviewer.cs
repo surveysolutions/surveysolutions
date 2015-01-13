@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.Implementation.ReadSide;
@@ -21,14 +22,27 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
 
             InterviewData data = Create.InterviewData(createdOnClient: true, 
                 status: InterviewStatus.RejectedBySupervisor,
-                wasRejected: true,
                 interviewId: interviewId);
 
             var interviews = new Mock<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>();
             interviews.SetReturnsDefault(new ViewWithSequence<InterviewData>(data, 1));
 
-            synchronizationDenormalizer = CreateDenormalizer(interviews: interviews.Object, 
-                synchronizationDataStorage: syncStorage.Object);
+
+            var interviewSummaryWriter =
+             Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(
+                 _ =>
+                     _.GetById(Moq.It.IsAny<string>()) ==
+                         new InterviewSummary()
+                         {
+                             WasCreatedOnClient = true,
+                             CommentedStatusesHistory =
+                                 new List<InterviewCommentedStatus>
+                                    {
+                                        new InterviewCommentedStatus() { Status = InterviewStatus.RejectedBySupervisor }
+                                    }
+                         });
+            synchronizationDenormalizer = CreateDenormalizer(interviews: interviews.Object,
+                synchronizationDataStorage: syncStorage.Object, interviewSummaryWriter: interviewSummaryWriter);
         };
 
         Because of = () => synchronizationDenormalizer.Handle(Create.InterviewerAssignedEvent());
