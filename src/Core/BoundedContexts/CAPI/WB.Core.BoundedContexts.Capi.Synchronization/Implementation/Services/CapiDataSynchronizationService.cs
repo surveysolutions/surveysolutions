@@ -224,7 +224,9 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
                 throw new ArgumentException("Failed to extract questionnaire version. Please upgrade supervisor to the latest version.", exception);
             }
 
-            questionnareAssemblyFileAccessor.StoreAssembly(metadata.QuestionnaireId, metadata.Version, item.Content);
+            var assemblyBody = this.ExtractObject<string>(item.Content, item.IsCompressed);
+
+            questionnareAssemblyFileAccessor.StoreAssembly(metadata.QuestionnaireId, metadata.Version, assemblyBody);
         }        
 
         private TResult ExtractObject<TResult>(string initialString, bool isCompressed)
