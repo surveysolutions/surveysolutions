@@ -124,7 +124,7 @@
     <value>Invalid device identifier. Something has happened with the client app installation, press "Send tablet information" button.</value>
   </data>
   <data name="InvalidUserFormat" xml:space="preserve">
-    <value>Synchronization failed. User is not autorized. Please check you login/password for {0}.</value>
+    <value>Synchronization failed. User is not authorized. Please check your login/password for {0}.</value>
   </data>
   <data name="NoClientIdentifier" xml:space="preserve">
     <value>System error. Please reinstall application. Installation identifier is missing.</value>

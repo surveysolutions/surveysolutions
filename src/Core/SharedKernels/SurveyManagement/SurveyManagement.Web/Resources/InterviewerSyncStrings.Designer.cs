@@ -125,7 +125,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synchronization failed. User is not autorized. Please check you login/password for {0}..
+        ///   Looks up a localized string similar to Synchronization failed. User is not authorized. Please check your login/password for {0}..
         /// </summary>
         internal static string InvalidUserFormat {
             get {
