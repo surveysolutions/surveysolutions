@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -21,17 +22,19 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
             ncqrCompatibleEventDispatcher.Register(ncqrsStyleDenormalizerMock.Object);
 
             eventSourceId = Guid.NewGuid();
-            eventsToPublish = CreatePublishableEvents(10, eventSourceId);
+            eventsToPublish = CreatePublishableEvents(10, eventSourceId).ToArray();
         };
 
         Because of = () => ncqrCompatibleEventDispatcher.Publish(eventsToPublish);
 
         It should_functional_denormalizer_method_handle_be_called_once_with_whole_published_stream = () =>
-            functionalStyleEventHandlerMock.Verify(x => x.Handle(eventsToPublish, eventSourceId), Times.Once());
+            functionalStyleEventHandlerMock.Verify(x => x.Handle(
+                Moq.It.Is<IEnumerable<IPublishableEvent>>(events => events.SequenceEqual(eventsToPublish)), eventSourceId),
+            Times.Once());
 
         private static NcqrCompatibleEventDispatcher ncqrCompatibleEventDispatcher;
         private static Mock<IFunctionalEventHandler> functionalStyleEventHandlerMock;
-        private static IEnumerable<IPublishableEvent> eventsToPublish;
+        private static IPublishableEvent[] eventsToPublish;
         private static Guid eventSourceId;
     }
 }
