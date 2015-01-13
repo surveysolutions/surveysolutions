@@ -1,4 +1,5 @@
 ﻿using Moq;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.BoundedContexts.Capi.Services;
@@ -17,7 +18,8 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
             ICommandService commandService = null, IJsonUtils jsonUtils = null,
             IViewFactory<LoginViewInput, LoginView> loginViewFactory = null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null, ICapiSynchronizationCacheService capiSynchronizationCacheService = null,
-            ICapiCleanUpService capiCleanUpService = null, IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor = null)
+            ICapiCleanUpService capiCleanUpService = null, IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor = null,
+            IStringCompressor stringCompressor = null)
         {
             var mockOfCompressor = new Mock<IStringCompressor>();
             mockOfCompressor.Setup(x => x.DecompressString(Moq.It.IsAny<string>())).Returns<string>(s => s);
@@ -26,9 +28,21 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 loginViewFactory ?? Mock.Of<IViewFactory<LoginViewInput, LoginView>>(),
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 capiCleanUpService ?? Mock.Of<ICapiCleanUpService>(),
-                Mock.Of<ILogger>(), capiSynchronizationCacheService ?? Mock.Of<ICapiSynchronizationCacheService>(), 
-                mockOfCompressor.Object, jsonUtils ?? Mock.Of<IJsonUtils>(),
+                Mock.Of<ILogger>(), capiSynchronizationCacheService ?? Mock.Of<ICapiSynchronizationCacheService>(),
+                stringCompressor ?? mockOfCompressor.Object, jsonUtils ?? Mock.Of<IJsonUtils>(),
                 questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>());
         }
+
+        protected static string GetItemAsContent(object item)
+        {
+            var settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All,
+                NullValueHandling = NullValueHandling.Ignore
+            };
+
+            return JsonConvert.SerializeObject(item, Newtonsoft.Json.Formatting.None, settings);
+        }
+
     }
 }
