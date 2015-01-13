@@ -106,6 +106,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Internal server error occurred. Please contact developers..
+        /// </summary>
+        internal static string ServerError {
+            get {
+                return ResourceManager.GetString("ServerError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaire with id={0} cannot be found. Please check the list of available questionnaires..
         /// </summary>
         internal static string TemplateNotFound {

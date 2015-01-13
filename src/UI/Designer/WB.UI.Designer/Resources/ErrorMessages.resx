@@ -144,4 +144,7 @@
   <data name="ApplicationUpdateRequired" xml:space="preserve">
     <value>Application update required</value>
   </data>
+  <data name="ServerError" xml:space="preserve">
+    <value>Internal server error occurred. Please contact developers.</value>
+  </data>
 </root>
