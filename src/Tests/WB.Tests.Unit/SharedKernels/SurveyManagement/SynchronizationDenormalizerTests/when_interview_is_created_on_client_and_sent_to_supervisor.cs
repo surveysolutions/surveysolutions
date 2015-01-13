@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.Implementation.ReadSide;
@@ -20,14 +21,20 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
         {
             interviewId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-            InterviewData data = Create.InterviewData(createdOnClient: true, status: InterviewStatus.Completed);
-
-            var interviews = new Mock<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>();
-            interviews.SetReturnsDefault(new ViewWithSequence<InterviewData>(data, 1));
+            var interviewSummaryWriterMock = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
+            interviewSummaryWriterMock.SetReturnsDefault(new InterviewSummary()
+            {
+                WasCreatedOnClient = true,
+                CommentedStatusesHistory =
+                    new List<InterviewCommentedStatus>
+                                    {
+                                        new InterviewCommentedStatus() { Status = InterviewStatus.Completed }
+                                    }
+            });
 
             syncStorage = new Mock<ISynchronizationDataStorage>();
 
-            denormalizer = CreateDenormalizer(interviews.Object, syncStorage.Object);
+            denormalizer = CreateDenormalizer(synchronizationDataStorage: syncStorage.Object, interviewSummaryWriter: interviewSummaryWriterMock.Object);
         };
 
         Because of = () => denormalizer.Handle(Create.InterviewerAssignedEvent());
