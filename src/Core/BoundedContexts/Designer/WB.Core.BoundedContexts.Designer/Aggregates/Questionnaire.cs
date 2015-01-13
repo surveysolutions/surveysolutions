@@ -139,6 +139,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         internal void Apply(NewQuestionAdded e)
         {
+            QuestionType questionType = e.QuestionType;
             IQuestion question =
                 this.questionnaireEntityFactory.CreateQuestion(
                     new QuestionData(
@@ -158,7 +159,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Instructions,
                         e.Mask,
                         e.Triggers,
-                        DetermineActualMaxValueForGenericQuestion(e.QuestionType, legacyMaxValue: e.MaxValue),
+                        null,
                         e.Answers,
                         e.LinkedToQuestionId,
                         e.IsInteger,
@@ -206,8 +207,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Instructions,
                         null,
                         e.Triggers,
-                        DetermineActualMaxValueForNumericQuestion(e.IsAutopropagating, legacyMaxValue: e.MaxValue,
-                            actualMaxValue: e.MaxAllowedValue),
+                        e.MaxAllowedValue,
                         null,
                         null,
                         e.IsInteger,
@@ -274,6 +274,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void Apply(QuestionCloned e)
         {
+            var maxValue = e.QuestionType == QuestionType.Numeric ? e.MaxValue as int? : null;
             IQuestion question =
                 this.questionnaireEntityFactory.CreateQuestion(
                     new QuestionData(
@@ -293,7 +294,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Instructions,
                         e.Mask,
                         e.Triggers,
-                        DetermineActualMaxValueForGenericQuestion(e.QuestionType, legacyMaxValue: e.MaxValue),
+                        maxValue,
                         e.Answers,
                         e.LinkedToQuestionId,
                         e.IsInteger,
@@ -338,8 +339,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Instructions,
                         null,
                         e.Triggers,
-                        DetermineActualMaxValueForNumericQuestion(e.IsAutopropagating, legacyMaxValue: e.MaxValue,
-                            actualMaxValue: e.MaxAllowedValue),
+                        e.MaxAllowedValue,
                         null,
                         null,
                         e.IsInteger,
@@ -418,6 +418,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         internal void Apply(QuestionChanged e)
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
+            QuestionType questionType = e.QuestionType;
             IQuestion newQuestion =
                 this.questionnaireEntityFactory.CreateQuestion(
                     new QuestionData(
@@ -437,7 +438,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Instructions,
                         e.Mask,
                         e.Triggers,
-                        DetermineActualMaxValueForGenericQuestion(e.QuestionType, legacyMaxValue: e.MaxValue),
+                        questionType == QuestionType.AutoPropagate || questionType == QuestionType.Numeric ? e.MaxValue as int? : null,
                         e.Answers,
                         e.LinkedToQuestionId,
                         e.IsInteger,
@@ -478,8 +479,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Instructions,
                         null,
                         e.Triggers,
-                        DetermineActualMaxValueForNumericQuestion(e.IsAutopropagating, legacyMaxValue: e.MaxValue,
-                            actualMaxValue: e.MaxAllowedValue),
+                        e.MaxAllowedValue,
                         null,
                         null,
                         e.IsInteger,
@@ -765,11 +765,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.innerDocument = snapshot.QuestionnaireDocument.Clone() as QuestionnaireDocument;
             this.wasExpressionsMigrationPerformed = snapshot.WasExpressionsMigrationPerformed;
-        }
-
-        private static int? DetermineActualMaxValueForGenericQuestion(QuestionType questionType, int legacyMaxValue)
-        {
-            return questionType == QuestionType.AutoPropagate ? legacyMaxValue as int? : null;
         }
 
         private static int? DetermineActualMaxValueForNumericQuestion(bool isAutopropagating, int? legacyMaxValue, int? actualMaxValue)
