@@ -114,6 +114,8 @@ namespace WB.UI.Shared.Android.Controls.Roster
                 }
                 if (this.questionView != null)
                 {
+                    this.questionView.AnswerSet -= this.questionView_AnswerSet;
+                    this.questionView.AnswerSaved -= this.questionView_AnswerSaved;
                     this.questionView.Dispose();
                     this.questionView = null;
                 }
