@@ -38,6 +38,7 @@ namespace WB.UI.Headquarters.Controllers
             ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
             IViewFactory<UserViewInputModel, UserView> userViewFactory, IPasswordHasher passwordHasher, ISettingsProvider settingsProvider,
             IDataExportRepositoryWriter dataExportRepositoryWriter, IReadSideRepositoryIndexAccessor readSideRepositoryIndexAccessor)
+            : base(serviceLocator, incomePackagesRepository, commandService, globalInfo, logger, settingsProvider)
         {
             this.userViewFactory = userViewFactory;
             this.passwordHasher = passwordHasher;
