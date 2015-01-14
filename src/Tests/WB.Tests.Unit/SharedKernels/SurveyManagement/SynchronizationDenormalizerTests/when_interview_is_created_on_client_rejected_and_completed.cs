@@ -37,6 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
                                         new InterviewCommentedStatus() { Status = InterviewStatus.RejectedBySupervisor }
                                     }
             });
+
             synchronizationDenormalizer = CreateDenormalizer(interviews: interviews.Object,
                 synchronizationDataStorage: syncStorage.Object, interviewSummaryWriter: interviewSummaryWriterMock.Object);
         };
