@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
                 CommentedStatusesHistory =
                     new List<InterviewCommentedStatus>
                                     {
-                                        new InterviewCommentedStatus() { Status = InterviewStatus.Completed }
+                                        new InterviewCommentedStatus() { Status = InterviewStatus.RejectedBySupervisor }
                                     }
             });
 
