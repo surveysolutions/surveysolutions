@@ -59,26 +59,24 @@
     </nav>
 </div>
 
-<div id="menu" class="col-md-offset-1 col-md-3 sidebar" data-bind="css: filter">
+<div id="menu" class="col-md-offset-1 col-md-4 sidebar" data-bind="css: filter">
     <ul id="groups-menu" class="list-group">
         @foreach (var group in Model.Groups.Skip(1))
         {
-            <li>
+            <li class="group-item" style="margin-left: @(group.Depth*20)px">
                 <a href="#group-@(group.Id)">@group.Title</a>
             </li>
         }
     </ul>
 </div>
 
-<div id="content" class="col-md-7 col-md-offset-4 sidebar">
+<div id="content" class="col-md-6 col-md-offset-5 sidebar">
     <div>
         <div id="list" data-spy="scroll" data-target="#groups-menu">
             @foreach (var group in Model.Groups.Skip(1))
             {
                 <div id="group-@group.Id">
-                    <div class="bubble">
-                        <h4 class="heading">@group.Title</h4>
-                    </div>
+                    <div class="bubble me"><b>@group.Title</b></div>
 
                     <table class="table table-bordered table-hover">
                         <tbody>
@@ -104,17 +102,12 @@
 
 @helper DrawStaticTextRow(InterviewStaticTextView entity)
 {
-    <div class="bubble">
-        <b>@entity.Text</b>
-    </div>
+    <div class="bubble me"><b>@entity.Text</b></div>
 }
 @helper DrawQuestionRow(InterviewQuestionView entity)
 {
-    <div class="bubble">
-        @entity.Title
-    </div>
-
-    <div class="bubble bubble--alt">
+    <div class="bubble me">@entity.Title</div>
+    <div class="bubble you">
         @{
             var answer = AnswerUtils.AnswerToString(entity.Answer);
             var answerToClient = string.IsNullOrEmpty(answer) ? "?" : answer;
