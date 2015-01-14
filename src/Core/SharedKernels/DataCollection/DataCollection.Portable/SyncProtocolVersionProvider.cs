@@ -4,7 +4,8 @@ namespace WB.Core.SharedKernels.DataCollection
 {
     public class SyncProtocolVersionProvider : ISyncProtocolVersionProvider
     {
-        private const int SyncProtocolVersionNumber = 5962;
+        //previous value 5962
+        private const int SyncProtocolVersionNumber = 6000;
 
         public int GetProtocolVersion()
         {
