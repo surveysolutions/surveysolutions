@@ -28,21 +28,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             interviews.SetReturnsDefault(new ViewWithSequence<InterviewData>(data, 1));
 
 
-            var interviewSummaryWriter =
-             Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(
-                 _ =>
-                     _.GetById(Moq.It.IsAny<string>()) ==
-                         new InterviewSummary()
-                         {
-                             WasCreatedOnClient = true,
-                             CommentedStatusesHistory =
-                                 new List<InterviewCommentedStatus>
+            var interviewSummaryWriterMock = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
+            interviewSummaryWriterMock.SetReturnsDefault(new InterviewSummary()
+            {
+                WasCreatedOnClient = true,
+                CommentedStatusesHistory =
+                    new List<InterviewCommentedStatus>
                                     {
-                                        new InterviewCommentedStatus() { Status = InterviewStatus.RejectedBySupervisor }
+                                        new InterviewCommentedStatus() { Status = InterviewStatus.Completed }
                                     }
-                         });
+            });
+
             synchronizationDenormalizer = CreateDenormalizer(interviews: interviews.Object,
-                synchronizationDataStorage: syncStorage.Object, interviewSummaryWriter: interviewSummaryWriter);
+                synchronizationDataStorage: syncStorage.Object, interviewSummaryWriter: interviewSummaryWriterMock.Object);
         };
 
         Because of = () => synchronizationDenormalizer.Handle(Create.InterviewerAssignedEvent());
