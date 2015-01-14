@@ -25,11 +25,11 @@
 }
 
 .navbar-title {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 5px 10px 0px 0px;
-    font-weight: bold;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+padding: 13px 10px 0px 0px;
+font-weight: bold;
 }
 
 .navbar-subtitle {
