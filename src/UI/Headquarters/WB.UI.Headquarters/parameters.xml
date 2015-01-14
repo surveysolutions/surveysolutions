@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <parameters>
-   <parameter name="The Event Store Provider"
-      description="Where application will store events"
-      defaultValue="Raven">
-   <parameterEntry kind="XmlFile" 
-      scope="\\web.config$" 
-      match="/configuration/appSettings/add[@key='Core.EventStoreProvider']/@value" />
-   </parameter>
    <parameter name="The RavenDB instance address"
       description="Provide the address for RavenDB instance"
       defaultValue="http://localhost:8081">

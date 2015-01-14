@@ -7,14 +7,6 @@
       scope="\\web.config$" 
       match="/configuration/appSettings/add[@key='Raven.DocumentStore']/@value" />
    </parameter>
-   <parameter name="The Event Store Provider"
-      description="Where application will store events"
-      defaultValue="Raven">
-   <parameterEntry kind="XmlFile" 
-      scope="\\web.config$" 
-      match="/configuration/appSettings/add[@key='Core.EventStoreProvider']/@value" />
-   </parameter>
-
   <parameter name="Event store IP address"
       defaultValue="127.0.0.1">
    <parameterValidation kind="AllowEmpty" />
