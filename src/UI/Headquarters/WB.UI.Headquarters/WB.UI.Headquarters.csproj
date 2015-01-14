@@ -225,6 +225,7 @@
     <Content Include="Content\datepicker.css" />
     <Content Include="Content\datepicker3.css" />
     <Content Include="Content\favicon.png" />
+    <Content Include="Content\interview.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Configuration\TLK.Headquarters.Web.config">
