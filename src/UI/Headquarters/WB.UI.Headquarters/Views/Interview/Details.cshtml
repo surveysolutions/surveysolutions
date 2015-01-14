@@ -1,270 +1,279 @@
 ﻿@using System.Globalization
 @using System.Web.Mvc.Html
+@using System.Web.Optimization
 @using Main.Core.Entities.SubEntities
+@using WB.Core.SharedKernels.DataCollection.Utils
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Views.Interview
+@using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
 @model InterviewDetailsView
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div data-bind="visible: IsPageLoaded">
-    <div id="menu" class="col-sm-4 col-md-3 sidebar" data-bind="css: filter">
-        <div class="panel panel-default">
-            <div class="panel-heading with-btn">
-                Groups
-                <div class="btn-group btn-group-sm pull-right">
-                    <button data-bind="click: ToggleFilter" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span> Hide groups</button>
-                </div>
-            </div>
-            <ul id="groups-menu" class="list-group">
-                @foreach (var group in Model.Groups)
-                {
-                    <li class="list-group-item @("level" + group.Depth)">
-                        <a href="#div-@(group.Id)">@group.Title</a>
-                    </li>
-                }
-            </ul>
+@section styles
+{
+    <link href="@Url.Content("~/Content/interview.css")" rel="stylesheet" />
+}
+
+<div id="sub-navbar" class="navbar navbar-default navbar-fixed-top col-md-offset-1 col-md-10">
+    <div class="navbar-header col-md-4">
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+            <i class="icon-reorder"></i>
+        </button>
+        <div class="navbar-title">
+            @Model.Title
+        </div>
+        <div class="navbar-subtitle">
+            @Model.Status.ToLocalizeString() by @Model.Responsible.Name
         </div>
     </div>
-    <div id="content" class="col-sm-8 col-sm-offset-4 col-md-9 col-md-offset-3 main">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <span data-bind="visible: !IsFilterOpen()"><button data-bind="click: ToggleFilter" class="btn btn-default  btn-xs"><span class="glyphicon glyphicon-arrow-right"></span> Show groups</button></span>
-                @if (((Model.Status == InterviewStatus.Completed || Model.Status == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor) || (Model.Status == InterviewStatus.ApprovedBySupervisor && GlobalInfo.IsHeadquarter))
-                {
-                    <button class="btn btn-success " data-bind="click: showApproveModal">Approve</button>
-                    <button class="btn btn-danger" data-bind="click: showRejectModal">Reject</button>
-                }
-                <a href="#/all" class="btn btn-default btn-xs" data-bind="css: { 'btn-primary': filter() == 'all' }">all</a>
-                <a href="#/flaged" class="btn btn-default  btn-xs" data-bind="css: { 'btn-primary': filter() == 'flaged' }">
-                    <i class="glyphicon glyphicon-flag" data-bind="    css: {'icon-white': filter() == 'flaged' }"></i> flagged (<span data-bind="    text: flagedCount"></span>)
-                </a>
-                <a href="#/commented" class="btn btn-default btn-xs" data-bind="css: { 'btn-primary': filter() == 'commented' }">
-                    <i class="glyphicon glyphicon-comment" data-bind="    css: {'icon-white': filter() == 'commented' }"></i> commented (<span data-bind="    text: commentedCount"></span>)
-                </a>
-                <a href="#/answered"
-                   class="btn btn-default btn-xs" data-bind="css: { 'btn-primary': filter() == 'answered' }">
-                    <i class="glyphicon glyphicon-ok"
-                       data-bind="    css: { 'icon-white': filter() == 'answered' }"></i> answered
-                    (<span data-bind="    text: answeredCount"></span>)
-                </a>
-                <a href="#/invalid" class="btn btn-default btn-xs"
-                   data-bind="css: { 'btn-primary': filter() == 'invalid' }">
-                    <i class="glyphicon glyphicon-warning-sign"
-                       data-bind="    css: { 'icon-white': filter() == 'invalid' }"></i>invalid (<span data-bind="    text: invalidCount"></span>)
-                </a>
-                <a href="#/supervisor" class="btn btn-default btn-xs"
-                   data-bind="css: { 'btn-primary': filter() == 'supervisor' }">
-                    <i class="glyphicon glyphicon-pencil"
-                       data-bind="    css: { 'icon-white': filter() == 'supervisor' }"></i>supervisor's
-                    (<span data-bind="    text: editableCount"></span>)
-                </a>
-                <a href="#/enabled" class="btn btn-default btn-xs" data-bind="css: { 'btn-primary': filter() == 'enabled' }">
-                    <i class="glyphicon glyphicon-pencil" data-bind="    css: { 'icon-white': filter() == 'enabled' }"></i>enabled (<span data-bind="    text: enabledCount"></span>)
-                </a>
-            </div>
-        </div>
-        <div class="row-fluid" data-bind="with: questionnaire">
-            <h3 class="span10 text-overflow-ellipsis">
-                <span>@Model.Title</span>
-                <span class="small">Status:</span><a class="btn-link" data-toggle="modal" data-target="#statusHistoryModal">@Model.Status</a>
-                <span class="small">Responsible:</span><span>@Model.Responsible.Name</span>
-            </h3>
-        </div>
-        <div id="list">
+    <nav class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+            <li class="active">
+                <a href="#">Full</a>
+            </li>
+            <li>
+                <a href="#">Answered</a>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Filtered by<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">With comments</a></li>
+                    <li><a href="#">Flag</a></li>
+                    <li><a href="#">Supervisor's only</a></li>
+                    <li><a href="#">Invalid</a></li>
+                    <li><a href="#">Enabled</a></li>
+                </ul>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav pull-right">
+            <li>
+                <a href="#">Approve</a>
+            </li>
+            <li>
+                <a href="#">Reject</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<div id="menu" class="col-md-offset-1 col-md-3 sidebar" data-bind="css: filter">
+    <ul id="groups-menu" class="list-group">
+        @foreach (var group in Model.Groups.Skip(1))
+        {
+            <li>
+                <a href="#group-@(group.Id)">@group.Title</a>
+            </li>
+        }
+    </ul>
+</div>
+
+<div id="content" class="col-md-7 col-md-offset-4 sidebar">
+    <div>
+        <div id="list" data-spy="scroll" data-target="#groups-menu">
             @foreach (var group in Model.Groups.Skip(1))
             {
                 <div id="group-@group.Id">
-                    <h2 class="heading">@group.Title</h2>
-                    <div class="questions">
-                        <table class="table table-bordered table-hover">
-                            <tbody data-bind="foreach: entities">
-                                @foreach (var entity in group.Entities)
-                                {
-                                    if (entity is InterviewStaticTextView)
-                                    {
-                                        @DrawStaticTextRow(entity as InterviewStaticTextView)
-                                    }
-                                    if (entity is InterviewQuestionView)
-                                    {
-                                        @DrawQuestionRow(entity as InterviewQuestionView)
-                                    }
-                                }
-                            </tbody>
-                        </table>
+                    <div class="bubble">
+                        <h4 class="heading">@group.Title</h4>
                     </div>
+
+                    <table class="table table-bordered table-hover">
+                        <tbody>
+                            @foreach (var entity in group.Entities)
+                            {
+                                if (entity is InterviewStaticTextView)
+                                {
+                                    @DrawStaticTextRow(entity as InterviewStaticTextView)
+                                }
+                                if (entity is InterviewQuestionView)
+                                {
+                                    @DrawQuestionRow(entity as InterviewQuestionView)
+                                }
+                            }
+                        </tbody>
+                    </table>
                 </div>
             }
         </div>
     </div>
+
 </div>
+
 @helper DrawStaticTextRow(InterviewStaticTextView entity)
 {
-    <tr>
-        <td colspan="3" class="static-text">
-            <div class="cell-content">
-                <span data-bind="html: staticText">@entity.Text</span>
-            </div>
-        </td>
-    </tr>
+    <div class="bubble">
+        <b>@entity.Text</b>
+    </div>
 }
 @helper DrawQuestionRow(InterviewQuestionView entity)
 {
-    <tr class="@css("danger", !entity.IsValid && entity.IsEnabled) @css("mandatory", entity.IsMandatory) @css("text-muted", !entity.IsEnabled)">
-        <td style="width: 60%" class="question-text">
-            <div class="cell-content @css("featured", entity.IsFeatured)">
-                <span class="icon-star"></span>
-                <span>@entity.Title</span>
-            </div>
-        </td>
-        <td class="question-answer">
-            <div class="cell-content" data-bind="visible: isEnabled || isAnswered">
-                <div class="question-clickable">
-                    <span data-bind="css: markerStyle()" class="question-marker"></span>
-                    <span>@entity.AnswerString</span>
-                    @switch (entity.QuestionType)
+    <div class="bubble">
+        @entity.Title
+    </div>
+
+    <div class="bubble bubble--alt">
+        @{
+            var answer = AnswerUtils.AnswerToString(entity.Answer);
+            var answerToClient = string.IsNullOrEmpty(answer) ? "?" : answer;
+        }
+        @answerToClient
+    </div>
+
+    @*<tr class="@css("danger", !entity.IsValid && entity.IsEnabled) @css("mandatory", entity.IsMandatory) @css("text-muted", !entity.IsEnabled)">
+            <td style="width: 60%" class="question-text">
+                <div class="cell-content @css("featured", entity.IsFeatured)">
+                    <span class="icon-star"></span>
+                    <span>@entity.Title</span>
+                </div>
+            </td>
+            <td class="question-answer">
+                <div class="cell-content" data-bind="visible: isEnabled || isAnswered">
+                    <div class="question-clickable">
+                        <span data-bind="css: markerStyle()" class="question-marker"></span>
+                        <span>@entity.AnswerString</span>
+                        @switch (entity.QuestionType)
+                        {
+                            case QuestionType.SingleOption:
+                                var singleOptinSetting = entity.Settings as SingleQuestionSettings;
+                                if (singleOptinSetting.IsCascade || singleOptinSetting.IsFilteredCombobox)
+                                {
+                                    <input class="form-control" type="text" value="@entity.Answer" />
+                                }
+                                else if (singleOptinSetting.IsLinked)
+                                {
+                                    <div class="form-group">
+                                        <div class="controls">
+                                            @foreach (var option in entity.Options)
+                                            {
+                                                var radioName = string.Format("option-{0}-{1}", entity.Id, Stringify(entity.RosterVector));
+                                                <label class="radio">
+                                                    @Html.RadioButton(radioName, Stringify((decimal[])option.Value), ((decimal[])entity.Answer).SequenceEqual((decimal[])option.Value))
+                                                    <span>@option.Label</span>
+                                                </label>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="form-group">
+                                        <div class="controls">
+                                            @foreach (var option in entity.Options)
+                                            {
+                                                var radioName = string.Format("option-{0}-{1}", entity.Id, Stringify(entity.RosterVector));
+                                                <label class="radio">
+                                                    @Html.RadioButton(radioName, Convert.ToDecimal(option.Value), Convert.ToDecimal(entity.Answer) == Convert.ToDecimal(option.Value))
+                                                    <span>@option.Label</span>
+                                                </label>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                                break;
+                            case QuestionType.MultyOption:
+                                var multiQuestionSettings = entity.Settings as MultiQuestionSettings;
+                                if (multiQuestionSettings.IsLinked)
+                                {
+                                    <div class="form-group">
+                                        <div class="controls">
+                                            @foreach (var option in entity.Options)
+                                            {
+                                                var radioName = string.Format("option-{0}-{1}", entity.Id, Stringify(entity.RosterVector));
+                                                <label class="radio">
+                                                    @Html.RadioButton(radioName, Stringify((decimal[])option.Value), ((decimal[])entity.Answer).SequenceEqual((decimal[])option.Value))
+                                                    <span>@option.Label</span>
+                                                </label>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="form-group">
+                                        <div class="controls">
+                                            @foreach (var option in entity.Options)
+                                            {
+                                                var radioName = string.Format("option-{0}-{1}", entity.Id, Stringify(entity.RosterVector));
+                                                <label class="radio">
+                                                    @Html.RadioButton(radioName, Convert.ToDecimal(option.Value), Convert.ToDecimal(entity.Answer) == Convert.ToDecimal(option.Value))
+                                                    <span>@option.Label</span>
+                                                </label>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                                break;
+                            case QuestionType.Numeric:
+                            <input class="form-control" type="number" value="@entity.Answer" />
+                                break;
+                            case QuestionType.DateTime:
+                                break;
+                            case QuestionType.GpsCoordinates:
+                                break;
+                            case QuestionType.Text:
+                            <input class="form-control" type="text" value="@entity.Answer" />
+                                break;
+                            case QuestionType.TextList:
+                                break;
+                            case QuestionType.QRBarcode:
+                            <input class="form-control" type="text" value="@entity.Answer" />
+                                break;
+                            case QuestionType.Multimedia:
+                            <img src="@Url.RouteUrl("Default", new { httproute = "", controller = "Resource", action = "InterviewFile", interviewid = Model.PublicKey, filename = entity.Answer})" />
+                                break;
+                        }
+                        @if (!entity.IsValid)
+                        {
+                            <small class="text-error">@entity.ValidationExpression</small>
+                            <small class="text-error">@entity.ValidationMessage</small>
+                        }
+                    </div>
+                </div>
+            </td>
+            <td class="col-sm-3">
+                <div class="actions pull-right">
+                    @if ((entity.Comments != null && entity.Comments.Count == 0) || entity.IsFlagged == false || entity.IsReadOnly == false)
                     {
-                        case QuestionType.SingleOption:
-                            var singleOptinSetting = entity.Settings as SingleQuestionSettings;
-                            if (singleOptinSetting.IsCascade || singleOptinSetting.IsFilteredCombobox)
-                            {
-                                <input class="form-control" type="text" value="@entity.Answer" />
-                            }
-                            else if (singleOptinSetting.IsLinked)
-                            {
-                                <div class="form-group">
-                                    <div class="controls">
-                                        @foreach (var option in entity.Options)
-                                        {
-                                            var radioName = string.Format("option-{0}-{1}", entity.Id, Stringify(entity.RosterVector));
-                                            <label class="radio">
-                                                @Html.RadioButton(radioName, Stringify((decimal[])option.Value), ((decimal[])entity.Answer).SequenceEqual((decimal[])option.Value))
-                                                <span>@option.Label</span>
-                                            </label>
-                                        }
-                                    </div>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="form-group">
-                                    <div class="controls">
-                                        @foreach (var option in entity.Options)
-                                        {
-                                            var radioName = string.Format("option-{0}-{1}", entity.Id, Stringify(entity.RosterVector));
-                                            <label class="radio">
-                                                @Html.RadioButton(radioName, Convert.ToDecimal(option.Value), Convert.ToDecimal(entity.Answer) == Convert.ToDecimal(option.Value))
-                                                <span>@option.Label</span>
-                                            </label>
-                                        }
-                                    </div>
-                                </div>
-                            }
-                            break;
-                        case QuestionType.MultyOption:
-                            var multiQuestionSettings = entity.Settings as MultiQuestionSettings;
-                            if (multiQuestionSettings.IsLinked)
-                            {
-                                <div class="form-group">
-                                    <div class="controls">
-                                        @foreach (var option in entity.Options)
-                                        {
-                                            var radioName = string.Format("option-{0}-{1}", entity.Id, Stringify(entity.RosterVector));
-                                            <label class="radio">
-                                                @Html.RadioButton(radioName, Stringify((decimal[])option.Value), ((decimal[])entity.Answer).SequenceEqual((decimal[])option.Value))
-                                                <span>@option.Label</span>
-                                            </label>
-                                        }
-                                    </div>
-                                </div>
-                            }
-                            else
-                            
-                            {
-                                <div class="form-group">
-                                    <div class="controls">
-                                        @foreach (var option in entity.Options)
-                                        {
-                                            var radioName = string.Format("option-{0}-{1}", entity.Id, Stringify(entity.RosterVector));
-                                            <label class="radio">
-                                                @Html.RadioButton(radioName, Convert.ToDecimal(option.Value), Convert.ToDecimal(entity.Answer) == Convert.ToDecimal(option.Value))
-                                                <span>@option.Label</span>
-                                            </label>
-                                        }
-                                    </div>
-                                </div>
-                            }
-                            break;
-                        case QuestionType.Numeric:
-                        <input class="form-control" type="number" value="@entity.Answer" />
-                            break;
-                        case QuestionType.DateTime:
-                            break;
-                        case QuestionType.GpsCoordinates:
-                            break;
-                        case QuestionType.Text:
-                        <input class="form-control" type="text" value="@entity.Answer" />
-                            break;
-                        case QuestionType.TextList:
-                            break;
-                        case QuestionType.QRBarcode:
-                        <input class="form-control" type="text" value="@entity.Answer" />
-                            break;
-                        case QuestionType.Multimedia:
-                        <img src="@Url.RouteUrl("Default", new { httproute = "", controller = "Resource", action = "InterviewFile", interviewid = Model.PublicKey, filename = entity.Answer})" />
-                            break;
+                        <div class="btn-group btn-group-xs">
+                            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-cog"></i><span class="caret"></span></a>
+                            <ul class="dropdown-menu pull-right">
+                                @if (!entity.IsReadOnly && entity.IsEnabled)
+                                {
+                                    <li><a href="#">Answer</a></li>
+                                }
+                                <li><a href="#"><i class="glyphicon glyphicon-comment"></i>&nbsp;Comment</a></li>
+                                @if (!entity.IsFlagged)
+                                {
+                                    <li><a href="#"><i class="glyphicon glyphicon-flag"></i>&nbsp;Flag</a></li>
+                                }
+                            </ul>
+                        </div>
                     }
-                    @if (!entity.IsValid)
+                    @if (entity.Comments != null && entity.Comments.Count > 0)
                     {
-                        <small class="text-error">@entity.ValidationExpression</small>
-                        <small class="text-error">@entity.ValidationMessage</small>
+                        <a class="btn  btn-xs btn-success">
+                            <span>@entity.Comments.Count</span><i class="glyphicon glyphicon-comment"></i>
+                        </a>
+                    }
+                    @if (entity.IsFlagged)
+                    {
+                        <a class="btn btn-xs btn-info">
+                            <i class="glyphicon glyphicon-flag"></i>
+                        </a>
+                    }
+                    @if (!entity.IsReadOnly && entity.IsEnabled)
+                    {
+                        <a class="btn btn-xs btn-primary" href="#">answer</a>
                     }
                 </div>
-            </div>
-        </td>
-        <td class="col-sm-3">
-            <div class="actions pull-right">
-                @if ((entity.Comments != null && entity.Comments.Count == 0) || entity.IsFlagged == false || entity.IsReadOnly == false)
-                {
-                    <div class="btn-group btn-group-xs">
-                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-cog"></i><span class="caret"></span></a>
-                        <ul class="dropdown-menu pull-right">
-                            @if (!entity.IsReadOnly && entity.IsEnabled)
-                            {
-                                <li><a href="#">Answer</a></li>
-                            }
-                            <li><a href="#"><i class="glyphicon glyphicon-comment"></i>&nbsp;Comment</a></li>
-                            @if (!entity.IsFlagged)
-                            {
-                                <li><a href="#"><i class="glyphicon glyphicon-flag"></i>&nbsp;Flag</a></li>
-                            }
-                        </ul>
-                    </div>
-                }
-                @if (entity.Comments != null && entity.Comments.Count > 0)
-                {
-                    <a class="btn  btn-xs btn-success">
-                        <span>@entity.Comments.Count</span><i class="glyphicon glyphicon-comment"></i>
-                    </a>
-                }
-                @if (entity.IsFlagged)
-                {
-                    <a class="btn btn-xs btn-info">
-                        <i class="glyphicon glyphicon-flag"></i>
-                    </a>
-                }
-                @if (!entity.IsReadOnly && entity.IsEnabled)
-                {
-                    <a class="btn btn-xs btn-primary" href="#">answer</a>
-                }
-            </div>
-        </td>
-    </tr>
+            </td>
+        </tr>*@
 }
 @functions
-{
+        {
     public string Stringify(decimal[] array)
     {
         return string.Join("_", array.Select(x => x.ToString(CultureInfo.InvariantCulture)));
