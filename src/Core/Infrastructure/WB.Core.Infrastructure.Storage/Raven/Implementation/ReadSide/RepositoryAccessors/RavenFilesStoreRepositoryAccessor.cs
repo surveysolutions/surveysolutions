@@ -12,6 +12,7 @@ using Raven.Client.FileSystem;
 using Raven.Imports.Newtonsoft.Json;
 using Raven.Json.Linq;
 using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Services;
@@ -222,7 +223,19 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         private TEntity GetEntityAvoidingCacheById(string entityId)
         {
-            using (var stream = AsyncContext.Run(() => ravenFilesStore.AsyncFilesCommands.DownloadAsync(this.CreateFileStoreEntityId(entityId))))
+            var id = this.CreateFileStoreEntityId(entityId);
+            var countOfDocumentsById = AsyncContext.Run(() =>
+            {
+                using (var session = ravenFilesStore.OpenAsyncSession())
+                {
+                    return session.Query().WhereEquals(f => f.Name, id).ToListAsync();
+                }
+            });
+
+            if (!countOfDocumentsById.Any())
+                return null;
+            
+            using (var stream = AsyncContext.Run(() => ravenFilesStore.AsyncFilesCommands.DownloadAsync(id)))
             {
                 if (stream == null)
                     return null;
