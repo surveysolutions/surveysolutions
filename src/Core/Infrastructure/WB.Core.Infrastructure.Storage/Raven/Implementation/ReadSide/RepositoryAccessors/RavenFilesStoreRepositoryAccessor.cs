@@ -145,9 +145,10 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         public Type ViewType { get { return typeof(TEntity); } }
 
-        public void Clear()
+        public async void Clear()
         {
-            this.ravenFilesStore.AsyncFilesCommands.Admin.DeleteFileSystemAsync(hardDelete: true, fileSystemName: ViewType.Name).Wait();
+            await this.ravenFilesStore.AsyncFilesCommands.Admin.EnsureFileSystemExistsAsync(ViewType.Name);
+            await this.ravenFilesStore.AsyncFilesCommands.Admin.DeleteFileSystemAsync(hardDelete: true, fileSystemName: ViewType.Name);
             this.ravenFilesStore.Dispose();
 
             this.ravenFilesStore = this.CreateRavenFilesStore();
