@@ -24,13 +24,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 CreatePublishableEvent(new GroupPropagated(rosterGroupId, new decimal[0], 1)));
 
         It should_interview_levels_count_be_equal_to_2 = () =>
-            viewState.Document.Levels.Keys.Count.ShouldEqual(2);
+            viewState.Levels.Keys.Count.ShouldEqual(2);
 
         It should_interview_level_with_id_0_be_present = () =>
-            viewState.Document.Levels.Keys.ShouldContain("0");
+            viewState.Levels.Keys.ShouldContain("0");
 
         private static InterviewEventHandlerFunctional interviewEventHandlerFunctional;
-        private static ViewWithSequence<InterviewData> viewState;
+        private static InterviewData viewState;
         private static Guid rosterGroupId;
         private static Guid rosterScopeId;
     }

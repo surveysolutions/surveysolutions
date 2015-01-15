@@ -27,9 +27,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsFeedDenormalizerT
             supervisorAssignedEvent = new SupervisorAssigned(userId, supervisorId).ToPublishedEvent(Guid.NewGuid());
 
             writer = Substitute.For<IReadSideRepositoryWriter<InterviewFeedEntry>>();
-            var interviews = Substitute.For<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>();
+            var interviews = Substitute.For<IReadSideRepositoryWriter<InterviewData>>();
             interviews.GetById(supervisorAssignedEvent.EventSourceId.FormatGuid())
-                .Returns(new ViewWithSequence<InterviewData>(new InterviewData { SupervisorId = supervisorId, CreatedOnClient = false}, 1));
+                .Returns(new InterviewData { SupervisorId = supervisorId, CreatedOnClient = false});
 
             denormalizer = Create.InterviewsFeedDenormalizer(writer, interviews);
         };

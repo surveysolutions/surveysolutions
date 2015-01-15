@@ -75,7 +75,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 
             if (occurredExceptions.Count > 0)
                 throw new AggregateException(
-                    string.Format("{0} handler(s) failed to handle published event '{1}'.", occurredExceptions.Count, eventMessage.EventIdentifier),
+                   string.Format("{0} handler(s) failed to handle published event '{1}' by event source '{2}' with sequence '{3}'.", occurredExceptions.Count, eventMessage.EventIdentifier, eventMessage.EventSourceId, eventMessage.EventSequence),
                     occurredExceptions);
         }
 

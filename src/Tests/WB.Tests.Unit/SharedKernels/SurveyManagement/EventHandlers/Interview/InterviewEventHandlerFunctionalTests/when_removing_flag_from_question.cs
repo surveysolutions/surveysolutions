@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         It should_remove_flag_from_question = () => GetQuestion(questionId, viewData).IsFlagged.ShouldBeFalse();
 
         static InterviewEventHandlerFunctional eventHandler;
-        static ViewWithSequence<InterviewData> viewData;
+        static InterviewData viewData;
         static Guid userId;
         static Guid questionId;
     }

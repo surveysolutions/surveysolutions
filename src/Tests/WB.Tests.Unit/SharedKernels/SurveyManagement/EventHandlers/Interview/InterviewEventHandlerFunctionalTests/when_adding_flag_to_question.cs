@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         It should_mark_question_as_flagged = () => GetQuestion(questionId, viewData).IsFlagged.ShouldBeTrue();
 
         static InterviewEventHandlerFunctional eventHandler;
-        static ViewWithSequence<InterviewData> viewData;
+        static InterviewData viewData;
         static Guid userId;
         static Guid questionId;
     }

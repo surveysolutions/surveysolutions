@@ -37,13 +37,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 CreatePublishableEvent(textQuestionAnsweredEvent));
 
         It shoult_set_first_roster_title_to_received_answer = () =>
-            viewState.Document.Levels["0"].RosterRowTitles[rosterGroup1Id].ShouldEqual(receivedAnswer);
+            viewState.Levels["0"].RosterRowTitles[rosterGroup1Id].ShouldEqual(receivedAnswer);
 
         It shoult_set_second_roster_title_to_received_answer = () =>
-            viewState.Document.Levels["0"].RosterRowTitles[rosterGroup2Id].ShouldEqual(receivedAnswer);
+            viewState.Levels["0"].RosterRowTitles[rosterGroup2Id].ShouldEqual(receivedAnswer);
 
         private static InterviewEventHandlerFunctional interviewEventHandlerFunctional;
-        private static ViewWithSequence<InterviewData> viewState;
+        private static InterviewData viewState;
         private static Guid rosterGroup1Id;
         private static Guid rosterGroup2Id;
         private static Guid rosterScopeId;

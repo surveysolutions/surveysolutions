@@ -19,11 +19,11 @@ namespace WB.UI.Headquarters.API.Resources
     [HeadquarterFeatureOnly]
     public class InterviewsResourceController : ApiController
     {
-        private readonly IReadSideRepositoryReader<ViewWithSequence<InterviewData>> interviewDataReader;
+        private readonly IReadSideRepositoryReader<InterviewData> interviewDataReader;
         private readonly IReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
         private readonly IInterviewSynchronizationDtoFactory factory;
 
-        public InterviewsResourceController(IReadSideRepositoryReader<ViewWithSequence<InterviewData>> interviewDataReader,
+        public InterviewsResourceController(IReadSideRepositoryReader<InterviewData> interviewDataReader,
             IInterviewSynchronizationDtoFactory factory, IReadSideRepositoryReader<InterviewSummary> interviewSummaryReader)
         {
             this.interviewDataReader = interviewDataReader;
@@ -48,7 +48,7 @@ namespace WB.UI.Headquarters.API.Resources
                 comments = interviewSummary.CommentedStatusesHistory.Last().Comment;
             }
 
-            InterviewData document = interviewData.Document;
+            InterviewData document = interviewData;
             InterviewSynchronizationDto interviewSynchronizationDto = this.factory.BuildFrom(document, comments);
 
             var result = this.Request.CreateResponse(HttpStatusCode.OK, interviewSynchronizationDto,

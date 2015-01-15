@@ -167,7 +167,7 @@ namespace WB.UI.Supervisor.App_Start
                     applicationBuildVersion, interviewDetailsDataLoaderSettings, overrideReceivedEventTimeStamp,
                     Constants.CapiSynchronizationOrigin, false,
                     int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"]),
-                    new InterviewHistorySettings(basePath,false)));
+                    new InterviewHistorySettings(basePath, false), ravenSettings.StoragePath));
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);

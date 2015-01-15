@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         {
             viewState = CreateViewWithSequenceOfInterviewData();
             interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional();
-            viewState.Document.Status = InterviewStatus.ReadyForInterview;
+            viewState.Status = InterviewStatus.ReadyForInterview;
 
             interviewerId = Guid.NewGuid();
             interviewerAssignedEvent = CreatePublishableEvent(new InterviewerAssigned(Guid.NewGuid(), interviewerId));
@@ -29,13 +29,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         Because of = () => interviewEventHandlerFunctional.Update(viewState, interviewerAssignedEvent);
 
 
-        It should_change_responsible_to_interviewer = () => viewState.Document.ResponsibleId.ShouldEqual(interviewerId);
+        It should_change_responsible_to_interviewer = () => viewState.ResponsibleId.ShouldEqual(interviewerId);
 
-        It should_set_responsible_role_to_Operator = () => viewState.Document.ResponsibleRole.ShouldEqual(UserRoles.Operator);
+        It should_set_responsible_role_to_Operator = () => viewState.ResponsibleRole.ShouldEqual(UserRoles.Operator);
 
 
         static InterviewEventHandlerFunctional interviewEventHandlerFunctional;
-        static ViewWithSequence<InterviewData> viewState;
+        static InterviewData viewState;
         static Guid interviewerId;
         static IPublishedEvent<InterviewerAssigned> interviewerAssignedEvent;
     }
