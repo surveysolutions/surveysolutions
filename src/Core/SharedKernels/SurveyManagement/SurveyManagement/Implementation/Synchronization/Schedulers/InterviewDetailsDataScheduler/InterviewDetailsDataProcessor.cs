@@ -14,14 +14,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
         private readonly InterviewDetailsDataProcessorContext interviewDetailsDataProcessorContext;
         private readonly InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings;
         private readonly SyncSettings syncSettings;
-        private readonly IReadSideRepositoryReader<InterviewData> interviewDetailsReader;
+        private readonly IReadSideKeyValueStorage<InterviewData> interviewDetailsReader;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         public InterviewDetailsDataProcessor(ILogger logger,
             InterviewDetailsDataProcessorContext interviewDetailsDataProcessorContext,
             InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings,
             SyncSettings syncSettings,
-            IReadSideRepositoryReader<InterviewData> interviewDetailsReader,
+            IReadSideKeyValueStorage<InterviewData> interviewDetailsReader,
             IFileSystemAccessor fileSystemAccessor)
         {
             if (logger == null) throw new ArgumentNullException("logger");

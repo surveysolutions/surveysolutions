@@ -19,11 +19,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
         IEventHandler<InterviewRejectedByHQ>
     {
         private readonly IReadSideRepositoryWriter<InterviewFeedEntry> writer;
-        private readonly IReadSideRepositoryWriter<InterviewData> interviews;
+        private readonly IReadSideKeyValueStorage<InterviewData> interviews;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewInterviewSummaryes;
 
         public InterviewsFeedDenormalizer(IReadSideRepositoryWriter<InterviewFeedEntry> writer,
-            IReadSideRepositoryWriter<InterviewData> interviews, IReadSideRepositoryWriter<InterviewSummary> interviewInterviewSummaryes)
+            IReadSideKeyValueStorage<InterviewData> interviews, IReadSideRepositoryWriter<InterviewSummary> interviewInterviewSummaryes)
         {
             if (writer == null) throw new ArgumentNullException("writer");
             if (interviews == null) throw new ArgumentNullException("interviews");

@@ -66,8 +66,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationTests.Sche
 
         private static IInterviewDetailsDataProcessor interviewDetailsDataProcessor;
 
-        private static Mock<IReadSideRepositoryReader<InterviewData>> interviewDataRepositoryReaderMock =
-            new Mock<IReadSideRepositoryReader<InterviewData>>();
+        private static Mock<IReadSideKeyValueStorage<InterviewData>> interviewDataRepositoryReaderMock =
+            new Mock<IReadSideKeyValueStorage<InterviewData>>();
 
         private static List<string> packageFileNames = new List<string>(){"11111111-1111-1111-1111-111111111111", 
                                                                           "22222222-2222-2222-2222-222222222222"};

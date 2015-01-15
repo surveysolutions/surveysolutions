@@ -18,7 +18,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors
 {
-    public class RavenFilesStoreRepositoryAccessor<TEntity> : IReadSideRepositoryWriter<TEntity>, IReadSideRepositoryReader<TEntity>, IReadSideRepositoryWriter, IReadSideRepositoryCleaner
+    public class RavenFilesStoreRepositoryAccessor<TEntity> : IReadSideKeyValueStorage<TEntity>, IReadSideRepositoryWriter, IReadSideRepositoryCleaner
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly ILogger logger;
@@ -64,27 +64,24 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             return files.Count;
         }
 
-        TEntity IReadSideRepositoryReader<TEntity>.GetById(string id)
-        {
-            if (!this.WaitUntilViewCanBeProcessed(id))
-                return this.GetEntityAvoidingCacheById(id);
-            try
-            {
-                if (ravenFilesStoreRepositoryAccessorSettings.AdditionalEventChecker != null)
-                    ravenFilesStoreRepositoryAccessorSettings.AdditionalEventChecker(id);
-            }
-            finally
-            {
-                this.ReleaseSpotForOtherThread(id);
-            }
-
-            return this.GetEntityAvoidingCacheById(id);
-        }
-
         TEntity IReadSideStorage<TEntity>.GetById(string id)
         {
             if (!isCacheEnabled)
+            {
+                if (this.WaitUntilViewCanBeProcessed(id))
+                {
+                    try
+                    {
+                        if (ravenFilesStoreRepositoryAccessorSettings.AdditionalEventChecker != null)
+                            ravenFilesStoreRepositoryAccessorSettings.AdditionalEventChecker(id);
+                    }
+                    finally
+                    {
+                        this.ReleaseSpotForOtherThread(id);
+                    }
+                }
                 return this.GetEntityAvoidingCacheById(id);
+            }
 
             if (!this.cache.ContainsKey(id))
             {

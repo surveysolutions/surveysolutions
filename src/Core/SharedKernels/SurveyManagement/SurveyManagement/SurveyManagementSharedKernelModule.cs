@@ -107,7 +107,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<RavenFilesStoreRepositoryAccessorSettings>().ToConstant(new RavenFilesStoreRepositoryAccessorSettings(ravenDbUrl, this.AdditionalEventChecker, ravenFileSystemName));
 
-            this.Bind<IReadSideRepositoryReader<InterviewData>, IReadSideRepositoryWriter<InterviewData>>()
+            this.Bind<IReadSideKeyValueStorage<InterviewData>>()
                 .To<RavenFilesStoreRepositoryAccessor<InterviewData>>().InSingletonScope();
 
             this.Bind<IInterviewDetailsDataLoader>().To<InterviewDetailsDataLoader>();
