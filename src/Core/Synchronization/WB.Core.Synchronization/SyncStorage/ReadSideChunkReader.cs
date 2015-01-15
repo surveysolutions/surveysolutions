@@ -10,13 +10,15 @@ namespace WB.Core.Synchronization.SyncStorage
 {
     internal class ReadSideChunkReader : IChunkReader
     {
+        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
         private readonly IQueryableReadSideRepositoryReader<SynchronizationDelta> queryableStorage;
+        private const string queryIndexName = "SynchronizationDeltasByBriefFields";
 
-        public ReadSideChunkReader(IQueryableReadSideRepositoryReader<SynchronizationDelta> queryableStorage)
+        public ReadSideChunkReader(IQueryableReadSideRepositoryReader<SynchronizationDelta> queryableStorage, IReadSideRepositoryIndexAccessor indexAccessor)
         {
             this.queryableStorage = queryableStorage;
+            this.indexAccessor = indexAccessor;
         }
-
 
         public SyncItem ReadChunk(string id)
         {
@@ -36,41 +38,45 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public IEnumerable<SynchronizationChunkMeta> GetChunkMetaDataCreatedAfter(string lastSyncedPackageId, IEnumerable<Guid> users)
         {
+            var items = this.indexAccessor.Query<SynchronizationDelta>(queryIndexName);
+
             var userIds = users.Concat(new[] { Guid.Empty });
 
             if (lastSyncedPackageId == null)
             {
-                var fullStreamDeltas = queryableStorage.Query(_ => _.Where(x => x.UserId.In(userIds))
-                                                                    .OrderBy(x => x.SortIndex)
-                                                                    .ToList());
+                List<SynchronizationDelta> fullStreamDeltas = items.Where(x => x.UserId.In(userIds))
+                                                                   .OrderBy(x => x.SortIndex)
+                                                                   .ToList();
 
                 var fullListResult = fullStreamDeltas.Select(s => new SynchronizationChunkMeta(s.PublicKey))
                                                      .ToList();
                 return fullListResult; 
             }
 
-            SynchronizationDelta lastSyncedPackage = queryableStorage.Query(_ => _.FirstOrDefault(x => x.PublicKey == lastSyncedPackageId));
+            SynchronizationDelta lastSyncedPackage = items.FirstOrDefault(x => x.PublicKey == lastSyncedPackageId);
 
             if (lastSyncedPackage == null)
             {
                 throw new SyncPackageNotFoundException(string.Format("Sync package with id {0} was not found on server", lastSyncedPackageId));
             }
 
-            var deltas = queryableStorage.Query(_ => _.Where(x => x.SortIndex > lastSyncedPackage.SortIndex && x.UserId.In(userIds))
-                                                      .OrderBy(x => x.SortIndex)
-                                                      .ToList());
+            var deltas = items.Where(x => x.SortIndex > lastSyncedPackage.SortIndex && x.UserId.In(userIds))
+                              .OrderBy(x => x.SortIndex)
+                              .ToList();
 
-            var result = deltas.Select(s => new SynchronizationChunkMeta(s.PublicKey))
-                               .ToList();
+            var result = deltas.Select(s => new SynchronizationChunkMeta(s.PublicKey)).ToList();
             return result; 
         }
 
         public SynchronizationChunkMeta GetChunkMetaDataByTimestamp(DateTime timestamp)
         {
-            var meta = this.queryableStorage.Query(_ => _.Where(x => timestamp >= x.Timestamp)
-                                                         .ToList()
-                                                         .OrderBy(x => x.SortIndex)
-                                                         .Last());
+            var items = this.indexAccessor.Query<SynchronizationDelta>(queryIndexName);
+
+            SynchronizationDelta meta = items.Where(x => timestamp >= x.Timestamp)
+                                             .ToList()
+                                             .OrderBy(x => x.SortIndex)
+                                             .Last();
+            
             return new SynchronizationChunkMeta(meta.PublicKey);
         }
     }

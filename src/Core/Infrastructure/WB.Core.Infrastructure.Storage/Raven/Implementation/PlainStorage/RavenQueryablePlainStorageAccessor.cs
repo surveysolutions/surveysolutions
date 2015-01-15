@@ -15,7 +15,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.PlainStorage
         {
             using (IDocumentSession session = this.OpenSession())
             {
-                return query.Invoke(session.Query<TEntity>().Customize(customization => customization.WaitForNonStaleResultsAsOfNow()));
+                return query.Invoke(session.Query<TEntity>().Customize(customization => customization.WaitForNonStaleResultsAsOfLastWrite()));
             }
 
         }

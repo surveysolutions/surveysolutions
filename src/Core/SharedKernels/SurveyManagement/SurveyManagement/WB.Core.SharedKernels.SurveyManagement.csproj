@@ -135,6 +135,8 @@
     <Compile Include="Implementation\IRecordsAccessor.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\InterviewsSearchIndex.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\SeachIndexContent.cs" />
+    <Compile Include="Implementation\ReadSide\Indexes\SynchronizationDeltasByBriefFields.cs" />
+    <Compile Include="Implementation\ReadSide\Indexes\UserDocumentsByBriefFields.cs" />
     <Compile Include="Implementation\Services\DataExport\CsvWriterService.cs" />
     <Compile Include="Implementation\Services\DataExport\FileBasedDataExportRepositorySettings.cs" />
     <Compile Include="Implementation\Services\DataExport\FilebasedExportedDataAccessor.cs" />
@@ -149,7 +151,6 @@
     <Compile Include="Implementation\Synchronization\IncomePackagesRepository\IncomePackagesRepository.cs" />
     <Compile Include="Implementation\Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsDataLoader.cs" />
     <Compile Include="Implementation\Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsDataProcessor.cs" />
-    <Compile Include="Implementation\ReadSide\Indexes\CompleteInterviewsWithErrorsIndex.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\HeadquarterReportsSurveysAndStatusesGroupByTeam.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\HeadquarterReportsTeamsAndStatusesGroupByTeam.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\QuestionnaireBrowseItemsGroupByQuestionnaireIdIndex.cs" />
