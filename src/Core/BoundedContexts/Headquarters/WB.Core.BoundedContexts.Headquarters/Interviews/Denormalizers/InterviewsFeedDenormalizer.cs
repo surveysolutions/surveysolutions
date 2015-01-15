@@ -19,11 +19,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
         IEventHandler<InterviewRejectedByHQ>
     {
         private readonly IReadSideRepositoryWriter<InterviewFeedEntry> writer;
-        private readonly IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviews;
+        private readonly IReadSideRepositoryWriter<InterviewData> interviews;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewInterviewSummaryes;
 
         public InterviewsFeedDenormalizer(IReadSideRepositoryWriter<InterviewFeedEntry> writer,
-            IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviews, IReadSideRepositoryWriter<InterviewSummary> interviewInterviewSummaryes)
+            IReadSideRepositoryWriter<InterviewData> interviews, IReadSideRepositoryWriter<InterviewSummary> interviewInterviewSummaryes)
         {
             if (writer == null) throw new ArgumentNullException("writer");
             if (interviews == null) throw new ArgumentNullException("interviews");
@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
 
         public void Handle(IPublishedEvent<SupervisorAssigned> evnt)
         {
-            InterviewData interviewData = Monads.Maybe(() => this.interviews.GetById(evnt.EventSourceId).Document);
+            InterviewData interviewData = Monads.Maybe(() => this.interviews.GetById(evnt.EventSourceId));
             if(interviewData!= null && interviewData.CreatedOnClient)
                 return;
 
@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
 
         public void Handle(IPublishedEvent<InterviewRejectedByHQ> evnt)
         {
-            InterviewData interviewData = this.interviews.GetById(evnt.EventSourceId).Document;
+            InterviewData interviewData = this.interviews.GetById(evnt.EventSourceId);
 
             string supervisorId = Monads.Maybe(() => interviewData.SupervisorId.FormatGuid());
             string responsibleId = interviewData.ResponsibleId.FormatGuid();

@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             interviewLevel.DisabledGroups.Add(disabledGroupId);
             interviewLevel.ScopeVectors.Add(new ValueVector<Guid> { someAdditionalScopeId }, null);
 
-            viewState.Document.Levels.Add("0", interviewLevel);
+            viewState.Levels.Add("0", interviewLevel);
 
             var questionnaireRosterStructure = CreateQuestionnaireRosterStructure(rosterScopeId, rosterGroupId, disabledGroupId);
 
@@ -34,16 +34,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 CreatePublishableEvent(Create.RosterInstancesRemoved(disabledGroupId)));
 
         It should_interview_levels_count_be_equal_to_2_top_level_and_roster_row = () =>
-            viewState.Document.Levels.Keys.Count.ShouldEqual(2);
+            viewState.Levels.Keys.Count.ShouldEqual(2);
 
         It should_interview_level_with_id_0_be_present = () =>
-            viewState.Document.Levels.Keys.ShouldContain("0");
+            viewState.Levels.Keys.ShouldContain("0");
 
         It should_interview_level_with_id_0_do_not_disabledGroupId = () =>
-           viewState.Document.Levels["0"].DisabledGroups.ShouldNotContain(disabledGroupId);
+           viewState.Levels["0"].DisabledGroups.ShouldNotContain(disabledGroupId);
 
         private static InterviewEventHandlerFunctional interviewEventHandlerFunctional;
-        private static ViewWithSequence<InterviewData> viewState;
+        private static InterviewData viewState;
         private static Guid rosterGroupId;
         private static Guid disabledGroupId;
         private static Guid rosterScopeId;

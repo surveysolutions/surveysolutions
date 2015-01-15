@@ -37,11 +37,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
         private static object GetAnswer()
         {
-            return viewState.Document.Levels["#"].GetAllQuestions().First(q => q.Id == questionId).Answer;
+            return viewState.Levels["#"].GetAllQuestions().First(q => q.Id == questionId).Answer;
         }
 
         private static InterviewEventHandlerFunctional interviewEventHandlerFunctional;
-        private static ViewWithSequence<InterviewData> viewState;
+        private static InterviewData viewState;
         private static Guid questionId = Guid.Parse("13333333333333333333333333333333");
         private static string answer = "some answer here";
     }

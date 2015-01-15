@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             viewState = CreateViewWithSequenceOfInterviewData();
             synchronizationDataStorage = new Mock<ISynchronizationDataStorage>();
             interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional();
-            viewState.Document.Status = InterviewStatus.RejectedByHeadquarters;
+            viewState.Status = InterviewStatus.RejectedByHeadquarters;
         };
 
        Because of = () => interviewEventHandlerFunctional.Update(viewState, CreatePublishableEvent(new InterviewerAssigned(Guid.NewGuid(), Guid.NewGuid())));
@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
        It should_not_sent_it_to_CAPI = () => synchronizationDataStorage.Verify(x => x.SaveInterview(Moq.It.IsAny<InterviewSynchronizationDto>(), Moq.It.IsAny<Guid>(), Moq.It.IsAny<DateTime>()), Times.Never);
        
        static InterviewEventHandlerFunctional interviewEventHandlerFunctional;
-       static ViewWithSequence<InterviewData> viewState;
+       static InterviewData viewState;
        static Mock<ISynchronizationDataStorage> synchronizationDataStorage;
     }
 }
