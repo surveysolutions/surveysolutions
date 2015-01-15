@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.EventHandlers
 {
-    public abstract class AbstractFunctionalEventHandler<TEntity, TStorage> : IFunctionalEventHandler, IEventHandler
+    public abstract class AbstractFunctionalEventHandler<TEntity, TStorage> : IFunctionalEventHandler, IAtomicEventHandler
         where TEntity : class, IReadSideRepositoryEntity
         where TStorage : class, IReadSideStorage<TEntity>
     {

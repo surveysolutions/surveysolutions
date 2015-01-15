@@ -9,11 +9,13 @@ using Nito.AsyncEx;
 using Nito.AsyncEx.Synchronous;
 using Raven.Abstractions.FileSystem;
 using Raven.Client.FileSystem;
+using Raven.Imports.Newtonsoft.Json;
 using Raven.Json.Linq;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Services;
+using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors
@@ -28,15 +30,13 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         private ConcurrentDictionary<string, bool> packagesInProcess = new ConcurrentDictionary<string, bool>();
         private const int CountOfAttempt = 60;
         private bool isCacheEnabled = false;
-        private readonly IJsonUtils jsonUtils;
         private readonly RavenFilesStoreRepositoryAccessorSettings ravenFilesStoreRepositoryAccessorSettings;
         private readonly IWaitService waitService;
         private readonly IFilesStore ravenFilesStore;
 
-        public RavenFilesStoreRepositoryAccessor(ILogger logger, IJsonUtils jsonUtils, IWaitService waitService, RavenFilesStoreRepositoryAccessorSettings ravenFilesStoreRepositoryAccessorSettings)
+        public RavenFilesStoreRepositoryAccessor(ILogger logger, IWaitService waitService, RavenFilesStoreRepositoryAccessorSettings ravenFilesStoreRepositoryAccessorSettings)
         {
             this.logger = logger;
-            this.jsonUtils = jsonUtils;
             this.waitService = waitService;
             this.ravenFilesStoreRepositoryAccessorSettings = ravenFilesStoreRepositoryAccessorSettings;
             this.ravenFilesStore = this.CreateRavenFilesStore();
@@ -229,16 +229,17 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
                 using (var reader = new StreamReader(stream, Encoding.UTF8))
                 {
-                    return jsonUtils.Deserialize<TEntity>(reader.ReadToEnd());
+                    return Deserrialize(reader.ReadToEnd());
                 }
             }
         }
 
         private void StoreAvoidingCache(TEntity entity, string entityId)
         {
-            using (var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(jsonUtils.Serialize(entity))))
+            using (var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(GetItemAsContent(entity))))
             {
-                ravenFilesStore.AsyncFilesCommands.UploadAsync(this.CreateFileStoreEntityId(entityId), memoryStream).WaitAndUnwrapException();
+                ravenFilesStore.AsyncFilesCommands.UploadAsync(this.CreateFileStoreEntityId(entityId), memoryStream)
+                    .WaitAndUnwrapException();
             }
         }
 
@@ -257,6 +258,38 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             this.cache[id] = view;
 
             this.ReduceCacheIfNeeded();
+        }
+
+        private JsonSerializerSettings JsonSerializerSettings
+        {
+            get
+            {
+                return new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.All,
+                    ContractResolver = new PropertiesOnlyContractResolver(),
+                    DefaultValueHandling = DefaultValueHandling.Ignore,
+                    MissingMemberHandling = MissingMemberHandling.Ignore,
+                    NullValueHandling = NullValueHandling.Ignore
+                };
+            }
+        }
+
+        private string GetItemAsContent(TEntity item)
+        {
+            return JsonConvert.SerializeObject(item, Formatting.None, JsonSerializerSettings);
+        }
+
+        private TEntity Deserrialize(string payload)
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<TEntity>(payload, JsonSerializerSettings);
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException(payload, e);
+            }
         }
     }
 }
