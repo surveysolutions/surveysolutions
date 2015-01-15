@@ -13,7 +13,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo
 {
     internal class QuestionnaireInfoViewDenormalizer :
-        AbstractFunctionalEventHandler<QuestionnaireInfoView>,
+        AbstractFunctionalEventHandler<QuestionnaireInfoView, IReadSideRepositoryWriter<QuestionnaireInfoView>>,
         ICreateHandler<QuestionnaireInfoView, NewQuestionnaireCreated>,
         ICreateHandler<QuestionnaireInfoView, QuestionnaireCloned>,
         ICreateHandler<QuestionnaireInfoView, TemplateImported>,

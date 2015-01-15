@@ -1,13 +1,10 @@
-﻿using Machine.Specifications;
-using Moq;
+﻿using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Tests.Unit.Infrastructure.AbstractFunctionalEventHandlerTests
 {
-    [Subject(typeof(AbstractFunctionalEventHandler<>))]
     internal class AbstractFunctionalEventHandlerTestContext
     {
         protected static TestableFunctionalEventHandler CreateAbstractFunctionalEventHandler(

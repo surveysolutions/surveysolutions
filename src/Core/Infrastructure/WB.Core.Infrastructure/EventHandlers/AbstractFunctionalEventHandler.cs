@@ -4,53 +4,56 @@ using System.Linq;
 using System.Reflection;
 using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.StorageStrategy;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.EventHandlers
 {
-    public abstract class AbstractFunctionalEventHandler<T> : IFunctionalEventHandler<T> where T : class, IReadSideRepositoryEntity
+    public abstract class AbstractFunctionalEventHandler<TEntity, TStorage> : IFunctionalEventHandler, IEventHandler
+        where TEntity : class, IReadSideRepositoryEntity
+        where TStorage : class, IReadSideStorage<TEntity>
     {
-        private IReadSideRepositoryWriter<T> readsideRepositoryWriter;
+        private readonly TStorage readSideStorage;
 
-        protected AbstractFunctionalEventHandler(IReadSideRepositoryWriter<T> readsideRepositoryWriter)
+        protected AbstractFunctionalEventHandler(TStorage readSideStorage)
         {
-            this.readsideRepositoryWriter = readsideRepositoryWriter;
+            this.readSideStorage = readSideStorage;
         }
 
-        public void Handle(IPublishableEvent evt)
+        private void Handle(IPublishableEvent evt)
         {
-            this.Handle(evt, this.readsideRepositoryWriter);
+            this.Handle(evt, this.readSideStorage);
         }
 
         public void Handle(IEnumerable<IPublishableEvent> publishableEvents, Guid eventSourceId)
         {
-            using (var inMemoryStorage = new InMemoryViewWriter<T>(this.readsideRepositoryWriter, eventSourceId))
+            using (var inMemoryStorage = new InMemoryViewWriter<TEntity>(this.readSideStorage, eventSourceId))
             {
                 foreach (var publishableEvent in publishableEvents)
                 {
-                    this.Handle((IPublishableEvent) publishableEvent, (IReadSideRepositoryWriter<T>) inMemoryStorage);
+                    this.Handle(publishableEvent, inMemoryStorage);
                 }
             }
         }
 
-        public void Handle(IPublishableEvent evt, IReadSideRepositoryWriter<T> storage)
+        private void Handle(IPublishableEvent evt, IReadSideStorage<TEntity> storage)
         {
             var eventType = typeof(IPublishedEvent<>).MakeGenericType(evt.Payload.GetType());
 
             if (this.IsUpgrader(evt))
             {
-                T currentState = this.GetViewById(evt.EventSourceId, storage);
-                var newState = (T)this.GetType().GetMethod("Update", new[] { typeof(T), eventType }).Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
+                TEntity currentState = GetViewById(evt.EventSourceId, storage);
+                var newState = (TEntity)this.GetType().GetMethod("Update", new[] { typeof(TEntity), eventType }).Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
 
                 if (newState != null)
                 {
-                    this.SaveView(evt.EventSourceId, newState, storage);
+                    SaveView(evt.EventSourceId, newState, storage);
                 }
                 else
                 {
-                    this.RemoveView(evt.EventSourceId, storage, currentState);
+                    RemoveView(evt.EventSourceId, storage);
                 }
 
                 return;
@@ -59,24 +62,24 @@ namespace WB.Core.Infrastructure.EventHandlers
             if (this.IsCreator(evt))
             {
                 var newObject =
-                    (T) this.GetType()
+                    (TEntity) this.GetType()
                         .GetMethod("Create", new[] { eventType })
                         .Invoke(this, new object[] { this.CreatePublishedEvent(evt) });
                 if (newObject != null)
-                    this.SaveView(evt.EventSourceId, newObject, storage);
+                    SaveView(evt.EventSourceId, newObject, storage);
                 return;
             }
 
             if (this.IsDeleter(evt))
             {
-                T currentState = this.GetViewById(evt.EventSourceId, storage);
-                var methodInfo = this.GetType().GetMethod("Delete", new[] { typeof(T), eventType });
-                var newState = (T)methodInfo.Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
-                this.RemoveView(evt.EventSourceId, storage, newState);
+                TEntity currentState = GetViewById(evt.EventSourceId, storage);
+                var methodInfo = this.GetType().GetMethod("Delete", new[] { typeof(TEntity), eventType });
+                var newState = (TEntity)methodInfo.Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
+                RemoveView(evt.EventSourceId, storage);
             }
         }
 
-        private void RemoveView(Guid id, IReadSideRepositoryWriter<T> storage, T currentState)
+        private static void RemoveView(Guid id, IReadSideStorage<TEntity> storage)
         {
             storage.Remove(id);
         }
@@ -90,7 +93,7 @@ namespace WB.Core.Infrastructure.EventHandlers
             handlers.ForEach((handler) => this.RegisterOldFashionHandler(oldEventBus, handler));
         }
 
-        private Type ExtractEventType(MethodInfo method)
+        private static Type ExtractEventType(MethodInfo method)
         {
             var parameters = method.GetParameters();
             var eventParameter = parameters.Last().ParameterType;
@@ -99,48 +102,48 @@ namespace WB.Core.Infrastructure.EventHandlers
 
         private void RegisterOldFashionHandler(InProcessEventBus oldEventBus, MethodInfo method)
         {
-            var evntType = this.ExtractEventType(method);
+            var evntType = ExtractEventType(method);
             NcqrsEnvironment.RegisterEventDataType(evntType);
             oldEventBus.RegisterHandler(evntType, this.Handle);
         }
 
-        private void SaveView(Guid id, T newState, IReadSideRepositoryWriter<T> storage)
+        private static void SaveView(Guid id, TEntity newState, IReadSideStorage<TEntity> storage)
         {
             storage.Store(newState, id);
         }
 
-        private T GetViewById(Guid id, IReadSideRepositoryWriter<T> storage)
+        private static TEntity GetViewById(Guid id, IReadSideStorage<TEntity> storage)
         {
             return storage.GetById(id);
         }
 
-        protected PublishedEvent CreatePublishedEvent(IPublishableEvent evt)
+        private PublishedEvent CreatePublishedEvent(IPublishableEvent evt)
         {
             var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(evt.Payload.GetType());
             return (PublishedEvent)Activator.CreateInstance(publishedEventClosedType, evt);
         }
 
-        protected bool IsUpgrader(IPublishableEvent evt)
+        private bool IsUpgrader(IPublishableEvent evt)
         {
             Type genericUpgrader = typeof(IUpdateHandler<,>);
-            return genericUpgrader.MakeGenericType(typeof(T), evt.Payload.GetType()).IsInstanceOfType(this.GetType());
+            return genericUpgrader.MakeGenericType(typeof(TEntity), evt.Payload.GetType()).IsInstanceOfType(this.GetType());
         }
 
-        protected bool IsCreator(IPublishableEvent evt)
+        private bool IsCreator(IPublishableEvent evt)
         {
             Type genericUpgrader = typeof(ICreateHandler<,>);
-            return genericUpgrader.MakeGenericType(typeof(T), evt.Payload.GetType()).IsInstanceOfType(this.GetType());
+            return genericUpgrader.MakeGenericType(typeof(TEntity), evt.Payload.GetType()).IsInstanceOfType(this.GetType());
         }
 
-        protected bool IsDeleter(IPublishableEvent evt)
+        private bool IsDeleter(IPublishableEvent evt)
         {
             Type genericDeleter = typeof(IDeleteHandler<,>);
-            return genericDeleter.MakeGenericType(typeof(T), evt.Payload.GetType()).IsInstanceOfType(this.GetType());
+            return genericDeleter.MakeGenericType(typeof(TEntity), evt.Payload.GetType()).IsInstanceOfType(this.GetType());
         }
 
         public string Name { get { return this.GetType().Name; } }
 
-        public virtual object[] Writers { get { return new object[] { this.readsideRepositoryWriter }; } }
+        public virtual object[] Writers { get { return new object[] { this.readSideStorage }; } }
 
         public virtual void CleanWritersByEventSource(Guid eventSourceId)
         {
@@ -152,10 +155,10 @@ namespace WB.Core.Infrastructure.EventHandlers
                 throw new InvalidOperationException(
                   "writers to clean up are missing");
 
-            if (this.Writers[0] != this.readsideRepositoryWriter)
+            if (this.Writers[0] != this.readSideStorage)
                 throw new InvalidOperationException("mismatch of view and writer");
 
-            this.readsideRepositoryWriter.Remove(eventSourceId);
+            this.readSideStorage.Remove(eventSourceId);
         }
 
         public virtual object[] Readers
