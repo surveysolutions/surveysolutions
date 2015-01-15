@@ -596,7 +596,6 @@
     <Content Include="Configuration\ANK.Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Configuration\Dima.Designer.Web.config" />
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
