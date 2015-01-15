@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationTests.Sche
             fileSystemAccessorMock.Setup(_ => _.GetFileNameWithoutExtension(GetFullPathToPackage(packageFileName)))
                 .Returns(packageFileName);
 
-            var interviewDataRepositoryReaderMock = new Mock<IReadSideRepositoryReader<InterviewData>>();
+            var interviewDataRepositoryReaderMock = new Mock<IReadSideKeyValueStorage<InterviewData>>();
             interviewDataRepositoryReaderMock.Setup(_ => _.GetById(packageFileName))
                 .Throws(new Exception(unhandledExceptionMessage));
 

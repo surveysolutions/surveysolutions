@@ -14,14 +14,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
     public class InterviewDetailsViewFactoryNew : IInterviewDetailsViewFactory
     {
-        private readonly IReadSideRepositoryReader<InterviewData> interviewStore;
+        private readonly IReadSideKeyValueStorage<InterviewData> interviewStore;
         private readonly IReadSideRepositoryReader<UserDocument> userStore;
         private readonly IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireStore;
         private readonly IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireRosterStructures;
         private readonly IVersionedReadSideRepositoryReader<ReferenceInfoForLinkedQuestions> questionnaireReferenceInfoForLinkedQuestions;
         private readonly IInterviewDataAndQuestionnaireMerger merger;
 
-        public InterviewDetailsViewFactoryNew(IReadSideRepositoryReader<InterviewData> interviewStore,
+        public InterviewDetailsViewFactoryNew(IReadSideKeyValueStorage<InterviewData> interviewStore,
             IReadSideRepositoryReader<UserDocument> userStore,
             IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireStore,
             IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireRosterStructures,

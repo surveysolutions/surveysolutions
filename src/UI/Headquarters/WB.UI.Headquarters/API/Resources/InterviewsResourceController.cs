@@ -19,11 +19,11 @@ namespace WB.UI.Headquarters.API.Resources
     [HeadquarterFeatureOnly]
     public class InterviewsResourceController : ApiController
     {
-        private readonly IReadSideRepositoryReader<InterviewData> interviewDataReader;
+        private readonly IReadSideKeyValueStorage<InterviewData> interviewDataReader;
         private readonly IReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
         private readonly IInterviewSynchronizationDtoFactory factory;
 
-        public InterviewsResourceController(IReadSideRepositoryReader<InterviewData> interviewDataReader,
+        public InterviewsResourceController(IReadSideKeyValueStorage<InterviewData> interviewDataReader,
             IInterviewSynchronizationDtoFactory factory, IReadSideRepositoryReader<InterviewSummary> interviewSummaryReader)
         {
             this.interviewDataReader = interviewDataReader;
