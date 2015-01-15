@@ -13,13 +13,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
     public class InterviewInfoForRevalidationFactory : IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView>
     {
         private readonly IInterviewDataAndQuestionnaireMerger merger;
-        private readonly IReadSideRepositoryReader<InterviewData> interviewStore;
+        private readonly IReadSideKeyValueStorage<InterviewData> interviewStore;
         private readonly IReadSideRepositoryReader<UserDocument> userStore;
         private readonly IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireStore;
         private readonly IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireRosterStructures;
         private readonly IVersionedReadSideRepositoryReader<ReferenceInfoForLinkedQuestions> questionnaireReferenceInfoForLinkedQuestions;
 
-        public InterviewInfoForRevalidationFactory(IReadSideRepositoryReader<InterviewData> interviewStore,
+        public InterviewInfoForRevalidationFactory(IReadSideKeyValueStorage<InterviewData> interviewStore,
             IReadSideRepositoryReader<UserDocument> userStore,
             IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireStore,
             IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireRosterStructures,

@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             return new InterviewEventHandlerFunctional(
                  userDocumentMockStorage.Object,
                 questionnaireRosterStructureMockStorage.Object,
-                new Mock<IReadSideRepositoryWriter<InterviewData>>().Object);
+                new Mock<IReadSideKeyValueStorage<InterviewData>>().Object);
         }
 
         protected static QuestionnaireRosterStructure CreateQuestionnaireRosterStructure(Guid scopeId,

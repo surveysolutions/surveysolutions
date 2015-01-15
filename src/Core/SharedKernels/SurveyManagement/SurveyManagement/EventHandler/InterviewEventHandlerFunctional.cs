@@ -26,7 +26,7 @@ using WB.Core.Synchronization.SyncStorage;
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     public class InterviewEventHandlerFunctional :
-        AbstractFunctionalEventHandler<InterviewData, IReadSideRepositoryWriter<InterviewData>>,
+        AbstractFunctionalEventHandler<InterviewData, IReadSideKeyValueStorage<InterviewData>>,
         ICreateHandler<InterviewData, InterviewCreated>,
         ICreateHandler<InterviewData, InterviewFromPreloadedDataCreated>,
         ICreateHandler<InterviewData, InterviewOnClientCreated>,
@@ -287,7 +287,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewEventHandlerFunctional(IReadSideRepositoryWriter<UserDocument> users,
             IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures,
-            IReadSideRepositoryWriter<InterviewData> interviewData)
+            IReadSideKeyValueStorage<InterviewData> interviewData)
             : base(interviewData)
         {
             this.users = users;
