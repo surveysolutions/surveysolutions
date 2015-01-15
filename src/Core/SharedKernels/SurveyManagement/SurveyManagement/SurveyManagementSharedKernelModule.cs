@@ -45,6 +45,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly bool overrideReceivedEventTimeStamp;
         private readonly string origin;
         private readonly string ravenDbUrl;
+        private readonly string ravenFileSystemName;
         private readonly bool hqEnabled;
         private readonly int maxCountOfCachedEntitiesForSqliteDb;
         private readonly InterviewHistorySettings interviewHistorySettings;
@@ -52,7 +53,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
         public SurveyManagementSharedKernelModule(string currentFolderPath,
             int supportedQuestionnaireVersionMajor, int supportedQuestionnaireVersionMinor, int supportedQuestionnaireVersionPatch,
             Func<bool> isDebug, Version applicationBuildVersion,
-            InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool overrideReceivedEventTimeStamp, string origin, bool hqEnabled, int maxCountOfCachedEntitiesForSqliteDb, InterviewHistorySettings interviewHistorySettings, string ravenDbUrl)
+            InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool overrideReceivedEventTimeStamp, string origin, bool hqEnabled, int maxCountOfCachedEntitiesForSqliteDb, InterviewHistorySettings interviewHistorySettings, string ravenDbUrl, string ravenFileSystemName)
         {
             this.currentFolderPath = currentFolderPath;
             this.supportedQuestionnaireVersionMajor = supportedQuestionnaireVersionMajor;
@@ -67,6 +68,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.maxCountOfCachedEntitiesForSqliteDb = maxCountOfCachedEntitiesForSqliteDb;
             this.interviewHistorySettings = interviewHistorySettings;
             this.ravenDbUrl = ravenDbUrl;
+            this.ravenFileSystemName = ravenFileSystemName;
         }
 
         public override void Load()
@@ -103,7 +105,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<IQuestionnaireCacheInitializer>().To<QuestionnaireCacheInitializer>();
 
-            this.Bind<RavenFilesStoreRepositoryAccessorSettings>().ToConstant(new RavenFilesStoreRepositoryAccessorSettings(ravenDbUrl, this.AdditionalEventChecker));
+            this.Bind<RavenFilesStoreRepositoryAccessorSettings>().ToConstant(new RavenFilesStoreRepositoryAccessorSettings(ravenDbUrl, this.AdditionalEventChecker, ravenFileSystemName));
 
             this.Bind<IReadSideRepositoryReader<InterviewData>, IReadSideRepositoryWriter<InterviewData>>()
                 .To<RavenFilesStoreRepositoryAccessor<InterviewData>>().InSingletonScope();
