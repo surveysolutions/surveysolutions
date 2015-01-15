@@ -11,7 +11,9 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Nito.AsyncEx;
 using Nito.AsyncEx.Synchronous;
+using Raven.Abstractions.Extensions;
 using WB.Core.GenericSubdomains.Utils;
 using Newtonsoft.Json.Converters;
 
@@ -65,7 +67,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
             do
             {
-                currentSlice = connection.ReadStreamEventsForwardAsync(EventsPrefix + id.FormatGuid(), nextSliceStart, batchSize, false).Result;
+                currentSlice = AsyncContext.Run(() => connection.ReadStreamEventsForwardAsync(EventsPrefix + id.FormatGuid(), nextSliceStart, batchSize, false));
                 nextSliceStart = currentSlice.NextEventNumber;
 
                 streamEvents.AddRange(currentSlice.Events);
@@ -82,7 +84,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             StreamEventsSlice currentSlice;
             do
             {
-                currentSlice = connection.ReadStreamEventsForwardAsync(AllEventsStream, nextPosition, bulkSize, true, this.credentials).Result;
+                currentSlice = AsyncContext.Run(() => connection.ReadStreamEventsForwardAsync(AllEventsStream, nextPosition, bulkSize, true, this.credentials));
                 nextPosition = currentSlice.NextEventNumber;
 
                 yield return currentSlice.Events.Select(this.ToCommittedEvent).ToArray();
@@ -95,7 +97,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             StreamEventsSlice currentSlice;
             do
             {
-                currentSlice = connection.ReadStreamEventsForwardAsync(AllEventsStream, nextPosition, 200, false, this.credentials).Result;
+                currentSlice = AsyncContext.Run(() => connection.ReadStreamEventsForwardAsync(AllEventsStream, nextPosition, 200, false, this.credentials));
                 nextPosition = currentSlice.NextEventNumber;
                 foreach (var resolvedEvent in currentSlice.Events)
                 {
@@ -122,19 +124,19 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
                 int expected = (int)(@event.EventSequence - 2);
                 connection.AppendToStreamAsync(EventsPrefix + @event.EventSourceId.FormatGuid(), expected, this.credentials, eventData)
-                    .Wait(this.defaultTimeout);
+                    .WaitWithTimeout(this.defaultTimeout);
             }
         }
 
         public int CountOfAllEvents()
         {
-            StreamEventsSlice slice = this.connection.ReadStreamEventsForwardAsync(AllEventsStream, 0, 1, false, this.credentials).Result;
+            StreamEventsSlice slice = AsyncContext.Run(() => this.connection.ReadStreamEventsForwardAsync(AllEventsStream, 0, 1, false, this.credentials));
             return slice.LastEventNumber + 1;
         }
 
         public long GetLastEventSequence(Guid id)
         {
-            StreamEventsSlice slice = this.connection.ReadStreamEventsForwardAsync(EventsPrefix + id.FormatGuid(), 0, 1, false, this.credentials).Result;
+            StreamEventsSlice slice = AsyncContext.Run(() => this.connection.ReadStreamEventsForwardAsync(EventsPrefix + id.FormatGuid(), 0, 1, false, this.credentials));
             return slice.LastEventNumber + 1;
         }
 
