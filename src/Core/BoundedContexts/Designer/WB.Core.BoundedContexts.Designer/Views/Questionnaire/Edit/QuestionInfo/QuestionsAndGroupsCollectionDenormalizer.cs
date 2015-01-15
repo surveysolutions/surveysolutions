@@ -14,7 +14,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 {
-    internal class QuestionsAndGroupsCollectionDenormalizer : AbstractFunctionalEventHandler<QuestionsAndGroupsCollectionView>
+    internal class QuestionsAndGroupsCollectionDenormalizer : AbstractFunctionalEventHandler<QuestionsAndGroupsCollectionView, IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView>>
         , ICreateHandler<QuestionsAndGroupsCollectionView, NewQuestionnaireCreated>
         , ICreateHandler<QuestionsAndGroupsCollectionView, QuestionnaireCloned>
         , ICreateHandler<QuestionsAndGroupsCollectionView, TemplateImported>
@@ -49,9 +49,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;
 
         public QuestionsAndGroupsCollectionDenormalizer(
-            IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView> readsideRepositoryWriter,
+            IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView> readSideStorage,
             IQuestionDetailsViewMapper questionDetailsViewMapper, IQuestionnaireEntityFactory questionnaireEntityFactory)
-            : base(readsideRepositoryWriter)
+            : base(readSideStorage)
         {
             this.questionDetailsViewMapper = questionDetailsViewMapper;
             this.questionnaireEntityFactory = questionnaireEntityFactory;

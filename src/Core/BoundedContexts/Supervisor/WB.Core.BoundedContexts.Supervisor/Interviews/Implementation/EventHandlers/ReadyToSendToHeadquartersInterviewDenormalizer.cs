@@ -7,11 +7,11 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.EventHandlers
 {
-    internal class ReadyToSendToHeadquartersInterviewDenormalizer : AbstractFunctionalEventHandler<ReadyToSendToHeadquartersInterview>,
+    internal class ReadyToSendToHeadquartersInterviewDenormalizer : AbstractFunctionalEventHandler<ReadyToSendToHeadquartersInterview, IReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview>>,
         IUpdateHandler<ReadyToSendToHeadquartersInterview, InterviewStatusChanged>
     {
-        public ReadyToSendToHeadquartersInterviewDenormalizer(IReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readsideRepositoryWriter)
-            : base(readsideRepositoryWriter) {}
+        public ReadyToSendToHeadquartersInterviewDenormalizer(IReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readSideStorage)
+            : base(readSideStorage) {}
 
         public ReadyToSendToHeadquartersInterview Update(ReadyToSendToHeadquartersInterview state, IPublishedEvent<InterviewStatusChanged> @event)
         {

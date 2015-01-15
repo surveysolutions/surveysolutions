@@ -16,7 +16,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class InterviewSummaryEventHandlerFunctional : AbstractFunctionalEventHandler<InterviewSummary>, 
+    public class InterviewSummaryEventHandlerFunctional : AbstractFunctionalEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>, 
         ICreateHandler<InterviewSummary, InterviewCreated>,
         ICreateHandler<InterviewSummary, InterviewFromPreloadedDataCreated>,
         ICreateHandler<InterviewSummary, InterviewOnClientCreated>,

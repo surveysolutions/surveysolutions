@@ -26,7 +26,7 @@ using WB.Core.Synchronization.SyncStorage;
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     public class InterviewEventHandlerFunctional :
-        AbstractFunctionalEventHandler<InterviewData>,
+        AbstractFunctionalEventHandler<InterviewData, IReadSideRepositoryWriter<InterviewData>>,
         ICreateHandler<InterviewData, InterviewCreated>,
         ICreateHandler<InterviewData, InterviewFromPreloadedDataCreated>,
         ICreateHandler<InterviewData, InterviewOnClientCreated>,
