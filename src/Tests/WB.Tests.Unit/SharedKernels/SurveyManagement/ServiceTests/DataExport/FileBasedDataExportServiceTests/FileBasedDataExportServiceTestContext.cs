@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
                 plainFileRepository ??
                     Mock.Of<IPlainInterviewFileStorage>(
                         _ => _.GetBinaryFilesForInterview(Moq.It.IsAny<Guid>()) == new List<InterviewBinaryDataDescriptor>()),
-                Mock.Of<IReadSideRepositoryWriter<InterviewData>>(
+                Mock.Of<IReadSideKeyValueStorage<InterviewData>>(
                     _ => _.GetById(It.IsAny<string>()) == (interviewData ?? new InterviewData())),
                 Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>>(
                     _ => _.GetById(It.IsAny<string>(), It.IsAny<long>()) == new QuestionnaireExportStructure()),

@@ -8,13 +8,15 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 {
     public class RavenFilesStoreRepositoryAccessorSettings
     {
-        public RavenFilesStoreRepositoryAccessorSettings(string url, Action<string> additionalEventChecker)
+        public RavenFilesStoreRepositoryAccessorSettings(string url, Action<string> additionalEventChecker, string ravenFileSystemName)
         {
+            this.RavenFileSystemName = ravenFileSystemName;
             this.Url = url;
             this.AdditionalEventChecker = additionalEventChecker;
         }
 
         public string Url { get; private set; }
+        public string RavenFileSystemName { get; private set; }
         public Action<string> AdditionalEventChecker { get; private set; }
     }
 }

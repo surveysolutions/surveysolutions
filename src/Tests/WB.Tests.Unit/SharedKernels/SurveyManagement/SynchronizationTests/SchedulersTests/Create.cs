@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationTests.Sche
         public static IInterviewDetailsDataProcessor InterviewDetailsDataProcessor(
             InterviewDetailsDataProcessorContext interviewDetailsDataProcessorContext = null,
             IFileSystemAccessor fileSystemAccessor = null, SyncSettings syncSettings = null,
-            IReadSideRepositoryReader<InterviewData> interviewDataRepositoryReader = null)
+            IReadSideKeyValueStorage<InterviewData> interviewDataRepositoryReader = null)
         {
             return
                 new InterviewDetailsDataProcessor(
@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationTests.Sche
                         new Mock<SyncSettings>(false, "AppData", "IncomingData", "IncomingDataWithErrors", "sync")
                             .Object,
                     interviewDetailsReader:
-                        interviewDataRepositoryReader ?? Mock.Of<IReadSideRepositoryReader<InterviewData>>(),
+                        interviewDataRepositoryReader ?? Mock.Of<IReadSideKeyValueStorage<InterviewData>>(),
                     fileSystemAccessor: fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>());
         }
     }
