@@ -32,13 +32,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                     helloRoster)));
 
         It should_roster_title_be_equal_to_recived_answer = () =>
-            viewState.Document.Levels["0"].RosterRowTitles[rosterGroupId].ShouldEqual(helloRoster);
+            viewState.Levels["0"].RosterRowTitles[rosterGroupId].ShouldEqual(helloRoster);
 
         It should_answer_on_head_question_be_equal_to_recived_answer = () =>
-            viewState.Document.Levels["0"].GetAllQuestions().First(q => q.Id == rosterTitleQuestionId).Answer.ShouldEqual(helloRoster);
+            viewState.Levels["0"].GetAllQuestions().First(q => q.Id == rosterTitleQuestionId).Answer.ShouldEqual(helloRoster);
 
         private static InterviewEventHandlerFunctional interviewEventHandlerFunctional;
-        private static ViewWithSequence<InterviewData> viewState;
+        private static InterviewData viewState;
         private static Guid rosterGroupId;
         private static Guid rosterScopeId;
         private static Guid rosterTitleQuestionId;

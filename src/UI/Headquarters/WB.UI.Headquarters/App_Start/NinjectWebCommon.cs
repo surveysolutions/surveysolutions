@@ -158,7 +158,7 @@ namespace WB.UI.Headquarters
                     applicationBuildVersion, interviewDetailsDataLoaderSettings, overrideReceivedEventTimeStamp,
                     Constants.SupervisorSynchronizationOrigin, true,
                     int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"]),
-                    new InterviewHistorySettings(basePath, bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"]))));
+                    new InterviewHistorySettings(basePath, bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"])), ravenSettings.StoragePath));
 
 
             kernel.Bind<ISettingsProvider>().To<SettingsProvider>();

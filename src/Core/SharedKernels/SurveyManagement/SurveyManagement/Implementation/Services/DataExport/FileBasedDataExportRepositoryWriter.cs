@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IPlainInterviewFileStorage plainFileRepository;
 
-        private readonly IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewDataWriter;
+        private readonly IReadSideRepositoryWriter<InterviewData> interviewDataWriter;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
@@ -53,7 +53,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         public FileBasedDataExportRepositoryWriter(
             IDataExportWriter dataExportWriter,
             IEnvironmentContentService environmentContentService,
-            IFileSystemAccessor fileSystemAccessor, ILogger logger, IPlainInterviewFileStorage plainFileRepository, IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewDataWriter,
+            IFileSystemAccessor fileSystemAccessor, ILogger logger, IPlainInterviewFileStorage plainFileRepository, IReadSideRepositoryWriter<InterviewData> interviewDataWriter,
             IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter,
             IReadSideRepositoryWriter<UserDocument> users, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter,
             IExportViewFactory exportViewFactory, IFilebasedExportedDataAccessor filebasedExportedDataAccessor, FileBasedDataExportRepositorySettings settings)
@@ -335,16 +335,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private InterviewDataExportView CreateInterviewDataExportView(Guid interviewId, QuestionnaireExportStructure questionnaireExportStructure=null)
         {
             var interview = interviewDataWriter.GetById(interviewId);
-            if(interview==null || interview.Document==null || interview.Document.IsDeleted)
+            if(interview==null  || interview.IsDeleted)
                 return null;
 
             if (questionnaireExportStructure == null)
             {
-                questionnaireExportStructure = questionnaireExportStructureWriter.GetById(interview.Document.QuestionnaireId, interview.Document.QuestionnaireVersion);
+                questionnaireExportStructure = questionnaireExportStructureWriter.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
                 if (questionnaireExportStructure == null)
                     return null;
             }
-            return exportViewFactory.CreateInterviewDataExportView(questionnaireExportStructure, interview.Document);
+            return exportViewFactory.CreateInterviewDataExportView(questionnaireExportStructure, interview);
         }
 
         private string GetUserRole(UserDocument user)

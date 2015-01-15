@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
@@ -43,6 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly Version applicationBuildVersion;
         private readonly bool overrideReceivedEventTimeStamp;
         private readonly string origin;
+        private readonly string ravenDbUrl;
         private readonly bool hqEnabled;
         private readonly int maxCountOfCachedEntitiesForSqliteDb;
         private readonly InterviewHistorySettings interviewHistorySettings;
@@ -50,7 +52,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
         public SurveyManagementSharedKernelModule(string currentFolderPath,
             int supportedQuestionnaireVersionMajor, int supportedQuestionnaireVersionMinor, int supportedQuestionnaireVersionPatch,
             Func<bool> isDebug, Version applicationBuildVersion,
-            InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool overrideReceivedEventTimeStamp, string origin, bool hqEnabled, int maxCountOfCachedEntitiesForSqliteDb, InterviewHistorySettings interviewHistorySettings)
+            InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool overrideReceivedEventTimeStamp, string origin, bool hqEnabled, int maxCountOfCachedEntitiesForSqliteDb, InterviewHistorySettings interviewHistorySettings, string ravenDbUrl)
         {
             this.currentFolderPath = currentFolderPath;
             this.supportedQuestionnaireVersionMajor = supportedQuestionnaireVersionMajor;
@@ -64,6 +66,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.hqEnabled = hqEnabled;
             this.maxCountOfCachedEntitiesForSqliteDb = maxCountOfCachedEntitiesForSqliteDb;
             this.interviewHistorySettings = interviewHistorySettings;
+            this.ravenDbUrl = ravenDbUrl;
         }
 
         public override void Load()
@@ -98,13 +101,12 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind(typeof (ITemporaryDataStorage<>)).To(typeof (FileTemporaryDataStorage<>));
 
-            Action<Guid> additionalEventChecker = this.AdditionalEventChecker;
-
-
             this.Bind<IQuestionnaireCacheInitializer>().To<QuestionnaireCacheInitializer>();
-            this.Bind<IReadSideRepositoryReader<InterviewData>>()
-                .To<ReadSideRepositoryReaderWithSequence<InterviewData>>().InSingletonScope()
-                .WithConstructorArgument("additionalEventChecker", additionalEventChecker);
+
+            this.Bind<RavenFilesStoreRepositoryAccessorSettings>().ToConstant(new RavenFilesStoreRepositoryAccessorSettings(ravenDbUrl, this.AdditionalEventChecker));
+
+            this.Bind<IReadSideRepositoryReader<InterviewData>, IReadSideRepositoryWriter<InterviewData>>()
+                .To<RavenFilesStoreRepositoryAccessor<InterviewData>>().InSingletonScope();
 
             this.Bind<IInterviewDetailsDataLoader>().To<InterviewDetailsDataLoader>();
             this.Bind<IInterviewDetailsDataProcessor>().To<InterviewDetailsDataProcessor>();
@@ -147,9 +149,11 @@ namespace WB.Core.SharedKernels.SurveyManagement
             }
         }
 
-        protected void AdditionalEventChecker(Guid interviewId)
+        protected void AdditionalEventChecker(string interviewIdString)
         {
-            this.Kernel.Get<IIncomePackagesRepository>().ProcessItem(interviewId);
+            Guid interviewId;
+            if(Guid.TryParse(interviewIdString, out interviewId))
+                this.Kernel.Get<IIncomePackagesRepository>().ProcessItem(interviewId);
         }
     }
 }

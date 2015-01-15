@@ -30,26 +30,26 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 CreatePublishableEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion)));
 
         private It should_interview_responsible_be_equal_to_creator_id = () =>
-            viewState.Document.ResponsibleId.ShouldEqual(userId);
+            viewState.ResponsibleId.ShouldEqual(userId);
 
         private It should_questionnareid_be_equal_to_provided_questionnaire_id = () =>
-            viewState.Document.QuestionnaireId.ShouldEqual(questionnaireId);
+            viewState.QuestionnaireId.ShouldEqual(questionnaireId);
 
         private It should_questionnaire_version_equal_to_provided_questionnaire_version = () =>
-            viewState.Document.QuestionnaireVersion.ShouldEqual(questionnaireVersion);
+            viewState.QuestionnaireVersion.ShouldEqual(questionnaireVersion);
 
         It should_interview_levels_count_be_equal_to_1 = () =>
-            viewState.Document.Levels.Keys.Count.ShouldEqual(1);
+            viewState.Levels.Keys.Count.ShouldEqual(1);
 
         It should_interview_has_created_onclient_true = () =>
-            viewState.Document.CreatedOnClient.ShouldEqual(true);
+            viewState.CreatedOnClient.ShouldEqual(true);
 
 
         private static Guid questionnaireId;
         private static long questionnaireVersion;
 
         private static InterviewEventHandlerFunctional interviewEventHandlerFunctional;
-        private static ViewWithSequence<InterviewData> viewState;
+        private static InterviewData viewState;
         private static Guid userId;
     }
 }

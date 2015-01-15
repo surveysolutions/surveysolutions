@@ -43,6 +43,7 @@ using WB.Core.Infrastructure.Storage.EventStore;
 using WB.Core.Infrastructure.Storage.EventStore.Implementation;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.Infrastructure.Storage.Raven.Implementation;
+using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
 using WB.Core.SharedKernels.DataCollection.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
@@ -111,7 +112,7 @@ namespace CapiDataGenerator
             this.Bind<IEventStore>().ToConstant(eventStore);
             this.Bind<IStreamableEventStore>().ToConstant(eventStore);
 
-            this.Bind<IReadSideRepositoryReader<InterviewData>>().To<ReadSideRepositoryReaderWithSequence<InterviewData>>().InSingletonScope();
+            this.Bind<IReadSideRepositoryReader<InterviewData>>().To<RavenFilesStoreRepositoryAccessor<InterviewData>>().InSingletonScope();
             
             this.Bind<IReadSideRepositoryWriter<LoginDTO>>().ToConstant(loginStore);
             this.Bind<IFilterableReadSideRepositoryReader<LoginDTO>>().ToConstant(loginStore);

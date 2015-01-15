@@ -46,11 +46,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
         private static InterviewTextListAnswers GetTextListAnswers()
         {
-            return ((InterviewTextListAnswers)viewState.Document.Levels["#"].GetAllQuestions().First(q => q.Id == textListQuestionId).Answer);
+            return ((InterviewTextListAnswers)viewState.Levels["#"].GetAllQuestions().First(q => q.Id == textListQuestionId).Answer);
         }
 
         private static InterviewEventHandlerFunctional interviewEventHandlerFunctional;
-        private static ViewWithSequence<InterviewData> viewState;
+        private static InterviewData viewState;
         private static Guid textListQuestionId;
         private static Tuple<decimal, string>[] answer;
     }

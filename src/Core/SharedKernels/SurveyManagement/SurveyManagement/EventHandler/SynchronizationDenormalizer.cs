@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly ISynchronizationDataStorage syncStorage;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures;
-        private readonly IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviews;
+        private readonly IReadSideRepositoryWriter<InterviewData> interviews;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummarys;
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public SynchronizationDenormalizer(ISynchronizationDataStorage syncStorage, 
             IReadSideRepositoryWriter<UserDocument> users,
             IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures,
-            IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviews,
+            IReadSideRepositoryWriter<InterviewData> interviews,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummarys,
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor, 
             IPlainQuestionnaireRepository plainQuestionnaireRepository)
@@ -100,7 +100,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 if (interviewWithVersion == null)
                     return;
 
-                var interview = interviewWithVersion.Document;
+                var interview = interviewWithVersion;
                 if (interview.Status != InterviewStatus.RejectedByHeadquarters)
                     this.ResendInterviewForPerson(interview, evnt.Payload.InterviewerId, evnt.EventTimeStamp);
             }
@@ -199,12 +199,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.syncStorage.SaveUser(item, evnt.EventTimeStamp);
         }
 
-        private void ResendInterviewInNewStatus(ViewWithSequence<InterviewData> interviewData, InterviewStatus newStatus, string comments, DateTime timestamp)
+        private void ResendInterviewInNewStatus(InterviewData interviewData, InterviewStatus newStatus, string comments, DateTime timestamp)
         {
             if (interviewData == null)
                 return;
 
-            var interview = interviewData.Document;
+            var interview = interviewData;
 
             var interviewSyncData = this.BuildSynchronizationDtoWhichIsAssignedToUser(interview, interview.ResponsibleId, newStatus, comments);
 

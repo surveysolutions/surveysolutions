@@ -36,22 +36,22 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                     geoPositionAnswer.Timestamp)));
 
         private It should_roster_title_be_equal_to_answer_text_representation = () =>
-            viewState.Document.Levels["0"].RosterRowTitles[rosterGroupId].ShouldEqual("1,2[3]4");
+            viewState.Levels["0"].RosterRowTitles[rosterGroupId].ShouldEqual("1,2[3]4");
 
         private It should_answer_on_head_question_Latitude_be_equal_to_recived_answer_Latitude = () =>
-            ((GeoPosition) viewState.Document.Levels["0"].GetAllQuestions().First(q => q.Id == rosterTitleQuestionId).Answer).Latitude
+            ((GeoPosition) viewState.Levels["0"].GetAllQuestions().First(q => q.Id == rosterTitleQuestionId).Answer).Latitude
                 .ShouldEqual(geoPositionAnswer.Latitude);
 
         private It should_answer_on_head_question_Longitude_be_equal_to_recived_answer_Longitude = () =>
-            ((GeoPosition) viewState.Document.Levels["0"].GetAllQuestions().First(q => q.Id == rosterTitleQuestionId).Answer).Longitude
+            ((GeoPosition) viewState.Levels["0"].GetAllQuestions().First(q => q.Id == rosterTitleQuestionId).Answer).Longitude
                 .ShouldEqual(geoPositionAnswer.Longitude);
 
         private It should_answer_on_head_question_Accuracy_be_equal_to_recived_answer_Accuracy = () =>
-            ((GeoPosition) viewState.Document.Levels["0"].GetAllQuestions().First(q => q.Id == rosterTitleQuestionId).Answer).Accuracy
+            ((GeoPosition) viewState.Levels["0"].GetAllQuestions().First(q => q.Id == rosterTitleQuestionId).Answer).Accuracy
                 .ShouldEqual(geoPositionAnswer.Accuracy);
 
         private static InterviewEventHandlerFunctional interviewEventHandlerFunctional;
-        private static ViewWithSequence<InterviewData> viewState;
+        private static InterviewData viewState;
         private static Guid rosterGroupId;
         private static Guid rosterScopeId;
         private static Guid rosterTitleQuestionId;

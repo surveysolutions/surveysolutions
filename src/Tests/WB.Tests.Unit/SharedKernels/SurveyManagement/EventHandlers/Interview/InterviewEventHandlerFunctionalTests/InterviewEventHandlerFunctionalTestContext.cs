@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             return new InterviewEventHandlerFunctional(
                  userDocumentMockStorage.Object,
                 questionnaireRosterStructureMockStorage.Object,
-                new Mock<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>().Object);
+                new Mock<IReadSideRepositoryWriter<InterviewData>>().Object);
         }
 
         protected static QuestionnaireRosterStructure CreateQuestionnaireRosterStructure(Guid scopeId,
@@ -69,10 +69,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             return rosterStructure;
         }
 
-        protected static ViewWithSequence<InterviewData> CreateViewWithSequenceOfInterviewData()
+        protected static InterviewData CreateViewWithSequenceOfInterviewData()
         {
-            var result = new ViewWithSequence<InterviewData>(new InterviewData(), 1);
-            result.Document.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), null, new decimal[0]));
+            var result = new InterviewData();
+            result.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), null, new decimal[0]));
             return result;
         }
 
@@ -88,9 +88,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             return new TextQuestionAnswered(Guid.NewGuid(), questionId, propagationVector, DateTime.Now, answer);
         }
 
-        protected static InterviewQuestion GetQuestion(Guid questionId, ViewWithSequence<InterviewData> viewData)
+        protected static InterviewQuestion GetQuestion(Guid questionId, InterviewData viewData)
         {
-            return viewData.Document.Levels["#"].GetAllQuestions().First(q => q.Id == questionId);
+            return viewData.Levels["#"].GetAllQuestions().First(q => q.Id == questionId);
         }
     }
 }
