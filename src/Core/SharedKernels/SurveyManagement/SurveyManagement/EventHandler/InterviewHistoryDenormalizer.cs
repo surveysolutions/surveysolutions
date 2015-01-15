@@ -25,7 +25,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    internal class InterviewHistoryDenormalizer : AbstractFunctionalEventHandler<InterviewHistoryView>,
+    internal class InterviewHistoryDenormalizer : AbstractFunctionalEventHandler<InterviewHistoryView, IReadSideRepositoryWriter<InterviewHistoryView>>,
         ICreateHandler<InterviewHistoryView, SupervisorAssigned>,
         IUpdateHandler<InterviewHistoryView, InterviewApprovedByHQ>,
         IUpdateHandler<InterviewHistoryView, InterviewerAssigned>,
@@ -54,10 +54,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireReader;
 
-        public InterviewHistoryDenormalizer(IReadSideRepositoryWriter<InterviewHistoryView> readsideRepositoryWriter,
+        public InterviewHistoryDenormalizer(IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader, IReadSideRepositoryWriter<UserDocument> userReader,
             IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireReader)
-            : base(readsideRepositoryWriter)
+            : base(readSideStorage)
         {
             this.interviewSummaryReader = interviewSummaryReader;
             this.userReader = userReader;

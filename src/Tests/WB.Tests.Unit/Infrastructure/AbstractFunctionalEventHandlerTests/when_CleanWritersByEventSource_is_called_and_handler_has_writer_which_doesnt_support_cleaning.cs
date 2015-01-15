@@ -1,6 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 using WB.Core.Infrastructure.EventHandlers;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Tests.Unit.Infrastructure.AbstractFunctionalEventHandlerTests
@@ -23,7 +24,7 @@ namespace WB.Tests.Unit.Infrastructure.AbstractFunctionalEventHandlerTests
         private static Guid eventSourceId;
         private static InvalidOperationException exception;
 
-        internal class TestableFunctionalEventHandlerWithUncleanableWriter : AbstractFunctionalEventHandler<IReadSideRepositoryEntity>
+        internal class TestableFunctionalEventHandlerWithUncleanableWriter : AbstractFunctionalEventHandler<IReadSideRepositoryEntity, IReadSideRepositoryWriter<IReadSideRepositoryEntity>>
         {
             public TestableFunctionalEventHandlerWithUncleanableWriter()
                 : base(null) { }

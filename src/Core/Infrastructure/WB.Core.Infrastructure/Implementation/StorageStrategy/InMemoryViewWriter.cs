@@ -4,20 +4,16 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Implementation.StorageStrategy
 {
-    internal class InMemoryViewWriter<T> : IReadSideRepositoryWriter<T>, IDisposable where T : class,
-        IReadSideRepositoryEntity
+    internal class InMemoryViewWriter<TEntity> : IReadSideStorage<TEntity>, IDisposable
+        where TEntity : class, IReadSideRepositoryEntity
     {
-        private  T view;
+        private TEntity view;
         private readonly Guid viewId;
-        private readonly IReadSideRepositoryWriter<T> readSideRepositoryWriter;
+        private readonly IReadSideStorage<TEntity> readSideRepositoryWriter;
 
-        public bool IsDisposed
-        {
-            get;
-            private set;
-        }
+        private bool IsDisposed { get; set; }
 
-        public InMemoryViewWriter(IReadSideRepositoryWriter<T> readSideRepositoryWriter, Guid viewId)
+        public InMemoryViewWriter(IReadSideStorage<TEntity> readSideRepositoryWriter, Guid viewId)
         {
             this.IsDisposed = false;
             this.readSideRepositoryWriter = readSideRepositoryWriter;
@@ -25,12 +21,12 @@ namespace WB.Core.Infrastructure.Implementation.StorageStrategy
             this.view = readSideRepositoryWriter.GetById(viewId);
         }
 
-        public T GetById(string id)
+        public TEntity GetById(string id)
         {
             return this.view;
         }
 
-        public void Store(T projection, string id)
+        public void Store(TEntity projection, string id)
         {
             this.view = projection;
         }

@@ -1289,9 +1289,9 @@
     <Compile Include="Infrastructure\Ncqrs\NcqrsEnvironmentSpecs.cs" />
     <Compile Include="Infrastructure\Ncqrs\Prepare.cs" />
     <Compile Include="Infrastructure\ReadSideRepositoryReaderExtensionsTests\when_getting_view_by_guid_id.cs" />
-    <Compile Include="Infrastructure\ReadSideRepositoryWriterExtensionsTests\when_getting_view_by_guid_id.cs" />
-    <Compile Include="Infrastructure\ReadSideRepositoryWriterExtensionsTests\when_removing_view_by_guid_id.cs" />
-    <Compile Include="Infrastructure\ReadSideRepositoryWriterExtensionsTests\when_storing_view_by_guid_id.cs" />
+    <Compile Include="Infrastructure\ReadSideStorageExtensionsTests\when_getting_view_by_guid_id.cs" />
+    <Compile Include="Infrastructure\ReadSideStorageExtensionsTests\when_removing_view_by_guid_id.cs" />
+    <Compile Include="Infrastructure\ReadSideStorageExtensionsTests\when_storing_view_by_guid_id.cs" />
     <Compile Include="Infrastructure\ReadSideServiceTests\ReadSideServiceTestContext.cs" />
     <Compile Include="Infrastructure\ReadSideServiceTests\when_get_list_of_all_available_handlers.cs" />
     <Compile Include="Infrastructure\ReadSideServiceTests\when_rebuild_all_views.cs" />

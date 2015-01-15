@@ -32,10 +32,10 @@ namespace WB.Tests.Unit.Infrastructure.AbstractFunctionalEventHandlerTests
         private static Mock<IReadSideRepositoryWriter<IReadSideRepositoryEntity>> readSideRepositoryWriterMock;
         private static Guid eventSourceId;
 
-        internal class TestableFunctionalEventHandlerWithDelete : AbstractFunctionalEventHandler<IReadSideRepositoryEntity>, IDeleteHandler<IReadSideRepositoryEntity, object>
+        internal class TestableFunctionalEventHandlerWithDelete : AbstractFunctionalEventHandler<IReadSideRepositoryEntity, IReadSideRepositoryWriter<IReadSideRepositoryEntity>>, IDeleteHandler<IReadSideRepositoryEntity, object>
         {
-            public TestableFunctionalEventHandlerWithDelete(IReadSideRepositoryWriter<IReadSideRepositoryEntity> readsideRepositoryWriter)
-                : base(readsideRepositoryWriter) { }
+            public TestableFunctionalEventHandlerWithDelete(IReadSideRepositoryWriter<IReadSideRepositoryEntity> readSideStorage)
+                : base(readSideStorage) { }
 
             public int CountOfDeletes { get; private set; }
 

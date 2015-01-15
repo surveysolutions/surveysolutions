@@ -36,7 +36,8 @@ namespace WB.Core.SharedKernels.DataCollection.EventHandler
                     Description = evnt.Payload.Description,
                     Title = evnt.Payload.Title
                 };
-            ReadSideRepositoryWriterExtensions.Store(this.attachments, fileDescription, evnt.Payload.PublicKey);
+
+            this.attachments.Store(fileDescription, evnt.Payload.PublicKey);
             using (MemoryStream original = this.FromBase64(evnt.Payload.OriginalFile))
             {
                 fileDescription.Content = original;
@@ -53,7 +54,7 @@ namespace WB.Core.SharedKernels.DataCollection.EventHandler
         /// </param>
         public void Handle(IPublishedEvent<FileDeleted> evnt)
         {
-            ReadSideRepositoryWriterExtensions.Remove(this.attachments, evnt.Payload.PublicKey);
+            this.attachments.Remove(evnt.Payload.PublicKey);
         }
 
         public abstract void PostSaveHandler(IPublishedEvent<FileUploaded> evnt);

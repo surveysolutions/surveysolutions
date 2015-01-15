@@ -78,7 +78,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             return this.GetEntityAvoidingCacheById(id);
         }
 
-        TEntity IReadSideRepositoryWriter<TEntity>.GetById(string id)
+        TEntity IReadSideStorage<TEntity>.GetById(string id)
         {
             if (!isCacheEnabled)
                 return this.GetEntityAvoidingCacheById(id);
