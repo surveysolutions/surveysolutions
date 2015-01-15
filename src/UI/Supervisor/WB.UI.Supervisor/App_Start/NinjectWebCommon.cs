@@ -100,7 +100,6 @@ namespace WB.UI.Supervisor.App_Start
             var ravenSettings = new RavenConnectionSettings(storePath,
                 username: WebConfigurationManager.AppSettings["Raven.Username"],
                 password: WebConfigurationManager.AppSettings["Raven.Password"],
-                eventsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Events"],
                 viewsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Views"],
                 plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"],
                 failoverBehavior: WebConfigurationManager.AppSettings["Raven.Databases.FailoverBehavior"],

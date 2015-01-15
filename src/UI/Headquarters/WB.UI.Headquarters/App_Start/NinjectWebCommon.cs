@@ -100,10 +100,12 @@ namespace WB.UI.Headquarters
 
             Version applicationBuildVersion = typeof(SyncController).Assembly.GetName().Version;
 
-            var ravenSettings = new RavenConnectionSettings(storePath, WebConfigurationManager.AppSettings["Raven.Username"],
-                WebConfigurationManager.AppSettings["Raven.Password"], WebConfigurationManager.AppSettings["Raven.Databases.Events"],
-                WebConfigurationManager.AppSettings["Raven.Databases.Views"],
-                WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"],
+            var ravenSettings = new RavenConnectionSettings(
+                storagePath: storePath,
+                username: WebConfigurationManager.AppSettings["Raven.Username"],
+                password: WebConfigurationManager.AppSettings["Raven.Password"],
+                viewsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Views"],
+                plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"],
                 failoverBehavior: WebConfigurationManager.AppSettings["Raven.Databases.FailoverBehavior"],
                 activeBundles: WebConfigurationManager.AppSettings["Raven.Databases.ActiveBundles"]);
 

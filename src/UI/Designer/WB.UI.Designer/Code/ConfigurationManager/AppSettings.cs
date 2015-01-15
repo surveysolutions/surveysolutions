@@ -45,11 +45,6 @@ namespace WB.UI.Designer
             get { return ConfigurationManager.AppSettings.GetString("Raven.Password"); }
         }
 
-        public string RavenEventsDatabase
-        {
-            get { return ConfigurationManager.AppSettings.GetString("Raven.Databases.Events"); }
-        }
-
         public string RavenViewsDatabase
         {
             get { return ConfigurationManager.AppSettings.GetString("Raven.Databases.Views"); }
