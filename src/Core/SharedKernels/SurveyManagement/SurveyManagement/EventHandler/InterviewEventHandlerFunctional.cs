@@ -25,7 +25,7 @@ using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class InterviewEventHandlerFunctional :
+    internal class InterviewEventHandlerFunctional :
         AbstractFunctionalEventHandler<InterviewData, IReadSideKeyValueStorage<InterviewData>>,
         ICreateHandler<InterviewData, InterviewCreated>,
         ICreateHandler<InterviewData, InterviewFromPreloadedDataCreated>,
