@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
         private readonly ILogger logger;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
         private readonly IReadSideRepositoryIndexAccessor indexAccessor;
-        private readonly IReadSideRepositoryWriter<InterviewData> interviewsDataWriter;
+        private readonly IReadSideKeyValueStorage<InterviewData> interviewsDataWriter;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewsSummaryWriter;
 
 
@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             ILogger logger,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviews,
             ICommandService commandService, IReadSideRepositoryIndexAccessor indexAccessor,
-            IReadSideRepositoryWriter<InterviewData> interviewsDataWriter,
+            IReadSideKeyValueStorage<InterviewData> interviewsDataWriter, 
             IReadSideRepositoryWriter<InterviewSummary> interviewsSummaryWriter)
         {
             this.logger = logger;

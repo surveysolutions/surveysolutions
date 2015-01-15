@@ -40,9 +40,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.interviewDetailsViewFactory = interviewDetailsViewFactory;
         }
 
-        public ActionResult Details(Guid id, string template, Guid? group, Guid? question, Guid? propagationKey)
+        public ActionResult Details(Guid id, InterviewDetailsSortBy? sortBy,  InterviewDetailsFilter? filter)
         {
             this.ViewBag.ActivePage = MenuItem.Docs;
+
+            sortBy = sortBy.HasValue ? sortBy : InterviewDetailsSortBy.All;
+            filter = filter.HasValue ? filter : InterviewDetailsFilter.None;
 
             ChangeStatusView interviewInfo = this.changeStatusFactory.Load(new ChangeStatusInputModel() { InterviewId = id });
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
@@ -59,7 +62,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             InterviewDetailsView interviewDetailsView = interviewDetailsViewFactory.GetInterviewDetails(id);
 
-            return View(interviewDetailsView);
+            return View(new DetailsViewModel() { SortBy = sortBy.Value, Filter = filter.Value, InterviewDetails = interviewDetailsView });
         }
 
         public ActionResult InterviewDetails(Guid id, string template, Guid? group, Guid? question, Guid? propagationKey)

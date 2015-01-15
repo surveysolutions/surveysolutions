@@ -112,7 +112,7 @@ namespace CapiDataGenerator
             this.Bind<IEventStore>().ToConstant(eventStore);
             this.Bind<IStreamableEventStore>().ToConstant(eventStore);
 
-            this.Bind<IReadSideRepositoryReader<InterviewData>>().To<RavenFilesStoreRepositoryAccessor<InterviewData>>().InSingletonScope();
+            this.Bind<IReadSideKeyValueStorage<InterviewData>>().To<RavenFilesStoreRepositoryAccessor<InterviewData>>().InSingletonScope();
             
             this.Bind<IReadSideRepositoryWriter<LoginDTO>>().ToConstant(loginStore);
             this.Bind<IFilterableReadSideRepositoryReader<LoginDTO>>().ToConstant(loginStore);

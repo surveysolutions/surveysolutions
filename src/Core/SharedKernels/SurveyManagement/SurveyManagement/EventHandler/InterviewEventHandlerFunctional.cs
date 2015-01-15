@@ -26,7 +26,7 @@ using WB.Core.Synchronization.SyncStorage;
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     public class InterviewEventHandlerFunctional :
-        AbstractFunctionalEventHandler<InterviewData, IReadSideRepositoryWriter<InterviewData>>,
+        AbstractFunctionalEventHandler<InterviewData, IReadSideKeyValueStorage<InterviewData>>,
         ICreateHandler<InterviewData, InterviewCreated>,
         ICreateHandler<InterviewData, InterviewFromPreloadedDataCreated>,
         ICreateHandler<InterviewData, InterviewOnClientCreated>,
@@ -79,10 +79,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return EventHandlerUtils.CreateLeveKeyFromPropagationVector(vector);
         }
 
-        private RosterScopeDescription GetScopeOfPassedGroup(InterviewData interview, Guid groupId)
+        private RosterScopeDescription GetScopeOfPassedGroup(InterviewData interview, Guid groupId, QuestionnaireRosterStructure questionnarie)
         {
-            var questionnarie = this.questionnriePropagationStructures.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
-
             foreach (var scopeId in questionnarie.RosterScopes.Keys)
             {
                 if (questionnarie.RosterScopes[scopeId].RosterIdToRosterTitleQuestionIdMap.ContainsKey(groupId))
@@ -287,7 +285,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewEventHandlerFunctional(IReadSideRepositoryWriter<UserDocument> users,
             IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures,
-            IReadSideRepositoryWriter<InterviewData> interviewData)
+            IReadSideKeyValueStorage<InterviewData> interviewData)
             : base(interviewData)
         {
             this.users = users;
@@ -369,9 +367,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<RosterInstancesAdded> evnt)
         {
+            var questionnarie = this.questionnriePropagationStructures.GetById(currentState.QuestionnaireId, currentState.QuestionnaireVersion);
+
             foreach (var instance in evnt.Payload.Instances)
             {
-                var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(currentState, instance.GroupId);
+                var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(currentState, instance.GroupId, questionnarie);
 
                 this.AddLevelToInterview(currentState,
                     instance.OuterRosterVector, instance.RosterInstanceId, instance.SortIndex, scopeOfCurrentGroup);
@@ -382,9 +382,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<RosterInstancesRemoved> evnt)
         {
+
+            var questionnarie = this.questionnriePropagationStructures.GetById(currentState.QuestionnaireId, currentState.QuestionnaireVersion);
             foreach (var instance in evnt.Payload.Instances)
             {
-                var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(currentState, instance.GroupId);
+                var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(currentState, instance.GroupId, questionnarie);
 
                 var rosterVector = this.CreateNewVector(instance.OuterRosterVector, instance.RosterInstanceId);
                 var levelKey = CreateLevelIdFromPropagationVector(rosterVector);
@@ -396,8 +398,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<GroupPropagated> evnt)
         {
+
+            var questionnarie = this.questionnriePropagationStructures.GetById(currentState.QuestionnaireId, currentState.QuestionnaireVersion);
             var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(currentState,
-                                                          evnt.Payload.GroupId);
+                                                          evnt.Payload.GroupId, questionnarie);
             List<string> keysOfLevelsByScope =
                 this.GetLevelsByScopeFromInterview(interview: currentState, scopeVector: scopeOfCurrentGroup.ScopeVector);
 

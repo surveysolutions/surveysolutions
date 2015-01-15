@@ -88,8 +88,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationTests.Sche
         private static InterviewDetailsDataProcessorContext interviewDetailsDataProcessorContext;
         private static IInterviewDetailsDataProcessor interviewDetailsDataProcessor;
 
-        private static Mock<IReadSideRepositoryReader<InterviewData>> interviewDataRepositoryReaderMock =
-            new Mock<IReadSideRepositoryReader<InterviewData>>();
+        private static Mock<IReadSideKeyValueStorage<InterviewData>> interviewDataRepositoryReaderMock =
+            new Mock<IReadSideKeyValueStorage<InterviewData>>();
 
         private static string lastContextMessage;
         private static string packageFileName = "11111111-1111-1111-1111-111111111111";
