@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsFeedDenormalizerT
             interviewRejectedEvent = new InterviewRejectedByHQ(Guid.NewGuid(), "comment").ToPublishedEvent(Guid.NewGuid());
 
             writer = Substitute.For<IReadSideRepositoryWriter<InterviewFeedEntry>>();
-            var interviews = Substitute.For<IReadSideRepositoryWriter<InterviewData>>();
+            var interviews = Substitute.For<IReadSideKeyValueStorage<InterviewData>>();
             supervisorId = Guid.NewGuid();
             interviews.GetById(interviewRejectedEvent.EventSourceId.FormatGuid())
                 .Returns(new InterviewData{SupervisorId = supervisorId });

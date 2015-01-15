@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
                 status: InterviewStatus.Completed,
                 interviewId: interviewId);
 
-            var interviews = new Mock<IReadSideRepositoryWriter<InterviewData>>();
+            var interviews = new Mock<IReadSideKeyValueStorage<InterviewData>>();
             interviews.SetReturnsDefault(data);
 
             var interviewSummaryWriterMock = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
