@@ -6,8 +6,9 @@
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Views.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
+@using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
-@model InterviewDetailsView
+@model WB.Core.SharedKernels.SurveyManagement.Web.Models.DetailsViewModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -17,50 +18,56 @@
     <link href="@Url.Content("~/Content/interview.css")" rel="stylesheet" />
 }
 
+@section scripts{
+}
+
 <div id="sub-navbar" class="navbar navbar-fixed-top">
-    <div class="navbar-default col-md-4 col-md-offset-1">
+    <div class="navbar-default col-md-3 col-md-offset-1">
         <div>
             <div class="navbar-title">
-                @Model.Title
+                @Model.InterviewDetails.Title
             </div>
             <div class="navbar-subtitle">
-                @Model.Status.ToLocalizeString() by @Model.Responsible.Name
+                @Model.InterviewDetails.Status.ToLocalizeString() by @Model.InterviewDetails.Responsible.Name
             </div>
         </div>
     </div>
-    <nav class="navbar-default col-md-6">
+    <nav class="navbar-default col-md-7">
         <ul class="nav navbar-nav">
-            <li class="active">
-                <a href="#">Full</a>
+            <li @IsSortByActive(InterviewDetailsSortBy.All)>
+                <a href="@Url.Action("Details", "Interview", new { id = Model.InterviewDetails.PublicKey, sortby=InterviewDetailsSortBy.All,  filter = Model.Filter })">Full</a>
             </li>
-            <li>
-                <a href="#">Answered</a>
+            <li @IsSortByActive(InterviewDetailsSortBy.Answered)>
+                <a href="@Url.Action("Details", "Interview", new { id = Model.InterviewDetails.PublicKey, sortby=InterviewDetailsSortBy.Answered,  filter = Model.Filter })">Answered</a>
+            </li>
+            <li @IsSortByActive(InterviewDetailsSortBy.Supervisors)>
+                <a href="@Url.Action("Details", "Interview", new { id = Model.InterviewDetails.PublicKey, sortby = InterviewDetailsSortBy.Supervisors, filter = Model.Filter })">Supervisor's</a>
             </li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Filtered by<b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                    <li><a href="#">With comments</a></li>
-                    <li><a href="#">Flag</a></li>
-                    <li><a href="#">Supervisor's only</a></li>
-                    <li><a href="#">Invalid</a></li>
-                    <li><a href="#">Enabled</a></li>
+                    <li @IsFilterActive(InterviewDetailsFilter.None)><a href="@Url.Action("Details", "Interview", new { id = Model.InterviewDetails.PublicKey, sortby=Model.SortBy,  filter = InterviewDetailsFilter.None })">None</a></li>
+                    <li @IsFilterActive(InterviewDetailsFilter.Commented)><a href="@Url.Action("Details", "Interview", new { id = Model.InterviewDetails.PublicKey, sortby=Model.SortBy,  filter = InterviewDetailsFilter.Commented })">With comments</a></li>
+                    <li @IsFilterActive(InterviewDetailsFilter.Invalid)><a href="@Url.Action("Details", "Interview", new { id = Model.InterviewDetails.PublicKey, sortby=Model.SortBy,  filter = InterviewDetailsFilter.Invalid })">Invalid</a></li>
+                    <li @IsFilterActive(InterviewDetailsFilter.Enabled)><a href="@Url.Action("Details", "Interview", new { id = Model.InterviewDetails.PublicKey, sortby=Model.SortBy,  filter = InterviewDetailsFilter.Enabled })">Enabled</a></li>
+                    <li @IsFilterActive(InterviewDetailsFilter.Starred)><a href="@Url.Action("Details", "Interview", new { id = Model.InterviewDetails.PublicKey, sortby=Model.SortBy,  filter = InterviewDetailsFilter.Starred })">Star</a></li>
                 </ul>
             </li>
         </ul>
         <ul class="nav navbar-nav pull-right">
-            <li>
+            <li class="approve">
                 <a href="#">Approve</a>
             </li>
-            <li>
+            <li class="reject">
                 <a href="#">Reject</a>
             </li>
         </ul>
     </nav>
 </div>
 
-<div id="menu" class="col-md-offset-1 col-md-4 sidebar" data-bind="css: filter">
+<div id="menu" class="col-md-offset-1 col-md-3 sidebar" data-bind="css: filter">
     <ul id="groups-menu" class="list-group">
-        @foreach (var group in Model.Groups.Skip(1))
+        @foreach (var group in Model.InterviewDetails.Groups.Skip(1))
         {
             <li class="group-item" style="margin-left: @(group.Depth*20)px">
                 <a href="#group-@(group.Id)">@group.Title</a>
@@ -69,12 +76,12 @@
     </ul>
 </div>
 
-<div id="content" class="col-md-6 col-md-offset-5 sidebar">
+<div id="content" class="col-md-7 col-md-offset-4 sidebar">
     <div>
         <div id="list" data-spy="scroll" data-target="#groups-menu">
-            @foreach (var group in Model.Groups.Skip(1))
+            @foreach (var group in Model.InterviewDetails.Groups.Skip(1))
             {
-                <div id="group-@group.Id">
+                <div id="group-@group.Id" class="group-item-content">
                     <div class="bubble me"><b>@group.Title</b></div>
 
                     <table class="table table-bordered table-hover">
@@ -99,6 +106,22 @@
 
 </div>
 
+@helper IsFilterActive(InterviewDetailsFilter selectedFilter)
+{
+    if (selectedFilter == Model.Filter)
+    {
+        <text>class="active"</text>
+    }
+}
+
+@helper IsSortByActive(InterviewDetailsSortBy selectedSortBy)
+{
+    if (selectedSortBy == Model.SortBy)
+    {
+        <text>class="active"</text>
+    }
+}
+
 @helper DrawStaticTextRow(InterviewStaticTextView entity)
 {
     <div class="bubble me"><b>@entity.Text</b></div>
@@ -109,7 +132,7 @@
     <div class="bubble you">
         @{
             var answer = AnswerUtils.AnswerToString(entity.Answer);
-            var answerToClient = string.IsNullOrEmpty(answer) ? "?" : answer;
+            var answerToClient = string.IsNullOrEmpty(answer) ? "no answer" : answer;
         }
         @answerToClient
     </div>
