@@ -14,7 +14,7 @@ namespace WB.UI.Shared.Web.Settings
 
         public static StoreProviders EventStoreProvider
         {
-            get { return (StoreProviders)Enum.Parse(typeof(StoreProviders), config.AppSettings["Core.EventStoreProvider"], true); }
+            get { return StoreProviders.EventStore; }
         }
 
         public static bool IsDevelopmentEnvironment
