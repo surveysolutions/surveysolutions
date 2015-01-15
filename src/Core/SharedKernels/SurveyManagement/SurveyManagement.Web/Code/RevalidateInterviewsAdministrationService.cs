@@ -2,12 +2,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Ncqrs;
-
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
@@ -39,8 +38,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
         public RevalidateInterviewsAdministrationService(
             ILogger logger,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviews,
-            ICommandService commandService, IReadSideRepositoryIndexAccessor indexAccessor, 
-            IReadSideRepositoryWriter<InterviewData> interviewsDataWriter, 
+            ICommandService commandService, IReadSideRepositoryIndexAccessor indexAccessor,
+            IReadSideRepositoryWriter<InterviewData> interviewsDataWriter,
             IReadSideRepositoryWriter<InterviewSummary> interviewsSummaryWriter)
         {
             this.logger = logger;
@@ -104,9 +103,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
                 areInterviewsBeingRevalidatingNow = true;
 
-                string indexName = typeof(CompleteInterviewsWithErrorsIndex).Name;
+                string indexName = typeof(InterviewsSearchIndex).Name;
 
-                var items = this.indexAccessor.Query<InterviewSummary>(indexName);
+                var items = this.indexAccessor.Query<InterviewSummary>(indexName)
+                    .Where(interview =>
+                        interview.HasErrors && interview.IsDeleted == false &&
+                        (interview.Status == InterviewStatus.Completed ||
+                         interview.Status == InterviewStatus.RejectedBySupervisor ||
+                         interview.Status == InterviewStatus.ApprovedBySupervisor ||
+                         interview.Status == InterviewStatus.ApprovedByHeadquarters ||
+                         interview.Status == InterviewStatus.RejectedByHeadquarters));
 
                 UpdateStatusMessage("Determining count of interview to be revalidated.");
 
