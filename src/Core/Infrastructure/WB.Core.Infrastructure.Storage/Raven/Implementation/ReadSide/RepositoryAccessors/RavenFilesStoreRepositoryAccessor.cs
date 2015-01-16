@@ -223,16 +223,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         private TEntity GetEntityAvoidingCacheById(string entityId)
         {
-            var countOfDocumentsById = AsyncContext.Run(() =>
-            {
-                using (var session = ravenFilesStore.OpenAsyncSession())
-                {
-                    return session.Query().WhereEquals(f => f.Name, entityId).ToListAsync();
-                }
-            });
-
-            if (!countOfDocumentsById.Any())
-                return null;
+            if (!IsEntityExists(entityId)) return null;
 
             using (var stream = AsyncContext.Run(() => ravenFilesStore.AsyncFilesCommands.DownloadAsync(this.CreateFileStoreEntityId(entityId))))
             {
@@ -246,6 +237,21 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             }
         }
 
+        private bool IsEntityExists(string entityId)
+        {
+            var countOfDocumentsById = AsyncContext.Run(() =>
+            {
+                using (var session = ravenFilesStore.OpenAsyncSession())
+                {
+                    return session.Query().WhereEquals(f => f.Name, entityId).ToListAsync();
+                }
+            });
+
+            if (!countOfDocumentsById.Any())
+                return false;
+            return true;
+        }
+
         private void StoreAvoidingCache(TEntity entity, string entityId)
         {
             using (var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(GetItemAsContent(entity))))
@@ -257,6 +263,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         private void RemoveAvoidingCache(string entityId)
         {
+            if (!IsEntityExists(entityId)) return;
             ravenFilesStore.AsyncFilesCommands.DeleteAsync(this.CreateFileStoreEntityId(entityId)).WaitAndUnwrapException();
         }
 
