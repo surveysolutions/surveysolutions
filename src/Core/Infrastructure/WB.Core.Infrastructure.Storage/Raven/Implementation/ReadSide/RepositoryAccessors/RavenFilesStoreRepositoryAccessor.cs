@@ -223,19 +223,18 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         private TEntity GetEntityAvoidingCacheById(string entityId)
         {
-            var id = this.CreateFileStoreEntityId(entityId);
             var countOfDocumentsById = AsyncContext.Run(() =>
             {
                 using (var session = ravenFilesStore.OpenAsyncSession())
                 {
-                    return session.Query().WhereEquals(f => f.Name, id).ToListAsync();
+                    return session.Query().WhereEquals(f => f.Name, entityId).ToListAsync();
                 }
             });
 
             if (!countOfDocumentsById.Any())
                 return null;
-            
-            using (var stream = AsyncContext.Run(() => ravenFilesStore.AsyncFilesCommands.DownloadAsync(id)))
+
+            using (var stream = AsyncContext.Run(() => ravenFilesStore.AsyncFilesCommands.DownloadAsync(this.CreateFileStoreEntityId(entityId))))
             {
                 if (stream == null)
                     return null;
