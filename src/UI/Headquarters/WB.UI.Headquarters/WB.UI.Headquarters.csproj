@@ -249,7 +249,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\ko.datepicker.js" />
     <Content Include="Scripts\pages\chart.js" />
-    <Content Include="Scripts\popover-extra-placements.min.js" />
+    <Content Include="Scripts\popover-extra-placements.js" />
     <Content Include="Views\HQ\InterviewsChart.cshtml" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
