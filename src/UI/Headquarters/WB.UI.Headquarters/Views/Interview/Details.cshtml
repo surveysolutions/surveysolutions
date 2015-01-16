@@ -15,42 +15,80 @@
 
 @section styles
 {
-    <link href="@Url.Content("~/Content/interview.css")" rel="stylesheet" />
+    @Styles.Render("~/Content/popover-extra-placements.min.css", "~/Content/interview.css")
 }
 
 @section scripts{
+@Scripts.Render("~/Scripts/popover-extra-placements.js")
+    <script type="text/javascript">
+        $(function() {
+            $('[data-toggle="popover"]').popover();
+            $('#historyOfStatusesHolder').popover({
+                html: true,
+                container: 'body',
+                placement: 'bottomLeft',
+                content: function () {
+                    return $("#historyOfStatusesContent").html();
+                }
+            });
+        })
+    </script>
 }
+<div id="historyOfStatusesContent" style="display: none;">
+    <table class=" table table-bordered table-striped col-md-3">
+        <thead>
+            <tr>
+                <th style="width: 125px">State</th>
+                <th>with comment</th>
+                <th style="width: 90px">on</th>
+                <th>by</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var historyItem in Model.History.StatusHistory)
+            {
+                <tr>
+                    <td>@historyItem.Status.ToLocalizeString()</td>
+                    <td>@historyItem.Comment</td>
+                    <td>@historyItem.Date.ToShortDateString()</td>
+                    <td>@historyItem.Responsible</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 <div id="sub-navbar" class="navbar navbar-fixed-top">
     <div class="navbar-default col-md-3 col-md-offset-1">
         <div>
             <div class="navbar-title">
-                @Model.InterviewDetails.Title
+                @Model.FilteredInterviewDetails.Title
             </div>
             <div class="navbar-subtitle">
-                @Model.InterviewDetails.Status.ToLocalizeString() by @Model.InterviewDetails.Responsible.Name
+                <a id="historyOfStatusesHolder" href="#">@Model.FilteredInterviewDetails.Status.ToLocalizeString()
+                </a> by @Model.FilteredInterviewDetails.Responsible.Name
             </div>
         </div>
     </div>
     <nav class="navbar-default col-md-7">
         <ul class="nav navbar-nav">
             <li @IsSortByActive(InterviewDetailsSortBy.All)>
-                <a href="@Url.Action("Details", "Interview", new { id = Model.InterviewDetails.PublicKey, sortby=InterviewDetailsSortBy.All,  filter = Model.Filter })">Full</a>
+                <a href="@Url.Action("Details", "Interview", new { id = Model.FilteredInterviewDetails.PublicKey, sortby=InterviewDetailsSortBy.All,  filter = Model.Filter })">Full</a>
             </li>
             <li @IsSortByActive(InterviewDetailsSortBy.Answered)>
-                <a href="@Url.Action("Details", "Interview", new { id = Model.InterviewDetails.PublicKey, sortby=InterviewDetailsSortBy.Answered,  filter = Model.Filter })">Answered</a>
+                <a href="@Url.Action("Details", "Interview", new { id = Model.FilteredInterviewDetails.PublicKey, sortby=InterviewDetailsSortBy.Answered,  filter = Model.Filter })">Answered</a>
             </li>
             <li @IsSortByActive(InterviewDetailsSortBy.Supervisors)>
-                <a href="@Url.Action("Details", "Interview", new { id = Model.InterviewDetails.PublicKey, sortby = InterviewDetailsSortBy.Supervisors, filter = Model.Filter })">Supervisor's</a>
+                <a href="@Url.Action("Details", "Interview", new { id = Model.FilteredInterviewDetails.PublicKey, sortby = InterviewDetailsSortBy.Supervisors, filter = Model.Filter })">Supervisor's</a>
             </li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Filtered by<b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                    <li @IsFilterActive(InterviewDetailsFilter.None)><a href="@Url.Action("Details", "Interview", new { id = Model.InterviewDetails.PublicKey, sortby=Model.SortBy,  filter = InterviewDetailsFilter.None })">None</a></li>
-                    <li @IsFilterActive(InterviewDetailsFilter.Commented)><a href="@Url.Action("Details", "Interview", new { id = Model.InterviewDetails.PublicKey, sortby=Model.SortBy,  filter = InterviewDetailsFilter.Commented })">With comments</a></li>
-                    <li @IsFilterActive(InterviewDetailsFilter.Invalid)><a href="@Url.Action("Details", "Interview", new { id = Model.InterviewDetails.PublicKey, sortby=Model.SortBy,  filter = InterviewDetailsFilter.Invalid })">Invalid</a></li>
-                    <li @IsFilterActive(InterviewDetailsFilter.Enabled)><a href="@Url.Action("Details", "Interview", new { id = Model.InterviewDetails.PublicKey, sortby=Model.SortBy,  filter = InterviewDetailsFilter.Enabled })">Enabled</a></li>
-                    <li @IsFilterActive(InterviewDetailsFilter.Starred)><a href="@Url.Action("Details", "Interview", new { id = Model.InterviewDetails.PublicKey, sortby=Model.SortBy,  filter = InterviewDetailsFilter.Starred })">Star</a></li>
+                    <li @IsFilterActive(InterviewDetailsFilter.None)><a href="@Url.Action("Details", "Interview", new { id = Model.FilteredInterviewDetails.PublicKey, sortby=Model.SortBy,  filter = InterviewDetailsFilter.None })">None</a></li>
+                    <li @IsFilterActive(InterviewDetailsFilter.Commented)><a href="@Url.Action("Details", "Interview", new { id = Model.FilteredInterviewDetails.PublicKey, sortby=Model.SortBy,  filter = InterviewDetailsFilter.Commented })">With comments</a></li>
+                    <li @IsFilterActive(InterviewDetailsFilter.Invalid)><a href="@Url.Action("Details", "Interview", new { id = Model.FilteredInterviewDetails.PublicKey, sortby=Model.SortBy,  filter = InterviewDetailsFilter.Invalid })">Invalid</a></li>
+                    <li @IsFilterActive(InterviewDetailsFilter.Enabled)><a href="@Url.Action("Details", "Interview", new { id = Model.FilteredInterviewDetails.PublicKey, sortby=Model.SortBy,  filter = InterviewDetailsFilter.Enabled })">Enabled</a></li>
+                    <li @IsFilterActive(InterviewDetailsFilter.Starred)><a href="@Url.Action("Details", "Interview", new { id = Model.FilteredInterviewDetails.PublicKey, sortby=Model.SortBy,  filter = InterviewDetailsFilter.Starred })">Star</a></li>
                 </ul>
             </li>
         </ul>
@@ -66,8 +104,8 @@
 </div>
 
 <div id="menu" class="col-md-offset-1 col-md-3 sidebar" data-bind="css: filter">
-    <ul id="groups-menu" class="list-group">
-        @foreach (var group in Model.InterviewDetails.Groups.Skip(1))
+    <ul id="groups-menu" class="list-group" data-spy="#list">
+        @foreach (var group in Model.Groups.Skip(1))
         {
             <li class="group-item" style="margin-left: @(group.Depth*20)px">
                 <a href="#group-@(group.Id)">@group.Title</a>
@@ -79,7 +117,7 @@
 <div id="content" class="col-md-7 col-md-offset-4 sidebar">
     <div>
         <div id="list" data-spy="scroll" data-target="#groups-menu">
-            @foreach (var group in Model.InterviewDetails.Groups.Skip(1))
+            @foreach (var group in Model.FilteredInterviewDetails.Groups.Skip(1))
             {
                 <div id="group-@group.Id" class="group-item-content">
                     <div class="bubble me"><b>@group.Title</b></div>
@@ -129,12 +167,22 @@
 @helper DrawQuestionRow(InterviewQuestionView entity)
 {
     <div class="bubble me">@entity.Title</div>
-    <div class="bubble you">
+    <div class="bubble you @(entity.IsValid ? "" : "invalid") @(entity.IsEnabled ? "" : "disabled")">
         @{
             var answer = AnswerUtils.AnswerToString(entity.Answer);
             var answerToClient = string.IsNullOrEmpty(answer) ? "no answer" : answer;
         }
+
         @answerToClient
+        @if (!entity.IsValid)
+        {
+            @:<i class="glyphicon glyphicon glyphicon-info-sign" data-toggle="popover" title="@entity.ValidationMessage" data-placement="top" data-container="body" data-content="@entity.ValidationExpression"></i>
+        }
+        @if (entity.IsFlagged)
+        {
+            @:&nbsp;<span class="glyphicon glyphicon-star star" aria-hidden="true"></span>
+        }
+
     </div>
 
     @*<tr class="@css("danger", !entity.IsValid && entity.IsEnabled) @css("mandatory", entity.IsMandatory) @css("text-muted", !entity.IsEnabled)">
