@@ -93,6 +93,10 @@
     max-width: 100%;
 }
 
+.comment-container {
+    color: #333;
+}
+
 /*BUBBLE*/
 .bubble {
     background-color: #F2F2F2;
@@ -126,6 +130,7 @@
 .me {
     float: left;
     margin: 5px 45px 5px 20px;
+    color: #333;
 }
 
     .me::before {
