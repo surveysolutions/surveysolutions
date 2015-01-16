@@ -123,7 +123,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<QuestionnaireAssemblyImported> evnt)
         {
             var assemblyAsBase64String = this.questionnareAssemblyFileAccessor.GetAssemblyAsBase64String(evnt.EventSourceId, evnt.Payload.Version);
-            this.syncStorage.SaveTemplateAssembly(evnt.EventSourceId, evnt.Payload.Version, assemblyAsBase64String, evnt.EventTimeStamp);
+            this.syncStorage.SaveQuestionnaireAssembly(evnt.EventSourceId, evnt.Payload.Version, assemblyAsBase64String, evnt.EventTimeStamp);
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)

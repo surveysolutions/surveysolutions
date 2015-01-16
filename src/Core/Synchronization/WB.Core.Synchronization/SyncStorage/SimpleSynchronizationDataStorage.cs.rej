@@ -1,0 +1,12 @@
+diff a/src/Core/Synchronization/WB.Core.Synchronization/SyncStorage/SimpleSynchronizationDataStorage.cs b/src/Core/Synchronization/WB.Core.Synchronization/SyncStorage/SimpleSynchronizationDataStorage.cs	(rejected hunks)
+@@ -152,8 +152,8 @@
+             {
+                 RootId = publicKey.Combine(AssemblySeed).Combine(version),
+                 ItemType = SyncItemType.QuestionnaireAssembly,
+-                IsCompressed = UseCompression,
+-                Content = GetItemAsContent(assemblyAsBase64String),
++                IsCompressed = UseCompressionForFiles,
++                Content = assemblyAsBase64String,
+                 MetaInfo = GetItemAsContent(meta)
+             };
+             chunkStorageWriter.StoreChunk(syncItem, null, timestamp);
