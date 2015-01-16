@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoViewDenormaliz
             denormalizer = CreateDenormalizer(viewState);
             movedItemId = Guid.NewGuid().FormatGuid();
 
-            viewState = denormalizer.Create(Create.NewQuestionnaireCreatedEvent(questionnaireId));
+            viewState = denormalizer.Update(null, Create.NewQuestionnaireCreatedEvent(questionnaireId));
             denormalizer.Update(viewState, Create.NewGroupAddedEvent(groupId: groupId, parentGroupId: questionnaireId, groupTitle: "group title"));
             denormalizer.Update(viewState, Create.NewGroupAddedEvent(groupId: movedItemId, parentGroupId: questionnaireId, groupTitle: "group title to move"));
         };
