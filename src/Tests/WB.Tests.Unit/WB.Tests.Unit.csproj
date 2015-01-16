@@ -1250,7 +1250,6 @@
     <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\when_CleanWritersByEventSource_is_called_and_handler_has_more_then_one_writer.cs" />
     <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\when_CleanWritersByEventSource_is_called_and_handler_has_no_writers.cs" />
     <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\when_CleanWritersByEventSource_is_called_and_handler_has_writer_which_doesnt_support_cleaning.cs" />
-    <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\when_delete_handler_is_called.cs" />
     <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\when_view_is_deleted_by_update_handler.cs" />
     <Compile Include="Infrastructure\Events\EventMergeUtilsTest.cs" />
     <Compile Include="Infrastructure\FileSystemIOAccessorTests\when_file_name_contains_invalid_characters.cs" />

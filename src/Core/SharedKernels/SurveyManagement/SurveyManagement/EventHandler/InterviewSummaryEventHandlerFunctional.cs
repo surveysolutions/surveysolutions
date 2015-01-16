@@ -16,10 +16,10 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class InterviewSummaryEventHandlerFunctional : AbstractFunctionalEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>, 
-        ICreateHandler<InterviewSummary, InterviewCreated>,
-        ICreateHandler<InterviewSummary, InterviewFromPreloadedDataCreated>,
-        ICreateHandler<InterviewSummary, InterviewOnClientCreated>,
+    public class InterviewSummaryEventHandlerFunctional : AbstractFunctionalEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>,
+        IUpdateHandler<InterviewSummary, InterviewCreated>,
+        IUpdateHandler<InterviewSummary, InterviewFromPreloadedDataCreated>,
+        IUpdateHandler<InterviewSummary, InterviewOnClientCreated>,
         IUpdateHandler<InterviewSummary, InterviewStatusChanged>,
         IUpdateHandler<InterviewSummary, SupervisorAssigned>,
         IUpdateHandler<InterviewSummary, TextQuestionAnswered>,
@@ -121,19 +121,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return interviewSummary;
         }
 
-        public InterviewSummary Create(IPublishedEvent<InterviewCreated> evnt)
+        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewCreated> evnt)
         {
             return this.CreateInterviewSummary(evnt.Payload.UserId, evnt.Payload.QuestionnaireId,
                 evnt.Payload.QuestionnaireVersion, evnt.EventSourceId, evnt.EventTimeStamp, wasCreatedOnClient: false);
         }
 
-        public InterviewSummary Create(IPublishedEvent<InterviewFromPreloadedDataCreated> evnt)
+        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewFromPreloadedDataCreated> evnt)
         {
             return this.CreateInterviewSummary(evnt.Payload.UserId, evnt.Payload.QuestionnaireId,
                 evnt.Payload.QuestionnaireVersion, evnt.EventSourceId, evnt.EventTimeStamp, wasCreatedOnClient: false);
         }
 
-        public InterviewSummary Create(IPublishedEvent<InterviewOnClientCreated> evnt)
+        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewOnClientCreated> evnt)
         {
             return this.CreateInterviewSummary(evnt.Payload.UserId, evnt.Payload.QuestionnaireId,
              evnt.Payload.QuestionnaireVersion, evnt.EventSourceId, evnt.EventTimeStamp, wasCreatedOnClient: true);

@@ -27,9 +27,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     internal class InterviewEventHandlerFunctional :
         AbstractFunctionalEventHandler<InterviewData, IReadSideKeyValueStorage<InterviewData>>,
-        ICreateHandler<InterviewData, InterviewCreated>,
-        ICreateHandler<InterviewData, InterviewFromPreloadedDataCreated>,
-        ICreateHandler<InterviewData, InterviewOnClientCreated>,
+        IUpdateHandler<InterviewData, InterviewCreated>,
+        IUpdateHandler<InterviewData, InterviewFromPreloadedDataCreated>,
+        IUpdateHandler<InterviewData, InterviewOnClientCreated>,
         IUpdateHandler<InterviewData, InterviewStatusChanged>,
         IUpdateHandler<InterviewData, SupervisorAssigned>,
         IUpdateHandler<InterviewData, InterviewerAssigned>,
@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewData, FlagSetToAnswer>,
         IUpdateHandler<InterviewData, InterviewDeclaredInvalid>,
         IUpdateHandler<InterviewData, InterviewDeclaredValid>,
-        IDeleteHandler<InterviewData, InterviewHardDeleted>
+        IUpdateHandler<InterviewData, InterviewHardDeleted>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures;
@@ -292,7 +292,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.questionnriePropagationStructures = questionnriePropagationStructures;
         }
 
-        public InterviewData Create(IPublishedEvent<InterviewCreated> evnt)
+        public InterviewData Update(InterviewData currentState, IPublishedEvent<InterviewCreated> evnt)
         {
             return this.CreateViewWithSequence(evnt.Payload.UserId, evnt.EventSourceId,
                 evnt.EventTimeStamp, evnt.Payload.QuestionnaireId,
@@ -300,7 +300,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 evnt.EventSequence, false);
         }
 
-        public InterviewData Create(IPublishedEvent<InterviewFromPreloadedDataCreated> evnt)
+        public InterviewData Update(InterviewData currentState, IPublishedEvent<InterviewFromPreloadedDataCreated> evnt)
         {
             return this.CreateViewWithSequence(evnt.Payload.UserId, evnt.EventSourceId,
                 evnt.EventTimeStamp, evnt.Payload.QuestionnaireId,
@@ -308,7 +308,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 evnt.EventSequence, false);
         }
 
-        public InterviewData Create(IPublishedEvent<InterviewOnClientCreated> evnt)
+        public InterviewData Update(InterviewData currentState, IPublishedEvent<InterviewOnClientCreated> evnt)
         {
             return this.CreateViewWithSequence(evnt.Payload.UserId, evnt.EventSourceId,
                  evnt.EventTimeStamp, evnt.Payload.QuestionnaireId,
@@ -627,9 +627,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return currentState;
         }
 
-        public InterviewData Delete(InterviewData currentState, IPublishedEvent<InterviewHardDeleted> evnt)
+        public InterviewData Update(InterviewData currentState, IPublishedEvent<InterviewHardDeleted> evnt)
         {
-            return currentState;
+            return null;
         }
     }
 }
