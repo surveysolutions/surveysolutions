@@ -64,6 +64,13 @@
       scope="\\web.config$" 
       match="/configuration/appSettings/add[@key='Raven.Databases.PlainStorage']/@value" />
    </parameter>
+   <parameter name="Filesystem name"
+      description=""
+      defaultValue="FileSystem">
+   <parameterEntry kind="XmlFile" 
+      scope="\\web.config$" 
+      match="/configuration/appSettings/add[@key='Raven.Databases.RavenFileSystemName']/@value" />
+   </parameter>
    <parameter name="Headquarters location"
       description="Provide the address for the headquarters"
       defaultValue="http://localhost/Headquarters">
