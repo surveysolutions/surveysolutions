@@ -223,33 +223,23 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         private TEntity GetEntityAvoidingCacheById(string entityId)
         {
-            if (!IsEntityExists(entityId)) return null;
-
-            using (var stream = AsyncContext.Run(() => ravenFilesStore.AsyncFilesCommands.DownloadAsync(this.CreateFileStoreEntityId(entityId))))
+            try
             {
-                if (stream == null)
-                    return null;
-
-                using (var reader = new StreamReader(stream, Encoding.UTF8))
+                using (
+                    var stream =
+                        AsyncContext.Run(() => ravenFilesStore.AsyncFilesCommands.DownloadAsync(this.CreateFileStoreEntityId(entityId))))
                 {
-                    return Deserrialize(reader.ReadToEnd());
+                    using (var reader = new StreamReader(stream, Encoding.UTF8))
+                    {
+                        return Deserrialize(reader.ReadToEnd());
+                    }
                 }
             }
-        }
-
-        private bool IsEntityExists(string entityId)
-        {
-            var countOfDocumentsById = AsyncContext.Run(() =>
+            catch (FileNotFoundException)
             {
-                using (var session = ravenFilesStore.OpenAsyncSession())
-                {
-                    return session.Query().WhereEquals(f => f.Name, entityId).ToListAsync();
-                }
-            });
-
-            if (!countOfDocumentsById.Any())
-                return false;
-            return true;
+                //it's ok to have FileNotFoundException view could be absent
+            }
+            return null;
         }
 
         private void StoreAvoidingCache(TEntity entity, string entityId)
@@ -263,8 +253,15 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         private void RemoveAvoidingCache(string entityId)
         {
-            if (!IsEntityExists(entityId)) return;
-            ravenFilesStore.AsyncFilesCommands.DeleteAsync(this.CreateFileStoreEntityId(entityId)).WaitAndUnwrapException();
+            try
+            {
+                ravenFilesStore.AsyncFilesCommands.DeleteAsync(this.CreateFileStoreEntityId(entityId)).WaitAndUnwrapException();
+            }
+            catch (FileNotFoundException e)
+            {
+                //it's ok to have FileNotFoundException during rebuild readside
+                logger.Info(e.Message, e);
+            }
         }
 
         private string CreateFileStoreEntityId(string id)
