@@ -5,14 +5,16 @@ using System.Runtime.Serialization;
 using Raven.Client.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.Synchronization.Implementation.ReadSide.Indexes;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
+
     internal class ReadSideChunkReader : IChunkReader
     {
         private readonly IReadSideRepositoryIndexAccessor indexAccessor;
         private readonly IQueryableReadSideRepositoryReader<SynchronizationDelta> queryableStorage;
-        private const string queryIndexName = "SynchronizationDeltasByBriefFields";
+        private string queryIndexName = typeof(SynchronizationDeltasByBriefFields).Name;
 
         public ReadSideChunkReader(IQueryableReadSideRepositoryReader<SynchronizationDelta> queryableStorage, IReadSideRepositoryIndexAccessor indexAccessor)
         {
