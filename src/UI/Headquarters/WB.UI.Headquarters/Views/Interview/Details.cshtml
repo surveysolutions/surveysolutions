@@ -185,164 +185,184 @@
 
     </div>
 
-    @*<tr class="@css("danger", !entity.IsValid && entity.IsEnabled) @css("mandatory", entity.IsMandatory) @css("text-muted", !entity.IsEnabled)">
-            <td style="width: 60%" class="question-text">
-                <div class="cell-content @css("featured", entity.IsFeatured)">
-                    <span class="icon-star"></span>
-                    <span>@entity.Title</span>
-                </div>
-            </td>
-            <td class="question-answer">
-                <div class="cell-content" data-bind="visible: isEnabled || isAnswered">
-                    <div class="question-clickable">
-                        <span data-bind="css: markerStyle()" class="question-marker"></span>
-                        <span>@entity.AnswerString</span>
-                        @switch (entity.QuestionType)
-                        {
-                            case QuestionType.SingleOption:
-                                var singleOptinSetting = entity.Settings as SingleQuestionSettings;
-                                if (singleOptinSetting.IsCascade || singleOptinSetting.IsFilteredCombobox)
-                                {
-                                    <input class="form-control" type="text" value="@entity.Answer" />
-                                }
-                                else if (singleOptinSetting.IsLinked)
-                                {
-                                    <div class="form-group">
-                                        <div class="controls">
-                                            @foreach (var option in entity.Options)
-                                            {
-                                                var radioName = string.Format("option-{0}-{1}", entity.Id, Stringify(entity.RosterVector));
-                                                <label class="radio">
-                                                    @Html.RadioButton(radioName, Stringify((decimal[])option.Value), ((decimal[])entity.Answer).SequenceEqual((decimal[])option.Value))
-                                                    <span>@option.Label</span>
-                                                </label>
-                                            }
-                                        </div>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="form-group">
-                                        <div class="controls">
-                                            @foreach (var option in entity.Options)
-                                            {
-                                                var radioName = string.Format("option-{0}-{1}", entity.Id, Stringify(entity.RosterVector));
-                                                <label class="radio">
-                                                    @Html.RadioButton(radioName, Convert.ToDecimal(option.Value), Convert.ToDecimal(entity.Answer) == Convert.ToDecimal(option.Value))
-                                                    <span>@option.Label</span>
-                                                </label>
-                                            }
-                                        </div>
-                                    </div>
-                                }
-                                break;
-                            case QuestionType.MultyOption:
-                                var multiQuestionSettings = entity.Settings as MultiQuestionSettings;
-                                if (multiQuestionSettings.IsLinked)
-                                {
-                                    <div class="form-group">
-                                        <div class="controls">
-                                            @foreach (var option in entity.Options)
-                                            {
-                                                var radioName = string.Format("option-{0}-{1}", entity.Id, Stringify(entity.RosterVector));
-                                                <label class="radio">
-                                                    @Html.RadioButton(radioName, Stringify((decimal[])option.Value), ((decimal[])entity.Answer).SequenceEqual((decimal[])option.Value))
-                                                    <span>@option.Label</span>
-                                                </label>
-                                            }
-                                        </div>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="form-group">
-                                        <div class="controls">
-                                            @foreach (var option in entity.Options)
-                                            {
-                                                var radioName = string.Format("option-{0}-{1}", entity.Id, Stringify(entity.RosterVector));
-                                                <label class="radio">
-                                                    @Html.RadioButton(radioName, Convert.ToDecimal(option.Value), Convert.ToDecimal(entity.Answer) == Convert.ToDecimal(option.Value))
-                                                    <span>@option.Label</span>
-                                                </label>
-                                            }
-                                        </div>
-                                    </div>
-                                }
-                                break;
-                            case QuestionType.Numeric:
-                            <input class="form-control" type="number" value="@entity.Answer" />
-                                break;
-                            case QuestionType.DateTime:
-                                break;
-                            case QuestionType.GpsCoordinates:
-                                break;
-                            case QuestionType.Text:
-                            <input class="form-control" type="text" value="@entity.Answer" />
-                                break;
-                            case QuestionType.TextList:
-                                break;
-                            case QuestionType.QRBarcode:
-                            <input class="form-control" type="text" value="@entity.Answer" />
-                                break;
-                            case QuestionType.Multimedia:
-                            <img src="@Url.RouteUrl("Default", new { httproute = "", controller = "Resource", action = "InterviewFile", interviewid = Model.PublicKey, filename = entity.Answer})" />
-                                break;
-                        }
-                        @if (!entity.IsValid)
-                        {
-                            <small class="text-error">@entity.ValidationExpression</small>
-                            <small class="text-error">@entity.ValidationMessage</small>
-                        }
-                    </div>
-                </div>
-            </td>
-            <td class="col-sm-3">
-                <div class="actions pull-right">
-                    @if ((entity.Comments != null && entity.Comments.Count == 0) || entity.IsFlagged == false || entity.IsReadOnly == false)
+    if (entity.Comments != null && entity.Comments.Any())
+    {
+        <div class="bubble you">
+            @for (int commentIndex = 0; commentIndex < entity.Comments.Count; commentIndex++)
+            {
+                var comment = entity.Comments[commentIndex];
+                if (commentIndex % 2 == 0)
+                {
+                    <div class="bubble me">@comment.Text</div>
+                }
+                else
+                {
+                    <div class="bubble you"><font class="comment-container">@comment.Text</font></div>
+                }
+            }
+
+        </div>
+    }
+
+
+    @*<tr class=" @css("danger", !entity.isvalid && entity.isenabled) @css("mandatory", entity.ismandatory) @css("text-muted", !entity.isenabled)">
+        <td style="width: 60%" class="question-text">
+            <div class="cell-content @css(" featured", entity.isfeatured)">
+                <span class="icon-star"></span>
+                <span>@entity.Title</span>
+            </div>
+        </td>
+        <td class="question-answer">
+            <div class="cell-content" data-bind="visible: isEnabled || isAnswered">
+                <div class="question-clickable">
+                    <span data-bind="css: markerStyle()" class="question-marker"></span>
+                    <span>@entity.AnswerString</span>
+                    @switch (entity.QuestionType)
                     {
-                        <div class="btn-group btn-group-xs">
-                            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-cog"></i><span class="caret"></span></a>
-                            <ul class="dropdown-menu pull-right">
-                                @if (!entity.IsReadOnly && entity.IsEnabled)
-                                {
-                                    <li><a href="#">Answer</a></li>
-                                }
-                                <li><a href="#"><i class="glyphicon glyphicon-comment"></i>&nbsp;Comment</a></li>
-                                @if (!entity.IsFlagged)
-                                {
-                                    <li><a href="#"><i class="glyphicon glyphicon-flag"></i>&nbsp;Flag</a></li>
-                                }
-                            </ul>
+                    case QuestionType.SingleOption:
+                    var singleOptinSetting = entity.Settings as SingleQuestionSettings;
+                    if (singleOptinSetting.IsCascade || singleOptinSetting.IsFilteredCombobox)
+                    {
+                    <input class="form-control" type="text" value="@entity.Answer" />
+                    }
+                    else if (singleOptinSetting.IsLinked)
+                    {
+                    <div class="form-group">
+                        <div class="controls">
+                            @foreach (var option in entity.Options)
+                            {
+                            var radioName = string.Format("option-{0}-{1}", entity.Id, Stringify(entity.RosterVector));
+                            <label class="radio">
+                                @Html.RadioButton(radioName, Stringify((decimal[])option.Value), ((decimal[])entity.Answer).SequenceEqual((decimal[])option.Value))
+                                <span>@option.Label</span>
+                            </label>
+                            }
                         </div>
+                    </div>
                     }
-                    @if (entity.Comments != null && entity.Comments.Count > 0)
+                    else
                     {
-                        <a class="btn  btn-xs btn-success">
-                            <span>@entity.Comments.Count</span><i class="glyphicon glyphicon-comment"></i>
-                        </a>
+                    <div class="form-group">
+                        <div class="controls">
+                            @foreach (var option in entity.Options)
+                            {
+                            var radioName = string.Format("option-{0}-{1}", entity.Id, Stringify(entity.RosterVector));
+                            <label class="radio">
+                                @Html.RadioButton(radioName, Convert.ToDecimal(option.Value), Convert.ToDecimal(entity.Answer) == Convert.ToDecimal(option.Value))
+                                <span>@option.Label</span>
+                            </label>
+                            }
+                        </div>
+                    </div>
                     }
-                    @if (entity.IsFlagged)
+                    break;
+                    case QuestionType.MultyOption:
+                    var multiQuestionSettings = entity.Settings as MultiQuestionSettings;
+                    if (multiQuestionSettings.IsLinked)
                     {
-                        <a class="btn btn-xs btn-info">
-                            <i class="glyphicon glyphicon-flag"></i>
-                        </a>
+                    <div class="form-group">
+                        <div class="controls">
+                            @foreach (var option in entity.Options)
+                            {
+                            var radioName = string.Format("option-{0}-{1}", entity.Id, Stringify(entity.RosterVector));
+                            <label class="radio">
+                                @Html.RadioButton(radioName, Stringify((decimal[])option.Value), ((decimal[])entity.Answer).SequenceEqual((decimal[])option.Value))
+                                <span>@option.Label</span>
+                            </label>
+                            }
+                        </div>
+                    </div>
                     }
-                    @if (!entity.IsReadOnly && entity.IsEnabled)
+                    else
                     {
-                        <a class="btn btn-xs btn-primary" href="#">answer</a>
+                    <div class="form-group">
+                        <div class="controls">
+                            @foreach (var option in entity.Options)
+                            {
+                            var radioName = string.Format("option-{0}-{1}", entity.Id, Stringify(entity.RosterVector));
+                            <label class="radio">
+                                @Html.RadioButton(radioName, Convert.ToDecimal(option.Value), Convert.ToDecimal(entity.Answer) == Convert.ToDecimal(option.Value))
+                                <span>@option.Label</span>
+                            </label>
+                            }
+                        </div>
+                    </div>
+                    }
+                    break;
+                    case QuestionType.Numeric:
+                    <input class="form-control" type="number" value="@entity.Answer" />
+                    break;
+                    case QuestionType.DateTime:
+                    break;
+                    case QuestionType.GpsCoordinates:
+                    break;
+                    case QuestionType.Text:
+                    <input class="form-control" type="text" value="@entity.Answer" />
+                    break;
+                    case QuestionType.TextList:
+                    break;
+                    case QuestionType.QRBarcode:
+                    <input class="form-control" type="text" value="@entity.Answer" />
+                    break;
+                    case QuestionType.Multimedia:
+                    <img src="@Url.RouteUrl(" default", new { httproute="" , controller="Resource" , action="InterviewFile" , interviewid=Model.PublicKey, filename=entity.Answer})" />
+                    break;
+                    }
+                    @if (!entity.IsValid)
+                    {
+                    <small class="text-error">@entity.ValidationExpression</small>
+                    <small class="text-error">@entity.ValidationMessage</small>
                     }
                 </div>
-            </td>
+            </div>
+        </td>
+        <td class="col-sm-3">
+            <div class="actions pull-right">
+                @if ((entity.Comments != null && entity.Comments.Count == 0) || entity.IsFlagged == false || entity.IsReadOnly == false)
+                {
+                <div class="btn-group btn-group-xs">
+                    <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-cog"></i><span class="caret"></span></a>
+                    <ul class="dropdown-menu pull-right">
+                        @if (!entity.IsReadOnly && entity.IsEnabled)
+                        {
+                        <li><a href="#">Answer</a></li>
+                        }
+                        <li><a href="#"><i class="glyphicon glyphicon-comment"></i>&nbsp;Comment</a></li>
+                        @if (!entity.IsFlagged)
+                        {
+                        <li><a href="#"><i class="glyphicon glyphicon-flag"></i>&nbsp;Flag</a></li>
+                        }
+                    </ul>
+                </div>
+                }
+                @if (entity.Comments != null && entity.Comments.Count > 0)
+                {
+                <a class="btn  btn-xs btn-success">
+                    <span>@entity.Comments.Count</span><i class="glyphicon glyphicon-comment"></i>
+                </a>
+                }
+                @if (entity.IsFlagged)
+                {
+                <a class="btn btn-xs btn-info">
+                    <i class="glyphicon glyphicon-flag"></i>
+                </a>
+                }
+                @if (!entity.IsReadOnly && entity.IsEnabled)
+                {
+                <a class="btn btn-xs btn-primary" href="#">answer</a>
+                }
+            </div>
+        </td>
         </tr>*@
-}
-@functions
+        }
+        @functions
         {
     public string Stringify(decimal[] array)
     {
         return string.Join("_", array.Select(x => x.ToString(CultureInfo.InvariantCulture)));
     }
-}
-@helper css(string style, bool shouldBeAdded = true)
+        }
+        @helper css(string style, bool shouldBeAdded = true)
 {
-    @(shouldBeAdded ? style : string.Empty)
+        @(shouldBeAdded ? style : string.Empty)
 }
