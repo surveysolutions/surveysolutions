@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Nito.AsyncEx;
 using Quartz;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
@@ -71,7 +72,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                         lastStoredFeedEntry.Timestamp)
                     : string.Format("Nothing synchronized yet, loading full users event stream"));
 
-                List<LocalUserChangedFeedEntry> newEvents = this.feedReader.ReadAfterAsync(lastStoredFeedEntry).Result;
+                List<LocalUserChangedFeedEntry> newEvents = AsyncContext.Run(() => this.feedReader.ReadAfterAsync(lastStoredFeedEntry));
 
                 this.headquartersPullContext.PushMessage(string.Format("Saving {0} new events to local storage", newEvents.Count));
                 this.localFeedStorage.Store(newEvents);
@@ -80,6 +81,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                 this.questionnaireSynchronizer.Pull();
                 this.interviewsSynchronizer.PullInterviewsForSupervisors(supervisorIds);
+            }
+            catch (ApplicationException e)
+            {
+                this.headquartersPullContext.PushError(e.Message);
             }
             finally
             {

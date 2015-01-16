@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Atom.Implementation
             if (!response.IsSuccessStatusCode)
             {
                 throw new ApplicationException(string.Format("Failed to read users feed. response code: {0}, response content: {1}",
-                    response.StatusCode, response.Content));
+                    response.StatusCode, response.Content.ReadAsStringAsync()));
             }
 
             string responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
