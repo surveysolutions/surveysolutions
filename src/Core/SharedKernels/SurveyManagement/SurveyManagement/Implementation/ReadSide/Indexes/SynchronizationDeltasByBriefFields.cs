@@ -13,13 +13,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes
             public string ItemType { get; set; }
             public DateTime Timestamp { get; set; }
             public Guid UserId { get; set; }
+            public string PublicKey { get; set; }
             public int SortIndex { get; set; }
         }
 
         public SynchronizationDeltasByBriefFields()
         {
             this.Map = interviews => from doc in interviews
-                                     select new SyncPackageBrief { ItemType = doc.ItemType, Timestamp = doc.Timestamp, UserId = doc.UserId, SortIndex = doc.SortIndex };
+                                     select new SyncPackageBrief { PublicKey = doc.PublicKey, ItemType = doc.ItemType, Timestamp = doc.Timestamp, UserId = doc.UserId, SortIndex = doc.SortIndex };
         }
     }
 }
