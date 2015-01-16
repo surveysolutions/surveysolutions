@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -20,20 +21,22 @@ namespace WB.Core.Synchronization.SyncStorage
         private readonly IChunkWriter chunkStorageWriter;
         private readonly IChunkReader chunkStorageReader;
 
-        public static Guid AssemblySeed = new Guid("371EF2E6-BF1D-4E36-927D-2AC13C41EF7B");
+        private readonly IArchiveUtils archiver;
 
-        private const bool UseCompression = true;
-        private const bool UseCompressionForFiles = false;
+        public static Guid AssemblySeed = new Guid("371EF2E6-BF1D-4E36-927D-2AC13C41EF7B");
+        private readonly bool useCompression ;
 
         public SimpleSynchronizationDataStorage(
             IQueryableReadSideRepositoryReader<UserDocument> userStorage,
-            IChunkWriter chunkStorageWriter, IChunkReader chunkStorageReader, IMetaInfoBuilder metaBuilder
-            )
+            IChunkWriter chunkStorageWriter, IChunkReader chunkStorageReader,
+            IMetaInfoBuilder metaBuilder, IArchiveUtils archiver)
         {
             this.userStorage = userStorage;
             this.chunkStorageWriter = chunkStorageWriter;
             this.chunkStorageReader = chunkStorageReader;
             this.metaBuilder = metaBuilder;
+            this.archiver = archiver;
+            this.useCompression = true;
         }
 
         public void Clear()
@@ -43,53 +46,51 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public void SaveInterview(InterviewSynchronizationDto doc, Guid responsibleId, DateTime timestamp)
         {
-            var syncItem = new SyncItem
-                {
-                    RootId = doc.Id,
-                    ItemType = SyncItemType.Questionnare,
-                    IsCompressed = UseCompression,
-                    Content = GetItemAsContent(doc),
-                    MetaInfo = GetItemAsContent(metaBuilder.GetInterviewMetaInfo(doc)) 
-                };
+            var syncItem = CreateSyncItem(doc.Id, SyncItemType.Questionnare, GetItemAsContent(doc), GetItemAsContent(metaBuilder.GetInterviewMetaInfo(doc)));
+
             chunkStorageWriter.StoreChunk(syncItem, responsibleId, timestamp);
+        }
+
+        private SyncItem CreateSyncItem(Guid id, string itemType, string rawContent, string rawMeta)
+        {
+            var content = useCompression ? archiver.CompressString(rawContent) : rawContent;
+            var metaInfo = (useCompression && !string.IsNullOrWhiteSpace(rawMeta)) ? archiver.CompressString(rawMeta) : rawMeta;
+
+            return new SyncItem
+            {
+                RootId = id,
+                ItemType = itemType,
+                IsCompressed = useCompression,
+                Content = content,
+                MetaInfo = metaInfo 
+            };
         }
 
         public void MarkInterviewForClientDeleting(Guid id, Guid? responsibleId, DateTime timestamp)
         {
-            var syncItem = new SyncItem
-            {
-                RootId = id,
-                ItemType = SyncItemType.DeleteQuestionnare,
-                IsCompressed = UseCompression,
-                Content = id.ToString()
-            };
+            var syncItem = CreateSyncItem(id, SyncItemType.DeleteQuestionnare, id.ToString(), string.Empty);
+
             chunkStorageWriter.StoreChunk(syncItem, responsibleId, timestamp);
         }
 
         public void SaveQuestionnaire(QuestionnaireDocument doc, long version, bool allowCensusMode, DateTime timestamp)
         {
             doc.IsDeleted = false;
-            var syncItem = new SyncItem
-            {
-                RootId = doc.PublicKey.Combine(version),
-                ItemType = SyncItemType.Template,
-                IsCompressed = UseCompression,
-                Content = GetItemAsContent(doc),
-                MetaInfo = GetItemAsContent(new QuestionnaireMetadata(doc.PublicKey, version, allowCensusMode)),
-            };
+
+            var questionnaireMetadata = new QuestionnaireMetadata(doc.PublicKey, version, allowCensusMode);
+            var syncItem = CreateSyncItem(doc.PublicKey.Combine(version), SyncItemType.Template, GetItemAsContent(doc), 
+                GetItemAsContent(questionnaireMetadata));
+
             chunkStorageWriter.StoreChunk(syncItem, null, timestamp);
         }
 
         public void DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, DateTime timestamp)
         {
-            var syncItem = new SyncItem
-            {
-                RootId = questionnaireId.Combine(questionnaireVersion),
-                ItemType = SyncItemType.DeleteTemplate,
-                IsCompressed = UseCompression,
-                Content = questionnaireId.ToString(),
-                MetaInfo = GetItemAsContent(new QuestionnaireMetadata(questionnaireId, questionnaireVersion, false)),
-            };
+            var questionnaireMetadata = new QuestionnaireMetadata(questionnaireId, questionnaireVersion, false);
+
+            var syncItem = CreateSyncItem(questionnaireId.Combine(questionnaireVersion), SyncItemType.DeleteTemplate, questionnaireId.ToString(), 
+                GetItemAsContent(questionnaireMetadata));
+            
             chunkStorageWriter.StoreChunk(syncItem, null, timestamp);
         }
 
@@ -110,13 +111,12 @@ namespace WB.Core.Synchronization.SyncStorage
         public IEnumerable<SynchronizationChunkMeta> GetChunkPairsCreatedAfter(string lastSyncedPackageId, Guid userId)
         {
             var users = GetUserTeamates(userId);
-            return
-                chunkStorageReader.GetChunkMetaDataCreatedAfter(lastSyncedPackageId, users);
+            return chunkStorageReader.GetChunkMetaDataCreatedAfter(lastSyncedPackageId, users);
         }
 
         private IEnumerable<Guid> GetUserTeamates(Guid userId)
         {
-            var user = userStorage.Query(_ => _.Where(u => u.PublicKey == userId).ToList().FirstOrDefault());
+            var user = userStorage.Query(_ => _.Where(u => u.PublicKey == userId)).ToList().FirstOrDefault();
             if (user == null)
                 return Enumerable.Empty<Guid>();
 
@@ -132,30 +132,19 @@ namespace WB.Core.Synchronization.SyncStorage
 
         private void SaveInteviewer(UserDocument doc, DateTime timestamp)
         {
-            var syncItem = new SyncItem
-            {
-                RootId = doc.PublicKey,
-                ItemType = SyncItemType.User,
-                IsCompressed = UseCompression,
-                Content = GetItemAsContent(doc)
-            };
+            var syncItem = CreateSyncItem(doc.PublicKey, SyncItemType.User, GetItemAsContent(doc), string.Empty);
 
-            chunkStorageWriter.StoreChunk(syncItem, doc.PublicKey,timestamp);
+            chunkStorageWriter.StoreChunk(syncItem, doc.PublicKey, timestamp);
         }
 
 
-        public void SaveTemplateAssembly(Guid publicKey, long version, string assemblyAsBase64String, DateTime timestamp)
+        public void SaveQuestionnaireAssembly(Guid publicKey, long version, string assemblyAsBase64String, DateTime timestamp)
         {
             var meta = new QuestionnaireAssemblyMetadata(publicKey, version);
 
-            var syncItem = new SyncItem
-            {
-                RootId = publicKey.Combine(AssemblySeed).Combine(version),
-                ItemType = SyncItemType.QuestionnaireAssembly,
-                IsCompressed = UseCompression,
-                Content = GetItemAsContent(assemblyAsBase64String),
-                MetaInfo = GetItemAsContent(meta)
-            };
+            var syncItem = CreateSyncItem(publicKey.Combine(AssemblySeed).Combine(version), SyncItemType.QuestionnaireAssembly,
+                GetItemAsContent(assemblyAsBase64String), GetItemAsContent(meta));
+
             chunkStorageWriter.StoreChunk(syncItem, null, timestamp);
         }
 
