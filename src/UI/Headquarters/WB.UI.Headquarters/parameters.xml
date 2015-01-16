@@ -65,6 +65,13 @@
       scope="\\web.config$" 
       match="/configuration/appSettings/add[@key='Raven.Databases.PlainStorage']/@value" />
    </parameter>
+   <parameter name="Filesystem name"
+      description=""
+      defaultValue="HeadquartersFileSystem">
+   <parameterEntry kind="XmlFile" 
+      scope="\\web.config$" 
+      match="/configuration/appSettings/add[@key='Raven.Databases.RavenFileSystemName']/@value" />
+   </parameter>
    <parameter name="Designer Endpoint Address" description="Please provide Designer address from which do import templates" defaultValue="https://solutions.worldbank.org/api/import" tags="">
     <parameterEntry kind="XmlFile" 
       scope="\\web.config$" 
