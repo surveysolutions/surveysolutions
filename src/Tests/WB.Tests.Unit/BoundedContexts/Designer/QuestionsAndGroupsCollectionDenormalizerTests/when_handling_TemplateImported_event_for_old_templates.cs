@@ -99,7 +99,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
         };
 
         Because of = () =>
-            newState = denormalizer.Create(evnt);
+            newState = denormalizer.Update(null, evnt);
 
         It should_return_not_null_view = () =>
             newState.ShouldNotBeNull();

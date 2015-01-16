@@ -13,8 +13,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             denormalizer = CreateDenormalizer();
         };
 
-        Because of = () => 
-            viewModel = denormalizer.Create(Create.InterviewOnClientCreatedEvent());
+        Because of = () =>
+            viewModel = denormalizer.Update(null, Create.InterviewOnClientCreatedEvent());
 
         It should_commented_statuses_history_first_item_responsible_be_equal_to_unknownResponsibleName = () =>
             viewModel.CommentedStatusesHistory.Single().Responsible.ShouldEqual(unknownResponsibleName);

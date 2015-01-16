@@ -62,8 +62,6 @@
     <Compile Include="Implementation\Services\WaitService.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideStatus.cs" />
     <Compile Include="EventHandlers\AbstractFunctionalEventHandler.cs" />
-    <Compile Include="EventHandlers\ICreateHandler.cs" />
-    <Compile Include="EventHandlers\IDeleteHandler.cs" />
     <Compile Include="EventHandlers\IFunctionalEventHandler.cs" />
     <Compile Include="EventHandlers\IUpdateHandler.cs" />
     <Compile Include="FileSystem\IArchiveUtils.cs" />
