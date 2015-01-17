@@ -5,6 +5,9 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{AD7E0C01-7CD9-46FD-9DD7-3BC8A5C10ECF}"
 	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
@@ -47,6 +50,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logging", "Logging", "{FBFD46B7-1521-42C1-BE95-043ADCF88A61}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Android Internals", "Android Internals", "{BD94CB7B-967D-4C78-814E-9B0F1F5BDF37}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndroidNcqrs.Eventing.Storage.SQLite", "..\Mono\AndroidNcqrs.Eventing.Storage.SQLite\AndroidNcqrs.Eventing.Storage.SQLite.csproj", "{F9A0B560-A8BF-4914-88FB-7D98DF4242EF}"
 EndProject
