@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
 using Ncqrs;
@@ -110,21 +111,24 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         {
             using (var transaction = connection.StartTransactionAsync(EventsPrefix + eventStream.SourceId, ExpectedVersion.Any, this.credentials).WaitAndUnwrapException())
             {
-                this.SaveStream(eventStream, connection);
+                this.SaveStreamAsynk(eventStream, connection).WaitAndUnwrapException();
 
                 transaction.CommitAsync().WaitAndUnwrapException();
             }
         }
 
-        internal void SaveStream(UncommittedEventStream eventStream, IEventStoreConnection connection)
+        internal async Task SaveStreamAsynk(UncommittedEventStream eventStream, IEventStoreConnection connection)
         {
             foreach (var @event in eventStream)
             {
                 var eventData = this.BuildEventData(@event);
 
                 int expected = (int)(@event.EventSequence - 2);
-                connection.AppendToStreamAsync(EventsPrefix + @event.EventSourceId.FormatGuid(), expected, this.credentials, eventData)
-                    .WaitWithTimeout(this.defaultTimeout);
+
+                await
+                    connection.AppendToStreamAsync(EventsPrefix + @event.EventSourceId.FormatGuid(), expected,
+                        this.credentials, eventData)
+                        .WaitWithTimeout(this.defaultTimeout);
             }
         }
 
