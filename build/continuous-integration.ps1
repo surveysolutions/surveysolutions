@@ -23,6 +23,10 @@ try {
 	CheckPrerequisites | %{ if (-not $_) { Exit } }
 	CleanBinAndObjFolders
 
+	$restore = "src/.nuget/nuget.exe restore src/WB.sln"
+    Write-Host "Running package restore: '$restore'"
+    iex $restore
+	
 	if ($Deep) {
 		BuildSolutions $BuildConfiguration -ClearBinAndObjFoldersBeforeEachSolution | %{ if (-not $_) { Exit } }
 	} else {
