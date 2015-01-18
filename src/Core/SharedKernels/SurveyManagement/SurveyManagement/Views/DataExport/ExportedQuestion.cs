@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 
         private string[] GetAnswers(InterviewQuestion question, ExportedHeaderItem header)
         {
-            if (question.Answer == null || !question.Enabled)
+            if (question.Answer == null || !question.IsEnabled())
                 return header.ColumnNames.Select(c => string.Empty).ToArray();
 
             if (header.ColumnNames.Length == 1)

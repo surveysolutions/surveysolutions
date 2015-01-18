@@ -7,9 +7,11 @@ using System.Text;
 using System.Threading;
 using Nito.AsyncEx;
 using Nito.AsyncEx.Synchronous;
+using Raven.Abstractions.Extensions;
 using Raven.Abstractions.FileSystem;
 using Raven.Client.FileSystem;
 using Raven.Imports.Newtonsoft.Json;
+using Raven.Imports.Newtonsoft.Json.Serialization;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -29,12 +31,22 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         private bool isCacheEnabled = false;
         private readonly RavenFilesStoreRepositoryAccessorSettings ravenFilesStoreRepositoryAccessorSettings;
         private readonly IFilesStore ravenFilesStore;
+        private readonly JsonSerializerSettings jsonSerializerSettings;
+
 
         public RavenFilesStoreRepositoryAccessor(ILogger logger, RavenFilesStoreRepositoryAccessorSettings ravenFilesStoreRepositoryAccessorSettings)
         {
             this.logger = logger;
             this.ravenFilesStoreRepositoryAccessorSettings = ravenFilesStoreRepositoryAccessorSettings;
             this.ravenFilesStore = this.CreateRavenFilesStore();
+
+            this.jsonSerializerSettings= new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.Auto,
+                    DefaultValueHandling = DefaultValueHandling.Ignore,
+                    MissingMemberHandling = MissingMemberHandling.Ignore,
+                    NullValueHandling = NullValueHandling.Ignore
+                };
         }
 
         private IFilesStore CreateRavenFilesStore()
@@ -157,8 +169,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         {
             if (this.IsCacheLimitReached())
             {
-                this.ReduceCache();
-            }
+                this.ReduceCache();}
         }
 
         private void ReduceCache()
@@ -176,6 +187,26 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
                     var entityToStore = cache[entityId];
 
                     var memoryStream =
+                        new MemoryStream(Encoding.UTF8.GetBytes(this.GetItemAsContent(entityToStore)));
+                    session.RegisterUpload(this.CreateFileStoreEntityId(entityId), memoryStream);
+
+                    streamsToClose.Add(entityId, memoryStream);
+                }
+                session.SaveChangesAsync().WaitAndUnwrapException(); ;
+            }
+
+        }
+
+        private void StoreChunk(List<string> bulk)
+        {
+            var streamsToClose = new Dictionary<string, MemoryStream>();
+            using (var session = this.ravenFilesStore.OpenAsyncSession())
+            {
+                foreach (var entityId in bulk)
+                {
+                streamsToClose[entityId].Dispose();
+                streamsToClose.Remove(entityId);
+
                         new MemoryStream(Encoding.UTF8.GetBytes(this.GetItemAsContent(entityToStore)));
                     session.RegisterUpload(this.CreateFileStoreEntityId(entityId), memoryStream);
 
@@ -254,31 +285,16 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             this.ReduceCacheIfNeeded();
         }
 
-        private JsonSerializerSettings JsonSerializerSettings
-        {
-            get
-            {
-                return new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.All,
-                    ContractResolver = new PropertiesOnlyContractResolver(),
-                    DefaultValueHandling = DefaultValueHandling.Ignore,
-                    MissingMemberHandling = MissingMemberHandling.Ignore,
-                    NullValueHandling = NullValueHandling.Ignore
-                };
-            }
-        }
-
         private string GetItemAsContent(TEntity item)
         {
-            return JsonConvert.SerializeObject(item, Formatting.None, JsonSerializerSettings);
+            return JsonConvert.SerializeObject(item, Formatting.None, jsonSerializerSettings);
         }
 
         private TEntity Deserrialize(string payload)
         {
             try
             {
-                return JsonConvert.DeserializeObject<TEntity>(payload, JsonSerializerSettings);
+                return JsonConvert.DeserializeObject<TEntity>(payload, jsonSerializerSettings);
             }
             catch (Exception e)
             {
