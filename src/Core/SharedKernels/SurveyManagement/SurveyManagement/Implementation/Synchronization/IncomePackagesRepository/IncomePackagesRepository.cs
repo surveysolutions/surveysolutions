@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Main.Core.Events;
 using Ncqrs;
 using Ncqrs.Eventing;
@@ -37,6 +39,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
         private readonly IArchiveUtils archiver;
         private IStreamableEventStore eventStore;
         private IEventDispatcher eventBus;
+        private ConcurrentDictionary<Guid, bool> packagesInProcess = new ConcurrentDictionary<Guid, bool>();
+        
 
         public IncomePackagesRepository(ILogger logger, SyncSettings syncSettings, ICommandService commandService,
             IFileSystemAccessor fileSystemAccessor, IJsonUtils jsonUtils, IArchiveUtils archiver,
@@ -90,6 +94,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             try
             { 
                 var meta = this.jsonUtils.Deserialize<InterviewMetaInfo>(archiver.DecompressString(item.MetaInfo));
+                var packageFileName = this.GetItemFileName(meta.PublicKey);
+                if (packagesInProcess.ContainsKey(meta.PublicKey) || fileSystemAccessor.IsFileExists(packageFileName))
+                    throw new InvalidOperationException(
+                        string.Format("attempt to store one more sync package with id '{0}' while one is in process",
+                            meta.PublicKey));
                 if (meta.CreatedOnClient.HasValue && meta.CreatedOnClient.Value && this.interviewSummaryRepositoryWriter.GetById(meta.PublicKey)==null)
                 {
                     AnsweredQuestionSynchronizationDto[] prefilledQuestions = null;
@@ -132,13 +141,34 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
                 string.Format("{0}.{1}", id, this.syncSettings.IncomingCapiPackageFileNameExtension));
         }
 
-        private string GetItemFileNameForErrorStorage(Guid id)
+        private string GetItemFileNameForErrorStorage(Guid id, int version = 1)
         {
-            return this.fileSystemAccessor.CombinePath(this.incomingCapiPackagesWithErrorsDirectory,
-                string.Format("{0}.{1}", id, this.syncSettings.IncomingCapiPackageFileNameExtension));
+            var fileName = this.fileSystemAccessor.CombinePath(this.incomingCapiPackagesWithErrorsDirectory,
+                string.Format("{0}V-{1}.{2}", id,version, this.syncSettings.IncomingCapiPackageFileNameExtension));
+
+            if (fileSystemAccessor.IsFileExists(fileName))
+                return GetItemFileNameForErrorStorage(id, version + 1);
+            
+            return fileName;
         }
 
         public void ProcessItem(Guid id)
+        {
+            if (packagesInProcess.TryAdd(id, true))
+            {
+                try
+                {
+                    ProcessItemImpl(id);
+                }
+                finally
+                {
+                    bool dummyBool;
+                    this.packagesInProcess.TryRemove(id, out dummyBool);
+                }
+            }
+        }
+
+        private void ProcessItemImpl(Guid id)
         {
             var fileName = this.GetItemFileName(id);
             if (!this.fileSystemAccessor.IsFileExists(fileName))
@@ -146,7 +176,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
 
             if (!IsInterviewPresent(id))
             {
-                this.fileSystemAccessor.WriteAllText(this.GetItemFileNameForErrorStorage(id), this.fileSystemAccessor.ReadAllText(fileName));
+                this.fileSystemAccessor.WriteAllText(this.GetItemFileNameForErrorStorage(id),
+                    this.fileSystemAccessor.ReadAllText(fileName));
                 this.fileSystemAccessor.DeleteFile(fileName);
                 return;
             }

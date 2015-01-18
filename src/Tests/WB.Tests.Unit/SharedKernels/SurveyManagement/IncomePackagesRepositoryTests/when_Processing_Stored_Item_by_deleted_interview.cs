@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomePackagesRepositoryT
         Establish context = () =>
         {
             fileSystemAccessorMock = CreateDefaultFileSystemAccessorMock();
-            fileSystemAccessorMock.Setup(x => x.IsFileExists(Moq.It.Is<string>(name => name.Contains(interviewId.ToString()))))
+            fileSystemAccessorMock.Setup(x => x.IsFileExists(Moq.It.Is<string>(name => name.Contains(interviewId.ToString()+".sync"))))
                 .Returns(true);
             fileSystemAccessorMock.Setup(x => x.ReadAllText(Moq.It.Is<string>(name => name.Contains(interviewId.ToString()))))
                 .Returns(packageContent);

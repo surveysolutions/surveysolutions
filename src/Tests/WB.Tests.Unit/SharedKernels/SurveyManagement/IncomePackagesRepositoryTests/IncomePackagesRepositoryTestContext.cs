@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomePackagesRepositoryT
 
         protected static string GetPathToSynchItemInErrorFolder(Guid syncItemId)
         {
-            return string.Format(@"{0}\{1}\{2}\{3}.{4}",appDataDirectory, incomingCapiPackagesDirectoryName,
+            return string.Format(@"{0}\{1}\{2}\{3}V-1.{4}",appDataDirectory, incomingCapiPackagesDirectoryName,
                 incomingCapiPackagesWithErrorsDirectoryName, syncItemId, incomingCapiPackageFileNameExtension);
         }
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Nito.AsyncEx;
 using Nito.AsyncEx.Synchronous;
 using Raven.Abstractions.FileSystem;
@@ -25,17 +26,13 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         private const int MaxCountOfCachedEntities = 253;
         private const int MaxCountOfEntitiesInOneStoreOperation = 30;
         private readonly ConcurrentDictionary<string, TEntity> cache = new ConcurrentDictionary<string, TEntity>();
-        private ConcurrentDictionary<string, bool> packagesInProcess = new ConcurrentDictionary<string, bool>();
-        private const int CountOfAttempt = 60;
         private bool isCacheEnabled = false;
         private readonly RavenFilesStoreRepositoryAccessorSettings ravenFilesStoreRepositoryAccessorSettings;
-        private readonly IWaitService waitService;
         private readonly IFilesStore ravenFilesStore;
 
-        public RavenFilesStoreRepositoryAccessor(ILogger logger, IWaitService waitService, RavenFilesStoreRepositoryAccessorSettings ravenFilesStoreRepositoryAccessorSettings)
+        public RavenFilesStoreRepositoryAccessor(ILogger logger, RavenFilesStoreRepositoryAccessorSettings ravenFilesStoreRepositoryAccessorSettings)
         {
             this.logger = logger;
-            this.waitService = waitService;
             this.ravenFilesStoreRepositoryAccessorSettings = ravenFilesStoreRepositoryAccessorSettings;
             this.ravenFilesStore = this.CreateRavenFilesStore();
         }
@@ -66,18 +63,8 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         {
             if (!isCacheEnabled)
             {
-                if (this.WaitUntilViewCanBeProcessed(id))
-                {
-                    try
-                    {
-                        if (ravenFilesStoreRepositoryAccessorSettings.AdditionalEventChecker != null)
-                            ravenFilesStoreRepositoryAccessorSettings.AdditionalEventChecker(id);
-                    }
-                    finally
-                    {
-                        this.ReleaseSpotForOtherThread(id);
-                    }
-                }
+                if (ravenFilesStoreRepositoryAccessorSettings.AdditionalEventChecker != null)
+                    ravenFilesStoreRepositoryAccessorSettings.AdditionalEventChecker(id);
                 return this.GetEntityAvoidingCacheById(id);
             }
 
@@ -164,27 +151,6 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         {
             while (!cache.IsEmpty)
                 ReduceCache();
-        }
-
-        private void ReleaseSpotForOtherThread(string id)
-        {
-            bool dummyBool;
-            packagesInProcess.TryRemove(id, out dummyBool);
-        }
-
-        private bool WaitUntilViewCanBeProcessed(string id)
-        {
-            int i = 0;
-            while (!packagesInProcess.TryAdd(id, true))
-            {
-                if (i > CountOfAttempt)
-                {
-                    return false;
-                }
-                waitService.WaitForSecond();
-                i++;
-            }
-            return true;
         }
 
         private void ReduceCacheIfNeeded()
