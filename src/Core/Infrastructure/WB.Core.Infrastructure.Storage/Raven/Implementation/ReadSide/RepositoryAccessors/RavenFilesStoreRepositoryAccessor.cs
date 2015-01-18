@@ -25,7 +25,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly ILogger logger;
-        private const int MaxCountOfCachedEntities = 253;
+        private const int MaxCountOfCachedEntities = 256;
         private const int MaxCountOfEntitiesInOneStoreOperation = 30;
         private readonly ConcurrentDictionary<string, TEntity> cache = new ConcurrentDictionary<string, TEntity>();
         private bool isCacheEnabled = false;
@@ -33,20 +33,19 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         private readonly IFilesStore ravenFilesStore;
         private readonly JsonSerializerSettings jsonSerializerSettings;
 
-
         public RavenFilesStoreRepositoryAccessor(ILogger logger, RavenFilesStoreRepositoryAccessorSettings ravenFilesStoreRepositoryAccessorSettings)
         {
             this.logger = logger;
             this.ravenFilesStoreRepositoryAccessorSettings = ravenFilesStoreRepositoryAccessorSettings;
             this.ravenFilesStore = this.CreateRavenFilesStore();
 
-            this.jsonSerializerSettings= new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.Auto,
-                    DefaultValueHandling = DefaultValueHandling.Ignore,
-                    MissingMemberHandling = MissingMemberHandling.Ignore,
-                    NullValueHandling = NullValueHandling.Ignore
-                };
+            this.jsonSerializerSettings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto,
+                DefaultValueHandling = DefaultValueHandling.Ignore,
+                MissingMemberHandling = MissingMemberHandling.Ignore,
+                NullValueHandling = NullValueHandling.Ignore
+            };
         }
 
         private IFilesStore CreateRavenFilesStore()
@@ -187,26 +186,6 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
                     var entityToStore = cache[entityId];
 
                     var memoryStream =
-                        new MemoryStream(Encoding.UTF8.GetBytes(this.GetItemAsContent(entityToStore)));
-                    session.RegisterUpload(this.CreateFileStoreEntityId(entityId), memoryStream);
-
-                    streamsToClose.Add(entityId, memoryStream);
-                }
-                session.SaveChangesAsync().WaitAndUnwrapException(); ;
-            }
-
-        }
-
-        private void StoreChunk(List<string> bulk)
-        {
-            var streamsToClose = new Dictionary<string, MemoryStream>();
-            using (var session = this.ravenFilesStore.OpenAsyncSession())
-            {
-                foreach (var entityId in bulk)
-                {
-                streamsToClose[entityId].Dispose();
-                streamsToClose.Remove(entityId);
-
                         new MemoryStream(Encoding.UTF8.GetBytes(this.GetItemAsContent(entityToStore)));
                     session.RegisterUpload(this.CreateFileStoreEntityId(entityId), memoryStream);
 
