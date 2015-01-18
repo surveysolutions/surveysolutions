@@ -111,13 +111,13 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         {
             using (var transaction = connection.StartTransactionAsync(EventsPrefix + eventStream.SourceId, ExpectedVersion.Any, this.credentials).WaitAndUnwrapException())
             {
-                this.SaveStreamAsynk(eventStream, connection).WaitAndUnwrapException();
+                this.SaveStream(eventStream, connection);
 
                 transaction.CommitAsync().WaitAndUnwrapException();
             }
         }
 
-        internal async Task SaveStreamAsynk(UncommittedEventStream eventStream, IEventStoreConnection connection)
+        internal void SaveStream(UncommittedEventStream eventStream, IEventStoreConnection connection)
         {
             foreach (var @event in eventStream)
             {
@@ -125,10 +125,10 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
                 int expected = (int)(@event.EventSequence - 2);
 
-                await
-                    connection.AppendToStreamAsync(EventsPrefix + @event.EventSourceId.FormatGuid(), expected,
-                        this.credentials, eventData)
-                        .WaitWithTimeout(this.defaultTimeout);
+                    AsyncContext.Run(
+                        () => connection.AppendToStreamAsync(EventsPrefix + @event.EventSourceId.FormatGuid(), expected,
+                            this.credentials, eventData)
+                            .WaitWithTimeout(this.defaultTimeout));
             }
         }
 
