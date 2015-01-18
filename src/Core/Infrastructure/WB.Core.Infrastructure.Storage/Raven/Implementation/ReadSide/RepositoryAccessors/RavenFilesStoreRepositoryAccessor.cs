@@ -4,15 +4,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Nito.AsyncEx;
 using Nito.AsyncEx.Synchronous;
 using Raven.Abstractions.FileSystem;
 using Raven.Client.FileSystem;
 using Raven.Imports.Newtonsoft.Json;
-using Raven.Json.Linq;
 using WB.Core.GenericSubdomains.Utils.Services;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Services;
@@ -25,8 +22,8 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly ILogger logger;
-        private const int MaxCountOfCachedEntities = 256;
-        private const int MaxCountOfEntitiesInOneStoreOperation = 16;
+        private const int MaxCountOfCachedEntities = 253;
+        private const int MaxCountOfEntitiesInOneStoreOperation = 30;
         private readonly ConcurrentDictionary<string, TEntity> cache = new ConcurrentDictionary<string, TEntity>();
         private ConcurrentDictionary<string, bool> packagesInProcess = new ConcurrentDictionary<string, bool>();
         private const int CountOfAttempt = 60;
@@ -160,19 +157,13 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             {
                 Remove(fileHeader.Name);
             }
+
         }
 
         private void StoreAllCachedEntitiesToRepository()
         {
-            foreach (var entityId in cache.Keys)
-            {
-                var entity = cache[entityId];
-                StoreAvoidingCache(entity, entityId);
-                TEntity deleteResult;
-                cache.TryRemove(entityId, out deleteResult);
-            }
-            if (!cache.IsEmpty)
-                this.StoreAllCachedEntitiesToRepository();
+            while (!cache.IsEmpty)
+                ReduceCache();
         }
 
         private void ReleaseSpotForOtherThread(string id)
@@ -206,13 +197,34 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         private void ReduceCache()
         {
-            var bulk = this.cache.Keys.Take(MaxCountOfEntitiesInOneStoreOperation).ToList();
+            StoreChunk(this.cache.Keys.Take(MaxCountOfEntitiesInOneStoreOperation).ToList());
+        }
+
+        private void StoreChunk(List<string> bulk)
+        {
+            var streamsToClose = new Dictionary<string, MemoryStream>();
+            using (var session = this.ravenFilesStore.OpenAsyncSession())
+            {
+                foreach (var entityId in bulk)
+                {
+                    var entityToStore = cache[entityId];
+
+                    var memoryStream =
+                        new MemoryStream(Encoding.UTF8.GetBytes(this.GetItemAsContent(entityToStore)));
+                    session.RegisterUpload(this.CreateFileStoreEntityId(entityId), memoryStream);
+
+                    streamsToClose.Add(entityId, memoryStream);
+                }
+                session.SaveChangesAsync().WaitAndUnwrapException(); ;
+            }
+
             foreach (var entityId in bulk)
             {
-                var entity = cache[entityId];
-                StoreAvoidingCache(entity, entityId);
+                streamsToClose[entityId].Dispose();
+                streamsToClose.Remove(entityId);
+
                 TEntity deleteResult;
-                cache.TryRemove(entityId, out deleteResult);
+                this.cache.TryRemove(entityId, out deleteResult);
             }
         }
 
@@ -237,7 +249,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             }
             catch (FileNotFoundException)
             {
-                //it's ok to have FileNotFoundException view could be absent
+                //it's ok to have FileNotFoundException, view could be absent
             }
             return null;
         }
