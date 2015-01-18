@@ -73,9 +73,9 @@ namespace WB.Tools.EventsMigrator
                             committedEvent.EventTimeStamp,
                             committedEvent.Payload,
                             committedEvent.EventVersion));
-                        
-                        
-                        eventStore.SaveStreamAsynk(stream, connection).Wait();
+
+
+                        eventStore.SaveStream(stream, connection);
 
                         Interlocked.Increment(ref processed);
                         this.elapsed = watch.Elapsed;
