@@ -195,8 +195,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var document = source as QuestionnaireDocument;
 
             if (document == null)
-                throw new QuestionnaireException(string.Format("Cannot import questionnaire with a document of a not supported type {0}.",
-                    source.GetType()));
+                throw new QuestionnaireException(string.Format("Cannot import questionnaire with a document of a not supported type {0}. SourceId: {1}",
+                    source.GetType(), source.PublicKey));
 
             return document;
         }

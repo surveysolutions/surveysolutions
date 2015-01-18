@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
 using Ncqrs;
@@ -123,8 +124,11 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                 var eventData = this.BuildEventData(@event);
 
                 int expected = (int)(@event.EventSequence - 2);
-                connection.AppendToStreamAsync(EventsPrefix + @event.EventSourceId.FormatGuid(), expected, this.credentials, eventData)
-                    .WaitWithTimeout(this.defaultTimeout);
+
+                    AsyncContext.Run(
+                        () => connection.AppendToStreamAsync(EventsPrefix + @event.EventSourceId.FormatGuid(), expected,
+                            this.credentials, eventData)
+                            .WaitWithTimeout(this.defaultTimeout));
             }
         }
 
