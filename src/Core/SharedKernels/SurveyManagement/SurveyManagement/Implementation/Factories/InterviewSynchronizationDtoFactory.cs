@@ -26,6 +26,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             return result;
         }
 
+        private string GetLastComment(InterviewQuestion question)
+        {
+            if (question.Comments == null || !question.Comments.Any())
+                return null;
+            return question.Comments.Last().Text;
+        }
         public InterviewSynchronizationDto BuildFrom(InterviewData interview, Guid userId, InterviewStatus status, string comments)
         {
             var answeredQuestions = new List<AnsweredQuestionSynchronizationDto>();
@@ -42,10 +48,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             {
                 foreach (var interviewQuestion in interviewLevel.GetAllQuestions())
                 {
-                    var answeredQuestion = new AnsweredQuestionSynchronizationDto(interviewQuestion.Id, 
+                    var answeredQuestion = new AnsweredQuestionSynchronizationDto(interviewQuestion.Id,
                         interviewLevel.RosterVector,
-                        interviewQuestion.Answer, 
-                        Monads.Maybe(() => interviewQuestion.Comments.LastOrDefault().Text));
+                        interviewQuestion.Answer, GetLastComment(interviewQuestion));
 
                     FillAllComments(answeredQuestion, interviewQuestion);
 
@@ -53,16 +58,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                     {
                         answeredQuestions.Add(answeredQuestion);
                     }
-                    if (!interviewQuestion.Enabled)
+                    if (!interviewQuestion.IsEnabled())
                     {
                         disabledQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.RosterVector));
                     }
 
-                    if (!interviewQuestion.Valid)
+                    if (!interviewQuestion.IsValid())
                     {
                         invalidQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.RosterVector));
                     }
-                    if (interviewQuestion.Valid)
+                    if (interviewQuestion.IsValid())
                     {
                         validQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.RosterVector));
                     }
@@ -93,7 +98,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
         private static void FillAllComments(AnsweredQuestionSynchronizationDto answeredQuestion, InterviewQuestion interviewQuestion)
         {
-            answeredQuestion.AllComments = interviewQuestion.Comments.Select(x => new CommentSynchronizationDto
+            answeredQuestion.AllComments = (interviewQuestion.Comments?? new List<InterviewQuestionComment>()).Select(x => new CommentSynchronizationDto
             {
                 Date = x.Date,
                 UserId = x.CommenterId,

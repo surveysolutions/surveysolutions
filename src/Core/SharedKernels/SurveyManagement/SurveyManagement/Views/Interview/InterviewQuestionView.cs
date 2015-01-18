@@ -72,10 +72,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
             if (answeredQuestion == null) return;
 
-            this.IsAnswered = answeredQuestion.IsAnswered;
-            this.IsEnabled = !isParentGroupDisabled && answeredQuestion.Enabled;
-            this.IsFlagged = answeredQuestion.IsFlagged;
-            this.Comments = answeredQuestion.Comments.Select(x => new InterviewQuestionCommentView
+            this.IsAnswered = answeredQuestion.GetIsAnswered();
+            this.IsEnabled = !isParentGroupDisabled && answeredQuestion.IsEnabled();
+            this.IsFlagged = answeredQuestion.GetIsFlagged();
+            this.Comments = (answeredQuestion.Comments?? new List<InterviewQuestionComment>()).Select(x => new InterviewQuestionCommentView
             {
                 Id = x.Id,
                 Text = x.Text,
@@ -111,7 +111,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
             bool shouldBeValidByConvention = !this.IsEnabled;
 
-            this.IsValid = shouldBeValidByConvention || answeredQuestion.Valid;
+            this.IsValid = shouldBeValidByConvention || answeredQuestion.IsValid();
             this.AnswerString = FormatAnswerAsString(answeredQuestion.Answer, question);
         }
 

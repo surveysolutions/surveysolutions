@@ -140,25 +140,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 interview.Levels[levelKey] = new InterviewLevel(scope.ScopeVector, sortIndex, newVector);
             else
                 interview.Levels[levelKey].ScopeVectors[scope.ScopeVector] = sortIndex;
-
-            var level = interview.Levels[levelKey];
-            foreach (var rosterGroupsWithTitleQuestionPair in scope.RosterIdToRosterTitleQuestionIdMap)
-            {
-                if (rosterGroupsWithTitleQuestionPair.Value != null)
-                {
-                    if (!level.RosterTitleQuestionIdToRosterIdMap.ContainsKey(
-                        rosterGroupsWithTitleQuestionPair.Value.QuestionId))
-                    {
-                        level.RosterTitleQuestionIdToRosterIdMap.Add(
-                            rosterGroupsWithTitleQuestionPair.Value.QuestionId, new List<Guid>());
-                    }
-
-                    level.RosterTitleQuestionIdToRosterIdMap[rosterGroupsWithTitleQuestionPair.Value.QuestionId].Add(rosterGroupsWithTitleQuestionPair.Key);
-
-                    level.RosterTitleQuestionDescriptions[rosterGroupsWithTitleQuestionPair.Value.QuestionId] =
-                        rosterGroupsWithTitleQuestionPair.Value;
-                }
-            }
         }
 
         private decimal[] CreateNewVector(decimal[] outerScopePropagationVector, decimal indexInScope)
@@ -200,7 +181,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             return UpdateQuestion(interview, vector, questionId, (question) =>
             {
-                question.Enabled = newState;
+                if (newState)
+                    question.QuestionState = question.QuestionState | QuestionState.Enabled;
+                else
+                    question.QuestionState &= ~QuestionState.Enabled;
+            
             });
         }
 
@@ -208,7 +193,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             return UpdateQuestion(interview, vector, questionId, (question) =>
             {
-                question.Valid = valid;
+                if (valid)
+                    question.QuestionState = question.QuestionState | QuestionState.Valid;
+                else
+                    question.QuestionState &= ~QuestionState.Valid; 
             });
         }
 
@@ -219,33 +207,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 var answeredQuestion = level.GetOrCreateQuestion(questionId);
 
                 answeredQuestion.Answer = answer;
-                answeredQuestion.IsAnswered = true;
 
-                if (level.RosterTitleQuestionIdToRosterIdMap.ContainsKey(questionId))
-                {
-                    var groupIds = level.RosterTitleQuestionIdToRosterIdMap[questionId];
-
-                    var questionDescription = level.RosterTitleQuestionDescriptions.ContainsKey(questionId)
-                        ? level.RosterTitleQuestionDescriptions[questionId]
-                        : null;
-
-                    var answerString =
-                        questionDescription != null && questionDescription.Options.Any()
-                            ? AnswerUtils.AnswerToString(answer, value => questionDescription.Options[value])
-                            : AnswerUtils.AnswerToString(answer);
-
-                    foreach (var groupId in groupIds)
-                    {
-                        if (level.RosterRowTitles.ContainsKey(groupId))
-                        {
-                            level.RosterRowTitles[groupId] = answerString;
-                        }
-                        else
-                        {
-                            level.RosterRowTitles.Add(groupId, answerString);
-                        }
-                    }
-                }
+                answeredQuestion.QuestionState = answeredQuestion.QuestionState | QuestionState.Answered;
             });
         }
 
@@ -253,7 +216,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             return UpdateQuestion(interview, vector, questionId, (question) =>
             {
-                question.IsFlagged = isFlagged;
+                if (isFlagged)
+                    question.QuestionState = question.QuestionState | QuestionState.Flagged;
+                else
+                    question.QuestionState &= ~QuestionState.Flagged;
             });
         }
 
@@ -519,7 +485,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     (document, question) => UpdateQuestion(document, question.RosterVector, question.Id, updatedQuestion =>
                     {
                         updatedQuestion.Answer = null;
-                        updatedQuestion.IsAnswered = false;
+
+                        updatedQuestion.QuestionState &= ~QuestionState.Answered;
                     }));
         }
 
