@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.DenormalizerStorage;
@@ -60,7 +61,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
         {
 
             var publishedEventClosedType = typeof(IPublishableEvent);
-            var handleMethod = typeof(InterviewHistoryDenormalizer).GetMethod("Handle", new[] { publishedEventClosedType });
+            var handleMethod = typeof (InterviewHistoryDenormalizer).GetMethod("Handle",
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null,
+                new[] {publishedEventClosedType}, null);
 
             if(handleMethod==null)
                 return;
