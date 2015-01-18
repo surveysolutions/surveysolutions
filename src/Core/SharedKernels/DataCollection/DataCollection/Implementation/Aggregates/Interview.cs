@@ -5,6 +5,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
+using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
@@ -553,7 +554,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (ExpressionProcessorStatePrototype == null)
             {
-                throw new InterviewException("Interview activation error. Code EC0002");
+                throw new InterviewException(string.Format("Interview activation error. Code EC0002. QuestionnaireId: {0}, Version: {1}, {2}", getQuestionnaireId(), getVersion(), id));
             }
 
         }
@@ -810,7 +811,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 pair => new DistinctDecimalList(pair.Value.Select(rosterInstance => rosterInstance.RosterInstanceId).ToList()));
         }
 
-        private static string GetLinkedQuestionAnswerFormattedAsRosterTitle(InterviewStateDependentOnAnswers state, Identity linkedQuestion, IQuestionnaire questionnaire)
+        private string GetLinkedQuestionAnswerFormattedAsRosterTitle(InterviewStateDependentOnAnswers state, Identity linkedQuestion, IQuestionnaire questionnaire)
         {
             // set of answers that support expressions includes set of answers that may be linked to, so following line is correct
             object answer = GetEnabledQuestionAnswerSupportedInExpressions(state, linkedQuestion, questionnaire);
@@ -823,7 +824,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return answersDeclaredValid.Select(Events.Interview.Dtos.Identity.ToEventIdentity).ToArray();
         }
 
-        private static bool IsQuestionOrParentGroupDisabled(Identity question, IQuestionnaire questionnaire, Func<Identity, bool> isGroupDisabled, Func<Identity, bool> isQuestionDisabled)
+        private bool IsQuestionOrParentGroupDisabled(Identity question, IQuestionnaire questionnaire, Func<Identity, bool> isGroupDisabled, Func<Identity, bool> isQuestionDisabled)
         {
             if (isQuestionDisabled(question))
                 return true;
@@ -857,12 +858,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return state.AnsweredQuestions.Contains(questionKey);
         }
 
-        private static object GetEnabledQuestionAnswerSupportedInExpressions(InterviewStateDependentOnAnswers state, Identity question, IQuestionnaire questionnaire)
+        private object GetEnabledQuestionAnswerSupportedInExpressions(InterviewStateDependentOnAnswers state, Identity question, IQuestionnaire questionnaire)
         {
             return GetEnabledQuestionAnswerSupportedInExpressions(state, question, IsQuestionDisabled, IsGroupDisabled, questionnaire);
         }
 
-        private static object GetEnabledQuestionAnswerSupportedInExpressions(InterviewStateDependentOnAnswers state,
+        private object GetEnabledQuestionAnswerSupportedInExpressions(InterviewStateDependentOnAnswers state,
             Identity question,
             Func<InterviewStateDependentOnAnswers, Identity, bool> isQuestionDisabled,
             Func<InterviewStateDependentOnAnswers, Identity, bool> isGroupDisabled,
@@ -886,7 +887,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : null;
         }
 
-        private static decimal[] ShrinkRosterVector(decimal[] rosterVector, int length)
+        private decimal[] ShrinkRosterVector(decimal[] rosterVector, int length)
         {
             if (length == 0)
                 return EmptyRosterVector;
@@ -895,8 +896,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 return rosterVector;
 
             if (length > rosterVector.Length)
-                throw new ArgumentException(string.Format("Cannot shrink vector with length {0} to bigger length {1}.", rosterVector.Length,
-                    length));
+                throw new ArgumentException(string.Format("Cannot shrink vector with length {0} to bigger length {1}. InterviewId: {2}.", rosterVector.Length,
+                    length, EventSourceId));
 
             return rosterVector.Take(length).ToArray();
         }
@@ -904,13 +905,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         /// <remarks>
         /// If roster vector should be extended, result will be a set of vectors depending on roster count of corresponding groups.
         /// </remarks>
-        private static IEnumerable<decimal[]> ExtendRosterVector(InterviewStateDependentOnAnswers state, decimal[] rosterVector, int length,
+        private IEnumerable<decimal[]> ExtendRosterVector(InterviewStateDependentOnAnswers state, decimal[] rosterVector, int length,
             Guid[] rosterGroupsStartingFromTop,
             Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds)
         {
             if (length < rosterVector.Length)
                 throw new ArgumentException(string.Format(
-                    "Cannot extend vector with length {0} to smaller length {1}.", rosterVector.Length, length));
+                    "Cannot extend vector with length {0} to smaller length {1}. InterviewId: {2}", rosterVector.Length, length, EventSourceId));
 
             if (length == rosterVector.Length)
             {
@@ -1057,7 +1058,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return new Identity(synchronizationIdentity.Id, synchronizationIdentity.InterviewItemPropagationVector);
         }
 
-        private static Identity GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(Guid questionId,
+        private Identity GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(Guid questionId,
             decimal[] rosterVector, IQuestionnaire questionnare)
         {
             int vectorRosterLevel = rosterVector.Length;
@@ -1065,15 +1066,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (questionRosterLevel > vectorRosterLevel)
                 throw new InterviewException(string.Format(
-                    "Question {0} expected to have roster level not deeper than {1} but it is {2}.",
-                    FormatQuestionForException(questionId, questionnare), vectorRosterLevel, questionRosterLevel));
+                    "Question {0} expected to have roster level not deeper than {1} but it is {2}. InterviewId: {3}",
+                    FormatQuestionForException(questionId, questionnare), vectorRosterLevel, questionRosterLevel, EventSourceId));
 
             decimal[] questionRosterVector = ShrinkRosterVector(rosterVector, questionRosterLevel);
 
             return new Identity(questionId, questionRosterVector);
         }
 
-        private static IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
+        private IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
             InterviewStateDependentOnAnswers state,
             IEnumerable<Guid> questionIds, decimal[] rosterVector, IQuestionnaire questionnare,
             Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds)
@@ -1083,7 +1084,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     getRosterInstanceIds));
         }
 
-        private static IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
+        private IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
             InterviewStateDependentOnAnswers state,
             Guid questionId, decimal[] rosterVector, IQuestionnaire questionnare,
             Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds)
@@ -1093,8 +1094,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (questionRosterLevel < vectorRosterLevel)
                 throw new InterviewException(string.Format(
-                    "Question {0} expected to have roster level not upper than {1} but it is {2}.",
-                    FormatQuestionForException(questionId, questionnare), vectorRosterLevel, questionRosterLevel));
+                    "Question {0} expected to have roster level not upper than {1} but it is {2}. InterviewId: {3}",
+                    FormatQuestionForException(questionId, questionnare), vectorRosterLevel, questionRosterLevel, EventSourceId));
 
             Guid[] parentRosterGroupsStartingFromTop =
                 questionnare.GetRostersFromTopToSpecifiedQuestion(questionId).ToArray();
@@ -1108,7 +1109,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private static IEnumerable<Identity> GetInstancesOfQuestionsInAllRosterLevels(
+        private IEnumerable<Identity> GetInstancesOfQuestionsInAllRosterLevels(
             InterviewStateDependentOnAnswers state,
             Guid questionId, decimal[] rosterVector, IQuestionnaire questionnare,
             Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds)
@@ -1138,7 +1139,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private static IEnumerable<Identity> GetInstancesOfGroupsWithSameAndUpperRosterLevelOrThrow(
+        private IEnumerable<Identity> GetInstancesOfGroupsWithSameAndUpperRosterLevelOrThrow(
             IEnumerable<Guid> groupIds, decimal[] rosterVector, IQuestionnaire questionnare)
         {
             int vectorRosterLevel = rosterVector.Length;
@@ -1149,8 +1150,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 if (groupRosterLevel > vectorRosterLevel)
                     throw new InterviewException(string.Format(
-                        "Group {0} expected to have roster level not deeper than {1} but it is {2}.",
-                        FormatGroupForException(groupId, questionnare), vectorRosterLevel, groupRosterLevel));
+                        "Group {0} expected to have roster level not deeper than {1} but it is {2}. InterviewId: {3}",
+                        FormatGroupForException(groupId, questionnare), vectorRosterLevel, groupRosterLevel, EventSourceId));
 
                 decimal[] groupRosterVector = ShrinkRosterVector(rosterVector, groupRosterLevel);
 
@@ -1159,7 +1160,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
 
-        private static List<Identity> GetQuestionsToBeInvalidInJustCreatedInterview(IQuestionnaire questionnaire,
+        private List<Identity> GetQuestionsToBeInvalidInJustCreatedInterview(IQuestionnaire questionnaire,
             List<Identity> groupsToBeDisabled, List<Identity> questionsToBeDisabled)
         {
             return questionnaire
@@ -1740,8 +1741,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         break;
 
                     default:
-                        throw new InterviewException(string.Format("Question {0} has unknown type {1}.",
-                            FormatQuestionForException(questionId, questionnaire), questionType));
+                        throw new InterviewException(string.Format("Question {0} has unknown type {1}. InterviewId: {2}",
+                            FormatQuestionForException(questionId, questionnaire), questionType, EventSourceId));
                 }
             }
 
@@ -2944,7 +2945,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void ThrowIfInterviewWasCompleted()
         {
             if (this.wasCompleted)
-                throw new InterviewException(string.Format("Interview was completed by interviewer and cannot be deleted"));
+                throw new InterviewException(string.Format("Interview was completed by interviewer and cannot be deleted. InterviewId: {0}", EventSourceId));
         }
 
         private static void ThrowIfQuestionDoesNotExist(Guid questionId, IQuestionnaire questionnaire)
@@ -2966,51 +2967,51 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 questionnaire);
         }
 
-        private static void ThrowIfAnswersExceedsMaxAnswerCountLimit(Tuple<decimal, string>[] answers, int? maxAnswersCountLimit,
+        private void ThrowIfAnswersExceedsMaxAnswerCountLimit(Tuple<decimal, string>[] answers, int? maxAnswersCountLimit,
             Guid questionId, IQuestionnaire questionnaire)
         {
             if (maxAnswersCountLimit.HasValue && answers.Length > maxAnswersCountLimit.Value)
             {
-                throw new InterviewException(string.Format("Answers exceeds MaxAnswerCount limit for question {0}",
-                    FormatQuestionForException(questionId, questionnaire)));
+                throw new InterviewException(string.Format("Answers exceeds MaxAnswerCount limit for question {0}. InterviewId: {1}",
+                    FormatQuestionForException(questionId, questionnaire), EventSourceId));
             }
         }
 
-        private static void ThrowIfStringValueAreEmptyOrWhitespaces(Tuple<decimal, string>[] answers, Guid questionId, IQuestionnaire questionnaire)
+        private void ThrowIfStringValueAreEmptyOrWhitespaces(Tuple<decimal, string>[] answers, Guid questionId, IQuestionnaire questionnaire)
         {
             if (answers.Any(x => string.IsNullOrWhiteSpace(x.Item2)))
             {
-                throw new InterviewException(string.Format("String values should be not empty or whitespaces for question {0}",
-                    FormatQuestionForException(questionId, questionnaire)));
+                throw new InterviewException(string.Format("String values should be not empty or whitespaces for question {0}. InterviewId: {1}",
+                    FormatQuestionForException(questionId, questionnaire), EventSourceId));
             }
         }
 
-        private static void ThrowIfDecimalValuesAreNotUnique(Tuple<decimal, string>[] answers, Guid questionId, IQuestionnaire questionnaire)
+        private void ThrowIfDecimalValuesAreNotUnique(Tuple<decimal, string>[] answers, Guid questionId, IQuestionnaire questionnaire)
         {
             var decimals = answers.Select(x => x.Item1).Distinct().ToArray();
             if (answers.Length > decimals.Length)
             {
-                throw new InterviewException(string.Format("Decimal values should be unique for question {0}",
-                    FormatQuestionForException(questionId, questionnaire)));
+                throw new InterviewException(string.Format("Decimal values should be unique for question {0}. InterviewId: {1}",
+                    FormatQuestionForException(questionId, questionnaire), EventSourceId));
             }
         }
 
-        private static void ThrowIfRosterVectorIsNull(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire)
+        private void ThrowIfRosterVectorIsNull(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire)
         {
             if (rosterVector == null)
                 throw new InterviewException(string.Format(
-                    "Roster information for question {0} is missing. Roster vector cannot be null.",
-                    FormatQuestionForException(questionId, questionnaire)));
+                    "Roster information for question {0} is missing. Roster vector cannot be null. InterviewId: {1}",
+                    FormatQuestionForException(questionId, questionnaire), EventSourceId));
         }
 
-        private static void ThrowIfRosterVectorLengthDoesNotCorrespondToParentRosterGroupsCount(
+        private void ThrowIfRosterVectorLengthDoesNotCorrespondToParentRosterGroupsCount(
             Guid questionId, decimal[] rosterVector, Guid[] parentRosterGroups, IQuestionnaire questionnaire)
         {
             if (rosterVector.Length != parentRosterGroups.Length)
                 throw new InterviewException(string.Format(
                     "Roster information for question {0} is incorrect. " +
-                        "Roster vector has {1} elements, but parent roster groups count is {2}.",
-                    FormatQuestionForException(questionId, questionnaire), rosterVector.Length, parentRosterGroups.Length));
+                        "Roster vector has {1} elements, but parent roster groups count is {2}. InterviewId: {3}",
+                    FormatQuestionForException(questionId, questionnaire), rosterVector.Length, parentRosterGroups.Length, EventSourceId));
         }
 
         private void ThrowIfSomeOfRosterVectorValuesAreInvalid(InterviewStateDependentOnAnswers state,
@@ -3031,10 +3032,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     throw new InterviewException(string.Format(
                         "Roster information for question {0} is incorrect. " +
                             "Roster vector element with index [{1}] refers to instance of roster group {2} by instance id [{3}] " +
-                            "but roster group has only following roster instances: {4}.",
+                            "but roster group has only following roster instances: {4}. InterviewId: {5}",
                         FormatQuestionForException(questionId, questionnaire), indexOfRosterVectorElement,
                         FormatGroupForException(rosterGroupId, questionnaire), rosterInstanceId,
-                        string.Join(", ", rosterInstanceIds)));
+                        string.Join(", ", rosterInstanceIds), EventSourceId));
             }
         }
 
@@ -3046,9 +3047,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             bool typeIsNotExpected = !expectedQuestionTypes.Contains(questionType);
             if (typeIsNotExpected)
                 throw new InterviewException(string.Format(
-                    "Question {0} has type {1}. But one of the following types was expected: {2}.",
+                    "Question {0} has type {1}. But one of the following types was expected: {2}. InterviewId: {3}",
                     FormatQuestionForException(questionId, questionnaire), questionType,
-                    string.Join(", ", expectedQuestionTypes.Select(type => type.ToString()))));
+                    string.Join(", ", expectedQuestionTypes.Select(type => type.ToString())),
+                    EventSourceId));
         }
 
         private void ThrowIfNumericQuestionIsNotReal(Guid questionId, IQuestionnaire questionnaire)
@@ -3056,8 +3058,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var isNotSupportReal = questionnaire.IsQuestionInteger(questionId);
             if (isNotSupportReal)
                 throw new InterviewException(string.Format(
-                    "Question {0} doesn't support answer of type real.",
-                    FormatQuestionForException(questionId, questionnaire)));
+                    "Question {0} doesn't support answer of type real. InterviewId: {1}",
+                    FormatQuestionForException(questionId, questionnaire), EventSourceId));
         }
 
         private void ThrowIfNumericQuestionIsNotInteger(Guid questionId, IQuestionnaire questionnaire)
@@ -3065,8 +3067,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var isNotSupportInteger = !questionnaire.IsQuestionInteger(questionId);
             if (isNotSupportInteger)
                 throw new InterviewException(string.Format(
-                    "Question {0} doesn't support answer of type integer.",
-                    FormatQuestionForException(questionId, questionnaire)));
+                    "Question {0} doesn't support answer of type integer. InterviewId: {1}",
+                    FormatQuestionForException(questionId, questionnaire), EventSourceId));
         }
 
         private void ThrowIfLinkedQuestionDoesNotHaveAnswer(InterviewStateDependentOnAnswers state, Identity answeredQuestion,
@@ -3075,21 +3077,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (!WasQuestionAnswered(state, answeredLinkedQuestion))
             {
                 throw new InterviewException(string.Format(
-                    "Could not set answer for question {0} because his dependent linked question {1} does not have answer",
+                    "Could not set answer for question {0} because his dependent linked question {1} does not have answer. InterviewId: {2}",
                     FormatQuestionForException(answeredQuestion, questionnaire),
-                    FormatQuestionForException(answeredLinkedQuestion, questionnaire)));
+                    FormatQuestionForException(answeredLinkedQuestion, questionnaire),
+                    EventSourceId));
             }
         }
 
-        private static void ThrowIfValueIsNotOneOfAvailableOptions(Guid questionId, decimal value, IQuestionnaire questionnaire)
+        private void ThrowIfValueIsNotOneOfAvailableOptions(Guid questionId, decimal value, IQuestionnaire questionnaire)
         {
             IEnumerable<decimal> availableValues = questionnaire.GetAnswerOptionsAsValues(questionId);
 
             bool valueIsNotOneOfAvailable = !availableValues.Contains(value);
             if (valueIsNotOneOfAvailable)
                 throw new InterviewException(string.Format(
-                    "For question {0} was provided selected value {1} as answer. But only following values are allowed: {2}.",
-                    FormatQuestionForException(questionId, questionnaire), value, JoinDecimalsWithComma(availableValues)));
+                    "For question {0} was provided selected value {1} as answer. But only following values are allowed: {2}. InterviewId: {3}",
+                    FormatQuestionForException(questionId, questionnaire), value, JoinDecimalsWithComma(availableValues), EventSourceId));
         }
 
         private void ThrowIfCascadingQuestionValueIsNotOneOfParentAvailableOptions(InterviewStateDependentOnAnswers interviewState, Identity answeredQuestion, decimal[] rosterVector, decimal value, IQuestionnaire questionnaire)
@@ -3113,40 +3116,42 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answerNotExistsInParent = Convert.ToDecimal(parentAnswer) != childParentValue;
             if (answerNotExistsInParent)
                 throw new InterviewException(string.Format(
-                    "For question {0} was provided selected value {1} as answer with parent value {2}, but this do not correspond to the parent answer selected value {3}",
-                    FormatQuestionForException(questionId, questionnaire), value, childParentValue, parentAnswer));
+                    "For question {0} was provided selected value {1} as answer with parent value {2}, but this do not correspond to the parent answer selected value {3}. InterviewId: {4}",
+                    FormatQuestionForException(questionId, questionnaire), value, childParentValue, parentAnswer, EventSourceId));
         }
 
-        private static void ThrowIfSomeValuesAreNotFromAvailableOptions(Guid questionId, decimal[] values, IQuestionnaire questionnaire)
+        private void ThrowIfSomeValuesAreNotFromAvailableOptions(Guid questionId, decimal[] values, IQuestionnaire questionnaire)
         {
             IEnumerable<decimal> availableValues = questionnaire.GetAnswerOptionsAsValues(questionId);
 
             bool someValueIsNotOneOfAvailable = values.Any(value => !availableValues.Contains(value));
             if (someValueIsNotOneOfAvailable)
                 throw new InterviewException(string.Format(
-                    "For question {0} were provided selected values {1} as answer. But only following values are allowed: {2}.",
+                    "For question {0} were provided selected values {1} as answer. But only following values are allowed: {2}. InterviewId: {3}",
                     FormatQuestionForException(questionId, questionnaire), JoinDecimalsWithComma(values),
-                    JoinDecimalsWithComma(availableValues)));
+                    JoinDecimalsWithComma(availableValues),
+                    EventSourceId));
         }
 
-        private static void ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(Guid questionId, int answersCount, IQuestionnaire questionnaire)
+        private void ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(Guid questionId, int answersCount, IQuestionnaire questionnaire)
         {
             int? maxSelectedOptions = questionnaire.GetMaxSelectedAnswerOptions(questionId);
 
             if (maxSelectedOptions.HasValue && maxSelectedOptions > 0 && answersCount > maxSelectedOptions)
                 throw new InterviewException(string.Format(
-                    "For question {0} number of answers is greater than the maximum number of selected answers",
-                    FormatQuestionForException(questionId, questionnaire)));
+                    "For question {0} number of answers is greater than the maximum number of selected answers. InterviewId: {1}",
+                    FormatQuestionForException(questionId, questionnaire), EventSourceId));
         }
 
-        private static void ThrowIfQuestionOrParentGroupIsDisabled(InterviewStateDependentOnAnswers state, Identity question, IQuestionnaire questionnaire)
+        private void ThrowIfQuestionOrParentGroupIsDisabled(InterviewStateDependentOnAnswers state, Identity question, IQuestionnaire questionnaire)
         {
             if (IsQuestionDisabled(state, question))
                 throw new InterviewException(string.Format(
-                    "Question {1} is disabled by it's following enablement condition:{0}{2}",
+                    "Question {1} is disabled by it's following enablement condition:{0}{2}{0}InterviewId: {3}",
                     Environment.NewLine,
                     FormatQuestionForException(question, questionnaire),
-                    questionnaire.GetCustomEnablementConditionForQuestion(question.Id)));
+                    questionnaire.GetCustomEnablementConditionForQuestion(question.Id),
+                    EventSourceId));
 
             IEnumerable<Guid> parentGroupIds = questionnaire.GetAllParentGroupsForQuestion(question.Id);
             IEnumerable<Identity> parentGroups = GetInstancesOfGroupsWithSameAndUpperRosterLevelOrThrow(parentGroupIds,
@@ -3156,11 +3161,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 if (IsGroupDisabled(state, parentGroup))
                     throw new InterviewException(string.Format(
-                        "Question {1} is disabled because parent group {2} is disabled by it's following enablement condition:{0}{3}",
+                        "Question {1} is disabled because parent group {2} is disabled by it's following enablement condition:{0}{3}{0}InterviewId: {4}",
                         Environment.NewLine,
                         FormatQuestionForException(question, questionnaire),
                         FormatGroupForException(parentGroup, questionnaire),
-                        questionnaire.GetCustomEnablementConditionForGroup(parentGroup.Id)));
+                        questionnaire.GetCustomEnablementConditionForGroup(parentGroup.Id),
+                        EventSourceId));
             }
         }
 
@@ -3174,11 +3180,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (roundedAnswer != answer)
                 throw new InterviewException(
                     string.Format(
-                        "Answer '{0}' for question {1}  is incorrect because has more decimal places then allowed by questionnaire", answer,
-                        FormatQuestionForException(questionId, questionnaire)));
+                        "Answer '{0}' for question {1}  is incorrect because has more decimal places then allowed by questionnaire. InterviewId: {2}", answer,
+                        FormatQuestionForException(questionId, questionnaire), EventSourceId));
         }
 
-        private static void ThrowIfNumericAnswerExceedsMaxValue(Guid questionId, decimal answer, IQuestionnaire questionnaire)
+        private void ThrowIfNumericAnswerExceedsMaxValue(Guid questionId, decimal answer, IQuestionnaire questionnaire)
         {
             int? maxValue = questionnaire.GetMaxValueForNumericQuestion(questionId);
 
@@ -3189,33 +3195,34 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (answerExceedsMaxValue)
                 throw new InterviewException(string.Format(
-                    "Answer '{0}' for question {1} is incorrect because answer is greater than Roster upper bound '{2}'.",
-                    answer, FormatQuestionForException(questionId, questionnaire), maxValue.Value));
+                    "Answer '{0}' for question {1} is incorrect because answer is greater than Roster upper bound '{2}'. InterviewId: {3}",
+                    answer, FormatQuestionForException(questionId, questionnaire), maxValue.Value, EventSourceId));
         }
 
-        private static void ThrowIfRosterSizeAnswerIsNegative(Guid questionId, int answer, IQuestionnaire questionnaire)
+        private void ThrowIfRosterSizeAnswerIsNegative(Guid questionId, int answer, IQuestionnaire questionnaire)
         {
             bool answerIsNegative = answer < 0;
 
             if (answerIsNegative)
                 throw new InterviewException(string.Format(
-                    "Answer '{0}' for question {1} is incorrect because question is used as size of roster group and specified answer is negative.",
-                    answer, FormatQuestionForException(questionId, questionnaire)));
+                    "Answer '{0}' for question {1} is incorrect because question is used as size of roster group and specified answer is negative. InterviewId: {2}",
+                    answer, FormatQuestionForException(questionId, questionnaire), EventSourceId));
         }
 
         private void ThrowIfInterviewStatusIsNotOneOfExpected(params InterviewStatus[] expectedStatuses)
         {
             if (!expectedStatuses.Contains(this.status))
                 throw new InterviewException(string.Format(
-                    "Interview status is {0}. But one of the following statuses was expected: {1}.",
-                    this.status, string.Join(", ", expectedStatuses.Select(expectedStatus => expectedStatus.ToString()))));
+                    "Interview status is {0}. But one of the following statuses was expected: {1}. InterviewId: {2}",
+                    this.status, 
+                    string.Join(", ", expectedStatuses.Select(expectedStatus => expectedStatus.ToString())),
+                    EventSourceId));
         }
 
         private void ThrowIfInterviewHardDeleted()
         {
             if (this.wasHardDeleted)
-                throw new InterviewException(
-                    "Interview status is hard deleted.");
+                throw new InterviewException(string.Format("Interview {0} status is hard deleted.", EventSourceId));
         }
 
         private void ThrowIfStatusNotAllowedToBeChangedWithMetadata(InterviewStatus interviewStatus)
@@ -3254,8 +3261,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     return;
             }
             throw new InterviewException(string.Format(
-                "Status {0} not allowed to be changed with ApplySynchronizationMetadata command",
-                interviewStatus));
+                "Status {0} not allowed to be changed with ApplySynchronizationMetadata command. InterviewId: {1}",
+                interviewStatus, EventSourceId));
         }
 
         #endregion
@@ -3575,7 +3582,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 referencedQuestionId, linkedQuestion.RosterVector, questionnaire, getRosterInstanceIds);
         }
 
-        private static bool IsQuestionGoingToBeDisabled(Identity question,
+        private bool IsQuestionGoingToBeDisabled(Identity question,
             IEnumerable<Identity> groupsToBeDisabled, IEnumerable<Identity> questionsToBeDisabled, IQuestionnaire questionnaire)
         {
             bool questionIsListedToBeDisabled =

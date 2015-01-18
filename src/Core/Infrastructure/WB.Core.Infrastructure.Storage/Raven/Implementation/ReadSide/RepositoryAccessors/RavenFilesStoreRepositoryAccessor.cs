@@ -4,15 +4,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using Nito.AsyncEx;
 using Nito.AsyncEx.Synchronous;
 using Raven.Abstractions.FileSystem;
 using Raven.Client.FileSystem;
 using Raven.Imports.Newtonsoft.Json;
-using Raven.Json.Linq;
 using WB.Core.GenericSubdomains.Utils.Services;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Services;
@@ -25,20 +23,16 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly ILogger logger;
-        private const int MaxCountOfCachedEntities = 256;
-        private const int MaxCountOfEntitiesInOneStoreOperation = 16;
+        private const int MaxCountOfCachedEntities = 253;
+        private const int MaxCountOfEntitiesInOneStoreOperation = 30;
         private readonly ConcurrentDictionary<string, TEntity> cache = new ConcurrentDictionary<string, TEntity>();
-        private ConcurrentDictionary<string, bool> packagesInProcess = new ConcurrentDictionary<string, bool>();
-        private const int CountOfAttempt = 60;
         private bool isCacheEnabled = false;
         private readonly RavenFilesStoreRepositoryAccessorSettings ravenFilesStoreRepositoryAccessorSettings;
-        private readonly IWaitService waitService;
         private readonly IFilesStore ravenFilesStore;
 
-        public RavenFilesStoreRepositoryAccessor(ILogger logger, IWaitService waitService, RavenFilesStoreRepositoryAccessorSettings ravenFilesStoreRepositoryAccessorSettings)
+        public RavenFilesStoreRepositoryAccessor(ILogger logger, RavenFilesStoreRepositoryAccessorSettings ravenFilesStoreRepositoryAccessorSettings)
         {
             this.logger = logger;
-            this.waitService = waitService;
             this.ravenFilesStoreRepositoryAccessorSettings = ravenFilesStoreRepositoryAccessorSettings;
             this.ravenFilesStore = this.CreateRavenFilesStore();
         }
@@ -69,18 +63,8 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         {
             if (!isCacheEnabled)
             {
-                if (this.WaitUntilViewCanBeProcessed(id))
-                {
-                    try
-                    {
-                        if (ravenFilesStoreRepositoryAccessorSettings.AdditionalEventChecker != null)
-                            ravenFilesStoreRepositoryAccessorSettings.AdditionalEventChecker(id);
-                    }
-                    finally
-                    {
-                        this.ReleaseSpotForOtherThread(id);
-                    }
-                }
+                if (ravenFilesStoreRepositoryAccessorSettings.AdditionalEventChecker != null)
+                    ravenFilesStoreRepositoryAccessorSettings.AdditionalEventChecker(id);
                 return this.GetEntityAvoidingCacheById(id);
             }
 
@@ -160,40 +144,13 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             {
                 Remove(fileHeader.Name);
             }
+
         }
 
         private void StoreAllCachedEntitiesToRepository()
         {
-            foreach (var entityId in cache.Keys)
-            {
-                var entity = cache[entityId];
-                StoreAvoidingCache(entity, entityId);
-                TEntity deleteResult;
-                cache.TryRemove(entityId, out deleteResult);
-            }
-            if (!cache.IsEmpty)
-                this.StoreAllCachedEntitiesToRepository();
-        }
-
-        private void ReleaseSpotForOtherThread(string id)
-        {
-            bool dummyBool;
-            packagesInProcess.TryRemove(id, out dummyBool);
-        }
-
-        private bool WaitUntilViewCanBeProcessed(string id)
-        {
-            int i = 0;
-            while (!packagesInProcess.TryAdd(id, true))
-            {
-                if (i > CountOfAttempt)
-                {
-                    return false;
-                }
-                waitService.WaitForSecond();
-                i++;
-            }
-            return true;
+            while (!cache.IsEmpty)
+                ReduceCache();
         }
 
         private void ReduceCacheIfNeeded()
@@ -206,13 +163,34 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         private void ReduceCache()
         {
-            var bulk = this.cache.Keys.Take(MaxCountOfEntitiesInOneStoreOperation).ToList();
+            StoreChunk(this.cache.Keys.Take(MaxCountOfEntitiesInOneStoreOperation).ToList());
+        }
+
+        private void StoreChunk(List<string> bulk)
+        {
+            var streamsToClose = new Dictionary<string, MemoryStream>();
+            using (var session = this.ravenFilesStore.OpenAsyncSession())
+            {
+                foreach (var entityId in bulk)
+                {
+                    var entityToStore = cache[entityId];
+
+                    var memoryStream =
+                        new MemoryStream(Encoding.UTF8.GetBytes(this.GetItemAsContent(entityToStore)));
+                    session.RegisterUpload(this.CreateFileStoreEntityId(entityId), memoryStream);
+
+                    streamsToClose.Add(entityId, memoryStream);
+                }
+                session.SaveChangesAsync().WaitAndUnwrapException(); ;
+            }
+
             foreach (var entityId in bulk)
             {
-                var entity = cache[entityId];
-                StoreAvoidingCache(entity, entityId);
+                streamsToClose[entityId].Dispose();
+                streamsToClose.Remove(entityId);
+
                 TEntity deleteResult;
-                cache.TryRemove(entityId, out deleteResult);
+                this.cache.TryRemove(entityId, out deleteResult);
             }
         }
 
@@ -223,27 +201,23 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         private TEntity GetEntityAvoidingCacheById(string entityId)
         {
-            var countOfDocumentsById = AsyncContext.Run(() =>
+            try
             {
-                using (var session = ravenFilesStore.OpenAsyncSession())
+                using (
+                    var stream =
+                        AsyncContext.Run(() => ravenFilesStore.AsyncFilesCommands.DownloadAsync(this.CreateFileStoreEntityId(entityId))))
                 {
-                    return session.Query().WhereEquals(f => f.Name, entityId).ToListAsync();
-                }
-            });
-
-            if (!countOfDocumentsById.Any())
-                return null;
-
-            using (var stream = AsyncContext.Run(() => ravenFilesStore.AsyncFilesCommands.DownloadAsync(this.CreateFileStoreEntityId(entityId))))
-            {
-                if (stream == null)
-                    return null;
-
-                using (var reader = new StreamReader(stream, Encoding.UTF8))
-                {
-                    return Deserrialize(reader.ReadToEnd());
+                    using (var reader = new StreamReader(stream, Encoding.UTF8))
+                    {
+                        return Deserrialize(reader.ReadToEnd());
+                    }
                 }
             }
+            catch (FileNotFoundException)
+            {
+                //it's ok to have FileNotFoundException, view could be absent
+            }
+            return null;
         }
 
         private void StoreAvoidingCache(TEntity entity, string entityId)
@@ -257,7 +231,15 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         private void RemoveAvoidingCache(string entityId)
         {
-            ravenFilesStore.AsyncFilesCommands.DeleteAsync(this.CreateFileStoreEntityId(entityId)).WaitAndUnwrapException();
+            try
+            {
+                ravenFilesStore.AsyncFilesCommands.DeleteAsync(this.CreateFileStoreEntityId(entityId)).WaitAndUnwrapException();
+            }
+            catch (FileNotFoundException e)
+            {
+                //it's ok to have FileNotFoundException during rebuild readside
+                logger.Info(e.Message, e);
+            }
         }
 
         private string CreateFileStoreEntityId(string id)

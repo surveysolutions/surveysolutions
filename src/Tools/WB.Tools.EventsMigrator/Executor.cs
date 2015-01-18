@@ -73,8 +73,8 @@ namespace WB.Tools.EventsMigrator
                             committedEvent.EventTimeStamp,
                             committedEvent.Payload,
                             committedEvent.EventVersion));
-                        
-                        
+
+
                         eventStore.SaveStream(stream, connection);
 
                         Interlocked.Increment(ref processed);

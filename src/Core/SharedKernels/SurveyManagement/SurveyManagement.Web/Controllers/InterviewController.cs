@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
@@ -49,6 +51,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             ChangeStatusView interviewInfo = this.changeStatusFactory.Load(new ChangeStatusInputModel() { InterviewId = id });
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
+            ChangeStatusView interviewHistoryOfStatuses = this.changeStatusFactory.Load(new ChangeStatusInputModel { InterviewId = id });
 
             if (interviewInfo == null || interviewSummary == null)
                 return HttpNotFound();
@@ -62,7 +65,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             InterviewDetailsView interviewDetailsView = interviewDetailsViewFactory.GetInterviewDetails(id);
 
-            return View(new DetailsViewModel() { SortBy = sortBy.Value, Filter = filter.Value, InterviewDetails = interviewDetailsView });
+            var allGroups = interviewDetailsView.Groups.ToArray();
+
+            foreach (var interviewGroupView in interviewDetailsView.Groups)
+            {
+                if (sortBy.Value == InterviewDetailsSortBy.Answered)
+                {
+                    interviewGroupView.Entities =
+                        interviewGroupView.Entities.Where(
+                            x =>
+                                x is InterviewStaticTextView ||
+                                ((x is InterviewQuestionView) && ((InterviewQuestionView) x).IsAnswered)).ToList();
+                }
+            }
+
+            return
+                View(new DetailsViewModel()
+                {
+                    SortBy = sortBy.Value,
+                    Filter = filter.Value,
+                    FilteredInterviewDetails = interviewDetailsView,
+                    Groups = allGroups,
+                    History = interviewHistoryOfStatuses
+                });
         }
 
         public ActionResult InterviewDetails(Guid id, string template, Guid? group, Guid? question, Guid? propagationKey)
