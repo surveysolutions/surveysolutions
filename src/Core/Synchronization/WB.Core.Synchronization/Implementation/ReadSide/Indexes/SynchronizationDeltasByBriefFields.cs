@@ -3,7 +3,7 @@ using System.Linq;
 using Raven.Client.Indexes;
 using WB.Core.Synchronization.SyncStorage;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes
+namespace WB.Core.Synchronization.Implementation.ReadSide.Indexes
 {
     public class SynchronizationDeltasByBriefFields :
         AbstractIndexCreationTask<SynchronizationDelta, SynchronizationDeltasByBriefFields.SyncPackageBrief>
