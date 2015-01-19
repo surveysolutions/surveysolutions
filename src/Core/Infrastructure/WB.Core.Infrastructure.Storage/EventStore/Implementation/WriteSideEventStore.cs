@@ -110,7 +110,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public void Store(UncommittedEventStream eventStream)
         {
-            using (var transaction = connection.StartTransactionAsync(EventsPrefix + eventStream.SourceId, ExpectedVersion.Any, this.credentials).WaitAndUnwrapException())
+            using (var transaction = AsyncContext.Run(() => connection.StartTransactionAsync(EventsPrefix + eventStream.SourceId, ExpectedVersion.Any, this.credentials)))
             {
                 this.SaveStream(eventStream, connection);
 
