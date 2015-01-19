@@ -10,6 +10,9 @@ namespace Main.Core.Events.Questionnaire
 
         public int TargetIndex { get; set; }
 
+        /// <summary>
+        /// Gets or sets count of allowed answers for list question
+        /// </summary>
         public int? MaxAnswerCount { get; set; }
 
         public int? CountOfDecimalPlaces { get; set; }
