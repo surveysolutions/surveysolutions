@@ -75,7 +75,7 @@ namespace WB.Tools.EventsMigrator
                             committedEvent.EventVersion));
 
 
-                        eventStore.SaveStream(stream, connection);
+                        eventStore.Store(stream);
 
                         Interlocked.Increment(ref processed);
                         this.elapsed = watch.Elapsed;
@@ -89,14 +89,14 @@ namespace WB.Tools.EventsMigrator
 
         private static WriteSideEventStore GetEventStoreStore(IShell settings)
         {
-            var instance = new WriteSideEventStore(new EventStoreConnectionSettings
+            var instance = new WriteSideEventStore(new EventStoreConnectionProvider(new EventStoreConnectionSettings
             {
                 ServerIP = settings.EventStoreIP,
                 ServerHttpPort = settings.EventStoreHttpPort,
                 ServerTcpPort = settings.EventStoreTcpPort,
                 Login = settings.EventStoreLogin,
                 Password = settings.EventStorePassword
-            });
+            }));
             return instance;
         }
 
