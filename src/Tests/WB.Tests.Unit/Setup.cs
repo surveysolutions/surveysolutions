@@ -4,7 +4,10 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -78,6 +81,40 @@ namespace WB.Tests.Unit
 
             Setup.InstanceToMockedServiceLocator<IQuestionnaireRepository>(
                 Create.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire));
+        }
+
+        public static IEventHandler FailingFunctionalEventHandler()
+        {
+            return FailingFunctionalEventHandlerHavingUniqueType<object>();
+        }
+
+        public static IEventHandler FailingFunctionalEventHandlerHavingUniqueType<TUniqueType>()
+        {
+            var uniqueEventHandlerMock = new Mock<IEnumerable<TUniqueType>>();
+            var eventHandlerMock = uniqueEventHandlerMock.As<IEventHandler>();
+            var eventHandlerAsFunctional = eventHandlerMock.As<IFunctionalEventHandler>();
+            eventHandlerAsFunctional
+                .Setup(_ => _.Handle(It.IsAny<IEnumerable<IPublishableEvent>>(), It.IsAny<Guid>()))
+                .Throws<Exception>();
+
+            return eventHandlerMock.Object;
+        }
+
+        public static IEventHandler FailingOldSchoolEventHandler()
+        {
+            return FailingOldSchoolEventHandlerHavingUniqueType<object>();
+        }
+
+        public static IEventHandler FailingOldSchoolEventHandlerHavingUniqueType<TUniqueType>()
+        {
+            var uniqueEventHandlerMock = new Mock<IEnumerable<TUniqueType>>();
+            var eventHandlerMock = uniqueEventHandlerMock.As<IEventHandler>();
+            var eventHandlerAsOldSchool = eventHandlerMock.As<IEventHandler<object>>();
+            eventHandlerAsOldSchool
+                .Setup(_ => _.Handle(It.IsAny<IPublishedEvent<object>>()))
+                .Throws<Exception>();
+
+            return eventHandlerMock.Object;
         }
     }
 }
