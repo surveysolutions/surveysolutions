@@ -114,9 +114,10 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             {
                 this.SaveStream(eventStream, connection);
 
-                var cancellationTokenSource = new CancellationTokenSource();
-                cancellationTokenSource.CancelAfter(this.defaultTimeout);
-                transaction.CommitAsync().WaitAndUnwrapException(cancellationTokenSource.Token);
+                using (var cancellationTokenSource = new CancellationTokenSource()) {
+                    cancellationTokenSource.CancelAfter(this.defaultTimeout);
+                    transaction.CommitAsync().WaitAndUnwrapException(cancellationTokenSource.Token);
+                }
             }
         }
 
@@ -127,11 +128,12 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                 var eventData = this.BuildEventData(@event);
                 int expected = (int)(@event.EventSequence - 2);
 
-                var cancellationTokenSource = new CancellationTokenSource();
-                cancellationTokenSource.CancelAfter(this.defaultTimeout);
+                using (var cancellationTokenSource = new CancellationTokenSource()) {
+                    cancellationTokenSource.CancelAfter(this.defaultTimeout);
 
-                connection.AppendToStreamAsync(EventsPrefix + @event.EventSourceId.FormatGuid(), expected, this.credentials, eventData)
-                    .WaitAndUnwrapException(cancellationTokenSource.Token);
+                    connection.AppendToStreamAsync(EventsPrefix + @event.EventSourceId.FormatGuid(), expected, this.credentials, eventData)
+                        .WaitAndUnwrapException(cancellationTokenSource.Token);
+                }
             }
         }
 
@@ -201,7 +203,13 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                 var eventStoreConnection =
                     EventStoreConnection.Create(new IPEndPoint(IPAddress.Parse(this.connectionSettings.ServerIP),
                         this.connectionSettings.ServerTcpPort));
-                eventStoreConnection.ConnectAsync().Wait(this.defaultTimeout);
+
+                using (var cancellationTokenSource = new CancellationTokenSource()) {
+                    cancellationTokenSource.CancelAfter(this.defaultTimeout);
+
+                    eventStoreConnection.ConnectAsync().WaitAndUnwrapException(cancellationTokenSource.Token);
+                }
+
                 return eventStoreConnection;
             }
             return this.connection;
