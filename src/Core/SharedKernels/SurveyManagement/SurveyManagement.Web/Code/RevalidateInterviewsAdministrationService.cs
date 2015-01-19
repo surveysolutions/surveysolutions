@@ -24,11 +24,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
         private readonly ICommandService commandService;
         private readonly ILogger logger;
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
-        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
-        private readonly IReadSideKeyValueStorage<InterviewData> interviewsDataWriter;
-        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewsSummaryWriter;
 
+        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
 
         static RevalidateInterviewsAdministrationService()
         {
@@ -37,17 +34,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
         public RevalidateInterviewsAdministrationService(
             ILogger logger,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviews,
-            ICommandService commandService, IReadSideRepositoryIndexAccessor indexAccessor,
-            IReadSideKeyValueStorage<InterviewData> interviewsDataWriter, 
-            IReadSideRepositoryWriter<InterviewSummary> interviewsSummaryWriter)
+            ICommandService commandService, IReadSideRepositoryIndexAccessor indexAccessor)
         {
             this.logger = logger;
-            this.interviews = interviews;
             this.commandService = commandService;
             this.indexAccessor = indexAccessor;
-            this.interviewsDataWriter = interviewsDataWriter;
-            this.interviewsSummaryWriter = interviewsSummaryWriter;
         }
 
         public void RevalidateAllInterviewsWithErrorsAsync()
@@ -107,7 +98,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
                 var items = this.indexAccessor.Query<InterviewSummary>(indexName)
                     .Where(interview =>
-                        interview.HasErrors && interview.IsDeleted == false &&
+                        interview.HasErrors == true && interview.IsDeleted == false &&
                         (interview.Status == InterviewStatus.Completed ||
                          interview.Status == InterviewStatus.RejectedBySupervisor ||
                          interview.Status == InterviewStatus.ApprovedBySupervisor ||
