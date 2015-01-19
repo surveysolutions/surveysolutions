@@ -187,7 +187,7 @@ namespace CapiDataGenerator
                 eventStoreConnectionSettings.Login = ConfigurationManager.AppSettings["EventStore.Headquarters.Login"];
                 eventStoreConnectionSettings.Password = ConfigurationManager.AppSettings["EventStore.Headquarters.Password"];
 
-                return new WriteSideEventStore(eventStoreConnectionSettings);
+                return new WriteSideEventStore(new EventStoreConnectionProvider(eventStoreConnectionSettings));
             }
             else
             {
@@ -214,7 +214,7 @@ namespace CapiDataGenerator
                 eventStoreConnectionSettings.Login = ConfigurationManager.AppSettings["EventStore.Supervisor.Login"];
                 eventStoreConnectionSettings.Password = ConfigurationManager.AppSettings["EventStore.Supervisor.Password"];
 
-                return new WriteSideEventStore(eventStoreConnectionSettings);
+                return new WriteSideEventStore(new EventStoreConnectionProvider(eventStoreConnectionSettings));
             }
             else
             {
