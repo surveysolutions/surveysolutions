@@ -19,6 +19,10 @@ namespace Main.Core.Events.Questionnaire
         public bool? IsInteger { get; set; }
 
         public bool? AreAnswersOrdered { get; set; }
+
+        /// <summary>
+        /// Gets or sets maximum count of answers for multioption question
+        /// </summary>
         public int? MaxAllowedAnswers { get; set; }
         public string Mask { get; set; }
         public bool? IsFilteredCombobox { get; set; }

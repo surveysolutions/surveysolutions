@@ -272,7 +272,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         }
 
-        private void Apply(QuestionCloned e)
+        internal void Apply(QuestionCloned e)
         {
             var maxValue = e.QuestionType == QuestionType.Numeric ? e.MaxValue as int? : null;
             IQuestion question =
@@ -301,7 +301,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         e.AreAnswersOrdered,
                         e.MaxAllowedAnswers,
-                        null,
+                        e.MaxAnswerCount,
                         e.IsFilteredCombobox,
                         e.CascadeFromQuestionId));
 
