@@ -196,19 +196,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             });
         }
 
-        private static InterviewData ChangeQuestionConditionState(InterviewData interview, decimal[] vector, Guid questionId, bool newState)
+        private static InterviewData ChangeQuestionConditionState(InterviewData interview, decimal[] vector, Guid questionId, bool disabled)
         {
             return UpdateQuestion(interview, vector, questionId, (question) =>
             {
-                question.Enabled = newState;
+                question.Disabled = disabled;
             });
         }
 
-        private static InterviewData ChangeQuestionConditionValidity(InterviewData interview, decimal[] vector, Guid questionId, bool valid)
+        private static InterviewData ChangeQuestionConditionValidity(InterviewData interview, decimal[] vector, Guid questionId, bool invalid)
         {
             return UpdateQuestion(interview, vector, questionId, (question) =>
             {
-                question.Valid = valid;
+                question.Invalid = invalid;
             });
         }
 
@@ -555,7 +555,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return 
                 evnt.Payload.Questions.Aggregate(
                     currentState,
-                    (document, question) => ChangeQuestionConditionState(document, question.RosterVector, question.Id, false));
+                    (document, question) => ChangeQuestionConditionState(document, question.RosterVector, question.Id, true));
         }
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<QuestionsEnabled> evnt)
@@ -563,7 +563,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return 
                 evnt.Payload.Questions.Aggregate(
                     currentState,
-                    (document, question) => ChangeQuestionConditionState(document, question.RosterVector, question.Id, true));
+                    (document, question) => ChangeQuestionConditionState(document, question.RosterVector, question.Id, false));
         }
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<AnswersDeclaredInvalid> evnt)
@@ -571,7 +571,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return
                 evnt.Payload.Questions.Aggregate(
                     currentState,
-                    (document, question) => ChangeQuestionConditionValidity(document, question.RosterVector, question.Id, false));
+                    (document, question) => ChangeQuestionConditionValidity(document, question.RosterVector, question.Id, true));
         }
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<AnswersDeclaredValid> evnt)
@@ -579,7 +579,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return 
                 evnt.Payload.Questions.Aggregate(
                     currentState,
-                    (document, question) => ChangeQuestionConditionValidity(document, question.RosterVector, question.Id, true));
+                    (document, question) => ChangeQuestionConditionValidity(document, question.RosterVector, question.Id, false));
         }
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<FlagRemovedFromAnswer> evnt)
