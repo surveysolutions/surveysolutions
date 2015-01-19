@@ -23,7 +23,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly ILogger logger;
-        private const int MaxCountOfCachedEntities = 253;
+        private const int MaxCountOfCachedEntities = 256;
         private const int MaxCountOfEntitiesInOneStoreOperation = 30;
         private readonly ConcurrentDictionary<string, TEntity> cache = new ConcurrentDictionary<string, TEntity>();
         private bool isCacheEnabled = false;
@@ -319,6 +319,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             }
             catch (Exception e)
             {
+                logger.Error(e.Message, e);
                 throw new InvalidOperationException(payload, e);
             }
         }
