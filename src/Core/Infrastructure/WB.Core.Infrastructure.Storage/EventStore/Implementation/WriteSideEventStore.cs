@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
@@ -48,7 +49,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             this.connectionSettings = connectionSettings;
             this.credentials = new UserCredentials(this.connectionSettings.Login, this.connectionSettings.Password);
             this.connection = this.GetConnection();
-            this.defaultTimeout = TimeSpan.FromSeconds(5);
+            this.defaultTimeout = TimeSpan.FromSeconds(30);
         }
 
         public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
@@ -113,7 +114,9 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             {
                 this.SaveStream(eventStream, connection);
 
-                transaction.CommitAsync().WaitAndUnwrapException();
+                var cancellationTokenSource = new CancellationTokenSource();
+                cancellationTokenSource.CancelAfter(this.defaultTimeout);
+                transaction.CommitAsync().WaitAndUnwrapException(cancellationTokenSource.Token);
             }
         }
 
@@ -122,13 +125,13 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             foreach (var @event in eventStream)
             {
                 var eventData = this.BuildEventData(@event);
-
                 int expected = (int)(@event.EventSequence - 2);
 
-                    AsyncContext.Run(
-                        () => connection.AppendToStreamAsync(EventsPrefix + @event.EventSourceId.FormatGuid(), expected,
-                            this.credentials, eventData)
-                            .WaitWithTimeout(this.defaultTimeout));
+                var cancellationTokenSource = new CancellationTokenSource();
+                cancellationTokenSource.CancelAfter(this.defaultTimeout);
+
+                connection.AppendToStreamAsync(EventsPrefix + @event.EventSourceId.FormatGuid(), expected, this.credentials, eventData)
+                    .WaitAndUnwrapException(cancellationTokenSource.Token);
             }
         }
 
