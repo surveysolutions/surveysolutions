@@ -117,8 +117,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                 using (var transactionTimeout = new CancellationTokenSource()) 
                 {
                     transactionTimeout.CancelAfter(this.defaultTimeout);
-                    var eventDatas = eventStream.Select(this.BuildEventData).ToArray();
-                    transaction.WriteAsync(eventDatas).WaitAndUnwrapException(transactionTimeout.Token);
+                    transaction.WriteAsync(eventStream.Select(this.BuildEventData)).WaitAndUnwrapException(transactionTimeout.Token);
                 }
 
                 using (var commitTimeout = new CancellationTokenSource()) 
