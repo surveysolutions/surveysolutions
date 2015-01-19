@@ -39,7 +39,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         {
             var occurredExceptions = new List<Exception>();
 
-            foreach (var handler in this.registredHandlers.Values.ToList())
+            foreach (EventHandlerWrapper handler in this.registredHandlers.Values.ToList())
             {
                 try
                 {

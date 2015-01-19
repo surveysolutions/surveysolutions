@@ -13,12 +13,12 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
     {
         protected static NcqrCompatibleEventDispatcher CreateNcqrCompatibleEventDispatcher(Type[] handlersToIgnore = null)
         {
-            return new NcqrCompatibleEventDispatcher(Mock.Of<IEventStore>(), handlersToIgnore ?? new Type[0]);
+            return Create.NcqrCompatibleEventDispatcher();
         }
 
-        protected static IPublishableEvent CreatePublishableEvent(Guid eventSourceId)
+        protected static IPublishableEvent CreatePublishableEvent(Guid? eventSourceId = null)
         {
-            return Mock.Of<IPublishableEvent>(_ => _.Payload == new object() && _.EventSourceId == eventSourceId);
+            return Create.PublishableEvent(eventSourceId);
         }
 
         protected static IEnumerable<IPublishableEvent> CreatePublishableEvents(int countOfEvents, Guid? eventSourceId = null)

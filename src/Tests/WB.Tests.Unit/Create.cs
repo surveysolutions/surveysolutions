@@ -37,6 +37,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -1283,6 +1284,16 @@ namespace WB.Tests.Unit
                 => repository.GetQuestionnaire(questionnaireId) == questionaire
                 && repository.GetHistoricalQuestionnaire(questionnaireId, questionaire.Version) == questionaire
                 && repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionaire);
+        }
+
+        public static IPublishableEvent PublishableEvent(Guid? eventSourceId = null)
+        {
+            return Mock.Of<IPublishableEvent>(_ => _.Payload == new object() && _.EventSourceId == (eventSourceId ?? Guid.NewGuid()));
+        }
+
+        public static NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(Type[] handlersToIgnore = null)
+        {
+            return new NcqrCompatibleEventDispatcher(Mock.Of<IEventStore>(), handlersToIgnore ?? new Type[]{});
         }
     }
 }
