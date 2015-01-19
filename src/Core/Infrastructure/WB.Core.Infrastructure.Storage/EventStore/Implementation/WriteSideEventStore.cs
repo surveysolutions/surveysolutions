@@ -5,7 +5,6 @@ using System.Net;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
 using Ncqrs;
@@ -15,7 +14,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Nito.AsyncEx;
 using Nito.AsyncEx.Synchronous;
-using Raven.Abstractions.Extensions;
 using WB.Core.GenericSubdomains.Utils;
 using Newtonsoft.Json.Converters;
 
@@ -23,7 +21,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 {
     internal class WriteSideEventStore : IStreamableEventStore, IDisposable
     {
-        private readonly EventStoreConnectionSettings connectionSettings;
+        private readonly IEventStoreConnectionProvider connectionProvider;
         private readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings
         {
             NullValueHandling = NullValueHandling.Ignore,
@@ -35,27 +33,30 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         };
 
         private readonly Encoding encoding = Encoding.UTF8;
-        private readonly UserCredentials credentials;
         internal static readonly string EventsCategory = "WB";
         private static readonly string EventsPrefix = EventsCategory + "-";
         private readonly IEventStoreConnection connection;
         bool disposed;
-        private readonly TimeSpan defaultTimeout;
+        private readonly TimeSpan defaultTimeout = TimeSpan.FromSeconds(30);
 
         internal const string AllEventsStream = "all_wb";
 
-        public WriteSideEventStore(EventStoreConnectionSettings connectionSettings)
+        public WriteSideEventStore(IEventStoreConnectionProvider connectionProvider)
         {
-            this.connectionSettings = connectionSettings;
-            this.credentials = new UserCredentials(this.connectionSettings.Login, this.connectionSettings.Password);
-            this.connection = this.GetConnection();
-            this.defaultTimeout = TimeSpan.FromSeconds(30);
+            this.connectionProvider = connectionProvider;
+            this.connection =  this.connectionProvider.Open();
+
+            using (var cancellationTokenSource = new CancellationTokenSource()) {
+                cancellationTokenSource.CancelAfter(this.defaultTimeout);
+
+                this.connection.ConnectAsync().WaitAndUnwrapException(cancellationTokenSource.Token);
+            }
         }
 
         public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
-            int normalMin = minVersion > 0 ? (int) Math.Max(0, minVersion - 1) : 0;
-            int normalMax = (int) Math.Min(int.MaxValue, maxVersion - 1);
+            int normalMin = minVersion > 0 ? (int)Math.Max(0, minVersion - 1) : 0;
+            int normalMax = (int)Math.Min(int.MaxValue, maxVersion - 1);
             if (minVersion > maxVersion)
             {
                 return new CommittedEventStream(id);
@@ -86,7 +87,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             StreamEventsSlice currentSlice;
             do
             {
-                currentSlice = AsyncContext.Run(() => connection.ReadStreamEventsForwardAsync(AllEventsStream, nextPosition, bulkSize, true, this.credentials));
+                currentSlice = AsyncContext.Run(() => connection.ReadStreamEventsForwardAsync(AllEventsStream, nextPosition, bulkSize, true));
                 nextPosition = currentSlice.NextEventNumber;
 
                 yield return currentSlice.Events.Select(this.ToCommittedEvent).ToArray();
@@ -99,7 +100,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             StreamEventsSlice currentSlice;
             do
             {
-                currentSlice = AsyncContext.Run(() => connection.ReadStreamEventsForwardAsync(AllEventsStream, nextPosition, 200, false, this.credentials));
+                currentSlice = AsyncContext.Run(() => connection.ReadStreamEventsForwardAsync(AllEventsStream, nextPosition, 200, false));
                 nextPosition = currentSlice.NextEventNumber;
                 foreach (var resolvedEvent in currentSlice.Events)
                 {
@@ -110,42 +111,32 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public void Store(UncommittedEventStream eventStream)
         {
-            using (var transaction = AsyncContext.Run(() => connection.StartTransactionAsync(EventsPrefix + eventStream.SourceId, ExpectedVersion.Any, this.credentials)))
+            int expectedStreamVersion = (int) (eventStream.InitialVersion - 1);
+            using (EventStoreTransaction transaction = AsyncContext.Run(() => this.connection.StartTransactionAsync(EventsPrefix + eventStream.SourceId.FormatGuid(), expectedStreamVersion)))
             {
-                this.SaveStream(eventStream, connection);
-
-                using (var cancellationTokenSource = new CancellationTokenSource()) {
-                    cancellationTokenSource.CancelAfter(this.defaultTimeout);
-                    transaction.CommitAsync().WaitAndUnwrapException(cancellationTokenSource.Token);
+                using (var transactionTimeout = new CancellationTokenSource()) 
+                {
+                    transactionTimeout.CancelAfter(this.defaultTimeout);
+                    transaction.WriteAsync(eventStream.Select(this.BuildEventData)).WaitAndUnwrapException(transactionTimeout.Token);
                 }
-            }
-        }
 
-        internal void SaveStream(UncommittedEventStream eventStream, IEventStoreConnection connection)
-        {
-            foreach (var @event in eventStream)
-            {
-                var eventData = this.BuildEventData(@event);
-                int expected = (int)(@event.EventSequence - 2);
-
-                using (var cancellationTokenSource = new CancellationTokenSource()) {
-                    cancellationTokenSource.CancelAfter(this.defaultTimeout);
-
-                    connection.AppendToStreamAsync(EventsPrefix + @event.EventSourceId.FormatGuid(), expected, this.credentials, eventData)
-                        .WaitAndUnwrapException(cancellationTokenSource.Token);
+                using (var commitTimeout = new CancellationTokenSource()) 
+                {
+                    commitTimeout.CancelAfter(this.defaultTimeout);
+                    transaction.CommitAsync().WaitAndUnwrapException(commitTimeout.Token);
                 }
             }
         }
 
         public int CountOfAllEvents()
         {
-            StreamEventsSlice slice = AsyncContext.Run(() => this.connection.ReadStreamEventsForwardAsync(AllEventsStream, 0, 1, false, this.credentials));
+            StreamEventsSlice slice = AsyncContext.Run(() => this.connection.ReadStreamEventsForwardAsync(AllEventsStream, 0, 1, false));
             return slice.LastEventNumber + 1;
         }
 
         public long GetLastEventSequence(Guid id)
         {
-            StreamEventsSlice slice = AsyncContext.Run(() => this.connection.ReadStreamEventsForwardAsync(EventsPrefix + id.FormatGuid(), 0, 1, false, this.credentials));
+            StreamEventsSlice slice = AsyncContext.Run(() => this.connection.ReadStreamEventsForwardAsync(EventsPrefix + id.FormatGuid(), 0, 1, false));
             return slice.LastEventNumber + 1;
         }
 
@@ -194,25 +185,6 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                 this.encoding.GetBytes(eventString),
                 this.encoding.GetBytes(metaData));
             return eventData;
-        }
-
-        private IEventStoreConnection GetConnection()
-        {
-            if (this.connection == null)
-            {
-                var eventStoreConnection =
-                    EventStoreConnection.Create(new IPEndPoint(IPAddress.Parse(this.connectionSettings.ServerIP),
-                        this.connectionSettings.ServerTcpPort));
-
-                using (var cancellationTokenSource = new CancellationTokenSource()) {
-                    cancellationTokenSource.CancelAfter(this.defaultTimeout);
-
-                    eventStoreConnection.ConnectAsync().WaitAndUnwrapException(cancellationTokenSource.Token);
-                }
-
-                return eventStoreConnection;
-            }
-            return this.connection;
         }
 
         public void Dispose()
