@@ -35,7 +35,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore
 
         private IStreamableEventStore GetEventStore()
         {
-            return new WriteSideEventStore(this.settings);
+            return new WriteSideEventStore(new EventStoreConnectionProvider(this.settings));
         }
 
         private void AddEventStoreProjections()
