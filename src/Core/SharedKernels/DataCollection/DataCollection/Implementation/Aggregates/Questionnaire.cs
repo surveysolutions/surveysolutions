@@ -162,7 +162,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (createdById.HasValue && createdById != command.ResponsibleId)
             {
                 throw new QuestionnaireException(
-                    string.Format("You don't have permissions to delete this questionnaire."));
+                    string.Format("You don't have permissions to delete this questionnaire. QuestionnaireId: {0}", this.EventSourceId));
             }
 
             this.ApplyEvent(new QuestionnaireDeleted()
@@ -179,7 +179,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (questionnaireDocument == null || questionnaireDocument.IsDeleted)
                 throw new QuestionnaireException(string.Format(
                     "Plain questionnaire {0} ver {1} cannot be registered because it is absent in plain repository.",
-                    this.EventSourceId.FormatGuid(), command.Version));
+                    this.EventSourceId, command.Version));
 
             this.ApplyEvent(new PlainQuestionnaireRegistered(command.Version, command.AllowCensusMode));
 
@@ -195,7 +195,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var document = source as QuestionnaireDocument;
 
             if (document == null)
-                throw new QuestionnaireException(string.Format("Cannot import questionnaire with a document of a not supported type {0}. SourceId: {1}",
+                throw new QuestionnaireException(string.Format("Cannot import questionnaire with a document of a not supported type {0}. QuestionnaireId: {1}",
                     source.GetType(), source.PublicKey));
 
             return document;
@@ -219,7 +219,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void ThrowIfCurrentAggregateIsUsedOnlyAsProxyToPlainQuestionnaireRepository()
         {
             if (this.isProxyToPlainQuestionnaireRepository)
-                throw new QuestionnaireException("This aggregate instance only supports sending of plain questionnaire repository events and it is not intended to be used separately.");
+                throw new QuestionnaireException(string.Format("This aggregate instance only supports sending of plain questionnaire repository events and it is not intended to be used separately. QuestionnaireId: {0}", this.EventSourceId));
         }
     }
 }

@@ -554,7 +554,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (ExpressionProcessorStatePrototype == null)
             {
-                throw new InterviewException(string.Format("Interview activation error. Code EC0002. QuestionnaireId: {0}, Version: {1}, {2}", getQuestionnaireId(), getVersion(), id));
+                throw new InterviewException(string.Format("Interview activation error. Code EC0002. QuestionnaireId: {0}, Questionnaire version: {1}, InterviewId: {2}", getQuestionnaireId(), getVersion(), id));
             }
 
         }
@@ -2029,8 +2029,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     default:
                         throw new InterviewException(string.Format(
-                            "Answer on Question {0} has type {1} which is not supported in applying method.",
-                            change.QuestionId, change.InterviewChangeType));
+                            "Answer on Question {0} has type {1} which is not supported in applying method. InterviewId {2}",
+                            change.QuestionId, change.InterviewChangeType, EventSourceId));
                 }
             }
         }
@@ -2948,10 +2948,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new InterviewException(string.Format("Interview was completed by interviewer and cannot be deleted. InterviewId: {0}", EventSourceId));
         }
 
-        private static void ThrowIfQuestionDoesNotExist(Guid questionId, IQuestionnaire questionnaire)
+        private void ThrowIfQuestionDoesNotExist(Guid questionId, IQuestionnaire questionnaire)
         {
             if (!questionnaire.HasQuestion(questionId))
-                throw new InterviewException(string.Format("Question with id '{0}' is not found.", questionId));
+                throw new InterviewException(string.Format("Question with id '{0}' is not found. InterviewId: {0}", questionId, EventSourceId));
         }
 
         private void ThrowIfRosterVectorIsIncorrect(InterviewStateDependentOnAnswers state, Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire)
@@ -3419,8 +3419,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     default:
                         throw new InterviewException(string.Format(
-                            "Question {0} has type {1} which is not supported as initial pre-filled question.",
-                            questionId, questionType));
+                            "Question {0} has type {1} which is not supported as initial pre-filled question. InterviewId: {2}",
+                            questionId, questionType, this.EventSourceId));
                 }
             }
         }
