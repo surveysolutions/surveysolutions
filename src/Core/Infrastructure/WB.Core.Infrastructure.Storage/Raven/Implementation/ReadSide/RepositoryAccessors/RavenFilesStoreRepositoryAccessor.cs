@@ -19,7 +19,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors
 {
-    public class RavenFilesStoreRepositoryAccessor<TEntity> : IReadSideKeyValueStorage<TEntity>, IReadSideRepositoryWriter, IReadSideRepositoryCleaner
+    public class RavenFilesStoreRepositoryAccessor<TEntity> : IReadSideKeyValueStorage<TEntity>, IReadSideRepositoryWriter, IReadSideRepositoryCleaner, IDisposable
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly ILogger logger;
@@ -27,6 +27,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         private const int MaxCountOfEntitiesInOneStoreOperation = 30;
         private readonly ConcurrentDictionary<string, TEntity> cache = new ConcurrentDictionary<string, TEntity>();
         private bool isCacheEnabled = false;
+        bool disposed;
         private readonly RavenFilesStoreRepositoryAccessorSettings ravenFilesStoreRepositoryAccessorSettings;
         private readonly IFilesStore ravenFilesStore;
 
@@ -35,6 +36,16 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             this.logger = logger;
             this.ravenFilesStoreRepositoryAccessorSettings = ravenFilesStoreRepositoryAccessorSettings;
             this.ravenFilesStore = this.CreateRavenFilesStore();
+        }
+
+        public RavenFilesStoreRepositoryAccessor(ILogger logger, IFilesStore filesStore)
+        {
+            this.logger = logger;
+            
+            this.ravenFilesStoreRepositoryAccessorSettings = new RavenFilesStoreRepositoryAccessorSettings(null, null,
+                null);
+
+            this.ravenFilesStore = filesStore;
         }
 
         private IFilesStore CreateRavenFilesStore()
@@ -59,7 +70,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             return files.Count;
         }
 
-        TEntity IReadSideStorage<TEntity>.GetById(string id)
+        public TEntity GetById(string id)
         {
             if (!isCacheEnabled)
             {
@@ -147,6 +158,30 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         }
 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        ~RavenFilesStoreRepositoryAccessor()
+        {
+            Dispose(false);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (this.disposed)
+                return;
+
+            if (disposing)
+            {
+                this.ravenFilesStore.Dispose();
+            }
+
+            this.disposed = true;
+        }
+
         private void StoreAllCachedEntitiesToRepository()
         {
             while (!cache.IsEmpty)
@@ -174,7 +209,9 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
                 foreach (var entityId in bulk)
                 {
                     var entityToStore = cache[entityId];
-
+                    if(entityToStore==null)
+                        continue;
+                    
                     var memoryStream =
                         new MemoryStream(Encoding.UTF8.GetBytes(this.GetItemAsContent(entityToStore)));
                     session.RegisterUpload(this.CreateFileStoreEntityId(entityId), memoryStream);

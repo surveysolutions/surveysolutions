@@ -88,6 +88,10 @@
     <Reference Include="Raven.Abstractions">
       <HintPath>..\..\..\packages\RavenDB.Database.3.0.3528\lib\net45\Raven.Abstractions.dll</HintPath>
     </Reference>
+    <Reference Include="Raven.Abstractions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\RavenDB.Tests.Helpers.3.0.3528\lib\net45\Raven.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="Raven.Client.Lightweight">
       <HintPath>..\..\..\packages\RavenDB.Client.3.0.3528\lib\net45\Raven.Client.Lightweight.dll</HintPath>
       <Private>True</Private>
@@ -95,6 +99,12 @@
     <Reference Include="Raven.Database">
       <HintPath>..\..\..\packages\RavenDB.Database.3.0.3528\lib\net45\Raven.Database.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Raven.Server">
+      <HintPath>..\..\..\packages\RavenDB.Tests.Helpers.3.0.3528\lib\net45\Raven.Server.exe</HintPath>
+    </Reference>
+    <Reference Include="Raven.Tests.Helpers">
+      <HintPath>..\..\..\packages\RavenDB.Tests.Helpers.3.0.3528\lib\net45\Raven.Tests.Helpers.dll</HintPath>
     </Reference>
     <Reference Include="Rhino.Mocks">
       <HintPath>..\..\..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
@@ -202,6 +212,16 @@
     <Compile Include="StorageTests\DocumentStoreFailedTests.cs" />
     <Compile Include="StorageTests\RavenDBEventStoreTests.cs" />
     <Compile Include="StorageTests\RavenDBTestBase.cs" />
+    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\RavenFilesStoreRepositoryAccessorTestContext.cs" />
+    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_clear_method_called.cs" />
+    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_count_of_stored_view_called_and_one_view_is_actually_stored.cs" />
+    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_get_by_id_called_and_cache_is_disabled_and_view_was_stored_avoiding_cache.cs" />
+    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_get_by_id_called_and_cache_is_enabled_and_view_was_stored_avoiding_cache.cs" />
+    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_get_by_id_called_and_cache_is_enabled_and_view_was_stored_in_cache.cs" />
+    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_get_by_id_called_but_view_is_missing.cs" />
+    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_remove_by_id_called_but_view_is_missing.cs" />
+    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_remove_by_id_called_view_is_present_and_cache_is_disabled.cs" />
+    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_remove_by_id_called_view_is_present_and_cache_is_enabled.cs" />
     <Compile Include="StorageTests\RavenReadSideRepositoryReaderTests\RavenReadSideRepositoryReaderTestsContext.cs" />
     <Compile Include="StorageTests\RavenReadSideRepositoryReaderTests\when_counting_repository_entities_and_views_are_being_rebuilt.cs" />
     <Compile Include="StorageTests\RavenReadSideRepositoryReaderTests\when_getting_repository_entity_by_id_and_views_are_being_rebuilt.cs" />
