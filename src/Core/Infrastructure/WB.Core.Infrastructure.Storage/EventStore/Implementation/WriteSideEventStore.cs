@@ -22,7 +22,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
     internal class WriteSideEventStore : IStreamableEventStore, IDisposable
     {
         private readonly IEventStoreConnectionProvider connectionProvider;
-        private readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings
+        private static readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings
         {
             NullValueHandling = NullValueHandling.Ignore,
             DefaultValueHandling = DefaultValueHandling.Ignore,
@@ -32,9 +32,9 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             Converters = new JsonConverter[] { new StringEnumConverter() }
         };
 
-        private readonly Encoding encoding = Encoding.UTF8;
+        private static readonly Encoding Encoding = Encoding.UTF8;
         internal static readonly string EventsCategory = "WB";
-        private static readonly string EventsPrefix = EventsCategory + "-";
+        internal static readonly string EventsPrefix = EventsCategory + "-";
         private readonly IEventStoreConnection connection;
         bool disposed;
         private readonly TimeSpan defaultTimeout = TimeSpan.FromSeconds(30);
@@ -117,7 +117,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                 using (var transactionTimeout = new CancellationTokenSource()) 
                 {
                     transactionTimeout.CancelAfter(this.defaultTimeout);
-                    transaction.WriteAsync(eventStream.Select(this.BuildEventData)).WaitAndUnwrapException(transactionTimeout.Token);
+                    transaction.WriteAsync(eventStream.Select(BuildEventData)).WaitAndUnwrapException(transactionTimeout.Token);
                 }
 
                 using (var commitTimeout = new CancellationTokenSource()) 
@@ -142,14 +142,14 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         private CommittedEvent ToCommittedEvent(ResolvedEvent resolvedEvent)
         {
-            string value = this.encoding.GetString(resolvedEvent.Event.Data);
-            var meta = this.encoding.GetString(resolvedEvent.Event.Metadata);
+            string value = Encoding.GetString(resolvedEvent.Event.Data);
+            var meta = Encoding.GetString(resolvedEvent.Event.Metadata);
             try
             {
-                var metadata = JsonConvert.DeserializeObject<EventMetada>(meta, this.jsonSerializerSettings);
+                var metadata = JsonConvert.DeserializeObject<EventMetada>(meta, jsonSerializerSettings);
                 var eventData = JsonConvert.DeserializeObject(value,
                                     NcqrsEnvironment.GetEventDataTypeByName(resolvedEvent.Event.EventType.ToPascalCase()),
-                                    this.jsonSerializerSettings);
+                                    jsonSerializerSettings);
 
                 var committedEvent = new CommittedEvent(Guid.NewGuid(),
                     metadata.Origin,
@@ -168,10 +168,9 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             }
         }
 
-        private EventData BuildEventData(UncommittedEvent @event)
+        internal static EventData BuildEventData(UncommittedEvent @event)
         {
-
-            string eventString = JsonConvert.SerializeObject(@event.Payload, Formatting.Indented, this.jsonSerializerSettings);
+            string eventString = JsonConvert.SerializeObject(@event.Payload, Formatting.Indented, jsonSerializerSettings);
             string metaData = JsonConvert.SerializeObject(new EventMetada
             {
                 Timestamp = @event.EventTimeStamp,
@@ -182,8 +181,8 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             var eventData = new EventData(@event.EventIdentifier,
                 @event.Payload.GetType().Name.ToCamelCase(),
                 true,
-                this.encoding.GetBytes(eventString),
-                this.encoding.GetBytes(metaData));
+                Encoding.GetBytes(eventString),
+                Encoding.GetBytes(metaData));
             return eventData;
         }
 
@@ -210,6 +209,5 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
             this.disposed = true;
         }
-
     }
 }
