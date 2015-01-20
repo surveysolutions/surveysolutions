@@ -16,11 +16,13 @@ using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
+using Nito.AsyncEx.Synchronous;
 using Raven.Client;
 using Raven.Client.Document;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Storage.EventStore;
 using WB.Core.Infrastructure.Storage.EventStore.Implementation;
 using WB.Core.Infrastructure.Storage.Raven;
@@ -44,7 +46,14 @@ namespace WB.Tools.EventsMigrator
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
 
             var ravenStore = GetRavenStore(settings);
-            var eventStore = GetEventStoreStore(settings);
+            var eventStoreConnectionProvider = new EventStoreConnectionProvider(new EventStoreConnectionSettings
+            {
+                ServerIP = settings.EventStoreIP,
+                ServerHttpPort = settings.EventStoreHttpPort,
+                ServerTcpPort = settings.EventStoreTcpPort,
+                Login = settings.EventStoreLogin,
+                Password = settings.EventStorePassword
+            });
 
             this.status = "Counting number of events to process";
             this.totalEvents = ravenStore.CountOfAllEvents();
@@ -57,7 +66,7 @@ namespace WB.Tools.EventsMigrator
 
             this.status = "Getting events from event store";
 
-            using (var connection = EventStoreConnection.Create(new IPEndPoint(IPAddress.Parse(settings.EventStoreIP), settings.EventStoreTcpPort)))
+            using (var connection = eventStoreConnectionProvider.Open())
             {
                 connection.ConnectAsync().Wait();
 
@@ -65,17 +74,17 @@ namespace WB.Tools.EventsMigrator
                 {
                     foreach (var committedEvent in @event)
                     {
-                        var stream = new UncommittedEventStream(Guid.NewGuid(), committedEvent.Origin);
-                        stream.Append(new UncommittedEvent(committedEvent.EventIdentifier,
+                        int expectedVersion = ((int)committedEvent.EventSequence - 2);
+                        string stream = WriteSideEventStore.EventsPrefix + committedEvent.EventSourceId.FormatGuid();
+
+                        var eventData = WriteSideEventStore.BuildEventData(new UncommittedEvent(committedEvent.EventIdentifier,
                             committedEvent.EventSourceId,
                             committedEvent.EventSequence,
                             0,
                             committedEvent.EventTimeStamp,
                             committedEvent.Payload,
                             committedEvent.EventVersion));
-
-
-                        eventStore.Store(stream);
+                        connection.AppendToStreamAsync(stream, expectedVersion, eventData).WaitAndUnwrapException();
 
                         Interlocked.Increment(ref processed);
                         this.elapsed = watch.Elapsed;
@@ -85,19 +94,6 @@ namespace WB.Tools.EventsMigrator
 
             this.status = "Done writing events";
             watch.Stop();
-        }
-
-        private static WriteSideEventStore GetEventStoreStore(IShell settings)
-        {
-            var instance = new WriteSideEventStore(new EventStoreConnectionProvider(new EventStoreConnectionSettings
-            {
-                ServerIP = settings.EventStoreIP,
-                ServerHttpPort = settings.EventStoreHttpPort,
-                ServerTcpPort = settings.EventStoreTcpPort,
-                Login = settings.EventStoreLogin,
-                Password = settings.EventStorePassword
-            }));
-            return instance;
         }
 
         private static RavenDBEventStore GetRavenStore(IShell settings)
