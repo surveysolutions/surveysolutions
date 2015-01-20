@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using Main.Core.Documents;
 
-using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Template;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
@@ -98,7 +99,7 @@ namespace WB.UI.Headquarters.Controllers
                     credentials: designerUserCredentials,
                     request: new DownloadQuestionnaireRequest()
                     {
-                        QuestionnaireId = request.QuestionnaireId,
+                        QuestionnaireId = request.Questionnaire.Id,
                         SupportedVersion = new QuestionnnaireVersion()
                         {
                             Major = supportedVersion.SupportedQuestionnaireVersionMajor,
@@ -116,16 +117,43 @@ namespace WB.UI.Headquarters.Controllers
 
                 return new QuestionnaireVerificationResponse();
             }
+            catch (RestException ex)
+            {
+                var questionnaireVerificationResponse = new QuestionnaireVerificationResponse();
+
+                switch (ex.StatusCode)
+                {
+                    case HttpStatusCode.Unauthorized:
+                    case HttpStatusCode.Forbidden:
+                    case HttpStatusCode.UpgradeRequired:
+                        questionnaireVerificationResponse.ImportError = ex.Message;
+                        break;
+                    case HttpStatusCode.PreconditionFailed:
+                        questionnaireVerificationResponse.ImportError = string.Format(ErrorMessages.Questionnaire_verification_failed, request.Questionnaire.Title);
+                        break;
+                    case HttpStatusCode.NotFound:
+                        questionnaireVerificationResponse.ImportError = string.Format(ErrorMessages.TemplateNotFound, request.Questionnaire.Title);
+                        break;
+                    case HttpStatusCode.ServiceUnavailable:
+                        questionnaireVerificationResponse.ImportError = ErrorMessages.ServiceUnavailable;
+                        break;
+                    case HttpStatusCode.RequestTimeout:
+                        questionnaireVerificationResponse.ImportError = ErrorMessages.RequestTimeout;
+                        break;
+                    default:
+                        questionnaireVerificationResponse.ImportError = ErrorMessages.ServerError;
+                        break;
+                }
+
+                return questionnaireVerificationResponse;
+            }
             catch (Exception ex)
             {
                 var domainEx = ex.GetSelfOrInnerAs<QuestionnaireException>();
                 if (domainEx != null) return new QuestionnaireVerificationResponse() {ImportError = domainEx.Message};
 
-                var restEx = ex.GetSelfOrInnerAs<RestException>();
-                if (restEx != null) return new QuestionnaireVerificationResponse() {ImportError = restEx.Message};
-
                 this.Logger.Error(
-                    string.Format("Designer: error when importing template #{0}", request.QuestionnaireId), ex);
+                    string.Format("Designer: error when importing template #{0}", request.Questionnaire.Id), ex);
                 throw;
             }
         }
