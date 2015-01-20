@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Threading;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.Embedded;
@@ -9,6 +12,7 @@ using EventStore.Core.Messages;
 using Machine.Specifications;
 using Moq;
 using Ncqrs;
+using Raven.Client.Linq;
 using WB.Core.Infrastructure.Storage.EventStore;
 
 namespace WB.Tests.Integration.EventStore
@@ -23,13 +27,26 @@ namespace WB.Tests.Integration.EventStore
             NcqrsEnvironment.InitDefaults();
 
             var emptyEndpoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 0);
-            node = EmbeddedVNodeBuilder.AsSingleNode()
-                .RunInMemory()
-                .WithInternalHttpOn(emptyEndpoint)
-                .WithInternalTcpOn(emptyEndpoint)
-                .WithExternalHttpOn(emptyEndpoint)
-                .WithExternalTcpOn(emptyEndpoint)
-                .Build();
+            try
+            {
+                node = EmbeddedVNodeBuilder.AsSingleNode()
+                    .RunInMemory()
+                    .WithInternalHttpOn(emptyEndpoint)
+                    .WithInternalTcpOn(emptyEndpoint)
+                    .WithExternalHttpOn(emptyEndpoint)
+                    .WithExternalTcpOn(emptyEndpoint)
+                    .Build();
+            }
+            catch (System.TypeInitializationException exception)
+            {
+                Console.WriteLine(exception.Message);
+
+                ReflectionTypeLoadException innerException = (ReflectionTypeLoadException)exception.InnerException;
+
+                Console.WriteLine("LoaderMessages: {1} ", innerException.Message, string.Join(",", innerException.LoaderExceptions.Select(x=> x.Message)));
+                Console.WriteLine("Data: " + exception.Data);
+                throw;
+            }
 
             var startedEvent = new ManualResetEventSlim(false);
             node.MainBus.Subscribe(
