@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Android.App;
@@ -17,6 +18,7 @@ using System;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
@@ -51,7 +53,7 @@ namespace WB.UI.QuestionnaireTester
         {
             base.OnCreate(bundle);
             this.ActionBar.SetDisplayShowHomeEnabled(false);
-            longOperationTokenSource = this.WaitForLongOperation((ct) => this.Restore(ct, Guid.Parse(this.Intent.GetStringExtra("publicKey"))));
+            longOperationTokenSource = this.WaitForLongOperation((ct) => this.Restore(ct, Guid.Parse(this.Intent.GetStringExtra("publicKey")), this.Intent.GetStringExtra("questionnaireTitle")));
         }
 
         public override void OnBackPressed()
@@ -98,11 +100,11 @@ namespace WB.UI.QuestionnaireTester
             this.Title = Resources.GetText(Resource.String.QuestionnaireLoadingError);
         }
 
-        protected async Task Restore(CancellationToken ct, Guid publicKey)
+        protected async Task Restore(CancellationToken ct, Guid publicKey, string questionnaireTitle)
         {
             Guid interviewId = Guid.NewGuid();
 
-            var loaded = await LoadTemplateAndCreateInterview(publicKey, interviewId, ct);
+            var loaded = await LoadTemplateAndCreateInterview(publicKey, questionnaireTitle, interviewId, ct);
             if (!loaded)
                 this.RunOnUiThread(ShowErrorMassageToUser);
             else
@@ -121,7 +123,7 @@ namespace WB.UI.QuestionnaireTester
             }
         }
 
-        private async Task<bool> LoadTemplateAndCreateInterview(Guid itemKey, Guid interviewId, CancellationToken ct)
+        private async Task<bool> LoadTemplateAndCreateInterview(Guid itemKey, string questionnaireTitle, Guid interviewId, CancellationToken ct)
         {
             if (!CapiTesterApplication.DesignerMembership.IsLoggedIn)
                 return false;
@@ -130,6 +132,33 @@ namespace WB.UI.QuestionnaireTester
             try
             {
                 template = await CapiTesterApplication.DesignerServices.GetTemplateForCurrentUser(CapiTesterApplication.DesignerMembership.RemoteUser, itemKey, ct);
+            }
+            catch (RestException ex)
+            {
+                switch (ex.StatusCode)
+                {
+                    case HttpStatusCode.Unauthorized:
+                    case HttpStatusCode.Forbidden:
+                    case HttpStatusCode.UpgradeRequired:
+                        additionalMassage = ex.Message;
+                        break;
+                    case HttpStatusCode.PreconditionFailed:
+                        additionalMassage = string.Format(ErrorMessages.Questionnaire_verification_failed, questionnaireTitle);
+                        break;
+                    case HttpStatusCode.NotFound:
+                        additionalMassage = string.Format(ErrorMessages.TemplateNotFound, questionnaireTitle);
+                        break;
+                    case HttpStatusCode.ServiceUnavailable:
+                        additionalMassage = ErrorMessages.ServiceUnavailable;
+                        break;
+                    case HttpStatusCode.RequestTimeout:
+                        additionalMassage = ErrorMessages.RequestTimeout;
+                        break;
+                    default:
+                        additionalMassage = ErrorMessages.ServerError;
+                        break;
+                }
+                return false;
             }
             catch (Exception exc)
             {
