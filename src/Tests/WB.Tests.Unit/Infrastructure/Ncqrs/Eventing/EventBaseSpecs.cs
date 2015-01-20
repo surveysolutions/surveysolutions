@@ -32,7 +32,9 @@ namespace Ncqrs.Tests.Eventing
         }
 
         [Test]
-        public void Constructing_a_new_event_base_it_should_set_the_event_identifier_to_identifier_that_has_been_given_from_the_IUniqueIdentifierGenerator_from_the_NcqrsEnvironment()
+        public void
+            Constructing_a_new_event_base_it_should_set_the_event_identifier_to_identifier_that_has_been_given_from_the_IUniqueIdentifierGenerator_from_the_NcqrsEnvironment
+            ()
         {
             var identiefier = Guid.NewGuid();
 
