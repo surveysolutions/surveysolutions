@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Threading;
 using Machine.Specifications;
 using Moq;
@@ -36,7 +37,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
 
             service
                 .Setup(x => x.PostAsync<QuestionnaireCommunicationPackage>(Moq.It.IsAny<string>(), Moq.It.IsAny<object>(), Moq.It.IsAny<RestCredentials>()))
-                .Throws(new RestException(someFaultReason));
+                .Throws(new RestException(someFaultReason, HttpStatusCode.Unauthorized));
 
             controller = CreateDesignerQuestionnairesApiController(
                 restService: service.Object,
