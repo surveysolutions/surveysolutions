@@ -47,12 +47,12 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
         
         private static IPublishableEvent CreateAEvent()
         {
-            return new UncommittedEvent(Guid.NewGuid(), Guid.NewGuid(), 0, 0, DateTime.UtcNow, new AEvent(), new Version(1, 0));
+            return new UncommittedEvent(Guid.NewGuid(), Guid.NewGuid(), 0, 0, DateTime.UtcNow, new AEvent());
         }
 
         private static IPublishableEvent CreateADomainEvent()
         {
-            return new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), Guid.NewGuid(), 0, DateTime.UtcNow, new ADomainEvent(), new Version(1, 0));
+            return new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), Guid.NewGuid(), 0, DateTime.UtcNow, new ADomainEvent());
         }
 
         [Test]

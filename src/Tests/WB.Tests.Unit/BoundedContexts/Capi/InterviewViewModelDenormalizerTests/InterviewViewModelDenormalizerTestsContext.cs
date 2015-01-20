@@ -68,8 +68,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelDenormalizerTests
                 1,
                 1,
                 DateTime.Now,
-                evnt,
-                new Version(1, 0))
+                evnt)
                 );
             return e;
         }

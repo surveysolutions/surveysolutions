@@ -14,7 +14,6 @@ namespace Ncqrs.Eventing
         private readonly DateTime _eventTimeStamp;
         private readonly Guid _eventSourceId;
         private readonly Guid _commitId;
-        private readonly Version _eventVersion;
         private readonly string _origin;
 
         /// <summary>
@@ -57,14 +56,6 @@ namespace Ncqrs.Eventing
         }
 
         /// <summary>
-        /// Gets the CLR version of event type that was used to persist data.
-        /// </summary>
-        public Version EventVersion
-        {
-            get { return _eventVersion; }
-        }
-
-        /// <summary>
         /// Gets the id of the event source that caused the event.
         /// </summary>
         /// <value>The id of the event source that caused the event.</value>
@@ -85,10 +76,9 @@ namespace Ncqrs.Eventing
             get { return _eventSequence; }
         }
 
-        public CommittedEvent(Guid commitId, string origin, Guid eventIdentifier, Guid eventSourceId, long eventSequence, DateTime eventTimeStamp, object payload, Version eventVersion)            
+        public CommittedEvent(Guid commitId, string origin, Guid eventIdentifier, Guid eventSourceId, long eventSequence, DateTime eventTimeStamp, object payload)            
         {            
             _payload = payload;
-            _eventVersion = eventVersion;
             _commitId = commitId;
             _origin = origin;
             _eventSourceId = eventSourceId;

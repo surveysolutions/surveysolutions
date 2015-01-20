@@ -16,7 +16,6 @@ namespace Ncqrs.Eventing
         private readonly DateTime _eventTimeStamp;
         private readonly Guid _eventSourceId;
         private readonly long _initialVersionOfEventSource;
-        private readonly Version _eventVersion;
         private Guid _commitId;
         private string _origin;
 
@@ -94,20 +93,14 @@ namespace Ncqrs.Eventing
             _origin = streamOrigin;
         }
 
-        public UncommittedEvent(Guid eventIdentifier, Guid eventSourceId, long eventSequence, long initialVersionOfEventSource, DateTime eventTimeStamp, object payload, Version eventVersion)            
+        public UncommittedEvent(Guid eventIdentifier, Guid eventSourceId, long eventSequence, long initialVersionOfEventSource, DateTime eventTimeStamp, object payload)            
         {
             _payload = payload;
-            _eventVersion = eventVersion;
             _initialVersionOfEventSource = initialVersionOfEventSource;
             _eventSourceId = eventSourceId;
             _eventSequence = eventSequence;
             _eventIdentifier = eventIdentifier;
             _eventTimeStamp = eventTimeStamp;
-        }
-
-        public Version EventVersion
-        {
-            get { return _eventVersion; }
         }
 
         public override string ToString()

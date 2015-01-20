@@ -62,7 +62,7 @@ namespace Ncqrs.Eventing.Storage
                 foreach (var evnt in eventStream)
                 {
                     events.Enqueue(new CommittedEvent(eventStream.CommitId, evnt.Origin, evnt.EventIdentifier, eventStream.SourceId, evnt.EventSequence,
-                                                      evnt.EventTimeStamp, evnt.Payload, evnt.EventVersion));
+                                                      evnt.EventTimeStamp, evnt.Payload));
                 }
             }
         }

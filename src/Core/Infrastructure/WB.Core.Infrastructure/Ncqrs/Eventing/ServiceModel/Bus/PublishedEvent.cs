@@ -49,7 +49,6 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         private readonly Guid _eventIdentifier;
         private readonly DateTime _eventTimeStamp;
         private readonly Guid _eventSourceId;
-        private readonly Version _eventVersion;
         private readonly Guid _commitId;
         private readonly string _origin;
 
@@ -93,14 +92,6 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         }
 
         /// <summary>
-        /// Gets the CLR version of event type that was used to persist data.
-        /// </summary>
-        public Version EventVersion
-        {
-            get { return _eventVersion; }
-        }
-
-        /// <summary>
         /// Gets the id of the event source that caused the event.
         /// </summary>
         /// <value>The id of the event source that caused the event.</value>
@@ -123,8 +114,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 
         protected PublishedEvent(IPublishableEvent evnt)            
         {            
-            _payload = evnt.Payload;
-            _eventVersion = evnt.EventVersion;            
+            _payload = evnt.Payload;           
             _eventSourceId = evnt.EventSourceId;
             _eventSequence = evnt.EventSequence;
             _eventIdentifier = evnt.EventIdentifier;

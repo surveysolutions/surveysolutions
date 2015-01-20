@@ -27,15 +27,6 @@ namespace Ncqrs.Eventing
         {
             get;
         }
-
-        /// <summary>
-        /// Gets the event version.
-        /// </summary>
-        /// <value>The event version.</value>
-        Version EventVersion
-        { 
-            get;
-        }
     }
 
     [ContractClassFor(typeof(IEvent))]
@@ -55,11 +46,6 @@ namespace Ncqrs.Eventing
             {
                 return default(DateTime);
             }
-        }
-
-        public Version EventVersion
-        {
-            get { return default(Version); }
         }
     }
 }
