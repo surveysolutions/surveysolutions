@@ -1486,7 +1486,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (asNumeric != null)
             {
                 questionCloned.IsInteger = asNumeric.IsInteger;
-                questionCloned.MaxValue = asNumeric.MaxValue.GetValueOrDefault();
+                questionCloned.MaxValue = asNumeric.MaxValue;
                 questionCloned.CountOfDecimalPlaces = asNumeric.CountOfDecimalPlaces;
             }
             if (asListQuestion != null)
