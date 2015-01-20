@@ -419,17 +419,6 @@ namespace WB.UI.Capi
                                 sb.AppendLine(Resources.GetString(Resource.String.NewHtmlLine));
                                 continue;
                             }
-                            var webException = exception as WebException;
-                            if (webException != null)
-                            {
-                                sb.AppendLine(
-                                    string.Format(
-                                        Resources.GetString(Resource.String.PleaseCheckURLInSettingsFormat),
-                                        settingsManager.GetSyncAddressPoint(), GetNetworkDescription(), GetNetworkStatus((int)webException.Status)));
-                                
-                                sb.AppendLine(Resources.GetString(Resource.String.NewHtmlLine));
-                                continue;
-                            }
                             sb.AppendLine(exception.Message);
 
                             sb.AppendLine(Resources.GetString(Resource.String.NewHtmlLine));
