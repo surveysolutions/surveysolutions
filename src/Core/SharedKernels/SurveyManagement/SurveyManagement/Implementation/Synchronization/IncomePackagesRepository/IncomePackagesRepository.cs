@@ -229,16 +229,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             return this.GetItemFileNameForErrorStorage(id);
         }
 
-        protected UncommittedEventStream BuildEventStreams(IEnumerable<AggregateRootEvent> stream, long sequence)
+        protected UncommittedEventStream BuildEventStreams(IEnumerable<AggregateRootEvent> stream, long initialVersion)
         {
             var uncommitedStream = new UncommittedEventStream(Guid.NewGuid(), null);
-            var i = sequence + 1;
+            var eventSequence = initialVersion + 1;
             foreach (var aggregateRootEvent in stream)
             {
                 uncommitedStream.Append(this.overrideReceivedEventTimeStamp
-                    ? aggregateRootEvent.CreateUncommitedEvent(i, 0, DateTime.UtcNow)
-                    : aggregateRootEvent.CreateUncommitedEvent(i, 0));
-                i++;
+                    ? aggregateRootEvent.CreateUncommitedEvent(eventSequence, initialVersion, DateTime.UtcNow)
+                    : aggregateRootEvent.CreateUncommitedEvent(eventSequence, initialVersion));
+                eventSequence++;
             }
             return uncommitedStream;
         }
