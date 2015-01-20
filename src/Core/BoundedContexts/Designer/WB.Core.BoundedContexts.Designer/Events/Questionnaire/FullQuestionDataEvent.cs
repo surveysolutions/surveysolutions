@@ -13,7 +13,10 @@ namespace Main.Core.Events.Questionnaire
         public Guid? GroupPublicKey { get; set; }
         public List<Guid> Triggers { get; set; }
 
-        public int MaxValue { get; set; }
+        /// <summary>
+        /// Max allowed value for numeric question
+        /// </summary>
+        public int? MaxValue { get; set; }
 
         public Guid? LinkedToQuestionId { get; set; }
         public bool? IsInteger { get; set; }
