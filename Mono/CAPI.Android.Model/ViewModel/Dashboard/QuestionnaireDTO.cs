@@ -27,7 +27,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
             this.SurveyVersion = surveyVersion;
             this.Comments = comments;
 
-            this.jsonUtils.Serialize(properties);
+            this.Properties = this.jsonUtils.Serialize(properties);
         }
 
         public QuestionnaireDTO() { }
