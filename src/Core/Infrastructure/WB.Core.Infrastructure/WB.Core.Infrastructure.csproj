@@ -88,7 +88,6 @@
     <Compile Include="Ncqrs\Domain\AggregateRootMappedByConvention.cs" />
     <Compile Include="Ncqrs\Domain\Entity.cs" />
     <Compile Include="Ncqrs\Domain\EntityMappedByConvention.cs" />
-    <Compile Include="Ncqrs\Domain\NoUnitOfWorkAvailableInThisContextException.cs" />
     <Compile Include="Ncqrs\Domain\Storage\AggregateRootCreationException.cs" />
     <Compile Include="Ncqrs\Domain\Storage\AggregateRootCreationStrategy.cs" />
     <Compile Include="Ncqrs\Domain\Storage\AggregateRootNotFoundException.cs" />
@@ -142,13 +141,10 @@
     <Compile Include="Ncqrs\Eventing\Storage\IEventStore.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\IEventTypeResolver.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\InMemoryEventStore.cs" />
-    <Compile Include="Ncqrs\Eventing\Storage\IPropertyBagConverter.cs" />
-    <Compile Include="Ncqrs\Eventing\Storage\IPropertyBagPostConverter.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\ISnapshotStore.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\IStreamableEventStore.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\NullSnapshotStore.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\PropertyBag.cs" />
-    <Compile Include="Ncqrs\Eventing\Storage\PropertyBagConverter.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\PropertyBagConvertionException.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\SimpleEventTypeResolver.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\StoredEvent.cs" />
