@@ -25,9 +25,6 @@ namespace Ncqrs.Eventing.Storage
         /// This is used when loading an event from the event store to find the concrete type
         /// for a given event based upon its name.
         /// 
-        /// If the event will be converted by <see cref="IPropertyBagConverter.Convert(PropertyBag)"/> then this
-        /// would be the final type that the converter returns, i.e. the target type registered with
-        /// <see cref="IPropertyBagConverter.AddPostConversion"/>.
         /// </remarks>
         /// <exception cref="ArgumentNullException">If <paramref name="eventName"/> is <value>null</value>.</exception>
         Type ResolveType(string eventName);
