@@ -7,6 +7,7 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Views.Template;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Controllers;
 using It = Machine.Specifications.It;
@@ -23,7 +24,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
                 SupportedQuestionnaireVersionMinor = 2,
                 SupportedQuestionnaireVersionPatch = 3
             };
-            request = new ImportQuestionnaireRequest{ QuestionnaireId = questionnaireId };
+            request = new ImportQuestionnaireRequest
+            {
+                Questionnaire = new DesignerQuestionnaireListViewItem() {Id = questionnaireId}
+            };
 
             var versionProvider = new Mock<ISupportedVersionProvider>();
             versionProvider.Setup(x => x.GetSupportedQuestionnaireVersion()).Returns(supportedVerstion);
