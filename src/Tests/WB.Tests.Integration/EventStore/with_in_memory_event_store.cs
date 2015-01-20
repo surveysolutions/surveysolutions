@@ -43,9 +43,7 @@ namespace WB.Tests.Integration.EventStore
 
                 ReflectionTypeLoadException innerException = (ReflectionTypeLoadException)exception.InnerException;
 
-                Console.WriteLine("LoaderMessages: {1} ", innerException.Message, string.Join(",", innerException.LoaderExceptions.Select(x=> x.Message)));
-                Console.WriteLine("Data: " + exception.Data);
-                throw;
+                throw new ApplicationException(string.Format("LoaderMessages: {1} ", innerException.Message, string.Join(",", innerException.LoaderExceptions.Select(x => x.Message))));
             }
 
             var startedEvent = new ManualResetEventSlim(false);
