@@ -25,7 +25,7 @@ namespace Ncqrs.Spec
                 foreach (var evnt in _events)
                 {
                     var committedEvent = new CommittedEvent(commitId, null, Guid.NewGuid(), id, sequence, DateTime.UtcNow,
-                                                            evnt, new Version(1, 0));
+                                                            evnt);
                     sequence++;
                     comittedEvents.Add(committedEvent);
                 }
@@ -42,7 +42,7 @@ namespace Ncqrs.Spec
                 foreach (var evnt in _events)
                 {
                     var uncommittedEvent = new UncommittedEvent(Guid.NewGuid(), id, sequence, initialVersion, DateTime.UtcNow,
-                                                            evnt, new Version(1, 0));
+                                                            evnt);
                     result.Append(uncommittedEvent);
                     sequence++;
                 }

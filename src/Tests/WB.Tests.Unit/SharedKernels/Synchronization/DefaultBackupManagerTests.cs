@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
                 for (int j = 0; j < EventsPerArCount; j++)
                 {
                     eventsPerAr[j] = new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), eventSourceId,
-                                                                       j + 1, DateTime.Now, new object(), new Version());
+                                                                       j + 1, DateTime.Now, new object());
                 }
                 eventList.Add(eventsPerAr);
             }

@@ -41,7 +41,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
 
         public static CommittedEvent ToCommittedEvent(StoredEvent x)
         {
-            return new CommittedEvent(x.CommitId, x.Origin, x.EventIdentifier, x.EventSourceId, x.EventSequence, x.EventTimeStamp, x.Data, x.Version);
+            return new CommittedEvent(x.CommitId, x.Origin, x.EventIdentifier, x.EventSourceId, x.EventSequence, x.EventTimeStamp, x.Data);
         }
 
         public IEnumerable<CommittedEvent> GetEventStream()
@@ -201,7 +201,6 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
                 Id = uncommittedEvent.EventSourceId + "/" + uncommittedEvent.EventSequence,
                 EventIdentifier = uncommittedEvent.EventIdentifier,
                 EventTimeStamp = uncommittedEvent.EventTimeStamp,
-                Version = uncommittedEvent.EventVersion,
                 CommitId = commitId,
                 Origin = uncommittedEvent.Origin,
                 Data = uncommittedEvent.Payload,

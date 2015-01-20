@@ -27,7 +27,7 @@ namespace Ncqrs.Tests.Eventing
         public void When_contains_single_event_should_indicate_a_single_source()
         {
             var sut = new UncommittedEventStream(Guid.NewGuid(), null);
-            sut.Append(new UncommittedEvent(Guid.NewGuid(), Guid.NewGuid(), 0, 0, DateTime.UtcNow, new object(), new Version(1,0)));
+            sut.Append(new UncommittedEvent(Guid.NewGuid(), Guid.NewGuid(), 0, 0, DateTime.UtcNow, new object()));
             Assert.IsTrue(sut.HasSingleSource);
         }
 
@@ -52,7 +52,7 @@ namespace Ncqrs.Tests.Eventing
 
         private static UncommittedEvent CreateEvent(Guid eventSourceId)
         {
-            return new UncommittedEvent(Guid.NewGuid(), eventSourceId, 0, 0, DateTime.UtcNow, new object(), new Version(1, 0));
+            return new UncommittedEvent(Guid.NewGuid(), eventSourceId, 0, 0, DateTime.UtcNow, new object());
         }
     }
 }

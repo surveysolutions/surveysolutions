@@ -124,8 +124,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                                                                               1,
                                                                               1,
                                                                               DateTime.Now,
-                                                                              evnt,
-                                                                              new Version(1, 0))
+                                                                              evnt)
                 );
             return e;
         }

@@ -44,8 +44,7 @@ namespace WB.Core.Synchronization.SyncProvider
                 foreach (var aggregateRootEvent in stream)
                 {
                     newStream.Append(new UncommittedEvent(aggregateRootEvent.EventIdentifier, aggregateRootEvent.EventSourceId,
-                        aggregateRootEvent.EventSequence, 0, aggregateRootEvent.EventTimeStamp, aggregateRootEvent.Payload,
-                        aggregateRootEvent.EventVersion));
+                        aggregateRootEvent.EventSequence, 0, aggregateRootEvent.EventTimeStamp, aggregateRootEvent.Payload));
                 }
                 this.IncomeEvents.AddRange(new[] { newStream });
             }
