@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Authentication;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection;
@@ -194,13 +196,30 @@ namespace WB.UI.Capi.Syncronization
                 throw new AuthenticationException("User wasn't authenticated.");
 
             this.credentials = userCredentials.Value;
-
+            
             this.OnStatusChanged(
                 new SynchronizationEventArgs("Connecting...", Operation.Handshake, true));
 
-            var clientRegistrationId = await this.synchronizationService.HandshakeAsync(credentials : credentials);
+            try
+            {
 
-            this.interviewerSettings.SetClientRegistrationId(clientRegistrationId);
+                var clientRegistrationId = await this.synchronizationService.HandshakeAsync(credentials: credentials);
+
+                this.interviewerSettings.SetClientRegistrationId(clientRegistrationId);
+
+            }
+            catch (Exception e)
+            {
+                var restException = e as RestException;
+                if (restException != null &&
+                    !new[]
+                    {HttpStatusCode.NotAcceptable, HttpStatusCode.InternalServerError, HttpStatusCode.Unauthorized}
+                        .Contains(restException.StatusCode))
+
+
+                    throw new RestException(string.Empty, restException.StatusCode, e);
+                throw;
+            }
         }
 
         public Task Run()
