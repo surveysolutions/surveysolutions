@@ -257,6 +257,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_and_providing_existing_targetId.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_and_source_not_present.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_without_permissions_to_edit_questionnaire.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_cloned_numeric_integer_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_cloned_question.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_3_functional_handlers_and_first_and_last_of_them_fail.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_3_old_school_handlers_and_first_and_last_of_them_fail.cs" />
@@ -1274,7 +1275,6 @@
     <Compile Include="Infrastructure\Ncqrs\Domain\AggregateRootTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\Domain\EntityTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\Domain\EventNotHandledExceptionTests.cs" />
-    <Compile Include="Infrastructure\Ncqrs\Domain\NoUnitOfWorkAvailableInThisContextExceptionTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\Domain\Storage\AggregateRootCreationExceptionTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\Domain\Storage\SimpleAggregateRootCreationStrategyTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\Domain\TypeThresholdedActionBasedInternalEventHandlerSpecs.cs" />
@@ -1284,7 +1284,6 @@
     <Compile Include="Infrastructure\Ncqrs\Eventing\ServiceModel\Bus\InProcessEventBusSpecs.cs" />
     <Compile Include="Infrastructure\Ncqrs\Eventing\Storage\AttributeEventTypeResolverTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\Eventing\Storage\InMemoryEventStoreSpecs.cs" />
-    <Compile Include="Infrastructure\Ncqrs\Eventing\Storage\PropertyBagConverterTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\Eventing\Storage\PropertyBagTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\Eventing\Storage\SimpleEventTypeResolverTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\Eventing\UncommittedEventStreamTests.cs" />
