@@ -31,23 +31,20 @@ namespace WB.Tests.Integration.EventStore
                 sequenceCounter++, 
                 0, 
                 DateTime.UtcNow, 
-                new AccountRegistered{ApplicationName = "App", ConfirmationToken = "token", Email = "test@test.com"}, 
-                new Version(1, 0)));
+                new AccountRegistered{ApplicationName = "App", ConfirmationToken = "token", Email = "test@test.com"}));
 
             events.Append(new UncommittedEvent(Guid.NewGuid(), 
                 eventSourceId, 
                 sequenceCounter++, 
                 0, 
                 DateTime.UtcNow, 
-                new AccountConfirmed(),
-                new Version(1, 0)));
+                new AccountConfirmed()));
             events.Append(new UncommittedEvent(Guid.NewGuid(), 
                 eventSourceId,
                 sequenceCounter++,
                 0, 
                 DateTime.UtcNow,
-                new AccountLocked(), 
-                new Version(1, 0)));
+                new AccountLocked()));
 
             WriteSideEventStorage = new WriteSideEventStore(ConnectionProvider);
         };

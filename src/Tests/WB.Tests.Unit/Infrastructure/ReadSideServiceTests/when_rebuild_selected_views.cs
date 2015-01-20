@@ -39,8 +39,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
             eventDispatcherMock = new Mock<IEventDispatcher>();
             eventDispatcherMock.Setup(x => x.GetAllRegistredEventHandlers()).Returns(new[] { eventHandlerMock.Object, eventHandlerToIgnoreMock.Object });
 
-            committedEvent = new CommittedEvent(Guid.NewGuid(), "test", Guid.NewGuid(), Guid.NewGuid(), 1, DateTime.Now, new object(),
-                new Version(1, 2));
+            committedEvent = new CommittedEvent(Guid.NewGuid(), "test", Guid.NewGuid(), Guid.NewGuid(), 1, DateTime.Now, new object());
             streamableEventStoreMock = new Mock<IStreamableEventStore>();
             streamableEventStoreMock.Setup(x => x.GetAllEvents(Moq.It.IsAny<int>(), Moq.It.IsAny<int>()))
                 .Returns(new[] { new[] { committedEvent } });

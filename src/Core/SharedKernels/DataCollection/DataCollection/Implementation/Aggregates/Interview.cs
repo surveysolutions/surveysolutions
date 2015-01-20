@@ -1739,7 +1739,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             : new MultipleOptionsQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (decimal[])answer)
                                 as object);
                         break;
-
+                    case QuestionType.Multimedia:
+                        this.ApplyEvent(new PictureQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (string)answer));
+                        break;
                     default:
                         throw new InterviewException(string.Format("Question {0} has unknown type {1}. InterviewId: {2}",
                             FormatQuestionForException(questionId, questionnaire), questionType, EventSourceId));

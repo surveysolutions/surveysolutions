@@ -82,8 +82,8 @@ namespace WB.Tools.EventsMigrator
                             committedEvent.EventSequence,
                             0,
                             committedEvent.EventTimeStamp,
-                            committedEvent.Payload,
-                            committedEvent.EventVersion));
+                            committedEvent.Payload));
+
                         connection.AppendToStreamAsync(stream, expectedVersion, eventData).WaitAndUnwrapException();
 
                         Interlocked.Increment(ref processed);

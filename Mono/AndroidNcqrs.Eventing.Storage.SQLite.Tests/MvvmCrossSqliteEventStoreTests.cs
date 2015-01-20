@@ -61,14 +61,13 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.Tests
 			var stream = new UncommittedEventStream(Guid.NewGuid(), null);
 			var sequenceCounter = 0;
 			stream.Append(
-				new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow, new CustomerCreatedEvent("Foo", 35),
-									 new Version(1, 0)));
+				new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow, new CustomerCreatedEvent("Foo", 35)));
 			stream.Append(
 				new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow,
-									 new CustomerNameChanged("Name" + sequenceCounter), new Version(1, 0)));
+									 new CustomerNameChanged("Name" + sequenceCounter)));
 			stream.Append(
 				new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow,
-									 new CustomerNameChanged("Name" + sequenceCounter), new Version(1, 0)));
+									 new CustomerNameChanged("Name" + sequenceCounter)));
 
 			return stream;
 		}
@@ -114,8 +113,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.Tests
 
 			var stream = new UncommittedEventStream(Guid.NewGuid(), null);
 			stream.Append(
-				new UncommittedEvent(Guid.NewGuid(), id, 1, 0, utcNow, new CustomerCreatedEvent("Foo", 35),
-				                     new Version(1, 0)));
+				new UncommittedEvent(Guid.NewGuid(), id, 1, 0, utcNow, new CustomerCreatedEvent("Foo", 35)));
 
 			this._store.Store(stream);
 

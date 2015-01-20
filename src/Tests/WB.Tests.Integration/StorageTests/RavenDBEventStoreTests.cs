@@ -100,17 +100,13 @@ namespace WB.Tests.Integration.StorageTests
             var events = new UncommittedEventStream(Guid.NewGuid(), null);
 
             events.Append(new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow, new CustomerCreatedEvent("Foo",
-                                                                                                                                   35),
-                                               new Version(1, 0)));
+                                                                                                                                   35)));
             events.Append(new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow, new CustomerNameChanged(
-                                                                                                              "Name" + sequenceCounter),
-                                               new Version(1, 0)));
+                                                                                                              "Name" + sequenceCounter)));
             events.Append(new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow, new CustomerNameChanged(
-                                                                                                              "Name" + sequenceCounter),
-                                               new Version(1, 0)));
+                                                                                                              "Name" + sequenceCounter)));
             events.Append(new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow, new CustomerNameChanged(
-                                                                                                              "Name" + sequenceCounter),
-                                               new Version(1, 0)));
+                                                                                                              "Name" + sequenceCounter)));
                              
 
             targetStore.Store(events);
@@ -133,8 +129,7 @@ namespace WB.Tests.Integration.StorageTests
                     sequenceCounter++,
                     0,
                     DateTime.UtcNow,
-                    new CustomerCreatedEvent("Foo", 35),
-                    new Version(1, 0)));
+                    new CustomerCreatedEvent("Foo", 35)));
             events.Append(
                 new UncommittedEvent(
                     Guid.NewGuid(),
@@ -142,8 +137,7 @@ namespace WB.Tests.Integration.StorageTests
                     sequenceCounter++,
                     0,
                     DateTime.UtcNow,
-                    new CustomerNameChanged("Name" + sequenceCounter),
-                    new Version(1, 0)));
+                    new CustomerNameChanged("Name" + sequenceCounter)));
             
             targetStore.Store(events);
 
@@ -162,17 +156,13 @@ namespace WB.Tests.Integration.StorageTests
             var events = new UncommittedEventStream(Guid.NewGuid(), null);
 
             events.Append(new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow, new CustomerCreatedEvent("Foo",
-                                                                                                                                   35),
-                                               new Version(1, 0)));
+                                                                                                                                   35)));
             events.Append(new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow, new CustomerNameChanged(
-                                                                                                              "Name" + sequenceCounter),
-                                               new Version(1, 0)));
+                                                                                                              "Name" + sequenceCounter)));
             events.Append(new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow, new CustomerNameChanged(
-                                                                                                              "Name" + sequenceCounter),
-                                               new Version(1, 0)));
+                                                                                                              "Name" + sequenceCounter)));
             events.Append(new UncommittedEvent(Guid.NewGuid(), id, sequenceCounter++, 0, DateTime.UtcNow, new CustomerNameChanged(
-                                                                                                              "Name" + sequenceCounter),
-                                               new Version(1, 0)));
+                                                                                                              "Name" + sequenceCounter)));
 
             targetStore.Store(events);
 

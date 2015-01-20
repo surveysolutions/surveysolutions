@@ -131,7 +131,7 @@ namespace WB.Tools.EventsConverter
             foreach (var committedEvent in eventsFromSingleCommit)
             {
                 streamToSave.Append(new UncommittedEvent(committedEvent.EventIdentifier, committedEvent.EventSourceId, sequence + 1, 1,
-                    committedEvent.EventTimeStamp, committedEvent.Payload, committedEvent.EventVersion));
+                    committedEvent.EventTimeStamp, committedEvent.Payload));
                 sequence++;
 
                 answersValid = new List<Identity>();
@@ -162,7 +162,7 @@ namespace WB.Tools.EventsConverter
             var newSequence = sequence + 1;
 
             var eventFromStream = new UncommittedEvent(baseEvent.EventIdentifier, baseEvent.EventSourceId, newSequence, 1,
-                baseEvent.EventTimeStamp, creator(), baseEvent.EventVersion);
+                baseEvent.EventTimeStamp, creator());
             stream.Append(eventFromStream);
             return newSequence;
         }

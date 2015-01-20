@@ -50,7 +50,7 @@ namespace WB.Tools.InterviewExtractor
                     {
                         if (@event.EventSourceId == eventSourseId || (@event.Payload is TemplateImported) || (@event.Payload is NewUserCreated))
                         {
-                            var eventFromStream = new UncommittedEvent(@event.EventIdentifier, @event.EventSourceId, @event.EventSequence, 1, @event.EventTimeStamp, @event.Payload, @event.EventVersion);
+                            var eventFromStream = new UncommittedEvent(@event.EventIdentifier, @event.EventSourceId, @event.EventSequence, 1, @event.EventTimeStamp, @event.Payload);
                             streamToSave.Append(eventFromStream);
                         }
 

@@ -82,7 +82,7 @@ namespace WB.Tools.QuestionnaireDocumentsConverter
                                 Description = listOfNewRostersVariable.Value.Description,
                                 ConditionExpression = listOfNewRostersVariable.Value.ConditionExpression,
                                 ResponsibleId = questionnaireDocument.CreatedBy ?? Guid.Empty
-                            }, lastEvent.EventVersion));
+                            }));
                         sequence++;
                     }
 

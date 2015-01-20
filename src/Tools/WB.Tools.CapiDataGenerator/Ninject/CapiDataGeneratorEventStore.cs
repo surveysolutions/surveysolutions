@@ -135,7 +135,7 @@ namespace WB.Tools.CapiDataGenerator.Ninject
 
                 eventstream.Append(new UncommittedEvent(eventIdentifier: @event.EventIdentifier,
                     eventSequence: eventsequences[@event.EventSourceId], eventSourceId: @event.EventSourceId,
-                    eventTimeStamp: @event.EventTimeStamp, eventVersion: @event.EventVersion,
+                    eventTimeStamp: @event.EventTimeStamp,
                     initialVersionOfEventSource: @event.InitialVersionOfEventSource, payload: @event.Payload));
             }
 

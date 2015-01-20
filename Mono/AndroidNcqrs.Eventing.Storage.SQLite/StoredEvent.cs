@@ -11,7 +11,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         {
         }
 
-        public StoredEvent(Guid commitId, string origin, Guid eventId, long sequence, DateTime timeStamp, object data,  Version version)
+        public StoredEvent(Guid commitId, string origin, Guid eventId, long sequence, DateTime timeStamp, object data)
         {
             CommitId = commitId.ToString();
             Origin = origin;
@@ -19,8 +19,6 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
             Sequence = sequence;
             TimeStamp = timeStamp.Ticks;
             Data = GetJsonData(data);
-            
-            Version = version.ToString();
         }
         private string GetJsonData(object payload)
         {
@@ -44,7 +42,5 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         public long TimeStamp { get; set; }
 
         public string Data { get; set; }
-
-        public string Version { get; set; }
     }
 }

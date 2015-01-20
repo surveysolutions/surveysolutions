@@ -225,7 +225,7 @@ namespace Ncqrs.Tests.Domain
             var theAggregate = new MyAggregateRoot();
             const long wrongSequence = 3;
             var stream = new CommittedEventStream(theAggregate.EventSourceId,
-                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, wrongSequence, DateTime.UtcNow, new HandledEvent(), new Version(1, 0)));
+                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, wrongSequence, DateTime.UtcNow, new HandledEvent()));
 
             Action act = ()=> theAggregate.InitializeFromHistory(stream);
             act.ShouldThrow<InvalidOperationException>().And.Message.Should().Contain("sequence");
@@ -237,11 +237,11 @@ namespace Ncqrs.Tests.Domain
             var theAggregate = new MyAggregateRoot();
 
             var stream = new CommittedEventStream(theAggregate.EventSourceId,
-                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, 1, DateTime.UtcNow, new HandledEvent(), new Version(1, 0)),
-                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, 2, DateTime.UtcNow, new HandledEvent(), new Version(1, 0)),
-                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, 3, DateTime.UtcNow, new HandledEvent(), new Version(1, 0)),
-                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, 4, DateTime.UtcNow, new HandledEvent(), new Version(1, 0)),
-                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, 5, DateTime.UtcNow, new HandledEvent(), new Version(1, 0)));
+                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, 1, DateTime.UtcNow, new HandledEvent()),
+                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, 2, DateTime.UtcNow, new HandledEvent()),
+                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, 3, DateTime.UtcNow, new HandledEvent()),
+                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, 4, DateTime.UtcNow, new HandledEvent()),
+                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, 5, DateTime.UtcNow, new HandledEvent()));
 
             theAggregate.InitializeFromHistory(stream);
         }
@@ -287,11 +287,11 @@ namespace Ncqrs.Tests.Domain
 
             Guid commandId = Guid.NewGuid();
 
-            var event1 = new CommittedEvent(commandId, null, Guid.NewGuid(), theAggregate.EventSourceId, 1, DateTime.UtcNow, new HandledEvent(), new Version(1, 0));
-            var event2 = new CommittedEvent(commandId, null, Guid.NewGuid(), theAggregate.EventSourceId, 2, DateTime.UtcNow, new HandledEvent(), new Version(1, 0));
-            var event3 = new CommittedEvent(commandId, null, Guid.NewGuid(), theAggregate.EventSourceId, 3, DateTime.UtcNow, new HandledEvent(), new Version(1, 0));
-            var event4 = new CommittedEvent(commandId, null, Guid.NewGuid(), theAggregate.EventSourceId, 4, DateTime.UtcNow, new HandledEvent(), new Version(1, 0));
-            var event5 = new CommittedEvent(commandId, null, Guid.NewGuid(), theAggregate.EventSourceId, 5, DateTime.UtcNow, new HandledEvent(), new Version(1, 0));
+            var event1 = new CommittedEvent(commandId, null, Guid.NewGuid(), theAggregate.EventSourceId, 1, DateTime.UtcNow, new HandledEvent());
+            var event2 = new CommittedEvent(commandId, null, Guid.NewGuid(), theAggregate.EventSourceId, 2, DateTime.UtcNow, new HandledEvent());
+            var event3 = new CommittedEvent(commandId, null, Guid.NewGuid(), theAggregate.EventSourceId, 3, DateTime.UtcNow, new HandledEvent());
+            var event4 = new CommittedEvent(commandId, null, Guid.NewGuid(), theAggregate.EventSourceId, 4, DateTime.UtcNow, new HandledEvent());
+            var event5 = new CommittedEvent(commandId, null, Guid.NewGuid(), theAggregate.EventSourceId, 5, DateTime.UtcNow, new HandledEvent());
 
             IEnumerable<CommittedEvent> history = new[] { event1, event2, event3, event4, event5 };
 

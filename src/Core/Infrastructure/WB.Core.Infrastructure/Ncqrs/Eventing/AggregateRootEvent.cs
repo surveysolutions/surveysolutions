@@ -16,7 +16,6 @@ namespace Main.Core.Events
             this.EventSequence = committedEvent.EventSequence;
             this.EventSourceId = committedEvent.EventSourceId;
             this.EventTimeStamp = committedEvent.EventTimeStamp;
-            this.EventVersion = committedEvent.EventVersion;
             this.CommitId = committedEvent.CommitId;
             this.Origin = committedEvent.Origin;
         }
@@ -33,8 +32,6 @@ namespace Main.Core.Events
 
         public DateTime EventTimeStamp { get; set; }
 
-        public Version EventVersion { get; set; }
-
         public object Payload { get; set; }
         
         public UncommittedEvent CreateUncommitedEvent(long eventSequence, long initialVersionOfEventSource,
@@ -46,8 +43,7 @@ namespace Main.Core.Events
                 eventSequence,
                 initialVersionOfEventSource,
                 eventTimestamp ?? this.EventTimeStamp,
-                this.Payload,
-                this.EventVersion);
+                this.Payload);
         }
     }
 }

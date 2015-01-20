@@ -15,9 +15,6 @@ namespace WB.Core.Infrastructure.Storage.Raven
         public string Origin { get; set; }
         public Guid EventIdentifier { get; set; }
         public DateTime EventTimeStamp { get; set; }
-        
-        [JsonConverter(typeof(VersionConverter))]
-        public Version Version { get; set; }
 
         [JsonProperty(TypeNameHandling = TypeNameHandling.All)]
         public object Data { get; set; }
