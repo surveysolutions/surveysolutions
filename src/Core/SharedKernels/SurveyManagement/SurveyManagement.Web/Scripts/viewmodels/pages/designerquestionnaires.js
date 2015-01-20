@@ -19,7 +19,7 @@
     };
 
     var getQuestionnaireRequest = function (questionnaireViewItem, allowCensusMode) {
-        var request = { questionnaireId: questionnaireViewItem.Id(), allowCensusMode: allowCensusMode };
+        var request = { questionnaire: questionnaireViewItem, allowCensusMode: allowCensusMode };
 
         self.SendCommand(request, function (data) {
             if ((data.ImportError || "") != "") {

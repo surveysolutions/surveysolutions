@@ -31,7 +31,6 @@ namespace WB.UI.Designer.Api
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireHelper questionnaireHelper;
-        private readonly ILogger logger;
 
         public ImportController(IQuestionnaireExportService exportService,
             IStringCompressor zipUtils,
@@ -52,7 +51,6 @@ namespace WB.UI.Designer.Api
             this.questionnaireVerifier = questionnaireVerifier;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.questionnaireHelper = questionnaireHelper;
-            this.logger = logger;
         }
 
         [HttpGet]
@@ -61,101 +59,95 @@ namespace WB.UI.Designer.Api
         [HttpPost]
         public QuestionnaireCommunicationPackage Questionnaire(DownloadQuestionnaireRequest request)
         {
-            try
+            if (request == null) throw new ArgumentNullException("request");
+
+            var questionnaireView =
+                questionnaireViewFactory.Load(new QuestionnaireViewInputModel(request.QuestionnaireId));
+            if (questionnaireView == null)
             {
-                if (request == null) throw new ArgumentNullException("request");
-
-                var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(request.QuestionnaireId));
-                if (questionnaireView == null)
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound)
                 {
-                    throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        ReasonPhrase = string.Format(ErrorMessages.TemplateNotFound, request.QuestionnaireId)
-                    });
-                }
-
-                if (!this.ValidateAccessPermissions(questionnaireView))
-                {
-                    throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden)
-                    {
-                        ReasonPhrase = ErrorMessages.User_Not_authorized
-                    });
-                }
-
-                var templateInfo = this.exportService.GetQuestionnaireTemplateInfo(questionnaireView.Source);
-
-                if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
-                {
-                    throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        ReasonPhrase = string.Format(ErrorMessages.TemplateNotFound, request.QuestionnaireId)
-                    });
-                }
-
-                var supportedClientVersion = new QuestionnaireVersion(request.SupportedVersion.Major, request.SupportedVersion.Minor,
-                    request.SupportedVersion.Patch);
-                if (templateInfo.Version > supportedClientVersion)
-                {
-                    throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
-                    {
-                        ReasonPhrase =
-                            string.Format(ErrorMessages.ClientVersionLessThenDocument, supportedClientVersion, templateInfo.Version)
-                    });
-                }
-
-                var questoinnaireErrors = questionnaireVerifier.Verify(questionnaireView.Source).ToArray();
-
-                if (questoinnaireErrors.Any())
-                {
-                    throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
-                    {
-                        ReasonPhrase = string.Format(ErrorMessages.Questionnaire_verification_failed, templateInfo.Title)
-                    });
-                }
-
-                GenerationResult generationResult;
-                string resultAssembly;
-                try
-                {
-                    generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireView.Source,
-                        out resultAssembly);
-                }
-                catch (Exception)
-                {
-                    generationResult = new GenerationResult()
-                    {
-                        Success = false,
-                        Diagnostics =
-                            new List<GenerationDiagnostic>()
-                            {
-                                new GenerationDiagnostic("Common verifier error", "Error", "unknown", GenerationDiagnosticSeverity.Error)
-                            }
-                    };
-                    resultAssembly = string.Empty;
-                }
-
-                if (!generationResult.Success || String.IsNullOrWhiteSpace(resultAssembly))
-                {
-                    throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
-                    {
-                        ReasonPhrase = string.Format(ErrorMessages.Questionnaire_verification_failed, templateInfo.Title)
-                    });
-                }
-
-                return new QuestionnaireCommunicationPackage
-                {
-                    Questionnaire = this.zipUtils.CompressString(templateInfo.Source),
-                    QuestionnaireAssembly = resultAssembly
-                };
-            }
-            catch (Exception e)
-            {
-                logger.Error(e.Message, e);
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
-                {
-                    ReasonPhrase = ErrorMessages.ServerError
+                    ReasonPhrase = string.Format(ErrorMessages.TemplateNotFound, request.QuestionnaireId)
                 });
             }
+
+            if (!this.ValidateAccessPermissions(questionnaireView))
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden)
+                {
+                    ReasonPhrase = ErrorMessages.User_Not_authorized
+                });
+            }
+
+            var templateInfo = this.exportService.GetQuestionnaireTemplateInfo(questionnaireView.Source);
+
+            if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    ReasonPhrase = string.Format(ErrorMessages.TemplateNotFound, request.QuestionnaireId)
+                });
+            }
+
+            var supportedClientVersion = new QuestionnaireVersion(request.SupportedVersion.Major,
+                request.SupportedVersion.Minor,
+                request.SupportedVersion.Patch);
+            if (templateInfo.Version > supportedClientVersion)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
+                {
+                    ReasonPhrase =
+                        string.Format(ErrorMessages.ClientVersionLessThenDocument, supportedClientVersion,
+                            templateInfo.Version)
+                });
+            }
+
+            var questoinnaireErrors = questionnaireVerifier.Verify(questionnaireView.Source).ToArray();
+
+            if (questoinnaireErrors.Any())
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
+                {
+                    ReasonPhrase = string.Format(ErrorMessages.Questionnaire_verification_failed, templateInfo.Title)
+                });
+            }
+
+            GenerationResult generationResult;
+            string resultAssembly;
+            try
+            {
+                generationResult =
+                    this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireView.Source,
+                        out resultAssembly);
+            }
+            catch (Exception)
+            {
+                generationResult = new GenerationResult()
+                {
+                    Success = false,
+                    Diagnostics =
+                        new List<GenerationDiagnostic>()
+                        {
+                            new GenerationDiagnostic("Common verifier error", "Error", "unknown",
+                                GenerationDiagnosticSeverity.Error)
+                        }
+                };
+                resultAssembly = string.Empty;
+            }
+
+            if (!generationResult.Success || String.IsNullOrWhiteSpace(resultAssembly))
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
+                {
+                    ReasonPhrase = string.Format(ErrorMessages.Questionnaire_verification_failed, templateInfo.Title)
+                });
+            }
+
+            return new QuestionnaireCommunicationPackage
+            {
+                Questionnaire = this.zipUtils.CompressString(templateInfo.Source),
+                QuestionnaireAssembly = resultAssembly
+            };
         }
 
         [HttpPost]
@@ -193,33 +185,23 @@ namespace WB.UI.Designer.Api
         [HttpGet]
         public QuestionnaireListCommunicationPackage QuestionnaireList()
         {
-            try
+            var questionnaireItemList = new List<QuestionnaireListItem>();
+            int pageIndex = 1;
+            while (true)
             {
-                var questionnaireItemList = new List<QuestionnaireListItem>();
-                int pageIndex = 1;
-                while (true)
-                {
-                    var questionnaireList = this.questionnaireHelper.GetQuestionnaires(viewerId: this.userHelper.WebUser.UserId,
+                var questionnaireList =
+                    this.questionnaireHelper.GetQuestionnaires(viewerId: this.userHelper.WebUser.UserId,
                         pageIndex: pageIndex);
 
-                    questionnaireItemList.AddRange(
-                        questionnaireList.Select(q => new QuestionnaireListItem() { Id = q.Id, Title = q.Title }).ToList());
+                questionnaireItemList.AddRange(
+                    questionnaireList.Select(q => new QuestionnaireListItem() {Id = q.Id, Title = q.Title}).ToList());
 
-                    pageIndex++;
-                    if (pageIndex > questionnaireList.TotalPages)
-                        break;
-                }
+                pageIndex++;
+                if (pageIndex > questionnaireList.TotalPages)
+                    break;
+            }
 
-                return new QuestionnaireListCommunicationPackage { Items = questionnaireItemList };
-            }
-            catch (Exception e)
-            {
-                logger.Error(e.Message, e);
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
-                {
-                    ReasonPhrase = ErrorMessages.ServerError
-                });
-            }
+            return new QuestionnaireListCommunicationPackage {Items = questionnaireItemList};
         }
 
         private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)
