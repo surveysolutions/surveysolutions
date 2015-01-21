@@ -298,7 +298,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Answers,
                         e.LinkedToQuestionId,
                         e.IsInteger,
-                        null,
+                        e.CountOfDecimalPlaces,
                         e.AreAnswersOrdered,
                         e.MaxAllowedAnswers,
                         e.MaxAnswerCount,
