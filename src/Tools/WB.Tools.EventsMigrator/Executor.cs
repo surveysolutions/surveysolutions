@@ -66,42 +66,50 @@ namespace WB.Tools.EventsMigrator
             Stopwatch watch = Stopwatch.StartNew();
 
             this.status = "Getting events from event store";
-
-           var policy = Policy.Handle<Exception>()
-                  .WaitAndRetryAsync(settings.RetryTimes, retryAttempt => TimeSpan.FromSeconds(5),
-                      (exception, duration) => 
-                          Caliburn.Micro.Execute.OnUIThread(() =>
-                              settings.ErrorMessages.Add(string.Format("Exception '{2}' cought. Message: '{0}'. Waiting for {1} seconds to retry",
-                                  exception.Message, duration.TotalSeconds, exception.GetType()))));
-            policy.ExecuteAsync(async () =>
+            int processedInCurrentRun = 0;
+            var policy = Policy.Handle<Exception>()
+                   .WaitAndRetryAsync(settings.RetryTimes, retryAttempt => TimeSpan.FromSeconds(5),
+                       (exception, duration) =>
+                           Caliburn.Micro.Execute.OnUIThread(() =>
+                               settings.ErrorMessages.Add(string.Format("Exception '{2}' cought. Message: '{0}'. Waiting for {1} seconds to retry",
+                                   exception.Message, duration.TotalSeconds, exception.GetType()))));
+            try
             {
-                using (var connection = eventStoreConnectionProvider.Open())
+                policy.ExecuteAsync(async () =>
                 {
-                    await connection.ConnectAsync();
-
-                    int skipEvents = Math.Max(0, settings.SkipEvents + processed - 1);
-                    foreach (CommittedEvent[] @event in ravenStore.GetAllEvents(50, skipEvents))
+                    using (var connection = eventStoreConnectionProvider.Open())
                     {
-                        foreach (var committedEvent in @event)
+                        await connection.ConnectAsync();
+
+                        int skipEvents = Math.Max(0, settings.SkipEvents + processedInCurrentRun - 1);
+                        foreach (CommittedEvent[] @event in ravenStore.GetAllEvents(50, skipEvents))
                         {
-                            int expectedVersion = ((int) committedEvent.EventSequence - 2);
-                            string stream = WriteSideEventStore.EventsPrefix + committedEvent.EventSourceId.FormatGuid();
+                            foreach (var committedEvent in @event)
+                            {
+                                int expectedVersion = ((int)committedEvent.EventSequence - 2);
+                                string stream = WriteSideEventStore.EventsPrefix + committedEvent.EventSourceId.FormatGuid();
 
-                            var eventData = WriteSideEventStore.BuildEventData(new UncommittedEvent(committedEvent.EventIdentifier,
-                                committedEvent.EventSourceId,
-                                committedEvent.EventSequence,
-                                0,
-                                committedEvent.EventTimeStamp,
-                            committedEvent.Payload));
+                                var eventData = WriteSideEventStore.BuildEventData(new UncommittedEvent(committedEvent.EventIdentifier,
+                                    committedEvent.EventSourceId,
+                                    committedEvent.EventSequence,
+                                    0,
+                                    committedEvent.EventTimeStamp,
+                                    committedEvent.Payload));
 
-                            await connection.AppendToStreamAsync(stream, expectedVersion, eventData);
+                                await connection.AppendToStreamAsync(stream, expectedVersion, eventData);
 
-                            Interlocked.Increment(ref processed);
-                            this.elapsed = watch.Elapsed;
+                                processed++;
+                                processedInCurrentRun++;
+                                this.elapsed = watch.Elapsed;
+                            }
                         }
                     }
-                }
-            }).WaitAndUnwrapException();
+                }).WaitAndUnwrapException();
+            }
+            finally
+            {
+                processedInCurrentRun = 0;
+            }
 
             this.status = "Done writing events";
             watch.Stop();
