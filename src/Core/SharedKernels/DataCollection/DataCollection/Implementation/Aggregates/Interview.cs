@@ -2623,8 +2623,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     default:
                         throw new InterviewException(string.Format(
-                            "Question {0} has type {1} which is not supported as initial pre-filled question.",
-                            questionId, questionType));
+                            "Question {0} has type {1} which is not supported as initial pre-filled question. InterviewId: {2}",
+                            questionId, questionType, EventSourceId));
                 }
 
                 changeStructures.State.ApplyInterviewChanges(interviewChanges);
@@ -2953,7 +2953,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void ThrowIfQuestionDoesNotExist(Guid questionId, IQuestionnaire questionnaire)
         {
             if (!questionnaire.HasQuestion(questionId))
-                throw new InterviewException(string.Format("Question with id '{0}' is not found. InterviewId: {0}", questionId, EventSourceId));
+                throw new InterviewException(string.Format("Question with id '{0}' is not found. InterviewId: {1}", questionId, EventSourceId));
         }
 
         private void ThrowIfRosterVectorIsIncorrect(InterviewStateDependentOnAnswers state, Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire)
