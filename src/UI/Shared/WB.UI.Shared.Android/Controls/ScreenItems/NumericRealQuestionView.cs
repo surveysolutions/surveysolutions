@@ -57,7 +57,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             var valueModel = this.Model as ValueQuestionViewModel;
 
             if (valueModel == null)
-                throw new InvalidCastException("Something bad happened with mapping question's viewmodel to question's view");
+                throw new InvalidCastException("Something bad happened with mapping question's view model to question's view");
 
             if (valueModel.CountOfDecimalPlaces.HasValue)
                 this.etAnswer.SetFilters(new IInputFilter[] { new DecimalPlacesFilter(valueModel.CountOfDecimalPlaces.Value) });
