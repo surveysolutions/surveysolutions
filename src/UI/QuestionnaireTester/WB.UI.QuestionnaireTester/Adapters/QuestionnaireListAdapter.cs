@@ -117,7 +117,7 @@ namespace WB.UI.QuestionnaireTester.Adapters
             Drawable img = activity.Resources.GetDrawable(Android.Resource.Drawable.IcMediaPlay);
             tvArrow.SetCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
             view.SetTag(Resource.Id.QuestionnaireId, dataItem.Id.ToString());
-            view.SetTag(int.MaxValue, dataItem.Title);
+            view.SetTag(Resource.Id.QuestionnaireTitle, dataItem.Title);
             return view;
         }
 

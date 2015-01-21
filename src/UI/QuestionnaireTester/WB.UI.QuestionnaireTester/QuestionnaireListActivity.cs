@@ -47,7 +47,7 @@ namespace WB.UI.QuestionnaireTester
         {
             var intent = new Intent(this, typeof (LoadingActivity));
             intent.PutExtra("publicKey", e.View.GetTag(Resource.Id.QuestionnaireId).ToString());
-            intent.PutExtra("questionnaireTitle", e.View.GetTag(int.MaxValue).ToString());
+            intent.PutExtra("questionnaireTitle", e.View.GetTag(Resource.Id.QuestionnaireTitle).ToString());
             this.StartActivity(intent);
         }
 

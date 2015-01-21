@@ -7,4 +7,5 @@
   <string name="ReasonFormat">Reason: {0}</string>
   <string name="TemplateIsNotValidForCurrentVersionOfTester">Template is not valid for current version of Tester.</string>
   <string name="TemplateIsMissing">Template is missing.</string>
+  <item  type="id"  name="QuestionnaireTitle" />
 </resources>
