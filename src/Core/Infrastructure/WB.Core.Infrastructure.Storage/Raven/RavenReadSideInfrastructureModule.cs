@@ -40,6 +40,17 @@ namespace WB.Core.Infrastructure.Storage.Raven
             this.Kernel.Bind(typeof(IReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);
             this.Kernel.Bind(typeof(IQueryableReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);
             this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(this.GetReadSideRepositoryWriter);
+
+
+          //  this.Kernel.Bind(typeof(FilesStoreRepositoryAccessor<>)).ToSelf().InSingletonScope();
+            this.Kernel.Bind(typeof(RavenFilesStoreRepositoryAccessor<>)).ToSelf().InSingletonScope();
+            this.Kernel.Bind(typeof(IReadSideKeyValueStorage<>)).ToMethod(this.GetKeyValueStorage);
+
+        }
+
+        protected object GetKeyValueStorage(IContext context)
+        {
+            return this.Kernel.Get(typeof(RavenFilesStoreRepositoryAccessor<>).MakeGenericType(context.GenericArguments[0]));
         }
 
         protected object GetReadSideRepositoryWriter(IContext context)
