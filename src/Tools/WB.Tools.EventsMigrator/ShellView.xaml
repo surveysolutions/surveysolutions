@@ -78,8 +78,10 @@
             <TextBox Grid.Column="1" Grid.Row="9" x:Name="RetryTimes" VerticalAlignment="Center"></TextBox>
 
             <Button Grid.Column="0" Grid.Row="10" 
-                    Grid.ColumnSpan="2" 
                     x:Name="Transfer" Content="Start" Margin="0,10,0,0" 
+                    Width="50"></Button>
+            <Button Grid.Column="1" Grid.Row="10" 
+                    x:Name="Stop" Content="Stop" Margin="0,10,0,0" 
                     Width="50"></Button>
 
         </Grid>

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -31,6 +32,8 @@ namespace WB.Tools.EventsMigrator
         private ObservableCollection<string> appNames;
         private int skipEvents;
         private int retryTimes;
+        private bool canStop;
+        private CancellationTokenSource cancellationSource;
 
         public ShellViewModel()
         {
@@ -148,6 +151,16 @@ namespace WB.Tools.EventsMigrator
             }
         }
 
+        public bool CanStop
+        {
+            get { return this.canStop; }
+            set
+            {
+                this.canStop = value;
+                this.NotifyOfPropertyChange(() => CanStop);
+            }
+        }
+
         public ObservableCollection<string> ErrorMessages
         {
             get { return this.errorMessages; }
@@ -238,10 +251,19 @@ namespace WB.Tools.EventsMigrator
             }
         }
 
+        public void Stop()
+        {
+            if (cancellationSource != null)
+            {
+                cancellationSource.Cancel();
+            }
+        }
+
         public async Task Transfer()
         {
             var executor = new Executor();
             CanTransfer = false;
+            CanStop = !CanTransfer;
             var timer = new DispatcherTimer(DispatcherPriority.Normal, Application.Current.Dispatcher);
             EventHandler timerOnTick = delegate
             {
@@ -257,14 +279,10 @@ namespace WB.Tools.EventsMigrator
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Start();
 
-
+            cancellationSource = new CancellationTokenSource();
             try
             {
-                await Task.Run(() => executor.Process(this));
-            }
-            catch (AggregateException e)
-            {
-                this.ErrorMessages.AddRange(e.UnwrapAllInnerExceptions().Select(x => string.Format("Exception: {0}, Message: {1}", x.GetType().Name, x.Message)));
+                await Task.Run(() => executor.Process(this, cancellationSource.Token));
             }
             catch (Exception e)
             {
@@ -272,6 +290,7 @@ namespace WB.Tools.EventsMigrator
             }
 
             CanTransfer = true;
+            CanStop = !CanTransfer;
             timer.Stop();
             timerOnTick.Invoke(this, EventArgs.Empty);
         }

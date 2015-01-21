@@ -42,7 +42,7 @@ namespace WB.Tools.EventsMigrator
         private int processed;
         private TimeSpan elapsed;
 
-        public void Process(IShell settings)
+        public void Process(IShell settings, CancellationToken token)
         {
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
 
@@ -86,6 +86,7 @@ namespace WB.Tools.EventsMigrator
                         {
                             foreach (var committedEvent in @event)
                             {
+                                token.ThrowIfCancellationRequested();
                                 int expectedVersion = ((int)committedEvent.EventSequence - 2);
                                 string stream = WriteSideEventStore.EventsPrefix + committedEvent.EventSourceId.FormatGuid();
 
@@ -104,7 +105,7 @@ namespace WB.Tools.EventsMigrator
                             }
                         }
                     }
-                }).WaitAndUnwrapException();
+                }).WaitAndUnwrapException(token);
             }
             finally
             {
