@@ -5,11 +5,9 @@ using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Graphics;
-using Android.Views;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Entities.SubEntities;
-
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.CommandBus;
@@ -38,7 +36,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             base.Initialize();
 
 
-            this.locationText = new TextView(this.Context);
+            this.locationText = new TextView(this.CurrentContext);
             this.locationText.SetTypeface(null, TypefaceStyle.Bold);
 
             this.InitializeViewAndButtonView(this.locationText, "Get Location", this.GetLocation);
@@ -65,15 +63,15 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         private void GetLocation(object sender, EventArgs e)
         {
             if (this.geoservice == null)
-                this.geoservice = new GeoService(this.Context);
+                this.geoservice = new GeoService(this.CurrentContext);
 
             if (!this.geoservice.IsGeolocationAvailable || !this.geoservice.IsGeolocationEnabled)
             {
-                Toast.MakeText(this.Context, "Geo location is unavailable", ToastLength.Long).Show();
+                Toast.MakeText(this.CurrentContext, "Geo location is unavailable", ToastLength.Long).Show();
                 return;
             }
 
-            this.progress = ProgressDialog.Show(this.Context, "Determining location", "Please Wait...", true, true);
+            this.progress = ProgressDialog.Show(this.CurrentContext, "Determining location", "Please Wait...", true, true);
             this.progress.CancelEvent += this.progressCoordinates_Cancel;
 
             Task.Factory.StartNew(this.GetLocation);
@@ -90,7 +88,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         {
             this.cancelSource = new CancellationTokenSource();
 
-            var activity = this.Context as Activity;
+            var activity = this.CurrentContext as Activity;
             if (activity == null)
                 return;
 
@@ -101,11 +99,11 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
                 if (t.IsCanceled)
                 {
-                    Toast.MakeText(this.Context, "Canceled or Timeout.", ToastLength.Long).Show();
+                    Toast.MakeText(this.CurrentContext, "Canceled or Timeout.", ToastLength.Long).Show();
                 }
                 else if (t.IsFaulted)
                 {
-                    Toast.MakeText(this.Context, "Error occurred on location retrieving.", ToastLength.Long).Show();
+                    Toast.MakeText(this.CurrentContext, "Error occurred on location retrieving.", ToastLength.Long).Show();
                 }
                 else
                 {

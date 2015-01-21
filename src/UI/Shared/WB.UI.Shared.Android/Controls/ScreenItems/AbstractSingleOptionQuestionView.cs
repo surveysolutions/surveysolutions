@@ -55,7 +55,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected RadioGroup CreateRadioButtonsGroup()
         {
-            var radioGroup = new RadioGroup(this.Context);
+            var radioGroup = new RadioGroup(this.CurrentContext);
             radioGroup.Orientation = Orientation.Vertical;
             radioGroup.CheckedChange += this.RadioGroupCheckedChange;
             return radioGroup;
@@ -109,7 +109,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private RadioButton CreateRadioButton(T answer)
         {
-            var radioButton = new RadioButton(this.Context);
+            var radioButton = new RadioButton(this.CurrentContext);
             radioButton.Text = this.GetAnswerTitle(answer);
             radioButton.SetTag(Resource.Id.AnswerId, this.GetAnswerId(answer));
             this.AddAdditionalAttributes(radioButton,answer);

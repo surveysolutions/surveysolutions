@@ -39,10 +39,10 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             var viewParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent);
             viewParams.SetMargins(10, 20, 250, 0);
 
-            dateDisplay = new TextView(this.Context) { LayoutParameters = viewParams };
+            dateDisplay = new TextView(this.CurrentContext) { LayoutParameters = viewParams };
             dateDisplay.SetTextSize(ComplexUnitType.Dip, 20);
 
-            dialog = new DatePickerDialog(this.Context, this.OnDateSet, selectedDate.Year, selectedDate.Month - 1, selectedDate.Day);
+            dialog = new DatePickerDialog(this.CurrentContext, this.OnDateSet, selectedDate.Year, selectedDate.Month - 1, selectedDate.Day);
 
             InitializeViewAndButtonView(this.dateDisplay, "Select date", this.ShowDateTimePicker);
 
