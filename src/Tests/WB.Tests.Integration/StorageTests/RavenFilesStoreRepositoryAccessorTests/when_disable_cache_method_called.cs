@@ -22,9 +22,6 @@ namespace WB.Tests.Integration.StorageTests.RavenFilesStoreRepositoryAccessorTes
 
         Because of = () => { ravenFilesStoreRepositoryAccessor.DisableCache(); };
 
-        It should_return_view_count_equlas_to_count_of_stored_views = () =>
-           ravenFilesStoreRepositoryAccessor.Count().ShouldEqual(viewCount);
-
         It should_return_readable_status_with_disabled_cache_and_zero_cached_items = () =>
          ravenFilesStoreRepositoryAccessor.GetReadableStatus().ShouldEqual("cache disabled;    cached raven file storage items: 0;");
 

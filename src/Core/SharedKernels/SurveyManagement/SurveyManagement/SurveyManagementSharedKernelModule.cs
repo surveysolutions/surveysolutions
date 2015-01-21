@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Services;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection;
@@ -44,16 +45,17 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly Version applicationBuildVersion;
         private readonly bool overrideReceivedEventTimeStamp;
         private readonly string origin;
-        private readonly string ravenDbUrl;
-        private readonly string ravenFileSystemName;
         private readonly bool hqEnabled;
         private readonly int maxCountOfCachedEntitiesForSqliteDb;
         private readonly InterviewHistorySettings interviewHistorySettings;
 
         public SurveyManagementSharedKernelModule(string currentFolderPath,
-            int supportedQuestionnaireVersionMajor, int supportedQuestionnaireVersionMinor, int supportedQuestionnaireVersionPatch,
+            int supportedQuestionnaireVersionMajor, int supportedQuestionnaireVersionMinor,
+            int supportedQuestionnaireVersionPatch,
             Func<bool> isDebug, Version applicationBuildVersion,
-            InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool overrideReceivedEventTimeStamp, string origin, bool hqEnabled, int maxCountOfCachedEntitiesForSqliteDb, InterviewHistorySettings interviewHistorySettings, string ravenDbUrl, string ravenFileSystemName)
+            InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool overrideReceivedEventTimeStamp,
+            string origin, bool hqEnabled, int maxCountOfCachedEntitiesForSqliteDb,
+            InterviewHistorySettings interviewHistorySettings)
         {
             this.currentFolderPath = currentFolderPath;
             this.supportedQuestionnaireVersionMajor = supportedQuestionnaireVersionMajor;
@@ -67,8 +69,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.hqEnabled = hqEnabled;
             this.maxCountOfCachedEntitiesForSqliteDb = maxCountOfCachedEntitiesForSqliteDb;
             this.interviewHistorySettings = interviewHistorySettings;
-            this.ravenDbUrl = ravenDbUrl;
-            this.ravenFileSystemName = ravenFileSystemName;
         }
 
         public override void Load()
@@ -105,8 +105,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<IQuestionnaireCacheInitializer>().To<QuestionnaireCacheInitializer>();
 
-            this.Bind<RavenFilesStoreRepositoryAccessorSettings>().ToConstant(new RavenFilesStoreRepositoryAccessorSettings(ravenDbUrl, this.AdditionalEventChecker, ravenFileSystemName));
-
             this.Bind<IReadSideKeyValueStorage<InterviewData>>()
                 .To<RavenFilesStoreRepositoryAccessor<InterviewData>>().InSingletonScope();
 
@@ -134,8 +132,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 this.Kernel.RegisterDenormalizer<InterviewExportedDataDenormalizer>();
                 this.Kernel.RegisterDenormalizer<QuestionnaireExportStructureDenormalizer>();
             }
-            
-            this.Bind<IIncomePackagesRepository>()
+
+            this.Bind<IIncomePackagesRepository, IAdditionalDataService<InterviewData>>()
                 .To<IncomePackagesRepository>()
                 .InSingletonScope()
                 .WithConstructorArgument("overrideReceivedEventTimeStamp", overrideReceivedEventTimeStamp)
@@ -149,13 +147,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 this.Bind<IReadSideRepositoryWriter<InterviewHistoryView>>().To<InterviewHistoryWriter>().InSingletonScope();
                 this.Kernel.RegisterDenormalizer<InterviewHistoryDenormalizer>();
             }
-        }
-
-        protected void AdditionalEventChecker(string interviewIdString)
-        {
-            Guid interviewId;
-            if(Guid.TryParse(interviewIdString, out interviewId))
-                this.Kernel.Get<IIncomePackagesRepository>().ProcessItem(interviewId);
         }
     }
 }
