@@ -19,12 +19,12 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors
 {
-    public class RavenFilesStoreRepositoryAccessor<TEntity> : IReadSideKeyValueStorage<TEntity>, IReadSideRepositoryWriter, IReadSideRepositoryCleaner, IDisposable
+    internal class RavenFilesStoreRepositoryAccessor<TEntity> : IReadSideKeyValueStorage<TEntity>, IReadSideRepositoryWriter, IReadSideRepositoryCleaner, IDisposable
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly ILogger logger;
         private const int MaxCountOfCachedEntities = 1024;
-        private const int MaxCountOfEntitiesInOneStoreOperation = 16;
+        private const int MaxCountOfEntitiesInOneStoreOperation = 30;
         private readonly Encoding encoding = Encoding.UTF8;
         private readonly ConcurrentDictionary<string, TEntity> cache = new ConcurrentDictionary<string, TEntity>();
         private readonly IAdditionalDataService<TEntity> additionalDataService;
@@ -124,10 +124,8 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
                     return fileSession.Query().Where(string.Format("__directoryName: /{0}", ViewType.Name)).ToListAsync();
                 }
             });
-            foreach (var file in filesToDelete)
-            {
-                RemoveAvoidingCache(file.Name).WaitAndUnwrapException();
-            }
+            var tasks = filesToDelete.Select(f => RemoveAvoidingCache(f.Name)).ToArray();
+            System.Threading.Tasks.Task.WhenAll(tasks);
         }
 
         public void Dispose()
@@ -157,7 +155,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         private void StoreAllCachedEntitiesToRepository()
         {
             while (!cache.IsEmpty)
-                StoreBulkOfViews(this.cache.Keys.ToList()).WaitAndUnwrapException();
+                StoreBulkOfViews(this.cache.Keys.ToList());
         }
 
         private void ReduceCacheIfNeeded()
@@ -170,13 +168,13 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         private void ReduceCache()
         {
-            StoreBulkOfViews(this.cache.Keys.Take(MaxCountOfEntitiesInOneStoreOperation).ToList()).WaitAndUnwrapException();
+            StoreBulkOfViews(this.cache.Keys.Take(MaxCountOfEntitiesInOneStoreOperation).ToList());
         }
 
-        private async System.Threading.Tasks.Task StoreBulkOfViews(List<string> bulk)
+        private void StoreBulkOfViews(List<string> bulk)
         {
             var tasks = bulk.Select(StoreEntityAsync);
-            await System.Threading.Tasks.Task.WhenAll(tasks);
+            System.Threading.Tasks.Task.WhenAll(tasks);
         }
 
         private async System.Threading.Tasks.Task StoreEntityAsync(string entityId)

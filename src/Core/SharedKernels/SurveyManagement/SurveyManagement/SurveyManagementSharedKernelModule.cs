@@ -104,10 +104,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind(typeof (ITemporaryDataStorage<>)).To(typeof (FileTemporaryDataStorage<>));
 
             this.Bind<IQuestionnaireCacheInitializer>().To<QuestionnaireCacheInitializer>();
-
-            this.Bind<IReadSideKeyValueStorage<InterviewData>>()
-                .To<RavenFilesStoreRepositoryAccessor<InterviewData>>().InSingletonScope();
-
             this.Bind<IInterviewDetailsDataLoader>().To<InterviewDetailsDataLoader>();
             this.Bind<IInterviewDetailsDataProcessor>().To<InterviewDetailsDataProcessor>();
             this.Bind<InterviewDetailsDataProcessorContext>().ToSelf().InSingletonScope();
