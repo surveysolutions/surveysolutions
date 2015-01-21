@@ -42,7 +42,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
         {
             base.Initialize();
             this.llWrapper.Click += this.NumericQuestionView_Click;
-            this.etAnswer = new EditText(this.Context);
+            this.etAnswer = new EditText(this.CurrentContext);
             this.etAnswer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent);
             this.etAnswer.InputType = this.KeyboardTypeFlags;
 

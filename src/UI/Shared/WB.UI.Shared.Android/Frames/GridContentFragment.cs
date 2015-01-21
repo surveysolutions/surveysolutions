@@ -46,7 +46,7 @@ namespace WB.UI.Shared.Android.Frames
             this.Top.AddView(breadcrumbs);
             
             this.BuildEmptyLabelDescription(inflater.Context);
-            this.BuildTabels(inflater.Context);
+            this.BuildTables(inflater.Context);
 
             this.AjustControlVisibility();
 
@@ -104,7 +104,7 @@ namespace WB.UI.Shared.Android.Frames
             this.Top.AddView(this.TvEmptyLabelDescription);
         }
 
-        protected void BuildTabels(Context context)
+        protected void BuildTables(Context context)
         {
             this.LlTablesContainer = new ListView(context);
             this.LlTablesContainer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
