@@ -88,11 +88,11 @@
     <Compile Include="EventStore\IEventStoreConnectionProvider.cs" />
     <Compile Include="EventStore\Implementation\WriteSideEventStore.cs" />
     <Compile Include="Raven\Implementation\DocumentStoreProvider.cs" />
+    <Compile Include="Raven\Implementation\FileStoreProvider.cs" />
     <Compile Include="Raven\Implementation\PlainStorage\RavenPlainStorageAccessor.cs" />
     <Compile Include="Raven\Implementation\PlainStorage\RavenPlainStorageProvider.cs" />
     <Compile Include="Raven\Implementation\PlainStorage\RavenQueryablePlainStorageAccessor.cs" />
     <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenFilesStoreRepositoryAccessor.cs" />
-    <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenFilesStoreRepositoryAccessorSettings.cs" />
     <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryWriterSettings.cs" />
     <Compile Include="Raven\Implementation\WriteSide\Indexes\EventsByTimeStampAndSequenceIndex.cs" />
     <Compile Include="Raven\Implementation\WriteSide\RavenConventionsExtensions.cs" />

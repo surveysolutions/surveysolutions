@@ -36,7 +36,8 @@ namespace WB.UI.Shared.Web.Modules
                     viewsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Views"],
                     plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"],
                     failoverBehavior: WebConfigurationManager.AppSettings["Raven.Databases.FailoverBehavior"],
-                    activeBundles: WebConfigurationManager.AppSettings["Raven.Databases.ActiveBundles"]);
+                    activeBundles: WebConfigurationManager.AppSettings["Raven.Databases.ActiveBundles"],
+                    ravenFileSystemName: WebConfigurationManager.AppSettings["Raven.Databases.RavenFileSystemName"]);
 
                 bool useStreamingForAllEvents;
                 if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.UseStreamingForAllEvents"], out useStreamingForAllEvents))

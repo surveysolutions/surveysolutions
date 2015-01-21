@@ -13,6 +13,7 @@ using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -23,7 +24,7 @@ using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository
 {
-    internal class IncomePackagesRepository : IIncomePackagesRepository
+    internal class IncomePackagesRepository : IIncomePackagesRepository, IAdditionalDataService<InterviewData>
     {
         private string incomingCapiPackagesDirectory;
         private string incomingCapiPackagesWithErrorsDirectory;
@@ -152,23 +153,27 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             return fileName;
         }
 
-        public void ProcessItem(Guid id)
+        public void CheckAdditionalRepository(string id)
         {
-            if (packagesInProcess.TryAdd(id, true))
+            Guid interviewId;
+            if (!Guid.TryParse(id, out interviewId))
+                return;
+
+            if (packagesInProcess.TryAdd(interviewId, true))
             {
                 try
                 {
-                    ProcessItemImpl(id);
+                    ProcessItem(interviewId);
                 }
                 finally
                 {
                     bool dummyBool;
-                    this.packagesInProcess.TryRemove(id, out dummyBool);
+                    this.packagesInProcess.TryRemove(interviewId, out dummyBool);
                 }
             }
         }
 
-        private void ProcessItemImpl(Guid id)
+        private void ProcessItem(Guid id)
         {
             var fileName = this.GetItemFileName(id);
             if (!this.fileSystemAccessor.IsFileExists(fileName))
