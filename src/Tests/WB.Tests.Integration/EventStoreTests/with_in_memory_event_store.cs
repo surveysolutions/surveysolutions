@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Threading;
-using EventStore.ClientAPI;
 using EventStore.ClientAPI.Embedded;
 using EventStore.Core;
 using EventStore.Core.Bus;
@@ -12,10 +10,9 @@ using EventStore.Core.Messages;
 using Machine.Specifications;
 using Moq;
 using Ncqrs;
-using Raven.Client.Linq;
 using WB.Core.Infrastructure.Storage.EventStore;
 
-namespace WB.Tests.Integration.EventStore
+namespace WB.Tests.Integration.EventStoreTests
 {
     public class with_in_memory_event_store
     {
@@ -37,13 +34,26 @@ namespace WB.Tests.Integration.EventStore
                     .WithExternalTcpOn(emptyEndpoint)
                     .Build();
             }
-            catch (System.TypeInitializationException exception)
+            catch (TypeInitializationException )
             {
-                Console.WriteLine(exception.Message);
+                node = EmbeddedVNodeBuilder.AsSingleNode()
+                   .RunInMemory()
+                   .WithInternalHttpOn(emptyEndpoint)
+                   .WithInternalTcpOn(emptyEndpoint)
+                   .WithExternalHttpOn(emptyEndpoint)
+                   .WithExternalTcpOn(emptyEndpoint)
+                   .Build();
 
-                ReflectionTypeLoadException innerException = (ReflectionTypeLoadException)exception.InnerException;
+                //Console.WriteLine(exception.Message);
 
-                throw new ApplicationException(string.Format("LoaderMessages: {1} ", innerException.Message, string.Join(",", innerException.LoaderExceptions.Select(x => x.Message))));
+                //ReflectionTypeLoadException innerException = (ReflectionTypeLoadException)exception.InnerException;
+                //var first = innerException.LoaderExceptions.First();
+                //Console.WriteLine("First stack trace:" + first.StackTrace);
+
+
+                //throw new ApplicationException(
+                //    string.Format("LoaderMessages: {1} ", innerException.Message, string.Join(",", innerException.LoaderExceptions.Select(x => x.Message))), exception);
+
             }
 
             var startedEvent = new ManualResetEventSlim(false);

@@ -4,14 +4,11 @@ using Machine.Specifications;
 using Ncqrs;
 using Ncqrs.Eventing;
 using WB.Core.Infrastructure.Storage.EventStore.Implementation;
-using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
-using WB.Tests.Integration.StorageTests;
 using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 
-namespace WB.Tests.Integration.EventStore
+namespace WB.Tests.Integration.EventStoreTests
 {
     [Subject(typeof (WriteSideEventStore))]
-    [Ignore("Test is incompatible with RavenDB >:(")]
     public class when_storing_event_stream : with_in_memory_event_store
     {
         Establish context = () =>
