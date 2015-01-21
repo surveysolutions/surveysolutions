@@ -124,9 +124,10 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
                     return fileSession.Query().Where(string.Format("__directoryName: /{0}", ViewType.Name)).ToListAsync();
                 }
             });
-
-            var tasks = filesToDelete.Select(f=>RemoveAvoidingCache(f.Name));
-            System.Threading.Tasks.Task.WhenAll(tasks).WaitAndUnwrapException();
+            foreach (var file in filesToDelete)
+            {
+                RemoveAvoidingCache(file.Name).WaitAndUnwrapException();
+            }
         }
 
         public void Dispose()
