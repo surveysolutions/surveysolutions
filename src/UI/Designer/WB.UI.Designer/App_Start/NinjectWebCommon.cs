@@ -74,7 +74,8 @@ namespace WB.UI.Designer.App_Start
                 viewsDatabase: AppSettings.Instance.RavenViewsDatabase,
                 plainDatabase: AppSettings.Instance.RavenPlainDatabase,
                 failoverBehavior: AppSettings.Instance.FailoverBehavior,
-                activeBundles: AppSettings.Instance.ActiveBundles);
+                activeBundles: AppSettings.Instance.ActiveBundles,
+                ravenFileSystemName: AppSettings.Instance.RavenFileSystemName);
 
             var dynamicCompilerSettings = (DynamicCompilerSettings)WebConfigurationManager.GetSection("dynamicCompilerSettings");
 

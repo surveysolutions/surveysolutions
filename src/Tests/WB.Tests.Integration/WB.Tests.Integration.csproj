@@ -220,7 +220,6 @@
     <Compile Include="StorageTests\RavenDBTestBase.cs" />
     <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\RavenFilesStoreRepositoryAccessorTestContext.cs" />
     <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_clear_method_called.cs" />
-    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_count_of_stored_view_called_and_one_view_is_actually_stored.cs" />
     <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_disable_cache_method_called.cs" />
     <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_get_by_id_called_and_cache_is_disabled_and_view_was_stored_avoiding_cache.cs" />
     <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_get_by_id_called_and_cache_is_enabled_and_view_was_stored_avoiding_cache.cs" />

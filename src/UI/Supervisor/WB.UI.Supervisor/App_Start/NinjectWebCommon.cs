@@ -103,7 +103,7 @@ namespace WB.UI.Supervisor.App_Start
                 viewsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Views"],
                 plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"],
                 failoverBehavior: WebConfigurationManager.AppSettings["Raven.Databases.FailoverBehavior"],
-                activeBundles: WebConfigurationManager.AppSettings["Raven.Databases.ActiveBundles"]);
+                activeBundles: WebConfigurationManager.AppSettings["Raven.Databases.ActiveBundles"], ravenFileSystemName: WebConfigurationManager.AppSettings["Raven.Databases.RavenFileSystemName"]);
 
             
             var schedulerSettings = new SchedulerSettings(LegacyOptions.SchedulerEnabled,
@@ -166,7 +166,7 @@ namespace WB.UI.Supervisor.App_Start
                     applicationBuildVersion, interviewDetailsDataLoaderSettings, overrideReceivedEventTimeStamp,
                     Constants.CapiSynchronizationOrigin, false,
                     int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"]),
-                    new InterviewHistorySettings(basePath, false), ravenSettings.StoragePath, WebConfigurationManager.AppSettings["Raven.Databases.RavenFileSystemName"]));
+                    new InterviewHistorySettings(basePath, false)));
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
