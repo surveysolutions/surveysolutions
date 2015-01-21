@@ -23,8 +23,8 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly ILogger logger;
-        private const int MaxCountOfCachedEntities = 256;
-        private const int MaxCountOfEntitiesInOneStoreOperation = 30;
+        private const int MaxCountOfCachedEntities = 1024;
+        private const int MaxCountOfEntitiesInOneStoreOperation = 16;
         private readonly Encoding encoding = Encoding.UTF8;
         private readonly ConcurrentDictionary<string, TEntity> cache = new ConcurrentDictionary<string, TEntity>();
         private readonly IAdditionalDataService<TEntity> additionalDataService;
@@ -74,12 +74,12 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
                     TEntity deleteResult;
                     cache.TryRemove(id, out deleteResult);
                 }
-                this.RemoveAvoidingCache(id);
+                this.RemoveAvoidingCache(id).WaitAndUnwrapException();
 
             }
             else
             {
-                this.RemoveAvoidingCache(id);
+                this.RemoveAvoidingCache(id).WaitAndUnwrapException();
             }
 
         }
@@ -89,7 +89,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             if (isCacheEnabled)
                 this.StoreUsingCache(view, id);
             else
-                this.StoreAvoidingCache(view, id);
+                this.StoreAvoidingCache(view, id).WaitAndUnwrapException();
         }
 
         public void EnableCache()
@@ -125,11 +125,8 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
                 }
             });
 
-            foreach (var fileHeader in filesToDelete)
-            {
-                Remove(fileHeader.Name);
-            }
-
+            var tasks = filesToDelete.Select(f=>RemoveAvoidingCache(f.Name));
+            System.Threading.Tasks.Task.WhenAll(tasks).WaitAndUnwrapException();
         }
 
         public void Dispose()
@@ -159,7 +156,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         private void StoreAllCachedEntitiesToRepository()
         {
             while (!cache.IsEmpty)
-                ReduceCache();
+                StoreBulkOfViews(this.cache.Keys.ToList()).WaitAndUnwrapException();
         }
 
         private void ReduceCacheIfNeeded()
@@ -172,37 +169,24 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         private void ReduceCache()
         {
-            StoreChunk(this.cache.Keys.Take(MaxCountOfEntitiesInOneStoreOperation).ToList());
+            StoreBulkOfViews(this.cache.Keys.Take(MaxCountOfEntitiesInOneStoreOperation).ToList()).WaitAndUnwrapException();
         }
 
-        private void StoreChunk(List<string> bulk)
+        private async System.Threading.Tasks.Task StoreBulkOfViews(List<string> bulk)
         {
-            var streamsToClose = new Dictionary<string, MemoryStream>();
-            using (var session = this.ravenFileStore.OpenAsyncSession())
-            {
-                foreach (var entityId in bulk)
-                {
-                    var entityToStore = cache[entityId];
-                    if(entityToStore==null)
-                        continue;
-                    
-                    var memoryStream =
-                        new MemoryStream(Encoding.UTF8.GetBytes(this.GetItemAsContent(entityToStore)));
-                    session.RegisterUpload(this.CreateFileStoreEntityId(entityId), memoryStream);
+            var tasks = bulk.Select(StoreEntityAsync);
+            await System.Threading.Tasks.Task.WhenAll(tasks);
+        }
 
-                    streamsToClose.Add(entityId, memoryStream);
-                }
-                session.SaveChangesAsync().WaitAndUnwrapException(); ;
-            }
+        private async System.Threading.Tasks.Task StoreEntityAsync(string entityId)
+        {
+            var entityToStore = cache[entityId];
+            if (entityToStore == null)
+                return;
 
-            foreach (var entityId in bulk)
-            {
-                streamsToClose[entityId].Dispose();
-                streamsToClose.Remove(entityId);
-
-                TEntity deleteResult;
-                this.cache.TryRemove(entityId, out deleteResult);
-            }
+            await StoreAvoidingCache(entityToStore, entityId);
+            TEntity deleteResult;
+            this.cache.TryRemove(entityId, out deleteResult);
         }
 
         private bool IsCacheLimitReached()
@@ -231,20 +215,19 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             return null;
         }
 
-        private void StoreAvoidingCache(TEntity entity, string entityId)
+        private async System.Threading.Tasks.Task StoreAvoidingCache(TEntity entity, string entityId)
         {
             using (var memoryStream = new MemoryStream(encoding.GetBytes(GetItemAsContent(entity))))
             {
-                ravenFileStore.AsyncFilesCommands.UploadAsync(this.CreateFileStoreEntityId(entityId), memoryStream)
-                    .WaitAndUnwrapException();
+               await ravenFileStore.AsyncFilesCommands.UploadAsync(this.CreateFileStoreEntityId(entityId), memoryStream);
             }
         }
 
-        private void RemoveAvoidingCache(string entityId)
+        private async System.Threading.Tasks.Task RemoveAvoidingCache(string entityId)
         {
             try
             {
-                ravenFileStore.AsyncFilesCommands.DeleteAsync(this.CreateFileStoreEntityId(entityId)).WaitAndUnwrapException();
+                await ravenFileStore.AsyncFilesCommands.DeleteAsync(this.CreateFileStoreEntityId(entityId));
             }
             catch (FileNotFoundException e)
             {
