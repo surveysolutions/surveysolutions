@@ -30,6 +30,7 @@ namespace WB.Tools.EventsMigrator
         private string appName;
         private ObservableCollection<string> appNames;
         private int skipEvents;
+        private int retryTimes;
 
         public ShellViewModel()
         {
@@ -44,6 +45,17 @@ namespace WB.Tools.EventsMigrator
             AppNames = new ObservableCollection<string>(new List<string>(){"Designer", "HQ/SV"});
             SelectedAppName = "HQ/SV";
             ErrorMessages = new ObservableCollection<string>();
+            RetryTimes = 5;
+        }
+
+        public int RetryTimes
+        {
+            get { return this.retryTimes; }
+            set
+            {
+                this.retryTimes = value;
+                this.NotifyOfPropertyChange(() => RetryTimes);
+            }
         }
 
         public string ServerAddress

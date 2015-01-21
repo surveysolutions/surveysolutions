@@ -40,6 +40,7 @@
                 <RowDefinition SharedSizeGroup="A"></RowDefinition>
                 <RowDefinition SharedSizeGroup="A"></RowDefinition>
                 <RowDefinition SharedSizeGroup="A"></RowDefinition>
+                <RowDefinition SharedSizeGroup="A"></RowDefinition>
             </Grid.RowDefinitions>
 
 
@@ -73,9 +74,10 @@
             <Label Grid.Column="0" Grid.Row="8" Content="Event store password:"></Label>
             <TextBox Grid.Column="1" Grid.Row="8" x:Name="EventStorePassword" VerticalAlignment="Center"></TextBox>
 
-           
+            <Label Grid.Column="0" Grid.Row="9" Content="Retry times:"></Label>
+            <TextBox Grid.Column="1" Grid.Row="9" x:Name="RetryTimes" VerticalAlignment="Center"></TextBox>
 
-            <Button Grid.Column="0" Grid.Row="9" 
+            <Button Grid.Column="0" Grid.Row="10" 
                     Grid.ColumnSpan="2" 
                     x:Name="Transfer" Content="Start" Margin="0,10,0,0" 
                     Width="50"></Button>

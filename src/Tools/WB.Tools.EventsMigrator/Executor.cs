@@ -17,6 +17,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Nito.AsyncEx.Synchronous;
+using Polly;
 using Raven.Client;
 using Raven.Client.Document;
 using WB.Core.BoundedContexts.Capi;
@@ -66,31 +67,41 @@ namespace WB.Tools.EventsMigrator
 
             this.status = "Getting events from event store";
 
-            using (var connection = eventStoreConnectionProvider.Open())
+           var policy = Policy.Handle<Exception>()
+                  .WaitAndRetryAsync(settings.RetryTimes, retryAttempt => TimeSpan.FromSeconds(5),
+                      (exception, duration) => 
+                          Caliburn.Micro.Execute.OnUIThread(() =>
+                              settings.ErrorMessages.Add(string.Format("Exception '{2}' cought. Message: '{0}'. Waiting for {1} seconds to retry",
+                                  exception.Message, duration.TotalSeconds, exception.GetType()))));
+            policy.ExecuteAsync(async () =>
             {
-                connection.ConnectAsync().Wait();
-
-                foreach (CommittedEvent[] @event in ravenStore.GetAllEvents(50, settings.SkipEvents))
+                using (var connection = eventStoreConnectionProvider.Open())
                 {
-                    foreach (var committedEvent in @event)
-                    {
-                        int expectedVersion = ((int)committedEvent.EventSequence - 2);
-                        string stream = WriteSideEventStore.EventsPrefix + committedEvent.EventSourceId.FormatGuid();
+                    await connection.ConnectAsync();
 
-                        var eventData = WriteSideEventStore.BuildEventData(new UncommittedEvent(committedEvent.EventIdentifier,
-                            committedEvent.EventSourceId,
-                            committedEvent.EventSequence,
-                            0,
-                            committedEvent.EventTimeStamp,
+                    int skipEvents = Math.Max(0, settings.SkipEvents + processed - 1);
+                    foreach (CommittedEvent[] @event in ravenStore.GetAllEvents(50, skipEvents))
+                    {
+                        foreach (var committedEvent in @event)
+                        {
+                            int expectedVersion = ((int) committedEvent.EventSequence - 2);
+                            string stream = WriteSideEventStore.EventsPrefix + committedEvent.EventSourceId.FormatGuid();
+
+                            var eventData = WriteSideEventStore.BuildEventData(new UncommittedEvent(committedEvent.EventIdentifier,
+                                committedEvent.EventSourceId,
+                                committedEvent.EventSequence,
+                                0,
+                                committedEvent.EventTimeStamp,
                             committedEvent.Payload));
 
-                        connection.AppendToStreamAsync(stream, expectedVersion, eventData).WaitAndUnwrapException();
+                            await connection.AppendToStreamAsync(stream, expectedVersion, eventData);
 
-                        Interlocked.Increment(ref processed);
-                        this.elapsed = watch.Elapsed;
+                            Interlocked.Increment(ref processed);
+                            this.elapsed = watch.Elapsed;
+                        }
                     }
                 }
-            }
+            }).WaitAndUnwrapException();
 
             this.status = "Done writing events";
             watch.Stop();
@@ -110,7 +121,7 @@ namespace WB.Tools.EventsMigrator
 
         private static void RegisterEvents(IShell settings)
         {
-            var assemblies = new List<Assembly> { typeof (AggregateRootEvent).Assembly };
+            var assemblies = new List<Assembly> { typeof(AggregateRootEvent).Assembly };
 
             if (settings.SelectedAppName == "Designer")
             {
@@ -119,7 +130,7 @@ namespace WB.Tools.EventsMigrator
             }
             else
             {
-                assemblies.Add(typeof (DataCollectionSharedKernelModule).Assembly);
+                assemblies.Add(typeof(DataCollectionSharedKernelModule).Assembly);
                 assemblies.Add(typeof(IAuthentication).Assembly);
                 assemblies.Add(typeof(SurveyManagementSharedKernelModule).Assembly);
             }
@@ -130,11 +141,11 @@ namespace WB.Tools.EventsMigrator
 
         private static IEnumerable<Type> GetAllEventTypes(IEnumerable<Assembly> assemblies)
         {
-            return (from assembly in assemblies 
-                   from type in assembly.GetTypes() 
-                   where IsEventHandler(type) 
-                        from handledEventType in GetHandledEventTypes(type) 
-                   select handledEventType).Distinct();
+            return (from assembly in assemblies
+                    from type in assembly.GetTypes()
+                    where IsEventHandler(type)
+                    from handledEventType in GetHandledEventTypes(type)
+                    select handledEventType).Distinct();
         }
 
         private static IEnumerable<Type> GetHandledEventTypes(Type type)

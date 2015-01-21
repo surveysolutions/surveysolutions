@@ -23,6 +23,7 @@ namespace WB.Tools.EventsMigrator
         string EventStorePassword { get; set; }
         ObservableCollection<string> AppNames { get; set; }
         int SkipEvents { get; set; }
+        int RetryTimes { get; set; }
         Task Transfer();
     }
 }
