@@ -69,10 +69,7 @@ namespace WB.Tools.EventsMigrator
 
             this.status = "Getting events from event store";
             int processedInCurrentRun = 0;
-            var policy = Policy.Handle<ObjectDisposedException>()
-                .Or<IOException>()
-                .Or<HttpRequestException>()
-                .Or<TimeoutException>()
+            var policy = Policy.Handle<Exception>(exception => exception.GetType() != typeof(OperationCanceledException))
                    .WaitAndRetryAsync(settings.RetryTimes, retryAttempt => TimeSpan.FromSeconds(5),
                        (exception, duration) =>
                            Caliburn.Micro.Execute.OnUIThread(() =>
