@@ -72,6 +72,7 @@ namespace WB.Tools.EventsMigrator
             var policy = Policy.Handle<ObjectDisposedException>()
                 .Or<IOException>()
                 .Or<HttpRequestException>()
+                .Or<TimeoutException>()
                    .WaitAndRetryAsync(settings.RetryTimes, retryAttempt => TimeSpan.FromSeconds(5),
                        (exception, duration) =>
                            Caliburn.Micro.Execute.OnUIThread(() =>
