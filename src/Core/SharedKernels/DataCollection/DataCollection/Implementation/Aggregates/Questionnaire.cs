@@ -120,6 +120,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(command.Source);
             this.ThrowIfCurrentAggregateIsUsedOnlyAsProxyToPlainQuestionnaireRepository();
 
+            if (command.SupportingAssembly != null && !string.IsNullOrWhiteSpace(command.SupportingAssembly))
+            {
+                throw new QuestionnaireException(string.Format("Cannot import questionnaire. Assembly file is empty. QuestionnaireId: {0}", this.EventSourceId));
+            }
+
             var newVersion = GetNextVersion();
             
             this.ApplyEvent(new TemplateImported
@@ -129,12 +134,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 Version = GetNextVersion(),
                 ResponsibleId = command.CreatedBy
             });
+            
+            QuestionnareAssemblyFileAccessor.StoreAssembly(EventSourceId, newVersion, command.SupportingAssembly);
+            this.ApplyEvent(new QuestionnaireAssemblyImported { Version = newVersion });
 
-            if (command.SupportingAssembly != null && !string.IsNullOrWhiteSpace(command.SupportingAssembly))
-            {
-                QuestionnareAssemblyFileAccessor.StoreAssembly(EventSourceId, newVersion, command.SupportingAssembly);
-                this.ApplyEvent(new QuestionnaireAssemblyImported { Version = newVersion });
-            }
         }
 
         public void ImportFromSupervisor(ImportFromSupervisor command)
