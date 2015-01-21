@@ -129,19 +129,30 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         private FeaturedItem CreateFeaturedItem(IQuestion featuredQuestion, object answer)
         {
-            if (questionTypesWithOptions.Contains(featuredQuestion.QuestionType))
+            if (this.questionTypesWithOptions.Contains(featuredQuestion.QuestionType))
             {
                 var featuredCategoricalOptions = featuredQuestion.Answers.Select(
                     option =>
-                        new FeaturedCategoricalOption()
+                        new FeaturedCategoricalOption
                         {
                             OptionValue = decimal.Parse(option.AnswerValue),
                             OptionText = option.AnswerText,
                         });
 
+                object objectAnswer;
+
+                if (answer.GetType().IsArray)
+                {
+                    objectAnswer = (answer as object[]).Select(Convert.ToDecimal).ToArray();
+                }
+                else
+                {
+                    objectAnswer = Convert.ToDecimal(answer);
+                }
+
                 return new FeaturedCategoricalItem(featuredQuestion.PublicKey, 
                     featuredQuestion.QuestionText,
-                    AnswerUtils.AnswerToString(answer,
+                    AnswerUtils.AnswerToString(objectAnswer,
                         (optionValue) => getCategoricalAnswerOptionText(featuredCategoricalOptions, optionValue)),
                     featuredCategoricalOptions);
             }

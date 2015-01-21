@@ -5,7 +5,6 @@ using WB.Core.BoundedContexts.Capi.Views.InterviewMetaInfo;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo
 {
