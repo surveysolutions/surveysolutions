@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -67,7 +69,9 @@ namespace WB.Tools.EventsMigrator
 
             this.status = "Getting events from event store";
             int processedInCurrentRun = 0;
-            var policy = Policy.Handle<Exception>()
+            var policy = Policy.Handle<ObjectDisposedException>()
+                .Or<IOException>()
+                .Or<HttpRequestException>()
                    .WaitAndRetryAsync(settings.RetryTimes, retryAttempt => TimeSpan.FromSeconds(5),
                        (exception, duration) =>
                            Caliburn.Micro.Execute.OnUIThread(() =>
