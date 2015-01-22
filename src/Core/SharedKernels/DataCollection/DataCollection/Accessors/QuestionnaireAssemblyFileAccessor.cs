@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Threading;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -36,10 +38,12 @@ namespace WB.Core.SharedKernels.DataCollection.Accessors
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
             var pathToSaveAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
 
-            if (this.fileSystemAccessor.IsFileExists(pathToSaveAssembly))
-                this.fileSystemAccessor.DeleteFile(pathToSaveAssembly);
+            var assembly = Convert.FromBase64String(assemblyAsBase64);
 
-            this.fileSystemAccessor.WriteAllBytes(pathToSaveAssembly, Convert.FromBase64String(assemblyAsBase64));
+            if (assembly.Length == 0)
+                throw new InvalidDataException("Invalid param: assemblyAsBase64");
+
+            this.fileSystemAccessor.WriteAllBytes(pathToSaveAssembly, assembly);
         }
 
         public void RemoveAssembly(Guid questionnaireId, long questionnaireVersion)
