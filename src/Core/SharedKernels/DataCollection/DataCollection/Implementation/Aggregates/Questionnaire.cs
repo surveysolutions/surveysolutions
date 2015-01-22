@@ -185,6 +185,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     this.EventSourceId, command.Version));
 
             this.ApplyEvent(new PlainQuestionnaireRegistered(command.Version, command.AllowCensusMode));
+
+            //ignoring on interviewer but saving on supervisor
+            if (string.IsNullOrWhiteSpace(command.SupportingAssembly)) return;
+            
+            QuestionnareAssemblyFileAccessor.StoreAssembly(EventSourceId, command.Version, command.SupportingAssembly);
+            this.ApplyEvent(new QuestionnaireAssemblyImported { Version = command.Version });
         }
 
         private static QuestionnaireDocument CastToQuestionnaireDocumentOrThrow(IQuestionnaireDocument source)
