@@ -6,22 +6,21 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
+using Raven.Imports.Newtonsoft.Json;
+using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
+
 namespace WB.Core.Infrastructure.Storage.RedisStore.Implementation
 {
     public class RedisReadSideStore<TEntity> : IReadSideKeyValueStorage<TEntity>, IReadSideRepositoryWriter, IReadSideRepositoryCleaner, IDisposable
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly IRedisClientsManager redisClientsManager;
-        private readonly IJsonUtils jsonUtils;
         private readonly string collectionName = typeof (TEntity).Name;
 
-        public RedisReadSideStore(IRedisClientsManager redisClientsManager,
-            IJsonUtils jsonUtils)
+        public RedisReadSideStore(IRedisClientsManager redisClientsManager)
         {
             if (redisClientsManager == null) throw new ArgumentNullException("redisClientsManager");
-            if (jsonUtils == null) throw new ArgumentNullException("jsonUtils");
             this.redisClientsManager = redisClientsManager;
-            this.jsonUtils = jsonUtils;
         }
 
         public TEntity GetById(string id)
@@ -29,7 +28,7 @@ namespace WB.Core.Infrastructure.Storage.RedisStore.Implementation
             using (IRedisClient readOnlyClient = redisClientsManager.GetReadOnlyClient())
             {
                 string valueFromHash = readOnlyClient.GetValueFromHash(collectionName, id);
-                return valueFromHash == null ? null : this.jsonUtils.Deserialize<TEntity>(valueFromHash);
+                return valueFromHash == null ? null : Deserrialize(valueFromHash);
             }
         }
 
@@ -44,7 +43,7 @@ namespace WB.Core.Infrastructure.Storage.RedisStore.Implementation
         {
             using (IRedisClient redisClient = redisClientsManager.GetClient())
             {
-                string data = this.jsonUtils.Serialize(view);
+                string data = GetItemAsContent(view);
                 redisClient.SetEntryInHash(collectionName, id, data);
             }
         }
@@ -69,5 +68,37 @@ namespace WB.Core.Infrastructure.Storage.RedisStore.Implementation
         public void EnableCache() {}
 
         public void DisableCache() {}
+
+        private JsonSerializerSettings JsonSerializerSettings
+        {
+            get
+            {
+                return new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.All,
+                    ContractResolver = new PropertiesOnlyContractResolver(),
+                    DefaultValueHandling = DefaultValueHandling.Ignore,
+                    MissingMemberHandling = MissingMemberHandling.Ignore,
+                    NullValueHandling = NullValueHandling.Ignore
+                };
+            }
+        }
+
+        private string GetItemAsContent(TEntity item)
+        {
+            return JsonConvert.SerializeObject(item, Formatting.None, JsonSerializerSettings);
+        }
+
+        private TEntity Deserrialize(string payload)
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<TEntity>(payload, JsonSerializerSettings);
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException(payload, e);
+            }
+        }
     }
 }
