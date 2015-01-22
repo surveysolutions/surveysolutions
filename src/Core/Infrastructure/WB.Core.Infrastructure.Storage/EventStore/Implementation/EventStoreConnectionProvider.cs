@@ -17,9 +17,14 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public IEventStoreConnection Open()
         {
+            var settings = ConnectionSettings
+                .Create()
+                .KeepReconnecting();
+
             var serverIp = IPAddress.Parse(this.connectionSettings.ServerIP);
             var tcpEndPoint = new IPEndPoint(serverIp, this.connectionSettings.ServerTcpPort);
-            var eventStoreConnection = EventStoreConnection.Create(tcpEndPoint);
+
+            var eventStoreConnection = EventStoreConnection.Create(settings, tcpEndPoint);
 
             return eventStoreConnection;
         }
