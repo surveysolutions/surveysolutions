@@ -133,7 +133,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 Source = document,
                 AllowCensusMode = command.AllowCensusMode,
-                Version = GetNextVersion(),
+                Version = newVersion,
                 ResponsibleId = command.CreatedBy
             });
             this.ApplyEvent(new QuestionnaireAssemblyImported { Version = newVersion });
