@@ -43,8 +43,8 @@ namespace WB.Core.Infrastructure.Storage.Raven
 
 
           //  this.Kernel.Bind(typeof(FilesStoreRepositoryAccessor<>)).ToSelf().InSingletonScope();
-            this.Kernel.Bind(typeof(RavenFilesStoreRepositoryAccessor<>)).ToSelf().InSingletonScope();
-            this.Kernel.Bind(typeof(IReadSideKeyValueStorage<>)).ToMethod(this.GetKeyValueStorage);
+            //this.Kernel.Bind(typeof(RavenFilesStoreRepositoryAccessor<>)).ToSelf().InSingletonScope();
+            //this.Kernel.Bind(typeof(IReadSideKeyValueStorage<>)).ToMethod(this.GetKeyValueStorage);
 
         }
 
