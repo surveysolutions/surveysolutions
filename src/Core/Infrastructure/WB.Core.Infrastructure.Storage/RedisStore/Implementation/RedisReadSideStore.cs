@@ -34,7 +34,8 @@ namespace WB.Core.Infrastructure.Storage.RedisStore.Implementation
 
         public void Remove(string id)
         {
-            using (IRedisClient redisClient = redisClientsManager.GetClient()) {
+            using (IRedisClient redisClient = redisClientsManager.GetClient())
+            {
                 redisClient.RemoveEntryFromHash(collectionName, id);
             }
         }
