@@ -130,7 +130,7 @@ namespace WB.UI.Supervisor.App_Start
             var basePath = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
             const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
 
-            var ravenReadSideRepositoryWriterSettings = new RavenReadSideRepositoryWriterSettings(basePath, int.Parse(WebConfigurationManager.AppSettings["Raven.Readside.BulkInsertBatchSize"]));
+            var ravenReadSideRepositoryWriterSettings = new RavenReadSideRepositoryWriterSettings(int.Parse(WebConfigurationManager.AppSettings["Raven.Readside.BulkInsertBatchSize"]));
 
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
