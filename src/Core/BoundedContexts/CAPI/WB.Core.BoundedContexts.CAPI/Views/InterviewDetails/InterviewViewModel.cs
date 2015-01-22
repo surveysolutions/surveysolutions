@@ -23,6 +23,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 {
     public class InterviewViewModel : MvxViewModel, IView
     {
+        public InterviewViewModel()
+        {
+
+        }
+
         protected InterviewViewModel(Guid id)
         {
             this.PublicKey = id;
@@ -101,6 +106,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.SubscribePrefilledQuestionsOnPropertiesChanges();
 
             #endregion
+        }
+
+        public void Init(Guid interviewId)
+        {
+            
         }
 
         private void SubscribePrefilledQuestionsOnPropertiesChanges()
