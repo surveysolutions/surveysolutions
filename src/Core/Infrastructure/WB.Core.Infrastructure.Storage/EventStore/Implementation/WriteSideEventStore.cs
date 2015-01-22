@@ -5,6 +5,7 @@ using System.Net;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
 using Ncqrs;
@@ -21,7 +22,6 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 {
     internal class WriteSideEventStore : IStreamableEventStore, IDisposable
     {
-        private readonly IEventStoreConnectionProvider connectionProvider;
         private static readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings
         {
             NullValueHandling = NullValueHandling.Ignore,
@@ -43,8 +43,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public WriteSideEventStore(IEventStoreConnectionProvider connectionProvider)
         {
-            this.connectionProvider = connectionProvider;
-            this.connection =  this.connectionProvider.Open();
+            this.connection = connectionProvider.Open();
 
             using (var cancellationTokenSource = new CancellationTokenSource()) {
                 cancellationTokenSource.CancelAfter(this.defaultTimeout);
@@ -70,7 +69,8 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
             do
             {
-                currentSlice = AsyncContext.Run(() => connection.ReadStreamEventsForwardAsync(EventsPrefix + id.FormatGuid(), nextSliceStart, batchSize, false));
+                currentSlice = this.RunWithDefaultTimeout(this.connection.ReadStreamEventsForwardAsync(EventsPrefix + id.FormatGuid(), nextSliceStart, batchSize, false));
+
                 nextSliceStart = currentSlice.NextEventNumber;
 
                 streamEvents.AddRange(currentSlice.Events);
@@ -87,7 +87,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             StreamEventsSlice currentSlice;
             do
             {
-                currentSlice = AsyncContext.Run(() => connection.ReadStreamEventsForwardAsync(AllEventsStream, nextPosition, bulkSize, true));
+                currentSlice = this.RunWithDefaultTimeout(connection.ReadStreamEventsForwardAsync(AllEventsStream, nextPosition, bulkSize, true));
                 nextPosition = currentSlice.NextEventNumber;
 
                 yield return currentSlice.Events.Select(this.ToCommittedEvent).ToArray();
@@ -100,7 +100,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             StreamEventsSlice currentSlice;
             do
             {
-                currentSlice = AsyncContext.Run(() => connection.ReadStreamEventsForwardAsync(AllEventsStream, nextPosition, 200, false));
+                currentSlice = this.RunWithDefaultTimeout(connection.ReadStreamEventsForwardAsync(AllEventsStream, nextPosition, 200, false));
                 nextPosition = currentSlice.NextEventNumber;
                 foreach (var resolvedEvent in currentSlice.Events)
                 {
@@ -112,7 +112,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         public void Store(UncommittedEventStream eventStream)
         {
             int expectedStreamVersion = (int) (eventStream.InitialVersion - 1);
-            using (EventStoreTransaction transaction = AsyncContext.Run(() => this.connection.StartTransactionAsync(EventsPrefix + eventStream.SourceId.FormatGuid(), expectedStreamVersion)))
+            using (EventStoreTransaction transaction = this.RunWithDefaultTimeout(this.connection.StartTransactionAsync(EventsPrefix + eventStream.SourceId.FormatGuid(), expectedStreamVersion)))
             {
                 using (var transactionTimeout = new CancellationTokenSource()) 
                 {
@@ -130,13 +130,13 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public int CountOfAllEvents()
         {
-            StreamEventsSlice slice = AsyncContext.Run(() => this.connection.ReadStreamEventsForwardAsync(AllEventsStream, 0, 1, false));
+            StreamEventsSlice slice = this.RunWithDefaultTimeout(this.connection.ReadStreamEventsForwardAsync(AllEventsStream, 0, 1, false));
             return slice.LastEventNumber + 1;
         }
 
         public long GetLastEventSequence(Guid id)
         {
-            StreamEventsSlice slice = AsyncContext.Run(() => this.connection.ReadStreamEventsForwardAsync(EventsPrefix + id.FormatGuid(), 0, 1, false));
+            StreamEventsSlice slice = this.RunWithDefaultTimeout(this.connection.ReadStreamEventsForwardAsync(EventsPrefix + id.FormatGuid(), 0, 1, false));
             return slice.LastEventNumber + 1;
         }
 
@@ -183,6 +183,22 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                 Encoding.GetBytes(eventString),
                 Encoding.GetBytes(metaData));
             return eventData;
+        }
+
+        private TResult RunWithDefaultTimeout<TResult>(Task<TResult> readTask)
+        {
+            using (var timeoutTokenSource = new CancellationTokenSource())
+            {
+                timeoutTokenSource.CancelAfter(this.defaultTimeout);
+                Task timeoutTask = timeoutTokenSource.Token.AsTask();
+
+                Task firstFinishedTask = AsyncContext.Run(() => Task.WhenAny(timeoutTask, readTask));
+
+                if (firstFinishedTask == timeoutTask)
+                    throw new TimeoutException(string.Format("Failed to perform eventstore operation using timeout {0}", this.defaultTimeout));
+
+                return ((Task<TResult>)firstFinishedTask).Result;
+            }
         }
 
         public void Dispose()
