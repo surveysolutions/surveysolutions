@@ -6,7 +6,7 @@ using Android.OS;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.UI.QuestionnaireTester.Implementations.Activities;
+using WB.UI.QuestionnaireTester.Views;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Frames;
 
@@ -42,7 +42,7 @@ namespace WB.UI.QuestionnaireTester.Implementations.Fragments
 
             if (questionnaire.FeaturedQuestions.Count == 0)
             {
-                var intent = new Intent(this.Activity, typeof (TesterDetailsActivity));
+                var intent = new Intent(this.Activity, typeof (InterviewView));
                 intent.PutExtra("publicKey", QuestionnaireId.ToString());
                 this.StartActivity(intent);
                 this.Activity.Finish();

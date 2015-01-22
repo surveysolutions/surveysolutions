@@ -17,7 +17,7 @@ namespace WB.UI.Shared.Android.Activities
 {
     public abstract class DetailsActivity : DoubleBackMvxFragmentActivity
     {
-        protected Guid QuestionnaireId
+        protected virtual Guid QuestionnaireId
         {
             get { return Guid.Parse(this.Intent.GetStringExtra("publicKey")); }
         }

@@ -6,7 +6,10 @@ using System.Reflection;
 using Android.App;
 using Android.Content;
 using Android.Runtime;
+using Cheesebaron.MvxPlugins.Settings.Interfaces;
+using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Droid.Platform;
+using IHS.MvvmCross.Plugins.Keychain;
 using Main.Core.Events.Questionnaire;
 using Main.DenormalizerStorage;
 using Microsoft.Practices.ServiceLocation;
@@ -41,7 +44,7 @@ using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement;
-using WB.UI.QuestionnaireTester.Authentication;
+using WB.UI.QuestionnaireTester.Implementation.Services;
 using WB.UI.QuestionnaireTester.Services;
 using WB.UI.Shared.Android;
 using WB.UI.Shared.Android.Controls.ScreenItems;
@@ -79,37 +82,6 @@ namespace WB.UI.QuestionnaireTester
         public static ICommandService CommandService
         {
             get { return Kernel.Get<ICommandService>(); }
-        }
-
-        public static DesignerAuthentication DesignerMembership
-        {
-            get { return Kernel.Get<DesignerAuthentication>(); }
-        }
-
-        public static DesignerService DesignerServices
-        {
-            get { return Kernel.Get<DesignerService>(); }
-        }
-
-        private const string DesignerPath = "DesignerPath";
-
-        public static string GetPathToDesigner()
-        {
-            ISharedPreferences prefs = Context.GetSharedPreferences(Context.Resources.GetString(Resource.String.ApplicationName), FileCreationMode.Private);
-            var pathToDesigner = prefs.GetString(DesignerPath, Context.Resources.GetString(Resource.String.DesignerPath));
-            #if DEBUG
-            //pathToDesigner = "http://172.29.124.72/Designer/api/tester";
-            #endif
-            return pathToDesigner;
-        }
-
-        public static void SetPathToDesigner(string path)
-        {
-            ISharedPreferences prefs = Application.Context.GetSharedPreferences(Context.Resources.GetString(Resource.String.ApplicationName),
-             FileCreationMode.Private);
-            ISharedPreferencesEditor prefEditor = prefs.Edit();
-            prefEditor.PutString(DesignerPath, path);
-            prefEditor.Commit();
         }
 
         public static IKernel Kernel
@@ -236,9 +208,6 @@ namespace WB.UI.QuestionnaireTester
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false, basePath: basePath),
                 new FileInfrastructureModule());
 
-            this.kernel.Bind<IAuthentication, DesignerAuthentication>().ToConstant(new DesignerAuthentication());
-            this.kernel.Bind<DesignerService>().ToSelf();
-            
             this.kernel.Bind<Context>().ToConstant(this);
 
             NcqrsEnvironment.SetDefault(ServiceLocator.Current.GetInstance<ILogger>());
@@ -264,6 +233,9 @@ namespace WB.UI.QuestionnaireTester
             this.kernel.Bind<IAnswerOnQuestionCommandService>().To<AnswerOnQuestionCommandService>().InSingletonScope();
             this.kernel.Bind<IAnswerProgressIndicator>().To<AnswerProgressIndicator>().InSingletonScope();
             this.kernel.Bind<IQuestionViewFactory>().To<DefaultQuestionViewFactory>();
+
+            this.kernel.Bind<IPrincipal>().ToConstant(new Principal(Mvx.Resolve<IKeychain>(), Mvx.Resolve<ISettings>()));
+            this.kernel.Bind<IAuthentication>().To<DesignerAuthentication>();
             
             #region register handlers
 

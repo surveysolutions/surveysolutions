@@ -19,7 +19,7 @@ namespace WB.UI.QuestionnaireTester.Implementations.Fragments
         {
             base.PreCompleteAction();
 
-            this.Activity.ClearAllBackStack<QuestionnaireListActivity>();
+            //this.Activity.ClearAllBackStack<QuestionnaireListActivity>();
         }
     }
 }
