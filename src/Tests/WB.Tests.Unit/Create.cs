@@ -1246,7 +1246,7 @@ namespace WB.Tests.Unit
 
         public static WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire Questionnaire(Guid creatorId, QuestionnaireDocument document)
         {
-            return new WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire(new Guid(), document, false, string.Empty);
+            return new WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire(new Guid(), document, false, "base65 string of assembly");
         }
 
         public static EnablementChanges EnablementChanges(List<Core.SharedKernels.DataCollection.Identity> groupsToBeDisabled = null, List<Core.SharedKernels.DataCollection.Identity> groupsToBeEnabled = null,
