@@ -17,7 +17,7 @@ namespace WB.Core.Infrastructure.Storage.RedisStore
 
         public override void Load()
         {
-            this.Kernel.Bind<IRedisClientsManager>().ToMethod((kernel) => new RedisManagerPool(connectionString));
+            this.Kernel.Bind<IRedisClientsManager>().ToMethod((kernel) => new PooledRedisClientManager(connectionString));
             this.Kernel.Bind(typeof(IReadSideKeyValueStorage<>)).To(typeof(RedisReadSideStore<>)).InSingletonScope();
         }
     }
