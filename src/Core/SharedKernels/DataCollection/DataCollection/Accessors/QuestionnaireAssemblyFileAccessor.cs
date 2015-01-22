@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.DataCollection.Accessors
             var assembly = Convert.FromBase64String(assemblyAsBase64);
 
             if (assembly.Length == 0)
-                throw new InvalidDataException("Invalid param: assemblyAsBase64");
+                throw new Exception(string.Format("Assembly file is empty. Cannot be saved. Questionnaire: {0}, version: {1}", questionnaireId, questionnaireVersion));
 
             this.fileSystemAccessor.WriteAllBytes(pathToSaveAssembly, assembly);
         }
