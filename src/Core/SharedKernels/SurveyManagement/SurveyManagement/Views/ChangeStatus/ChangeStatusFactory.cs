@@ -7,9 +7,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus
 {
     public class ChangeStatusFactory : IViewFactory<ChangeStatusInputModel, ChangeStatusView>
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
+        private readonly IReadSideRepositoryReader<InterviewSummary> interviews;
 
-        public ChangeStatusFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviews)
+        public ChangeStatusFactory(IReadSideRepositoryReader<InterviewSummary> interviews)
         {
             this.interviews = interviews;
         }
