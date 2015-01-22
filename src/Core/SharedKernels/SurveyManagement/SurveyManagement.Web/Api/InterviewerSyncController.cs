@@ -67,6 +67,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.jsonUtils = jsonUtils;
         }
 
+        [HttpGet]
+        [ApiBasicAuth]
+        public HttpResponseMessage GetHandshakePackage(string clientId, string androidId, Guid? clientRegistrationId, int version = 0)
+        {
+            int supervisorRevisionNumber = syncVersionProvider.GetProtocolVersion();
+
+            throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable)
+            {
+                ReasonPhrase = string.Format(InterviewerSyncStrings.InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication, version, supervisorRevisionNumber)
+            });
+        }
+
         [HttpPost]
         [ApiBasicAuth]
         public HandshakePackage GetHandshakePackage(HandshakePackageRequest request)
