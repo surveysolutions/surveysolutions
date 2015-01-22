@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             // act
             TestDelegate act =
                 () =>
-                questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), docMock.Object, false, null));
+                questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), docMock.Object, false, "base64 string of assembly"));
             
             // assert
             Assert.Throws<QuestionnaireException>(act);
