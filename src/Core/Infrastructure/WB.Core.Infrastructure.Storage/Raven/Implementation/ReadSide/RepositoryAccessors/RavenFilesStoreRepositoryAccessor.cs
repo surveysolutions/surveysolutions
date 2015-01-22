@@ -125,7 +125,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
                 }
             });
             var tasks = filesToDelete.Select(f => RemoveAvoidingCache(f.Name)).ToArray();
-            System.Threading.Tasks.Task.WhenAll(tasks);
+            System.Threading.Tasks.Task.WhenAll(tasks).WaitWithoutException();
         }
 
         public void Dispose()
@@ -173,8 +173,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         private void StoreBulkOfViews(List<string> bulk)
         {
-            var tasks = bulk.Select(StoreEntityAsync);
-            System.Threading.Tasks.Task.WhenAll(tasks);
+            System.Threading.Tasks.Task.WhenAll(bulk.Select(StoreEntityAsync)).WaitAndUnwrapException();
         }
 
         private async System.Threading.Tasks.Task StoreEntityAsync(string entityId)
