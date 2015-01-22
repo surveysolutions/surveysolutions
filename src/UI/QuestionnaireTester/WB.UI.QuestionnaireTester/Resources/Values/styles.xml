@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <style name="Theme.Splash" parent="@android:style/Theme.Light">
+    <item name="android:windowNoTitle">true</item>
+  </style>
+
+  <color name="text">#FFFFFFFF</color>
+  <color name="background">#FF2A81CB</color>
+
+  <color name="enabledQuestionnaire">#FF2FC507</color>
+  <color name="disabledQuestionnaire">#FFE9E9E9</color>
+
+  <color name="progressIndicatorFirst">#90EE90</color>
+  <color name="progressIndicatorSecond">#FFFFFFFF</color>
+  <color name="progressIndicatorThird">#EE82EE</color>
+  <color name="progressIndicatorFourth">#FFFFFFFF</color>
+</resources>
