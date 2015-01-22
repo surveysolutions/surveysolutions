@@ -24,8 +24,9 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation
                 new FilesStore()
                 {
                     Url = settings.StoragePath,
-                    DefaultFileSystem = settings.RavenFileSystemName
+                    DefaultFileSystem = settings.RavenFileSystemName, MaxNumberOfCachedRequests = 2048
                 };
+            
             store.Initialize(true);
             return store;
         }
