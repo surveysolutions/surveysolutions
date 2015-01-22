@@ -120,7 +120,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(command.Source);
             this.ThrowIfCurrentAggregateIsUsedOnlyAsProxyToPlainQuestionnaireRepository();
 
-            if (command.SupportingAssembly != null && !string.IsNullOrWhiteSpace(command.SupportingAssembly))
+            if (string.IsNullOrWhiteSpace(command.SupportingAssembly))
             {
                 throw new QuestionnaireException(string.Format("Cannot import questionnaire. Assembly file is empty. QuestionnaireId: {0}", this.EventSourceId));
             }
