@@ -188,7 +188,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             if (entityToStore == null)
                 return;
 
-            await StoreAvoidingCache(entityToStore, entityId);
+            await StoreAvoidingCache(entityToStore, entityId).ConfigureAwait(false);
             cache.Remove(entityId);
         }
 
@@ -200,13 +200,13 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         private async Task<TEntity> GetEntityAvoidingCacheById(string entityId)
         {
             var fileEntityId = this.CreateFileStoreEntityId(entityId);
-            var headers = await ravenFileStore.AsyncFilesCommands.GetAsync(new[] { fileEntityId });
+            var headers = await ravenFileStore.AsyncFilesCommands.GetAsync(new[] { fileEntityId }).ConfigureAwait(false);
             if (!headers.Any())
                 return null;
 
             using (
                 var stream =
-                    await ravenFileStore.AsyncFilesCommands.DownloadAsync(fileEntityId))
+                    await ravenFileStore.AsyncFilesCommands.DownloadAsync(fileEntityId).ConfigureAwait(false))
             {
                 using (var reader = new StreamReader(stream, encoding))
                 {
@@ -219,17 +219,17 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         {
             using (var memoryStream = new MemoryStream(encoding.GetBytes(GetItemAsContent(entity))))
             {
-               await ravenFileStore.AsyncFilesCommands.UploadAsync(this.CreateFileStoreEntityId(entityId), memoryStream);
+                await ravenFileStore.AsyncFilesCommands.UploadAsync(this.CreateFileStoreEntityId(entityId), memoryStream).ConfigureAwait(false);
             }
         }
 
         private async System.Threading.Tasks.Task RemoveAvoidingCache(string entityId)
         {
             var fileEntityId = this.CreateFileStoreEntityId(entityId);
-            var headers = await ravenFileStore.AsyncFilesCommands.GetAsync(new[] { fileEntityId });
+            var headers = await ravenFileStore.AsyncFilesCommands.GetAsync(new[] { fileEntityId }).ConfigureAwait(false);
             if (!headers.Any())
                 return;
-            await ravenFileStore.AsyncFilesCommands.DeleteAsync(fileEntityId);
+            await ravenFileStore.AsyncFilesCommands.DeleteAsync(fileEntityId).ConfigureAwait(false);
         }
 
         private string CreateFileStoreEntityId(string id)
