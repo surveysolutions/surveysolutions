@@ -51,6 +51,8 @@ namespace WB.Core.SharedKernels.DataCollection.Accessors
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
             var pathToSaveAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
 
+            Logger.Info(string.Format("Trying to delete assembly for questionnaire {0} version {1}", questionnaireId, questionnaireVersion));
+
             //loaded assembly could be locked
             try
             {
@@ -58,7 +60,7 @@ namespace WB.Core.SharedKernels.DataCollection.Accessors
             }
             catch (Exception e)
             {
-                Logger.Error("Error on assembly deletion");
+                Logger.Error(string.Format("Error on assembly deletion for questionnaire {0} version {1}", questionnaireId, questionnaireVersion));
                 Logger.Error(e.Message, e);
             }
         }
