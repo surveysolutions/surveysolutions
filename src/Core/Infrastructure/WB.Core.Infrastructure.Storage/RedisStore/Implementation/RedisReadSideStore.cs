@@ -51,7 +51,7 @@ namespace WB.Core.Infrastructure.Storage.RedisStore.Implementation
 
         public string GetReadableStatus()
         {
-            return "OMG";
+            return "Redis :)";
         }
 
         public Type ViewType { get { return typeof(TEntity); } }
