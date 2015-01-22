@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
+using Ninject.Activation.Caching;
 using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Client.Document;
@@ -21,50 +23,18 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
     {
         private const int MaxCountOfCachedEntities = 256;
         private const int MaxCountOfEntitiesInOneStoreOperation = 16;
-        private const string ReadSideCacheFolderName = "ReadSideCache";
 
         private bool isCacheEnabled = false;
-        private string cacheFolderUniqueId;
 
-        private readonly ConcurrentDictionary<string, TEntity> cache = new ConcurrentDictionary<string, TEntity>();
-        private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly Dictionary<string, TEntity> cache = new Dictionary<string, TEntity>();
         private readonly RavenReadSideRepositoryWriterSettings settings;
-        private readonly string cachedViewsFolder;
         private readonly ILogger logger;
 
-        private JsonSerializerSettings JsonSerializerSettings
-        {
-            get
-            {
-                return new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.All,
-                    ContractResolver = this.RavenStore.Conventions.JsonContractResolver,
-                    DefaultValueHandling = DefaultValueHandling.Ignore,
-                    MissingMemberHandling = MissingMemberHandling.Ignore,
-                    NullValueHandling = NullValueHandling.Ignore
-                };
-            }
-        }
-
-        public RavenReadSideRepositoryWriter(IDocumentStore ravenStore, IFileSystemAccessor fileSystemAccessor, ILogger logger, RavenReadSideRepositoryWriterSettings settings)
+        public RavenReadSideRepositoryWriter(IDocumentStore ravenStore, ILogger logger, RavenReadSideRepositoryWriterSettings settings)
             : base(ravenStore)
         {
-            this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
             this.settings = settings;
-
-            var readSideCacheFolderPath = GetFolderPathAndCreateIfAbsent(settings.BasePath, ReadSideCacheFolderName);
-
-            this.cachedViewsFolder = GetFolderPathAndCreateIfAbsent(readSideCacheFolderPath, ViewName);
-        }
-
-        private string GetFolderPathAndCreateIfAbsent(string path, string folderName)
-        {
-            var folderPath = fileSystemAccessor.CombinePath(path, folderName);
-            if (!fileSystemAccessor.IsDirectoryExists(folderPath))
-                fileSystemAccessor.CreateDirectory(folderPath);
-            return folderPath;
         }
 
         public TEntity GetById(string id)
@@ -101,36 +71,25 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         public void EnableCache()
         {
             this.isCacheEnabled = true;
-
-            this.cacheFolderUniqueId = Guid.NewGuid().FormatGuid();
-
-            var cacheDirectory = fileSystemAccessor.CombinePath(cachedViewsFolder, this.cacheFolderUniqueId);
-
-            if (fileSystemAccessor.IsDirectoryExists(cacheDirectory))
-                fileSystemAccessor.DeleteDirectory(cacheDirectory);
-
-            fileSystemAccessor.CreateDirectory(cacheDirectory);
         }
 
         public void DisableCache()
         {
-            this.StoreAllCachedEntitiesToRepository();
+            while (cache.Any())
+            {
+                this.StoreBulkEntitiesToRepository(cache.Keys.ToList());
+            }
 
             this.isCacheEnabled = false;
-
-            this.cacheFolderUniqueId = string.Empty;
         }
 
         public string GetReadableStatus()
         {
-            int cachedEntities = this.cache.Count + fileSystemAccessor.GetFilesInDirectory(fileSystemAccessor.CombinePath(cachedViewsFolder, cacheFolderUniqueId)).Length;
+            int cachedEntities = this.cache.Count;
 
-            int cachedEntitiesWhichNeedToBeStoredToRepository = this.cache.Count;
-
-            return string.Format("cache {0,8};    cached: {1,3};    not stored: {2,3}",
+            return string.Format("cache {0};    cached: {1};",
                 this.isCacheEnabled ? "enabled" : "disabled",
-                cachedEntities,
-                cachedEntitiesWhichNeedToBeStoredToRepository);
+                cachedEntities);
         }
 
         public Type ViewType
@@ -140,52 +99,26 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         private TEntity GetByIdUsingCache(string id)
         {
-            var result = cache.GetOrAdd(id, (key) =>
-            {
-                TEntity entity = null;
+            if (cache.ContainsKey(id))
+                return cache[id];
 
-                var filePath = this.GetPathToEntity(id);
+            var entity = GetByIdAvoidingCache(id);
 
-                if (fileSystemAccessor.IsFileExists(filePath))
-                {
-                    entity = this.Deserrialize(fileSystemAccessor.ReadAllText(filePath));
-                    fileSystemAccessor.DeleteFile(filePath);
-                }
-
-                if (entity==null)
-                    entity = GetByIdAvoidingCache(key);
-
-                return entity;
-            });
+            cache[id] = entity;
 
             this.ReduceCacheIfNeeded();
 
-            return result;
+            return entity;
         }
 
         private void RemoveUsingCache(string id)
         {
-            TEntity entity;
-            this.cache.TryRemove(id, out entity);
-
-            var filePath = this.GetPathToEntity(id);
-
-            if (fileSystemAccessor.IsFileExists(filePath))
-            {
-                fileSystemAccessor.DeleteFile(filePath);
-            }
+            this.cache.Remove(id);
         }
 
         private void StoreUsingCache(TEntity entity, string id)
         {
-            this.cache.AddOrUpdate(id, (key) => entity, (key, value) => entity);
-
-            var filePath = this.GetPathToEntity(id);
-
-            if (fileSystemAccessor.IsFileExists(filePath))
-            {
-                fileSystemAccessor.DeleteFile(filePath);
-            }
+            this.cache[id] = entity;
 
             this.ReduceCacheIfNeeded();
         }
@@ -240,17 +173,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         private void ReduceCache()
         {
             var bulk = this.cache.Keys.Take(MaxCountOfEntitiesInOneStoreOperation).ToList();
-
-            foreach (var cachedEntityId in bulk)
-            {
-                TEntity entity;
-
-                if (cache.TryRemove(cachedEntityId, out entity))
-                {
-                    this.fileSystemAccessor.WriteAllText(this.GetPathToEntity(cachedEntityId),
-                        this.GetItemAsContent(entity));
-                }
-            }
+            this.StoreBulkEntitiesToRepository(bulk);
         }
 
         private bool IsCacheLimitReached()
@@ -258,44 +181,32 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             return this.cache.Count >= MaxCountOfCachedEntities;
         }
 
-        private void StoreAllCachedEntitiesToRepository()
+        private void StoreBulkEntitiesToRepository(IEnumerable<string> bulkOfEntityIds)
         {
             try
             {
-                using (var session = this.RavenStore.BulkInsert(options: new BulkInsertOptions() { OverwriteExisting = true }))
+                using (
+                    var session =
+                        this.RavenStore.BulkInsert(options:
+                            new BulkInsertOptions() {OverwriteExisting = true, BatchSize = settings.BulkInsertBatchSize})
+                    )
                 {
-                    foreach (var entity in cache)
+                    foreach (var entityId in bulkOfEntityIds)
                     {
-                        StoreCachedEntityToRepository(session, entity.Key, entity.Value);
+                        StoreCachedEntityToRepository(session, entityId, cache[entityId]);
                     }
                 }
 
-                cache.Clear();
+                foreach (var entityId in bulkOfEntityIds)
+                {
+                    cache.Remove(entityId);
+                }
             }
             catch (Exception e)
             {
                 logger.Error(e.Message, e);
-
-                foreach (var entity in cache)
-                {
-                    this.fileSystemAccessor.WriteAllText(this.GetPathToEntity(entity.Key),
-                     this.GetItemAsContent(entity.Value));
-                }
                 throw;
             }
-
-            var fileNamesWithCachedEntities =
-                fileSystemAccessor.GetFilesInDirectory(fileSystemAccessor.CombinePath(cachedViewsFolder, cacheFolderUniqueId));
-
-            using (var session = this.RavenStore.BulkInsert(options: new BulkInsertOptions() { OverwriteExisting = true, BatchSize = settings.BulkInsertBatchSize }))
-            {
-                foreach (var fileNamesWithCachedEntity in fileNamesWithCachedEntities)
-                {
-                    StoreCachedEntityToRepository(session, fileSystemAccessor.GetFileName(fileNamesWithCachedEntity),
-                        this.Deserrialize(fileSystemAccessor.ReadAllText(fileNamesWithCachedEntity)));
-                }
-            }
-            this.fileSystemAccessor.DeleteDirectory(fileSystemAccessor.CombinePath(cachedViewsFolder, this.cacheFolderUniqueId));
         }
 
         private void StoreCachedEntityToRepository(BulkInsertOperation bulkOperation, string id, TEntity entity)
@@ -306,28 +217,6 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             bulkOperation.Store(entity: entity, id: ravenId);
         }
 
-        private string GetPathToEntity(string entityName)
-        {
-            return fileSystemAccessor.CombinePath(fileSystemAccessor.CombinePath(cachedViewsFolder, cacheFolderUniqueId), entityName);
-        }
-
-        private string GetItemAsContent(TEntity item)
-        {
-            return JsonConvert.SerializeObject(item, Formatting.None, JsonSerializerSettings);
-        }
-
-        private TEntity Deserrialize(string payload)
-        {
-            try
-            {
-                return JsonConvert.DeserializeObject<TEntity>(payload, JsonSerializerSettings);
-            }
-            catch (Exception e)
-            {
-                throw new InvalidOperationException(payload, e);
-            }
-        }
-
         public void Clear()
         {
             const string DefaultIndexName = "Raven/DocumentsByEntityName";
@@ -336,11 +225,6 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
                 {
                     Query = string.Format("Tag: *{0}*", global::Raven.Client.Util.Inflector.Pluralize(ViewName))
                 }, new BulkOperationOptions {AllowStale = false}).WaitForCompletion();
-        }
-
-        public int Count()
-        {
-            throw new NotImplementedException();
         }
 
         protected override TResult QueryImpl<TResult>(Func<IRavenQueryable<TEntity>, TResult> query)
