@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Designer.Api.Attributes;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Resources;
@@ -187,6 +188,15 @@ namespace WB.UI.Designer.Api
         {
             var questionnaireItemList = new List<QuestionnaireListItem>();
             int pageIndex = 1;
+
+            var engineVersion = QuestionnaireVersionProvider.GetCurrentEngineVersion();
+            var supportedVersion = new Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion()
+            {
+                Major = engineVersion.Major,
+                Minor = engineVersion.Minor,
+                Patch = engineVersion.Patch
+            };
+
             while (true)
             {
                 var questionnaireList =
@@ -194,7 +204,14 @@ namespace WB.UI.Designer.Api
                         pageIndex: pageIndex);
 
                 questionnaireItemList.AddRange(
-                    questionnaireList.Select(q => new QuestionnaireListItem() {Id = q.Id, Title = q.Title}).ToList());
+                    questionnaireList.Select(q => new QuestionnaireListItem()
+                    {
+                        Id = q.Id,
+                        Title = q.Title,
+                        LastModifiedDate = q.LastEntryDate,
+                        OwnerName = q.Owner,
+                        Version = supportedVersion
+                    }).ToList());
 
                 pageIndex++;
                 if (pageIndex > questionnaireList.TotalPages)
