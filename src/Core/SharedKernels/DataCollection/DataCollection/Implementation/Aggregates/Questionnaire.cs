@@ -178,21 +178,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void RegisterPlainQuestionnaire(RegisterPlainQuestionnaire command)
         {
             QuestionnaireDocument questionnaireDocument = this.PlainQuestionnaireRepository.GetQuestionnaireDocument(command.Id, command.Version);
-
-            if (string.IsNullOrWhiteSpace(command.SupportingAssembly))
-            {
-                throw new QuestionnaireException(string.Format("Cannot register questionnaire. Assembly file is empty. QuestionnaireId: {0}", this.EventSourceId));
-            }
-
+            
             if (questionnaireDocument == null || questionnaireDocument.IsDeleted)
                 throw new QuestionnaireException(string.Format(
                     "Plain questionnaire {0} ver {1} cannot be registered because it is absent in plain repository.",
                     this.EventSourceId, command.Version));
 
-            QuestionnareAssemblyFileAccessor.StoreAssembly(EventSourceId, command.Version, command.SupportingAssembly);
-
             this.ApplyEvent(new PlainQuestionnaireRegistered(command.Version, command.AllowCensusMode));
-            this.ApplyEvent(new QuestionnaireAssemblyImported { Version = command.Version });
         }
 
         private static QuestionnaireDocument CastToQuestionnaireDocumentOrThrow(IQuestionnaireDocument source)
