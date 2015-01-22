@@ -73,10 +73,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             int supervisorRevisionNumber = syncVersionProvider.GetProtocolVersion();
 
-            throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable)
-            {
-                ReasonPhrase = string.Format(InterviewerSyncStrings.InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication, version, supervisorRevisionNumber)
-            });
+            return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, 
+                string.Format(InterviewerSyncStrings.InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication,
+                version, supervisorRevisionNumber));
         }
 
         [HttpPost]
