@@ -100,7 +100,7 @@ namespace WB.UI.Headquarters.Controllers
                     request: new DownloadQuestionnaireRequest()
                     {
                         QuestionnaireId = request.Questionnaire.Id,
-                        SupportedVersion = new QuestionnnaireVersion()
+                        SupportedVersion = new QuestionnaireVersion()
                         {
                             Major = supportedVersion.SupportedQuestionnaireVersionMajor,
                             Minor = supportedVersion.SupportedQuestionnaireVersionMinor,
