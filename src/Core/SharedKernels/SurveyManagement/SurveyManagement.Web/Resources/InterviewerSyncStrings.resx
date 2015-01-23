@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="InterviewerApplicationHasHigherVersion_thanSupervisor_Format" xml:space="preserve">
-    <value>Synchronization failed. Interviewer and Supervisor versions are different. Interviewer application has higher version '{0}' than Supervisor '{1}'. Please contact your supervisor.</value>
+    <value>Synchronization failed. Your application is not compatible with the server you are trying to synchronize. Please contact your supervisor.</value>
   </data>
   <data name="InvalidDeviceIdentifier" xml:space="preserve">
     <value>Invalid device identifier. Something has happened with the client app installation, press "Send tablet information" button.</value>
@@ -130,7 +130,7 @@
     <value>System error. Please reinstall application. Installation identifier is missing.</value>
   </data>
   <data name="InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication" xml:space="preserve">
-    <value>Synchronization failed. Interviewer and Supervisor versions are different. Interviewer application has version '{0}' but Supervisor has '{1}'. Update Interviewer application</value>
+    <value>Synchronization failed. Your application is not compatible with server one. Update Interviewer application</value>
   </data>
   <data name="ServerError" xml:space="preserve">
     <value>Internal server error occurred. Please contact developers.</value>
