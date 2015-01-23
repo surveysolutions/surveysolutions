@@ -356,11 +356,11 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             var result = false;
 
             var alert = new AlertDialog.Builder(this.CurrentContext);
-           
-            alert.SetTitle(Resources.GetText(Resource.String.Warning));
-            alert.SetMessage(string.Format(Resources.GetText(Resource.String.AreYouSureYouWantToRemoveRowFromRosterFormat), countOfRemovedRows));
-            alert.SetPositiveButton(Resources.GetText(Resource.String.Yes), (e, s) =>{result = true;});
-            alert.SetNegativeButton(Resources.GetText(Resource.String.No), (EventHandler<DialogClickEventArgs>)null);
+
+            alert.SetTitle(this.CurrentContext.Resources.GetText(Resource.String.Warning));
+            alert.SetMessage(string.Format(this.CurrentContext.Resources.GetText(Resource.String.AreYouSureYouWantToRemoveRowFromRosterFormat), countOfRemovedRows));
+            alert.SetPositiveButton(this.CurrentContext.Resources.GetText(Resource.String.Yes), (e, s) => { result = true; });
+            alert.SetNegativeButton(this.CurrentContext.Resources.GetText(Resource.String.No), (EventHandler<DialogClickEventArgs>) null);
 
             var dialog = alert.Create();
 
