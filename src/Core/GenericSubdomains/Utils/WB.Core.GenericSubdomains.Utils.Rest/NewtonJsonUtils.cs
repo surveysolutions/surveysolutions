@@ -5,9 +5,6 @@ using WB.Core.GenericSubdomains.Utils.Services;
 namespace WB.Core.GenericSubdomains.Utils.Rest
 {
     using System;
-    using System.Runtime.Serialization;
-
-    using Newtonsoft.Json.Serialization;
 
     public class NewtonJsonUtils : IJsonUtils
     {
@@ -21,7 +18,7 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
                 TypeNameHandling = TypeNameHandling.Objects,
                 NullValueHandling = NullValueHandling.Ignore,
                 FloatParseHandling = FloatParseHandling.Decimal,
-                Binder = new AssemblyNameRaplaceSerializationBinder()
+                //Binder = new AssemblyNameRaplaceSerializationBinder()
             };
             this.jsonSerializer = JsonSerializer.Create(this.jsonSerializerSetings);
         }
@@ -41,7 +38,13 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
 
         public T Deserialize<T>(string payload)
         {
-            return JsonConvert.DeserializeObject<T>(payload, this.jsonSerializerSetings);
+            return JsonConvert.DeserializeObject<T>(ReplaceOldAssemblyNames(payload), this.jsonSerializerSetings);
+        }
+
+        [Obsolete]
+        private static string ReplaceOldAssemblyNames(string payload)
+        {
+            return payload.Replace(", Main.Core",", WB.Core.Infrastructure");
         }
 
         public T Deserialize<T>(byte[] payload)
@@ -54,13 +57,13 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
         }
     }
 
-    [Obsolete]
-    public class AssemblyNameRaplaceSerializationBinder : DefaultSerializationBinder
-    {
-        public override Type BindToType(string assemblyName, string typeName)
-        {
-            if (assemblyName == "Main.Core") assemblyName = "WB.Core.Infrastructure";
-            return base.BindToType(assemblyName, typeName);
-        }
-    }
+    //[Obsolete]
+    //public class AssemblyNameRaplaceSerializationBinder : DefaultSerializationBinder
+    //{
+    //    public override Type BindToType(string assemblyName, string typeName)
+    //    {
+    //        if (assemblyName == "Main.Core") assemblyName = "WB.Core.Infrastructure";
+    //        return base.BindToType(assemblyName, typeName);
+    //    }
+    //}
 }
