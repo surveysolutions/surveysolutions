@@ -7,8 +7,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace Main.DenormalizerStorage
 {
-    public class InMemoryReadSideRepositoryAccessor<TView> : IReadSideRepositoryCleaner, IQueryableReadSideRepositoryReader<TView>, IReadSideRepositoryWriter<TView>
-        where TView : class, IView
+    public class InMemoryReadSideRepositoryAccessor<TView> : IReadSideRepositoryCleaner, IQueryableReadSideRepositoryReader<TView>, IReadSideRepositoryWriter<TView>, IReadSideKeyValueStorage<TView> where TView : class, IView
     {
         private readonly Dictionary<string, TView> repository;
         private object locker = new object();
