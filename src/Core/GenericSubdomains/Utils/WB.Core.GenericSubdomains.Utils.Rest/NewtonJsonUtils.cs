@@ -44,7 +44,10 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
         [Obsolete]
         private static string ReplaceOldAssemblyNames(string payload)
         {
-            return payload.Replace(", Main.Core",", WB.Core.Infrastructure");
+            var replaceOldAssemblyNames = payload;
+            replaceOldAssemblyNames = replaceOldAssemblyNames.Replace("Main.Core.Events.AggregateRootEvent, Main.Core", "Main.Core.Events.AggregateRootEvent, WB.Core.Infrastructure");
+            replaceOldAssemblyNames = replaceOldAssemblyNames.Replace("Main.Core.Events.QuestionnaireDocument, Main.Core", "Main.Core.Events.AggregateRootEvent, WB.Core.SharedKernels.SurveySolutions");
+            return replaceOldAssemblyNames;
         }
 
         public T Deserialize<T>(byte[] payload)
