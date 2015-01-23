@@ -4,6 +4,11 @@ using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.Core.GenericSubdomains.Utils.Rest
 {
+    using System;
+    using System.Runtime.Serialization;
+
+    using Newtonsoft.Json.Serialization;
+
     public class NewtonJsonUtils : IJsonUtils
     {
         private readonly JsonSerializer jsonSerializer;
@@ -15,9 +20,9 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
             {
                 TypeNameHandling = TypeNameHandling.Objects,
                 NullValueHandling = NullValueHandling.Ignore,
-                FloatParseHandling = FloatParseHandling.Decimal
+                FloatParseHandling = FloatParseHandling.Decimal,
+                Binder = new AssemblyNameRaplaceSerializationBinder()
             };
-
             this.jsonSerializer = JsonSerializer.Create(this.jsonSerializerSetings);
         }
 
@@ -46,6 +51,16 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
             {
                 return jsonSerializer.Deserialize<T>(new JsonTextReader(reader));
             }
+        }
+    }
+
+    [Obsolete]
+    public class AssemblyNameRaplaceSerializationBinder : DefaultSerializationBinder
+    {
+        public override Type BindToType(string assemblyName, string typeName)
+        {
+            if (assemblyName == "Main.Core") assemblyName = "WB.Core.Infrastructure";
+            return base.BindToType(assemblyName, typeName);
         }
     }
 }
