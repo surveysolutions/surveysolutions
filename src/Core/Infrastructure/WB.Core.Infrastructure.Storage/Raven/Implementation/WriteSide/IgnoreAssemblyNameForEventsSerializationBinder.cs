@@ -21,14 +21,25 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
 
         public override Type BindToType(string assemblyName, string typeName)
         {
+            
             if (NcqrsEnvironment.IsEventDataType(typeName))
             {
                 return NcqrsEnvironment.GetEventDataTypeByFullName(typeName);
             }
-            else
+
+            var replacedTypeName = ReplaceAssemblyInTypeName(typeName);
+            if (NcqrsEnvironment.IsEventDataType(replacedTypeName))
             {
-                return base.BindToType(assemblyName, typeName);
+                return NcqrsEnvironment.GetEventDataTypeByFullName(replacedTypeName);
             }
+
+            return base.BindToType(assemblyName, typeName);
+        }
+
+        [Obsolete]
+        private static string ReplaceAssemblyInTypeName(string typeName)
+        {
+            return typeName.Replace(", Main.Core", ", WB.Core.Infrastructure");
         }
     }
 }
