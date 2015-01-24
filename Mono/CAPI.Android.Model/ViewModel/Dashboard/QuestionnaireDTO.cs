@@ -27,7 +27,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
             this.SurveyVersion = surveyVersion;
             this.Comments = comments;
 
-            this.Properties = this.jsonUtils.Serialize(properties);
+            SetProperties(properties);
         }
 
         public QuestionnaireDTO() { }
@@ -50,6 +50,11 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
             return string.IsNullOrEmpty(this.Properties)
                 ? new FeaturedItem[0]
                 : jsonUtils.Deserialize<IEnumerable<FeaturedItem>>(this.Properties);
+        }
+
+        public void SetProperties(IEnumerable<FeaturedItem> properties)
+        {
+            this.Properties = this.jsonUtils.Serialize(properties);
         }
     }
 }

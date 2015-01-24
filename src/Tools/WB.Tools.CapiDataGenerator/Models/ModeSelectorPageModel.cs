@@ -96,7 +96,7 @@ namespace WB.Tools.CapiDataGenerator.Models
             new StandardKernel(
                 new InfrastructureModule().AsNinject(),
                 new NcqrsModule().AsNinject(),
-                new RavenReadSideInfrastructureModule(ravenSupervisorSettings, new RavenReadSideRepositoryWriterSettings(basePath, 1024)),
+                new RavenReadSideInfrastructureModule(ravenSupervisorSettings, new RavenReadSideRepositoryWriterSettings(1024)),
                 new SynchronizationModule(synchronizationSettings),
                 new RavenPlainStorageInfrastructureModule(ravenSupervisorSettings),
                 new CapiDataGeneratorRegistry(),

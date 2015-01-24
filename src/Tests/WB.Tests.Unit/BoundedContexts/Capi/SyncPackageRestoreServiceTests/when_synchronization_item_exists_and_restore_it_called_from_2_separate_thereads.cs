@@ -56,8 +56,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.SyncPackageRestoreServiceTests
                               interviewSynchronizationDto.Id));
             });
 
-            task1.Wait();
-            task2.Wait();
+            Task.WaitAll(task1, task2);
         };
 
         It should_call_SynchronizeInterviewCommand =
@@ -71,7 +70,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.SyncPackageRestoreServiceTests
                                         param.SynchronizedInterview == interviewSynchronizationDto &&
                                         param.UserId == interviewSynchronizationDto.UserId), null), Times.Once);
 
-        It should_rise_exception_for_first_or_second_thread = () => (exception1!=null ^ exception2!=null).ShouldBeTrue();
+        It should_rise_exception_for_first_or_second_thread = () => (exception1 != null ^ exception2 != null).ShouldBeTrue();
 
         It should_delete_synchronization_item = () => capiSynchronizationCacheServiceMock.DeleteCallCount.ShouldEqual(1);
 

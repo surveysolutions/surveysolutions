@@ -361,7 +361,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Configuration\SlavaDesktop.Headquarters.Web.config" />
+    <Content Include="Configuration\SlavaDesktop.Supervisor.Web.config" />
     <None Include="parameters.xml">
       <SubType>Designer</SubType>
     </None>

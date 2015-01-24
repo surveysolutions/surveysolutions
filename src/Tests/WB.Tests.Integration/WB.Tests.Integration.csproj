@@ -237,10 +237,9 @@
     <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_disabling_cache.cs" />
     <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_get_by_id_called_and_cache_is_disabled.cs" />
     <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_get_by_id_called_and_cache_is_enabled.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_get_by_id_called_cache_is_enabled_and_view_stored_at_file_system.cs" />
     <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_remove_called_and_cache_is_disabled.cs" />
     <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_remove_called_and_cache_is_enabled.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_remove_called_cache_is_enabled_and_view_stored_at_file_system.cs" />
+    <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_store_called_and_cache_is_disabled.cs" />
     <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_store_called_cache_is_enabled_and_cache_limit_is_reached.cs" />
     <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_store_called_cache_is_enabled_and_view_stored_at_file_system.cs" />
     <Compile Include="StringExtensions.cs" />

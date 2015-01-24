@@ -67,6 +67,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.jsonUtils = jsonUtils;
         }
 
+        [HttpGet]
+        [ApiBasicAuth]
+        public HttpResponseMessage GetHandshakePackage(string clientId, string androidId, Guid? clientRegistrationId, int version = 0)
+        {
+            int supervisorRevisionNumber = syncVersionProvider.GetProtocolVersion();
+
+            Logger.Info(string.Format("Old version client. Client has protocol version {0} but current app protocol is {1} ", version, supervisorRevisionNumber));
+
+            return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, 
+                InterviewerSyncStrings.InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication);
+        }
+
         [HttpPost]
         [ApiBasicAuth]
         public HandshakePackage GetHandshakePackage(HandshakePackageRequest request)
@@ -75,17 +87,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
             if (request.Version > supervisorRevisionNumber)
             {
+                Logger.Error(string.Format("Version mismatch. Client from the future. Client has protocol version {0} but current app protocol is {1} ", request.Version, supervisorRevisionNumber));
+                
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable)
                 {
-                    ReasonPhrase = string.Format(InterviewerSyncStrings.InterviewerApplicationHasHigherVersion_thanSupervisor_Format, request.Version, supervisorRevisionNumber)
+                    ReasonPhrase = InterviewerSyncStrings.InterviewerApplicationHasHigherVersion_thanSupervisor_Format
                 });
             }
 
             if (request.Version < supervisorRevisionNumber)
             {
+                Logger.Info(string.Format(" Client has protocol version {0} but current app protocol is {1} ", request.Version, supervisorRevisionNumber));
+
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable)
                 {
-                    ReasonPhrase = string.Format(InterviewerSyncStrings.InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication, request.Version, supervisorRevisionNumber)
+                    ReasonPhrase = InterviewerSyncStrings.InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication
                 });
             }
 

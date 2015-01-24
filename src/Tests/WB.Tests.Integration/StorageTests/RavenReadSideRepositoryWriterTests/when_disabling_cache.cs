@@ -18,10 +18,8 @@ namespace WB.Tests.Integration.StorageTests.RavenReadSideRepositoryWriterTests
     {
         Establish context = () =>
         {
-            fileSystemAccessor = new FileSystemIOAccessor();
-
             documentStore = CreateEmbeddableDocumentStore();
-            ravenReadSideRepositoryWriter = CreateRavenReadSideRepositoryWriter(fileSystemAccessor: fileSystemAccessor, ravenStore: documentStore);
+            ravenReadSideRepositoryWriter = CreateRavenReadSideRepositoryWriter(ravenStore: documentStore);
             ravenReadSideRepositoryWriter.EnableCache();
 
             for (int i = 1; i <= cahceLimit+1; i++)
@@ -37,10 +35,9 @@ namespace WB.Tests.Integration.StorageTests.RavenReadSideRepositoryWriterTests
             documentStore.OpenSession().Query<View>().Count().ShouldEqual(257);
 
         It should_has_no_cached_items_left = () =>
-            ravenReadSideRepositoryWriter.GetReadableStatus().ShouldEqual("cache disabled;    cached:   0;    not stored:   0");
+            ravenReadSideRepositoryWriter.GetReadableStatus().ShouldEqual("cache disabled;    cached: 0;");
 
         private static RavenReadSideRepositoryWriter<View> ravenReadSideRepositoryWriter;
-        private static FileSystemIOAccessor fileSystemAccessor;
         private static long cahceLimit = 256;
         private static IDocumentStore documentStore;
     }

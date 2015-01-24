@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 
         public static Questionnaire CreateQuestionnaire(Guid? creatorId = null, QuestionnaireDocument document = null)
         {
-            return new Questionnaire(creatorId ?? new Guid(), document ?? new QuestionnaireDocument(), false, string.Empty);
+            return new Questionnaire(creatorId ?? new Guid(), document ?? new QuestionnaireDocument(), false, "base64 string of assembly");
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)

@@ -8,13 +8,10 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 {
     public class RavenReadSideRepositoryWriterSettings
     {
-        public RavenReadSideRepositoryWriterSettings(string basePath, int bulkInsertBatchSize)
+        public RavenReadSideRepositoryWriterSettings(int bulkInsertBatchSize)
         {
-            this.BasePath = basePath;
             this.BulkInsertBatchSize = bulkInsertBatchSize;
         }
-
-        public string BasePath { get; private set; }
         public int BulkInsertBatchSize { get; private set; }
     }
 }
