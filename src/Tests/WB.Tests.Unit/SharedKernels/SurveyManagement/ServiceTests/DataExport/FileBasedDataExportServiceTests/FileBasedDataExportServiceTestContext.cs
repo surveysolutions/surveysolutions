@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
                         _ => _.GetBinaryFilesForInterview(Moq.It.IsAny<Guid>()) == new List<InterviewBinaryDataDescriptor>()),
                 Mock.Of<IReadSideKeyValueStorage<InterviewData>>(
                     _ => _.GetById(It.IsAny<string>()) == (interviewData ?? new InterviewData())),
-                Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>>(
+                Mock.Of<IVersionedReadSideKeyValueStorage<QuestionnaireExportStructure>>(
                     _ => _.GetById(It.IsAny<string>(), It.IsAny<long>()) == new QuestionnaireExportStructure()),
                 Mock.Of<IReadSideRepositoryWriter<UserDocument>>(_ => _.GetById(It.IsAny<string>()) == user),
                 interviewSummaryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),

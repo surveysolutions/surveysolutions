@@ -47,14 +47,14 @@ namespace CAPI.Android.Core.Model.EventHandlers
                                       IEventHandler<SupervisorAssigned>
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDtOdocumentStorage;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireStorage;
+        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStorage;
         private readonly IReadSideRepositoryWriter<SurveyDto> surveyDtoDocumentStorage;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly QuestionType[] questionTypesWithOptions = new[] { QuestionType.SingleOption, QuestionType.MultyOption, QuestionType.DropDownList, QuestionType.YesNo };
 
         public DashboardDenormalizer(IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDTOdocumentStorage,
-                                     IReadSideRepositoryWriter<SurveyDto> surveyDTOdocumentStorage, 
-                                     IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireStorage,
+                                     IReadSideRepositoryWriter<SurveyDto> surveyDTOdocumentStorage,
+                                     IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStorage,
                                      IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.questionnaireDtOdocumentStorage = questionnaireDTOdocumentStorage;

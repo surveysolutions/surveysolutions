@@ -16,16 +16,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     {
         private readonly IReadSideKeyValueStorage<InterviewData> interviewStore;
         private readonly IReadSideRepositoryReader<UserDocument> userStore;
-        private readonly IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireStore;
-        private readonly IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireRosterStructures;
-        private readonly IVersionedReadSideRepositoryReader<ReferenceInfoForLinkedQuestions> questionnaireReferenceInfoForLinkedQuestions;
+        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore;
+        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructures;
+        private readonly IVersionedReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions> questionnaireReferenceInfoForLinkedQuestions;
         private readonly IInterviewDataAndQuestionnaireMerger merger;
 
         public InterviewDetailsViewFactoryNew(IReadSideKeyValueStorage<InterviewData> interviewStore,
             IReadSideRepositoryReader<UserDocument> userStore,
-            IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireStore,
-            IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireRosterStructures,
-            IVersionedReadSideRepositoryReader<ReferenceInfoForLinkedQuestions> questionnaireReferenceInfoForLinkedQuestions,
+            IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore,
+            IVersionedReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructures,
+            IVersionedReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions> questionnaireReferenceInfoForLinkedQuestions,
             IInterviewDataAndQuestionnaireMerger merger)
         {
             this.interviewStore = interviewStore;

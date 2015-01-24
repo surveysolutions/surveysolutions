@@ -46,11 +46,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewSummary, InterviewHardDeleted>
 
     {
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaires;
+        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaires;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
 
         public InterviewSummaryEventHandlerFunctional(IReadSideRepositoryWriter<InterviewSummary> interviewSummary,
-            IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaires, IReadSideRepositoryWriter<UserDocument> users)
+            IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaires, IReadSideRepositoryWriter<UserDocument> users)
             : base(interviewSummary)
         {
             this.questionnaires = questionnaires;

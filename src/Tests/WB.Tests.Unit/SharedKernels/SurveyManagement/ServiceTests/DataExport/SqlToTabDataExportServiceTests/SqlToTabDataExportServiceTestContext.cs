@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
             return new SqlToTabDataExportService(Mock.Of<IFileSystemAccessor>(), Mock.Of<ISqlServiceFactory>(),
                 Mock.Of<ICsvWriterFactory>(_ => _.OpenCsvWriter(
                     It.IsAny<Stream>(), It.IsAny<string>()) == csvWriterService),
-                Mock.Of<ISqlDataAccessor>(), Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>>(_=>_.GetById(
+                Mock.Of<ISqlDataAccessor>(), Mock.Of<IVersionedReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(
                     It.IsAny<string>(), It.IsAny<long>()) == questionnaireExportStructure));
         }
 

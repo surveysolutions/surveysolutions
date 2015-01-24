@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 interviewHistoryViewWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewHistoryView>>(),
                 interviewSummaryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(_=>_.GetById(It.IsAny<string>())==new InterviewSummary()),
                 userDocumentWriter ?? Mock.Of<IReadSideRepositoryWriter<UserDocument>>(),
-                Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>(
+                Mock.Of<IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(
                         _ =>
                             _.GetById(It.IsAny<string>(), It.IsAny<long>()) ==
                                 new QuestionnaireDocumentVersioned() { Questionnaire = questionnaireDocument ?? new QuestionnaireDocument() }));

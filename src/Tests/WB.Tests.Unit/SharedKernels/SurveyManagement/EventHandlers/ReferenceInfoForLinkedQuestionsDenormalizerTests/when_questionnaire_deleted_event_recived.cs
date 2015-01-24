@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.ReferenceIn
         Establish context = () =>
         {
             questionnaireId = Guid.Parse("33332222111100000000111122223333");
-            referenceInfoForLinkedQuestionsWriter = new Mock<IVersionedReadSideRepositoryWriter<ReferenceInfoForLinkedQuestions>>();
+            referenceInfoForLinkedQuestionsWriter = new Mock<IVersionedReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions>>();
             denormalizer = CreateReferenceInfoForLinkedQuestionsDenormalizer(referenceInfoForLinkedQuestionsWriter.Object);
             evnt = CreateQuestionnaireDeletedEvent(questionnaireId,2);
         };
@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.ReferenceIn
         private static Guid linkedId = Guid.Parse("22222222222222222222222222222222");
         private static ReferenceInfoForLinkedQuestionsDenormalizer denormalizer;
         private static IPublishedEvent<QuestionnaireDeleted> evnt;
-        private static Mock<IVersionedReadSideRepositoryWriter<ReferenceInfoForLinkedQuestions>> referenceInfoForLinkedQuestionsWriter;
+        private static Mock<IVersionedReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions>> referenceInfoForLinkedQuestionsWriter;
         private static Guid questionnaireId;
     }
 }

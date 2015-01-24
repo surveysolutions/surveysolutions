@@ -31,8 +31,8 @@ namespace WB.Tests.Integration.SqlToTabDataExportServiceTests
                     questionnaireExportStructure, "");
 
             return new SqlToTabDataExportService(fileSystemAccessor, sqlServiceFactory,
-                Mock.Of<ICsvWriterFactory>(_ => _.OpenCsvWriter(It.IsAny<Stream>(), It.IsAny<string>()) == csvWriterService), new SqlDataAccessor(fileSystemAccessor), 
-                Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>>(_ => _.GetById(It.IsAny<string>(), It.IsAny<long>()) == questionnaireExportStructure));
+                Mock.Of<ICsvWriterFactory>(_ => _.OpenCsvWriter(It.IsAny<Stream>(), It.IsAny<string>()) == csvWriterService), new SqlDataAccessor(fileSystemAccessor),
+                Mock.Of<IVersionedReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(It.IsAny<string>(), It.IsAny<long>()) == questionnaireExportStructure));
         }
 
 

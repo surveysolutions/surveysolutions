@@ -20,9 +20,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 {
     internal class SampleImportService : ISampleImportService
     {
-        private readonly IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage;
-        private readonly IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireExportStructureStorage;
-        private readonly IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
+        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage;
+        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage;
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
         private static ILogger Logger
@@ -30,11 +30,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
         }
 
-        public SampleImportService(IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage,
+        public SampleImportService(IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage,
             ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage,
             IPreloadedDataServiceFactory preloadedDataServiceFactory,
-            IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireExportStructureStorage,
-            IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireRosterStructureStorage)
+            IVersionedReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage,
+            IVersionedReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage)
         {
             this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
             this.tempSampleCreationStorage = tempSampleCreationStorage;
