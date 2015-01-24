@@ -15,10 +15,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> readsideRepositoryWriter;
+        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireRosterStructure> readsideRepositoryWriter;
         
         public QuestionnaireRosterStructureEventHandler(
-            IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> readsideRepositoryWriter,
+            IVersionedReadSideKeyValueStorage<QuestionnaireRosterStructure> readsideRepositoryWriter,
             IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory, IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.questionnaireRosterStructureFactory = questionnaireRosterStructureFactory;

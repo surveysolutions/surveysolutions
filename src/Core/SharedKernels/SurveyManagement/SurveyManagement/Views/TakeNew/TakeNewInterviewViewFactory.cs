@@ -9,9 +9,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TakeNew
 {
     public class TakeNewInterviewViewFactory : BaseUserViewFactory, IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> 
     {
-        private readonly IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> surveys;
+        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> surveys;
 
-        public TakeNewInterviewViewFactory(IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> surveys, IQueryableReadSideRepositoryReader<UserDocument> users)
+        public TakeNewInterviewViewFactory(IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> surveys, IQueryableReadSideRepositoryReader<UserDocument> users)
             : base(users)
         {
             this.surveys = surveys;

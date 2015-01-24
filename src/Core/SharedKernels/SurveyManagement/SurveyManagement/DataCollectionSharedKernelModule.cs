@@ -55,6 +55,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind(typeof(IVersionedReadSideRepositoryWriter<>)).To(typeof(VersionedReadSideRepositoryWriter<>));
             this.Bind(typeof(IVersionedReadSideRepositoryReader<>)).To(typeof(VersionedReadSideRepositoryReader<>));
+            this.Bind(typeof(IVersionedReadSideKeyValueStorage<>)).To(typeof(VersionedReadSideKeyValueStorage<>));
 
             this.Bind<IQuestionnaireRosterStructureFactory>().To<QuestionnaireRosterStructureFactory>();
 

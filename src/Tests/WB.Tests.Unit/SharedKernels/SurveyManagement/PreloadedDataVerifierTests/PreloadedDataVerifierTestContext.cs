@@ -35,15 +35,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                 : new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(questionnaireDocument, 1));
             return
                 new PreloadedDataVerifier(
-                    Mock.Of<IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned>>(
+                    Mock.Of<IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(
                         _ =>
                             _.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()) == (questionnaireDocument != null
                                 ? new QuestionnaireDocumentVersioned() { Questionnaire = questionnaireDocument }
                                 : null)),
-                    Mock.Of<IVersionedReadSideRepositoryReader<QuestionnaireExportStructure>>(
+                    Mock.Of<IVersionedReadSideKeyValueStorage<QuestionnaireExportStructure>>(
                         _ =>
                             _.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()) == questionnaireExportStructure),
-                    Mock.Of<IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure>>(
+                    Mock.Of<IVersionedReadSideKeyValueStorage<QuestionnaireRosterStructure>>(
                         _ => _.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()) == questionnaireRosterStructure),
                     Mock.Of<IPreloadedDataServiceFactory>(
                         _ =>
