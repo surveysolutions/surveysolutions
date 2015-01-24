@@ -19,10 +19,10 @@ namespace WB.Tests.Integration.StorageTests.RavenReadSideRepositoryWriterTests
     internal class RavenReadSideRepositoryWriterTestsContext
     {
         internal static RavenReadSideRepositoryWriter<View> CreateRavenReadSideRepositoryWriter(
-            IDocumentStore ravenStore = null, IFileSystemAccessor fileSystemAccessor=null)
+            IDocumentStore ravenStore = null)
         {
             return new RavenReadSideRepositoryWriter<View>(
-                ravenStore ?? CreateEmbeddableDocumentStore(), fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), Mock.Of<ILogger>(), new RavenReadSideRepositoryWriterSettings("", 1024));
+                ravenStore ?? CreateEmbeddableDocumentStore(), Mock.Of<ILogger>(), new RavenReadSideRepositoryWriterSettings(1024));
         }
 
         protected static IDocumentStore CreateEmbeddableDocumentStore()
