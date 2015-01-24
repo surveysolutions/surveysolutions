@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                 var newState = CreateQuestionnaireDocumentWithOneChapter();
 
                 // act
-                questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(),newState, false, null));
+                questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), newState, false, "base64 string of assembly"));
 
                 // assert
                 Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             // act
             TestDelegate act =
                 () =>
-                questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), docMock.Object, false, null));
+                questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), docMock.Object, false, "base64 string of assembly"));
             
             // assert
             Assert.Throws<QuestionnaireException>(act);
@@ -107,7 +107,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 
             using (var eventContext = new EventContext())
             {
-                questionnaire.ImportFromDesigner(new ImportFromDesigner(responsibleId, newState, false, null));
+                questionnaire.ImportFromDesigner(new ImportFromDesigner(responsibleId, newState, false, "base64 string of assembly"));
                 // act
                 questionnaire.DeleteQuestionnaire(new DeleteQuestionnaire(Guid.NewGuid(), 1, responsibleId));
                 // assert
@@ -127,7 +127,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 
             using (var eventContext = new EventContext())
             {
-                questionnaire.ImportFromDesigner(new ImportFromDesigner(responsibleId, newState, false, null));
+                questionnaire.ImportFromDesigner(new ImportFromDesigner(responsibleId, newState, false, "base64 string of assembly"));
                 // act
                 questionnaire.DeleteQuestionnaire(new DeleteQuestionnaire(Guid.NewGuid(), 1, responsibleId));
                 // assert
@@ -212,7 +212,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                 var document = CreateQuestionnaireDocumentWithOneChapter();
 
                 // act
-                questionnaire.RegisterPlainQuestionnaire(new RegisterPlainQuestionnaire(document.PublicKey, 3, false, null));
+                questionnaire.RegisterPlainQuestionnaire(new RegisterPlainQuestionnaire(document.PublicKey, 3, false, "dummy assembly"));
 
                 // assert
                 Assert.That(GetLastEvent<PlainQuestionnaireRegistered>(eventContext).AllowCensusMode, Is.EqualTo(false));
@@ -253,9 +253,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                 var document = CreateQuestionnaireDocumentWithOneChapter();
 
                 // act
-                questionnaire.ImportFromDesigner(new ImportFromDesigner(responsibleId, document, false, null));
+                questionnaire.ImportFromDesigner(new ImportFromDesigner(responsibleId, document, false, "base64 string of assembly"));
                 questionnaire.DeleteQuestionnaire(new DeleteQuestionnaire(Guid.NewGuid(), 2, responsibleId));
-                questionnaire.ImportFromDesigner(new ImportFromDesigner(responsibleId, document, false, null));
+                questionnaire.ImportFromDesigner(new ImportFromDesigner(responsibleId, document, false, "base64 string of assembly"));
 
                 // assert
                 Assert.That(GetLastEvent<TemplateImported>(eventContext).Version, Is.EqualTo(3));

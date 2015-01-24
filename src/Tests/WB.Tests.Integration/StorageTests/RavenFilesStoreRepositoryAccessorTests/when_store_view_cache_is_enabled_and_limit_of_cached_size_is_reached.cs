@@ -23,7 +23,7 @@ namespace WB.Tests.Integration.StorageTests.RavenFilesStoreRepositoryAccessorTes
         Because of = () => { ravenFilesStoreRepositoryAccessor.Store(new TestableView() { RandomNumber = 1804 }, id); };
 
         It should_return_readable_status_with_disabled_cache_and_zero_cached_items = () =>
-         ravenFilesStoreRepositoryAccessor.GetReadableStatus().ShouldEqual("cache enabled;    cached raven file storage items: 227;");
+         ravenFilesStoreRepositoryAccessor.GetReadableStatus().ShouldEqual("cache enabled;    cached raven file storage items: 995;");
 
         private Cleanup stuff = () =>
         {
@@ -34,7 +34,7 @@ namespace WB.Tests.Integration.StorageTests.RavenFilesStoreRepositoryAccessorTes
         protected static RavenFilesStoreRepositoryAccessor<TestableView> ravenFilesStoreRepositoryAccessor =
             CreateRavenFilesStoreRepositoryAccessor();
 
-        private static int cacheLimit = 256;
+        private static int cacheLimit = 1024;
         private static string id = "nastya_id";
     }
 }
