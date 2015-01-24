@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.ReferenceIn
         {
             var id = Guid.Parse("33332222111100000000111122223333");
             importeDocument = CreateQuestionnaireDocumentWithRosterAndNumericQuestionAndLinedQuestionAfter(id, rosterId, linkedId);
-            referenceInfoForLinkedQuestionsWriter = new Mock<IVersionedReadSideRepositoryWriter<ReferenceInfoForLinkedQuestions>>();
+            referenceInfoForLinkedQuestionsWriter = new Mock<IVersionedReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions>>();
             denormalizer = CreateReferenceInfoForLinkedQuestionsDenormalizer(referenceInfoForLinkedQuestionsWriter.Object);
             evnt = CreateTemplateImportedEvent(importeDocument);
         };
@@ -53,6 +53,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.ReferenceIn
         private static QuestionnaireDocument importeDocument;
         private static ReferenceInfoForLinkedQuestionsDenormalizer denormalizer;
         private static IPublishedEvent<TemplateImported> evnt;
-        private static Mock<IVersionedReadSideRepositoryWriter<ReferenceInfoForLinkedQuestions>> referenceInfoForLinkedQuestionsWriter;
+        private static Mock<IVersionedReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions>> referenceInfoForLinkedQuestionsWriter;
     }
 }

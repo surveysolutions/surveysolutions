@@ -30,11 +30,11 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelDenormalizerTests
 
         protected static InterviewViewModelDenormalizer CreateInterviewViewModelDenormalizer(
             Mock<IReadSideRepositoryWriter<InterviewViewModel>> storageStub,
-            Mock<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>> versionedStorageStub)
+            Mock<IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned>> versionedStorageStub)
         {
             var denormalizer = new InterviewViewModelDenormalizer(storageStub.Object,
                 versionedStorageStub.Object,
-                Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>(), new QuestionnaireRosterStructureFactory());
+                Mock.Of<IVersionedReadSideKeyValueStorage<QuestionnaireRosterStructure>>(), new QuestionnaireRosterStructureFactory());
 
             return denormalizer;
         }
@@ -49,10 +49,10 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelDenormalizerTests
             return storageStub;
         }
 
-        protected static Mock<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>> CreateQuestionnaireDocumentVersionedStorageStub(
+        protected static Mock<IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned>> CreateQuestionnaireDocumentVersionedStorageStub(
             QuestionnaireDocument document)
         {
-            var questionnaireStorageMock = new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>();
+            var questionnaireStorageMock = new Mock<IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>();
             questionnaireStorageMock.Setup(x => x.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()))
                 .Returns(new QuestionnaireDocumentVersioned()
                 {
