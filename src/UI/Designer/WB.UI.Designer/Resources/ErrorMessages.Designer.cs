@@ -79,6 +79,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Server is on the maintenance mode now. Sorry for the inconvenience. Please, try again later..
+        /// </summary>
+        internal static string Maintenance {
+            get {
+                return ResourceManager.GetString("Maintenance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to import questionnaire. Requested questionnaire &quot;{0}&quot; has {1} version. Headquarters application supports version up to {2}.
         /// </summary>
         internal static string NotSupportedQuestionnaireVersion {

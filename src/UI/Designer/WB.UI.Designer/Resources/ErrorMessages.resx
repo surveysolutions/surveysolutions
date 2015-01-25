@@ -147,4 +147,7 @@
   <data name="ServerError" xml:space="preserve">
     <value>Internal server error occurred. Please contact developers.</value>
   </data>
+  <data name="Maintenance" xml:space="preserve">
+    <value>Server is on the maintenance mode now. Sorry for the inconvenience. Please, try again later.</value>
+  </data>
 </root>
