@@ -1,11 +1,14 @@
 using System;
 using Android.App;
 using Android.Content.PM;
+using Cirrious.CrossCore;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.QuestionnaireTester.Implementations.Adapters;
 using WB.UI.Shared.Android.Activities;
 using WB.UI.Shared.Android.Adapters;
+using WB.UI.Shared.Android.Controls.ScreenItems;
+using WB.UI.QuestionnaireTester.Extensions;
 
 namespace WB.UI.QuestionnaireTester.Views
 {
@@ -23,6 +26,12 @@ namespace WB.UI.QuestionnaireTester.Views
             return
                 CapiTesterApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
                     new QuestionnaireScreenInput(interviewId));
+        }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+            this.CreateActionBar(Mvx.Resolve<IAnswerProgressIndicator>());
         }
     }
 }
