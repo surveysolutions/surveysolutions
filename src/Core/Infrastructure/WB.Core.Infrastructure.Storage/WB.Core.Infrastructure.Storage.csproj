@@ -37,6 +37,12 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Esent.Collections">
+      <HintPath>..\..\..\..\packages\Microsoft.Database.Collections.Generic.1.9.2.0\lib\net40\Esent.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Esent.Interop">
+      <HintPath>..\..\..\..\packages\ManagedEsent.1.9.2.0\lib\net40\Esent.Interop.dll</HintPath>
+    </Reference>
     <Reference Include="EventStore.ClientAPI">
       <HintPath>..\..\..\..\packages\EventStore.Client.3.0.1\lib\net40\EventStore.ClientAPI.dll</HintPath>
       <Private>True</Private>
@@ -100,6 +106,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Esent\EsentReadSideModule.cs" />
+    <Compile Include="Esent\Implementation\EsentKeyValueStorage.cs" />
+    <Compile Include="Esent\Implementation\EsentSettings.cs" />
     <Compile Include="EventStore\EventStoreConnectionSettings.cs" />
     <Compile Include="EventStore\EventStoreWriteSideModule.cs" />
     <Compile Include="EventStore\Implementation\EventMetada.cs" />
