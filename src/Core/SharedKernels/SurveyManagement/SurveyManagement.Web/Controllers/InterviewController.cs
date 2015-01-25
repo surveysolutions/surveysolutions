@@ -42,12 +42,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.interviewDetailsViewFactory = interviewDetailsViewFactory;
         }
 
-        public ActionResult Details(Guid id, InterviewDetailsSortBy? sortBy,  InterviewDetailsFilter? filter)
+        public ActionResult Details(Guid id, InterviewDetailsFilter? filter)
         {
             this.ViewBag.ActivePage = MenuItem.Docs;
 
-            sortBy = sortBy.HasValue ? sortBy : InterviewDetailsSortBy.All;
-            filter = filter.HasValue ? filter : InterviewDetailsFilter.None;
+            filter = filter.HasValue ? filter : InterviewDetailsFilter.All;
 
             ChangeStatusView interviewInfo = this.changeStatusFactory.Load(new ChangeStatusInputModel() { InterviewId = id });
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
@@ -69,7 +68,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             foreach (var interviewGroupView in interviewDetailsView.Groups)
             {
-                if (sortBy.Value == InterviewDetailsSortBy.Answered)
+                if (filter.Value == InterviewDetailsFilter.Answered)
                 {
                     interviewGroupView.Entities =
                         interviewGroupView.Entities.Where(
@@ -82,11 +81,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return
                 View(new DetailsViewModel()
                 {
-                    SortBy = sortBy.Value,
                     Filter = filter.Value,
                     FilteredInterviewDetails = interviewDetailsView,
                     Groups = allGroups,
-                    History = interviewHistoryOfStatuses
+                    History = interviewHistoryOfStatuses,
+                    Statistic = new DetailsStatisticView() {AnsweredCount = 0, CommentedCount = 0, EnabledCount = 0, FlaggedCount = 0, InvalidCount = 0, SupervisorsCount = 0}
                 });
         }
 
