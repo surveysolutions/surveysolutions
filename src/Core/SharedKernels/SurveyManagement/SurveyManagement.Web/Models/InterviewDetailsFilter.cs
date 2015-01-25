@@ -2,10 +2,12 @@
 {
     public enum InterviewDetailsFilter
     {
-        None,
+        All,
         Commented,
         Invalid,
         Enabled,
-        Starred
+        Answered,
+        Flagged,
+        Supervisors
     }
 }
