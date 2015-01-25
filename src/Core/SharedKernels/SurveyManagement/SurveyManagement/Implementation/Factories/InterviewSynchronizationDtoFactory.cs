@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
@@ -13,8 +13,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 {
     internal class InterviewSynchronizationDtoFactory : IInterviewSynchronizationDtoFactory
     {
-        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures;
-        public InterviewSynchronizationDtoFactory(IVersionedReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures)
+        private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures;
+        public InterviewSynchronizationDtoFactory(IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures)
         {
             if (questionnriePropagationStructures == null) throw new ArgumentNullException("questionnriePropagationStructures");
             this.questionnriePropagationStructures = questionnriePropagationStructures;
@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             var invalidQuestions = new HashSet<InterviewItemId>();
             var propagatedGroupInstanceCounts = new Dictionary<InterviewItemId, RosterSynchronizationDto[]>();
 
-            var questionnariePropagationStructure = this.questionnriePropagationStructures.GetById(interview.QuestionnaireId,
+            var questionnariePropagationStructure = this.questionnriePropagationStructures.AsVersioned().Get(interview.QuestionnaireId.FormatGuid(),
                 interview.QuestionnaireVersion);
 
             foreach (var interviewLevel in interview.Levels.Values)

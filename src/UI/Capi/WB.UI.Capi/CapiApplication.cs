@@ -50,7 +50,6 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -178,7 +177,7 @@ namespace WB.UI.Capi
         private void InitTemplateStorage(InProcessEventBus bus)
         {
             var templateDenoramalizer = new QuestionnaireDenormalizer(
-                this.kernel.Get<IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
+                this.kernel.Get<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
                 this.kernel.Get<IPlainQuestionnaireRepository>());
 
             bus.RegisterHandler(templateDenoramalizer, typeof(TemplateImported));
@@ -186,7 +185,7 @@ namespace WB.UI.Capi
             bus.RegisterHandler(templateDenoramalizer, typeof(PlainQuestionnaireRegistered));
             
             var rosterStructureDenormalizer = new QuestionnaireRosterStructureDenormalizer(
-                this.kernel.Get<IVersionedReadSideKeyValueStorage<QuestionnaireRosterStructure>>(),
+                this.kernel.Get<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(),
                 this.kernel.Get<IQuestionnaireRosterStructureFactory>(),
                 this.kernel.Get<IPlainQuestionnaireRepository>());
 
@@ -215,7 +214,7 @@ namespace WB.UI.Capi
             var dashboardeventHandler = new DashboardDenormalizer(
                 this.kernel.Get<IReadSideRepositoryWriter<QuestionnaireDTO>>(),
                 this.kernel.Get<IReadSideRepositoryWriter<SurveyDto>>(),
-                this.kernel.Get<IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
+                this.kernel.Get<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
                 this.kernel.Get<IPlainQuestionnaireRepository>());
 
             bus.RegisterHandler(dashboardeventHandler, typeof(SynchronizationMetadataApplied));
@@ -335,8 +334,8 @@ namespace WB.UI.Capi
             var eventHandler =
                 new InterviewViewModelDenormalizer(
                     this.kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>(),
-                    this.kernel.Get<IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
-                    this.kernel.Get<IVersionedReadSideKeyValueStorage<QuestionnaireRosterStructure>>(),
+                    this.kernel.Get<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
+                    this.kernel.Get<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(),
                     this.kernel.Get<IQuestionnaireRosterStructureFactory>());
 
             var answerOptionsForLinkedQuestionsDenormalizer = this.kernel.Get<AnswerOptionsForLinkedQuestionsDenormalizer>();

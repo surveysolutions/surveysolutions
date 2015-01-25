@@ -3,11 +3,11 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -18,14 +18,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     public class QuestionnaireDenormalizer : BaseDenormalizer, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, 
         IEventHandler<QuestionnaireDeleted>
     {
-        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> documentStorage;
+        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> documentStorage;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviews;
         private readonly IQuestionnaireCacheInitializer questionnaireCacheInitializer;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
 
         public QuestionnaireDenormalizer(
-            IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> documentStorage, 
+            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> documentStorage, 
             IQuestionnaireCacheInitializer questionnaireCacheInitializer,
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
         {
-            this.documentStorage.Remove(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
+            this.documentStorage.AsVersioned().Remove(evnt.EventSourceId.FormatGuid(), evnt.Payload.QuestionnaireVersion);
 
          /*   var anyInterviewExists =
                         interviews.Query(_ => _.Any(i =>!i.IsDeleted && i.QuestionnaireId == evnt.EventSourceId && i.QuestionnaireVersion == evnt.Payload.QuestionnaireVersion));
@@ -87,11 +87,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             this.questionnaireCacheInitializer.InitializeQuestionnaireDocumentWithCaches(document);
 
-            this.documentStorage.Store(
+            this.documentStorage.AsVersioned().Store(
                 new QuestionnaireDocumentVersioned() { Questionnaire = document, Version = version },
-                id);
-            
-            
+                id.FormatGuid(), version);
         }
     }
 }

@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Tests.Unit.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using It = Machine.Specifications.It;

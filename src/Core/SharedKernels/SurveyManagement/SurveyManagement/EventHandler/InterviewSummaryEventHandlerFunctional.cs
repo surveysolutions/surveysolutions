@@ -4,10 +4,10 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -46,11 +46,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewSummary, InterviewHardDeleted>
 
     {
-        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaires;
+        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaires;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
 
         public InterviewSummaryEventHandlerFunctional(IReadSideRepositoryWriter<InterviewSummary> interviewSummary,
-            IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaires, IReadSideRepositoryWriter<UserDocument> users)
+            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaires, IReadSideRepositoryWriter<UserDocument> users)
             : base(interviewSummary)
         {
             this.questionnaires = questionnaires;
@@ -100,8 +100,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             Guid eventSourceId, DateTime eventTimeStamp, bool wasCreatedOnClient)
         {
             UserDocument responsible = this.users.GetById(userId);
-            var questionnarie = this.questionnaires.GetById(questionnaireId,
-                questionnaireVersion);
+            var questionnarie = this.questionnaires.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
 
             var interviewSummary = new InterviewSummary(questionnarie.Questionnaire)
             {

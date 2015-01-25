@@ -13,7 +13,6 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -52,11 +51,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
-        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader;
+        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader;
 
         public InterviewHistoryDenormalizer(IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader, IReadSideRepositoryWriter<UserDocument> userReader,
-            IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader)
+            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader)
             : base(readSideStorage)
         {
             this.interviewSummaryReader = interviewSummaryReader;
@@ -369,7 +368,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             if(view ==null)
                 return;
 
-            var questionnaireWithVersion = questionnaireReader.GetById(view.QuestionnaireId, view.QuestionnaireVersion);
+            var questionnaireWithVersion = questionnaireReader.AsVersioned().Get(view.QuestionnaireId.FormatGuid(), view.QuestionnaireVersion);
             if (questionnaireWithVersion == null || questionnaireWithVersion.Questionnaire == null)
                 return;
 
