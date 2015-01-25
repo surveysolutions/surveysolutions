@@ -1,7 +1,6 @@
 using System;
 using Android.App;
 using Android.Content.PM;
-using Android.OS;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.QuestionnaireTester.Implementations.Adapters;

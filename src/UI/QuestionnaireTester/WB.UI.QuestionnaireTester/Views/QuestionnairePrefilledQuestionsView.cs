@@ -1,4 +1,5 @@
 using Android.App;
+using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
@@ -29,7 +30,10 @@ namespace WB.UI.QuestionnaireTester.Views
 
             this.ViewModel.OnInterviewDetailsOpened += (interviewId) =>
             {
-
+                var intent = new Intent(this, typeof(InterviewView));
+                intent.SetFlags(ActivityFlags.ReorderToFront);
+                intent.PutExtra("publicKey", interviewId.ToString());
+                this.StartActivity(intent);
             };
         }
     }
