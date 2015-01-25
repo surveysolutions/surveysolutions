@@ -11,9 +11,9 @@ namespace WB.Core.Synchronization.MetaInfo
 {
     public class MetaInfoBuilder : IMetaInfoBuilder
     {
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
+        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnarieStorage;
 
-        public MetaInfoBuilder(IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage)
+        public MetaInfoBuilder(IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnarieStorage)
         {
             this.questionnarieStorage = questionnarieStorage;
         }

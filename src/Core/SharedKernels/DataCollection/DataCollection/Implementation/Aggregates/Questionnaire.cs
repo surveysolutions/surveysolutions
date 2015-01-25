@@ -120,22 +120,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(command.Source);
             this.ThrowIfCurrentAggregateIsUsedOnlyAsProxyToPlainQuestionnaireRepository();
 
-            if (command.SupportingAssembly != null && !string.IsNullOrWhiteSpace(command.SupportingAssembly))
+            if (string.IsNullOrWhiteSpace(command.SupportingAssembly))
             {
                 throw new QuestionnaireException(string.Format("Cannot import questionnaire. Assembly file is empty. QuestionnaireId: {0}", this.EventSourceId));
             }
 
             var newVersion = GetNextVersion();
-            
+
+            QuestionnareAssemblyFileAccessor.StoreAssembly(EventSourceId, newVersion, command.SupportingAssembly);
+
             this.ApplyEvent(new TemplateImported
             {
                 Source = document,
                 AllowCensusMode = command.AllowCensusMode,
-                Version = GetNextVersion(),
+                Version = newVersion,
                 ResponsibleId = command.CreatedBy
             });
-            
-            QuestionnareAssemblyFileAccessor.StoreAssembly(EventSourceId, newVersion, command.SupportingAssembly);
             this.ApplyEvent(new QuestionnaireAssemblyImported { Version = newVersion });
 
         }
@@ -178,7 +178,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void RegisterPlainQuestionnaire(RegisterPlainQuestionnaire command)
         {
             QuestionnaireDocument questionnaireDocument = this.PlainQuestionnaireRepository.GetQuestionnaireDocument(command.Id, command.Version);
-
+            
             if (questionnaireDocument == null || questionnaireDocument.IsDeleted)
                 throw new QuestionnaireException(string.Format(
                     "Plain questionnaire {0} ver {1} cannot be registered because it is absent in plain repository.",
@@ -186,11 +186,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new PlainQuestionnaireRegistered(command.Version, command.AllowCensusMode));
 
-            if (command.SupportingAssembly != null && !string.IsNullOrWhiteSpace(command.SupportingAssembly))
-            {
-                QuestionnareAssemblyFileAccessor.StoreAssembly(EventSourceId, command.Version, command.SupportingAssembly);
-                this.ApplyEvent(new QuestionnaireAssemblyImported { Version = command.Version });
-            }
+            //ignoring on interviewer but saving on supervisor
+            if (string.IsNullOrWhiteSpace(command.SupportingAssembly)) return;
+            
+            QuestionnareAssemblyFileAccessor.StoreAssembly(EventSourceId, command.Version, command.SupportingAssembly);
+            this.ApplyEvent(new QuestionnaireAssemblyImported { Version = command.Version });
         }
 
         private static QuestionnaireDocument CastToQuestionnaireDocumentOrThrow(IQuestionnaireDocument source)

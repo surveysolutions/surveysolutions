@@ -48,11 +48,6 @@ namespace WB.Core.Infrastructure.Storage.Raven
 
         }
 
-        protected object GetKeyValueStorage(IContext context)
-        {
-            return this.Kernel.Get(typeof(RavenFilesStoreRepositoryAccessor<>).MakeGenericType(context.GenericArguments[0]));
-        }
-
         protected object GetReadSideRepositoryWriter(IContext context)
         {
             return this.Kernel.Get(typeof(RavenReadSideRepositoryWriter<>).MakeGenericType(context.GenericArguments[0]));
