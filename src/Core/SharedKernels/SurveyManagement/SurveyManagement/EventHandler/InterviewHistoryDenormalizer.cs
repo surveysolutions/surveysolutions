@@ -52,11 +52,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireReader;
+        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader;
 
         public InterviewHistoryDenormalizer(IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader, IReadSideRepositoryWriter<UserDocument> userReader,
-            IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireReader)
+            IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader)
             : base(readSideStorage)
         {
             this.interviewSummaryReader = interviewSummaryReader;

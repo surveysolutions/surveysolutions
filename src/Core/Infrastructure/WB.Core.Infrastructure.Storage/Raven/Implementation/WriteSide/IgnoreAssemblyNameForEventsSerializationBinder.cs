@@ -25,10 +25,8 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
             {
                 return NcqrsEnvironment.GetEventDataTypeByFullName(typeName);
             }
-            else
-            {
-                return base.BindToType(assemblyName, typeName);
-            }
+
+            return base.BindToType(assemblyName, typeName);
         }
     }
 }

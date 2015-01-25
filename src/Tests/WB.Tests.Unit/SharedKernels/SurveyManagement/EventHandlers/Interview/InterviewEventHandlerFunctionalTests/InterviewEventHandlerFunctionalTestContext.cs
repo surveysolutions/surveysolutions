@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
     {
         protected static InterviewEventHandlerFunctional CreateInterviewEventHandlerFunctional(QuestionnaireRosterStructure rosterStructure = null, UserDocument user = null)
         {
-            var questionnaireRosterStructureMockStorage = new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>();
+            var questionnaireRosterStructureMockStorage = new Mock<IVersionedReadSideKeyValueStorage<QuestionnaireRosterStructure>>();
             questionnaireRosterStructureMockStorage.Setup(x => x.GetById(It.IsAny<string>())).Returns(rosterStructure);
             questionnaireRosterStructureMockStorage.Setup(x => x.GetById(It.IsAny<string>(), It.IsAny<long>())).Returns(rosterStructure);
 

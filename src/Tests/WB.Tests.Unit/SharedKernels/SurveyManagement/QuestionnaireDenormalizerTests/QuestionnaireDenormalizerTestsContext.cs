@@ -19,11 +19,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireDenormalizer
     {
         protected static QuestionnaireDenormalizer CreateDenormalizer(IReadSideRepositoryWriter<InterviewSummary> interviews = null,
             IQuestionnaireAssemblyFileAccessor assemblyFileAccessor = null,
-            IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireDocumentStorage = null,
+            IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentStorage = null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null)
         {
             return new QuestionnaireDenormalizer(
-                questionnaireDocumentStorage ?? Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>(),
+                questionnaireDocumentStorage ?? Mock.Of<IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
                 Mock.Of<IQuestionnaireCacheInitializer>(),
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 assemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),

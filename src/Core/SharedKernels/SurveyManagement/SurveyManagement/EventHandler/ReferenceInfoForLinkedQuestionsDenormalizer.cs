@@ -13,12 +13,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     public class ReferenceInfoForLinkedQuestionsDenormalizer : BaseDenormalizer, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>
     {
-        private readonly IVersionedReadSideRepositoryWriter<ReferenceInfoForLinkedQuestions> questionnaires;
+        private readonly IVersionedReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions> questionnaires;
         private readonly IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
         public ReferenceInfoForLinkedQuestionsDenormalizer(
-            IVersionedReadSideRepositoryWriter<ReferenceInfoForLinkedQuestions> questionnaires,
+            IVersionedReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions> questionnaires,
             IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory,
             IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {

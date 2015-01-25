@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿extern alias datacollection;
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using datacollection::Main.Core.Events.Questionnaire;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
-namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
+namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
     internal class when_creating_questionnaire_imported_from_designer_in_census_mode : QuestionnaireTestsContext
     {
@@ -26,10 +25,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
         };
 
         Because of = () =>
-            questionnaire=new Questionnaire(Guid.NewGuid(),questionnaireDocument,true);
+            questionnaire = new Questionnaire(Guid.NewGuid(), questionnaireDocument, true, "assembly body");
 
         It should_raise_1_TemplateImported_event = () =>
-          eventContext.GetEvents<TemplateImported>().Count(@event => @event.Source == questionnaireDocument && @event.AllowCensusMode).ShouldEqual(1);
+          eventContext.GetEvents<TemplateImported>().Count(@event => @event.Source == questionnaireDocument && @event.AllowCensusMode && @event.Version == 1).ShouldEqual(1);
+
+        It should_raise_1_QuestionnaireAssemblyImported_event = () =>
+          eventContext.GetEvents<QuestionnaireAssemblyImported>().Count(@event => @event.Version == 1).ShouldEqual(1);
 
         private static Questionnaire questionnaire;
         private static QuestionnaireDocument questionnaireDocument;

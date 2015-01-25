@@ -10,9 +10,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 {
     public class QuestionnaireQuestionInfoFactory : IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView>
     {
-        private readonly IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireStore;
+        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore;
 
-        public QuestionnaireQuestionInfoFactory(IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireStore)
+        public QuestionnaireQuestionInfoFactory(IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore)
         {
             this.questionnaireStore = questionnaireStore;
         }

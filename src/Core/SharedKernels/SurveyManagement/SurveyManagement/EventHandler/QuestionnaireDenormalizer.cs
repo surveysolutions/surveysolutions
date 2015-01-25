@@ -18,14 +18,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     public class QuestionnaireDenormalizer : BaseDenormalizer, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, 
         IEventHandler<QuestionnaireDeleted>
     {
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> documentStorage;
+        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> documentStorage;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviews;
         private readonly IQuestionnaireCacheInitializer questionnaireCacheInitializer;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
 
         public QuestionnaireDenormalizer(
-            IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> documentStorage, 
+            IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> documentStorage, 
             IQuestionnaireCacheInitializer questionnaireCacheInitializer,
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,

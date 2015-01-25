@@ -15,10 +15,10 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<TemplateImported>, IEventHandler<QuestionnaireDeleted>,
         IEventHandler<PlainQuestionnaireRegistered>
     {
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
+        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnarieStorage;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
-        public QuestionnaireDenormalizer(IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage, 
+        public QuestionnaireDenormalizer(IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnarieStorage, 
             IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.questionnarieStorage = questionnarieStorage;

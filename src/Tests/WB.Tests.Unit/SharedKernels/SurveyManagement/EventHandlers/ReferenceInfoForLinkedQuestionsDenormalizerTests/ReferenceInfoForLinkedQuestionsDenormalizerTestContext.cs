@@ -51,11 +51,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.ReferenceIn
         }
 
         protected static ReferenceInfoForLinkedQuestionsDenormalizer CreateReferenceInfoForLinkedQuestionsDenormalizer(
-            IVersionedReadSideRepositoryWriter<ReferenceInfoForLinkedQuestions> questionnaires = null)
+            IVersionedReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions> questionnaires = null)
         {
             return
                 new ReferenceInfoForLinkedQuestionsDenormalizer(questionnaires ??
-                    Mock.Of<IVersionedReadSideRepositoryWriter<ReferenceInfoForLinkedQuestions>>(),
+                    Mock.Of<IVersionedReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions>>(),
                     new ReferenceInfoForLinkedQuestionsFactory(),
                     Mock.Of<IPlainQuestionnaireRepository>());
         }

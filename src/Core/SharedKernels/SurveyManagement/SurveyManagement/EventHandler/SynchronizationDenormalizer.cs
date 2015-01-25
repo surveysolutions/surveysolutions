@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly ISynchronizationDataStorage syncStorage;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures;
+        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures;
         private readonly IReadSideKeyValueStorage<InterviewData> interviews;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummarys;
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
@@ -50,7 +50,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public SynchronizationDenormalizer(ISynchronizationDataStorage syncStorage, 
             IReadSideRepositoryWriter<UserDocument> users,
-            IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures,
+            IVersionedReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures,
             IReadSideKeyValueStorage<InterviewData> interviews,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummarys,
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor, 

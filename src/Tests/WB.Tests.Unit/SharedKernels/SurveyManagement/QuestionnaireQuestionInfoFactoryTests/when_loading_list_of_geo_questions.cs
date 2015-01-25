@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireQuestionInfo
     {
         private Establish context = () =>
         {
-            questionnaireDocumentReaderMock = new Mock<IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned>>();
+            questionnaireDocumentReaderMock = new Mock<IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>();
 
             var questionnaire = new QuestionnaireDocument()
             {
@@ -70,6 +70,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireQuestionInfo
         private static QuestionnaireQuestionInfoFactory factory;
         private static QuestionnaireQuestionInfoInputModel input;
         private static QuestionnaireQuestionInfoView view;
-        private static Mock<IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned>> questionnaireDocumentReaderMock;
+        private static Mock<IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned>> questionnaireDocumentReaderMock;
     }
 }

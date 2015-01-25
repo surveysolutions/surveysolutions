@@ -11,9 +11,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Preloading
 {
     public class QuestionnairePreloadingDataViewFactory : IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem>
     {
-        private readonly IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireDocumentVersionedStorage;
+        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireDocumentVersionedStorage;
 
-        public QuestionnairePreloadingDataViewFactory(IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireDocumentVersionedStorage)
+        public QuestionnairePreloadingDataViewFactory(IVersionedReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireDocumentVersionedStorage)
         {
             this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
         }
