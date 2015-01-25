@@ -5,7 +5,6 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
@@ -19,11 +18,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireDenormalizer
     {
         protected static QuestionnaireDenormalizer CreateDenormalizer(IReadSideRepositoryWriter<InterviewSummary> interviews = null,
             IQuestionnaireAssemblyFileAccessor assemblyFileAccessor = null,
-            IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentStorage = null,
+            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentStorage = null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null)
         {
             return new QuestionnaireDenormalizer(
-                questionnaireDocumentStorage ?? Mock.Of<IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
+                questionnaireDocumentStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
                 Mock.Of<IQuestionnaireCacheInitializer>(),
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 assemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),

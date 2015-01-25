@@ -4,13 +4,13 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -64,7 +64,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IDeleteHandler<InterviewData, InterviewHardDeleted>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
-        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures;
+        private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures;
 
 
         public override object[] Readers
@@ -284,7 +284,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         }
 
         public InterviewEventHandlerFunctional(IReadSideRepositoryWriter<UserDocument> users,
-            IVersionedReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures,
+            IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures,
             IReadSideKeyValueStorage<InterviewData> interviewData)
             : base(interviewData)
         {
@@ -367,7 +367,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<RosterInstancesAdded> evnt)
         {
-            var questionnarie = this.questionnriePropagationStructures.GetById(currentState.QuestionnaireId, currentState.QuestionnaireVersion);
+            var questionnarie = this.questionnriePropagationStructures.AsVersioned().Get(currentState.QuestionnaireId.FormatGuid(), currentState.QuestionnaireVersion);
 
             foreach (var instance in evnt.Payload.Instances)
             {
@@ -383,7 +383,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public InterviewData Update(InterviewData currentState, IPublishedEvent<RosterInstancesRemoved> evnt)
         {
 
-            var questionnarie = this.questionnriePropagationStructures.GetById(currentState.QuestionnaireId, currentState.QuestionnaireVersion);
+            var questionnarie = this.questionnriePropagationStructures.AsVersioned().Get(currentState.QuestionnaireId.FormatGuid(), currentState.QuestionnaireVersion);
             foreach (var instance in evnt.Payload.Instances)
             {
                 var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(currentState, instance.GroupId, questionnarie);
@@ -399,7 +399,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public InterviewData Update(InterviewData currentState, IPublishedEvent<GroupPropagated> evnt)
         {
 
-            var questionnarie = this.questionnriePropagationStructures.GetById(currentState.QuestionnaireId, currentState.QuestionnaireVersion);
+            var questionnarie = this.questionnriePropagationStructures.AsVersioned().Get(currentState.QuestionnaireId.FormatGuid(), currentState.QuestionnaireVersion);
             var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(currentState,
                                                           evnt.Payload.GroupId, questionnarie);
             List<string> keysOfLevelsByScope =
