@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AccountIsLockedOnServer" xml:space="preserve">
+    <value>Your account was locked. Please, contact to the Survey Solutions team</value>
+  </data>
   <data name="DashboardTitleText" xml:space="preserve">
     <value>Questionnaires</value>
   </data>
@@ -135,12 +138,6 @@
   <data name="ImportQuestionnairePreconditionFailed" xml:space="preserve">
     <value>Requested questionnaire "{0}" has errors. Please verify the questionnaire on Designer.</value>
   </data>
-  <data name="ImportQuestionnaireRequestTimeout" xml:space="preserve">
-    <value>Timeout when connecting to 'Designer' website. Check your internet connection</value>
-  </data>
-  <data name="ImportQuestionnaireServiceUnavailable" xml:space="preserve">
-    <value>No connection to 'Designer'. Please make sure that the 'Designer' website is available and it's not in the maintenance mode</value>
-  </data>
   <data name="ImportQuestionnaireUpgradeRequired" xml:space="preserve">
     <value>Your version of application does not support of this questionnaire. Please, update application</value>
   </data>
@@ -156,11 +153,20 @@
   <data name="LoginTitleText" xml:space="preserve">
     <value>Authorization</value>
   </data>
+  <data name="Maintenance" xml:space="preserve">
+    <value>Server is on the maintenance mode now. Sorry for the inconvenience. Please, try again later.</value>
+  </data>
   <data name="OwnerNameTitle" xml:space="preserve">
     <value>Owner:</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Password</value>
+  </data>
+  <data name="RequestTimeout" xml:space="preserve">
+    <value>Timeout when connecting to 'Designer' website. Check your internet connection</value>
+  </data>
+  <data name="ServiceUnavailable" xml:space="preserve">
+    <value>No connection to 'Designer'. Please make sure that the 'Designer' website is available and it's not in the maintenance mode</value>
   </data>
   <data name="SettingsText" xml:space="preserve">
     <value>Settings</value>
@@ -170,5 +176,8 @@
   </data>
   <data name="StaySignedInText" xml:space="preserve">
     <value>Stay signed in</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>Your login or password is incorrect</value>
   </data>
 </root>

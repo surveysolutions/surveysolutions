@@ -61,6 +61,15 @@ namespace WB.UI.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your account was locked. Please, contact to the Survey Solutions team.
+        /// </summary>
+        internal static string AccountIsLockedOnServer {
+            get {
+                return ResourceManager.GetString("AccountIsLockedOnServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaires.
         /// </summary>
         internal static string DashboardTitleText {
@@ -115,24 +124,6 @@ namespace WB.UI.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Timeout when connecting to &apos;Designer&apos; website. Check your internet connection.
-        /// </summary>
-        internal static string ImportQuestionnaireRequestTimeout {
-            get {
-                return ResourceManager.GetString("ImportQuestionnaireRequestTimeout", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No connection to &apos;Designer&apos;. Please make sure that the &apos;Designer&apos; website is available and it&apos;s not in the maintenance mode.
-        /// </summary>
-        internal static string ImportQuestionnaireServiceUnavailable {
-            get {
-                return ResourceManager.GetString("ImportQuestionnaireServiceUnavailable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Your version of application does not support of this questionnaire. Please, update application.
         /// </summary>
         internal static string ImportQuestionnaireUpgradeRequired {
@@ -178,6 +169,15 @@ namespace WB.UI.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Server is on the maintenance mode now. Sorry for the inconvenience. Please, try again later..
+        /// </summary>
+        internal static string Maintenance {
+            get {
+                return ResourceManager.GetString("Maintenance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Owner:.
         /// </summary>
         internal static string OwnerNameTitle {
@@ -192,6 +192,24 @@ namespace WB.UI.QuestionnaireTester.Properties {
         internal static string PasswordHint {
             get {
                 return ResourceManager.GetString("PasswordHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Timeout when connecting to &apos;Designer&apos; website. Check your internet connection.
+        /// </summary>
+        internal static string RequestTimeout {
+            get {
+                return ResourceManager.GetString("RequestTimeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No connection to &apos;Designer&apos;. Please make sure that the &apos;Designer&apos; website is available and it&apos;s not in the maintenance mode.
+        /// </summary>
+        internal static string ServiceUnavailable {
+            get {
+                return ResourceManager.GetString("ServiceUnavailable", resourceCulture);
             }
         }
         
@@ -219,6 +237,15 @@ namespace WB.UI.QuestionnaireTester.Properties {
         internal static string StaySignedInText {
             get {
                 return ResourceManager.GetString("StaySignedInText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your login or password is incorrect.
+        /// </summary>
+        internal static string Unauthorized {
+            get {
+                return ResourceManager.GetString("Unauthorized", resourceCulture);
             }
         }
     }

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Net;
 using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
+using WB.UI.QuestionnaireTester.Properties;
 using WB.UI.QuestionnaireTester.Services;
 
 namespace WB.UI.QuestionnaireTester.ViewModels
@@ -66,7 +68,25 @@ namespace WB.UI.QuestionnaireTester.ViewModels
             }
             catch (RestException ex)
             {
-                this.UIDialogs.Alert(ex.Message);
+
+                switch (ex.StatusCode)
+                {
+                    case HttpStatusCode.Unauthorized:
+                        this.UIDialogs.Alert(ex.Message.Contains("lock")
+                            ? UIResources.AccountIsLockedOnServer
+                            : UIResources.Unauthorized);
+                        break;
+                    case HttpStatusCode.ServiceUnavailable:
+                        this.UIDialogs.Alert(ex.Message.Contains("maintenance")
+                            ? UIResources.Maintenance
+                            : UIResources.ServiceUnavailable);
+                        break;
+                    case HttpStatusCode.RequestTimeout:
+                        this.UIDialogs.Alert(UIResources.RequestTimeout);
+                        break;
+                    default:
+                        throw;
+                }
             }
             catch (Exception ex)
             {

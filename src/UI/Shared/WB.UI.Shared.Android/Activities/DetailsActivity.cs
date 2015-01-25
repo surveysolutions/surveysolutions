@@ -17,7 +17,7 @@ namespace WB.UI.Shared.Android.Activities
 {
     public abstract class DetailsActivity : DoubleBackMvxFragmentActivity
     {
-        protected virtual Guid QuestionnaireId
+        protected Guid QuestionnaireId
         {
             get { return Guid.Parse(this.Intent.GetStringExtra("publicKey")); }
         }
@@ -46,7 +46,7 @@ namespace WB.UI.Shared.Android.Activities
         private QuestionnaireNavigationView navList;
         private InterviewItemId? screenId;
         private ActionBarDrawerToggle drawerToggle;
-        
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -84,7 +84,7 @@ namespace WB.UI.Shared.Android.Activities
             this.adapter = this.CreateFrameAdapter(this.screenId);
             this.VpContent.Adapter = this.adapter;
             this.VpContent.PageSelected += this.VpContentPageSelected;
-            
+
             this.drawerToggle = new ActionBarDrawerToggle(this, this.llContainer, Android.Resource.Drawable.ic_drawer_dark,
                 Resource.String.drawer_open,
                 Resource.String.drawer_close);
@@ -190,9 +190,9 @@ namespace WB.UI.Shared.Android.Activities
         {
             base.OnDestroy();
 
-            if(this.VpContent != null)
+            if (this.VpContent != null)
                 this.VpContent.PageSelected -= this.VpContentPageSelected;
-            if(this.navList != null)
+            if (this.navList != null)
                 this.navList.ScreenChanged -= this.ContentFrameAdapterScreenChanged;
 
             GC.Collect();

@@ -1,10 +1,7 @@
-using System;
 using Android.App;
-using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
-using Android.Widget;
 using WB.UI.QuestionnaireTester.Implementations.Fragments;
 using WB.UI.QuestionnaireTester.ViewModels;
 
@@ -28,6 +25,11 @@ namespace WB.UI.QuestionnaireTester.Views
                 var screen = PrefilledScreenContentFragment.CreatePrefilledScreenContentFragment(interviewId);
 
                 SupportFragmentManager.BeginTransaction().Add(Resource.Id.flFragmentHolder, screen).Commit();  
+            };
+
+            this.ViewModel.OnInterviewDetailsOpened += (interviewId) =>
+            {
+
             };
         }
     }

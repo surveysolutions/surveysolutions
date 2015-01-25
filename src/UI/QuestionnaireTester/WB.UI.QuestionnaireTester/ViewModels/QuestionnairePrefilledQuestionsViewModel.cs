@@ -29,7 +29,8 @@ namespace WB.UI.QuestionnaireTester.ViewModels
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
         private readonly ICommandService commandService;
         public QuestionnaireListItem Questionnaire { get; private set; }
-        public Action<Guid> OnInterviewCreated { get; set; }  
+        public Action<Guid> OnInterviewCreated { get; set; }
+        public Action<Guid> OnInterviewDetailsOpened { get; set; }
 
         private bool isAnswering = false;
         public bool IsAnswering
@@ -106,8 +107,9 @@ namespace WB.UI.QuestionnaireTester.ViewModels
 
         private void OpenInterview()
         {
-            if (this.interviewId.HasValue)
-                this.ShowViewModel<InterviewViewModel>(this.interviewId);
+            if (this.interviewId.HasValue && this.OnInterviewDetailsOpened != null)
+                this.OnInterviewDetailsOpened(this.interviewId.Value);
+
         }
 
         private Guid? interviewId;
@@ -160,10 +162,12 @@ namespace WB.UI.QuestionnaireTester.ViewModels
                         this.UIDialogs.Alert(string.Format(UIResources.ImportQuestionnaireNotFound, this.Questionnaire.Title));
                         break;
                     case HttpStatusCode.ServiceUnavailable:
-                        this.UIDialogs.Alert(UIResources.ImportQuestionnaireServiceUnavailable);
+                        this.UIDialogs.Alert(ex.Message.Contains("maintenance")
+                            ? UIResources.Maintenance
+                            : UIResources.ServiceUnavailable);
                         break;
                     case HttpStatusCode.RequestTimeout:
-                        this.UIDialogs.Alert(UIResources.ImportQuestionnaireRequestTimeout);
+                        this.UIDialogs.Alert(UIResources.RequestTimeout);
                         break;
                     default:
                         throw;
