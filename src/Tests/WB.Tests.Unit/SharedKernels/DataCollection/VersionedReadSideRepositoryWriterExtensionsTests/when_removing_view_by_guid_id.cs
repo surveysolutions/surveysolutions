@@ -1,7 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 using Moq;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Tests.Unit.SharedKernels.DataCollection.Views;
 using It = Machine.Specifications.It;
 
@@ -11,15 +11,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.VersionedReadSideRepository
     {
         Establish context = () =>
         {
-            writerMock = new Mock<IVersionedReadSideRepositoryWriter<View>>();
+            writerMock = new Mock<IReadSideRepositoryWriter<View>>();
         };
 
         Because of = () =>
-            VersionedReadSideRepositoryWriterExtensions.Remove(writerMock.Object, Guid.Parse("11111111111111111111111111111111"), 1);
+            ReadSideExtensions.Remove(writerMock.Object, Guid.Parse("11111111111111111111111111111111"));
 
         It should_pass_string_11111111111111111111111111111111_to_writers_Remove_method = () =>
-            writerMock.Verify(x => x.Remove("11111111111111111111111111111111", 1), Times.Once);
+            writerMock.Verify(x => x.Remove("11111111111111111111111111111111"), Times.Once);
 
-        private static Mock<IVersionedReadSideRepositoryWriter<View>> writerMock;
+        private static Mock<IReadSideRepositoryWriter<View>> writerMock;
     }
 }

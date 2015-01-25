@@ -1,13 +1,14 @@
-﻿using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
+﻿using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 {
     public class QuestionnaireItemViewFactory: IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem>
     {
-        private readonly IVersionedReadSideRepositoryReader<QuestionnaireBrowseItem> documentGroupSession;
+        private readonly IReadSideRepositoryReader<QuestionnaireBrowseItem> documentGroupSession;
 
-        public QuestionnaireItemViewFactory(IVersionedReadSideRepositoryReader<QuestionnaireBrowseItem> documentGroupSession)
+        public QuestionnaireItemViewFactory(IReadSideRepositoryReader<QuestionnaireBrowseItem> documentGroupSession)
         {
             this.documentGroupSession = documentGroupSession;
         }
@@ -16,7 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
         {
             //return documentGroupSession.GetById(input.QuestionnaireId);
             return
-                documentGroupSession.GetById(input.QuestionnaireId, input.Version)/*.Query(
+                this.documentGroupSession.AsVersioned().Get(input.QuestionnaireId.FormatGuid(), input.Version)/*.Query(
                     _ => _.Where(q => q.QuestionnaireId == input.QuestionnaireId).OrderByDescending(q=>q.Version).ToList().FirstOrDefault())*/;
         }
     }

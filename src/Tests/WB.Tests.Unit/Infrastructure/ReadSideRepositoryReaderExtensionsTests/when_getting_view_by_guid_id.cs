@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideRepositoryReaderExtensionsTests
         };
 
         Because of = () =>
-            ReadSideRepositoryReaderExtensions.GetById(readerMock.Object, Guid.Parse("11111111111111111111111111111111"));
+            ReadSideExtensions.GetById(readerMock.Object, Guid.Parse("11111111111111111111111111111111"));
 
         It should_pass_string_11111111111111111111111111111111_to_readers_GetById_method = () =>
             readerMock.Verify(x => x.GetById("11111111111111111111111111111111"), Times.Once);

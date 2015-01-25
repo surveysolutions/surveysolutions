@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql;
@@ -32,7 +32,7 @@ namespace WB.Tests.Integration.SqlToTabDataExportServiceTests
 
             return new SqlToTabDataExportService(fileSystemAccessor, sqlServiceFactory,
                 Mock.Of<ICsvWriterFactory>(_ => _.OpenCsvWriter(It.IsAny<Stream>(), It.IsAny<string>()) == csvWriterService), new SqlDataAccessor(fileSystemAccessor),
-                Mock.Of<IVersionedReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(It.IsAny<string>(), It.IsAny<long>()) == questionnaireExportStructure));
+                Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(It.IsAny<string>()) == questionnaireExportStructure));
         }
 
 
