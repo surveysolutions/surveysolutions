@@ -25,11 +25,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly ISqlDataAccessor sqlDataAccessor;
         private readonly string parentId = "ParentId";
 
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter;
+        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter;
 
         public SqlToTabDataExportService(IFileSystemAccessor fileSystemAccessor, ISqlServiceFactory sqlServiceFactory,
             ICsvWriterFactory csvWriterFactory, ISqlDataAccessor sqlDataAccessor,
-            IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter)
+            IVersionedReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter)
         {
             this.sqlServiceFactory = sqlServiceFactory;
             this.csvWriterFactory = csvWriterFactory;

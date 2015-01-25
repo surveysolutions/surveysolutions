@@ -66,7 +66,7 @@ namespace CapiDataGenerator
         private readonly RavenConnectionSettings headquartersSettings;
         private readonly RavenConnectionSettings supervisorSettings;
 
-        private IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> capiTemplateVersionedWriter;
+        private IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> capiTemplateVersionedWriter;
 
         public MainModelModule(RavenConnectionSettings headquartersSettings, RavenConnectionSettings supervisorSettings)
         {
@@ -98,7 +98,7 @@ namespace CapiDataGenerator
                 environmentalPersonalFolderPath);
 
             var capiTemplateWriter = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>(this.Kernel.Get<IJsonUtils>());
-            this.capiTemplateVersionedWriter = new VersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>(capiTemplateWriter);
+            this.capiTemplateVersionedWriter = new VersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned>(capiTemplateWriter);
             
             ClearCapiDb(capiEvenStore, denormalizerStore, plainStore, changeLogStore, capiTemplateWriter);
 

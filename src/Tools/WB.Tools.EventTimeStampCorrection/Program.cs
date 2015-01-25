@@ -4,9 +4,11 @@ using System.Linq;
 using Raven.Abstractions.Replication;
 using Raven.Client;
 using Raven.Client.Document;
+using Raven.Client.Extensions;
 using Raven.Client.Indexes;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
+using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide.Indexes;
 
 namespace WB.Tools.EventTimeStampCorrection
 {
@@ -50,29 +52,61 @@ namespace WB.Tools.EventTimeStampCorrection
             try
             {
                 var eventStore = CreateRavenStorage(settings[requiredSettings[0]], settings[requiredSettings[1]]);
+                if (eventStore.DatabaseCommands.GetIndex("Event_ByEventSource") == null)
+                {
+                    eventStore.ExecuteIndex(new Event_ByEventSource());
+                }
 
                 Console.WriteLine("Connected to db");
 
+                long maxEventSequence = GetMaxEventSequenceNo(eventStore);
+
                 int processedEventsCount = 0;
-                var eventsToBeUpdated = new List<StoredEvent>();
                 DateTime etalonTime = default(DateTime);
 
-                foreach (var bulkEvents in RavenQuery<StoredEvent>(eventStore))
+                var eventsToBeUpdated = new List<StoredEvent>();
+                var timeStampsByEventSource = new Dictionary<Guid, DateTime>();
+
+                for (int currentEventSequence = 1; currentEventSequence <= maxEventSequence; currentEventSequence++)
                 {
-                    foreach (var storedEvent in bulkEvents)
+                    foreach (var bulkEvents in RavenQuery(eventStore, currentEventSequence))
                     {
-                        if (etalonTime != default(DateTime) && (storedEvent.EventTimeStamp < etalonTime))
+                        foreach (var storedEvent in bulkEvents)
                         {
-                            storedEvent.EventTimeStamp = etalonTime.AddTicks(1);
-                            eventsToBeUpdated.Add(storedEvent);
+                            if (currentEventSequence == 1)
+                            {
+                                if (etalonTime == default(DateTime))
+                                {
+                                    etalonTime = storedEvent.EventTimeStamp;
+                                }
+                                else
+                                {
+                                    if (storedEvent.EventTimeStamp < etalonTime)
+                                    {
+                                        storedEvent.EventTimeStamp = etalonTime.AddTicks(1);
+                                        eventsToBeUpdated.Add(storedEvent);
+                                    }
+
+                                    etalonTime = storedEvent.EventTimeStamp;   
+                                }
+                                timeStampsByEventSource.Add(storedEvent.EventSourceId, storedEvent.EventTimeStamp);
+                            }
+                            else
+                            {
+                                if (storedEvent.EventTimeStamp < timeStampsByEventSource[storedEvent.EventSourceId])
+                                {
+                                    storedEvent.EventTimeStamp = timeStampsByEventSource[storedEvent.EventSourceId].AddTicks(1);
+                                    eventsToBeUpdated.Add(storedEvent);
+
+                                    timeStampsByEventSource[storedEvent.EventSourceId] = storedEvent.EventTimeStamp;
+                                }
+                            }
+
+                            processedEventsCount++;
+
+                            Console.Write("\r{0} event(s) processed. {1} event(s) with incorrect event timestamp",
+                                processedEventsCount, eventsToBeUpdated.Count);
                         }
-
-                        etalonTime = storedEvent.EventTimeStamp;
-
-                        processedEventsCount++;
-
-                        Console.Write("\r{0} event(s) processed. {1} event(s) with incorrect event timestamp",
-                            processedEventsCount, eventsToBeUpdated.Count);
                     }
                 }
 
@@ -125,11 +159,11 @@ namespace WB.Tools.EventTimeStampCorrection
             return store;
         }
 
-        private static IEnumerable<T[]> RavenQuery<T>(DocumentStore documentStore)
+        private static IEnumerable<StoredEvent[]> RavenQuery(DocumentStore documentStore, long sequenceNo)
         {
             using (IDocumentSession session = documentStore.OpenSession())
             {
-                var query = session.Query<T, RavenDocumentsByEntityName>();
+                var query = session.Query<StoredEvent, Event_ByEventSource>().Where(evt=>evt.EventSequence == sequenceNo);
 
                 var enumerator = session.Advanced.Stream(query);
 
@@ -137,6 +171,14 @@ namespace WB.Tools.EventTimeStampCorrection
                 {
                     yield return new[] { enumerator.Current.Document };
                 }
+            }
+        }
+
+        private static long GetMaxEventSequenceNo(DocumentStore documentStore)
+        {
+            using (IDocumentSession session = documentStore.OpenSession())
+            {
+                return session.Query<StoredEvent, Event_ByEventSource>().OrderByDescending(x => x.EventSequence).Take(1).ToArray()[0].EventSequence;
             }
         }
 

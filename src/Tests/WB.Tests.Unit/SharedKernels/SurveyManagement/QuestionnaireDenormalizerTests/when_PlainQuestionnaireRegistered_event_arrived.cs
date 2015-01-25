@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireDenormalizer
         {
             questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId };
 
-            questionnaireBrowseItemStorageMock = new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>();
+            questionnaireBrowseItemStorageMock = new Mock<IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>();
             plainQuestionnaireRepositoryMock = new Mock<IPlainQuestionnaireRepository>();
             plainQuestionnaireRepositoryMock.Setup(x => x.GetQuestionnaireDocument(questionnaireId, 1)).Returns(questionnaireDocument);
 
@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireDenormalizer
         private static QuestionnaireDenormalizer questionnaireBrowseItemDenormalizer;
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static QuestionnaireDocument questionnaireDocument;
-        private static Mock<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>> questionnaireBrowseItemStorageMock;
+        private static Mock<IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned>> questionnaireBrowseItemStorageMock;
         private static Mock<IPlainQuestionnaireRepository> plainQuestionnaireRepositoryMock;
 
     }

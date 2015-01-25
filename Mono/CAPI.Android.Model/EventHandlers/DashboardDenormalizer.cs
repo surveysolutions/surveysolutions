@@ -47,14 +47,14 @@ namespace CAPI.Android.Core.Model.EventHandlers
                                       IEventHandler<SupervisorAssigned>
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDtOdocumentStorage;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireStorage;
+        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStorage;
         private readonly IReadSideRepositoryWriter<SurveyDto> surveyDtoDocumentStorage;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly QuestionType[] questionTypesWithOptions = new[] { QuestionType.SingleOption, QuestionType.MultyOption, QuestionType.DropDownList, QuestionType.YesNo };
 
         public DashboardDenormalizer(IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDTOdocumentStorage,
-                                     IReadSideRepositoryWriter<SurveyDto> surveyDTOdocumentStorage, 
-                                     IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireStorage,
+                                     IReadSideRepositoryWriter<SurveyDto> surveyDTOdocumentStorage,
+                                     IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStorage,
                                      IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.questionnaireDtOdocumentStorage = questionnaireDTOdocumentStorage;
@@ -254,11 +254,15 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
             if (questionnaire == null) return;
 
-            var preFilledQuestion = questionnaire.GetProperties().FirstOrDefault(question => question.PublicKey == questionId);
+            var featuredItems = questionnaire.GetProperties().ToList();
+
+            var preFilledQuestion = featuredItems.FirstOrDefault(question => question.PublicKey == questionId);
 
             if (preFilledQuestion == null) return;
 
             preFilledQuestion.Value = getAnswer(preFilledQuestion, answer);
+
+            questionnaire.SetProperties(featuredItems);
 
             questionnaireDtOdocumentStorage.Store(questionnaire, interviewId);
         }

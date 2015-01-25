@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Threading;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -36,16 +38,20 @@ namespace WB.Core.SharedKernels.DataCollection.Accessors
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
             var pathToSaveAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
 
-            if (this.fileSystemAccessor.IsFileExists(pathToSaveAssembly))
-                this.fileSystemAccessor.DeleteFile(pathToSaveAssembly);
+            var assembly = Convert.FromBase64String(assemblyAsBase64);
 
-            this.fileSystemAccessor.WriteAllBytes(pathToSaveAssembly, Convert.FromBase64String(assemblyAsBase64));
+            if (assembly.Length == 0)
+                throw new Exception(string.Format("Assembly file is empty. Cannot be saved. Questionnaire: {0}, version: {1}", questionnaireId, questionnaireVersion));
+
+            this.fileSystemAccessor.WriteAllBytes(pathToSaveAssembly, assembly);
         }
 
         public void RemoveAssembly(Guid questionnaireId, long questionnaireVersion)
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
             var pathToSaveAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
+
+            Logger.Info(string.Format("Trying to delete assembly for questionnaire {0} version {1}", questionnaireId, questionnaireVersion));
 
             //loaded assembly could be locked
             try
@@ -54,7 +60,7 @@ namespace WB.Core.SharedKernels.DataCollection.Accessors
             }
             catch (Exception e)
             {
-                Logger.Error("Error on assembly deletion");
+                Logger.Error(string.Format("Error on assembly deletion for questionnaire {0} version {1}", questionnaireId, questionnaireVersion));
                 Logger.Error(e.Message, e);
             }
         }

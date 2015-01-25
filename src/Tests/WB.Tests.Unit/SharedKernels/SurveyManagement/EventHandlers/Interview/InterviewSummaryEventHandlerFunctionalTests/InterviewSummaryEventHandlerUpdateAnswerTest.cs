@@ -176,7 +176,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         {
             var mockOfInterviewSummary = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
             return new InterviewSummaryEventHandlerFunctional(mockOfInterviewSummary.Object,
-                new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>().Object,
+                new Mock<IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>().Object,
                 new Mock<IReadSideRepositoryWriter<UserDocument>>().Object);
         }
 

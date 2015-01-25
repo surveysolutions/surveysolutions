@@ -22,13 +22,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireReader;
+        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader;
         private readonly IEventStore eventStore;
         private readonly ILogger logger;
 
         public InterviewHistoryFactory(IEventStore eventStore, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
             IReadSideRepositoryWriter<UserDocument> userReader,
-            IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireReader, ILogger logger)
+            IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader, ILogger logger)
         {
             this.eventStore = eventStore;
             this.interviewSummaryReader = interviewSummaryReader;

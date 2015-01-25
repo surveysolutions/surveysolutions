@@ -27,8 +27,7 @@ namespace WB.Tests.Integration.StorageTests.RavenFilesStoreRepositoryAccessorTes
                 ravenFilesStoreRepositoryAccessor.Dispose();
         };
 
-        protected static RavenFilesStoreRepositoryAccessor<TestableView> ravenFilesStoreRepositoryAccessor =
-            CreateRavenFilesStoreRepositoryAccessor();
+        protected static RavenFilesStoreRepositoryAccessor<TestableView> ravenFilesStoreRepositoryAccessor;
 
         private static TestableView storedView = new TestableView() { RandomNumber = 2 };
         private static string id = "test";

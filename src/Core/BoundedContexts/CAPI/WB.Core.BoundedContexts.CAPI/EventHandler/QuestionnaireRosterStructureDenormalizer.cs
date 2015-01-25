@@ -13,12 +13,12 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 {
     public class QuestionnaireRosterStructureDenormalizer : IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>
     {
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnries;
+        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnries;
         private readonly IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
         public QuestionnaireRosterStructureDenormalizer(
-            IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnries, IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory, IPlainQuestionnaireRepository plainQuestionnaireRepository)
+            IVersionedReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnries, IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory, IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.questionnries = questionnries;
             this.questionnaireRosterStructureFactory = questionnaireRosterStructureFactory;

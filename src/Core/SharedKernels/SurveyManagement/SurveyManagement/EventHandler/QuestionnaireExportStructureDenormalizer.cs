@@ -15,14 +15,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     internal class QuestionnaireExportStructureDenormalizer : BaseDenormalizer, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>
     {
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> readsideRepositoryWriter;
+        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireExportStructure> readsideRepositoryWriter;
         private readonly IDataExportRepositoryWriter dataExportWriter;
 
         private readonly IExportViewFactory exportViewFactory;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
         public QuestionnaireExportStructureDenormalizer(
-            IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> readsideRepositoryWriter, IDataExportRepositoryWriter dataExportWriter,
+            IVersionedReadSideKeyValueStorage<QuestionnaireExportStructure> readsideRepositoryWriter, IDataExportRepositoryWriter dataExportWriter,
             IExportViewFactory exportViewFactory, IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.readsideRepositoryWriter = readsideRepositoryWriter;

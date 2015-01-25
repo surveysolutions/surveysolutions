@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             var result = new SynchronizationDenormalizer(
                 synchronizationDataStorage ?? Mock.Of<ISynchronizationDataStorage>(), 
                 Mock.Of<IReadSideRepositoryWriter<UserDocument>>(),
-                Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>(),
+                Mock.Of<IVersionedReadSideKeyValueStorage<QuestionnaireRosterStructure>>(),
                 interviews ?? Mock.Of<IReadSideKeyValueStorage<InterviewData>>(),
                 interviewSummaryWriter??Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
                 Mock.Of<IQuestionnaireAssemblyFileAccessor>(), 

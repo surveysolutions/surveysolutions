@@ -21,13 +21,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
         protected static InterviewSynchronizationDtoFactory CreateInterviewSynchronizationDtoFactory(QuestionnaireDocument document)
         {
             document.ConnectChildrenWithParent();
-            return new InterviewSynchronizationDtoFactory(Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>(
+            return new InterviewSynchronizationDtoFactory(Mock.Of<IVersionedReadSideKeyValueStorage<QuestionnaireRosterStructure>>(
                 _ => _.GetById(It.IsAny<string>(), It.IsAny<long>()) == new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(document, 1)));
         }
 
         protected static InterviewSynchronizationDtoFactory CreateInterviewSynchronizationDtoFactory(QuestionnaireRosterStructure questionnaireRosterStructure)
         {
-            return new InterviewSynchronizationDtoFactory(Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>(
+            return new InterviewSynchronizationDtoFactory(Mock.Of<IVersionedReadSideKeyValueStorage<QuestionnaireRosterStructure>>(
                 _ => _.GetById(It.IsAny<string>(), It.IsAny<long>()) == questionnaireRosterStructure));
         }
 

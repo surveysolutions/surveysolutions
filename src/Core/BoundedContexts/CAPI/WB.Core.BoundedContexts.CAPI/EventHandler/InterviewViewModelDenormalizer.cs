@@ -46,8 +46,8 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<PictureQuestionAnswered>
     {
         private readonly IReadSideRepositoryWriter<InterviewViewModel> interviewStorage;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
+        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnarieStorage;
+        private readonly IVersionedReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
 
         private static ILogger Logger
@@ -57,8 +57,8 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
         public InterviewViewModelDenormalizer(
             IReadSideRepositoryWriter<InterviewViewModel> interviewStorage,
-            IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage,
-            IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory)
+            IVersionedReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnarieStorage,
+            IVersionedReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory)
         {
             this.interviewStorage = interviewStorage;
             this.questionnarieStorage = questionnarieStorage;
