@@ -128,7 +128,7 @@ namespace WB.UI.Capi.Syncronization
 
             if (!string.IsNullOrEmpty(lastReceivedPackageId))
             {
-                this.logger.Error(string.Format("Migration of old version of sync. Last received package id: {0}", lastReceivedPackageId));
+                this.logger.Warn(string.Format("Migration of old version of sync. Last received package id: {0}", lastReceivedPackageId));
 
                 long lastReceivedPackageIdOfLongType;
                 if (!long.TryParse(lastReceivedPackageId, out lastReceivedPackageIdOfLongType))
