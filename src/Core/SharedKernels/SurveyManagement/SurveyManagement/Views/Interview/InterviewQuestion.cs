@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public InterviewQuestion(Guid id):this()
         {
             this.Id = id;
-        }
+        } 
 
         public Guid Id { get; set; }
         public object Answer { get;  set; }
@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     [Flags]
     public enum QuestionState
     {
-        Valid = 0,
+        Valid = 8,
         Enabled = 1,
         Flagged = 2,
         Answered = 4
