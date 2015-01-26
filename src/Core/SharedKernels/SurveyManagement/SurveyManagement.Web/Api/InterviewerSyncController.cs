@@ -173,7 +173,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpGet]
         [ApiBasicAuth]
-        public string GetPacakgeIdByTimeStamp(long timestamp)
+        public string GetPackageIdByTimeStamp(long timestamp)
         {
             return this.syncManager.GetPackageIdByTimestamp(new DateTime(timestamp));
         }
