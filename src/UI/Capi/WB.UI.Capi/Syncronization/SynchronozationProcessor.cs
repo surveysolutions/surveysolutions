@@ -76,7 +76,7 @@ namespace WB.UI.Capi.Syncronization
             do
             {
                 this.OnStatusChanged(
-                    new SynchronizationEventArgsWithPercent("Receiving list of packageIdStorage to download",
+                    new SynchronizationEventArgsWithPercent("Receiving list of packageIds to download",
                         Operation.Pull, true, 0));
 
                 remoteChuncksForDownload = await this.synchronizationService.GetChunksAsync(credentials: credentials, lastKnownPackageId: lastKnownPackageId);
