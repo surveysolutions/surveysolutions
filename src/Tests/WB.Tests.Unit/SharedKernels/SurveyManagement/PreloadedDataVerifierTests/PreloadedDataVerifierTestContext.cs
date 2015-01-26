@@ -8,8 +8,8 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
@@ -35,16 +35,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                 : new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(questionnaireDocument, 1));
             return
                 new PreloadedDataVerifier(
-                    Mock.Of<IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned>>(
+                    Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(
                         _ =>
-                            _.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()) == (questionnaireDocument != null
+                            _.GetById(Moq.It.IsAny<string>()) == (questionnaireDocument != null
                                 ? new QuestionnaireDocumentVersioned() { Questionnaire = questionnaireDocument }
                                 : null)),
-                    Mock.Of<IVersionedReadSideRepositoryReader<QuestionnaireExportStructure>>(
+                    Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(
                         _ =>
-                            _.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()) == questionnaireExportStructure),
-                    Mock.Of<IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure>>(
-                        _ => _.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()) == questionnaireRosterStructure),
+                            _.GetById(Moq.It.IsAny<string>()) == questionnaireExportStructure),
+                    Mock.Of<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(
+                        _ => _.GetById(Moq.It.IsAny<string>()) == questionnaireRosterStructure),
                     Mock.Of<IPreloadedDataServiceFactory>(
                         _ =>
                             _.CreatePreloadedDataService(Moq.It.IsAny<QuestionnaireExportStructure>(), Moq.It.IsAny<QuestionnaireRosterStructure>(), Moq.It.IsAny<QuestionnaireDocument>()) ==
