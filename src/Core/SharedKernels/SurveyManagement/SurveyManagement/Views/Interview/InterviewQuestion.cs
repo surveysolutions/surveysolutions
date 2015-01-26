@@ -7,12 +7,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     {
         public InterviewQuestion()
         {
-            this.QuestionState = QuestionState.Valid | QuestionState.Enabled;
         }
              
         public InterviewQuestion(Guid id):this()
         {
             this.Id = id;
+            this.QuestionState = QuestionState.Valid | QuestionState.Enabled;
         } 
 
         public Guid Id { get; set; }
