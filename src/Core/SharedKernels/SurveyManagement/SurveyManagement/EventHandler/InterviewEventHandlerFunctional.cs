@@ -182,10 +182,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return UpdateQuestion(interview, vector, questionId, (question) =>
             {
                 if (disabled)
-                    question.QuestionState = question.QuestionState | QuestionState.Enabled;
-                else
                     question.QuestionState &= ~QuestionState.Enabled;
-            
+                else
+                    question.QuestionState = question.QuestionState | QuestionState.Enabled;
             });
         }
 
@@ -194,7 +193,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return UpdateQuestion(interview, vector, questionId, (question) =>
             {
                 if (invalid)
-                     question.QuestionState &= ~QuestionState.Valid; 
+                    question.QuestionState &= ~QuestionState.Valid; 
                 else
                     question.QuestionState = question.QuestionState | QuestionState.Valid;
             });
