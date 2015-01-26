@@ -157,7 +157,7 @@ namespace WB.Core.Synchronization.SyncStorage
         {
             var settings = new JsonSerializerSettings
                 {
-                    TypeNameHandling = TypeNameHandling.All, 
+                    TypeNameHandling = TypeNameHandling.Auto, 
                     NullValueHandling = NullValueHandling.Ignore
                 };
 
