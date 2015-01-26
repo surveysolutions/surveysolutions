@@ -12,9 +12,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 {
     public class ChartStatisticsViewFactory : IChartStatisticsViewFactory
     {
-        private readonly IReadSideRepositoryReader<StatisticsGroupedByDateAndTemplate> statisticsReader;
+        private readonly IReadSideKeyValueStorage<StatisticsGroupedByDateAndTemplate> statisticsReader;
 
-        public ChartStatisticsViewFactory(IReadSideRepositoryReader<StatisticsGroupedByDateAndTemplate> statisticsReader)
+        public ChartStatisticsViewFactory(IReadSideKeyValueStorage<StatisticsGroupedByDateAndTemplate> statisticsReader)
         {
             this.statisticsReader = statisticsReader;
         }

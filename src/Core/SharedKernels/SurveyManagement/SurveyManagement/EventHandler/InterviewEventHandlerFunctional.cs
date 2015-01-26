@@ -4,13 +4,13 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -27,9 +27,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     internal class InterviewEventHandlerFunctional :
         AbstractFunctionalEventHandler<InterviewData, IReadSideKeyValueStorage<InterviewData>>,
-        ICreateHandler<InterviewData, InterviewCreated>,
-        ICreateHandler<InterviewData, InterviewFromPreloadedDataCreated>,
-        ICreateHandler<InterviewData, InterviewOnClientCreated>,
+        IUpdateHandler<InterviewData, InterviewCreated>,
+        IUpdateHandler<InterviewData, InterviewFromPreloadedDataCreated>,
+        IUpdateHandler<InterviewData, InterviewOnClientCreated>,
         IUpdateHandler<InterviewData, InterviewStatusChanged>,
         IUpdateHandler<InterviewData, SupervisorAssigned>,
         IUpdateHandler<InterviewData, InterviewerAssigned>,
@@ -61,10 +61,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewData, FlagSetToAnswer>,
         IUpdateHandler<InterviewData, InterviewDeclaredInvalid>,
         IUpdateHandler<InterviewData, InterviewDeclaredValid>,
-        IDeleteHandler<InterviewData, InterviewHardDeleted>
+        IUpdateHandler<InterviewData, InterviewHardDeleted>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures;
+        private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures;
 
 
         public override object[] Readers
@@ -140,25 +140,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 interview.Levels[levelKey] = new InterviewLevel(scope.ScopeVector, sortIndex, newVector);
             else
                 interview.Levels[levelKey].ScopeVectors[scope.ScopeVector] = sortIndex;
-
-            var level = interview.Levels[levelKey];
-            foreach (var rosterGroupsWithTitleQuestionPair in scope.RosterIdToRosterTitleQuestionIdMap)
-            {
-                if (rosterGroupsWithTitleQuestionPair.Value != null)
-                {
-                    if (!level.RosterTitleQuestionIdToRosterIdMap.ContainsKey(
-                        rosterGroupsWithTitleQuestionPair.Value.QuestionId))
-                    {
-                        level.RosterTitleQuestionIdToRosterIdMap.Add(
-                            rosterGroupsWithTitleQuestionPair.Value.QuestionId, new List<Guid>());
-                    }
-
-                    level.RosterTitleQuestionIdToRosterIdMap[rosterGroupsWithTitleQuestionPair.Value.QuestionId].Add(rosterGroupsWithTitleQuestionPair.Key);
-
-                    level.RosterTitleQuestionDescriptions[rosterGroupsWithTitleQuestionPair.Value.QuestionId] =
-                        rosterGroupsWithTitleQuestionPair.Value;
-                }
-            }
         }
 
         private decimal[] CreateNewVector(decimal[] outerScopePropagationVector, decimal indexInScope)
@@ -200,7 +181,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             return UpdateQuestion(interview, vector, questionId, (question) =>
             {
-                question.Disabled = disabled;
+                if (disabled)
+                    question.QuestionState &= ~QuestionState.Enabled;
+                else
+                    question.QuestionState = question.QuestionState | QuestionState.Enabled;
             });
         }
 
@@ -208,7 +192,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             return UpdateQuestion(interview, vector, questionId, (question) =>
             {
-                question.Invalid = invalid;
+                if (invalid)
+                    question.QuestionState &= ~QuestionState.Valid; 
+                else
+                    question.QuestionState = question.QuestionState | QuestionState.Valid;
             });
         }
 
@@ -219,33 +206,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 var answeredQuestion = level.GetOrCreateQuestion(questionId);
 
                 answeredQuestion.Answer = answer;
-                answeredQuestion.IsAnswered = true;
 
-                if (level.RosterTitleQuestionIdToRosterIdMap.ContainsKey(questionId))
-                {
-                    var groupIds = level.RosterTitleQuestionIdToRosterIdMap[questionId];
-
-                    var questionDescription = level.RosterTitleQuestionDescriptions.ContainsKey(questionId)
-                        ? level.RosterTitleQuestionDescriptions[questionId]
-                        : null;
-
-                    var answerString =
-                        questionDescription != null && questionDescription.Options.Any()
-                            ? AnswerUtils.AnswerToString(answer, value => questionDescription.Options[value])
-                            : AnswerUtils.AnswerToString(answer);
-
-                    foreach (var groupId in groupIds)
-                    {
-                        if (level.RosterRowTitles.ContainsKey(groupId))
-                        {
-                            level.RosterRowTitles[groupId] = answerString;
-                        }
-                        else
-                        {
-                            level.RosterRowTitles.Add(groupId, answerString);
-                        }
-                    }
-                }
+                answeredQuestion.QuestionState = answeredQuestion.QuestionState | QuestionState.Answered;
             });
         }
 
@@ -253,7 +215,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             return UpdateQuestion(interview, vector, questionId, (question) =>
             {
-                question.IsFlagged = isFlagged;
+                if (isFlagged)
+                    question.QuestionState = question.QuestionState | QuestionState.Flagged;
+                else
+                    question.QuestionState &= ~QuestionState.Flagged;
             });
         }
 
@@ -284,7 +249,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         }
 
         public InterviewEventHandlerFunctional(IReadSideRepositoryWriter<UserDocument> users,
-            IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures,
+            IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures,
             IReadSideKeyValueStorage<InterviewData> interviewData)
             : base(interviewData)
         {
@@ -292,7 +257,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.questionnriePropagationStructures = questionnriePropagationStructures;
         }
 
-        public InterviewData Create(IPublishedEvent<InterviewCreated> evnt)
+        public InterviewData Update(InterviewData currentState, IPublishedEvent<InterviewCreated> evnt)
         {
             return this.CreateViewWithSequence(evnt.Payload.UserId, evnt.EventSourceId,
                 evnt.EventTimeStamp, evnt.Payload.QuestionnaireId,
@@ -300,7 +265,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 evnt.EventSequence, false);
         }
 
-        public InterviewData Create(IPublishedEvent<InterviewFromPreloadedDataCreated> evnt)
+        public InterviewData Update(InterviewData currentState, IPublishedEvent<InterviewFromPreloadedDataCreated> evnt)
         {
             return this.CreateViewWithSequence(evnt.Payload.UserId, evnt.EventSourceId,
                 evnt.EventTimeStamp, evnt.Payload.QuestionnaireId,
@@ -308,7 +273,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 evnt.EventSequence, false);
         }
 
-        public InterviewData Create(IPublishedEvent<InterviewOnClientCreated> evnt)
+        public InterviewData Update(InterviewData currentState, IPublishedEvent<InterviewOnClientCreated> evnt)
         {
             return this.CreateViewWithSequence(evnt.Payload.UserId, evnt.EventSourceId,
                  evnt.EventTimeStamp, evnt.Payload.QuestionnaireId,
@@ -367,7 +332,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<RosterInstancesAdded> evnt)
         {
-            var questionnarie = this.questionnriePropagationStructures.GetById(currentState.QuestionnaireId, currentState.QuestionnaireVersion);
+            var questionnarie = this.questionnriePropagationStructures.AsVersioned().Get(currentState.QuestionnaireId.FormatGuid(), currentState.QuestionnaireVersion);
 
             foreach (var instance in evnt.Payload.Instances)
             {
@@ -383,7 +348,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public InterviewData Update(InterviewData currentState, IPublishedEvent<RosterInstancesRemoved> evnt)
         {
 
-            var questionnarie = this.questionnriePropagationStructures.GetById(currentState.QuestionnaireId, currentState.QuestionnaireVersion);
+            var questionnarie = this.questionnriePropagationStructures.AsVersioned().Get(currentState.QuestionnaireId.FormatGuid(), currentState.QuestionnaireVersion);
             foreach (var instance in evnt.Payload.Instances)
             {
                 var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(currentState, instance.GroupId, questionnarie);
@@ -399,7 +364,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public InterviewData Update(InterviewData currentState, IPublishedEvent<GroupPropagated> evnt)
         {
 
-            var questionnarie = this.questionnriePropagationStructures.GetById(currentState.QuestionnaireId, currentState.QuestionnaireVersion);
+            var questionnarie = this.questionnriePropagationStructures.AsVersioned().Get(currentState.QuestionnaireId.FormatGuid(), currentState.QuestionnaireVersion);
             var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(currentState,
                                                           evnt.Payload.GroupId, questionnarie);
             List<string> keysOfLevelsByScope =
@@ -519,7 +484,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     (document, question) => UpdateQuestion(document, question.RosterVector, question.Id, updatedQuestion =>
                     {
                         updatedQuestion.Answer = null;
-                        updatedQuestion.IsAnswered = false;
+
+                        updatedQuestion.QuestionState &= ~QuestionState.Answered;
                     }));
         }
 
@@ -627,9 +593,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return currentState;
         }
 
-        public InterviewData Delete(InterviewData currentState, IPublishedEvent<InterviewHardDeleted> evnt)
+        public InterviewData Update(InterviewData currentState, IPublishedEvent<InterviewHardDeleted> evnt)
         {
-            return currentState;
+            return null;
         }
     }
 }

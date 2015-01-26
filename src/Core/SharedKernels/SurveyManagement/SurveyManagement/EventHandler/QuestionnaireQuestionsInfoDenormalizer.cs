@@ -15,10 +15,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     public class QuestionnaireQuestionsInfoDenormalizer : BaseDenormalizer, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>
     {
-        private readonly IReadSideRepositoryWriter<QuestionnaireQuestionsInfo> questionnaires;
+        private readonly IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> questionnaires;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
-        public QuestionnaireQuestionsInfoDenormalizer(IReadSideRepositoryWriter<QuestionnaireQuestionsInfo> questionnaires, IPlainQuestionnaireRepository plainQuestionnaireRepository)
+        public QuestionnaireQuestionsInfoDenormalizer(IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> questionnaires, IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.questionnaires = questionnaires;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;

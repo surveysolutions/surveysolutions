@@ -14,7 +14,6 @@ using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
@@ -33,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Questionnai
         {
             questionnaireId = Guid.NewGuid();
             questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId };
-            questionnaireExportStructureMock=new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>>();
+            questionnaireExportStructureMock = new Mock<IReadSideKeyValueStorage<QuestionnaireExportStructure>>();
             dataExportServiceMock = new Mock<IDataExportRepositoryWriter>();
             exportViewFactory = new Mock<IExportViewFactory>();
 
@@ -45,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Questionnai
           questionnaireExportStructureDenormalizer.Handle(CreatePublishableEvent());
 
         It should_QuestionnaireExportStructure_be_stored_readside = () =>
-            questionnaireExportStructureMock.Verify(x => x.Store(Moq.It.IsAny<QuestionnaireExportStructure>(), questionnaireId.FormatGuid()),
+            questionnaireExportStructureMock.Verify(x => x.Store(Moq.It.IsAny<QuestionnaireExportStructure>(), questionnaireId.FormatGuid() + "$" + QuestionnaireVersion.ToString()),
                 Times.Once());
 
         It should_QuestionnaireExportStructure_be_stored_by_IDataExportService = () =>
@@ -66,7 +65,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Questionnai
         }
 
         private static QuestionnaireExportStructureDenormalizer questionnaireExportStructureDenormalizer;
-        private static Mock<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>> questionnaireExportStructureMock;
+        private static Mock<IReadSideKeyValueStorage<QuestionnaireExportStructure>> questionnaireExportStructureMock;
         private static Mock<IDataExportRepositoryWriter> dataExportServiceMock;
         private static Mock<IExportViewFactory> exportViewFactory;
         private static Guid questionnaireId;

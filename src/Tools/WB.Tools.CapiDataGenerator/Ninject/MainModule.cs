@@ -45,8 +45,6 @@ using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.Infrastructure.Storage.Raven.Implementation;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
-using WB.Core.SharedKernels.DataCollection.Implementation.ReadSide;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -66,7 +64,7 @@ namespace CapiDataGenerator
         private readonly RavenConnectionSettings headquartersSettings;
         private readonly RavenConnectionSettings supervisorSettings;
 
-        private IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> capiTemplateVersionedWriter;
+        private IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> capiTemplateVersionedWriter;
 
         public MainModelModule(RavenConnectionSettings headquartersSettings, RavenConnectionSettings supervisorSettings)
         {
@@ -98,7 +96,7 @@ namespace CapiDataGenerator
                 environmentalPersonalFolderPath);
 
             var capiTemplateWriter = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>(this.Kernel.Get<IJsonUtils>());
-            this.capiTemplateVersionedWriter = new VersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>(capiTemplateWriter);
+            this.capiTemplateVersionedWriter = capiTemplateWriter;
             
             ClearCapiDb(capiEvenStore, denormalizerStore, plainStore, changeLogStore, capiTemplateWriter);
 

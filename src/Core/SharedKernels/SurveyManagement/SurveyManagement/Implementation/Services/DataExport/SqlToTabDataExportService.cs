@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -25,11 +26,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly ISqlDataAccessor sqlDataAccessor;
         private readonly string parentId = "ParentId";
 
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter;
+        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter;
 
         public SqlToTabDataExportService(IFileSystemAccessor fileSystemAccessor, ISqlServiceFactory sqlServiceFactory,
             ICsvWriterFactory csvWriterFactory, ISqlDataAccessor sqlDataAccessor,
-            IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter)
+            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter)
         {
             this.sqlServiceFactory = sqlServiceFactory;
             this.csvWriterFactory = csvWriterFactory;
@@ -42,7 +43,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public void CreateHeaderStructureForPreloadingForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string targetFolder)
         {
-            var structure = questionnaireExportStructureWriter.GetById(questionnaireId, questionnaireVersion);
+            var structure = questionnaireExportStructureWriter.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
 
             if (structure == null)
                 return;
@@ -158,7 +159,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private string[] ExportToTabFile(Guid questionnaireId, long questionnaireVersion, string basePath, string dbPath,
             InterviewExportedAction? action = null)
         {
-            var structure = questionnaireExportStructureWriter.GetById(questionnaireId, questionnaireVersion);
+            var structure = questionnaireExportStructureWriter.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
 
             if (structure == null)
                 return new string[0];

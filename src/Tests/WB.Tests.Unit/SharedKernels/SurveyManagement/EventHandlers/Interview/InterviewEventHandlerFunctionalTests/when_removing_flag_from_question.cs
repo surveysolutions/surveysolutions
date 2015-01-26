@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
         Because of = () => viewData = eventHandler.Update(viewData, CreatePublishableEvent(new FlagRemovedFromAnswer(userId, questionId, Empty.RosterVector)));
 
-        It should_remove_flag_from_question = () => GetQuestion(questionId, viewData).IsFlagged.ShouldBeFalse();
+        It should_remove_flag_from_question = () => GetQuestion(questionId, viewData).IsFlagged().ShouldBeFalse();
 
         static InterviewEventHandlerFunctional eventHandler;
         static InterviewData viewData;

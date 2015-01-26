@@ -5,8 +5,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons
 {
     public class QuestionnaireSharedPersonsFactory : IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons>
     {
-        private readonly IQueryableReadSideRepositoryReader<QuestionnaireSharedPersons> _repository;
-        public QuestionnaireSharedPersonsFactory(IQueryableReadSideRepositoryReader<QuestionnaireSharedPersons> repository)
+        private readonly IReadSideRepositoryReader<QuestionnaireSharedPersons> _repository;
+        public QuestionnaireSharedPersonsFactory(IReadSideRepositoryReader<QuestionnaireSharedPersons> repository)
         {
             this._repository = repository;
         }

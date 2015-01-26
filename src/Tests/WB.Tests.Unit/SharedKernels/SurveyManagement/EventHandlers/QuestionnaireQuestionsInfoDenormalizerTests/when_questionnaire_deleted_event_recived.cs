@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Questionnai
     {
         Establish context = () =>
         {
-            questionnaireQuestionsInfoWriter = new Mock<IReadSideRepositoryWriter<QuestionnaireQuestionsInfo>>();
+            questionnaireQuestionsInfoWriter = new Mock<IReadSideKeyValueStorage<QuestionnaireQuestionsInfo>>();
             denormalizer = CreateQuestionnaireQuestionsInfoDenormalizer(questionnaireQuestionsInfoWriter.Object);
             evnt = CreateQuestionnaireDeletedEvent(questionnaireId,2);
         };
@@ -37,6 +37,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Questionnai
         private static Guid questionnaireId = Guid.Parse("33332222111100000000111122223333");
         private static QuestionnaireQuestionsInfoDenormalizer denormalizer;
         private static IPublishedEvent<QuestionnaireDeleted> evnt;
-        private static Mock<IReadSideRepositoryWriter<QuestionnaireQuestionsInfo>> questionnaireQuestionsInfoWriter;
+        private static Mock<IReadSideKeyValueStorage<QuestionnaireQuestionsInfo>> questionnaireQuestionsInfoWriter;
     }
 }

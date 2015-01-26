@@ -59,12 +59,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<InterviewOnClientCreated>,
         IEventHandler<InterviewStatusChanged>
     {
-        private readonly IReadSideRepositoryWriter<StatisticsGroupedByDateAndTemplate> statisticsStorage;
-        private readonly IReadSideRepositoryWriter<InterviewDetailsForChart> interviewDetailsStorage;
+        private readonly IReadSideKeyValueStorage<StatisticsGroupedByDateAndTemplate> statisticsStorage;
+        private readonly IReadSideKeyValueStorage<InterviewDetailsForChart> interviewDetailsStorage;
 
         public InterviewsChartDenormalizer(
-            IReadSideRepositoryWriter<InterviewDetailsForChart> interviewDetailsStorage,
-            IReadSideRepositoryWriter<StatisticsGroupedByDateAndTemplate> statisticsStorage)
+            IReadSideKeyValueStorage<InterviewDetailsForChart> interviewDetailsStorage,
+            IReadSideKeyValueStorage<StatisticsGroupedByDateAndTemplate> statisticsStorage)
         {
             this.interviewDetailsStorage = interviewDetailsStorage;
             this.statisticsStorage = statisticsStorage;

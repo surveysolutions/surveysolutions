@@ -59,7 +59,7 @@ namespace WB.Tests.Integration.InterviewStatistics
         private static Guid interviewId = Guid.Parse("22222222222222222222222222222222");
         private static DateTime eventDate = new DateTime(2014, 9, 1, 12, 48, 35);
         private static Guid userId = Guid.Parse("11111111111111111111111111111111");
-        private static IReadSideRepositoryWriter<InterviewDetailsForChart> interviewDetailsStorage;
+        private static IReadSideKeyValueStorage<InterviewDetailsForChart> interviewDetailsStorage;
         private static InMemoryReadSideRepositoryAccessor<StatisticsGroupedByDateAndTemplate> statisticsStorage;
     }
 }

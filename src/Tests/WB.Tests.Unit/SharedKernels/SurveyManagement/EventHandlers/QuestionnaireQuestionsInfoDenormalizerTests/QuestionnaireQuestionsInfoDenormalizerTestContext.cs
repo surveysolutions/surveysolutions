@@ -48,10 +48,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Questionnai
             }, questionnaireId);
         }
 
-        protected static QuestionnaireQuestionsInfoDenormalizer CreateQuestionnaireQuestionsInfoDenormalizer(IReadSideRepositoryWriter<QuestionnaireQuestionsInfo> questionnaires = null)
+        protected static QuestionnaireQuestionsInfoDenormalizer CreateQuestionnaireQuestionsInfoDenormalizer(IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> questionnaires = null)
         {
             return new QuestionnaireQuestionsInfoDenormalizer(
-                questionnaires ?? Mock.Of<IReadSideRepositoryWriter<QuestionnaireQuestionsInfo>>(),
+                questionnaires ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireQuestionsInfo>>(),
                 Mock.Of<IPlainQuestionnaireRepository>());
         }
 

@@ -43,14 +43,9 @@ namespace WB.Core.Infrastructure.Storage.Raven
 
 
           //  this.Kernel.Bind(typeof(FilesStoreRepositoryAccessor<>)).ToSelf().InSingletonScope();
-            this.Kernel.Bind(typeof(RavenDataStoreRepositoryAccessor<>)).ToSelf().InSingletonScope();
-            this.Kernel.Bind(typeof(IReadSideKeyValueStorage<>)).ToMethod(this.GetKeyValueStorage);
+            //this.Kernel.Bind(typeof(RavenFilesStoreRepositoryAccessor<>)).ToSelf().InSingletonScope();
+            //this.Kernel.Bind(typeof(IReadSideKeyValueStorage<>)).ToMethod(this.GetKeyValueStorage);
 
-        }
-
-        protected object GetKeyValueStorage(IContext context)
-        {
-            return this.Kernel.Get(typeof(RavenDataStoreRepositoryAccessor<>).MakeGenericType(context.GenericArguments[0]));
         }
 
         protected object GetReadSideRepositoryWriter(IContext context)
