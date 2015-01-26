@@ -123,10 +123,15 @@ namespace WB.UI.Capi.Syncronization
 
         private async Task MigrateOldSyncTimestampToId()
         {
-            if (!string.IsNullOrEmpty(this.interviewerSettings.GetLastReceivedPackageId()))
+            string lastReceivedPackageId = this.interviewerSettings.GetLastReceivedPackageId();
+            
+
+            if (!string.IsNullOrEmpty(lastReceivedPackageId))
             {
+                this.logger.Warn(string.Format("Migration of old version of sync. Last received package id: {0}", lastReceivedPackageId));
+
                 long lastReceivedPackageIdOfLongType;
-                if (!long.TryParse(this.interviewerSettings.GetLastReceivedPackageId(), out lastReceivedPackageIdOfLongType))
+                if (!long.TryParse(lastReceivedPackageId, out lastReceivedPackageIdOfLongType))
                     return;
                 this.OnStatusChanged(new SynchronizationEventArgs("Tablet had old installation. Migrating pacakge timestamp to it's id", Operation.Pull, true));
                 string lastReceivedChunkId = await this.synchronizationService.GetChunkIdByTimestampAsync(timestamp: lastReceivedPackageIdOfLongType, credentials: credentials);
