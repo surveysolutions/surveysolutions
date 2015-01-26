@@ -196,6 +196,15 @@ namespace WB.UI.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to prefilled questions.
+        /// </summary>
+        internal static string PrefilledQuestionsSubTitle {
+            get {
+                return ResourceManager.GetString("PrefilledQuestionsSubTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Timeout when connecting to &apos;Designer&apos; website. Check your internet connection.
         /// </summary>
         internal static string RequestTimeout {
