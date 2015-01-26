@@ -78,7 +78,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             catch (Exception e)
             {
                 //if state is saved as event but denormalizer failed we won't delete file
-                this.logger.Error("Error occured during applying interview after synchronization", e);
+                this.logger.Error(string.Format("Error occured during applying interview after synchronization. Item key: {0}", itemKey), e);
                 throw;
             }
             finally
