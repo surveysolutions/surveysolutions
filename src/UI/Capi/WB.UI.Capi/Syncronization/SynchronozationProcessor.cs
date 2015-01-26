@@ -112,7 +112,7 @@ namespace WB.UI.Capi.Syncronization
                 }
                 catch (Exception e)
                 {
-                    this.logger.Error(string.Format("Chunk {0} wasn't processed", chunk), e);
+                    this.logger.Error(string.Format("Chunk {0} wasn't processed", chunk.Id), e);
                     throw;
                 }
 
