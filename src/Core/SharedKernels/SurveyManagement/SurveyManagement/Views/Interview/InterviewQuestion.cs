@@ -7,22 +7,46 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     {
         public InterviewQuestion()
         {
-            this.Invalid = false;
-            this.Disabled = false;
-            this.IsAnswered = false;
-            this.Comments = new List<InterviewQuestionComment>();
         }
-        public InterviewQuestion(Guid id):this()
+        
+             
+        public InterviewQuestion(Guid id)
         {
             this.Id = id;
         }
 
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
         public object Answer { get;  set; }
         public List<InterviewQuestionComment> Comments { get; set; }
-        public bool Invalid { get;  set; }
-        public bool Disabled { get;  set; }
-        public bool IsFlagged { get; set; }
-        public bool IsAnswered { get; set; }
+        public QuestionState QuestionState { get; set; }
+
+        public bool IsInValid()
+        {
+            return !QuestionState.HasFlag(QuestionState.Valid);
+        }
+
+        public bool IsDisabled()
+        {
+            return !QuestionState.HasFlag(QuestionState.Enabled);
+        }
+
+        public bool IsFlagged()
+        {
+            return QuestionState.HasFlag(QuestionState.Flagged);
+        }
+
+        public bool IsAnswered()
+        {
+            return QuestionState.HasFlag(QuestionState.Answered);
+        }
+    }
+
+    [Flags]
+    public enum QuestionState
+    {
+        Valid = 0,
+        Enabled = 1,
+        Flagged = 2,
+        Answered = 4
     }
 }
