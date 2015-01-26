@@ -58,16 +58,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                     {
                         answeredQuestions.Add(answeredQuestion);
                     }
-                    if (!interviewQuestion.IsDisabled())
+                    if (interviewQuestion.IsDisabled())
                     {
                         disabledQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.RosterVector));
                     }
 
-                    if (!interviewQuestion.IsInvalid())
+                    if (interviewQuestion.IsInvalid())
                     {
                         invalidQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.RosterVector));
                     }
-                    if (interviewQuestion.IsInvalid())
+                    if (!interviewQuestion.IsInvalid())
                     {
                         validQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.RosterVector));
                     }

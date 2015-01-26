@@ -299,7 +299,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             if (interviewQuestion == null)
                 return null;
 
-            if (interviewQuestion.Disabled)
+            if (interviewQuestion.IsDisabled())
                 return null;
 
             return GetFormattedAnswerForTitleSubstitution(interviewQuestion, questionnaire, getAvailableOptions);
@@ -375,7 +375,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                 allAvailableLevelsByScope.ToDictionary(interviewLevel => interviewLevel.RosterVector,
                     interviewLevel => interviewLevel.GetQuestion(optionsSource.ReferencedQuestionId));
 
-            return allLinkedQuestions.Where(question => question.Value != null && !question.Value.Disabled && question.Value.Answer != null)
+            return allLinkedQuestions.Where(question => question.Value != null && !question.Value.IsDisabled() && question.Value.Answer != null)
                 .ToDictionary(question => question.Key,
                     question =>
                         CreateLinkedQuestionOption(question.Value, question.Key, questionRosterVector, optionsSource, questionnaireRosters,

@@ -181,7 +181,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             return UpdateQuestion(interview, vector, questionId, (question) =>
             {
-                if (newState)
+                if (disabled)
                     question.QuestionState = question.QuestionState | QuestionState.Enabled;
                 else
                     question.QuestionState &= ~QuestionState.Enabled;
@@ -193,10 +193,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             return UpdateQuestion(interview, vector, questionId, (question) =>
             {
-                if (valid)
-                    question.QuestionState = question.QuestionState | QuestionState.Valid;
+                if (invalid)
+                     question.QuestionState &= ~QuestionState.Valid; 
                 else
-                    question.QuestionState &= ~QuestionState.Valid; 
+                    question.QuestionState = question.QuestionState | QuestionState.Valid;
             });
         }
 

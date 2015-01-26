@@ -7,10 +7,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     {
         public InterviewQuestion()
         {
+            this.QuestionState = QuestionState.Valid | QuestionState.Enabled;
         }
-        
              
-        public InterviewQuestion(Guid id)
+        public InterviewQuestion(Guid id):this()
         {
             this.Id = id;
         }
@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public List<InterviewQuestionComment> Comments { get; set; }
         public QuestionState QuestionState { get; set; }
 
-        public bool IsInValid()
+        public bool IsInvalid()
         {
             return !QuestionState.HasFlag(QuestionState.Valid);
         }
