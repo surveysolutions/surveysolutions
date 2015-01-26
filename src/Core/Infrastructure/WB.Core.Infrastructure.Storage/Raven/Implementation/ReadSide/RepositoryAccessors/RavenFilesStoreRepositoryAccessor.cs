@@ -22,7 +22,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors
 {
-    internal class RavenFilesStoreRepositoryAccessor<TEntity> : IReadSideKeyValueStorage<TEntity>, IReadSideRepositoryWriter, IReadSideRepositoryCleaner, IDisposable
+    internal class RavenFilesStoreRepositoryAccessor<TEntity> : IReadSideKeyValueStorage<TEntity>, IReadSideRepositoryWriter, IReadSideRepositoryCleaner
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly ILogger logger;
@@ -32,14 +32,12 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         private readonly Dictionary<string, TEntity> cache = new Dictionary<string, TEntity>();
         private readonly IAdditionalDataService<TEntity> additionalDataService;
         private bool isCacheEnabled = false;
-        private readonly RavenFilesStoreRepositoryAccessorSettings ravenFilesStoreRepositoryAccessorSettings;
         private readonly IFilesStore ravenFilesStore;
         private readonly JsonSerializerSettings jsonSerializerSettings;
 
         public RavenFilesStoreRepositoryAccessor(ILogger logger, IFilesStore ravenFileStore)
         {
             this.logger = logger;
-            this.ravenFilesStoreRepositoryAccessorSettings = ravenFilesStoreRepositoryAccessorSettings;
             this.ravenFilesStore = this.CreateRavenFilesStore();
 
             this.jsonSerializerSettings = new JsonSerializerSettings
@@ -56,8 +54,6 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             return
                 new FilesStore()
                 {
-                    Url = ravenFilesStoreRepositoryAccessorSettings.Url,
-                    DefaultFileSystem = ravenFilesStoreRepositoryAccessorSettings.RavenFileSystemName
                 }.Initialize(true);
         }
 
@@ -141,7 +137,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         {
             List<FileHeader> filesToDelete = AsyncContext.Run(() =>
             {
-                using (var fileSession = ravenFileStore.OpenAsyncSession())
+                using (var fileSession = ravenFilesStore.OpenAsyncSession())
                 {
                     return fileSession.Query().Where(string.Format("__directoryName: /{0}", ViewType.Name)).ToListAsync();
                 }
@@ -149,32 +145,8 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
             foreach (var fileHeader in filesToDelete)
             {
-                ravenFileStore.AsyncFilesCommands.DeleteAsync(this.CreateFileStoreEntityId(fileHeader.Name)).WaitAndUnwrapException();
+                ravenFilesStore.AsyncFilesCommands.DeleteAsync(this.CreateFileStoreEntityId(fileHeader.Name)).WaitAndUnwrapException();
             }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        ~RavenFilesStoreRepositoryAccessor()
-        {
-            Dispose(false);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (this.disposed)
-                return;
-
-            if (disposing)
-            {
-                this.ravenFileStore.Dispose();
-            }
-
-            this.disposed = true;
         }
 
         private void StoreAllCachedEntitiesToRepository()
@@ -221,13 +193,13 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         private async Task<TEntity> GetEntityAvoidingCacheById(string entityId)
         {
             var fileEntityId = this.CreateFileStoreEntityId(entityId);
-            var headers = await ravenFileStore.AsyncFilesCommands.GetAsync(new[] { fileEntityId }).ConfigureAwait(false);
+            var headers = await ravenFilesStore.AsyncFilesCommands.GetAsync(new[] { fileEntityId }).ConfigureAwait(false);
             if (!headers.Any())
                 return null;
 
             using (
                 var stream =
-                    await ravenFileStore.AsyncFilesCommands.DownloadAsync(fileEntityId).ConfigureAwait(false))
+                    await ravenFilesStore.AsyncFilesCommands.DownloadAsync(fileEntityId).ConfigureAwait(false))
             {
                 using (var reader = new StreamReader(stream, encoding))
                 {
@@ -240,17 +212,17 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         {
             using (var memoryStream = new MemoryStream(encoding.GetBytes(GetItemAsContent(entity))))
             {
-                await ravenFileStore.AsyncFilesCommands.UploadAsync(this.CreateFileStoreEntityId(entityId), memoryStream).ConfigureAwait(false);
+                await ravenFilesStore.AsyncFilesCommands.UploadAsync(this.CreateFileStoreEntityId(entityId), memoryStream).ConfigureAwait(false);
             }
         }
 
         private async System.Threading.Tasks.Task RemoveAvoidingCache(string entityId)
         {
             var fileEntityId = this.CreateFileStoreEntityId(entityId);
-            var headers = await ravenFileStore.AsyncFilesCommands.GetAsync(new[] { fileEntityId }).ConfigureAwait(false);
+            var headers = await ravenFilesStore.AsyncFilesCommands.GetAsync(new[] { fileEntityId }).ConfigureAwait(false);
             if (!headers.Any())
                 return;
-            await ravenFileStore.AsyncFilesCommands.DeleteAsync(fileEntityId).ConfigureAwait(false);
+            await ravenFilesStore.AsyncFilesCommands.DeleteAsync(fileEntityId).ConfigureAwait(false);
         }
 
         private string CreateFileStoreEntityId(string id)
