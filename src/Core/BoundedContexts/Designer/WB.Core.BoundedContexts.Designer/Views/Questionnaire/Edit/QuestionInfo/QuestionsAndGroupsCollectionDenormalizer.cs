@@ -15,9 +15,9 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 {
     internal class QuestionsAndGroupsCollectionDenormalizer : AbstractFunctionalEventHandler<QuestionsAndGroupsCollectionView, IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView>>
-        , ICreateHandler<QuestionsAndGroupsCollectionView, NewQuestionnaireCreated>
-        , ICreateHandler<QuestionsAndGroupsCollectionView, QuestionnaireCloned>
-        , ICreateHandler<QuestionsAndGroupsCollectionView, TemplateImported>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, NewQuestionnaireCreated>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionnaireCloned>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, TemplateImported>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, NewQuestionAdded>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionChanged>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionCloned>
@@ -57,17 +57,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             this.questionnaireEntityFactory = questionnaireEntityFactory;
         }
 
-        public QuestionsAndGroupsCollectionView Create(IPublishedEvent<NewQuestionnaireCreated> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<NewQuestionnaireCreated> evnt)
         {
             return this.CreateStateWithAllQuestions(new QuestionnaireDocument());
         }
 
-        public QuestionsAndGroupsCollectionView Create(IPublishedEvent<QuestionnaireCloned> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<QuestionnaireCloned> evnt)
         {
             return this.CreateStateWithAllQuestions(evnt.Payload.QuestionnaireDocument);
         }
 
-        public QuestionsAndGroupsCollectionView Create(IPublishedEvent<TemplateImported> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<TemplateImported> evnt)
         {
             return this.CreateStateWithAllQuestions(evnt.Payload.Source);
         }

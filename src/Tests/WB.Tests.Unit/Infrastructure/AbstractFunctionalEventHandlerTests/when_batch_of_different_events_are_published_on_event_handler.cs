@@ -26,11 +26,8 @@ namespace WB.Tests.Unit.Infrastructure.AbstractFunctionalEventHandlerTests
         It should_readSideRepositoryWriters_method_Store_called_once = () =>
             readSideRepositoryWriterMock.Verify(x => x.Store(Moq.It.IsAny<IReadSideRepositoryEntity>(), eventSourceId.FormatGuid()), Times.Once());
 
-        It should_count_of_updates_be_equal_to_3= () =>
+        It should_count_of_updates_be_equal_to_3 = () =>
            testableFunctionalEventHandler.CountOfUpdates.ShouldEqual(3);
-
-        It should_count_of_creates_be_equal_to_1 = () =>
-          testableFunctionalEventHandler.CountOfCreate.ShouldEqual(1);
 
         private static TestableFunctionalEventHandler testableFunctionalEventHandler;
         private static Mock<IReadSideRepositoryWriter<IReadSideRepositoryEntity>> readSideRepositoryWriterMock;

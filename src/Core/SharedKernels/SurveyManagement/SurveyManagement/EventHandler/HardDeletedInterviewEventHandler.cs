@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
         }
 
-        public HardDeletedInterview Create(IPublishedEvent<InterviewHardDeleted> evnt)
+        public HardDeletedInterview Update(HardDeletedInterview currentState, IPublishedEvent<InterviewHardDeleted> evnt)
         {
             return new HardDeletedInterview() { InterviewId = evnt.EventSourceId };
         }

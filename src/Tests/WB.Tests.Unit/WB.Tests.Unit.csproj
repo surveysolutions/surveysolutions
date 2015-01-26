@@ -1258,7 +1258,6 @@
     <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\when_CleanWritersByEventSource_is_called_and_handler_has_more_then_one_writer.cs" />
     <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\when_CleanWritersByEventSource_is_called_and_handler_has_no_writers.cs" />
     <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\when_CleanWritersByEventSource_is_called_and_handler_has_writer_which_doesnt_support_cleaning.cs" />
-    <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\when_delete_handler_is_called.cs" />
     <Compile Include="Infrastructure\AbstractFunctionalEventHandlerTests\when_view_is_deleted_by_update_handler.cs" />
     <Compile Include="Infrastructure\Events\EventMergeUtilsTest.cs" />
     <Compile Include="Infrastructure\FileSystemIOAccessorTests\when_file_name_contains_invalid_characters.cs" />
@@ -1526,18 +1525,12 @@
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\AnswersByVariableDenormalizerTests\when_removing_answer_and_where_is_no_interview_brief_info.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\AnswersByVariableDenormalizerTests\when_removing_answer_and_where_is_no_question_id_to_variable_map.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\InterviewEventHandlerFunctionalTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_DateTimeQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_GeoLocationQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_GrpupPropagated_event_recived_and_new_roster_row_need_to_be_add.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_GrpupPropagated_event_recived_and_new_roster_row_need_to_be_removed.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_handling_answer_for_roster_title_text_question_that_is_title_.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_InterviewCreated_event_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_InterviewOnClientCreated_event_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_interview_is_assigned_to_interviewer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_interview_is_assigned_to_interviewer_in_RejectedByHQ_status.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_MultipleOptionsQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_NumericIntegerQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_NumericRealQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_PictureQuestionAnswered_received.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_QRBarcodeQuestionAnswered_received.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_adding_flag_to_question.cs" />
@@ -1546,9 +1539,6 @@
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_RosterRowRemoved_event_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_RosterRowRemoved_event_recived_for_disabled_group.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_RosterRowTitleChanged_event_recived.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_SingleOptionQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_TextListQuestionAnswered_recived.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_TextQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewExportedDataEventHandlerTests\InterviewExportedDataEventHandlerTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_AnswerCommented_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_AnswerSet_recived.cs" />

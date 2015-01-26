@@ -25,7 +25,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     internal class InterviewHistoryDenormalizer : AbstractFunctionalEventHandler<InterviewHistoryView, IReadSideRepositoryWriter<InterviewHistoryView>>,
-        ICreateHandler<InterviewHistoryView, SupervisorAssigned>,
+        IUpdateHandler<InterviewHistoryView, SupervisorAssigned>,
         IUpdateHandler<InterviewHistoryView, InterviewApprovedByHQ>,
         IUpdateHandler<InterviewHistoryView, InterviewerAssigned>,
         IUpdateHandler<InterviewHistoryView, InterviewStatusChanged>,
@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewHistoryView, PictureQuestionAnswered>,
         IUpdateHandler<InterviewHistoryView, AnswerCommented>,
         IUpdateHandler<InterviewHistoryView, InterviewDeleted>,
-        IDeleteHandler<InterviewHistoryView, InterviewHardDeleted>
+        IUpdateHandler<InterviewHistoryView, InterviewHardDeleted>
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
@@ -68,7 +68,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             get { return new object[] { interviewSummaryReader, userReader, questionnaireReader }; }
         }
 
-        public InterviewHistoryView Create(IPublishedEvent<SupervisorAssigned> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView currentState, IPublishedEvent<SupervisorAssigned> evnt)
         {
             var interviewSummary = interviewSummaryReader.GetById(evnt.EventSourceId);
             if (interviewSummary == null)
@@ -273,7 +273,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return view;
         }
 
-        public InterviewHistoryView Delete(InterviewHistoryView view, IPublishedEvent<InterviewHardDeleted> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewHardDeleted> evnt)
         {
             return null;
         }
