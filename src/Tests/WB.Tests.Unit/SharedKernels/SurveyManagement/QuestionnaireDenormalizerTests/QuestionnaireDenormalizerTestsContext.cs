@@ -24,9 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireDenormalizer
             return new QuestionnaireDenormalizer(
                 questionnaireDocumentStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
                 Mock.Of<IQuestionnaireCacheInitializer>(),
-                plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
-                assemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
-                interviews ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>());
+                plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>());
         }
 
         protected static IPublishedEvent<T> CreatePublishedEvent<T>(Guid questionnaireId, T evnt)

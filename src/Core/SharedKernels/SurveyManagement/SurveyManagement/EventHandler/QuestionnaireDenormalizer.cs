@@ -7,11 +7,9 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Services;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
@@ -19,23 +17,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<QuestionnaireDeleted>
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> documentStorage;
-        private readonly IReadSideRepositoryWriter<InterviewSummary> interviews;
         private readonly IQuestionnaireCacheInitializer questionnaireCacheInitializer;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
-        private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
 
         public QuestionnaireDenormalizer(
             IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> documentStorage, 
             IQuestionnaireCacheInitializer questionnaireCacheInitializer,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository, 
-            IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
-            IReadSideRepositoryWriter<InterviewSummary> interviews)
+            IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.documentStorage = documentStorage;
             this.questionnaireCacheInitializer = questionnaireCacheInitializer;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
-            this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
-            this.interviews = interviews;
         }
 
         public override object[] Writers
@@ -45,7 +37,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public override object[] Readers
         {
-            get { return new object[] { interviews }; }
+            get { return new object[] {}; }
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
@@ -70,13 +62,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
         {
             this.documentStorage.AsVersioned().Remove(evnt.EventSourceId.FormatGuid(), evnt.Payload.QuestionnaireVersion);
-
-         /*   var anyInterviewExists =
-                        interviews.Query(_ => _.Any(i =>!i.IsDeleted && i.QuestionnaireId == evnt.EventSourceId && i.QuestionnaireVersion == evnt.Payload.QuestionnaireVersion));
-            if (!anyInterviewExists)
-            {
-                this.questionnareAssemblyFileAccessor.RemoveAssembly(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
-            }*/
         }
 
         private void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument, bool allowCensusMode, DateTime timestamp)
