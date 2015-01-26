@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Questionnai
             importeDocument = CreateQuestionnaireDocumentWith7NumericQuestionsInDifferentRosters(questionnaireId,
                 textAId, textBId, textCId, textDId, textEId, textFId, textGId, textHId, textIId,
                 textAVar, textBVar, textCVar, textDVar, textEVar, textFVar, textGVar, textHVar, textIVar);
-            questionnaireQuestionsInfoWriter = new Mock<IReadSideRepositoryWriter<QuestionnaireQuestionsInfo>>();
+            questionnaireQuestionsInfoWriter = new Mock<IReadSideKeyValueStorage<QuestionnaireQuestionsInfo>>();
 
             questionnaireQuestionsInfoWriter
                 .Setup(x => x.Store(Moq.It.IsAny<QuestionnaireQuestionsInfo>(), "33332222111100000000111122223333-1"))
@@ -84,6 +84,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Questionnai
         private static string questionsInfoId;
         private static QuestionnaireQuestionsInfoDenormalizer denormalizer;
         private static IPublishedEvent<TemplateImported> evnt;
-        private static Mock<IReadSideRepositoryWriter<QuestionnaireQuestionsInfo>> questionnaireQuestionsInfoWriter;
+        private static Mock<IReadSideKeyValueStorage<QuestionnaireQuestionsInfo>> questionnaireQuestionsInfoWriter;
     }
 }

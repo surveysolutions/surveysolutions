@@ -15,9 +15,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<GeoLocationQuestionAnswered>,
         IEventHandler<AnswersRemoved>
     {
-        private readonly IReadSideRepositoryWriter<AnswersByVariableCollection> answersByVariableStorage;
+        private readonly IReadSideKeyValueStorage<AnswersByVariableCollection> answersByVariableStorage;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewBriefStorage;
-        private readonly IReadSideRepositoryWriter<QuestionnaireQuestionsInfo> variablesStorage;
+        private readonly IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> variablesStorage;
 
         public override object[] Writers
         {
@@ -30,8 +30,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         }
 
         public AnswersByVariableDenormalizer(IReadSideRepositoryWriter<InterviewSummary> interviewBriefStorage,
-            IReadSideRepositoryWriter<QuestionnaireQuestionsInfo> variablesStorage,
-            IReadSideRepositoryWriter<AnswersByVariableCollection> answersByVariableStorage)
+            IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> variablesStorage,
+            IReadSideKeyValueStorage<AnswersByVariableCollection> answersByVariableStorage)
         {
             this.interviewBriefStorage = interviewBriefStorage;
             this.variablesStorage = variablesStorage;

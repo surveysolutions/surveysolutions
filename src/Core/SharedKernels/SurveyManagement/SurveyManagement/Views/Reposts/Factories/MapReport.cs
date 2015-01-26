@@ -10,9 +10,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 {
     public class MapReport : IViewFactory<MapReportInputModel, MapReportView>
     {
-        private readonly IReadSideRepositoryReader<AnswersByVariableCollection> answersByVariableStorage;
+        private readonly IReadSideKeyValueStorage<AnswersByVariableCollection> answersByVariableStorage;
 
-        public MapReport(IReadSideRepositoryReader<AnswersByVariableCollection> answersByVariableStorage)
+        public MapReport(IReadSideKeyValueStorage<AnswersByVariableCollection> answersByVariableStorage)
         {
             this.answersByVariableStorage = answersByVariableStorage;
         }

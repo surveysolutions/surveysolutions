@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.Capi.EventHandler;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 
@@ -30,11 +29,11 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelDenormalizerTests
 
         protected static InterviewViewModelDenormalizer CreateInterviewViewModelDenormalizer(
             Mock<IReadSideRepositoryWriter<InterviewViewModel>> storageStub,
-            Mock<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>> versionedStorageStub)
+            Mock<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>> versionedStorageStub)
         {
             var denormalizer = new InterviewViewModelDenormalizer(storageStub.Object,
                 versionedStorageStub.Object,
-                Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>(), new QuestionnaireRosterStructureFactory());
+                Mock.Of<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(), new QuestionnaireRosterStructureFactory());
 
             return denormalizer;
         }
@@ -49,11 +48,11 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelDenormalizerTests
             return storageStub;
         }
 
-        protected static Mock<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>> CreateQuestionnaireDocumentVersionedStorageStub(
+        protected static Mock<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>> CreateQuestionnaireDocumentVersionedStorageStub(
             QuestionnaireDocument document)
         {
-            var questionnaireStorageMock = new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>();
-            questionnaireStorageMock.Setup(x => x.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()))
+            var questionnaireStorageMock = new Mock<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>();
+            questionnaireStorageMock.Setup(x => x.GetById(Moq.It.IsAny<string>()))
                 .Returns(new QuestionnaireDocumentVersioned()
                 {
                     Questionnaire = document

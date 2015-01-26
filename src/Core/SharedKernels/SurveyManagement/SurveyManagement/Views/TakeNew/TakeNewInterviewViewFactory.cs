@@ -1,7 +1,7 @@
 using System.Linq;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
@@ -9,9 +9,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TakeNew
 {
     public class TakeNewInterviewViewFactory : BaseUserViewFactory, IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> 
     {
-        private readonly IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> surveys;
+        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> surveys;
 
-        public TakeNewInterviewViewFactory(IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> surveys, IQueryableReadSideRepositoryReader<UserDocument> users)
+        public TakeNewInterviewViewFactory(IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> surveys, IQueryableReadSideRepositoryReader<UserDocument> users)
             : base(users)
         {
             this.surveys = surveys;
@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TakeNew
         public TakeNewInterviewView Load(TakeNewInterviewInputModel input)
         {
             var questionnaire = input.QuestionnaireVersion.HasValue
-                ? this.surveys.GetById(input.QuestionnaireId, input.QuestionnaireVersion.Value)
+                ? this.surveys.AsVersioned().Get(input.QuestionnaireId.FormatGuid(), input.QuestionnaireVersion.Value)
                 : this.surveys.GetById(input.QuestionnaireId);
 
             var view = new TakeNewInterviewView(questionnaire.Questionnaire, questionnaire.Version)

@@ -202,7 +202,7 @@ namespace WB.Tests.Integration.InterviewStatistics
         private static DateTime day8 = new DateTime(2014, 9, 8, 23, 59, 35);
         private static DateTime day9 = new DateTime(2014, 9, 9, 22, 44, 35);
         private static Guid userId = Guid.Parse("11111111111111111111111111111111");
-        private static IReadSideRepositoryWriter<InterviewDetailsForChart> interviewDetailsStorage;
+        private static IReadSideKeyValueStorage<InterviewDetailsForChart> interviewDetailsStorage;
         private static InMemoryReadSideRepositoryAccessor<StatisticsGroupedByDateAndTemplate> statisticsStorage;
 
         private static string storageKey = String.Format("{0}_{1}$",

@@ -11,9 +11,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     public class ClientDeviceDenormalizer : BaseDenormalizer, IEventHandler<NewClientDeviceCreated>,
                                             IEventHandler<ClientDeviceLastSyncItemUpdated>
     {
-        private readonly IReadSideRepositoryWriter<ClientDeviceDocument> devices;
+        private readonly IReadSideKeyValueStorage<ClientDeviceDocument> devices;
 
-        public ClientDeviceDenormalizer(IReadSideRepositoryWriter<ClientDeviceDocument> devices)
+        public ClientDeviceDenormalizer(IReadSideKeyValueStorage<ClientDeviceDocument> devices)
         {
             this.devices = devices;
         }

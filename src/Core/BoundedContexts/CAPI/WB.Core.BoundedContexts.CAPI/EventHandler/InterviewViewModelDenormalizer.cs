@@ -4,10 +4,10 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.BoundedContexts.Supervisor.Factories;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
@@ -46,8 +46,8 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<PictureQuestionAnswered>
     {
         private readonly IReadSideRepositoryWriter<InterviewViewModel> interviewStorage;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
+        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnarieStorage;
+        private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
 
         private static ILogger Logger
@@ -57,8 +57,8 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
         public InterviewViewModelDenormalizer(
             IReadSideRepositoryWriter<InterviewViewModel> interviewStorage,
-            IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage,
-            IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory)
+            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnarieStorage,
+            IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory)
         {
             this.interviewStorage = interviewStorage;
             this.questionnarieStorage = questionnarieStorage;
@@ -68,8 +68,9 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
         public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
         {
-            var questionnaire = this.questionnarieStorage.GetById(evnt.Payload.InterviewData.QuestionnaireId,
-                                                             evnt.Payload.InterviewData.QuestionnaireVersion);
+            var questionnaire = this.questionnarieStorage.AsVersioned().Get(
+                evnt.Payload.InterviewData.QuestionnaireId.FormatGuid(), evnt.Payload.InterviewData.QuestionnaireVersion);
+
             if (questionnaire == null)
                 return;
 
@@ -84,8 +85,8 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
               QuestionnaireRosterStructure propagationStructure = null;
             try
             {
-                propagationStructure = this.questionnaireRosterStructureStorage.GetById(questionnaire.Questionnaire.PublicKey,
-                    questionnaire.Version);
+                propagationStructure = this.questionnaireRosterStructureStorage.AsVersioned().Get(
+                    questionnaire.Questionnaire.PublicKey.FormatGuid(), questionnaire.Version);
             }
             catch (Exception e)
             {
@@ -98,7 +99,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 #warning it's bad to write data to other storage, but I've wrote this code for backward compatibility with old versions of CAPI where QuestionnaireRosterStructureDenormalizer haven't been running
 
             propagationStructure = questionnaireRosterStructureFactory.CreateQuestionnaireRosterStructure(questionnaire.Questionnaire, questionnaire.Version);
-            this.questionnaireRosterStructureStorage.Store(propagationStructure, propagationStructure.QuestionnaireId);
+            this.questionnaireRosterStructureStorage.AsVersioned().Store(propagationStructure, propagationStructure.QuestionnaireId.FormatGuid(), propagationStructure.Version);
             return propagationStructure;
         }
 
@@ -334,8 +335,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
         public void Handle(IPublishedEvent<InterviewForTestingCreated> evnt)
         {
-            var questionnaire = this.questionnarieStorage.GetById(evnt.Payload.QuestionnaireId,
-                                                             evnt.Payload.QuestionnaireVersion);
+            var questionnaire = this.questionnarieStorage.AsVersioned().Get(evnt.Payload.QuestionnaireId.FormatGuid(), evnt.Payload.QuestionnaireVersion);
             if (questionnaire == null)
                 return;
 
@@ -348,8 +348,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
         public void Handle(IPublishedEvent<InterviewOnClientCreated> evnt)
         {
-            var questionnaire = this.questionnarieStorage.GetById(evnt.Payload.QuestionnaireId,
-                                                             evnt.Payload.QuestionnaireVersion);
+            var questionnaire = this.questionnarieStorage.AsVersioned().Get(evnt.Payload.QuestionnaireId.FormatGuid(), evnt.Payload.QuestionnaireVersion);
             if (questionnaire == null)
                 return;
 

@@ -12,13 +12,13 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 {
     internal class SyncManager : ISyncManager
     {
-        private readonly IReadSideRepositoryWriter<ClientDeviceDocument> devices;
+        private readonly IReadSideKeyValueStorage<ClientDeviceDocument> devices;
         private readonly ISynchronizationDataStorage storage;
         private readonly IIncomePackagesRepository incomeRepository;
         private readonly ILogger logger;
         private readonly ICommandService commandService;
 
-        public SyncManager(IReadSideRepositoryWriter<ClientDeviceDocument> devices,
+        public SyncManager(IReadSideKeyValueStorage<ClientDeviceDocument> devices,
             ISynchronizationDataStorage storage, 
             IIncomePackagesRepository incomeRepository,
             ILogger logger, 
