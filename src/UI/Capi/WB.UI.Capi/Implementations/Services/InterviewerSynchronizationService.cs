@@ -119,7 +119,7 @@ namespace WB.UI.Capi.Implementations.Services
             return await this.restService.GetAsync<string>(
                 url: "api/InterviewerSync/GetPackageIdByTimeStamp",
                 credentials: new RestCredentials() {Login = credentials.Login, Password = credentials.Password},
-                queryString: timestamp);
+                queryString: new { timestamp });
         }
 
         public async Task<bool> NewVersionAvailableAsync()
