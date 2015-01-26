@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Threading;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -44,6 +42,8 @@ namespace WB.Core.SharedKernels.DataCollection.Accessors
                 throw new Exception(string.Format("Assembly file is empty. Cannot be saved. Questionnaire: {0}, version: {1}", questionnaireId, questionnaireVersion));
 
             this.fileSystemAccessor.WriteAllBytes(pathToSaveAssembly, assembly);
+
+            this.fileSystemAccessor.MarkFileAsReadonly(pathToSaveAssembly);
         }
 
         public void RemoveAssembly(Guid questionnaireId, long questionnaireVersion)

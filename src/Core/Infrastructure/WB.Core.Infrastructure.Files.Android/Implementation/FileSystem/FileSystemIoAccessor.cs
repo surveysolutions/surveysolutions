@@ -138,6 +138,11 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             }
         }
 
+        public void MarkFileAsReadonly(string pathToFile)
+        {
+            File.SetAttributes(pathToFile, FileAttributes.ReadOnly);
+        }
+
         public Assembly LoadAssembly(string assemblyFile)
         {
             //please don't use LoadFile or Load here, but use LoadFrom
