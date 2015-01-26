@@ -212,6 +212,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             }
 
             var assemblyBody = this.ExtractObject<string>(item.Content, item.IsCompressed);
+
             questionnareAssemblyFileAccessor.StoreAssembly(metadata.QuestionnaireId, metadata.Version, assemblyBody);
         }        
 
