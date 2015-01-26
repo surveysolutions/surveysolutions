@@ -11,22 +11,10 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
     public class InProcessEventBus : IEventBus
     {
         private readonly Dictionary<Type, List<Action<PublishedEvent>>> _handlerRegister = new Dictionary<Type, List<Action<PublishedEvent>>>();
-        private readonly bool _useTransactionScope;
         private readonly IEventStore eventStore;
 
         public InProcessEventBus(IEventStore eventStore)
-            : this(true, eventStore)
-        {            
-        }
-
-        /// <summary>
-        /// Creates new <see cref="InProcessEventBus"/> instance.
-        /// </summary>
-        /// <param name="useTransactionScope">Use transaction scope?</param>
-        /// <param name="eventStore">Event store</param>
-        public InProcessEventBus(bool useTransactionScope, IEventStore eventStore)
         {
-            _useTransactionScope = useTransactionScope;
             this.eventStore = eventStore;
         }
 
@@ -38,20 +26,8 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             
             if (handlers.Any())
             {
-                if (_useTransactionScope)
-                {
-                    TransactionallyPublishToHandlers(eventMessage, eventMessageType, handlers);
-                }
-                else
-                {
-                    PublishToHandlers(eventMessage, eventMessageType, handlers);
-                }
+                PublishToHandlers(eventMessage, eventMessageType, handlers);
             }
-        }
-
-        private static void TransactionallyPublishToHandlers(IPublishableEvent eventMessage, Type eventMessageType, IEnumerable<Action<PublishedEvent>> handlers)
-        {
-            PublishToHandlers(eventMessage, eventMessageType, handlers);
         }
 
         private static void PublishToHandlers(IPublishableEvent eventMessage, Type eventMessageType, IEnumerable<Action<PublishedEvent>> handlers)

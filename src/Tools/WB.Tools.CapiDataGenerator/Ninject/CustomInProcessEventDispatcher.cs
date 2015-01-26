@@ -14,8 +14,8 @@ namespace WB.Tools.CapiDataGenerator.Ninject
 {
     public class CustomInProcessEventDispatcher : InProcessEventBus, IEventDispatcher
     {
-        public CustomInProcessEventDispatcher(bool useTransactionScope, IEventStore eventStore)
-            : base(useTransactionScope, eventStore) { }
+        public CustomInProcessEventDispatcher(IEventStore eventStore)
+            : base(eventStore) { }
 
         public override void RegisterHandler<TEvent>(IEventHandler<TEvent> handler)
         {

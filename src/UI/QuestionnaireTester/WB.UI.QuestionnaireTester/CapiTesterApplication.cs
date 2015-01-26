@@ -253,7 +253,7 @@ namespace WB.UI.QuestionnaireTester
             kernel.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
             kernel.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
 
-            var bus = new InProcessEventBus(true, Kernel.Get<IEventStore>());
+            var bus = new InProcessEventBus(Kernel.Get<IEventStore>());
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
             //kernel.Bind<IEventBus>().ToConstant(bus);
             this.kernel.Bind<IEventBus>().ToConstant(bus).Named("interviewViewBus");
