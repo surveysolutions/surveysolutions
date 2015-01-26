@@ -22,7 +22,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors
 {
-    internal class RavenFilesStoreRepositoryAccessor<TEntity> : IReadSideKeyValueStorage<TEntity>, IReadSideRepositoryWriter, IReadSideRepositoryCleaner
+    internal class RavenFilesStoreRepositoryAccessor<TEntity> : IReadSideKeyValueStorage<TEntity>, IReadSideRepositoryWriter, IReadSideRepositoryCleaner, IDisposable
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly ILogger logger;
@@ -252,6 +252,14 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             {
                 logger.Error(e.Message, e);
                 throw new InvalidOperationException(payload, e);
+            }
+        }
+
+        public void Dispose()
+        {
+            if (ravenFilesStore != null)
+            {
+                ravenFilesStore.Dispose();
             }
         }
     }
