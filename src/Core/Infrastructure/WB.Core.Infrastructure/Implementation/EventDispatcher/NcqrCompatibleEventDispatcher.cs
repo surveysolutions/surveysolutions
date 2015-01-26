@@ -25,7 +25,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         {
             this.eventStore = eventStore;
             this.handlersToIgnore = handlersToIgnore.ToArray();
-            this.getInProcessEventBus = () => new InProcessEventBus(true, eventStore);
+            this.getInProcessEventBus = () => new InProcessEventBus(eventStore);
         }
 
         internal NcqrCompatibleEventDispatcher(Func<InProcessEventBus> getInProcessEventBus, IEventStore eventStore, IEnumerable<Type> handlersToIgnore)
