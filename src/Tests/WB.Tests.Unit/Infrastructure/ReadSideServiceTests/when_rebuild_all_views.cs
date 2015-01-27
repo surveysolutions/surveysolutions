@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -56,7 +57,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
            readSideRepositoryWriterMock.Verify(x => x.DisableCache(), Times.Once);
 
         It should_publish_one_event_on_event_dispatcher = () =>
-            eventDispatcherMock.Verify(x=>x.PublishEventToHandlers(committedEvent, Moq.It.IsAny<IEnumerable<IEventHandler>>()), Times.Once);
+            eventDispatcherMock.Verify(x => x.PublishEventToHandlers(committedEvent, Moq.It.IsAny<Dictionary<IEventHandler, Stopwatch>>()), Times.Once);
 
         private static ReadSideService ravenReadSideService;
         private static Mock<IEventDispatcher> eventDispatcherMock;
