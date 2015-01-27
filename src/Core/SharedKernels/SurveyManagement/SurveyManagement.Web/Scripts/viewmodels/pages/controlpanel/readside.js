@@ -129,9 +129,7 @@
         //update all writers
         _.each(newList, function (denormalizer) {
             denormalizer.timeSpentDescription = moment.duration(denormalizer.TimeSpent).format("HH:mm:ss");
-
-         /*  self.TimeSpentDescription(data.TimeSpentDescription);
-            denormalizer.TimeSpentDescription = ko.observable(denormalizer.TimeSpentDescription);*/
+            denormalizer.timeSpentInPersentDescription = denormalizer.Percent+"%";
             self.rebuildDenormalizerStatistic.push(denormalizer);
         });
     };
