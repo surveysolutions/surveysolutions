@@ -1,11 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.Core.GenericSubdomains.Utils.Rest
 {
-    using System;
-
     public class NewtonJsonUtils : IJsonUtils
     {
         private readonly JsonSerializer jsonSerializer;
@@ -38,7 +37,8 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
 
         public T Deserialize<T>(string payload)
         {
-            return JsonConvert.DeserializeObject<T>(ReplaceOldAssemblyNames(payload), this.jsonSerializerSetings);
+            var replaceOldAssemblyNames = ReplaceOldAssemblyNames(payload);
+            return JsonConvert.DeserializeObject<T>(replaceOldAssemblyNames, this.jsonSerializerSetings);
         }
 
         [Obsolete]
@@ -46,7 +46,14 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
         {
             var replaceOldAssemblyNames = payload;
             replaceOldAssemblyNames = replaceOldAssemblyNames.Replace("Main.Core.Events.AggregateRootEvent, Main.Core", "Main.Core.Events.AggregateRootEvent, WB.Core.Infrastructure");
-            replaceOldAssemblyNames = replaceOldAssemblyNames.Replace("Main.Core.Events.QuestionnaireDocument, Main.Core", "Main.Core.Events.AggregateRootEvent, WB.Core.SharedKernels.SurveySolutions");
+
+            foreach (var type in new[] { "NewUserCreated", "UserChanged", "UserLocked", "UserLockedBySupervisor", "UserUnlocked", "UserUnlockedBySupervisor" })
+            {
+               replaceOldAssemblyNames = replaceOldAssemblyNames.Replace(
+                   string.Format("Main.Core.Events.User.{0}, Main.Core", type),
+                   string.Format("Main.Core.Events.User.{0}, WB.Core.SharedKernels.DataCollection", type));
+            }
+            
             return replaceOldAssemblyNames;
         }
 

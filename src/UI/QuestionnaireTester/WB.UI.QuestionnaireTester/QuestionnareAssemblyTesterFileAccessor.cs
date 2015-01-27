@@ -64,6 +64,8 @@ namespace WB.UI.QuestionnaireTester
             var pathToSaveAssembly = Path.Combine(pathToFolder, fileName);
 
             File.WriteAllBytes(pathToSaveAssembly, Convert.FromBase64String(assemblyAsBase64String));
+
+            File.SetAttributes(pathToSaveAssembly, FileAttributes.ReadOnly);  
         }
 
         public void RemoveAssembly(Guid questionnaireId, long questionnaireVersion)

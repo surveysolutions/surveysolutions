@@ -16,6 +16,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Capi.SyncPackageRestoreServiceTests
 {
+    [Ignore("This test is very fragile. KP-4846")]
     internal class when_synchronization_item_exists_and_restore_it_called_from_2_separate_thereads : SyncPackageRestoreServiceTestContext
     {
         Establish context = () =>

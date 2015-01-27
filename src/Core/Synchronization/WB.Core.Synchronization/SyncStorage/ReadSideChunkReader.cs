@@ -77,7 +77,7 @@ namespace WB.Core.Synchronization.SyncStorage
             SynchronizationDelta meta = items.Where(x => timestamp >= x.Timestamp)
                                              .ToList()
                                              .OrderBy(x => x.SortIndex)
-                                             .Last();
+                                             .First();
             
             return new SynchronizationChunkMeta(meta.PublicKey);
         }

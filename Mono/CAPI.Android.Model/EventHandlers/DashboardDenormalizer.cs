@@ -131,6 +131,10 @@ namespace CAPI.Android.Core.Model.EventHandlers
         {
             if (this.questionTypesWithOptions.Contains(featuredQuestion.QuestionType))
             {
+                if (answer == null)
+                    return new FeaturedItem(featuredQuestion.PublicKey, featuredQuestion.QuestionText,
+                        string.Empty);
+
                 var featuredCategoricalOptions = featuredQuestion.Answers.Select(
                     option =>
                         new FeaturedCategoricalOption
