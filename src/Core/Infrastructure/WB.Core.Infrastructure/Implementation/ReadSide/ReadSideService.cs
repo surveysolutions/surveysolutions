@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -322,14 +323,38 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
         private IEnumerable<CommittedEvent> GetEventStream(int skipEventsCount)
         {
+            var eventSourcesAndSequences = new Dictionary<Guid, long>();
+
             foreach (CommittedEvent[] eventBulk in this.eventStore.GetAllEvents(skipEvents: skipEventsCount))
             {
                 foreach (var committedEvent in eventBulk)
                 {
+                    EnsureEventSequenceIsCorrect(committedEvent, eventSourcesAndSequences);
+
                     yield return committedEvent;
                 }
             }
-        } 
+        }
+
+        private static void EnsureEventSequenceIsCorrect(CommittedEvent committedEvent, Dictionary<Guid, long> eventSourcesAndSequences)
+        {
+            if (eventSourcesAndSequences.ContainsKey(committedEvent.EventSourceId))
+            {
+                long lastEventSequence = eventSourcesAndSequences[committedEvent.EventSourceId];
+                long expectedEventSequence = lastEventSequence + 1;
+
+                if (committedEvent.EventSequence != expectedEventSequence)
+                {
+                    throw new InvalidDataException(string.Format(
+                        "Event {0} {1} (event source {2}) appears in all events stream not when expected. Event sequence: {3}. Expected sequence: {4}.",
+                        committedEvent.EventIdentifier.FormatGuid(), committedEvent.Payload.GetType().Name, 
+                        committedEvent.EventSourceId.FormatGuid(),
+                        committedEvent.EventSequence, expectedEventSequence));
+                }
+            }
+
+            eventSourcesAndSequences[committedEvent.EventSourceId] = committedEvent.EventSequence;
+        }
 
 
         private void CleanUpWritersForHandlers(IEnumerable<IEventHandler> handlers)
