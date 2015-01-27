@@ -181,6 +181,11 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             }
         }
 
+        public void MarkFileAsReadonly(string pathToFile)
+        {
+            ZlpIOHelper.SetFileAttributes(pathToFile, ZetaLongPaths.Native.FileAttributes.Readonly);
+        }
+
         public Assembly LoadAssembly(string assemblyFile)
         {
             //please don't use LoadFile or Load here, but use LoadFrom

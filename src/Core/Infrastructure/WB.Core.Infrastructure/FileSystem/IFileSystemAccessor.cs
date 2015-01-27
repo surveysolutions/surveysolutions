@@ -32,6 +32,9 @@ namespace WB.Core.Infrastructure.FileSystem
         string ReadAllText(string pathToFile);
 
         void CopyFileOrDirectory(string sourceDir, string targetDir);
+
+        void MarkFileAsReadonly(string pathToFile);
+
         Assembly LoadAssembly(string assemblyFile);
     }
 }
