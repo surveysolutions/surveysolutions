@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -78,7 +79,7 @@ namespace WB.Tools.CapiDataGenerator.Ninject
             throw new NotImplementedException();
         }
 
-        public void PublishEventToHandlers(IPublishableEvent eventMessage, IEnumerable<IEventHandler> handlers)
+        public void PublishEventToHandlers(IPublishableEvent eventMessage, Dictionary<IEventHandler, Stopwatch> handlers)
         {
             throw new NotImplementedException();
         }
