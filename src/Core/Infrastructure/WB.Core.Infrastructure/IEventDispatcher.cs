@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
 
@@ -6,7 +7,8 @@ namespace WB.Core.Infrastructure
 {
     public interface IEventDispatcher : IEventBus
     {
-        void PublishEventToHandlers(IPublishableEvent eventMessage, IEnumerable<IEventHandler> handlers);
+        void PublishEventToHandlers(IPublishableEvent eventMessage,
+            Dictionary<IEventHandler, Stopwatch> handlersWithStopwatch);
 
         IEnumerable<IEventHandler> GetAllRegistredEventHandlers();
 

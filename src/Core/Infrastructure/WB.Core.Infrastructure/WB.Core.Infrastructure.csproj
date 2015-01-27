@@ -54,6 +54,7 @@
     <Compile Include="EventBus\IEventHandler.cs" />
     <Compile Include="Implementation\Aggregates\AggregateRootRepository.cs" />
     <Compile Include="Implementation\CommandBus\CommandService.cs" />
+    <Compile Include="Implementation\ReadSide\ReadSideDenormalizerStatistic.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideEventHandlerDescription.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideRepositoryWriterError.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideRepositoryWriterStatus.cs" />
