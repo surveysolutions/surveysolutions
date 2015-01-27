@@ -163,9 +163,9 @@
             <div class="controls">
                 <div data-bind="foreach: options">
                     <label class="checkbox" data-bind='attr: { "for": optionFor }'>
-                        <span class="badge" data-bind="text: orderNo"></span>
                         <input type="checkbox" data-bind="attr: { value: value, name: $parent.variable, id: optionFor }, checked : $parent.selectedOptions, value: value, disable: $parent.isReadonly" />
                         <span data-bind="html: label"></span>
+                        <span class="badge" data-bind="text: orderNo"></span>
                     </label>
                 </div>
                 <span class="help-inline" data-bind="validationMessage: selectedOptions"></span>
