@@ -30,52 +30,6 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             }
         }
 
-        private static void PublishToHandlers(IPublishableEvent eventMessage, Type eventMessageType, IEnumerable<Action<PublishedEvent>> handlers)
-        {
-            var publishedEventClosedType = typeof (PublishedEvent<>).MakeGenericType(eventMessage.Payload.GetType());
-            var publishedEvent = (PublishedEvent)Activator.CreateInstance(publishedEventClosedType, eventMessage);
-
-            var occurredExceptions = new List<Exception>();
-
-            foreach (var handler in handlers)
-            {
-                try
-                {
-                    handler.Invoke(publishedEvent);
-                }
-                catch (Exception exception)
-                {
-                    occurredExceptions.Add(exception);
-                }
-            }
-
-            if (occurredExceptions.Count > 0)
-                throw new AggregateException(
-                   string.Format("{0} handler(s) failed to handle published event '{1}' by event source '{2}' with sequence '{3}'.", occurredExceptions.Count, eventMessage.EventIdentifier, eventMessage.EventSourceId, eventMessage.EventSequence),
-                    occurredExceptions);
-        }
-
-        [ContractVerification(false)]
-        protected List<Action<PublishedEvent>> GetHandlersForEvent(IPublishableEvent eventMessage)
-        {
-            if (eventMessage == null)
-                return null;
-
-            var dataType = eventMessage.Payload.GetType();
-            var result = new List<Action<PublishedEvent>>();
-
-            foreach(var key in _handlerRegister.Keys)
-            {
-                if (key.GetTypeInfo().IsAssignableFrom(dataType.GetTypeInfo()))
-                {
-                    var handlers = _handlerRegister[key];
-                    result.AddRange(handlers);
-                }
-            }
-
-            return result;
-        }
-
         public void Publish(IEnumerable<IPublishableEvent> eventMessages)
         {
             foreach (var eventMessage in eventMessages)
@@ -116,6 +70,52 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             }
 
             handlers.Add(handler);
+        }
+
+        [ContractVerification(false)]
+        protected List<Action<PublishedEvent>> GetHandlersForEvent(IPublishableEvent eventMessage)
+        {
+            if (eventMessage == null)
+                return null;
+
+            var dataType = eventMessage.Payload.GetType();
+            var result = new List<Action<PublishedEvent>>();
+
+            foreach (var key in _handlerRegister.Keys)
+            {
+                if (key.GetTypeInfo().IsAssignableFrom(dataType.GetTypeInfo()))
+                {
+                    var handlers = _handlerRegister[key];
+                    result.AddRange(handlers);
+                }
+            }
+
+            return result;
+        }
+
+        private static void PublishToHandlers(IPublishableEvent eventMessage, Type eventMessageType, IEnumerable<Action<PublishedEvent>> handlers)
+        {
+            var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(eventMessage.Payload.GetType());
+            var publishedEvent = (PublishedEvent)Activator.CreateInstance(publishedEventClosedType, eventMessage);
+
+            var occurredExceptions = new List<Exception>();
+
+            foreach (var handler in handlers)
+            {
+                try
+                {
+                    handler.Invoke(publishedEvent);
+                }
+                catch (Exception exception)
+                {
+                    occurredExceptions.Add(exception);
+                }
+            }
+
+            if (occurredExceptions.Count > 0)
+                throw new AggregateException(
+                   string.Format("{0} handler(s) failed to handle published event '{1}' by event source '{2}' with sequence '{3}'.", occurredExceptions.Count, eventMessage.EventIdentifier, eventMessage.EventSourceId, eventMessage.EventSequence),
+                    occurredExceptions);
         }
     }
 }
