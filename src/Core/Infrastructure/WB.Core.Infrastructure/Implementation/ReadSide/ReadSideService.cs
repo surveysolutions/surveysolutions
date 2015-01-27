@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -39,6 +40,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         private readonly IStreamableEventStore eventStore;
         private readonly IEventDispatcher eventBus;
         private readonly ILogger logger;
+        private Dictionary<IEventHandler, Stopwatch> handlersWithStopwatches;
 
         static ReadSideService()
         {
@@ -104,6 +106,15 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     .ToList();
         }
 
+        private List<ReadSideDenormalizerStatistic> GetRebuildDenormalizerStatistics()
+        {
+            if(handlersWithStopwatches==null)
+                return new List<ReadSideDenormalizerStatistic>();
+            return
+                handlersWithStopwatches.OrderByDescending(h=>h.Value.Elapsed).Select(h => new ReadSideDenormalizerStatistic(h.Key.Name, h.Value.Elapsed))
+                    .ToList();
+        }
+
         public ReadSideStatus GetRebuildStatus()
         {
             int republishedEventsCount = this.processedEventsCount - this.skippedEventsCount;
@@ -153,7 +164,8 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                         ErrorTime = error.Item1,
                         ErrorMessage = error.Item2,
                         InnerException = GetFullUnwrappedExceptionText(error.Item3)
-                    })
+                    }),
+                ReadSideDenormalizerStatistics=GetRebuildDenormalizerStatistics()
             };
         }
 
@@ -417,16 +429,17 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 + Environment.NewLine
                 + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
 
+            handlersWithStopwatches = handlers.ToDictionary(x => x, x => new Stopwatch());
+
             foreach (CommittedEvent @event in eventStream)
             {
                 ThrowIfShouldStopViewsRebuilding();
 
                 UpdateStatusMessage(string.Format("Publishing event {0}. ", this.processedEventsCount + 1));
 
-
                 try
                 {
-                    this.eventBus.PublishEventToHandlers(@event, handlers);
+                    this.eventBus.PublishEventToHandlers(@event, handlersWithStopwatches);
                 }
                 catch (Exception exception)
                 {

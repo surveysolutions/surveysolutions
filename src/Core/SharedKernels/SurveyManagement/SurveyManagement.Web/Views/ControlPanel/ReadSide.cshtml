@@ -163,7 +163,18 @@
                         Estimated time
                     </li>
                 </ul>
-            </div>
+                <!-- ko if: rebuildDenormalizerStatistic().length > 0 -->
+
+                <table class="table table-striped table-bordered table-condensed table-hover">
+                    <tbody data-bind="foreach: rebuildDenormalizerStatistic()">
+                        <tr>
+                            <td data-bind="text: DenormalizerName"></td>
+                            <td data-bind="text: timeSpentDescription"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- /ko -->
+</div>
         </div>
     </div>
 </div>
