@@ -110,8 +110,13 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         {
             if(handlersWithStopwatches==null)
                 return new List<ReadSideDenormalizerStatistic>();
+            var currentStateOfDenormalizers =
+                handlersWithStopwatches.OrderByDescending(h => h.Value.Elapsed)
+                    .Select(h => new {Name = h.Key.Name, Ticks = h.Value.ElapsedTicks});
+
+            var timeSpentForAllDenormalizers = currentStateOfDenormalizers.Sum(x => x.Ticks);
             return
-                handlersWithStopwatches.OrderByDescending(h=>h.Value.Elapsed).Select(h => new ReadSideDenormalizerStatistic(h.Key.Name, h.Value.Elapsed))
+                currentStateOfDenormalizers.Select(h => new ReadSideDenormalizerStatistic(h.Name, new TimeSpan(h.Ticks), (int)Math.Round((double)(100 * h.Ticks) / timeSpentForAllDenormalizers)))
                     .ToList();
         }
 
