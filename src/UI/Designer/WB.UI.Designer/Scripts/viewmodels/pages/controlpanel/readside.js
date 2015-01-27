@@ -30,6 +30,7 @@
     self.isRebuildRunning = ko.observable(false);
 
     self.readSideRepositoryWriters = ko.observableArray([]);
+    self.rebuildDenormalizerStatistic = ko.observableArray([]);
     self.rebuildErrors = ko.observableArray([]);
 
     self.lastStatusUpdateTime = ko.observable('-');
@@ -85,6 +86,7 @@
             self.estimatedTime(moment.duration(data.EventPublishingDetails.EstimatedTime).format("HH:mm:ss"));
 
             self.reloadRepositoryWritersList(data.StatusByRepositoryWriters);
+            self.reloadDenormalizerStatistics(data.ReadSideDenormalizerStatistics);
             self.reloadErrorsList(data.RebuildErrors);
 
             _.delay(self.updateStatus, 3000);
@@ -115,6 +117,20 @@
             } else {
                 existingWriter.Status(writer.Status);
             }
+        });
+    };
+
+    self.reloadDenormalizerStatistics = function (newList) {
+        //remove all writers
+        _.each(self.rebuildDenormalizerStatistic(), function (oldWriter) {
+            self.rebuildDenormalizerStatistic.pop(oldWriter);
+        });
+
+        //update all writers
+        _.each(newList, function (denormalizer) {
+            denormalizer.timeSpentDescription = moment.duration(denormalizer.TimeSpent).format("HH:mm:ss");
+            denormalizer.timeSpentInPersentDescription = denormalizer.Percent + "%";
+            self.rebuildDenormalizerStatistic.push(denormalizer);
         });
     };
 
