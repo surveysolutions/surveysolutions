@@ -30,9 +30,10 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
                 throw new RestException(Resources.NoNetwork);
             }
 
-            var restClient = this.restServiceSettings.BaseAddress()
+            Url fullUrl = this.restServiceSettings.BaseAddress()
                 .AppendPathSegment(url)
-                .SetQueryParams(queryString)
+                .SetQueryParams(queryString);
+            var restClient = fullUrl
                 .WithHeader("Accept-Encoding", "gzip,deflate");
 
             if (credentials != null)
@@ -44,7 +45,7 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
             }
             catch (FlurlHttpException ex)
             {
-                this.logger.Error(ex.Message, ex);
+                this.logger.Error(string.Format("Request to '{0}'. QueryParams: {1} failed. ", fullUrl, fullUrl.QueryParams), ex);
 
                 if (ex.Call.Response != null)
                     throw new RestException(ex.Call.Response.ReasonPhrase, statusCode: ex.Call.Response.StatusCode, innerException: ex);
