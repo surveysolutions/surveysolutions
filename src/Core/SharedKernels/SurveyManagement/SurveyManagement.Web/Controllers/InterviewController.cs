@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -42,18 +43,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.interviewDetailsViewFactory = interviewDetailsViewFactory;
         }
 
-        public ActionResult Details(Guid id, InterviewDetailsFilter? filter)
+        public ActionResult Details(Guid id, InterviewDetailsFilter? filter, Guid? currentGroupId)
         {
             this.ViewBag.ActivePage = MenuItem.Docs;
 
             filter = filter.HasValue ? filter : InterviewDetailsFilter.All;
 
-            ChangeStatusView interviewInfo = this.changeStatusFactory.Load(new ChangeStatusInputModel() { InterviewId = id });
-            InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
-            ChangeStatusView interviewHistoryOfStatuses = this.changeStatusFactory.Load(new ChangeStatusInputModel { InterviewId = id });
 
-            if (interviewInfo == null || interviewSummary == null)
-                return HttpNotFound();
+            InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
 
             bool isAccessAllowed =
                 this.GlobalInfo.IsHeadquarter ||
@@ -62,21 +59,115 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (!isAccessAllowed)
                 return HttpNotFound();
 
+            ChangeStatusView interviewInfo =
+                this.changeStatusFactory.Load(new ChangeStatusInputModel() {InterviewId = id});
+
+            if (interviewInfo == null || interviewSummary == null)
+                return HttpNotFound();
+
+            ChangeStatusView interviewHistoryOfStatuses =
+                this.changeStatusFactory.Load(new ChangeStatusInputModel {InterviewId = id});
             InterviewDetailsView interviewDetailsView = interviewDetailsViewFactory.GetInterviewDetails(id);
+            //InterviewDetailsView view = interviewDetailsViewFactory.GetInterviewDetails(id);
+            //var interviewDetailsView = new NewInterviewDetailsView()
+            //{
+            //    InterviewInfo = new InterviewInfoModel()
+            //    {
+            //        id = view.PublicKey.ToString(),
+            //        questionnaireId = view.QuestionnairePublicKey.ToString(),
+            //        title = view.Title,
+            //        status = view.Status.ToLocalizeString(),
+            //        responsible = view.Responsible != null ? view.Responsible.Name : null
+            //    },
+            //    Groups = view.Groups.Select(@group => new GroupModel(@group.ParentId)
+            //    {
+            //        id = @group.Id.ToString(),
+            //        depth = @group.Depth,
+            //        title = @group.Title,
+            //        rosterVector = @group.RosterVector,
+            //        entities = new List<EntityModel>(@group.Entities.Select(entity => this.SelectModelByEntity(@group, entity)))
+            //    });
+
+            var detailsStatisticView = new DetailsStatisticView()
+            {
+                AnsweredCount = interviewDetailsView.Groups.Sum(_ => _.Entities.Count(x => ((x is InterviewQuestionView) && ((InterviewQuestionView)x).IsAnswered))),
+                CommentedCount = interviewDetailsView.Groups.Sum(_ => _.Entities.Count(x => ((x is InterviewQuestionView) && ((InterviewQuestionView)x).Comments != null && ((InterviewQuestionView)x).Comments.Any()))),
+                EnabledCount = interviewDetailsView.Groups.Sum(_ => _.Entities.Count(x => ((x is InterviewQuestionView) && ((InterviewQuestionView)x).IsEnabled))),
+                FlaggedCount = interviewDetailsView.Groups.Sum(_ => _.Entities.Count(x => ((x is InterviewQuestionView) && ((InterviewQuestionView)x).IsFlagged))),
+                InvalidCount = interviewDetailsView.Groups.Sum(_ => _.Entities.Count(x => ((x is InterviewQuestionView) && !((InterviewQuestionView)x).IsValid))),
+                SupervisorsCount = interviewDetailsView.Groups.Sum(_ => _.Entities.Count(x => ((x is InterviewQuestionView) && ((InterviewQuestionView)x).Scope == QuestionScope.Supervisor)))
+            };
 
             var allGroups = interviewDetailsView.Groups.ToArray();
 
-            foreach (var interviewGroupView in interviewDetailsView.Groups)
+            if (currentGroupId.HasValue)
             {
-                if (filter.Value == InterviewDetailsFilter.Answered)
-                {
-                    interviewGroupView.Entities =
-                        interviewGroupView.Entities.Where(
-                            x =>
-                                x is InterviewStaticTextView ||
-                                ((x is InterviewQuestionView) && ((InterviewQuestionView) x).IsAnswered)).ToList();
-                }
+                interviewDetailsView.Groups = interviewDetailsView.Groups.Where(_ => _.Id == currentGroupId.Value || _.ParentId == currentGroupId.Value).ToList();
             }
+            else
+            {
+                foreach (var interviewGroupView in interviewDetailsView.Groups)
+                {
+                    if (filter.Value == InterviewDetailsFilter.Answered)
+                    {
+                        interviewGroupView.Entities =
+                            interviewGroupView.Entities.Where(
+                                x =>
+                                    x is InterviewStaticTextView ||
+                                    ((x is InterviewQuestionView) && ((InterviewQuestionView) x).IsAnswered)).ToList();
+                    }
+
+                    if (filter.Value == InterviewDetailsFilter.Commented)
+                    {
+                        interviewGroupView.Entities =
+                            interviewGroupView.Entities.Where(
+                                x =>
+                                    x is InterviewStaticTextView ||
+                                    ((x is InterviewQuestionView) && ((InterviewQuestionView) x).Comments != null &&
+                                     ((InterviewQuestionView) x).Comments.Any())).ToList();
+                    }
+
+                    if (filter.Value == InterviewDetailsFilter.Enabled)
+                    {
+                        interviewGroupView.Entities =
+                            interviewGroupView.Entities.Where(
+                                x =>
+                                    x is InterviewStaticTextView ||
+                                    ((x is InterviewQuestionView) && ((InterviewQuestionView) x).IsEnabled)).ToList();
+                    }
+
+                    if (filter.Value == InterviewDetailsFilter.Flagged)
+                    {
+                        interviewGroupView.Entities =
+                            interviewGroupView.Entities.Where(
+                                x =>
+                                    x is InterviewStaticTextView ||
+                                    ((x is InterviewQuestionView) && ((InterviewQuestionView) x).IsFlagged)).ToList();
+                    }
+
+                    if (filter.Value == InterviewDetailsFilter.Invalid)
+                    {
+                        interviewGroupView.Entities =
+                            interviewGroupView.Entities.Where(
+                                x =>
+                                    x is InterviewStaticTextView ||
+                                    ((x is InterviewQuestionView) && !((InterviewQuestionView) x).IsValid)).ToList();
+                    }
+
+                    if (filter.Value == InterviewDetailsFilter.Supervisors)
+                    {
+                        interviewGroupView.Entities =
+                            interviewGroupView.Entities.Where(
+                                x =>
+                                    x is InterviewStaticTextView ||
+                                    ((x is InterviewQuestionView) &&
+                                     ((InterviewQuestionView) x).Scope == QuestionScope.Supervisor)).ToList();
+                    }
+                }
+
+                interviewDetailsView.Groups = interviewDetailsView.Groups.Where(_ => _.Entities.Any()).ToList();
+            }
+
 
             return
                 View(new DetailsViewModel()
@@ -85,7 +176,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     FilteredInterviewDetails = interviewDetailsView,
                     Groups = allGroups,
                     History = interviewHistoryOfStatuses,
-                    Statistic = new DetailsStatisticView() {AnsweredCount = 0, CommentedCount = 0, EnabledCount = 0, FlaggedCount = 0, InvalidCount = 0, SupervisorsCount = 0}
+                    Statistic = detailsStatisticView
                 });
         }
 
