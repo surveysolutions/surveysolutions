@@ -19,40 +19,34 @@
 
 @section scripts
 {
- 
+    @Scripts.Render("~/js/interview-general", "~/js/details")
     <script type="text/javascript">
-        var isPanelOfGroupsOpened = true;
-        function toggleFilter() {
-            if (isPanelOfGroupsOpened) {
-                $('body').addClass('menu-hidden');
+        var urlReferrer = null;
+        @if (Request.UrlReferrer != null && Request.UrlReferrer.OriginalString.Contains("Interviews") && Request.UrlReferrer.OriginalString.Contains("Survey"))
+        {
+            <text>urlReferrer = '@Html.Raw(Request.UrlReferrer)';</text>
+        }
 
-                $('#content').removeClass('col-sm-9');
-                $('#content').removeClass('col-sm-offset-3');
-                $('#content').removeClass('col-md-10');
-                $('#content').removeClass('col-md-offset-2');
-                $('#content').addClass('col-sm-12');
-                $('#content').addClass('col-md-12');
-                $("#btnShowGroups").show();
-            } else {
-                $('body').removeClass('menu-hidden');
+        var settings = new Supervisor.VM.InterviewDetailsSettings();
+        settings.UserName = '@User.Identity.Name';
+        settings.UrlReferrer = urlReferrer;
 
-                $('#content').addClass('col-sm-9');
-                $('#content').addClass('col-sm-offset-3');
-                $('#content').addClass('col-md-10');
-                $('#content').addClass('col-md-offset-2');
-                $('#content').removeClass('col-sm-12');
-                $('#content').removeClass('col-md-12');
-                $("#btnShowGroups").hide();
-            }
-            isPanelOfGroupsOpened = !isPanelOfGroupsOpened;
-        };
-        function showApproveModal() {
-            $('#approveModal').modal('show');
-        };
+        settings.Interview.InterviewId = '@Model.FilteredInterviewDetails.PublicKey';
+        @*settings.Interview.CurrentGroupId = '@Model.CurrentGroupId';
+        settings.Interview.CurrentPropagationKeyId = '@Model.CurrentPropagationKeyId';*@
 
-            function showRejectModal() {
-            $('#rejectModal').modal('show');
-        };
+        settings.Urls.CommandExecution = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "Execute"})';
+        settings.Urls.InterviewDetails = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "InterviewDetails"})';
+        settings.Urls.Interviews = '@(GlobalInfo.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ", new {area = ""}))';
+        settings.Urls.ChangeStateHistory = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "ChangeStateHistory"})';
+
+        settings.Urls.InterviewFile = '@Url.RouteUrl("Default", new {httproute = "", controller = "Resource", action = "InterviewFile"})';
+
+        $(function() {
+            window.model = new Supervisor.VM.Details(settings);
+            ko.applyBindings(model);
+            model.load();
+        });
     </script>
 }
 
@@ -62,14 +56,14 @@
                 <div class="panel-heading with-btn">
                     Groups
                     <div class="btn-group btn-group-sm pull-right">
-                        <button onclick="toggleFilter()" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span> Hide groups</button>
+                        <button data-bind="click: ToggleFilter" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span> Hide groups</button>
                     </div>
                 </div>
                 <ul id="groups-menu" class="list-group">
                     @foreach (var group in Model.Groups)
                     {
                         <li class="list-group-item @SetGroupLevelClass(group.Depth)">
-                            <a href="@Url.Action("Details", "Interview", new { id = Model.FilteredInterviewDetails.PublicKey, filter = InterviewDetailsFilter.All, currentGroupId = group.Id})">@group.Title</a>
+                            <a href="@Url.Action("Details", "Interview", new {id = Model.FilteredInterviewDetails.PublicKey, filter = InterviewDetailsFilter.All, currentGroupId = group.Id})">@group.Title</a>
                         </li>
                     }
                 </ul>
@@ -86,12 +80,12 @@
             </div>
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <span id="btnShowGroups" style="display:none;"><button onclick="toggleFilter()" class="btn btn-default  btn-xs"><span class="glyphicon glyphicon-arrow-right"></span> Show groups</button></span>
+                    <span data-bind="visible: !IsFilterOpen()"><button data-bind="click: ToggleFilter" class="btn btn-default  btn-xs"><span class="glyphicon glyphicon-arrow-right"></span> Show groups</button></span>
                     @if (((Model.FilteredInterviewDetails.Status == InterviewStatus.Completed || Model.FilteredInterviewDetails.Status == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor)
                          || (Model.FilteredInterviewDetails.Status == InterviewStatus.ApprovedBySupervisor && GlobalInfo.IsHeadquarter))
                     {
-                        <button class="btn btn-success" onclick="showApproveModal()">Approve</button>
-                        <button class="btn btn-danger" onclick="showRejectModal()">Reject</button>
+                        <button class="btn btn-success " data-bind="click: showApproveModal">Approve</button>
+                        <button class="btn btn-danger" data-bind="click: showRejectModal">Reject</button>
                     }
                     <a href="@Url.Action("Details", "Interview", new {id = Model.FilteredInterviewDetails.PublicKey, filter = InterviewDetailsFilter.All})" class="btn btn-default btn-xs @SetFilterActiveClass(InterviewDetailsFilter.All)">all</a>
                     <a href="@Url.Action("Details", "Interview", new {id = Model.FilteredInterviewDetails.PublicKey, filter = InterviewDetailsFilter.Flagged})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Flagged)"><i class="glyphicon glyphicon-flag @SetFilterIconActiveClass(InterviewDetailsFilter.Flagged)"></i> flagged (<span>@Model.Statistic.FlaggedCount</span>)</a>
@@ -206,9 +200,9 @@
     
     @helper SetGroupLevelClass(int level)
     {
-    <text>level</text>@level
-        
-}
+        <text>level</text>@level
+
+    }
 
     @helper SetFilterActiveClass(InterviewDetailsFilter filter)
     {
@@ -264,7 +258,7 @@
                                             {
                                                 var radioName = string.Format("option-{0}-{1}", entity.Id, Stringify(entity.RosterVector));
                                                 <label class="radio">
-                                                    @Html.RadioButton(radioName, Stringify((decimal[])option.Value), ((decimal[])entity.Answer).SequenceEqual((decimal[])option.Value), new { @disabled = "disabled" })
+                                                    @Html.RadioButton(radioName, Stringify((decimal[]) option.Value), ((decimal[]) entity.Answer).SequenceEqual((decimal[]) option.Value), new {@disabled = "disabled"})
                                                     <span>@option.Label</span>
                                                 </label>
                                             }
@@ -279,7 +273,7 @@
                                             {
                                                 var radioName = string.Format("option-{0}-{1}", entity.Id, Stringify(entity.RosterVector));
                                                 <label class="radio">
-                                                    @Html.RadioButton(radioName, Convert.ToDecimal(option.Value), Convert.ToDecimal(entity.Answer) == Convert.ToDecimal(option.Value), new { @disabled = "disabled" })
+                                                    @Html.RadioButton(radioName, Convert.ToDecimal(option.Value), Convert.ToDecimal(entity.Answer) == Convert.ToDecimal(option.Value), new {@disabled = "disabled"})
                                                     <span>@option.Label</span>
                                                 </label>
                                             }
@@ -297,7 +291,7 @@
                                             {
                                                 var radioName = string.Format("option-{0}-{1}", entity.Id, Stringify(entity.RosterVector));
                                                 <label class="radio">
-                                                    @Html.RadioButton(radioName, Stringify((decimal[])option.Value), ((decimal[])entity.Answer).SequenceEqual((decimal[])option.Value), new { @disabled = "disabled" })
+                                                    @Html.RadioButton(radioName, Stringify((decimal[]) option.Value), ((decimal[]) entity.Answer).SequenceEqual((decimal[]) option.Value), new {@disabled = "disabled"})
                                                     <span>@option.Label</span>
                                                 </label>
                                             }
@@ -312,7 +306,7 @@
                                             {
                                                 var radioName = string.Format("option-{0}-{1}", entity.Id, Stringify(entity.RosterVector));
                                                 <label class="radio">
-                                                    @Html.RadioButton(radioName, Convert.ToDecimal(option.Value), Convert.ToDecimal(entity.Answer) == Convert.ToDecimal(option.Value), new { @disabled = "disabled" })
+                                                    @Html.RadioButton(radioName, Convert.ToDecimal(option.Value), Convert.ToDecimal(entity.Answer) == Convert.ToDecimal(option.Value), new {@disabled = "disabled"})
                                                     <span>@option.Label</span>
                                                 </label>
                                             }
@@ -321,19 +315,19 @@
                                 }
                                 break;
                             case QuestionType.Numeric:
-                            <input class="form-control" type="number" value="@entity.Answer" readonly="readonly" />
+                                <input class="form-control" type="number" value="@entity.Answer" readonly="readonly" />
                                 break;
                             case QuestionType.DateTime:
                                 break;
                             case QuestionType.GpsCoordinates:
                                 break;
                             case QuestionType.Text:
-                            <input class="form-control" type="text" value="@entity.Answer" readonly="readonly" />
+                                <input class="form-control" type="text" value="@entity.Answer" readonly="readonly" />
                                 break;
                             case QuestionType.TextList:
                                 break;
                             case QuestionType.QRBarcode:
-                            <input class="form-control" type="text" value="@entity.Answer" readonly="readonly" />
+                                <input class="form-control" type="text" value="@entity.Answer" readonly="readonly" />
                                 break;
                             case QuestionType.Multimedia:
                                 <img src="@Url.RouteUrl("Default", new {httproute = "", controller = "Resource", action = "InterviewFile", interviewid = Model.FilteredInterviewDetails.PublicKey, filename = entity.Answer})" />

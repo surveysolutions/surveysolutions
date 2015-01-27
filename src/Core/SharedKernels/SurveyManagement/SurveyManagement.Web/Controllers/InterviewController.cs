@@ -68,25 +68,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             ChangeStatusView interviewHistoryOfStatuses =
                 this.changeStatusFactory.Load(new ChangeStatusInputModel {InterviewId = id});
             InterviewDetailsView interviewDetailsView = interviewDetailsViewFactory.GetInterviewDetails(id);
-            //InterviewDetailsView view = interviewDetailsViewFactory.GetInterviewDetails(id);
-            //var interviewDetailsView = new NewInterviewDetailsView()
-            //{
-            //    InterviewInfo = new InterviewInfoModel()
-            //    {
-            //        id = view.PublicKey.ToString(),
-            //        questionnaireId = view.QuestionnairePublicKey.ToString(),
-            //        title = view.Title,
-            //        status = view.Status.ToLocalizeString(),
-            //        responsible = view.Responsible != null ? view.Responsible.Name : null
-            //    },
-            //    Groups = view.Groups.Select(@group => new GroupModel(@group.ParentId)
-            //    {
-            //        id = @group.Id.ToString(),
-            //        depth = @group.Depth,
-            //        title = @group.Title,
-            //        rosterVector = @group.RosterVector,
-            //        entities = new List<EntityModel>(@group.Entities.Select(entity => this.SelectModelByEntity(@group, entity)))
-            //    });
 
             var detailsStatisticView = new DetailsStatisticView()
             {
