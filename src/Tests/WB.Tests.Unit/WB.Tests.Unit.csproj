@@ -1879,6 +1879,8 @@
     <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\when_list_of_info_packages_is_requested.cs" />
     <Compile Include="SharedKernels\SurveySolutions\Documents\QuestionnaireDocumentTests.cs" />
     <Compile Include="SharedKernels\Synchronization\DefaultBackupManagerTests.cs" />
+    <Compile Include="SharedKernels\Synchronization\ReadSideChunkReaderTests\when_GetChunkMetaDataByTimestamp_is_called_and_packages_behind_are_present.cs" />
+    <Compile Include="SharedKernels\Synchronization\ReadSideChunkReaderTests\when_GetChunkMetaDataByTimestamp_is_called_and_package_with_the_same_timestamp.cs" />
     <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\SimpleSynchronizationDataStorageTestContext.cs" />
     <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\when_getting_chunk_info_by_timestamp.cs" />
     <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\when_marking_interview_for_deleting.cs" />
