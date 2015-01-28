@@ -12,7 +12,7 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
     internal class MemoryCachedReadSideRepositoryWriter<TEntity> : MemoryCachedReadSideStore<TEntity>,
         IReadSideRepositoryWriter<TEntity> where TEntity : class, IReadSideRepositoryEntity
     {
-        public MemoryCachedReadSideRepositoryWriter(RavenReadSideRepositoryWriter<TEntity> readSideStorage)
+        public MemoryCachedReadSideRepositoryWriter(IReadSideRepositoryWriter<TEntity> readSideStorage)
             : base(readSideStorage)
         {
         }
