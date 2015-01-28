@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Esent.Implementation
 {
-    internal class EsentKeyValueStorage<TEntity> : IReadSideKeyValueStorage<TEntity>, IReadSideRepositoryWriter, IReadSideRepositoryCleaner, IDisposable
+    internal class EsentKeyValueStorage<TEntity> : IReadSideKeyValueStorage<TEntity>, IReadSideRepositoryCleaner, IDisposable
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly PersistentDictionary<string, string> storage;
@@ -38,13 +38,6 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
             this.storage[id] = Serialize(view);
         }
 
-        public string GetReadableStatus()
-        {
-            return "ESENT :)";
-        }
-
-        public Type ViewType { get { return typeof(TEntity); } }
-
         public void Clear()
         {
             this.storage.Clear();
@@ -54,10 +47,6 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
         {
             this.storage.Flush();
         }
-
-        public void EnableCache() {}
-
-        public void DisableCache() {}
 
         private static JsonSerializerSettings JsonSerializerSettings
         {

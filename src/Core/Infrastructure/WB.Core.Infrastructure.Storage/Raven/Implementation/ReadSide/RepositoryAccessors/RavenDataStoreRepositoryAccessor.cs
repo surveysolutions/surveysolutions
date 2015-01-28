@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors
 {
-    internal class RavenDataStoreRepositoryAccessor<TEntity> : IReadSideKeyValueStorage<TEntity>, IReadSideRepositoryWriter, IReadSideRepositoryCleaner
+    internal class RavenDataStoreRepositoryAccessor<TEntity> : IReadSideKeyValueStorage<TEntity>, IReadSideRepositoryCleaner
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly RavenReadSideRepositoryWriter<TEntity> readSideRepositoryWriter;
@@ -44,28 +44,6 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         public void Store(TEntity view, string id)
         {
           readSideRepositoryWriter.Store(view, id);
-        }
-
-        public void EnableCache()
-        {
-            readSideRepositoryWriter.EnableCache();
-            this.isCacheEnabled = true;
-        }
-
-        public void DisableCache()
-        {
-            readSideRepositoryWriter.DisableCache();
-            this.isCacheEnabled = false;
-        }
-
-        public string GetReadableStatus()
-        {
-            return readSideRepositoryWriter.GetReadableStatus();
-        }
-
-        public Type ViewType
-        {
-            get { return readSideRepositoryWriter.ViewType; }
         }
 
         public void Clear()
