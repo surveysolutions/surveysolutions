@@ -84,6 +84,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RestExtensions.cs" />
+    <Compile Include="RestMessageHandler.cs" />
     <Compile Include="RestService.cs" />
   </ItemGroup>
   <ItemGroup>

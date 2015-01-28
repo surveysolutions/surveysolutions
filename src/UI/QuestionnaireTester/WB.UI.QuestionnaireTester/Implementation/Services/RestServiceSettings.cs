@@ -1,3 +1,4 @@
+using System;
 using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.UI.QuestionnaireTester.Implementation.Services
@@ -14,6 +15,11 @@ namespace WB.UI.QuestionnaireTester.Implementation.Services
         public string BaseAddress()
         {
             return this.applicationSettings.GetPathToDesigner();
+        }
+
+        public TimeSpan GetTimeout()
+        {
+            return this.applicationSettings.GetHttpTimeout();
         }
     }
 }

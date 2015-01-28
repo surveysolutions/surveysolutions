@@ -176,7 +176,6 @@ namespace WB.UI.QuestionnaireTester.ViewModels
             catch (Exception ex)
             {
                 this.Logger.Error("Exception when downloading questionnaire/creating interview", ex);
-                this.UIDialogs.Alert(ex.Message);
             }
             finally
             {

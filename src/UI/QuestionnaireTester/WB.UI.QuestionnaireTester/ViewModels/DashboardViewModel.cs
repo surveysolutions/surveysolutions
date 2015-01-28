@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
+using WB.UI.QuestionnaireTester.Properties;
 using WB.UI.QuestionnaireTester.Services;
 using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion;
 
@@ -41,6 +42,7 @@ namespace WB.UI.QuestionnaireTester.ViewModels
 
         private IList<QuestionnaireListItem> allQuestionnaires;
         private IList<QuestionnaireListItem> questionnaires;
+
         public IList<QuestionnaireListItem> Questionnaires
         {
             get { return questionnaires; }
@@ -83,7 +85,7 @@ namespace WB.UI.QuestionnaireTester.ViewModels
         private IMvxCommand showHelpCommand;
         public IMvxCommand ShowHelpCommand
         {
-            get { return showHelpCommand ?? (showHelpCommand =  new MvxCommand(() => this.ShowViewModel<HelpViewModel>())); }
+            get { return showHelpCommand ?? (showHelpCommand = new MvxCommand(() => this.ShowViewModel<HelpViewModel>())); }
         }
 
         private IMvxCommand loadQuestionnaireCommand;
@@ -91,28 +93,26 @@ namespace WB.UI.QuestionnaireTester.ViewModels
         {
             get
             {
-                return loadQuestionnaireCommand ?? (loadQuestionnaireCommand =
-                    new MvxCommand<QuestionnaireListItem>(
-                        LoadQuestionnaire,
+                return loadQuestionnaireCommand ?? (loadQuestionnaireCommand =  new MvxCommand<QuestionnaireListItem>(this.LoadQuestionnaire,
                         (questionnaire) => questionnaire.Version <= supportedQuestionnaireVersion));
             }
-        }
-
-        private void  LoadQuestionnaire(QuestionnaireListItem questionnaire)
-        {
-            this.ShowViewModel<QuestionnairePrefilledQuestionsViewModel>(questionnaire);
         }
 
         private IMvxCommand refreshQuestionnairesCommand;
         public IMvxCommand RefreshQuestionnairesCommand
         {
-            get { return refreshQuestionnairesCommand ?? (refreshQuestionnairesCommand = new MvxCommand(async ()=>await this.RefreshQuestionnaires(), () => !this.IsInProgress)); }
+            get { return refreshQuestionnairesCommand ?? (refreshQuestionnairesCommand = new MvxCommand(async () => await this.RefreshQuestionnaires(), () => !this.IsInProgress)); }
         }
 
         private IMvxCommand findQuestionnairesCommand;
         public IMvxCommand FindQuestionnairesCommand
         {
             get { return findQuestionnairesCommand ?? (findQuestionnairesCommand = new MvxCommand<string>(this.FindQuestionnaires, (qyery) => !this.IsInProgress)); }
+        }
+
+        private void LoadQuestionnaire(QuestionnaireListItem questionnaire)
+        {
+            this.ShowViewModel<QuestionnairePrefilledQuestionsViewModel>(questionnaire);
         }
 
         private void FindQuestionnaires(string query)
@@ -148,9 +148,14 @@ namespace WB.UI.QuestionnaireTester.ViewModels
             {
                 var questionnaireListCommunicationPackage = await this.restService.GetAsync<QuestionnaireListCommunicationPackage>(
                         url: "questionnairelist",
-                        credentials: new RestCredentials() { Login = this.Principal.CurrentIdentity.Name, Password = this.Principal.CurrentIdentity.Password });
-                
-                    Questionnaires = questionnaireListCommunicationPackage.Items.ToList();
+                        credentials:
+                            new RestCredentials()
+                            {
+                                Login = this.Principal.CurrentIdentity.Name,
+                                Password = this.Principal.CurrentIdentity.Password
+                            });
+
+                this.Questionnaires = questionnaireListCommunicationPackage.Items.ToList();
             }
             catch (RestException ex)
             {
@@ -159,9 +164,16 @@ namespace WB.UI.QuestionnaireTester.ViewModels
                     case HttpStatusCode.Unauthorized:
                         this.SignOut();
                         break;
-                    default:
-                        this.UIDialogs.Alert(ex.Message);
+                    case HttpStatusCode.ServiceUnavailable:
+                        this.UIDialogs.Alert(ex.Message.Contains("maintenance")
+                            ? UIResources.Maintenance
+                            : UIResources.ServiceUnavailable);
                         break;
+                    case HttpStatusCode.RequestTimeout:
+                        this.UIDialogs.Alert(UIResources.RequestTimeout);
+                        break;
+                    default:
+                        throw;
                 }
             }
             catch (Exception ex)
