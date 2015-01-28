@@ -278,6 +278,7 @@ namespace WB.UI.Capi
             const string InterviewFilesFolder = "InterviewData";
             const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
 
+
             this.kernel = new StandardKernel(
                 new ServiceLocationModule(),
                 new InfrastructureModule().AsNinject(),
@@ -286,9 +287,13 @@ namespace WB.UI.Capi
                 new AndroidCoreRegistry(),
                 new AndroidSharedModule(),
                 new FileInfrastructureModule(),
-                new AndroidLoggingModule(),
-                new AndroidModelModule(basePath,
-                    new[] {SynchronizationFolder, InterviewFilesFolder, QuestionnaireAssembliesFolder}),
+                new AndroidLoggingModule());
+
+            this.kernel.Bind<SyncPackageIdsStorage>().ToSelf().InSingletonScope();
+            this.kernel.Bind<ISyncPackageIdsStorage>().To<SyncPackageIdsStorage>();
+
+            this.kernel.Load(new AndroidModelModule(basePath,
+                    new[] { SynchronizationFolder, InterviewFilesFolder, QuestionnaireAssembliesFolder}, this.kernel.Get<SyncPackageIdsStorage>()),
                 new ErrorReportingModule(pathToTemporaryFolder: basePath),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath,
                     syncDirectoryName: SynchronizationFolder, dataDirectoryName: InterviewFilesFolder,
@@ -319,7 +324,6 @@ namespace WB.UI.Capi
             this.kernel.Bind<IAnswerProgressIndicator>().To<AnswerProgressIndicator>().InSingletonScope();
             this.kernel.Bind<IQuestionViewFactory>().To<DefaultQuestionViewFactory>();
             this.kernel.Bind<INavigationService>().To<NavigationService>().InSingletonScope();
-            this.kernel.Bind<ISyncPackageIdsStorage>().To<SyncPackageIdsStorage>().InSingletonScope();
 
 
             this.kernel.Unbind<ISyncPackageRestoreService>();
