@@ -1,12 +1,17 @@
+using System;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Modules;
+using Ninject.Parameters;
+using ServiceStack.Common;
 using ServiceStack.Redis;
+using ServiceStack.ServiceHost;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage.Esent.Implementation;
 using WB.Core.Infrastructure.Storage.Memory.Implementation;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.Storage.RedisStore.Implementation;
+using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Esent
 {
@@ -23,11 +28,33 @@ namespace WB.Core.Infrastructure.Storage.Esent
         {
             this.Kernel.Bind<EsentSettings>().ToConstant(new EsentSettings(dataFolder));
 
-            this.Kernel.Bind(typeof(EsentKeyValueStorage<>)).ToSelf().InSingletonScope();
+            this.Kernel.Bind(typeof (EsentKeyValueStorage<>)).ToSelf().InSingletonScope();
 
-            this.Kernel.Bind(typeof(MemoryCachedKeyValueStorage<>)).ToSelf().InSingletonScope();
+            this.Kernel.Bind(typeof (MemoryCachedKeyValueStorageProvider<>)).ToSelf();
 
-            this.Kernel.Bind(typeof(IReadSideKeyValueStorage<>)).To(typeof(MemoryCachedKeyValueStorage<>)).InSingletonScope();
+            this.Kernel.Bind(typeof (IReadSideKeyValueStorage<>))
+                .ToMethod(GetReadSideKeyValueStorage)
+                .InSingletonScope();
+        }
+
+        protected object GetReadSideKeyValueStorage(IContext context)
+        {
+            var genericProvider = this.Kernel.Get(
+                typeof (MemoryCachedKeyValueStorageProvider<>).MakeGenericType(context.GenericArguments[0])) as
+                IProvider;
+
+            if(genericProvider==null)
+                return null;
+            return genericProvider.Create(context);
+        }
+
+        private class MemoryCachedKeyValueStorageProvider<TEntity> : Provider<IReadSideKeyValueStorage<TEntity>>
+            where TEntity : class, IReadSideRepositoryEntity
+        {
+            protected override IReadSideKeyValueStorage<TEntity> CreateInstance(IContext context)
+            {
+                return new MemoryCachedKeyValueStorage<TEntity>(context.Kernel.Get<EsentKeyValueStorage<TEntity>>());
+            }
         }
     }
 }
