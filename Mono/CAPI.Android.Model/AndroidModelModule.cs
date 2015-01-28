@@ -46,11 +46,13 @@ namespace CAPI.Android.Core.Model
         private const string PlainStoreName = "PlainStore";
         private readonly string basePath;
         private readonly string[] foldersToBackup;
+        private readonly IBackupable[] globalBackupables;
 
-        public AndroidModelModule(string basePath, string[] foldersToBackup)
+        public AndroidModelModule(string basePath, string[] foldersToBackup, params IBackupable[] globalBackupables)
         {
             this.basePath = basePath;
             this.foldersToBackup = foldersToBackup;
+            this.globalBackupables = globalBackupables;
         }
 
         public override void Load()
@@ -115,7 +117,10 @@ namespace CAPI.Android.Core.Model
                     evenStore, changeLogStore, fileSystem, denormalizerStore, plainStore,
                     bigSurveyStore, syncCacher, sharedPreferencesBackup, templateStore, propagationStructureStore
             };
-
+            if (globalBackupables != null && globalBackupables.Length > 0)
+            {
+                backupable.AddRange(globalBackupables);
+            }
             foreach (var folderToBackup in foldersToBackup)
             {
                 backupable.Add(new FolderBackupable(basePath, folderToBackup));
