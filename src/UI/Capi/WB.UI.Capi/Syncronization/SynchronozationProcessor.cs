@@ -133,7 +133,7 @@ namespace WB.UI.Capi.Syncronization
                 long lastReceivedPackageIdOfLongType;
                 if (!long.TryParse(lastReceivedPackageId, out lastReceivedPackageIdOfLongType))
                     return;
-                this.OnStatusChanged(new SynchronizationEventArgs("Tablet had old installation. Migrating pacakge timestamp to it's id", Operation.Pull, true));
+                this.OnStatusChanged(new SynchronizationEventArgs("Tablet had old installation. Migrating package timestamp to it's id", Operation.Pull, true));
                 string lastReceivedChunkId = await this.synchronizationService.GetChunkIdByTimestampAsync(timestamp: lastReceivedPackageIdOfLongType, credentials: credentials);
                 this.packageIdStorage.Append(lastReceivedChunkId);
                 this.interviewerSettings.SetLastReceivedPackageId(null);
