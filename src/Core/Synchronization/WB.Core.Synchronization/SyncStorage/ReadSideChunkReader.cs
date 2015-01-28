@@ -74,10 +74,10 @@ namespace WB.Core.Synchronization.SyncStorage
         {
             var items = this.indexAccessor.Query<SynchronizationDelta>(queryIndexName);
 
-            SynchronizationDelta meta = items.Where(x => timestamp < x.Timestamp)
+            SynchronizationDelta meta = items.Where(x => timestamp <= x.Timestamp)
                                              .ToList()
                                              .OrderBy(x => x.SortIndex) 
-                                             .First();
+                                             .Last();
             
             return new SynchronizationChunkMeta(meta.PublicKey);
         }
