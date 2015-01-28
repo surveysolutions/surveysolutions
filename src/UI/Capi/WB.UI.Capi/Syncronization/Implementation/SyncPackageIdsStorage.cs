@@ -3,24 +3,29 @@ using System.IO;
 using System.Linq;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Plugins.Sqlite;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.Backup;
+using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.UI.Capi.Syncronization.Implementation
 {
-    internal class SyncPackageIdsStorage : ISyncPackageIdsStorage
+    internal class SyncPackageIdsStorage : ISyncPackageIdsStorage, IBackupable
     {
+        private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ISQLiteConnectionFactory connectionFactory;
+        private const string dbFileName = "syncPackages";
+
 
         private string FullPathToDataBase
         {
             get
             {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "syncPackages");
+                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), dbFileName);
             }
         }
 
-        public SyncPackageIdsStorage()
+        public SyncPackageIdsStorage(IFileSystemAccessor fileSystemAccessor)
         {
+            this.fileSystemAccessor = fileSystemAccessor;
             PluginLoader.Instance.EnsureLoaded();
             connectionFactory = Mvx.GetSingleton<ISQLiteConnectionFactory>();
             using (var connection = connectionFactory.Create(FullPathToDataBase))
@@ -82,6 +87,19 @@ namespace WB.UI.Capi.Syncronization.Implementation
 
                 return chunkBeforeChunkWithId.Id;
             }
+        }
+
+        public string GetPathToBackupFile()
+        {
+            return this.FullPathToDataBase;
+        }
+
+        public void RestoreFromBackupFolder(string path)
+        {
+            var sourceFile = this.fileSystemAccessor.CombinePath(path, dbFileName);
+
+            this.fileSystemAccessor.DeleteFile(FullPathToDataBase);
+            this.fileSystemAccessor.CopyFileOrDirectory(sourceFile, FullPathToDataBase);
         }
     }
 }
