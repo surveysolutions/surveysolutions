@@ -111,8 +111,8 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             if(handlersWithStopwatches==null)
                 return new List<ReadSideDenormalizerStatistic>();
             var currentStateOfDenormalizers =
-                handlersWithStopwatches.OrderByDescending(h => h.Value.Elapsed)
-                    .Select(h => new {Name = h.Key.Name, Ticks = h.Value.ElapsedTicks});
+                handlersWithStopwatches.OrderByDescending(h => h.Value.Elapsed.Ticks)
+                    .Select(h => new {Name = h.Key.Name, Ticks = h.Value.Elapsed.Ticks});
 
             var timeSpentForAllDenormalizers = currentStateOfDenormalizers.Sum(x => x.Ticks);
             return
