@@ -4,9 +4,11 @@ using Ninject.Activation;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Storage.Esent.Implementation;
 using WB.Core.Infrastructure.Storage.Memory.Implementation;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
+using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Raven
 {
@@ -35,24 +37,39 @@ namespace WB.Core.Infrastructure.Storage.Raven
            
             this.Bind<RavenReadSideRepositoryWriterSettings>().ToConstant(ravenReadSideRepositoryWriterSettings);
 
-            // each repository writer should exist in one instance because it might use caching
-            this.Kernel.Bind(typeof(RavenReadSideRepositoryWriter<>)).ToSelf().InSingletonScope();
-            this.Kernel.Bind(typeof(MemoryCachedReadSideRepositoryWriter<>)).ToSelf().InSingletonScope();
-            this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).To(typeof(MemoryCachedReadSideRepositoryWriter<>)).InSingletonScope();
-
+          
             this.Kernel.Bind(typeof(IReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);
             this.Kernel.Bind(typeof(IQueryableReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);
 
-
-          //  this.Kernel.Bind(typeof(FilesStoreRepositoryAccessor<>)).ToSelf().InSingletonScope();
-            //this.Kernel.Bind(typeof(RavenFilesStoreRepositoryAccessor<>)).ToSelf().InSingletonScope();
-            //this.Kernel.Bind(typeof(IReadSideKeyValueStorage<>)).ToMethod(this.GetKeyValueStorage);
-
+            // each repository writer should exist in one instance because it might use caching
+            this.Kernel.Bind(typeof(RavenReadSideRepositoryWriter<>)).ToSelf().InSingletonScope();
+            this.Kernel.Bind(typeof(MemoryCachedReadSideRepositoryWriterProvider<>)).ToSelf();
+            this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(GetReadSideRepositoryWriter).InSingletonScope(); 
         }
 
         protected object GetReadSideRepositoryReader(IContext context)
         {
             return this.Kernel.Get(typeof(RavenReadSideRepositoryReader<>).MakeGenericType(context.GenericArguments[0]));
+        }
+
+        protected object GetReadSideRepositoryWriter(IContext context)
+        {
+            var genericProvider = this.Kernel.Get(
+                  typeof(MemoryCachedReadSideRepositoryWriterProvider<>).MakeGenericType(context.GenericArguments[0])) as
+                  IProvider;
+
+            if (genericProvider == null)
+                return null;
+            return genericProvider.Create(context);
+        }
+
+        private class MemoryCachedReadSideRepositoryWriterProvider<TEntity> : Provider<IReadSideRepositoryWriter<TEntity>>
+           where TEntity : class, IReadSideRepositoryEntity
+        {
+            protected override IReadSideRepositoryWriter<TEntity> CreateInstance(IContext context)
+            {
+                return new MemoryCachedReadSideRepositoryWriter<TEntity>(context.Kernel.Get<RavenReadSideRepositoryWriter<TEntity>>());
+            }
         }
     }
 }
