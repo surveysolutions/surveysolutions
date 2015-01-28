@@ -4,6 +4,7 @@ using Ninject.Activation;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Storage.Memory.Implementation;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 
@@ -36,21 +37,17 @@ namespace WB.Core.Infrastructure.Storage.Raven
 
             // each repository writer should exist in one instance because it might use caching
             this.Kernel.Bind(typeof(RavenReadSideRepositoryWriter<>)).ToSelf().InSingletonScope();
+            this.Kernel.Bind(typeof(MemoryCachedReadSideRepositoryWriter<>)).ToSelf().InSingletonScope();
+            this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).To(typeof(MemoryCachedReadSideRepositoryWriter<>)).InSingletonScope();
 
             this.Kernel.Bind(typeof(IReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);
             this.Kernel.Bind(typeof(IQueryableReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);
-            this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(this.GetReadSideRepositoryWriter);
 
 
           //  this.Kernel.Bind(typeof(FilesStoreRepositoryAccessor<>)).ToSelf().InSingletonScope();
             //this.Kernel.Bind(typeof(RavenFilesStoreRepositoryAccessor<>)).ToSelf().InSingletonScope();
             //this.Kernel.Bind(typeof(IReadSideKeyValueStorage<>)).ToMethod(this.GetKeyValueStorage);
 
-        }
-
-        protected object GetReadSideRepositoryWriter(IContext context)
-        {
-            return this.Kernel.Get(typeof(RavenReadSideRepositoryWriter<>).MakeGenericType(context.GenericArguments[0]));
         }
 
         protected object GetReadSideRepositoryReader(IContext context)
