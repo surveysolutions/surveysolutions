@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
             interviewViewModel.UpdateRosterRowTitle(rosterGroupId, new decimal[] { }, 0, rosterTitle);
 
         It should_roster_title_be_equal_set_title = () =>
-            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(rosterGroupId, new decimal[] { 0 })]).ScreenName.ShouldEqual(rosterTitle);
+            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(rosterGroupId, new decimal[] { 0 })]).ScreenName.ShouldEqual(rosterTitle);
 
         It should_create_numeric_question_with_triggered_roster_titles_filled = () =>
             interviewViewModel.FindQuestion(q => q.PublicKey.Id == rosterSizeQuestionId).First().TriggeredRosters.ShouldEqual(new[] { groupTitle });

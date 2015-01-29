@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
             interviewViewModel.RemovePropagatedScreen(rosterId, new decimal[0], 0);
 
         It should_contain_screen_with_added_roster_row = () =>
-            interviewViewModel.Screens.Keys.ShouldNotContain(new InterviewItemId(rosterId, new decimal[] { 0 }));
+            interviewViewModel.Screens.Keys.ShouldNotContain(InterviewItemId.ConvertIdAndRosterVectorToString(rosterId, new decimal[] { 0 }));
 
         private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;

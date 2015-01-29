@@ -69,13 +69,13 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
         };
 
         Because of = () =>
-            interviewViewModel.SetAnswer(new InterviewItemId(rosterTitleQuestionId, new decimal[] { 0 }), rosterTitle);
+            interviewViewModel.SetAnswer(InterviewItemId.ConvertIdAndRosterVectorToString(rosterTitleQuestionId, new decimal[] { 0 }), rosterTitle);
 
         It should_title_of_first_roster_be_equal_set_title = () =>
-            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(rosterGroupId1, new decimal[] { 0 })]).ScreenName.ShouldEqual(rosterTitle);
+            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(rosterGroupId1, new decimal[] { 0 })]).ScreenName.ShouldEqual(rosterTitle);
 
         It should_title_of_second_roster_be_equal_set_title = () =>
-            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(rosterGroupId2, new decimal[] { 0 })]).ScreenName.ShouldEqual(rosterTitle);
+            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(rosterGroupId2, new decimal[] { 0 })]).ScreenName.ShouldEqual(rosterTitle);
 
         private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;
