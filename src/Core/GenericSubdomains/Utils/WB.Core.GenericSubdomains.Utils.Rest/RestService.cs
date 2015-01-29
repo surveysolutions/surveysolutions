@@ -73,17 +73,17 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
 
         public async Task<T> PostAsync<T>(string url, object request = null, RestCredentials credentials = null)
         {
-            return await this.PostAsync<T>(url: url, credentials: credentials, token: default(CancellationToken));
+            return await this.PostAsync<T>(url: url, credentials: credentials, request: request, token: default(CancellationToken));
         }
 
         public async Task PostAsync(string url, object request = null, RestCredentials credentials = null)
         {
-            await this.PostAsync(url: url, credentials: credentials, token: default(CancellationToken));
+            await this.PostAsync(url: url, credentials: credentials, request: request, token: default(CancellationToken));
         }
 
         public async Task<T> GetAsync<T>(string url, CancellationToken token, object queryString = null, RestCredentials credentials = null)
         {
-            return await this.ExecuteRequestAsync(url: url, queryString: queryString, credentials: credentials, request: (client) => client.GetAsync(), token: token).ReceiveCompressedJson<T>();
+            return await this.ExecuteRequestAsync(url: url, queryString: queryString, credentials: credentials, request: (client) => client.GetAsync(), token: token).ReceiveCompressedJsonAsync<T>();
         }
 
         public async Task GetAsync(string url, CancellationToken token, object queryString = null, RestCredentials credentials = null)
@@ -93,12 +93,24 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
 
         public async Task<T> PostAsync<T>(string url, CancellationToken token, object request = null, RestCredentials credentials = null)
         {
-            return await this.ExecuteRequestAsync(url: url, credentials: credentials, request: (client) => client.PostJsonAsync(request), token: token).GetJsonAsyncWithProgress<T>(token);
+            return await this.ExecuteRequestAsync(url: url, credentials: credentials, request: (client) => client.PostJsonAsync(request), token: token).ReceiveCompressedJsonAsync<T>();
         }
 
         public async Task PostAsync(string url, CancellationToken token, object request = null, RestCredentials credentials = null)
         {
             await this.ExecuteRequestAsync(url: url, credentials: credentials, request: (client) => client.PostJsonAsync(request), token: token);
+        }
+
+        public async Task<T> GetWithProgressAsync<T>(string url, CancellationToken token, IProgress<decimal> progress, object queryString = null,
+            RestCredentials credentials = null)
+        {
+            return await this.ExecuteRequestAsync(url: url, queryString: queryString, credentials: credentials, request: (client) => client.GetAsync(), token: token).ReceiveCompressedJsonWithProgressAsync<T>(token: token, progress : progress);
+        }
+
+        public async Task<T> PostWithProgressAsync<T>(string url, CancellationToken token, IProgress<decimal> progress, object request = null,
+            RestCredentials credentials = null)
+        {
+            return await this.ExecuteRequestAsync(url: url, credentials: credentials, request: (client) => client.PostJsonAsync(request), token: token).ReceiveCompressedJsonWithProgressAsync<T>(token:token, progress: progress);
         }
     }
 }

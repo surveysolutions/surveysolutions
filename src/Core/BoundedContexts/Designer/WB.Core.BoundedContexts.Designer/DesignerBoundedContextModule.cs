@@ -40,7 +40,6 @@ namespace WB.Core.BoundedContexts.Designer
         public override void Load()
         {
             this.Bind<IQuestionDetailsViewMapper>().To<QuestionDetailsViewMapper>().InSingletonScope();
-            this.Bind<IQuestionnaireExportService>().To<QuestionnaireExportService>().InSingletonScope();
             this.Bind<IQuestionnaireDocumentUpgrader>().To<QuestionnaireDocumentUpgrader>().InSingletonScope();
             this.Bind<IQuestionnaireEntityFactory>().To<QuestionnaireEntityFactory>().InSingletonScope();
             this.Bind<IQuestionnaireVersioner>().To<QuestionnaireVersioner>().InSingletonScope();

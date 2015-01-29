@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Utils.Implementation;
@@ -16,5 +17,8 @@ namespace WB.Core.GenericSubdomains.Utils.Services
         Task GetAsync(string url, CancellationToken token, object queryString = null, RestCredentials credentials = null);
         Task<T> PostAsync<T>(string url, CancellationToken token, object request = null, RestCredentials credentials = null);
         Task PostAsync(string url, CancellationToken token, object request = null, RestCredentials credentials = null);
+
+        Task<T> GetWithProgressAsync<T>(string url, CancellationToken token, IProgress<decimal> progress,  object queryString = null, RestCredentials credentials = null);
+        Task<T> PostWithProgressAsync<T>(string url, CancellationToken token, IProgress<decimal> progress, object request = null, RestCredentials credentials = null);
     }
 }
