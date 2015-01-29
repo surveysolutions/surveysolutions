@@ -70,11 +70,12 @@ namespace WB.Core.Synchronization.SyncStorage
             return result; 
         }
 
-        public SynchronizationChunkMeta GetChunkMetaDataByTimestamp(DateTime timestamp)
+        public SynchronizationChunkMeta GetChunkMetaDataByTimestamp(DateTime timestamp, IEnumerable<Guid> users)
         {
             var items = this.indexAccessor.Query<SynchronizationDelta>(queryIndexName);
+            var userIds = users.Concat(new[] { Guid.Empty });
 
-            SynchronizationDelta meta = items.Where(x => timestamp >= x.Timestamp)
+            SynchronizationDelta meta = items.Where(x => timestamp >= x.Timestamp && x.UserId.In(userIds))
                                              .ToList()
                                              .OrderBy(x => x.SortIndex) 
                                              .Last();
