@@ -3,7 +3,6 @@ using System.Web;
 using System.Web.Mvc;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -17,7 +16,6 @@ namespace WB.UI.Designer.Controllers
     public class SynchronizationController : BaseController
     {
         private readonly ICommandService commandService;
-        private readonly IQuestionnaireExportService exportService;
         private readonly IStringCompressor zipUtils;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
 
@@ -25,13 +23,11 @@ namespace WB.UI.Designer.Controllers
             ICommandService commandService,
             IMembershipUserService userHelper,
             IStringCompressor zipUtils,
-            IQuestionnaireExportService exportService,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory)
             : base(userHelper)
         {
             this.commandService = commandService;
             this.zipUtils = zipUtils;
-            this.exportService = exportService;
             this.questionnaireViewFactory = questionnaireViewFactory;
         }
 
@@ -42,16 +38,9 @@ namespace WB.UI.Designer.Controllers
             if (questionnaireView == null)
                 return null;
 
-            var templateInfo = this.exportService.GetQuestionnaireTemplateInfo(questionnaireView.Source);
-
-            if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
+            return new FileStreamResult(this.zipUtils.CompressGZip(questionnaireView.Source), "application/octet-stream")
             {
-                return null;
-            }
-
-            return new FileStreamResult(this.zipUtils.Compress(templateInfo.Source), "application/octet-stream")
-            {
-                FileDownloadName = string.Format("{0}.tmpl", templateInfo.Title.ToValidFileName())
+                FileDownloadName = string.Format("{0}.tmpl", questionnaireView.Title.ToValidFileName())
             };
         }
 

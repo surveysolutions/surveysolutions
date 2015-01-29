@@ -302,7 +302,6 @@
     <Compile Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplateExt.cs" />
     <Compile Include="Services\IKeywordsProvider .cs" />
     <Compile Include="Services\IQuestionnaireVerifier.cs" />
-    <Compile Include="Implementation\Services\QuestionnaireExportService .cs" />
     <Compile Include="Implementation\Services\QuestionnaireDocumentUpgrader.cs" />
     <Compile Include="Implementation\Services\QuestionnaireVersioner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -317,11 +316,9 @@
       <DependentUpon>ExceptionMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\IExpressionReplacer.cs" />
-    <Compile Include="Services\IQuestionnaireExportService .cs" />
     <Compile Include="Services\IQuestionnaireDocumentUpgrader.cs" />
     <Compile Include="Services\IQuestionnaireVersioner.cs" />
     <Compile Include="Services\ExpressionLocationItemType.cs" />
-    <Compile Include="Services\TemplateInfo.cs" />
     <Compile Include="ValueObjects\InconsistentVersionException.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationError.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationReference.cs" />
