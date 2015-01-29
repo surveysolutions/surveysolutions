@@ -9,6 +9,8 @@ using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using Ninject;
 using Ninject.Modules;
+using Nito.AsyncEx;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.Infrastructure.Storage.EventStore.Implementation;
 using ILogger = WB.Core.GenericSubdomains.Utils.Services.ILogger;
 
@@ -45,25 +47,13 @@ namespace WB.Core.Infrastructure.Storage.EventStore
             var manager = new ProjectionsManager(new EventStoreLogger(logger), httpEndPoint, TimeSpan.FromSeconds(2));
 
             var userCredentials = new UserCredentials(this.settings.Login, this.settings.Password);
-            try
+            string projectionStatus = AsyncContext.Run(() => manager.GetStatusAsync("$by_category"));
+            var status = JsonConvert.DeserializeAnonymousType(projectionStatus, new { status = "" });
+            if (status.status != "Running")
             {
-                var status = JsonConvert.DeserializeAnonymousType(manager.GetStatusAsync("$by_category").Result, new { status = "" });
-                if (status.status != "Running")
-                {
-                    manager.EnableAsync("$by_category", userCredentials);
-                }
-                manager.GetStatusAsync("ToAllEvents", userCredentials).Wait();
-            }
-            catch (AggregateException)
-            {
-                string projectionQuery = @"fromCategory('" + WriteSideEventStore.EventsCategory + @"') 
-                                                .when({        
-                                                    $any: function (s, e) {
-                                                        linkTo('" + WriteSideEventStore.AllEventsStream + @"', e)
-                                                    }
-                                                })";
-                manager.CreateContinuousAsync("ToAllEvents", projectionQuery, userCredentials);
+                manager.EnableAsync("$by_category", userCredentials).WaitAndUnwrapException();
             }
         }
+
     }
 }

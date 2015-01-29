@@ -148,9 +148,10 @@ namespace WB.Core.Synchronization.SyncStorage
             chunkStorageWriter.StoreChunk(syncItem, null, timestamp);
         }
 
-        public SynchronizationChunkMeta GetChunkInfoByTimestamp(DateTime timestamp)
+        public SynchronizationChunkMeta GetChunkInfoByTimestamp(DateTime timestamp, Guid userId)
         {
-            return this.chunkStorageReader.GetChunkMetaDataByTimestamp(timestamp);
+            var users = GetUserTeamates(userId);
+            return this.chunkStorageReader.GetChunkMetaDataByTimestamp(timestamp, users);
         }
 
         private static string GetItemAsContent(object item)

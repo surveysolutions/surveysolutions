@@ -39,7 +39,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         bool disposed;
         private readonly TimeSpan defaultTimeout = TimeSpan.FromSeconds(30);
 
-        internal const string AllEventsStream = "all_wb";
+        internal static readonly string AllEventsStream = "$ce-" + EventsCategory;
 
         public WriteSideEventStore(IEventStoreConnectionProvider connectionProvider)
         {
