@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Synchronization.SyncStorage;
@@ -15,10 +17,10 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SimpleSynchronizationDataS
             simpleSynchronizationDataStorage = GetSimpleSynchronizationDataStorage(chunkStorageReader: chunkStorageReader.Object);
         };
 
-        private Because of = () => simpleSynchronizationDataStorage.GetChunkInfoByTimestamp(timestamp);
+        private Because of = () => simpleSynchronizationDataStorage.GetChunkInfoByTimestamp(timestamp, new Guid());
 
         It should_get_chunk_meta_data_by_timestamp = () =>
-            chunkStorageReader.Verify(x => x.GetChunkMetaDataByTimestamp(timestamp), Times.Once);
+            chunkStorageReader.Verify(x => x.GetChunkMetaDataByTimestamp(timestamp, Moq.It.IsAny<IEnumerable<Guid>>()), Times.Once);
         
         private static SimpleSynchronizationDataStorage simpleSynchronizationDataStorage;
         private static Mock<IChunkReader> chunkStorageReader;
