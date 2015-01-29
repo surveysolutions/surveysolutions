@@ -4,6 +4,7 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.Synchronization.Commands;
 using WB.Core.Synchronization.Documents;
 using WB.Core.Synchronization.SyncProvider;
@@ -82,9 +83,9 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             return new SyncPackage() {Id = Guid.NewGuid(), SyncItem = item};
         }
 
-        public string GetPackageIdByTimestamp(DateTime timestamp)
+        public string GetPackageIdByTimestamp(Guid userId, DateTime timestamp)
         {
-            return this.storage.GetChunkInfoByTimestamp(timestamp).Id;
+            return this.storage.GetChunkInfoByTimestamp(timestamp, userId).Id;
         }
 
         private SyncItem GetSyncItem(Guid clientRegistrationKey, string id)
