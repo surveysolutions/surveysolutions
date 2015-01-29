@@ -165,7 +165,7 @@ namespace WB.UI.Shared.Android.Activities
 
             if (e.ScreenId.HasValue)
             {
-                var screen = this.Model.Screens[e.ScreenId.Value];
+                var screen = this.Model.Screens[InterviewItemId.ConvertInterviewItemId(e.ScreenId.Value)];
                 var chapterKey = screen.Breadcrumbs.First();
                 for (int i = 0; i < this.Model.Chapters.Count; i++)
                 {

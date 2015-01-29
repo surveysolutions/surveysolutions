@@ -56,49 +56,49 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
              PropagateScreen(interviewViewModel, rosterId, 0);
 
         It should_contain_grid_screen = () =>
-            interviewViewModel.Screens.Keys.ShouldContain(new InterviewItemId(rosterId, new decimal[0]));
+            interviewViewModel.Screens.Keys.ShouldContain(InterviewItemId.ConvertIdAndRosterVectorToString(rosterId, new decimal[0]));
 
         It should_contain_grid_screen_with_nested_group = () =>
-            ((QuestionnaireGridViewModel)interviewViewModel.Screens[new InterviewItemId(rosterId, new decimal[0])]).Rows.First().Items[0].PublicKey.ShouldEqual(new InterviewItemId(nestedGroupId, new decimal[] { 0 }));
+            ((QuestionnaireGridViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(rosterId, new decimal[0])]).Rows.First().Items[0].PublicKey.ShouldEqual(new InterviewItemId(nestedGroupId, new decimal[] { 0 }));
 
         It should_contain_grid_screen_with_header_with_nested_group_id = () =>
-            ((QuestionnaireGridViewModel)interviewViewModel.Screens[new InterviewItemId(rosterId, new decimal[0])]).Header[0].PublicKey.ShouldEqual(nestedGroupId);
+            ((QuestionnaireGridViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(rosterId, new decimal[0])]).Header[0].PublicKey.ShouldEqual(nestedGroupId);
 
         It should_contain_grid_screen_with_header_with_nested_group_title = () =>
-            ((QuestionnaireGridViewModel)interviewViewModel.Screens[new InterviewItemId(rosterId, new decimal[0])]).Header[0].Title.ShouldEqual(nestedGroupTitle);
+            ((QuestionnaireGridViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(rosterId, new decimal[0])]).Header[0].Title.ShouldEqual(nestedGroupTitle);
 
         It should_contain_screen_with_added_roster_row = () =>
-            interviewViewModel.Screens.Keys.ShouldContain(new InterviewItemId(rosterId, new decimal[] { 0 }));
+            interviewViewModel.Screens.Keys.ShouldContain(InterviewItemId.ConvertIdAndRosterVectorToString(rosterId, new decimal[] { 0 }));
 
         It should_contain_roster_screen_with_nested_group_inside_roster_row = () =>
-            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(rosterId, new decimal[] { 0 })]).Items[0].PublicKey.ShouldEqual(new InterviewItemId(nestedGroupId, new decimal[] { 0 }));
+            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(rosterId, new decimal[] { 0 })]).Items[0].PublicKey.ShouldEqual(new InterviewItemId(nestedGroupId, new decimal[] { 0 }));
 
         It should_contain_screen_with_added_nested_roster_row = () =>
-            interviewViewModel.Screens.Keys.ShouldContain(new InterviewItemId(nestedGroupId, new decimal[] { 0 }));
+            interviewViewModel.Screens.Keys.ShouldContain(InterviewItemId.ConvertIdAndRosterVectorToString(nestedGroupId, new decimal[] { 0 }));
 
         It should_not_contain_nested_rosters_grid_screen = () =>
-           interviewViewModel.Screens.Keys.ShouldNotContain(new InterviewItemId(nestedGroupId, new decimal[0]));
+           interviewViewModel.Screens.Keys.ShouldNotContain(InterviewItemId.ConvertIdAndRosterVectorToString(nestedGroupId, new decimal[0]));
 
         It should_breadcrumbs_count_of_nested_group_be_equal_to_4 = () =>
-            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(nestedGroupId, new decimal[] { 0 })]).Breadcrumbs.Count().ShouldEqual(4);
+            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(nestedGroupId, new decimal[] { 0 })]).Breadcrumbs.Count().ShouldEqual(4);
 
         It should_contain_nested_group_screen_with_nested_group_title = () =>
-            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(nestedGroupId, new decimal[] { 0 })]).ScreenName.ShouldEqual(nestedGroupTitle);
+            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(nestedGroupId, new decimal[] { 0 })]).ScreenName.ShouldEqual(nestedGroupTitle);
 
         It should_last_breadcrumb_of_nested_group_be_equal_to_nested_group_id = () =>
-            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(nestedGroupId, new decimal[] { 0 })]).Breadcrumbs.Last().ShouldEqual(new InterviewItemId(nestedGroupId, new decimal[] { 0 }));
+            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(nestedGroupId, new decimal[] { 0 })]).Breadcrumbs.Last().ShouldEqual(new InterviewItemId(nestedGroupId, new decimal[] { 0 }));
 
         It should_3n_breadcrumb_of_nested_group_be_equal_to_roster_row_screen_id = () =>
-            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(nestedGroupId, new decimal[] { 0 })]).Breadcrumbs.ToList()[2].ShouldEqual(new InterviewItemId(rosterId, new decimal[] { 0 }));
+            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(nestedGroupId, new decimal[] { 0 })]).Breadcrumbs.ToList()[2].ShouldEqual(new InterviewItemId(rosterId, new decimal[] { 0 }));
 
         It should_2n_breadcrumb_of_nested_group_be_equal_to_greed_screen_id = () =>
-            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(nestedGroupId, new decimal[] { 0 })]).Breadcrumbs.ToList()[1].ShouldEqual(new InterviewItemId(rosterId, new decimal[0]));
+            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(nestedGroupId, new decimal[] { 0 })]).Breadcrumbs.ToList()[1].ShouldEqual(new InterviewItemId(rosterId, new decimal[0]));
 
         It should_have_1_sibling_of_nested_group = () =>
-            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(nestedGroupId, new decimal[] { 0 })]).Siblings.Count().ShouldEqual(1);
+            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(nestedGroupId, new decimal[] { 0 })]).Siblings.Count().ShouldEqual(1);
 
         It should_have_him_self_in_list_of_siblings = () =>
-            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(nestedGroupId, new decimal[] { 0 })]).Siblings.First().ShouldEqual(new InterviewItemId(nestedGroupId, new decimal[] { 0 }));
+            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(nestedGroupId, new decimal[] { 0 })]).Siblings.First().ShouldEqual(new InterviewItemId(nestedGroupId, new decimal[] { 0 }));
 
         private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;

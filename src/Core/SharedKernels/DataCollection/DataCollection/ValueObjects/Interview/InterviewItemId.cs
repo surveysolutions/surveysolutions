@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 {
@@ -124,6 +127,23 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
                 return new InterviewItemId(Guid.Parse(items[items.Length - 1]), vector);
             }
             return new InterviewItemId(Guid.Parse(value));
+        }
+
+        public static string ConvertIdAndRosterVectorToString(Guid id, decimal[] rosterVector = null)
+        {
+            if (rosterVector == null || !rosterVector.Any())
+                return id.FormatGuid();
+
+            return string.Format("{0}[{1}]", id.FormatGuid(),
+                string.Join((string) "-",
+                    (IEnumerable<string>)
+                        rosterVector.Select(
+                            v => v.ToString("0.############################", CultureInfo.InvariantCulture))));
+        }
+
+        public static string ConvertInterviewItemId(InterviewItemId interviewItemId)
+        {
+            return ConvertIdAndRosterVectorToString(interviewItemId.Id, interviewItemId.InterviewItemPropagationVector);
         }
     }
 

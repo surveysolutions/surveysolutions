@@ -59,31 +59,31 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
         };
 
         Because of = () =>
-            interviewViewModel.SetScreenStatus(new InterviewItemId(chapterId, new decimal[0]), false);
+            interviewViewModel.SetScreenStatus(InterviewItemId.ConvertIdAndRosterVectorToString(chapterId, new decimal[0]), false);
 
         It should_nested_group_be_disabled = () =>
-            ((QuestionnaireScreenViewModel)interviewViewModel.Screens[new InterviewItemId(nestedGroupId, new decimal[0])]).Enabled.ShouldEqual(false);
+            ((QuestionnaireScreenViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(nestedGroupId, new decimal[0])]).Enabled.ShouldEqual(false);
 
         It should_nested_group_be_disabled_as_item_inside_chapter = () =>
-            ((QuestionnaireNavigationPanelItem)((QuestionnaireScreenViewModel)interviewViewModel.Screens[new InterviewItemId(chapterId, new decimal[0])]).Items[0]).Enabled.ShouldEqual(false);
+            ((QuestionnaireNavigationPanelItem)((QuestionnaireScreenViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(chapterId, new decimal[0])]).Items[0]).Enabled.ShouldEqual(false);
 
         It should_quesition_inside_nested_group_be_disabled = () =>
             ((QuestionViewModel)
-                ((QuestionnaireScreenViewModel) interviewViewModel.Screens[new InterviewItemId(nestedGroupId, new decimal[0])]).Items[0])
+                ((QuestionnaireScreenViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(nestedGroupId, new decimal[0])]).Items[0])
                 .Status.HasFlag(QuestionStatus.ParentEnabled).ShouldEqual(false);
 
         It should_quesition_inside_nested_group_be_disabled_if_question_is_queried_from_interviewViewModel = () =>
            interviewViewModel.FindQuestion(q => q.PublicKey.Id == nestedGroupInnterQuestionId).First().Status.HasFlag(QuestionStatus.ParentEnabled).ShouldEqual(false);
 
         It should_nested_inner_group_be_disabled = () =>
-            ((QuestionnaireScreenViewModel)interviewViewModel.Screens[new InterviewItemId(nestedGroupInnterGroupId, new decimal[0])]).Enabled.ShouldEqual(false);
+            ((QuestionnaireScreenViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(nestedGroupInnterGroupId, new decimal[0])]).Enabled.ShouldEqual(false);
 
         It should_nested_inner_group_be_disabled_as_item_inside_chapter = () =>
-            ((QuestionnaireNavigationPanelItem)((QuestionnaireScreenViewModel)interviewViewModel.Screens[new InterviewItemId(nestedGroupId, new decimal[0])]).Items[1]).Enabled.ShouldEqual(false);
+            ((QuestionnaireNavigationPanelItem)((QuestionnaireScreenViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(nestedGroupId, new decimal[0])]).Items[1]).Enabled.ShouldEqual(false);
 
         It should_quesition_inside_chapter_be_disabled = () =>
            ((QuestionViewModel)
-               ((QuestionnaireScreenViewModel)interviewViewModel.Screens[new InterviewItemId(chapterId, new decimal[0])]).Items[1])
+               ((QuestionnaireScreenViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(chapterId, new decimal[0])]).Items[1])
                .Status.HasFlag(QuestionStatus.ParentEnabled).ShouldEqual(false);
 
         It should_quesition_inside_chapter_be_disabled_if_question_is_queried_from_interviewViewModel = () =>

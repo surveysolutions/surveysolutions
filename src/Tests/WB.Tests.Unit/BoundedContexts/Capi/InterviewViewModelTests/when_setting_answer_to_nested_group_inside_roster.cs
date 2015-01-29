@@ -62,28 +62,28 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
         };
 
         Because of = () =>
-            interviewViewModel.SetAnswer(new InterviewItemId(questionInNestedGroupId, new decimal[] { 0 }), 3);
+            interviewViewModel.SetAnswer(InterviewItemId.ConvertIdAndRosterVectorToString(questionInNestedGroupId, new decimal[] { 0 }), 3);
 
         It should_count_of_answered_questions_in_rosters_navigation_item_of_nested_group_be_equal_to_1 = () =>
-            ((QuestionnaireNavigationPanelItem)((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(rosterId, new decimal[] { 0 })]).Items[0]).Answered.ShouldEqual(1);
+            ((QuestionnaireNavigationPanelItem)((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(rosterId, new decimal[] { 0 })]).Items[0]).Answered.ShouldEqual(1);
         
         It should_count_of_total_questions_in_rosters_navigation_item_of_nested_group_be_equal_to_1 = () =>
-            ((QuestionnaireNavigationPanelItem)((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(rosterId, new decimal[] { 0 })]).Items[0]).Total.ShouldEqual(1);
+            ((QuestionnaireNavigationPanelItem)((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(rosterId, new decimal[] { 0 })]).Items[0]).Total.ShouldEqual(1);
 
         It should_count_of_answered_questions_in_grids_first_row_of_nested_group_be_equal_to_1 = () =>
-            ((QuestionnaireNavigationPanelItem)((QuestionnaireGridViewModel)interviewViewModel.Screens[new InterviewItemId(rosterId, new decimal[0])]).Rows.First().Items[0]).Answered.ShouldEqual(1);
+            ((QuestionnaireNavigationPanelItem)((QuestionnaireGridViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(rosterId, new decimal[0])]).Rows.First().Items[0]).Answered.ShouldEqual(1);
 
         It should_count_of_total_questions_in_grids_first_row_of_nested_group_be_equal_to_1 = () =>
-          ((QuestionnaireNavigationPanelItem)((QuestionnaireGridViewModel)interviewViewModel.Screens[new InterviewItemId(rosterId, new decimal[0])]).Rows.First().Items[0]).Total.ShouldEqual(1);
+          ((QuestionnaireNavigationPanelItem)((QuestionnaireGridViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(rosterId, new decimal[0])]).Rows.First().Items[0]).Total.ShouldEqual(1);
 
         It should_count_of_answered_questions_in_nested_group_screen_be_equal_to_1 = () =>
-            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(nestedGroupId, new decimal[] { 0 })]).Answered.ShouldEqual(1);
+            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(nestedGroupId, new decimal[] { 0 })]).Answered.ShouldEqual(1);
 
         It should_count_of_total_questions_in_nested_group_screen_be_equal_to_1 = () =>
-            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(nestedGroupId, new decimal[] { 0 })]).Total.ShouldEqual(1);
+            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(nestedGroupId, new decimal[] { 0 })]).Total.ShouldEqual(1);
 
         It should_answer_on_question_in_nested_group_be_equal_3_ = () =>
-            ((ValueQuestionViewModel)((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(nestedGroupId, new decimal[] { 0 })]).Items[0]).AnswerObject.ShouldEqual(3);
+            ((ValueQuestionViewModel)((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(nestedGroupId, new decimal[] { 0 })]).Items[0]).AnswerObject.ShouldEqual(3);
 
         It should_answer_on_answered_question_be_equal_3_ = () =>
             interviewViewModel.FindQuestion(q => q.PublicKey == new InterviewItemId(questionInNestedGroupId, new decimal[] { 0 }))

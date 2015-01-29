@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
         private static StaticTextViewModel getStaticTextInRosterRow(int indexOfRow)
         {
             return
-                ((QuestionnaireGridViewModel) (interviewViewModel.Screens[interviewItemId])).Rows.ElementAt(indexOfRow).Items[0] as StaticTextViewModel;
+                ((QuestionnaireGridViewModel)(interviewViewModel.Screens[InterviewItemId.ConvertInterviewItemId(interviewItemId)])).Rows.ElementAt(indexOfRow).Items[0] as StaticTextViewModel;
         }
 
         private static InterviewViewModel interviewViewModel;

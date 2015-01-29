@@ -58,14 +58,14 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
             PropagateScreen(interviewViewModel, nestedRosterId, 1, new decimal[] { 0 });
 
         It should_added_screen_has_2_siblings = () =>
-            interviewViewModel.Screens[new InterviewItemId(nestedRosterId, new decimal[] { 0,1 })].Siblings.Count().ShouldEqual(2);
+            interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(nestedRosterId, new decimal[] { 0,1 })].Siblings.Count().ShouldEqual(2);
 
         It should_added_screen_has_first_roster_row_as_sibling = () =>
-            interviewViewModel.Screens[new InterviewItemId(nestedRosterId, new decimal[] { 0, 1 })].Siblings.Select(
+            interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(nestedRosterId, new decimal[] { 0, 1 })].Siblings.Select(
                 s => s.InterviewItemPropagationVector.LastOrDefault()).SequenceEqual(new decimal[] { 0, 1 });
 
         It should_added_screen_siblings_has_nestedRosterId_as_screen_id = () =>
-            interviewViewModel.Screens[new InterviewItemId(nestedRosterId, new decimal[] { 0, 1 })].Siblings.Select(
+            interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(nestedRosterId, new decimal[] { 0, 1 })].Siblings.Select(
                 s => s.Id).SequenceEqual(new [] { nestedRosterId });
 
         private static InterviewViewModel interviewViewModel;
