@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
         };
 
         Because of = () =>
-            interviewViewModel.SetAnswer(new InterviewItemId(targetQuestionId, new decimal[0]), answer);
+            interviewViewModel.SetAnswer(InterviewItemId.ConvertIdAndRosterVectorToString(targetQuestionId, new decimal[0]), answer);
 
         It should_unansweredQuestions_in_statistic_count_has_zero_elements = () =>
            interviewViewModel.Statistics.UnansweredQuestions.ShouldBeEmpty();
