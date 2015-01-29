@@ -20,7 +20,7 @@ namespace WB.Core.Synchronization.Implementation.ReadSide.Indexes
 
         public SynchronizationDeltasByBriefFields()
         {
-            this.Map = interviews => from doc in interviews
+            Map = interviews => from doc in interviews
                                      select new SyncPackageBrief { 
                                          PublicKey = doc.PublicKey, 
                                          ItemType = doc.ItemType, 
@@ -29,7 +29,8 @@ namespace WB.Core.Synchronization.Implementation.ReadSide.Indexes
                                          SortIndex = doc.SortIndex 
                                      };
 
-            this.Sort(x => x.SortIndex, SortOptions.Int);
+            Index(x => x.SortIndex, FieldIndexing.Default);
+            Sort(x => x.SortIndex, SortOptions.Int);
         }
     }
 }
