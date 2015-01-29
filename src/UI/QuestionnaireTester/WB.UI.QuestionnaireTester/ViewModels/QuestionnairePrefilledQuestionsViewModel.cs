@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.ViewModels;
@@ -51,6 +52,17 @@ namespace WB.UI.QuestionnaireTester.ViewModels
             {
                 isInProgress = value;
                 RaisePropertyChanged(() => IsInProgress);
+            }
+        }
+
+        private ImportQuestionnaireDownloadingProgress progressIndicator = new ImportQuestionnaireDownloadingProgress();
+        public ImportQuestionnaireDownloadingProgress ProgressIndicator
+        {
+            get { return progressIndicator; }
+            set
+            {
+                progressIndicator = value;
+                RaisePropertyChanged(() => ProgressIndicator);
             }
         }
 
@@ -122,19 +134,16 @@ namespace WB.UI.QuestionnaireTester.ViewModels
             {
                 var template = await this.GetQuestionnaireFromServer();
 
-                string content = this.compressionUtils.DecompressString(template.Questionnaire);
-                var questionnaireDocument = this.jsonUtils.Deserialize<QuestionnaireDocument>(content);
-
-                questionnaireAssemblyFileAccessor.StoreAssembly(questionnaireDocument.PublicKey, 0,
+                questionnaireAssemblyFileAccessor.StoreAssembly(template.Questionnaire.PublicKey, 0,
                     template.QuestionnaireAssembly);
 
-                this.commandService.Execute(new ImportFromDesignerForTester(questionnaireDocument));
+                this.commandService.Execute(new ImportFromDesignerForTester(template.Questionnaire));
 
                 Guid interviewUserId = Guid.NewGuid();
                 Guid interviewId = Guid.NewGuid();
 
                 this.commandService.Execute(new CreateInterviewForTestingCommand(interviewId, interviewUserId,
-                    questionnaireDocument.PublicKey, new Dictionary<Guid, object>(), DateTime.UtcNow));
+                    template.Questionnaire.PublicKey, new Dictionary<Guid, object>(), DateTime.UtcNow));
 
                 this.interviewId = interviewId;
                 if (this.OnInterviewCreated != null)
@@ -187,7 +196,7 @@ namespace WB.UI.QuestionnaireTester.ViewModels
         {
             var supportedVersion = QuestionnaireVersionProvider.GetCurrentEngineVersion();
 
-            return await this.restService.PostAsync<QuestionnaireCommunicationPackage>(
+            return await this.restService.PostWithProgressAsync<QuestionnaireCommunicationPackage>(
                 url: "questionnaire",
                 credentials:
                     new RestCredentials()
@@ -204,7 +213,26 @@ namespace WB.UI.QuestionnaireTester.ViewModels
                         Minor = supportedVersion.Minor,
                         Patch = supportedVersion.Patch
                     }
-                });
+                }, progress: this.ProgressIndicator, token: new CancellationToken());
+        }
+    }
+
+    public class ImportQuestionnaireDownloadingProgress : MvxViewModel, IProgress<decimal>
+    {
+        private decimal progress = 0;
+        public decimal Progress
+        {
+            get { return progress; }
+            set
+            {
+                progress = value;
+                RaisePropertyChanged(() => Progress);
+            }
+        }
+
+        public void Report(decimal value)
+        {
+            this.InvokeOnMainThread(() => this.Progress = value);
         }
     }
 }

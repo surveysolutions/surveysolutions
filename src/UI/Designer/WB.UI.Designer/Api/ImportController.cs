@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
-using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
@@ -23,8 +22,7 @@ namespace WB.UI.Designer.Api
     [ApiBasicAuth]
     public class ImportController : ApiController
     {
-        private readonly IQuestionnaireExportService exportService;
-        private readonly IStringCompressor zipUtils;
+        private readonly IQuestionnaireVersioner questionnaireVersioner;
         private readonly IMembershipUserService userHelper;
         private readonly IQuestionnaireListViewFactory viewFactory;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
@@ -33,18 +31,16 @@ namespace WB.UI.Designer.Api
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireHelper questionnaireHelper;
 
-        public ImportController(IQuestionnaireExportService exportService,
-            IStringCompressor zipUtils,
+        public ImportController(IQuestionnaireVersioner questionnaireVersioner,
             IMembershipUserService userHelper,
             IQuestionnaireListViewFactory viewFactory,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
-            IQuestionnaireHelper questionnaireHelper, ILogger logger)
+            IQuestionnaireHelper questionnaireHelper)
         {
-            this.exportService = exportService;
-            this.zipUtils = zipUtils;
+            this.questionnaireVersioner = questionnaireVersioner;
             this.userHelper = userHelper;
             this.viewFactory = viewFactory;
             this.questionnaireViewFactory = questionnaireViewFactory;
@@ -80,26 +76,14 @@ namespace WB.UI.Designer.Api
                 });
             }
 
-            var templateInfo = this.exportService.GetQuestionnaireTemplateInfo(questionnaireView.Source);
+            var supportedClientVersion = new QuestionnaireVersion(request.SupportedVersion.Major, request.SupportedVersion.Minor, request.SupportedVersion.Patch);
+            var designerEngineVersion = this.questionnaireVersioner.GetVersion(questionnaireView.Source);
 
-            if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound)
-                {
-                    ReasonPhrase = string.Format(ErrorMessages.TemplateNotFound, request.QuestionnaireId)
-                });
-            }
-
-            var supportedClientVersion = new QuestionnaireVersion(request.SupportedVersion.Major,
-                request.SupportedVersion.Minor,
-                request.SupportedVersion.Patch);
-            if (templateInfo.Version > supportedClientVersion)
+            if (designerEngineVersion > supportedClientVersion)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
                 {
-                    ReasonPhrase =
-                        string.Format(ErrorMessages.ClientVersionLessThenDocument, supportedClientVersion,
-                            templateInfo.Version)
+                    ReasonPhrase = string.Format(ErrorMessages.ClientVersionLessThenDocument, supportedClientVersion, designerEngineVersion)
                 });
             }
 
@@ -109,7 +93,7 @@ namespace WB.UI.Designer.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
                 {
-                    ReasonPhrase = string.Format(ErrorMessages.Questionnaire_verification_failed, templateInfo.Title)
+                    ReasonPhrase = string.Format(ErrorMessages.Questionnaire_verification_failed, questionnaireView.Title)
                 });
             }
 
@@ -140,13 +124,13 @@ namespace WB.UI.Designer.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
                 {
-                    ReasonPhrase = string.Format(ErrorMessages.Questionnaire_verification_failed, templateInfo.Title)
+                    ReasonPhrase = string.Format(ErrorMessages.Questionnaire_verification_failed, questionnaireView.Title)
                 });
             }
 
             return new QuestionnaireCommunicationPackage
             {
-                Questionnaire = this.zipUtils.CompressString(templateInfo.Source),
+                Questionnaire = questionnaireView.Source,
                 QuestionnaireAssembly = resultAssembly
             };
         }

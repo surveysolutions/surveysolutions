@@ -344,13 +344,10 @@
       <DependentUpon>QuestionnaireController.resx</DependentUpon>
     </Compile>
     <Compile Include="ServiceLocationModule.cs" />
-    <Compile Include="WebServices\IPublicService.cs" />
-    <Compile Include="WebServices\PublicService.cs" />
     <Compile Include="WebServices\Questionnaire\DownloadQuestionnaireRequest.cs" />
     <Compile Include="WebServices\Questionnaire\QuestionnaireListRequest.cs" />
     <Compile Include="WebServices\Questionnaire\QuestionnaireListViewItemMessage.cs" />
     <Compile Include="WebServices\Questionnaire\QuestionnaireListViewMessage.cs" />
-    <Compile Include="WebServices\RemoteFileInfo.cs" />
     <Compile Include="Utils\JsonWithTypeResult.cs" />
     <Compile Include="Utils\TypeResolver.cs" />
   </ItemGroup>
@@ -601,7 +598,6 @@
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="fonts\FontAwesome.otf" />
     <Content Include="Scripts\amplify-vsdoc.js" />
-    <Content Include="PublicService.svc" />
     <Content Include="Scripts\amplify.js" />
     <Content Include="Scripts\amplify.min.js" />
     <Content Include="Scripts\common.js" />
