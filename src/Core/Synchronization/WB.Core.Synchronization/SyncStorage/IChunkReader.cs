@@ -9,6 +9,6 @@ namespace WB.Core.Synchronization.SyncStorage
         SyncItem ReadChunk(string id);
 
         IEnumerable<SynchronizationChunkMeta> GetChunkMetaDataCreatedAfter(string lastSyncedPackageId, IEnumerable<Guid> users);
-        SynchronizationChunkMeta GetChunkMetaDataByTimestamp(DateTime timestamp);
+        SynchronizationChunkMeta GetChunkMetaDataByTimestamp(DateTime timestamp, IEnumerable<Guid> userId);
     }
 }
