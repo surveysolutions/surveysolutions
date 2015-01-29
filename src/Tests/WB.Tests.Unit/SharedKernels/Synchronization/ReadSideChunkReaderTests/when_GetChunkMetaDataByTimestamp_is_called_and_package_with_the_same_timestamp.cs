@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -12,14 +10,14 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Synchronization.ReadSideChunkReaderTests
 {
-    internal class when_GetChunkMetaDataByTimestamp_is_called_and_package_with_the_same_timestamp
+    internal class when_GetChunkMetaDataByTimestamp_is_called_and_provided_timestamp_is_last_one_in_the_storage
     {
         Establish context = () =>
         {
             synchronizationDeltaBehind = new SynchronizationDelta(Guid.NewGuid(), "test", DateTime.Now, null, false, "t",
                 "meta", 2);
 
-            var synchronizationDelta = new List<SynchronizationDelta>()
+            var synchronizationDelta = new List<SynchronizationDelta>
             {
                 new SynchronizationDelta(Guid.NewGuid(), "test", synchronizationDeltaBehind.Timestamp.AddMinutes(-1), null, false, "t",
                 "meta", 1),
@@ -35,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.ReadSideChunkReaderTests
         Because of = () =>
             result = readSideChunkReader.GetChunkMetaDataByTimestamp(synchronizationDeltaBehind.Timestamp);
 
-        It should_return_last_created_chank_before_passed_time_stamp = () =>
+        It should_return_last_created_chunk_before_passed_time_stamp = () =>
             result.Id.ShouldEqual(synchronizationDeltaBehind.PublicKey);
 
         private static ReadSideChunkReader readSideChunkReader;

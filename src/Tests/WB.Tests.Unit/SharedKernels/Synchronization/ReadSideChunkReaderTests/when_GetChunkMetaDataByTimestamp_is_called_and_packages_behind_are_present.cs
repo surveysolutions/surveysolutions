@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.ReadSideChunkReaderTests
         Because of = () =>
             result = readSideChunkReader.GetChunkMetaDataByTimestamp(synchronizationDeltaBehind.Timestamp.AddMinutes(1));
 
-        It should_return_last_created_chank_before_passed_time_stamp = () =>
+        It should_return_last_created_chunk_before_passed_time_stamp = () =>
             result.Id.ShouldEqual(synchronizationDeltaBehind.PublicKey);
 
         private static ReadSideChunkReader readSideChunkReader;
