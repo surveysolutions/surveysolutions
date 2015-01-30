@@ -34,14 +34,6 @@ namespace WB.UI.Headquarters.Code
             }
         }
 
-        public static string SynchronizationIncomingCapiPackagesDirectory
-        {
-            get
-            {
-                return WebConfigurationManager.AppSettings["Synchronization.IncomingCapiPackagesDirectory"];
-            }
-        }
-
         public static string SynchronizationIncomingCapiPackagesWithErrorsDirectory
         {
             get
@@ -55,6 +47,14 @@ namespace WB.UI.Headquarters.Code
             get
             {
                 return WebConfigurationManager.AppSettings["Synchronization.IncomingCapiPackageFileNameExtension"];
+            }
+        }
+
+        public static string IncomingUnprocessedPackageFileNameExtension
+        {
+            get
+            {
+                return WebConfigurationManager.AppSettings["Synchronization.IncomingUnprocessedPackageFileNameExtension"];
             }
         }
     }

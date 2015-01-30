@@ -6,8 +6,9 @@ namespace WB.Core.Synchronization
 {
     public interface IIncomePackagesRepository
     {
-        void StoreIncomingItem(SyncItem item);
+        void StoreIncomingItem(string item);
         IEnumerable<Guid> GetListOfUnhandledPackages();
         string GetUnhandledPackagePath(Guid id);
+        int GetUnprocessedPackagesCount();
     }
 }  

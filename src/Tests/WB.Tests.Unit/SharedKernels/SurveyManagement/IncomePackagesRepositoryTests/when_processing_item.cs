@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomePackagesRepositoryT
         };
 
         Because of = () =>
-            incomePackagesRepository.CheckAdditionalRepository(interviewId.ToString());
+            incomePackagesRepository.Process();
 
         It should_not_change_event_timespamp = () =>
             storedStream.Single().EventTimeStamp.ShouldEqual(initialTimestamp);

@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomePackagesRepositoryT
         };
 
         Because of = () => exception = Catch.Exception(() =>
-            incomePackagesRepository.StoreIncomingItem(new SyncItem()));
+            incomePackagesRepository.StoreIncomingItem(""));
 
         It should_throw_exception = () =>
           exception.ShouldNotBeNull();

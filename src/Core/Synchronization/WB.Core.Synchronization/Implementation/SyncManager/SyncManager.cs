@@ -46,19 +46,9 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             return this.CheckAndCreateNewSyncActivity(clientIdentifier);
         }
 
-        public bool SendSyncItem(SyncItem item)
+        public void SendSyncItem(string item)
         {
-            if (item == null)
-                throw new ArgumentException("Sync Item is not set.");
-
-            if (string.IsNullOrWhiteSpace(item.Content))
-                throw new ArgumentException("Sync Item content is not set.");
-
-            if (item.RootId == Guid.Empty)
-                throw new ArgumentException("Sync Item id is not set.");
-
             this.incomeRepository.StoreIncomingItem(item);
-            return true;
         }
 
         public IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, string lastSyncedPackageId)
