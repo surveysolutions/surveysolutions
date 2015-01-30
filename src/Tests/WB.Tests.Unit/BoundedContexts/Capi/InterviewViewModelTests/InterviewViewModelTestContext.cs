@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
 
             var extendedVector = outerVector.ToList();
             extendedVector.Add(rosterInstanceId);
-            var newScreen = interviewViewModel.Screens[new InterviewItemId(screenId, extendedVector.ToArray())] as QuestionnaireScreenViewModel;
+            var newScreen = interviewViewModel.Screens[ InterviewViewModel.ConvertIdAndRosterVectorToString(screenId, extendedVector.ToArray())] as QuestionnaireScreenViewModel;
             SubscribeScreen(interviewViewModel, newScreen);
         }
 
@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
 
                     var questionnaireNavigationPanelItem = item as QuestionnaireNavigationPanelItem;
                     if (questionnaireNavigationPanelItem != null)
-                        SubscribeScreen(interviewViewModel, interviewViewModel.Screens[questionnaireNavigationPanelItem.PublicKey]);
+                        SubscribeScreen(interviewViewModel, interviewViewModel.Screens[InterviewViewModel.ConvertInterviewItemId(questionnaireNavigationPanelItem.PublicKey)]);
                 }
 
             }

@@ -5,15 +5,15 @@ using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
 {
-    public class UserView
+    public class UserWebView
     {
         private UserRoles? primaryRole;
 
-        public UserView()
+        public UserWebView()
         {
         }
 
-        public UserView(Guid publicKey, string userName, string password, string email, DateTime creationDate, 
+        public UserWebView(Guid publicKey, string userName, string password, string email, DateTime creationDate, 
             IEnumerable<UserRoles> roles, bool isLockedBySupervisor, bool isLockedByHQ, UserLight supervisor)
         {
             this.PublicKey = publicKey;
@@ -62,9 +62,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
 
         public string UserName { get; set; }
 
-        public static UserView New()
+        public static UserWebView New()
         {
-            return new UserView(
+            return new UserWebView(
                 Guid.Empty, null, null, null, DateTime.UtcNow, new[] { UserRoles.User }, false, false, null);
         }
     }

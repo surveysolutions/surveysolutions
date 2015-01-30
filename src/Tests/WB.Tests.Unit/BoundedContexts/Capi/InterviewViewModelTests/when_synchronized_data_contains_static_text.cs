@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
         private static StaticTextViewModel getStaticText()
         {
             return
-                ((QuestionnaireScreenViewModel) interviewViewModel.Screens[interviewItemId]).Items.FirstOrDefault() as
+                ((QuestionnaireScreenViewModel)interviewViewModel.Screens[InterviewViewModel.ConvertInterviewItemId(interviewItemId)]).Items.FirstOrDefault() as
                     StaticTextViewModel;
         }
 

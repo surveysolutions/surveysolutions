@@ -1,14 +1,10 @@
 ﻿using System;
-using Ninject;
 using Ninject.Modules;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Services;
-using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
-using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
@@ -34,6 +30,8 @@ using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement
 {
+    using WB.Core.SharedKernels.SurveyManagement.Views.User;
+
     public class SurveyManagementSharedKernelModule : NinjectModule
     {
         private readonly string currentFolderPath;
@@ -73,6 +71,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
         public override void Load()
         {
+            //this.Bind<IUserViewFactory>().To<UserViewFactory>(); // binded automatically but should not
+
             this.Bind<ISampleImportService>().To<SampleImportService>();
             this.Bind<IFilebasedExportedDataAccessor>().To<FilebasedExportedDataAccessor>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IDataExportService>().To<SqlToTabDataExportService>();
@@ -136,7 +136,9 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .WithConstructorArgument("origin", origin);
 
             this.Bind<InterviewHistorySettings>().ToConstant(interviewHistorySettings);
+            
             this.Bind<IInterviewHistoryFactory>().To<InterviewHistoryFactory>();
+
             if (interviewHistorySettings.EnableInterviewHistory)
             {
                 this.Unbind<IReadSideRepositoryWriter<InterviewHistoryView>>();

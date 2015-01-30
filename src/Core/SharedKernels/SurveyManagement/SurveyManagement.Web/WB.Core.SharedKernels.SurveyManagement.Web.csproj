@@ -276,9 +276,9 @@
     <Compile Include="Models\User\UserBrowseItem.cs" />
     <Compile Include="Models\User\UserBrowseView.cs" />
     <Compile Include="Models\User\UserBrowseViewFactory.cs" />
-    <Compile Include="Models\User\UserView.cs" />
-    <Compile Include="Models\User\UserViewFactory.cs" />
-    <Compile Include="Models\User\UserViewInputModel.cs" />
+    <Compile Include="Models\User\UserWebView.cs" />
+    <Compile Include="Models\User\UserWebViewFactory.cs" />
+    <Compile Include="Models\User\UserWebViewInputModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\FieldsAndValidations.resx">

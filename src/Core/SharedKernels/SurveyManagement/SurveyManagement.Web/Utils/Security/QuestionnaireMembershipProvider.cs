@@ -14,9 +14,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
     {
         private static readonly string PERSON_TO_REQUEST = "FEF8050CBFAC46edBDF6B73C5C14DF0B.";
 
-        private IViewFactory<UserViewInputModel, UserView> ViewFactory
+        private IUserWebViewFactory ViewFactory
         {
-            get { return ServiceLocator.Current.GetInstance<IViewFactory<UserViewInputModel, UserView>>(); }
+            get { return ServiceLocator.Current.GetInstance<IUserWebViewFactory>(); }
         }
 
         public override string ApplicationName
@@ -176,9 +176,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
             var retval = HttpContext.Current.Items[providerUserKey] as MembershipUser;
             if (retval == null)
             {
-                UserView person =
+                UserWebView person =
                     this.ViewFactory.Load(
-                        new UserViewInputModel((Guid)providerUserKey));
+                        new UserWebViewInputModel((Guid)providerUserKey));
                 if (person == null)
                 {
                     return null;
@@ -203,8 +203,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
             var retval = HttpContext.Current.Items[person_key] as MembershipUser;
             if (retval == null)
             {
-                UserView person =
-                    this.ViewFactory.Load(new UserViewInputModel(username, null));
+                UserWebView person =
+                    this.ViewFactory.Load(new UserWebViewInputModel(username, null));
                 if (person == null)
                 {
                     return null;
@@ -240,16 +240,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
 
         public override bool ValidateUser(string username, string password)
         {
-            UserView user =
+            UserWebView user =
                 this.ViewFactory.Load(
-                    new UserViewInputModel(
+                    new UserWebViewInputModel(
                         username.ToLower(), 
                         // bad hack due to key insensitivity of login
                         password));
             return user != null && !user.isLockedBySupervisor && !user.IsLockedByHQ;
         }
 
-        private MembershipUser MembershipInstance(UserView person)
+        private MembershipUser MembershipInstance(UserWebView person)
         {
             // byte[] bsid = new System.Text.UTF8Encoding().GetBytes(person.PublicKey);
             DateTime now = DateTime.Now;

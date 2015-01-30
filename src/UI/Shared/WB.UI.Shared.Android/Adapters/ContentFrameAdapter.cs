@@ -27,7 +27,7 @@ namespace WB.UI.Shared.Android.Adapters
         {
             this.questionnaire = questionnaire;
             this.screensHolder = (screenId.HasValue
-                                     ? questionnaire.Screens[screenId.Value].Siblings
+                                     ? questionnaire.Screens[InterviewViewModel.ConvertInterviewItemId(screenId.Value)].Siblings
                                      : questionnaire.Chapters.Select(c=>c.ScreenId)).ToList();
             this.screenId = screenId;
             this.isRoot = questionnaire.Chapters.Any(s => s.ScreenId == screenId) || !screenId.HasValue;
@@ -61,7 +61,7 @@ namespace WB.UI.Shared.Android.Adapters
             else
             {
                 var param = this.screensHolder[position];
-                var model = this.questionnaire.Screens[param];
+                var model = this.questionnaire.Screens[InterviewViewModel.ConvertInterviewItemId(param)];
                 var screenModel = model as QuestionnaireScreenViewModel;
                 if (screenModel != null)
                 {
@@ -121,7 +121,7 @@ namespace WB.UI.Shared.Android.Adapters
         public void UpdateScreenData(InterviewItemId? newScreenId)
         {
             var screenIdNotNull = newScreenId ?? this.questionnaire.Chapters.First().ScreenId;
-            this.screensHolder = this.questionnaire.Screens[screenIdNotNull].Siblings.ToList();
+            this.screensHolder = this.questionnaire.Screens[InterviewViewModel.ConvertInterviewItemId(screenIdNotNull)].Siblings.ToList();
             this.screenId = newScreenId;
             this.isRoot = this.questionnaire.Chapters.Any(s => s.ScreenId == screenIdNotNull);
             this.mFragments = new AbstractScreenChangingFragment[this.Count];

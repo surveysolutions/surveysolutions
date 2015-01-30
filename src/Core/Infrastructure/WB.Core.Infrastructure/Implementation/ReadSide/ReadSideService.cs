@@ -473,10 +473,9 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 }
                 catch (Exception exception)
                 {
-                    this.SaveErrorForStatusReport(
-                        string.Format("Failed to publish event {0} of {1} ({2})",
-                            this.processedEventsCount + 1, this.totalEventsToRebuildCount, @event.EventIdentifier),
-                        exception);
+                    string message = string.Format("Failed to publish event {0} of {1} ({2})", this.processedEventsCount + 1, this.totalEventsToRebuildCount, @event.EventIdentifier);
+                    this.SaveErrorForStatusReport(message, exception);
+                    this.logger.Error(message, exception);
 
                     this.failedEventsCount++;
                 }
@@ -485,16 +484,16 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                 if (this.failedEventsCount >= MaxAllowedFailedEvents)
                 {
-                    var message = string.Format("Failed to rebuild read layer. Too many events failed: {0}.",
-                        this.failedEventsCount);
+                    var message = string.Format("Failed to rebuild read layer. Too many events failed: {0}. Last processed event count: {1}", this.failedEventsCount, this.processedEventsCount);
                     UpdateStatusMessage(message);
+                    this.logger.Error(message);
                     throw new Exception(message);
                 }
             }
 
             UpdateStatusMessage("Acquiring next portion of events.");
 
-            this.logger.Info(String.Format("Processed {0} events, failed {1}", this.processedEventsCount, this.failedEventsCount));
+            this.logger.Info(String.Format("Rebuild of read side finished sucessfuly. Processed {0} events, failed {1}", this.processedEventsCount, this.failedEventsCount));
 
             UpdateStatusMessage("All events were republished.");
 
