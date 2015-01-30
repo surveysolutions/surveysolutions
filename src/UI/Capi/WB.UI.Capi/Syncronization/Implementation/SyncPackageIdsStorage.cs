@@ -99,7 +99,7 @@ namespace WB.UI.Capi.Syncronization.Implementation
             var sourceFile = this.fileSystemAccessor.CombinePath(path, dbFileName);
 
             this.fileSystemAccessor.DeleteFile(FullPathToDataBase);
-            this.fileSystemAccessor.CopyFileOrDirectory(sourceFile, FullPathToDataBase);
+            this.fileSystemAccessor.CopyFileOrDirectory(sourceFile, Environment.GetFolderPath(Environment.SpecialFolder.Personal));
         }
     }
 }

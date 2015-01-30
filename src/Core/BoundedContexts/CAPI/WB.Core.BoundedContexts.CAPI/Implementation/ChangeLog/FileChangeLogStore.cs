@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.ChangeLog
                 return;
 
             foreach (var file in fileSystemAccessor.GetFilesInDirectory(dirWithCahngelog))
-                fileSystemAccessor.CopyFileOrDirectory(file, fileSystemAccessor.CombinePath(this.changelogPath, fileSystemAccessor.GetFileName(file)));
+                fileSystemAccessor.CopyFileOrDirectory(file, this.changelogPath);
         }
     }
 }
