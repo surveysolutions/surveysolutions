@@ -67,13 +67,13 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
         };
 
         Because of = () =>
-            interviewViewModel.SetScreenStatus(new InterviewItemId(nestedRosterId,new decimal[]{0,0}),false );
+            interviewViewModel.SetScreenStatus(InterviewViewModel.ConvertIdAndRosterVectorToString(nestedRosterId, new decimal[] { 0, 0 }), false);
 
         It should_row_count_be_equal_to_0 = () =>
-            ((QuestionnaireGridViewModel)interviewViewModel.Screens[new InterviewItemId(nestedRosterId, new decimal[] { 0 })]).Rows.Count().ShouldEqual(1);
+            ((QuestionnaireGridViewModel)interviewViewModel.Screens[InterviewViewModel.ConvertIdAndRosterVectorToString(nestedRosterId, new decimal[] { 0 })]).Rows.Count().ShouldEqual(1);
 
         It should_nested_roster_screen_be_disabled = () =>
-          ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(nestedRosterId, new decimal[] { 0,0 })]).Enabled.ShouldBeFalse();
+          ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[InterviewViewModel.ConvertIdAndRosterVectorToString(nestedRosterId, new decimal[] { 0, 0 })]).Enabled.ShouldBeFalse();
 
 
         private static InterviewViewModel interviewViewModel;

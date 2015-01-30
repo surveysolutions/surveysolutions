@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
         };
 
         Because of = () =>
-            interviewViewModel.SetAnswer(mandatoryQuestionToBeAnsweredItemId, answer);
+            interviewViewModel.SetAnswer(InterviewViewModel.ConvertInterviewItemId(mandatoryQuestionToBeAnsweredItemId), answer);
 
         It should_answered_question_has_IsMandatoryAndEmpty_property_value_false = () =>
             interviewViewModel.FindQuestion(q => q.PublicKey == mandatoryQuestionToBeAnsweredItemId).SingleOrDefault().IsMandatoryAndEmpty.ShouldEqual(false);

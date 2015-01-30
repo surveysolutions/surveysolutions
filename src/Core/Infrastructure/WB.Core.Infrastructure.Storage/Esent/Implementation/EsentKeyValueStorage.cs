@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using Microsoft.Isam.Esent.Collections.Generic;
 using Newtonsoft.Json;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
@@ -11,21 +10,22 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
     internal class EsentKeyValueStorage<TEntity> : IReadSideKeyValueStorage<TEntity>, IReadSideRepositoryCleaner, IDisposable
         where TEntity : class, IReadSideRepositoryEntity
     {
-        private readonly PersistentDictionary<string, string> storage;
+        private PersistentDictionary<string, string> storage;
+        private readonly string collectionFolder;
 
         public EsentKeyValueStorage(EsentSettings settings)
         {
             if (settings == null) throw new ArgumentNullException("settings");
 
             string collectionName = typeof(TEntity).Name;
-            string collectionFolder = Path.Combine(settings.Folder, collectionName);
+            this.collectionFolder = Path.Combine(settings.Folder, collectionName);
 
             this.storage = new PersistentDictionary<string, string>(collectionFolder);
         }
 
         public TEntity GetById(string id)
         {
-            return this.storage.ContainsKey(id) ? Deserialize(this.storage[id]) : null;
+            return this.storage.ContainsKey(id) ? JsonConvert.DeserializeObject<TEntity>(this.storage[id], JsonSerializerSettings) : null;
         }
 
         public void Remove(string id)
@@ -35,17 +35,35 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
 
         public void Store(TEntity view, string id)
         {
-            this.storage[id] = Serialize(view);
+            this.storage[id] = JsonConvert.SerializeObject(view, Formatting.None, JsonSerializerSettings);
         }
 
         public void Clear()
         {
-            this.storage.Clear();
+            this.storage.Dispose();
+            PersistentDictionaryFile.DeleteFiles(this.collectionFolder);
+            this.storage = new PersistentDictionary<string, string>(collectionFolder);
         }
 
         public void Dispose()
         {
-            this.storage.Flush();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // free managed resources
+                if (this.storage != null)
+                {
+                    this.storage.Dispose();
+                    this.storage = null;
+                }
+
+                // free native resources if there are any.
+            }
         }
 
         private static JsonSerializerSettings JsonSerializerSettings
@@ -59,23 +77,6 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
                     MissingMemberHandling = MissingMemberHandling.Ignore,
                     NullValueHandling = NullValueHandling.Ignore
                 };
-            }
-        }
-
-        private static string Serialize(TEntity entity)
-        {
-            return JsonConvert.SerializeObject(entity, Formatting.None, JsonSerializerSettings);
-        }
-
-        private static TEntity Deserialize(string json)
-        {
-            try
-            {
-                return JsonConvert.DeserializeObject<TEntity>(json, JsonSerializerSettings);
-            }
-            catch (Exception e)
-            {
-                throw new InvalidOperationException(json, e);
             }
         }
     }

@@ -28,7 +28,7 @@ namespace WB.UI.Headquarters.Controllers
     [LocalOrDevelopmentAccessOnly]
     public class ControlPanelController : WB.Core.SharedKernels.SurveyManagement.Web.Controllers.ControlPanelController
     {
-        private readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
+        private readonly IUserViewFactory userViewFactory;
         private readonly IPasswordHasher passwordHasher;
         private static string lastReexportMessage = "no reexport performed";
         private readonly IDataExportRepositoryWriter dataExportRepositoryWriter;
@@ -36,7 +36,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public ControlPanelController(IServiceLocator serviceLocator, IIncomePackagesRepository incomePackagesRepository,
             ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
-            IViewFactory<UserViewInputModel, UserView> userViewFactory, IPasswordHasher passwordHasher, ISettingsProvider settingsProvider,
+            IUserViewFactory userViewFactory, IPasswordHasher passwordHasher, ISettingsProvider settingsProvider,
             IDataExportRepositoryWriter dataExportRepositoryWriter, IReadSideRepositoryIndexAccessor readSideRepositoryIndexAccessor)
             : base(serviceLocator, incomePackagesRepository, commandService, globalInfo, logger, settingsProvider)
         {

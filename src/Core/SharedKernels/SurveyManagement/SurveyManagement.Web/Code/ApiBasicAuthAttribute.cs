@@ -22,9 +22,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
     {
         private readonly Func<string, string, bool> isUserValid;
 
-        private IViewFactory<UserViewInputModel, UserView> userViewFactory
+        private IUserViewFactory userViewFactory
         {
-            get { return ServiceLocator.Current.GetInstance<IViewFactory<UserViewInputModel, UserView>>(); }
+            get { return ServiceLocator.Current.GetInstance<IUserViewFactory>(); }
         }
 
         internal static string[] SplitString(string original)

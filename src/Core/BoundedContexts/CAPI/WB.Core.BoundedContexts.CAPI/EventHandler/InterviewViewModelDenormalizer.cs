@@ -122,7 +122,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         public void Handle(IPublishedEvent<AnswerCommented> evnt)
         {
             var doc = this.GetStoredViewModel(evnt.EventSourceId);
-            doc.SetComment(new InterviewItemId(evnt.Payload.QuestionId, evnt.Payload.PropagationVector),
+            doc.SetComment(InterviewViewModel.ConvertIdAndRosterVectorToString(evnt.Payload.QuestionId, evnt.Payload.PropagationVector),
                            evnt.Payload.Comment);
         }
 
@@ -213,7 +213,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
             foreach (var group in evnt.Payload.Groups)
             {
-                doc.SetScreenStatus(new InterviewItemId(group.Id, group.RosterVector), false);
+                doc.SetScreenStatus(InterviewViewModel.ConvertIdAndRosterVectorToString(group.Id, group.RosterVector), false);
             }
         }
 
@@ -223,7 +223,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
             foreach (var group in evnt.Payload.Groups)
             {
-                doc.SetScreenStatus(new InterviewItemId(group.Id, group.RosterVector), true);
+                doc.SetScreenStatus(InterviewViewModel.ConvertIdAndRosterVectorToString(group.Id, group.RosterVector), true);
             }
         }
 
@@ -233,7 +233,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
             foreach (var question in evnt.Payload.Questions)
             {
-                doc.SetQuestionStatus(new InterviewItemId(question.Id, question.RosterVector), false);
+                doc.SetQuestionStatus(InterviewViewModel.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector), false);
             }
         }
 
@@ -243,7 +243,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
             foreach (var question in evnt.Payload.Questions)
             {
-                doc.SetQuestionStatus(new InterviewItemId(question.Id, question.RosterVector), true);
+                doc.SetQuestionStatus(InterviewViewModel.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector), true);
             }
         }
 
@@ -253,7 +253,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
             foreach (var question in evnt.Payload.Questions)
             {
-                doc.SetQuestionValidity(new InterviewItemId(question.Id, question.RosterVector), false);
+                doc.SetQuestionValidity(InterviewViewModel.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector), false);
             }
         }
 
@@ -263,7 +263,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
             foreach (var question in evnt.Payload.Questions)
             {
-                doc.SetQuestionValidity(new InterviewItemId(question.Id, question.RosterVector), true);
+                doc.SetQuestionValidity(InterviewViewModel.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector), true);
             }
         }
 
@@ -276,20 +276,20 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         private void SetSelectableAnswer(Guid interviewId, Guid questionId, decimal[] protagationVector, decimal[] answers)
         {
             var doc = this.GetStoredViewModel(interviewId);
-            doc.SetAnswer(new InterviewItemId(questionId, protagationVector), answers);
+            doc.SetAnswer(InterviewViewModel.ConvertIdAndRosterVectorToString(questionId, protagationVector), answers);
         }
 
         private void SetValueAnswer(Guid interviewId, Guid questionId, decimal[] protagationVector, object answer)
         {
             var doc = this.GetStoredViewModel(interviewId);
-            doc.SetAnswer(new InterviewItemId(questionId, protagationVector), answer);
+            doc.SetAnswer(InterviewViewModel.ConvertIdAndRosterVectorToString(questionId, protagationVector), answer);
         }
 
         private void RemoveAnswer(Guid interviewId, Guid questionId, decimal[] propagationVector)
         {
             InterviewViewModel viewModel = this.GetStoredViewModel(interviewId);
 
-            viewModel.RemoveAnswer(new InterviewItemId(questionId, propagationVector));
+            viewModel.RemoveAnswer(InterviewViewModel.ConvertIdAndRosterVectorToString(questionId, propagationVector));
         }
 
         public void Handle(IPublishedEvent<GroupPropagated> evnt)
