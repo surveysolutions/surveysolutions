@@ -18,9 +18,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Τools", "Τools", "{B7280D2A-26B0-466E-8DFB-C1642E2B7E1F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Τests", "Τests", "{D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}"
-	ProjectSection(SolutionItems) = preProject
-		Tests\WB.Tests.CleanIntegration\WB.Tests.CleanIntegration.csproj = Tests\WB.Tests.CleanIntegration\WB.Tests.CleanIntegration.csproj
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Designer", "Designer", "{805098EC-6BA3-43EB-9A2F-9640E641E2F9}"
 EndProject
@@ -160,6 +157,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.GenericSubdomains.Utils.Rest", "Core\GenericSubdomains\Utils\WB.Core.GenericSubdomains.Utils.Rest\WB.Core.GenericSubdomains.Utils.Rest.csproj", "{F3BE22B5-C075-4B9C-A99D-E89B70A0DFCD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Tools.EventTimeStampCorrection", "Tools\WB.Tools.EventTimeStampCorrection\WB.Tools.EventTimeStampCorrection.csproj", "{4E4C7C61-BE1D-48D9-8C44-03EB6616A14C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Tests.CleanIntegration", "Tests\WB.Tests.CleanIntegration\WB.Tests.CleanIntegration.csproj", "{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -846,6 +845,21 @@ Global
 		{4E4C7C61-BE1D-48D9-8C44-03EB6616A14C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{4E4C7C61-BE1D-48D9-8C44-03EB6616A14C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4E4C7C61-BE1D-48D9-8C44-03EB6616A14C}.Release|x86.ActiveCfg = Release|Any CPU
+		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Deploy-dev|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Deploy-dev|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Deploy-dev|x86.ActiveCfg = Debug|Any CPU
+		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -918,5 +932,6 @@ Global
 		{2DA00710-008B-499D-A704-E1EB62D07E82} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
 		{F3BE22B5-C075-4B9C-A99D-E89B70A0DFCD} = {E616192B-D9A4-4E05-892E-B7A80A38624D}
 		{4E4C7C61-BE1D-48D9-8C44-03EB6616A14C} = {B7280D2A-26B0-466E-8DFB-C1642E2B7E1F}
+		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
 	EndGlobalSection
 EndGlobal
