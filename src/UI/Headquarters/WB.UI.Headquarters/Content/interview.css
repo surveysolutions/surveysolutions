@@ -9,3 +9,16 @@
 .question-answer .radio input[type="radio"] {
     margin-left: 0px;
 }
+
+.comments .form-horizontal .has-feedback .form-control-feedback {
+    right: 0px;
+}
+
+.visible {
+display: block !important;
+visibility: visible !important;
+}
+
+.hidden {
+    display:none !important;
+}
