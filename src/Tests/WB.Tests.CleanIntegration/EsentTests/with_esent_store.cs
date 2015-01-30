@@ -15,7 +15,10 @@ namespace WB.Tests.Integration.EsentTests
         Cleanup things = () =>
         {
             storage.Dispose();
-            PersistentDictionaryFile.DeleteFiles("TempStore");
+            if (PersistentDictionaryFile.Exists("TempStore"))
+            {
+                PersistentDictionaryFile.DeleteFiles("TempStore");
+            }
         };
 
         protected static EsentKeyValueStorage<T> storage;
