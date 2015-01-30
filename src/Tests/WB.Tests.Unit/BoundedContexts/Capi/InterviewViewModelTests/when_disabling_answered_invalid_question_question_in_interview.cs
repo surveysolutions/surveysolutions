@@ -34,12 +34,12 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
 
             interviewViewModel = CreateInterviewViewModel(questionnarie, rosterStructure,
             interviewSynchronizationDto);
-            interviewViewModel.SetAnswer(InterviewItemId.ConvertIdAndRosterVectorToString(targetQuestionId, new decimal[0]), 3);
-            interviewViewModel.SetQuestionValidity(InterviewItemId.ConvertIdAndRosterVectorToString(targetQuestionId, new decimal[0]), false);
+            interviewViewModel.SetAnswer(InterviewViewModel.ConvertIdAndRosterVectorToString(targetQuestionId, new decimal[0]), 3);
+            interviewViewModel.SetQuestionValidity(InterviewViewModel.ConvertIdAndRosterVectorToString(targetQuestionId, new decimal[0]), false);
         };
 
         Because of = () =>
-             interviewViewModel.SetQuestionStatus(InterviewItemId.ConvertIdAndRosterVectorToString(targetQuestionId, new decimal[0]), false);
+             interviewViewModel.SetQuestionStatus(InterviewViewModel.ConvertIdAndRosterVectorToString(targetQuestionId, new decimal[0]), false);
 
         It should_UnansweredQuestions_in_statistic_cont_has_zero_elements = () =>
            interviewViewModel.Statistics.UnansweredQuestions.ShouldBeEmpty();

@@ -219,7 +219,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CascadingComboboxTests
 
             var extendedVector = outerVector.ToList();
             extendedVector.Add(rosterInstanceId);
-            var newScreen = interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(screenId, extendedVector.ToArray())] as QuestionnaireScreenViewModel;
+            var newScreen = interviewViewModel.Screens[InterviewViewModel.ConvertIdAndRosterVectorToString(screenId, extendedVector.ToArray())] as QuestionnaireScreenViewModel;
             SubscribeScreen(interviewViewModel, newScreen);
         }
 
@@ -236,7 +236,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CascadingComboboxTests
 
                     var questionnaireNavigationPanelItem = item as QuestionnaireNavigationPanelItem;
                     if (questionnaireNavigationPanelItem != null)
-                        SubscribeScreen(interviewViewModel, interviewViewModel.Screens[InterviewItemId.ConvertInterviewItemId(questionnaireNavigationPanelItem.PublicKey)]);
+                        SubscribeScreen(interviewViewModel, interviewViewModel.Screens[InterviewViewModel.ConvertInterviewItemId(questionnaireNavigationPanelItem.PublicKey)]);
                 }
 
             }

@@ -128,23 +128,6 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
             }
             return new InterviewItemId(Guid.Parse(value));
         }
-
-        public static string ConvertIdAndRosterVectorToString(Guid id, decimal[] rosterVector = null)
-        {
-            if (rosterVector == null || !rosterVector.Any())
-                return id.FormatGuid();
-
-            return string.Format("{0}[{1}]", id.FormatGuid(),
-                string.Join((string) "-",
-                    (IEnumerable<string>)
-                        rosterVector.Select(
-                            v => v.ToString("0.############################", CultureInfo.InvariantCulture))));
-        }
-
-        public static string ConvertInterviewItemId(InterviewItemId interviewItemId)
-        {
-            return ConvertIdAndRosterVectorToString(interviewItemId.Id, interviewItemId.InterviewItemPropagationVector);
-        }
     }
 
 }

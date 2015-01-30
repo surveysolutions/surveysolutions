@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
         };
 
         private Because of = () =>
-            interviewViewModel.SetAnswer(InterviewItemId.ConvertIdAndRosterVectorToString(prefilledNumeric, new decimal[0]), 2);
+            interviewViewModel.SetAnswer(InterviewViewModel.ConvertIdAndRosterVectorToString(prefilledNumeric, new decimal[0]), 2);
 
         It should_substituted_title_of_question_with_substitution_with_answer_on_prefilled_question = () =>
             GetQuestion(questionReferencePrefilledNumericId, new decimal[0]).Text.ShouldEqual("Hello, 2");
