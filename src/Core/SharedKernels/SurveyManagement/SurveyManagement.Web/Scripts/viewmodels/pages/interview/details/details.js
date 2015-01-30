@@ -30,14 +30,43 @@ Supervisor.VM.Details = function (settings) {
             self.currentQuestion().comments.valueHasMutated();
         });
     };
-    self.flagAnswer = function(question) {
-        var commandName = question.isFlagged()
-            ? config.commands.removeFlagFromAnswer
-            : config.commands.setFlagToAnswer;
+    self.setFlag = function (element, questionId, underscoreJoinedQuestionRosterVector) {
+        var commandName = config.commands.setFlagToAnswer;
+
+        var question = {
+            id: questionId,
+            rosterVector: parseRosterVector(underscoreJoinedQuestionRosterVector)
+        }
 
         var command = datacontext.getCommand(commandName, question);
         self.SendCommand(command, function () {
-            question.isFlagged(!question.isFlagged());
+            var flagIndicator = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "flagIndicator"));
+            var setFlagMenuItem = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "setFlagMenuItem"));
+            var removeFlagMenuItem = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "removeFlagMenuItem"));
+
+            $(flagIndicator).removeClass("hidden");
+            $(removeFlagMenuItem).removeClass("hidden");
+            $(setFlagMenuItem).addClass("hidden");
+        });
+    };
+
+    self.removeFlag = function (element, questionId, underscoreJoinedQuestionRosterVector) {
+        var commandName = config.commands.removeFlagFromAnswer;
+
+        var question = {
+            id: questionId,
+            rosterVector: parseRosterVector(underscoreJoinedQuestionRosterVector)
+    }
+
+        var command = datacontext.getCommand(commandName, question);
+        self.SendCommand(command, function () {
+            var flagIndicator = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "flagIndicator"));
+            var setFlagMenuItem = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "setFlagMenuItem"));
+            var removeFlagMenuItem = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "removeFlagMenuItem"));
+
+            $(flagIndicator).addClass("hidden");
+            $(removeFlagMenuItem).addClass("hidden");
+            $(setFlagMenuItem).removeClass("hidden");
         });
     };
     self.saveAnswer = function(question) {
@@ -102,5 +131,16 @@ Supervisor.VM.Details = function (settings) {
             
         });
     };
+
+    function getInterviewItemIdWithPostfix(questionId, rosterVector, postfix) {
+        return questionId + "_" + rosterVector + "_" + postfix;
+    }
+
+    function parseRosterVector(rosterVector) {
+        if (rosterVector == "")
+            return null;
+
+        return rosterVector.split('_');
+    }
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.Details, Supervisor.VM.BasePage);

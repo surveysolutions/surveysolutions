@@ -7,8 +7,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
     public class DetailsViewModel
     {
         public InterviewDetailsFilter Filter { get; set; }
-        public InterviewDetailsView FilteredInterviewDetails { get; set; }
-        public IEnumerable<InterviewGroupView> Groups { get; set; }
+        public InterviewDetailsView InterviewDetails { get; set; }
+        public IEnumerable<InterviewGroupView> FilteredGroups { get; set; }
         public ChangeStatusView History { get; set; }
         public DetailsStatisticView Statistic { get; set; }
     }
