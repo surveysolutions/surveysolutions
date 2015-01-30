@@ -23,7 +23,6 @@ namespace WB.Tests.Integration.StorageTests
         public void Query_IndexWithBool_BoolNotFiltered()
         {
             XmlConfigurator.Configure();
-            //_documentStore = ConnectToDocumentStore();
             _documentStore = NewDocumentStore();
 
             IndexCreation.CreateIndexes(GetType().Assembly,_documentStore);
@@ -48,7 +47,7 @@ namespace WB.Tests.Integration.StorageTests
 
         private IDocumentStore NewDocumentStore()
         {
-            path = Path.GetDirectoryName(Assembly.GetAssembly(typeof(RavenDBEventStoreTests)).CodeBase);
+            path = Path.GetDirectoryName(Assembly.GetAssembly(typeof(DocumentStoreFailedTests)).CodeBase);
             path = Path.Combine(path, "TestRavenDb").Substring(6);
             if (Directory.Exists(path))
             {
@@ -68,7 +67,7 @@ namespace WB.Tests.Integration.StorageTests
             }
             catch (ReflectionTypeLoadException loadException)
             {
-                throw new Exception("Failed to load with following loader exceptions: " + loadException.LoaderExceptions.Select(x => x.Message));
+                throw new Exception("Failed to load with following loader exceptions: " + string.Join(", ", loadException.LoaderExceptions.Select(x => x.Message)), loadException);
             }
         }
     }
