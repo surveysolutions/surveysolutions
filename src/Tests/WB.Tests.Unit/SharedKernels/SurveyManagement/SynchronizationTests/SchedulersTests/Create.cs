@@ -24,26 +24,5 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationTests.Sche
                         interviewDetailsDataProcessorContext ??
                         new InterviewDetailsDataProcessorContext(Mock.Of<IPlainStorageAccessor<SynchronizationStatus>>()));
         }
-
-        public static IInterviewDetailsDataProcessor InterviewDetailsDataProcessor(
-            InterviewDetailsDataProcessorContext interviewDetailsDataProcessorContext = null,
-            IFileSystemAccessor fileSystemAccessor = null, SyncSettings syncSettings = null,
-            IReadSideKeyValueStorage<InterviewData> interviewDataRepositoryReader = null)
-        {
-            return
-                new InterviewDetailsDataProcessor(
-                    interviewDetailsDataProcessorContext:
-                        interviewDetailsDataProcessorContext ??
-                        new InterviewDetailsDataProcessorContext(Mock.Of<IPlainStorageAccessor<SynchronizationStatus>>()),
-                    logger: Mock.Of<ILogger>(),
-                    interviewDetailsDataLoaderSettings: new Mock<InterviewDetailsDataLoaderSettings>(true, 1, 1).Object,
-                    syncSettings:
-                        syncSettings ??
-                        new Mock<SyncSettings>(false, "AppData", "IncomingData", "IncomingDataWithErrors", "sync")
-                            .Object,
-                    interviewDetailsReader:
-                        interviewDataRepositoryReader ?? Mock.Of<IReadSideKeyValueStorage<InterviewData>>(),
-                    fileSystemAccessor: fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>());
-        }
     }
 }

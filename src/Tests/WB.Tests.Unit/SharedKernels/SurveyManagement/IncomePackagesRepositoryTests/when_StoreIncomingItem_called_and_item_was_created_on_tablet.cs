@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomePackagesRepositoryT
         };
 
         Because of = () =>
-            incomePackagesRepository.StoreIncomingItem(syncItem);
+            incomePackagesRepository.StoreIncomingItem("");
 
         It should_write_text_file_to_sync_package_folder = () =>
           fileSystemAccessorMock.Verify(x => x.WriteAllText(GetPathToSynchItemInSyncPackageFolder(interviewMetaInfo.PublicKey), syncItem.Content), Times.Once);
