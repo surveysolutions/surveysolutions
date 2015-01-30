@@ -59,10 +59,10 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
         };
 
         Because of = () =>
-            interviewViewModel.SetAnswer(InterviewItemId.ConvertIdAndRosterVectorToString(rosterTitleQuestionId, new decimal[] { 0 }), rosterTitle);
+            interviewViewModel.SetAnswer(InterviewViewModel.ConvertIdAndRosterVectorToString(rosterTitleQuestionId, new decimal[] { 0 }), rosterTitle);
 
         It should_roster_title_be_equal_set_answer = () =>
-            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(rosterGroupId, new decimal[] { 0 })]).ScreenName.ShouldEqual(rosterTitle);
+            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[InterviewViewModel.ConvertIdAndRosterVectorToString(rosterGroupId, new decimal[] { 0 })]).ScreenName.ShouldEqual(rosterTitle);
 
         private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;

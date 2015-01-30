@@ -71,10 +71,10 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
             PropagateScreen(interviewViewModel, nestedRosterId, 0, new decimal[] { 1 });
 
         It should_row_count_at_first_nested_roster_be_equal_to_1 = () =>
-            ((QuestionnaireGridViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(nestedRosterId, new decimal[] { 0 })]).Rows.Count().ShouldEqual(1);
+            ((QuestionnaireGridViewModel)interviewViewModel.Screens[InterviewViewModel.ConvertIdAndRosterVectorToString(nestedRosterId, new decimal[] { 0 })]).Rows.Count().ShouldEqual(1);
 
         It should_row_count_at_second_nested_roster_be_equal_to_1 = () =>
-            ((QuestionnaireGridViewModel)interviewViewModel.Screens[InterviewItemId.ConvertIdAndRosterVectorToString(nestedRosterId, new decimal[] { 1 })]).Rows.Count().ShouldEqual(1);
+            ((QuestionnaireGridViewModel)interviewViewModel.Screens[InterviewViewModel.ConvertIdAndRosterVectorToString(nestedRosterId, new decimal[] { 1 })]).Rows.Count().ShouldEqual(1);
 
 
         private static InterviewViewModel interviewViewModel;

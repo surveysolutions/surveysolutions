@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
         };
 
         Because of = () =>
-            interviewViewModel.SetAnswer(InterviewItemId.ConvertIdAndRosterVectorToString(questionSourceOfSubstitutionId, new decimal[] { 0 }), "answer");
+            interviewViewModel.SetAnswer(InterviewViewModel.ConvertIdAndRosterVectorToString(questionSourceOfSubstitutionId, new decimal[] { 0 }), "answer");
 
         It should_title_of_question_with_substitution_be_substituted_with_answer_on_set_question = () =>
             interviewViewModel.FindQuestion(q => q.PublicKey == new InterviewItemId(questionInNesedGroupWithSubstitutionId, new decimal[] { 0 })).FirstOrDefault().Text.ShouldEqual("answer example");

@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         [JsonIgnore]
         public IEnumerable<QuestionnairePropagatedScreenViewModel> Rows
         {
-            get { return this.rowsValue(InterviewItemId.ConvertInterviewItemId(ScreenId)); }
+            get { return this.rowsValue(InterviewViewModel.ConvertInterviewItemId(ScreenId)); }
         }
 
         public IEnumerable<InterviewItemId> Siblings

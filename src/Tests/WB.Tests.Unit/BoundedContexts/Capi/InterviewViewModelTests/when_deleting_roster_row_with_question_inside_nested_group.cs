@@ -70,10 +70,10 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
             interviewViewModel.RemovePropagatedScreen(rosterId, new decimal[0], 0);
 
         It should_not_contain_screen_with_added_roster_row = () =>
-            interviewViewModel.Screens.Keys.ShouldNotContain(InterviewItemId.ConvertIdAndRosterVectorToString(rosterId, new decimal[] { 0 }));
+            interviewViewModel.Screens.Keys.ShouldNotContain(InterviewViewModel.ConvertIdAndRosterVectorToString(rosterId, new decimal[] { 0 }));
 
         It should_not_contain_screen_with_nested_group = () =>
-           interviewViewModel.Screens.Keys.ShouldNotContain(InterviewItemId.ConvertIdAndRosterVectorToString(nestedGroupId, new decimal[] { 0 }));
+           interviewViewModel.Screens.Keys.ShouldNotContain(InterviewViewModel.ConvertIdAndRosterVectorToString(nestedGroupId, new decimal[] { 0 }));
 
         It should_not_contain_question_from_nested_group = () =>
             interviewViewModel.FindQuestion(q => q.PublicKey == new InterviewItemId(questionInNestedGroupId, new decimal[] { 0 })).ShouldBeEmpty();
