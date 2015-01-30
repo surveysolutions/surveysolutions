@@ -26,11 +26,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.ChapterInfoViewFactoryTests
         }
 
         protected static ChapterInfoViewFactory CreateChapterInfoViewFactory(
-            IQueryableReadSideRepositoryReader<GroupInfoView> repository = null)
+            IReadSideKeyValueStorage<GroupInfoView> repository = null)
         {
             return
                 new ChapterInfoViewFactory(repository ??
-                                                 Mock.Of<IQueryableReadSideRepositoryReader<GroupInfoView>>());
+                                                 Mock.Of<IReadSideKeyValueStorage<GroupInfoView>>());
         }
     }
 }

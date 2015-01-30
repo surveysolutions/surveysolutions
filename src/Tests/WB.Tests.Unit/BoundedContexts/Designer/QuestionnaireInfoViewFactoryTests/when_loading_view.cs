@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoViewFactoryTes
     {
         Establish context = () =>
         {
-            var repositoryMock = new Mock<IQueryableReadSideRepositoryReader<QuestionnaireInfoView>>();
+            var repositoryMock = new Mock<IReadSideKeyValueStorage<QuestionnaireInfoView>>();
 
             repositoryMock
                 .Setup(x => x.GetById(questionnaireId))
