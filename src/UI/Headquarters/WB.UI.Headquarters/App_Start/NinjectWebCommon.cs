@@ -112,17 +112,21 @@ namespace WB.UI.Headquarters
                     LegacyOptions.InterviewDetailsDataSchedulerNumberOfInterviewsProcessedAtTime);
 
             bool reevaluateInterviewWhenSynchronized = LegacyOptions.SupervisorFunctionsEnabled;
+            string appDataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
+
             var synchronizationSettings = new SyncSettings(reevaluateInterviewWhenSynchronized: reevaluateInterviewWhenSynchronized,
-                appDataDirectory: AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
+                appDataDirectory: appDataDirectory,
                 incomingCapiPackagesDirectoryName: LegacyOptions.SynchronizationIncomingCapiPackagesDirectory,
                 incomingCapiPackagesWithErrorsDirectoryName:
-                    LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
+                LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
                 incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension);
 
-            var basePath = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
+            var basePath = appDataDirectory;
             //const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
 
             var ravenReadSideRepositoryWriterSettings = new RavenReadSideRepositoryWriterSettings(int.Parse(WebConfigurationManager.AppSettings["Raven.Readside.BulkInsertBatchSize"]));
+
+            string esentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.DbFolder"]);
 
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
@@ -139,7 +143,7 @@ namespace WB.UI.Headquarters
                 new HeadquartersRegistry(),
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
-                new EsentReadSideModule(Path.Combine(AppDomain.CurrentDomain.GetData("DataDirectory").ToString(), "ReadSide/Esent")),
+                new EsentReadSideModule(esentDataFolder),
                 new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled));
 
             NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
