@@ -42,6 +42,12 @@
       <HintPath>..\..\..\packages\AppDomainToolkit.1.0.4.1\lib\net\AppDomainToolkit.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Esent.Collections">
+      <HintPath>..\..\..\packages\Microsoft.Database.Collections.Generic.1.9.2.0\lib\net40\Esent.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Esent.Interop">
+      <HintPath>..\..\..\packages\ManagedEsent.1.9.2.0\lib\net40\Esent.Interop.dll</HintPath>
+    </Reference>
     <Reference Include="EventStore.ClientAPI, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\EventStore.Client.3.0.1\lib\net40\EventStore.ClientAPI.dll</HintPath>
@@ -137,6 +143,10 @@
     <Compile Include="CommandServiceTests\when_executing_not_registered_command.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="Empty.cs" />
+    <Compile Include="EsentTests\TestStoredEntity.cs" />
+    <Compile Include="EsentTests\when_esent_store_is_cleared.cs" />
+    <Compile Include="EsentTests\when_random_item_is_stored.cs" />
+    <Compile Include="EsentTests\with_esent_store.cs" />
     <Compile Include="EventContext.cs" />
     <Compile Include="EventContextExtensions.cs" />
     <Compile Include="EventHandler\when_event_handlers_are_created.cs" />
@@ -218,17 +228,6 @@
     <Compile Include="StorageTests\DocumentStoreFailedTests.cs" />
     <Compile Include="StorageTests\RavenDBEventStoreTests.cs" />
     <Compile Include="StorageTests\RavenDBTestBase.cs" />
-    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\RavenFilesStoreRepositoryAccessorTestContext.cs" />
-    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_clear_method_called.cs" />
-    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_disable_cache_method_called.cs" />
-    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_get_by_id_called_and_cache_is_disabled_and_view_was_stored_avoiding_cache.cs" />
-    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_get_by_id_called_and_cache_is_enabled_and_view_was_stored_avoiding_cache.cs" />
-    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_get_by_id_called_and_cache_is_enabled_and_view_was_stored_in_cache.cs" />
-    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_get_by_id_called_but_view_is_missing.cs" />
-    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_remove_by_id_called_but_view_is_missing.cs" />
-    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_remove_by_id_called_view_is_present_and_cache_is_disabled.cs" />
-    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_remove_by_id_called_view_is_present_and_cache_is_enabled.cs" />
-    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_store_view_cache_is_enabled_and_limit_of_cached_size_is_reached.cs" />
     <Compile Include="StorageTests\RavenReadSideRepositoryReaderTests\RavenReadSideRepositoryReaderTestsContext.cs" />
     <Compile Include="StorageTests\RavenReadSideRepositoryReaderTests\when_counting_repository_entities_and_views_are_being_rebuilt.cs" />
     <Compile Include="StorageTests\RavenReadSideRepositoryReaderTests\when_getting_repository_entity_by_id_and_views_are_being_rebuilt.cs" />
