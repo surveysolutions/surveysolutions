@@ -62,14 +62,13 @@ namespace WB.Tests.Integration.StorageTests
                 {
                     DataDirectory = path
                 };
-
+                
                 documentStore.Initialize();
                 return documentStore;
             }
             catch (ReflectionTypeLoadException loadException)
             {
-                Console.WriteLine(loadException.LoaderExceptions.Select(x => x.Message));
-                throw;
+                throw new Exception("Failed to load with following loader exceptions: " + loadException.LoaderExceptions.Select(x => x.Message));
             }
         }
     }
