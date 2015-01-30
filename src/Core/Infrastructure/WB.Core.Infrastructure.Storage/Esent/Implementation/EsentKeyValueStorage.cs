@@ -25,7 +25,7 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
 
         public TEntity GetById(string id)
         {
-            return this.storage.ContainsKey(id) ? Deserialize(this.storage[id]) : null;
+            return this.storage.ContainsKey(id) ? JsonConvert.DeserializeObject<TEntity>(this.storage[id], JsonSerializerSettings) : null;
         }
 
         public void Remove(string id)
@@ -35,7 +35,7 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
 
         public void Store(TEntity view, string id)
         {
-            this.storage[id] = Serialize(view);
+            this.storage[id] = JsonConvert.SerializeObject(view, Formatting.None, JsonSerializerSettings);
         }
 
         public void Clear()
@@ -77,23 +77,6 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
                     MissingMemberHandling = MissingMemberHandling.Ignore,
                     NullValueHandling = NullValueHandling.Ignore
                 };
-            }
-        }
-
-        private static string Serialize(TEntity entity)
-        {
-            return JsonConvert.SerializeObject(entity, Formatting.None, JsonSerializerSettings);
-        }
-
-        private static TEntity Deserialize(string json)
-        {
-            try
-            {
-                return JsonConvert.DeserializeObject<TEntity>(json, JsonSerializerSettings);
-            }
-            catch (Exception e)
-            {
-                throw new InvalidOperationException(json, e);
             }
         }
     }

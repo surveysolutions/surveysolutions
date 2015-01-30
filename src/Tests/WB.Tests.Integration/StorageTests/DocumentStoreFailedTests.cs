@@ -55,12 +55,21 @@ namespace WB.Tests.Integration.StorageTests
                 File.SetAttributes(path, FileAttributes.Directory);
                 Directory.Delete(path, true);
             }
-            var documentStore = new EmbeddableDocumentStore
+
+            try
             {
-                DataDirectory = path
-            };
-            documentStore.Initialize();
-            return documentStore;
+                var documentStore = new EmbeddableDocumentStore
+                {
+                    DataDirectory = path
+                };
+                documentStore.Initialize();
+                return documentStore;
+            }
+            catch (ReflectionTypeLoadException loadException)
+            {
+                Console.WriteLine(loadException.LoaderExceptions.Select(x => x.Message));
+                throw;
+            }
         }
     }
     public class TestIndex : AbstractIndexCreationTask<StoredDoc>
