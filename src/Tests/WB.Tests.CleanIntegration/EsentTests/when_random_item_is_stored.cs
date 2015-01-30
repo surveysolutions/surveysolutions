@@ -1,6 +1,5 @@
 ﻿using System;
 using Machine.Specifications;
-using Raven.Client.Linq;
 using WB.Core.Infrastructure.Storage.Esent.Implementation;
 
 namespace WB.Tests.Integration.EsentTests
