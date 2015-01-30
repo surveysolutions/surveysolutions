@@ -136,7 +136,7 @@ namespace WB.UI.Shared.Android.Frames
             {
                 if (this.model == null)
                 {
-                    this.model = this.Questionnaire.Screens[InterviewItemId.ConvertInterviewItemId(InterviewItemId.Parse(this.Arguments.GetString(ScreenId)))] as QuestionnaireGridViewModel;
+                    this.model = this.Questionnaire.Screens[InterviewViewModel.ConvertInterviewItemId(InterviewItemId.Parse(this.Arguments.GetString(ScreenId)))] as QuestionnaireGridViewModel;
                 }
                 return this.model;
             }

@@ -35,7 +35,7 @@ namespace WB.UI.QuestionnaireTester.Implementations.Fragments
 
         protected override QuestionnaireScreenViewModel GetScreenViewModel()
         {
-            return Questionnaire.Screens[InterviewItemId.ConvertInterviewItemId(ScreenId)] as QuestionnaireScreenViewModel;
+            return Questionnaire.Screens[InterviewViewModel.ConvertInterviewItemId(ScreenId)] as QuestionnaireScreenViewModel;
         }
 
         protected override List<IQuestionnaireViewModel> GetBreadcrumbs()

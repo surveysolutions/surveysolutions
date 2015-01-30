@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             {
                 if (screen == null)
                 {
-                    screen = getFullScreen(InterviewItemId.ConvertInterviewItemId(PublicKey));
+                    screen = getFullScreen(InterviewViewModel.ConvertInterviewItemId(PublicKey));
                     screen.PropertyChanged += screen_PropertyChanged;
                 }
                 return this.screen;
