@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="EsentTests\TestStoredEntity.cs" />
     <Compile Include="EsentTests\when_esent_store_is_cleared.cs" />
+    <Compile Include="EsentTests\when_item_removed.cs" />
     <Compile Include="EsentTests\when_random_item_is_stored.cs" />
     <Compile Include="EsentTests\with_esent_store.cs" />
     <Compile Include="EventStoreTests\when_storing_event_stream.cs" />
