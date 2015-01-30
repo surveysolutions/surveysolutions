@@ -24,11 +24,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
 
             this.TotalCount = userListView.TotalCount;
             this.Users = userListView.Items.Select(
-                    item => new UserApiItem(item.UserId, item.UserName, item.Email, DateTime.Parse(item.CreationDate), item.IsLockedByHQ || item.IsLockedBySupervisor));
+                    item => new UserApiItem(
+                        item.UserId, 
+                        item.UserName, 
+                        item.Email, 
+                        DateTime.Parse(item.CreationDate), 
+                        item.IsLockedByHQ || item.IsLockedBySupervisor,
+                        item.DeviceId));
 
             this.Offset = userListView.Page;
             this.Limit = userListView.PageSize;
-            //this.Order = questionnaireBrowseView.Order;
         }
 
         public UserApiView(InterviewersView userListView)
@@ -38,11 +43,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
 
             this.TotalCount = userListView.TotalCount;
             this.Users = userListView.Items.Select(
-                    item => new UserApiItem(item.UserId, item.UserName, item.Email, DateTime.Parse(item.CreationDate), item.IsLockedByHQ || item.IsLockedBySupervisor));
-
-            //this.Offset = userListView.ItemsSummary.Page;
-            //this.Limit = questionnaireBrowseView.PageSize;
-            //this.Order = questionnaireBrowseView.Order;
+                    item => new UserApiItem(
+                        item.UserId, 
+                        item.UserName, 
+                        item.Email, 
+                        DateTime.Parse(item.CreationDate), 
+                        item.IsLockedByHQ || item.IsLockedBySupervisor, 
+                        item.DeviceId));
         }
 
         public IEnumerable<UserApiItem> Users { get; private set; }
