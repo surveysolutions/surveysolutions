@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
             interviewViewModel.FeaturedQuestions.Count.ShouldEqual(1);
 
         It should_interview_has_1_prefilled_question_with_answer_equal_to_answerForNumeric = () =>
-            interviewViewModel.FeaturedQuestions[new InterviewItemId(answeredQuestionId)].AnswerString.ShouldEqual(answerForNumeric.ToString());
+            interviewViewModel.FeaturedQuestions[InterviewViewModel.ConvertIdAndRosterVectorToString(answeredQuestionId)].AnswerString.ShouldEqual(answerForNumeric.ToString());
 
         It should_invalidQuestions_in_statistic_be_empty = () =>
             interviewViewModel.Statistics.InvalidQuestions.ShouldBeEmpty();

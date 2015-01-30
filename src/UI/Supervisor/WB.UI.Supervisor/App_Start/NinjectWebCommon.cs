@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
@@ -21,6 +22,7 @@ using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
+using WB.Core.Infrastructure.Storage.Esent;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernels.SurveyManagement;
@@ -51,19 +53,10 @@ using WB.Core.Synchronization.Implementation.ReadSide.Indexes;
 
 namespace WB.UI.Supervisor.App_Start
 {
-    /// <summary>
-    /// The ninject web common.
-    /// </summary>
     public static class NinjectWebCommon
     {
-        /// <summary>
-        /// The bootstrapper.
-        /// </summary>
         private static readonly Bootstrapper Bootstrapper = new Bootstrapper();
 
-        /// <summary>
-        /// Starts the application
-        /// </summary>
         public static void Start()
         {
             DynamicModuleUtility.RegisterModule(typeof(OnePerRequestHttpModule));
@@ -71,18 +64,11 @@ namespace WB.UI.Supervisor.App_Start
             Bootstrapper.Initialize(CreateKernel);
         }
 
-        /// <summary>
-        /// Stops the application.
-        /// </summary>
         public static void Stop()
         {
             Bootstrapper.ShutDown();
         }
 
-        /// <summary>
-        /// Creates the kernel that will manage your application.
-        /// </summary>
-        /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
 #warning TLK: delete this when NCQRS initialization moved to Global.asax
@@ -97,7 +83,8 @@ namespace WB.UI.Supervisor.App_Start
                 viewsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Views"],
                 plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"],
                 failoverBehavior: WebConfigurationManager.AppSettings["Raven.Databases.FailoverBehavior"],
-                activeBundles: WebConfigurationManager.AppSettings["Raven.Databases.ActiveBundles"], ravenFileSystemName: WebConfigurationManager.AppSettings["Raven.Databases.RavenFileSystemName"]);
+                activeBundles: WebConfigurationManager.AppSettings["Raven.Databases.ActiveBundles"],
+                ravenFileSystemName: WebConfigurationManager.AppSettings["Raven.Databases.RavenFileSystemName"]);
 
             
             var schedulerSettings = new SchedulerSettings(LegacyOptions.SchedulerEnabled,
@@ -114,17 +101,19 @@ namespace WB.UI.Supervisor.App_Start
             Func<bool> isDebug = () => AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
             Version applicationBuildVersion = typeof(AccountController).Assembly.GetName().Version;
 
+            string appDataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
             var synchronizationSettings = new SyncSettings(reevaluateInterviewWhenSynchronized: true,
-                appDataDirectory: AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
+                appDataDirectory: appDataDirectory,
                 incomingCapiPackagesDirectoryName: LegacyOptions.SynchronizationIncomingCapiPackagesDirectory,
                 incomingCapiPackagesWithErrorsDirectoryName:
-                    LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
+                LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
                 incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension);
 
-            var basePath = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
-            const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
+            var basePath = appDataDirectory;
 
             var ravenReadSideRepositoryWriterSettings = new RavenReadSideRepositoryWriterSettings(int.Parse(WebConfigurationManager.AppSettings["Raven.Readside.BulkInsertBatchSize"]));
+
+            string esentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.DbFolder"]);
 
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
@@ -141,6 +130,7 @@ namespace WB.UI.Supervisor.App_Start
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
+                new EsentReadSideModule(esentDataFolder),
                 new SupervisorBoundedContextModule(headquartersSettings, schedulerSettings));
 
             NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
