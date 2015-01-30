@@ -30,9 +30,6 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
             {
                 throw new RestException(Resources.NoNetwork);
             }
-            ServicePointManager
-                .ServerCertificateValidationCallback +=
-                (sender, cert, chain, sslPolicyErrors) => true;
             Url fullUrl = this.restServiceSettings.BaseAddress()
                 .AppendPathSegment(url)
                 .SetQueryParams(queryString);
