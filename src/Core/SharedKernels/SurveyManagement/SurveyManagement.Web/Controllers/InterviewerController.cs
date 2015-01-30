@@ -4,7 +4,6 @@ using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -64,12 +63,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             if(user == null) throw new HttpException(404, string.Empty);
 
-            return this.View(new UserEditModel()
+            return this.View(new UserEditModel
                 {
                     Id = user.PublicKey,
                     Email = user.Email,
                     IsLocked = this.GlobalInfo.IsHeadquarter ? user.IsLockedByHQ : user.IsLockedBySupervisor,
-                    UserName = user.UserName
+                    UserName = user.UserName,
+                    DevicesHistory = user.DeviceChangingHistory
                 });
         }
 

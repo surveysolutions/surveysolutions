@@ -2,9 +2,6 @@
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.User
 {
-    /// <summary>
-    /// The user list view.
-    /// </summary>
     public class UserListView : IListView<UserListItem>
     {
         public int Page { get; set; }

@@ -41,7 +41,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
                                             isLockedBySupervisor: x.IsLockedBySupervisor,
                                             isLockedByHQ:x.IsLockedByHQ,
                                             name: x.UserName,
-                                            roles: x.Roles
+                                            roles: x.Roles,
+                                            deviceId:x.DeviceId
                                             ));
 
                         return new UserListView {Page = input.Page, PageSize = input.PageSize, TotalCount = all.Count(), Items = selection};

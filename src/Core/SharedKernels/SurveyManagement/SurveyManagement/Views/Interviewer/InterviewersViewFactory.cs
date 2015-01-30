@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
                             .Skip((input.Page - 1) * input.PageSize)
                             .Take(input.PageSize)
                             .Select(
-                                x => new InterviewersItem(x.PublicKey, x.UserName, x.Email, x.CreationDate, x.IsLockedBySupervisor, x.IsLockedByHQ));
+                                x => new InterviewersItem(x.PublicKey, x.UserName, x.Email, x.CreationDate, x.IsLockedBySupervisor, x.IsLockedByHQ, x.DeviceId));
             return new InterviewersView() {Items = items, TotalCount = interviewers.Count()};
         }
     }

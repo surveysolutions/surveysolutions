@@ -14,6 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views
             this.CreationDate = DateTime.Now;
             this.PublicKey = Guid.NewGuid();
             this.Roles = new List<UserRoles>();
+            this.DeviceChangingHistory = new List<DeviceInfo>();
         }
 
         public DateTime CreationDate { get; set; }
@@ -31,6 +32,10 @@ namespace WB.Core.SharedKernels.DataCollection.Views
         public string UserName { get; set; }
 
         public DateTime LastChangeDate { get; set; }
+
+        public string DeviceId { get; set; }
+
+        public List<DeviceInfo> DeviceChangingHistory { get; set; }
 
         public UserLight GetUseLight()
         {
