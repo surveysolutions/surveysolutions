@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WB.Core.Infrastructure.Raven")]
+[assembly: AssemblyTitle("WB.Tests.CleanIntegration")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("WB.Core.Infrastructure.Raven")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyProduct("WB.Tests.CleanIntegration")]
+[assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("5063700b-8316-43fc-bcac-72b5b540b3a7")]
+[assembly: Guid("4f1c5273-3bf8-4b72-813b-d78c52ddb614")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -34,18 +34,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: AssemblyInformationalVersion("1.0.0 (build 1)")]
-
-[assembly: InternalsVisibleTo("WB.Core.Infrastructure.Raven.Tests")]
-[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
-[assembly: InternalsVisibleTo("LoadTestDataGenerator")]
-[assembly: InternalsVisibleTo("WB.Tools.CapiDataGenerator")]
-[assembly: InternalsVisibleTo("WB.Tools.EventsConverter")]
-[assembly: InternalsVisibleTo("WB.Tools.InterviewExtractor")]
-[assembly: InternalsVisibleTo("WB.Tools.DatabaseCleaner")]
-[assembly: InternalsVisibleTo("WB.Tools.QuestionnaireDocumentsConverter")]
-[assembly: InternalsVisibleTo("WB.Tools.EventsMigrator")]
-[assembly: InternalsVisibleTo("WB.Tools.EventTimeStampCorrection")]
-[assembly: InternalsVisibleTo("WB.Tests.Unit")]
-[assembly: InternalsVisibleTo("WB.Tests.Integration")]
-[assembly: InternalsVisibleTo("WB.Tests.CleanIntegration")]
