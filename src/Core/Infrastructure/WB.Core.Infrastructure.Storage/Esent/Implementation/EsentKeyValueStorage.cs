@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using Microsoft.Isam.Esent.Collections.Generic;
 using Newtonsoft.Json;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
@@ -11,14 +10,15 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
     internal class EsentKeyValueStorage<TEntity> : IReadSideKeyValueStorage<TEntity>, IReadSideRepositoryCleaner, IDisposable
         where TEntity : class, IReadSideRepositoryEntity
     {
-        private readonly PersistentDictionary<string, string> storage;
+        private PersistentDictionary<string, string> storage;
+        private readonly string collectionFolder;
 
         public EsentKeyValueStorage(EsentSettings settings)
         {
             if (settings == null) throw new ArgumentNullException("settings");
 
             string collectionName = typeof(TEntity).Name;
-            string collectionFolder = Path.Combine(settings.Folder, collectionName);
+            this.collectionFolder = Path.Combine(settings.Folder, collectionName);
 
             this.storage = new PersistentDictionary<string, string>(collectionFolder);
         }
@@ -40,12 +40,30 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
 
         public void Clear()
         {
-            this.storage.Clear();
+            this.storage.Dispose();
+            PersistentDictionaryFile.DeleteFiles(this.collectionFolder);
+            this.storage = new PersistentDictionary<string, string>(collectionFolder);
         }
 
         public void Dispose()
         {
-            this.storage.Flush();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // free managed resources
+                if (this.storage != null)
+                {
+                    this.storage.Dispose();
+                    this.storage = null;
+                }
+
+                // free native resources if there are any.
+            }
         }
 
         private static JsonSerializerSettings JsonSerializerSettings
