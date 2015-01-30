@@ -632,8 +632,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewDenormalizerTests\when_QuestionnaireUpdated_event_received.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewDenormalizerTests\when_TemplateImported_event_received.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\QuestionnaireInfoViewFactoryContext.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_counting_questionnaires_which_are_not_migrated_to_csharp_and_4_questionnaires_have_csharp_flag_and_5_do_not_have.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_getting_questionnaires_which_are_not_migrated_to_csharp_and_4_questionnaires_have_csharp_flag_and_5_do_not_have.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_loading_non_empty_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_loading_view.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\QuestionnaireListViewDenormalizerOldTests.cs" />

@@ -7,9 +7,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
     public class QuestionnaireViewFactory : IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>
     {
-        private readonly IReadSideRepositoryReader<QuestionnaireDocument> questionnaireStorage;
+        private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
 
-        public QuestionnaireViewFactory(IReadSideRepositoryReader<QuestionnaireDocument> questionnaireStorage)
+        public QuestionnaireViewFactory(IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage)
         {
             this.questionnaireStorage = questionnaireStorage;
         }

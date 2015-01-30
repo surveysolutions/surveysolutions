@@ -4,9 +4,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
     public class ChapterInfoViewFactory : IChapterInfoViewFactory
     {
-        private readonly IReadSideRepositoryReader<GroupInfoView> readSideReader;
+        private readonly IReadSideKeyValueStorage<GroupInfoView> readSideReader;
 
-        public ChapterInfoViewFactory(IReadSideRepositoryReader<GroupInfoView> readSideReader)
+        public ChapterInfoViewFactory(IReadSideKeyValueStorage<GroupInfoView> readSideReader)
         {
             this.readSideReader = readSideReader;
         }

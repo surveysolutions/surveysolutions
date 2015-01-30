@@ -11,9 +11,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons
         IEventHandler<SharedPersonToQuestionnaireAdded>,
         IEventHandler<SharedPersonFromQuestionnaireRemoved>
     {
-        private readonly IReadSideRepositoryWriter<QuestionnaireSharedPersons> documentStorage;
+        private readonly IReadSideKeyValueStorage<QuestionnaireSharedPersons> documentStorage;
 
-        public QuestionnaireSharedPersonsDenormalizer(IReadSideRepositoryWriter<QuestionnaireSharedPersons> documentStorage)
+        public QuestionnaireSharedPersonsDenormalizer(IReadSideKeyValueStorage<QuestionnaireSharedPersons> documentStorage)
         {
             this.documentStorage = documentStorage;
         }
