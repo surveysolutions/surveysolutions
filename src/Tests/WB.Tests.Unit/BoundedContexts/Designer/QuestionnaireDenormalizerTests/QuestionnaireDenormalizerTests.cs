@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             Assert.That(evnt.ValidationMessage, Is.EqualTo(question.ValidationMessage));
         }
 
-        private static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(Mock<IReadSideRepositoryWriter<QuestionnaireDocument>> storageStub)
+        private static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(Mock<IReadSideKeyValueStorage<QuestionnaireDocument>> storageStub)
         {
             #warning: we shouldn't use CompleteQuestionFactory here?
             var denormalizer = new QuestionnaireDenormalizer(storageStub.Object, new QuestionnaireEntityFactory(), Mock.Of<ILogger>());
@@ -71,9 +71,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             return denormalizer;
         }
 
-        private static Mock<IReadSideRepositoryWriter<QuestionnaireDocument>> CreateQuestionnaireDenormalizerStorageStub(QuestionnaireDocument document)
+        private static Mock<IReadSideKeyValueStorage<QuestionnaireDocument>> CreateQuestionnaireDenormalizerStorageStub(QuestionnaireDocument document)
         {
-            var storageStub = new Mock<IReadSideRepositoryWriter<QuestionnaireDocument>>();
+            var storageStub = new Mock<IReadSideKeyValueStorage<QuestionnaireDocument>>();
 
             storageStub.Setup(d => d.GetById(document.PublicKey.FormatGuid())).Returns(document);
 

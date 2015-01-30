@@ -14,7 +14,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
     internal class ChaptersInfoViewDenormalizer :
-        AbstractFunctionalEventHandler<GroupInfoView, IReadSideRepositoryWriter<GroupInfoView>>,
+        AbstractFunctionalEventHandler<GroupInfoView, IReadSideKeyValueStorage<GroupInfoView>>,
         IUpdateHandler<GroupInfoView, NewQuestionnaireCreated>,
         IUpdateHandler<GroupInfoView, TemplateImported>,
         IUpdateHandler<GroupInfoView, QuestionnaireCloned>,
@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         IUpdateHandler<GroupInfoView, GroupStoppedBeingARoster>
     {
 
-        public ChaptersInfoViewDenormalizer(IReadSideRepositoryWriter<GroupInfoView> writer)
+        public ChaptersInfoViewDenormalizer(IReadSideKeyValueStorage<GroupInfoView> writer)
             : base(writer)
         {
         }

@@ -13,7 +13,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo
 {
     internal class QuestionnaireInfoViewDenormalizer :
-        AbstractFunctionalEventHandler<QuestionnaireInfoView, IReadSideRepositoryWriter<QuestionnaireInfoView>>,
+        AbstractFunctionalEventHandler<QuestionnaireInfoView, IReadSideKeyValueStorage<QuestionnaireInfoView>>,
         IUpdateHandler<QuestionnaireInfoView, NewQuestionnaireCreated>,
         IUpdateHandler<QuestionnaireInfoView, QuestionnaireCloned>,
         IUpdateHandler<QuestionnaireInfoView, TemplateImported>,
@@ -28,7 +28,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
         private readonly Dictionary<string, string> groupTitles = new Dictionary<string, string>();
 
-        public QuestionnaireInfoViewDenormalizer(IReadSideRepositoryWriter<QuestionnaireInfoView> writer) : base(writer)
+        public QuestionnaireInfoViewDenormalizer(IReadSideKeyValueStorage<QuestionnaireInfoView> writer)
+            : base(writer)
         {
         }
 
