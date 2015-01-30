@@ -105,7 +105,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<IQuestionnaireCacheInitializer>().To<QuestionnaireCacheInitializer>();
             this.Bind<IInterviewDetailsDataLoader>().To<InterviewDetailsDataLoader>();
-            this.Bind<IInterviewDetailsDataProcessor>().To<InterviewDetailsDataProcessor>();
             this.Bind<InterviewDetailsDataProcessorContext>().ToSelf().InSingletonScope();
             this.Bind<InterviewDetailsDataLoaderSettings>().ToConstant(this.interviewDetailsDataLoaderSettings);
             this.Bind<InterviewDetailsBackgroundSchedulerTask>().ToSelf();
@@ -129,7 +128,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 this.Kernel.RegisterDenormalizer<QuestionnaireExportStructureDenormalizer>();
             }
 
-            this.Bind<IIncomePackagesRepository, IAdditionalDataService<InterviewData>>()
+            this.Bind<IIncomePackagesRepository, IInterviewDetailsDataProcessor>()
                 .To<IncomePackagesRepository>()
                 .InSingletonScope()
                 .WithConstructorArgument("overrideReceivedEventTimeStamp", overrideReceivedEventTimeStamp)

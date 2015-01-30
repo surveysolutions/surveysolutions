@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomePackagesRepositoryT
         };
 
         Because of = () =>
-            incomePackagesRepository.CheckAdditionalRepository(interviewId.ToString());
+            incomePackagesRepository.Process();
 
         It should_content_of_package_not_be_written_at_error_folder = () =>
             fileSystemAccessorMock.Verify(

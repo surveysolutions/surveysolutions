@@ -104,10 +104,9 @@ namespace WB.UI.Supervisor.App_Start
             string appDataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
             var synchronizationSettings = new SyncSettings(reevaluateInterviewWhenSynchronized: true,
                 appDataDirectory: appDataDirectory,
-                incomingCapiPackagesDirectoryName: LegacyOptions.SynchronizationIncomingCapiPackagesDirectory,
                 incomingCapiPackagesWithErrorsDirectoryName:
                 LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
-                incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension);
+                incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension, incomingUnprocessedPackagesDirectoryName: LegacyOptions.IncomingUnprocessedPackageFileNameExtension);
 
             var basePath = appDataDirectory;
 

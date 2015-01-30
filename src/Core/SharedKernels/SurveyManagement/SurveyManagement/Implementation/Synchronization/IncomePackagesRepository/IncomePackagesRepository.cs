@@ -8,6 +8,7 @@ using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
@@ -18,17 +19,18 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository
 {
-    internal class IncomePackagesRepository : IIncomePackagesRepository, IAdditionalDataService<InterviewData>
+    internal class IncomePackagesRepository : IIncomePackagesRepository, IInterviewDetailsDataProcessor
     {
-        private string incomingCapiPackagesDirectory;
         private string incomingCapiPackagesWithErrorsDirectory;
-
+        private string incomingUnprocessedPackagesDirectory;
+        private readonly object locker = new object();
         private readonly string origin;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter;
         private readonly ILogger logger;
@@ -40,9 +42,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
         private readonly IArchiveUtils archiver;
         private IStreamableEventStore eventStore;
         private IEventDispatcher eventBus;
-        private ConcurrentDictionary<Guid, bool> packagesInProcess = new ConcurrentDictionary<Guid, bool>();
-        
-
         public IncomePackagesRepository(ILogger logger, SyncSettings syncSettings, ICommandService commandService,
             IFileSystemAccessor fileSystemAccessor, IJsonUtils jsonUtils, IArchiveUtils archiver,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter, bool overrideReceivedEventTimeStamp, string origin)
@@ -74,72 +73,96 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
 
         private void InitializeDirectoriesForCapiIncomePackages()
         {
-            this.incomingCapiPackagesDirectory = this.fileSystemAccessor.CombinePath(this.syncSettings.AppDataDirectory,
-                this.syncSettings.IncomingCapiPackagesDirectoryName);
+            this.incomingUnprocessedPackagesDirectory= this.fileSystemAccessor.CombinePath(this.syncSettings.AppDataDirectory,
+                this.syncSettings.IncomingUnprocessedPackagesDirectoryName);
 
-            this.incomingCapiPackagesWithErrorsDirectory = this.fileSystemAccessor.CombinePath(this.incomingCapiPackagesDirectory,
+            this.incomingCapiPackagesWithErrorsDirectory = this.fileSystemAccessor.CombinePath(this.syncSettings.AppDataDirectory,
                 this.syncSettings.IncomingCapiPackagesWithErrorsDirectoryName);
 
-            if (!this.fileSystemAccessor.IsDirectoryExists(this.incomingCapiPackagesDirectory))
-                this.fileSystemAccessor.CreateDirectory(this.incomingCapiPackagesDirectory);
+            if (!this.fileSystemAccessor.IsDirectoryExists(this.incomingUnprocessedPackagesDirectory))
+                this.fileSystemAccessor.CreateDirectory(this.incomingUnprocessedPackagesDirectory);
 
             if (!this.fileSystemAccessor.IsDirectoryExists(this.incomingCapiPackagesWithErrorsDirectory))
                 this.fileSystemAccessor.CreateDirectory(this.incomingCapiPackagesWithErrorsDirectory);
         }
 
-        public void StoreIncomingItem(SyncItem item)
+        public void Process()
         {
-            if (string.IsNullOrWhiteSpace(item.Content))
+            lock (locker)
+            {
+                var fileToProcess =
+                    fileSystemAccessor.GetFilesInDirectory(incomingUnprocessedPackagesDirectory).FirstOrDefault();
+
+                if (string.IsNullOrEmpty(fileToProcess) || !fileSystemAccessor.IsFileExists(fileToProcess))
+                    return;
+
+                try
+                {
+                    var syncItem = this.jsonUtils.Deserialize<SyncItem>(fileSystemAccessor.ReadAllText(fileToProcess));
+
+                    var meta =
+                        this.jsonUtils.Deserialize<InterviewMetaInfo>(archiver.DecompressString(syncItem.MetaInfo));
+
+                    if (meta.CreatedOnClient.HasValue && meta.CreatedOnClient.Value &&
+                        this.interviewSummaryRepositoryWriter.GetById(meta.PublicKey) == null)
+                    {
+                        AnsweredQuestionSynchronizationDto[] prefilledQuestions = null;
+                        if (meta.FeaturedQuestionsMeta != null)
+                            prefilledQuestions = meta.FeaturedQuestionsMeta
+                                .Select(
+                                    q =>
+                                        new AnsweredQuestionSynchronizationDto(q.PublicKey, new decimal[0], q.Value,
+                                            string.Empty))
+                                .ToArray();
+
+                        this.commandService.Execute(
+                            new CreateInterviewCreatedOnClientCommand(interviewId: meta.PublicKey,
+                                userId: meta.ResponsibleId, questionnaireId: meta.TemplateId,
+                                questionnaireVersion: meta.TemplateVersion, status: (InterviewStatus) meta.Status,
+                                featuredQuestionsMeta: prefilledQuestions, isValid: meta.Valid), origin);
+
+                    }
+
+                    var items =
+                        this.jsonUtils.Deserialize<AggregateRootEvent[]>(archiver.DecompressString(syncItem.Content));
+                    if (items.Length > 0)
+                    {
+                        var incomeEvents = this.BuildEventStreams(items,
+                            this.EventStore.GetLastEventSequence(syncItem.RootId));
+
+                        this.EventStore.Store(incomeEvents);
+
+                        this.EventBus.Publish(incomeEvents);
+                    }
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message, e);
+                    this.fileSystemAccessor.CopyFileOrDirectory(fileToProcess, incomingCapiPackagesWithErrorsDirectory);
+                    return;
+                }
+
+                this.fileSystemAccessor.DeleteFile(fileToProcess);
+            }
+        }
+
+        public void StoreIncomingItem(string item)
+        {
+            if (string.IsNullOrWhiteSpace(item))
                 throw new ArgumentException("Sync Item is not set.");
 
             try
-            { 
-                var meta = this.jsonUtils.Deserialize<InterviewMetaInfo>(archiver.DecompressString(item.MetaInfo));
-                var packageFileName = this.GetItemFileName(meta.PublicKey);
-                if (packagesInProcess.ContainsKey(meta.PublicKey) || fileSystemAccessor.IsFileExists(packageFileName))
-                    throw new InvalidOperationException(
-                        string.Format("attempt to store one more sync package with id '{0}' while one is in process",
-                            meta.PublicKey));
-                if (meta.CreatedOnClient.HasValue && meta.CreatedOnClient.Value && this.interviewSummaryRepositoryWriter.GetById(meta.PublicKey)==null)
-                {
-                    AnsweredQuestionSynchronizationDto[] prefilledQuestions = null;
-                    if (meta.FeaturedQuestionsMeta != null)
-                        prefilledQuestions = meta.FeaturedQuestionsMeta
-                            .Select(q => new AnsweredQuestionSynchronizationDto(q.PublicKey, new decimal[0], q.Value, string.Empty))
-                            .ToArray();
-
-                    this.commandService.Execute(new CreateInterviewCreatedOnClientCommand(interviewId: meta.PublicKey,
-                        userId: meta.ResponsibleId, questionnaireId: meta.TemplateId,
-                        questionnaireVersion: meta.TemplateVersion, status: (InterviewStatus) meta.Status,
-                        featuredQuestionsMeta: prefilledQuestions, isValid: meta.Valid), origin);
-
-                }
-                else
-                    commandService.Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
-                        meta.TemplateVersion,
-                        (InterviewStatus)meta.Status, null, meta.Comments, meta.Valid, false), origin);
-
-                this.fileSystemAccessor.WriteAllText(this.GetItemFileName(meta.PublicKey), item.Content);
+            {
+                this.fileSystemAccessor.WriteAllText(
+                    this.fileSystemAccessor.CombinePath(this.incomingUnprocessedPackagesDirectory,
+                        string.Format("{0}.{1}", Guid.NewGuid().FormatGuid(),
+                            this.syncSettings.IncomingCapiPackageFileNameExtension)), item);
             }
             catch (Exception ex)
             {
                 this.logger.Error("error on handling incoming package,", ex);
-                this.fileSystemAccessor.WriteAllText(this.GetItemFileNameForErrorStorage(item.RootId),this.jsonUtils.Serialize(item));
+                throw;
             }
-        }
-
-        private bool IsInterviewPresent(Guid interviewId)
-        {
-            var interviewSummary = this.interviewSummaryRepositoryWriter.GetById(interviewId);
-            if (interviewSummary == null)
-                return false;
-            return !interviewSummary.IsDeleted;
-        }
-
-        private string GetItemFileName(Guid id)
-        {
-            return this.fileSystemAccessor.CombinePath(this.incomingCapiPackagesDirectory,
-                string.Format("{0}.{1}", id, this.syncSettings.IncomingCapiPackageFileNameExtension));
         }
 
         private string GetItemFileNameForErrorStorage(Guid id, int version = 1)
@@ -151,64 +174,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
                 return GetItemFileNameForErrorStorage(id, version + 1);
             
             return fileName;
-        }
-
-        public void CheckAdditionalRepository(string id)
-        {
-            Guid interviewId;
-            if (!Guid.TryParse(id, out interviewId))
-                return;
-
-            if (packagesInProcess.TryAdd(interviewId, true))
-            {
-                try
-                {
-                    ProcessItem(interviewId);
-                }
-                finally
-                {
-                    bool dummyBool;
-                    this.packagesInProcess.TryRemove(interviewId, out dummyBool);
-                }
-            }
-        }
-
-        private void ProcessItem(Guid id)
-        {
-            var fileName = this.GetItemFileName(id);
-            if (!this.fileSystemAccessor.IsFileExists(fileName))
-                return;
-
-            if (!IsInterviewPresent(id))
-            {
-                this.fileSystemAccessor.WriteAllText(this.GetItemFileNameForErrorStorage(id),
-                    this.fileSystemAccessor.ReadAllText(fileName));
-                this.fileSystemAccessor.DeleteFile(fileName);
-                return;
-            }
-
-            var fileContent = this.fileSystemAccessor.ReadAllText(fileName);
-
-            var items = this.jsonUtils.Deserialize<AggregateRootEvent[]>(archiver.DecompressString(fileContent));
-            if (items.Length > 0)
-            {
-                if (this.EventStore == null)
-                    return;
-
-                if (this.EventBus == null)
-                    return;
-
-                var incomeEvents = this.BuildEventStreams(items, this.EventStore.GetLastEventSequence(id));
-
-                this.EventStore.Store(incomeEvents);
-                this.fileSystemAccessor.DeleteFile(fileName);
-
-                this.EventBus.Publish(incomeEvents);
-            }
-            else
-            {
-                this.fileSystemAccessor.DeleteFile(fileName);
-            }
         }
 
         public IEnumerable<Guid> GetListOfUnhandledPackages()
@@ -232,6 +197,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
         public string GetUnhandledPackagePath(Guid id)
         {
             return this.GetItemFileNameForErrorStorage(id);
+        }
+
+        public int GetUnprocessedPackagesCount()
+        {
+            return fileSystemAccessor.GetFilesInDirectory(incomingUnprocessedPackagesDirectory).Count();
         }
 
         protected UncommittedEventStream BuildEventStreams(IEnumerable<AggregateRootEvent> stream, long initialVersion)
