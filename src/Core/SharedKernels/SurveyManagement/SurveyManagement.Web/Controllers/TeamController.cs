@@ -13,13 +13,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
     public class TeamController : BaseController
     {
-        protected readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
+        protected readonly IUserViewFactory userViewFactory;
         protected readonly IPasswordHasher passwordHasher;
 
         public TeamController(ICommandService commandService, 
                               IGlobalInfoProvider globalInfo, 
                               ILogger logger,
-                              IViewFactory<UserViewInputModel, UserView> userViewFactory,
+                              IUserViewFactory userViewFactory,
                               IPasswordHasher passwordHasher)
             : base(commandService, globalInfo, logger)
         {

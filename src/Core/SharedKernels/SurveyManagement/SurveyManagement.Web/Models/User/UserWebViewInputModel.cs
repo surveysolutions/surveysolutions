@@ -5,23 +5,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
     /// <summary>
     /// The user view input model.
     /// </summary>
-    public class UserViewInputModel
+    public class UserWebViewInputModel
     {
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UserViewInputModel"/> class.
+        /// Initializes a new instance of the <see cref="UserWebViewInputModel"/> class.
         /// </summary>
         /// <param name="id">
         /// The id.
         /// </param>
-        public UserViewInputModel(Guid id)
+        public UserWebViewInputModel(Guid id)
         {
             this.UserId = id;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UserViewInputModel"/> class.
+        /// Initializes a new instance of the <see cref="UserWebViewInputModel"/> class.
         /// </summary>
         /// <param name="username">
         /// The username.
@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
         /// <param name="password">
         /// The password.
         /// </param>
-        public UserViewInputModel(string username, string password)
+        public UserWebViewInputModel(string username, string password)
         {
             this.UserName = username;
             this.Password = password;
