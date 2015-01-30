@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public InterviewerController(ICommandService commandService, 
                               IGlobalInfoProvider globalInfo, 
                               ILogger logger,
-                              IViewFactory<UserViewInputModel, UserView> userViewFactory,
+                              IUserViewFactory userViewFactory,
                               IPasswordHasher passwordHasher)
             : base(commandService, globalInfo, logger, userViewFactory, passwordHasher)
         {

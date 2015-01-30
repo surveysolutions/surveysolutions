@@ -1,24 +1,28 @@
 using System;
 using System.Linq;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
 {
-    public class UserViewFactory : IViewFactory<UserViewInputModel, UserView>
+    public interface IUserWebViewFactory
+    {
+        UserWebView Load(UserWebViewInputModel input);
+    }
+
+    public class UserWebViewFactory : IUserWebViewFactory //IUserWebViewFactory
     {
         // in this case we use writer here because we want to make sure login is performed on the latest version of data and we understand that indexing may take some time
         private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
 
-        public UserViewFactory(IQueryableReadSideRepositoryReader<UserDocument> users)
+        public UserWebViewFactory(IQueryableReadSideRepositoryReader<UserDocument> users)
         {
             this.users = users;
         }
         
-        public UserView Load(UserViewInputModel input)
+        public UserWebView Load(UserWebViewInputModel input)
         {
-            UserView result = this.users.Query(queryableUsers =>
+            UserWebView result = this.users.Query(queryableUsers =>
                 {
                     UserDocument doc = null;
                     if (input.UserId != Guid.Empty)
@@ -44,7 +48,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
                         return null;
                     }
 
-                    return new UserView(doc.PublicKey, doc.UserName, doc.Password, doc.Email, doc.CreationDate, doc.Roles, doc.IsLockedBySupervisor, doc.IsLockedByHQ, doc.Supervisor);
+                    return new UserWebView(doc.PublicKey, doc.UserName, doc.Password, doc.Email, doc.CreationDate, doc.Roles, doc.IsLockedBySupervisor, doc.IsLockedByHQ, doc.Supervisor);
                 });
             return result;
         }
