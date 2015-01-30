@@ -62,6 +62,7 @@ namespace WB.Tests.Integration.StorageTests
                 {
                     DataDirectory = path
                 };
+
                 documentStore.Initialize();
                 return documentStore;
             }
