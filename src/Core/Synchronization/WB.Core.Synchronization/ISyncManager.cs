@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization
 {
@@ -16,5 +15,7 @@ namespace WB.Core.Synchronization
         SyncPackage ReceiveSyncPackage(Guid clientRegistrationId, string id);
 
         string GetPackageIdByTimestamp(Guid userId, DateTime timestamp);
+
+        void LinkUserToDevice(Guid interviewerId, string deviceId);
     }
 }

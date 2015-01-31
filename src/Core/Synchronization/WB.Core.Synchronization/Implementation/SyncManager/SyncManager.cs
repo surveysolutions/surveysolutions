@@ -4,10 +4,9 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.Synchronization.Commands;
 using WB.Core.Synchronization.Documents;
-using WB.Core.Synchronization.SyncProvider;
 
 namespace WB.Core.Synchronization.Implementation.SyncManager
 {
@@ -61,6 +60,18 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             return true;
         }
 
+        public void LinkUserToDevice(Guid interviewerId, string deviceId)
+        {
+            if (interviewerId == Guid.Empty)
+                throw new ArgumentException("Interview id is not set.");
+
+            if (string.IsNullOrEmpty(deviceId))
+                throw new ArgumentException("Device id is not set.");
+
+            commandService.Execute(new LinkUserToDevice(interviewerId, deviceId));
+        }
+
+
         public IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, string lastSyncedPackageId)
         {
             var device = devices.GetById(clientRegistrationKey);
@@ -80,7 +91,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                 throw new Exception("Item was not found");
             }
 
-            return new SyncPackage() {Id = Guid.NewGuid(), SyncItem = item};
+            return new SyncPackage {Id = Guid.NewGuid(), SyncItem = item};
         }
 
         public string GetPackageIdByTimestamp(Guid userId, DateTime timestamp)
