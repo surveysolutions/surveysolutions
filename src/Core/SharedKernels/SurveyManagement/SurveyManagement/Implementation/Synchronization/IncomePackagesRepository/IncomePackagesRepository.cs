@@ -122,6 +122,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
                                 featuredQuestionsMeta: prefilledQuestions, isValid: meta.Valid), origin);
 
                     }
+                    else
+                        commandService.Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
+                            meta.TemplateVersion,
+                            (InterviewStatus)meta.Status, null, meta.Comments, meta.Valid, false), origin);
+
 
                     var items =
                         this.jsonUtils.Deserialize<AggregateRootEvent[]>(archiver.DecompressString(syncItem.Content));
