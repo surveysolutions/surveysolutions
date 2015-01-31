@@ -26,6 +26,7 @@ namespace WB.UI.Capi
 		
 		public static void UpdateIdValues()
 		{
+			global::Chance.MvvmCross.Plugins.UserInteraction.Droid.Resource.String.library_name = global::WB.UI.Capi.Resource.String.library_name;
 			global::MWBarcodeScanner.Resource.Drawable.flashbuttonoff = global::WB.UI.Capi.Resource.Drawable.flashbuttonoff;
 			global::MWBarcodeScanner.Resource.Drawable.flashbuttonon = global::WB.UI.Capi.Resource.Drawable.flashbuttonon;
 			global::MWBarcodeScanner.Resource.Drawable.overlay = global::WB.UI.Capi.Resource.Drawable.overlay;
@@ -336,8 +337,8 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f05004b
 			public const int btnInvalid = 2131034187;
 			
-			// aapt resource value: 0x7f050033
-			public const int btnLogin = 2131034163;
+			// aapt resource value: 0x7f050051
+			public const int btnLogin = 2131034193;
 			
 			// aapt resource value: 0x7f05001d
 			public const int btnNewInterview = 2131034141;
@@ -443,6 +444,9 @@ namespace WB.UI.Capi
 			
 			// aapt resource value: 0x7f05001c
 			public const int rlSurveyHeader = 2131034140;
+			
+			// aapt resource value: 0x7f050033
+			public const int startLogin = 2131034163;
 			
 			// aapt resource value: 0x7f050028
 			public const int startSynchronization = 2131034152;

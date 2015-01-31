@@ -1,39 +1,20 @@
 using System;
+using System.Collections.Generic;
+
 using Android.App;
 using Android.Graphics;
 using Android.OS;
 using Android.Widget;
 using Android.Content.PM;
 using Cirrious.MvvmCross.Droid.Views;
-using Microsoft.Practices.ServiceLocation;
-using Ninject;
-using WB.Core.BoundedContexts.Capi.Views.Login;
 using WB.UI.Capi.Extensions;
-using WB.UI.Capi.Settings;
 using WB.UI.Capi.Views;
-using WB.UI.Shared.Android.Extensions;
 
 namespace WB.UI.Capi
 {
-    /// <summary>
-    /// The login activity.
-    /// </summary>
     [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class LoginActivity : MvxActivity
     {
-        protected Button btnLogin
-        {
-            get { return this.FindViewById<Button>(WB.UI.Capi.Resource.Id.btnLogin); }
-        }
-        protected EditText teLogin
-        {
-            get { return this.FindViewById<EditText>(WB.UI.Capi.Resource.Id.teLogin); }
-        }
-        protected EditText tePassword
-        {
-            get { return this.FindViewById<EditText>(WB.UI.Capi.Resource.Id.tePassword); }
-        }
-
         protected override void OnStart()
         {
             base.OnStart();
@@ -42,33 +23,9 @@ namespace WB.UI.Capi
 
         protected override void OnCreate(Bundle bundle)
         {
-            this.DataContext = new LoginViewModel();
+            this.DataContext = new LoginActivityViewModel();
             base.OnCreate(bundle);
-            if (CapiApplication.Membership.IsLoggedIn)
-            {
-                this.StartActivity(typeof (DashboardActivity));
-            }
-
             this.SetContentView(Resource.Layout.Login);
-            this.btnLogin.Click += this.btnLogin_Click;
-
-            if (ServiceLocator.Current.GetInstance<IInterviewerSettings>().GetClientRegistrationId() != null) return;
-
-            this.ClearAllBackStack<FinishInstallationActivity>();
-            this.Finish();
-        }
-
-        private async void btnLogin_Click(object sender, EventArgs e)
-        {
-            bool result = await CapiApplication.Membership.LogOnAsync(this.teLogin.Text, this.tePassword.Text);
-            if (result)
-            {
-                this.ClearAllBackStack<DashboardActivity>();
-                return;
-            }
-
-            this.teLogin.SetBackgroundColor(Color.Red);
-            this.tePassword.SetBackgroundColor(Color.Red);
         }
     }
 }
