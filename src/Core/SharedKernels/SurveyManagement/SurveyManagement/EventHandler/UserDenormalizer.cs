@@ -18,6 +18,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                                     IEventHandler<UserUnlocked>,
                                     IEventHandler<UserLockedBySupervisor>,
                                     IEventHandler<UserUnlockedBySupervisor>,
+                                    IEventHandler<UserLinkedToDevice>,
                                     IEventHandler
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;

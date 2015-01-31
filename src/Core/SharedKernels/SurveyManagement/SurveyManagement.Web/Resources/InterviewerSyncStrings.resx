@@ -132,6 +132,12 @@
   <data name="InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication" xml:space="preserve">
     <value>Synchronization failed. Your application is not compatible with server one. Update Interviewer application</value>
   </data>
+  <data name="AndroidDeviceIdWasNotProvided" xml:space="preserve">
+    <value>Synchronization failed. Android device id was not provided.</value>
+  </data>
+  <data name="WrongAndroidDeviceIdWasProvided" xml:space="preserve">
+    <value>Synchronization failed. Wrong adroid device id was provided.</value>
+  </data>
   <data name="ServerError" xml:space="preserve">
     <value>Internal server error occurred. Please contact developers.</value>
   </data>
