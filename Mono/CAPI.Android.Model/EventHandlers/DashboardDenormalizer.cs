@@ -131,10 +131,6 @@ namespace CAPI.Android.Core.Model.EventHandlers
         {
             if (this.questionTypesWithOptions.Contains(featuredQuestion.QuestionType))
             {
-                if (answer == null)
-                    return new FeaturedItem(featuredQuestion.PublicKey, featuredQuestion.QuestionText,
-                        string.Empty);
-
                 var featuredCategoricalOptions = featuredQuestion.Answers.Select(
                     option =>
                         new FeaturedCategoricalOption
@@ -142,6 +138,10 @@ namespace CAPI.Android.Core.Model.EventHandlers
                             OptionValue = decimal.Parse(option.AnswerValue),
                             OptionText = option.AnswerText,
                         });
+                if (answer == null)
+                    return new FeaturedCategoricalItem(featuredQuestion.PublicKey, featuredQuestion.QuestionText,
+                        string.Empty, featuredCategoricalOptions);
+
 
                 object objectAnswer;
 
@@ -275,9 +275,8 @@ namespace CAPI.Android.Core.Model.EventHandlers
         {
             var featuredCategoricalQuestion = featuredQuestion as FeaturedCategoricalItem;
             if (featuredCategoricalQuestion != null)
-                return AnswerUtils.AnswerToString(answer,
+                return AnswerUtils.AnswerToString(Convert.ToDecimal(answer),
                     (optionValue) => getCategoricalAnswerOptionText(featuredCategoricalQuestion.Options, optionValue));
-
             return AnswerUtils.AnswerToString(answer);
         }
 
