@@ -9,11 +9,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomePackagesRepositoryT
     {
         Establish context = () =>
         {
-            incomePackagesRepository = CreateIncomePackagesRepository();
+            incomingPackagesQueue = CreateIncomePackagesRepository();
         };
 
         Because of = () => exception = Catch.Exception(() =>
-            incomePackagesRepository.StoreIncomingItem(""));
+            incomingPackagesQueue.PushSyncItem(""));
 
         It should_throw_exception = () =>
           exception.ShouldNotBeNull();
@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomePackagesRepositoryT
         It should_throw_exception_of_type_ArgumentException = () =>
           exception.ShouldBeOfExactType<ArgumentException>();
 
-        private static IncomePackagesRepository incomePackagesRepository;
+        private static IncomingPackagesQueue incomingPackagesQueue;
         private static Exception exception;
     }
 }

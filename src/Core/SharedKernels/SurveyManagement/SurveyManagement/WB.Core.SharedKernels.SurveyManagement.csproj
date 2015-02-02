@@ -147,8 +147,7 @@
     <Compile Include="Implementation\Services\Sql\SqliteService.cs" />
     <Compile Include="Implementation\Services\Sql\SqliteServiceFactory.cs" />
     <Compile Include="Implementation\Synchronization\Constants.cs" />
-    <Compile Include="Implementation\Synchronization\IncomePackagesRepository\IncomePackagesRepository.cs" />
-    <Compile Include="Implementation\Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsDataLoader.cs" />
+    <Compile Include="Implementation\Synchronization\IncomePackagesRepository\IncomingPackagesQueue.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\HeadquarterReportsSurveysAndStatusesGroupByTeam.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\HeadquarterReportsTeamsAndStatusesGroupByTeam.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\QuestionnaireBrowseItemsGroupByQuestionnaireIdIndex.cs" />
@@ -206,11 +205,8 @@
     <Compile Include="Synchronization\Interview\EntryType.cs" />
     <Compile Include="Synchronization\Questionnaire\QuestionnaireEntryType.cs" />
     <Compile Include="Synchronization\Questionnaire\QuestionnaireFeedEntry.cs" />
-    <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\IInterviewDetailsDataLoader.cs" />
-    <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\IInterviewDetailsDataProcessor.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundSchedulerTask.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsDataLoaderSettings.cs" />
-    <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsDataProcessorContext.cs" />
     <Compile Include="Synchronization\Schedulers\SynchorizationContext.cs" />
     <Compile Include="Synchronization\Schedulers\SynchronizationStatus.cs" />
     <Compile Include="Synchronization\Users\SupervisorValidationResult.cs" />

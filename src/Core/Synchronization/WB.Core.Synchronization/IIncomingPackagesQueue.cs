@@ -4,11 +4,12 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.Core.Synchronization
 {
-    public interface IIncomePackagesRepository
+    public interface IIncomingPackagesQueue
     {
-        void StoreIncomingItem(string item);
+        void PushSyncItem(string item);
+        int QueueLength { get; }
+        void DeQueue();
         IEnumerable<Guid> GetListOfUnhandledPackages();
         string GetUnhandledPackagePath(Guid id);
-        int GetUnprocessedPackagesCount();
     }
 }  
