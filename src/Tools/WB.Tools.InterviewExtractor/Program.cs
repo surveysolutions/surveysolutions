@@ -31,8 +31,8 @@ namespace WB.Tools.InterviewExtractor
             var targetDatabaseName = "FilteredEvents"; //args[3];
             Guid eventSourseId = Guid.Parse("3a86396f-16eb-4ffb-9a5d-718347d2c4ef" /*args[4]*/);
 
-            eventStoreSource = new RavenDBEventStore(CreateServerStorage(sourceDbUrl, sourceDatabaseName == system ? "" : sourceDatabaseName), 1024);
-            eventStoreTarget = new RavenDBEventStore(CreateServerStorage(targetDbUrl, targetDatabaseName), 1024);
+            //eventStoreSource = new RavenDBEventStore(CreateServerStorage(sourceDbUrl, sourceDatabaseName == system ? "" : sourceDatabaseName), 1024);
+            //eventStoreTarget = new RavenDBEventStore(CreateServerStorage(targetDbUrl, targetDatabaseName), 1024);
 
             RegisterEvents();
 

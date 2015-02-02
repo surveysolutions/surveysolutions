@@ -23,8 +23,8 @@ namespace WB.Tools.EventsConverter
 
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
 
-            eventStoreSource = new RavenDBEventStore(CreateServerStorage(args[0]), 1024);
-            eventStoreTarget = new RavenDBEventStore(CreateServerStorage(args[1]), 1024);
+            //eventStoreSource = new RavenDBEventStore(CreateServerStorage(args[0]), 1024);
+            //eventStoreTarget = new RavenDBEventStore(CreateServerStorage(args[1]), 1024);
             var eventSequences = new Dictionary<Guid, long>();
             var eventsFromSingleCommit = new List<CommittedEvent>();
             Guid? commitId = null;

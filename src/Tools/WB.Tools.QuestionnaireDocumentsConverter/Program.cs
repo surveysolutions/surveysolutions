@@ -43,9 +43,9 @@ namespace WB.Tools.QuestionnaireDocumentsConverter
                 ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
                 questionnaireUpgradeService = new QuestionnaireUpgradeService(new FileSystemIOAccessor());
 
-                eventStore =
-                    new RavenDBEventStore(
-                        CreateServerStorage(settings.DataBaseUrl, settings.EventStoreDbName, CreateStoreConventions(CollectionName)), 1024);
+                //eventStore =
+                //    new RavenDBEventStore(
+                //        CreateServerStorage(settings.DataBaseUrl, settings.EventStoreDbName, CreateStoreConventions(CollectionName)), 1024);
                 RegisterEvents();
 
                 var questionnaireStorage =
