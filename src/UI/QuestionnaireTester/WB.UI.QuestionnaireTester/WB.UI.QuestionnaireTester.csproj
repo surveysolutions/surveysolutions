@@ -67,20 +67,25 @@
     <Reference Include="Cheesebaron.MvxPlugins.Settings.Droid">
       <HintPath>..\..\..\..\packages\Cheesebaron.MvxPlugins.Settings.1.0.3\lib\MonoAndroid16\Cheesebaron.MvxPlugins.Settings.Droid.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.CrossCore">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\MonoAndroid\Cirrious.CrossCore.dll</HintPath>
+    <Reference Include="Cirrious.CrossCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e16445fd9b451819, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.0\lib\MonoAndroid\Cirrious.CrossCore.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.CrossCore.Droid">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\MonoAndroid\Cirrious.CrossCore.Droid.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.0\lib\MonoAndroid\Cirrious.CrossCore.Droid.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.dll</HintPath>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Binding">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Binding.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Binding.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Binding.Droid">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Binding.Droid.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross.Binding.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Binding.Droid.dll</HintPath>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Droid">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Droid.dll</HintPath>
@@ -88,8 +93,10 @@
     <Reference Include="Cirrious.MvvmCross.Droid.Fragging">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Droid.Fragging.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Droid.Fragging.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Localization">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Localization.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross.Localization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Localization.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.Color">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Color.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Color.dll</HintPath>
@@ -109,6 +116,14 @@
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.Visibility.Droid">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Visibility.3.2.2\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Visibility.Droid.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.WebBrowser">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.WebBrowser.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.WebBrowser.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.WebBrowser.Droid">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.WebBrowser.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.WebBrowser.Droid.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="IHS.MvvmCross.Plugins.Keychain">
       <HintPath>..\..\..\..\packages\IHS.MvvmCross.Plugins.Keychain.0.0.12\lib\monoandroid\IHS.MvvmCross.Plugins.Keychain.dll</HintPath>
@@ -131,20 +146,33 @@
     <Reference Include="Ninject">
       <HintPath>..\..\..\..\packages\Portable.Ninject.3.3\lib\monoandroid\Ninject.dll</HintPath>
     </Reference>
+    <Reference Include="PCLStorage">
+      <HintPath>..\..\..\..\packages\PCLStorage.1.0.2\lib\monoandroid\PCLStorage.dll</HintPath>
+    </Reference>
+    <Reference Include="PCLStorage.Abstractions">
+      <HintPath>..\..\..\..\packages\PCLStorage.1.0.2\lib\monoandroid\PCLStorage.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\..\..\..\packages\protobuf-net.2.0.0.668\lib\portable-sl4+net40+wp7+windows8\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="Siaqodb">
+      <HintPath>..\..\..\..\packages\Siaqodb.4.0.2.29\lib\MonoAndroid\Siaqodb.dll</HintPath>
+    </Reference>
+    <Reference Include="SiaqodbPortable">
+      <HintPath>..\..\..\..\packages\Siaqodb.4.0.2.29\lib\MonoAndroid\SiaqodbPortable.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net">
-      <Private>True</Private>
       <HintPath>..\..\..\..\packages\MvvmCross.PortableSupport.3.1.1\lib\MonoAndroid\System.Net.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows">
-      <Private>True</Private>
       <HintPath>..\..\..\..\packages\MvvmCross.PortableSupport.3.1.1\lib\MonoAndroid\System.Windows.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Serialization">
-      <Private>True</Private>
       <HintPath>..\..\..\..\packages\MvvmCross.PortableSupport.3.1.1\lib\MonoAndroid\System.Xml.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Android.Support.v13">
@@ -162,20 +190,33 @@
     <Compile Include="Bootstrap\SettingsPluginBootstrap.cs" />
     <Compile Include="Bootstrap\UserInteractionPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
+    <Compile Include="Bootstrap\WebBrowserPluginBootstrap.cs" />
     <Compile Include="CapiTesterApplication.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controls\MvxSwipeRefreshLayout.cs" />
-    <Compile Include="CustomBindings\SearchViewQueryTextChangeBinding.cs" />
-    <Compile Include="CustomBindings\SearchViewQueryTextSubmitBinding.cs" />
-    <Compile Include="CustomBindings\SwipeRefreshLayoutRefreshBinding.cs" />
-    <Compile Include="CustomBindings\SwipeRefreshLayoutRefreshingBinding.cs" />
+    <Compile Include="CustomBindings\SearchViewQueryTextChangeBinding.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CustomBindings\SearchViewQueryTextSubmitBinding.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CustomBindings\SwipeRefreshLayoutRefreshBinding.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CustomBindings\SwipeRefreshLayoutRefreshingBinding.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Extensions\ActivityExtensions.cs" />
     <Compile Include="Implementation\Services\ApplicationSettings.cs" />
+    <Compile Include="Implementation\Services\QuestionnaireDocumentRepository.cs" />
+    <Compile Include="Implementation\Services\DashboardStorageViewModelRepository.cs" />
     <Compile Include="Implementation\Services\DesignerAuthentication.cs" />
     <Compile Include="Implementation\Services\Identity.cs" />
     <Compile Include="Implementation\Services\Principal.cs" />
     <Compile Include="Implementation\Services\RestServiceSettings.cs" />
+    <Compile Include="Implementation\Services\SiaqodbFactory.cs" />
+    <Compile Include="Implementation\Services\StorageSerializer.cs" />
     <Compile Include="Properties\UIResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -197,6 +238,7 @@
     <Compile Include="TesterLoggingModule.cs" />
     <Compile Include="AndroidTesterModelModule.cs" />
     <Compile Include="App.cs" />
+    <Compile Include="ViewModels\DashboardStorageViewModel.cs" />
     <Compile Include="Views\BaseFragmentActivityView.cs" />
     <Compile Include="Views\QuestionnairePrefilledQuestionsView.cs" />
     <Compile Include="Views\InterviewView.cs" />
@@ -404,10 +446,15 @@
     <AndroidResource Include="Resources\Values\default_theme.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Drawable\rounded_button.xml" />
+    <AndroidResource Include="Resources\Drawable\rounded_button.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\Drawable\rounded_button_unfocused.xml" />
     <AndroidResource Include="Resources\Drawable\rounded_button_focus.xml" />
     <AndroidResource Include="Resources\Drawable\rounded_button_press.xml" />
+    <AndroidResource Include="Resources\Drawable\btn_shadow_img.png" />
+    <AndroidResource Include="Resources\Drawable\ic_action_new.png" />
+    <AndroidResource Include="Resources\Drawable\ic_action_web_site.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Mono\Mono.Android.Crasher\Mono.Android.Crasher.csproj">

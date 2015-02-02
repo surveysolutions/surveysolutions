@@ -22,6 +22,7 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/logo"
             android:layout_marginTop="3dp"
+            android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:orientation="vertical">
             <TextView
@@ -79,13 +80,11 @@
             android:layout_alignParentBottom="true"
             android:background="@color/background" />
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
             android:background="@drawable/rounded_button"
-            local:MvxBind="Click OpenInterviewCommand" />
+            local:MvxBind="Click OpenInterviewCommand; Hidden IsInProgress" />
     </RelativeLayout>
 </LinearLayout>

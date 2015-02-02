@@ -10,6 +10,7 @@ using Cheesebaron.MvxPlugins.Settings.Interfaces;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Droid.Platform;
 using IHS.MvvmCross.Plugins.Keychain;
+using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Main.DenormalizerStorage;
 using Microsoft.Practices.ServiceLocation;
@@ -24,11 +25,13 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Modules;
+using Sqo;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.EventHandler;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
@@ -46,6 +49,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.UI.QuestionnaireTester.Implementation.Services;
 using WB.UI.QuestionnaireTester.Services;
+using WB.UI.QuestionnaireTester.ViewModels;
 using WB.UI.Shared.Android;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using Context = Android.Content.Context;
@@ -236,6 +240,9 @@ namespace WB.UI.QuestionnaireTester
 
             this.kernel.Bind<IPrincipal>().ToConstant(new Principal(Mvx.Resolve<IKeychain>(), Mvx.Resolve<ISettings>()));
             this.kernel.Bind<IAuthentication>().To<DesignerAuthentication>();
+            this.kernel.Bind<IReadSideStorage<DashboardStorageViewModel>>().To<DashboardStorageViewModelRepository>().InSingletonScope();
+            this.kernel.Bind<IReadSideStorage<QuestionnaireDocument>>().To<QuestionnaireDocumentRepository>();
+            this.kernel.Bind<IDocumentSerializer>().To<StorageSerializer>().InSingletonScope();
             
             #region register handlers
 

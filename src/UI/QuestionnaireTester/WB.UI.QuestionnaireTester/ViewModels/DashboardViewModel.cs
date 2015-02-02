@@ -4,9 +4,11 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Chance.MvvmCross.Plugins.UserInteraction;
+using Cirrious.MvvmCross.Plugins.WebBrowser;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.QuestionnaireTester.Properties;
@@ -18,13 +20,18 @@ namespace WB.UI.QuestionnaireTester.ViewModels
     public class DashboardViewModel : BaseViewModel
     {
         private readonly IRestService restService;
+        private readonly IReadSideStorage<DashboardStorageViewModel> dashboardStorage;
+        private readonly IMvxWebBrowserTask webBrowser;
 
         private readonly QuestionnaireVersion supportedQuestionnaireVersion;
 
         public DashboardViewModel(IPrincipal principal, IRestService restService, ILogger logger,
-            IUserInteraction uiDialogs) : base(logger, principal: principal, uiDialogs: uiDialogs)
+            IUserInteraction uiDialogs, IReadSideStorage<DashboardStorageViewModel> dashboardStorage, IMvxWebBrowserTask webBrowser)
+            : base(logger, principal: principal, uiDialogs: uiDialogs)
         {
             this.restService = restService;
+            this.dashboardStorage = dashboardStorage;
+            this.webBrowser = webBrowser;
 
             var engineVersion = QuestionnaireVersionProvider.GetCurrentEngineVersion();
             this.supportedQuestionnaireVersion = new QuestionnaireVersion()
@@ -37,9 +44,9 @@ namespace WB.UI.QuestionnaireTester.ViewModels
 
         public async void Init()
         {
-            await this.RefreshQuestionnaires();
+            await this.LoadDashboardViewModelFromStorage();
         }
-
+        
         private IList<QuestionnaireListItem> allQuestionnaires;
         private IList<QuestionnaireListItem> questionnaires;
 
@@ -110,6 +117,13 @@ namespace WB.UI.QuestionnaireTester.ViewModels
             get { return findQuestionnairesCommand ?? (findQuestionnairesCommand = new MvxCommand<string>(this.FindQuestionnaires, (qyery) => !this.IsInProgress)); }
         }
 
+        private IMvxCommand navigateToApplicationStorePageCommand;
+        public IMvxCommand NavigateToApplicationStorePageCommand
+        {
+            get { return navigateToApplicationStorePageCommand ?? (navigateToApplicationStorePageCommand = new MvxCommand(() => this.webBrowser.ShowWebPage("market://details?id=org.worldbank.solutions.Vtester"))); }
+        }
+
+
         private void LoadQuestionnaire(QuestionnaireListItem questionnaire)
         {
             this.ShowViewModel<QuestionnairePrefilledQuestionsViewModel>(questionnaire);
@@ -141,6 +155,25 @@ namespace WB.UI.QuestionnaireTester.ViewModels
             }
         }
 
+        private Task LoadDashboardViewModelFromStorage()
+        {
+            return Task.Run(() =>
+            {
+                var dashboardStorageViewModel = this.dashboardStorage.GetById(this.Principal.CurrentIdentity.Name);
+                if (dashboardStorageViewModel != null)
+                    this.Questionnaires = dashboardStorageViewModel.Questionnaires; 
+            });
+        }
+
+        private Task SaveDashboardViewModelToStorage(List<QuestionnaireListItem> questionnaireListItems)
+        {
+            return Task.Run(() =>
+            {
+                this.dashboardStorage.Store(new DashboardStorageViewModel(){Questionnaires = questionnaireListItems},  this.Principal.CurrentIdentity.Name);
+                this.Questionnaires = questionnaireListItems;
+            });
+        }
+
         public async Task RefreshQuestionnaires()
         {
             this.IsInProgress = true;
@@ -154,8 +187,8 @@ namespace WB.UI.QuestionnaireTester.ViewModels
                                 Login = this.Principal.CurrentIdentity.Name,
                                 Password = this.Principal.CurrentIdentity.Password
                             });
-
-                this.Questionnaires = questionnaireListCommunicationPackage.Items.ToList();
+                
+                await this.SaveDashboardViewModelToStorage(questionnaireListCommunicationPackage.Items.ToList());
             }
             catch (RestException ex)
             {
