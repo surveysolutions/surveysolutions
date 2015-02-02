@@ -189,7 +189,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             this.registredHandlers.Remove(handler.GetType());
         }
 
-        public IEnumerable<IEventHandler> GetAllRegistredEventHandlers()
+        public IEventHandler[] GetAllRegistredEventHandlers()
         {
             return this.registredHandlers.Values.Select(v => v.Handler).ToArray();
         }
