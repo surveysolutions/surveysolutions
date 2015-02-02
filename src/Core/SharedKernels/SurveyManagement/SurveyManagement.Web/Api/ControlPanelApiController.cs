@@ -14,13 +14,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     [LocalOrDevelopmentAccessOnly]
     public class ControlPanelApiController : ApiController
     {
-        private readonly InterviewDetailsDataProcessorContext interviewDetailsDataProcessorContext;
         private readonly IReadSideAdministrationService readSideAdministrationService;
 
-        public ControlPanelApiController(InterviewDetailsDataProcessorContext interviewDetailsDataProcessorContext,
-            IReadSideAdministrationService readSideAdministrationService)
+        public ControlPanelApiController(IReadSideAdministrationService readSideAdministrationService)
         {
-            this.interviewDetailsDataProcessorContext = interviewDetailsDataProcessorContext;
             this.readSideAdministrationService = readSideAdministrationService;
         }
 
@@ -28,7 +25,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             return new InterviewDetailsSchedulerViewModel()
             {
-                Messages = this.interviewDetailsDataProcessorContext.GetMessages().ToArray()
+                Messages = new string[0]
             };
         }
 

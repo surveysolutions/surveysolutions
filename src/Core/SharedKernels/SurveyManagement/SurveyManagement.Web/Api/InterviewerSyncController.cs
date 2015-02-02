@@ -202,9 +202,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             try
             {
-                var syncItem = this.jsonUtils.Deserialize<SyncItem>(request.SynchronizationPackage);
-
-                syncManager.SendSyncItem(syncItem);
+                syncManager.SendSyncItem(request.SynchronizationPackage);
             }
             catch (Exception ex)
             {
