@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                     })
             });
 
-            var documentStorage = new Mock<IReadSideRepositoryWriter<QuestionnaireDocument>>();
+            var documentStorage = new Mock<IReadSideKeyValueStorage<QuestionnaireDocument>>();
             
             documentStorage
                 .Setup(writer => writer.GetById(Moq.It.IsAny<string>()))

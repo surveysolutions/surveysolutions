@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTes
     internal class PdfQuestionnaireDenormalizerTestContext
     {
         protected static PdfQuestionnaireDenormalizer CreatePdfQuestionnaireDenormalizer(
-            IReadSideRepositoryWriter<PdfQuestionnaireView> documentStorage = null,
+            IReadSideKeyValueStorage<PdfQuestionnaireView> documentStorage = null,
             ILogger logger = null)
         {
             return new PdfQuestionnaireDenormalizer(documentStorage, logger, null);

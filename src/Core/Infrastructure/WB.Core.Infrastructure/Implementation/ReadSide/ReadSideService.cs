@@ -302,7 +302,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             }
         }
 
-        private void RebuildViewsImpl(int skipEvents, IEnumerable<IEventHandler> handlers)
+        private void RebuildViewsImpl(int skipEvents, IEventHandler[] handlers)
         {
             try
             {
@@ -438,7 +438,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         }
 
         private void RepublishAllEvents(IEnumerable<CommittedEvent> eventStream, int allEventsCount, int skipEventsCount = 0,
-            IEnumerable<IEventHandler> handlers = null)
+            IEventHandler[] handlers = null)
         {
             this.totalEventsToRebuildCount = allEventsCount;
             this.skippedEventsCount = skipEventsCount;
