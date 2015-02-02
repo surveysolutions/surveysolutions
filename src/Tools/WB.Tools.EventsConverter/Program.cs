@@ -7,7 +7,7 @@ using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Raven.Client.Document;
-using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
+using WB.Core.Infrastructure.Storage.Raven.Implementation;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
 namespace WB.Tools.EventsConverter

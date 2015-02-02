@@ -10,7 +10,7 @@ using Ncqrs.Eventing.Storage;
 using Raven.Client.Document;
 using Raven.Client.Extensions;
 using Raven.Imports.Newtonsoft.Json;
-using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
+using WB.Core.Infrastructure.Storage.Raven.Implementation;
 
 namespace WB.Tools.InterviewExtractor
 {
