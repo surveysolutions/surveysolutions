@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Main.Core.Documents;
+using Sqo.Attributes;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.UI.QuestionnaireTester.Implementation.Services
@@ -8,8 +9,8 @@ namespace WB.UI.QuestionnaireTester.Implementation.Services
     {
         private class QuestionnaireStorageViewModel
         {
-            public int OID { get; set; }
             public string Id { get; set; }
+            [Document]
             public QuestionnaireDocument Questionnaire { get; set; }
         }
 
