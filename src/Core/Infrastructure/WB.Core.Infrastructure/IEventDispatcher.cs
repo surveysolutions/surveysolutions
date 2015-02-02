@@ -10,7 +10,7 @@ namespace WB.Core.Infrastructure
         void PublishEventToHandlers(IPublishableEvent eventMessage,
             Dictionary<IEventHandler, Stopwatch> handlersWithStopwatch);
 
-        IEnumerable<IEventHandler> GetAllRegistredEventHandlers();
+        IEventHandler[] GetAllRegistredEventHandlers();
 
         void Register(IEventHandler handler);
         void Unregister(IEventHandler handler);

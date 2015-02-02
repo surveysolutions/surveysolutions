@@ -22,12 +22,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
     internal class QuestionsAndGroupsCollectionDenormalizerTestContext
     {
         protected static QuestionsAndGroupsCollectionDenormalizer CreateQuestionnaireInfoDenormalizer(
-            IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView> readsideRepositoryWriter = null,
+            IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView> readsideRepositoryWriter = null,
             IQuestionDetailsViewMapper questionDetailsViewMapper = null, 
             IQuestionnaireEntityFactory questionnaireEntityFactory = null)
         {
 
-            return new QuestionsAndGroupsCollectionDenormalizer(readsideRepositoryWriter ?? Mock.Of<IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView>>(),
+            return new QuestionsAndGroupsCollectionDenormalizer(readsideRepositoryWriter ?? Mock.Of<IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView>>(),
                 questionDetailsViewMapper ?? Mock.Of<IQuestionDetailsViewMapper>(),
                 questionnaireEntityFactory ?? Mock.Of<IQuestionnaireEntityFactory>());
         }

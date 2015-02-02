@@ -5,9 +5,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
     public class PdfQuestionnaireFactory : IViewFactory<PdfQuestionnaireInputModel, PdfQuestionnaireView>
     {
-        private readonly IReadSideRepositoryReader<PdfQuestionnaireView> _repository;
+        private readonly IReadSideKeyValueStorage<PdfQuestionnaireView> _repository;
 
-        public PdfQuestionnaireFactory(IReadSideRepositoryReader<PdfQuestionnaireView> repository)
+        public PdfQuestionnaireFactory(IReadSideKeyValueStorage<PdfQuestionnaireView> repository)
         {
             _repository = repository;
         }
