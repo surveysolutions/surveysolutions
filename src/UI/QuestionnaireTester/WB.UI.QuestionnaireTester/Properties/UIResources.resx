@@ -120,6 +120,9 @@
   <data name="AccountIsLockedOnServer" xml:space="preserve">
     <value>Your account was locked. Please, contact to the Survey Solutions team</value>
   </data>
+  <data name="CheckForUpdatesText" xml:space="preserve">
+    <value>Check for updates</value>
+  </data>
   <data name="DashboardTitleText" xml:space="preserve">
     <value>Questionnaires</value>
   </data>

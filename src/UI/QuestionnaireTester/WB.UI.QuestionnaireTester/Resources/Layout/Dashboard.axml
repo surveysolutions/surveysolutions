@@ -175,6 +175,28 @@
                         android:layout_width="fill_parent"
                         android:layout_height="32dp"
                         android:layout_marginTop="10dip"
+                        local:MvxBind="Click NavigateToApplicationStorePageCommand">
+                        <ImageView
+                            android:layout_weight="0.15"
+                            android:layout_width="0dip"
+                            android:layout_height="fill_parent"
+                            android:layout_marginLeft="10dip"
+                            android:src="@drawable/ic_action_web_site" />
+                        <LinearLayout
+                            android:layout_weight="0.85"
+                            android:layout_width="0dip"
+                            android:layout_height="fill_parent">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="fill_parent"
+                                android:gravity="center_vertical"
+                                local:MvxBind="Text Localization('CheckForUpdatesText')" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="32dp"
+                        android:layout_marginTop="10dip"
                         local:MvxBind="Click SignOutCommand">
                         <ImageView
                             android:layout_weight="0.15"

@@ -70,6 +70,15 @@ namespace WB.UI.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check for updates.
+        /// </summary>
+        internal static string CheckForUpdatesText {
+            get {
+                return ResourceManager.GetString("CheckForUpdatesText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaires.
         /// </summary>
         internal static string DashboardTitleText {
