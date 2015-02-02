@@ -24,16 +24,6 @@ namespace WB.UI.Headquarters.Code
             }
         }
 
-        public static int InterviewDetailsDataSchedulerNumberOfInterviewsProcessedAtTime
-        {
-            get
-            {
-                return
-                    int.Parse(
-                        WebConfigurationManager.AppSettings["InterviewDetailsDataScheduler.NumberOfInterviewsProcessedAtTime"]);
-            }
-        }
-
         public static string SynchronizationIncomingCapiPackagesWithErrorsDirectory
         {
             get
