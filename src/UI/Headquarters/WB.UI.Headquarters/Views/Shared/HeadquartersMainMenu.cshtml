@@ -39,13 +39,16 @@
 </ul>
 <ul class="nav navbar-nav navbar-right" role="menu">
     <li class="active">
-        <a href="#"><i class="glyphicon glyphicon-cloud-upload"></i> 2</a>
+        <a href="#">
+            <i class="glyphicon glyphicon-cloud-upload"></i>
+            <span id="IncomingPackagesQueueIndicator"></span>
+        </a>
     </li>
     <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Hi, <strong>@User.Identity.Name</strong> <b class="caret"></b></a>
         <ul class="dropdown-menu">
-            <li class="@(page == MenuItem.ManageAccount ? "active" : "")">@Html.ActionLink(WB.Core.SharedKernels.SurveyManagement.Web.Properties.Strings.SurverManagement_MainMenu_ManageAccount, "Manage", "Account", new {area = string.Empty}, null)</li>
-            <li>@Html.ActionLink("Logoff", "LogOff", "Account", new {area = string.Empty}, null)</li>
+            <li class="@(page == MenuItem.ManageAccount ? "active" : "")">@Html.ActionLink(WB.Core.SharedKernels.SurveyManagement.Web.Properties.Strings.SurverManagement_MainMenu_ManageAccount, "Manage", "Account", new { area = string.Empty }, null)</li>
+            <li>@Html.ActionLink("Logoff", "LogOff", "Account", new { area = string.Empty }, null)</li>
         </ul>
     </li>
 </ul>

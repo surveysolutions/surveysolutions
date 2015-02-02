@@ -121,14 +121,15 @@
             $('#wrapper').css('margin-top', navigationHeight + 'px');
             $('#umbrella').css('top', navigationHeight + 'px');
         };
-
+        var $updateIncomingPackagesQueueApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "GetIncomingPackagesQueueLength" })';
         $(document).ready(function () {
             setMinHeight();
             $(window).resize(function () {
                 setMinHeight();
             });
+            new Supervisor.VM.SurveyManagmentHeader($updateIncomingPackagesQueueApiUrl, "#IncomingPackagesQueueIndicator").load();
         });
-    </script>
+</script>
     @RenderSection("scripts", false)
 </body>
 </html>
