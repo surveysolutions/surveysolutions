@@ -136,7 +136,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
                     option =>
                         new FeaturedCategoricalOption
                         {
-                            OptionValue = decimal.Parse(option.AnswerValue),
+                            OptionValue = decimal.Parse(option.AnswerValue, CultureInfo.InvariantCulture),
                             OptionText = option.AnswerText,
                         });
                 if (answer == null)
@@ -148,11 +148,11 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
                 if (answer.GetType().IsArray)
                 {
-                    objectAnswer = (answer as object[]).Select(Convert.ToDecimal).ToArray();
+                    objectAnswer = (answer as object[]).Select(x => Convert.ToDecimal(x, CultureInfo.InvariantCulture)).ToArray();
                 }
                 else
                 {
-                    objectAnswer = Convert.ToDecimal(answer);
+                    objectAnswer = Convert.ToDecimal(answer, CultureInfo.InvariantCulture);
                 }
 
                 return new FeaturedCategoricalItem(featuredQuestion.PublicKey, 
