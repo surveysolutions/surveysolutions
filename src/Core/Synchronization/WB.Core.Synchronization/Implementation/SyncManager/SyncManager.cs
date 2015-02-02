@@ -15,19 +15,19 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
     {
         private readonly IReadSideKeyValueStorage<ClientDeviceDocument> devices;
         private readonly ISynchronizationDataStorage storage;
-        private readonly IIncomePackagesRepository incomeRepository;
+        private readonly IIncomingPackagesQueue incomingQueue;
         private readonly ILogger logger;
         private readonly ICommandService commandService;
 
         public SyncManager(IReadSideKeyValueStorage<ClientDeviceDocument> devices,
             ISynchronizationDataStorage storage, 
-            IIncomePackagesRepository incomeRepository,
+            IIncomingPackagesQueue incomingQueue,
             ILogger logger, 
             ICommandService commandService)
         {
             this.devices = devices;
             this.storage = storage;
-            this.incomeRepository = incomeRepository;
+            this.incomingQueue = incomingQueue;
             this.logger = logger;
             this.commandService = commandService;
         }
@@ -48,7 +48,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
         public void SendSyncItem(string item)
         {
-            this.incomeRepository.StoreIncomingItem(item);
+            this.incomingQueue.PushSyncItem(item);
         }
 
         public IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, string lastSyncedPackageId)
