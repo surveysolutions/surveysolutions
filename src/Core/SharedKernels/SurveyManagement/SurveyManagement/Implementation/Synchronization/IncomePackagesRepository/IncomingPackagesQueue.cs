@@ -79,10 +79,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             if (string.IsNullOrEmpty(fileToProcess) || !fileSystemAccessor.IsFileExists(fileToProcess))
                 return;
 
+            Guid? interviewId = null;
             try
             {
                 var syncItem = this.jsonUtils.Deserialize<SyncItem>(fileSystemAccessor.ReadAllText(fileToProcess));
-
+                
+                interviewId = syncItem.RootId;
+                
                 var meta =
                     this.jsonUtils.Deserialize<InterviewMetaInfo>(archiver.DecompressString(syncItem.MetaInfo));
 
@@ -127,11 +130,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             catch (Exception e)
             {
                 logger.Error(e.Message, e);
-                this.fileSystemAccessor.CopyFileOrDirectory(fileToProcess, incomingCapiPackagesWithErrorsDirectory);
+                if (interviewId.HasValue)
+                    StoreErrorPackageAtInterviewCorrespondingFolder(interviewId.Value, fileToProcess);
+                else
+                    this.fileSystemAccessor.CopyFileOrDirectory(fileToProcess, incomingCapiPackagesWithErrorsDirectory);
                 return;
             }
 
             this.fileSystemAccessor.DeleteFile(fileToProcess);
+        }
+
+        public string[] GetListOfUnhandledPackagesForInterview(Guid interviewId)
+        {
+             var interviewFolder = this.fileSystemAccessor.CombinePath(this.incomingCapiPackagesWithErrorsDirectory,
+               interviewId.FormatGuid());
+
+            if (!this.fileSystemAccessor.IsDirectoryExists(interviewFolder))
+                return new string[0];
+
+            return fileSystemAccessor.GetFilesInDirectory(interviewFolder);
         }
 
         public void PushSyncItem(string item)
@@ -163,27 +180,48 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             this.DeQueue();
         }
 
-        public IEnumerable<Guid> GetListOfUnhandledPackages()
+        public IEnumerable<string> GetListOfUnhandledPackages()
         {
             if (!this.fileSystemAccessor.IsDirectoryExists(this.incomingCapiPackagesWithErrorsDirectory))
-                return Enumerable.Empty<Guid>();
+                return Enumerable.Empty<string>();
 
             var syncFiles = this.fileSystemAccessor.GetFilesInDirectory(this.incomingCapiPackagesWithErrorsDirectory,
                 string.Format("*.{0}", this.syncSettings.IncomingCapiPackageFileNameExtension));
 
-            var result = new List<Guid>();
+            var result = new List<string>();
             foreach (var syncFile in syncFiles)
             {
-                Guid packageId;
-                if (Guid.TryParse(this.fileSystemAccessor.GetFileNameWithoutExtension(syncFile), out packageId))
-                    result.Add(packageId);
+                result.Add(this.fileSystemAccessor.GetFileName(syncFile));
+            }
+
+            var interviewFolders = fileSystemAccessor.GetDirectoriesInDirectory(this.incomingCapiPackagesWithErrorsDirectory);
+            foreach (var interviewFolder in interviewFolders)
+            {
+                var interviewSyncFiles = this.fileSystemAccessor.GetFilesInDirectory(interviewFolder,
+                    string.Format("*.{0}", this.syncSettings.IncomingCapiPackageFileNameExtension));
+
+                foreach (var interviewSyncFile in interviewSyncFiles)
+                {
+                    result.Add(fileSystemAccessor.CombinePath(this.fileSystemAccessor.GetFileName(interviewFolder), this.fileSystemAccessor.GetFileName(interviewSyncFile)));
+                }
             }
             return result;
         }
 
-        public string GetUnhandledPackagePath(Guid id)
+        public string GetUnhandledPackagePath(string package)
         {
-            return this.GetItemFileNameForErrorStorage(id);
+            return this.fileSystemAccessor.CombinePath(this.incomingCapiPackagesWithErrorsDirectory, package);
+        }
+
+        private void StoreErrorPackageAtInterviewCorrespondingFolder(Guid interviewId, string fileToProcess)
+        {
+            var interviewFolder = this.fileSystemAccessor.CombinePath(this.incomingCapiPackagesWithErrorsDirectory,
+               interviewId.FormatGuid());
+
+            if (!this.fileSystemAccessor.IsDirectoryExists(interviewFolder))
+                this.fileSystemAccessor.CreateDirectory(interviewFolder);
+
+            this.fileSystemAccessor.CopyFileOrDirectory(fileToProcess, interviewFolder);
         }
 
         private string GetItemFileNameForErrorStorage(Guid id, int version = 1)
