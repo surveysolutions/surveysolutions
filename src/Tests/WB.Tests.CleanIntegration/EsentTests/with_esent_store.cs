@@ -1,4 +1,5 @@
-﻿using Machine.Specifications;
+﻿using System.IO;
+using Machine.Specifications;
 using Microsoft.Isam.Esent.Collections.Generic;
 using WB.Core.Infrastructure.Storage.Esent.Implementation;
 using WB.Core.SharedKernels.SurveySolutions;
@@ -9,7 +10,7 @@ namespace WB.Tests.Integration.EsentTests
     {
         Establish context = () =>
         {
-            storage = new EsentKeyValueStorage<T>(new EsentSettings("TempStore"));
+            storage = new EsentKeyValueStorage<T>(new EsentSettings(Path.GetTempPath()));
         };
 
         Cleanup things = () =>
