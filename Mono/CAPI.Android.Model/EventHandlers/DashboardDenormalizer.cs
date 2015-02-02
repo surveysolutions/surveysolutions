@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Main.Core.Documents;
@@ -275,7 +276,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
         {
             var featuredCategoricalQuestion = featuredQuestion as FeaturedCategoricalItem;
             if (featuredCategoricalQuestion != null)
-                return AnswerUtils.AnswerToString(Convert.ToDecimal(answer),
+                return AnswerUtils.AnswerToString(Convert.ToDecimal(answer, CultureInfo.InvariantCulture),
                     (optionValue) => getCategoricalAnswerOptionText(featuredCategoricalQuestion.Options, optionValue));
             return AnswerUtils.AnswerToString(answer);
         }
