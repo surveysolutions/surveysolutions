@@ -10,18 +10,20 @@ namespace WB.Tests.Integration.EsentTests
     {
         Establish context = () =>
         {
-            storage = new EsentKeyValueStorage<T>(new EsentSettings(Path.GetTempPath()));
+            storePath = Path.GetTempPath();
+            storage = new EsentKeyValueStorage<T>(new EsentSettings(storePath));
         };
 
         Cleanup things = () =>
         {
             storage.Dispose();
-            if (PersistentDictionaryFile.Exists("TempStore"))
+            if (PersistentDictionaryFile.Exists(storePath))
             {
-                PersistentDictionaryFile.DeleteFiles("TempStore");
+                PersistentDictionaryFile.DeleteFiles(storePath);
             }
         };
 
         protected static EsentKeyValueStorage<T> storage;
+        private static string storePath;
     }
 }
