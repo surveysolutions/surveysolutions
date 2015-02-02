@@ -4,7 +4,6 @@ using Ninject.Activation;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Imports.Newtonsoft.Json;
-using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation
 {
@@ -18,16 +17,6 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation
         {
             if (settings == null) throw new ArgumentNullException("settings");
             this.settings = settings;
-        }
-
-        /// <summary>
-        /// Creates a separate instance for event store.
-        /// This is needed because event store substitutes conventions and substituted are not compatible with read side.
-        /// Always creates a new instance, so should be called only once per app.
-        /// </summary>
-        public IDocumentStore CreateSeparateInstanceForEventStore()
-        {
-            return this.CreateServerStorage(this.settings.EventsDatabase);
         }
 
         public IDocumentStore CreateInstanceForPlainStorage()
