@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-
 using Android.App;
-using Android.Graphics;
 using Android.OS;
-using Android.Widget;
 using Android.Content.PM;
 using Cirrious.MvvmCross.Droid.Views;
 using WB.UI.Capi.Extensions;

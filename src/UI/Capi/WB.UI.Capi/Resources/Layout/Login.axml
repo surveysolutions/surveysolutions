@@ -63,7 +63,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dip"
                 android:text="Login"
-				local:MvxBind="Click LoginCommand" />
+				        local:MvxBind="Click LoginCommand" />
+          <TextView
+                android:id="@+id/knownUsers"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                local:MvxBind="Text KnownUsers" />
         <!-- Link to Registration Screen -->
         </LinearLayout>
     <!-- Login Form Ends -->

@@ -1,9 +1,10 @@
 using System.Collections.Generic;
-
+using System.Linq;
 using Chance.MvvmCross.Plugins.UserInteraction;
 
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
+using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.ValueObjects;
@@ -32,6 +33,12 @@ namespace WB.UI.Capi.Views
         public string Login { get; private set; }
         public string Password { get; private set; }
 
+        public string KnownUsers {
+            get { return string.Join(", ", Users.Select(x => x.Name)); }
+        }
+
+        public List<UserLight> Users { get; private set; } 
+
         private bool isLoginValid = true;
         public bool IsLoginValid
         {
@@ -48,6 +55,8 @@ namespace WB.UI.Capi.Views
 
         public LoginActivityViewModel()
         {
+            Users = CapiApplication.Membership.GetKnownUsers().Result;
+            RaisePropertyChanged(() => this.KnownUsers);
 #if DEBUG
             this.Login = "inter";
             this.Password = "Qwerty1234";
@@ -82,7 +91,7 @@ namespace WB.UI.Capi.Views
             IsPasswordValid = false;
 
             Mvx.Resolve<IUserInteraction>().Confirm("Are you sure new user for this tablet?",
-                    async () => this.NavigationService.NavigateTo(CapiPages.Synchronization,
+                () => this.NavigationService.NavigateTo(CapiPages.Synchronization,
                             new Dictionary<string, string>
                             {
                                 { "Login", this.Login },

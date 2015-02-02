@@ -1,9 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using Main.Core.Entities.SubEntities;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -11,7 +11,7 @@ namespace CAPI.Android.Core.Model.Authorization
 {
     public class AndroidAuthentication : IDataCollectionAuthentication
     {
-        #warning ViewFactory should be used here
+#warning ViewFactory should be used here
         private readonly IFilterableReadSideRepositoryReader<LoginDTO> documentStorage;
         private readonly IPasswordHasher passwordHasher;
 
@@ -33,16 +33,18 @@ namespace CAPI.Android.Core.Model.Authorization
 
         public SyncCredentials? RequestSyncCredentials()
         {
-            if(!IsLoggedIn)
+            if (!IsLoggedIn)
                 throw new InvalidOperationException("Please login first.");
 
-            LoginDTO user = this.documentStorage.Filter(u =>u.Login == CurrentUser.Name).FirstOrDefault();
+            LoginDTO user = this.documentStorage.Filter(u => u.Login == CurrentUser.Name).FirstOrDefault();
 
             return new SyncCredentials(user.Login, user.Password);
         }
 
-        public bool IsLoggedIn { get { return currentUser != null; }
-    }
+        public bool IsLoggedIn
+        {
+            get { return currentUser != null; }
+        }
 
         public Task<bool> LogOnAsync(string userName, string password, bool wasPasswordHashed = false)
         {
@@ -64,10 +66,16 @@ namespace CAPI.Android.Core.Model.Authorization
                 this.SupervisorId = Guid.TryParse(user.Supervisor, out super) ? super : Guid.NewGuid();
                 return Task.FromResult(true);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return Task.FromResult(false);
             }
+        }
+
+        public Task<List<UserLight>> GetKnownUsers()
+        {
+            var users = this.documentStorage.Filter(x => true).Select(x => new UserLight(Guid.Empty, x.Login)).ToList();
+            return Task.FromResult(users);
         }
 
         public void LogOff()
