@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.MessageHandlers;
 
 namespace WB.UI.Designer
@@ -23,6 +24,8 @@ namespace WB.UI.Designer
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            config.Formatters.Insert(0, new JsonFormatter());
         }
     }
 }

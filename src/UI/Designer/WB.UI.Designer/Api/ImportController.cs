@@ -53,6 +53,32 @@ namespace WB.UI.Designer.Api
         [HttpGet]
         public void Login() { }
 
+        [HttpGet]
+        public QuestionnaireLastEntryDateResponse GetQuestionnaireLastModifiedDate(QuestionnaireLastEntryDateRequest request)
+        {
+            if (request == null) throw new ArgumentNullException("request");
+
+             var questionnaireView =
+                questionnaireViewFactory.Load(new QuestionnaireViewInputModel(request.QuestionnaireId));
+            if (questionnaireView == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    ReasonPhrase = string.Format(ErrorMessages.TemplateNotFound, request.QuestionnaireId)
+                });
+            }
+
+            if (!this.ValidateAccessPermissions(questionnaireView))
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden)
+                {
+                    ReasonPhrase = ErrorMessages.User_Not_authorized
+                });
+            }
+
+            return new QuestionnaireLastEntryDateResponse() { LastEntryDate = questionnaireView.Source.LastEntryDate };
+        }
+
         [HttpPost]
         public QuestionnaireCommunicationPackage Questionnaire(DownloadQuestionnaireRequest request)
         {
