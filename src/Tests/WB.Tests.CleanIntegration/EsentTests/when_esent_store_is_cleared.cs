@@ -7,13 +7,12 @@ namespace WB.Tests.Integration.EsentTests
     {
         Establish context = () =>
         {
-            transientEntity = new TestStoredEntity
+            storage.Store(new TestStoredEntity
             {
                 Id = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"),
                 IntegerProperty = 5,
                 StringProperty = "Some test string"
-            };
-            storage.Store(transientEntity, itemId);
+            }, itemId);
         };
 
         Because of = () => storage.Clear();
@@ -21,7 +20,6 @@ namespace WB.Tests.Integration.EsentTests
         It should_clear_stored_data = () => storage.GetById(itemId).ShouldBeNull();
 
         const string itemId = "id";
-        static TestStoredEntity transientEntity;
     }
 }
 
