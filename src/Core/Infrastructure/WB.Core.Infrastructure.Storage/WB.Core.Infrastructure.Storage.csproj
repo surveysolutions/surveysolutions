@@ -120,7 +120,6 @@
     <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryReader.cs" />
     <Compile Include="Raven\Implementation\WriteSide\IgnoreAssemblyNameForEventsSerializationBinder.cs" />
     <Compile Include="Raven\Implementation\WriteSide\PropertiesOnlyContractResolver.cs" />
-    <Compile Include="Raven\Implementation\WriteSide\RavenDBEventStore.cs" />
     <Compile Include="Raven\Implementation\WriteSide\Indexes\Event_ByEventSource.cs" />
     <Compile Include="Raven\Implementation\WriteSide\Indexes\UniqueEventsIndex.cs" />
     <Compile Include="Raven\RavenExtensions.cs" />
@@ -128,7 +127,6 @@
     <Compile Include="Raven\RavenPlainStorageInfrastructureModule.cs" />
     <Compile Include="Raven\RavenReadSideInfrastructureModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Raven\RavenWriteSideInfrastructureModule.cs" />
     <Compile Include="Raven\StoredEvent.cs" />
   </ItemGroup>
   <ItemGroup>

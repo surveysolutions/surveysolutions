@@ -56,7 +56,6 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation
             {
                 Url = this.settings.StoragePath,
                 DefaultDatabase = databaseName,
-                
                 Conventions =
                 {
                     FailoverBehavior = this.settings.FailoverBehavior,
