@@ -239,6 +239,7 @@
     <Compile Include="Api\TesterController.cs" />
     <Compile Include="Api\ImportController.cs" />
     <Compile Include="Api\QuestionnaireController.cs" />
+    <Compile Include="Code\JsonFormatter.cs" />
     <Compile Include="Resources\ErrorMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

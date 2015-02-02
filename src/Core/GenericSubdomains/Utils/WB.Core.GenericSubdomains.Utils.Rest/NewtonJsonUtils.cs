@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Utils.Services;
 
@@ -15,7 +16,8 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
             {
                 TypeNameHandling = TypeNameHandling.Objects,
                 NullValueHandling = NullValueHandling.Ignore,
-                FloatParseHandling = FloatParseHandling.Decimal
+                FloatParseHandling = FloatParseHandling.Decimal,
+                Formatting = Formatting.None
             };
 
             this.jsonSerializer = JsonSerializer.Create(this.jsonSerializerSetings);
@@ -23,7 +25,7 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
 
         public string Serialize(object item)
         {
-            return JsonConvert.SerializeObject(item, Formatting.None, this.jsonSerializerSetings);
+            return JsonConvert.SerializeObject(item, this.jsonSerializerSetings);
         }
 
         public byte[] SerializeToByteArray(object payload)
@@ -45,6 +47,24 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
             using (var reader = new StreamReader(input))
             {
                 return jsonSerializer.Deserialize<T>(new JsonTextReader(reader));
+            }
+        }
+
+        public object DeserializeFromStream(Stream stream, Type type)
+        {
+            using (var sr = new StreamReader(stream))
+            using (var jsonTextReader = new JsonTextReader(sr))
+            {
+                return jsonSerializer.Deserialize(jsonTextReader, type);
+            }
+        }
+
+        public void SerializeToStream(object value, Type type, Stream stream)
+        {
+            using (var writer = new StreamWriter(stream))
+            using (var jsonWriter = new JsonTextWriter(writer))
+            {
+                jsonSerializer.Serialize(jsonWriter, value, type);
             }
         }
     }
