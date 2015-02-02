@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Utils.Services;
@@ -16,8 +17,7 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
             {
                 TypeNameHandling = TypeNameHandling.Objects,
                 NullValueHandling = NullValueHandling.Ignore,
-                FloatParseHandling = FloatParseHandling.Decimal,
-                //Binder = new AssemblyNameRaplaceSerializationBinder()
+                FloatParseHandling = FloatParseHandling.Decimal
             };
             this.jsonSerializer = JsonSerializer.Create(this.jsonSerializerSetings);
         }

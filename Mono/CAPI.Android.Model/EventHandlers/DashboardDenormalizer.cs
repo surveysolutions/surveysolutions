@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Main.Core.Documents;
@@ -131,27 +132,27 @@ namespace CAPI.Android.Core.Model.EventHandlers
         {
             if (this.questionTypesWithOptions.Contains(featuredQuestion.QuestionType))
             {
-                if (answer == null)
-                    return new FeaturedItem(featuredQuestion.PublicKey, featuredQuestion.QuestionText,
-                        string.Empty);
-
                 var featuredCategoricalOptions = featuredQuestion.Answers.Select(
                     option =>
                         new FeaturedCategoricalOption
                         {
-                            OptionValue = decimal.Parse(option.AnswerValue),
+                            OptionValue = decimal.Parse(option.AnswerValue, CultureInfo.InvariantCulture),
                             OptionText = option.AnswerText,
                         });
+                if (answer == null)
+                    return new FeaturedCategoricalItem(featuredQuestion.PublicKey, featuredQuestion.QuestionText,
+                        string.Empty, featuredCategoricalOptions);
+
 
                 object objectAnswer;
 
                 if (answer.GetType().IsArray)
                 {
-                    objectAnswer = (answer as object[]).Select(Convert.ToDecimal).ToArray();
+                    objectAnswer = (answer as object[]).Select(x => Convert.ToDecimal(x, CultureInfo.InvariantCulture)).ToArray();
                 }
                 else
                 {
-                    objectAnswer = Convert.ToDecimal(answer);
+                    objectAnswer = Convert.ToDecimal(answer, CultureInfo.InvariantCulture);
                 }
 
                 return new FeaturedCategoricalItem(featuredQuestion.PublicKey, 
@@ -275,9 +276,8 @@ namespace CAPI.Android.Core.Model.EventHandlers
         {
             var featuredCategoricalQuestion = featuredQuestion as FeaturedCategoricalItem;
             if (featuredCategoricalQuestion != null)
-                return AnswerUtils.AnswerToString(answer,
+                return AnswerUtils.AnswerToString(Convert.ToDecimal(answer, CultureInfo.InvariantCulture),
                     (optionValue) => getCategoricalAnswerOptionText(featuredCategoricalQuestion.Options, optionValue));
-
             return AnswerUtils.AnswerToString(answer);
         }
 
