@@ -52,9 +52,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.View(this.incomingPackagesQueue.GetListOfUnhandledPackages());
         }
 
-        public FileResult GetIncomingDataWithError(Guid id)
+        public FileResult GetIncomingDataWithError(string packageId)
         {
-            return this.File(this.incomingPackagesQueue.GetUnhandledPackagePath(id), System.Net.Mime.MediaTypeNames.Application.Octet);
+            return this.File(this.incomingPackagesQueue.GetUnhandledPackagePath(packageId), System.Net.Mime.MediaTypeNames.Application.Octet, packageId);
         }
         
         public ActionResult Settings()

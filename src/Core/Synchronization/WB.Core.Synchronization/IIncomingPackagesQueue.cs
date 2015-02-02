@@ -9,7 +9,10 @@ namespace WB.Core.Synchronization
         void PushSyncItem(string item);
         int QueueLength { get; }
         void DeQueue();
-        IEnumerable<Guid> GetListOfUnhandledPackages();
-        string GetUnhandledPackagePath(Guid id);
+
+        string[] GetListOfUnhandledPackagesForInterview(Guid interviewId);
+
+        IEnumerable<string> GetListOfUnhandledPackages();
+        string GetUnhandledPackagePath(string id);
     }
 }  
