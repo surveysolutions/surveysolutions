@@ -139,7 +139,6 @@ namespace WB.UI.Supervisor.App_Start
             kernel.Bind<ISettingsProvider>().To<SupervisorSettingsProvider>();
 
             var eventStoreModule = ModulesFactory.GetEventStoreModule();
-            var overrideReceivedEventTimeStamp = CoreSettings.EventStoreProvider == StoreProviders.Raven;
 
             kernel.Load(
                 eventStoreModule,
@@ -147,7 +146,7 @@ namespace WB.UI.Supervisor.App_Start
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]), isDebug,
-                    applicationBuildVersion, interviewDetailsDataLoaderSettings, overrideReceivedEventTimeStamp,
+                    applicationBuildVersion, interviewDetailsDataLoaderSettings, false,
                     Constants.CapiSynchronizationOrigin, false,
                     int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"]),
                     new InterviewHistorySettings(basePath, false)));

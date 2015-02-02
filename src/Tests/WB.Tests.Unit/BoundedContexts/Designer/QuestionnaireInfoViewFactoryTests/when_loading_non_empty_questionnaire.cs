@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoViewFactoryTes
     {
         Establish context = () =>
         {
-            var repositoryMock = new Mock<IQueryableReadSideRepositoryReader<QuestionnaireInfoView>>();
+            var repositoryMock = new Mock<IReadSideKeyValueStorage<QuestionnaireInfoView>>();
 
             repositoryMock
                 .Setup(x => x.GetById(questionnaireId))
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoViewFactoryTes
 
             questionnaire.CreatedBy = userId;
 
-            var questionnaireDocument = Mock.Of<IQueryableReadSideRepositoryReader<QuestionnaireDocument>>(x => x.GetById(questionnaireId) == questionnaire);
+            var questionnaireDocument = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(x => x.GetById(questionnaireId) == questionnaire);
             var userRepositoryMock =
                 Mock.Of<IReadSideRepositoryReader<AccountDocument>>(
                     x => x.GetById(userId.FormatGuid()) == new AccountDocument() { Email = ownerEmail });

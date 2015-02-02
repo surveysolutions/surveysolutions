@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 {
     internal class QuestionChangeEventTestContext
     {
-        internal static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(IQuestionnaireEntityFactory questionnaireEntityFactoryMock, Mock<IReadSideRepositoryWriter<QuestionnaireDocument>> storageStub)
+        internal static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(IQuestionnaireEntityFactory questionnaireEntityFactoryMock, Mock<IReadSideKeyValueStorage<QuestionnaireDocument>> storageStub)
         {
             var denormalizer = new QuestionnaireDenormalizer(storageStub.Object, questionnaireEntityFactoryMock, Mock.Of<ILogger>());
 
