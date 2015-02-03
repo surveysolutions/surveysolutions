@@ -4,7 +4,6 @@ using Machine.Specifications;
 
 namespace WB.Tests.CleanIntegration.EsentTests
 {
-    [Ignore("Don't know what to do here yet.")]
     internal class when_multiple_tasks_are_updating_entity : with_esent_store<TestStoredEntity>
     {
         Establish context = () =>

@@ -25,7 +25,13 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
 
         public TEntity GetById(string id)
         {
-            return this.storage.ContainsKey(id) ? JsonConvert.DeserializeObject<TEntity>(this.storage[id], JsonSerializerSettings) : null;
+            string value;
+            if (this.storage.TryGetValue(id, out value))
+            {
+                return JsonConvert.DeserializeObject<TEntity>(this.storage[id], JsonSerializerSettings);
+            }
+
+            return null;
         }
 
         public void Remove(string id)
