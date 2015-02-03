@@ -25,11 +25,6 @@ namespace WB.UI.Capi.Views
             get { return ServiceLocator.Current.GetInstance<IPasswordHasher>(); }
         }
 
-        private IInterviewerSettings interviewerSettings
-        {
-            get { return ServiceLocator.Current.GetInstance<IInterviewerSettings>(); }
-        }
-
         public string Login { get; private set; }
         public string Password { get; private set; }
 
@@ -61,16 +56,6 @@ namespace WB.UI.Capi.Views
             this.Login = "inter";
             this.Password = "P@$$w0rd";
 #endif
-
-            if (CapiApplication.Membership.IsLoggedIn)
-            {
-                NavigationService.NavigateTo(CapiPages.Dashboard, new Dictionary<string, string>());
-            }
-
-            if (interviewerSettings.GetClientRegistrationId() == null)
-            {
-                NavigationService.NavigateTo(CapiPages.FinishInstallation, new Dictionary<string, string>(), true);
-            }
         }
 
         public IMvxCommand LoginCommand

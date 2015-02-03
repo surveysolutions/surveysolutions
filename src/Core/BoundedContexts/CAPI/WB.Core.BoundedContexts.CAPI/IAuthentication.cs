@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 
@@ -16,7 +15,5 @@ namespace WB.Core.BoundedContexts.Capi
         Task<bool> LogOnAsync(string userName, string password, bool wasPasswordHashed = false);
 
         void LogOff();
-
-        Task<List<UserLight>> GetKnownUsers();
     }
 }

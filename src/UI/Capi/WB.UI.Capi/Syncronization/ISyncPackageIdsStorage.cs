@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace WB.UI.Capi.Syncronization
+﻿namespace WB.UI.Capi.Syncronization
 {
     public interface ISyncPackageIdsStorage
     {

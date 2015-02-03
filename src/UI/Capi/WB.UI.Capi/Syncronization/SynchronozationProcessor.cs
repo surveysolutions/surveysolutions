@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
 using WB.Core.BoundedContexts.Capi.Services;
-using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Services;
 using WB.UI.Capi.Settings;
@@ -32,6 +31,8 @@ namespace WB.UI.Capi.Syncronization
         private readonly IInterviewSynchronizationFileStorage fileSyncRepository;
         private readonly ISyncPackageIdsStorage packageIdStorage;
 
+        private readonly IDeviceChangingVerifier deviceChangingVerifier;
+
         private readonly ISyncAuthenticator authentificator;
         private SyncCredentials credentials;
         
@@ -41,6 +42,7 @@ namespace WB.UI.Capi.Syncronization
         public event EventHandler<SynchronizationCanceledEventArgs> ProcessCanceled;
 
         public SynchronozationProcessor(
+            IDeviceChangingVerifier deviceChangingVerifier,
             ISyncAuthenticator authentificator, 
             ICapiDataSynchronizationService dataProcessor,
             ICapiCleanUpService cleanUpExecutor, 
@@ -50,6 +52,7 @@ namespace WB.UI.Capi.Syncronization
             ISynchronizationService synchronizationService,
             IInterviewerSettings interviewerSettings)
         {
+            this.deviceChangingVerifier = deviceChangingVerifier;
             this.authentificator = authentificator;
             this.cleanUpExecutor = cleanUpExecutor;
             this.fileSyncRepository = fileSyncRepository;
@@ -202,26 +205,36 @@ namespace WB.UI.Capi.Syncronization
 
             this.credentials = userCredentials.Value;
             
-            this.OnStatusChanged(
-                new SynchronizationEventArgs("Connecting...", Operation.Handshake, true));
+            this.OnStatusChanged(new SynchronizationEventArgs("Connecting...", Operation.Handshake, true));
 
             try
             {
+                var isThisExpectedDevice = await this.synchronizationService.CheckExpectedDeviceAsync(credentials: credentials);
 
-                var clientRegistrationId = await this.synchronizationService.HandshakeAsync(credentials: credentials);
+                var shouldThisDeviceBeLinkedToUser = false;
+                if (!isThisExpectedDevice)
+                {
+                    shouldThisDeviceBeLinkedToUser = this.deviceChangingVerifier.ConfirmDeviceChanging();
+                }
+
+                Guid clientRegistrationId = await this.synchronizationService.HandshakeAsync(credentials: this.credentials, shouldThisDeviceBeLinkedToUser: shouldThisDeviceBeLinkedToUser);
 
                 this.interviewerSettings.SetClientRegistrationId(clientRegistrationId);
 
+                if (shouldThisDeviceBeLinkedToUser)
+                {
+                    var userId = CapiApplication.Membership.GetUserIdByLoginIfExists(credentials.Login).Result;
+                    if (userId.HasValue)
+                    {
+                        this.cleanUpExecutor.DeleteAllInterviewsForUser(userId.Value);
+                    }
+                }
             }
             catch (Exception e)
             {
+                var knownHttpStatusCodes = new[] { HttpStatusCode.NotAcceptable, HttpStatusCode.InternalServerError, HttpStatusCode.Unauthorized };
                 var restException = e as RestException;
-                if (restException != null &&
-                    !new[]
-                    {HttpStatusCode.NotAcceptable, HttpStatusCode.InternalServerError, HttpStatusCode.Unauthorized}
-                        .Contains(restException.StatusCode))
-
-
+                if (restException != null && !knownHttpStatusCodes.Contains(restException.StatusCode)) 
                     throw new RestException(string.Empty, restException.StatusCode, e);
                 throw;
             }

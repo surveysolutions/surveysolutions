@@ -123,7 +123,7 @@ namespace WB.UI.Capi
                         if (t.Exception != null && t.Exception.InnerException != null)
                         {
                             var innerException = t.Exception.InnerException as GeolocationException;
-                            if (innerException != null && innerException.Error != null)
+                            if (innerException != null)
                                 messageToShow += innerException.Error.ToString();
                         }
                     }
@@ -342,7 +342,7 @@ namespace WB.UI.Capi
                     interviewerSettings.SetSyncAddressPoint(editSettingsSync.Text);
                     editSettingsSync.SetBackgroundColor(Color.LightGreen);
                 }
-                catch(ArgumentException ex)
+                catch(ArgumentException)
                 {
                     editSettingsSync.SetBackgroundColor(Color.Red);
                 }

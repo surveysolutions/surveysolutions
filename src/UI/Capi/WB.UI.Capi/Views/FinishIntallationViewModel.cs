@@ -76,7 +76,7 @@ namespace WB.UI.Capi.Views
                     {"PasswordHash", passwordHasher.Hash(Password)}
                 });
             }
-            catch(ArgumentException ex)
+            catch(ArgumentException)
             {
                 this.CanSetSyncEndpoint = false;
             }
