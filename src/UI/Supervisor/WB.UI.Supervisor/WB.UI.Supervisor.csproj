@@ -362,6 +362,10 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Configuration\SlavaDesktop.Supervisor.Web.config" />
+    <Content Include="Configuration\SPuV.Supervisor.Web.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="parameters.xml">
       <SubType>Designer</SubType>
     </None>

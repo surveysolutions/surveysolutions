@@ -440,6 +440,9 @@
     <Content Include="Configuration\SlavaDesktop.Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Configuration\SPuV.Designer.Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="parameters.xml">
       <SubType>Designer</SubType>
     </None>
