@@ -66,7 +66,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EsentTests\when_multiple_tasks_are_updating_entity.cs" />
     <Compile Include="EsentTests\TestStoredEntity.cs" />
     <Compile Include="EsentTests\when_esent_store_is_cleared.cs" />
     <Compile Include="EsentTests\when_item_removed.cs" />
