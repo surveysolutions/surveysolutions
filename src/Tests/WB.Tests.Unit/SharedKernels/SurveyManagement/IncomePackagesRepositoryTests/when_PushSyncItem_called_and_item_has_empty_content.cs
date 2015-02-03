@@ -5,7 +5,7 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.Inco
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomePackagesRepositoryTests
 {
-    internal class when_StoreIncomingItem_called_and_item_has_empty_content : IncomePackagesRepositoryTestContext
+    internal class when_PushSyncItem_called_and_item_has_empty_content : IncomePackagesRepositoryTestContext
     {
         Establish context = () =>
         {

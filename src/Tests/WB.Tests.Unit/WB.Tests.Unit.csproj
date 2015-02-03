@@ -273,6 +273,16 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_SharedPersonFromQuestionnaireRemoved_recived.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_SharedPersonToQuestionnaireAdded_received.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\IncomePackagesRepositoryTests\when_DeQueue_called_and_folder_with_packages_is_empty.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\IncomePackagesRepositoryTests\when_DeQueue_called_and_interview_were_created_on_client.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\IncomePackagesRepositoryTests\when_DeQueue_called_and_package_cant_be_opened.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\IncomePackagesRepositoryTests\when_DeQueue_called_and_package_content_cant_be_opened.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\IncomePackagesRepositoryTests\when_GetListOfUnhandledPackagesForInterview_and_interview_directory_is_missing.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\IncomePackagesRepositoryTests\when_GetListOfUnhandledPackagesForInterview_and_interview_directory_is_present_and_not_empty.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\IncomePackagesRepositoryTests\when_GetListOfUnhandledPackages_is_called_and_error_folder_is_missing.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\IncomePackagesRepositoryTests\when_GetListOfUnhandledPackages_is_called_and_error_folder_is_present_and_not_empty.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\IncomePackagesRepositoryTests\when_PushSyncItem_called_and_NullReferenceException_were_thrown.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\IncomePackagesRepositoryTests\when_QueueLength_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\ApiBasicAuthAttributeTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorizing_and_request_header_has_bad_basic_auth_info.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorizing_non_existant_user.cs" />
@@ -1637,7 +1647,7 @@
     <Compile Include="SharedKernels\SurveyManagement\FilebasedPreloadedDataRepositoryTests\when_storing_new_preloaded_data_file.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomePackagesRepositoryTests\IncomePackagesRepositoryTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomePackagesRepositoryTests\when_processing_item.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\IncomePackagesRepositoryTests\when_StoreIncomingItem_called_and_item_has_empty_content.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\IncomePackagesRepositoryTests\when_PushSyncItem_called_and_item_has_empty_content.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomePackagesRepositoryTests\when_PushSyncItem_called_and_item_content_is_not_empty.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\InterviewApiControllerTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_interview_details_under_headquarter_user.cs" />

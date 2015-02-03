@@ -134,7 +134,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
                     StoreErrorPackageAtInterviewCorrespondingFolder(interviewId.Value, fileToProcess);
                 else
                     this.fileSystemAccessor.CopyFileOrDirectory(fileToProcess, incomingCapiPackagesWithErrorsDirectory);
-                return;
             }
 
             this.fileSystemAccessor.DeleteFile(fileToProcess);
@@ -222,17 +221,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
                 this.fileSystemAccessor.CreateDirectory(interviewFolder);
 
             this.fileSystemAccessor.CopyFileOrDirectory(fileToProcess, interviewFolder);
-        }
-
-        private string GetItemFileNameForErrorStorage(Guid id, int version = 1)
-        {
-            var fileName = this.fileSystemAccessor.CombinePath(this.incomingCapiPackagesWithErrorsDirectory,
-                string.Format("{0}V-{1}.{2}", id, version, this.syncSettings.IncomingCapiPackageFileNameExtension));
-
-            if (fileSystemAccessor.IsFileExists(fileName))
-                return GetItemFileNameForErrorStorage(id, version + 1);
-
-            return fileName;
         }
 
         private void InitializeDirectoriesForCapiIncomePackages()
