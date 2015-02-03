@@ -281,6 +281,7 @@
     <Compile Include="SharedKernels\SurveyManagement\IncomePackagesRepositoryTests\when_GetListOfUnhandledPackagesForInterview_and_interview_directory_is_present_and_not_empty.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomePackagesRepositoryTests\when_GetListOfUnhandledPackages_is_called_and_error_folder_is_missing.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomePackagesRepositoryTests\when_GetListOfUnhandledPackages_is_called_and_error_folder_is_present_and_not_empty.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\IncomePackagesRepositoryTests\when_GetUnhandledPackagePath_is_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomePackagesRepositoryTests\when_PushSyncItem_called_and_NullReferenceException_were_thrown.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomePackagesRepositoryTests\when_QueueLength_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\ApiBasicAuthAttributeTestsContext.cs" />
