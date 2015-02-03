@@ -2,13 +2,13 @@
     this.Layout = "~/Views/Shared/_ControlPanelLayout.cshtml";
     this.ViewBag.Title = "Control Panel: Incoming data which wasn't handled successfully";
 }
-@model IEnumerable<Guid>
+@model IEnumerable<string>
 <h3>Incoming data Control Panel</h3>
 <pre style="height: 300px; overflow-y: scroll;">
 @foreach (var packageId in Model)
       {
 <b>PackageId </b> @packageId  
-          @Html.ActionLink("Download content", "GetIncomingDataWithError", new { id = packageId })
+          @Html.ActionLink("Download content", "GetIncomingDataWithError", new { packageId = packageId })
           <br/>
                 
       }

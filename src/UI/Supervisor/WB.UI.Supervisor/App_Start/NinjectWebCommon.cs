@@ -95,19 +95,16 @@ namespace WB.UI.Supervisor.App_Start
 
             var interviewDetailsDataLoaderSettings =
                 new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled,
-                    LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval,
-                    LegacyOptions.InterviewDetailsDataSchedulerNumberOfInterviewsProcessedAtTime);
+                    LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval);
 
             Func<bool> isDebug = () => AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
             Version applicationBuildVersion = typeof(AccountController).Assembly.GetName().Version;
 
             string appDataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
-            var synchronizationSettings = new SyncSettings(reevaluateInterviewWhenSynchronized: true,
-                appDataDirectory: appDataDirectory,
-                incomingCapiPackagesDirectoryName: LegacyOptions.SynchronizationIncomingCapiPackagesDirectory,
+            var synchronizationSettings = new SyncSettings(appDataDirectory: appDataDirectory,
                 incomingCapiPackagesWithErrorsDirectoryName:
                 LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
-                incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension);
+                incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension, incomingUnprocessedPackagesDirectoryName: LegacyOptions.IncomingUnprocessedPackageFileNameExtension, origin: Constants.CapiSynchronizationOrigin);
 
             var basePath = appDataDirectory;
 
@@ -147,7 +144,6 @@ namespace WB.UI.Supervisor.App_Start
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]), isDebug,
                     applicationBuildVersion, interviewDetailsDataLoaderSettings, false,
-                    Constants.CapiSynchronizationOrigin, false,
                     int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"]),
                     new InterviewHistorySettings(basePath, false)));
 
