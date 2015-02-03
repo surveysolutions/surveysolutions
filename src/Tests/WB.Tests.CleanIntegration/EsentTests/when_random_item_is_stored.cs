@@ -2,7 +2,7 @@
 using Machine.Specifications;
 using WB.Core.Infrastructure.Storage.Esent.Implementation;
 
-namespace WB.Tests.Integration.EsentTests
+namespace WB.Tests.CleanIntegration.EsentTests
 {
     [Subject(typeof (EsentKeyValueStorage<>))]
     internal class when_random_item_is_stored : with_esent_store<TestStoredEntity>

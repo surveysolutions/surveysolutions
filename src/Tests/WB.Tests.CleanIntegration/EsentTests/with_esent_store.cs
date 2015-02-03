@@ -4,7 +4,7 @@ using Microsoft.Isam.Esent.Collections.Generic;
 using WB.Core.Infrastructure.Storage.Esent.Implementation;
 using WB.Core.SharedKernels.SurveySolutions;
 
-namespace WB.Tests.Integration.EsentTests
+namespace WB.Tests.CleanIntegration.EsentTests
 {
     internal class with_esent_store<T> where T : class, IReadSideRepositoryEntity
     {
