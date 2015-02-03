@@ -18,8 +18,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly IReadSideKeyValueStorage<StatisticsGroupedByDateAndTemplate> statisticsStorage;
         private readonly IReadSideKeyValueStorage<InterviewDetailsForChart> chartItemsStorage;
-        private static readonly object lockObject = new object();
-
 
         public InterviewsChartDenormalizer(
             IReadSideKeyValueStorage<InterviewDetailsForChart> chartItemsStorage,
@@ -31,32 +29,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private void HandleCreation(Guid eventSourceId, Guid questionnaireId, long questionnaireVersion, DateTime date)
         {
-            lock (lockObject)
+            var interviewDetails = new InterviewDetailsForChart
             {
-                var interviewDetails = new InterviewDetailsForChart
-                {
-                    InterviewId = eventSourceId,
-                    QuestionnaireId = questionnaireId,
-                    QuestionnaireVersion = questionnaireVersion,
-                    Status = InterviewStatus.Created
-                };
-                this.chartItemsStorage.Store(interviewDetails, eventSourceId);
+                InterviewId = eventSourceId,
+                QuestionnaireId = questionnaireId,
+                QuestionnaireVersion = questionnaireVersion,
+                Status = InterviewStatus.Created
+            };
+            this.chartItemsStorage.Store(interviewDetails, eventSourceId);
 
-                var statisticsKey = this.GetStatisticsKey(questionnaireId, questionnaireVersion);
+            var statisticsKey = this.GetStatisticsKey(questionnaireId, questionnaireVersion);
 
-                var stat = this.statisticsStorage.GetById(statisticsKey) ?? new StatisticsGroupedByDateAndTemplate();
+            var stat = this.statisticsStorage.GetById(statisticsKey) ?? new StatisticsGroupedByDateAndTemplate();
 
-                if (!stat.StatisticsByDate.ContainsKey(date))
-                {
-                    CreateStatisticsRecord(stat, date);
-                }
-
-                stat.StatisticsByDate
-                    .Where(x => x.Key.Date >= date)
-                    .ForEach(x => x.Value.CreatedCount++);
-
-                this.statisticsStorage.Store(stat, statisticsKey);
+            if (!stat.StatisticsByDate.ContainsKey(date))
+            {
+                CreateStatisticsRecord(stat, date);
             }
+
+            stat.StatisticsByDate
+                .Where(x => x.Key.Date >= date)
+                .ForEach(x => x.Value.CreatedCount++);
+
+            this.statisticsStorage.Store(stat, statisticsKey);
         }
 
         private void DecreaseStatisticsByStatus(QuestionnaireStatisticsForChart statistics, InterviewStatus status)
@@ -128,35 +123,32 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
         {
-            lock (lockObject)
+            var interviewDetails = this.chartItemsStorage.GetById(evnt.EventSourceId);
+            var previousStatus = interviewDetails.Status;
+            interviewDetails.Status = evnt.Payload.Status;
+            this.chartItemsStorage.Store(interviewDetails, interviewDetails.InterviewId);
+
+            var date = evnt.EventTimeStamp.Date;
+
+            var statisticsKey = this.GetStatisticsKey(interviewDetails.QuestionnaireId, interviewDetails.QuestionnaireVersion);
+
+            var stat = this.statisticsStorage.GetById(statisticsKey);
+
+            if (!stat.StatisticsByDate.ContainsKey(date))
             {
-                var interviewDetails = this.chartItemsStorage.GetById(evnt.EventSourceId);
-                var previousStatus = interviewDetails.Status;
-                interviewDetails.Status = evnt.Payload.Status;
-                this.chartItemsStorage.Store(interviewDetails, interviewDetails.InterviewId);
-
-                var date = evnt.EventTimeStamp.Date;
-
-                var statisticsKey = this.GetStatisticsKey(interviewDetails.QuestionnaireId, interviewDetails.QuestionnaireVersion);
-
-                var stat = this.statisticsStorage.GetById(statisticsKey);
-
-                if (!stat.StatisticsByDate.ContainsKey(date))
-                {
-                    CreateStatisticsRecord(stat, date);
-                }
-
-                stat.StatisticsByDate
-                    .Where(x => x.Key.Date >= date.Date)
-                    .ForEach(x => DecreaseStatisticsByStatus(x.Value, previousStatus));
-
-                stat.StatisticsByDate
-                    .Where(x => x.Key.Date >= date.Date)
-                    .ForEach(x => this.IncreaseStatisticsByStatus(x.Value, evnt.Payload.Status));
-
-
-                this.statisticsStorage.Store(stat, statisticsKey);
+                CreateStatisticsRecord(stat, date);
             }
+
+            stat.StatisticsByDate
+                .Where(x => x.Key.Date >= date.Date)
+                .ForEach(x => DecreaseStatisticsByStatus(x.Value, previousStatus));
+
+            stat.StatisticsByDate
+                .Where(x => x.Key.Date >= date.Date)
+                .ForEach(x => this.IncreaseStatisticsByStatus(x.Value, evnt.Payload.Status));
+
+
+            this.statisticsStorage.Store(stat, statisticsKey);
         }
 
         private static void CreateStatisticsRecord(StatisticsGroupedByDateAndTemplate stat, DateTime date)
