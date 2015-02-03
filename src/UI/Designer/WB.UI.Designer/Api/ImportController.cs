@@ -54,7 +54,7 @@ namespace WB.UI.Designer.Api
         public void Login() { }
 
         [HttpGet]
-        public QuestionnaireLastEntryDateResponse GetQuestionnaireLastModifiedDate(QuestionnaireLastEntryDateRequest request)
+        public QuestionnaireLastEntryDateResponse GetQuestionnaireLastModifiedDate([FromUri]QuestionnaireLastEntryDateRequest request)
         {
             if (request == null) throw new ArgumentNullException("request");
 

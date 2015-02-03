@@ -35,7 +35,7 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
         }
 
 
-        public static async Task<T> ReceiveCompressedJsonWithProgressAsync<T>(this Task<HttpResponseMessage> response, CancellationToken token, IProgress<decimal> progress = null)
+        public static async Task<T> ReceiveCompressedJsonWithProgressAsync<T>(this Task<HttpResponseMessage> response, CancellationToken token, Action<decimal> progressPercentage = null)
         {
             var responseMessage = await response;
             byte[] responseContent;
@@ -48,18 +48,16 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
                     token.ThrowIfCancellationRequested();
                 }
 
-                var buffer = new byte[16*1024];
+                var buffer = new byte[512];
                 using (var ms = new MemoryStream())
                 {
                     int read;
                     while ((read = await responseStream.ReadAsync(buffer, 0, buffer.Length, token)) > 0)
                     {
                         ms.Write(buffer, 0, read);
-                        if (progress != null)
+                        if (progressPercentage != null)
                         {
-                            progress.Report(contentLength.HasValue
-                                ? Math.Round((decimal) (100*ms.Length)/contentLength.Value)
-                                : ms.Length);
+                           progressPercentage(contentLength.HasValue ? Math.Round((decimal) (100*ms.Length)/contentLength.Value) : ms.Length);
                         }
                     }
                     responseContent = ms.ToArray();
