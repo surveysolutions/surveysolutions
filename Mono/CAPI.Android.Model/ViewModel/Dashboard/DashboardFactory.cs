@@ -20,8 +20,6 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
             this.surveyDtoDocumentStorage = surveyDtoDocumentStorage;
         }
 
-        #region Implementation of IViewFactory<DashboardInput,DashboardModel>
-
         public DashboardModel Load(DashboardInput input)
         {
             var result = new DashboardModel(input.UserId);
@@ -59,7 +57,5 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
             }
             return result;
         }
-
-        #endregion
     }
 }

@@ -5,6 +5,9 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Hosting;
 using System.Web.Http;
+
+using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
@@ -78,6 +81,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 InterviewerSyncStrings.InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication);
         }
 
+        private HttpResponseException CreateRestException(HttpStatusCode httpStatusCode, SyncStatusCode code, string message)
+        {
+            var restErrorDescription = new RestErrorDescription { Code = code, Message = message };
+            return new HttpResponseException(new HttpResponseMessage(httpStatusCode)
+                                             {
+                                                 ReasonPhrase = jsonUtils.Serialize(restErrorDescription)
+                                             });
+        }
+
         [HttpPost]
         [ApiBasicAuth]
         public HandshakePackage GetHandshakePackage(HandshakePackageRequest request)
@@ -88,43 +100,42 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             {
                 Logger.Error(string.Format("Version mismatch. Client from the future. Client has protocol version {0} but current app protocol is {1} ", request.Version, supervisorRevisionNumber));
 
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable)
-                {
-                    ReasonPhrase = InterviewerSyncStrings.InterviewerApplicationHasHigherVersion_thanSupervisor_Format
-                });
+                throw CreateRestException(HttpStatusCode.NotAcceptable, SyncStatusCode.General, InterviewerSyncStrings.InterviewerApplicationHasHigherVersion_thanSupervisor_Format);
             }
 
             if (request.Version < supervisorRevisionNumber)
             {
                 Logger.Info(string.Format(" Client has protocol version {0} but current app protocol is {1} ", request.Version, supervisorRevisionNumber));
 
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable)
-                {
-                    ReasonPhrase = InterviewerSyncStrings.InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication
-                });
+                throw CreateRestException(
+                    HttpStatusCode.NotAcceptable,
+                    SyncStatusCode.General,
+                    InterviewerSyncStrings.InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication);
             }
 
             if (string.IsNullOrEmpty(request.AndroidId))
             {
                 Logger.Info(string.Format("Android device id was not provided"));
 
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable)
-                {
-                    ReasonPhrase = InterviewerSyncStrings.AndroidDeviceIdWasNotProvided
-                });
+                 throw CreateRestException(
+                    HttpStatusCode.NotAcceptable,
+                    SyncStatusCode.General,
+                    InterviewerSyncStrings.AndroidDeviceIdWasNotProvided
+                );
             }
 
             var interviewerInfo = userInfoViewFactory.Load(new UserWebViewInputModel(this.GlobalInfo.GetCurrentUser().Name, null));
 
-            if (!string.IsNullOrEmpty(interviewerInfo.DeviceId) && interviewerInfo.DeviceId != request.AndroidId)
+            if (!string.IsNullOrEmpty(interviewerInfo.DeviceId) && interviewerInfo.DeviceId != request.AndroidId && !request.ShouldDeviceBeLinkedToUser)
             {
                 Logger.Info(string.Format("User {0}[{1}] is linked to device {2}, but handshake was requested from device {3}",
                     interviewerInfo.UserName, interviewerInfo.PublicKey, interviewerInfo.DeviceId, request.AndroidId));
 
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable)
-                {
-                    ReasonPhrase = InterviewerSyncStrings.WrongAndroidDeviceIdWasProvided
-                });
+                throw CreateRestException(
+                    HttpStatusCode.NotAcceptable,
+                    SyncStatusCode.DeviceIsNotLinkedToUser,
+                    InterviewerSyncStrings.WrongAndroidDeviceIdWasProvided
+                );
             }
 
             var identifier = new ClientIdentifier
@@ -137,7 +148,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             };
             try
             {
-                if (string.IsNullOrEmpty(interviewerInfo.DeviceId))
+                if (string.IsNullOrEmpty(interviewerInfo.DeviceId) || request.ShouldDeviceBeLinkedToUser)
                 {
                     this.syncManager.LinkUserToDevice(interviewerInfo.PublicKey, request.AndroidId);
                 }
@@ -149,36 +160,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     string.Format("Sync Handshake Error. ClientId:{0}, AndroidId : {1}, ClientRegistrationId:{2}, version: {3}",
                         request.ClientId, request.AndroidId, request.ClientRegistrationId, request.Version), exc);
 
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
-                {
-                    ReasonPhrase = exc.Message
-                });
+                throw CreateRestException(HttpStatusCode.InternalServerError, SyncStatusCode.General, exc.Message);
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         [ApiBasicAuth]
-        public HandshakePackage LinkDeviceToUserAndShake(HandshakePackageRequest request)
+        public bool CheckExpectedDevice(string deviceId)
         {
             var interviewerInfo = userInfoViewFactory.Load(new UserWebViewInputModel(this.GlobalInfo.GetCurrentUser().Name, null));
-
-            try
-            {
-                this.syncManager.LinkUserToDevice(interviewerInfo.PublicKey, request.AndroidId);
-            }
-            catch (Exception exc)
-            {
-                Logger.Fatal(
-                    string.Format("Sync Handshake Error. ClientId:{0}, AndroidId : {1}, ClientRegistrationId:{2}, version: {3}",
-                        request.ClientId, request.AndroidId, request.ClientRegistrationId, request.Version), exc);
-
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
-                {
-                    ReasonPhrase = exc.Message
-                });
-            }
-
-            return this.GetHandshakePackage(request);
+            return string.IsNullOrEmpty(interviewerInfo.DeviceId) || interviewerInfo.DeviceId == deviceId;
         }
 
         [HttpPost]
@@ -192,10 +183,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             catch (Exception ex)
             {
                 Logger.Error(ex.Message, ex);
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
-                {
-                    ReasonPhrase = InterviewerSyncStrings.ServerError
-                });
+                throw CreateRestException(HttpStatusCode.ServiceUnavailable, SyncStatusCode.General, InterviewerSyncStrings.ServerError);
             }
         }
 
@@ -213,10 +201,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             catch (SyncPackageNotFoundException ex)
             {
                 Logger.Error(ex.Message, ex);
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
-                {
-                    ReasonPhrase = InterviewerSyncStrings.ServerError
-                });
+                throw CreateRestException(HttpStatusCode.ServiceUnavailable, SyncStatusCode.General, InterviewerSyncStrings.ServerError);
             }
         }
 
@@ -238,10 +223,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             catch (Exception ex)
             {
                 Logger.Error(ex.Message, ex);
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
-                {
-                    ReasonPhrase = InterviewerSyncStrings.ServerError
-                });
+
+                throw CreateRestException(HttpStatusCode.ServiceUnavailable, SyncStatusCode.General, InterviewerSyncStrings.ServerError);
             }
         }
 
@@ -258,10 +241,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             catch (Exception ex)
             {
                 Logger.Error(ex.Message, ex);
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
-                {
-                    ReasonPhrase = InterviewerSyncStrings.ServerError
-                });
+                throw CreateRestException(HttpStatusCode.ServiceUnavailable, SyncStatusCode.General, InterviewerSyncStrings.ServerError);
             }
         }
 

@@ -5,7 +5,6 @@ namespace WB.UI.Capi.Syncronization
 {
     public class RestAuthenticator : ISyncAuthenticator
     {
-
         public event RequestCredentialsCallBack RequestCredentialsCallback;
 
         protected SyncCredentials? OnRequestCredentials()
@@ -22,6 +21,5 @@ namespace WB.UI.Capi.Syncronization
 
             return credentials;
         }
-
     }
 }

@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
@@ -13,6 +15,8 @@ using System.Text;
 using System.Threading;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
+using Chance.MvvmCross.Plugins.UserInteraction;
+using Cirrious.CrossCore;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
@@ -216,7 +220,7 @@ namespace WB.UI.Capi
             {
                 Logger.Fatal("Error occured during Backup. ", exception);
             }
-            
+
             var alert = new AlertDialog.Builder(this);
             if (string.IsNullOrWhiteSpace(path))
             {
@@ -226,11 +230,11 @@ namespace WB.UI.Capi
             else
             {
                 alert.SetTitle("Success");
-                alert.SetMessage(string.Format("Backup was saved to {0}", path));    
+                alert.SetMessage(string.Format("Backup was saved to {0}", path));
             }
-            
-            
-            
+
+
+
             alert.Show();
         }
 
@@ -263,10 +267,12 @@ namespace WB.UI.Capi
             this.PrepareUI();
             try
             {
+                var deviceChangeVerifier = this.CreateDeviceChangeVerifier();
                 var changeLogManipulator = CapiApplication.Kernel.Get<IChangeLogManipulator>();
                 var plainFileRepository = CapiApplication.Kernel.Get<IPlainInterviewFileStorage>();
                 var cleaner = new CapiCleanUpService(changeLogManipulator, plainFileRepository);
                 this.synchronizer = new SynchronozationProcessor(
+                    deviceChangeVerifier,
                     authenticator,
                     new CapiDataSynchronizationService(
                         changeLogManipulator,
@@ -303,12 +309,65 @@ namespace WB.UI.Capi
             await this.synchronizer.Run();
         }
 
+        protected IDeviceChangingVerifier CreateDeviceChangeVerifier()
+        {
+            var deviceChangeVerifier = new DeviceChangingVerifier();
+            deviceChangeVerifier.ConfirmDeviceChangeCallback += this.ConfirmDeviceChangeCallback;
+            return deviceChangeVerifier;
+        }
 
         protected ISyncAuthenticator CreateAuthenticator()
         {
             var authentificator = new RestAuthenticator();
             authentificator.RequestCredentialsCallback += this.RequestCredentialsCallBack;
             return authentificator;
+        }
+
+        protected bool ConfirmDeviceChangeCallback(object sender)
+        {
+            bool shouldThisDeviceBeLinkedToUser = false;
+            bool actionCompleted = false;
+            this.RunOnUiThread(
+                () =>
+                {
+                    if (this.progressDialog != null) this.progressDialog.Dismiss();
+
+                    EventHandler<DialogClickEventArgs> noHandler = (s, ev) => { actionCompleted = true; this.synchronizer.Cancel(); };
+
+                    var firstConfirmationDialog = this.CreateYesNoDialog("Do you want to make this tablet your working device?",
+                        yesHandler: (s, ev) =>
+                        {
+                            var secondConfirmationDialog = this.CreateYesNoDialog("All your collected data on other devices will be removed. Are you sure?",
+                                yesHandler: (s1, evnt) =>
+                                {
+                                    if (this.progressDialog != null) 
+                                        this.progressDialog.Show();
+                                    shouldThisDeviceBeLinkedToUser = true;
+                                    actionCompleted = true;
+                                },
+                                noHandler: noHandler);
+                            secondConfirmationDialog.Show();
+
+                        },
+                        noHandler: noHandler);
+                    firstConfirmationDialog.Show();
+                });
+            while (!actionCompleted)
+            {
+                Thread.Sleep(200);
+            }
+            return shouldThisDeviceBeLinkedToUser;
+        }
+
+        private AlertDialog CreateYesNoDialog(string title, EventHandler<DialogClickEventArgs> yesHandler, EventHandler<DialogClickEventArgs> noHandler)
+        {
+            var builder = new AlertDialog.Builder(this);
+            AlertDialog alertDialog = builder.Create();
+            alertDialog.SetTitle(title);
+            alertDialog.SetCancelable(false);
+            alertDialog.SetButton("No", noHandler);
+            alertDialog.SetButton2("Yes", yesHandler);
+            return alertDialog;
         }
 
         protected SyncCredentials? RequestCredentialsCallBack(object sender)

@@ -209,6 +209,7 @@
     <Compile Include="Setup.cs" />
     <Compile Include="SplashScreen.cs" />
     <Compile Include="SynchronizationActivity.cs" />
+    <Compile Include="Syncronization\DeviceChangingVerifier.cs" />
     <Compile Include="Syncronization\Implementation\SyncPackageIdsStorage.cs" />
     <Compile Include="Syncronization\ISyncPackageIdsStorage.cs" />
     <Compile Include="Syncronization\RestAuthenticator.cs" />

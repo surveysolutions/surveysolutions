@@ -8,12 +8,20 @@ namespace WB.UI.Capi.Services
 {
     public interface ISynchronizationService
     {
-        Task<Guid> HandshakeAsync(SyncCredentials credentials);
+        Task<Guid> HandshakeAsync(SyncCredentials credentials, bool shouldThisDeviceBeLinkedToUser = false);
+
         Task<IEnumerable<SynchronizationChunkMeta>> GetChunksAsync(SyncCredentials credentials, string lastKnownPackageId);
+
         Task<SyncItem> RequestChunkAsync(SyncCredentials credentials, string chunkId);
+
         Task PushChunkAsync(SyncCredentials credentials, string chunkAsString);
+
         Task PushBinaryAsync(SyncCredentials credentials, Guid interviewId, string fileName, byte[] fileData);
+
         Task<string> GetChunkIdByTimestampAsync(SyncCredentials credentials, long timestamp);
+
         Task<bool> NewVersionAvailableAsync();
+
+        Task<bool> CheckExpectedDeviceAsync(SyncCredentials credentials);
     }
 }

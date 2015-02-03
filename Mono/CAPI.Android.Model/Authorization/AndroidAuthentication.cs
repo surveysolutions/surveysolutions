@@ -66,7 +66,7 @@ namespace CAPI.Android.Core.Model.Authorization
                 this.SupervisorId = Guid.TryParse(user.Supervisor, out super) ? super : Guid.NewGuid();
                 return Task.FromResult(true);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return Task.FromResult(false);
             }
@@ -74,8 +74,23 @@ namespace CAPI.Android.Core.Model.Authorization
 
         public Task<List<UserLight>> GetKnownUsers()
         {
-            var users = this.documentStorage.Filter(x => true).Select(x => new UserLight(Guid.Empty, x.Login)).ToList();
+            var users = this.documentStorage
+                .Filter(x => true)
+                .Select(x => new UserLight(Guid.Empty, x.Login))
+                .ToList();
+
             return Task.FromResult(users);
+        }
+
+        public Task<Guid?> GetUserIdByLoginIfExists(string login)
+        {
+            var userIdAsString = this.documentStorage
+                .Filter(x => x.Login == login)
+                .Select(x => x.Id)
+                .FirstOrDefault();
+
+            Guid? userId = string.IsNullOrEmpty(userIdAsString) ? (Guid?)null : Guid.Parse(userIdAsString);
+            return Task.FromResult(userId);
         }
 
         public void LogOff()

@@ -26,7 +26,18 @@ namespace WB.UI.Capi.Implementations.Services
             this.syncProtocolVersionProvider = syncProtocolVersionProvider;
         }
 
-        public async Task<Guid> HandshakeAsync(SyncCredentials credentials)
+        public async Task<bool> CheckExpectedDeviceAsync(SyncCredentials credentials)
+        {
+            var deviceId = this.interviewerSettings.GetDeviceId();
+            var isThisExpectedDevice = await this.restService.GetAsync<bool>(
+                url: "api/InterviewerSync/CheckExpectedDevice",
+                credentials: new RestCredentials {Login = credentials.Login, Password = credentials.Password},
+                queryString: new { deviceId });
+
+            return isThisExpectedDevice;
+        }
+
+        public async Task<Guid> HandshakeAsync(SyncCredentials credentials, bool shouldThisDeviceBeLinkedToUser = false)
         {
             var package = await this.restService.PostAsync<HandshakePackage>(
                 url: "api/InterviewerSync/GetHandshakePackage",
@@ -36,7 +47,8 @@ namespace WB.UI.Capi.Implementations.Services
                     ClientId = this.interviewerSettings.GetInstallationId(),
                     Version = this.syncProtocolVersionProvider.GetProtocolVersion(),
                     ClientRegistrationId = this.interviewerSettings.GetClientRegistrationId(),
-                    AndroidId = this.interviewerSettings.GetDeviceId()
+                    AndroidId = this.interviewerSettings.GetDeviceId(),
+                    ShouldDeviceBeLinkedToUser = shouldThisDeviceBeLinkedToUser
                 });
 
             return package.ClientRegistrationKey;
