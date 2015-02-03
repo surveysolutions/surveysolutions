@@ -104,10 +104,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             {
                 try
                 {
-                    lock (Locker)
-                    {
-                        handler.Invoke(publishedEvent);
-                    }
+                    handler.Invoke(publishedEvent);
                 }
                 catch (Exception exception)
                 {
