@@ -111,6 +111,8 @@
     <Compile Include="EventHandler\InterviewsChartDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewSummaryEventHandlerFunctional.cs" />
     <Compile Include="EventHandler\QuestionnaireDetailsForChart.cs" />
+    <Compile Include="EventHandler\QuestionnaireStatisticsForChart.cs" />
+    <Compile Include="EventHandler\StatisticsGroupedByDateAndTemplate.cs" />
     <Compile Include="EventHandler\SynchronizationDenormalizer.cs" />
     <Compile Include="Factories\ICsvWriterFactory.cs" />
     <Compile Include="Factories\IChartStatisticsViewFactory.cs" />
