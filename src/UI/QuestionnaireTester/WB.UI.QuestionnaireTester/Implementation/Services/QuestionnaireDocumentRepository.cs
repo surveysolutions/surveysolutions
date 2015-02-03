@@ -1,11 +1,13 @@
+using System;
 using System.Collections.Generic;
 using Main.Core.Documents;
 using Sqo.Attributes;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using Sqo.Transactions;
+using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.UI.QuestionnaireTester.Implementation.Services
 {
-    public class QuestionnaireDocumentRepository : IReadSideStorage<QuestionnaireDocument>
+    public class QuestionnaireDocumentRepository : IPlainStorageAccessor<QuestionnaireDocument>
     {
         private class QuestionnaireStorageViewModel
         {
@@ -29,6 +31,26 @@ namespace WB.UI.QuestionnaireTester.Implementation.Services
         public void Store(QuestionnaireDocument view, string id)
         {
             SiaqodbFactory.GetInstance().StoreObject(new QuestionnaireStorageViewModel{ Id = id, Questionnaire = view});
+        }
+
+        public void Store(IEnumerable<Tuple<QuestionnaireDocument, string>> entities)
+        {
+            var siaqodb = SiaqodbFactory.GetInstance();
+
+            ITransaction transaction = siaqodb.BeginTransaction();
+            try
+            {
+                foreach (var entity in entities)
+                {
+                    siaqodb.StoreObject(entity, transaction);
+                }
+
+                transaction.Commit();
+            }
+            catch
+            {
+                transaction.Rollback();
+            }
         }
     }
 }

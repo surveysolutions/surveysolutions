@@ -10,7 +10,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -28,7 +28,7 @@ namespace WB.UI.QuestionnaireTester.ViewModels
         private readonly IRestService restService;
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
         private readonly ICommandService commandService;
-        private readonly IReadSideStorage<QuestionnaireDocument> questionnairesStorage;
+        private readonly IPlainStorageAccessor<QuestionnaireDocument> questionnairesStorage;
         public QuestionnaireListItem Questionnaire { get; private set; }
         public Action<Guid> OnInterviewCreated { get; set; }
         public Action<Guid> OnInterviewDetailsOpened { get; set; }
@@ -55,8 +55,8 @@ namespace WB.UI.QuestionnaireTester.ViewModels
             }
         }
 
-        private ImportQuestionnaireDownloadingProgress progressIndicator = new ImportQuestionnaireDownloadingProgress();
-        public ImportQuestionnaireDownloadingProgress ProgressIndicator
+        private string progressIndicator;
+        public string ProgressIndicator
         {
             get { return progressIndicator; }
             set
@@ -69,7 +69,7 @@ namespace WB.UI.QuestionnaireTester.ViewModels
         public QuestionnairePrefilledQuestionsViewModel(ILogger logger, IRestService restService,
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor, ICommandService commandService,
             IPrincipal principal, IAnswerProgressIndicator answerProgressIndicator, IUserInteraction uiDialogs,
-            IReadSideStorage<QuestionnaireDocument> questionnairesStorage)
+            IPlainStorageAccessor<QuestionnaireDocument> questionnairesStorage)
             : base(logger, principal: principal, uiDialogs: uiDialogs)
         {
             answerProgressIndicator.Setup(() => this.IsAnswering = true, () => this.IsAnswering = false);
@@ -133,25 +133,35 @@ namespace WB.UI.QuestionnaireTester.ViewModels
 
                 try
                 {
+                    this.ProgressIndicator = UIResources.ImportQuestionnaire_VerifyOnServer;
+
                     var questionnaireDocumentFromStorage = this.questionnairesStorage.GetById(this.Questionnaire.Id.FormatGuid());
 
                     if (questionnaireDocumentFromStorage == null ||
                         questionnaireDocumentFromStorage.LastEntryDate != (await this.GetQuestionnaireLastEntryDate()).LastEntryDate)
                     {
-                        var questionnaireCommunicationPackage = await this.GetQuestionnaireFromServer();
+                        var questionnaireCommunicationPackage = await this.GetQuestionnaireFromServer(
+                            (downloadProgress) => { this.ProgressIndicator = string.Format(UIResources.ImportQuestionnaire_DownloadProgress, downloadProgress); });
 
-                        this.questionnaireAssemblyFileAccessor.StoreAssembly(
-                            questionnaireCommunicationPackage.Questionnaire.PublicKey, 0,
-                            questionnaireCommunicationPackage.QuestionnaireAssembly);
+                        this.ProgressIndicator = UIResources.ImportQuestionnaire_StoreQuestionnaire;
 
                         this.questionnairesStorage.Store(questionnaireCommunicationPackage.Questionnaire, questionnaireCommunicationPackage.Questionnaire.PublicKey.FormatGuid());
                         questionnaireDocumentFromStorage = questionnaireCommunicationPackage.Questionnaire;
+
+                        this.ProgressIndicator = UIResources.ImportQuestionnaire_StoreAssembly;
+
+                        this.questionnaireAssemblyFileAccessor.StoreAssembly(questionnaireCommunicationPackage.Questionnaire.PublicKey, 0,
+                            questionnaireCommunicationPackage.QuestionnaireAssembly);
                     }
+
+                    this.ProgressIndicator = UIResources.ImportQuestionnaire_PrepareQuestionnaire;
 
                     this.ExecuteImportFromDesignerForTesterCommand(questionnaireDocumentFromStorage);
 
                     Guid interviewUserId = Guid.NewGuid();
                     Guid interviewId = Guid.NewGuid();
+
+                    this.ProgressIndicator = UIResources.ImportQuestionnaire_CreateInterview;
 
                     this.ExecuteCreateInterviewCommand(interviewId, interviewUserId, questionnaireDocumentFromStorage.PublicKey);
 
@@ -169,17 +179,17 @@ namespace WB.UI.QuestionnaireTester.ViewModels
                             this.SignOut();
                             break;
                         case HttpStatusCode.Forbidden:
-                            this.UIDialogs.Alert(UIResources.ImportQuestionnaireForbidden);
+                            this.UIDialogs.Alert(UIResources.ImportQuestionnaire_Error_Forbidden);
                             break;
                         case HttpStatusCode.UpgradeRequired:
-                            this.UIDialogs.Alert(UIResources.ImportQuestionnaireUpgradeRequired);
+                            this.UIDialogs.Alert(UIResources.ImportQuestionnaire_Error_UpgradeRequired);
                             break;
                         case HttpStatusCode.PreconditionFailed:
-                            this.UIDialogs.Alert(string.Format(UIResources.ImportQuestionnairePreconditionFailed,
+                            this.UIDialogs.Alert(string.Format(UIResources.ImportQuestionnaire_Error_PreconditionFailed,
                                 this.Questionnaire.Title));
                             break;
                         case HttpStatusCode.NotFound:
-                            this.UIDialogs.Alert(string.Format(UIResources.ImportQuestionnaireNotFound,
+                            this.UIDialogs.Alert(string.Format(UIResources.ImportQuestionnaire_Error_NotFound,
                                 this.Questionnaire.Title));
                             break;
                         case HttpStatusCode.ServiceUnavailable:
@@ -197,6 +207,7 @@ namespace WB.UI.QuestionnaireTester.ViewModels
                 catch (Exception ex)
                 {
                     this.Logger.Error("Exception when downloading questionnaire/creating interview", ex);
+                    this.UIDialogs.Alert(ex.Message);
                 }
                 finally
                 {
@@ -217,7 +228,7 @@ namespace WB.UI.QuestionnaireTester.ViewModels
 
         private async Task<QuestionnaireLastEntryDateResponse> GetQuestionnaireLastEntryDate()
         {
-            return await this.restService.PostAsync<QuestionnaireLastEntryDateResponse>(
+            return await this.restService.GetAsync<QuestionnaireLastEntryDateResponse>(
                 url: "GetQuestionnaireLastModifiedDate",
                 credentials:
                     new RestCredentials()
@@ -225,13 +236,13 @@ namespace WB.UI.QuestionnaireTester.ViewModels
                         Login = this.Principal.CurrentIdentity.Name,
                         Password = this.Principal.CurrentIdentity.Password
                     },
-                request: new QuestionnaireLastEntryDateRequest()
+                queryString: new QuestionnaireLastEntryDateRequest()
                 {
                     QuestionnaireId = Questionnaire.Id
                 });
         }
 
-        public async Task<QuestionnaireCommunicationPackage> GetQuestionnaireFromServer()
+        public async Task<QuestionnaireCommunicationPackage> GetQuestionnaireFromServer(Action<decimal> downloadProgress)
         {
             var supportedVersion = QuestionnaireVersionProvider.GetCurrentEngineVersion();
 
@@ -252,26 +263,7 @@ namespace WB.UI.QuestionnaireTester.ViewModels
                         Minor = supportedVersion.Minor,
                         Patch = supportedVersion.Patch
                     }
-                }, progress: this.ProgressIndicator, token: new CancellationToken());
-        }
-    }
-
-    public class ImportQuestionnaireDownloadingProgress : MvxViewModel, IProgress<decimal>
-    {
-        private decimal progress = 0;
-        public decimal Progress
-        {
-            get { return progress; }
-            set
-            {
-                progress = value;
-                RaisePropertyChanged(() => Progress);
-            }
-        }
-
-        public void Report(decimal value)
-        {
-            this.Progress = value;
+                }, progressPercentage: downloadProgress, token: new CancellationToken());
         }
     }
 }

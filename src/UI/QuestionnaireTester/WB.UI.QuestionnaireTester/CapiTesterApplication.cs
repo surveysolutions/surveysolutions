@@ -37,6 +37,7 @@ using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Ncqrs;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
@@ -240,8 +241,7 @@ namespace WB.UI.QuestionnaireTester
 
             this.kernel.Bind<IPrincipal>().ToConstant(new Principal(Mvx.Resolve<IKeychain>(), Mvx.Resolve<ISettings>()));
             this.kernel.Bind<IAuthentication>().To<DesignerAuthentication>();
-            this.kernel.Bind<IReadSideStorage<DashboardStorageViewModel>>().To<DashboardStorageViewModelRepository>().InSingletonScope();
-            this.kernel.Bind<IReadSideStorage<QuestionnaireDocument>>().To<QuestionnaireDocumentRepository>();
+            this.kernel.Bind<IPlainStorageAccessor<DashboardStorageViewModel>>().To<DashboardStorageViewModelRepository>().InSingletonScope();
             this.kernel.Bind<IDocumentSerializer>().To<StorageSerializer>().InSingletonScope();
             
             #region register handlers

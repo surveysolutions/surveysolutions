@@ -132,17 +132,35 @@
   <data name="HelpText" xml:space="preserve">
     <value>Help/Comment</value>
   </data>
-  <data name="ImportQuestionnaireForbidden" xml:space="preserve">
+  <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
+    <value>Creating interview</value>
+  </data>
+  <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
+    <value>Downloading questionnaire -  {0}%</value>
+  </data>
+  <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
     <value>You don't have permissions to look this questionnaire</value>
   </data>
-  <data name="ImportQuestionnaireNotFound" xml:space="preserve">
+  <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
     <value>Requested questionnaire "{0}" cannot be found. Please check the list of available questionnaires.</value>
   </data>
-  <data name="ImportQuestionnairePreconditionFailed" xml:space="preserve">
+  <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
     <value>Requested questionnaire "{0}" has errors. Please verify the questionnaire on Designer.</value>
   </data>
-  <data name="ImportQuestionnaireUpgradeRequired" xml:space="preserve">
+  <data name="ImportQuestionnaire_Error_UpgradeRequired" xml:space="preserve">
     <value>Your version of application does not support of this questionnaire. Please, update application</value>
+  </data>
+  <data name="ImportQuestionnaire_PrepareQuestionnaire" xml:space="preserve">
+    <value>Preparing questionnaire to creating interview</value>
+  </data>
+  <data name="ImportQuestionnaire_StoreAssembly" xml:space="preserve">
+    <value>Saving interview dynamic link library to local storage</value>
+  </data>
+  <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
+    <value>Saving questionnaire to local storage</value>
+  </data>
+  <data name="ImportQuestionnaire_VerifyOnServer" xml:space="preserve">
+    <value>Checking questionnaire for errors on the server</value>
   </data>
   <data name="LastModifiedDateTitle" xml:space="preserve">
     <value>Modified on:</value>

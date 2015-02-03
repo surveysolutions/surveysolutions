@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using Sqo.Transactions;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.QuestionnaireTester.ViewModels;
 
 namespace WB.UI.QuestionnaireTester.Implementation.Services
 {
-    public class DashboardStorageViewModelRepository : IReadSideStorage<DashboardStorageViewModel>
+    public class DashboardStorageViewModelRepository : IPlainStorageAccessor<DashboardStorageViewModel>
     {
         public DashboardStorageViewModel GetById(string id)
         {
@@ -21,6 +22,26 @@ namespace WB.UI.QuestionnaireTester.Implementation.Services
         {
             view.Id = id;
             SiaqodbFactory.GetInstance().StoreObject(view);
+        }
+
+        public void Store(IEnumerable<Tuple<DashboardStorageViewModel, string>> entities)
+        {
+            var siaqodb = SiaqodbFactory.GetInstance();
+
+            ITransaction transaction = siaqodb.BeginTransaction();
+            try
+            {
+                foreach (var entity in entities)
+                {
+                    siaqodb.StoreObject(entity, transaction);
+                }
+
+                transaction.Commit();
+            }
+            catch
+            {
+                transaction.Rollback();
+            }
         }
     }
 }

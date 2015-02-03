@@ -31,9 +31,7 @@ namespace WB.UI.QuestionnaireTester
             var propagationStructureStore = new InMemoryReadSideRepositoryAccessor<QuestionnaireRosterStructure>();
 
             var bigSurveyStore = new InMemoryReadSideRepositoryAccessor<InterviewViewModel>();
-
-            var plainQuestionnaireStore = new InMemoryPlainStorageAccessor<QuestionnaireDocument>();
-
+            
             this.Bind<IEventStore>().ToConstant(evenStore);
             this.Bind<ISnapshotStore>().ToConstant(snapshotStore);
             this.Bind<IReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>().ToConstant(templateStore);
@@ -43,7 +41,7 @@ namespace WB.UI.QuestionnaireTester
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
             this.Bind<IStringCompressor>().To<JsonCompressor>();
             this.Bind<IWaitService>().To<WaitService>().InSingletonScope();
-            this.Bind<IPlainStorageAccessor<QuestionnaireDocument>>().ToConstant(plainQuestionnaireStore);
+            this.Bind<IPlainStorageAccessor<QuestionnaireDocument>>().To<QuestionnaireDocumentRepository>().InSingletonScope();
             this.Bind<IRestServiceSettings>().To<RestServiceSettings>().InSingletonScope();
         }
     }

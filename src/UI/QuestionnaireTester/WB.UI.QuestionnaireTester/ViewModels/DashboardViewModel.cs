@@ -8,7 +8,7 @@ using Cirrious.MvvmCross.Plugins.WebBrowser;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.QuestionnaireTester.Properties;
@@ -20,13 +20,13 @@ namespace WB.UI.QuestionnaireTester.ViewModels
     public class DashboardViewModel : BaseViewModel
     {
         private readonly IRestService restService;
-        private readonly IReadSideStorage<DashboardStorageViewModel> dashboardStorage;
+        private readonly IPlainStorageAccessor<DashboardStorageViewModel> dashboardStorage;
         private readonly IMvxWebBrowserTask webBrowser;
 
         private readonly QuestionnaireVersion supportedQuestionnaireVersion;
 
         public DashboardViewModel(IPrincipal principal, IRestService restService, ILogger logger,
-            IUserInteraction uiDialogs, IReadSideStorage<DashboardStorageViewModel> dashboardStorage, IMvxWebBrowserTask webBrowser)
+            IUserInteraction uiDialogs, IPlainStorageAccessor<DashboardStorageViewModel> dashboardStorage, IMvxWebBrowserTask webBrowser)
             : base(logger, principal: principal, uiDialogs: uiDialogs)
         {
             this.restService = restService;

@@ -58,21 +58,13 @@
             android:id="@+id/flFragmentHolder"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" />
-        <ProgressBar
-            android:layout_height="20dp"
-            android:layout_width="wrap_content"
-            android:indeterminateOnly="true"
-            android:keepScreenOn="false"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            local:MvxBind="Visible IsInProgress" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
-            local:MvxBind="Text Format('Dowloading - {0}%', ProgressIndicator.Progress)" />
+            local:MvxBind="Text ProgressIndicator; Visible IsInProgress" />
         <RelativeLayout
             android:id="@+id/ab_bottom"
             android:layout_width="match_parent"

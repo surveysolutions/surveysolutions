@@ -106,38 +106,92 @@ namespace WB.UI.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Creating interview.
+        /// </summary>
+        internal static string ImportQuestionnaire_CreateInterview {
+            get {
+                return ResourceManager.GetString("ImportQuestionnaire_CreateInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloading questionnaire -  {0}%.
+        /// </summary>
+        internal static string ImportQuestionnaire_DownloadProgress {
+            get {
+                return ResourceManager.GetString("ImportQuestionnaire_DownloadProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You don&apos;t have permissions to look this questionnaire.
         /// </summary>
-        internal static string ImportQuestionnaireForbidden {
+        internal static string ImportQuestionnaire_Error_Forbidden {
             get {
-                return ResourceManager.GetString("ImportQuestionnaireForbidden", resourceCulture);
+                return ResourceManager.GetString("ImportQuestionnaire_Error_Forbidden", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Requested questionnaire &quot;{0}&quot; cannot be found. Please check the list of available questionnaires..
         /// </summary>
-        internal static string ImportQuestionnaireNotFound {
+        internal static string ImportQuestionnaire_Error_NotFound {
             get {
-                return ResourceManager.GetString("ImportQuestionnaireNotFound", resourceCulture);
+                return ResourceManager.GetString("ImportQuestionnaire_Error_NotFound", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Requested questionnaire &quot;{0}&quot; has errors. Please verify the questionnaire on Designer..
         /// </summary>
-        internal static string ImportQuestionnairePreconditionFailed {
+        internal static string ImportQuestionnaire_Error_PreconditionFailed {
             get {
-                return ResourceManager.GetString("ImportQuestionnairePreconditionFailed", resourceCulture);
+                return ResourceManager.GetString("ImportQuestionnaire_Error_PreconditionFailed", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Your version of application does not support of this questionnaire. Please, update application.
         /// </summary>
-        internal static string ImportQuestionnaireUpgradeRequired {
+        internal static string ImportQuestionnaire_Error_UpgradeRequired {
             get {
-                return ResourceManager.GetString("ImportQuestionnaireUpgradeRequired", resourceCulture);
+                return ResourceManager.GetString("ImportQuestionnaire_Error_UpgradeRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preparing questionnaire to creating interview.
+        /// </summary>
+        internal static string ImportQuestionnaire_PrepareQuestionnaire {
+            get {
+                return ResourceManager.GetString("ImportQuestionnaire_PrepareQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saving interview dynamic link library to local storage.
+        /// </summary>
+        internal static string ImportQuestionnaire_StoreAssembly {
+            get {
+                return ResourceManager.GetString("ImportQuestionnaire_StoreAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saving questionnaire to local storage.
+        /// </summary>
+        internal static string ImportQuestionnaire_StoreQuestionnaire {
+            get {
+                return ResourceManager.GetString("ImportQuestionnaire_StoreQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checking questionnaire for errors on the server.
+        /// </summary>
+        internal static string ImportQuestionnaire_VerifyOnServer {
+            get {
+                return ResourceManager.GetString("ImportQuestionnaire_VerifyOnServer", resourceCulture);
             }
         }
         

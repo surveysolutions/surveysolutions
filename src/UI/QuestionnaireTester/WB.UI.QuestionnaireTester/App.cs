@@ -4,7 +4,7 @@ using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.UI.QuestionnaireTester.Services;
 using WB.UI.QuestionnaireTester.ViewModels;
@@ -25,8 +25,8 @@ namespace WB.UI.QuestionnaireTester
             Mvx.RegisterSingleton(() => ServiceLocator.Current.GetInstance<ICommandService>());
             Mvx.RegisterSingleton(() => ServiceLocator.Current.GetInstance<IQuestionnaireAssemblyFileAccessor>());
             Mvx.RegisterSingleton(()=>ServiceLocator.Current.GetInstance<IAnswerProgressIndicator>());
-            Mvx.RegisterSingleton(()=>ServiceLocator.Current.GetInstance<IReadSideStorage<DashboardStorageViewModel>>());
-            Mvx.RegisterSingleton(() => ServiceLocator.Current.GetInstance<IReadSideStorage<QuestionnaireDocument>>());
+            Mvx.RegisterSingleton(() => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<DashboardStorageViewModel>>());
+            Mvx.RegisterSingleton(() => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireDocument>>());
             
             Mvx.RegisterSingleton<IMvxAppStart>(new MvxAppStart<SplashViewModel>());
         }
