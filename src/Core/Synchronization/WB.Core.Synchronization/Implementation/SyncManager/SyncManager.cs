@@ -14,19 +14,19 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
     {
         private readonly IReadSideKeyValueStorage<ClientDeviceDocument> devices;
         private readonly ISynchronizationDataStorage storage;
-        private readonly IIncomePackagesRepository incomeRepository;
+        private readonly IIncomingPackagesQueue incomingQueue;
         private readonly ILogger logger;
         private readonly ICommandService commandService;
 
         public SyncManager(IReadSideKeyValueStorage<ClientDeviceDocument> devices,
             ISynchronizationDataStorage storage, 
-            IIncomePackagesRepository incomeRepository,
+            IIncomingPackagesQueue incomingQueue,
             ILogger logger, 
             ICommandService commandService)
         {
             this.devices = devices;
             this.storage = storage;
-            this.incomeRepository = incomeRepository;
+            this.incomingQueue = incomingQueue;
             this.logger = logger;
             this.commandService = commandService;
         }
@@ -45,19 +45,9 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             return this.CheckAndCreateNewSyncActivity(clientIdentifier);
         }
 
-        public bool SendSyncItem(SyncItem item)
+        public void SendSyncItem(string item)
         {
-            if (item == null)
-                throw new ArgumentException("Sync Item is not set.");
-
-            if (string.IsNullOrWhiteSpace(item.Content))
-                throw new ArgumentException("Sync Item content is not set.");
-
-            if (item.RootId == Guid.Empty)
-                throw new ArgumentException("Sync Item id is not set.");
-
-            this.incomeRepository.StoreIncomingItem(item);
-            return true;
+            this.incomingQueue.PushSyncItem(item);
         }
 
         public void LinkUserToDevice(Guid interviewerId, string deviceId)

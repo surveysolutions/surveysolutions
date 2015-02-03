@@ -16,11 +16,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public abstract class ControlPanelController : BaseController
     {
         private readonly IServiceLocator serviceLocator;
-        private readonly IIncomePackagesRepository incomePackagesRepository;
+        private readonly IIncomingPackagesQueue incomingPackagesQueue;
         private readonly ISettingsProvider settingsProvider;
 
         public ControlPanelController(IServiceLocator serviceLocator, 
-            IIncomePackagesRepository incomePackagesRepository,
+            IIncomingPackagesQueue incomingPackagesQueue,
             ICommandService commandService, 
             IGlobalInfoProvider globalInfo, 
             ILogger logger,
@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             : base(commandService: commandService, globalInfo: globalInfo, logger: logger)
         {
             this.serviceLocator = serviceLocator;
-            this.incomePackagesRepository = incomePackagesRepository;
+            this.incomingPackagesQueue = incomingPackagesQueue;
             this.settingsProvider = settingsProvider;
         }
 
@@ -49,12 +49,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         public ActionResult IncomingDataWithErrors()
         {
-            return this.View(this.incomePackagesRepository.GetListOfUnhandledPackages());
+            return this.View(this.incomingPackagesQueue.GetListOfUnhandledPackages());
         }
 
-        public FileResult GetIncomingDataWithError(Guid id)
+        public FileResult GetIncomingDataWithError(string packageId)
         {
-            return this.File(this.incomePackagesRepository.GetUnhandledPackagePath(id), System.Net.Mime.MediaTypeNames.Application.Octet);
+            return this.File(this.incomingPackagesQueue.GetUnhandledPackagePath(packageId), System.Net.Mime.MediaTypeNames.Application.Octet, packageId);
         }
         
         public ActionResult Settings()

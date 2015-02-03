@@ -22,8 +22,8 @@ namespace WB.UI.Supervisor.Controllers
     [LocalOrDevelopmentAccessOnly]
     public class ControlPanelController : WB.Core.SharedKernels.SurveyManagement.Web.Controllers.ControlPanelController
     {
-        public ControlPanelController(IServiceLocator serviceLocator, IIncomePackagesRepository incomePackagesRepository,
+        public ControlPanelController(IServiceLocator serviceLocator, IIncomingPackagesQueue incomingPackagesQueue,
             ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger, ISettingsProvider settingsProvider)
-            : base(serviceLocator, incomePackagesRepository, commandService, globalInfo, logger, settingsProvider) { }
+            : base(serviceLocator, incomingPackagesQueue, commandService, globalInfo, logger, settingsProvider) { }
     }
 }
