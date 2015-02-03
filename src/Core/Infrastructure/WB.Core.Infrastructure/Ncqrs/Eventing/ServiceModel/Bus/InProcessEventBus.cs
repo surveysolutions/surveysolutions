@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
@@ -10,8 +11,9 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 {
     public class InProcessEventBus : IEventBus
     {
-        private readonly Dictionary<Type, List<Action<PublishedEvent>>> _handlerRegister = new Dictionary<Type, List<Action<PublishedEvent>>>();
+        private readonly Dictionary<Type, List<Action<PublishedEvent>>> handlerRegistry = new Dictionary<Type, List<Action<PublishedEvent>>>();
         private readonly IEventStore eventStore;
+        private static readonly object Locker = new object();
 
         public InProcessEventBus(IEventStore eventStore)
         {
@@ -20,13 +22,11 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 
         public void Publish(IPublishableEvent eventMessage)
         {
-            var eventMessageType = eventMessage.GetType();
-
             List<Action<PublishedEvent>> handlers = GetHandlersForEvent(eventMessage);
-            
+
             if (handlers.Any())
             {
-                PublishToHandlers(eventMessage, eventMessageType, handlers);
+                PublishToHandlers(eventMessage, handlers);
             }
         }
 
@@ -63,10 +63,10 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         public void RegisterHandler(Type eventDataType, Action<PublishedEvent> handler)
         {
             List<Action<PublishedEvent>> handlers = null;
-            if (!_handlerRegister.TryGetValue(eventDataType, out handlers))
+            if (!this.handlerRegistry.TryGetValue(eventDataType, out handlers))
             {
                 handlers = new List<Action<PublishedEvent>>(1);
-                _handlerRegister.Add(eventDataType, handlers);
+                this.handlerRegistry.Add(eventDataType, handlers);
             }
 
             handlers.Add(handler);
@@ -81,11 +81,11 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             var dataType = eventMessage.Payload.GetType();
             var result = new List<Action<PublishedEvent>>();
 
-            foreach (var key in _handlerRegister.Keys)
+            foreach (var key in this.handlerRegistry.Keys)
             {
                 if (key.GetTypeInfo().IsAssignableFrom(dataType.GetTypeInfo()))
                 {
-                    var handlers = _handlerRegister[key];
+                    var handlers = this.handlerRegistry[key];
                     result.AddRange(handlers);
                 }
             }
@@ -93,7 +93,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             return result;
         }
 
-        private static void PublishToHandlers(IPublishableEvent eventMessage, Type eventMessageType, IEnumerable<Action<PublishedEvent>> handlers)
+        private static void PublishToHandlers(IPublishableEvent eventMessage, IEnumerable<Action<PublishedEvent>> handlers)
         {
             var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(eventMessage.Payload.GetType());
             var publishedEvent = (PublishedEvent)Activator.CreateInstance(publishedEventClosedType, eventMessage);
@@ -104,14 +104,17 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             {
                 try
                 {
-                    handler.Invoke(publishedEvent);
+                    lock (Locker)
+                    {
+                        handler.Invoke(publishedEvent);
+                    }
                 }
                 catch (Exception exception)
                 {
                     occurredExceptions.Add(exception);
                 }
             }
-
+           
             if (occurredExceptions.Count > 0)
                 throw new AggregateException(
                    string.Format("{0} handler(s) failed to handle published event '{1}' by event source '{2}' with sequence '{3}'.", occurredExceptions.Count, eventMessage.EventIdentifier, eventMessage.EventSourceId, eventMessage.EventSequence),
