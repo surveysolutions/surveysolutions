@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Machine.Specifications;
 using Microsoft.Isam.Esent.Collections.Generic;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Storage.Esent.Implementation;
 using WB.Core.SharedKernels.SurveySolutions;
 
@@ -10,7 +12,7 @@ namespace WB.Tests.CleanIntegration.EsentTests
     {
         Establish context = () =>
         {
-            storePath = Path.GetTempPath();
+            storePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().FormatGuid());
             storage = new EsentKeyValueStorage<T>(new EsentSettings(storePath));
         };
 
