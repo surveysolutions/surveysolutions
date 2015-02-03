@@ -8,7 +8,7 @@ namespace WB.Core.Synchronization
     {
         HandshakePackage ItitSync(ClientIdentifier identifier);
 
-        bool SendSyncItem(SyncItem package);
+        void SendSyncItem(string package);
 
         IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, string lastSyncedPackageId);
 

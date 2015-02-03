@@ -24,17 +24,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomePackagesRepositoryT
         const string incomingCapiPackagesWithErrorsDirectoryName = "IncomingDataWithErrors";
         const string incomingCapiPackageFileNameExtension = "sync";
 
-        protected static IncomePackagesRepository CreateIncomePackagesRepository(IJsonUtils jsonUtils = null,
+        protected static IncomingPackagesQueue CreateIncomePackagesRepository(IJsonUtils jsonUtils = null,
             IFileSystemAccessor fileSystemAccessor = null, ICommandService commandService = null, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryStorage=null,
             IStreamableEventStore eventStore = null, IArchiveUtils archiver = null)
         {
-            return new IncomePackagesRepository(logger: Mock.Of<ILogger>(),
-                syncSettings: new SyncSettings(true, appDataDirectory, incomingCapiPackagesDirectoryName, incomingCapiPackagesWithErrorsDirectoryName, incomingCapiPackageFileNameExtension),
+            return new IncomingPackagesQueue(logger: Mock.Of<ILogger>(),
+                syncSettings: new SyncSettings(appDataDirectory, incomingCapiPackagesWithErrorsDirectoryName, incomingCapiPackageFileNameExtension, incomingCapiPackagesDirectoryName, ""),
                 commandService: commandService ?? Mock.Of<ICommandService>(),
                 fileSystemAccessor: fileSystemAccessor ?? CreateDefaultFileSystemAccessorMock().Object,
                 jsonUtils: jsonUtils ?? Mock.Of<IJsonUtils>(),
                 archiver: archiver ?? Mock.Of<IArchiveUtils>(),
-                interviewSummaryRepositoryWriter: interviewSummaryStorage ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(), overrideReceivedEventTimeStamp: false, origin: "capi-sync")
+                interviewSummaryRepositoryWriter: interviewSummaryStorage ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>())
             {
                 EventStore = eventStore ?? Mock.Of<IStreamableEventStore>(),
                 EventBus = Mock.Of<IEventDispatcher>()
@@ -69,6 +69,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomePackagesRepositoryT
             fileSystemAccessorMock.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
                 .Returns<string, string>(Path.Combine);
             return fileSystemAccessorMock;
+        }
+
+        protected static IJsonUtils CreateJsonUtils(SyncItem syncItem = null, InterviewMetaInfo interviewMetaInfo = null)
+        {
+            return
+                Mock.Of<IJsonUtils>(
+                    _ =>
+                        _.Deserialize<SyncItem>(Moq.It.IsAny<string>()) == syncItem &&
+                        _.Deserialize<InterviewMetaInfo>(Moq.It.IsAny<string>()) == interviewMetaInfo);
         }
     }
 }
