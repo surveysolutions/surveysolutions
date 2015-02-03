@@ -1,7 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 
-namespace WB.Tests.Integration.EsentTests
+namespace WB.Tests.CleanIntegration.EsentTests
 {
     internal class when_esent_store_is_cleared : with_esent_store<TestStoredEntity>
     {
