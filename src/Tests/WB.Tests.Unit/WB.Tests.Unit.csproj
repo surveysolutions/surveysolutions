@@ -259,6 +259,17 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_without_permissions_to_edit_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_cloned_numeric_integer_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_cloned_question.cs" />
+    <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\MemoryCachedReadSideStoreTestContext.cs" />
+    <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_Clear_called.cs" />
+    <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_disable_cache_is_called.cs" />
+    <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_GetById_called_and_cache_is_disabled.cs" />
+    <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_GetById_called_and_cache_is_enabled_and_view_is_absent_in_cache_but_present_in_store.cs" />
+    <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_GetById_called_and_cache_is_enabled_and_view_is_present_in_cache.cs" />
+    <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_Remove_called_and_cache_is_disabled.cs" />
+    <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_Remove_called_and_cache_is_enabled.cs" />
+    <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_Store_called_and_cache_is_disabled.cs" />
+    <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_Store_called_and_cache_is_enabled.cs" />
+    <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_Store_called_and_cache_is_enabled_and_cache_limit_is_reached.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_3_functional_handlers_and_first_and_last_of_them_fail.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_3_old_school_handlers_and_first_and_last_of_them_fail.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireAssemblyFileAccessorTests\when_storing_assembly_with_empty_content.cs" />
