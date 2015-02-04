@@ -150,5 +150,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
         }
 
         public Type ViewType { get { return typeof (InterviewHistoryView); } }
+
+        public bool IsCacheEnabled { get { return this.cacheEnabled; } }
     }
 }
