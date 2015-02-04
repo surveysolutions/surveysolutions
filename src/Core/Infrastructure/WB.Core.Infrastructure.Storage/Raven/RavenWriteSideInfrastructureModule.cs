@@ -2,6 +2,9 @@
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Raven.Abstractions.Replication;
+using WB.Core.Infrastructure.HealthCheck;
+using WB.Core.Infrastructure.Storage.EventStore;
+using WB.Core.Infrastructure.Storage.EventStore.Implementation;
 using WB.Core.Infrastructure.Storage.Raven.Implementation;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
 
@@ -30,6 +33,7 @@ namespace WB.Core.Infrastructure.Storage.Raven
             NcqrsEnvironment.SetGetter<IEventStore>(this.GetEventStore);
             this.Kernel.Bind<IStreamableEventStore>().ToMethod(_ => this.GetEventStore());
             this.Kernel.Bind<IEventStore>().ToMethod(_ => this.GetEventStore());
+            this.Kernel.Bind<IEventStoreHealthCheck>().To<DatabaseHealthCheck>();
         }
 
         private IStreamableEventStore GetEventStore()
