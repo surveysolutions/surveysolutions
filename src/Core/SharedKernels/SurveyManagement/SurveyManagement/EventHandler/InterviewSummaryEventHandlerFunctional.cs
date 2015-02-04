@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -245,9 +246,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
             {
                 interview.IsDeleted = true;
-
-                AddInterviewStatus(summary: interview, status: InterviewStatus.Deleted,
-                    date: evnt.EventTimeStamp, comment: null, responsibleId: evnt.Payload.UserId);
+                if (string.IsNullOrEmpty(evnt.Origin))
+                {
+                    AddInterviewStatus(summary: interview, status: InterviewStatus.Deleted,
+                        date: evnt.EventTimeStamp, comment: null, responsibleId: evnt.Payload.UserId);
+                }
             });
         }
 
@@ -268,8 +271,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             {
                 interview.IsDeleted = false;
 
-                AddInterviewStatus(summary: interview, status: InterviewStatus.Restored,
-                    date: evnt.EventTimeStamp, comment: null, responsibleId: evnt.Payload.UserId);
+                if (string.IsNullOrEmpty(evnt.Origin))
+                {
+                    AddInterviewStatus(summary: interview, status: InterviewStatus.Restored,
+                        date: evnt.EventTimeStamp, comment: null, responsibleId: evnt.Payload.UserId);
+                }
             });
         }
 
