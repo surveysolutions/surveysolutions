@@ -24,7 +24,6 @@ namespace WB.Core.Synchronization
             this.Bind<IBackupManager>().To<DefaultBackupManager>();
             this.Bind<SyncSettings>().ToConstant(this.syncSettings);
 
-            this.Bind<ISynchronizationDataStorage>().To<SimpleSynchronizationDataStorage>().InSingletonScope();
             this.Bind<IMetaInfoBuilder>().To<MetaInfoBuilder>();
 
             CommandRegistry
