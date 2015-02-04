@@ -5,31 +5,34 @@ Supervisor.VM.Details = function (settings) {
         config = new Config(),
         datacontext = new DataContext(config, settings.Interview.InterviewId);
 
-    self.questionnaire = ko.observable();
-    self.currentComment = ko.observable('');
-    self.changeStateComment = ko.observable('');
-    self.changeStateHistory = ko.observable();
-    
+    self.addComment = function (element, questionId, underscoreJoinedQuestionRosterVector) {
 
-    self.getImageUrl = function(fileName) {
-        return settings.Urls.InterviewFile + "?interviewId=" + settings.Interview.InterviewId + "&fileName=" + fileName;
-    };
+        var addCommentTextInput = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "addComment"));
+        var comment = $(addCommentTextInput).val();
 
-    self.addComment = function() {
+        if (comment == "") return;
+
         var command = datacontext.getCommand(config.commands.setCommentCommand, {
-            comment: self.currentComment(),
-            question: self.currentQuestion()
+            comment: $(addCommentTextInput).val(),
+            question: {
+                id: questionId,
+                rosterVector: parseRosterVector(underscoreJoinedQuestionRosterVector)
+            }
         });
         self.SendCommand(command, function () {
-            self.currentQuestion().comments().push({
-                text: self.currentComment(),
-                date: new Date(),
-                userName: settings.UserName
-            });
-            self.currentComment('');
-            self.currentQuestion().comments.valueHasMutated();
+            var commentsCounterElement = $("#commentsCounter");
+            commentsCounterElement.text(parseInt(commentsCounterElement.text()) + 1);
+
+            $(addCommentTextInput).val('');
+
+            var commentListElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "commentList"));
+
+            commentListElement.append('<dt>' + settings.UserName + '</dt><dd><span>' + comment + '</span><small class="text-block comment-date">' + moment(new Date()).fromNow() + '</small></dd>');
+
+
         });
     };
+
     self.setFlag = function (element, questionId, underscoreJoinedQuestionRosterVector) {
         var commandName = config.commands.setFlagToAnswer;
 
@@ -47,6 +50,9 @@ Supervisor.VM.Details = function (settings) {
             $(flagIndicator).removeClass("hidden");
             $(removeFlagMenuItem).removeClass("hidden");
             $(setFlagMenuItem).addClass("hidden");
+
+            var flagsCounterElement = $("#flagsCounter");
+            flagsCounterElement.text(parseInt(flagsCounterElement.text()) + 1);
         });
     };
 
@@ -67,6 +73,9 @@ Supervisor.VM.Details = function (settings) {
             $(flagIndicator).addClass("hidden");
             $(removeFlagMenuItem).addClass("hidden");
             $(setFlagMenuItem).removeClass("hidden");
+
+            var flagsCounterElement = $("#flagsCounter");
+            flagsCounterElement.text(parseInt(flagsCounterElement.text()) - 1);
         });
     };
     self.saveAnswer = function(question) {
@@ -132,13 +141,30 @@ Supervisor.VM.Details = function (settings) {
         });
     };
 
+    self.ToggleFilter = function () {
+        if (self.IsFilterOpen()) {
+            $('body').addClass('menu-hidden');
+
+            $('#content').removeClass('col-md-9');
+            $('#content').removeClass('col-md-offset-3');
+            $('#content').addClass('col-md-12');
+        } else {
+            $('body').removeClass('menu-hidden');
+
+            $('#content').addClass('col-md-9');
+            $('#content').addClass('col-md-offset-3');
+            $('#content').removeClass('col-md-12');
+        }
+        self.IsFilterOpen(!self.IsFilterOpen());
+    };
+
     function getInterviewItemIdWithPostfix(questionId, rosterVector, postfix) {
         return questionId + "_" + rosterVector + "_" + postfix;
     }
 
     function parseRosterVector(rosterVector) {
         if (rosterVector == "")
-            return null;
+            return [];
 
         return rosterVector.split('_');
     }
