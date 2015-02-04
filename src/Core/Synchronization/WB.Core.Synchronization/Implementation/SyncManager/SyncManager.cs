@@ -19,7 +19,6 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
     internal class SyncManager : ISyncManager
     {
         private readonly IReadSideKeyValueStorage<ClientDeviceDocument> devices;
-
         private readonly IIncomingPackagesQueue incomingQueue;
         private readonly ILogger logger;
         private readonly ICommandService commandService;
