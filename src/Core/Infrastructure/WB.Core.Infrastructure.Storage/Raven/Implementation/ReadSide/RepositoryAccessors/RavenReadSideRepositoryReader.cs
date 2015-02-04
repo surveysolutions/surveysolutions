@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Raven.Client;
-using Raven.Client.Document;
 using Raven.Client.Linq;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;

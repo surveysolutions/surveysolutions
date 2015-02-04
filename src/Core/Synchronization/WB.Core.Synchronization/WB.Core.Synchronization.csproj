@@ -96,12 +96,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SyncSettings.cs" />
-    <Compile Include="SyncStorage\IChunkReader.cs" />
-    <Compile Include="SyncStorage\ReadSideChunkReader.cs" />
-    <Compile Include="SyncStorage\ReadSideChunkWriter.cs" />
     <Compile Include="SyncStorage\SimpleSynchronizationDataStorage.cs" />
-    <Compile Include="SyncStorage\IChunkWriter.cs" />
     <Compile Include="SyncStorage\SynchronizationDelta.cs" />
+    <Compile Include="SyncStorage\SyncPackageNotFoundException.cs" />
     <Compile Include="ZipFileData.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -8,22 +8,35 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
     public class NewtonJsonUtils : IJsonUtils
     {
         private readonly JsonSerializer jsonSerializer;
-        private readonly JsonSerializerSettings jsonSerializerSetings;
+        private readonly JsonSerializerSettings objectsOnlySerializeSettings;
+        private readonly JsonSerializerSettings allTypesSerializeSettings;
 
         public NewtonJsonUtils()
         {
-            this.jsonSerializerSetings = new JsonSerializerSettings
+            this.objectsOnlySerializeSettings = new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.Objects,
                 NullValueHandling = NullValueHandling.Ignore,
                 FloatParseHandling = FloatParseHandling.Decimal
             };
-            this.jsonSerializer = JsonSerializer.Create(this.jsonSerializerSetings);
+
+            this.allTypesSerializeSettings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All,
+                NullValueHandling = NullValueHandling.Ignore,
+                FloatParseHandling = FloatParseHandling.Decimal
+            };
+
+            this.jsonSerializer = JsonSerializer.Create(this.objectsOnlySerializeSettings);
         }
 
-        public string Serialize(object item)
+        public string Serialize(object item, TypeSerializationSettings typeSerializationSettings = TypeSerializationSettings.ObjectsOnly)
         {
-            return JsonConvert.SerializeObject(item, Formatting.None, this.jsonSerializerSetings);
+            var settings = typeSerializationSettings == TypeSerializationSettings.ObjectsOnly
+                ? this.objectsOnlySerializeSettings
+                : this.allTypesSerializeSettings;
+
+            return JsonConvert.SerializeObject(item, Formatting.None, settings);
         }
 
         public byte[] SerializeToByteArray(object payload)
@@ -37,7 +50,7 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
         public T Deserialize<T>(string payload)
         {
             var replaceOldAssemblyNames = ReplaceOldAssemblyNames(payload);
-            return JsonConvert.DeserializeObject<T>(replaceOldAssemblyNames, this.jsonSerializerSetings);
+            return JsonConvert.DeserializeObject<T>(replaceOldAssemblyNames, this.objectsOnlySerializeSettings);
         }
 
         [Obsolete]
@@ -65,14 +78,4 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
             }
         }
     }
-
-    //[Obsolete]
-    //public class AssemblyNameRaplaceSerializationBinder : DefaultSerializationBinder
-    //{
-    //    public override Type BindToType(string assemblyName, string typeName)
-    //    {
-    //        if (assemblyName == "Main.Core") assemblyName = "WB.Core.Infrastructure";
-    //        return base.BindToType(assemblyName, typeName);
-    //    }
-    //}
 }

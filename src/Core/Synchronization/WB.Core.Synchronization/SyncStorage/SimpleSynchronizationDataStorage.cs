@@ -1,117 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Newtonsoft.Json;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.Infrastructure.FileSystem;
+using Raven.Client.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.Synchronization.MetaInfo;
+using WB.Core.Synchronization.Implementation.ReadSide.Indexes;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
     internal class SimpleSynchronizationDataStorage : ISynchronizationDataStorage
     {
         private readonly IQueryableReadSideRepositoryReader<UserDocument> userStorage;
-        private readonly IMetaInfoBuilder metaBuilder;
-        private readonly IChunkWriter chunkStorageWriter;
-        private readonly IChunkReader chunkStorageReader;
-
-        private readonly IArchiveUtils archiver;
-
-        public static Guid AssemblySeed = new Guid("371EF2E6-BF1D-4E36-927D-2AC13C41EF7B");
-        private readonly bool useCompression ;
+        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
+        private readonly IQueryableReadSideRepositoryReader<SynchronizationDelta> queryableStorage;
+        private string queryIndexName = typeof(SynchronizationDeltasByBriefFields).Name;
 
         public SimpleSynchronizationDataStorage(
             IQueryableReadSideRepositoryReader<UserDocument> userStorage,
-            IChunkWriter chunkStorageWriter, IChunkReader chunkStorageReader,
-            IMetaInfoBuilder metaBuilder, IArchiveUtils archiver)
+            IReadSideRepositoryIndexAccessor indexAccessor, 
+            IQueryableReadSideRepositoryReader<SynchronizationDelta> queryableStorage)
         {
             this.userStorage = userStorage;
-            this.chunkStorageWriter = chunkStorageWriter;
-            this.chunkStorageReader = chunkStorageReader;
-            this.metaBuilder = metaBuilder;
-            this.archiver = archiver;
-            this.useCompression = true;
+            this.indexAccessor = indexAccessor;
+            this.queryableStorage = queryableStorage;
         }
-
-        public void Clear()
-        {
-            chunkStorageWriter.Clear();
-        }
-
-        public void SaveInterview(InterviewSynchronizationDto doc, Guid responsibleId, DateTime timestamp)
-        {
-            var syncItem = CreateSyncItem(doc.Id, SyncItemType.Questionnare, GetItemAsContent(doc), GetItemAsContent(metaBuilder.GetInterviewMetaInfo(doc)));
-
-            chunkStorageWriter.StoreChunk(syncItem, responsibleId, timestamp);
-        }
-
-        private SyncItem CreateSyncItem(Guid id, string itemType, string rawContent, string rawMeta)
-        {
-            var content = useCompression ? archiver.CompressString(rawContent) : rawContent;
-            var metaInfo = (useCompression && !string.IsNullOrWhiteSpace(rawMeta)) ? archiver.CompressString(rawMeta) : rawMeta;
-
-            return new SyncItem
-            {
-                RootId = id,
-                ItemType = itemType,
-                IsCompressed = useCompression,
-                Content = content,
-                MetaInfo = metaInfo 
-            };
-        }
-
-        public void MarkInterviewForClientDeleting(Guid id, Guid? responsibleId, DateTime timestamp)
-        {
-            var syncItem = CreateSyncItem(id, SyncItemType.DeleteQuestionnare, id.ToString(), string.Empty);
-
-            chunkStorageWriter.StoreChunk(syncItem, responsibleId, timestamp);
-        }
-
-        public void SaveQuestionnaire(QuestionnaireDocument doc, long version, bool allowCensusMode, DateTime timestamp)
-        {
-            doc.IsDeleted = false;
-
-            var questionnaireMetadata = new QuestionnaireMetadata(doc.PublicKey, version, allowCensusMode);
-            var syncItem = CreateSyncItem(doc.PublicKey.Combine(version), SyncItemType.Template, GetItemAsContent(doc), 
-                GetItemAsContent(questionnaireMetadata));
-
-            chunkStorageWriter.StoreChunk(syncItem, null, timestamp);
-        }
-
-        public void DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, DateTime timestamp)
-        {
-            var questionnaireMetadata = new QuestionnaireMetadata(questionnaireId, questionnaireVersion, false);
-
-            var syncItem = CreateSyncItem(questionnaireId.Combine(questionnaireVersion), SyncItemType.DeleteTemplate, questionnaireId.ToString(), 
-                GetItemAsContent(questionnaireMetadata));
-            
-            chunkStorageWriter.StoreChunk(syncItem, null, timestamp);
-        }
-
-        public void SaveUser(UserDocument doc, DateTime timestamp)
-        {
-            if (doc.Roles.Contains(UserRoles.Operator))
-            {
-                SaveInteviewer(doc, timestamp);
-            }
-        }
-       
+     
         public SyncItem GetLatestVersion(string id)
         {
-            var result = chunkStorageReader.ReadChunk(id);
+            var result = ReadChunk(id);
             return result;
         }
 
         public IEnumerable<SynchronizationChunkMeta> GetChunkPairsCreatedAfter(string lastSyncedPackageId, Guid userId)
         {
-            var users = GetUserTeamates(userId);
-            return chunkStorageReader.GetChunkMetaDataCreatedAfter(lastSyncedPackageId, users);
+            var users = new List<Guid> { userId };
+            return GetChunkMetaDataCreatedAfter(lastSyncedPackageId, users);
         }
 
         private IEnumerable<Guid> GetUserTeamates(Guid userId)
@@ -129,57 +54,71 @@ namespace WB.Core.Synchronization.SyncStorage
             return team;
         }
 
-
-        private void SaveInteviewer(UserDocument doc, DateTime timestamp)
-        {
-            var syncItem = CreateSyncItem(doc.PublicKey, SyncItemType.User, GetItemAsContent(doc), string.Empty);
-
-            chunkStorageWriter.StoreChunk(syncItem, doc.PublicKey, timestamp);
-        }
-
-
-        public void SaveQuestionnaireAssembly(Guid publicKey, long version, string assemblyAsBase64String, DateTime timestamp)
-        {
-            var meta = new QuestionnaireAssemblyMetadata(publicKey, version);
-
-            var syncItem = CreateSyncItem(publicKey.Combine(AssemblySeed).Combine(version), SyncItemType.QuestionnaireAssembly,
-                GetItemAsContent(assemblyAsBase64String), GetItemAsContent(meta));
-
-            chunkStorageWriter.StoreChunk(syncItem, null, timestamp);
-        }
-
         public SynchronizationChunkMeta GetChunkInfoByTimestamp(DateTime timestamp, Guid userId)
         {
             var users = GetUserTeamates(userId);
-            return this.chunkStorageReader.GetChunkMetaDataByTimestamp(timestamp, users);
+            return this.GetChunkMetaDataByTimestamp(timestamp, users);
         }
 
-        private static string GetItemAsContent(object item)
+        public SyncItem ReadChunk(string id)
         {
-            var settings = new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.All, 
-                    NullValueHandling = NullValueHandling.Ignore
-                };
+            SynchronizationDelta item = queryableStorage.GetById(id);
+            if (item == null)
+                throw new ArgumentException("chunk is absent");
 
-            return  JsonConvert.SerializeObject(item, Formatting.None, settings);
+            return new SyncItem
+            {
+                RootId = item.RootId,
+                IsCompressed = item.IsCompressed,
+                ItemType = item.ItemType,
+                Content = item.Content,
+                MetaInfo = item.MetaInfo
+            };
         }
 
-        public void EnableCache()
+        public IEnumerable<SynchronizationChunkMeta> GetChunkMetaDataCreatedAfter(string lastSyncedPackageId, IEnumerable<Guid> users)
         {
-            chunkStorageWriter.EnableCache();
+            var items = this.indexAccessor.Query<SynchronizationDelta>(queryIndexName);
+
+            var userIds = users.Concat(new[] { Guid.Empty });
+
+            if (lastSyncedPackageId == null)
+            {
+                List<SynchronizationDelta> fullStreamDeltas = items.Where(x => x.UserId.In(userIds))
+                                                                   .OrderBy(x => x.SortIndex)
+                                                                   .ToList();
+
+                var fullListResult = fullStreamDeltas.Select(s => new SynchronizationChunkMeta(s.PublicKey))
+                                                     .ToList();
+                return fullListResult;
+            }
+
+            SynchronizationDelta lastSyncedPackage = items.FirstOrDefault(x => x.PublicKey == lastSyncedPackageId);
+
+            if (lastSyncedPackage == null)
+            {
+                throw new SyncPackageNotFoundException(string.Format("Sync package with id {0} was not found on server", lastSyncedPackageId));
+            }
+
+            var deltas = items.Where(x => x.SortIndex > lastSyncedPackage.SortIndex && x.UserId.In(userIds))
+                              .OrderBy(x => x.SortIndex)
+                              .ToList();
+
+            var result = deltas.Select(s => new SynchronizationChunkMeta(s.PublicKey)).ToList();
+            return result;
         }
 
-        public void DisableCache()
+        public SynchronizationChunkMeta GetChunkMetaDataByTimestamp(DateTime timestamp, IEnumerable<Guid> users)
         {
-            chunkStorageWriter.DisableCache();
-        }
+            var items = this.indexAccessor.Query<SynchronizationDelta>(queryIndexName);
+            var userIds = users.Concat(new[] { Guid.Empty });
 
-        public string GetReadableStatus()
-        {
-            return chunkStorageWriter.GetReadableStatus();
-        }
+            SynchronizationDelta meta = items.Where(x => timestamp >= x.Timestamp && x.UserId.In(userIds))
+                                             .ToList()
+                                             .OrderBy(x => x.SortIndex)
+                                             .Last();
 
-        public Type ViewType { get { return chunkStorageWriter.ViewType; } }
+            return new SynchronizationChunkMeta(meta.PublicKey);
+        }
     }
 }
