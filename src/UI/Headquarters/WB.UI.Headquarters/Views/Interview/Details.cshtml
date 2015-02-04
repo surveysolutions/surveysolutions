@@ -1,6 +1,7 @@
 ﻿@using System.Globalization
 @using System.Web.Optimization
 @using Main.Core.Entities.SubEntities
+@using WB.Core.SharedKernels.DataCollection.Utils
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Views.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
@@ -32,13 +33,8 @@
         settings.UrlReferrer = urlReferrer;
 
         settings.Interview.InterviewId = '@Model.InterviewDetails.PublicKey';
-        @*settings.Interview.CurrentGroupId = '@Model.CurrentGroupId';
-        settings.Interview.CurrentPropagationKeyId = '@Model.CurrentPropagationKeyId';*@
 
         settings.Urls.CommandExecution = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "Execute"})';
-        settings.Urls.InterviewDetails = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "InterviewDetails"})';
-        settings.Urls.Interviews = '@(GlobalInfo.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ", new {area = ""}))';
-        settings.Urls.ChangeStateHistory = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "ChangeStateHistory"})';
 
         settings.Urls.InterviewFile = '@Url.RouteUrl("Default", new {httproute = "", controller = "Resource", action = "InterviewFile"})';
 
@@ -51,7 +47,7 @@
 }
 
 <div>
-    <div id="menu" class="col-sm-3 col-md-2 sidebar">
+    <div id="menu" class="col-md-3 sidebar">
         <div class="panel panel-default">
             <div class="panel-heading with-btn">
                 Groups
@@ -70,7 +66,7 @@
         </div>
 
     </div>
-    <div id="content" class="col-sm-6 col-sm-offset-3 col-md-8 col-md-offset-2 main">
+    <div id="content" class="col-md-9 col-md-offset-3 main">
         <div class="row-fluid">
             <h3 class="span10 text-overflow-ellipsis">
                 <span>@Model.InterviewDetails.Title</span>
@@ -88,8 +84,8 @@
                     <button class="btn btn-danger" data-bind="click: showRejectModal">Reject</button>
                 }
                 <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.All})" class="btn btn-default btn-xs @SetFilterActiveClass(InterviewDetailsFilter.All)">all</a>
-                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Flagged})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Flagged)"><i class="glyphicon glyphicon-flag @SetFilterIconActiveClass(InterviewDetailsFilter.Flagged)"></i> flagged (<span>@Model.Statistic.FlaggedCount</span>)</a>
-                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Commented})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Commented)"><i class="glyphicon glyphicon-comment @SetFilterIconActiveClass(InterviewDetailsFilter.Commented)"></i> commented (<span>@Model.Statistic.CommentedCount</span>)</a>
+                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Flagged})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Flagged)"><i class="glyphicon glyphicon-flag @SetFilterIconActiveClass(InterviewDetailsFilter.Flagged)"></i> flagged (<span id="flagsCounter">@Model.Statistic.FlaggedCount</span>)</a>
+                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Commented})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Commented)"><i class="glyphicon glyphicon-comment @SetFilterIconActiveClass(InterviewDetailsFilter.Commented)"></i> commented (<span id="commentsCounter">@Model.Statistic.CommentedCount</span>)</a>
                 <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Answered})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Answered)"><i class="glyphicon glyphicon-ok @SetFilterIconActiveClass(InterviewDetailsFilter.Answered)"></i> answered (<span>@Model.Statistic.AnsweredCount</span>)</a>
                 <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Invalid})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Invalid)"><i class="glyphicon glyphicon-warning-sign @SetFilterIconActiveClass(InterviewDetailsFilter.Invalid)"></i> invalid (<span>@Model.Statistic.InvalidCount</span>)</a>
                 <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Supervisors})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Supervisors)"><i class="glyphicon glyphicon-pencil @SetFilterIconActiveClass(InterviewDetailsFilter.Supervisors)"></i> supervisor's (<span>@Model.Statistic.SupervisorsCount</span>)</a>
@@ -315,26 +311,12 @@
                             }
                             break;
                         case QuestionType.Numeric:
-                            @entity.Answer
-                            break;
                         case QuestionType.DateTime:
-                            break;
-                        case QuestionType.GpsCoordinates:
-                        <span>
-                            <div>latitude: <span data-bind="text: latitude"></span></div>
-                            <div>longitude: <span data-bind="text: longitude"></span></div>
-                            <div>accuracy: <span data-bind="text: accuracy"></span></div>
-                            <div>altitude: <span data-bind="text: altitude"></span></div>
-                            <div>time stamp: <span data-bind="text: timestamp ? moment(timestamp).format('lll') : '' "></span></div>
-                        </span>
-                            break;
                         case QuestionType.Text:
-                            @entity.Answer
-                            break;
-                        case QuestionType.TextList:
-                            break;
                         case QuestionType.QRBarcode:
-                            @entity.Answer
+                        case QuestionType.TextList:
+                        case QuestionType.GpsCoordinates:
+                            @AnswerUtils.AnswerToString(entity.Answer)
                             break;
                         case QuestionType.Multimedia:
                             <img src="@Url.RouteUrl("Default", new {httproute = "", controller = "Resource", action = "InterviewFile", interviewid = Model.InterviewDetails.PublicKey, filename = entity.Answer})" />
@@ -376,22 +358,22 @@
             @if (entity.Comments != null && entity.Comments.Count > 0)
             {
                 <h4 class="heading">Comments</h4>
-                <dl>
-                    @foreach (var comment in entity.Comments)
-                    {
-                        <dt>@comment.CommenterName</dt>
-                        <dd>
-                            <span>@comment.Text</span>
-                            <small class="text-block comment-date " data-bind="text: moment('@comment.Date').fromNow()"></small>
-                        </dd>
-                    }
-                </dl>
+    <dl id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, "commentList")">
+        @foreach (var comment in entity.Comments)
+        {
+            <dt>@comment.CommenterName</dt>
+            <dd>
+                <span>@comment.Text</span>
+                <small class="text-block comment-date" data-bind="text: moment('@comment.Date').fromNow()"></small>
+            </dd>
+        }
+    </dl>
             }
             <div class="form-horizontal">
             <div class="has-feedback">
                 <div >
-                    <input type="text" class="form-control" id="inputSuccess3" aria-describedby="inputSuccess3Status" placeholder="Enter your comment here">
-                    <span class="glyphicon glyphicon-plus form-control-feedback" aria-hidden="true"></span>
+                    <input id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, "addComment")" type="text" class="form-control" id="inputSuccess3" aria-describedby="inputSuccess3Status" placeholder="Enter your comment here">
+                    <span class="glyphicon glyphicon-plus form-control-feedback" aria-hidden="true" data-bind="click: addComment.bind($data, $element, '@entity.Id', '@Stringify(entity.RosterVector)')"></span>
                     <span id="inputSuccess3Status" class="sr-only">(success)</span>
                 </div>
             </div>
