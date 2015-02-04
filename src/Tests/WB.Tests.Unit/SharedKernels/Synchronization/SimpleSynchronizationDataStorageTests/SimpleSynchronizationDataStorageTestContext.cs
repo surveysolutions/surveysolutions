@@ -19,11 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SimpleSynchronizationDataS
             IChunkWriter chunkStorageWriter = null, IChunkReader chunkStorageReader = null,
             IMetaInfoBuilder metaBuilder = null, IArchiveUtils archiver = null)
         {
-            return new SimpleSynchronizationDataStorage(userStorage ??  Mock.Of<IQueryableReadSideRepositoryReader<UserDocument>>(),
-                chunkStorageWriter ?? Mock.Of<IChunkWriter>(),
-                chunkStorageReader ?? Mock.Of<IChunkReader>(),
-                metaBuilder ?? Mock.Of<IMetaInfoBuilder>(),
-                archiver ?? Mock.Of<IArchiveUtils>());
+            return new SimpleSynchronizationDataStorage(userStorage ??  Mock.Of<IQueryableReadSideRepositoryReader<UserDocument>>());
         }
 
 

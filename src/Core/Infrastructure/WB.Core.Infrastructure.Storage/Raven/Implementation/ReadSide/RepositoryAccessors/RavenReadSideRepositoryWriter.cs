@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using Ninject.Activation.Caching;
 using Raven.Abstractions.Data;
 using Raven.Client;
-using Raven.Client.Document;
 using Raven.Client.Linq;
-using Raven.Imports.Newtonsoft.Json;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
-using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
