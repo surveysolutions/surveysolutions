@@ -96,8 +96,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SyncSettings.cs" />
+    <Compile Include="SyncStorage\IIndexedView.cs" />
+    <Compile Include="SyncStorage\InterviewSyncPackage.cs" />
+    <Compile Include="SyncStorage\QuestionnaireSyncPackage.cs" />
     <Compile Include="SyncStorage\SynchronizationDelta.cs" />
     <Compile Include="SyncStorage\SyncPackageNotFoundException.cs" />
+    <Compile Include="SyncStorage\UserSyncPackage.cs" />
     <Compile Include="ZipFileData.cs" />
   </ItemGroup>
   <ItemGroup>

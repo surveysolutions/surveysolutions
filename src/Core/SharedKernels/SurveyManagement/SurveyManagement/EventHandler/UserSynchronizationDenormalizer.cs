@@ -5,9 +5,8 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.User;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils.Services;
-using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.Synchronization.SyncStorage;
@@ -23,25 +22,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<UserUnlockedBySupervisor>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
+        private readonly IJsonUtils jsonUtils;
+        private readonly IReadSideRepositoryWriter<UserSyncPackage> userPackageStorageWriter;
+        private readonly IQueryableReadSideRepositoryReader<UserSyncPackage> userPackageStorageReader;
+        private static int currentSortIndex = 0;
 
-        public UserSynchronizationDenormalizer(IReadSideRepositoryWriter<UserDocument> users, 
-            IArchiveUtils archiver,
+        public UserSynchronizationDenormalizer(
+            IReadSideRepositoryWriter<UserDocument> users, 
             IJsonUtils jsonUtils,
-            IReadSideRepositoryWriter<SynchronizationDelta> syncStorage,
-            IQueryableReadSideRepositoryReader<SynchronizationDelta> syncStorageReader)
-            : base(archiver, jsonUtils, syncStorage, syncStorageReader)
+            IReadSideRepositoryWriter<UserSyncPackage> userPackageStorageWriter,
+            IQueryableReadSideRepositoryReader<UserSyncPackage> userPackageStorageReader)
         {
             this.users = users;
+            this.jsonUtils = jsonUtils;
+            this.userPackageStorageWriter = userPackageStorageWriter;
+            this.userPackageStorageReader = userPackageStorageReader;
         }
 
         public override object[] Writers
         {
-            get { return new object[] { syncStorage }; }
+            get { return new object[] { this.userPackageStorageWriter }; }
         }
 
         public override object[] Readers
         {
-            get { return new object[] { this.users }; }
+            get { return new object[] { this.users, userPackageStorageReader }; }
 
         }
 
@@ -52,7 +57,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                           UserName = evnt.Payload.Name,
                           Password = evnt.Payload.Password,
                           PublicKey = evnt.Payload.PublicKey,
-                          CreationDate = DateTime.UtcNow,
+                          CreationDate = evnt.EventTimeStamp,
                           Email = evnt.Payload.Email,
                           IsLockedBySupervisor = evnt.Payload.IsLockedBySupervisor,
                           IsLockedByHQ = evnt.Payload.IsLocked,
@@ -105,14 +110,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.SaveUser(item, evnt.EventTimeStamp);
         }
 
-        public void SaveUser(UserDocument doc, DateTime timestamp)
+        private void SaveUser(UserDocument user, DateTime timestamp)
         {
-            if (doc.Roles.Contains(UserRoles.Operator))
+            if (!user.Roles.Contains(UserRoles.Operator))
             {
-                var syncItem = this.CreateSyncItem(doc.PublicKey, SyncItemType.User, GetItemAsContent(doc), string.Empty);
-
-                StoreChunk(syncItem, doc.PublicKey, timestamp);
+                return;
             }
+
+            var sortIndex = this.CalcNextSortIndex(
+                currentSortIndex, 
+                this.userPackageStorageWriter as IReadSideRepositoryWriter, 
+                this.userPackageStorageReader);
+
+            var synchronizationDelta = new UserSyncPackage(
+                userId: user.PublicKey,
+                content: this.GetItemAsContent(user),
+                timestamp: timestamp,
+                sortIndex: sortIndex);
+
+            this.userPackageStorageWriter.Store(synchronizationDelta, synchronizationDelta.PackageId);
+        }
+
+        protected string GetItemAsContent(object item)
+        {
+            return this.jsonUtils.Serialize(item, TypeSerializationSettings.AllTypes);
         }
     }
 }
