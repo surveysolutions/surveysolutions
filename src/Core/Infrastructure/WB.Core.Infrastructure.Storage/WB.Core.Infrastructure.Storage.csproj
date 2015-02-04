@@ -100,6 +100,7 @@
     <Compile Include="EventStore\Implementation\EventStoreLogger.cs" />
     <Compile Include="EventStore\IEventStoreConnectionProvider.cs" />
     <Compile Include="EventStore\Implementation\WriteSideEventStore.cs" />
+    <Compile Include="EventStore\Implementation\EventStoreHealthCheck.cs" />
     <Compile Include="Memory\Implementation\MemoryCachedReadSideRepositoryWriter.cs" />
     <Compile Include="Memory\Implementation\MemoryCachedReadSideStore.cs" />
     <Compile Include="Memory\Implementation\MemoryCachedKeyValueStorage.cs" />
@@ -108,6 +109,7 @@
     <Compile Include="Raven\Implementation\PlainStorage\RavenPlainStorageAccessor.cs" />
     <Compile Include="Raven\Implementation\PlainStorage\RavenPlainStorageProvider.cs" />
     <Compile Include="Raven\Implementation\PlainStorage\RavenQueryablePlainStorageAccessor.cs" />
+    <Compile Include="Raven\Implementation\RavenHealthCheck.cs" />
     <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenDataStoreRepositoryAccessor.cs" />
     <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryWriterSettings.cs" />
     <Compile Include="Raven\Implementation\WriteSide\Indexes\EventsByTimeStampAndSequenceIndex.cs" />
