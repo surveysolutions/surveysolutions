@@ -1,34 +1,48 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Entities.SubEntities;
+using Raven.Client.Linq;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.Synchronization.Commands;
 using WB.Core.Synchronization.Documents;
+using WB.Core.Synchronization.Implementation.ReadSide.Indexes;
+using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.Implementation.SyncManager
 {
     internal class SyncManager : ISyncManager
     {
         private readonly IReadSideKeyValueStorage<ClientDeviceDocument> devices;
-        private readonly ISynchronizationDataStorage storage;
+
         private readonly IIncomingPackagesQueue incomingQueue;
         private readonly ILogger logger;
         private readonly ICommandService commandService;
+        private readonly IQueryableReadSideRepositoryReader<UserDocument> userStorage;
+        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
+        private readonly IQueryableReadSideRepositoryReader<SynchronizationDelta> queryableStorage;
+        private string queryIndexName = typeof(SynchronizationDeltasByBriefFields).Name;
 
-        public SyncManager(IReadSideKeyValueStorage<ClientDeviceDocument> devices,
-            ISynchronizationDataStorage storage, 
+        public SyncManager(IReadSideKeyValueStorage<ClientDeviceDocument> devices, 
             IIncomingPackagesQueue incomingQueue,
             ILogger logger, 
-            ICommandService commandService)
+            ICommandService commandService, 
+            IQueryableReadSideRepositoryReader<UserDocument> userStorage,
+            IReadSideRepositoryIndexAccessor indexAccessor, 
+            IQueryableReadSideRepositoryReader<SynchronizationDelta> queryableStorage)
         {
             this.devices = devices;
-            this.storage = storage;
             this.incomingQueue = incomingQueue;
             this.logger = logger;
             this.commandService = commandService;
+            this.userStorage = userStorage;
+            this.indexAccessor = indexAccessor;
+            this.queryableStorage = queryableStorage;
         }
 
         public HandshakePackage ItitSync(ClientIdentifier clientIdentifier)
@@ -69,7 +83,36 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             if (device == null)
                 throw new ArgumentException("Device was not found.");
 
-            return storage.GetChunkPairsCreatedAfter(lastSyncedPackageId, userId);
+            var users = new List<Guid> { userId };
+            var items = this.indexAccessor.Query<SynchronizationDelta>(this.queryIndexName);
+
+            var userIds = users.Concat(new[] { Guid.Empty });
+
+            if (lastSyncedPackageId == null)
+            {
+                List<SynchronizationDelta> fullStreamDeltas = items.Where(x => x.UserId.In(userIds))
+                    .OrderBy(x => x.SortIndex)
+                    .ToList();
+
+                var fullListResult = fullStreamDeltas.Select(s => new SynchronizationChunkMeta(s.PublicKey))
+                    .ToList();
+
+                return fullListResult;
+            }
+
+            SynchronizationDelta lastSyncedPackage = items.FirstOrDefault(x => x.PublicKey == lastSyncedPackageId);
+
+            if (lastSyncedPackage == null)
+            {
+                throw new SyncPackageNotFoundException(string.Format("Sync package with id {0} was not found on server", lastSyncedPackageId));
+            }
+
+            var deltas = items.Where(x => x.SortIndex > lastSyncedPackage.SortIndex && x.UserId.In(userIds))
+                .OrderBy(x => x.SortIndex)
+                .ToList();
+
+            var result = deltas.Select(s => new SynchronizationChunkMeta(s.PublicKey)).ToList();
+            return result;
         }
 
         public SyncPackage ReceiveSyncPackage(Guid clientRegistrationId, string id)
@@ -86,7 +129,30 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
         public string GetPackageIdByTimestamp(Guid userId, DateTime timestamp)
         {
-            return this.storage.GetChunkInfoByTimestamp(timestamp, userId).Id;
+            var users = this.GetUserTeamates(userId);
+            var items = this.indexAccessor.Query<SynchronizationDelta>(this.queryIndexName);
+            var userIds = users.Concat(new[] { Guid.Empty });
+
+            SynchronizationDelta meta = items.Where(x => timestamp >= x.Timestamp && x.UserId.In(userIds))
+                .ToList()
+                .OrderBy(x => x.SortIndex)
+                .Last();
+            return new SynchronizationChunkMeta(meta.PublicKey).Id;
+        }
+
+        private IEnumerable<Guid> GetUserTeamates(Guid userId)
+        {
+            var user = userStorage.Query(_ => _.Where(u => u.PublicKey == userId)).ToList().FirstOrDefault();
+            if (user == null)
+                return Enumerable.Empty<Guid>();
+
+            Guid supervisorId = user.Roles.Contains(UserRoles.Supervisor) ? userId : user.Supervisor.Id;
+
+            var team =
+                userStorage.Query(
+                    _ => _.Where(u => u.Supervisor != null && u.Supervisor.Id == supervisorId).Select(u => u.PublicKey)).ToList();
+            team.Add(supervisorId);
+            return team;
         }
 
         private SyncItem GetSyncItem(Guid clientRegistrationKey, string id)
@@ -96,9 +162,18 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                 throw new ArgumentException("Device was not found.");
 
             // item could be changed on server and sequence would be different
-            var item = storage.GetLatestVersion(id);
-
-            return item;
+            SynchronizationDelta delta = this.queryableStorage.GetById(id);
+            if (delta == null)
+                throw new ArgumentException("chunk is absent");
+            var result = new SyncItem
+                         {
+                             RootId = delta.RootId,
+                             IsCompressed = delta.IsCompressed,
+                             ItemType = delta.ItemType,
+                             Content = delta.Content,
+                             MetaInfo = delta.MetaInfo
+                         };
+            return result;
         }
 
         private HandshakePackage CheckAndCreateNewSyncActivity(ClientIdentifier identifier)
