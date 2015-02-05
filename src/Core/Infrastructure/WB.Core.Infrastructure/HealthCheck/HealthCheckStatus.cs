@@ -3,6 +3,7 @@
     public enum HealthCheckStatus
     {
         Happy,
+        Warning,
         Down
     }
 }
