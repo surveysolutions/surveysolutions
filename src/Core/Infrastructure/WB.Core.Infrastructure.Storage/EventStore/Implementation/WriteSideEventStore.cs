@@ -94,21 +94,6 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             } while (!currentSlice.IsEndOfStream);
         }
 
-        public IEnumerable<CommittedEvent> GetEventStream()
-        {
-            var nextPosition = 0;
-            StreamEventsSlice currentSlice;
-            do
-            {
-                currentSlice = this.RunWithDefaultTimeout(connection.ReadStreamEventsForwardAsync(AllEventsStream, nextPosition, 200, false));
-                nextPosition = currentSlice.NextEventNumber;
-                foreach (var resolvedEvent in currentSlice.Events)
-                {
-                    yield return this.ToCommittedEvent(resolvedEvent);
-                }
-            } while (!currentSlice.IsEndOfStream);
-        }
-
         public void Store(UncommittedEventStream eventStream)
         {
             int expectedStreamVersion = (int) (eventStream.InitialVersion - 1);
