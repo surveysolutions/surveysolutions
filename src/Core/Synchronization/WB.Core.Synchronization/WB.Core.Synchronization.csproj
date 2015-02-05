@@ -77,6 +77,7 @@
     <Compile Include="IIncomePackagesRepository.cs" />
     <Compile Include="Implementation\ImportManager\DefaultBackupManager.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\SynchronizationDeltasByBriefFields.cs" />
+    <Compile Include="Implementation\ReadSide\Indexes\SynchronizationDeltasByRecordSize.cs" />
     <Compile Include="Implementation\SyncManager\SyncManager.cs" />
     <Compile Include="ISynchronizationDataStorage.cs" />
     <Compile Include="ISyncManager.cs" />

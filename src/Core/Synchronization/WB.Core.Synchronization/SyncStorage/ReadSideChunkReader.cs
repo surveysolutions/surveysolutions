@@ -14,7 +14,8 @@ namespace WB.Core.Synchronization.SyncStorage
     {
         private readonly IReadSideRepositoryIndexAccessor indexAccessor;
         private readonly IQueryableReadSideRepositoryReader<SynchronizationDelta> queryableStorage;
-        private string queryIndexName = typeof(SynchronizationDeltasByBriefFields).Name;
+        private string queryByBriefFieldsIndexName = typeof(SynchronizationDeltasByBriefFields).Name;
+        private string queryByRecordSizeIndexName = typeof(SynchronizationDeltasByRecordSize).Name;
 
         public ReadSideChunkReader(IQueryableReadSideRepositoryReader<SynchronizationDelta> queryableStorage, IReadSideRepositoryIndexAccessor indexAccessor)
         {
@@ -40,7 +41,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public IEnumerable<SynchronizationChunkMeta> GetChunkMetaDataCreatedAfter(string lastSyncedPackageId, IEnumerable<Guid> users)
         {
-            var items = this.indexAccessor.Query<SynchronizationDelta>(queryIndexName);
+            var items = this.indexAccessor.Query<SynchronizationDelta>(queryByBriefFieldsIndexName);
 
             var userIds = users.Concat(new[] { Guid.Empty });
 
@@ -72,7 +73,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public SynchronizationChunkMeta GetChunkMetaDataByTimestamp(DateTime timestamp, IEnumerable<Guid> users)
         {
-            var items = this.indexAccessor.Query<SynchronizationDelta>(queryIndexName);
+            var items = this.indexAccessor.Query<SynchronizationDelta>(queryByBriefFieldsIndexName);
             var userIds = users.Concat(new[] { Guid.Empty });
 
             SynchronizationDelta meta = items.Where(x => timestamp >= x.Timestamp && x.UserId.In(userIds))
@@ -81,6 +82,13 @@ namespace WB.Core.Synchronization.SyncStorage
                                              .Last();
             
             return new SynchronizationChunkMeta(meta.PublicKey);
+        }
+
+        public int GetNumberOfSyncPackagesWithBigSize()
+        {
+            var items = this.indexAccessor.Query<SynchronizationDelta>(queryByRecordSizeIndexName);
+            int count = items.Count();
+            return count;
         }
     }
 
