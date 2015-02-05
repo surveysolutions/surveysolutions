@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomePackagesRepositoryTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UnhandledPackageStorageTests
 {
-    internal class when_GetListOfUnhandledPackagesForInterview_and_interview_directory_is_present_and_not_empty : IncomePackagesRepositoryTestContext
+    internal class when_GetListOfUnhandledPackagesForInterview_and_interview_directory_is_present_and_not_empty : UnhandledPackageStorageTestContext
     {
         Establish context = () =>
         {
@@ -26,16 +22,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomePackagesRepositoryT
             fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>()))
                 .Returns(filesInFolder);
 
-            incomingPackagesQueue = CreateIncomePackagesRepository(fileSystemAccessor: fileSystemAccessorMock.Object);
+            unhandledPackageStorage = CreateUnhandledPackageStorage(fileSystemAccessor: fileSystemAccessorMock.Object);
         };
 
         Because of = () =>
-            result = incomingPackagesQueue.GetListOfUnhandledPackagesForInterview(interviewId);
+            result = unhandledPackageStorage.GetListOfUnhandledPackagesForInterview(interviewId);
 
         It should_result_return_all_files_in_folder = () =>
            result.ShouldEqual(filesInFolder);
 
-        private static IncomingPackagesQueue incomingPackagesQueue;
+        private static UnhandledPackageStorage unhandledPackageStorage;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
         private static Guid interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static string[] result;
