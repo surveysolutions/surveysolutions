@@ -259,6 +259,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_without_permissions_to_edit_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_cloned_numeric_integer_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_cloned_question.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_title_has_invalid_characters.cs" />
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\MemoryCachedReadSideStoreTestContext.cs" />
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_Clear_called.cs" />
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_disable_cache_is_called.cs" />

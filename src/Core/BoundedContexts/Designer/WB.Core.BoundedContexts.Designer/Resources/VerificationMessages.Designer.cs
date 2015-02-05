@@ -838,7 +838,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Condition expression has length more than 10000 characters.
+        ///   Looks up a localized string similar to Condition expression has length more than 10000 characters..
         /// </summary>
         internal static string WB0094_ConditionExpresssionHasLengthMoreThan10000Characters {
             get {
@@ -847,7 +847,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation expression has length more than 10000 characters.
+        ///   Looks up a localized string similar to Validation expression has length more than 10000 characters..
         /// </summary>
         internal static string WB0095_ValidationExpresssionHasLengthMoreThan10000Characters {
             get {
@@ -856,11 +856,20 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error occurred during questionnaire compilation.
+        ///   Looks up a localized string similar to Error occurred during questionnaire compilation..
         /// </summary>
         internal static string WB0096_GeneralCompilationError {
             get {
                 return ResourceManager.GetString("WB0096_GeneralCompilationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire title contains characters that are not allowed. Only letters, numbers, and _ are allowed..
+        /// </summary>
+        internal static string WB0097_QuestionnaireTitleHasInvalidCharacters {
+            get {
+                return ResourceManager.GetString("WB0097_QuestionnaireTitleHasInvalidCharacters", resourceCulture);
             }
         }
     }
