@@ -143,6 +143,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                     resolvedEvent.Event.EventNumber + 1,
                     metadata.Timestamp,
                     eventData);
+                
                 return committedEvent;
             }
             catch (JsonException exception)
