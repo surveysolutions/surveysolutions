@@ -599,16 +599,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return !Enumerable.Range(1, 40).Contains(rosterSizeQuestionMaxValue.Value);
         }
 
-        private static bool FixedRosterSizeExceeded(IGroup roster)
-        {
-            if (!IsRosterByFixedTitles(roster))
-            {
-                return false;
-            }
-
-            return roster.RosterFixedTitles.Length > 40;
-        }
-
         private static bool RosterHasRosterLevelMoreThan4(IGroup roster)
         {
             if (!IsRosterGroup(roster))
