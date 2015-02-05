@@ -75,17 +75,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             try
             {
                 var syncItem = jsonUtils.Deserialize<SyncItem>(fileSystemAccessor.ReadAllText(fileToProcess));
-                
+
                 interviewId = syncItem.RootId;
-                
+
                 var meta =
                     jsonUtils.Deserialize<InterviewMetaInfo>(archiver.DecompressString(syncItem.MetaInfo));
 
                 var items =
                     jsonUtils.Deserialize<AggregateRootEvent[]>(archiver.DecompressString(syncItem.Content));
-
-                var incomeEvents = BuildEventStreams(items,
-                      EventStore.GetLastEventSequence(syncItem.RootId));
 
                 if (IsNewInterivewCreatedOnClient(meta))
                 {
@@ -103,11 +100,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                     commandService.Execute(
                         new CreateInterviewCreatedOnClientCommand(
                             interviewId: meta.PublicKey,
-                            userId: meta.ResponsibleId, 
+                            userId: meta.ResponsibleId,
                             questionnaireId: meta.TemplateId,
-                            questionnaireVersion: meta.TemplateVersion, 
+                            questionnaireVersion: meta.TemplateVersion,
                             status: (InterviewStatus) meta.Status,
-                            featuredQuestionsMeta: prefilledQuestions, 
+                            featuredQuestionsMeta: prefilledQuestions,
                             isValid: meta.Valid), origin);
 
                 }
@@ -117,9 +114,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                             meta.TemplateVersion,
                             (InterviewStatus) meta.Status, null, meta.Comments, meta.Valid), origin);
 
-                    EventStore.Store(incomeEvents);
+                var incomeEvents = BuildEventStreams(items,
+                    EventStore.GetLastEventSequence(syncItem.RootId));
+                EventStore.Store(incomeEvents);
 
-                    EventBus.Publish(incomeEvents);
+                EventBus.Publish(incomeEvents);
             }
             catch (Exception e)
             {

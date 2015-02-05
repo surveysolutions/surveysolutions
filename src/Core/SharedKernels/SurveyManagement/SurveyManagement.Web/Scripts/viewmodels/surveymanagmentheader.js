@@ -1,20 +1,21 @@
 ﻿Supervisor.VM.SurveyManagmentHeader = function (updateIncomingPackagesQueueApiUrl, holderId) {
-    Supervisor.VM.SurveyManagmentHeader.superclass.constructor.apply(this, arguments);
     var self = this;
     self.holder = $(holderId);
     self.holder.html('-');
-    self.holder.parent.tooltip();
     self.load = function () {
-        self.updateIncomingPackagesQueue();
+        setInterval(self.updateIncomingPackagesQueue, 3000);
     };
 
     self.updateIncomingPackagesQueue = function () {
-        self.SendRequest(updateIncomingPackagesQueueApiUrl, {}, function (data) {
+        var requestHeaders = {};
+        requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
+        $.ajax({
+            url: updateIncomingPackagesQueueApiUrl,
+            type: 'get',
+            headers: requestHeaders,
+            dataType: 'json'
+        }).done(function(data) {
             self.holder.html(data);
-            setInterval(self.updateIncomingPackagesQueue, 3000);
-        }, true, true);
+        });
     };
 }
-
-
-Supervisor.Framework.Classes.inherit(Supervisor.VM.SurveyManagmentHeader, Supervisor.VM.BasePage);
