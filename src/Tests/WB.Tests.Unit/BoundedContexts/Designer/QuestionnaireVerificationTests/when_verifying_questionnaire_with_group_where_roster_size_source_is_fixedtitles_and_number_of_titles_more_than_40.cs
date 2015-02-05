@@ -11,7 +11,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
-    internal class when_verifying_questionnaire_with_group_where_roster_size_source_is_fixedtitles_and_number_of_titles_more_than_250 :
+    internal class when_verifying_questionnaire_with_group_where_roster_size_source_is_fixedtitles_and_number_of_titles_more_than_40 :
         QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             rosterGroupId = Guid.Parse("13333333333333333333333333333333");
 
             var fixedTitles = new List<string>();
-            for (int i = 0; i < 251; i++)
+            for (int i = 0; i < 41; i++)
             {
                 fixedTitles.Add(string.Format("Fixed Title {0}", i));
             }

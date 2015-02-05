@@ -325,11 +325,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed titles roster cannot have more than 250 rows..
+        ///   Looks up a localized string similar to Fixed titles roster cannot have more than 40 rows..
         /// </summary>
-        internal static string WB0038_RosterFixedTitlesHaveMoreThan250Items {
+        internal static string WB0038_RosterFixedTitlesHaveMoreThan40Items {
             get {
-                return ResourceManager.GetString("WB0038_RosterFixedTitlesHaveMoreThan250Items", resourceCulture);
+                return ResourceManager.GetString("WB0038_RosterFixedTitlesHaveMoreThan40Items", resourceCulture);
             }
         }
         

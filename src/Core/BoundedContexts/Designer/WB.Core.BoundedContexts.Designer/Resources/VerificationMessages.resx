@@ -204,8 +204,8 @@
   <data name="WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles" xml:space="preserve">
     <value>Fixed titles roster cannot have empty titles.</value>
   </data>
-  <data name="WB0038_RosterFixedTitlesHaveMoreThan250Items" xml:space="preserve">
-    <value>Fixed titles roster cannot have more than 250 rows.</value>
+  <data name="WB0038_RosterFixedTitlesHaveMoreThan40Items" xml:space="preserve">
+    <value>Fixed titles roster cannot have more than 40 rows.</value>
   </data>
   <data name="WB0039_TextListQuestionCannotBePrefilled" xml:space="preserve">
     <value>List question cannot be prefilled.</value>
