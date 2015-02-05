@@ -88,6 +88,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly IKeywordsProvider keywordsProvider;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
 
+        private static readonly Regex VariableNameRegex = new Regex("^[_A-Za-z][_A-Za-z0-9]*$");
+
         public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, IFileSystemAccessor fileSystemAccessor,
             ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider,
             IExpressionProcessorGenerator expressionProcessorGenerator)
@@ -172,6 +174,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<SingleQuestion>(CascadingQuestionHasValidationExpresssion, "WB0092", VerificationMessages.WB0092_CascadingChildQuesionShouldNotContainValidation),
                     Verifier<IComposite>(ConditionExpresssionHasLengthMoreThan10000Characters, "WB0094", VerificationMessages.WB0094_ConditionExpresssionHasLengthMoreThan10000Characters),
                     Verifier<IQuestion>(ValidationExpresssionHasLengthMoreThan10000Characters, "WB0095", VerificationMessages.WB0095_ValidationExpresssionHasLengthMoreThan10000Characters),
+                    Verifier(QuestionnaireTitleHasInvalidCharacters, "WB0097", VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
 
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
@@ -680,6 +683,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return question.Answers.Any(option => string.IsNullOrEmpty(option.AnswerValue));
         }
 
+        private static bool QuestionnaireTitleHasInvalidCharacters(QuestionnaireDocument questionnaire)
+        {
+            if (string.IsNullOrWhiteSpace(questionnaire.Title))
+            {
+                return false;
+            }
+
+            return !VariableNameRegex.IsMatch(questionnaire.Title);
+        }
+
         private static bool QuestionHasInvalidVariableName(IQuestion arg)
         {
             return !IsVariableNameValid(arg.StataExportCaption);
@@ -692,8 +705,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             if (variableName.Length > 32)
                 return false;
-            var regExp = new Regex("^[_A-Za-z][_A-Za-z0-9]*$");
-            return regExp.IsMatch(variableName);
+            return VariableNameRegex.IsMatch(variableName);
         }
 
         private static bool RosterHasEmptyVariableName(IGroup group)
