@@ -76,7 +76,9 @@
     <Compile Include="IBackupManager.cs" />
     <Compile Include="IIncomingPackagesQueue.cs" />
     <Compile Include="Implementation\ImportManager\DefaultBackupManager.cs" />
-    <Compile Include="Implementation\ReadSide\Indexes\SynchronizationDeltasByBriefFields.cs" />
+    <Compile Include="Implementation\ReadSide\Indexes\InterviewSyncPackagesByBriefFields.cs" />
+    <Compile Include="Implementation\ReadSide\Indexes\QuestionnaireSyncPackagesByBriefFields.cs" />
+    <Compile Include="Implementation\ReadSide\Indexes\UserSyncPackagesByBriefFields.cs" />
     <Compile Include="Implementation\SyncManager\SyncManager.cs" />
     <Compile Include="ISynchronizationDataStorage.cs" />
     <Compile Include="ISyncManager.cs" />
@@ -98,8 +100,8 @@
     <Compile Include="SyncSettings.cs" />
     <Compile Include="SyncStorage\IIndexedView.cs" />
     <Compile Include="SyncStorage\InterviewSyncPackage.cs" />
+    <Compile Include="SyncStorage\ISyncPackage.cs" />
     <Compile Include="SyncStorage\QuestionnaireSyncPackage.cs" />
-    <Compile Include="SyncStorage\SynchronizationDelta.cs" />
     <Compile Include="SyncStorage\SyncPackageNotFoundException.cs" />
     <Compile Include="SyncStorage\UserSyncPackage.cs" />
     <Compile Include="ZipFileData.cs" />

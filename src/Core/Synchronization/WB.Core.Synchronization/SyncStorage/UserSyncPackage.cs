@@ -1,11 +1,9 @@
-﻿using System;
-
+using System;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
-    public class UserSyncPackage : IIndexedView
+    public class UserSyncPackage : ISyncPackage
     {
         [Obsolete("Probably used for deserialization")]
         public UserSyncPackage()
@@ -29,10 +27,10 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public string PackageId { get; private set; }
 
-        public string Content { get; private set; }
-
         public DateTime Timestamp { get; private set; }
 
         public int SortIndex { get; private set; }
+
+        public string Content { get; private set; }
     }
 }

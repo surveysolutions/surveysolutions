@@ -6,24 +6,24 @@ using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.Implementation.ReadSide.Indexes
 {
-    public class SynchronizationDeltasByBriefFields :
-        AbstractIndexCreationTask<SynchronizationDelta, SynchronizationDeltasByBriefFields.SyncPackageBrief>
+    public class UserSyncPackagesByBriefFields : AbstractIndexCreationTask<UserSyncPackage, UserSyncPackagesByBriefFields.SyncPackageBrief>
     {
         public class SyncPackageBrief
         {
-            public string ItemType { get; set; }
+            public string PackageId { get; set; }
+
             public DateTime Timestamp { get; set; }
+
             public Guid UserId { get; set; }
-            public string PublicKey { get; set; }
+
             public int SortIndex { get; set; }
         }
 
-        public SynchronizationDeltasByBriefFields()
+        public UserSyncPackagesByBriefFields()
         {
             Map = interviews => from doc in interviews
-                                     select new SyncPackageBrief { 
-                                         PublicKey = doc.PublicKey, 
-                                         ItemType = doc.ItemType, 
+                                     select new SyncPackageBrief {
+                                         PackageId = doc.PackageId, 
                                          Timestamp = doc.Timestamp, 
                                          UserId = doc.UserId,
                                          SortIndex = doc.SortIndex 

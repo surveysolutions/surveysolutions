@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.ReadSideChunkReaderTests
             readSideChunkReader =
                 new ReadSideChunkReader(Mock.Of<IQueryableReadSideRepositoryReader<SynchronizationDelta>>(),
                     Mock.Of<IReadSideRepositoryIndexAccessor>(
-                        _ => _.Query<SynchronizationDelta>("SynchronizationDeltasByBriefFields") == synchronizationDelta));
+                        _ => _.Query<SynchronizationDelta>("UserSyncPackagesByBriefFields") == synchronizationDelta));
         };
 
         Because of = () =>
