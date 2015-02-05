@@ -124,6 +124,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
             {
                 "~/js/details", new[]
                 {
+                    "~/Scripts/components/bindings.js",
                     "~/Scripts/director.js",
                     "~/Scripts/viewmodels/pages/interview/details/config.js",
                     "~/Scripts/viewmodels/pages/interview/details/datacontext.js",

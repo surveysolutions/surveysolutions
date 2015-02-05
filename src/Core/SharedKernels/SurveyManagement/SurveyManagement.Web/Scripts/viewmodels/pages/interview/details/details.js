@@ -7,29 +7,28 @@ Supervisor.VM.Details = function (settings) {
 
     self.addComment = function (element, questionId, underscoreJoinedQuestionRosterVector) {
 
-        var addCommentTextInput = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "addComment"));
-        var comment = $(addCommentTextInput).val();
+        var commentInputElement = $(element);
+        var comment = commentInputElement.val();
 
         if (comment == "") return;
 
         var command = datacontext.getCommand(config.commands.setCommentCommand, {
-            comment: $(addCommentTextInput).val(),
+            comment: comment,
             question: {
                 id: questionId,
                 rosterVector: parseRosterVector(underscoreJoinedQuestionRosterVector)
             }
         });
         self.SendCommand(command, function () {
-            var commentsCounterElement = $("#commentsCounter");
-            commentsCounterElement.text(parseInt(commentsCounterElement.text()) + 1);
-
-            $(addCommentTextInput).val('');
+            commentInputElement.val('');
 
             var commentListElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "commentList"));
-
-            commentListElement.append('<dt>' + settings.UserName + '</dt><dd><span>' + comment + '</span><small class="text-block comment-date">' + moment(new Date()).fromNow() + '</small></dd>');
-
-
+            if (commentListElement.children().length == 0) {
+                var commentsCounterElement = $("#commentsCounter");
+                commentsCounterElement.text(parseInt(commentsCounterElement.text()) + 1);
+            }
+            commentListElement.append('<dt>' + settings.UserName + '<span class="text-normal">' + comment + '</span></dt><dd><small class="comment-date">' + moment(new Date()).fromNow() + '</small></dd>');
+            commentListElement.removeClass("hidden");
         });
     };
 
