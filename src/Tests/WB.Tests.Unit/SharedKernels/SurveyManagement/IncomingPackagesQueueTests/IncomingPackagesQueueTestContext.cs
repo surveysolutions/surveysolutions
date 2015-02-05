@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
@@ -17,7 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
     {
         protected static IncomingPackagesQueue CreateIncomingPackagesQueue(IFileSystemAccessor fileSystemAccessor = null)
         {
-            return new IncomingPackagesQueue(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), new SyncSettings(appDataDirectory, incomingCapiPackagesWithErrorsDirectoryName, incomingCapiPackageFileNameExtension, incomingCapiPackagesDirectoryName, ""));
+            return new IncomingPackagesQueue(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), new SyncSettings(AppDataDirectory, IncomingCapiPackagesWithErrorsDirectoryName, IncomingCapiPackageFileNameExtension, IncomingCapiPackagesDirectoryName, ""));
         }
 
         protected static Mock<IFileSystemAccessor> CreateDefaultFileSystemAccessorMock()
@@ -28,9 +23,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
             return fileSystemAccessorMock;
         }
 
-        const string appDataDirectory = "App_Data";
-        const string incomingCapiPackagesDirectoryName = "IncomingData";
-        const string incomingCapiPackagesWithErrorsDirectoryName = "IncomingDataWithErrors";
-        const string incomingCapiPackageFileNameExtension = "sync";
+        const string AppDataDirectory = "App_Data";
+        const string IncomingCapiPackagesDirectoryName = "IncomingData";
+        const string IncomingCapiPackagesWithErrorsDirectoryName = "IncomingDataWithErrors";
+        const string IncomingCapiPackageFileNameExtension = "sync";
     }
 }
