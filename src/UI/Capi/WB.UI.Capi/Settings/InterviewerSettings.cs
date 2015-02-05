@@ -1,9 +1,12 @@
 ﻿using System;
 using Android.App;
 using Android.Content;
-using CAPI.Android.Settings;
+
 using Java.Util;
+
+using WB.Core.BoundedContexts.Capi.Services;
 using WB.UI.Capi.Properties;
+using WB.UI.Capi.SharedPreferences;
 
 namespace WB.UI.Capi.Settings
 {
@@ -31,6 +34,21 @@ namespace WB.UI.Capi.Settings
             var sClientRegistrationId = GetSetting(SettingsNames.RegistrationKeyName);
 
             return string.IsNullOrEmpty(sClientRegistrationId) ? (Guid?) null : Guid.Parse(sClientRegistrationId);
+        }
+
+        public string GetLastReceivedUserPackageId()
+        {
+            return GetSetting(SettingsNames.LastReceivedUserPackageId);
+        }
+
+        public string GetLastReceivedQuestionnairePackageId()
+        {
+            return GetSetting(SettingsNames.LastReceivedQuestionnairePackageId);
+        }
+
+        public string GetLastReceivedInterviewPackageId()
+        {
+            return GetSetting(SettingsNames.LastReceivedInterviewPackageId);
         }
 
         public string GetLastReceivedPackageId()
@@ -64,9 +82,25 @@ namespace WB.UI.Capi.Settings
                 clientRegistrationId.HasValue ? clientRegistrationId.ToString() : string.Empty);
         }
 
+        [Obsolete]
         public void SetLastReceivedPackageId(string lastReceivedPackageId)
         {
             SetSetting(SettingsNames.LastTimestamp, lastReceivedPackageId);
+        }
+
+        public void SetLastReceivedUserPackageId(string lastReceivedUserPackageId)
+        {
+            SetSetting(SettingsNames.LastReceivedUserPackageId, lastReceivedUserPackageId);
+        }
+
+        public void SetLastReceivedQuestionnairePackageId(string lastReceivedQuestionnairePackageId)
+        {
+            SetSetting(SettingsNames.LastReceivedQuestionnairePackageId, lastReceivedQuestionnairePackageId);
+        }
+
+        public void SetLastReceivedInterviewPackageId(string lastReceivedInterviewPackageId)
+        {
+            SetSetting(SettingsNames.LastReceivedInterviewPackageId, lastReceivedInterviewPackageId);
         }
 
         public void SetSyncAddressPoint(string syncAddressPoint)

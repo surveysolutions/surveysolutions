@@ -1,14 +1,7 @@
-﻿namespace WB.UI.Capi.Syncronization
+﻿using WB.Core.BoundedContexts.Capi.Services;
+
+namespace WB.UI.Capi.Syncronization
 {
-    public interface IDeviceChangingVerifier
-    {
-        bool ConfirmDeviceChanging();
-
-        event RequestDeviceChangeCallBack ConfirmDeviceChangeCallback;
-    }
-
-    public delegate bool RequestDeviceChangeCallBack(object sender);
-
     public class DeviceChangingVerifier : IDeviceChangingVerifier
     {
         public event RequestDeviceChangeCallBack ConfirmDeviceChangeCallback;

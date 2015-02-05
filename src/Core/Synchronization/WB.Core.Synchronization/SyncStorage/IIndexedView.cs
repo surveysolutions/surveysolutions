@@ -1,4 +1,4 @@
-﻿using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.Synchronization.SyncStorage
 {

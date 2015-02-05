@@ -3,6 +3,7 @@ using System.Threading;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
@@ -10,7 +11,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     internal abstract class BaseSynchronizationDenormalizer : BaseDenormalizer
     {
         protected int CalcNextSortIndex<T>(
-           int currentSortIndex,
+           ref int currentSortIndex,
            IReadSideRepositoryWriter readSideRepositoryWriter,
            IQueryableReadSideRepositoryReader<T> queryableReadSideRepositoryReader) where T : class, IIndexedView
         {

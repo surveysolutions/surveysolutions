@@ -1,18 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
-using CAPI.Android.Core.Model.Authorization;
-using WB.Core.SharedKernel.Structures.Synchronization;
 
-namespace WB.UI.Capi.Services
+using WB.Core.BoundedContexts.Capi.Implementation.Authorization;
+using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
+
+namespace WB.Core.BoundedContexts.Capi.Services
 {
     public interface ISynchronizationService
     {
         Task<Guid> HandshakeAsync(SyncCredentials credentials, bool shouldThisDeviceBeLinkedToUser = false);
 
-        Task<IEnumerable<SynchronizationChunkMeta>> GetChunksAsync(SyncCredentials credentials, string lastKnownPackageId);
+        Task<SyncItemsMetaContainer> GetChunksAsync(SyncCredentials credentials, string lastKnownPackageId);
 
-        Task<SyncItem> RequestChunkAsync(SyncCredentials credentials, string chunkId);
+        Task<UserSyncPackageDto> RequestUserPackageAsync(SyncCredentials credentials, string chunkId);
+
+        Task<QuestionnaireSyncPackageDto> RequestQuestionnairePackageAsync(SyncCredentials credentials, string chunkId);
+
+        Task<InterviewSyncPackageDto> RequestInterviewPackageAsync(SyncCredentials credentials, string chunkId);
 
         Task PushChunkAsync(SyncCredentials credentials, string chunkAsString);
 

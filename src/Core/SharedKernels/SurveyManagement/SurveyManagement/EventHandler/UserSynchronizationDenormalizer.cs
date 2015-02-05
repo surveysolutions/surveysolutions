@@ -7,6 +7,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.Synchronization.SyncStorage;
@@ -118,7 +119,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             }
 
             var sortIndex = this.CalcNextSortIndex(
-                currentSortIndex, 
+                ref currentSortIndex, 
                 this.userPackageStorageWriter as IReadSideRepositoryWriter, 
                 this.userPackageStorageReader);
 

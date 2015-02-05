@@ -3,6 +3,8 @@ using System.IO;
 using System.Linq;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Plugins.Sqlite;
+
+using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.FileSystem;
 

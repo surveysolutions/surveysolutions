@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Generic;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 
 namespace WB.Core.Synchronization
 {
@@ -10,9 +10,13 @@ namespace WB.Core.Synchronization
 
         void SendSyncItem(string package);
 
-        IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, string lastSyncedPackageId);
+        SyncItemsMetaContainer GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationId, string lastSyncedUserPackageId, string lastSyncedQuestionnairePackageId, string lastSyncedInterviewPackageId);
 
-        SyncPackage ReceiveSyncPackage(Guid clientRegistrationId, string id);
+        UserSyncPackageDto ReceiveUserSyncPackage(Guid clientRegistrationId, string packageId);
+
+        QuestionnaireSyncPackageDto ReceiveQuestionnaireSyncPackage(Guid clientRegistrationId, string packageId);
+
+        InterviewSyncPackageDto ReceiveInterviewSyncPackage(Guid clientRegistrationId, string packageId);
 
         string GetPackageIdByTimestamp(Guid userId, DateTime timestamp);
 

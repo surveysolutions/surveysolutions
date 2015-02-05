@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AndroidNcqrs.Eventing.Storage.SQLite;
-using CAPI.Android.Core.Model.SnapshotStore;
+
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Ncqrs;
 using Ncqrs.Eventing.Storage;
@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.UI.Capi.SnapshotStore;
 
 namespace WB.UI.Capi.Syncronization
 {

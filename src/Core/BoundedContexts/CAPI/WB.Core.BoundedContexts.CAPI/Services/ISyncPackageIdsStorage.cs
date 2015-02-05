@@ -1,4 +1,4 @@
-﻿namespace WB.UI.Capi.Syncronization
+namespace WB.Core.BoundedContexts.Capi.Services
 {
     public interface ISyncPackageIdsStorage
     {

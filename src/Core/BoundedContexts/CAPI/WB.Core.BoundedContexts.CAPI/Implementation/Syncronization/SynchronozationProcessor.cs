@@ -2,21 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Security.Authentication;
 using System.Threading;
 using System.Threading.Tasks;
-using CAPI.Android.Core.Model;
-using CAPI.Android.Core.Model.Authorization;
+using WB.Core.BoundedContexts.Capi.Implementation.Authorization;
 using WB.Core.BoundedContexts.Capi.Services;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.UI.Capi.Services;
-using WB.UI.Capi.Settings;
 
-namespace WB.UI.Capi.Syncronization
+namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
 {
     public class SynchronozationProcessor
     {
@@ -35,10 +31,12 @@ namespace WB.UI.Capi.Syncronization
 
         private readonly ISyncAuthenticator authentificator;
         private SyncCredentials credentials;
-        
+
+        private readonly IDataCollectionAuthentication membership;
+
         public event EventHandler<SynchronizationEventArgs> StatusChanged;
-        public event EventHandler ProcessFinished;
-        public event EventHandler ProcessCanceling;
+        public event System.EventHandler ProcessFinished;
+        public event System.EventHandler ProcessCanceling;
         public event EventHandler<SynchronizationCanceledEventArgs> ProcessCanceled;
 
         public SynchronozationProcessor(
@@ -50,7 +48,8 @@ namespace WB.UI.Capi.Syncronization
             ISyncPackageIdsStorage packageIdStorage,
             ILogger logger,
             ISynchronizationService synchronizationService,
-            IInterviewerSettings interviewerSettings)
+            IInterviewerSettings interviewerSettings,
+            IDataCollectionAuthentication membership)
         {
             this.deviceChangingVerifier = deviceChangingVerifier;
             this.authentificator = authentificator;
@@ -61,6 +60,7 @@ namespace WB.UI.Capi.Syncronization
             this.synchronizationService = synchronizationService;
             this.interviewerSettings = interviewerSettings;
             this.dataProcessor = dataProcessor;
+            this.membership = membership;
         }
 
         private async Task Pull()
@@ -70,57 +70,105 @@ namespace WB.UI.Capi.Syncronization
 
             await this.MigrateOldSyncTimestampToId();
 
-            IEnumerable<SynchronizationChunkMeta> remoteChuncksForDownload = new SynchronizationChunkMeta[0];
+            SyncItemsMetaContainer syncItemsMetaContainer = null;
 
             bool foundNeededPackages = false;
             var lastKnownPackageId = this.packageIdStorage.GetLastStoredChunkId();
-            int returnedBackCount = 0;
+            //int returnedBackCount = 0;
 
             do
             {
-                this.OnStatusChanged(
-                    new SynchronizationEventArgsWithPercent("Receiving list of packageIds to download",
-                        Operation.Pull, true, 0));
+                this.OnStatusChanged(new SynchronizationEventArgsWithPercent("Receiving list of packageIds to download", Operation.Pull, true, 0));
 
-                remoteChuncksForDownload = await this.synchronizationService.GetChunksAsync(credentials: credentials, lastKnownPackageId: lastKnownPackageId);
+                syncItemsMetaContainer = await this.synchronizationService.GetChunksAsync(
+                    credentials: this.credentials, 
+                    lastKnownPackageId: lastKnownPackageId);
 
-                if (remoteChuncksForDownload == null)
-                {
-                    returnedBackCount++;
-                    this.OnStatusChanged(new SynchronizationEventArgsWithPercent(
-                        string.Format(
-                            "Last known package not found on server. Searching for previous. Tried {0} packageIdStorage",
-                            returnedBackCount),
-                        Operation.Pull, true, 0));
-                    lastKnownPackageId = this.packageIdStorage.GetChunkBeforeChunkWithId(lastKnownPackageId);
-                    continue;
-                }
+                //if (remoteChuncksForDownload == null)
+                //{
+                //    returnedBackCount++;
+                //    this.OnStatusChanged(new SynchronizationEventArgsWithPercent(
+                //        string.Format("Last known package not found on server. Searching for previous. Tried {0} packageIdStorage", returnedBackCount),
+                //        Operation.Pull, true, 0));
+                //    lastKnownPackageId = this.packageIdStorage.GetChunkBeforeChunkWithId(lastKnownPackageId);
+                //    continue;
+                //}
 
                 foundNeededPackages = true;
             } while (!foundNeededPackages);
                 
             int progressCounter = 0;
-            foreach (SynchronizationChunkMeta chunk in remoteChuncksForDownload)
+            int chunksToDownload = syncItemsMetaContainer.InterviewChunksMeta.Count()
+                                   + syncItemsMetaContainer.QuestionnaireChunksMeta.Count()
+                                   + syncItemsMetaContainer.UserChunksMeta.Count();
+
+            foreach (SynchronizationChunkMeta chunk in syncItemsMetaContainer.UserChunksMeta)
             {
                 if (this.cancellationToken.IsCancellationRequested)
                     return;
 
                 try
                 {
-                    SyncItem data = await this.synchronizationService.RequestChunkAsync(credentials: credentials, chunkId: chunk.Id);
+                    var data = await this.synchronizationService.RequestUserPackageAsync(credentials: this.credentials, chunkId: chunk.Id);
 
-                    this.dataProcessor.SavePulledItem(data);
+                    this.dataProcessor.ProcessDownloadedPackage((UserSyncPackageDto)data);
 
                     this.packageIdStorage.Append(chunk.Id);
                 }
                 catch (Exception e)
                 {
-                    this.logger.Error(string.Format("Chunk {0} wasn't processed", chunk.Id), e);
+                    this.logger.Error(string.Format("User packge {0} wasn't processed", chunk.Id), e);
                     throw;
                 }
 
                 this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", Operation.Pull, true,
-                    ((progressCounter++) * 100) / remoteChuncksForDownload.Count()));
+                    ((progressCounter++) * 100) / chunksToDownload));
+            }
+
+            foreach (SynchronizationChunkMeta chunk in syncItemsMetaContainer.QuestionnaireChunksMeta)
+            {
+                if (this.cancellationToken.IsCancellationRequested)
+                    return;
+
+                try
+                {
+                    var data = await this.synchronizationService.RequestQuestionnairePackageAsync(credentials: this.credentials, chunkId: chunk.Id);
+
+                    this.dataProcessor.ProcessDownloadedPackage((QuestionnaireSyncPackageDto)data);
+
+                    this.packageIdStorage.Append(chunk.Id);
+                }
+                catch (Exception e)
+                {
+                    this.logger.Error(string.Format("Questionnaire packge  {0} wasn't processed", chunk.Id), e);
+                    throw;
+                }
+
+                this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", Operation.Pull, true,
+                    ((progressCounter++) * 100) / chunksToDownload));
+            }
+
+            foreach (SynchronizationChunkMeta chunk in syncItemsMetaContainer.InterviewChunksMeta)
+            {
+                if (this.cancellationToken.IsCancellationRequested)
+                    return;
+
+                try
+                {
+                    var data = await this.synchronizationService.RequestInterviewPackageAsync(credentials: this.credentials, chunkId: chunk.Id);
+
+                    this.dataProcessor.ProcessDownloadedPackage((InterviewSyncPackageDto)data);
+
+                    this.packageIdStorage.Append(chunk.Id);
+                }
+                catch (Exception e)
+                {
+                    this.logger.Error(string.Format("Interview packge  {0} wasn't processed", chunk.Id), e);
+                    throw;
+                }
+
+                this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", Operation.Pull, true,
+                    ((progressCounter++) * 100) / chunksToDownload));
             }
         }
 
@@ -137,8 +185,10 @@ namespace WB.UI.Capi.Syncronization
                 if (!long.TryParse(lastReceivedPackageId, out lastReceivedPackageIdOfLongType))
                     return;
                 this.OnStatusChanged(new SynchronizationEventArgs("Tablet had old installation. Migrating package timestamp to it's id", Operation.Pull, true));
-                string lastReceivedChunkId = await this.synchronizationService.GetChunkIdByTimestampAsync(timestamp: lastReceivedPackageIdOfLongType, credentials: credentials);
+                string lastReceivedChunkId = await this.synchronizationService.GetChunkIdByTimestampAsync(timestamp: lastReceivedPackageIdOfLongType, credentials: this.credentials);
+                
                 this.packageIdStorage.Append(lastReceivedChunkId);
+                
                 this.interviewerSettings.SetLastReceivedPackageId(null);
             }
         }
@@ -154,7 +204,7 @@ namespace WB.UI.Capi.Syncronization
             {
                 this.ExitIfCanceled();
 
-                await this.synchronizationService.PushChunkAsync(credentials : credentials, chunkAsString: chunckDescription.Content);
+                await this.synchronizationService.PushChunkAsync(credentials : this.credentials, chunkAsString: chunckDescription.Content);
 
                 this.fileSyncRepository.MoveInterviewsBinaryDataToSyncFolder(chunckDescription.EventSourceId);
 
@@ -175,7 +225,7 @@ namespace WB.UI.Capi.Syncronization
                 try
                 {
                     await this.synchronizationService.PushBinaryAsync(
-                        credentials: credentials,
+                        credentials: this.credentials,
                         fileData: binaryData.GetData(), 
                         fileName: binaryData.FileName,
                         interviewId: binaryData.InterviewId);
@@ -201,7 +251,7 @@ namespace WB.UI.Capi.Syncronization
             this.ExitIfCanceled();
 
             if (!userCredentials.HasValue)
-                throw new AuthenticationException("User wasn't authenticated.");
+                throw new Exception("User wasn't authenticated.");
 
             this.credentials = userCredentials.Value;
             
@@ -209,7 +259,7 @@ namespace WB.UI.Capi.Syncronization
 
             try
             {
-                var isThisExpectedDevice = await this.synchronizationService.CheckExpectedDeviceAsync(credentials: credentials);
+                var isThisExpectedDevice = await this.synchronizationService.CheckExpectedDeviceAsync(credentials: this.credentials);
 
                 var shouldThisDeviceBeLinkedToUser = false;
                 if (!isThisExpectedDevice)
@@ -223,7 +273,7 @@ namespace WB.UI.Capi.Syncronization
 
                 if (shouldThisDeviceBeLinkedToUser)
                 {
-                    var userId = CapiApplication.Membership.GetUserIdByLoginIfExists(credentials.Login).Result;
+                    var userId =  this.membership.GetUserIdByLoginIfExists(this.credentials.Login).Result;
                     if (userId.HasValue)
                     {
                         this.cleanUpExecutor.DeleteAllInterviewsForUser(userId.Value);
@@ -260,7 +310,7 @@ namespace WB.UI.Capi.Syncronization
                     this.OnProcessCanceled(new List<Exception>() {e});
                 }
 
-            }, cancellationToken);
+            }, this.cancellationToken);
         }
 
         public void Cancel(Exception exception = null)

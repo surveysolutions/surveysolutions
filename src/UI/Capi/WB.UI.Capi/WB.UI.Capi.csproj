@@ -159,7 +159,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AndroidModelModule.cs" />
     <Compile Include="App.cs" />
+    <Compile Include="Authorization\AndroidAuthentication.cs" />
+    <Compile Include="Backup\BackupableInMemoryReadSideRepositoryAccessor.cs" />
+    <Compile Include="Backup\DefaultBackup.cs" />
+    <Compile Include="Backup\FolderBackupable.cs" />
     <Compile Include="Bootstrap\ColorPluginBootstrap.cs" />
     <Compile Include="Bootstrap\PictureChooserPluginBootstrap.cs" />
     <Compile Include="Bootstrap\ResourceLoaderPluginBootstrap.cs" />
@@ -178,7 +183,12 @@
     <Compile Include="Core\ParcelableWrapper.cs" />
     <Compile Include="CreateInterviewActivity.cs" />
     <Compile Include="DashboardActivity.cs" />
+    <Compile Include="EventHandlers\AndroidFileStoreDenormalizer.cs" />
+    <Compile Include="EventHandlers\DashboardDenormalizer.cs" />
+    <Compile Include="EventHandlers\UserDenormalizer.cs" />
     <Compile Include="Extensions\ActivityExtensions.cs" />
+    <Compile Include="FileStorage\FileStorageService.cs" />
+    <Compile Include="FileStorage\IFileStorageService.cs" />
     <Compile Include="Implementations\Activities\DataCollectionDetailsActivity.cs" />
     <Compile Include="Implementations\Adapters\DataCollectionContentFrameAdapter.cs" />
     <Compile Include="Implementations\Fragments\DataCollectionGridContentFragment.cs" />
@@ -194,11 +204,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Services\ISynchronizationService.cs" />
-    <Compile Include="Settings\IInterviewerSettings.cs" />
+    <Compile Include="ReadSideStore\FileReadSideRepositoryWriter.cs" />
     <Compile Include="Settings\InterviewerSettings.cs" />
     <Compile Include="Settings\ErrorReportingSettings.cs" />
     <Compile Include="Settings\RestServiceSettings.cs" />
+    <Compile Include="SharedPreferences\SettingsNames.cs" />
+    <Compile Include="SharedPreferences\SharedPreferencesBackupOperator.cs" />
+    <Compile Include="SnapshotStore\FileBasedSnapshotStore.cs" />
     <Compile Include="Syncronization\CapiCleanUpService.cs" />
     <Compile Include="LoadingActivity.cs" />
     <Compile Include="LoginActivity.cs" />
@@ -209,18 +221,31 @@
     <Compile Include="Setup.cs" />
     <Compile Include="SplashScreen.cs" />
     <Compile Include="SynchronizationActivity.cs" />
+    <Compile Include="Syncronization\ChangeLogManipulator.cs" />
     <Compile Include="Syncronization\DeviceChangingVerifier.cs" />
     <Compile Include="Syncronization\Implementation\SyncPackageIdsStorage.cs" />
-    <Compile Include="Syncronization\ISyncPackageIdsStorage.cs" />
     <Compile Include="Syncronization\RestAuthenticator.cs" />
-    <Compile Include="Syncronization\SynchronizationCanceledEventArgs.cs" />
     <Compile Include="Syncronization\SynchronizationEventArgs.cs" />
     <Compile Include="Syncronization\SynchronizationEventArgsWithPercent.cs" />
     <Compile Include="Syncronization\SynchronizationException.cs" />
-    <Compile Include="Syncronization\SynchronozationProcessor.cs" />
     <Compile Include="Syncronization\Implementation\SyncPackageId.cs" />
     <Compile Include="Syncronization\Update\UpdateProcessor.cs" />
     <Compile Include="Utils\BooleanToTextColorValueConverter.cs" />
+    <Compile Include="ViewModel\Dashboard\DashboardFactory.cs" />
+    <Compile Include="ViewModel\Dashboard\DashboardInput.cs" />
+    <Compile Include="ViewModel\Dashboard\DashboardModel.cs" />
+    <Compile Include="ViewModel\Dashboard\DashboardQuestionnaireItem.cs" />
+    <Compile Include="ViewModel\Dashboard\DashboardSurveyItem.cs" />
+    <Compile Include="ViewModel\Dashboard\FeaturedCategoricalItem.cs" />
+    <Compile Include="ViewModel\Dashboard\FeaturedCategoricalOption.cs" />
+    <Compile Include="ViewModel\Dashboard\FeaturedItem.cs" />
+    <Compile Include="ViewModel\Dashboard\QuestionnaireDTO.cs" />
+    <Compile Include="ViewModel\Dashboard\SurveyDTO.cs" />
+    <Compile Include="ViewModel\InterviewMetaInfo\InterviewMetaInfoFactory.cs" />
+    <Compile Include="ViewModel\Login\LoginDTO.cs" />
+    <Compile Include="ViewModel\Synchronization\DraftChangesetDTO.cs" />
+    <Compile Include="ViewModel\Synchronization\PublicChangeSetDTO.cs" />
+    <Compile Include="ViewModel\Synchronization\SyncViewModel.cs" />
     <Compile Include="Views\LoginViewModel.cs" />
     <Compile Include="Views\FinishIntallationViewModel.cs" />
     <Compile Include="Views\Login\LoginViewFactory.cs" />
@@ -318,10 +343,6 @@
       <Project>{f9a0b560-a8bf-4914-88fb-7d98df4242ef}</Project>
       <Name>AndroidNcqrs.Eventing.Storage.SQLite</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Mono\CAPI.Android.Model\CAPI.Android.Core.Model.csproj">
-      <Project>{ea102e79-6ccf-49f7-9b12-c26320c91ca2}</Project>
-      <Name>CAPI.Android.Core.Model</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Mono\Mono.Android.Crasher\Mono.Android.Crasher.csproj">
       <Project>{4ece2c97-13a0-46d6-95d1-7bb50a48267b}</Project>
       <Name>Mono.Android.Crasher</Name>
@@ -379,7 +400,9 @@
       <Name>WB.Core.GenericSubdomains.Utils</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

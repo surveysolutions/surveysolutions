@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace WB.UI.Capi.Syncronization
+namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
 {
     public class SynchronizationCanceledEventArgs:EventArgs
     {
