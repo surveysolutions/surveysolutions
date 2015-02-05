@@ -14,13 +14,15 @@ using System;
 using System.Text;
 using System.Threading;
 using CAPI.Android.Core.Model;
-using CAPI.Android.Core.Model.Authorization;
+
 using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.CrossCore;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
+using WB.Core.BoundedContexts.Capi.Implementation.Authorization;
 using WB.Core.BoundedContexts.Capi.Implementation.Services;
+using WB.Core.BoundedContexts.Capi.Implementation.Syncronization;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.Login;
 using WB.Core.GenericSubdomains.Utils;
@@ -33,7 +35,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Controls;
 using WB.UI.Capi.Extensions;
-using WB.UI.Capi.Services;
 using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization;
 using WB.UI.Shared.Android.Extensions;
@@ -282,7 +283,6 @@ namespace WB.UI.Capi
                         cleaner,
                         ServiceLocator.Current.GetInstance<ILogger>(),
                         CapiApplication.Kernel.Get<ICapiSynchronizationCacheService>(),
-                        CapiApplication.Kernel.Get<IStringCompressor>(),
                         CapiApplication.Kernel.Get<IJsonUtils>(),
                         CapiApplication.Kernel.Get<IQuestionnaireAssemblyFileAccessor>()),
                     cleaner,

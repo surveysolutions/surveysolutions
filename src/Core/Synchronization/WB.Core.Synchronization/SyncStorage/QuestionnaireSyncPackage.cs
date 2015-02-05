@@ -1,9 +1,11 @@
-﻿using System;
+using System;
+
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
-    public class QuestionnaireSyncPackage : IIndexedView
+    public class QuestionnaireSyncPackage : ISyncPackage
     {
         [Obsolete("Probably used for deserialization")]
         public QuestionnaireSyncPackage()

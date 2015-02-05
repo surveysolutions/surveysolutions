@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -99,7 +100,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void StoreChunk(Guid questionnaireId, long questionnaireVersion, string itemType, string content, string metaInfo, DateTime timestamp)
         {
             int sortIndex = CalcNextSortIndex(
-                currentSortIndex,
+                ref currentSortIndex,
                 this.questionnairePackageStorageWriter as IReadSideRepositoryWriter,
                 this.questionnairePackageStorageReader);
 

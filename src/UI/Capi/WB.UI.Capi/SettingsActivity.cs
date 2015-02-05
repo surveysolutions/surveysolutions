@@ -10,10 +10,11 @@ using Android.Views;
 using Android.Widget;
 using Android.Content.PM;
 using Microsoft.Practices.ServiceLocation;
+
+using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.UI.Capi.Extensions;
-using WB.UI.Capi.Services;
 using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization.Update;
 using WB.UI.Shared.Android.GeolocationServices;

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -172,11 +171,41 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpPost]
         [ApiBasicAuth]
-        public SyncPackage GetSyncPackage(SyncPackageRequest request)
+        public UserSyncPackageDto GetUserSyncPackage(SyncPackageRequest request)
         {
             try
             {
-                return syncManager.ReceiveSyncPackage(request.ClientRegistrationId, request.PackageId);
+                return syncManager.ReceiveUserSyncPackage(request.ClientRegistrationId, request.PackageId);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message, ex);
+                throw CreateRestException(HttpStatusCode.ServiceUnavailable, SyncStatusCode.General, InterviewerSyncStrings.ServerError);
+            }
+        }
+
+        [HttpPost]
+        [ApiBasicAuth]
+        public QuestionnaireSyncPackageDto GetQuestionnaireSyncPackage(SyncPackageRequest request)
+        {
+            try
+            {
+                return syncManager.ReceiveQuestionnaireSyncPackage(request.ClientRegistrationId, request.PackageId);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message, ex);
+                throw CreateRestException(HttpStatusCode.ServiceUnavailable, SyncStatusCode.General, InterviewerSyncStrings.ServerError);
+            }
+        }
+
+        [HttpPost]
+        [ApiBasicAuth]
+        public InterviewSyncPackageDto GetInterviewSyncPackage(SyncPackageRequest request)
+        {
+            try
+            {
+                return syncManager.ReceiveInterviewSyncPackage(request.ClientRegistrationId, request.PackageId);
             }
             catch (Exception ex)
             {
@@ -191,10 +220,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             try
             {
-                IEnumerable<SynchronizationChunkMeta> package = syncManager.GetAllARIdsWithOrder(this.GlobalInfo.GetCurrentUser().Id,
-                    request.ClientRegistrationId, request.LastSyncedPackageId);
+                SyncItemsMetaContainer syncItemsMetaContainer = syncManager.GetAllARIdsWithOrder(
+                    this.GlobalInfo.GetCurrentUser().Id,
+                    request.ClientRegistrationId, 
+                    request.LastSyncedUserPackageId, 
+                    request.LastSyncedQuestionnairePackageId, 
+                    request.LastSyncedInterviewPackageId);
 
-                return new SyncItemsMetaContainer { ChunksMeta = package };
+                return syncItemsMetaContainer;
             }
             catch (SyncPackageNotFoundException ex)
             {
