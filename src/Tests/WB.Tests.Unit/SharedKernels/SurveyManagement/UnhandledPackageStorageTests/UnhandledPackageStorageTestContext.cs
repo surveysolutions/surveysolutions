@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Machine.Specifications;
+﻿using Machine.Specifications;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.Synchronization;
@@ -17,11 +12,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UnhandledPackageStorageTe
     {
         protected static UnhandledPackageStorage CreateUnhandledPackageStorage(IFileSystemAccessor fileSystemAccessor=null)
         {
-            return new UnhandledPackageStorage(fileSystemAccessor??Mock.Of<IFileSystemAccessor>(), new SyncSettings(appDataDirectory, incomingCapiPackagesWithErrorsDirectoryName, incomingCapiPackageFileNameExtension, incomingCapiPackagesDirectoryName, ""));
+            return new UnhandledPackageStorage(fileSystemAccessor??Mock.Of<IFileSystemAccessor>(), new SyncSettings(AppDataDirectory, IncomingCapiPackagesWithErrorsDirectoryName, IncomingCapiPackageFileNameExtension, IncomingCapiPackagesDirectoryName, ""));
         }
-        const string appDataDirectory = "App_Data";
-        const string incomingCapiPackagesDirectoryName = "IncomingData";
-        const string incomingCapiPackagesWithErrorsDirectoryName = "IncomingDataWithErrors";
-        const string incomingCapiPackageFileNameExtension = "sync";
+        const string AppDataDirectory = "App_Data";
+        const string IncomingCapiPackagesDirectoryName = "IncomingData";
+        const string IncomingCapiPackagesWithErrorsDirectoryName = "IncomingDataWithErrors";
+        const string IncomingCapiPackageFileNameExtension = "sync";
     }
 }
