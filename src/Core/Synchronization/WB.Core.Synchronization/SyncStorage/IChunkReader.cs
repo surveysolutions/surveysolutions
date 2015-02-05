@@ -10,5 +10,6 @@ namespace WB.Core.Synchronization.SyncStorage
 
         IEnumerable<SynchronizationChunkMeta> GetChunkMetaDataCreatedAfter(string lastSyncedPackageId, IEnumerable<Guid> users);
         SynchronizationChunkMeta GetChunkMetaDataByTimestamp(DateTime timestamp, IEnumerable<Guid> userId);
+        int GetNumberOfSyncPackagesWithBigSize();
     }
 }
