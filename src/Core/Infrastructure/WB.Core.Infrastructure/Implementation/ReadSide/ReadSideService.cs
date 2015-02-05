@@ -281,13 +281,13 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                         var eventsToPublish = this.eventStore.ReadFrom(eventSourceId, 0, long.MaxValue);
                         this.RepublishAllEvents(eventsToPublish, eventsToPublish.Count(), handlers: handlers);
                     }
-
-                    UpdateStatusMessage("Rebuild specific views succeeded.");
                 }
                 finally
                 {
                     this.DisableWritersCacheForHandlers(handlers);
                 }
+
+                UpdateStatusMessage("Rebuild specific views succeeded.");
             }
             catch (Exception exception)
             {
@@ -318,12 +318,13 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 {
                     this.EnableWritersCacheForHandlers(handlers);
                     this.RepublishAllEvents(this.GetEventStream(skipEvents), this.eventStore.CountOfAllEvents(),skipEventsCount: skipEvents, handlers: handlers);
-                    UpdateStatusMessage("Rebuild specific views succeeded.");
                 }
                 finally
                 {
                     this.DisableWritersCacheForHandlers(handlers);
                 }
+
+                UpdateStatusMessage("Rebuild specific views succeeded.");
             }
             catch (Exception exception)
             {
