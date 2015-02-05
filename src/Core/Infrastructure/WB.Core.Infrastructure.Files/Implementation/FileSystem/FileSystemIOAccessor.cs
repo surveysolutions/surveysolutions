@@ -3,6 +3,7 @@ using System.CodeDom;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using WB.Core.Infrastructure.FileSystem;
 using ZetaLongPaths;
@@ -130,7 +131,7 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
 
         public string[] GetFilesInDirectory(string pathToDirectory)
         {
-            return ZlpIOHelper.GetFiles(pathToDirectory).Select(fileInfo => fileInfo.FullName).ToArray();
+            return ZlpIOHelper.GetFiles(pathToDirectory).OrderBy(x=>x.CreationTime).Select(fileInfo => fileInfo.FullName).ToArray();
         }
 
         public string[] GetFilesInDirectory(string pathToDirectory, string pattern)

@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
+using WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTests;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomePackagesRepositoryTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UnhandledPackageStorageTests
 {
-    internal class when_GetListOfUnhandledPackages_is_called_and_error_folder_is_present_and_not_empty : IncomePackagesRepositoryTestContext
+    internal class when_GetListOfUnhandledPackages_is_called_and_error_folder_is_present_and_not_empty : UnhandledPackageStorageTestContext
     {
         Establish context = () =>
         {
@@ -38,16 +36,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomePackagesRepositoryT
             fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(interviewId.FormatGuid(), Moq.It.IsAny<string>()))
                 .Returns(filesWithInterview);
 
-            incomingPackagesQueue = CreateIncomePackagesRepository(fileSystemAccessor: fileSystemAccessorMock.Object);
+            unhandledPackageStorage = CreateUnhandledPackageStorage(fileSystemAccessor: fileSystemAccessorMock.Object);
         };
 
         Because of = () =>
-            result = incomingPackagesQueue.GetListOfUnhandledPackages();
+            result = unhandledPackageStorage.GetListOfUnhandledPackages();
 
         It should_result_not_empty = () =>
            result.ShouldEqual(new[] { "f1.sync", "f2.sync", interviewId.FormatGuid() + @"\" + "i1.sync", interviewId.FormatGuid() + @"\" + "i2.sync" });
 
-        private static IncomingPackagesQueue incomingPackagesQueue;
+        private static UnhandledPackageStorage unhandledPackageStorage;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
         private static IEnumerable<string> result;
         private static string[] filesWithoutInterview = new[] {"f1.sync", "f2.sync"};
