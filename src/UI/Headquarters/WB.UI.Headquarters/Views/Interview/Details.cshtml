@@ -33,10 +33,7 @@
         settings.UrlReferrer = urlReferrer;
 
         settings.Interview.InterviewId = '@Model.InterviewDetails.PublicKey';
-
         settings.Urls.CommandExecution = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "Execute"})';
-
-        settings.Urls.InterviewFile = '@Url.RouteUrl("Default", new {httproute = "", controller = "Resource", action = "InterviewFile"})';
 
         $(function () {
             window.model = new Supervisor.VM.Details(settings);
@@ -316,10 +313,10 @@
                         case QuestionType.QRBarcode:
                         case QuestionType.TextList:
                         case QuestionType.GpsCoordinates:
-                            @AnswerUtils.AnswerToString(entity.Answer)
+                        @AnswerUtils.AnswerToString(entity.Answer)
                             break;
                         case QuestionType.Multimedia:
-                            <img src="@Url.RouteUrl("Default", new {httproute = "", controller = "Resource", action = "InterviewFile", interviewid = Model.InterviewDetails.PublicKey, filename = entity.Answer})" />
+                        <img src="@Url.RouteUrl("Default", new {httproute = "", controller = "Resource", action = "InterviewFile", interviewid = Model.InterviewDetails.PublicKey, filename = entity.Answer})" />
                             break;
                     }
                     @if (!entity.IsValid)
@@ -339,46 +336,44 @@
                 {
                     <a class="btn btn-xs btn-primary" href="#">answer</a>
                 }
-                
-                    <div class="btn-group btn-group-xs">
-                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-cog"></i><span class="caret"></span></a>
-                        <ul class="dropdown-menu pull-right">
-                            @if (!entity.IsReadOnly && entity.IsEnabled)
-                            {
-                                <li><a href="#">Answer</a></li>
-                            }
-                            <li id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, "setFlagMenuItem")" class="@css("hidden", entity.IsFlagged)"><a data-bind="click: setFlag.bind($data, $element, '@entity.Id', '@Stringify(entity.RosterVector)')"><i class="glyphicon glyphicon-flag"></i>&nbsp;Set flag</a></li>
-                            <li id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, "removeFlagMenuItem")" class="@css("hidden", !entity.IsFlagged)"><a data-bind="click: removeFlag.bind($data, $element, '@entity.Id', '@Stringify(entity.RosterVector)')"><i class="glyphicon glyphicon-flag"></i>&nbsp;Remove Flag</a></li>
-                        </ul>
-                    </div>
-                
+
+                <div class="btn-group btn-group-xs">
+                    <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-cog"></i><span class="caret"></span></a>
+                    <ul class="dropdown-menu pull-right">
+                        @if (!entity.IsReadOnly && entity.IsEnabled)
+                        {
+                            <li><a href="#">Answer</a></li>
+                        }
+                        <li id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, "setFlagMenuItem")" class="@css("hidden", entity.IsFlagged)"><a data-bind="click: setFlag.bind($data, $element, '@entity.Id', '@Stringify(entity.RosterVector)')"><i class="glyphicon glyphicon-flag"></i>&nbsp;Set flag</a></li>
+                        <li id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, "removeFlagMenuItem")" class="@css("hidden", !entity.IsFlagged)"><a data-bind="click: removeFlag.bind($data, $element, '@entity.Id', '@Stringify(entity.RosterVector)')"><i class="glyphicon glyphicon-flag"></i>&nbsp;Remove Flag</a></li>
+                    </ul>
+                </div>
+
             </div>
         </td>
         <td class="comments col-sm-3">
-            @if (entity.Comments != null && entity.Comments.Count > 0)
-            {
-                <h4 class="heading">Comments</h4>
-    <dl id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, "commentList")">
-        @foreach (var comment in entity.Comments)
-        {
-            <dt>@comment.CommenterName</dt>
-            <dd>
-                <span>@comment.Text</span>
-                <small class="text-block comment-date" data-bind="text: moment('@comment.Date').fromNow()"></small>
-            </dd>
-        }
-    </dl>
-            }
+            <dl id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, "commentList")" class="@css("hidden", entity.Comments == null || entity.Comments.Count == 0)">
+                @if (entity.Comments != null && entity.Comments.Count > 0)
+                {
+                    foreach (var comment in entity.Comments)
+                    {
+                        <dt>@comment.CommenterName <span class="text-normal">@comment.Text</span></dt>
+                        <dd>
+                            <small class="comment-date" data-bind="text: moment('@comment.Date').fromNow()"></small>
+                        </dd>
+                    }
+                }
+            </dl>
+
             <div class="form-horizontal">
-            <div class="has-feedback">
-                <div >
-                    <input id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, "addComment")" type="text" class="form-control" id="inputSuccess3" aria-describedby="inputSuccess3Status" placeholder="Enter your comment here">
-                    <span class="glyphicon glyphicon-plus form-control-feedback" aria-hidden="true" data-bind="click: addComment.bind($data, $element, '@entity.Id', '@Stringify(entity.RosterVector)')"></span>
-                    <span id="inputSuccess3Status" class="sr-only">(success)</span>
+                <div class="has-feedback">
+                    <div>
+                        <input type="text" class="form-control" placeholder="Write a comment..." data-bind="enterKey: addComment.bind($data, $element, '@entity.Id', '@Stringify(entity.RosterVector)')">
+                        <span class="glyphicon glyphicon-comment form-control-feedback" aria-hidden="true"></span>
+                    </div>
                 </div>
             </div>
-                </div>
-</td>
+        </td>
     </tr>
 }
 
@@ -393,7 +388,7 @@
     {
         return string.Format("{0}_{1}_{2}", questionId, Stringify(rosterVector), postfix);
     }
-    
+
     public string Stringify(decimal[] array)
     {
         return string.Join("_", array.Select(x => x.ToString(CultureInfo.InvariantCulture)));
