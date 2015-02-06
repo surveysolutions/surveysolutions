@@ -113,10 +113,9 @@ Supervisor.VM.Details = function (settings, filter) {
         if (areAnswersOrdered) {
             var selectedOptions = selectedOptionsAsString.split(',').map(function (answerAsString) { return parseFloat(answerAsString); });
             if (selectedOptions.length > answerOptionValues.length) {
-                var unSelectedAnswer = _.find(selectedOptions, function (answer) {
+                _.remove(selectedOptions, function (answer) {
                     return !_.contains(answerOptionValues, answer);
                 });
-                selectedOptions.pop(unSelectedAnswer);
             } else {
                 var selectedAnswer = _.find(answerOptionValues, function(answer) {
                     return !_.contains(selectedOptions, answer);
@@ -132,6 +131,7 @@ Supervisor.VM.Details = function (settings, filter) {
     };
 
     self.load = function () {
+        updateCommentDates();
         setInterval(updateCommentDates, 60000);
     };
 
