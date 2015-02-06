@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_WB0097_error = () => errors.ShouldContain(x => x.Code == "WB0097");
 
         It should_return_WB0097_error_with_appropriate_message = () =>
-            errors.ShouldContain(x => x.Message == "Questionnaire title contains characters that are not allowed. Only letters, numbers, and _ are allowed.");
+            errors.ShouldContain(x => x.Message == "Questionnaire title contains characters that are not allowed. Only letters, numbers, space and _ are allowed.");
 
         static QuestionnaireDocument questionnaire;
         static QuestionnaireVerifier verifier;
