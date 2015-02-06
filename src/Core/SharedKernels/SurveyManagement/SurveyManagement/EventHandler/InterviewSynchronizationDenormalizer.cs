@@ -159,7 +159,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 questionnaireId, 
                 questionnaireVersion, 
                 responsibleId, 
-                SyncItemType.Questionnare, 
+                SyncItemType.Interview, 
                 this.jsonUtils.Serialize(doc, TypeSerializationSettings.AllTypes), 
                 this.jsonUtils.Serialize(this.metaBuilder.GetInterviewMetaInfo(doc), TypeSerializationSettings.AllTypes), 
                 timestamp);

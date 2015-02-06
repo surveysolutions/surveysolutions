@@ -111,7 +111,14 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             if (package == null)
                 throw new ArgumentException(string.Format("Package {0} with user is absent", packageId));
 
-            return new UserSyncPackageDto(package);
+            return new UserSyncPackageDto
+                   {
+                       PackageId = package.PackageId, 
+                       Content = package.Content, 
+                       Timestamp = package.Timestamp, 
+                       SortIndex = package.SortIndex,
+                       UserId = package.UserId
+                   };
         }
 
         public QuestionnaireSyncPackageDto ReceiveQuestionnaireSyncPackage(Guid clientRegistrationId, string packageId)
@@ -121,7 +128,17 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             if (package == null)
                 throw new ArgumentException(string.Format("Package {0} with questionnaire is absent", packageId));
 
-            return new QuestionnaireSyncPackageDto(package);
+            return new QuestionnaireSyncPackageDto
+                   {
+                       PackageId = package.PackageId,
+                       Content = package.Content,
+                       Timestamp = package.Timestamp,
+                       SortIndex = package.SortIndex,
+                       QuestionnaireId = package.QuestionnaireId,
+                       QuestionnaireVersion = package.QuestionnaireVersion,
+                       ItemType = package.ItemType,
+                       MetaInfo = package.MetaInfo,
+                   };
         }
 
         public InterviewSyncPackageDto ReceiveInterviewSyncPackage(Guid clientRegistrationId, string packageId)
@@ -131,7 +148,18 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             InterviewSyncPackage package = this.interviewPackageStore.GetById(packageId);
             if (package == null)
                 throw new ArgumentException(string.Format("Package {0} with interview is absent", packageId));
-            return new InterviewSyncPackageDto(package);
+            return new InterviewSyncPackageDto
+                   {
+                       PackageId = package.PackageId,
+                       Content = package.Content,
+                       Timestamp = package.Timestamp,
+                       SortIndex = package.SortIndex,
+                       MetaInfo = package.MetaInfo,
+                       InterviewId = package.InterviewId,
+                       VersionedQuestionnaireId = package.VersionedQuestionnaireId,
+                       UserId = package.UserId,
+                       ItemType = package.ItemType,
+                   };
         }
 
         public string GetPackageIdByTimestamp(Guid userId, DateTime timestamp)

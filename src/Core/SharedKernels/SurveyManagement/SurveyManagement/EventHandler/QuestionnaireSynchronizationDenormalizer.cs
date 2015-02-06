@@ -91,7 +91,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             this.StoreChunk(questionnaireDocument.PublicKey, 
                 version, 
-                SyncItemType.Template, 
+                SyncItemType.Questionnaire, 
                 this.GetItemAsContent(questionnaireDocument), 
                 this.GetItemAsContent(questionnaireMetadata), 
                 timestamp);

@@ -39,6 +39,9 @@ using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization;
 using WB.UI.Shared.Android.Extensions;
 
+using SynchronizationEventArgs = WB.Core.BoundedContexts.Capi.Implementation.Syncronization.SynchronizationEventArgs;
+using SynchronizationEventArgsWithPercent = WB.Core.BoundedContexts.Capi.Implementation.Syncronization.SynchronizationEventArgsWithPercent;
+
 namespace WB.UI.Capi
 {
     [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
@@ -290,7 +293,8 @@ namespace WB.UI.Capi
                     CapiApplication.Kernel.Get<ISyncPackageIdsStorage>(),
                     CapiApplication.Kernel.Get<ILogger>(),
                     CapiApplication.Kernel.Get<ISynchronizationService>(),
-                    CapiApplication.Kernel.Get<IInterviewerSettings>());
+                    CapiApplication.Kernel.Get<IInterviewerSettings>(),
+                    CapiApplication.Membership);
             }
             catch (Exception ex)
             {

@@ -3736,7 +3736,7 @@ ko.exportSymbol('__tr_ambtns', ko.templateRewriting.applyMemoizedBindingsToNextS
     //                                           without reading/writing the actual element text content, since it will be overwritten
     //                                           with the rendered template output.
     // You can implement your own template source if you want to fetch/store templates somewhere other than in DOM elements.
-    // Template sources need to have the following functions:
+    // Questionnaire sources need to have the following functions:
     //   text() 			- returns the template text from your storage location
     //   text(value)		- writes the supplied template text to your storage location
     //   data(key)			- reads values stored using data(key, value) - see below
@@ -3910,7 +3910,7 @@ ko.exportSymbol('__tr_ambtns', ko.templateRewriting.applyMemoizedBindingsToNextS
 
         // Loosely check result is an array of DOM nodes
         if ((typeof renderedNodesArray.length != "number") || (renderedNodesArray.length > 0 && typeof renderedNodesArray[0].nodeType != "number"))
-            throw new Error("Template engine must return an array of DOM nodes");
+            throw new Error("Questionnaire engine must return an array of DOM nodes");
 
         var haveAddedNodesToParent = false;
         switch (renderMode) {

@@ -67,13 +67,13 @@
                 <td>
                     <a data-bind="attr: { href: $interviewsUrl + '?templateId=' + QuestionnaireId() + '&templateVersion=' + QuestionnaireVersion() }, text: QuestionnaireTitle() + ' (ver.' + QuestionnaireVersion() + ')'"></a>
                 </td>
-                <td data-bind="template: { name: 'SupervisorAssignedCountTemplate' }"></td>
-                <td data-bind="template: { name: 'InterviewerAssignedCountTemplate' }"></td>
-                <td data-bind="template: { name: 'CompletedCountTemplate' }"></td>
-                <td data-bind="template: { name: 'RejectedBySupervisorCountTemplate' }"></td>
-                <td data-bind="template: { name: 'ApprovedBySupervisorCountTemplate' }"></td>
-                <td data-bind="template: { name: 'RejectedByHeadquartersCountTemplate' }"></td>
-                <td data-bind="template: { name: 'ApprovedByHeadquartersCountTemplate' }"></td>
+                <td data-bind="template: { name: 'SupervisorAssignedCountQuestionnaire' }"></td>
+                <td data-bind="template: { name: 'InterviewerAssignedCountQuestionnaire' }"></td>
+                <td data-bind="template: { name: 'CompletedCountQuestionnaire' }"></td>
+                <td data-bind="template: { name: 'RejectedBySupervisorCountQuestionnaire' }"></td>
+                <td data-bind="template: { name: 'ApprovedBySupervisorCountQuestionnaire' }"></td>
+                <td data-bind="template: { name: 'RejectedByHeadquartersCountQuestionnaire' }"></td>
+                <td data-bind="template: { name: 'ApprovedByHeadquartersCountQuestionnaire' }"></td>
                 <td>
                     <a data-bind="attr: { href: $interviewsUrl + '?templateId=' + QuestionnaireId() + '&templateVersion=' + QuestionnaireVersion() }, text: TotalCount"></a>
                 </td>

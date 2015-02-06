@@ -63,7 +63,6 @@ namespace WB.UI.QuestionnaireTester
 
         protected override void OnCreate(Bundle bundle)
         {
-
             this.DataContext = new LoginViewModel();
             base.OnCreate(bundle);
 
