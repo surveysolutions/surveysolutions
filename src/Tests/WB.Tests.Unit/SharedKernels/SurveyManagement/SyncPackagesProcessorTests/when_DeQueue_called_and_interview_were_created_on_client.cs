@@ -33,38 +33,24 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
                 new InterviewMetaInfo()
                 {
                     CreatedOnClient = true,
-                    FeaturedQuestionsMeta = new[] {new FeaturedQuestionMeta(Guid.NewGuid(), "test", "test value")}
+                    PublicKey = interviewId 
                 });
 
             var fileSystemAccessor = Mock.Of<IFileSystemAccessor>(_ =>
                 _.IsFileExists(Moq.It.IsAny<string>()) == true);
 
-            var incomingPackagesQueue = Mock.Of<IIncomingPackagesQueue>(_ => _.DeQueue() == Guid.NewGuid().FormatGuid());
-
-            var eventStore = Mock.Of<IStreamableEventStore>();
-            Mock.Get(eventStore)
-                .Setup(store => store.Store(Moq.It.IsAny<UncommittedEventStream>()))
-                .Callback<UncommittedEventStream>(stream => storedStream = stream);
+            var incomingPackagesQueue = Mock.Of<IIncomingSyncPackagesQueue>(_ => _.DeQueue() == Guid.NewGuid().FormatGuid());
 
             commandServiceMock=new Mock<ICommandService>();
-            syncPackagesProcessor = CreateSyncPackagesProcessor(eventStore: eventStore, fileSystemAccessor: fileSystemAccessor, jsonUtils: jsonUtils, commandService:commandServiceMock.Object,
-                interviewSummaryStorage:
-                    Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(_ => _.GetById(interviewId.FormatGuid()) == new InterviewSummary()), incomingPackagesQueue: incomingPackagesQueue);
+            syncPackagesProcessor = CreateSyncPackagesProcessor(fileSystemAccessor: fileSystemAccessor, jsonUtils: jsonUtils, commandService: commandServiceMock.Object, incomingSyncPackagesQueue: incomingPackagesQueue);
         };
 
         Because of = () =>
             syncPackagesProcessor.ProcessNextSyncPackage();
 
-        It should_not_change_event_timespamp = () =>
-            storedStream.Single().EventTimeStamp.ShouldEqual(initialTimestamp);
+        It should_call_SynchronizeInterviewEvents = () =>
+            commandServiceMock.Verify(x => x.Execute(Moq.It.Is<SynchronizeInterviewEvents>(_ => _.CreatedOnClient && _.InterviewId == interviewId), ""), Times.Once);
 
-        It should_call_CreateInterviewCreatedOnClientCommand = () =>
-            commandServiceMock.Verify(x => x.Execute(Moq.It.IsAny<CreateInterviewCreatedOnClientCommand>(), Moq.It.IsAny<string>()), Times.Once);
-
-        It should_never_call_ApplySynchronizationMetadata = () =>
-            commandServiceMock.Verify(x => x.Execute(Moq.It.IsAny<ApplySynchronizationMetadata>(), Moq.It.IsAny<string>()), Times.Never);
-
-        private static UncommittedEventStream storedStream;
         private static readonly DateTime initialTimestamp = new DateTime(2012, 04, 22);
         private static SyncPackagesProcessor syncPackagesProcessor;
         private static Guid interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
