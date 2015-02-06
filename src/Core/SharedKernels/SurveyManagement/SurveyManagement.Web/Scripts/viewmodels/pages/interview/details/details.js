@@ -93,26 +93,46 @@ Supervisor.VM.Details = function (settings, filter) {
         sendAnswerCommand(config.commands.answerNumericRealQuestionCommand, question);
     };
 
-    self.saveCategoricalOneAnswer = function (questionId, underscoreJoinedQuestionRosterVector, isLinked) {
+    self.saveCategoricalOneAnswer = function (questionId, underscoreJoinedQuestionRosterVector) {
         var answerElementId = getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector);
+        var answerOptionValue = $("input:radio[name=" + answerElementId + "]:checked").val();
 
         var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
-        question.selectedOption = ko.observable($("input:radio[name=" + answerElementId + "]:checked").val());
+        question.selectedOption = ko.observable(answerOptionValue);
 
         sendAnswerCommand(config.commands.answerSingleOptionQuestionCommand, question);
     };
 
-    self.saveCategoricalMultiAnswer = function (questionId, underscoreJoinedQuestionRosterVector, isLinked, areAnswersOrdered, maxAnswersCount, prevAnswer) {
+    self.saveCategoricalMultiAnswer = function (questionId, underscoreJoinedQuestionRosterVector, areAnswersOrdered, maxAnswersCount, selectedOptionsAsString) {
         var answerElementId = getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector);
-
+        var answerOptionValues = $("input:checkbox[name=" + answerElementId + "]:checked").map(function() { return parseFloat($(this).val()); }).get();
+        
         var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
-        question.areAnswersOrdered = areAnswersOrdered;
-        question.selectedOptions = ko.observable($("input:checkbox[name=" + answerElementId + "]:checked").map(function () { return $(this).val(); }).get());
+        question.areAnswersOrdered = false;
+
+        if (areAnswersOrdered) {
+            var selectedOptions = selectedOptionsAsString.split(',').map(function (answerAsString) { return parseFloat(answerAsString); });
+            if (selectedOptions.length > answerOptionValues.length) {
+                var unSelectedAnswer = _.find(selectedOptions, function (answer) {
+                    return !_.contains(answerOptionValues, answer);
+                });
+                selectedOptions.pop(unSelectedAnswer);
+            } else {
+                var selectedAnswer = _.find(answerOptionValues, function(answer) {
+                    return !_.contains(selectedOptions, answer);
+                });
+                selectedOptions.push(selectedAnswer);
+            }
+            question.selectedOptions = ko.observable(selectedOptions);
+        } else {
+            question.selectedOptions = ko.observable(answerOptionValues);
+        }
 
         sendAnswerCommand(config.commands.answerMultipleOptionsQuestionCommand, question);
     };
 
     self.load = function () {
+        setInterval(updateCommentDates, 60000);
     };
 
     self.showApproveModal = function () {
@@ -166,6 +186,12 @@ Supervisor.VM.Details = function (settings, filter) {
         self.IsFilterOpen(!self.IsFilterOpen());
     };
 
+    function updateCommentDates() {
+        $(".comment-date").each(function (index, item) {
+            $(item).text(moment($(item).attr("date")).fromNow());
+        });
+    };
+
     function sendAnswerCommand(commandName, question) {
         var command = datacontext.getCommand(commandName, question);
         self.SendCommand(command, function () {
@@ -181,7 +207,7 @@ Supervisor.VM.Details = function (settings, filter) {
         if (rosterVector == "")
             return [];
 
-        return rosterVector.split('_');
+        return rosterVector.split('_').map(function (vector) { return vector.replace('-', '.'); });
     }
 
     function prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector) {
