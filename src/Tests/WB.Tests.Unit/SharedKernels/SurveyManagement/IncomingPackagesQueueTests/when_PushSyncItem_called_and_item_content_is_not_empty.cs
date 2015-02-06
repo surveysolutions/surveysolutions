@@ -1,27 +1,20 @@
-﻿using System;
-using Machine.Specifications;
+﻿using Machine.Specifications;
 using Moq;
-
-using WB.Core.GenericSubdomains.Utils.Services;
-using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository;
-using WB.Core.SharedKernels.SurveySolutions.Services;
+using WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTests;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomePackagesRepositoryTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTests
 {
-    internal class when_PushSyncItem_called_and_item_content_is_not_empty : IncomePackagesRepositoryTestContext
+    internal class when_PushSyncItem_called_and_item_content_is_not_empty : IncomingPackagesQueueTestContext
     {
         Establish context = () =>
         {
             fileSystemAccessorMock = CreateDefaultFileSystemAccessorMock();
 
-            incomingPackagesQueue = CreateIncomePackagesRepository(fileSystemAccessor: fileSystemAccessorMock.Object);
+            incomingPackagesQueue = CreateIncomingPackagesQueue(fileSystemAccessor: fileSystemAccessorMock.Object);
         };
 
         Because of = () =>
