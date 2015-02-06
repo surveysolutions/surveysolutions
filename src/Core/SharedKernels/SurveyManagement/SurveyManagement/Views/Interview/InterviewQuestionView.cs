@@ -70,6 +70,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 };
             }
 
+            var textQuestion = question as TextQuestion;
+            if (textQuestion != null)
+            {
+                this.Settings = new TextQuestionSettings
+                {
+                    Mask = textQuestion.Mask
+                };
+            }
+
             if (answeredQuestion == null) return;
 
             this.IsAnswered = answeredQuestion.IsAnswered();
@@ -98,15 +107,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                         Label = a.Answer
                     }).ToList();
                 }
-            }
-
-            var textQuestion = question as TextQuestion;
-            if (textQuestion != null)
-            {
-                this.Settings = new
-                {
-                    Mask = textQuestion.Mask
-                };
             }
 
             bool shouldBeValidByConvention = !this.IsEnabled;
@@ -217,6 +217,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public object Answer { get; set; }
 
         public dynamic Settings { get; set; }
+    }
+
+    public class TextQuestionSettings
+    {
+        public string Mask { get; set; }
     }
 
     public class NumericQuestionSettings
