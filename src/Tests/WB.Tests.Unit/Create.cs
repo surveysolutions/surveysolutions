@@ -70,12 +70,15 @@ namespace WB.Tests.Unit
 {
     internal static class Create
     {
-        public static IPublishedEvent<T> ToPublishedEvent<T>(this T @event, Guid? eventSourceId = null)
+        public static IPublishedEvent<T> ToPublishedEvent<T>(this T @event, 
+            Guid? eventSourceId = null,
+            string origin = null)
             where T : class
         {
             return Mock.Of<IPublishedEvent<T>>(publishedEvent
                 => publishedEvent.Payload == @event
-                && publishedEvent.EventSourceId == (eventSourceId ?? Guid.NewGuid()));
+                && publishedEvent.EventSourceId == (eventSourceId ?? Guid.NewGuid()) &&
+                publishedEvent.Origin == origin);
         }
 
         public static class Event
@@ -1174,9 +1177,9 @@ namespace WB.Tests.Unit
                     interviewerId: GetGuidIdByStringId(interviewerId)));
         }
 
-        public static IPublishedEvent<InterviewDeleted> InterviewDeletedEvent(string userId = null, Guid? interviewId = null)
+        public static IPublishedEvent<InterviewDeleted> InterviewDeletedEvent(string userId = null, string origin = null, Guid? interviewId = null)
         {
-            return ToPublishedEvent(new InterviewDeleted(userId: GetGuidIdByStringId(userId)), eventSourceId: interviewId);
+            return ToPublishedEvent(new InterviewDeleted(userId: GetGuidIdByStringId(userId)), origin: origin, eventSourceId: interviewId);
         }
 
         public static IPublishedEvent<InterviewHardDeleted> InterviewHardDeletedEvent(string userId = null, Guid? interviewId = null)
@@ -1184,9 +1187,10 @@ namespace WB.Tests.Unit
             return ToPublishedEvent(new InterviewHardDeleted(userId: GetGuidIdByStringId(userId)), eventSourceId: interviewId);
         }
 
-        public static IPublishedEvent<InterviewRestored> InterviewRestoredEvent(string userId = null)
+        public static IPublishedEvent<InterviewRestored> InterviewRestoredEvent(string userId = null,
+            string origin = null)
         {
-            return ToPublishedEvent(new InterviewRestored(userId: GetGuidIdByStringId(userId)));
+            return ToPublishedEvent(new InterviewRestored(userId: GetGuidIdByStringId(userId)), origin: origin);
         }
 
         public static IPublishedEvent<InterviewRestarted> InterviewRestartedEvent(string userId = null)

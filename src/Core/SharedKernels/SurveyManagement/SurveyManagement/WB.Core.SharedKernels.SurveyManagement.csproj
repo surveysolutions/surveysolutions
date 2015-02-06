@@ -174,6 +174,8 @@
     <Compile Include="Implementation\Services\SampleImportService.cs" />
     <Compile Include="Implementation\Services\SupportedVersionProvider.cs" />
     <Compile Include="Implementation\Services\TabletInformation\FileBasedTabletInformationService.cs" />
+    <Compile Include="Implementation\Synchronization\SyncPackagesProcessor.cs" />
+    <Compile Include="Implementation\Synchronization\UnhandledPackageStorage.cs" />
     <Compile Include="Implementation\TemporaryDataStorage\FileTemporaryDataStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PreloadingVerificationMessages.Designer.cs">
@@ -208,6 +210,7 @@
     <Compile Include="Services\Sql\ISqlServiceFactory.cs" />
     <Compile Include="SurveyManagementSharedKernelModule.cs" />
     <Compile Include="Synchronization\Interview\EntryType.cs" />
+    <Compile Include="Synchronization\IUnhandledPackageStorage.cs" />
     <Compile Include="Synchronization\Questionnaire\QuestionnaireEntryType.cs" />
     <Compile Include="Synchronization\Questionnaire\QuestionnaireFeedEntry.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundSchedulerTask.cs" />

@@ -103,8 +103,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             if (newStatus != InterviewStatus.Completed && newStatus != InterviewStatus.Restarted)
                 return view;
 
-            AddHistoricalRecord(view, newStatus == InterviewStatus.Completed ? InterviewHistoricalAction.Completed : InterviewHistoricalAction.Restarted, Guid.Empty, evnt.EventTimeStamp,
-               CreateCommentParameters(evnt.Payload.Comment));
+            InterviewHistoricalAction interviewHistoricalAction = newStatus == InterviewStatus.Completed ? InterviewHistoricalAction.Completed : InterviewHistoricalAction.Restarted;
+            AddHistoricalRecord(view, interviewHistoricalAction, Guid.Empty, evnt.EventTimeStamp, CreateCommentParameters(evnt.Payload.Comment));
 
             return view;
         }

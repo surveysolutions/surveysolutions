@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Machine.Specifications;
+﻿using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository;
+using WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTests;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomePackagesRepositoryTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTests
 {
-    internal class when_QueueLength_called : IncomePackagesRepositoryTestContext
+    internal class when_QueueLength_called : IncomingPackagesQueueTestContext
     {
         Establish context = () =>
         {
@@ -20,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomePackagesRepositoryT
             fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>()))
                 .Returns(filesInFolder);
 
-            incomingPackagesQueue = CreateIncomePackagesRepository(fileSystemAccessor: fileSystemAccessorMock.Object);
+            incomingPackagesQueue = CreateIncomingPackagesQueue(fileSystemAccessor: fileSystemAccessorMock.Object);
         };
 
         Because of = () =>

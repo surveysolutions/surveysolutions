@@ -1,5 +1,6 @@
 ﻿using System;
 using Quartz;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository;
 using WB.Core.Synchronization;
 
@@ -21,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.Inte
 
         public void Configure()
         {
-            IJobDetail job = JobBuilder.Create<IncomingPackagesQueue>()
+            IJobDetail job = JobBuilder.Create<SyncPackagesProcessor>()
                 .WithIdentity("Capi interview packages sync", "Synchronization")
                 .StoreDurably(true)
                 .Build();

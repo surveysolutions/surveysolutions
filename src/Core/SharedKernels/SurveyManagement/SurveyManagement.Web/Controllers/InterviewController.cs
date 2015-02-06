@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -42,19 +44,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.interviewDetailsViewFactory = interviewDetailsViewFactory;
         }
 
-        public ActionResult Details(Guid id, InterviewDetailsSortBy? sortBy,  InterviewDetailsFilter? filter)
+        public ActionResult Details(Guid id, InterviewDetailsFilter? filter, Guid? currentGroupId)
         {
             this.ViewBag.ActivePage = MenuItem.Docs;
 
-            sortBy = sortBy.HasValue ? sortBy : InterviewDetailsSortBy.All;
-            filter = filter.HasValue ? filter : InterviewDetailsFilter.None;
+            filter = filter.HasValue ? filter : InterviewDetailsFilter.All;
 
-            ChangeStatusView interviewInfo = this.changeStatusFactory.Load(new ChangeStatusInputModel() { InterviewId = id });
+
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
-            ChangeStatusView interviewHistoryOfStatuses = this.changeStatusFactory.Load(new ChangeStatusInputModel { InterviewId = id });
-
-            if (interviewInfo == null || interviewSummary == null)
-                return HttpNotFound();
 
             bool isAccessAllowed =
                 this.GlobalInfo.IsHeadquarter ||
@@ -63,30 +60,100 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (!isAccessAllowed)
                 return HttpNotFound();
 
+            ChangeStatusView interviewInfo =
+                this.changeStatusFactory.Load(new ChangeStatusInputModel() {InterviewId = id});
+
+            if (interviewInfo == null || interviewSummary == null)
+                return HttpNotFound();
+
+            ChangeStatusView interviewHistoryOfStatuses =
+                this.changeStatusFactory.Load(new ChangeStatusInputModel {InterviewId = id});
             InterviewDetailsView interviewDetailsView = interviewDetailsViewFactory.GetInterviewDetails(id);
 
-            var allGroups = interviewDetailsView.Groups.ToArray();
+            var detailsStatisticView = new DetailsStatisticView()
+            {
+                AnsweredCount = interviewDetailsView.Groups.Sum(_ => _.Entities.Count(x => ((x is InterviewQuestionView) && ((InterviewQuestionView)x).IsAnswered))),
+                CommentedCount = interviewDetailsView.Groups.Sum(_ => _.Entities.Count(x => ((x is InterviewQuestionView) && ((InterviewQuestionView)x).Comments != null && ((InterviewQuestionView)x).Comments.Any()))),
+                EnabledCount = interviewDetailsView.Groups.Sum(_ => _.Entities.Count(x => ((x is InterviewQuestionView) && ((InterviewQuestionView)x).IsEnabled))),
+                FlaggedCount = interviewDetailsView.Groups.Sum(_ => _.Entities.Count(x => ((x is InterviewQuestionView) && ((InterviewQuestionView)x).IsFlagged))),
+                InvalidCount = interviewDetailsView.Groups.Sum(_ => _.Entities.Count(x => ((x is InterviewQuestionView) && !((InterviewQuestionView)x).IsValid))),
+                SupervisorsCount = interviewDetailsView.Groups.Sum(_ => _.Entities.Count(x => ((x is InterviewQuestionView) && ((InterviewQuestionView)x).Scope == QuestionScope.Supervisor)))
+            };
+
+            var selectedGroups = new List<InterviewGroupView>();
 
             foreach (var interviewGroupView in interviewDetailsView.Groups)
             {
-                if (sortBy.Value == InterviewDetailsSortBy.Answered)
+                if (currentGroupId.HasValue)
                 {
-                    interviewGroupView.Entities =
-                        interviewGroupView.Entities.Where(
-                            x =>
-                                x is InterviewStaticTextView ||
-                                ((x is InterviewQuestionView) && ((InterviewQuestionView) x).IsAnswered)).ToList();
+                    if (interviewGroupView.Id == currentGroupId.Value || selectedGroups.Any(_ => _.Id == interviewGroupView.ParentId))
+                    {
+                        selectedGroups.Add(interviewGroupView);
+                    }
+                }
+                else
+                {
+                    switch (filter)
+                    {
+                        case InterviewDetailsFilter.Answered:
+                            interviewGroupView.Entities =
+                                interviewGroupView.Entities.Where(
+                                    x =>
+                                        x is InterviewStaticTextView ||
+                                        ((x is InterviewQuestionView) && ((InterviewQuestionView)x).IsAnswered)).ToList();
+                            break;
+                        case InterviewDetailsFilter.Commented:
+                            interviewGroupView.Entities =
+                                interviewGroupView.Entities.Where(
+                                    x =>
+                                        x is InterviewStaticTextView ||
+                                        ((x is InterviewQuestionView) && ((InterviewQuestionView)x).Comments != null &&
+                                         ((InterviewQuestionView)x).Comments.Any())).ToList();
+                            break;
+                        case InterviewDetailsFilter.Enabled:
+                            interviewGroupView.Entities =
+                            interviewGroupView.Entities.Where(
+                                x =>
+                                    x is InterviewStaticTextView ||
+                                    ((x is InterviewQuestionView) && ((InterviewQuestionView)x).IsEnabled)).ToList();
+                            break;
+                        case InterviewDetailsFilter.Flagged:
+                            interviewGroupView.Entities =
+                            interviewGroupView.Entities.Where(
+                                x =>
+                                    x is InterviewStaticTextView ||
+                                    ((x is InterviewQuestionView) && ((InterviewQuestionView)x).IsFlagged)).ToList();
+                            break;
+                        case InterviewDetailsFilter.Invalid:
+                            interviewGroupView.Entities =
+                            interviewGroupView.Entities.Where(
+                                x =>
+                                    x is InterviewStaticTextView ||
+                                    ((x is InterviewQuestionView) && !((InterviewQuestionView)x).IsValid)).ToList();
+                            break;
+                        case InterviewDetailsFilter.Supervisors:
+                            interviewGroupView.Entities =
+                            interviewGroupView.Entities.Where(
+                                x =>
+                                    x is InterviewStaticTextView ||
+                                    ((x is InterviewQuestionView) &&
+                                     ((InterviewQuestionView)x).Scope == QuestionScope.Supervisor)).ToList();
+                            break;
+                    }
+
+                    if (interviewGroupView.Entities.Any())
+                        selectedGroups.Add(interviewGroupView);
                 }
             }
 
             return
                 View(new DetailsViewModel()
                 {
-                    SortBy = sortBy.Value,
                     Filter = filter.Value,
-                    FilteredInterviewDetails = interviewDetailsView,
-                    Groups = allGroups,
-                    History = interviewHistoryOfStatuses
+                    InterviewDetails = interviewDetailsView,
+                    FilteredGroups = selectedGroups,
+                    History = interviewHistoryOfStatuses,
+                    Statistic = detailsStatisticView
                 });
         }
 
