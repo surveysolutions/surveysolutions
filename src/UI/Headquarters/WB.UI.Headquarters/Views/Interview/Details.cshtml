@@ -247,8 +247,9 @@
                 switch (entity.QuestionType)
                 {
                     case QuestionType.Text:
+                        var textQuestionSettings = entity.Settings as TextQuestionSettings;
                         <div class="input-group">
-                            <input id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector)" class="form-control" type="text" value="@entity.Answer" />
+                            <input id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector)" class="form-control mask" type="text" value="@entity.Answer" mask="@(textQuestionSettings.Mask)" />
                             <span class="input-group-btn">
                                 <button class="btn btn-success" type="button" data-bind="click: saveTextAnswer.bind($data, '@entity.Id', '@Stringify(entity.RosterVector)')">Save</button>
                             </span>

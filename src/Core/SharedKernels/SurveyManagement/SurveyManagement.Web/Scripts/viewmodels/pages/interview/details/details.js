@@ -131,6 +131,11 @@ Supervisor.VM.Details = function (settings, filter) {
     };
 
     self.load = function () {
+        $("input[mask]").each(function (index, item) {
+            ko.bindingHandlers.maskFormatter.init(this, function () {
+                return $(item).attr("mask");
+            });
+        });
         updateCommentDates();
         setInterval(updateCommentDates, 60000);
     };
