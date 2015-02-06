@@ -29,7 +29,7 @@ Supervisor.VM.Details = function (settings, filter) {
                 var commentsCounterElement = $("#commentsCounter");
                 commentsCounterElement.text(parseInt(commentsCounterElement.text()) + 1);
             }
-            commentListElement.append('<dt>' + settings.UserName + ' <span class="text-normal">' + comment + '</span></dt><dd><small class="comment-date">' + moment(new Date()).fromNow() + '</small></dd>');
+            commentListElement.append('<dt>' + settings.UserName + ' <span class="text-normal">' + comment + '</span></dt><dd><small class="comment-date" date="' + moment(new Date()).fromNow() + '"></small></dd>');
             commentListElement.removeClass("hidden");
         });
     };
