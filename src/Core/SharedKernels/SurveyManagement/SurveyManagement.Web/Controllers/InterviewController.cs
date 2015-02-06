@@ -83,11 +83,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             var selectedGroups = new List<InterviewGroupView>();
 
+            var currentGroup = interviewDetailsView.Groups.Find(group => currentGroupId != null && group.Id == currentGroupId);
+
             foreach (var interviewGroupView in interviewDetailsView.Groups)
             {
-                if (currentGroupId.HasValue)
+                if (currentGroup != null && currentGroup.ParentId.HasValue)
                 {
-                    if (interviewGroupView.Id == currentGroupId.Value || selectedGroups.Any(_ => _.Id == interviewGroupView.ParentId))
+                    if (interviewGroupView.Id == currentGroup.Id || selectedGroups.Any(_ => _.Id == interviewGroupView.ParentId))
                     {
                         selectedGroups.Add(interviewGroupView);
                     }
