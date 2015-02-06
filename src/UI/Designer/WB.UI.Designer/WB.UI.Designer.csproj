@@ -678,6 +678,7 @@
     <Content Include="Views\Questionnaire\Index.cshtml">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

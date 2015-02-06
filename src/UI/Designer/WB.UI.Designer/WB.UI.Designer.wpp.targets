@@ -2,20 +2,20 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <DeployManagedPipelineMode>Integrated</DeployManagedPipelineMode>
-	<EnableMSDeployAppOffline>true</EnableMSDeployAppOffline>
-	<MSDeployUseChecksum>true</MSDeployUseChecksum>
+    <EnableMSDeployAppOffline>true</EnableMSDeployAppOffline>
+    <MSDeployUseChecksum>true</MSDeployUseChecksum>
     <OnBeforePackageUsingManifest>AddCustomSkipRules</OnBeforePackageUsingManifest>
   </PropertyGroup>
   <Target Name="AddCustomSkipRules">
     <ItemGroup>
-	<MsDeploySkipRules Include="SkipAppDataFolder">
+      <MsDeploySkipRules Include="SkipAppDataFolder">
         <SkipAction>Delete</SkipAction>
         <ObjectName>dirPath</ObjectName>
         <AbsolutePath>\\App_Data$</AbsolutePath>
         <XPath></XPath>
       </MsDeploySkipRules>
-           
-	<MsDeploySkipRules Include="SkipReadSideFolder">
+
+      <MsDeploySkipRules Include="SkipReadSideFolder">
         <SkipAction>Delete</SkipAction>
         <ObjectName>dirPath</ObjectName>
         <AbsolutePath>\\App_Data\\ReadSide\\.*\\*</AbsolutePath>
