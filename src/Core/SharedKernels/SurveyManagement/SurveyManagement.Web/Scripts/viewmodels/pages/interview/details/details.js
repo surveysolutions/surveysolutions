@@ -36,27 +36,27 @@ Supervisor.VM.Details = function (settings, filter) {
 
     self.flagAnswer = function (element, questionId, underscoreJoinedQuestionRosterVector) {
 
-        var isAnswerFlagged = $(element).hasClass("btn-info");
-        var commandName = isAnswerFlagged ? config.commands.removeFlagFromAnswer : config.commands.setFlagToAnswer;
-
         var question = {
             id: questionId,
-            rosterVector: parseRosterVector(underscoreJoinedQuestionRosterVector)
+            rosterVector: parseRosterVector(underscoreJoinedQuestionRosterVector),
+            isAnswerFlagged: $(element).hasClass("btn-info")
         }
+
+        var commandName = question.isAnswerFlagged ? config.commands.removeFlagFromAnswer : config.commands.setFlagToAnswer;
 
         var command = datacontext.getCommand(commandName, question);
         self.SendCommand(command, function () {
             var flagsCounterElement = $("#flagsCounter");
-            flagsCounterElement.text(parseInt(flagsCounterElement.text()) - 1);
 
-            if (isAnswerFlagged) {
+            if (question.isAnswerFlagged) {
                 if (filter.filteredBy == 'Flagged') {
-                    var answerRowElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "answer"));
+                    var answerRowElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "answerRow"));
                     answerRowElement.remove();
                 } else {
                     $(element).removeClass("btn-info");
                     $(element).addClass("btn-default");
                 }
+                flagsCounterElement.text(parseInt(flagsCounterElement.text()) - 1);
             } else {
                 $(element).removeClass("btn-default");
                 $(element).addClass("btn-info");
