@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
         {
             switch (item.ItemType)
             {
-                case SyncItemType.Template:
+                case SyncItemType.Questionnaire:
                     this.UpdateQuestionnaire(item);
                     break;
                 case SyncItemType.DeleteTemplate:
@@ -92,7 +92,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
         {
             switch (item.ItemType)
             {
-                case SyncItemType.Questionnare:
+                case SyncItemType.Interview:
                     this.UpdateInterview(item);
                     break;
                 case SyncItemType.DeleteQuestionnare:

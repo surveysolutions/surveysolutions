@@ -70,17 +70,17 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 => utils.Deserialize<bool>(positiveResponse) == true);
 
             Mock.Get(jsonUtils)
-                .Setup(utils => utils.Serialize(Moq.It.IsAny<AggregateRootEvent[]>()))
+                .Setup(utils => utils.Serialize(Moq.It.IsAny<AggregateRootEvent[]>(), TypeSerializationSettings.ObjectsOnly))
                 .Returns(eventsJson)
                 .Callback<object>(entity => events = (AggregateRootEvent[]) entity);
 
             Mock.Get(jsonUtils)
-                .Setup(utils => utils.Serialize(Moq.It.IsAny<InterviewMetaInfo>()))
+                .Setup(utils => utils.Serialize(Moq.It.IsAny<InterviewMetaInfo>(), TypeSerializationSettings.ObjectsOnly))
                 .Returns(metadataJson)
                 .Callback<object>(entity => metadata = (InterviewMetaInfo) entity);
 
             Mock.Get(jsonUtils)
-                .Setup(utils => utils.Serialize(Moq.It.IsAny<SyncItem>()))
+                .Setup(utils => utils.Serialize(Moq.It.IsAny<SyncItem>(), TypeSerializationSettings.ObjectsOnly))
                 .Returns(syncItemJson)
                 .Callback<object>(entity => syncItem = (SyncItem) entity);
 
