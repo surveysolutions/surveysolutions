@@ -770,7 +770,6 @@
     <Content Include="UpdatedDesigner\package.json" />
     <Content Include="Views\ControlPanel\ExpressionGeneration.cshtml" />
     <Content Include="Views\ControlPanel\MakeAdmin.cshtml" />
-    <Content Include="WB.UI.Designer.wpp.targets" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
