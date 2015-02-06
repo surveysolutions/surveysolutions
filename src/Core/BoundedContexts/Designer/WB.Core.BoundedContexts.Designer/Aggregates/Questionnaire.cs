@@ -793,11 +793,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             get { return ServiceLocator.Current.GetInstance<IExpressionProcessor>(); }
         }
 
-        private INCalcToCSharpConverter NCalcToCSharpConverter
-        {
-            get { return ServiceLocator.Current.GetInstance<INCalcToCSharpConverter>(); }
-        }
-
         protected ISubstitutionService SubstitutionService
         {
             get { return ServiceLocator.Current.GetInstance<ISubstitutionService>(); }
@@ -931,37 +926,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void DeleteQuestionnaire()
         {
             this.ApplyEvent(new QuestionnaireDeleted());
-        }
-
-        public void MigrateExpressionsToCSharp()
-        {
-            this.ThrowIfExpressionsAreAlreadyMigrated();
-
-
-            bool wasAnyExpressionMigrated = false;
-
-            Dictionary<string, string> customMappings = this.BuildCustomMappingsFromIdsToIdentifiers();
-            QuestionnaireDocument newDocument = this.innerDocument.Clone();
-
-            foreach (var group in newDocument.Find<IGroup>(HasEnablementCondition))
-            {
-                this.MigrateGroupToRoslyn(group, customMappings);
-                wasAnyExpressionMigrated = true;
-            }
-
-            foreach (var question in newDocument.Find<IQuestion>(HasEnablementConditionOrValidationExpression))
-            {
-                this.MigrateQuestionToRoslyn(question, customMappings);
-                wasAnyExpressionMigrated = true;
-            }
-
-
-            if (wasAnyExpressionMigrated)
-            {
-                this.ApplyEvent(new TemplateImported { Source = newDocument });
-            }
-
-            this.ApplyEvent(new ExpressionsMigratedToCSharp());
         }
 
         #endregion
@@ -3734,35 +3698,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return @group != null
                 ? @group.Title ?? "<<NO GROUP TITLE>>"
                 : "<<MISSING GROUP>>";
-        }
-
-        private void MigrateGroupToRoslyn(IGroup group, Dictionary<string, string> customMappings)
-        {
-            group.ConditionExpression = this.ConvertExpressionToCSharpIfNotEmpty(@group.ConditionExpression, customMappings);
-        }
-
-        private void MigrateQuestionToRoslyn(IQuestion question, Dictionary<string, string> customMappings)
-        {
-            UpdateCustomMappingsWithContextQuestion(customMappings, question);
-
-            question.ConditionExpression = this.ConvertExpressionToCSharpIfNotEmpty(question.ConditionExpression, customMappings);
-            question.ValidationExpression = this.ConvertExpressionToCSharpIfNotEmpty(question.ValidationExpression, customMappings);
-        }
-
-        private string ConvertExpressionToCSharpIfNotEmpty(string expression, Dictionary<string, string> customMappings)
-        {
-            try
-            {
-                return string.IsNullOrWhiteSpace(expression)
-                    ? expression
-                    : this.NCalcToCSharpConverter.Convert(expression, customMappings);
-            }
-            catch (Exception exception)
-            {
-                Logger.Warn(string.Format("Failed to migrate NCalc expression to C#: {0}", expression ?? string.Empty), exception);
-
-                return expression;
-            }
         }
 
         private static void UpdateCustomMappingsWithContextQuestion(Dictionary<string, string> customMappings, IQuestion contextQuestion)
