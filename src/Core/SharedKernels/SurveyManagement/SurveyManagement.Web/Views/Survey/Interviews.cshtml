@@ -56,10 +56,10 @@
                 <th>
                     <input type="checkbox" data-bind="click: $root.selectAll($element)" />
                 </th>
-                <!-- ko if:SelectedTemplate() == '' -->
+                <!-- ko if:SelectedQuestionnaire() == '' -->
                 <th>Pre-filled Questions</th>
                 <!-- /ko -->
-                <!-- ko ifnot:SelectedTemplate() == '' -->
+                <!-- ko ifnot:SelectedQuestionnaire() == '' -->
                 <!-- ko if:Items().length > 0-->
                 <!-- ko foreach:Items()[0].FeaturedQuestions -->
                 <th data-bind='text: Question'></th>
@@ -80,10 +80,10 @@
                 <td>
                     <input type="checkbox" data-bind="checked: IsSelected, enable: CanBeReassigned" />
                 </td>
-                <!-- ko if:$root.SelectedTemplate() == '' -->
+                <!-- ko if:$root.SelectedQuestionnaire() == '' -->
                 <td data-bind="text: FeaturedQuestions().joinArrayOfObjects('Question', 'Answer')"></td>
                 <!-- /ko -->
-                <!-- ko ifnot:$root.SelectedTemplate() == '' -->
+                <!-- ko ifnot:$root.SelectedQuestionnaire() == '' -->
                 <!-- ko foreach:FeaturedQuestions -->
                 <td data-bind="text: Answer"></td>
                 <!-- /ko -->
@@ -114,9 +114,9 @@
 {
     <ul class="list-group">
         <li class="list-group-item">
-            <h4 class="list-group-item-heading">Template</h4>
+            <h4 class="list-group-item-heading">Questionnaire</h4>
             <p class="list-group-item-text">
-                <select data-bind="value: SelectedTemplate" class="form-control">
+                <select data-bind="value: SelectedQuestionnaire" class="form-control">
                     @if (Model.Templates.Count() > 1)
                     {
                         <option value="">Any</option>

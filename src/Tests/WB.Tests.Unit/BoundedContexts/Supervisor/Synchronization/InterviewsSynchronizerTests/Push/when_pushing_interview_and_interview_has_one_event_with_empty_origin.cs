@@ -6,11 +6,9 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Machine.Specifications;
-using Main.Core;
 using Main.Core.Events;
 using Moq;
 using Moq.Protected;
-using Ncqrs.Commanding;
 
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
@@ -25,7 +23,6 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSynchronizerTests.Push
@@ -64,17 +61,17 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 => utils.Deserialize<bool>(positiveResponse) == true);
 
             Mock.Get(jsonUtils)
-                .Setup(utils => utils.Serialize(Moq.It.IsAny<AggregateRootEvent[]>()))
+                .Setup(utils => utils.Serialize(Moq.It.IsAny<AggregateRootEvent[]>(), TypeSerializationSettings.ObjectsOnly))
                 .Returns(eventsJson)
                 .Callback<object>(entity => events = (AggregateRootEvent[]) entity);
 
             Mock.Get(jsonUtils)
-                .Setup(utils => utils.Serialize(Moq.It.IsAny<InterviewMetaInfo>()))
+                .Setup(utils => utils.Serialize(Moq.It.IsAny<InterviewMetaInfo>(), TypeSerializationSettings.ObjectsOnly))
                 .Returns(metadataJson)
                 .Callback<object>(entity => metadata = (InterviewMetaInfo) entity);
 
             Mock.Get(jsonUtils)
-                .Setup(utils => utils.Serialize(Moq.It.IsAny<SyncItem>()))
+                .Setup(utils => utils.Serialize(Moq.It.IsAny<SyncItem>(), TypeSerializationSettings.ObjectsOnly))
                 .Returns(syncItemJson)
                 .Callback<object>(entity => syncItem = (SyncItem) entity);
 

@@ -284,6 +284,8 @@
     <Compile Include="SharedKernels\SurveyManagement\IncomePackagesRepositoryTests\when_GetUnhandledPackagePath_is_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomePackagesRepositoryTests\when_PushSyncItem_called_and_NullReferenceException_were_thrown.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomePackagesRepositoryTests\when_QueueLength_called.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\InterviewSynchronizationDenormalizerTestsContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\QuestionnaireSynchronizationDenormalizerTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\ApiBasicAuthAttributeTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorizing_and_request_header_has_bad_basic_auth_info.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorizing_non_existant_user.cs" />
@@ -1538,7 +1540,6 @@
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_InterviewCreated_event_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_InterviewOnClientCreated_event_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_interview_is_assigned_to_interviewer.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_interview_is_assigned_to_interviewer_in_RejectedByHQ_status.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_PictureQuestionAnswered_received.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_QRBarcodeQuestionAnswered_received.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_adding_flag_to_question.cs" />
@@ -1820,7 +1821,7 @@
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\InMemoryTemporaryDataRepositoryAccessor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SupportedVersionProviderTests\SupportedVersionProviderTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SupportedVersionProviderTests\when_getting_supported_questionnaire_version_for_supervisor_app.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\SynchronizationDenormalizerTestsContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\UserSynchronizationDenormalizerTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_created_on_client_and_assigned_to_interviewer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_is_created_on_client_and_sent_to_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_created_on_client_and_rejected_by_supervisor_is_assigned_to_interviewer.cs" />
@@ -1870,19 +1871,9 @@
     <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\when_list_of_info_packages_is_requested.cs" />
     <Compile Include="SharedKernels\SurveySolutions\Documents\QuestionnaireDocumentTests.cs" />
     <Compile Include="SharedKernels\Synchronization\DefaultBackupManagerTests.cs" />
-    <Compile Include="SharedKernels\Synchronization\ReadSideChunkReaderTests\when_GetChunkMetaDataByTimestamp_is_called_and_packages_behind_are_present.cs" />
-    <Compile Include="SharedKernels\Synchronization\ReadSideChunkReaderTests\when_GetChunkMetaDataByTimestamp_is_called_and_package_with_the_same_timestamp.cs" />
-    <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\SimpleSynchronizationDataStorageTestContext.cs" />
-    <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\when_getting_chunk_info_by_timestamp.cs" />
     <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\when_marking_interview_for_deleting.cs" />
-    <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\when_getting_chunk_pairs_created_after.cs" />
-    <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\when_getting_latest_version.cs" />
-    <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\when_saving_interview.cs" />
-    <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\when_saving_questionnaire.cs" />
     <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\when_saving_questionnare_assembly.cs" />
     <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\when_deleting_questionnaire.cs" />
-    <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\when_saving_user.cs" />
-    <Compile Include="SharedKernels\Synchronization\when_content_is_not_empty.cs" />
     <Compile Include="Applications\Shared\Web\LocalOrDevelopmentAccessOnlyAttributeTests\LocalOrDevelopmentAccessOnlyAttributeTestsContext.cs" />
     <Compile Include="Applications\Shared\Web\LocalOrDevelopmentAccessOnlyAttributeTests\when_action_executing_and_web_site_called_by_localhost.cs" />
     <Compile Include="Applications\Shared\Web\LocalOrDevelopmentAccessOnlyAttributeTests\when_action_executing_and_web_site_in_development.cs" />
@@ -1897,6 +1888,7 @@
     <Folder Include="Applications\Designer\CommandUtilsTests\" />
     <Folder Include="GenericSubdomains\Logging\" />
     <Folder Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewsChartDenormalizerTests\" />
+    <Folder Include="SharedKernels\Synchronization\ReadSideChunkReaderTests\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

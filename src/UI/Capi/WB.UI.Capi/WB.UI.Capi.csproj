@@ -225,8 +225,6 @@
     <Compile Include="Syncronization\DeviceChangingVerifier.cs" />
     <Compile Include="Syncronization\Implementation\SyncPackageIdsStorage.cs" />
     <Compile Include="Syncronization\RestAuthenticator.cs" />
-    <Compile Include="Syncronization\SynchronizationEventArgs.cs" />
-    <Compile Include="Syncronization\SynchronizationEventArgsWithPercent.cs" />
     <Compile Include="Syncronization\SynchronizationException.cs" />
     <Compile Include="Syncronization\Implementation\SyncPackageId.cs" />
     <Compile Include="Syncronization\Update\UpdateProcessor.cs" />
