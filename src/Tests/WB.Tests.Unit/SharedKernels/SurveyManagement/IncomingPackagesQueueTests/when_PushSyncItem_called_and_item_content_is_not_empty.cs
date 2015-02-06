@@ -14,16 +14,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
         {
             fileSystemAccessorMock = CreateDefaultFileSystemAccessorMock();
 
-            incomingPackagesQueue = CreateIncomingPackagesQueue(fileSystemAccessor: fileSystemAccessorMock.Object);
+            incomingSyncPackagesQueue = CreateIncomingPackagesQueue(fileSystemAccessor: fileSystemAccessorMock.Object);
         };
 
         Because of = () =>
-            incomingPackagesQueue.PushSyncItem(contentOfSyncItem);
+            incomingSyncPackagesQueue.PushSyncItem(contentOfSyncItem);
 
         It should_write_text_file_to_error_folder = () =>
           fileSystemAccessorMock.Verify(x => x.WriteAllText(Moq.It.IsAny<string>(), contentOfSyncItem), Times.Once);
 
-        private static IncomingPackagesQueue incomingPackagesQueue;
+        private static IncomingSyncPackagesQueue incomingSyncPackagesQueue;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
         private static string contentOfSyncItem = "content of sync item";
     }

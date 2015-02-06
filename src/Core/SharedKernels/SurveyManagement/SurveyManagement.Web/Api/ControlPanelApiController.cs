@@ -17,12 +17,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     public class ControlPanelApiController : ApiController
     {
         private readonly IReadSideAdministrationService readSideAdministrationService;
-        private readonly IIncomingPackagesQueue incomingPackagesQueue;
+        private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
 
-        public ControlPanelApiController(IReadSideAdministrationService readSideAdministrationService, IIncomingPackagesQueue incomingPackagesQueue)
+        public ControlPanelApiController(IReadSideAdministrationService readSideAdministrationService, IIncomingSyncPackagesQueue incomingSyncPackagesQueue)
         {
             this.readSideAdministrationService = readSideAdministrationService;
-            this.incomingPackagesQueue = incomingPackagesQueue;
+            this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
         }
 
         public InterviewDetailsSchedulerViewModel InterviewDetails()
@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         public int GetIncomingPackagesQueueLength()
         {
-            return this.incomingPackagesQueue.QueueLength;
+            return this.incomingSyncPackagesQueue.QueueLength;
         }
 
         public IEnumerable<ReadSideEventHandlerDescription> GetAllAvailableHandlers()

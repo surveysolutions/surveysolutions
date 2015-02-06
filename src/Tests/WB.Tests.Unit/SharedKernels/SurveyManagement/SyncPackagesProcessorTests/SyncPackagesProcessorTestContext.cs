@@ -24,8 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
         const string IncomingCapiPackageFileNameExtension = "sync";
 
         protected static SyncPackagesProcessor CreateSyncPackagesProcessor(IJsonUtils jsonUtils = null,
-            IFileSystemAccessor fileSystemAccessor = null, ICommandService commandService = null, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryStorage=null,
-            IStreamableEventStore eventStore = null, IArchiveUtils archiver = null, IIncomingPackagesQueue incomingPackagesQueue = null, IUnhandledPackageStorage unhandledPackageStorage=null)
+            IFileSystemAccessor fileSystemAccessor = null, ICommandService commandService = null, IArchiveUtils archiver = null, IIncomingSyncPackagesQueue incomingSyncPackagesQueue = null, IUnhandledPackageStorage unhandledPackageStorage=null)
         {
             return new SyncPackagesProcessor(logger: Mock.Of<ILogger>(),
                 syncSettings:
@@ -35,14 +34,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
                 fileSystemAccessor: fileSystemAccessor ?? CreateDefaultFileSystemAccessorMock().Object,
                 jsonUtils: jsonUtils ?? Mock.Of<IJsonUtils>(),
                 archiver: archiver ?? Mock.Of<IArchiveUtils>(),
-                interviewSummaryRepositoryWriter:
-                    interviewSummaryStorage ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
-                incomingPackagesQueue: incomingPackagesQueue ?? Mock.Of<IIncomingPackagesQueue>(),
-                unhandledPackageStorage: unhandledPackageStorage??Mock.Of<IUnhandledPackageStorage>())
-            {
-                EventStore = eventStore ?? Mock.Of<IStreamableEventStore>(),
-                EventBus = Mock.Of<IEventDispatcher>()
-            };
+                incomingSyncPackagesQueue: incomingSyncPackagesQueue ?? Mock.Of<IIncomingSyncPackagesQueue>(),
+                unhandledPackageStorage: unhandledPackageStorage??Mock.Of<IUnhandledPackageStorage>());
         }
 
         protected static string GetPathToSynchItemInErrorFolder(Guid syncItemId)

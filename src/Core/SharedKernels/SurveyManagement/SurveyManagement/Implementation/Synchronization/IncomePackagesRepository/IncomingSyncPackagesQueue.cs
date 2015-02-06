@@ -1,23 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository
 {
-    internal class IncomingPackagesQueue : IIncomingPackagesQueue
+    internal class IncomingSyncPackagesQueue : IIncomingSyncPackagesQueue
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string incomingUnprocessedPackagesDirectory;
         private readonly SyncSettings syncSettings;
 
-        public IncomingPackagesQueue(IFileSystemAccessor fileSystemAccessor, SyncSettings syncSettings)
+        public IncomingSyncPackagesQueue(IFileSystemAccessor fileSystemAccessor, SyncSettings syncSettings)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.syncSettings = syncSettings;
@@ -48,7 +43,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
 
         public string DeQueue()
         {
-            return  fileSystemAccessor.GetFilesInDirectory(incomingUnprocessedPackagesDirectory).FirstOrDefault();
+            return fileSystemAccessor.GetFilesInDirectory(incomingUnprocessedPackagesDirectory).FirstOrDefault();
         }
     }
 }

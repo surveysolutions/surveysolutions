@@ -27,12 +27,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
             fileSystemAccessorMock.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
                 .Returns<string, string>(Path.Combine);
 
-            var incomingPackagesQueue = Mock.Of<IIncomingPackagesQueue>(_ => _.DeQueue() == interviewId.FormatGuid());
+            var incomingPackagesQueue = Mock.Of<IIncomingSyncPackagesQueue>(_ => _.DeQueue() == interviewId.FormatGuid());
 
             unhandledPackageStorageMock = new Mock<IUnhandledPackageStorage>();
             syncPackagesProcessor = CreateSyncPackagesProcessor(fileSystemAccessor: fileSystemAccessorMock.Object, jsonUtils: jsonUtilsMock.Object,
-                interviewSummaryStorage:
-                    Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(_ => _.GetById(interviewId.FormatGuid()) == new InterviewSummary()), incomingPackagesQueue: incomingPackagesQueue, unhandledPackageStorage: unhandledPackageStorageMock.Object);
+                incomingSyncPackagesQueue: incomingPackagesQueue, unhandledPackageStorage: unhandledPackageStorageMock.Object);
         };
 
         Because of = () =>
