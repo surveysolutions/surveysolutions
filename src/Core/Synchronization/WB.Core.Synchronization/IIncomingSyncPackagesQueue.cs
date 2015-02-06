@@ -1,6 +1,6 @@
 ﻿namespace WB.Core.Synchronization
 {
-    public interface IIncomingPackagesQueue
+    public interface IIncomingSyncPackagesQueue
     {
         void PushSyncItem(string item);
         int QueueLength { get; }

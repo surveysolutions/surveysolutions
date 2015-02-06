@@ -19,16 +19,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
             fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>()))
                 .Returns(filesInFolder);
 
-            incomingPackagesQueue = CreateIncomingPackagesQueue(fileSystemAccessor: fileSystemAccessorMock.Object);
+            incomingSyncPackagesQueue = CreateIncomingPackagesQueue(fileSystemAccessor: fileSystemAccessorMock.Object);
         };
 
         Because of = () =>
-            result = incomingPackagesQueue.DeQueue();
+            result = incomingSyncPackagesQueue.DeQueue();
 
         It should_result_be_equal_to_first_file_in_folder = () =>
            result.ShouldEqual(filesInFolder.First());
 
-        private static IncomingPackagesQueue incomingPackagesQueue;
+        private static IncomingSyncPackagesQueue incomingSyncPackagesQueue;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
 
         private static string result;

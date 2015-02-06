@@ -149,7 +149,7 @@
     <Compile Include="Implementation\Services\Sql\SqliteService.cs" />
     <Compile Include="Implementation\Services\Sql\SqliteServiceFactory.cs" />
     <Compile Include="Implementation\Synchronization\Constants.cs" />
-    <Compile Include="Implementation\Synchronization\IncomePackagesRepository\IncomingPackagesQueue.cs" />
+    <Compile Include="Implementation\Synchronization\IncomePackagesRepository\IncomingSyncPackagesQueue.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\HeadquarterReportsSurveysAndStatusesGroupByTeam.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\HeadquarterReportsTeamsAndStatusesGroupByTeam.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\QuestionnaireBrowseItemsGroupByQuestionnaireIdIndex.cs" />

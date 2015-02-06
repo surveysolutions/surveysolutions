@@ -7,12 +7,12 @@ using WB.Core.Synchronization;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTests
 {
-    [Subject(typeof(IncomingPackagesQueue))]
+    [Subject(typeof(IncomingSyncPackagesQueue))]
     internal class IncomingPackagesQueueTestContext
     {
-        protected static IncomingPackagesQueue CreateIncomingPackagesQueue(IFileSystemAccessor fileSystemAccessor = null)
+        protected static IncomingSyncPackagesQueue CreateIncomingPackagesQueue(IFileSystemAccessor fileSystemAccessor = null)
         {
-            return new IncomingPackagesQueue(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), new SyncSettings(AppDataDirectory, IncomingCapiPackagesWithErrorsDirectoryName, IncomingCapiPackageFileNameExtension, IncomingCapiPackagesDirectoryName, ""));
+            return new IncomingSyncPackagesQueue(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), new SyncSettings(AppDataDirectory, IncomingCapiPackagesWithErrorsDirectoryName, IncomingCapiPackageFileNameExtension, IncomingCapiPackagesDirectoryName, ""));
         }
 
         protected static Mock<IFileSystemAccessor> CreateDefaultFileSystemAccessorMock()
