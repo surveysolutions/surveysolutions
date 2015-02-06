@@ -383,11 +383,6 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static NCalcToCSharpConverter NCalcToCSharpConverter()
-        {
-            return new NCalcToCSharpConverter();
-        }
-
         public static IAsyncExecutor SyncAsyncExecutor()
         {
             return new SyncAsyncExecutorStub();
