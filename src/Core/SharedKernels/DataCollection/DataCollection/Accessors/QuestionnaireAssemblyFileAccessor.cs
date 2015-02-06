@@ -69,6 +69,9 @@ namespace WB.Core.SharedKernels.DataCollection.Accessors
         {
             byte[] assemblyAsByteArray = this.GetAssemblyAsByteArray(questionnaireId, questionnaireVersion);
 
+            if (assemblyAsByteArray == null)
+                return null;
+
             return Convert.ToBase64String(assemblyAsByteArray);
         }
 
@@ -76,6 +79,9 @@ namespace WB.Core.SharedKernels.DataCollection.Accessors
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
             string pathToAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
+
+            if (!this.fileSystemAccessor.IsFileExists(pathToAssembly))
+                return null;
 
             return this.fileSystemAccessor.ReadAllBytes(pathToAssembly);
         }

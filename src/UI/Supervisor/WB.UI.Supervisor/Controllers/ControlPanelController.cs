@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -22,8 +23,8 @@ namespace WB.UI.Supervisor.Controllers
     [LocalOrDevelopmentAccessOnly]
     public class ControlPanelController : WB.Core.SharedKernels.SurveyManagement.Web.Controllers.ControlPanelController
     {
-        public ControlPanelController(IServiceLocator serviceLocator, IIncomingPackagesQueue incomingPackagesQueue,
+        public ControlPanelController(IServiceLocator serviceLocator, IUnhandledPackageStorage unhandledPackageStorage,
             ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger, ISettingsProvider settingsProvider)
-            : base(serviceLocator, incomingPackagesQueue, commandService, globalInfo, logger, settingsProvider) { }
+            : base(serviceLocator, unhandledPackageStorage, commandService, globalInfo, logger, settingsProvider) { }
     }
 }

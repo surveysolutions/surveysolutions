@@ -274,7 +274,6 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                 try
                 {
-
                     this.EnableWritersCacheForHandlers(handlers);
 
                     foreach (var eventSourceId in eventSourceIds)
@@ -286,13 +285,13 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 finally
                 {
                     this.DisableWritersCacheForHandlers(handlers);
-
-                    UpdateStatusMessage("Rebuild specific views succeeded.");
-
                 }
+
+                UpdateStatusMessage("Rebuild specific views succeeded.");
             }
             catch (Exception exception)
             {
+                UpdateStatusMessage("Unexpected error occurred");
                 this.SaveErrorForStatusReport("Unexpected error occurred", exception);
                 throw;
             }
@@ -323,12 +322,13 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 finally
                 {
                     this.DisableWritersCacheForHandlers(handlers);
-
-                    UpdateStatusMessage("Rebuild specific views succeeded.");
                 }
+
+                UpdateStatusMessage("Rebuild specific views succeeded.");
             }
             catch (Exception exception)
             {
+                UpdateStatusMessage("Unexpected error occurred");
                 this.SaveErrorForStatusReport("Unexpected error occurred", exception);
                 throw;
             }
@@ -427,10 +427,9 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 }
                 catch (Exception exception)
                 {
-                    this.SaveErrorForStatusReport(
-                        string.Format("Failed to disable cache and store data to repository for writer {0}.",
-                            this.GetRepositoryEntityName(writer)),
-                        exception);
+                    string message = string.Format("Failed to disable cache and store data to repository for writer {0}.", this.GetRepositoryEntityName(writer));
+                    this.SaveErrorForStatusReport(message, exception);
+                    UpdateStatusMessage(message);
                 }
             }
 
@@ -491,12 +490,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 }
             }
 
-            UpdateStatusMessage("Acquiring next portion of events.");
-
             this.logger.Info(String.Format("Rebuild of read side finished sucessfuly. Processed {0} events, failed {1}", this.processedEventsCount, this.failedEventsCount));
-
-            UpdateStatusMessage("All events were republished.");
-
         }
 
         private static string GetReadablePublishingDetails(DateTime republishStarted,

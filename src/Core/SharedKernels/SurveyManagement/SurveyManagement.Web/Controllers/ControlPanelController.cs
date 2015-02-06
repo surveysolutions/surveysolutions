@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
@@ -16,11 +17,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public abstract class ControlPanelController : BaseController
     {
         private readonly IServiceLocator serviceLocator;
-        private readonly IIncomingPackagesQueue incomingPackagesQueue;
+        private readonly IUnhandledPackageStorage unhandledPackageStorage;
         private readonly ISettingsProvider settingsProvider;
 
-        public ControlPanelController(IServiceLocator serviceLocator, 
-            IIncomingPackagesQueue incomingPackagesQueue,
+        public ControlPanelController(IServiceLocator serviceLocator,
+            IUnhandledPackageStorage unhandledPackageStorage,
             ICommandService commandService, 
             IGlobalInfoProvider globalInfo, 
             ILogger logger,
@@ -28,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             : base(commandService: commandService, globalInfo: globalInfo, logger: logger)
         {
             this.serviceLocator = serviceLocator;
-            this.incomingPackagesQueue = incomingPackagesQueue;
+            this.unhandledPackageStorage = unhandledPackageStorage;
             this.settingsProvider = settingsProvider;
         }
 
@@ -49,12 +50,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         public ActionResult IncomingDataWithErrors()
         {
-            return this.View(this.incomingPackagesQueue.GetListOfUnhandledPackages());
+            return this.View(this.unhandledPackageStorage.GetListOfUnhandledPackages());
         }
 
         public FileResult GetIncomingDataWithError(string packageId)
         {
-            return this.File(this.incomingPackagesQueue.GetUnhandledPackagePath(packageId), System.Net.Mime.MediaTypeNames.Application.Octet, packageId);
+            return this.File(this.unhandledPackageStorage.GetUnhandledPackagePath(packageId), System.Net.Mime.MediaTypeNames.Application.Octet, packageId);
         }
         
         public ActionResult Settings()
