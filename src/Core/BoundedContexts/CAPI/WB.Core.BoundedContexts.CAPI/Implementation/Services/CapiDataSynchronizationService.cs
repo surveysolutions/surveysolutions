@@ -54,6 +54,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
         private readonly IViewFactory<LoginViewInput, LoginView> loginViewFactory;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IJsonUtils jsonUtils;
+
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
 
         public void ProcessDownloadedPackage(UserSyncPackageDto item)
@@ -217,7 +218,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
                 throw new ArgumentException("Failed to extract questionnaire version. Please upgrade supervisor to the latest version.", exception);
             }
 
-            var assemblyBody = this.jsonUtils.Deserialize<string>(item.Content);
+            var assemblyBody = item.Content;
 
             questionnareAssemblyFileAccessor.StoreAssembly(metadata.QuestionnaireId, metadata.Version, assemblyBody);
         }        
