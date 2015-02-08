@@ -35,12 +35,14 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         private readonly string questionnireQueryIndexName = typeof(QuestionnaireSyncPackagesByBriefFields).Name;
 
         public SyncManager(IReadSideKeyValueStorage<ClientDeviceDocument> devices, 
-           
             IIncomingSyncPackagesQueue incomingSyncPackagesQueue,
             ILogger logger, 
             ICommandService commandService, 
             IQueryableReadSideRepositoryReader<UserDocument> userStorage,
-            IReadSideRepositoryIndexAccessor indexAccessor, IQueryableReadSideRepositoryReader<UserSyncPackage> userPackageStorage, IQueryableReadSideRepositoryReader<QuestionnaireSyncPackage> questionnairePackageStorage, IQueryableReadSideRepositoryReader<InterviewSyncPackage> interviewPackageStore)
+            IReadSideRepositoryIndexAccessor indexAccessor, 
+            IQueryableReadSideRepositoryReader<UserSyncPackage> userPackageStorage, 
+            IQueryableReadSideRepositoryReader<QuestionnaireSyncPackage> questionnairePackageStorage, 
+            IQueryableReadSideRepositoryReader<InterviewSyncPackage> interviewPackageStore)
         {
             this.devices = devices;
            
