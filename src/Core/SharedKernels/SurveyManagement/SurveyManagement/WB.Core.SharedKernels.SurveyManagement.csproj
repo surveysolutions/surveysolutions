@@ -132,6 +132,7 @@
     <Compile Include="Implementation\Factories\ExportViewFactory.cs" />
     <Compile Include="Implementation\Factories\ReferenceInfoForLinkedQuestionsFactory.cs" />
     <Compile Include="Implementation\Factories\PreloadedDataServiceFactory.cs" />
+    <Compile Include="Implementation\FolderPermissionChecker.cs" />
     <Compile Include="Implementation\IRecordsAccessor.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\InterviewsSearchIndex.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\SeachIndexContent.cs" />
