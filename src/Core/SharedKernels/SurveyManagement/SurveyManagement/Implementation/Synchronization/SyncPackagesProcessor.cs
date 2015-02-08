@@ -27,60 +27,39 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
     {
         private IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
         private IUnhandledPackageStorage unhandledPackageStorage;
-        private readonly string origin;
         private readonly ILogger logger;
         private readonly ICommandService commandService;
-        private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IJsonUtils jsonUtils;
-        private readonly IArchiveUtils archiver;
 
-        public SyncPackagesProcessor(ILogger logger, SyncSettings syncSettings, ICommandService commandService,
-            IFileSystemAccessor fileSystemAccessor, IJsonUtils jsonUtils, IArchiveUtils archiver, IIncomingSyncPackagesQueue incomingSyncPackagesQueue, IUnhandledPackageStorage unhandledPackageStorage)
+        public SyncPackagesProcessor(ILogger logger, ICommandService commandService,
+            IIncomingSyncPackagesQueue incomingSyncPackagesQueue, IUnhandledPackageStorage unhandledPackageStorage)
         {
             this.logger = logger;
             this.commandService = commandService;
-            this.fileSystemAccessor = fileSystemAccessor;
-            this.jsonUtils = jsonUtils;
-            this.archiver = archiver;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.unhandledPackageStorage = unhandledPackageStorage;
-            origin = syncSettings.Origin;
         }
 
         public void ProcessNextSyncPackage()
         {
-            string fileToProcess = incomingSyncPackagesQueue.DeQueue();
+            IncomingSyncPackages incomingSyncPackages = incomingSyncPackagesQueue.DeQueue();
 
-            if (string.IsNullOrEmpty(fileToProcess) || !fileSystemAccessor.IsFileExists(fileToProcess))
+            if (incomingSyncPackages==null)
                 return;
 
-            Guid? interviewId = null;
             try
             {
-                var syncItem = jsonUtils.Deserialize<SyncItem>(fileSystemAccessor.ReadAllText(fileToProcess));
-
-                interviewId = syncItem.RootId;
-
-                var meta =
-                    jsonUtils.Deserialize<InterviewMetaInfo>(archiver.DecompressString(syncItem.MetaInfo));
-
-                var items =
-                    jsonUtils.Deserialize<AggregateRootEvent[]>(archiver.DecompressString(syncItem.Content))
-                        .Select(e => e.Payload)
-                        .ToArray();
-
                 commandService.Execute(
-                    new SynchronizeInterviewEvents(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
-                        meta.TemplateVersion, items, (InterviewStatus) meta.Status, meta.CreatedOnClient ?? false),
-                    origin);
+                    new SynchronizeInterviewEvents(incomingSyncPackages.InterviewId, incomingSyncPackages.ResponsibleId, incomingSyncPackages.QuestionnaireId,
+                        incomingSyncPackages.QuestionnaireVersion, incomingSyncPackages.EventsToSynchronize, incomingSyncPackages.InterviewStatus, incomingSyncPackages.CreatedOnClient),
+                    incomingSyncPackages.Origin);
             }
             catch (Exception e)
             {
-                logger.Error(string.Format("package '{0}' wasn't processed. Reason: '{1}'", fileToProcess, e.Message), e);
-                unhandledPackageStorage.StoreUnhandledPackage(fileToProcess, interviewId);
+                logger.Error(string.Format("package '{0}' wasn't processed. Reason: '{1}'", incomingSyncPackages.PathToPackage, e.Message), e);
+                unhandledPackageStorage.StoreUnhandledPackage(incomingSyncPackages.PathToPackage, incomingSyncPackages.InterviewId);
             }
 
-            fileSystemAccessor.DeleteFile(fileToProcess);
+            incomingSyncPackagesQueue.DeleteSyncItem(incomingSyncPackages.PathToPackage);
         }
 
         public void Execute(IJobExecutionContext context)
