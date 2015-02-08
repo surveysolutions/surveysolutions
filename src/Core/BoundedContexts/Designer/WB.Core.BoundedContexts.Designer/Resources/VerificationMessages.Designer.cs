@@ -865,7 +865,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire title contains characters that are not allowed. Only letters, numbers, and _ are allowed..
+        ///   Looks up a localized string similar to Questionnaire title contains characters that are not allowed. Only letters, numbers, space and _ are allowed..
         /// </summary>
         internal static string WB0097_QuestionnaireTitleHasInvalidCharacters {
             get {

@@ -74,7 +74,8 @@
     <Compile Include="Events\Sync\NewDeviceRegistered.cs" />
     <Compile Include="Events\Sync\UpdateRegisteredDevice.cs" />
     <Compile Include="IBackupManager.cs" />
-    <Compile Include="IIncomingPackagesQueue.cs" />
+    <Compile Include="IIncomingSyncPackagesQueue.cs" />
+    <Compile Include="IncomingSyncPackages.cs" />
     <Compile Include="ISyncPackagesProcessor.cs" />
     <Compile Include="Implementation\ImportManager\DefaultBackupManager.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\InterviewSyncPackagesByBriefFields.cs" />

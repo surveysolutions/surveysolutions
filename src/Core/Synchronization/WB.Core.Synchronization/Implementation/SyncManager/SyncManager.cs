@@ -19,7 +19,8 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
     internal class SyncManager : ISyncManager
     {
         private readonly IReadSideKeyValueStorage<ClientDeviceDocument> devices;
-        private readonly IIncomingPackagesQueue incomingQueue;
+
+        private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
         private readonly ILogger logger;
         private readonly ICommandService commandService;
         private readonly IQueryableReadSideRepositoryReader<UserDocument> userStorage;
@@ -34,14 +35,16 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         private readonly string questionnireQueryIndexName = typeof(QuestionnaireSyncPackagesByBriefFields).Name;
 
         public SyncManager(IReadSideKeyValueStorage<ClientDeviceDocument> devices, 
-            IIncomingPackagesQueue incomingQueue,
+           
+            IIncomingSyncPackagesQueue incomingSyncPackagesQueue,
             ILogger logger, 
             ICommandService commandService, 
             IQueryableReadSideRepositoryReader<UserDocument> userStorage,
             IReadSideRepositoryIndexAccessor indexAccessor, IQueryableReadSideRepositoryReader<UserSyncPackage> userPackageStorage, IQueryableReadSideRepositoryReader<QuestionnaireSyncPackage> questionnairePackageStorage, IQueryableReadSideRepositoryReader<InterviewSyncPackage> interviewPackageStore)
         {
             this.devices = devices;
-            this.incomingQueue = incomingQueue;
+           
+            this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.logger = logger;
             this.commandService = commandService;
             this.userStorage = userStorage;
@@ -67,7 +70,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
         public void SendSyncItem(string item)
         {
-            this.incomingQueue.PushSyncItem(item);
+            this.incomingSyncPackagesQueue.PushSyncItem(item);
         }
 
         public SyncItemsMetaContainer GetQuestionnaireArIdsWithOrder(Guid userId, Guid clientRegistrationId, string lastSyncedPackageId)
