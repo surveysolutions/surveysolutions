@@ -4,6 +4,7 @@
     {
         void PushSyncItem(string item);
         int QueueLength { get; }
-        string DeQueue();
+        IncomingSyncPackages DeQueue();
+        void DeleteSyncItem(string syncItemPath);
     }
 }
