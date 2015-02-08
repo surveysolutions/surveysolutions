@@ -292,7 +292,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
         {
             var package = await this.synchronizationService.RequestInterviewPackageAsync(this.credentials, chunk.Id);
             this.dataProcessor.ProcessDownloadedPackage(package);
-            this.packageIdStorage.Append(package.PackageId, SyncItemType.Questionnaire, package.UserId, package.SortIndex);
+            this.packageIdStorage.Append(package.PackageId, SyncItemType.Interview, package.UserId, package.SortIndex);
         }
 
         private async Task MigrateOldSyncTimestampToId()

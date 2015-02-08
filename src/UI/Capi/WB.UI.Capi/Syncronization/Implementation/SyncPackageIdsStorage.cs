@@ -7,7 +7,6 @@ using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.UI.Capi.Syncronization.Implementation
 {
@@ -15,7 +14,8 @@ namespace WB.UI.Capi.Syncronization.Implementation
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ISQLiteConnectionFactory connectionFactory;
-        private const string dbFileName = "syncPackages";
+        private const string oldDbFileName = "syncPackages";
+        private const string dbFileName = "synchronizationPackages";
 
         private string FullPathToDataBase
         {
