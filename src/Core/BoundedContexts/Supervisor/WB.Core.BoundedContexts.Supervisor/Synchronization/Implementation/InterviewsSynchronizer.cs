@@ -436,10 +436,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             var syncItem = new SyncItem
             {
-                Content = archiver.CompressString(this.jsonUtils.Serialize(eventsToSend)),
+                Content = this.archiver.CompressString(this.jsonUtils.Serialize(eventsToSend)),
                 IsCompressed = true,
                 ItemType = SyncItemType.Interview,
-                MetaInfo = archiver.CompressString(this.jsonUtils.Serialize(metadata)),
+                MetaInfo = this.archiver.CompressString(this.jsonUtils.Serialize(metadata)),
                 RootId = interviewId
             };
 

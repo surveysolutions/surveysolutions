@@ -4,9 +4,6 @@ namespace WB.UI.Capi.SharedPreferences
 {
     public class SettingsNames
     {
-        /// <summary>
-        /// The app name.
-        /// </summary>
         public const string AppName = "CapiApp";
         public const string SyncAddressSettingsName = "SyncAddress";
         public const string RegistrationKeyName = "RegistrationKey";
@@ -17,11 +14,5 @@ namespace WB.UI.Capi.SharedPreferences
 
         [Obsolete]
         public static readonly string ReceivedChunkIds = "ReceivedChunkIds";
-
-        public static readonly string LastReceivedUserPackageId = "LastReceivedUserPackageId";
-
-        public static readonly string LastReceivedQuestionnairePackageId = "LastReceivedQuestionnairePackageId";
-
-        public static readonly string LastReceivedInterviewPackageId = "LastReceivedInterviewPackageId";
     }
 }

@@ -3,10 +3,11 @@ using System.IO;
 using System.Linq;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Plugins.Sqlite;
-
 using WB.Core.BoundedContexts.Capi.Services;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.UI.Capi.Syncronization.Implementation
 {
@@ -15,7 +16,6 @@ namespace WB.UI.Capi.Syncronization.Implementation
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ISQLiteConnectionFactory connectionFactory;
         private const string dbFileName = "syncPackages";
-
 
         private string FullPathToDataBase
         {
@@ -36,58 +36,76 @@ namespace WB.UI.Capi.Syncronization.Implementation
             }
         }
 
-        public void Append(string lastReceivedChunkId)
+        public void Append(string packageId, string packageType, Guid userId, int sortIndex)
         {
             using (var connection = connectionFactory.Create(FullPathToDataBase))
             {
                 var newId = new SyncPackageId
                 {
-                    Id = lastReceivedChunkId, 
-                    SortIndex = connection.Table<SyncPackageId>().Count()
+                    PackageId = packageId,
+                    SortIndex = sortIndex,
+                    UserId = userId.FormatGuid(),
+                    Type = packageType
                 };
 
                 connection.Insert(newId);
             }
         }
 
-        public string GetLastStoredChunkId()
+        public string GetLastStoredPackageId(string type, Guid currentUserId)
         {
-            using (var connection = connectionFactory.Create(FullPathToDataBase))
+            return this.LastStoredPackageId(SyncItemType.User, currentUserId);
+        }
+
+        private string LastStoredPackageId(string type, Guid userId)
+        {
+            var userIdAsString = userId.FormatGuid();
+            using (var connection = this.connectionFactory.Create(this.FullPathToDataBase))
             {
-                var lastStoredChunkId = connection.Table<SyncPackageId>().OrderBy(x => x.SortIndex).LastOrDefault();
+                var lastStoredChunkId = connection.Table<SyncPackageId>()
+                    .Where(x => x.Type == type && x.UserId == userIdAsString)
+                    .OrderBy(x => x.SortIndex)
+                    .LastOrDefault();
+
                 if (lastStoredChunkId == null)
                 {
                     return null;
                 }
 
-                return lastStoredChunkId.Id;
+                return lastStoredChunkId.PackageId;
             }
         }
 
-        public string GetChunkBeforeChunkWithId(string before)
+        public string GetChunkBeforeChunkWithId(string type, string lastKnownPackageId, Guid userId)
         {
-            if (string.IsNullOrWhiteSpace(before))
+            if (string.IsNullOrWhiteSpace(lastKnownPackageId))
             {
                 return null;
             }
 
-            var stringId = before;
+            var userIdAsString = userId.FormatGuid();
+            var stringId = lastKnownPackageId;
             using (var connection = connectionFactory.Create(FullPathToDataBase))
-            { 
-                SyncPackageId requestedSortIndex = connection.Table<SyncPackageId>().SingleOrDefault(x => x.Id == stringId);
+            {
+                SyncPackageId requestedSortIndex =
+                    connection.Table<SyncPackageId>().SingleOrDefault(x => x.PackageId == stringId);
+
                 if (requestedSortIndex == null || requestedSortIndex.SortIndex == 0)
                 {
                     return null;
                 }
 
                 int prevSortIndex = requestedSortIndex.SortIndex - 1;
-                var chunkBeforeChunkWithId = connection.Table<SyncPackageId>().SingleOrDefault(x => x.SortIndex == prevSortIndex);
+                var chunkBeforeChunkWithId =
+                    connection.Table<SyncPackageId>()
+                        .Where(x => x.UserId == userIdAsString)
+                        .SingleOrDefault(x => x.SortIndex == prevSortIndex);
                 if (chunkBeforeChunkWithId == null)
                 {
                     return null;
                 }
 
-                return chunkBeforeChunkWithId.Id;
+                return chunkBeforeChunkWithId.PackageId;
             }
         }
 
