@@ -30,3 +30,8 @@ visibility: visible !important;
 .comment-date {
     color: #9197a3;
 }
+
+.answer-status {
+    width: 1px;
+    white-space: nowrap;
+}

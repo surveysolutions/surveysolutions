@@ -73,6 +73,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             var detailsStatisticView = new DetailsStatisticView()
             {
                 AnsweredCount = interviewDetailsView.Groups.Sum(_ => _.Entities.Count(x => ((x is InterviewQuestionView) && ((InterviewQuestionView)x).IsAnswered))),
+                UnansweredCount = interviewDetailsView.Groups.Sum(_ => _.Entities.Count(x => ((x is InterviewQuestionView) && !((InterviewQuestionView)x).IsAnswered))),
                 CommentedCount = interviewDetailsView.Groups.Sum(_ => _.Entities.Count(x => ((x is InterviewQuestionView) && ((InterviewQuestionView)x).Comments != null && ((InterviewQuestionView)x).Comments.Any()))),
                 EnabledCount = interviewDetailsView.Groups.Sum(_ => _.Entities.Count(x => ((x is InterviewQuestionView) && ((InterviewQuestionView)x).IsEnabled))),
                 FlaggedCount = interviewDetailsView.Groups.Sum(_ => _.Entities.Count(x => ((x is InterviewQuestionView) && ((InterviewQuestionView)x).IsFlagged))),
@@ -82,11 +83,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             var selectedGroups = new List<InterviewGroupView>();
 
+            var currentGroup = interviewDetailsView.Groups.Find(group => currentGroupId != null && group.Id == currentGroupId);
+
             foreach (var interviewGroupView in interviewDetailsView.Groups)
             {
-                if (currentGroupId.HasValue)
+                if (currentGroup != null && currentGroup.ParentId.HasValue)
                 {
-                    if (interviewGroupView.Id == currentGroupId.Value || selectedGroups.Any(_ => _.Id == interviewGroupView.ParentId))
+                    if (interviewGroupView.Id == currentGroup.Id || selectedGroups.Any(_ => _.Id == interviewGroupView.ParentId))
                     {
                         selectedGroups.Add(interviewGroupView);
                     }
@@ -101,6 +104,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                                     x =>
                                         x is InterviewStaticTextView ||
                                         ((x is InterviewQuestionView) && ((InterviewQuestionView)x).IsAnswered)).ToList();
+                            break;
+                        case InterviewDetailsFilter.Unanswered:
+                            interviewGroupView.Entities =
+                                interviewGroupView.Entities.Where(
+                                    x =>
+                                        x is InterviewStaticTextView ||
+                                        ((x is InterviewQuestionView) && !((InterviewQuestionView)x).IsAnswered)).ToList();
                             break;
                         case InterviewDetailsFilter.Commented:
                             interviewGroupView.Entities =

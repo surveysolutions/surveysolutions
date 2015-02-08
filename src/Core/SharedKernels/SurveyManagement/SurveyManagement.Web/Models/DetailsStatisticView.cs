@@ -8,5 +8,6 @@
         public int EnabledCount { get; set; }
         public int SupervisorsCount { get; set; }
         public int AnsweredCount { get; set; }
+        public int UnansweredCount { get; set; }
     }
 }
