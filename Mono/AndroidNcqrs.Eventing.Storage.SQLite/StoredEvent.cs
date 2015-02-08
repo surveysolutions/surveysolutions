@@ -30,7 +30,6 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
                     FloatParseHandling = FloatParseHandling.Decimal
                 });
         }
-        }
 
         public string CommitId { get; set; }
 
