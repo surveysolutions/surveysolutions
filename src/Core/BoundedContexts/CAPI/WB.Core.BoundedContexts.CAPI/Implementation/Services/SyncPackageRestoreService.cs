@@ -16,18 +16,19 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
 
         private readonly ILogger logger;
         private readonly ICapiSynchronizationCacheService capiSynchronizationCacheService;
-        private readonly IStringCompressor stringCompressor;
+
         private readonly IJsonUtils jsonUtils;
         private readonly ICommandService commandService;
         private readonly IWaitService waitService;
 
-        public SyncPackageRestoreService(ILogger logger, ICapiSynchronizationCacheService capiSynchronizationCacheService, 
-            IStringCompressor stringCompressor, IJsonUtils jsonUtils, ICommandService commandService,
+        public SyncPackageRestoreService(ILogger logger, 
+            ICapiSynchronizationCacheService capiSynchronizationCacheService, 
+            IJsonUtils jsonUtils, 
+            ICommandService commandService,
             IWaitService waitService)
         {
             this.logger = logger;
             this.capiSynchronizationCacheService = capiSynchronizationCacheService;
-            this.stringCompressor = stringCompressor;
             this.jsonUtils = jsonUtils;
             this.commandService = commandService;
             this.waitService = waitService;
@@ -66,8 +67,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
 
                     if (!string.IsNullOrWhiteSpace(item))
                     {
-                        string content = this.stringCompressor.DecompressString(item);
-                        var interview = this.jsonUtils.Deserialize<InterviewSynchronizationDto>(content);
+                        var interview = this.jsonUtils.Deserialize<InterviewSynchronizationDto>(item);
 
                         this.commandService.Execute(new SynchronizeInterviewCommand(interview.Id, interview.UserId, interview));
 

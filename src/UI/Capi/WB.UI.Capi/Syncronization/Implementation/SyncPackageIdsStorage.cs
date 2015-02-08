@@ -54,7 +54,7 @@ namespace WB.UI.Capi.Syncronization.Implementation
 
         public string GetLastStoredPackageId(string type, Guid currentUserId)
         {
-            return this.LastStoredPackageId(SyncItemType.User, currentUserId);
+            return this.LastStoredPackageId(type, currentUserId);
         }
 
         private string LastStoredPackageId(string type, Guid userId)

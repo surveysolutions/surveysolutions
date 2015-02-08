@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.SyncPackageRestoreServiceTests
             var stringCompressorMock = new Mock<IStringCompressor>();
             stringCompressorMock.Setup(x => x.DecompressString(Moq.It.IsAny<string>())).Returns<string>(s => s);
             return new SyncPackageRestoreService(Mock.Of<ILogger>(),
-                capiSynchronizationCacheService ?? Mock.Of<ICapiSynchronizationCacheService>(), stringCompressorMock.Object,
+                capiSynchronizationCacheService ?? Mock.Of<ICapiSynchronizationCacheService>(),
                 jsonUtils ?? Mock.Of<IJsonUtils>(), commandService ?? Mock.Of<ICommandService>(),
                 waitService ?? Mock.Of<IWaitService>());
         }
