@@ -1,23 +1,23 @@
-﻿using WB.Core.GenericSubdomains.Utils.Services;
-using WB.UI.QuestionnaireTester.Services;
+﻿using System.Threading.Tasks;
+using WB.UI.QuestionnaireTester.Ninject;
 
 namespace WB.UI.QuestionnaireTester.ViewModels
 {
     public class SplashViewModel : BaseViewModel
     {
-        private readonly IPrincipal principal;
-
-        public SplashViewModel(IPrincipal principal, ILogger logger) : base(logger, principal: principal)
+        public SplashViewModel() : base(null, null)
         {
-            this.principal = principal;
         }
 
-        public void Load()
+        public void Init()
         {
-            if (this.principal.CurrentIdentity.IsAuthenticated)
+            Task.Run(() =>
+            {
+                NinjectInitializer.Initialize();
+                MvxInitializer.Initialize();
+
                 this.ShowViewModel<DashboardViewModel>();
-            else
-                this.ShowViewModel<LoginViewModel>();
+            });
         }
     }
 }

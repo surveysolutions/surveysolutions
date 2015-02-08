@@ -12,14 +12,5 @@ namespace WB.UI.QuestionnaireTester.Views
         {
             get { return Resource.Layout.Splash; }
         }
-
-        protected override async void OnViewModelSet()
-        {
-            await Task.Run(() =>
-            {
-                Thread.Sleep(2000);
-                ViewModel.Load(); 
-            });
-        }
     }
 }

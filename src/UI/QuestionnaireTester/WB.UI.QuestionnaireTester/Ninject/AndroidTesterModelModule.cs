@@ -7,16 +7,14 @@ using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.GenericSubdomains.Utils.Services;
-using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Implementation.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.UI.QuestionnaireTester.Implementation.Services;
-using WB.UI.QuestionnaireTester.Services;
 
-namespace WB.UI.QuestionnaireTester
+namespace WB.UI.QuestionnaireTester.Ninject
 {
     public class AndroidTesterModelModule : NinjectModule
     {

@@ -44,7 +44,14 @@ namespace WB.UI.QuestionnaireTester.ViewModels
 
         public async void Init()
         {
-            await this.LoadDashboardViewModelFromStorage();
+            if (this.Principal.CurrentIdentity.IsAuthenticated)
+            {
+                await this.LoadDashboardViewModelFromStorage();   
+            }
+            else
+            {
+                this.ShowViewModel<LoginViewModel>();
+            }
         }
         
         private IList<QuestionnaireListItem> allQuestionnaires;

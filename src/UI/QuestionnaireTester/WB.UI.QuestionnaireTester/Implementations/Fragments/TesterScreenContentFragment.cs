@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Android.OS;
+using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Frames;
@@ -30,7 +32,7 @@ namespace WB.UI.QuestionnaireTester.Implementations.Fragments
 
         protected override IQuestionViewFactory GetQuestionViewFactory()
         {
-            return CapiTesterApplication.Kernel.Get<IQuestionViewFactory>();
+            return ServiceLocator.Current.GetInstance<IQuestionViewFactory>();
         }
 
         protected override QuestionnaireScreenViewModel GetScreenViewModel()
@@ -58,8 +60,8 @@ namespace WB.UI.QuestionnaireTester.Implementations.Fragments
             {
                 if (questionnaire == null)
                 {
-                    questionnaire = CapiTesterApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
-                        new QuestionnaireScreenInput(QuestionnaireId));
+                    questionnaire = ServiceLocator.Current.GetInstance<IViewFactory<QuestionnaireScreenInput, InterviewViewModel>>()
+                    .Load(new QuestionnaireScreenInput(QuestionnaireId));
                 }
                 return questionnaire;
             }
