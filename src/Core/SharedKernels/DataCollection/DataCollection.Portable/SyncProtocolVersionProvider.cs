@@ -9,7 +9,7 @@ namespace WB.Core.SharedKernels.DataCollection
         //should be updated after protocol changes
         //on release process update please use step 10 or 100
         //to leave space for hot-fixes 
-        private const int SyncProtocolVersionNumber = 5962;
+        private const int SyncProtocolVersionNumber = 5999;
 
         public SyncProtocolVersionProvider(Func<bool> isDebug)
         {
