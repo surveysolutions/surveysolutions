@@ -141,7 +141,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 ClientInstanceKey = request.ClientId,
                 ClientVersionIdentifier = "unknown",
                 ClientRegistrationKey = request.ClientRegistrationId,
-                SupervisorPublicKey = interviewerInfo.Supervisor.Id
+                SupervisorPublicKey = interviewerInfo.Supervisor.Id,
+                UserId = interviewerInfo.PublicKey
             };
             try
             {
@@ -216,23 +217,46 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpPost]
         [ApiBasicAuth]
-        public SyncItemsMetaContainer GetARKeys(SyncItemsMetaContainerRequest request)
+        public SyncItemsMetaContainer GetUserArKeys(SyncItemsMetaContainerRequest request)
         {
             try
             {
-                SyncItemsMetaContainer syncItemsMetaContainer = syncManager.GetAllARIdsWithOrder(
-                    this.GlobalInfo.GetCurrentUser().Id,
-                    request.ClientRegistrationId, 
-                    request.LastSyncedUserPackageId, 
-                    request.LastSyncedQuestionnairePackageId, 
-                    request.LastSyncedInterviewPackageId);
-
-                return syncItemsMetaContainer;
+                return this.syncManager.GetUserArIdsWithOrder(this.GlobalInfo.GetCurrentUser().Id, request.ClientRegistrationId, request.LastSyncedPackageId);
             }
             catch (SyncPackageNotFoundException ex)
             {
-                Logger.Error(ex.Message, ex);
-                throw CreateRestException(HttpStatusCode.ServiceUnavailable, SyncStatusCode.General, InterviewerSyncStrings.ServerError);
+                this.Logger.Error(ex.Message, ex);
+                throw this.CreateRestException(HttpStatusCode.ServiceUnavailable, SyncStatusCode.General, InterviewerSyncStrings.ServerError);
+            }
+        }
+
+        [HttpPost]
+        [ApiBasicAuth]
+        public SyncItemsMetaContainer GetQuestionnaireArKeys(SyncItemsMetaContainerRequest request)
+        {
+            try
+            {
+                return this.syncManager.GetQuestionnaireArIdsWithOrder(this.GlobalInfo.GetCurrentUser().Id, request.ClientRegistrationId, request.LastSyncedPackageId);
+            }
+            catch (SyncPackageNotFoundException ex)
+            {
+                this.Logger.Error(ex.Message, ex);
+                throw this.CreateRestException(HttpStatusCode.ServiceUnavailable, SyncStatusCode.General, InterviewerSyncStrings.ServerError);
+            }
+        }
+
+        [HttpPost]
+        [ApiBasicAuth]
+        public SyncItemsMetaContainer GetInterviewArKeys(SyncItemsMetaContainerRequest request)
+        {
+            try
+            {
+                return this.syncManager.GetInterviewArIdsWithOrder(this.GlobalInfo.GetCurrentUser().Id, request.ClientRegistrationId, request.LastSyncedPackageId);
+            }
+            catch (SyncPackageNotFoundException ex)
+            {
+                this.Logger.Error(ex.Message, ex);
+                throw this.CreateRestException(HttpStatusCode.ServiceUnavailable, SyncStatusCode.General, InterviewerSyncStrings.ServerError);
             }
         }
 

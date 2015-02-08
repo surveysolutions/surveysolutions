@@ -46,7 +46,7 @@ namespace WB.UI.Capi.Views
         {
             this.SyncEndpoint = "";
 #if DEBUG
-            this.SyncEndpoint = "http://172.29.121.10/headquarters";
+            this.SyncEndpoint = "http://192.168.173.1/headquarters";
             this.Login = "inter";
             this.Password = "P@$$w0rd";
 #endif

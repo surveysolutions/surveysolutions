@@ -293,8 +293,7 @@ namespace WB.UI.Capi
                     CapiApplication.Kernel.Get<ISyncPackageIdsStorage>(),
                     CapiApplication.Kernel.Get<ILogger>(),
                     CapiApplication.Kernel.Get<ISynchronizationService>(),
-                    CapiApplication.Kernel.Get<IInterviewerSettings>(),
-                    CapiApplication.Membership);
+                    CapiApplication.Kernel.Get<IInterviewerSettings>());
             }
             catch (Exception ex)
             {

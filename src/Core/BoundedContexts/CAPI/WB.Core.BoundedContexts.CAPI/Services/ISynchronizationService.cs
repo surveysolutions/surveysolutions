@@ -9,9 +9,7 @@ namespace WB.Core.BoundedContexts.Capi.Services
 {
     public interface ISynchronizationService
     {
-        Task<Guid> HandshakeAsync(SyncCredentials credentials, bool shouldThisDeviceBeLinkedToUser = false);
-
-        Task<SyncItemsMetaContainer> GetChunksAsync(SyncCredentials credentials, string lastKnownPackageId);
+        Task<HandshakePackage> HandshakeAsync(SyncCredentials credentials, bool shouldThisDeviceBeLinkedToUser = false);
 
         Task<UserSyncPackageDto> RequestUserPackageAsync(SyncCredentials credentials, string chunkId);
 
@@ -28,5 +26,7 @@ namespace WB.Core.BoundedContexts.Capi.Services
         Task<bool> NewVersionAvailableAsync();
 
         Task<bool> CheckExpectedDeviceAsync(SyncCredentials credentials);
+
+        Task<SyncItemsMetaContainer> GetPackageIdsToDownloadAsync(SyncCredentials credentials, string type, string lastSyncedPackageId);
     }
 }

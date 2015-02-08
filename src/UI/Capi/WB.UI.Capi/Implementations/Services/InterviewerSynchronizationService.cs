@@ -37,7 +37,12 @@ namespace WB.UI.Capi.Implementations.Services
             return isThisExpectedDevice;
         }
 
-        public async Task<Guid> HandshakeAsync(SyncCredentials credentials, bool shouldThisDeviceBeLinkedToUser = false)
+        public async Task<SyncItemsMetaContainer> GetPackageIdsToDownloadAsync(SyncCredentials credentials, string type, string lastSyncedPackageId)
+        {
+            return await this.SyncItemsMetaContainer(credentials, lastSyncedPackageId, type);
+        }
+
+        public async Task<HandshakePackage> HandshakeAsync(SyncCredentials credentials, bool shouldThisDeviceBeLinkedToUser = false)
         {
             var package = await this.restService.PostAsync<HandshakePackage>(
                 url: "api/InterviewerSync/GetHandshakePackage",
@@ -50,49 +55,44 @@ namespace WB.UI.Capi.Implementations.Services
                     ShouldDeviceBeLinkedToUser = shouldThisDeviceBeLinkedToUser
                 });
 
-            return package.ClientRegistrationKey;
+            return package;
         }
 
-        public async Task<SyncItemsMetaContainer> GetChunksAsync(SyncCredentials credentials, string lastKnownPackageId)
+        private async Task<SyncItemsMetaContainer> SyncItemsMetaContainer(SyncCredentials credentials, string lastSyncedUserPackageId, string type)
         {
-            var syncItemsMetaContainer = await restService.PostAsync<SyncItemsMetaContainer>(
-                url: "api/InterviewerSync/GetARKeys",
-                credentials: new RestCredentials() {Login = credentials.Login, Password = credentials.Password},
-                request: new SyncItemsMetaContainerRequest
-                {
-                    ClientRegistrationId = this.interviewerSettings.GetClientRegistrationId().Value,
-                    LastSyncedUserPackageId = lastKnownPackageId,
-                    LastSyncedQuestionnairePackageId = lastKnownPackageId,
-                    LastSyncedInterviewPackageId = lastKnownPackageId,
-                });
+            var request = new SyncItemsMetaContainerRequest
+                          {
+                              ClientRegistrationId = this.interviewerSettings.GetClientRegistrationId().Value,
+                              LastSyncedPackageId = lastSyncedUserPackageId,
+                          };
 
-            if (syncItemsMetaContainer.UserChunksMeta == null 
-                || syncItemsMetaContainer.InterviewChunksMeta == null 
-                || syncItemsMetaContainer.QuestionnaireChunksMeta == null)
-                throw new Exception(Resources.ErrorOnItemListReceiving);
+            var syncItemsMetaContainer = await this.restService.PostAsync<SyncItemsMetaContainer>(
+                        url: string.Format("api/InterviewerSync/Get{0}ArKeys", type),
+                        credentials: new RestCredentials { Login = credentials.Login, Password = credentials.Password },
+                        request: request);
 
             return syncItemsMetaContainer;
         }
 
         public async Task<UserSyncPackageDto> RequestUserPackageAsync(SyncCredentials credentials, string chunkId)
         {
-            return await this.DownloadPackage<UserSyncPackageDto>(credentials, chunkId);
+            return await this.DownloadPackage<UserSyncPackageDto>(credentials, chunkId, "GetUserSyncPackage");
         }
 
         public async Task<QuestionnaireSyncPackageDto> RequestQuestionnairePackageAsync(SyncCredentials credentials, string chunkId)
         {
-            return await this.DownloadPackage<QuestionnaireSyncPackageDto>(credentials, chunkId);
+            return await this.DownloadPackage<QuestionnaireSyncPackageDto>(credentials, chunkId, "GetQuestionnaireSyncPackage");
         }
 
         public async Task<InterviewSyncPackageDto> RequestInterviewPackageAsync(SyncCredentials credentials, string chunkId)
         {
-            return await this.DownloadPackage<InterviewSyncPackageDto>(credentials, chunkId);
+            return await this.DownloadPackage<InterviewSyncPackageDto>(credentials, chunkId, "GetInterviewSyncPackage");
         }
 
-        private async Task<T> DownloadPackage<T>(SyncCredentials credentials, string chunkId)
+        private async Task<T> DownloadPackage<T>(SyncCredentials credentials, string chunkId, string Url)
         {
             var package = await this.restService.PostAsync<T>(
-                        url: string.Format("api/InterviewerSync/Get{0}", typeof(T).Name),
+                        url: string.Format("api/InterviewerSync/{0}", Url),
                         credentials: new RestCredentials { Login = credentials.Login, Password = credentials.Password },
                         request:
                             new SyncPackageRequest

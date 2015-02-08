@@ -9,7 +9,6 @@ using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
@@ -32,7 +31,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
         private readonly ISyncAuthenticator authentificator;
         private SyncCredentials credentials;
 
-        private readonly IDataCollectionAuthentication membership;
+        private Guid userId = Guid.Empty;
 
         public event EventHandler<SynchronizationEventArgs> StatusChanged;
         public event System.EventHandler ProcessFinished;
@@ -48,8 +47,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
             ISyncPackageIdsStorage packageIdStorage,
             ILogger logger,
             ISynchronizationService synchronizationService,
-            IInterviewerSettings interviewerSettings,
-            IDataCollectionAuthentication membership)
+            IInterviewerSettings interviewerSettings)
         {
             this.deviceChangingVerifier = deviceChangingVerifier;
             this.authentificator = authentificator;
@@ -60,7 +58,75 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
             this.synchronizationService = synchronizationService;
             this.interviewerSettings = interviewerSettings;
             this.dataProcessor = dataProcessor;
-            this.membership = membership;
+        }
+
+        public Task Run()
+        {
+            this.cancellationTokenSource = new CancellationTokenSource();
+            this.cancellationToken = this.cancellationTokenSource.Token;
+
+            return Task.Run(async () =>
+            {
+                try
+                {
+                    await this.Handshake();
+                    await this.Push();
+                    await this.Pull();
+
+                    this.OnProcessFinished();
+                }
+                catch (Exception e)
+                {
+                    this.OnProcessCanceled(new List<Exception>() { e });
+                }
+
+            }, this.cancellationToken);
+        }
+
+        private async Task Handshake()
+        {
+            this.ExitIfCanceled();
+
+            var userCredentials = this.authentificator.RequestCredentials();
+
+            this.ExitIfCanceled();
+
+            if (!userCredentials.HasValue)
+                throw new Exception("User wasn't authenticated.");
+
+            this.credentials = userCredentials.Value;
+
+            this.OnStatusChanged(new SynchronizationEventArgs("Connecting...", Operation.Handshake, true));
+
+            try
+            {
+                var isThisExpectedDevice = await this.synchronizationService.CheckExpectedDeviceAsync(credentials: this.credentials);
+
+                var shouldThisDeviceBeLinkedToUser = false;
+                if (!isThisExpectedDevice)
+                {
+                    shouldThisDeviceBeLinkedToUser = this.deviceChangingVerifier.ConfirmDeviceChanging();
+                }
+
+                HandshakePackage package = await this.synchronizationService.HandshakeAsync(credentials: this.credentials, shouldThisDeviceBeLinkedToUser: shouldThisDeviceBeLinkedToUser);
+                
+                userId = package.UserId;
+
+                this.interviewerSettings.SetClientRegistrationId(package.ClientRegistrationKey);
+
+                if (shouldThisDeviceBeLinkedToUser)
+                {
+                    this.cleanUpExecutor.DeleteAllInterviewsForUser(userId);
+                }
+            }
+            catch (Exception e)
+            {
+                var knownHttpStatusCodes = new[] { HttpStatusCode.NotAcceptable, HttpStatusCode.InternalServerError, HttpStatusCode.Unauthorized };
+                var restException = e as RestException;
+                if (restException != null && !knownHttpStatusCodes.Contains(restException.StatusCode))
+                    throw new RestException(string.Empty, restException.StatusCode, e);
+                throw;
+            }
         }
 
         private async Task Pull()
@@ -70,127 +136,9 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
 
             await this.MigrateOldSyncTimestampToId();
 
-            SyncItemsMetaContainer syncItemsMetaContainer = null;
-
-            bool foundNeededPackages = false;
-            var lastKnownPackageId = this.packageIdStorage.GetLastStoredChunkId();
-            //int returnedBackCount = 0;
-
-            do
-            {
-                this.OnStatusChanged(new SynchronizationEventArgsWithPercent("Receiving list of packageIds to download", Operation.Pull, true, 0));
-
-                syncItemsMetaContainer = await this.synchronizationService.GetChunksAsync(
-                    credentials: this.credentials, 
-                    lastKnownPackageId: lastKnownPackageId);
-
-                //if (remoteChuncksForDownload == null)
-                //{
-                //    returnedBackCount++;
-                //    this.OnStatusChanged(new SynchronizationEventArgsWithPercent(
-                //        string.Format("Last known package not found on server. Searching for previous. Tried {0} packageIdStorage", returnedBackCount),
-                //        Operation.Pull, true, 0));
-                //    lastKnownPackageId = this.packageIdStorage.GetChunkBeforeChunkWithId(lastKnownPackageId);
-                //    continue;
-                //}
-
-                foundNeededPackages = true;
-            } while (!foundNeededPackages);
-                
-            int progressCounter = 0;
-            int chunksToDownload = syncItemsMetaContainer.InterviewChunksMeta.Count()
-                                   + syncItemsMetaContainer.QuestionnaireChunksMeta.Count()
-                                   + syncItemsMetaContainer.UserChunksMeta.Count();
-
-            foreach (SynchronizationChunkMeta chunk in syncItemsMetaContainer.UserChunksMeta)
-            {
-                if (this.cancellationToken.IsCancellationRequested)
-                    return;
-
-                try
-                {
-                    var data = await this.synchronizationService.RequestUserPackageAsync(credentials: this.credentials, chunkId: chunk.Id);
-
-                    this.dataProcessor.ProcessDownloadedPackage((UserSyncPackageDto)data);
-
-                    this.packageIdStorage.Append(chunk.Id);
-                }
-                catch (Exception e)
-                {
-                    this.logger.Error(string.Format("User packge {0} wasn't processed", chunk.Id), e);
-                    throw;
-                }
-
-                this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", Operation.Pull, true,
-                    ((progressCounter++) * 100) / chunksToDownload));
-            }
-
-            foreach (SynchronizationChunkMeta chunk in syncItemsMetaContainer.QuestionnaireChunksMeta)
-            {
-                if (this.cancellationToken.IsCancellationRequested)
-                    return;
-
-                try
-                {
-                    var data = await this.synchronizationService.RequestQuestionnairePackageAsync(credentials: this.credentials, chunkId: chunk.Id);
-
-                    this.dataProcessor.ProcessDownloadedPackage((QuestionnaireSyncPackageDto)data);
-
-                    this.packageIdStorage.Append(chunk.Id);
-                }
-                catch (Exception e)
-                {
-                    this.logger.Error(string.Format("Questionnaire packge  {0} wasn't processed", chunk.Id), e);
-                    throw;
-                }
-
-                this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", Operation.Pull, true,
-                    ((progressCounter++) * 100) / chunksToDownload));
-            }
-
-            foreach (SynchronizationChunkMeta chunk in syncItemsMetaContainer.InterviewChunksMeta)
-            {
-                if (this.cancellationToken.IsCancellationRequested)
-                    return;
-
-                try
-                {
-                    var data = await this.synchronizationService.RequestInterviewPackageAsync(credentials: this.credentials, chunkId: chunk.Id);
-
-                    this.dataProcessor.ProcessDownloadedPackage((InterviewSyncPackageDto)data);
-
-                    this.packageIdStorage.Append(chunk.Id);
-                }
-                catch (Exception e)
-                {
-                    this.logger.Error(string.Format("Interview packge  {0} wasn't processed", chunk.Id), e);
-                    throw;
-                }
-
-                this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", Operation.Pull, true,
-                    ((progressCounter++) * 100) / chunksToDownload));
-            }
-        }
-
-        private async Task MigrateOldSyncTimestampToId()
-        {
-            string lastReceivedPackageId = this.interviewerSettings.GetLastReceivedPackageId();
-            
-
-            if (!string.IsNullOrEmpty(lastReceivedPackageId))
-            {
-                this.logger.Warn(string.Format("Migration of old version of sync. Last received package id: {0}", lastReceivedPackageId));
-
-                long lastReceivedPackageIdOfLongType;
-                if (!long.TryParse(lastReceivedPackageId, out lastReceivedPackageIdOfLongType))
-                    return;
-                this.OnStatusChanged(new SynchronizationEventArgs("Tablet had old installation. Migrating package timestamp to it's id", Operation.Pull, true));
-                string lastReceivedChunkId = await this.synchronizationService.GetChunkIdByTimestampAsync(timestamp: lastReceivedPackageIdOfLongType, credentials: this.credentials);
-                
-                this.packageIdStorage.Append(lastReceivedChunkId);
-                
-                this.interviewerSettings.SetLastReceivedPackageId(null);
-            }
+            await this.PullUserPackages();
+            await this.PullQuestionnairePackages();
+            await this.PullInterviewPackages();
         }
 
         private async Task Push()
@@ -204,7 +152,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
             {
                 this.ExitIfCanceled();
 
-                await this.synchronizationService.PushChunkAsync(credentials : this.credentials, chunkAsString: chunckDescription.Content);
+                await this.synchronizationService.PushChunkAsync(this.credentials, chunckDescription.Content);
 
                 this.fileSyncRepository.MoveInterviewsBinaryDataToSyncFolder(chunckDescription.EventSourceId);
 
@@ -226,9 +174,9 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
                 {
                     await this.synchronizationService.PushBinaryAsync(
                         credentials: this.credentials,
-                        fileData: binaryData.GetData(), 
+                        interviewId: binaryData.InterviewId,
                         fileName: binaryData.FileName,
-                        interviewId: binaryData.InterviewId);
+                        fileData: binaryData.GetData());
 
                     this.fileSyncRepository.RemoveBinaryDataFromSyncFolder(binaryData.InterviewId, binaryData.FileName);
                 }
@@ -242,77 +190,132 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
             }
         }
 
-        private async Task Handshake()
+        private async Task PullUserPackages()
         {
-            this.ExitIfCanceled();
-
-            var userCredentials = this.authentificator.RequestCredentials();
-
-            this.ExitIfCanceled();
-
-            if (!userCredentials.HasValue)
-                throw new Exception("User wasn't authenticated.");
-
-            this.credentials = userCredentials.Value;
-            
-            this.OnStatusChanged(new SynchronizationEventArgs("Connecting...", Operation.Handshake, true));
-
-            try
-            {
-                var isThisExpectedDevice = await this.synchronizationService.CheckExpectedDeviceAsync(credentials: this.credentials);
-
-                var shouldThisDeviceBeLinkedToUser = false;
-                if (!isThisExpectedDevice)
-                {
-                    shouldThisDeviceBeLinkedToUser = this.deviceChangingVerifier.ConfirmDeviceChanging();
-                }
-
-                Guid clientRegistrationId = await this.synchronizationService.HandshakeAsync(credentials: this.credentials, shouldThisDeviceBeLinkedToUser: shouldThisDeviceBeLinkedToUser);
-
-                this.interviewerSettings.SetClientRegistrationId(clientRegistrationId);
-
-                if (shouldThisDeviceBeLinkedToUser)
-                {
-                    var userId =  this.membership.GetUserIdByLoginIfExists(this.credentials.Login).Result;
-                    if (userId.HasValue)
-                    {
-                        this.cleanUpExecutor.DeleteAllInterviewsForUser(userId.Value);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                var knownHttpStatusCodes = new[] { HttpStatusCode.NotAcceptable, HttpStatusCode.InternalServerError, HttpStatusCode.Unauthorized };
-                var restException = e as RestException;
-                if (restException != null && !knownHttpStatusCodes.Contains(restException.StatusCode)) 
-                    throw new RestException(string.Empty, restException.StatusCode, e);
-                throw;
-            }
+            var packageProcessor = new Func<SynchronizationChunkMeta, Task>(DownloadAndProcessUserPackage);
+            await this.PullPackages(this.userId, "User", packageProcessor, SyncItemType.User);
         }
 
-        public Task Run()
+        private async Task PullQuestionnairePackages()
         {
-            this.cancellationTokenSource = new CancellationTokenSource();
-            this.cancellationToken = this.cancellationTokenSource.Token;
+            var packageProcessor = new Func<SynchronizationChunkMeta, Task>(DownloadAndProcessQuestionnirePackage);
+            await this.PullPackages(Guid.Empty, "Questionnaire", packageProcessor, SyncItemType.Questionnaire);
+        }
 
-            return Task.Run(async () =>
+        private async Task PullInterviewPackages()
+        {
+            var packageProcessor = new Func<SynchronizationChunkMeta, Task>(DownloadAndProcessInterviewPackage);
+            await this.PullPackages(this.userId, "Interview", packageProcessor, SyncItemType.Interview);
+        }
+
+        private async Task PullPackages(Guid currentUserId, string type, Func<SynchronizationChunkMeta, Task> packageProcessor, string packageType)
+        {
+            this.ExitIfCanceled();
+            this.OnStatusChanged(new SynchronizationEventArgsWithPercent(
+                string.Format("Pulling packages for {0}", type.ToLower()), Operation.Pull, true, 0));
+
+            SyncItemsMetaContainer syncItemsMetaContainer = null;
+
+            bool foundNeededPackages = false;
+            int returnedBackCount = 0;
+
+            var lastKnownPackageId = this.packageIdStorage.GetLastStoredPackageId(packageType, currentUserId);
+            do
             {
+                this.OnStatusChanged(new SynchronizationEventArgsWithPercent(
+                    string.Format("Receiving list of packageIds for {0} to download", type.ToLower()), Operation.Pull, true, 0));
+
+                syncItemsMetaContainer = await this.synchronizationService.GetPackageIdsToDownloadAsync(this.credentials, type, lastKnownPackageId);
+
+                if (syncItemsMetaContainer == null)
+                {
+                    returnedBackCount++;
+                    this.OnStatusChanged(
+                        new SynchronizationEventArgsWithPercent(
+                            string.Format("Last known package for {0} not found on server. Searching for previous. Tried {1} packageIdStorage",
+                                type.ToLower(),
+                                returnedBackCount),
+                            Operation.Pull, true, 0));
+
+                    lastKnownPackageId = this.packageIdStorage.GetChunkBeforeChunkWithId(packageType, lastKnownPackageId, currentUserId);
+                    continue;
+                }
+
+                foundNeededPackages = true;
+            }
+            while (!foundNeededPackages);
+
+            int progressCounter = 0;
+            int chunksToDownload = syncItemsMetaContainer.SyncPackagesMeta.Count();
+
+            foreach (SynchronizationChunkMeta chunk in syncItemsMetaContainer.SyncPackagesMeta)
+            {
+                if (this.cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+
                 try
                 {
-                    await this.Handshake();
-                    await this.Push();
-                    await this.Pull();
-
-                    this.OnProcessFinished();
+                    await packageProcessor(chunk);
                 }
                 catch (Exception e)
                 {
-                    this.OnProcessCanceled(new List<Exception>() {e});
+                    this.logger.Error(string.Format("{0} packge {1} wasn't processed", type, chunk.Id), e);
+                    throw;
                 }
 
-            }, this.cancellationToken);
+                this.OnStatusChanged(
+                    new SynchronizationEventArgsWithPercent(
+                        string.Format("Pulling packages for {0}", type.ToLower()),
+                        Operation.Pull,
+                        true,
+                        ((progressCounter++) * 100) / chunksToDownload));
+            }
         }
 
+        private async Task DownloadAndProcessUserPackage(SynchronizationChunkMeta chunk)
+        {
+            var package = await this.synchronizationService.RequestUserPackageAsync(credentials: this.credentials, chunkId: chunk.Id);
+            this.dataProcessor.ProcessDownloadedPackage(package);
+            this.packageIdStorage.Append(package.PackageId, SyncItemType.User, package.UserId, package.SortIndex);
+        }
+
+        private async Task DownloadAndProcessQuestionnirePackage(SynchronizationChunkMeta chunk)
+        {
+            var package = await this.synchronizationService.RequestQuestionnairePackageAsync(this.credentials, chunk.Id);
+            this.dataProcessor.ProcessDownloadedPackage(package);
+            this.packageIdStorage.Append(package.PackageId, SyncItemType.Questionnaire, Guid.Empty, package.SortIndex);
+        }
+
+        private async Task DownloadAndProcessInterviewPackage(SynchronizationChunkMeta chunk)
+        {
+            var package = await this.synchronizationService.RequestInterviewPackageAsync(this.credentials, chunk.Id);
+            this.dataProcessor.ProcessDownloadedPackage(package);
+            this.packageIdStorage.Append(package.PackageId, SyncItemType.Questionnaire, package.UserId, package.SortIndex);
+        }
+
+        private async Task MigrateOldSyncTimestampToId()
+        {
+            string lastReceivedPackageId = this.interviewerSettings.GetLastReceivedPackageId();
+            
+
+            if (!string.IsNullOrEmpty(lastReceivedPackageId))
+            {
+                this.logger.Warn(string.Format("Migration of old version of sync. Last received package id: {0}", lastReceivedPackageId));
+
+                long lastReceivedPackageIdOfLongType;
+                if (!long.TryParse(lastReceivedPackageId, out lastReceivedPackageIdOfLongType))
+                    return;
+                this.OnStatusChanged(new SynchronizationEventArgs("Tablet had old installation. Migrating package timestamp to it's id", Operation.Pull, true));
+                string lastReceivedChunkId = await this.synchronizationService.GetChunkIdByTimestampAsync(timestamp: lastReceivedPackageIdOfLongType, credentials: this.credentials);
+                
+                //this.packageIdStorage.Append(lastReceivedChunkId);
+                
+                this.interviewerSettings.SetLastReceivedPackageId(null);
+            }
+        }
+       
         public void Cancel(Exception exception = null)
         {
             this.OnStatusChanged(new SynchronizationEventArgs("Cancelling", Operation.Pull, false));
@@ -327,18 +330,21 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
             if (handler != null)
                 handler(this, EventArgs.Empty);
         }
+
         protected void OnProcessCanceling()
         {
             var handler = this.ProcessCanceling;
             if (handler != null)
                 handler(this, EventArgs.Empty);
         }
+        
         protected void OnProcessCanceled(IList<Exception> exceptions)
         {
             var handler = this.ProcessCanceled;
             if (handler != null)
                 handler(this, new SynchronizationCanceledEventArgs(exceptions));
         }
+
         protected void OnStatusChanged(SynchronizationEventArgs evt)
         {
             if (this.cancellationToken.IsCancellationRequested)

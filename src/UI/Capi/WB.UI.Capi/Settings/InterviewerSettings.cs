@@ -36,21 +36,6 @@ namespace WB.UI.Capi.Settings
             return string.IsNullOrEmpty(sClientRegistrationId) ? (Guid?) null : Guid.Parse(sClientRegistrationId);
         }
 
-        public string GetLastReceivedUserPackageId()
-        {
-            return GetSetting(SettingsNames.LastReceivedUserPackageId);
-        }
-
-        public string GetLastReceivedQuestionnairePackageId()
-        {
-            return GetSetting(SettingsNames.LastReceivedQuestionnairePackageId);
-        }
-
-        public string GetLastReceivedInterviewPackageId()
-        {
-            return GetSetting(SettingsNames.LastReceivedInterviewPackageId);
-        }
-
         public string GetLastReceivedPackageId()
         {
             return GetSetting(SettingsNames.LastTimestamp);
@@ -86,21 +71,6 @@ namespace WB.UI.Capi.Settings
         public void SetLastReceivedPackageId(string lastReceivedPackageId)
         {
             SetSetting(SettingsNames.LastTimestamp, lastReceivedPackageId);
-        }
-
-        public void SetLastReceivedUserPackageId(string lastReceivedUserPackageId)
-        {
-            SetSetting(SettingsNames.LastReceivedUserPackageId, lastReceivedUserPackageId);
-        }
-
-        public void SetLastReceivedQuestionnairePackageId(string lastReceivedQuestionnairePackageId)
-        {
-            SetSetting(SettingsNames.LastReceivedQuestionnairePackageId, lastReceivedQuestionnairePackageId);
-        }
-
-        public void SetLastReceivedInterviewPackageId(string lastReceivedInterviewPackageId)
-        {
-            SetSetting(SettingsNames.LastReceivedInterviewPackageId, lastReceivedInterviewPackageId);
         }
 
         public void SetSyncAddressPoint(string syncAddressPoint)

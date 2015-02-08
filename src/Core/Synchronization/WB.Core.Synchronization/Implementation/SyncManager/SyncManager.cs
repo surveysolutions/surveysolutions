@@ -70,6 +70,45 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             this.incomingQueue.PushSyncItem(item);
         }
 
+        public SyncItemsMetaContainer GetQuestionnaireArIdsWithOrder(Guid userId, Guid clientRegistrationId, string lastSyncedPackageId)
+        {
+            this.MakeSureThisDeviceIsRegisteredOrThrow(clientRegistrationId);
+
+            var updateFromLastPakageByQuestionnaire =
+                this.GetUpdateFromLastPakage(lastSyncedPackageId, this.indexAccessor.Query<QuestionnaireSyncPackage>(questionnireQueryIndexName));
+
+            return new SyncItemsMetaContainer
+            {
+                SyncPackagesMeta = updateFromLastPakageByQuestionnaire
+            };
+        }
+
+        public SyncItemsMetaContainer GetUserArIdsWithOrder(Guid userId, Guid clientRegistrationId, string lastSyncedPackageId)
+        {
+            this.MakeSureThisDeviceIsRegisteredOrThrow(clientRegistrationId);
+
+            var updateFromLastPakageByUser =
+                this.GetUpdateFromLastPakage(lastSyncedPackageId, this.indexAccessor.Query<UserSyncPackage>(userQueryIndexName).Where(x => x.UserId == userId));
+
+            return new SyncItemsMetaContainer
+            {
+                SyncPackagesMeta = updateFromLastPakageByUser
+            };
+        }
+
+        public SyncItemsMetaContainer GetInterviewArIdsWithOrder(Guid userId, Guid clientRegistrationId, string lastSyncedPackageId)
+        {
+            this.MakeSureThisDeviceIsRegisteredOrThrow(clientRegistrationId);
+
+            var updateFromLastPakageByInterview =
+                this.GetUpdateFromLastPakage(lastSyncedPackageId, this.indexAccessor.Query<InterviewSyncPackage>(interviewQueryIndexName).Where(x => x.UserId == userId));
+
+            return new SyncItemsMetaContainer
+            {
+                SyncPackagesMeta = updateFromLastPakageByInterview
+            };
+        }
+
         public void LinkUserToDevice(Guid interviewerId, string deviceId)
         {
             if (interviewerId == Guid.Empty)
@@ -79,27 +118,6 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                 throw new ArgumentException("Device id is not set.");
 
             commandService.Execute(new LinkUserToDevice(interviewerId, deviceId));
-        }
-
-        public SyncItemsMetaContainer GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationId, string lastSyncedUserPackageId, string lastSyncedQuestionnairePackageId, string lastSyncedInterviewPackageId)
-        {
-            this.MakeSureThisDeviceIsRegisteredOrThrow(clientRegistrationId);
-
-            var updateFromLastPakageByUser = 
-                this.GetUpdateFromLastPakage(lastSyncedUserPackageId, this.indexAccessor.Query<UserSyncPackage>(userQueryIndexName).Where(x => x.UserId == userId));
-            
-            var updateFromLastPakageByQuestionnaire =
-                this.GetUpdateFromLastPakage(lastSyncedQuestionnairePackageId, this.indexAccessor.Query<QuestionnaireSyncPackage>(questionnireQueryIndexName));
-
-            var updateFromLastPakageByInterview =
-                this.GetUpdateFromLastPakage(lastSyncedInterviewPackageId, this.indexAccessor.Query<InterviewSyncPackage>(interviewQueryIndexName).Where(x => x.UserId == userId));
-
-            return new SyncItemsMetaContainer
-                   {
-                       UserChunksMeta = updateFromLastPakageByUser,
-                       QuestionnaireChunksMeta = updateFromLastPakageByQuestionnaire,
-                       InterviewChunksMeta = updateFromLastPakageByInterview
-                   };
         }
 
         public UserSyncPackageDto ReceiveUserSyncPackage(Guid clientRegistrationId, string packageId)
@@ -233,15 +251,16 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
             Guid syncActivityKey = Guid.NewGuid();
 
-            return new HandshakePackage(identifier.ClientInstanceKey, syncActivityKey, ClientRegistrationKey);
+            return new HandshakePackage(identifier.UserId, identifier.ClientInstanceKey, syncActivityKey, ClientRegistrationKey);
         }
 
         private IEnumerable<SynchronizationChunkMeta> GetUpdateFromLastPakage<T>(string lastSyncedPackageId, IQueryable<T> items) where T : ISyncPackage
         {
             if (lastSyncedPackageId == null)
             {
-                List<SynchronizationChunkMeta> fullListResult = items
-                    .OrderBy(x => x.SortIndex)
+                var orderedQueryable = items.OrderBy(x => x.SortIndex).ToList();
+
+                List<SynchronizationChunkMeta> fullListResult = orderedQueryable
                     .Select(s => new SynchronizationChunkMeta(s.PackageId))
                     .ToList();
 
@@ -255,9 +274,14 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                 throw new SyncPackageNotFoundException(string.Format("Sync package with id {0} was not found on server", lastSyncedPackageId));
             }
 
-            var deltas = items
-                    .Where(x => x.SortIndex > lastSyncedPackage.SortIndex)
-                    .OrderBy(x => x.SortIndex)
+            int lastSyncedSortIndex = lastSyncedPackage.SortIndex;
+
+            var orderedPackages = items
+                .Where(x => x.SortIndex > lastSyncedSortIndex)
+                .OrderBy(x => x.SortIndex)
+                .ToList();
+
+            var deltas = orderedPackages
                     .Select(s => new SynchronizationChunkMeta(s.PackageId))
                     .ToList();
 
