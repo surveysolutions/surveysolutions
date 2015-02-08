@@ -51,8 +51,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
 
         It should_create_deletion_synchronization_package = () =>
             interviewPackageStorageWriter.Verify(x => 
-                x.Store(Moq.It.Is<InterviewSyncPackage>(s => s.InterviewId == interviewId), Moq.It.IsAny<string>()), 
-                Times.Once);
+                x.Store(Moq.It.Is<InterviewSyncPackage>(s => s.InterviewId == interviewId), Moq.It.IsAny<string>()), Times.Once);
 
         static InterviewSynchronizationDenormalizer synchronizationDenormalizer;
         static Guid interviewId;

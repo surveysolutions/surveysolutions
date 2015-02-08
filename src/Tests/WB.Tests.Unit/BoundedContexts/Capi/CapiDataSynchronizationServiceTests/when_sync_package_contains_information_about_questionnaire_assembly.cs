@@ -20,14 +20,14 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
 
             var jsonUtils = new NewtonJsonUtils();
             var compressor = new JsonCompressor(jsonUtils);
-           
+
             received = new QuestionnaireSyncPackageDto
             {
                 QuestionnaireId = questionnaireId,
                 QuestionnaireVersion = version,
                 ItemType = SyncItemType.QuestionnaireAssembly,
-                Content = compressor.CompressString(GetItemAsContent(assemblyAsBase64)),
-                MetaInfo =compressor.CompressString(GetItemAsContent(meta))
+                Content = assemblyAsBase64,
+                MetaInfo = GetItemAsContent(meta)
             };
 
             changeLogManipulator = new Mock<IChangeLogManipulator>();
@@ -41,8 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
         Because of = () => capiDataSynchronizationService.ProcessDownloadedPackage(received);
 
         It should_call_StoreAssembly_once =
-            () => questionnareAssemblyFileAccessor.Verify(x => x.StoreAssembly(questionnaireId, version, assemblyAsBase64),
-                  Times.Once);
+            () => questionnareAssemblyFileAccessor.Verify(x => x.StoreAssembly(questionnaireId, version, assemblyAsBase64), Times.Once);
 
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static long version = 3;
