@@ -1,8 +1,10 @@
 ﻿using System.IO;
 using Machine.Specifications;
 using Moq;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.Synchronization;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTests
@@ -10,9 +12,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
     [Subject(typeof(IncomingSyncPackagesQueue))]
     internal class IncomingPackagesQueueTestContext
     {
-        protected static IncomingSyncPackagesQueue CreateIncomingPackagesQueue(IFileSystemAccessor fileSystemAccessor = null)
+        protected static IncomingSyncPackagesQueue CreateIncomingPackagesQueue(IJsonUtils jsonUtils = null,
+            IFileSystemAccessor fileSystemAccessor = null, IArchiveUtils archiver = null, IUnhandledPackageStorage unhandledPackageStorage = null)
         {
-            return new IncomingSyncPackagesQueue(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), new SyncSettings(AppDataDirectory, IncomingCapiPackagesWithErrorsDirectoryName, IncomingCapiPackageFileNameExtension, IncomingCapiPackagesDirectoryName, ""));
+            return new IncomingSyncPackagesQueue(fileSystemAccessor??Mock.Of<IFileSystemAccessor>(),
+                new SyncSettings(AppDataDirectory, IncomingCapiPackagesWithErrorsDirectoryName,
+                    IncomingCapiPackageFileNameExtension, IncomingCapiPackagesDirectoryName, ""), Mock.Of<ILogger>(), jsonUtils: jsonUtils ?? Mock.Of<IJsonUtils>(),
+                archiver: archiver ?? Mock.Of<IArchiveUtils>(), unhandledPackageStorage: unhandledPackageStorage ?? Mock.Of<IUnhandledPackageStorage>());
+
         }
 
         protected static Mock<IFileSystemAccessor> CreateDefaultFileSystemAccessorMock()
