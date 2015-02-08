@@ -25,131 +25,46 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
     [DisallowConcurrentExecution]
     internal class SyncPackagesProcessor : ISyncPackagesProcessor, IJob
     {
-        private IIncomingPackagesQueue incomingPackagesQueue;
+        private IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
         private IUnhandledPackageStorage unhandledPackageStorage;
-        private readonly string origin;
-        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter;
         private readonly ILogger logger;
         private readonly ICommandService commandService;
-        private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IJsonUtils jsonUtils;
-        private readonly IArchiveUtils archiver;
-        private IStreamableEventStore eventStore;
-        private IEventDispatcher eventBus;
 
-        internal IStreamableEventStore EventStore
-        {
-            get { return eventStore ?? NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore; }
-            set { eventStore = value; }
-        }
-
-        internal IEventDispatcher EventBus
-        {
-            get { return eventBus ?? NcqrsEnvironment.Get<IEventBus>() as IEventDispatcher; }
-            set { eventBus = value; }
-        }
-
-        public SyncPackagesProcessor(ILogger logger, SyncSettings syncSettings, ICommandService commandService,
-            IFileSystemAccessor fileSystemAccessor, IJsonUtils jsonUtils, IArchiveUtils archiver,
-            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter, IIncomingPackagesQueue incomingPackagesQueue, IUnhandledPackageStorage unhandledPackageStorage)
+        public SyncPackagesProcessor(ILogger logger, ICommandService commandService,
+            IIncomingSyncPackagesQueue incomingSyncPackagesQueue, IUnhandledPackageStorage unhandledPackageStorage)
         {
             this.logger = logger;
             this.commandService = commandService;
-            this.fileSystemAccessor = fileSystemAccessor;
-            this.jsonUtils = jsonUtils;
-            this.archiver = archiver;
-            this.interviewSummaryRepositoryWriter = interviewSummaryRepositoryWriter;
-            this.incomingPackagesQueue = incomingPackagesQueue;
+            this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.unhandledPackageStorage = unhandledPackageStorage;
-            origin = syncSettings.Origin;
         }
 
         public void ProcessNextSyncPackage()
         {
-            string fileToProcess = incomingPackagesQueue.DeQueue();
+            IncomingSyncPackages incomingSyncPackages = incomingSyncPackagesQueue.DeQueue();
 
-            if (string.IsNullOrEmpty(fileToProcess) || !fileSystemAccessor.IsFileExists(fileToProcess))
+            if (incomingSyncPackages==null)
                 return;
 
-            Guid? interviewId = null;
             try
             {
-                var syncItem = jsonUtils.Deserialize<SyncItem>(fileSystemAccessor.ReadAllText(fileToProcess));
-
-                interviewId = syncItem.RootId;
-
-                var meta =
-                    jsonUtils.Deserialize<InterviewMetaInfo>(archiver.DecompressString(syncItem.MetaInfo));
-
-                var items =
-                    jsonUtils.Deserialize<AggregateRootEvent[]>(archiver.DecompressString(syncItem.Content));
-
-                if (IsNewInterivewCreatedOnClient(meta))
-                {
-                    AnsweredQuestionSynchronizationDto[] prefilledQuestions = null;
-                    if (meta.FeaturedQuestionsMeta != null)
-                    {
-                        prefilledQuestions = meta.FeaturedQuestionsMeta
-                            .Select(
-                                q =>
-                                    new AnsweredQuestionSynchronizationDto(q.PublicKey, new decimal[0], q.Value,
-                                        string.Empty))
-                            .ToArray();
-                    }
-
-                    commandService.Execute(
-                        new CreateInterviewCreatedOnClientCommand(
-                            interviewId: meta.PublicKey,
-                            userId: meta.ResponsibleId,
-                            questionnaireId: meta.TemplateId,
-                            questionnaireVersion: meta.TemplateVersion,
-                            status: (InterviewStatus) meta.Status,
-                            featuredQuestionsMeta: prefilledQuestions,
-                            isValid: meta.Valid), origin);
-
-                }
-                else
-                    commandService.Execute(
-                        new ApplySynchronizationMetadata(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
-                            meta.TemplateVersion,
-                            (InterviewStatus) meta.Status, null, meta.Comments, meta.Valid), origin);
-
-                var incomeEvents = BuildEventStreams(items,
-                    EventStore.GetLastEventSequence(syncItem.RootId));
-                EventStore.Store(incomeEvents);
-
-                EventBus.Publish(incomeEvents);
+                commandService.Execute(
+                    new SynchronizeInterviewEvents(incomingSyncPackages.InterviewId, incomingSyncPackages.ResponsibleId, incomingSyncPackages.QuestionnaireId,
+                        incomingSyncPackages.QuestionnaireVersion, incomingSyncPackages.EventsToSynchronize, incomingSyncPackages.InterviewStatus, incomingSyncPackages.CreatedOnClient),
+                    incomingSyncPackages.Origin);
             }
             catch (Exception e)
             {
-                logger.Error(e.Message, e);
-                unhandledPackageStorage.StoreUnhandledPackage(fileToProcess, interviewId);
+                logger.Error(string.Format("package '{0}' wasn't processed. Reason: '{1}'", incomingSyncPackages.PathToPackage, e.Message), e);
+                unhandledPackageStorage.StoreUnhandledPackage(incomingSyncPackages.PathToPackage, incomingSyncPackages.InterviewId);
             }
 
-            fileSystemAccessor.DeleteFile(fileToProcess);
-        }
-
-        private bool IsNewInterivewCreatedOnClient(InterviewMetaInfo meta)
-        {
-            return meta.CreatedOnClient.HasValue && meta.CreatedOnClient.Value &&
-                   interviewSummaryRepositoryWriter.GetById(meta.PublicKey) == null;
+            incomingSyncPackagesQueue.DeleteSyncItem(incomingSyncPackages.PathToPackage);
         }
 
         public void Execute(IJobExecutionContext context)
         {
             ProcessNextSyncPackage();
-        }
-
-        private UncommittedEventStream BuildEventStreams(IEnumerable<AggregateRootEvent> stream, long initialVersion)
-        {
-            var uncommitedStream = new UncommittedEventStream(Guid.NewGuid(), null);
-            var eventSequence = initialVersion + 1;
-            foreach (var aggregateRootEvent in stream)
-            {
-                uncommitedStream.Append(aggregateRootEvent.CreateUncommitedEvent(eventSequence, initialVersion));
-                eventSequence++;
-            }
-            return uncommitedStream;
         }
     }
 }

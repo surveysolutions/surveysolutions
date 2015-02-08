@@ -132,8 +132,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .To<SyncPackagesProcessor>()
                 .InSingletonScope();
 
-            this.Bind<IIncomingPackagesQueue>()
-              .To<IncomingPackagesQueue>()
+            this.Bind<IIncomingSyncPackagesQueue>()
+              .To<IncomingSyncPackagesQueue>()
               .InSingletonScope();
             
             this.Bind<InterviewHistorySettings>().ToConstant(interviewHistorySettings);

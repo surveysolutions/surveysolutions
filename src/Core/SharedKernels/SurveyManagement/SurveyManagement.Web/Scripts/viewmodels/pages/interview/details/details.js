@@ -1,9 +1,11 @@
-Supervisor.VM.Details = function (settings) {
+Supervisor.VM.Details = function (settings, filter) {
     Supervisor.VM.Details.superclass.constructor.apply(this, [settings.Urls.CommandExecution]);
 
     var self = this,
         config = new Config(),
         datacontext = new DataContext(config, settings.Interview.InterviewId);
+
+    self.changeStateComment = ko.observable('');
 
     self.addComment = function (element, questionId, underscoreJoinedQuestionRosterVector) {
 
@@ -27,83 +29,115 @@ Supervisor.VM.Details = function (settings) {
                 var commentsCounterElement = $("#commentsCounter");
                 commentsCounterElement.text(parseInt(commentsCounterElement.text()) + 1);
             }
-            commentListElement.append('<dt>' + settings.UserName + '<span class="text-normal">' + comment + '</span></dt><dd><small class="comment-date">' + moment(new Date()).fromNow() + '</small></dd>');
+            commentListElement.append('<dt>' + settings.UserName + ' <span class="text-normal">' + comment + '</span></dt><dd><small class="comment-date" date="' + moment(new Date()).fromNow() + '"></small></dd>');
             commentListElement.removeClass("hidden");
         });
     };
 
-    self.setFlag = function (element, questionId, underscoreJoinedQuestionRosterVector) {
-        var commandName = config.commands.setFlagToAnswer;
+    self.flagAnswer = function (element, questionId, underscoreJoinedQuestionRosterVector) {
 
         var question = {
             id: questionId,
-            rosterVector: parseRosterVector(underscoreJoinedQuestionRosterVector)
+            rosterVector: parseRosterVector(underscoreJoinedQuestionRosterVector),
+            isAnswerFlagged: $(element).hasClass("btn-info")
         }
+
+        var commandName = question.isAnswerFlagged ? config.commands.removeFlagFromAnswer : config.commands.setFlagToAnswer;
 
         var command = datacontext.getCommand(commandName, question);
         self.SendCommand(command, function () {
-            var flagIndicator = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "flagIndicator"));
-            var setFlagMenuItem = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "setFlagMenuItem"));
-            var removeFlagMenuItem = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "removeFlagMenuItem"));
-
-            $(flagIndicator).removeClass("hidden");
-            $(removeFlagMenuItem).removeClass("hidden");
-            $(setFlagMenuItem).addClass("hidden");
-
             var flagsCounterElement = $("#flagsCounter");
-            flagsCounterElement.text(parseInt(flagsCounterElement.text()) + 1);
+
+            if (question.isAnswerFlagged) {
+                if (filter.filteredBy == 'Flagged') {
+                    var answerRowElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "answerRow"));
+                    answerRowElement.remove();
+                } else {
+                    $(element).removeClass("btn-info");
+                    $(element).addClass("btn-default");
+                }
+                flagsCounterElement.text(parseInt(flagsCounterElement.text()) - 1);
+            } else {
+                $(element).removeClass("btn-default");
+                $(element).addClass("btn-info");
+                flagsCounterElement.text(parseInt(flagsCounterElement.text()) + 1);
+            }
         });
-    };
 
-    self.removeFlag = function (element, questionId, underscoreJoinedQuestionRosterVector) {
-        var commandName = config.commands.removeFlagFromAnswer;
-
-        var question = {
-            id: questionId,
-            rosterVector: parseRosterVector(underscoreJoinedQuestionRosterVector)
     }
 
-        var command = datacontext.getCommand(commandName, question);
-        self.SendCommand(command, function () {
-            var flagIndicator = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "flagIndicator"));
-            var setFlagMenuItem = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "setFlagMenuItem"));
-            var removeFlagMenuItem = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "removeFlagMenuItem"));
+    self.saveTextAnswer = function (questionId, underscoreJoinedQuestionRosterVector) {
+        var answerElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector));
 
-            $(flagIndicator).addClass("hidden");
-            $(removeFlagMenuItem).addClass("hidden");
-            $(setFlagMenuItem).removeClass("hidden");
+        var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
+        question.answer = ko.observable(answerElement.val());
 
-            var flagsCounterElement = $("#flagsCounter");
-            flagsCounterElement.text(parseInt(flagsCounterElement.text()) - 1);
-        });
+        sendAnswerCommand(config.commands.answerTextQuestionCommand, question);
     };
-    self.saveAnswer = function(question) {
-        var commandName = "";
-        switch (question.questionType) {
-        case config.questionTypes.Text:
-            commandName = config.commands.answerTextQuestionCommand;
-            break;
-        case config.questionTypes.Numeric:
-            commandName = question.isInteger ? config.commands.answerNumericIntegerQuestionCommand : config.commands.answerNumericRealQuestionCommand;
-            break;
-        case config.questionTypes.DateTime:
-            commandName = config.commands.answerDateTimeQuestionCommand;
-            break;
-        case config.questionTypes.GpsCoordinates:
-            commandName = config.commands.answerGeoLocationQuestionCommand;
-            break;
-        case config.questionTypes.SingleOption:
-            commandName = config.commands.answerSingleOptionQuestionCommand;
-            break;
-        case config.questionTypes.MultyOption:
-            commandName = config.commands.answerMultipleOptionsQuestionCommand;
-            break;
+
+    self.saveNumericIntegerAnswer = function (questionId, underscoreJoinedQuestionRosterVector) {
+        var answerElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector));
+
+        var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
+        question.answer = ko.observable(answerElement.val());
+
+        sendAnswerCommand(config.commands.answerNumericIntegerQuestionCommand, question);
+    };
+
+    self.saveNumericRealAnswer = function (questionId, underscoreJoinedQuestionRosterVector, countOfDecimalPlaces) {
+        var answerElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector));
+
+        var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
+        question.answer = ko.observable(answerElement.val());
+
+        sendAnswerCommand(config.commands.answerNumericRealQuestionCommand, question);
+    };
+
+    self.saveCategoricalOneAnswer = function (questionId, underscoreJoinedQuestionRosterVector) {
+        var answerElementId = getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector);
+        var answerOptionValue = $("input:radio[name=" + answerElementId + "]:checked").val();
+
+        var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
+        question.selectedOption = ko.observable(answerOptionValue);
+
+        sendAnswerCommand(config.commands.answerSingleOptionQuestionCommand, question);
+    };
+
+    self.saveCategoricalMultiAnswer = function (questionId, underscoreJoinedQuestionRosterVector, areAnswersOrdered, maxAnswersCount, selectedOptionsAsString) {
+        var answerElementId = getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector);
+        var answerOptionValues = $("input:checkbox[name=" + answerElementId + "]:checked").map(function() { return parseFloat($(this).val()); }).get();
+        
+        var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
+        question.areAnswersOrdered = false;
+
+        if (areAnswersOrdered) {
+            var selectedOptions = selectedOptionsAsString.split(',').map(function (answerAsString) { return parseFloat(answerAsString); });
+            if (selectedOptions.length > answerOptionValues.length) {
+                _.remove(selectedOptions, function (answer) {
+                    return !_.contains(answerOptionValues, answer);
+                });
+            } else {
+                var selectedAnswer = _.find(answerOptionValues, function(answer) {
+                    return !_.contains(selectedOptions, answer);
+                });
+                selectedOptions.push(selectedAnswer);
+            }
+            question.selectedOptions = ko.observable(selectedOptions);
+        } else {
+            question.selectedOptions = ko.observable(answerOptionValues);
         }
 
-        var command = datacontext.getCommand(commandName, question);
-        self.SendCommand(command);
+        sendAnswerCommand(config.commands.answerMultipleOptionsQuestionCommand, question);
     };
+
     self.load = function () {
+        $("input[mask]").each(function (index, item) {
+            ko.bindingHandlers.maskFormatter.init(this, function () {
+                return $(item).attr("mask");
+            });
+        });
+        updateCommentDates();
+        setInterval(updateCommentDates, 60000);
     };
 
     self.showApproveModal = function () {
@@ -157,15 +191,35 @@ Supervisor.VM.Details = function (settings) {
         self.IsFilterOpen(!self.IsFilterOpen());
     };
 
+    function updateCommentDates() {
+        $(".comment-date").each(function (index, item) {
+            $(item).text(moment($(item).attr("date")).fromNow());
+        });
+    };
+
+    function sendAnswerCommand(commandName, question) {
+        var command = datacontext.getCommand(commandName, question);
+        self.SendCommand(command, function () {
+            location.reload();
+        });
+    };
+
     function getInterviewItemIdWithPostfix(questionId, rosterVector, postfix) {
-        return questionId + "_" + rosterVector + "_" + postfix;
+        return questionId + "_" + rosterVector + "_" + (_.isUndefined(postfix) ? "" : postfix);
     }
 
     function parseRosterVector(rosterVector) {
         if (rosterVector == "")
             return [];
 
-        return rosterVector.split('_');
+        return rosterVector.split('_').map(function (vector) { return vector.replace('-', '.'); });
     }
+
+    function prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector) {
+        return {
+            id: questionId,
+            rosterVector: parseRosterVector(underscoreJoinedQuestionRosterVector)
+        };
+    };
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.Details, Supervisor.VM.BasePage);

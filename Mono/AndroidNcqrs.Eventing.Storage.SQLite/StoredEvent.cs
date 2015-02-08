@@ -22,12 +22,13 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         }
         private string GetJsonData(object payload)
         {
-            var jsonSerializerSettings = new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.Objects,
-                NullValueHandling = NullValueHandling.Ignore
-            };
-            return JsonConvert.SerializeObject(payload, Formatting.None, jsonSerializerSettings);
+            return JsonConvert.SerializeObject(
+                payload, Formatting.None, new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.All,
+                    NullValueHandling = NullValueHandling.Ignore,
+                    FloatParseHandling = FloatParseHandling.Decimal
+                });
         }
 
         public string CommitId { get; set; }
