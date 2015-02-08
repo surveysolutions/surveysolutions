@@ -3,11 +3,13 @@ using Ninject.Modules;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Implementation;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
@@ -134,6 +136,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .InSingletonScope()
                 .WithConstructorArgument("overrideReceivedEventTimeStamp", overrideReceivedEventTimeStamp)
                 .WithConstructorArgument("origin", origin);
+
+            this.Bind<IFolderPermissionChecker>().To<FolderPermissionChecker>().WithConstructorArgument("folderPath", this.currentFolderPath); ;
 
             this.Bind<InterviewHistorySettings>().ToConstant(interviewHistorySettings);
             

@@ -1,4 +1,5 @@
-﻿using WB.Core.Infrastructure.HealthCheck;
+﻿using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.HealthCheck;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 
 namespace WB.UI.Headquarters.Models
@@ -10,6 +11,7 @@ namespace WB.UI.Headquarters.Models
         public ReadSideStatus ReadSideServiceStatus { get; set; }
         public int NumberOfUnhandledPackages { get; set; }
         public int NumberOfSyncPackagesWithBigSize { get; set; }
+        public FolderPermissionCheckResult FolderPermissionCheckResult { get; set; }
 
         public HealthCheckStatus Status { get; set; }
     }
