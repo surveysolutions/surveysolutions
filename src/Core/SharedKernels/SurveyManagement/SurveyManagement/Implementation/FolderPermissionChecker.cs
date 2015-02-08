@@ -25,15 +25,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation
             HashSet<string> deniedFolders = new HashSet<string>();
 
             var directories = GetAllSubFolders(folderPath, deniedFolders);
-            //string ntAccountName = Environment.UserDomainName;
-            //SecurityIdentifier users = new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, null);
-            //SecurityIdentifier users = new SecurityIdentifier(WellKnownSidType.ApplicationPoolIdentity, null);
-            NTAccount iisNtAccount = new NTAccount(@"IIS AppPool\DefaultAppPool");
-            SecurityIdentifier securityIdentifier = (SecurityIdentifier)iisNtAccount.Translate(typeof(SecurityIdentifier));
+
             var windowsIdentity = WindowsIdentity.GetCurrent();
-            var identityReference = windowsIdentity.User.Translate(typeof(NTAccount));
-//            var securityIdentifier = (SecurityIdentifier) identityReference;
-            string currentUserName = securityIdentifier.Value;
 
             foreach (var directory in directories)
             {
@@ -62,6 +55,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation
         private IEnumerable<string> GetAllSubFolders(string path, HashSet<string> deniedFolders)
         {
             HashSet<string> folders = new HashSet<string>();
+            folders.Add(path);
 
             try
             {
@@ -93,89 +87,43 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation
                 DirectorySecurity security = Directory.GetAccessControl(path);
                 var authorizationRuleCollection = security.GetAccessRules(true, true, typeof(SecurityIdentifier));
 
-                foreach (AuthorizationRule rule in authorizationRuleCollection)
-                {
-                    if (currentUserReference.User.Equals(rule.IdentityReference))
-                    {
-                        FileSystemAccessRule rights = ((FileSystemAccessRule)rule);
+                var identityReferences = new List<IdentityReference> { currentUserReference.User };
+                if (currentUserReference.Groups != null)
+                    identityReferences.AddRange(currentUserReference.Groups);
 
-                        if (rights.AccessControlType == AccessControlType.Allow)
-                        {
-                            if ((rights.FileSystemRights & FileSystemRights.WriteData) > 0)
-                                return true;
-                        }
-                    }
-                }
-
-                foreach (var userGroup in currentUserReference.Groups)
-                {
-                    foreach (AuthorizationRule rule in authorizationRuleCollection)
-                    {
-                        if (userGroup.Equals(rule.IdentityReference))
-                        {
-                            FileSystemAccessRule rights = ((FileSystemAccessRule)rule);
-
-                            if (rights.AccessControlType == AccessControlType.Allow)
-                            {
-                                if ((rights.FileSystemRights & FileSystemRights.WriteData) > 0)
-                                    return true;
-                            }
-                        }
-                    }
-                }
-
-                return false;
+                var isAllowWriteForUser = IsAllowWriteForIdentityReferance(authorizationRuleCollection, identityReferences);
+                return isAllowWriteForUser;
             }
-            catch
+            catch(UnauthorizedAccessException)
             {
                 return false;
             }
         }
 
-        public bool CheckWriteAccess2(WindowsIdentity currentUserReference, string path)
+        private static bool IsAllowWriteForIdentityReferance(
+            AuthorizationRuleCollection authorizationRuleCollection, List<IdentityReference> identityReferences)
         {
             var writeAllow = false;
             var writeDeny = false;
 
-            DirectorySecurity accessControlList;
-            try
+            foreach (AuthorizationRule authorizationRule in authorizationRuleCollection)
             {
-                accessControlList = Directory.GetAccessControl(path);
-                if (accessControlList == null)
-                    return false;
-            }
-            catch (UnauthorizedAccessException)
-            {
-                return false;
-            }
+                var isUserPermission = identityReferences.Any(ir => ir.Equals(authorizationRule.IdentityReference));
+                if (isUserPermission)
+                {
+                    FileSystemAccessRule rule = ((FileSystemAccessRule) authorizationRule);
 
-            var accessRules = accessControlList.GetAccessRules(true, true, typeof(SecurityIdentifier));
-
-            foreach (FileSystemAccessRule rule in accessRules)
-            {
-                if ((FileSystemRights.Write & rule.FileSystemRights) != FileSystemRights.Write)
-                    continue;
-
-                if (rule.AccessControlType == AccessControlType.Allow)
-                    writeAllow = true;
-                else if (rule.AccessControlType == AccessControlType.Deny)
-                    writeDeny = true;
+                    if ((rule.FileSystemRights & FileSystemRights.WriteData) == FileSystemRights.WriteData)
+                    {
+                        if (rule.AccessControlType == AccessControlType.Allow)
+                            writeAllow = true;
+                        else if (rule.AccessControlType == AccessControlType.Deny)
+                            writeDeny = true;
+                    }
+                }
             }
 
             return writeAllow && !writeDeny;
-        }
-
-        public bool CheckWriteAccess3(WindowsIdentity currentUserReference, string path)
-        {
-            var permissionSet = new PermissionSet(PermissionState.None);
-            var writePermission = new FileIOPermission(FileIOPermissionAccess.Write, path);
-            permissionSet.AddPermission(writePermission);
-
-            if (permissionSet.IsSubsetOf(AppDomain.CurrentDomain.PermissionSet))
-            {
-                return true;
-            }
-            return false;
         }
     }
 }
