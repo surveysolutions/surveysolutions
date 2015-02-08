@@ -3,6 +3,7 @@ using System.Web.Http;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.HealthCheck;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Storage.EventStore;
@@ -24,13 +25,16 @@ namespace WB.UI.Headquarters.API
         private readonly IDatabaseHealthCheck databaseHealthCheck;
         private readonly IEventStoreHealthCheck eventStoreHealthCheck;
         private readonly IChunkReader chunkReader;
+        private readonly IFolderPermissionChecker folderPermissionChecker;
 
         public HealthCheckController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             IDatabaseHealthCheck databaseHealthCheck, IEventStoreHealthCheck eventStoreHealthCheck, 
             IIncomePackagesRepository incomePackagesRepository, IChunkReader chunkReader,
+            IFolderPermissionChecker folderPermissionChecker,
             IReadSideAdministrationService readSideAdministrationService)
             : base(commandService, provider, logger)
         {
+            this.folderPermissionChecker = folderPermissionChecker;
             this.chunkReader = chunkReader;
             this.eventStoreHealthCheck = eventStoreHealthCheck;
             this.databaseHealthCheck = databaseHealthCheck;
@@ -55,12 +59,14 @@ namespace WB.UI.Headquarters.API
             var eventStoreHealthCheckResult = eventStoreHealthCheck.Check();
             var numberOfUnhandledPackages = incomePackagesRepository.GetListOfUnhandledPackages().Count();
             var numberOfSyncPackagesWithBigSize = chunkReader.GetNumberOfSyncPackagesWithBigSize();
+            var folderPermissionCheckResult = folderPermissionChecker.Check();
             var readSideStatus = readSideAdministrationService.GetRebuildStatus();
 
             var status = HealthCheckStatus.Happy;
 
             if (databaseHealthCheckResult.Status != HealthCheckStatus.Happy
-                || eventStoreHealthCheckResult.Status != HealthCheckStatus.Happy)
+                || eventStoreHealthCheckResult.Status != HealthCheckStatus.Happy
+                || folderPermissionCheckResult.DenidedFolders.Length > 0)
             {
                 status = HealthCheckStatus.Down;
             }
@@ -75,6 +81,7 @@ namespace WB.UI.Headquarters.API
                 EventstoreConnectionStatus = eventStoreHealthCheckResult,
                 NumberOfUnhandledPackages = numberOfUnhandledPackages,
                 NumberOfSyncPackagesWithBigSize = numberOfSyncPackagesWithBigSize,
+                FolderPermissionCheckResult = folderPermissionCheckResult,
                 ReadSideServiceStatus = readSideStatus,
 
                 Status = status
