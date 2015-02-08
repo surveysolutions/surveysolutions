@@ -24,5 +24,7 @@
         public Guid? CurrentProcessKey;
 
         public Guid SupervisorPublicKey;
+
+        public Guid UserId;
     }
 }

@@ -10,14 +10,7 @@ namespace WB.Core.BoundedContexts.Capi.Services
 
         Guid? GetClientRegistrationId();
 
-        [Obsolete]
         string GetLastReceivedPackageId();
-
-        string GetLastReceivedUserPackageId();
-        
-        string GetLastReceivedQuestionnairePackageId();
-
-        string GetLastReceivedInterviewPackageId();
 
         string GetSyncAddressPoint();
 
@@ -31,12 +24,6 @@ namespace WB.Core.BoundedContexts.Capi.Services
 
         [Obsolete]
         void SetLastReceivedPackageId(string lastReceivedPackageId);
-
-        void SetLastReceivedUserPackageId(string lastReceivedUserPackageId);
-
-        void SetLastReceivedQuestionnairePackageId(string lastReceivedQuestionnairePackageId);
-
-        void SetLastReceivedInterviewPackageId(string lastReceivedInterviewPackageId);
 
         void SetSyncAddressPoint(string syncAddressPoint);
     }
