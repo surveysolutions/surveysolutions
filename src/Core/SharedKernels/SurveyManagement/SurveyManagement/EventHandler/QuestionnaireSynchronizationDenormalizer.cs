@@ -31,7 +31,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public QuestionnaireSynchronizationDenormalizer(
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository, IJsonUtils jsonUtils,
+            IPlainQuestionnaireRepository plainQuestionnaireRepository, 
+            IJsonUtils jsonUtils,
             IReadSideRepositoryWriter<QuestionnaireSyncPackage> questionnairePackageStorageWriter,
             IQueryableReadSideRepositoryReader<QuestionnaireSyncPackage> questionnairePackageStorageReader)
         {
