@@ -4,7 +4,7 @@ using System.Linq;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using Environment = Android.OS.Environment;
 
-namespace WB.UI.QuestionnaireTester
+namespace WB.UI.QuestionnaireTester.Implementation.Services
 {
     internal class QuestionnareAssemblyTesterFileAccessor : IQuestionnaireAssemblyFileAccessor
     {
