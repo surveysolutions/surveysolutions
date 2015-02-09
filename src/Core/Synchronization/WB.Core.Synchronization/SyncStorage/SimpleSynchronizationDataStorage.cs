@@ -143,7 +143,7 @@ namespace WB.Core.Synchronization.SyncStorage
             var meta = new QuestionnaireAssemblyMetadata(publicKey, version);
 
             var syncItem = CreateSyncItem(publicKey.Combine(AssemblySeed).Combine(version), SyncItemType.QuestionnaireAssembly,
-                GetItemAsContent(assemblyAsBase64String), GetItemAsContent(meta));
+                GetItemAsContent(assemblyAsBase64String ?? string.Empty), GetItemAsContent(meta));
 
             chunkStorageWriter.StoreChunk(syncItem, null, timestamp);
         }

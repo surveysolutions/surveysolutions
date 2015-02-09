@@ -104,7 +104,7 @@
 
 <div>
     <div class="panel-body">
-        <div class="well well-sm">Current rebuild stage: &nbsp;<b data-bind="text: currentRebuildStatus"></b></div>
+        <div class="well well-sm">Current rebuild stage: &nbsp;<b data-bind="text: currentRebuildStatus, css: {'has-error': hasErrors}"></b></div>
         <div class="row">
             <div class="col-md-8">
                 <!-- ko if: readSideRepositoryWriters().length > 0 -->
@@ -233,6 +233,9 @@
         .accordion-caret .accordion-toggle.collapsed:before {
             content: "▸";
             margin-right: 0px;
+        }
+        .has-error {
+            color: red;
         }
     </style>
     @Scripts.Render("~/Scripts/components/moment-duration-format.js", "~/Scripts/components/bindings.js", "~/Scripts/viewmodels/pages/controlpanel/readside.js")

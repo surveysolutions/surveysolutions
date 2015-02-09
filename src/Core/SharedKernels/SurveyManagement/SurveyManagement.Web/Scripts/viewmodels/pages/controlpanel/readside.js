@@ -32,6 +32,9 @@
     self.readSideRepositoryWriters = ko.observableArray([]);
     self.rebuildDenormalizerStatistic = ko.observableArray([]);
     self.rebuildErrors = ko.observableArray([]);
+    self.hasErrors = ko.computed(function () {
+        return self.rebuildErrors().length > 0;
+    });
 
     self.lastStatusUpdateTime = ko.observable('-');
     self.lastRebuildDate = ko.observable('-');

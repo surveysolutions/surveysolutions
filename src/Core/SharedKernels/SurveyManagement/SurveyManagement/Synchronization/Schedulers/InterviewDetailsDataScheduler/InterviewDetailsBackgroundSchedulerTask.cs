@@ -1,6 +1,7 @@
 ﻿using System;
 using Quartz;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.Schedulers.InterviewDetailsDataScheduler;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
+using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler
 {
@@ -20,7 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.Inte
 
         public void Configure()
         {
-            IJobDetail job = JobBuilder.Create<InterviewDetailsDataLoader>()
+            IJobDetail job = JobBuilder.Create<SyncPackagesProcessor>()
                 .WithIdentity("Capi interview packages sync", "Synchronization")
                 .StoreDurably(true)
                 .Build();

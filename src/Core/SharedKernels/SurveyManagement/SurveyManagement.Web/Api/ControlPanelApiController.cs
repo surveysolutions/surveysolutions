@@ -4,8 +4,10 @@ using System.Web.Http;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Core.Synchronization;
 using WB.UI.Headquarters.Models;
 using WB.UI.Shared.Web.Filters;
 
@@ -14,22 +16,26 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     [LocalOrDevelopmentAccessOnly]
     public class ControlPanelApiController : ApiController
     {
-        private readonly InterviewDetailsDataProcessorContext interviewDetailsDataProcessorContext;
         private readonly IReadSideAdministrationService readSideAdministrationService;
+        private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
 
-        public ControlPanelApiController(InterviewDetailsDataProcessorContext interviewDetailsDataProcessorContext,
-            IReadSideAdministrationService readSideAdministrationService)
+        public ControlPanelApiController(IReadSideAdministrationService readSideAdministrationService, IIncomingSyncPackagesQueue incomingSyncPackagesQueue)
         {
-            this.interviewDetailsDataProcessorContext = interviewDetailsDataProcessorContext;
             this.readSideAdministrationService = readSideAdministrationService;
+            this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
         }
 
         public InterviewDetailsSchedulerViewModel InterviewDetails()
         {
             return new InterviewDetailsSchedulerViewModel()
             {
-                Messages = this.interviewDetailsDataProcessorContext.GetMessages().ToArray()
+                Messages = new string[0]
             };
+        }
+
+        public int GetIncomingPackagesQueueLength()
+        {
+            return this.incomingSyncPackagesQueue.QueueLength;
         }
 
         public IEnumerable<ReadSideEventHandlerDescription> GetAllAvailableHandlers()

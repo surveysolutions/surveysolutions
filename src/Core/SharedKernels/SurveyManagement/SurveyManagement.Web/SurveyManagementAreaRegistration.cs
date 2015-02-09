@@ -72,7 +72,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/query-string.js",
                     "~/Scripts/supervisor.framework.js",
                     "~/Scripts/viewmodels/viewmodelbase.js",
-                    "~/Scripts/viewmodels/pagebase.js"
+                    "~/Scripts/viewmodels/pagebase.js",
+                    "~/Scripts/viewmodels/surveymanagmentheader.js"
                 }
             },
             {
@@ -119,6 +120,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/viewmodels/pages/interview/details/datacontext.js",
                     "~/Scripts/viewmodels/pages/interview/details/interviewdetailssettings.js",
                     "~/Scripts/viewmodels/pages/interview/details/interviewdetails.js",
+                }
+            },
+            {
+                "~/js/details", new[]
+                {
+                    "~/Scripts/components/bindings.js",
+                    "~/Scripts/director.js",
+                    "~/Scripts/viewmodels/pages/interview/details/config.js",
+                    "~/Scripts/viewmodels/pages/interview/details/datacontext.js",
+                    "~/Scripts/viewmodels/pages/interview/details/interviewdetailssettings.js",
+                    "~/Scripts/viewmodels/pages/interview/details/details.js",
                 }
             },
             {

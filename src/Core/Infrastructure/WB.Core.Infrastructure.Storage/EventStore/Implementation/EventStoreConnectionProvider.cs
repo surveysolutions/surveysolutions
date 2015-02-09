@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using EventStore.ClientAPI;
+using EventStore.ClientAPI.SystemData;
 
 namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 {
@@ -19,7 +20,8 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         {
             var settings = ConnectionSettings
                 .Create()
-                .KeepReconnecting();
+                .KeepReconnecting()
+                .SetDefaultUserCredentials(new UserCredentials(this.connectionSettings.Login, this.connectionSettings.Password));
 
             var serverIp = IPAddress.Parse(this.connectionSettings.ServerIP);
             var tcpEndPoint = new IPEndPoint(serverIp, this.connectionSettings.ServerTcpPort);

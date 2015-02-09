@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             var numericQuestion = question as INumericQuestion;
             if (numericQuestion != null)
             {
-                this.Settings = new
+                this.Settings = new NumericQuestionSettings
                 {
                     IsInteger = numericQuestion.IsInteger,
                     CountOfDecimalPlaces = numericQuestion.CountOfDecimalPlaces
@@ -67,6 +67,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                     IsFilteredCombobox = categoricalSingleQuestion.IsFilteredCombobox ?? false,
                     IsCascade = categoricalSingleQuestion.CascadeFromQuestionId.HasValue,
                     IsLinked = categoricalSingleQuestion.LinkedToQuestionId.HasValue
+                };
+            }
+
+            var textQuestion = question as TextQuestion;
+            if (textQuestion != null)
+            {
+                this.Settings = new TextQuestionSettings
+                {
+                    Mask = textQuestion.Mask
                 };
             }
 
@@ -98,15 +107,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                         Label = a.Answer
                     }).ToList();
                 }
-            }
-
-            var textQuestion = question as TextQuestion;
-            if (textQuestion != null)
-            {
-                this.Settings = new
-                {
-                    Mask = textQuestion.Mask
-                };
             }
 
             bool shouldBeValidByConvention = !this.IsEnabled;
@@ -217,6 +217,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public object Answer { get; set; }
 
         public dynamic Settings { get; set; }
+    }
+
+    public class TextQuestionSettings
+    {
+        public string Mask { get; set; }
+    }
+
+    public class NumericQuestionSettings
+    {
+        public bool IsInteger { get; set; }
+        public int? CountOfDecimalPlaces { get; set; }
     }
 
     public class MultiQuestionSettings

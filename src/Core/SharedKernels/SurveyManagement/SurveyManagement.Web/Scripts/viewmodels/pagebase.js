@@ -1,4 +1,4 @@
-﻿Supervisor.VM.BasePage = function (commandExecutionUrl) {
+﻿Supervisor.VM.BasePage = function(commandExecutionUrl) {
 
     var self = this;
 
@@ -15,7 +15,7 @@
         if (self.IsFilterOpen()) {
             $('body').addClass('menu-hidden');
 
-            $('#content').removeClass('col-sm-9');  
+            $('#content').removeClass('col-sm-9');
             $('#content').removeClass('col-sm-offset-3');
             $('#content').removeClass('col-md-10');
             $('#content').removeClass('col-md-offset-2');
@@ -67,10 +67,10 @@
     });
 
     var notifyHandler;
-    self.ShowNotification = function (title, text) {
+    self.ShowNotification = function(title, text) {
 
         self.NotifyTitle(title || input.settings.messages.notifyDialogTitle);
-        self.NotifyText (text || input.settings.messages.notifyDialogText);
+        self.NotifyText(text || input.settings.messages.notifyDialogText);
 
         self.IsNotifyVisible(true);
 
@@ -92,7 +92,7 @@
         }
     };
 
-    self.SendRequest = function (requestUrl, args, onSuccess, skipInProgressCheck, allowGet) {
+    self.SendRequest = function(requestUrl, args, onSuccess, skipInProgressCheck, allowGet) {
 
         if (!skipInProgressCheck && !self.IsAjaxComplete()) {
             self.CheckForRequestComplete();
@@ -109,13 +109,14 @@
             type: allowGet === true ? 'get' : 'post',
             data: args,
             headers: requestHeaders,
-            dataType: 'json'}).done(function (data) {
+            dataType: 'json'
+        }).done(function(data) {
             if (!Supervisor.Framework.Objects.isUndefined(onSuccess)) {
                 onSuccess(data);
             }
-        }).fail(function () {
+        }).fail(function() {
             self.ShowError(input.settings.messages.unhandledExceptionMessage);
-        }).always(function () {
+        }).always(function() {
             self.IsPageLoaded(true);
             self.IsAjaxComplete(true);
         });
@@ -124,7 +125,7 @@
     self.SendCommand = function(command, onSuccess) {
         self.SendRequest(commandExecutionUrl, command, function(data) {
             if (data.IsSuccess) {
-                if (!Supervisor.Framework.Objects.isUndefined(data.DomainException) && data.DomainException!=null) {
+                if (!Supervisor.Framework.Objects.isUndefined(data.DomainException) && data.DomainException != null) {
                     self.ShowError(data.DomainException);
                 } else if (!Supervisor.Framework.Objects.isUndefined(onSuccess)) {
                     onSuccess(data);
@@ -135,9 +136,9 @@
         });
     };
 
-    self.SendCommands = function (commands, onSuccess) {
-        self.SendRequest(commandExecutionUrl, commands, function (data) {
-            var failedCommands = ko.utils.arrayFilter(data.CommandStatuses, function (cmd) {
+    self.SendCommands = function(commands, onSuccess) {
+        self.SendRequest(commandExecutionUrl, commands, function(data) {
+            var failedCommands = ko.utils.arrayFilter(data.CommandStatuses, function(cmd) {
                 return !cmd.IsSuccess;
             });
 
@@ -153,7 +154,7 @@
             }
         });
     };
-    
+
     self.load = function() {
     };
-}
+};

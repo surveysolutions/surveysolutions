@@ -147,10 +147,10 @@
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
     <Compile Include="Models\DeleteQuestionnaireRequestModel.cs" />
     <Compile Include="Models\AllQuestionnairesRequestModel.cs" />
+    <Compile Include="Models\DetailsStatisticView.cs" />
     <Compile Include="Models\EventHandlerDescriptionModel.cs" />
     <Compile Include="Models\ImportQuestionnaireRequest.cs" />
     <Compile Include="Models\InterviewDetailsFilter.cs" />
-    <Compile Include="Models\InterviewDetailsSortBy.cs" />
     <Compile Include="Models\DetailsViewModel.cs" />
     <Compile Include="Models\RebuildReadSideInputViewModel.cs" />
     <Compile Include="Models\RebuildReadSideType.cs" />
@@ -507,6 +507,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Implementation\Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\viewmodels\pages\interview\details\details.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\viewmodels\surveymanagmentheader.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

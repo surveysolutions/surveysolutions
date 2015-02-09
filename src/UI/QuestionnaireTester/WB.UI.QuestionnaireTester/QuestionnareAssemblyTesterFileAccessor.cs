@@ -77,11 +77,18 @@ namespace WB.UI.QuestionnaireTester
         {
             byte[] assemblyAsByteArray = this.GetAssemblyAsByteArray(questionnaireId, questionnaireVersion);
 
+            if (assemblyAsByteArray == null)
+                return null;
+
             return Convert.ToBase64String(assemblyAsByteArray);
         }
 
         public byte[] GetAssemblyAsByteArray(Guid questionnaireId, long questionnaireVersion)
         {
+            var assemblyPath = GetFullPathToAssembly(questionnaireId);
+            if (!File.Exists(assemblyPath))
+                return null;
+            
             return File.ReadAllBytes(GetFullPathToAssembly(questionnaireId));
         }
 
