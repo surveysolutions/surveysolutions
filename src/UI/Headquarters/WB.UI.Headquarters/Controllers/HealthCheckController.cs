@@ -9,6 +9,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Storage.EventStore;
 using WB.Core.Infrastructure.Storage.EventStore.Implementation;
 using WB.Core.Infrastructure.Storage.Raven.Implementation;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
@@ -21,15 +22,15 @@ namespace WB.UI.Headquarters.API
     public class HealthCheckController : BaseController
     {
         private readonly IReadSideAdministrationService readSideAdministrationService;
-        private readonly IIncomePackagesRepository incomePackagesRepository;
+        private readonly IUnhandledPackageStorage unhandledPackageStorage;
         private readonly IDatabaseHealthCheck databaseHealthCheck;
         private readonly IEventStoreHealthCheck eventStoreHealthCheck;
         private readonly IChunkReader chunkReader;
         private readonly IFolderPermissionChecker folderPermissionChecker;
 
         public HealthCheckController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
-            IDatabaseHealthCheck databaseHealthCheck, IEventStoreHealthCheck eventStoreHealthCheck, 
-            IIncomePackagesRepository incomePackagesRepository, IChunkReader chunkReader,
+            IDatabaseHealthCheck databaseHealthCheck, IEventStoreHealthCheck eventStoreHealthCheck,
+            IUnhandledPackageStorage unhandledPackageStorage, IChunkReader chunkReader,
             IFolderPermissionChecker folderPermissionChecker,
             IReadSideAdministrationService readSideAdministrationService)
             : base(commandService, provider, logger)
@@ -38,7 +39,7 @@ namespace WB.UI.Headquarters.API
             this.chunkReader = chunkReader;
             this.eventStoreHealthCheck = eventStoreHealthCheck;
             this.databaseHealthCheck = databaseHealthCheck;
-            this.incomePackagesRepository = incomePackagesRepository;
+            this.unhandledPackageStorage = unhandledPackageStorage;
             this.readSideAdministrationService = readSideAdministrationService;
         }
 
@@ -57,7 +58,7 @@ namespace WB.UI.Headquarters.API
         {
             var databaseHealthCheckResult = databaseHealthCheck.Check();
             var eventStoreHealthCheckResult = eventStoreHealthCheck.Check();
-            var numberOfUnhandledPackages = incomePackagesRepository.GetListOfUnhandledPackages().Count();
+            var numberOfUnhandledPackages = unhandledPackageStorage.GetListOfUnhandledPackages().Count();
             var numberOfSyncPackagesWithBigSize = chunkReader.GetNumberOfSyncPackagesWithBigSize();
             var folderPermissionCheckResult = folderPermissionChecker.Check();
             var readSideStatus = readSideAdministrationService.GetRebuildStatus();
