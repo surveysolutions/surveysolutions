@@ -3,8 +3,8 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.UI.QuestionnaireTester.Implementations.Fragments;
-using WB.UI.QuestionnaireTester.ViewModels;
 
 namespace WB.UI.QuestionnaireTester.Views
 {

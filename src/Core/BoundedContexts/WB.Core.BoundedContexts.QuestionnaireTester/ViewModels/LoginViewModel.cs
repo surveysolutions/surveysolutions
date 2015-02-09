@@ -1,12 +1,11 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
-using WB.UI.QuestionnaireTester.Properties;
 
-namespace WB.UI.QuestionnaireTester.ViewModels
+namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     public class LoginViewModel : BaseViewModel
     {
@@ -86,10 +85,6 @@ namespace WB.UI.QuestionnaireTester.ViewModels
                     default:
                         throw;
                 }
-            }
-            catch (Exception ex)
-            {
-                this.Logger.Error("Unhandled exception when login", ex);
             }
             finally
             {

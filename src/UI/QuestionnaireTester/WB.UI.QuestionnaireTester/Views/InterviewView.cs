@@ -5,6 +5,7 @@ using Cirrious.CrossCore;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.QuestionnaireTester.Implementations.Adapters;
 using WB.UI.Shared.Android.Activities;

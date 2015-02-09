@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.Plugins.WebBrowser;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
-using WB.UI.QuestionnaireTester.Properties;
 using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion;
 
-namespace WB.UI.QuestionnaireTester.ViewModels
+namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     public class DashboardViewModel : BaseViewModel
     {
@@ -214,10 +214,6 @@ namespace WB.UI.QuestionnaireTester.ViewModels
                     default:
                         throw;
                 }
-            }
-            catch (Exception ex)
-            {
-                this.Logger.Error("Unhandled exception when request list of questionnaires", ex);
             }
             finally
             {

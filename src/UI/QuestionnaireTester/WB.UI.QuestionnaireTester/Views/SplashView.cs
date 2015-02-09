@@ -1,7 +1,5 @@
-using System.Threading.Tasks;
 using Android.App;
-using Java.Lang;
-using WB.UI.QuestionnaireTester.ViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 
 namespace WB.UI.QuestionnaireTester.Views
 {

@@ -1,6 +1,6 @@
 using Android.OS;
 using Cirrious.MvvmCross.Droid.Views;
-using WB.UI.QuestionnaireTester.ViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 
 namespace WB.UI.QuestionnaireTester.Views
 {

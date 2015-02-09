@@ -2,7 +2,7 @@ using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Utils.Services;
 
-namespace WB.UI.QuestionnaireTester.ViewModels
+namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     public class BaseViewModel : MvxViewModel
     {

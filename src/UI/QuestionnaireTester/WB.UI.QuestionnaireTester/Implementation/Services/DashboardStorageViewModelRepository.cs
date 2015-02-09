@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Sqo.Transactions;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.UI.QuestionnaireTester.ViewModels;
 
 namespace WB.UI.QuestionnaireTester.Implementation.Services
 {

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WB.UI.QuestionnaireTester.Properties {
+namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
     using System;
     
     
@@ -22,7 +22,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class UIResources {
+    public class UIResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,10 +36,10 @@ namespace WB.UI.QuestionnaireTester.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.QuestionnaireTester.Properties.UIResources", typeof(UIResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.QuestionnaireTester.Properties.UIResources", typeof(UIResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Your account was locked. Please, contact to the Survey Solutions team.
         /// </summary>
-        internal static string AccountIsLockedOnServer {
+        public static string AccountIsLockedOnServer {
             get {
                 return ResourceManager.GetString("AccountIsLockedOnServer", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Check for updates.
         /// </summary>
-        internal static string CheckForUpdatesText {
+        public static string CheckForUpdatesText {
             get {
                 return ResourceManager.GetString("CheckForUpdatesText", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Questionnaires.
         /// </summary>
-        internal static string DashboardTitleText {
+        public static string DashboardTitleText {
             get {
                 return ResourceManager.GetString("DashboardTitleText", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to No questionnaires found.  Pull down to refresh list..
         /// </summary>
-        internal static string EmptyQuestionnaireListText {
+        public static string EmptyQuestionnaireListText {
             get {
                 return ResourceManager.GetString("EmptyQuestionnaireListText", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Help/Comment.
         /// </summary>
-        internal static string HelpText {
+        public static string HelpText {
             get {
                 return ResourceManager.GetString("HelpText", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Creating interview.
         /// </summary>
-        internal static string ImportQuestionnaire_CreateInterview {
+        public static string ImportQuestionnaire_CreateInterview {
             get {
                 return ResourceManager.GetString("ImportQuestionnaire_CreateInterview", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Downloading questionnaire -  {0}%.
         /// </summary>
-        internal static string ImportQuestionnaire_DownloadProgress {
+        public static string ImportQuestionnaire_DownloadProgress {
             get {
                 return ResourceManager.GetString("ImportQuestionnaire_DownloadProgress", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to You don&apos;t have permissions to look this questionnaire.
         /// </summary>
-        internal static string ImportQuestionnaire_Error_Forbidden {
+        public static string ImportQuestionnaire_Error_Forbidden {
             get {
                 return ResourceManager.GetString("ImportQuestionnaire_Error_Forbidden", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Requested questionnaire &quot;{0}&quot; cannot be found. Please check the list of available questionnaires..
         /// </summary>
-        internal static string ImportQuestionnaire_Error_NotFound {
+        public static string ImportQuestionnaire_Error_NotFound {
             get {
                 return ResourceManager.GetString("ImportQuestionnaire_Error_NotFound", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Requested questionnaire &quot;{0}&quot; has errors. Please verify the questionnaire on Designer..
         /// </summary>
-        internal static string ImportQuestionnaire_Error_PreconditionFailed {
+        public static string ImportQuestionnaire_Error_PreconditionFailed {
             get {
                 return ResourceManager.GetString("ImportQuestionnaire_Error_PreconditionFailed", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Your version of application does not support of this questionnaire. Please, update application.
         /// </summary>
-        internal static string ImportQuestionnaire_Error_UpgradeRequired {
+        public static string ImportQuestionnaire_Error_UpgradeRequired {
             get {
                 return ResourceManager.GetString("ImportQuestionnaire_Error_UpgradeRequired", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Preparing questionnaire to creating interview.
         /// </summary>
-        internal static string ImportQuestionnaire_PrepareQuestionnaire {
+        public static string ImportQuestionnaire_PrepareQuestionnaire {
             get {
                 return ResourceManager.GetString("ImportQuestionnaire_PrepareQuestionnaire", resourceCulture);
             }
@@ -171,7 +171,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Saving interview dynamic link library to local storage.
         /// </summary>
-        internal static string ImportQuestionnaire_StoreAssembly {
+        public static string ImportQuestionnaire_StoreAssembly {
             get {
                 return ResourceManager.GetString("ImportQuestionnaire_StoreAssembly", resourceCulture);
             }
@@ -180,7 +180,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Saving questionnaire to local storage.
         /// </summary>
-        internal static string ImportQuestionnaire_StoreQuestionnaire {
+        public static string ImportQuestionnaire_StoreQuestionnaire {
             get {
                 return ResourceManager.GetString("ImportQuestionnaire_StoreQuestionnaire", resourceCulture);
             }
@@ -189,7 +189,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Checking questionnaire for errors on the server.
         /// </summary>
-        internal static string ImportQuestionnaire_VerifyOnServer {
+        public static string ImportQuestionnaire_VerifyOnServer {
             get {
                 return ResourceManager.GetString("ImportQuestionnaire_VerifyOnServer", resourceCulture);
             }
@@ -198,7 +198,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Modified on:.
         /// </summary>
-        internal static string LastModifiedDateTitle {
+        public static string LastModifiedDateTitle {
             get {
                 return ResourceManager.GetString("LastModifiedDateTitle", resourceCulture);
             }
@@ -207,7 +207,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to User name.
         /// </summary>
-        internal static string LoginNameHint {
+        public static string LoginNameHint {
             get {
                 return ResourceManager.GetString("LoginNameHint", resourceCulture);
             }
@@ -216,7 +216,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Sign in.
         /// </summary>
-        internal static string LoginText {
+        public static string LoginText {
             get {
                 return ResourceManager.GetString("LoginText", resourceCulture);
             }
@@ -225,7 +225,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Authorization.
         /// </summary>
-        internal static string LoginTitleText {
+        public static string LoginTitleText {
             get {
                 return ResourceManager.GetString("LoginTitleText", resourceCulture);
             }
@@ -234,7 +234,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Server is on the maintenance mode now. Sorry for the inconvenience. Please, try again later..
         /// </summary>
-        internal static string Maintenance {
+        public static string Maintenance {
             get {
                 return ResourceManager.GetString("Maintenance", resourceCulture);
             }
@@ -243,7 +243,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Owner:.
         /// </summary>
-        internal static string OwnerNameTitle {
+        public static string OwnerNameTitle {
             get {
                 return ResourceManager.GetString("OwnerNameTitle", resourceCulture);
             }
@@ -252,7 +252,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
-        internal static string PasswordHint {
+        public static string PasswordHint {
             get {
                 return ResourceManager.GetString("PasswordHint", resourceCulture);
             }
@@ -261,7 +261,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to prefilled questions.
         /// </summary>
-        internal static string PrefilledQuestionsSubTitle {
+        public static string PrefilledQuestionsSubTitle {
             get {
                 return ResourceManager.GetString("PrefilledQuestionsSubTitle", resourceCulture);
             }
@@ -270,7 +270,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Timeout when connecting to &apos;Designer&apos; website. Check your internet connection.
         /// </summary>
-        internal static string RequestTimeout {
+        public static string RequestTimeout {
             get {
                 return ResourceManager.GetString("RequestTimeout", resourceCulture);
             }
@@ -279,7 +279,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to No connection to &apos;Designer&apos;. Please make sure that the &apos;Designer&apos; website is available and it&apos;s not in the maintenance mode.
         /// </summary>
-        internal static string ServiceUnavailable {
+        public static string ServiceUnavailable {
             get {
                 return ResourceManager.GetString("ServiceUnavailable", resourceCulture);
             }
@@ -288,7 +288,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
-        internal static string SettingsText {
+        public static string SettingsText {
             get {
                 return ResourceManager.GetString("SettingsText", resourceCulture);
             }
@@ -297,7 +297,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Sign out.
         /// </summary>
-        internal static string SignOutText {
+        public static string SignOutText {
             get {
                 return ResourceManager.GetString("SignOutText", resourceCulture);
             }
@@ -306,7 +306,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Stay signed in.
         /// </summary>
-        internal static string StaySignedInText {
+        public static string StaySignedInText {
             get {
                 return ResourceManager.GetString("StaySignedInText", resourceCulture);
             }
@@ -315,7 +315,7 @@ namespace WB.UI.QuestionnaireTester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Your login or password is incorrect.
         /// </summary>
-        internal static string Unauthorized {
+        public static string Unauthorized {
             get {
                 return ResourceManager.GetString("Unauthorized", resourceCulture);
             }

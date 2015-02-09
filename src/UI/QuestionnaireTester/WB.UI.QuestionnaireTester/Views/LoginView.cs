@@ -1,6 +1,6 @@
 using Android.App;
 using Android.Views;
-using WB.UI.QuestionnaireTester.ViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 
 namespace WB.UI.QuestionnaireTester.Views
 {

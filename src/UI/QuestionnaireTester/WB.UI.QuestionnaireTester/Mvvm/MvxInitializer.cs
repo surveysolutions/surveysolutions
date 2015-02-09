@@ -1,11 +1,11 @@
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
-using WB.UI.QuestionnaireTester.ViewModels;
-using WB.UI.Shared.Android.Controls.ScreenItems;
 
 namespace WB.UI.QuestionnaireTester.Mvvm
 {

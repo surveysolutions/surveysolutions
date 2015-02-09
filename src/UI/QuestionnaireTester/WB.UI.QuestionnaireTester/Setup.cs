@@ -1,7 +1,10 @@
+using System.Reflection;
 using Android.Content;
 using Android.Widget;
+using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Binding.Bindings.Target.Construction;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.UI.QuestionnaireTester.Controls;
 using WB.UI.QuestionnaireTester.CustomBindings;
 using WB.UI.Shared.Android;
@@ -29,6 +32,11 @@ namespace WB.UI.QuestionnaireTester
             registry.RegisterFactory(new MvxCustomBindingFactory<SearchView>("QueryTextSubmit", (view) => new SearchViewQueryTextSubmitBinding(view)));
 
             base.FillTargetFactories(registry);
+        }
+
+        protected override Assembly[] GetViewModelAssemblies()
+        {
+            return new[] { typeof(BaseViewModel).Assembly };
         }
     }
 }

@@ -2,7 +2,7 @@ using Android.App;
 using Android.OS;
 using Android.Support.V4.Widget;
 using Android.Widget;
-using WB.UI.QuestionnaireTester.ViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 
 namespace WB.UI.QuestionnaireTester.Views
 {

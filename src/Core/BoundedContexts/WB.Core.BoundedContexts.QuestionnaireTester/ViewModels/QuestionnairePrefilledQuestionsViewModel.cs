@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
+using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
@@ -16,11 +17,9 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
-using WB.UI.QuestionnaireTester.Properties;
-using WB.UI.Shared.Android.Controls.ScreenItems;
 using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion;
 
-namespace WB.UI.QuestionnaireTester.ViewModels
+namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     public class QuestionnairePrefilledQuestionsViewModel : BaseViewModel
     {
@@ -184,12 +183,12 @@ namespace WB.UI.QuestionnaireTester.ViewModels
                             this.UIDialogs.Alert(UIResources.ImportQuestionnaire_Error_UpgradeRequired);
                             break;
                         case HttpStatusCode.PreconditionFailed:
-                            this.UIDialogs.Alert(string.Format(UIResources.ImportQuestionnaire_Error_PreconditionFailed,
-                                this.Questionnaire.Title));
+                            this.UIDialogs.Alert(string.Format((string) UIResources.ImportQuestionnaire_Error_PreconditionFailed,
+                                (object) this.Questionnaire.Title));
                             break;
                         case HttpStatusCode.NotFound:
-                            this.UIDialogs.Alert(string.Format(UIResources.ImportQuestionnaire_Error_NotFound,
-                                this.Questionnaire.Title));
+                            this.UIDialogs.Alert(string.Format((string) UIResources.ImportQuestionnaire_Error_NotFound,
+                                (object) this.Questionnaire.Title));
                             break;
                         case HttpStatusCode.ServiceUnavailable:
                             this.UIDialogs.Alert(ex.Message.Contains("maintenance")
@@ -202,11 +201,6 @@ namespace WB.UI.QuestionnaireTester.ViewModels
                         default:
                             throw;
                     }
-                }
-                catch (Exception ex)
-                {
-                    this.Logger.Error("Exception when downloading questionnaire/creating interview", ex);
-                    this.UIDialogs.Alert(ex.Message);
                 }
                 finally
                 {

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Utils.Services;
 
-namespace WB.UI.QuestionnaireTester.ViewModels
+namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     public class SplashViewModel : BaseViewModel
     {

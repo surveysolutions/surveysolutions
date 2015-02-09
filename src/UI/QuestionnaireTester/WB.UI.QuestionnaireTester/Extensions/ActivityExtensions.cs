@@ -1,6 +1,7 @@
 using Android.App;
 using Android.Views;
 using Android.Widget;
+using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 
 namespace WB.UI.QuestionnaireTester.Extensions

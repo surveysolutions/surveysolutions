@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 using Cirrious.CrossCore.Converters;
-using WB.UI.QuestionnaireTester.Properties;
+using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 
 namespace WB.UI.QuestionnaireTester.ValueContervers
 {

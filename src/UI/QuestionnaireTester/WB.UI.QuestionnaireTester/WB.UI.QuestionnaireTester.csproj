@@ -55,17 +55,20 @@
   <ItemGroup>
     <Reference Include="Chance.MvvmCross.Plugins.UserInteraction, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Chance.MvvmCross.Plugins.UserInteraction.1.1.2\lib\MonoAndroid\Chance.MvvmCross.Plugins.UserInteraction.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Chance.MvvmCross.Plugins.UserInteraction.1.1.3\lib\MonoAndroid\Chance.MvvmCross.Plugins.UserInteraction.dll</HintPath>
     </Reference>
     <Reference Include="Chance.MvvmCross.Plugins.UserInteraction.Droid, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Chance.MvvmCross.Plugins.UserInteraction.1.1.2\lib\MonoAndroid\Chance.MvvmCross.Plugins.UserInteraction.Droid.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Chance.MvvmCross.Plugins.UserInteraction.1.1.3\lib\MonoAndroid\Chance.MvvmCross.Plugins.UserInteraction.Droid.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Cheesebaron.MvxPlugins.Settings">
-      <HintPath>..\..\..\..\packages\Cheesebaron.MvxPlugins.Settings.1.0.3\lib\MonoAndroid16\Cheesebaron.MvxPlugins.Settings.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Cheesebaron.MvxPlugins.Settings.1.1.0\lib\MonoAndroid10\Cheesebaron.MvxPlugins.Settings.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Cheesebaron.MvxPlugins.Settings.Droid">
-      <HintPath>..\..\..\..\packages\Cheesebaron.MvxPlugins.Settings.1.0.3\lib\MonoAndroid16\Cheesebaron.MvxPlugins.Settings.Droid.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Cheesebaron.MvxPlugins.Settings.1.1.0\lib\MonoAndroid10\Cheesebaron.MvxPlugins.Settings.Droid.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.CrossCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e16445fd9b451819, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -77,7 +80,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Binding">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Binding.dll</HintPath>
@@ -88,10 +92,12 @@
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Binding.Droid.dll</HintPath>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Droid">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Droid.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Droid.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Droid.Fragging">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Droid.Fragging.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Droid.Fragging.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Droid.Fragging.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Droid.Fragging.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Localization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -99,23 +105,28 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.Color">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Color.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Color.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Color.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Color.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.Color.Droid">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Color.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Color.Droid.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Color.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Color.Droid.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.PictureChooser">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.PictureChooser.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.PictureChooser.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.PictureChooser.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.PictureChooser.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.PictureChooser.Droid">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.PictureChooser.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.PictureChooser.Droid.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.PictureChooser.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.PictureChooser.Droid.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.Visibility">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Visibility.3.2.2\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Visibility.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Visibility.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Visibility.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.Visibility.Droid">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Visibility.3.2.2\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Visibility.Droid.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Visibility.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Visibility.Droid.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.WebBrowser">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.WebBrowser.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.WebBrowser.dll</HintPath>
@@ -144,7 +155,8 @@
       <HintPath>..\..\..\..\packages\Newtonsoft.Json.6.0.7\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ninject">
-      <HintPath>..\..\..\..\packages\Portable.Ninject.3.3\lib\monoandroid\Ninject.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Portable.Ninject.3.3.1\lib\monoandroid\Ninject.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="PCLStorage">
       <HintPath>..\..\..\..\packages\PCLStorage.1.0.2\lib\monoandroid\PCLStorage.dll</HintPath>
@@ -227,23 +239,7 @@
     <Compile Include="Ninject\NinjectServiceLocator.cs" />
     <Compile Include="Ninject\ServiceLocationModule.cs" />
     <Compile Include="Ninject\TesterLoggingModule.cs" />
-    <Compile Include="Properties\UIResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\UIResources.uk-UA.Designer.cs">
-      <DependentUpon>UIResources.uk-UA.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Properties\UIResources.ru-RU.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UIResources.ru-RU.resx</DependentUpon>
-    </Compile>
     <Compile Include="App.cs" />
-    <Compile Include="ViewModels\DashboardStorageViewModel.cs" />
     <Compile Include="Views\BaseFragmentActivityView.cs" />
     <Compile Include="Views\QuestionnairePrefilledQuestionsView.cs" />
     <Compile Include="Views\InterviewView.cs" />
@@ -259,13 +255,6 @@
     <Compile Include="ValueContervers\VisibleIfListIsEmptyValueConverter.cs" />
     <Compile Include="ValueContervers\VisibleIfListHasItemsValueConverter.cs" />
     <Compile Include="ValueContervers\QuestionnaireVersionToColorValueConverter.cs" />
-    <Compile Include="ViewModels\BaseViewModel.cs" />
-    <Compile Include="ViewModels\HelpViewModel.cs" />
-    <Compile Include="ViewModels\QuestionnairePrefilledQuestionsViewModel.cs" />
-    <Compile Include="ViewModels\SettingsViewModel.cs" />
-    <Compile Include="ViewModels\DashboardViewModel.cs" />
-    <Compile Include="ViewModels\LoginViewModel.cs" />
-    <Compile Include="ViewModels\SplashViewModel.cs" />
     <Compile Include="Views\BaseActivityView.cs" />
     <Compile Include="Views\DashboardView.cs" />
     <Compile Include="Views\LoginView.cs" />
@@ -469,6 +458,10 @@
       <Project>{c6ed30a9-4d14-48d1-8311-c2267dfd424f}</Project>
       <Name>WB.Core.BoundedContexts.Capi</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\BoundedContexts\WB.Core.BoundedContexts.QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester.csproj">
+      <Project>{1d9951b0-c351-432c-bcad-e3dcaaf71e06}</Project>
+      <Name>WB.Core.BoundedContexts.QuestionnaireTester</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\Utils\WB.Core.GenericSubdomains.Utils.Rest\WB.Core.GenericSubdomains.Utils.Rest.csproj">
       <Project>{f3be22b5-c075-4b9c-a99d-e89b70a0dfcd}</Project>
       <Name>WB.Core.GenericSubdomains.Utils.Rest</Name>
@@ -509,23 +502,6 @@
       <Project>{b9af365d-f3c9-423a-86e2-9c3e0c1ac402}</Project>
       <Name>WB.Core.GenericSubdomains.Utils</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\UIResources.uk-UA.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>UIResources.uk-UA.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\UIResources.ru-RU.resx">
-      <SubType>Designer</SubType>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>UIResources.ru-RU.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\UIResources.resx">
-      <SubType>Designer</SubType>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>UIResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
