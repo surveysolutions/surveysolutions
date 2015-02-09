@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.Caching;
 using System.Web.Http;
-using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.Synchronization;
 using WB.UI.Headquarters.Models;
@@ -18,6 +16,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     {
         private readonly IReadSideAdministrationService readSideAdministrationService;
         private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
+        private readonly MemoryCache cache = MemoryCache.Default;
 
         public ControlPanelApiController(IReadSideAdministrationService readSideAdministrationService, IIncomingSyncPackagesQueue incomingSyncPackagesQueue)
         {
@@ -27,7 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         public InterviewDetailsSchedulerViewModel InterviewDetails()
         {
-            return new InterviewDetailsSchedulerViewModel()
+            return new InterviewDetailsSchedulerViewModel
             {
                 Messages = new string[0]
             };
@@ -35,7 +34,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         public int GetIncomingPackagesQueueLength()
         {
-            return this.incomingSyncPackagesQueue.QueueLength;
+            if (this.cache.Contains("incomingPackagesQueueLength"))
+            {
+                return (int) this.cache.Get("incomingPackagesQueueLength");
+            }
+
+            int incomingPackagesQueueLength = this.incomingSyncPackagesQueue.QueueLength;
+            this.cache.Add("incomingPackagesQueueLength", incomingPackagesQueueLength, DateTime.UtcNow.AddSeconds(3));
+
+            return incomingPackagesQueueLength;
         }
 
         public IEnumerable<ReadSideEventHandlerDescription> GetAllAvailableHandlers()
