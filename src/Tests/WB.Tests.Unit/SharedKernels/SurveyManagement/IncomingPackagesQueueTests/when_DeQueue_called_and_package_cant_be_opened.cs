@@ -7,7 +7,6 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.Synchronization;
 using WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTests;
@@ -41,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
            fileSystemAccessorMock.Verify(x => x.DeleteFile(interviewId.FormatGuid()), Times.Once);
 
         It should_copy_package_to_error_folder = () =>
-           unhandledPackageStorageMock.Verify(x => x.StoreUnhandledPackage(interviewId.FormatGuid(), null), Times.Once);
+           unhandledPackageStorageMock.Verify(x => x.StoreUnhandledPackage(interviewId.FormatGuid(), null, Moq.It.IsAny<NullReferenceException>()), Times.Once);
 
         It should_result_be_null = () =>
            result.ShouldBeNull();

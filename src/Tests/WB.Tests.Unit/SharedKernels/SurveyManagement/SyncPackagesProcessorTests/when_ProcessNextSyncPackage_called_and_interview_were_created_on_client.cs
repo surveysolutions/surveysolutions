@@ -38,13 +38,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
             syncPackagesProcessor.ProcessNextSyncPackage();
 
         It should_call_SynchronizeInterviewEvents = () =>
-            commandServiceMock.Verify(x => x.Execute(Moq.It.Is<SynchronizeInterviewEvents>(_ => _.CreatedOnClient && _.InterviewId == interviewId), ""), Times.Once);
+            commandServiceMock.Verify(x => x.Execute(Moq.It.Is<SynchronizeInterviewEventsCommand>(_ => _.CreatedOnClient && _.InterviewId == interviewId), ""), Times.Once);
 
         It should_call_DeleteSyncItem = () =>
         incomingSyncPackagesQueueMock.Verify(x => x.DeleteSyncItem("path"), Times.Once);
 
         It should_never_call_StoreUnhandledPackage = () =>
-            unhandledPackageStorage.Verify(x => x.StoreUnhandledPackage("path", interviewId), Times.Never);
+            unhandledPackageStorage.Verify(x => x.StoreUnhandledPackage("path", interviewId, Moq.It.IsAny<Exception>()), Times.Never);
 
         private static readonly DateTime initialTimestamp = new DateTime(2012, 04, 22);
         private static SyncPackagesProcessor syncPackagesProcessor;
