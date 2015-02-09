@@ -39,6 +39,11 @@
 </ul>
 <ul class="nav navbar-nav navbar-right" role="menu">
     <li class="active">
+        <a href="@Url.Action("Index", "HealthCheck", new { area = string.Empty }, null)" title="Health Check">
+            <i class="fa" id="HealthCheckIndicator"></i>
+        </a>
+    </li> 
+    <li class="active">
         <a href="#" title="Count of synchronized interviews, but unprocessed yet">
             <i class="glyphicon glyphicon-cloud-upload"></i>
             <span id="IncomingPackagesQueueIndicator"></span>
