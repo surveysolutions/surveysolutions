@@ -11,5 +11,5 @@
 	<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
 	<uses-permission android:name="android.permission.CAMERA" />
 	<activity android:name="CAPI.Android.Implementations.Activities.DataCollectionDetailsActivity" />
-	<uses-sdk android:minSdkVersion="14" />
+	<uses-sdk android:minSdkVersion="15" />
 </manifest>

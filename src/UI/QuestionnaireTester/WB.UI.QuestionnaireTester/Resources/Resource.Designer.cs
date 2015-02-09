@@ -40,6 +40,8 @@ namespace WB.UI.QuestionnaireTester
 			global::MWBarcodeScanner.Resource.String.library_name = global::WB.UI.QuestionnaireTester.Resource.String.library_name;
 			global::PCLStorage.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
 			global::PCLStorage.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
+			global::Xamarin.InsightsCore.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
+			global::Xamarin.InsightsCore.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 			global::WB.Core.Infrastructure.Files.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
 			global::WB.Core.Infrastructure.Files.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 			global::WB.UI.Shared.Android.Resource.Attribute.MvxBind = global::WB.UI.QuestionnaireTester.Resource.Attribute.MvxBind;
