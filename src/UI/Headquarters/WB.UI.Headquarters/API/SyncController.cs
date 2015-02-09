@@ -33,14 +33,11 @@ namespace WB.UI.Headquarters.API
 
         public async Task<HttpResponseMessage> Post()
         {
-            var syncItem = JsonConvert.DeserializeObject<SyncItem>(await this.Request.Content.ReadAsStringAsync(),
-                new JsonSerializerSettings {
-                    TypeNameHandling = TypeNameHandling.Objects
-                });
+            var syncItem = await this.Request.Content.ReadAsStringAsync();
 
-            bool result = this.syncManager.SendSyncItem(syncItem);
+            this.syncManager.SendSyncItem(syncItem);
 
-            return Request.CreateResponse(HttpStatusCode.OK, result);
+            return Request.CreateResponse(HttpStatusCode.OK, true);
         }
 
         [ActionName("postfile")]

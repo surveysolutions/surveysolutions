@@ -1,16 +1,18 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Machine.Specifications;
 using Microsoft.Isam.Esent.Collections.Generic;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Storage.Esent.Implementation;
 using WB.Core.SharedKernels.SurveySolutions;
 
-namespace WB.Tests.Integration.EsentTests
+namespace WB.Tests.CleanIntegration.EsentTests
 {
     internal class with_esent_store<T> where T : class, IReadSideRepositoryEntity
     {
         Establish context = () =>
         {
-            storePath = Path.GetTempPath();
+            storePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().FormatGuid());
             storage = new EsentKeyValueStorage<T>(new EsentSettings(storePath));
         };
 

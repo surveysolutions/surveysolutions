@@ -110,6 +110,7 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
         private void RemoveUsingCache(string id)
         {
             this.cache.Remove(id);
+            this.readSideStorage.Remove(id);
         }
 
         private void StoreUsingCache(TEntity entity, string id)

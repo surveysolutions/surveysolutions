@@ -29,7 +29,7 @@
       <MsDeploySkipRules Include="SkipReadSideFolder">
         <SkipAction>Delete</SkipAction>
         <ObjectName>dirPath</ObjectName>
-        <AbsolutePath>\\App_Data\\ReadSide\\**\*.*</AbsolutePath>
+        <AbsolutePath>\\App_Data\\ReadSide\\.*\\*</AbsolutePath>
         <XPath></XPath>
       </MsDeploySkipRules>
       <MsDeploySkipRules Include="SkipIncomingData">
