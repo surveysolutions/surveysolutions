@@ -149,6 +149,7 @@
     <Compile Include="Models\AllQuestionnairesRequestModel.cs" />
     <Compile Include="Models\DetailsStatisticView.cs" />
     <Compile Include="Models\EventHandlerDescriptionModel.cs" />
+    <Compile Include="Models\HealthCheckModel.cs" />
     <Compile Include="Models\ImportQuestionnaireRequest.cs" />
     <Compile Include="Models\InterviewDetailsFilter.cs" />
     <Compile Include="Models\DetailsViewModel.cs" />
