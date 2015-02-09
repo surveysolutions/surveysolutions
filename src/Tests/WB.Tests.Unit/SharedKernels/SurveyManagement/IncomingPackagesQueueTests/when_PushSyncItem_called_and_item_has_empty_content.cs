@@ -1,7 +1,6 @@
 ﻿using System;
 using Machine.Specifications;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository;
 using WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTests;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTests
