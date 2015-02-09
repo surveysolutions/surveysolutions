@@ -35,3 +35,7 @@ visibility: visible !important;
     width: 1px;
     white-space: nowrap;
 }
+
+.filtered-combobox-button {
+    margin-top: -5px;
+}
