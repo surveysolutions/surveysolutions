@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.Synchronization;
@@ -23,20 +24,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
     {
         Establish context = () =>
         {
-            var @event = new AggregateRootEvent { EventTimeStamp = initialTimestamp };
-
-            var jsonUtils = Mock.Of<IJsonUtils>(_ => 
-                _.Deserialize<AggregateRootEvent[]>(Moq.It.IsAny<string>()) == new [] { @event }
-                && _.Deserialize<SyncItem>(Moq.It.IsAny<string>()) == new SyncItem() { MetaInfo = "test"}
-                && _.Deserialize<InterviewMetaInfo>(Moq.It.IsAny<string>())==new InterviewMetaInfo(){ PublicKey =interviewId});
-
-            var fileSystemAccessor = Mock.Of<IFileSystemAccessor>(_=> 
-                 _.IsFileExists(Moq.It.IsAny<string>()) == true);
-            var incomingPackagesQueue = Mock.Of<IIncomingSyncPackagesQueue>(_ => _.DeQueue() == Guid.NewGuid().FormatGuid());
+            var incomingPackagesQueue = Mock.Of<IIncomingSyncPackagesQueue>(_ => _.DeQueue() == new IncomingSyncPackages(interviewId, Guid.NewGuid(), Guid.NewGuid(), 1, InterviewStatus.Completed, new object[0], false, "", "path"));
 
             commandServiceMock = new Mock<ICommandService>();
 
-            syncPackagesProcessor = CreateSyncPackagesProcessor(commandService: commandServiceMock.Object, fileSystemAccessor: fileSystemAccessor, jsonUtils: jsonUtils,
+            syncPackagesProcessor = CreateSyncPackagesProcessor(commandService: commandServiceMock.Object,
                 incomingSyncPackagesQueue: incomingPackagesQueue);
         };
 
@@ -44,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
             syncPackagesProcessor.ProcessNextSyncPackage();
 
         It should_SynchronizeInterviewEvents_should_be_called = () =>
-          commandServiceMock.Verify(x => x.Execute(Moq.It.Is<SynchronizeInterviewEvents>(_ => !_.CreatedOnClient && _.InterviewId == interviewId), ""), Times.Once);
+           commandServiceMock.Verify(x => x.Execute(Moq.It.Is<SynchronizeInterviewEvents>(_ => !_.CreatedOnClient && _.InterviewId == interviewId), ""), Times.Once);
 
         private static readonly DateTime initialTimestamp = new DateTime(2012, 04, 22);
         private static SyncPackagesProcessor syncPackagesProcessor;

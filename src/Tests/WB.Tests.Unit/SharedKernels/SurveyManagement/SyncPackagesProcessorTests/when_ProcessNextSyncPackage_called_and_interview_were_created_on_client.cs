@@ -12,37 +12,26 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.Synchronization;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTests
 {
-    internal class when_DeQueue_called_and_interview_were_created_on_client : SyncPackagesProcessorTestContext
+    internal class when_ProcessNextSyncPackage_called_and_interview_were_created_on_client : SyncPackagesProcessorTestContext
     {
         Establish context = () =>
         {
-            var @event = new AggregateRootEvent { EventTimeStamp = initialTimestamp };
-
-            var jsonUtils = Mock.Of<IJsonUtils>(_ =>
-                _.Deserialize<AggregateRootEvent[]>(Moq.It.IsAny<string>()) == new[] {@event}
-                && _.Deserialize<SyncItem>(Moq.It.IsAny<string>()) == new SyncItem() {MetaInfo = "test"}
-                &&
-                _.Deserialize<InterviewMetaInfo>(Moq.It.IsAny<string>()) ==
-                new InterviewMetaInfo()
-                {
-                    CreatedOnClient = true,
-                    PublicKey = interviewId 
-                });
-
-            var fileSystemAccessor = Mock.Of<IFileSystemAccessor>(_ =>
-                _.IsFileExists(Moq.It.IsAny<string>()) == true);
-
-            var incomingPackagesQueue = Mock.Of<IIncomingSyncPackagesQueue>(_ => _.DeQueue() == Guid.NewGuid().FormatGuid());
-
+            unhandledPackageStorage = new Mock<IUnhandledPackageStorage>();
+            incomingSyncPackagesQueueMock = new Mock<IIncomingSyncPackagesQueue>();
+            incomingSyncPackagesQueueMock.Setup(x => x.DeQueue())
+                .Returns(new IncomingSyncPackages(interviewId, Guid.NewGuid(), Guid.NewGuid(), 1,
+                    InterviewStatus.Completed, new object[0], true, "", "path"));
             commandServiceMock=new Mock<ICommandService>();
-            syncPackagesProcessor = CreateSyncPackagesProcessor(fileSystemAccessor: fileSystemAccessor, jsonUtils: jsonUtils, commandService: commandServiceMock.Object, incomingSyncPackagesQueue: incomingPackagesQueue);
+            syncPackagesProcessor = CreateSyncPackagesProcessor(commandService: commandServiceMock.Object, incomingSyncPackagesQueue: incomingSyncPackagesQueueMock.Object, unhandledPackageStorage: unhandledPackageStorage.Object);
         };
 
         Because of = () =>
@@ -51,9 +40,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
         It should_call_SynchronizeInterviewEvents = () =>
             commandServiceMock.Verify(x => x.Execute(Moq.It.Is<SynchronizeInterviewEvents>(_ => _.CreatedOnClient && _.InterviewId == interviewId), ""), Times.Once);
 
+        It should_call_DeleteSyncItem = () =>
+        incomingSyncPackagesQueueMock.Verify(x => x.DeleteSyncItem("path"), Times.Once);
+
+        It should_never_call_StoreUnhandledPackage = () =>
+            unhandledPackageStorage.Verify(x => x.StoreUnhandledPackage("path", interviewId), Times.Never);
+
         private static readonly DateTime initialTimestamp = new DateTime(2012, 04, 22);
         private static SyncPackagesProcessor syncPackagesProcessor;
         private static Guid interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Mock<ICommandService> commandServiceMock;
+        private static Mock<IIncomingSyncPackagesQueue> incomingSyncPackagesQueueMock;
+        private static Mock<IUnhandledPackageStorage> unhandledPackageStorage;
     }
 }
