@@ -360,18 +360,23 @@
                         break;
                     case QuestionType.MultyOption:
                         var multiQuestionSettings = entity.Settings as MultiQuestionSettings;
-                        var answers = (decimal[])entity.Answer;
+                        
                         foreach (var option in entity.Options)
                         {
                             string optionValue;
                             bool isChecked;
+                            int orderIndex;
                             if (multiQuestionSettings.IsLinked)
                             {
+                                var answers = (decimal[][])entity.Answer;
+                                orderIndex = answers.Select((item, index) => new { index, item }).First(_ => _.item.SequenceEqual((decimal[])option.Value)).index + 1;
                                 optionValue = Stringify((decimal[])option.Value);
                                 isChecked = entity.Answer != null && ((decimal[][])entity.Answer).Contains((decimal[])option.Value);
                             }
                             else
                             {
+                                var answers = (decimal[])entity.Answer;
+                                orderIndex = answers.Select((item, index) => new {index, item}).First(_ => _.item == (decimal) option.Value).index + 1;
                                 optionValue = option.Value.ToString();
                                 isChecked = entity.Answer != null && ((decimal[])entity.Answer).Contains(Convert.ToDecimal(option.Value));
                             }
@@ -382,7 +387,7 @@
                                 <span>@option.Label</span>
                                 @if (multiQuestionSettings.AreAnswersOrdered && isChecked)
                                 {
-                                    <span class="badge">@(answers.Select((item, index) => new { index, item }).First(_ => _.item == (decimal)option.Value).index + 1)</span>
+                                    <span class="badge">@orderIndex</span>
                                 }
                             </label>
                         }
