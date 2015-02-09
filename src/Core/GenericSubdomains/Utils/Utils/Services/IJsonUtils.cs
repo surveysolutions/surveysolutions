@@ -8,7 +8,8 @@
 
     public interface IJsonUtils
     {
-        string Serialize(object item, TypeSerializationSettings typeSerializationSettings = TypeSerializationSettings.ObjectsOnly);
+        string Serialize(object item);
+        string Serialize(object item, TypeSerializationSettings typeSerializationSettings);
         byte[] SerializeToByteArray(object item);
         T Deserialize<T>(string payload);
         T Deserialize<T>(byte[] payload);

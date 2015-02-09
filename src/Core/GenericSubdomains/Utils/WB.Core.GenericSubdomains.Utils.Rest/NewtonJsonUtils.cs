@@ -30,7 +30,12 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
             this.jsonSerializer = JsonSerializer.Create(this.objectsOnlySerializeSettings);
         }
 
-        public string Serialize(object item, TypeSerializationSettings typeSerializationSettings = TypeSerializationSettings.ObjectsOnly)
+        public string Serialize(object item)
+        {
+            return Serialize(item, TypeSerializationSettings.ObjectsOnly);
+        }
+
+        public string Serialize(object item, TypeSerializationSettings typeSerializationSettings)
         {
             var settings = typeSerializationSettings == TypeSerializationSettings.ObjectsOnly
                 ? this.objectsOnlySerializeSettings
