@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
@@ -37,7 +38,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 
         public int QueueLength
         {
-            get { return this.fileSystemAccessor.GetFilesInDirectory(this.incomingUnprocessedPackagesDirectory).Count(); }
+            get
+            {
+                return this.fileSystemAccessor.GetFilesInDirectory(this.incomingUnprocessedPackagesDirectory).Count();
+            }
         }
 
         public string DeQueue()
