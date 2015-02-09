@@ -1,10 +1,11 @@
-Supervisor.VM.Details = function (settings, filter) {
+Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
     Supervisor.VM.Details.superclass.constructor.apply(this, [settings.Urls.CommandExecution]);
 
     var self = this,
         config = new Config(),
         datacontext = new DataContext(config, settings.Interview.InterviewId);
 
+    self.filteredComboboxes = filteredComboboxes;
     self.changeStateComment = ko.observable('');
 
     self.addComment = function (element, questionId, underscoreJoinedQuestionRosterVector) {
@@ -65,6 +66,22 @@ Supervisor.VM.Details = function (settings, filter) {
         });
 
     }
+
+    self.saveFilteredComboboxAnswer = function (questionId, underscoreJoinedQuestionRosterVector) {
+
+        var filteredCombobox = _.find(self.filteredComboboxes, function(item) {
+            return item.id == getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector); 
+        });
+
+        var selectedOptionId = filteredCombobox.selectedValue().id();
+
+        if (selectedOptionId) {
+            var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
+            question.selectedOption = ko.observable(selectedOptionId);
+
+            sendAnswerCommand(config.commands.answerSingleOptionQuestionCommand, question);
+        }
+    };
 
     self.saveTextAnswer = function (questionId, underscoreJoinedQuestionRosterVector) {
         var answerElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector));
@@ -135,6 +152,19 @@ Supervisor.VM.Details = function (settings, filter) {
             ko.bindingHandlers.maskFormatter.init(this, function () {
                 return $(item).attr("mask");
             });
+        });
+        _.forEach(self.filteredComboboxes, function(filteredCombobox) {
+            var filteredComboboxElement = $("#" + filteredCombobox.id);
+
+            filteredCombobox.selectedValue = ko.observable({ id: ko.observable(), value: ko.observable() });
+            var selectedOptionId = filteredComboboxElement.val();
+            if (selectedOptionId) {
+                filteredCombobox.selectedValue().id(selectedOptionId);
+                filteredCombobox.selectedValue().value(_.find(filteredCombobox.options, function (option) { return option.value == selectedOptionId; }).label);
+            }
+            ko.bindingHandlers.typeahead.init(filteredComboboxElement, function () {
+                return filteredCombobox.options;
+            }, filteredCombobox.selectedValue);
         });
         updateCommentDates();
         setInterval(updateCommentDates, 60000);

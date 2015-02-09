@@ -1,5 +1,6 @@
 ﻿@using System.Globalization
 @using System.Web.Optimization
+@using Humanizer
 @using Main.Core.Entities.SubEntities
 @using WB.Core.SharedKernels.DataCollection.Utils
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
@@ -37,8 +38,10 @@
 
         var filter = { filteredBy: '@Model.Filter' };
 
+        var filteredComboboxes = [@(Html.Raw( string.Join(",", Model.InterviewDetails.Groups.SelectMany(_ => _.Entities).OfType<InterviewQuestionView>().Where(IsFilteredCombobox).Select(_ => string.Format("{{id:'{0}', options:[{1}]}}", getInterviewItemIdWithPostfix(_.Id, _.RosterVector),string.Join(",", _.Options.Select(x=>string.Format("{{value:'{0}', label:'{1}'}}", x.Value, x.Label))))))))];
+
         $(function () {
-            window.model = new Supervisor.VM.Details(settings, filter);
+            window.model = new Supervisor.VM.Details(settings, filter, filteredComboboxes);
             ko.applyBindings(model);
             model.load();
         });
@@ -242,7 +245,7 @@
             </div>
         </td>
         <td class="question-answer">
-            @if (!entity.IsReadOnly && entity.Scope == QuestionScope.Supervisor)
+            @if (!entity.IsReadOnly && entity.Scope == QuestionScope.Supervisor && GlobalInfo.IsSupervisor)
             {
                 switch (entity.QuestionType)
                 {
@@ -272,19 +275,31 @@
                         </div>
                                 break;
                     case QuestionType.SingleOption:
-                                var singleOptionSetting = entity.Settings as SingleQuestionSettings;
-                                foreach (var option in entity.Options)
+                                var singleOptionSettings = entity.Settings as SingleQuestionSettings;
+                                if (singleOptionSettings.IsFilteredCombobox)
                                 {
-                                    var optionValue = option.Value.ToString();
-                                    var isChecked = entity.Answer != null && Convert.ToDecimal(entity.Answer) == Convert.ToDecimal(option.Value);
-
-                                    <label class="radio" for="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, string.Format("option{0}", optionValue))">
-                                        <input type="radio" name="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector)" id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, string.Format("option{0}", optionValue))" value="@optionValue" @(isChecked ? "checked" : "")
-                                               data-bind="click: saveCategoricalOneAnswer.bind($data, '@entity.Id', '@Stringify(entity.RosterVector)')">
-                                        <span>@option.Label</span>
-                                    </label>
+                                    <div class="input-group">
+                                        <input id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector)" class="form-control" type="text" value="@entity.Answer" />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-success filtered-combobox-button" type="button" data-bind="click: saveFilteredComboboxAnswer.bind($data, '@entity.Id', '@Stringify(entity.RosterVector)')">Save</button>
+                                        </span>
+                                    </div>
                                 }
-                                break;
+                                else
+                                {
+                                    foreach (var option in entity.Options)
+                                    {
+                                        var optionValue = option.Value.ToString();
+                                        var isChecked = entity.Answer != null && Convert.ToDecimal(entity.Answer) == Convert.ToDecimal(option.Value);
+
+                                <label class="radio" for="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, string.Format("option{0}", optionValue))">
+                                    <input type="radio" name="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector)" id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, string.Format("option{0}", optionValue))" value="@optionValue" @(isChecked ? "checked" : "")
+                                           data-bind="click: saveCategoricalOneAnswer.bind($data, '@entity.Id', '@Stringify(entity.RosterVector)')">
+                                    <span>@option.Label</span>
+                                </label>
+                            }
+                        }
+                        break;
                     case QuestionType.MultyOption:
                                 var multiQuestionSettings = entity.Settings as MultiQuestionSettings;
                                 var answers = (decimal[])entity.Answer;
@@ -314,8 +329,7 @@
                 {
                     case QuestionType.SingleOption:
                         var singleOptionSetting = entity.Settings as SingleQuestionSettings;
-                        var singleOptinSetting = entity.Settings as SingleQuestionSettings;
-                        if (singleOptinSetting.IsCascade || singleOptinSetting.IsFilteredCombobox)
+                        if (singleOptionSetting.IsCascade || singleOptionSetting.IsFilteredCombobox)
                         {
                             @entity.Answer
                         }
@@ -436,6 +450,17 @@
     public string Stringify(decimal[] array)
     {
         return string.Join("_", array.Select(x => x.ToString(CultureInfo.InvariantCulture).Replace('.', '-')));
+    }
+
+    private static bool IsFilteredCombobox(InterviewQuestionView entityView)
+    {
+        if (entityView.QuestionType == QuestionType.SingleOption)
+        {
+            var interviewQuestionViewSettings = entityView.Settings as SingleQuestionSettings;
+
+            return interviewQuestionViewSettings != null && interviewQuestionViewSettings.IsFilteredCombobox;
+        }
+        return false;
     }
 
 }
