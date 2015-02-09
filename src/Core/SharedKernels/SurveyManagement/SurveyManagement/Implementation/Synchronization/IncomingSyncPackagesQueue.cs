@@ -29,11 +29,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             if (string.IsNullOrWhiteSpace(item))
                 throw new ArgumentException("Sync Item is not set.");
 
-            this.fileSystemAccessor.WriteAllText(
-                this.fileSystemAccessor.CombinePath(this.incomingUnprocessedPackagesDirectory,
-                    string.Format("{0}.{1}", Guid.NewGuid().FormatGuid(),
-                        this.syncSettings.IncomingCapiPackageFileNameExtension)), item);
+            string syncPackageFileName = string.Format("{0}.{1}", Guid.NewGuid().FormatGuid(), this.syncSettings.IncomingCapiPackageFileNameExtension);
+            string fullPathToSyncPackage = this.fileSystemAccessor.CombinePath(this.incomingUnprocessedPackagesDirectory, syncPackageFileName);
 
+            this.fileSystemAccessor.WriteAllText(fullPathToSyncPackage, item);
         }
 
         public int QueueLength
