@@ -148,9 +148,14 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
     };
 
     self.load = function () {
-        $("input[mask]").each(function (index, item) {
-            ko.bindingHandlers.maskFormatter.init(this, function () {
+        $("input[mask]").each(function(index, item) {
+            ko.bindingHandlers.maskFormatter.init(item, function () {
                 return $(item).attr("mask");
+            });
+        });
+        $("input.numeric").each(function (index, item) {
+            $(item).keydown(function() {
+                ko.bindingHandlers.numericformatter.update(item, ko.observable($(item).val()));
             });
         });
         _.forEach(self.filteredComboboxes, function(filteredCombobox) {

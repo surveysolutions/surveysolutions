@@ -261,7 +261,7 @@
                     case QuestionType.Numeric:
                         var numericQuestionSetting = entity.Settings as NumericQuestionSettings;
                         <div class="input-group">
-                            <input id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector)" class="form-control" type="text" value="@entity.Answer" />
+                            <input id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector)" class="form-control numeric" type="text" value="@entity.Answer" />
                             <span class="input-group-btn">
                                 @if (numericQuestionSetting.IsInteger)
                                 {
