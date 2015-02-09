@@ -4,7 +4,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Synchronization;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository
+namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 {
     internal class IncomingSyncPackagesQueue : IIncomingSyncPackagesQueue
     {
@@ -17,11 +17,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             this.fileSystemAccessor = fileSystemAccessor;
             this.syncSettings = syncSettings;
 
-            incomingUnprocessedPackagesDirectory = fileSystemAccessor.CombinePath(syncSettings.AppDataDirectory,
+            this.incomingUnprocessedPackagesDirectory = fileSystemAccessor.CombinePath(syncSettings.AppDataDirectory,
                 syncSettings.IncomingUnprocessedPackagesDirectoryName);
 
-            if (!fileSystemAccessor.IsDirectoryExists(incomingUnprocessedPackagesDirectory))
-                fileSystemAccessor.CreateDirectory(incomingUnprocessedPackagesDirectory);
+            if (!fileSystemAccessor.IsDirectoryExists(this.incomingUnprocessedPackagesDirectory))
+                fileSystemAccessor.CreateDirectory(this.incomingUnprocessedPackagesDirectory);
         }
 
         public void PushSyncItem(string item)
@@ -38,12 +38,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
 
         public int QueueLength
         {
-            get { return fileSystemAccessor.GetFilesInDirectory(incomingUnprocessedPackagesDirectory).Count(); }
+            get { return this.fileSystemAccessor.GetFilesInDirectory(this.incomingUnprocessedPackagesDirectory).Count(); }
         }
 
         public string DeQueue()
         {
-            return fileSystemAccessor.GetFilesInDirectory(incomingUnprocessedPackagesDirectory).FirstOrDefault();
+            return this.fileSystemAccessor.GetFilesInDirectory(this.incomingUnprocessedPackagesDirectory).FirstOrDefault();
         }
     }
 }
