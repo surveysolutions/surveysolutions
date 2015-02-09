@@ -15,6 +15,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string incomingCapiPackagesWithErrorsDirectory;
         private readonly SyncSettings syncSettings;
+        private readonly string exceptionExtension = ".exception";
 
         public UnhandledPackageStorage(IFileSystemAccessor fileSystemAccessor, SyncSettings syncSettings)
         {
@@ -72,23 +73,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             return fileSystemAccessor.CombinePath(incomingCapiPackagesWithErrorsDirectory, package);
         }
 
-        public void StoreUnhandledPackage(string unhandledPackagePath, Guid? interviewId)
+        public void StoreUnhandledPackage(string unhandledPackagePath, Guid? interviewId, Exception e)
         {
+            string folderToStore;
             if (interviewId.HasValue)
-                StoreErrorPackageAtInterviewCorrespondingFolder(interviewId.Value, unhandledPackagePath);
+            {
+                folderToStore = fileSystemAccessor.CombinePath(incomingCapiPackagesWithErrorsDirectory,
+                    interviewId.Value.FormatGuid());
+
+                if (!fileSystemAccessor.IsDirectoryExists(folderToStore))
+                    fileSystemAccessor.CreateDirectory(folderToStore);
+            }
             else
-                fileSystemAccessor.CopyFileOrDirectory(unhandledPackagePath, incomingCapiPackagesWithErrorsDirectory);
-        }
+                folderToStore = incomingCapiPackagesWithErrorsDirectory;
 
-        private void StoreErrorPackageAtInterviewCorrespondingFolder(Guid interviewId, string fileToProcess)
-        {
-            var interviewFolder = fileSystemAccessor.CombinePath(incomingCapiPackagesWithErrorsDirectory,
-               interviewId.FormatGuid());
+            fileSystemAccessor.CopyFileOrDirectory(unhandledPackagePath, folderToStore);
+            var fileName = fileSystemAccessor.GetFileNameWithoutExtension(unhandledPackagePath) +exceptionExtension;
 
-            if (!fileSystemAccessor.IsDirectoryExists(interviewFolder))
-                fileSystemAccessor.CreateDirectory(interviewFolder);
-
-            fileSystemAccessor.CopyFileOrDirectory(fileToProcess, interviewFolder);
+            fileSystemAccessor.WriteAllText(fileSystemAccessor.CombinePath(folderToStore, fileName), string.Format("{0} {1}", e.Message, e.StackTrace));
         }
     }
 }

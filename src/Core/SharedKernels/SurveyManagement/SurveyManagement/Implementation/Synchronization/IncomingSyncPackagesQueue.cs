@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                 fileSystemAccessor.CreateDirectory(this.incomingUnprocessedPackagesDirectory);
         }
 
-        public void PushSyncItem(string item)
+        public void Enqueue(string item)
         {
             if (string.IsNullOrWhiteSpace(item))
                 throw new ArgumentException("Sync Item is not set.");
@@ -85,7 +85,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             catch (Exception e)
             {
                 logger.Error(string.Format("package '{0}' wasn't parsed. Reason: '{1}'", pathToPackage, e.Message), e);
-                unhandledPackageStorage.StoreUnhandledPackage(pathToPackage, interviewId);
+                unhandledPackageStorage.StoreUnhandledPackage(pathToPackage, interviewId, e);
                 DeleteSyncItem(pathToPackage);
             }
             return null;

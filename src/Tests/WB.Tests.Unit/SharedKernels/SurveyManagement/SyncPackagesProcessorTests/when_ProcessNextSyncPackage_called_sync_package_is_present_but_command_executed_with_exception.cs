@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
                     InterviewStatus.Completed, new object[0], true, "", "path"));
 
             commandServiceMock = new Mock<ICommandService>();
-            commandServiceMock.Setup(x => x.Execute(Moq.It.IsAny<SynchronizeInterviewEvents>(), Moq.It.IsAny<string>()))
+            commandServiceMock.Setup(x => x.Execute(Moq.It.IsAny<SynchronizeInterviewEventsCommand>(), Moq.It.IsAny<string>()))
                 .Throws<NullReferenceException>();
 
             syncPackagesProcessor = CreateSyncPackagesProcessor(commandService: commandServiceMock.Object, incomingSyncPackagesQueue: incomingSyncPackagesQueueMock.Object, unhandledPackageStorage: unhandledPackageStorage.Object);
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
             syncPackagesProcessor.ProcessNextSyncPackage();
 
         It should_call_StoreUnhandledPackage = () =>
-            unhandledPackageStorage.Verify(x => x.StoreUnhandledPackage("path",interviewId), Times.Once);
+            unhandledPackageStorage.Verify(x => x.StoreUnhandledPackage("path", interviewId, Moq.It.IsAny<NullReferenceException>()), Times.Once);
 
         It should_call_DeleteSyncItem = () =>
           incomingSyncPackagesQueueMock.Verify(x => x.DeleteSyncItem("path"), Times.Once);
