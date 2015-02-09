@@ -1,0 +1,33 @@
+﻿@using System.Web.Optimization
+@{
+    this.ViewBag.Title = "Heath Check Page";
+}
+
+<h1 class="page-header">Interview details loading information</h1>
+
+<div>
+    <div class="panel-body">
+        <div class="well well-sm">Current health check state: &nbsp;<b data-bind="text: status"></b></div>
+        <div class="well well-sm">Current health check state: &nbsp;<b data-bind="text: model"></b></div>
+        <div class="well well-sm">Current health check state: &nbsp;<b data-bind="text: model().status"></b></div>
+        
+    </div>
+</div>
+
+
+
+
+@section scripts {
+
+    @Scripts.Render("~/Scripts/viewmodels/pages/healthcheck.js")
+    <script type="text/javascript">
+        var viewModel = new Supervisor.VM.HealthCheck(
+            '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "HealthCheckApi", action = "GetVerboseStatus"})');
+        viewModel.load();
+
+        setInterval(viewModel.load, 10000);
+
+        ko.applyBindings(viewModel);
+    </script>
+
+}

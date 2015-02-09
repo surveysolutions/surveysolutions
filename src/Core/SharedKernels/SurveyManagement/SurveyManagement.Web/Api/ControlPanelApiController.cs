@@ -1,18 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.HealthCheck;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.Synchronization;
-using WB.Core.Synchronization.SyncStorage;
 using WB.UI.Headquarters.Models;
 using WB.UI.Shared.Web.Filters;
+
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
@@ -21,24 +15,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     {
         private readonly IReadSideAdministrationService readSideAdministrationService;
         private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
-        private readonly IUnhandledPackageStorage unhandledPackageStorage;
-        private readonly IDatabaseHealthCheck databaseHealthCheck;
-        private readonly IEventStoreHealthCheck eventStoreHealthCheck;
-        private readonly IChunkReader chunkReader;
-        private readonly IFolderPermissionChecker folderPermissionChecker;
+
 
         public ControlPanelApiController(IReadSideAdministrationService readSideAdministrationService,
-            IIncomingSyncPackagesQueue incomingSyncPackagesQueue, IDatabaseHealthCheck databaseHealthCheck, 
-            IEventStoreHealthCheck eventStoreHealthCheck, IUnhandledPackageStorage unhandledPackageStorage, 
-            IChunkReader chunkReader, IFolderPermissionChecker folderPermissionChecker)
+            IIncomingSyncPackagesQueue incomingSyncPackagesQueue)
         {
             this.readSideAdministrationService = readSideAdministrationService;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
-            this.folderPermissionChecker = folderPermissionChecker;
-            this.chunkReader = chunkReader;
-            this.eventStoreHealthCheck = eventStoreHealthCheck;
-            this.databaseHealthCheck = databaseHealthCheck;
-            this.unhandledPackageStorage = unhandledPackageStorage;
         }
 
         public InterviewDetailsSchedulerViewModel InterviewDetails()
@@ -86,37 +69,5 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             this.readSideAdministrationService.StopAllViewsRebuilding();
         }
-
-        public HealthCheckStatus GetStatus()
-        {
-            var healthCheckStatus = CollectHealthCheckStatus();
-            return healthCheckStatus.Status;
-        }
-
-        public HealthCheckModel GetVerboseStatus()
-        {
-            return CollectHealthCheckStatus();
-        }
-
-        private HealthCheckModel CollectHealthCheckStatus()
-        {
-            var databaseHealthCheckResult = databaseHealthCheck.Check();
-            var eventStoreHealthCheckResult = eventStoreHealthCheck.Check();
-            var numberOfUnhandledPackages = unhandledPackageStorage.GetListOfUnhandledPackages().Count();
-            var numberOfSyncPackagesWithBigSize = chunkReader.GetNumberOfSyncPackagesWithBigSize();
-            var folderPermissionCheckResult = folderPermissionChecker.Check();
-            var readSideStatus = readSideAdministrationService.GetRebuildStatus();
-
-            return new HealthCheckModel()
-            {
-                DatabaseConnectionStatus = databaseHealthCheckResult,
-                EventstoreConnectionStatus = eventStoreHealthCheckResult,
-                NumberOfUnhandledPackages = numberOfUnhandledPackages,
-                NumberOfSyncPackagesWithBigSize = numberOfSyncPackagesWithBigSize,
-                FolderPermissionCheckResult = folderPermissionCheckResult,
-                ReadSideServiceStatus = readSideStatus
-            };
-        }
-
     }
 }
