@@ -49,14 +49,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             try
             {
                 commandService.Execute(
-                    new SynchronizeInterviewEvents(incomingSyncPackages.InterviewId, incomingSyncPackages.ResponsibleId, incomingSyncPackages.QuestionnaireId,
+                    new SynchronizeInterviewEventsCommand(incomingSyncPackages.InterviewId, incomingSyncPackages.ResponsibleId, incomingSyncPackages.QuestionnaireId,
                         incomingSyncPackages.QuestionnaireVersion, incomingSyncPackages.EventsToSynchronize, incomingSyncPackages.InterviewStatus, incomingSyncPackages.CreatedOnClient),
                     incomingSyncPackages.Origin);
             }
             catch (Exception e)
             {
                 logger.Error(string.Format("package '{0}' wasn't processed. Reason: '{1}'", incomingSyncPackages.PathToPackage, e.Message), e);
-                unhandledPackageStorage.StoreUnhandledPackage(incomingSyncPackages.PathToPackage, incomingSyncPackages.InterviewId);
+                unhandledPackageStorage.StoreUnhandledPackage(incomingSyncPackages.PathToPackage, incomingSyncPackages.InterviewId, e);
             }
 
             incomingSyncPackagesQueue.DeleteSyncItem(incomingSyncPackages.PathToPackage);
