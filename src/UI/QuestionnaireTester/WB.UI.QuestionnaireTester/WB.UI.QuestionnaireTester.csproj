@@ -208,6 +208,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Extensions\ActivityExtensions.cs" />
+    <Compile Include="Implementation\Services\ApplicationInitializer.cs" />
     <Compile Include="Implementation\Services\ApplicationSettings.cs" />
     <Compile Include="Implementation\Services\QuestionnaireDocumentRepository.cs" />
     <Compile Include="Implementation\Services\DashboardStorageViewModelRepository.cs" />

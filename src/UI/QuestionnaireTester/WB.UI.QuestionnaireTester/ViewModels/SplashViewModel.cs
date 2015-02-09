@@ -1,21 +1,22 @@
 ﻿using System.Threading.Tasks;
-using WB.UI.QuestionnaireTester.Ninject;
+using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.UI.QuestionnaireTester.ViewModels
 {
     public class SplashViewModel : BaseViewModel
     {
-        public SplashViewModel() : base(null, null)
+        private readonly IApplicationInitializer applicationInitializer;
+
+        public SplashViewModel(IApplicationInitializer applicationInitializer) : base(null, null)
         {
+            this.applicationInitializer = applicationInitializer;
         }
 
         public void Init()
         {
             Task.Run(() =>
             {
-                NinjectInitializer.Initialize();
-                MvxInitializer.Initialize();
-
+                this.applicationInitializer.Init();
                 this.ShowViewModel<DashboardViewModel>();
             });
         }
