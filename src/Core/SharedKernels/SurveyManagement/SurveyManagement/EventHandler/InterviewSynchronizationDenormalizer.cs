@@ -77,7 +77,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 if (interviewSummary == null)
                     return;
 
-                if (this.IsNewStatusCompletedOrDeleted(newStatus) && this.IsInterviewWereRejectedAtLeastOnceBeboreOrNotCreateOnClient(interviewSummary))
+                if (this.IsNewStatusCompletedOrDeleted(newStatus))
                     this.MarkInterviewForClientDeleting(evnt.EventSourceId, null, evnt.EventTimeStamp, interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
             }
         }

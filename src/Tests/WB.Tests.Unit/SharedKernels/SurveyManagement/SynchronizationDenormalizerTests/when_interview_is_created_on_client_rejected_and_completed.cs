@@ -25,13 +25,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             interviews.SetReturnsDefault(data);
 
             var interviewSummaryWriterMock = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
-            interviewSummaryWriterMock.SetReturnsDefault(new InterviewSummary()
+            interviewSummaryWriterMock.SetReturnsDefault(new InterviewSummary
             {
                 WasCreatedOnClient = true,
                 CommentedStatusesHistory =
                     new List<InterviewCommentedStatus>
                                     {
-                                        new InterviewCommentedStatus() { Status = InterviewStatus.RejectedBySupervisor }
+                                        new InterviewCommentedStatus { Status = InterviewStatus.RejectedBySupervisor }
                                     }
             });
 
@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
 
         It should_create_deletion_synchronization_package = () =>
             interviewPackageStorageWriter.Verify(x => 
-                x.Store(Moq.It.Is<InterviewSyncPackage>(s => s.InterviewId == interviewId), Moq.It.IsAny<string>()), Times.Once);
+                x.Store(Moq.It.Is<InterviewSyncPackage>(s => s.InterviewId == interviewId), Moq.It.IsAny<string>()), Times.Exactly(2));
 
         static InterviewSynchronizationDenormalizer synchronizationDenormalizer;
         static Guid interviewId;
