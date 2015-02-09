@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -34,11 +35,11 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IDataExportRepositoryWriter dataExportRepositoryWriter;
         private readonly IReadSideRepositoryIndexAccessor readSideRepositoryIndexAccessor;
 
-        public ControlPanelController(IServiceLocator serviceLocator, IIncomePackagesRepository incomePackagesRepository,
+        public ControlPanelController(IServiceLocator serviceLocator, IUnhandledPackageStorage unhandledPackageStorage,
             ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
             IUserViewFactory userViewFactory, IPasswordHasher passwordHasher, ISettingsProvider settingsProvider,
             IDataExportRepositoryWriter dataExportRepositoryWriter, IReadSideRepositoryIndexAccessor readSideRepositoryIndexAccessor)
-            : base(serviceLocator, incomePackagesRepository, commandService, globalInfo, logger, settingsProvider)
+            : base(serviceLocator, unhandledPackageStorage, commandService, globalInfo, logger, settingsProvider)
         {
             this.userViewFactory = userViewFactory;
             this.passwordHasher = passwordHasher;

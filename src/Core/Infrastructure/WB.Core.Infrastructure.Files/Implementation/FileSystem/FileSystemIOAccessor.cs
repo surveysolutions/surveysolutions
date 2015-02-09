@@ -3,6 +3,7 @@ using System.CodeDom;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using WB.Core.Infrastructure.FileSystem;
 using ZetaLongPaths;
