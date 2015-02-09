@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.UI.Shared.Android.Controls.ScreenItems
+namespace WB.Core.SharedKernels.DataCollection
 {
     public interface IAnswerProgressIndicator
     {
