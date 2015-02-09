@@ -240,8 +240,6 @@
       <DependentUpon>UIResources.ru-RU.resx</DependentUpon>
     </Compile>
     <Compile Include="QuestionnareAssemblyTesterFileAccessor.cs" />
-    <Compile Include="Services\IIdentity.cs" />
-    <Compile Include="Services\IPrincipal.cs" />
     <Compile Include="TesterLoggingModule.cs" />
     <Compile Include="App.cs" />
     <Compile Include="ViewModels\DashboardStorageViewModel.cs" />

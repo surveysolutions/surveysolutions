@@ -5,7 +5,6 @@ using Cirrious.MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.UI.QuestionnaireTester.Properties;
-using WB.UI.QuestionnaireTester.Services;
 
 namespace WB.UI.QuestionnaireTester.ViewModels
 {

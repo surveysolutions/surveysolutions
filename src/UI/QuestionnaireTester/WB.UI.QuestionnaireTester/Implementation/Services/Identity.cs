@@ -1,4 +1,4 @@
-using WB.UI.QuestionnaireTester.Services;
+using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.UI.QuestionnaireTester.Implementation.Services
 {

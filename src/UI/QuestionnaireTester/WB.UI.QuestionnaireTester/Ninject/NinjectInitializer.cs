@@ -31,7 +31,6 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.UI.QuestionnaireTester.Implementation.Services;
-using WB.UI.QuestionnaireTester.Services;
 using WB.UI.QuestionnaireTester.ViewModels;
 using WB.UI.Shared.Android;
 using WB.UI.Shared.Android.Controls.ScreenItems;

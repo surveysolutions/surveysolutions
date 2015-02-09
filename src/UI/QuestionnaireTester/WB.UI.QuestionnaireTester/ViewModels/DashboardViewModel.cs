@@ -12,7 +12,6 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.QuestionnaireTester.Properties;
-using WB.UI.QuestionnaireTester.Services;
 using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion;
 
 namespace WB.UI.QuestionnaireTester.ViewModels

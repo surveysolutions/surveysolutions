@@ -17,7 +17,6 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.UI.QuestionnaireTester.Properties;
-using WB.UI.QuestionnaireTester.Services;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion;
 

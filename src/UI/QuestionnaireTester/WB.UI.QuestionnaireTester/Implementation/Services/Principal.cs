@@ -1,6 +1,6 @@
 ﻿using Cheesebaron.MvxPlugins.Settings.Interfaces;
 using IHS.MvvmCross.Plugins.Keychain;
-using WB.UI.QuestionnaireTester.Services;
+using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.UI.QuestionnaireTester.Implementation.Services
 {

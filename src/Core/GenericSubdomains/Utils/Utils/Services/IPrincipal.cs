@@ -1,4 +1,4 @@
-namespace WB.UI.QuestionnaireTester.Services
+namespace WB.Core.GenericSubdomains.Utils.Services
 {
     public interface IPrincipal
     {

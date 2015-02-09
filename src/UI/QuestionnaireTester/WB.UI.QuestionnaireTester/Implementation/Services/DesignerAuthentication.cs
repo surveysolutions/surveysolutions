@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Capi;
-using WB.UI.QuestionnaireTester.Services;
+using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.UI.QuestionnaireTester.Implementation.Services
 {
