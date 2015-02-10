@@ -10,31 +10,31 @@
 
         <div>
             <div class="panel-body">
-                <div class="well well-sm">Current health check state: &nbsp;<b data-bind="text: status, css: {'has-error': !isGood}"></b></div>
+                <div class="well well-sm">Current health check state: &nbsp;<b data-bind="text: status, css: {'has-error': hasErrors, 'has-error': hasWarnings}"></b></div>
                 <div class="row">
                     <div class="col-md-12">
                         <ul class="list-group">
-                            <li class="list-group-item">
+                            <li class="list-group-item" data-bind="css: {'has-error': databaseConnectionError }">
                                 <span class="badge" data-bind="text:databaseConnectionStatus"></span>
                                 Database connection status
                                 <p data-bind="text:databaseConnectionError"></p>
                             </li>
-                            <li class="list-group-item">
+                            <li class="list-group-item" data-bind="css: {'has-error': eventstoreConnectionError }">
                                 <span class="badge" data-bind="text:eventstoreConnectionStatus"></span>
                                 Eventstore connection status
                                 <p data-bind="text:eventstoreConnectionError"></p>
                             </li>
-                            <li class="list-group-item">
+                            <li class="list-group-item" data-bind="css: {'has-error': numberOfUnhandledPackagesError }">
                                 <span class="badge" data-bind="text:numberOfUnhandledPackages"></span>
                                 Number of unhandled packages
                                 <p data-bind="text:numberOfUnhandledPackagesError"></p>
                             </li>
-                            <li class="list-group-item">
+                            <li class="list-group-item" data-bind="css: {'has-error': numberOfSyncPackagesWithBigSizeError }">
                                 <span class="badge" data-bind="text:numberOfSyncPackagesWithBigSize"></span>
                                 Number of sync packages with size more then 2Mb
                                 <p data-bind="text:numberOfSyncPackagesWithBigSizeError"></p>
                             </li>
-                            <li class="list-group-item">
+                            <li class="list-group-item" data-bind="css: {'has-error': denidedFolders().length > 0 }">
                                 <span class="badge" data-bind="text:denidedFoldersStatus"></span>
                                 Permissions on write in App_Data folder
                                 <table class="table table-condensed margin-0" data-bind="foreach: denidedFolders">
@@ -57,13 +57,9 @@
 @section scripts {
 
     <style>
-        b.has-error {
-            color: red;
-        }
-
-        .badge.has-error {
-            background-color: red;
-        }
+        b.has-error { color: red; }
+        li.has-error .badge { background-color: red; }
+        li.has-error { color: red; }
     </style>
 
     @Scripts.Render("~/Scripts/viewmodels/pages/healthcheck.js")
@@ -72,7 +68,7 @@
             '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "HealthCheckApi", action = "GetVerboseStatus"})');
         viewModel.load();
 
-        setInterval(viewModel.load, 10000);
+        setInterval(viewModel.load, 5000);
 
         ko.applyBindings(viewModel);
     </script>

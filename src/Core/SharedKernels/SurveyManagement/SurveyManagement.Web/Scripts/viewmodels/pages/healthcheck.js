@@ -7,17 +7,18 @@
 
     self.model = ko.observable({});
     self.status = ko.observable('');
-    self.isGood = ko.observable(true);
+    self.hasWarnings = ko.observable(false);
+    self.hasErrors = ko.observable(false);
 
     self.databaseConnectionStatus = ko.observable('');
     self.databaseConnectionError = ko.observable('');
     self.eventstoreConnectionStatus = ko.observable('');
     self.eventstoreConnectionError = ko.observable('');
     self.numberOfUnhandledPackagesStatus = ko.observable('');
-    self.numberOfUnhandledPackages = ko.observable(0);
+    self.numberOfUnhandledPackages = ko.observable('');
     self.numberOfUnhandledPackagesError = ko.observable('');
     self.numberOfSyncPackagesWithBigSizeStatus = ko.observable('');
-    self.numberOfSyncPackagesWithBigSize = ko.observable(0);
+    self.numberOfSyncPackagesWithBigSize = ko.observable('');
     self.numberOfSyncPackagesWithBigSizeError = ko.observable('');
     self.denidedFoldersStatus = ko.observable('');
     self.denidedFolders = ko.observableArray([]);
@@ -26,16 +27,23 @@
         self.SendRequest(self.apiUrl, {}, function (data) {
             self.model(data);
             self.status(self.getTextStatus(data.Status));
-            self.isGood(data.Status == 1);
+            self.hasWarnings(data.Status == 2);
+            self.hasErrors(data.Status == 3);
             self.databaseConnectionStatus(self.getTextStatus(data.DatabaseConnectionStatus.Status));
             self.databaseConnectionError(data.DatabaseConnectionStatus.ErrorMessage);
             self.eventstoreConnectionStatus(self.getTextStatus(data.EventstoreConnectionStatus.Status));
             self.eventstoreConnectionError(data.EventstoreConnectionStatus.ErrorMessage);
             self.numberOfUnhandledPackagesStatus(self.getTextStatus(data.NumberOfUnhandledPackages.Status));
-            self.numberOfUnhandledPackages(data.NumberOfUnhandledPackages.Value);
+            var numberOfUnhandledPackagesText = data.NumberOfUnhandledPackages.Status == 3
+                ? self.getTextStatus(data.NumberOfUnhandledPackages.Status)
+                : data.NumberOfUnhandledPackages.Value;
+            self.numberOfUnhandledPackages(numberOfUnhandledPackagesText);
             self.numberOfUnhandledPackagesError(data.NumberOfUnhandledPackages.ErrorMessage);
-            self.numberOfSyncPackagesWithBigSizeStatus(self.getTextStatus(data.NumberOfSyncPackagesWithBigSize.Value));
-            self.numberOfSyncPackagesWithBigSize(data.NumberOfSyncPackagesWithBigSize.Value);
+            self.numberOfSyncPackagesWithBigSizeStatus(self.getTextStatus(data.NumberOfSyncPackagesWithBigSize.Status));
+            var numberOfSyncPackagesText = data.NumberOfSyncPackagesWithBigSize.Status == 3
+                ? self.getTextStatus(data.NumberOfSyncPackagesWithBigSize.Status)
+                : data.NumberOfSyncPackagesWithBigSize.Value;
+            self.numberOfSyncPackagesWithBigSize(numberOfSyncPackagesText);
             self.numberOfSyncPackagesWithBigSizeError(data.NumberOfSyncPackagesWithBigSize.ErrorMessage);
             self.denidedFoldersStatus(self.getTextStatus(data.FolderPermissionCheckResult.Status));
             self.denidedFolders(data.FolderPermissionCheckResult.DenidedFolders);
