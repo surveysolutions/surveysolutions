@@ -9,5 +9,7 @@ namespace WB.Core.BoundedContexts.Capi.Services
         string GetChunkBeforeChunkWithId(string type, string lastKnownPackageId, Guid userId);
 
         string GetLastStoredPackageId(string type, Guid currentUserId);
+
+        void CleanAllInterviewIdsForUser(Guid currentUserId);
     }
 }

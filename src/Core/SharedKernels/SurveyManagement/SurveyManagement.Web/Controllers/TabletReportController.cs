@@ -24,5 +24,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             return this.File(this.tabletInformationService.GetFullPathToContentFile(fileName), "application/zip", fileName);
         }
+
+        [Authorize(Roles = "Headquarter, Supervisor")]
+        public ActionResult Device(string id)
+        {
+            return this.View(this.tabletInformationService.GetTabletLog(id));
+        }
     }
 }

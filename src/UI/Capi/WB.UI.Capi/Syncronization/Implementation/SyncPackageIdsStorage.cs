@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.UI.Capi.Syncronization.Implementation
 {
@@ -55,6 +56,19 @@ namespace WB.UI.Capi.Syncronization.Implementation
         public string GetLastStoredPackageId(string type, Guid currentUserId)
         {
             return this.LastStoredPackageId(type, currentUserId);
+        }
+
+        public void CleanAllInterviewIdsForUser(Guid userId)
+        {
+            var userIdAsString = userId.FormatGuid();
+            using (var connection = this.connectionFactory.Create(this.FullPathToDataBase))
+            {
+                var interviewRecordsForUser = connection.Table<SyncPackageId>()
+                    .Where(x => x.Type == SyncItemType.Interview && x.UserId == userIdAsString)
+                    .ToList();
+
+                interviewRecordsForUser.ForEach(x => connection.Delete(x));
+            }
         }
 
         private string LastStoredPackageId(string type, Guid userId)

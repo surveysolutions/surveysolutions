@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -137,9 +138,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
             var identifier = new ClientIdentifier
             {
-                ClientDeviceKey = request.AndroidId,
+                AndroidId = request.AndroidId,
                 ClientInstanceKey = request.ClientId,
-                ClientVersionIdentifier = "unknown",
+                AppVersion = request.Version.ToString(CultureInfo.InvariantCulture),
                 ClientRegistrationKey = request.ClientRegistrationId,
                 SupervisorPublicKey = interviewerInfo.Supervisor.Id,
                 UserId = interviewerInfo.PublicKey
@@ -148,7 +149,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             {
                 if (string.IsNullOrEmpty(interviewerInfo.DeviceId) || request.ShouldDeviceBeLinkedToUser)
                 {
-                    this.syncManager.LinkUserToDevice(interviewerInfo.PublicKey, request.AndroidId);
+                    this.syncManager.LinkUserToDevice(interviewerInfo.PublicKey, request.AndroidId, interviewerInfo.DeviceId);
                 }
                 return syncManager.ItitSync(identifier);
             }
@@ -176,7 +177,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             try
             {
-                return syncManager.ReceiveUserSyncPackage(request.ClientRegistrationId, request.PackageId);
+                var interviewerInfo = userInfoViewFactory.Load(new UserWebViewInputModel(this.GlobalInfo.GetCurrentUser().Name, null));
+                return syncManager.ReceiveUserSyncPackage(request.ClientRegistrationId, request.PackageId, interviewerInfo.PublicKey);
             }
             catch (Exception ex)
             {
@@ -191,7 +193,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             try
             {
-                return syncManager.ReceiveQuestionnaireSyncPackage(request.ClientRegistrationId, request.PackageId);
+                var interviewerInfo = userInfoViewFactory.Load(new UserWebViewInputModel(this.GlobalInfo.GetCurrentUser().Name, null));
+                return syncManager.ReceiveQuestionnaireSyncPackage(request.ClientRegistrationId, request.PackageId, interviewerInfo.PublicKey);
             }
             catch (Exception ex)
             {
@@ -206,7 +209,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             try
             {
-                return syncManager.ReceiveInterviewSyncPackage(request.ClientRegistrationId, request.PackageId);
+                var interviewerInfo = userInfoViewFactory.Load(new UserWebViewInputModel(this.GlobalInfo.GetCurrentUser().Name, null));
+                return syncManager.ReceiveInterviewSyncPackage(request.ClientRegistrationId, request.PackageId, interviewerInfo.PublicKey);
             }
             catch (Exception ex)
             {

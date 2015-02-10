@@ -23,10 +23,16 @@ namespace WB.UI.Capi.Syncronization
         private readonly IChangeLogManipulator changelog;
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
 
-        public CapiCleanUpService(IChangeLogManipulator changelog, IPlainInterviewFileStorage plainInterviewFileStorage)
+        private ISyncPackageIdsStorage syncPackageIdsStorage;
+
+        public CapiCleanUpService(
+            IChangeLogManipulator changelog, 
+            IPlainInterviewFileStorage plainInterviewFileStorage, 
+            ISyncPackageIdsStorage syncPackageIdsStorage)
         {
             this.changelog = changelog;
             this.plainInterviewFileStorage = plainInterviewFileStorage;
+            this.syncPackageIdsStorage = syncPackageIdsStorage;
         }
 
         public void DeleteAllInterviewsForUser(Guid userIdAsGuid)
@@ -43,6 +49,8 @@ namespace WB.UI.Capi.Syncronization
             {
                 this.DeleteInterview(interviewId);
             }
+
+            syncPackageIdsStorage.CleanAllInterviewIdsForUser(userIdAsGuid);
         }
 
         //dangerous operation

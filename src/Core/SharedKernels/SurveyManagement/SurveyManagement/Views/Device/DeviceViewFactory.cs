@@ -11,9 +11,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Device
 {
     public class DeviceViewFactory : IViewFactory<DeviceViewInputModel, DeviceView>
     {
-        private readonly IQueryableReadSideRepositoryReader<SyncDeviceRegisterDocument> devices;
+        private readonly IQueryableReadSideRepositoryReader<TabletDocument> devices;
 
-        public DeviceViewFactory(IQueryableReadSideRepositoryReader<SyncDeviceRegisterDocument> devices)
+        public DeviceViewFactory(IQueryableReadSideRepositoryReader<TabletDocument> devices)
         {
             this.devices = devices;
         }
@@ -30,10 +30,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Device
                     return new DeviceView(0, 0, 0, new List<RegisterData>(), string.Empty);
                 }
 
-                IQueryable<SyncDeviceRegisterDocument> query = queryableDevices.Where(d => d.Registrator != Guid.Empty).Where(d => d.Registrator == input.RegistratorId);
+                IQueryable<TabletDocument> query = queryableDevices.Where(d => d.Registrator != Guid.Empty).Where(d => d.Registrator == input.RegistratorId);
                 var page = query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
                 var items = page.ToList();
-                var devices = items.Select(item => new RegisterData() { Description = item.Description, RegisterDate = item.CreationDate, RegistrationId = item.PublicKey, Registrator = item.Registrator, SecretKey = item.SecretKey }).ToList();
+                var devices = items.Select(item => new RegisterData() { Description = item.Description, RegisterDate = item.RegistrationDate, RegistrationId = item.DeviceId, Registrator = item.Registrator, SecretKey = item.SecretKey }).ToList();
                 return new DeviceView(input.Page, input.PageSize, count, devices, input.Order);
             });
         }

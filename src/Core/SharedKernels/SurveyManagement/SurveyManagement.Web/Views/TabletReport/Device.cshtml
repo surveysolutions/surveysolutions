@@ -1,0 +1,17 @@
+﻿@model WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation.TabletLogView
+
+@{
+    ViewBag.Title = "Tablet sync log";
+}
+
+<h2>@Model.AndroidId</h2>
+<ul class="list-group">
+    @foreach (var userId in Model.Users)
+    {
+        <li class="list-group-item">@userId</li>
+    }
+</ul>
+@foreach (var kvp in Model.SyncLog)
+{
+    
+}
