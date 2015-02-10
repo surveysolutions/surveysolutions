@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.HealthCheck;
-using WB.Core.Infrastructure.Implementation.ReadSide;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
 {
@@ -9,20 +8,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
     {
         public HealthCheckModel(ConnectionHealthCheckResult databaseConnectionStatus,
             ConnectionHealthCheckResult eventstoreConnectionStatus, NumberHealthCheckResult numberOfUnhandledPackages,
-            NumberHealthCheckResult numberOfSyncPackagesWithBigSize, FolderPermissionCheckResult folderPermissionCheckResult,
-            ReadSideStatus readSideServiceStatus)
+            NumberHealthCheckResult numberOfSyncPackagesWithBigSize, FolderPermissionCheckResult folderPermissionCheckResult)
         {
             DatabaseConnectionStatus = databaseConnectionStatus;
             EventstoreConnectionStatus = eventstoreConnectionStatus;
             NumberOfUnhandledPackages = numberOfUnhandledPackages;
             NumberOfSyncPackagesWithBigSize = numberOfSyncPackagesWithBigSize;
             FolderPermissionCheckResult = folderPermissionCheckResult;
-            ReadSideServiceStatus = readSideServiceStatus;
         }
 
         public ConnectionHealthCheckResult DatabaseConnectionStatus { get; private set; }
         public ConnectionHealthCheckResult EventstoreConnectionStatus { get; private set; }
-        public ReadSideStatus ReadSideServiceStatus { get; private set; }
         public NumberHealthCheckResult NumberOfUnhandledPackages { get; private set; }
         public NumberHealthCheckResult NumberOfSyncPackagesWithBigSize { get; private set; }
         public FolderPermissionCheckResult FolderPermissionCheckResult { get; private set; }
