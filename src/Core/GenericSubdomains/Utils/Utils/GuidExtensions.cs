@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Text;
 
 namespace WB.Core.GenericSubdomains.Utils
 {
@@ -36,6 +37,13 @@ namespace WB.Core.GenericSubdomains.Utils
 
             return new Guid(BitConverter.GetBytes(BitConverter.ToUInt64(a, 0))
                                         .Concat(BitConverter.GetBytes(BitConverter.ToUInt64(a, 8) ^ BitConverter.ToUInt64(b, 0))).ToArray());
+        }
+
+        public static Guid ToGuid(this string value)
+        {
+            var data = new byte[value.Length * sizeof(char)];
+            Buffer.BlockCopy(value.ToCharArray(), 0, data, 0, data.Length);
+            return new Guid(data);
         }
     }
 }

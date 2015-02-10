@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation;
+using WB.Core.Synchronization.Documents;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletInformation
 {
@@ -15,9 +18,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletI
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string zipExtension = ".zip";
 
-        public FileBasedTabletInformationService(string parentFolder, IFileSystemAccessor fileSystemAccessor)
+        private readonly IReadSideRepositoryReader<TabletDocument> tabletDocumentsStrogeReader;
+        private readonly IReadSideRepositoryReader<UserDocument> usersStorageReader;
+
+        public FileBasedTabletInformationService(string parentFolder, 
+            IFileSystemAccessor fileSystemAccessor, 
+            IReadSideRepositoryReader<TabletDocument> tabletDocumentsStrogeReader, IReadSideRepositoryReader<UserDocument> usersStorageReader)
         {
             this.fileSystemAccessor = fileSystemAccessor;
+            this.tabletDocumentsStrogeReader = tabletDocumentsStrogeReader;
+            this.usersStorageReader = usersStorageReader;
             this.basePath = fileSystemAccessor.CombinePath(parentFolder, TabletInformationFolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.basePath))
                 fileSystemAccessor.CreateDirectory(this.basePath);
@@ -68,6 +78,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletI
                 return null;
 
             return new TabletInformationView(fileName, separatedValues[0], separatedValues[1], fileCreationTime, fileSize);
+        }
+
+        public TabletLogView GetTabletLog(string deviceId)
+        {
+            var tabletLogView = new TabletLogView();
+            var tabletLog = tabletDocumentsStrogeReader.GetById(deviceId);
+            if (tabletLog == null)
+                return tabletLogView;
+
+            //usersStorageReader
+
+            return tabletLogView;
         }
     }
 }

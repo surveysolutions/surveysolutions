@@ -9,7 +9,6 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Capi.Properties;
-using WB.UI.Capi.Settings;
 
 namespace WB.UI.Capi.Implementations.Services
 {

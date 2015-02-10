@@ -12,18 +12,18 @@ namespace WB.Core.Synchronization
 
         SyncItemsMetaContainer GetQuestionnaireArIdsWithOrder(Guid userId, Guid clientRegistrationId, string lastSyncedPackageId);
 
-        SyncItemsMetaContainer GetUserArIdsWithOrder(Guid userId, Guid clientRegistrationId, string lastSyncedPackageId);
+        SyncItemsMetaContainer GetUserArIdsWithOrder(Guid userId, Guid deviceId, string lastSyncedPackageId);
 
-        SyncItemsMetaContainer GetInterviewArIdsWithOrder(Guid userId, Guid clientRegistrationId, string lastSyncedPackageId);
+        SyncItemsMetaContainer GetInterviewArIdsWithOrder(Guid userId, Guid deviceId, string lastSyncedPackageId);
 
-        UserSyncPackageDto ReceiveUserSyncPackage(Guid clientRegistrationId, string packageId);
+        UserSyncPackageDto ReceiveUserSyncPackage(Guid deviceId, string packageId, Guid userId);
 
-        QuestionnaireSyncPackageDto ReceiveQuestionnaireSyncPackage(Guid clientRegistrationId, string packageId);
+        QuestionnaireSyncPackageDto ReceiveQuestionnaireSyncPackage(Guid clientRegistrationId, string packageId, Guid userId);
 
-        InterviewSyncPackageDto ReceiveInterviewSyncPackage(Guid clientRegistrationId, string packageId);
+        InterviewSyncPackageDto ReceiveInterviewSyncPackage(Guid clientRegistrationId, string packageId, Guid userId);
 
         string GetPackageIdByTimestamp(Guid userId, DateTime timestamp);
 
-        void LinkUserToDevice(Guid interviewerId, string deviceId);
+        void LinkUserToDevice(Guid interviewerId, string androidId, string oldDeviceId);
     }
 }

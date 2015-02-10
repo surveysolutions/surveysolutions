@@ -63,15 +63,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aggregates\ClientDeviceAR.cs" />
+    <Compile Include="Aggregates\Tablet.cs" />
     <Compile Include="ClientIdentifier.cs" />
-    <Compile Include="Commands\CreateClientDeviceCommand.cs" />
+    <Compile Include="Commands\RegisterTabletCommand.cs" />
+    <Compile Include="Commands\TrackHandshakeCommand.cs" />
     <Compile Include="Documents\ClientDeviceDocument.cs" />
-    <Compile Include="Documents\SyncDeviceRegisterDocument.cs" />
-    <Compile Include="EventHandler\DeviceDenormalizer.cs" />
+    <Compile Include="Documents\TabletDocument.cs" />
+    <Compile Include="EventHandler\TabletDenormalizer.cs" />
     <Compile Include="Events\Sync\ClientDeviceLastSyncItemUpdated.cs" />
     <Compile Include="Events\Sync\NewClientDeviceCreated.cs" />
     <Compile Include="Events\Sync\NewDeviceRegistered.cs" />
+    <Compile Include="Events\Sync\TabletRegistered.cs" />
     <Compile Include="Events\Sync\UpdateRegisteredDevice.cs" />
     <Compile Include="IBackupManager.cs" />
     <Compile Include="IIncomingSyncPackagesQueue.cs" />

@@ -13,10 +13,10 @@
         
         // key provided by client OS as a device identifie
         // could be changed by rooting or system update
-        public string ClientDeviceKey;
+        public string AndroidId;
 
         //identifier of installed version of application
-        public string ClientVersionIdentifier;
+        public string AppVersion;
         
 
         public Guid? LastSyncKey;
