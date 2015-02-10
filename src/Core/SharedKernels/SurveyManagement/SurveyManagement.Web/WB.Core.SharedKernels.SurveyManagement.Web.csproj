@@ -437,6 +437,8 @@
       <DependentUpon>moment.min.js</DependentUpon>
     </None>
     <EmbeddedResource Include="Views\HealthCheck\Index.cshtml" />
+    <EmbeddedResource Include="Content\interview.css" />
+    <EmbeddedResource Include="Views\Interview\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">

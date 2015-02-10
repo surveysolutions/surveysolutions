@@ -1,9 +1,6 @@
 ﻿@using System.Globalization
 @using System.Web.Optimization
-@using Humanizer
 @using Main.Core.Entities.SubEntities
-@using Microsoft.Ajax.Utilities
-@using WB.Core.SharedKernels.DataCollection.Utils
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @using WB.Core.SharedKernels.DataCollection.Views.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Views.Interview
@@ -40,7 +37,7 @@
 
         var filter = { filteredBy: '@Model.Filter' };
 
-        var filteredComboboxes = [@(Html.Raw( string.Join(",", Model.InterviewDetails.Groups.SelectMany(_ => _.Entities).OfType<InterviewQuestionView>().Where(IsFilteredCombobox).Select(_ => string.Format("{{id:'{0}', options:[{1}]}}", getInterviewItemIdWithPostfix(_.Id, _.RosterVector),string.Join(",", _.Options.Select(x=>string.Format("{{value:'{0}', label:'{1}'}}", x.Value, x.Label))))))))];
+        var filteredComboboxes = [@(Html.Raw( string.Join(",", Model.InterviewDetails.Groups.SelectMany(_ => _.Entities).OfType<InterviewQuestionView>().Where(IsFilteredCombobox).Select(_ => string.Format("{{id:'{0}', options:[{1}]}}", getInterviewItemIdWithPostfix(_.Id, _.RosterVector),string.Join(",", _.Options.Select(x=>string.Format("{{value:'{0}', label:'{1}'}}", x.Value, HttpUtility.UrlEncode(x.Label)))))))))];
 
         $(function () {
             window.model = new Supervisor.VM.Details(settings, filter, filteredComboboxes);
@@ -125,39 +122,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="statusHistoryModal" tabindex="-1" role="dialog" aria-labelledby="statusHistoryModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="statusHistoryModalLabel">Interview change status history</h4>
-            </div>
-            <div class="modal-body">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th style="width: 125px">State</th>
-                            <th>with comment</th>
-                            <th style="width: 90px">on</th>
-                            <th>by</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var historyItem in Model.History.StatusHistory)
-                        {
-                            <tr>
-                                <td>@historyItem.Status.ToLocalizeString()</td>
-                                <td>@historyItem.Comment</td>
-                                <td>@historyItem.Date.ToShortDateString()</td>
-                                <td>@historyItem.Responsible</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
+@HistoryOfStatusesView()
 @if (((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor)
          || (Model.InterviewDetails.Status == InterviewStatus.ApprovedBySupervisor && GlobalInfo.IsHeadquarter))
 {
@@ -485,6 +450,44 @@
 {
     @(shouldBeAdded ? style : string.Empty)
 }
+@helper HistoryOfStatusesView()
+{
+    <div class="modal fade" id="statusHistoryModal" tabindex="-1" role="dialog" aria-labelledby="statusHistoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="statusHistoryModalLabel">Interview change status history</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 125px">State</th>
+                                <th>with comment</th>
+                                <th style="width: 90px">on</th>
+                                <th>by</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        
+                            @foreach (var historyItem in Model.History.StatusHistory)
+                            {
+                                <tr>
+                                    <td>@historyItem.Status.ToLocalizeString()</td>
+                                    <td>@historyItem.Comment</td>
+                                    <td>@historyItem.Date.ToShortDateString()</td>
+                                    <td>@historyItem.Responsible</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 @functions
     {
 
