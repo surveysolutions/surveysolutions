@@ -18,7 +18,7 @@ namespace WB.Core.Infrastructure.FileSystem
 
         public HealthCheckStatus Status
         {
-            get { return DenidedFolders.Any() ? HealthCheckStatus.Warning : HealthCheckStatus.Happy; }
+            get { return DenidedFolders.Any() ? HealthCheckStatus.Down : HealthCheckStatus.Happy; }
         }
     }
 }
