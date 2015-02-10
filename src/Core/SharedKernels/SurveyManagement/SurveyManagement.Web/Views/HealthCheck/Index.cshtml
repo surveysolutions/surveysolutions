@@ -10,7 +10,7 @@
 
         <div>
             <div class="panel-body">
-                <div class="well well-sm">Current health check state: &nbsp;<b data-bind="text: status, css: {'has-error': hasErrors, 'has-warning': hasWarnings}"></b></div>
+                <div class="well well-sm">Current health check state: &nbsp;<b class="is-good" data-bind="text: status, css: {'has-error': hasErrors, 'has-warning': hasWarnings}"></b></div>
                 <div class="row">
                     <div class="col-md-12">
                         <ul class="list-group">
@@ -24,12 +24,12 @@
                                 Eventstore connection status
                                 <p data-bind="text:eventstoreConnectionError"></p>
                             </li>
-                            <li class="list-group-item" data-bind="css: {'has-error': numberOfUnhandledPackagesError }">
+                            <li class="list-group-item" data-bind="css: {'has-error': numberOfUnhandledPackagesError() || numberOfUnhandledPackages() > 0 }">
                                 <span class="badge" data-bind="text:numberOfUnhandledPackages"></span>
                                 Number of unhandled packages
                                 <p data-bind="text:numberOfUnhandledPackagesError"></p>
                             </li>
-                            <li class="list-group-item" data-bind="css: {'has-error': numberOfSyncPackagesWithBigSizeError }">
+                            <li class="list-group-item" data-bind="css: {'has-error': numberOfSyncPackagesWithBigSizeError() || numberOfSyncPackagesWithBigSize() > 0 }">
                                 <span class="badge" data-bind="text:numberOfSyncPackagesWithBigSize"></span>
                                 Number of sync packages with size more then 2Mb
                                 <p data-bind="text:numberOfSyncPackagesWithBigSizeError"></p>
@@ -57,6 +57,7 @@
 @section scripts {
 
     <style>
+        b.is-good { color: green; }
         b.has-error, b.has-warning { color: red; text-transform: uppercase; }
         li .badge { background-color: green; }
         li.has-error .badge { background-color: red; }
