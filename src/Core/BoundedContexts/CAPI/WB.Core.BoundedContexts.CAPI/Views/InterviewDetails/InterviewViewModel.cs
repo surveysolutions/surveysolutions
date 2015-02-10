@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
@@ -563,12 +564,14 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public void SetQuestionValidity(string key, bool valid)
         {
-            if (!this.Questions.ContainsKey(key))
-                return;
-
-            var question =
-                this.Questions[key];
-            question.SetValid(valid);
+            if (this.Questions.ContainsKey(key))
+            {
+                this.Questions[key].SetValid(valid);
+            } 
+            else if (this.FeaturedQuestions.ContainsKey(key))
+            {
+                this.FeaturedQuestions[key].SetValid(valid);
+            }
         }
 
         public void SetScreenStatus(string key, bool enabled)
