@@ -1,12 +1,11 @@
 using System;
 using Microsoft.Practices.ServiceLocation;
-using Ninject;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Frames;
 
-namespace WB.UI.QuestionnaireTester.Implementations.Fragments
+namespace WB.UI.QuestionnaireTester.Controls.Fragments
 {
     public class TesterGridContentFragment : GridContentFragment
     {

@@ -4,9 +4,9 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
-using WB.UI.QuestionnaireTester.Implementations.Fragments;
+using WB.UI.QuestionnaireTester.Controls.Fragments;
 
-namespace WB.UI.QuestionnaireTester.Views
+namespace WB.UI.QuestionnaireTester.Mvvm.Views
 {
     [Activity(WindowSoftInputMode = SoftInput.AdjustPan,
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize, Theme = "@style/Theme.Tester")]

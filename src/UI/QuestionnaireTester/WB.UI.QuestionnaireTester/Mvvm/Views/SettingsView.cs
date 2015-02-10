@@ -1,14 +1,14 @@
 ﻿using Android.App;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 
-namespace WB.UI.QuestionnaireTester.Views
+namespace WB.UI.QuestionnaireTester.Mvvm.Views
 {
     [Activity(Theme = "@style/Theme.Tester")]
-    public class HelpView : BaseActivityView<HelpViewModel>
+    public class SettingsView : BaseActivityView<SettingsViewModel>
     {
         protected override int ViewResourceId
         {
-            get { return Resource.Layout.Help; }
+            get { return Resource.Layout.Settings; }
         }
     }
 }

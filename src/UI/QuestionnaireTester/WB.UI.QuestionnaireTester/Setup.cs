@@ -6,7 +6,7 @@ using Cirrious.MvvmCross.Binding.Bindings.Target.Construction;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.UI.QuestionnaireTester.Controls;
-using WB.UI.QuestionnaireTester.CustomBindings;
+using WB.UI.QuestionnaireTester.Mvvm.CustomBindings;
 using WB.UI.Shared.Android;
 using Xamarin;
 

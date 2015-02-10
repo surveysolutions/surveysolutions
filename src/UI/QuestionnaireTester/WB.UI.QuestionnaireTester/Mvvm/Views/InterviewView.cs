@@ -7,13 +7,12 @@ using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.UI.QuestionnaireTester.Implementations.Adapters;
+using WB.UI.QuestionnaireTester.Controls.Adapters;
 using WB.UI.Shared.Android.Activities;
 using WB.UI.Shared.Android.Adapters;
-using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.QuestionnaireTester.Extensions;
 
-namespace WB.UI.QuestionnaireTester.Views
+namespace WB.UI.QuestionnaireTester.Mvvm.Views
 {
     [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class InterviewView : DetailsActivity

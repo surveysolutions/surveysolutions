@@ -6,7 +6,7 @@ using Cirrious.MvvmCross.Plugins.Color;
 using WB.Core.SharedKernels.DataCollection;
 using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion;
 
-namespace WB.UI.QuestionnaireTester.ValueContervers
+namespace WB.UI.QuestionnaireTester.Mvvm.ValueContervers
 {
     public class QuestionnaireVersionToColorValueConverter : MvxColorValueConverter
     {

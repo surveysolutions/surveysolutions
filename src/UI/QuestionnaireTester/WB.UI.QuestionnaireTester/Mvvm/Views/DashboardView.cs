@@ -4,7 +4,7 @@ using Android.Support.V4.Widget;
 using Android.Widget;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 
-namespace WB.UI.QuestionnaireTester.Views
+namespace WB.UI.QuestionnaireTester.Mvvm.Views
 {
     [Activity(Theme = "@style/Theme.Tester")]
     public class DashboardView : BaseActivityView<DashboardViewModel>

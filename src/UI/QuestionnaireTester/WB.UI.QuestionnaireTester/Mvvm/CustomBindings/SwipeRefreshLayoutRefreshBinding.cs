@@ -1,30 +1,30 @@
 ﻿using System;
-using Android.Widget;
 using Cirrious.MvvmCross.Binding;
 using Cirrious.MvvmCross.Binding.Droid.Target;
 using Cirrious.MvvmCross.ViewModels;
+using WB.UI.QuestionnaireTester.Controls;
 
-namespace WB.UI.QuestionnaireTester.CustomBindings
+namespace WB.UI.QuestionnaireTester.Mvvm.CustomBindings
 {
 
-    public class SearchViewQueryTextSubmitBinding : MvxAndroidTargetBinding
+    public class SwipeRefreshLayoutRefreshBinding : MvxAndroidTargetBinding
     {
-        protected new SearchView Target
+        protected new MvxSwipeRefreshLayout Target
         {
-            get { return (SearchView)base.Target; }
+            get { return (MvxSwipeRefreshLayout)base.Target; }
         }
 
-        public SearchViewQueryTextSubmitBinding(SearchView target)
+        public SwipeRefreshLayoutRefreshBinding(MvxSwipeRefreshLayout target)
             : base(target)
         {
         }
 
         public override void SubscribeToEvents()
         {
-            Target.QueryTextSubmit += TargetChanged;
+            Target.Refresh += TargetRefreshChanged;
         }
 
-        private void TargetChanged(object sender, SearchView.QueryTextSubmitEventArgs e)
+        private void TargetRefreshChanged(object sender, EventArgs eventArgs)
         {
             if (Target == null)
                 return;
@@ -35,8 +35,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             if (!Command.CanExecute())
                 return;
 
-            e.Handled = true;
-            Command.Execute(e.Query);
+            Command.Execute();
         }
 
         protected override void SetValueImpl(object target, object value)
@@ -65,7 +64,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             {
                 if (Target != null)
                 {
-                    Target.QueryTextSubmit -= TargetChanged;
+                    Target.Refresh -= TargetRefreshChanged;
                 }
             }
             base.Dispose(isDisposing);

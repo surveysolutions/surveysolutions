@@ -1,10 +1,10 @@
 using Android.OS;
-using Cirrious.MvvmCross.Droid.Views;
+using Cirrious.MvvmCross.Droid.Fragging;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 
-namespace WB.UI.QuestionnaireTester.Views
+namespace WB.UI.QuestionnaireTester.Mvvm.Views
 {
-    public abstract class BaseActivityView<TViewModel> : MvxActivity
+    public abstract class BaseFragmentActivityView<TViewModel> : MvxFragmentActivity
         where TViewModel : BaseViewModel
     {
         protected abstract int ViewResourceId { get; }

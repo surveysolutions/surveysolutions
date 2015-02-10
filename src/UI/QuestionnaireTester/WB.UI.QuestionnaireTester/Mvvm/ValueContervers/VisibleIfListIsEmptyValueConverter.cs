@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using Cirrious.MvvmCross.Plugins.Visibility;
 
-namespace WB.UI.QuestionnaireTester.ValueContervers
+namespace WB.UI.QuestionnaireTester.Mvvm.ValueContervers
 {
     public class VisibleIfListIsEmptyValueConverter : MvxVisibilityValueConverter
     {

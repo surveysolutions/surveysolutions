@@ -1,42 +1,34 @@
 ﻿using System;
-using Android.Widget;
 using Cirrious.MvvmCross.Binding;
 using Cirrious.MvvmCross.Binding.Droid.Target;
-using Cirrious.MvvmCross.ViewModels;
+using WB.UI.QuestionnaireTester.Controls;
 
-namespace WB.UI.QuestionnaireTester.CustomBindings
+namespace WB.UI.QuestionnaireTester.Mvvm.CustomBindings
 {
 
-    public class SearchViewQueryTextChangeBinding : MvxAndroidTargetBinding
+    public class SwipeRefreshLayoutRefreshingBinding : MvxAndroidTargetBinding
     {
-        protected new SearchView Target
+        protected new MvxSwipeRefreshLayout Target
         {
-            get { return (SearchView)base.Target; }
+            get { return (MvxSwipeRefreshLayout)base.Target; }
         }
 
-        public SearchViewQueryTextChangeBinding(SearchView target)
+        public SwipeRefreshLayoutRefreshingBinding(MvxSwipeRefreshLayout target)
             : base(target)
         {
         }
 
         public override void SubscribeToEvents()
         {
-            Target.QueryTextChange += TargetChanged;
+            Target.Refresh += TargetRefreshChanged;
         }
 
-        private void TargetChanged(object sender, SearchView.QueryTextChangeEventArgs e)
+        private void TargetRefreshChanged(object sender, EventArgs eventArgs)
         {
             if (Target == null)
                 return;
 
-            if (Command == null)
-                return;
-
-            if (!Command.CanExecute())
-                return;
-
-            e.Handled = true;
-            Command.Execute(e.NewText);
+            FireValueChanged(Target.Refreshing);
         }
 
         protected override void SetValueImpl(object target, object value)
@@ -44,14 +36,12 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             if (Target == null)
                 return;
 
-            Command = (IMvxCommand)value;
+            Target.Refreshing = (bool)value;
         }
-
-        private IMvxCommand Command;
 
         public override Type TargetType
         {
-            get { return typeof (IMvxCommand); }
+            get { return typeof (bool); }
         }
 
         public override MvxBindingMode DefaultMode
@@ -65,7 +55,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             {
                 if (Target != null)
                 {
-                    Target.QueryTextChange -= TargetChanged;
+                    Target.Refresh -= TargetRefreshChanged;
                 }
             }
             base.Dispose(isDisposing);
