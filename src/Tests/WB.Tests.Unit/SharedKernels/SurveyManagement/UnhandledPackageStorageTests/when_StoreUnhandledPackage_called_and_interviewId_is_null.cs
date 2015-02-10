@@ -20,16 +20,23 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UnhandledPackageStorageTe
             fileSystemAccessorMock.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
                 .Returns<string, string>(Path.Combine);
 
+            fileSystemAccessorMock.Setup(x => x.GetFileNameWithoutExtension(Moq.It.IsAny<string>()))
+                .Returns(unhandledPackageName);
             unhandledPackageStorage = CreateUnhandledPackageStorage(fileSystemAccessor: fileSystemAccessorMock.Object);
         };
 
         Because of = () =>
-            unhandledPackageStorage.StoreUnhandledPackage("test",null);
+            unhandledPackageStorage.StoreUnhandledPackage(unhandledPackageName, null, nullReferenceException);
 
         It should_copy_package_to_error_folder = () =>
-           fileSystemAccessorMock.Verify(x => x.CopyFileOrDirectory("test",@"App_Data\IncomingDataWithErrors"), Times.Once);
+           fileSystemAccessorMock.Verify(x => x.CopyFileOrDirectory(unhandledPackageName, @"App_Data\IncomingDataWithErrors"), Times.Once);
+
+        It should_create_exception_file_with_exception_message = () =>
+         fileSystemAccessorMock.Verify(x => x.WriteAllText(string.Format(@"App_Data\IncomingDataWithErrors\{0}.exception", unhandledPackageName), nullReferenceException.Message + " "), Times.Once);
 
         private static UnhandledPackageStorage unhandledPackageStorage;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
+        private static NullReferenceException nullReferenceException = new NullReferenceException("test message");
+        private static string unhandledPackageName = "test";
     }
 }
