@@ -117,31 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CumulativeChart" xml:space="preserve">
-    <value>Cumulative Interview Chart</value>
-  </data>
-  <data name="Interviews" xml:space="preserve">
-    <value>Interviews</value>
-  </data>
-  <data name="MapReport" xml:space="preserve">
-    <value>Map Report</value>
-  </data>
-  <data name="Questionnaires" xml:space="preserve">
-    <value>Questionnaires</value>
-  </data>
   <data name="QueueSizeTitle" xml:space="preserve">
     <value>Number of synchronized interviews, but unprocessed yet</value>
-  </data>
-  <data name="Reports" xml:space="preserve">
-    <value>Reports</value>
-  </data>
-  <data name="Supervisors" xml:space="preserve">
-    <value>Supervisors</value>
-  </data>
-  <data name="SurveysAndStatuses" xml:space="preserve">
-    <value>Surveys and Statuses</value>
-  </data>
-  <data name="TeamsAndStatuses" xml:space="preserve">
-    <value>Teams and Statuses</value>
   </data>
 </root>

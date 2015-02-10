@@ -86,7 +86,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             CommandRegistry
                 .Setup<Interview>()
                 .InitializesWith<ApplySynchronizationMetadata>(command => command.InterviewId, (command, aggregate) => aggregate.ApplySynchronizationMetadata(command.Id, command.UserId, command.QuestionnaireId, command.QuestionnaireVersion, command.InterviewStatus, command.FeaturedQuestionsMeta, command.Comments, command.Valid, command.CreatedOnClient))
-                .InitializesWith<SynchronizeInterviewEvents>(command => command.InterviewId, (command, aggregate) => aggregate.SynchronizeInterviewEvents(command.UserId, command.QuestionnaireId, command.QuestionnaireVersion, command.InterviewStatus, command.SynchronizedEvents, command.CreatedOnClient))
+                .InitializesWith<SynchronizeInterviewEventsCommand>(command => command.InterviewId, (command, aggregate) => aggregate.SynchronizeInterviewEvents(command.UserId, command.QuestionnaireId, command.QuestionnaireVersion, command.InterviewStatus, command.SynchronizedEvents, command.CreatedOnClient))
                
                 .InitializesWith<CreateInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterview(command.QuestionnaireId, command.QuestionnaireVersion, command.SupervisorId, command.AnswersToFeaturedQuestions, command.AnswersTime, command.UserId))
                 .InitializesWith<CreateInterviewCreatedOnClientCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewCreatedOnClient(command.QuestionnaireId, command.QuestionnaireVersion, command.InterviewStatus, command.FeaturedQuestionsMeta, command.IsValid, command.UserId))

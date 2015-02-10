@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
-    public class SynchronizeInterviewEvents : InterviewCommand
+    public class SynchronizeInterviewEventsCommand : InterviewCommand
     {
         public Guid QuestionnaireId { get; set; }
 
@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 
         public bool CreatedOnClient { get; set; }
 
-        public SynchronizeInterviewEvents(Guid interviewId, Guid userId, Guid questionnaireId, long questionnaireVersion, object[] synchronizedEvents, InterviewStatus interviewStatus, bool createdOnClient)
+        public SynchronizeInterviewEventsCommand(Guid interviewId, Guid userId, Guid questionnaireId, long questionnaireVersion, object[] synchronizedEvents, InterviewStatus interviewStatus, bool createdOnClient)
             : base(interviewId, userId)
         {
             QuestionnaireId = questionnaireId;

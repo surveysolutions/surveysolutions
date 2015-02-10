@@ -61,83 +61,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cumulative Interview Chart.
-        /// </summary>
-        internal static string CumulativeChart {
-            get {
-                return ResourceManager.GetString("CumulativeChart", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Interviews.
-        /// </summary>
-        internal static string Interviews {
-            get {
-                return ResourceManager.GetString("Interviews", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Map Report.
-        /// </summary>
-        internal static string MapReport {
-            get {
-                return ResourceManager.GetString("MapReport", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Questionnaires.
-        /// </summary>
-        internal static string Questionnaires {
-            get {
-                return ResourceManager.GetString("Questionnaires", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Number of synchronized interviews, but unprocessed yet.
         /// </summary>
         internal static string QueueSizeTitle {
             get {
                 return ResourceManager.GetString("QueueSizeTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Reports.
-        /// </summary>
-        internal static string Reports {
-            get {
-                return ResourceManager.GetString("Reports", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Supervisors.
-        /// </summary>
-        internal static string Supervisors {
-            get {
-                return ResourceManager.GetString("Supervisors", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surveys and Statuses.
-        /// </summary>
-        internal static string SurveysAndStatuses {
-            get {
-                return ResourceManager.GetString("SurveysAndStatuses", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Teams and Statuses.
-        /// </summary>
-        internal static string TeamsAndStatuses {
-            get {
-                return ResourceManager.GetString("TeamsAndStatuses", resourceCulture);
             }
         }
     }

@@ -48,7 +48,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
         public void SendSyncItem(string item)
         {
-            this.incomingSyncPackagesQueue.PushSyncItem(item);
+            this.incomingSyncPackagesQueue.Enqueue(item);
         }
 
         public IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, string lastSyncedPackageId)

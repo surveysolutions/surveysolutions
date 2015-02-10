@@ -232,7 +232,7 @@
 }
 @helper DrawQuestionRow(InterviewQuestionView entity)
 {
-    <tr id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, "answerRow")"  class="@css("danger", !entity.IsValid && entity.IsEnabled) @css("mandatory", entity.IsMandatory) @css("text-muted", !entity.IsEnabled)">
+    <tr id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, "answerRow")" class="@css("danger", !entity.IsValid && entity.IsEnabled) @css("mandatory", entity.IsMandatory) @css("text-muted", !entity.IsEnabled)">
         <td class="answer-status">
             <div class="btn btn-xs @css("btn-info", entity.IsFlagged) @css("btn-default", !entity.IsFlagged)" data-bind="click: flagAnswer.bind($data, $element, '@entity.Id', '@Stringify(entity.RosterVector)')">
                 <i class="glyphicon glyphicon-flag"></i>
@@ -292,14 +292,14 @@
                                         var optionValue = option.Value.ToString();
                                         var isChecked = entity.Answer != null && Convert.ToDecimal(entity.Answer) == Convert.ToDecimal(option.Value);
 
-                                <label class="radio" for="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, string.Format("option{0}", optionValue))">
-                                    <input type="radio" name="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector)" id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, string.Format("option{0}", optionValue))" value="@optionValue" @(isChecked ? "checked" : "")
-                                           data-bind="click: saveCategoricalOneAnswer.bind($data, '@entity.Id', '@Stringify(entity.RosterVector)')">
-                                    <span>@option.Label</span>
-                                </label>
-                            }
-                        }
-                        break;
+                                        <label class="radio" for="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, string.Format("option{0}", optionValue))">
+                                            <input type="radio" name="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector)" id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, string.Format("option{0}", optionValue))" value="@optionValue" @(isChecked ? "checked" : "")
+                                                   data-bind="click: saveCategoricalOneAnswer.bind($data, '@entity.Id', '@Stringify(entity.RosterVector)')">
+                                            <span>@option.Label</span>
+                                        </label>
+                                    }
+                                }
+                                break;
                     case QuestionType.MultyOption:
                                 var multiQuestionSettings = entity.Settings as MultiQuestionSettings;
                                 var answers = (decimal[])entity.Answer;
@@ -307,7 +307,7 @@
                                 foreach (var option in entity.Options)
                                 {
                                     var optionValue = option.Value.ToString();
-                                    var isChecked = answers != null && (answers).Contains(Convert.ToDecimal(option.Value));
+                                    var isChecked = answers != null && answers.Contains(Convert.ToDecimal(option.Value));
 
                                     <label class="checkbox" for="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, string.Format("option{0}", optionValue))">
                                         <input type="checkbox" name="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector)" id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, string.Format("option{0}", optionValue))" value="@optionValue" @(isChecked ? "checked" : "")
@@ -360,25 +360,39 @@
                         break;
                     case QuestionType.MultyOption:
                         var multiQuestionSettings = entity.Settings as MultiQuestionSettings;
-                        
+
                         foreach (var option in entity.Options)
                         {
                             string optionValue;
-                            bool isChecked;
-                            int orderIndex;
+                            bool isChecked = false;
+                            int orderIndex = 0;
                             if (multiQuestionSettings.IsLinked)
                             {
-                                var answers = (decimal[][])entity.Answer;
-                                orderIndex = answers.Select((item, index) => new { index, item }).First(_ => _.item.SequenceEqual((decimal[])option.Value)).index + 1;
                                 optionValue = Stringify((decimal[])option.Value);
-                                isChecked = entity.Answer != null && ((decimal[][])entity.Answer).Contains((decimal[])option.Value);
+
+                                if (entity.Answer != null)
+                                {
+                                    var answers = (decimal[][])entity.Answer;
+                                    isChecked = answers.Contains((decimal[])option.Value);
+                                    if (isChecked)
+                                    {
+                                        orderIndex = answers.Select((item, index) => new { index, item }).First(_ => _.item.SequenceEqual((decimal[])option.Value)).index + 1;
+                                    }
+                                }
                             }
                             else
                             {
-                                var answers = (decimal[])entity.Answer;
-                                orderIndex = answers.Select((item, index) => new {index, item}).First(_ => _.item == (decimal) option.Value).index + 1;
                                 optionValue = option.Value.ToString();
-                                isChecked = entity.Answer != null && ((decimal[])entity.Answer).Contains(Convert.ToDecimal(option.Value));
+
+                                if (entity.Answer != null)
+                                {
+                                    var answers = (decimal[])entity.Answer;
+                                    isChecked = answers.Contains((decimal)option.Value);
+                                    if (isChecked)
+                                    {
+                                        orderIndex = answers.Any() ? answers.Select((item, index) => new { index, item }).First(_ => _.item == Convert.ToDecimal(option.Value)).index + 1 : 0;
+                                    }
+                                }
                             }
 
                             <label class="checkbox" for="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, string.Format("option{0}", optionValue))">

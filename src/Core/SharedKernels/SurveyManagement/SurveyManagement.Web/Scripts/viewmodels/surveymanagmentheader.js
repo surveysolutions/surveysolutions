@@ -1,9 +1,8 @@
 ﻿Supervisor.VM.SurveyManagmentHeader = function (updateIncomingPackagesQueueApiUrl, holderId) {
     var self = this;
     self.holder = $(holderId);
-    self.holder.html('-');
     self.load = function () {
-        setInterval(self.updateIncomingPackagesQueue, 3000);
+        self.updateIncomingPackagesQueue();
     };
 
     self.updateIncomingPackagesQueue = function () {
@@ -14,8 +13,16 @@
             type: 'get',
             headers: requestHeaders,
             dataType: 'json'
-        }).done(function(data) {
-            self.holder.html(data);
+        }).success(function (data) {
+            self.holder.find('.sync-queue-size').text(data);
+            if (data > 0) {
+                self.holder.fadeIn();
+            } else {
+                self.holder.fadeOut();
+            }
+        })
+        .complete(function() {
+            _.delay(self.updateIncomingPackagesQueue, 3000);
         });
     };
 }
