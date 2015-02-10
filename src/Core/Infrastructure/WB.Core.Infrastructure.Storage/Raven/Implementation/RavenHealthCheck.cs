@@ -23,7 +23,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation
             }
             catch (Exception e)
             {
-                return ConnectionHealthCheckResult.Down(e.Message);
+                return ConnectionHealthCheckResult.Down("Can't connect to Raven. " + e.Message);
             }
         }
     }

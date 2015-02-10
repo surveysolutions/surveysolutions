@@ -2,7 +2,7 @@
 {
     public enum HealthCheckStatus
     {
-        Happy,
+        Happy = 1,
         Warning,
         Down
     }
