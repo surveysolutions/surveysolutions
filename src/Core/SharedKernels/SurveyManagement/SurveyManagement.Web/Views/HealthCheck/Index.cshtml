@@ -10,7 +10,7 @@
 
         <div>
             <div class="panel-body">
-                <div class="well well-sm">Current health check state: &nbsp;<b data-bind="text: status, css: {'has-error': hasErrors, 'has-error': hasWarnings}"></b></div>
+                <div class="well well-sm">Current health check state: &nbsp;<b data-bind="text: status, css: {'has-error': hasErrors, 'has-warning': hasWarnings}"></b></div>
                 <div class="row">
                     <div class="col-md-12">
                         <ul class="list-group">
@@ -57,7 +57,8 @@
 @section scripts {
 
     <style>
-        b.has-error { color: red; }
+        b.has-error, b.has-warning { color: red; text-transform: uppercase; }
+        li .badge { background-color: green; }
         li.has-error .badge { background-color: red; }
         li.has-error { color: red; }
     </style>
