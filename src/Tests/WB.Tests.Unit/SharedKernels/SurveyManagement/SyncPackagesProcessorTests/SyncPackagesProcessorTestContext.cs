@@ -18,25 +18,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
 {
     internal class SyncPackagesProcessorTestContext
     {
-        const string AppDataDirectory = "App_Data";
-        const string IncomingCapiPackagesDirectoryName = "IncomingData";
-        const string IncomingCapiPackagesWithErrorsDirectoryName = "IncomingDataWithErrors";
-        const string IncomingCapiPackageFileNameExtension = "sync";
-
-        protected static SyncPackagesProcessor CreateSyncPackagesProcessor(IJsonUtils jsonUtils = null,
-            IFileSystemAccessor fileSystemAccessor = null, ICommandService commandService = null, IArchiveUtils archiver = null, IIncomingSyncPackagesQueue incomingSyncPackagesQueue = null, IUnhandledPackageStorage unhandledPackageStorage=null)
+        protected static SyncPackagesProcessor CreateSyncPackagesProcessor(
+            ICommandService commandService = null,  IIncomingSyncPackagesQueue incomingSyncPackagesQueue = null, IUnhandledPackageStorage unhandledPackageStorage=null)
         {
             return new SyncPackagesProcessor(logger: Mock.Of<ILogger>(),
-                syncSettings:
-                    new SyncSettings(AppDataDirectory, IncomingCapiPackagesWithErrorsDirectoryName,
-                        IncomingCapiPackageFileNameExtension, IncomingCapiPackagesDirectoryName, ""),
                 commandService: commandService ?? Mock.Of<ICommandService>(),
-                fileSystemAccessor: fileSystemAccessor ?? CreateDefaultFileSystemAccessorMock().Object,
-                jsonUtils: jsonUtils ?? Mock.Of<IJsonUtils>(),
-                archiver: archiver ?? Mock.Of<IArchiveUtils>(),
                 incomingSyncPackagesQueue: incomingSyncPackagesQueue ?? Mock.Of<IIncomingSyncPackagesQueue>(),
                 unhandledPackageStorage: unhandledPackageStorage??Mock.Of<IUnhandledPackageStorage>());
         }
+
+      /*  const string AppDataDirectory = "App_Data";
+        const string IncomingCapiPackagesDirectoryName = "IncomingData";
+        const string IncomingCapiPackagesWithErrorsDirectoryName = "IncomingDataWithErrors";
+        const string IncomingCapiPackageFileNameExtension = "sync";
 
         protected static string GetPathToSynchItemInErrorFolder(Guid syncItemId)
         {
@@ -49,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
             return string.Format(@"{0}\{1}\{2}.{3}", AppDataDirectory, IncomingCapiPackagesDirectoryName, syncItemId,
                 IncomingCapiPackageFileNameExtension);
         }
-
+        */
         protected static string GetSyncItemAsString(SyncItem item)
         {
             return JsonConvert.SerializeObject(item, Formatting.None, new JsonSerializerSettings

@@ -2,8 +2,9 @@
 {
     public interface IIncomingSyncPackagesQueue
     {
-        void PushSyncItem(string item);
+        void Enqueue(string item);
         int QueueLength { get; }
-        string DeQueue();
+        IncomingSyncPackage DeQueue();
+        void DeleteSyncItem(string syncItemPath);
     }
 }

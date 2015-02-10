@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
         };
 
         Because of = () =>
-            incomingSyncPackagesQueue.PushSyncItem(contentOfSyncItem);
+            incomingSyncPackagesQueue.Enqueue(contentOfSyncItem);
 
         It should_write_text_file_to_error_folder = () =>
           fileSystemAccessorMock.Verify(x => x.WriteAllText(Moq.It.IsAny<string>(), contentOfSyncItem), Times.Once);
