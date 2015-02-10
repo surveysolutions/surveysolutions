@@ -4,7 +4,7 @@
     {
         void Enqueue(string item);
         int QueueLength { get; }
-        IncomingSyncPackages DeQueue();
+        IncomingSyncPackage DeQueue();
         void DeleteSyncItem(string syncItemPath);
     }
 }
