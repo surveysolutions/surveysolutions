@@ -40,7 +40,7 @@
 
         var filter = { filteredBy: '@Model.Filter' };
 
-        var filteredComboboxes = [@(Html.Raw( string.Join(",", Model.InterviewDetails.Groups.SelectMany(_ => _.Entities).OfType<InterviewQuestionView>().Where(IsFilteredCombobox).Select(_ => string.Format("{{id:'{0}', options:[{1}]}}", getInterviewItemIdWithPostfix(_.Id, _.RosterVector),string.Join(",", _.Options.Select(x=>string.Format("{{value:'{0}', label:'{1}'}}", x.Value, x.Label))))))))];
+        var filteredComboboxes = [@(Html.Raw( string.Join(",", Model.InterviewDetails.Groups.SelectMany(_ => _.Entities).OfType<InterviewQuestionView>().Where(IsFilteredCombobox).Select(_ => string.Format("{{id:'{0}', options:[{1}]}}", getInterviewItemIdWithPostfix(_.Id, _.RosterVector),string.Join(",", _.Options.Select(x=>string.Format("{{value:'{0}', label:'{1}'}}", x.Value, HttpUtility.UrlEncode(x.Label)))))))))];
 
         $(function () {
             window.model = new Supervisor.VM.Details(settings, filter, filteredComboboxes);

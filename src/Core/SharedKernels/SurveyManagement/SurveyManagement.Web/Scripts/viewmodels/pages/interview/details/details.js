@@ -5,7 +5,13 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
         config = new Config(),
         datacontext = new DataContext(config, settings.Interview.InterviewId);
 
-    self.filteredComboboxes = filteredComboboxes;
+    self.filteredComboboxes = filteredComboboxes.map(function(combobox) {
+        combobox.options = combobox.options.map(function(option) {
+            option.label = decodeURIComponent(option.label);
+            return option;
+        });
+        return combobox;
+    });
     self.changeStateComment = ko.observable('');
 
     self.addComment = function (element, questionId, underscoreJoinedQuestionRosterVector) {
@@ -158,7 +164,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
                 ko.bindingHandlers.numericformatter.update(item, ko.observable($(item).val()));
             });
         });
-        _.forEach(self.filteredComboboxes, function(filteredCombobox) {
+        _.forEach(self.filteredComboboxes, function (filteredCombobox) {
             var filteredComboboxElement = $("#" + filteredCombobox.id);
 
             filteredCombobox.selectedValue = ko.observable({ id: ko.observable(), value: ko.observable() });
