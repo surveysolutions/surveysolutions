@@ -3,7 +3,7 @@
 <tr>
     <td colspan="4" class="static-text">
         <div class="cell-content">
-            <span data-bind="html: staticText">@Model.Text</span>
+            <span data-bind="html: staticText">@Html.Raw(Model.Text)</span>
         </div>
     </td>
 </tr>
