@@ -2,8 +2,10 @@
 @using System.Web.Optimization
 @using Humanizer
 @using Main.Core.Entities.SubEntities
+@using Microsoft.Ajax.Utilities
 @using WB.Core.SharedKernels.DataCollection.Utils
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
+@using WB.Core.SharedKernels.DataCollection.Views.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Views.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @using WB.Core.SharedKernels.SurveyManagement.Web.Models
@@ -61,7 +63,7 @@
                 @foreach (var group in Model.InterviewDetails.Groups)
                 {
                     <li class="list-group-item @SetGroupLevelClass(group.Depth)">
-                        <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.All, currentGroupId = group.Id})">@group.Title</a>
+                        <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.All, currentGroupId = group.Id, rosterVector=Stringify(group.RosterVector)})">@group.Title</a>
                     </li>
                 }
             </ul>
@@ -331,7 +333,11 @@
                         var singleOptionSetting = entity.Settings as SingleQuestionSettings;
                         if (singleOptionSetting.IsCascade || singleOptionSetting.IsFilteredCombobox)
                         {
-                            @entity.Answer
+                            if (entity.Answer != null)
+                            {
+                                var answer = Convert.ToDecimal(entity.Answer);
+                                @entity.Options.First(option=>answer == Convert.ToDecimal(option.Value)).Label
+                            }
                         }
                         else
                         {
@@ -410,9 +416,30 @@
                     case QuestionType.DateTime:
                     case QuestionType.Text:
                     case QuestionType.QRBarcode:
-                    case QuestionType.TextList:
-                    case QuestionType.GpsCoordinates:
                     @entity.AnswerString
+                        break;
+                    case QuestionType.GpsCoordinates:
+                        if (entity.Answer != null)
+                        {
+                            var geoLocationAnswer = entity.Answer as GeoPosition;
+                            <span data-bind="template: { name: questionType }">
+                                <div>latitude: <span>@geoLocationAnswer.Latitude</span></div>
+                                <div>longitude: <span>@geoLocationAnswer.Longitude</span></div>
+                                <div>accuracy: <span>@geoLocationAnswer.Accuracy</span></div>
+                                <div>altitude: <span>@geoLocationAnswer.Altitude</span></div>
+                                <div>time stamp: <span data-bind="text: moment('@geoLocationAnswer.Timestamp.ToLocalTime()').format('lll')"></span></div>
+                            </span>
+                        }
+                        break;
+                    case QuestionType.TextList:
+                        if (entity.Answer != null)
+                        {
+                            var textListAnswer = entity.Answer as InterviewTextListAnswers;
+                            foreach (var interviewTextListAnswer in textListAnswer.Answers)
+                            {
+                                <div><span>@interviewTextListAnswer.Answer</span></div>
+                            }
+                        }
                         break;
                     case QuestionType.Multimedia:
                     <img src="@Url.RouteUrl("Default", new {httproute = "", controller = "Resource", action = "InterviewFile", interviewid = Model.InterviewDetails.PublicKey, filename = entity.Answer})" />
