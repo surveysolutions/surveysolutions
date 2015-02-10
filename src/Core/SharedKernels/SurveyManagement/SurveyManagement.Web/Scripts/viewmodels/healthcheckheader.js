@@ -3,7 +3,7 @@
     self.holder = $(controlId);
 
     self.load = function () {
-        setInterval(self.updateHealthCheckStatus, 5000);
+        self.updateHealthCheckStatus();
     };
 
     self.updateHealthCheckStatus = function () {
@@ -14,8 +14,10 @@
             type: 'get',
             headers: requestHeaders,
             dataType: 'text'
-        }).done(function(data) {
+        }).success(function (data) {
             self.updateIconByStatus(data);
+        }).complete(function () {
+            _.delay(self.updateHealthCheckStatus, 3000);
         });
     };
 
