@@ -44,7 +44,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.interviewDetailsViewFactory = interviewDetailsViewFactory;
         }
 
-        public ActionResult Details(Guid id, InterviewDetailsFilter? filter, Guid? currentGroupId)
+        private decimal[] ParseRosterVector(string rosterVectorAsString)
+        {
+            if (string.IsNullOrEmpty(rosterVectorAsString))
+                return new decimal[0];
+
+            return rosterVectorAsString.Split('_').Select(vector => decimal.Parse(vector.Replace('-', '.'))).ToArray();
+        }
+
+        public ActionResult Details(Guid id, InterviewDetailsFilter? filter, Guid? currentGroupId, string rosterVector)
         {
             this.ViewBag.ActivePage = MenuItem.Docs;
 
@@ -83,13 +91,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             var selectedGroups = new List<InterviewGroupView>();
 
-            var currentGroup = interviewDetailsView.Groups.Find(group => currentGroupId != null && group.Id == currentGroupId);
+            var currentGroup = interviewDetailsView.Groups.Find(group => currentGroupId != null && group.Id == currentGroupId && group.RosterVector.SequenceEqual(ParseRosterVector(rosterVector)));
 
             foreach (var interviewGroupView in interviewDetailsView.Groups)
             {
                 if (currentGroup != null && currentGroup.ParentId.HasValue)
                 {
-                    if (interviewGroupView.Id == currentGroup.Id || selectedGroups.Any(_ => _.Id == interviewGroupView.ParentId))
+                    if (interviewGroupView.Id == currentGroup.Id && interviewGroupView.RosterVector.SequenceEqual(currentGroup.RosterVector) || selectedGroups.Any(_ => _.Id == interviewGroupView.ParentId))
                     {
                         selectedGroups.Add(interviewGroupView);
                     }
