@@ -14,7 +14,7 @@
     <td style="width: 50%">
         <div class="@css("featured", Model.IsFeatured)">
             <span class="icon-star"></span>
-            <span>@Model.Title</span>
+            <span>@Html.Raw(Model.Title)</span>
         </div>
     </td>
     <td class="question-answer">
