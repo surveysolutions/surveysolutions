@@ -254,6 +254,7 @@
     <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\DesignerQuestionnairesApiControllerTestsContext.cs" />
     <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception.cs" />
     <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\when_requesting_questionnaire_and_designer_service_throws_fault_exception.cs" />
+    <Compile Include="BoundedContexts\Capi\InterviewViewModelTests\when_setting_validity_to_answered_prefilled_question_in_interview.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_and_providing_existing_targetId.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_and_source_not_present.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_without_permissions_to_edit_questionnaire.cs" />
