@@ -36,7 +36,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             if (this.cache.Contains("incomingPackagesQueueLength"))
             {
-                return (int) this.cache.Get("incomingPackagesQueueLength");
+                return (int)this.cache.Get("incomingPackagesQueueLength");
             }
 
             int incomingPackagesQueueLength = this.incomingSyncPackagesQueue.QueueLength;
