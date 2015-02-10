@@ -2,7 +2,6 @@
 @using System.Web.Optimization
 @using Main.Core.Entities.SubEntities
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
-@using WB.Core.SharedKernels.DataCollection.Views.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Views.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @using WB.Core.SharedKernels.SurveyManagement.Web.Models
@@ -107,11 +106,11 @@
                                 {
                                     if (entity is InterviewStaticTextView)
                                     {
-                                        @DrawStaticTextRow(entity as InterviewStaticTextView)
+                                        @Html.Partial("StaticTextPartialView", entity as InterviewStaticTextView)
                                     }
                                     if (entity is InterviewQuestionView)
                                     {
-                                        @DrawQuestionRow(entity as InterviewQuestionView)
+                                        @Html.Partial("QuestionPartialView", entity as InterviewQuestionView, new ViewDataDictionary{{ "InterviewId", Model.InterviewDetails.PublicKey}})
                                     }
                                 }
                             </tbody>
@@ -122,48 +121,8 @@
         </div>
     </div>
 </div>
-@HistoryOfStatusesView()
-@if (((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor)
-         || (Model.InterviewDetails.Status == InterviewStatus.ApprovedBySupervisor && GlobalInfo.IsHeadquarter))
-{
-    <div class="modal fade" id="approveModal" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="approveModalLabel">Approve interview</h4>
-                </div>
-                <div class="modal-body">
-                    <label>Comment:</label>
-                    <textarea data-bind="value: changeStateComment" class="form-control" rows="10"></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button class="btn btn-success" data-bind="click: @(GlobalInfo.IsSupervisor ? "approveInterview" : "hQApproveInterview")">Approve</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="rejectModalLabel">Reject interview</h4>
-                </div>
-                <div class="modal-body">
-                    <label>Comment:</label>
-                    <textarea data-bind="value: changeStateComment" class="form-control" rows="10"></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button class="btn btn-danger" data-bind="click: @(GlobalInfo.IsSupervisor ? "rejectInterview" : "hQRejectInterview")">Reject</button>
-                </div>
-            </div>
-        </div>
-    </div>
-}
+@Html.Partial("HistoryOfStatusesPartialView", Model.History)
+@Html.Partial("ApproveRejectPartialView", Model.InterviewDetails.Status)
 
 @helper SetGroupLevelClass(int level)
 {
@@ -187,306 +146,6 @@
     }
 }
 
-@helper DrawStaticTextRow(InterviewStaticTextView entity)
-{
-    <tr>
-        <td colspan="4" class="static-text">
-            <div class="cell-content">
-                <span data-bind="html: staticText">@entity.Text</span>
-            </div>
-        </td>
-    </tr>
-}
-@helper DrawQuestionRow(InterviewQuestionView entity)
-{
-    <tr id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, "answerRow")" class="@css("danger", !entity.IsValid && entity.IsEnabled) @css("mandatory", entity.IsMandatory) @css("text-muted", !entity.IsEnabled)">
-        <td class="answer-status">
-            <div class="btn btn-xs @css("btn-info", entity.IsFlagged) @css("btn-default", !entity.IsFlagged)" data-bind="click: flagAnswer.bind($data, $element, '@entity.Id', '@Stringify(entity.RosterVector)')">
-                <i class="glyphicon glyphicon-flag"></i>
-            </div>
-        </td>
-        <td style="width: 50%">
-            <div class="@css("featured", entity.IsFeatured)">
-                <span class="icon-star"></span>
-                <span>@entity.Title</span>
-            </div>
-        </td>
-        <td class="question-answer">
-            @if (!entity.IsReadOnly && entity.Scope == QuestionScope.Supervisor && GlobalInfo.IsSupervisor)
-            {
-                switch (entity.QuestionType)
-                {
-                    case QuestionType.Text:
-                        var textQuestionSettings = entity.Settings as TextQuestionSettings;
-                        <div class="input-group">
-                            <input id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector)" class="form-control mask" type="text" value="@entity.Answer" mask="@(textQuestionSettings.Mask)" />
-                            <span class="input-group-btn">
-                                <button class="btn btn-success" type="button" data-bind="click: saveTextAnswer.bind($data, '@entity.Id', '@Stringify(entity.RosterVector)')">Save</button>
-                            </span>
-                        </div>
-                        break;
-                    case QuestionType.Numeric:
-                        var numericQuestionSetting = entity.Settings as NumericQuestionSettings;
-                        <div class="input-group">
-                            <input id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector)" class="form-control numeric" type="text" value="@entity.Answer" />
-                            <span class="input-group-btn">
-                                @if (numericQuestionSetting.IsInteger)
-                                {
-                                    <button class="btn btn-success" type="button" data-bind="click: saveNumericIntegerAnswer.bind($data, '@entity.Id', '@Stringify(entity.RosterVector)')">Save</button>
-                                }
-                                else
-                                {
-                                    <button class="btn btn-success" type="button" data-bind="click: saveNumericRealAnswer.bind($data, '@entity.Id', '@Stringify(entity.RosterVector)', @(numericQuestionSetting.CountOfDecimalPlaces ?? 0))">Save</button>
-                                }
-                            </span>
-                        </div>
-                                break;
-                    case QuestionType.SingleOption:
-                                var singleOptionSettings = entity.Settings as SingleQuestionSettings;
-                                if (singleOptionSettings.IsFilteredCombobox)
-                                {
-                                    <div class="input-group">
-                                        <input id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector)" class="form-control" type="text" value="@entity.Answer" />
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-success filtered-combobox-button" type="button" data-bind="click: saveFilteredComboboxAnswer.bind($data, '@entity.Id', '@Stringify(entity.RosterVector)')">Save</button>
-                                        </span>
-                                    </div>
-                                }
-                                else
-                                {
-                                    foreach (var option in entity.Options)
-                                    {
-                                        var optionValue = option.Value.ToString();
-                                        var isChecked = entity.Answer != null && Convert.ToDecimal(entity.Answer) == Convert.ToDecimal(option.Value);
-
-                                        <label class="radio" for="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, string.Format("option{0}", optionValue))">
-                                            <input type="radio" name="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector)" id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, string.Format("option{0}", optionValue))" value="@optionValue" @(isChecked ? "checked" : "")
-                                                   data-bind="click: saveCategoricalOneAnswer.bind($data, '@entity.Id', '@Stringify(entity.RosterVector)')">
-                                            <span>@option.Label</span>
-                                        </label>
-                                    }
-                                }
-                                break;
-                    case QuestionType.MultyOption:
-                                var multiQuestionSettings = entity.Settings as MultiQuestionSettings;
-                                var answers = (decimal[])entity.Answer;
-                                var selectedOptions = answers == null ? "" : string.Join(",", answers);
-                                foreach (var option in entity.Options)
-                                {
-                                    var optionValue = option.Value.ToString();
-                                    var isChecked = answers != null && answers.Contains(Convert.ToDecimal(option.Value));
-
-                                    <label class="checkbox" for="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, string.Format("option{0}", optionValue))">
-                                        <input type="checkbox" name="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector)" id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, string.Format("option{0}", optionValue))" value="@optionValue" @(isChecked ? "checked" : "")
-                                               data-bind="click: saveCategoricalMultiAnswer.bind($data, '@entity.Id', '@Stringify(entity.RosterVector)', @(multiQuestionSettings.AreAnswersOrdered.ToString().ToLower()), @(multiQuestionSettings.MaxAllowedAnswers ?? 0), '@selectedOptions')">
-
-                                        <span>@option.Label</span>
-                                        @if (multiQuestionSettings.AreAnswersOrdered && isChecked)
-                                        {
-                                            <span class="badge">@(answers.Select((item, index) => new { index, item }).First(_ => _.item == (decimal)option.Value).index + 1)</span>
-                                        }
-                                    </label>
-                                }
-                                break;
-                }
-            }
-            else
-            {
-                switch (entity.QuestionType)
-                {
-                    case QuestionType.SingleOption:
-                        var singleOptionSetting = entity.Settings as SingleQuestionSettings;
-                        if (singleOptionSetting.IsCascade || singleOptionSetting.IsFilteredCombobox)
-                        {
-                            if (entity.Answer != null)
-                            {
-                                var answer = Convert.ToDecimal(entity.Answer);
-                                @entity.Options.First(option=>answer == Convert.ToDecimal(option.Value)).Label
-                            }
-                        }
-                        else
-                        {
-                            foreach (var option in entity.Options)
-                            {
-                                string optionValue;
-                                bool isChecked;
-                                if (singleOptionSetting.IsLinked)
-                                {
-                                    optionValue = Stringify((decimal[])option.Value);
-                                    isChecked = entity.Answer != null && ((decimal[])entity.Answer).SequenceEqual((decimal[])option.Value);
-                                }
-                                else
-                                {
-                                    optionValue = option.Value.ToString();
-                                    isChecked = entity.Answer != null && Convert.ToDecimal(entity.Answer) == Convert.ToDecimal(option.Value);
-                                }
-
-                                <label class="radio" for="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, string.Format("option{0}", optionValue))">
-                                    <input type="radio" name="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector)" id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, string.Format("option{0}", optionValue))" @(isChecked ? "checked" : "") disabled="disabled">
-                                    <span>@option.Label</span>
-                                </label>
-                            }
-                        }
-
-                        break;
-                    case QuestionType.MultyOption:
-                        var multiQuestionSettings = entity.Settings as MultiQuestionSettings;
-
-                        foreach (var option in entity.Options)
-                        {
-                            string optionValue;
-                            bool isChecked = false;
-                            int orderIndex = 0;
-                            if (multiQuestionSettings.IsLinked)
-                            {
-                                optionValue = Stringify((decimal[])option.Value);
-
-                                if (entity.Answer != null)
-                                {
-                                    var answers = (decimal[][])entity.Answer;
-                                    isChecked = answers.Contains((decimal[])option.Value);
-                                    if (isChecked)
-                                    {
-                                        orderIndex = answers.Select((item, index) => new { index, item }).First(_ => _.item.SequenceEqual((decimal[])option.Value)).index + 1;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                optionValue = option.Value.ToString();
-
-                                if (entity.Answer != null)
-                                {
-                                    var answers = (decimal[])entity.Answer;
-                                    isChecked = answers.Contains((decimal)option.Value);
-                                    if (isChecked)
-                                    {
-                                        orderIndex = answers.Any() ? answers.Select((item, index) => new { index, item }).First(_ => _.item == Convert.ToDecimal(option.Value)).index + 1 : 0;
-                                    }
-                                }
-                            }
-
-                            <label class="checkbox" for="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, string.Format("option{0}", optionValue))">
-                                <input type="checkbox" name="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector)" id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, string.Format("option{0}", optionValue))" @(isChecked ? "checked" : "") disabled="disabled">
-
-                                <span>@option.Label</span>
-                                @if (multiQuestionSettings.AreAnswersOrdered && isChecked)
-                                {
-                                    <span class="badge">@orderIndex</span>
-                                }
-                            </label>
-                        }
-                        break;
-                    case QuestionType.Numeric:
-                    case QuestionType.DateTime:
-                    case QuestionType.Text:
-                    case QuestionType.QRBarcode:
-                    @entity.AnswerString
-                        break;
-                    case QuestionType.GpsCoordinates:
-                        if (entity.Answer != null)
-                        {
-                            var geoLocationAnswer = entity.Answer as GeoPosition;
-                            <span data-bind="template: { name: questionType }">
-                                <div>latitude: <span>@geoLocationAnswer.Latitude</span></div>
-                                <div>longitude: <span>@geoLocationAnswer.Longitude</span></div>
-                                <div>accuracy: <span>@geoLocationAnswer.Accuracy</span></div>
-                                <div>altitude: <span>@geoLocationAnswer.Altitude</span></div>
-                                <div>time stamp: <span data-bind="text: moment('@geoLocationAnswer.Timestamp.ToLocalTime()').format('lll')"></span></div>
-                            </span>
-                        }
-                        break;
-                    case QuestionType.TextList:
-                        if (entity.Answer != null)
-                        {
-                            var textListAnswer = entity.Answer as InterviewTextListAnswers;
-                            foreach (var interviewTextListAnswer in textListAnswer.Answers)
-                            {
-                                <div><span>@interviewTextListAnswer.Answer</span></div>
-                            }
-                        }
-                        break;
-                    case QuestionType.Multimedia:
-                    <img src="@Url.RouteUrl("Default", new {httproute = "", controller = "Resource", action = "InterviewFile", interviewid = Model.InterviewDetails.PublicKey, filename = entity.Answer})" />
-                        break;
-                }
-            }
-
-
-            @if (!entity.IsValid)
-            {
-                <small class="text-error">@entity.ValidationExpression</small>
-                <small class="text-error">@entity.ValidationMessage</small>
-            }
-        </td>
-
-        <td class="comments col-sm-3">
-            <dl id="@getInterviewItemIdWithPostfix(entity.Id, entity.RosterVector, "commentList")" class="@css("hidden", entity.Comments == null || entity.Comments.Count == 0)">
-                @if (entity.Comments != null && entity.Comments.Count > 0)
-                {
-                    foreach (var comment in entity.Comments)
-                    {
-                        <dt>@comment.CommenterName <span class="text-normal">@comment.Text</span></dt>
-                        <dd>
-                            <small class="comment-date" date="@comment.Date.ToLocalTime()"></small>
-                        </dd>
-                    }
-                }
-            </dl>
-
-            <div class="form-horizontal">
-                <div class="has-feedback">
-                    <div>
-                        <input type="text" class="form-control" placeholder="Write a comment..." data-bind="enterKey: addComment.bind($data, $element, '@entity.Id', '@Stringify(entity.RosterVector)')">
-                        <span class="glyphicon glyphicon-comment form-control-feedback" aria-hidden="true"></span>
-                    </div>
-                </div>
-            </div>
-        </td>
-    </tr>
-}
-
-@helper css(string style, bool shouldBeAdded = true)
-{
-    @(shouldBeAdded ? style : string.Empty)
-}
-@helper HistoryOfStatusesView()
-{
-    <div class="modal fade" id="statusHistoryModal" tabindex="-1" role="dialog" aria-labelledby="statusHistoryModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="statusHistoryModalLabel">Interview change status history</h4>
-                </div>
-                <div class="modal-body">
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th style="width: 125px">State</th>
-                                <th>with comment</th>
-                                <th style="width: 90px">on</th>
-                                <th>by</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        
-                            @foreach (var historyItem in Model.History.StatusHistory)
-                            {
-                                <tr>
-                                    <td>@historyItem.Status.ToLocalizeString()</td>
-                                    <td>@historyItem.Comment</td>
-                                    <td>@historyItem.Date.ToShortDateString()</td>
-                                    <td>@historyItem.Responsible</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-}
 
 @functions
     {
@@ -500,7 +159,7 @@
     {
         return string.Join("_", array.Select(x => x.ToString(CultureInfo.InvariantCulture).Replace('.', '-')));
     }
-
+    
     private static bool IsFilteredCombobox(InterviewQuestionView entityView)
     {
         if (entityView.QuestionType == QuestionType.SingleOption)
