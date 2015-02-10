@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
             unhandledPackageStorage = new Mock<IUnhandledPackageStorage>();
             incomingSyncPackagesQueueMock=new Mock<IIncomingSyncPackagesQueue>();
             incomingSyncPackagesQueueMock.Setup(x => x.DeQueue())
-                .Returns(new IncomingSyncPackages(interviewId, Guid.NewGuid(), Guid.NewGuid(), 1,
+                .Returns(new IncomingSyncPackage(interviewId, Guid.NewGuid(), Guid.NewGuid(), 1,
                     InterviewStatus.Completed, new object[0], true, "", "path"));
 
             commandServiceMock = new Mock<ICommandService>();

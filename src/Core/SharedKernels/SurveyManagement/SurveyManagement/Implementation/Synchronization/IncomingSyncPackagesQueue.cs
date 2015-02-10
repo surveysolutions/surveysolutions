@@ -20,9 +20,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         private readonly ILogger logger;
         private readonly IJsonUtils jsonUtils;
         private readonly IArchiveUtils archiver;
-        private IUnhandledPackageStorage unhandledPackageStorage;
+        private readonly IUnhandledPackageStorage unhandledPackageStorage;
 
-        public IncomingSyncPackagesQueue(IFileSystemAccessor fileSystemAccessor, SyncSettings syncSettings, ILogger logger, IJsonUtils jsonUtils, IArchiveUtils archiver, IUnhandledPackageStorage unhandledPackageStorage)
+        public IncomingSyncPackagesQueue(IFileSystemAccessor fileSystemAccessor, 
+            SyncSettings syncSettings, 
+            ILogger logger, 
+            IJsonUtils jsonUtils, 
+            IArchiveUtils archiver, 
+            IUnhandledPackageStorage unhandledPackageStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.syncSettings = syncSettings;
@@ -57,7 +62,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             }
         }
 
-        public IncomingSyncPackages DeQueue()
+        public IncomingSyncPackage DeQueue()
         {
             var pathToPackage = fileSystemAccessor.GetFilesInDirectory(incomingUnprocessedPackagesDirectory).FirstOrDefault();
 
@@ -79,7 +84,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                         .Select(e => e.Payload)
                         .ToArray();
 
-                return new IncomingSyncPackages(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
+                return new IncomingSyncPackage(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
                         meta.TemplateVersion, (InterviewStatus)meta.Status, eventsToSync, meta.CreatedOnClient ?? false, syncSettings.Origin, pathToPackage);
             }
             catch (Exception e)
