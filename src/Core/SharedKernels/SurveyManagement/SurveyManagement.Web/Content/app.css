@@ -378,3 +378,7 @@ input::-ms-clear {
 #details .radio, .checkbox {
     margin-left: 20px;
 }
+
+.margin-0 {
+    margin: 0;
+}

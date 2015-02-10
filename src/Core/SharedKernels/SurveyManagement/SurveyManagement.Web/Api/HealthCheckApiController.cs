@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Http;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.HealthCheck;
@@ -47,14 +48,40 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             var databaseHealthCheckResult = databaseHealthCheck.Check();
             var eventStoreHealthCheckResult = eventStoreHealthCheck.Check();
-            var numberOfUnhandledPackages = unhandledPackageStorage.GetListOfUnhandledPackages().Count();
-            var numberOfSyncPackagesWithBigSize = chunkReader.GetNumberOfSyncPackagesWithBigSize();
+            var numberOfUnhandledPackages = GetNumberOfUnhandledPackages();
+            var numberOfSyncPackagesWithBigSize = GetNumberOfSyncPackagesWithBigSize();
             var folderPermissionCheckResult = folderPermissionChecker.Check();
             var readSideStatus = readSideAdministrationService.GetRebuildStatus();
 
             return new HealthCheckModel(databaseHealthCheckResult, eventStoreHealthCheckResult,
                 numberOfUnhandledPackages, numberOfSyncPackagesWithBigSize,
                 folderPermissionCheckResult, readSideStatus);
+        }
+
+        private NumberHealthCheckResult GetNumberOfUnhandledPackages()
+        {
+            try
+            {
+                int count = unhandledPackageStorage.GetListOfUnhandledPackages().Count();
+                return NumberHealthCheckResult.ForNumber(count);
+            }
+            catch (Exception e)
+            {
+                return NumberHealthCheckResult.Error("The information about unhandled packages can't be collected. " + e.Message);
+            }
+        }
+
+        private NumberHealthCheckResult GetNumberOfSyncPackagesWithBigSize()
+        {
+            try
+            {
+                int count = chunkReader.GetNumberOfSyncPackagesWithBigSize();
+                return NumberHealthCheckResult.ForNumber(count);
+            }
+            catch (Exception e)
+            {
+                return NumberHealthCheckResult.Error("The information about sync packages with big size can't be collected. " + e.Message);
+            }
         }
     }
 }

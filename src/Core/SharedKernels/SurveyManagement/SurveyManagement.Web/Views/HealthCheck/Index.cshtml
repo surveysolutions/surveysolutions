@@ -3,35 +3,49 @@
     this.ViewBag.Title = "Heath Check Page";
 }
 
-<h1 class="page-header">Health check page</h1>
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
 
-<div>
-    <div class="panel-body">
-        <div class="well well-sm">Current health check state: &nbsp;<b data-bind="text: status"></b></div>
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <span class="badge" data-bind="text:databaseConnectionStatus"></span>
-                        Database connection status
-                    </li>
-                    <li class="list-group-item">
-                        <span class="badge" data-bind="text:eventstoreConnectionStatus"></span>
-                        Eventstore connection status
-                    </li>
-                    <li class="list-group-item">
-                        <span class="badge" data-bind="text:numberOfUnhandledPackages"></span>
-                        Number of unhandled packages
-                    </li>
-                    <li class="list-group-item">
-                        <span class="badge" data-bind="text:numberOfSyncPackagesWithBigSize"></span>
-                        Number of sync packages with size more then 2Mb
-                    </li>
-                    <li class="list-group-item">
-                        <span class="badge" data-bind="text:denidedFoldersStatus"></span>
-                        Permissions on write in App_Data folder
-                    </li>
-                </ul>
+        <h1 class="page-header">Health check page</h1>
+
+        <div>
+            <div class="panel-body">
+                <div class="well well-sm">Current health check state: &nbsp;<b data-bind="text: status, css: {'has-error': !isGood}"></b></div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <span class="badge" data-bind="text:databaseConnectionStatus"></span>
+                                Database connection status
+                                <p data-bind="text:databaseConnectionError"></p>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge" data-bind="text:eventstoreConnectionStatus"></span>
+                                Eventstore connection status
+                                <p data-bind="text:eventstoreConnectionError"></p>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge" data-bind="text:numberOfUnhandledPackages"></span>
+                                Number of unhandled packages
+                                <p data-bind="text:numberOfUnhandledPackagesError"></p>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge" data-bind="text:numberOfSyncPackagesWithBigSize"></span>
+                                Number of sync packages with size more then 2Mb
+                                <p data-bind="text:numberOfSyncPackagesWithBigSizeError"></p>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge" data-bind="text:denidedFoldersStatus"></span>
+                                Permissions on write in App_Data folder
+                                <table class="table table-condensed margin-0" data-bind="foreach: denidedFolders">
+                                    <tr>
+                                        <td data-bind="text: $data"></td>
+                                    </tr>
+                                </table>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -41,6 +55,16 @@
 
 
 @section scripts {
+
+    <style>
+        b.has-error {
+            color: red;
+        }
+
+        .badge.has-error {
+            background-color: red;
+        }
+    </style>
 
     @Scripts.Render("~/Scripts/viewmodels/pages/healthcheck.js")
     <script type="text/javascript">
@@ -52,5 +76,4 @@
 
         ko.applyBindings(viewModel);
     </script>
-
 }

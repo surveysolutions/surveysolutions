@@ -20,11 +20,11 @@
     };
 
     self.updateIconByStatus = function(status) {
-        if (status == 0) { // good
+        if (status == 1) { // good
             self.holder.css('color', 'green');
-        } else if (status == 1) { // warning
+        } else if (status == 2) { // warning
             self.holder.css('color', 'yellow');
-        } else if (status == 2) { // down
+        } else { // down
             self.holder.css('color', 'red');
         }
     }
