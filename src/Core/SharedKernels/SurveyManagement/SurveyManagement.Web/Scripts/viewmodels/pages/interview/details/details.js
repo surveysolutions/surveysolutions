@@ -128,7 +128,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
         question.areAnswersOrdered = false;
 
         if (areAnswersOrdered) {
-            var selectedOptions = selectedOptionsAsString.split(',').map(function (answerAsString) { return parseFloat(answerAsString); });
+            var selectedOptions = selectedOptionsAsString == "" ? [] : selectedOptionsAsString.split(',').map(function(answerAsString) { return parseFloat(answerAsString); });
             if (selectedOptions.length > answerOptionValues.length) {
                 _.remove(selectedOptions, function (answer) {
                     return !_.contains(answerOptionValues, answer);
