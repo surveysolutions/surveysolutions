@@ -120,6 +120,9 @@
   <data name="CumulativeChart" xml:space="preserve">
     <value>Cumulative Interview Chart</value>
   </data>
+  <data name="HealthCheck" xml:space="preserve">
+    <value>Health Check</value>
+  </data>
   <data name="Interviews" xml:space="preserve">
     <value>Interviews</value>
   </data>
