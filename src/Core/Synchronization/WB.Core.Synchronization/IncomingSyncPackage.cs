@@ -3,9 +3,17 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.Synchronization
 {
-    public class IncomingSyncPackages
+    public class IncomingSyncPackage
     {
-        public IncomingSyncPackages(Guid interviewId, Guid responsibleId, Guid questionnaireId, long questionnaireVersion, InterviewStatus interviewStatus, object[] eventsToSynchronize, bool createdOnClient, string origin, string pathToPackage)
+        public IncomingSyncPackage(Guid interviewId, 
+            Guid responsibleId,
+            Guid questionnaireId, 
+            long questionnaireVersion, 
+            InterviewStatus interviewStatus, 
+            object[] eventsToSynchronize, 
+            bool createdOnClient, 
+            string origin, 
+            string pathToPackage)
         {
             InterviewId = interviewId;
             QuestionnaireId = questionnaireId;

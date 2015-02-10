@@ -75,7 +75,7 @@
     <Compile Include="Events\Sync\UpdateRegisteredDevice.cs" />
     <Compile Include="IBackupManager.cs" />
     <Compile Include="IIncomingSyncPackagesQueue.cs" />
-    <Compile Include="IncomingSyncPackages.cs" />
+    <Compile Include="IncomingSyncPackage.cs" />
     <Compile Include="ISyncPackagesProcessor.cs" />
     <Compile Include="Implementation\ImportManager\DefaultBackupManager.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\SynchronizationDeltasByBriefFields.cs" />

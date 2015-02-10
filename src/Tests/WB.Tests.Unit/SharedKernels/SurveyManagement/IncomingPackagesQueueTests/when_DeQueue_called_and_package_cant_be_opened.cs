@@ -49,6 +49,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
         private static Mock<IUnhandledPackageStorage> unhandledPackageStorageMock;
         private static Guid interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-        private static IncomingSyncPackages result;
+        private static IncomingSyncPackage result;
     }
 }
