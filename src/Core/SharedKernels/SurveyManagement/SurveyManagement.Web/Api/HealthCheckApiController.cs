@@ -18,14 +18,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IEventStoreHealthCheck eventStoreHealthCheck;
         private readonly IChunkReader chunkReader;
         private readonly IFolderPermissionChecker folderPermissionChecker;
-        private readonly IReadSideAdministrationService readSideAdministrationService;
 
         public HealthCheckApiController(IDatabaseHealthCheck databaseHealthCheck, 
             IEventStoreHealthCheck eventStoreHealthCheck, IUnhandledPackageStorage unhandledPackageStorage, 
-            IChunkReader chunkReader, IFolderPermissionChecker folderPermissionChecker,
-            IReadSideAdministrationService readSideAdministrationService)
+            IChunkReader chunkReader, IFolderPermissionChecker folderPermissionChecker)
         {
-            this.readSideAdministrationService = readSideAdministrationService;
             this.folderPermissionChecker = folderPermissionChecker;
             this.chunkReader = chunkReader;
             this.eventStoreHealthCheck = eventStoreHealthCheck;
@@ -51,11 +48,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             var numberOfUnhandledPackages = GetNumberOfUnhandledPackages();
             var numberOfSyncPackagesWithBigSize = GetNumberOfSyncPackagesWithBigSize();
             var folderPermissionCheckResult = folderPermissionChecker.Check();
-            var readSideStatus = readSideAdministrationService.GetRebuildStatus();
 
             return new HealthCheckModel(databaseHealthCheckResult, eventStoreHealthCheckResult,
                 numberOfUnhandledPackages, numberOfSyncPackagesWithBigSize,
-                folderPermissionCheckResult, readSideStatus);
+                folderPermissionCheckResult);
         }
 
         private NumberHealthCheckResult GetNumberOfUnhandledPackages()
