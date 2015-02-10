@@ -11,7 +11,7 @@
 
     <script type="text/javascript">
         var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "Survey", new { }, Request.Url.Scheme))';
-        var $detailsUrl = '@Url.Action("InterviewDetails", "Interview")';
+        var $detailsUrl = '@Url.Action("Details", "Interview")';
         var $surveysUrl = '@Url.Action("Index", "Survey")';
         var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
         $(function() {
