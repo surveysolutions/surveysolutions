@@ -123,8 +123,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 this.Kernel.RegisterDenormalizer<InterviewExportedDataDenormalizer>();
                 this.Kernel.RegisterDenormalizer<QuestionnaireExportStructureDenormalizer>();
             }
-            this.Bind<IUnhandledPackageStorage>()
-                .To<UnhandledPackageStorage>();
+            this.Bind<IBrokenSyncPackagesStorage>()
+                .To<BrokenSyncPackagesStorage>();
 
             this.Bind<ISyncPackagesProcessor>()
                 .To<SyncPackagesProcessor>()

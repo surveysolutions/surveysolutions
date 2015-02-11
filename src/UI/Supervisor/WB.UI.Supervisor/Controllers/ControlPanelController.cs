@@ -23,8 +23,8 @@ namespace WB.UI.Supervisor.Controllers
     [LocalOrDevelopmentAccessOnly]
     public class ControlPanelController : WB.Core.SharedKernels.SurveyManagement.Web.Controllers.ControlPanelController
     {
-        public ControlPanelController(IServiceLocator serviceLocator, IUnhandledPackageStorage unhandledPackageStorage,
+        public ControlPanelController(IServiceLocator serviceLocator, IBrokenSyncPackagesStorage brokenSyncPackagesStorage,
             ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger, ISettingsProvider settingsProvider)
-            : base(serviceLocator, unhandledPackageStorage, commandService, globalInfo, logger, settingsProvider) { }
+            : base(serviceLocator, brokenSyncPackagesStorage, commandService, globalInfo, logger, settingsProvider) { }
     }
 }

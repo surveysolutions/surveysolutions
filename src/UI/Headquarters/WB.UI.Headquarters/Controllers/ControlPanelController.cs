@@ -35,11 +35,11 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IDataExportRepositoryWriter dataExportRepositoryWriter;
         private readonly IReadSideRepositoryIndexAccessor readSideRepositoryIndexAccessor;
 
-        public ControlPanelController(IServiceLocator serviceLocator, IUnhandledPackageStorage unhandledPackageStorage,
+        public ControlPanelController(IServiceLocator serviceLocator, IBrokenSyncPackagesStorage brokenSyncPackagesStorage,
             ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
             IUserViewFactory userViewFactory, IPasswordHasher passwordHasher, ISettingsProvider settingsProvider,
             IDataExportRepositoryWriter dataExportRepositoryWriter, IReadSideRepositoryIndexAccessor readSideRepositoryIndexAccessor)
-            : base(serviceLocator, unhandledPackageStorage, commandService, globalInfo, logger, settingsProvider)
+            : base(serviceLocator, brokenSyncPackagesStorage, commandService, globalInfo, logger, settingsProvider)
         {
             this.userViewFactory = userViewFactory;
             this.passwordHasher = passwordHasher;

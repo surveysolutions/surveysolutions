@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Synchronization
 {
-    public interface IUnhandledPackageStorage
+    public interface IBrokenSyncPackagesStorage
     {
         string[] GetListOfUnhandledPackagesForInterview(Guid interviewId);
 
