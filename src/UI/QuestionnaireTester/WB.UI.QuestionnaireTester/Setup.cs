@@ -16,7 +16,7 @@ namespace WB.UI.QuestionnaireTester
     {
         public Setup(Context applicationContext) : base(applicationContext)
         {
-            Insights.Initialize("24d22f99f3068798f24f20d297baaa0fbfe9f528", applicationContext);
+           
         }
 
         protected override IMvxApplication CreateApp()

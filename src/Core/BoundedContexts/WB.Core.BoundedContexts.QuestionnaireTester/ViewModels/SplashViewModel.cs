@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
@@ -17,6 +18,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             Task.Run(() =>
             {
                 this.applicationInitializer.Init();
+                Thread.Sleep(3000);
                 this.ShowViewModel<DashboardViewModel>();
             });
         }
