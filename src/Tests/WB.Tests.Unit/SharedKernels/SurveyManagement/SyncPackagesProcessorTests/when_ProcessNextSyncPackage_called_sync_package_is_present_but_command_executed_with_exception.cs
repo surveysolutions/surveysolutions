@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
     {
         Establish context = () =>
         {
-            unhandledPackageStorage = new Mock<IUnhandledPackageStorage>();
+            unhandledPackageStorage = new Mock<IBrokenSyncPackagesStorage>();
             incomingSyncPackagesQueueMock=new Mock<IIncomingSyncPackagesQueue>();
             incomingSyncPackagesQueueMock.Setup(x => x.DeQueue())
                 .Returns(new IncomingSyncPackage(interviewId, Guid.NewGuid(), Guid.NewGuid(), 1,
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
             commandServiceMock.Setup(x => x.Execute(Moq.It.IsAny<SynchronizeInterviewEventsCommand>(), Moq.It.IsAny<string>()))
                 .Throws<NullReferenceException>();
 
-            syncPackagesProcessor = CreateSyncPackagesProcessor(commandService: commandServiceMock.Object, incomingSyncPackagesQueue: incomingSyncPackagesQueueMock.Object, unhandledPackageStorage: unhandledPackageStorage.Object);
+            syncPackagesProcessor = CreateSyncPackagesProcessor(commandService: commandServiceMock.Object, incomingSyncPackagesQueue: incomingSyncPackagesQueueMock.Object, brokenSyncPackagesStorage: unhandledPackageStorage.Object);
         };
 
         Because of = () =>
@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
         private static SyncPackagesProcessor syncPackagesProcessor;
         private static Guid interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Mock<ICommandService> commandServiceMock;
-        private static Mock<IUnhandledPackageStorage> unhandledPackageStorage;
+        private static Mock<IBrokenSyncPackagesStorage> unhandledPackageStorage;
         private static Mock<IIncomingSyncPackagesQueue> incomingSyncPackagesQueueMock;
     }
 }

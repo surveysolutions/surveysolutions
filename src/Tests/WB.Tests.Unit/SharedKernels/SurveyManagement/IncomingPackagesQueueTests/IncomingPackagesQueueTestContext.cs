@@ -13,12 +13,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
     internal class IncomingPackagesQueueTestContext
     {
         protected static IncomingSyncPackagesQueue CreateIncomingPackagesQueue(IJsonUtils jsonUtils = null,
-            IFileSystemAccessor fileSystemAccessor = null, IArchiveUtils archiver = null, IUnhandledPackageStorage unhandledPackageStorage = null)
+            IFileSystemAccessor fileSystemAccessor = null, IArchiveUtils archiver = null)
         {
             return new IncomingSyncPackagesQueue(fileSystemAccessor??Mock.Of<IFileSystemAccessor>(),
                 new SyncSettings(AppDataDirectory, IncomingCapiPackagesWithErrorsDirectoryName,
                     IncomingCapiPackageFileNameExtension, IncomingCapiPackagesDirectoryName, ""), Mock.Of<ILogger>(), jsonUtils: jsonUtils ?? Mock.Of<IJsonUtils>(),
-                archiver: archiver ?? Mock.Of<IArchiveUtils>(), unhandledPackageStorage: unhandledPackageStorage ?? Mock.Of<IUnhandledPackageStorage>());
+                archiver: archiver ?? Mock.Of<IArchiveUtils>());
 
         }
 

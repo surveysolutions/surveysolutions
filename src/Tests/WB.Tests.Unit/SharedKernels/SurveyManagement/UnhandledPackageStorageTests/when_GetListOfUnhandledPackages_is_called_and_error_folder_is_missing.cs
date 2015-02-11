@@ -14,16 +14,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UnhandledPackageStorageTe
         {
             fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
 
-            unhandledPackageStorage = CreateUnhandledPackageStorage(fileSystemAccessor: fileSystemAccessorMock.Object);
+            brokenSyncPackagesStorage = CreateUnhandledPackageStorage(fileSystemAccessor: fileSystemAccessorMock.Object);
         };
 
         Because of = () =>
-            result = unhandledPackageStorage.GetListOfUnhandledPackages();
+            result = brokenSyncPackagesStorage.GetListOfUnhandledPackages();
 
         It should_result_be_empty = () =>
            result.ShouldBeEmpty();
 
-        private static UnhandledPackageStorage unhandledPackageStorage;
+        private static BrokenSyncPackagesStorage brokenSyncPackagesStorage;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
         private static IEnumerable<string> result;
     }
