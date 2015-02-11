@@ -12,24 +12,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
     internal class SyncPackagesProcessor : ISyncPackagesProcessor, IJob
     {
         private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
-        private readonly IUnhandledPackageStorage unhandledPackageStorage;
+        private readonly IBrokenSyncPackagesStorage brokenSyncPackagesStorage;
         private readonly ILogger logger;
         private readonly ICommandService commandService;
 
         public SyncPackagesProcessor(ILogger logger, 
             ICommandService commandService,
             IIncomingSyncPackagesQueue incomingSyncPackagesQueue, 
-            IUnhandledPackageStorage unhandledPackageStorage)
+            IBrokenSyncPackagesStorage brokenSyncPackagesStorage)
         {
             this.logger = logger;
             this.commandService = commandService;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
-            this.unhandledPackageStorage = unhandledPackageStorage;
+            this.brokenSyncPackagesStorage = brokenSyncPackagesStorage;
         }
 
         public void ProcessNextSyncPackage()
         {
-            IncomingSyncPackage syncPackage = incomingSyncPackagesQueue.DeQueue();
+            IncomingSyncPackage syncPackage = null;
+            try
+            {
+                syncPackage = incomingSyncPackagesQueue.DeQueue();
+            }
+            catch (IncomingSyncPackageException e)
+            {
+                brokenSyncPackagesStorage.StoreUnhandledPackage(e.PathToPackage, e.InterviewId, e.InnerException);
+                incomingSyncPackagesQueue.DeleteSyncItem(e.PathToPackage);
+            }
 
             if (syncPackage == null)
             {
@@ -50,7 +59,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             catch (Exception e)
             {
                 logger.Error(string.Format("package '{0}' wasn't processed. Reason: '{1}'", syncPackage.PathToPackage, e.Message), e);
-                unhandledPackageStorage.StoreUnhandledPackage(syncPackage.PathToPackage, syncPackage.InterviewId, e);
+                brokenSyncPackagesStorage.StoreUnhandledPackage(syncPackage.PathToPackage, syncPackage.InterviewId, e);
             }
 
             incomingSyncPackagesQueue.DeleteSyncItem(syncPackage.PathToPackage);

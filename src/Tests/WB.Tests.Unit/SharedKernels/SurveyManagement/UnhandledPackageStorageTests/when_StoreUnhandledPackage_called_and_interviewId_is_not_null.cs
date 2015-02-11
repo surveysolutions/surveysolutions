@@ -24,11 +24,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UnhandledPackageStorageTe
             fileSystemAccessorMock.Setup(x => x.GetFileNameWithoutExtension(Moq.It.IsAny<string>()))
               .Returns(interviewId.FormatGuid());
 
-            unhandledPackageStorage = CreateUnhandledPackageStorage(fileSystemAccessor: fileSystemAccessorMock.Object);
+            brokenSyncPackagesStorage = CreateUnhandledPackageStorage(fileSystemAccessor: fileSystemAccessorMock.Object);
         };
 
         Because of = () =>
-            unhandledPackageStorage.StoreUnhandledPackage("test", interviewId, nullReferenceException);
+            brokenSyncPackagesStorage.StoreUnhandledPackage("test", interviewId, nullReferenceException);
 
         It should_copy_package_to_error_folder = () =>
            fileSystemAccessorMock.Verify(x => x.CopyFileOrDirectory("test", @"App_Data\IncomingDataWithErrors\" + interviewId.FormatGuid()), Times.Once);
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UnhandledPackageStorageTe
         It should_create_exception_file_with_exception_message = () =>
             fileSystemAccessorMock.Verify(x => x.WriteAllText(string.Format(@"App_Data\IncomingDataWithErrors\{0}\{0}.exception", interviewId.FormatGuid()), nullReferenceException.Message+" "), Times.Once);
 
-        private static UnhandledPackageStorage unhandledPackageStorage;
+        private static BrokenSyncPackagesStorage brokenSyncPackagesStorage;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static NullReferenceException nullReferenceException = new NullReferenceException("test message");

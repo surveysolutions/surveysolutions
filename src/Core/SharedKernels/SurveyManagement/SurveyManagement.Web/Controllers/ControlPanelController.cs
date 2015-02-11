@@ -17,11 +17,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public abstract class ControlPanelController : BaseController
     {
         private readonly IServiceLocator serviceLocator;
-        private readonly IUnhandledPackageStorage unhandledPackageStorage;
+        private readonly IBrokenSyncPackagesStorage brokenSyncPackagesStorage;
         private readonly ISettingsProvider settingsProvider;
 
         public ControlPanelController(IServiceLocator serviceLocator,
-            IUnhandledPackageStorage unhandledPackageStorage,
+            IBrokenSyncPackagesStorage brokenSyncPackagesStorage,
             ICommandService commandService, 
             IGlobalInfoProvider globalInfo, 
             ILogger logger,
@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             : base(commandService: commandService, globalInfo: globalInfo, logger: logger)
         {
             this.serviceLocator = serviceLocator;
-            this.unhandledPackageStorage = unhandledPackageStorage;
+            this.brokenSyncPackagesStorage = brokenSyncPackagesStorage;
             this.settingsProvider = settingsProvider;
         }
 
@@ -50,12 +50,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         public ActionResult IncomingDataWithErrors()
         {
-            return this.View(this.unhandledPackageStorage.GetListOfUnhandledPackages());
+            return this.View(this.brokenSyncPackagesStorage.GetListOfUnhandledPackages());
         }
 
         public FileResult GetIncomingDataWithError(string packageId)
         {
-            return this.File(this.unhandledPackageStorage.GetUnhandledPackagePath(packageId), System.Net.Mime.MediaTypeNames.Application.Octet, packageId);
+            return this.File(this.brokenSyncPackagesStorage.GetUnhandledPackagePath(packageId), System.Net.Mime.MediaTypeNames.Application.Octet, packageId);
         }
         
         public ActionResult Settings()

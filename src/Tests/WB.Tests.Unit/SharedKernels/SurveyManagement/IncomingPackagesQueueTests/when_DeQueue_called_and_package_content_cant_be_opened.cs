@@ -29,26 +29,23 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
             fileSystemAccessorMock.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
                 .Returns<string, string>(Path.Combine);
 
-            unhandledPackageStorageMock=new Mock<IUnhandledPackageStorage>();
-            incomingSyncPackages = CreateIncomingPackagesQueue(fileSystemAccessor: fileSystemAccessorMock.Object, jsonUtils: jsonUtilsMock.Object,  unhandledPackageStorage: unhandledPackageStorageMock.Object);
+            incomingSyncPackages = CreateIncomingPackagesQueue(fileSystemAccessor: fileSystemAccessorMock.Object, jsonUtils: jsonUtilsMock.Object);
         };
 
         Because of = () =>
-            result = incomingSyncPackages.DeQueue();
+         exception = Catch.Exception(() =>
+            result = incomingSyncPackages.DeQueue()) as IncomingSyncPackageException;
 
-        It should_delete_package = () =>
-           fileSystemAccessorMock.Verify(x => x.DeleteFile(interviewId.FormatGuid()), Times.Once);
-
-        It should_copy_package_to_error_folder_corresponding_to_interview = () =>
-           unhandledPackageStorageMock.Verify(x => x.StoreUnhandledPackage(interviewId.FormatGuid(), interviewId, Moq.It.IsAny<NullReferenceException>()), Times.Once);
+        It should_throw_exception_with_interviewId_equals_to_interview_id_from_metadata = () =>
+            exception.InterviewId.ShouldEqual(interviewId);
 
         It should_result_be_null = () =>
           result.ShouldBeNull();
 
         private static IncomingSyncPackagesQueue incomingSyncPackages;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
-        private static Mock<IUnhandledPackageStorage> unhandledPackageStorageMock;
         private static Guid interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static IncomingSyncPackage result;
+        private static IncomingSyncPackageException exception;
     }
 }
