@@ -9,6 +9,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation
 {
     public class TabletLogView
     {
+        public TabletLogView()
+        {
+            SyncLog = new List<UserSyncLogView>();
+        }
         public Guid DeviceId { get; set; }
 
         public string AndroidId { get; set; }

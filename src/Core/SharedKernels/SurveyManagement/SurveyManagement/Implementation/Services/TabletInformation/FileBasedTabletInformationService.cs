@@ -110,6 +110,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletI
 
                     userSyncLogView.TabletSyncLog.Add(tabletSyncLogView);
                 }
+
+                tabletLogView.SyncLog.Add(userSyncLogView);
             }
 
             return tabletLogView;

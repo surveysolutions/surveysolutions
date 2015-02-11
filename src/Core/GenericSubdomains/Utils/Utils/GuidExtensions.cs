@@ -41,9 +41,20 @@ namespace WB.Core.GenericSubdomains.Utils
 
         public static Guid ToGuid(this string value)
         {
-            var data = new byte[value.Length * sizeof(char)];
+            int chuncksCount = (int)Math.Ceiling((decimal)((value.Length) * sizeof(char))/16);
+            int arraySize = chuncksCount*16;
+            var data = new byte[arraySize];
             Buffer.BlockCopy(value.ToCharArray(), 0, data, 0, data.Length);
-            return new Guid(data);
+
+            var bytes16 = new byte[16];
+            for (int i = 0; i < chuncksCount; i++)
+            {
+                byte[] part1 = BitConverter.GetBytes((BitConverter.ToUInt64(data, i*16) >> (i%2)*4) ^ BitConverter.ToUInt64(bytes16, 0));
+                byte[] part2 = BitConverter.GetBytes((BitConverter.ToUInt64(data, i*16 + 8) >> (i%2)*4) ^ BitConverter.ToUInt64(bytes16, 8));
+                bytes16 = part1.Concat(part2).ToArray();
+            }
+
+            return new Guid(bytes16);
         }
     }
 }

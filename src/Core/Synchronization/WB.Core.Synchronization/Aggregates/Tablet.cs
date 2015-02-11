@@ -44,6 +44,10 @@ namespace WB.Core.Synchronization.Aggregates
             this.ApplyEvent(new UserLinkedFromDevice(command.UserId));
         }
 
+        protected void Apply(TabletRegistered @event)
+        {
+        }
+
         protected void Apply(PackageRequested @event)
         {
         }
