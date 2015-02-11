@@ -29,6 +29,7 @@ using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.Intervie
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.Synchronization;
+using WB.Core.Synchronization.EventHandler;
 
 namespace WB.Core.SharedKernels.SurveyManagement
 {
@@ -119,6 +120,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Kernel.RegisterDenormalizer<InterviewSynchronizationDenormalizer>();
             this.Kernel.RegisterDenormalizer<UserSynchronizationDenormalizer>();
             this.Kernel.RegisterDenormalizer<QuestionnaireSynchronizationDenormalizer>();
+            this.Kernel.RegisterDenormalizer<TabletDenormalizer>();
 
             if (hqEnabled)
             {

@@ -19,7 +19,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 {
     internal class SyncManager : ISyncManager
     {
-        private readonly IReadSideKeyValueStorage<ClientDeviceDocument> devices;
+        private readonly IReadSideRepositoryReader<TabletDocument> devices;
         private readonly bool isSyncTrackingEnabled = true;
         private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
         private readonly ILogger logger;
@@ -35,7 +35,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         private readonly string interviewQueryIndexName = typeof(InterviewSyncPackagesByBriefFields).Name;
         private readonly string questionnireQueryIndexName = typeof(QuestionnaireSyncPackagesByBriefFields).Name;
 
-        public SyncManager(IReadSideKeyValueStorage<ClientDeviceDocument> devices, 
+        public SyncManager(IReadSideRepositoryReader<TabletDocument> devices, 
             IIncomingSyncPackagesQueue incomingSyncPackagesQueue,
             ILogger logger, 
             ICommandService commandService, 
@@ -71,7 +71,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             Guid deviceId = clientIdentifier.AndroidId.ToGuid();
             var device = this.devices.GetById(deviceId);
 
-            if (device == null)
+            if (device != null)
             {
                 this.commandService.Execute(new TrackHandshakeCommand(deviceId, clientIdentifier.UserId, clientIdentifier.AppVersion));
             }
