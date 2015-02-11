@@ -193,7 +193,7 @@
                     if (Model.Answer != null)
                     {
                         var geoLocationAnswer = Model.Answer as GeoPosition;
-                        <span data-bind="template: { name: questionType }">
+                        <span>
                             <div>latitude: <span>@geoLocationAnswer.Latitude</span></div>
                             <div>longitude: <span>@geoLocationAnswer.Longitude</span></div>
                             <div>accuracy: <span>@geoLocationAnswer.Accuracy</span></div>
