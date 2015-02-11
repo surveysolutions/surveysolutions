@@ -15,10 +15,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
         public int Value { get; private set; }
         public string ErrorMessage { get; private set; }
 
-        public static NumberHealthCheckResult ForNumber(int value)
+        public static NumberHealthCheckResult Happy(int value)
         {
-            var status = value == 0 ? HealthCheckStatus.Happy : HealthCheckStatus.Warning;
-            return new NumberHealthCheckResult(status, value);
+            return new NumberHealthCheckResult(HealthCheckStatus.Happy, value);
+        }
+
+        public static NumberHealthCheckResult Warning(int value, string message)
+        {
+            return new NumberHealthCheckResult(HealthCheckStatus.Warning, value, message);
         }
 
         public static NumberHealthCheckResult Error(string errorMessage)
