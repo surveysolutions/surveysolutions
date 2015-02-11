@@ -24,12 +24,12 @@
                                 Eventstore connection status
                                 <p data-bind="text:eventstoreConnectionError"></p>
                             </li>
-                            <li class="list-group-item" data-bind="css: {'has-error': numberOfUnhandledPackagesError() || numberOfUnhandledPackages() > 0 }">
+                            <li class="list-group-item" data-bind="css: {'has-warning': numberOfUnhandledPackages() > 0, 'has-error': numberOfUnhandledPackages() == 'Error' }">
                                 <span class="badge" data-bind="text:numberOfUnhandledPackages"></span>
                                 Number of unhandled packages
                                 <p data-bind="text:numberOfUnhandledPackagesError"></p>
                             </li>
-                            <li class="list-group-item" data-bind="css: {'has-error': numberOfSyncPackagesWithBigSizeError() || numberOfSyncPackagesWithBigSize() > 0 }">
+                            <li class="list-group-item" data-bind="css: {'has-warning': numberOfSyncPackagesWithBigSize() > 0, 'has-error': numberOfSyncPackagesWithBigSize() == 'Error' }">
                                 <span class="badge" data-bind="text:numberOfSyncPackagesWithBigSize"></span>
                                 Number of sync packages with size more then 2Mb
                                 <p data-bind="text:numberOfSyncPackagesWithBigSizeError"></p>
@@ -58,10 +58,13 @@
 
     <style>
         b.is-good { color: green; }
-        b.has-error, b.has-warning { color: red; text-transform: uppercase; }
+        b.has-error { color: red; text-transform: uppercase; }
+        b.has-warning { color: orange; text-transform: uppercase; }
         li .badge { background-color: green; }
         li.has-error .badge { background-color: red; }
         li.has-error { color: red; }
+        li.has-warning .badge { background-color: orange; }
+        li.has-warning { color: orange; }
     </style>
 
     @Scripts.Render("~/Scripts/viewmodels/pages/healthcheck.js")
