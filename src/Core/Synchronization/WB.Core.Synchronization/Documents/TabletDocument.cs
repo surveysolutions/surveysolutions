@@ -37,7 +37,7 @@ namespace WB.Core.Synchronization.Documents
                                    };
         }
 
-        public DateTime HandshakeInitTime { get; set; }
+        public DateTime HandshakeTime { get; set; }
 
         public string AppVersion { get; set; }
 

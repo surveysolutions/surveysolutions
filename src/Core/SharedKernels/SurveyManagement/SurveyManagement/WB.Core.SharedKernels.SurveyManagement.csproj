@@ -246,7 +246,6 @@
     <Compile Include="Views\InterviewHistory\InterviewHistoryFactory.cs" />
     <Compile Include="Views\DataExport\QuestionnaireExportStructure.cs" />
     <Compile Include="Views\Device\DeviceView.cs" />
-    <Compile Include="Views\Device\DeviceViewFactory.cs" />
     <Compile Include="Views\Device\DeviceViewInputModel.cs" />
     <Compile Include="Views\IInterviewDataAndQuestionnaireMerger.cs" />
     <Compile Include="Views\IListView.cs" />

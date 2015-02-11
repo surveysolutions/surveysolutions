@@ -1,4 +1,6 @@
-﻿@model WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation.TabletLogView
+﻿@using System.Globalization
+@using WB.Core.SharedKernel.Structures.Synchronization
+@model WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation.TabletLogView
 
 @{
     ViewBag.Title = "Tablet sync log";
@@ -6,12 +8,50 @@
 
 <h2>@Model.AndroidId</h2>
 <ul class="list-group">
-    @foreach (var userId in Model.Users)
+    @foreach (var user in Model.Users)
     {
-        <li class="list-group-item">@userId</li>
+        <li class="list-group-item">@user.Name</li>
     }
 </ul>
-@foreach (var kvp in Model.SyncLog)
+@foreach (var userLog in Model.SyncLog)
 {
-    
+    <div class="panel panel-default">
+        <div class="panel-heading">@userLog.User.Name [@userLog.User.Id]</div>
+        <div class="panel-body">
+            @foreach (var sync in userLog.TabletSyncLog)
+            {
+                <table class ="table">
+                    <caption>App version: @sync.AppVersion, handshake was on: @sync.HandshakeTime.ToLocalTime()</caption>
+                    <thead>
+                        <tr>
+                            <th>User's packages</th>
+                            <th>Questionnaire packages</th>
+                            <th>Interview's packages</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="info">
+                            <td colspan="2">@sync.PackagesTrackingInfo[SyncItemType.User].LastPackageId</td>
+                            <td colspan="2">@sync.PackagesTrackingInfo[SyncItemType.Questionnaire].LastPackageId</td>
+                            <td colspan="2">@sync.PackagesTrackingInfo[SyncItemType.Interview].LastPackageId</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @foreach (var requestInfo in sync.PackagesTrackingInfo[SyncItemType.User].PackagesRequestInfo)
+                                {
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <span class="badge">@(requestInfo.Value.HasValue ? requestInfo.Value.Value.ToLocalTime().ToString(CultureInfo.InvariantCulture) : "-")</span>
+                                            @requestInfo.Key
+                                        </li>
+                                    </ul>
+                                }
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
 }

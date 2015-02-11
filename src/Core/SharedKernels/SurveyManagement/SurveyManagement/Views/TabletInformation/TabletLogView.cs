@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Main.Core.Entities.SubEntities;
+
 using WB.Core.Synchronization.Documents;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation
@@ -15,8 +17,28 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation
 
         public DateTime LastUpdateDate { get; set; }
 
-        public List<Guid> Users { get; set; }
+        public List<UserLight> Users { get; set; }
 
-        public Dictionary<Guid, List<TabletSyncLog>> SyncLog { get; set; }
+        public List<UserSyncLogView> SyncLog { get; set; }
+    }
+
+    public class UserSyncLogView
+    {
+        public UserSyncLogView()
+        {
+            this.TabletSyncLog = new List<TabletSyncLogView>();
+        }
+        public UserLight User { get; set; }
+
+        public List<TabletSyncLogView> TabletSyncLog { get; set; }
+    }
+
+    public class TabletSyncLogView
+    {
+        public string AppVersion { get; set; }
+
+        public DateTime HandshakeTime { get; set; }
+
+        public Dictionary<string, PackagesTrackingInfo> PackagesTrackingInfo { get; set; }
     }
 }

@@ -274,7 +274,7 @@ namespace WB.UI.Capi
                 var deviceChangeVerifier = this.CreateDeviceChangeVerifier();
                 var changeLogManipulator = CapiApplication.Kernel.Get<IChangeLogManipulator>();
                 var plainFileRepository = CapiApplication.Kernel.Get<IPlainInterviewFileStorage>();
-                var cleaner = new CapiCleanUpService(changeLogManipulator, plainFileRepository);
+                var cleaner = new CapiCleanUpService(changeLogManipulator, plainFileRepository, CapiApplication.Kernel.Get<ISyncPackageIdsStorage>());
                 this.synchronizer = new SynchronozationProcessor(
                     deviceChangeVerifier,
                     authenticator,

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
+using Main.Core.Entities.SubEntities;
+
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -83,11 +86,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletI
         public TabletLogView GetTabletLog(string deviceId)
         {
             var tabletLogView = new TabletLogView();
-            var tabletLog = tabletDocumentsStrogeReader.GetById(deviceId);
+            TabletDocument tabletLog = tabletDocumentsStrogeReader.GetById(deviceId);
             if (tabletLog == null)
                 return tabletLogView;
 
-            //usersStorageReader
+            tabletLogView.Users = tabletLog.Users.Select(x => new UserLight(x, usersStorageReader.GetById(x).UserName)).ToList();
+
+            foreach (var userSyncLog in tabletLog.SyncLog)
+            {
+                var userSyncLogView = new UserSyncLogView
+                                      {
+                                          User = new UserLight(userSyncLog.Key, this.usersStorageReader.GetById(userSyncLog.Key).UserName)
+                                      };
+
+                foreach (var tabletSyncLog in userSyncLog.Value)
+                {
+                    var tabletSyncLogView = new TabletSyncLogView
+                                            {
+                                                AppVersion = tabletSyncLog.AppVersion,
+                                                HandshakeTime = tabletSyncLog.HandshakeTime,
+                                                PackagesTrackingInfo = tabletSyncLog.PackagesTrackingInfo
+                                            };
+
+                    userSyncLogView.TabletSyncLog.Add(tabletSyncLogView);
+                }
+            }
 
             return tabletLogView;
         }
