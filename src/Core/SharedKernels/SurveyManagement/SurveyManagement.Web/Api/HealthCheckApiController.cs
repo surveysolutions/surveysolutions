@@ -80,7 +80,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 if (count == 0)
                     return NumberHealthCheckResult.Happy(count);
                 return NumberHealthCheckResult.Warning(count,
-                        "Some interviews are oversized. Please contactSurvey Solutions Team support@mysurvey.solutions to report the error.");
+                        "Some interviews are oversized. Please contact Survey Solutions Team support@mysurvey.solutions to report the error.");
             }
             catch (Exception e)
             {
