@@ -19,12 +19,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
     internal class SyncPackagesProcessorTestContext
     {
         protected static SyncPackagesProcessor CreateSyncPackagesProcessor(
-            ICommandService commandService = null,  IIncomingSyncPackagesQueue incomingSyncPackagesQueue = null, IUnhandledPackageStorage unhandledPackageStorage=null)
+            ICommandService commandService = null,  IIncomingSyncPackagesQueue incomingSyncPackagesQueue = null, IBrokenSyncPackagesStorage brokenSyncPackagesStorage=null)
         {
             return new SyncPackagesProcessor(logger: Mock.Of<ILogger>(),
                 commandService: commandService ?? Mock.Of<ICommandService>(),
                 incomingSyncPackagesQueue: incomingSyncPackagesQueue ?? Mock.Of<IIncomingSyncPackagesQueue>(),
-                unhandledPackageStorage: unhandledPackageStorage??Mock.Of<IUnhandledPackageStorage>());
+                brokenSyncPackagesStorage: brokenSyncPackagesStorage??Mock.Of<IBrokenSyncPackagesStorage>());
         }
 
       /*  const string AppDataDirectory = "App_Data";

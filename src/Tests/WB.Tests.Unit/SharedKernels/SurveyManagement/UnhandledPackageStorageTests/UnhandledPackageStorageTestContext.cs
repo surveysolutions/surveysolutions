@@ -7,12 +7,12 @@ using Moq;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UnhandledPackageStorageTests
 {
-    [Subject(typeof(UnhandledPackageStorage))]
+    [Subject(typeof(BrokenSyncPackagesStorage))]
     internal class UnhandledPackageStorageTestContext
     {
-        protected static UnhandledPackageStorage CreateUnhandledPackageStorage(IFileSystemAccessor fileSystemAccessor=null)
+        protected static BrokenSyncPackagesStorage CreateUnhandledPackageStorage(IFileSystemAccessor fileSystemAccessor=null)
         {
-            return new UnhandledPackageStorage(fileSystemAccessor??Mock.Of<IFileSystemAccessor>(), new SyncSettings(AppDataDirectory, IncomingCapiPackagesWithErrorsDirectoryName, IncomingCapiPackageFileNameExtension, IncomingCapiPackagesDirectoryName, ""));
+            return new BrokenSyncPackagesStorage(fileSystemAccessor??Mock.Of<IFileSystemAccessor>(), new SyncSettings(AppDataDirectory, IncomingCapiPackagesWithErrorsDirectoryName, IncomingCapiPackageFileNameExtension, IncomingCapiPackagesDirectoryName, ""));
         }
         const string AppDataDirectory = "App_Data";
         const string IncomingCapiPackagesDirectoryName = "IncomingData";
