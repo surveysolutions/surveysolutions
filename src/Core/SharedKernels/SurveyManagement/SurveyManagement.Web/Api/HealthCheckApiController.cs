@@ -13,21 +13,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     [AllowAnonymous]
     public class HealthCheckApiController : ApiController
     {
-        private readonly IUnhandledPackageStorage unhandledPackageStorage;
+        private readonly IBrokenSyncPackagesStorage brokenSyncPackagesStorage;
         private readonly IDatabaseHealthCheck databaseHealthCheck;
         private readonly IEventStoreHealthCheck eventStoreHealthCheck;
         private readonly IChunkReader chunkReader;
         private readonly IFolderPermissionChecker folderPermissionChecker;
 
-        public HealthCheckApiController(IDatabaseHealthCheck databaseHealthCheck, 
-            IEventStoreHealthCheck eventStoreHealthCheck, IUnhandledPackageStorage unhandledPackageStorage, 
+        public HealthCheckApiController(IDatabaseHealthCheck databaseHealthCheck,
+            IEventStoreHealthCheck eventStoreHealthCheck, IBrokenSyncPackagesStorage brokenSyncPackagesStorage, 
             IChunkReader chunkReader, IFolderPermissionChecker folderPermissionChecker)
         {
             this.folderPermissionChecker = folderPermissionChecker;
             this.chunkReader = chunkReader;
             this.eventStoreHealthCheck = eventStoreHealthCheck;
             this.databaseHealthCheck = databaseHealthCheck;
-            this.unhandledPackageStorage = unhandledPackageStorage;
+            this.brokenSyncPackagesStorage = brokenSyncPackagesStorage;
         }
 
         public HealthCheckStatus GetStatus()
@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             try
             {
-                int count = unhandledPackageStorage.GetListOfUnhandledPackages().Count();
+                int count = brokenSyncPackagesStorage.GetListOfUnhandledPackages().Count();
                 return NumberHealthCheckResult.ForNumber(count);
             }
             catch (Exception e)
