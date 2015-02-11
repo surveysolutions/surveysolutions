@@ -16,7 +16,7 @@ namespace WB.Core.Synchronization.EventHandler
          IUpdateHandler<TabletDocument, UserLinkingRequested>,
          IUpdateHandler<TabletDocument, UnlinkUserFromDeviceCommand>,
          IUpdateHandler<TabletDocument, TabletRegistered>,
-        IUpdateHandler<TabletDocument, PackageRequested>
+         IUpdateHandler<TabletDocument, PackageRequested>
     {
 
         public TabletDenormalizer(IReadSideRepositoryWriter<TabletDocument> tabletDocumentsStroraWriter) : base(tabletDocumentsStroraWriter)
@@ -63,7 +63,7 @@ namespace WB.Core.Synchronization.EventHandler
             PackagesTrackingInfo lastPackageInfo = lastUserSyncLog.PackagesTrackingInfo[evnt.Payload.PackageType];
 
             if (lastPackageInfo.PackagesRequestInfo.ContainsKey(evnt.Payload.PackageId))
-                lastPackageInfo.PackagesRequestInfo.Add(evnt.Payload.PackageId, evnt.EventTimeStamp);
+                lastPackageInfo.PackagesRequestInfo[evnt.Payload.PackageId] = evnt.EventTimeStamp;
 
             return currentState;
         }
