@@ -4,6 +4,7 @@
     var self = this;
 
     self.apiUrl = healthCheckUrl;
+    self.IsShowRequestIndicator(false);
 
     self.model = ko.observable({});
     self.status = ko.observable('');

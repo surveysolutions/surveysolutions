@@ -10,6 +10,7 @@
     self.IsNotifyVisible = ko.observable(false);
     self.NotifyTitle = ko.observable(input.settings.messages.notifyDialogTitle);
     self.NotifyText = ko.observable(input.settings.messages.notifyDialogText);
+    self.IsShowRequestIndicator = ko.observable(true);
 
     self.ToggleFilter = function() {
         if (self.IsFilterOpen()) {
@@ -57,7 +58,7 @@
     self.IsAjaxComplete.subscribe(function(isLoaded) {
         if (isLoaded) {
             $('#umbrella').hide();
-        } else {
+        } else if (self.IsShowRequestIndicator()) {
             setTimeout(function() {
                 if (!self.IsAjaxComplete()) {
                     $('#umbrella').show();
