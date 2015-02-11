@@ -59,7 +59,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             try
             {
                 int count = brokenSyncPackagesStorage.GetListOfUnhandledPackages().Count();
-                return NumberHealthCheckResult.ForNumber(count);
+
+                if (count == 0)
+                    return NumberHealthCheckResult.Happy(count);
+
+                return NumberHealthCheckResult.Warning(count,
+                        "The error occurred during interview processing. Please contactSurvey Solutions Team support@mysurvey.solutions to report the error.");
             }
             catch (Exception e)
             {
@@ -72,7 +77,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             try
             {
                 int count = chunkReader.GetNumberOfSyncPackagesWithBigSize();
-                return NumberHealthCheckResult.ForNumber(count);
+                if (count == 0)
+                    return NumberHealthCheckResult.Happy(count);
+                return NumberHealthCheckResult.Warning(count,
+                        "Some interviews are oversized. Please contactSurvey Solutions Team support@mysurvey.solutions to report the error.");
             }
             catch (Exception e)
             {
