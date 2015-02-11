@@ -4,7 +4,6 @@ using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.Synchronization.Commands;
 using WB.Core.Synchronization.Documents;
 using WB.Core.Synchronization.Events.Sync;
@@ -20,11 +19,8 @@ namespace WB.Core.Synchronization.EventHandler
         IUpdateHandler<TabletDocument, PackageRequested>
     {
 
-        public TabletDenormalizer(
-            IReadSideRepositoryWriter<TabletDocument> tabletDocumentsStroraWriter, 
-            IReadSideRepositoryReader<UserDocument> userStorage) : base(tabletDocumentsStroraWriter)
+        public TabletDenormalizer(IReadSideRepositoryWriter<TabletDocument> tabletDocumentsStroraWriter) : base(tabletDocumentsStroraWriter)
         {
-            this.usersStorageReader = userStorage;
         }
 
         public TabletDocument Update(TabletDocument currentState, IPublishedEvent<TabletRegistered> evnt)
@@ -48,7 +44,7 @@ namespace WB.Core.Synchronization.EventHandler
             {
                 currentState.SyncLog.Add(userId, new List<TabletSyncLog>());
             }
-            currentState.SyncLog[userId].Add(new TabletSyncLog { AppVersion = evnt.Payload.AppVersion, HandshakeInitTime = evnt.EventTimeStamp });
+            currentState.SyncLog[userId].Add(new TabletSyncLog { AppVersion = evnt.Payload.AppVersion, HandshakeTime = evnt.EventTimeStamp });
             
             return currentState;
         }
