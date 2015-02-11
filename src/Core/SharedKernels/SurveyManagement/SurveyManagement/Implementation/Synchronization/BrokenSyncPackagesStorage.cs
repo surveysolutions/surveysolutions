@@ -10,14 +10,14 @@ using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 {
-    internal class UnhandledPackageStorage : IUnhandledPackageStorage
+    internal class BrokenSyncPackagesStorage : IBrokenSyncPackagesStorage
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string incomingCapiPackagesWithErrorsDirectory;
         private readonly SyncSettings syncSettings;
         private readonly string exceptionExtension = ".exception";
 
-        public UnhandledPackageStorage(IFileSystemAccessor fileSystemAccessor, SyncSettings syncSettings)
+        public BrokenSyncPackagesStorage(IFileSystemAccessor fileSystemAccessor, SyncSettings syncSettings)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.syncSettings = syncSettings;

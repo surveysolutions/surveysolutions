@@ -20,21 +20,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         private readonly ILogger logger;
         private readonly IJsonUtils jsonUtils;
         private readonly IArchiveUtils archiver;
-        private readonly IUnhandledPackageStorage unhandledPackageStorage;
 
         public IncomingSyncPackagesQueue(IFileSystemAccessor fileSystemAccessor, 
             SyncSettings syncSettings, 
             ILogger logger, 
             IJsonUtils jsonUtils, 
-            IArchiveUtils archiver, 
-            IUnhandledPackageStorage unhandledPackageStorage)
+            IArchiveUtils archiver)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.syncSettings = syncSettings;
             this.logger = logger;
             this.jsonUtils = jsonUtils;
             this.archiver = archiver;
-            this.unhandledPackageStorage = unhandledPackageStorage;
 
             this.incomingUnprocessedPackagesDirectory = fileSystemAccessor.CombinePath(syncSettings.AppDataDirectory,
                 syncSettings.IncomingUnprocessedPackagesDirectoryName);
@@ -89,11 +86,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             }
             catch (Exception e)
             {
-                logger.Error(string.Format("package '{0}' wasn't parsed. Reason: '{1}'", pathToPackage, e.Message), e);
-                unhandledPackageStorage.StoreUnhandledPackage(pathToPackage, interviewId, e);
-                DeleteSyncItem(pathToPackage);
+                var message = string.Format("package '{0}' wasn't parsed. Reason: '{1}'", pathToPackage, e.Message);
+                logger.Error(message, e);
+                throw new IncomingSyncPackageException(message, e, interviewId, pathToPackage);
             }
-            return null;
         }
 
         public void DeleteSyncItem(string syncItemPath)
