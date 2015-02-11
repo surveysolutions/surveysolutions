@@ -36,16 +36,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UnhandledPackageStorageTe
             fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(interviewId.FormatGuid(), Moq.It.IsAny<string>()))
                 .Returns(filesWithInterview);
 
-            unhandledPackageStorage = CreateUnhandledPackageStorage(fileSystemAccessor: fileSystemAccessorMock.Object);
+            brokenSyncPackagesStorage = CreateUnhandledPackageStorage(fileSystemAccessor: fileSystemAccessorMock.Object);
         };
 
         Because of = () =>
-            result = unhandledPackageStorage.GetListOfUnhandledPackages();
+            result = brokenSyncPackagesStorage.GetListOfUnhandledPackages();
 
         It should_result_not_empty = () =>
            result.ShouldEqual(new[] { "f1.sync", "f2.sync", interviewId.FormatGuid() + @"\" + "i1.sync", interviewId.FormatGuid() + @"\" + "i2.sync" });
 
-        private static UnhandledPackageStorage unhandledPackageStorage;
+        private static BrokenSyncPackagesStorage brokenSyncPackagesStorage;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
         private static IEnumerable<string> result;
         private static string[] filesWithoutInterview = new[] {"f1.sync", "f2.sync"};
