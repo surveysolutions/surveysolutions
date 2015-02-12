@@ -78,15 +78,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 this.changeStatusFactory.Load(new ChangeStatusInputModel {InterviewId = id});
             InterviewDetailsView interviewDetailsView = interviewDetailsViewFactory.GetInterviewDetails(id);
 
+            var questionViews = interviewDetailsView.Groups.SelectMany(group => group.Entities).OfType<InterviewQuestionView>();
             var detailsStatisticView = new DetailsStatisticView()
             {
-                AnsweredCount = interviewDetailsView.Groups.Sum(_ => _.Entities.Count(x => ((x is InterviewQuestionView) && ((InterviewQuestionView)x).IsAnswered))),
-                UnansweredCount = interviewDetailsView.Groups.Sum(_ => _.Entities.Count(x => ((x is InterviewQuestionView) && !((InterviewQuestionView)x).IsAnswered))),
-                CommentedCount = interviewDetailsView.Groups.Sum(_ => _.Entities.Count(x => ((x is InterviewQuestionView) && ((InterviewQuestionView)x).Comments != null && ((InterviewQuestionView)x).Comments.Any()))),
-                EnabledCount = interviewDetailsView.Groups.Sum(_ => _.Entities.Count(x => ((x is InterviewQuestionView) && ((InterviewQuestionView)x).IsEnabled))),
-                FlaggedCount = interviewDetailsView.Groups.Sum(_ => _.Entities.Count(x => ((x is InterviewQuestionView) && ((InterviewQuestionView)x).IsFlagged))),
-                InvalidCount = interviewDetailsView.Groups.Sum(_ => _.Entities.Count(x => ((x is InterviewQuestionView) && !((InterviewQuestionView)x).IsValid))),
-                SupervisorsCount = interviewDetailsView.Groups.Sum(_ => _.Entities.Count(x => ((x is InterviewQuestionView) && ((InterviewQuestionView)x).Scope == QuestionScope.Supervisor)))
+                AnsweredCount = questionViews.Count(question => question.IsAnswered),
+                UnansweredCount = questionViews.Count(question => question.IsEnabled && !question.IsAnswered),
+                CommentedCount = questionViews.Count(question => question.Comments != null && question.Comments.Any()),
+                EnabledCount = questionViews.Count(question => question.IsEnabled),
+                FlaggedCount = questionViews.Count(question => question.IsFlagged),
+                InvalidCount = questionViews.Count(question => !question.IsValid),
+                SupervisorsCount = questionViews.Count(question => question.Scope == QuestionScope.Supervisor)
             };
 
             var selectedGroups = new List<InterviewGroupView>();

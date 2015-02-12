@@ -37,8 +37,19 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
                 commentsCounterElement.text(parseInt(commentsCounterElement.text()) + 1);
             }
             var commentDate = new Date();
-            commentListElement.append('<dt>' + settings.UserName + ' <span class="text-normal">' + comment + '</span></dt><dd><small class="comment-date" date="' + commentDate + '">' + moment(commentDate).fromNow() + '</small></dd>');
+            var commentHeaderElement = $('<dt/>');
+            var commentDateElement = $('<dd/>');
+            var commentElement = $('<span class="text-normal"/>');
+
+            commentListElement.append(commentHeaderElement);
+            commentListElement.append(commentDateElement);
             commentListElement.removeClass("hidden");
+
+            commentHeaderElement.append(settings.UserName);
+            commentHeaderElement.append(' ');
+            commentHeaderElement.append(commentElement);
+            commentDateElement.html('<small class="comment-date" date="' + commentDate + '">' + moment(commentDate).fromNow() + '</small>');
+            commentElement.text(comment);
         });
     };
 
