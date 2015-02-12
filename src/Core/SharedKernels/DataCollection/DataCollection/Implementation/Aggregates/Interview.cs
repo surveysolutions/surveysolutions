@@ -3147,7 +3147,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             object answer = interviewState.AnswersSupportedInExpressions[questionKey];
             string parentAnswer = AnswerUtils.AnswerToString(answer);
 
-            var answerNotExistsInParent = Convert.ToDecimal(parentAnswer) != childParentValue;
+            var answerNotExistsInParent = Convert.ToDecimal(parentAnswer, CultureInfo.InvariantCulture) != childParentValue;
             if (answerNotExistsInParent)
                 throw new InterviewException(string.Format(
                     "For question {0} was provided selected value {1} as answer with parent value {2}, but this do not correspond to the parent answer selected value {3}. InterviewId: {4}",
