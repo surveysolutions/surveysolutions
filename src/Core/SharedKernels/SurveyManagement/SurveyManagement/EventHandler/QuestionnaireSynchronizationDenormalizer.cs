@@ -3,18 +3,18 @@ using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils.Services;
-using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.RepositoryAccessors;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    internal class QuestionnaireSynchronizationDenormalizer : BaseSynchronizationDenormalizer,
+    internal class QuestionnaireSynchronizationDenormalizer : BaseDenormalizer,
         IEventHandler<QuestionnaireDeleted>,
         IEventHandler<QuestionnaireAssemblyImported>,
         IEventHandler<TemplateImported>,
@@ -23,24 +23,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IJsonUtils jsonUtils;
-        private readonly IReadSideRepositoryWriter<QuestionnaireSyncPackage> questionnairePackageStorageWriter;
-        private readonly IQueryableReadSideRepositoryReader<QuestionnaireSyncPackage> questionnairePackageStorageReader;
-        private static int currentSortIndex = 0;
-
-        public static Guid AssemblySeed = new Guid("371EF2E6-BF1D-4E36-927D-2AC13C41EF7B");
+        private readonly IOrderableSyncPackageWriter<QuestionnaireSyncPackage> questionnairePackageStorageWriter;
 
         public QuestionnaireSynchronizationDenormalizer(
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
             IJsonUtils jsonUtils,
-            IReadSideRepositoryWriter<QuestionnaireSyncPackage> questionnairePackageStorageWriter,
-            IQueryableReadSideRepositoryReader<QuestionnaireSyncPackage> questionnairePackageStorageReader)
+            IOrderableSyncPackageWriter<QuestionnaireSyncPackage> questionnairePackageStorageWriter)
         {
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.jsonUtils = jsonUtils;
             this.questionnairePackageStorageWriter = questionnairePackageStorageWriter;
-            this.questionnairePackageStorageReader = questionnairePackageStorageReader;
         }
 
         public override object[] Writers
@@ -50,7 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public override object[] Readers
         {
-            get { return new object[] { questionnairePackageStorageReader }; }
+            get { return new object[] { }; }
         }
 
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
@@ -59,7 +53,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             long questionnaireVersion = evnt.Payload.QuestionnaireVersion;
             var questionnaireMetadata = new QuestionnaireMetadata(questionnaireId, questionnaireVersion, false);
             
-            this.StoreChunk(questionnaireId, questionnaireVersion, SyncItemType.DeleteTemplate, questionnaireId.ToString(), this.GetItemAsContent(questionnaireMetadata), evnt.EventTimeStamp);
+            this.StoreChunk(questionnaireId, questionnaireVersion, SyncItemType.DeleteTemplate, questionnaireId.ToString(), this.GetItemAsContent(questionnaireMetadata), evnt.EventTimeStamp, evnt.EventSequence);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireAssemblyImported> evnt)
@@ -69,22 +63,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             long version = evnt.Payload.Version;
             var meta = new QuestionnaireAssemblyMetadata(publicKey, version);
 
-            this.StoreChunk(evnt.EventSourceId, version, SyncItemType.QuestionnaireAssembly, assemblyAsBase64String, this.GetItemAsContent(meta), evnt.EventTimeStamp);
+            this.StoreChunk(evnt.EventSourceId, version, SyncItemType.QuestionnaireAssembly, assemblyAsBase64String, this.GetItemAsContent(meta), evnt.EventTimeStamp, evnt.EventSequence);
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
             this.SaveQuestionnaire(evnt.Payload.Source, evnt.Payload.Version ?? evnt.EventSequence, evnt.Payload.AllowCensusMode,
-                evnt.EventTimeStamp);
+                evnt.EventTimeStamp, evnt.EventSequence);
         }
 
         public void Handle(IPublishedEvent<PlainQuestionnaireRegistered> evnt)
         {
             QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(evnt.EventSourceId, evnt.Payload.Version);
-            this.SaveQuestionnaire(questionnaireDocument, evnt.Payload.Version, evnt.Payload.AllowCensusMode, evnt.EventTimeStamp);
+            this.SaveQuestionnaire(questionnaireDocument, evnt.Payload.Version, evnt.Payload.AllowCensusMode, evnt.EventTimeStamp, evnt.EventSequence);
         }
 
-        public void SaveQuestionnaire(QuestionnaireDocument questionnaireDocument, long version, bool allowCensusMode, DateTime timestamp)
+        public void SaveQuestionnaire(QuestionnaireDocument questionnaireDocument, long version, bool allowCensusMode, DateTime timestamp, long eventSuquence)
         {
             questionnaireDocument.IsDeleted = false;
 
@@ -95,15 +89,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 SyncItemType.Questionnaire, 
                 this.GetItemAsContent(questionnaireDocument), 
                 this.GetItemAsContent(questionnaireMetadata), 
-                timestamp);
+                timestamp,
+                eventSuquence);
         }
 
-        public void StoreChunk(Guid questionnaireId, long questionnaireVersion, string itemType, string content, string metaInfo, DateTime timestamp)
+        public void StoreChunk(Guid questionnaireId, long questionnaireVersion, string itemType, string content, string metaInfo, DateTime timestamp, long eventSuquence)
         {
-            int sortIndex = CalcNextSortIndex(
-                ref currentSortIndex,
-                this.questionnairePackageStorageWriter as IReadSideRepositoryWriter,
-                this.questionnairePackageStorageReader);
+            long sortIndex = questionnairePackageStorageWriter.GetNextOrder();
 
             var synchronizationDelta = new QuestionnaireSyncPackage(
                 questionnaireId, 

@@ -257,7 +257,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                 throw new SyncPackageNotFoundException(string.Format("Sync package with id {0} was not found on server", lastSyncedPackageId));
             }
 
-            int lastSyncedSortIndex = lastSyncedPackage.SortIndex;
+            long lastSyncedSortIndex = lastSyncedPackage.SortIndex;
 
             var orderedPackages = items
                 .Where(x => x.SortIndex > lastSyncedSortIndex)

@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors
 {
-    #warning TLK: make string identifiers here after switch to new storage
+#warning TLK: make string identifiers here after switch to new storage
     public class RavenReadSideRepositoryWriter<TEntity> : RavenReadSideRepositoryAccessor<TEntity>,
         IReadSideRepositoryWriter<TEntity>, IReadSideRepositoryCleaner
         where TEntity : class, IReadSideRepositoryEntity
