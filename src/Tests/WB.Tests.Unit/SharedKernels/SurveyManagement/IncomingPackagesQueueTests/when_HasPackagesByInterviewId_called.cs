@@ -1,13 +1,13 @@
-﻿using Machine.Specifications;
+﻿using System;
+using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
-using WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTests;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTests
 {
-    internal class when_QueueLength_called : IncomingPackagesQueueTestContext
+    internal class when_HasPackagesByInterviewId_called : IncomingPackagesQueueTestContext
     {
         Establish context = () =>
         {
@@ -19,15 +19,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
         };
 
         Because of = () =>
-            result = incomingSyncPackagesQueue.QueueLength;
+            result = incomingSyncPackagesQueue.HasPackagesByInterviewId(new Guid());
 
-        It should_result_length_of_queue_be_equal_to_cound_of_files_in_folder = () =>
-           result.ShouldEqual(2);
+        It should_sync_packages_folder_contains_some_sync_files_by_specific_interview_id = () =>
+           result.ShouldBeTrue();
 
         private static IncomingSyncPackagesQueue incomingSyncPackagesQueue;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
        
-        private static int result;
-        private static string[] filesInFolder = new[] { "f1.sync", "f2.sync" };
+        private static bool result;
+        private static string[] filesInFolder = new[] { "datetimeticks-interviewid.sync", "datetimeticks-interviewid.sync" };
     }
 }

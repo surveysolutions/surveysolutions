@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
         };
 
         Because of = () => exception = Catch.Exception(() =>
-            incomingSyncPackagesQueue.Enqueue("nastya"));
+            incomingSyncPackagesQueue.Enqueue(Guid.Empty, "nastya"));
 
         It should_throw_exception = () =>
           exception.ShouldNotBeNull();

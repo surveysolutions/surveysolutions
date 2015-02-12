@@ -76,7 +76,7 @@ namespace WB.UI.Capi.Implementations.Services
             return package.SyncItem;
         }
 
-        public async Task PushChunkAsync(SyncCredentials credentials, string synchronizationPackage)
+        public async Task PushChunkAsync(SyncCredentials credentials, Guid interviewId, string synchronizationPackage)
         {
             if (synchronizationPackage == null) throw new ArgumentNullException("synchronizationPackage");
 
@@ -85,7 +85,7 @@ namespace WB.UI.Capi.Implementations.Services
                 await this.restService.PostAsync(
                     url: "api/InterviewerSync/PostPackage",
                     credentials: new RestCredentials() {Login = credentials.Login, Password = credentials.Password},
-                    request: new PostPackageRequest() {SynchronizationPackage = synchronizationPackage});
+                    request: new PostPackageRequest() {SynchronizationPackage = synchronizationPackage, InterviewId = interviewId});
             }
             catch (Exception ex)
             {

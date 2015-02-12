@@ -31,11 +31,11 @@ namespace WB.UI.Headquarters.API
             this.logger = logger;
         }
 
-        public async Task<HttpResponseMessage> Post()
+        public async Task<HttpResponseMessage> Post([FromUri]Guid interviewId)
         {
             var syncItem = await this.Request.Content.ReadAsStringAsync();
 
-            this.syncManager.SendSyncItem(syncItem);
+            this.syncManager.SendSyncItem(interviewId: interviewId, package: syncItem);
 
             return Request.CreateResponse(HttpStatusCode.OK, true);
         }
