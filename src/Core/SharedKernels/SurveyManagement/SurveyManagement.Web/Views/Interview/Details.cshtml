@@ -72,6 +72,10 @@
                 <span>@Model.InterviewDetails.Title</span>
                 <span class="small">Status:</span><a class="btn-link" data-toggle="modal" data-target="#statusHistoryModal">@Model.InterviewDetails.Status.ToLocalizeString()</a>
                 <span class="small">Responsible:</span><span>@Model.InterviewDetails.Responsible.Name</span>
+                @if (Model.HasUnprocessedSyncPackages)
+                {
+                    <span class="badge badge-orange"><i class="glyphicon glyphicon-refresh"></i> Interview has pending synchonization packages in queue</span>
+                }
             </h3>
         </div>
         <div class="panel panel-default">

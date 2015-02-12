@@ -11,5 +11,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         public IEnumerable<InterviewGroupView> FilteredGroups { get; set; }
         public ChangeStatusView History { get; set; }
         public DetailsStatisticView Statistic { get; set; }
+        public bool HasUnprocessedSyncPackages { get; set; }
     }
 }

@@ -202,7 +202,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             try
             {
-                syncManager.SendSyncItem(request.SynchronizationPackage);
+                syncManager.SendSyncItem(interviewId: request.InterviewId, package: request.SynchronizationPackage);
             }
             catch (Exception ex)
             {
