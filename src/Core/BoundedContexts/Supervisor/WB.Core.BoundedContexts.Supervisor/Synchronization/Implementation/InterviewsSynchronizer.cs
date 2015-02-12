@@ -454,7 +454,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         {
             using (var client = new HttpClient(this.httpMessageHandler()).AppendAuthToken(this.settings))
             {
-                var request = new HttpRequestMessage(HttpMethod.Post, this.settings.InterviewsPushUrl) {
+                var request = new HttpRequestMessage(HttpMethod.Post, string.Format("{0}?interviewId={1}", this.settings.InterviewsPushUrl, interviewId)) {
                     Content = new StringContent(interviewData)
                 };
 
