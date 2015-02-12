@@ -3,7 +3,7 @@
     this.ViewBag.Title = "Heath Check Page";
 }
 
-<div class="row">
+<div class="row health-check">
     <div class="col-md-8 col-md-offset-2">
 
         <h1 class="page-header">Health check page</h1>
@@ -55,17 +55,6 @@
 
 
 @section scripts {
-
-    <style>
-        b.is-good { color: green; }
-        b.has-error { color: red; text-transform: uppercase; }
-        b.has-warning { color: orange; text-transform: uppercase; }
-        li .badge { background-color: green; }
-        li.has-error .badge { background-color: red; }
-        li.has-error { color: red; }
-        li.has-warning .badge { background-color: orange; }
-        li.has-warning { color: orange; }
-    </style>
 
     @Scripts.Render("~/Scripts/viewmodels/pages/healthcheck.js")
     <script type="text/javascript">

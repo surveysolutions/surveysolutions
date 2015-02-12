@@ -401,3 +401,14 @@ input::-ms-clear {
     50%  { color: #fff; text-shadow: 0 -1px 0 #444, 0 0 2px #ffd, 0 0 4px #fff; }
     100% { color: #ddd; text-shadow: 0 -1px 0 #000; }
 }
+
+/* Health check page */
+.health-check b.is-good { color: green; }
+.health-check b.has-error { color: red; text-transform: uppercase; }
+.health-check b.has-warning { color: orange; text-transform: uppercase; }
+.health-check li .badge { background-color: green; }
+.health-check li p, li table.table { width: 85%; }
+.health-check li.has-error .badge { background-color: red; }
+.health-check li.has-error { color: red; }
+.health-check li.has-warning .badge { background-color: orange; }
+.health-check li.has-warning { color: orange; }
