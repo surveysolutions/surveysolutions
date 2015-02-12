@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SimpleSynchronizationDataS
 
         It should_store_delete_package = () =>
             questionnairePackageStorageWriter.Verify(
-                x => x.Store(Moq.It.Is<QuestionnaireSyncPackage>(s => s.ItemType == SyncItemType.DeleteTemplate), Moq.It.IsAny<string>()), 
+                x => x.Store(Moq.It.Is<QuestionnaireSyncPackage>(s => s.ItemType == SyncItemType.DeleteQuestionnaire), Moq.It.IsAny<string>()), 
                 Times.Once);
 
 

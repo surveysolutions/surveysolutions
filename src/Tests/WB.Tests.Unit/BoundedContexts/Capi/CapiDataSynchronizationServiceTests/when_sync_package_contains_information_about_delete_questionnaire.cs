@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
 
             syncItem = new QuestionnaireSyncPackageDto
                        {
-                           ItemType = SyncItemType.DeleteTemplate,
+                           ItemType = SyncItemType.DeleteQuestionnaire,
                            Content = "some content", 
                            MetaInfo = "some metadata",
                            QuestionnaireId = questionnaireMetadata.QuestionnaireId,

@@ -80,7 +80,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
                 case SyncItemType.Questionnaire:
                     this.UpdateQuestionnaire(item);
                     break;
-                case SyncItemType.DeleteTemplate:
+                case SyncItemType.DeleteQuestionnaire:
                     this.DeleteQuestionnaire(item);
                     break;
                 case SyncItemType.QuestionnaireAssembly:
@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
                 case SyncItemType.Interview:
                     this.UpdateInterview(item);
                     break;
-                case SyncItemType.DeleteQuestionnare:
+                case SyncItemType.DeleteInterview:
                     this.DeleteInterview(item);
                     break;
             }
