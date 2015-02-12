@@ -364,7 +364,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 {
                     throw new InvalidDataException(string.Format(
                         "Event {0} {1} (event source {2}) appears in all events stream not when expected. Event sequence: {3}. Expected sequence: {4}.",
-                        committedEvent.EventIdentifier.FormatGuid(), committedEvent.Payload.GetType().Name, 
+                        committedEvent.EventIdentifier.FormatGuid(), committedEvent.Payload.GetType().Name,
                         committedEvent.EventSourceId.FormatGuid(),
                         committedEvent.EventSequence, expectedEventSequence));
                 }

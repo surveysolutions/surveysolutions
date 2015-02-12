@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.EventBus;
@@ -27,8 +28,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummarys;
         private readonly IJsonUtils jsonUtils;
         private readonly IOrderableSyncPackageWriter<InterviewSyncPackage> interviewPackageStorageWriter;
+        private readonly IReadSideRepositoryWriter<InterviewResponsible> interviewResponsibleStorageWriter;
 
-        public static Guid AssemblySeed = new Guid("371EF2E6-BF1D-4E36-927D-2AC13C41EF7B");
         private readonly IMetaInfoBuilder metaBuilder;
 
         public InterviewSynchronizationDenormalizer(
@@ -37,7 +38,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             IReadSideRepositoryWriter<InterviewSummary> interviewSummarys, 
             IJsonUtils jsonUtils,
             IMetaInfoBuilder metaBuilder,
-            IOrderableSyncPackageWriter<InterviewSyncPackage> interviewPackageStorageWriter)
+            IOrderableSyncPackageWriter<InterviewSyncPackage> interviewPackageStorageWriter,
+            IReadSideRepositoryWriter<InterviewResponsible> interviewResponsibleStorageWriter)
         {
             this.questionnriePropagationStructures = questionnriePropagationStructures;
             this.interviews = interviews;
@@ -45,11 +47,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.metaBuilder = metaBuilder;
             this.jsonUtils = jsonUtils;
             this.interviewPackageStorageWriter = interviewPackageStorageWriter;
+            this.interviewResponsibleStorageWriter = interviewResponsibleStorageWriter;
         }
 
         public override object[] Writers
         {
-            get { return new object[] { this.interviewPackageStorageWriter }; }
+            get { return new object[] { this.interviewPackageStorageWriter, interviewResponsibleStorageWriter }; }
         }
 
         public override object[] Readers
@@ -84,16 +87,28 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             if (interviewSummary == null)
                 return;
 
+            var interviewResponsibleInfo = interviewResponsibleStorageWriter.GetById(evnt.EventSourceId);
+            if (interviewResponsibleInfo != null && interviewResponsibleInfo.UserId != evnt.Payload.InterviewerId && interviewSummary.ResponsibleRole == UserRoles.Operator)
+            {
+                this.MarkInterviewForClientDeleting(evnt.EventSourceId, interviewResponsibleInfo.UserId, evnt.EventTimeStamp,
+                    interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
+            }
+
             if (this.IsInterviewWereRejectedAtLeastOnceBeboreOrNotCreateOnClient(interviewSummary))
             {
-                var interviewWithVersion = interviews.GetById(evnt.EventSourceId);
-                if (interviewWithVersion == null)
-                    return;
-
-                var interview = interviewWithVersion;
-                if (interview.Status != InterviewStatus.RejectedByHeadquarters)
-                    this.ResendInterviewForPerson(interview, evnt.Payload.InterviewerId, evnt.EventTimeStamp);
+                var interviewWithVersion = this.interviews.GetById(evnt.EventSourceId);
+                if (interviewWithVersion != null)
+                {
+                    if (interviewWithVersion.Status != InterviewStatus.RejectedByHeadquarters) 
+                        this.ResendInterviewForPerson(interviewWithVersion, evnt.Payload.InterviewerId, evnt.EventTimeStamp);
+                }
             }
+
+            if (interviewResponsibleInfo == null)
+                interviewResponsibleInfo = new InterviewResponsible { InterviewId = evnt.EventSourceId };
+
+            interviewResponsibleInfo.UserId = evnt.Payload.InterviewerId;
+            interviewResponsibleStorageWriter.Store(interviewResponsibleInfo, evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
@@ -104,6 +119,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             this.MarkInterviewForClientDeleting(evnt.EventSourceId, interviewSummary.ResponsibleId, evnt.EventTimeStamp, 
                 interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
+
+            //interviewResponsibleStorageWriter.Remove(evnt.EventSourceId);
         }
 
         private void ResendInterviewInNewStatus(InterviewData interviewData, InterviewStatus newStatus, string comments, DateTime timestamp)
@@ -169,7 +186,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 questionnaireId,
                 questionnaireVersion, 
                 responsibleId, 
-                SyncItemType.DeleteQuestionnare, 
+                SyncItemType.DeleteInterview, 
                 interviewId.ToString(), 
                 string.Empty, 
                 timestamp);

@@ -24,6 +24,11 @@
                 {
                     <table class="table">
                         <caption>App version: @sync.AppVersion, handshake was on: @sync.HandshakeTime.ToLocalTime()</caption>
+                        <colgroup>
+                            <col style="width: 33%;" />
+                            <col style="width: 33%;" />
+                            <col />
+                        </colgroup>
                         <thead>
                             <tr>
                                 <th>User's packages</th>
@@ -33,9 +38,9 @@
                         </thead>
                         <tbody>
                             <tr class="info">
-                                <td colspan="2">@(sync.PackagesTrackingInfo[SyncItemType.User].LastPackageId ?? "-")</td>
-                                <td colspan="2">@(sync.PackagesTrackingInfo[SyncItemType.Questionnaire].LastPackageId ?? "-")</td>
-                                <td colspan="2">@(sync.PackagesTrackingInfo[SyncItemType.Interview].LastPackageId ?? "-")</td>
+                                <td>@(sync.PackagesTrackingInfo[SyncItemType.User].LastPackageId ?? "-")</td>
+                                <td>@(sync.PackagesTrackingInfo[SyncItemType.Questionnaire].LastPackageId ?? "-")</td>
+                                <td>@(sync.PackagesTrackingInfo[SyncItemType.Interview].LastPackageId ?? "-")</td>
                             </tr>
                             <tr>
                                 <td>

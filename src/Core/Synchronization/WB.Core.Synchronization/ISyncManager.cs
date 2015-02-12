@@ -18,9 +18,9 @@ namespace WB.Core.Synchronization
 
         UserSyncPackageDto ReceiveUserSyncPackage(Guid deviceId, string packageId, Guid userId);
 
-        QuestionnaireSyncPackageDto ReceiveQuestionnaireSyncPackage(Guid clientRegistrationId, string packageId, Guid userId);
+        QuestionnaireSyncPackageDto ReceiveQuestionnaireSyncPackage(Guid deviceId, string packageId, Guid userId);
 
-        InterviewSyncPackageDto ReceiveInterviewSyncPackage(Guid clientRegistrationId, string packageId, Guid userId);
+        InterviewSyncPackageDto ReceiveInterviewSyncPackage(Guid deviceId, string packageId, Guid userId);
 
         string GetPackageIdByTimestamp(Guid userId, DateTime timestamp);
 

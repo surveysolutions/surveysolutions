@@ -1,7 +1,5 @@
 ﻿using Machine.Specifications;
-
 using Moq;
-
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -30,7 +28,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
                 interviewSummarys ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
                 jsonUtils ?? Mock.Of<IJsonUtils>(),
                 metaBuilder ?? Mock.Of<IMetaInfoBuilder>(),
-                interviewPackageStorageWriter ?? Mock.Of<IOrderableSyncPackageWriter<InterviewSyncPackage>>());
+                interviewPackageStorageWriter ?? Mock.Of<IOrderableSyncPackageWriter<InterviewSyncPackage>>(),
+                Mock.Of<IReadSideRepositoryWriter<InterviewResponsible>>());
 
             return result;
         }

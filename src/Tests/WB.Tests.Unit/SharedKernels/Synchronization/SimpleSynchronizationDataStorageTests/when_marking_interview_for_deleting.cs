@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SimpleSynchronizationDataS
 
         It should_store_chunck = () =>
             interviewPackageStorageWriter.Verify(x => x.Store(
-                Moq.It.Is<InterviewSyncPackage>(s => s.ItemType == SyncItemType.DeleteQuestionnare && 
+                Moq.It.Is<InterviewSyncPackage>(s => s.ItemType == SyncItemType.DeleteInterview && 
                     s.InterviewId == interviewId), Moq.It.IsAny<string>()), Times.Once);
 
 

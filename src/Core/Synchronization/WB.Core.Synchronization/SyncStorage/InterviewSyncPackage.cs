@@ -1,10 +1,16 @@
 using System;
-
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
+    public class InterviewResponsible : IView
+    {
+        public Guid InterviewId { get; set; }
+
+        public Guid UserId { get; set; }
+    }
+
     public class InterviewSyncPackage : ISyncPackage
     {
         [Obsolete("Probably used for deserialization")]

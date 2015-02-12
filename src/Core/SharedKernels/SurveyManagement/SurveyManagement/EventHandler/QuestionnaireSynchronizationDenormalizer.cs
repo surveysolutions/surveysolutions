@@ -53,7 +53,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             long questionnaireVersion = evnt.Payload.QuestionnaireVersion;
             var questionnaireMetadata = new QuestionnaireMetadata(questionnaireId, questionnaireVersion, false);
             
-            this.StoreChunk(questionnaireId, questionnaireVersion, SyncItemType.DeleteTemplate, questionnaireId.ToString(), this.GetItemAsContent(questionnaireMetadata), evnt.EventTimeStamp, evnt.EventSequence);
+            this.StoreChunk(questionnaireId, questionnaireVersion, SyncItemType.DeleteQuestionnaire, questionnaireId.ToString(), this.GetItemAsContent(questionnaireMetadata), evnt.EventTimeStamp, evnt.EventSequence);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireAssemblyImported> evnt)
