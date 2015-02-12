@@ -11,7 +11,7 @@ namespace WB.Core.Synchronization.SyncStorage
         {
         }
 
-        public QuestionnaireSyncPackage(Guid questionnaireId, long questionnaireVersion, string itemType, string content, string metaInfo, int sortIndex, DateTime timestamp)
+        public QuestionnaireSyncPackage(Guid questionnaireId, long questionnaireVersion, string itemType, string content, string metaInfo, long sortIndex, DateTime timestamp)
         {
             this.PackageId = string.Format("{0}_{1}${2}", questionnaireId.FormatGuid(), questionnaireVersion, sortIndex);
             this.QuestionnaireId = questionnaireId;
@@ -37,6 +37,6 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public string MetaInfo { get; private set; }
 
-        public int SortIndex { get; private set; }
+        public long SortIndex { get; private set; }
     }
 }

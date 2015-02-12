@@ -17,7 +17,7 @@ namespace WB.Core.Synchronization.Implementation.ReadSide.Indexes
 
             public DateTime Timestamp { get; set; }
 
-            public int SortIndex { get; set; }
+            public long SortIndex { get; set; }
         }
 
         public QuestionnaireSyncPackagesByBriefFields()
@@ -31,7 +31,7 @@ namespace WB.Core.Synchronization.Implementation.ReadSide.Indexes
                        };
 
             this.Index(x => x.SortIndex, FieldIndexing.Default);
-            this.Sort(x => x.SortIndex, SortOptions.Int);
+            this.Sort(x => x.SortIndex, SortOptions.Long);
         }
     }
 }

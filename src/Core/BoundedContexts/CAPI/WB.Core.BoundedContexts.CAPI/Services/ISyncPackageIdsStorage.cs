@@ -4,7 +4,7 @@ namespace WB.Core.BoundedContexts.Capi.Services
 {
     public interface ISyncPackageIdsStorage
     {
-        void Append(string packageId, string packageType, Guid userId, int sortIndex);
+        void Append(string packageId, string packageType, Guid userId, long sortIndex);
 
         string GetChunkBeforeChunkWithId(string type, string lastKnownPackageId, Guid userId);
 

@@ -10,6 +10,6 @@ namespace WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement
 
         public DateTime Timestamp { get; set; }
 
-        public int SortIndex { get; set; }
+        public long SortIndex { get; set; }
     }
 }

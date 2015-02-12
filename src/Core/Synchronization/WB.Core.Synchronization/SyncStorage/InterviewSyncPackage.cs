@@ -20,7 +20,7 @@ namespace WB.Core.Synchronization.SyncStorage
             Guid? userId,
             string itemType,
             string metaInfo,
-            int sortIndex)
+            long sortIndex)
         {
             this.InterviewId = interviewId;
             this.VersionedQuestionnaireId = string.Format("{0}_{1}", questionnaireId, questionnaireVersion);
@@ -49,6 +49,6 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public string ItemType { get; private set; }
 
-        public int SortIndex { get; private set; }
+        public long SortIndex { get; private set; }
     }
 }

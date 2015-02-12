@@ -4,6 +4,7 @@ using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.Synchronization.SyncStorage;
 
 using It = Machine.Specifications.It;
@@ -16,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
         {
             interviewId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-            interviewPackageStorageWriter = new Mock<IReadSideRepositoryWriter<InterviewSyncPackage>>();
+            interviewPackageStorageWriter = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackage>>();
 
             denormalizer = CreateDenormalizer(interviewPackageStorageWriter: interviewPackageStorageWriter.Object);
         };
@@ -28,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             interviewPackageStorageWriter.Verify(x => x.Store(Moq.It.IsAny<InterviewSyncPackage>(), Moq.It.IsAny<string>()), Times.Never);
 
         static InterviewSynchronizationDenormalizer denormalizer;
-        static Mock<IReadSideRepositoryWriter<InterviewSyncPackage>> interviewPackageStorageWriter;
+        static Mock<IOrderableSyncPackageWriter<InterviewSyncPackage>> interviewPackageStorageWriter;
         static Guid interviewId;
     }
 }

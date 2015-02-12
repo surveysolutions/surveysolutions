@@ -4,6 +4,7 @@ using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.Synchronization.SyncStorage;
 using WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormalizerTests;
 
@@ -15,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SimpleSynchronizationDataS
     {
         Establish context = () =>
         {
-            questionnairePackageStorageWriter = new Mock<IReadSideRepositoryWriter<QuestionnaireSyncPackage>>();
+            questionnairePackageStorageWriter = new Mock<IOrderableSyncPackageWriter<QuestionnaireSyncPackage>>();
             denormalizer = CreateDenormalizer(questionnairePackageStorageWriter: questionnairePackageStorageWriter.Object);
         };
 
@@ -30,6 +31,6 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SimpleSynchronizationDataS
         private static QuestionnaireSynchronizationDenormalizer denormalizer;
         private static Guid questionnaireId = Guid.Parse("1BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static long version = 4;
-        private static Mock<IReadSideRepositoryWriter<QuestionnaireSyncPackage>> questionnairePackageStorageWriter;
+        private static Mock<IOrderableSyncPackageWriter<QuestionnaireSyncPackage>> questionnairePackageStorageWriter;
     }
 }
