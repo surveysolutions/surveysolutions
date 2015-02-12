@@ -150,7 +150,7 @@
                             if (Model.Answer != null)
                             {
                                 var answers = (decimal[][])Model.Answer;
-                                isChecked = answers.Contains((decimal[])option.Value);
+                                isChecked = answers.Any(answer => answer.SequenceEqual((decimal[])option.Value));
                                 if (isChecked)
                                 {
                                     orderIndex = answers.Select((item, index) => new { index, item }).First(_ => _.item.SequenceEqual((decimal[])option.Value)).index + 1;
@@ -203,14 +203,10 @@
                     }
                     break;
                 case QuestionType.TextList:
-                    if (Model.Answer != null)
-                    {
-                        var textListAnswer = Model.Answer as InterviewTextListAnswers;
-                        foreach (var interviewTextListAnswer in textListAnswer.Answers)
+                    foreach (var option in Model.Options)
                         {
-                            <div><span>@interviewTextListAnswer.Answer</span></div>
+                            <div><span>@option.Label</span></div>
                         }
-                    }
                     break;
                 case QuestionType.Multimedia:
                 <img src="@Url.RouteUrl("Default", new {httproute = "", controller = "Resource", action = "InterviewFile", interviewid = ViewData["InterviewId"], filename = Model.Answer})" />
