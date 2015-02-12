@@ -37,7 +37,7 @@ namespace WB.UI.Capi.Syncronization.Implementation
             }
         }
 
-        public void Append(string packageId, string packageType, Guid userId, int sortIndex)
+        public void Append(string packageId, string packageType, Guid userId, long sortIndex)
         {
             using (var connection = connectionFactory.Create(FullPathToDataBase))
             {
@@ -109,7 +109,7 @@ namespace WB.UI.Capi.Syncronization.Implementation
                     return null;
                 }
 
-                int prevSortIndex = requestedSortIndex.SortIndex - 1;
+                var prevSortIndex = requestedSortIndex.SortIndex - 1;
                 var chunkBeforeChunkWithId =
                     connection.Table<SyncPackageId>()
                         .Where(x => x.UserId == userIdAsString)

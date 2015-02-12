@@ -4,6 +4,7 @@ using System.Linq;
 
 using Main.Core.Entities.SubEntities;
 
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -83,8 +84,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletI
             return new TabletInformationView(fileName, separatedValues[0], separatedValues[1], fileCreationTime, fileSize);
         }
 
-        public TabletLogView GetTabletLog(string deviceId)
+        public TabletLogView GetTabletLog(string androidId)
         {
+            string deviceId = androidId.ToGuid().FormatGuid();
             var tabletLogView = new TabletLogView();
             TabletDocument tabletLog = tabletDocumentsStrogeReader.GetById(deviceId);
             if (tabletLog == null)

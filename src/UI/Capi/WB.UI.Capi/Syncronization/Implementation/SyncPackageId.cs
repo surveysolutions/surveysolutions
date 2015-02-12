@@ -7,7 +7,7 @@ namespace WB.UI.Capi.Syncronization.Implementation
         [PrimaryKey]
         public string PackageId { get; set; }
 
-        public int SortIndex { get; set; }
+        public long SortIndex { get; set; }
 
         public string Type { get; set; }
 

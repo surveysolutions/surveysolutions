@@ -2,22 +2,22 @@
 using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils.Services;
-using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    internal class InterviewSynchronizationDenormalizer : BaseSynchronizationDenormalizer, 
+    internal class InterviewSynchronizationDenormalizer : BaseDenormalizer, 
         IEventHandler<InterviewStatusChanged>, 
         IEventHandler<InterviewerAssigned>, 
         IEventHandler<InterviewHardDeleted>
@@ -26,9 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IReadSideKeyValueStorage<InterviewData> interviews;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummarys;
         private readonly IJsonUtils jsonUtils;
-        private readonly IReadSideRepositoryWriter<InterviewSyncPackage> interviewPackageStorageWriter;
-        private readonly IQueryableReadSideRepositoryReader<InterviewSyncPackage> interviewPackageStorageReader;
-        private static int currentSortIndex = 0;
+        private readonly IOrderableSyncPackageWriter<InterviewSyncPackage> interviewPackageStorageWriter;
 
         public static Guid AssemblySeed = new Guid("371EF2E6-BF1D-4E36-927D-2AC13C41EF7B");
         private readonly IMetaInfoBuilder metaBuilder;
@@ -39,8 +37,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             IReadSideRepositoryWriter<InterviewSummary> interviewSummarys, 
             IJsonUtils jsonUtils,
             IMetaInfoBuilder metaBuilder,
-            IReadSideRepositoryWriter<InterviewSyncPackage> interviewPackageStorageWriter,
-            IQueryableReadSideRepositoryReader<InterviewSyncPackage> interviewPackageStorageReader)
+            IOrderableSyncPackageWriter<InterviewSyncPackage> interviewPackageStorageWriter)
         {
             this.questionnriePropagationStructures = questionnriePropagationStructures;
             this.interviews = interviews;
@@ -48,7 +45,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.metaBuilder = metaBuilder;
             this.jsonUtils = jsonUtils;
             this.interviewPackageStorageWriter = interviewPackageStorageWriter;
-            this.interviewPackageStorageReader = interviewPackageStorageReader;
         }
 
         public override object[] Writers
@@ -58,7 +54,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public override object[] Readers
         {
-            get { return new object[] { questionnriePropagationStructures, interviews, interviewSummarys, interviewPackageStorageReader }; }
+            get { return new object[] { questionnriePropagationStructures, interviews, interviewSummarys }; }
 
         }
 
@@ -181,10 +177,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void StoreChunk(Guid interviewId, Guid questionnaireId, long questionnaireVersion, Guid? userId, string itemType, string content, string metaInfo, DateTime timestamp)
         {
-            int sortIndex = CalcNextSortIndex(
-                ref currentSortIndex,
-                this.interviewPackageStorageWriter as IReadSideRepositoryWriter,
-                this.interviewPackageStorageReader);
+            long sortIndex = interviewPackageStorageWriter.GetNextOrder();
             
             var synchronizationDelta = new InterviewSyncPackage(interviewId, questionnaireId, questionnaireVersion, content, timestamp,
                 userId, itemType, metaInfo, sortIndex);

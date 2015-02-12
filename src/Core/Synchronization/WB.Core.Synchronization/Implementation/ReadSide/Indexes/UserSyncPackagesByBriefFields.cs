@@ -16,7 +16,7 @@ namespace WB.Core.Synchronization.Implementation.ReadSide.Indexes
 
             public Guid UserId { get; set; }
 
-            public int SortIndex { get; set; }
+            public long SortIndex { get; set; }
         }
 
         public UserSyncPackagesByBriefFields()
@@ -30,7 +30,7 @@ namespace WB.Core.Synchronization.Implementation.ReadSide.Indexes
                                      };
 
             Index(x => x.SortIndex, FieldIndexing.Default);
-            Sort(x => x.SortIndex, SortOptions.Int);
+            Sort(x => x.SortIndex, SortOptions.Long);
         }
     }
 }

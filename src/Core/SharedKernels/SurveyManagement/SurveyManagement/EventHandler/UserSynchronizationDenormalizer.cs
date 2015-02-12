@@ -5,16 +5,17 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.User;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils.Services;
-using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.RepositoryAccessors;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    internal class UserSynchronizationDenormalizer : BaseSynchronizationDenormalizer,
+    internal class UserSynchronizationDenormalizer : BaseDenormalizer,
         IEventHandler<NewUserCreated>,
         IEventHandler<UserChanged>,
         IEventHandler<UserLocked>,
@@ -24,20 +25,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IJsonUtils jsonUtils;
-        private readonly IReadSideRepositoryWriter<UserSyncPackage> userPackageStorageWriter;
-        private readonly IQueryableReadSideRepositoryReader<UserSyncPackage> userPackageStorageReader;
-        private static int currentSortIndex = 0;
+        private readonly IOrderableSyncPackageWriter<UserSyncPackage> userPackageStorageWriter;
 
         public UserSynchronizationDenormalizer(
             IReadSideRepositoryWriter<UserDocument> users, 
             IJsonUtils jsonUtils,
-            IReadSideRepositoryWriter<UserSyncPackage> userPackageStorageWriter,
-            IQueryableReadSideRepositoryReader<UserSyncPackage> userPackageStorageReader)
+            IOrderableSyncPackageWriter<UserSyncPackage> userPackageStorageWriter)
         {
             this.users = users;
             this.jsonUtils = jsonUtils;
             this.userPackageStorageWriter = userPackageStorageWriter;
-            this.userPackageStorageReader = userPackageStorageReader;
         }
 
         public override object[] Writers
@@ -47,7 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public override object[] Readers
         {
-            get { return new object[] { this.users, userPackageStorageReader }; }
+            get { return new object[] { this.users }; }
 
         }
 
@@ -118,10 +115,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return;
             }
 
-            var sortIndex = this.CalcNextSortIndex(
-                ref currentSortIndex, 
-                this.userPackageStorageWriter as IReadSideRepositoryWriter, 
-                this.userPackageStorageReader);
+            var sortIndex = userPackageStorageWriter.GetNextOrder();
 
             var synchronizationDelta = new UserSyncPackage(
                 userId: user.PublicKey,

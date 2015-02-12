@@ -14,7 +14,7 @@ namespace WB.Core.Synchronization.SyncStorage
             Guid userId,
             string content,
             DateTime timestamp,
-            int sortIndex)
+            long sortIndex)
         {
             this.UserId = userId;
             this.PackageId = userId.FormatGuid() + "$" + sortIndex;
@@ -29,7 +29,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public DateTime Timestamp { get; private set; }
 
-        public int SortIndex { get; private set; }
+        public long SortIndex { get; private set; }
 
         public string Content { get; private set; }
     }

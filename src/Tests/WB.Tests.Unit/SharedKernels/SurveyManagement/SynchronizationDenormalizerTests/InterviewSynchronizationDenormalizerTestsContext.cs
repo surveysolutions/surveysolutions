@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Core.Synchronization.SyncStorage;
@@ -21,8 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             IReadSideRepositoryWriter<InterviewSummary> interviewSummarys = null,
             IJsonUtils jsonUtils = null,
             IMetaInfoBuilder metaBuilder = null,
-            IReadSideRepositoryWriter<InterviewSyncPackage> interviewPackageStorageWriter = null,
-            IQueryableReadSideRepositoryReader<InterviewSyncPackage> interviewPackageStorageReader = null)
+            IOrderableSyncPackageWriter<InterviewSyncPackage> interviewPackageStorageWriter = null)
         {
             var result = new InterviewSynchronizationDenormalizer(
                 questionnriePropagationStructures ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(),
@@ -30,8 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
                 interviewSummarys ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
                 jsonUtils ?? Mock.Of<IJsonUtils>(),
                 metaBuilder ?? Mock.Of<IMetaInfoBuilder>(),
-                interviewPackageStorageWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSyncPackage>>(),
-                interviewPackageStorageReader ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSyncPackage>>());
+                interviewPackageStorageWriter ?? Mock.Of<IOrderableSyncPackageWriter<InterviewSyncPackage>>());
 
             return result;
         }

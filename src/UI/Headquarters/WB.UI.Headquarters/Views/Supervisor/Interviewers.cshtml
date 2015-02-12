@@ -10,6 +10,7 @@
     @Scripts.Render("~/Scripts/viewmodels/pages/users.js")
     <script type="text/javascript">
         var $editUrl = '@Url.Action("Edit", "Interviewer", new { area = string.Empty })';
+        var $deviceUrl = '@Url.Action("Device", "TabletReport", new { area = string.Empty })';
         $(function () {
             var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "Interviewers"})');
             model.GetFilterMethod = function () {
@@ -18,7 +19,7 @@
             ko.applyBindings(model);
             model.load();
         });
-    </script>
+</script>
 }
 
 @section header
@@ -58,7 +59,7 @@
                 <td data-bind="text: UserName"></td>
                 <td data-bind="text: CreationDate"></td>
                 <td data-bind="text: Email"></td>
-                <td data-bind="text: DeviceId"></td>
+                <td><a data-bind="text: DeviceId, attr: { href: $deviceUrl + '/' + DeviceId() }"></a></td>
                 <td>
                     <a class="btn btn-info" data-bind="attr: { href: $editUrl + '/' + UserId() }">
                         <i class="icon icon-edit icon-white"></i> Edit
