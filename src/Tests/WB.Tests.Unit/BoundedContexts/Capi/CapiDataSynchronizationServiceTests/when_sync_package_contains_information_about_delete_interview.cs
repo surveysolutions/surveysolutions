@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
             syncItem = new InterviewSyncPackageDto
                        {
                            InterviewId = interviewId,
-                           ItemType = SyncItemType.DeleteQuestionnare, 
+                           ItemType = SyncItemType.DeleteInterview, 
                            Content = interviewId.ToString(), MetaInfo = "some metadata"
                        };
 

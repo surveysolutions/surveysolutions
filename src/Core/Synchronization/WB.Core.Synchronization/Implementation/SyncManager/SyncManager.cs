@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+
+using Raven.Abstractions.Smuggler;
+
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -71,14 +74,12 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             Guid deviceId = clientIdentifier.AndroidId.ToGuid();
             var device = this.devices.GetById(deviceId);
 
-            if (device != null)
-            {
-                this.commandService.Execute(new TrackHandshakeCommand(deviceId, clientIdentifier.UserId, clientIdentifier.AppVersion));
-            }
-            else //register new device
+            if (device == null)
             {
                 this.commandService.Execute(new RegisterTabletCommand(deviceId, clientIdentifier.UserId, clientIdentifier.AndroidId, clientIdentifier.AppVersion));
             }
+
+            this.commandService.Execute(new TrackHandshakeCommand(deviceId, clientIdentifier.UserId, clientIdentifier.AppVersion));
 
             return new HandshakePackage(clientIdentifier.UserId, clientIdentifier.ClientInstanceKey, Guid.NewGuid(), deviceId);
         }
@@ -94,6 +95,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
             var updateFromLastPakageByQuestionnaire =
                 this.GetUpdateFromLastPakage(lastSyncedPackageId, this.indexAccessor.Query<QuestionnaireSyncPackage>(questionnireQueryIndexName))
+                .Select(x => new SynchronizationChunkMeta(x.PackageId))
                 .ToList();
 
             this.TrackArIdsRequestIfNeeded(userId, deviceId, SyncItemType.Questionnaire, lastSyncedPackageId, updateFromLastPakageByQuestionnaire);
@@ -103,13 +105,15 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                 SyncPackagesMeta = updateFromLastPakageByQuestionnaire
             };
         }
-        
+
         public SyncItemsMetaContainer GetUserArIdsWithOrder(Guid userId, Guid deviceId, string lastSyncedPackageId)
         {
             this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
             var updateFromLastPakageByUser =
-                this.GetUpdateFromLastPakage(lastSyncedPackageId, this.indexAccessor.Query<UserSyncPackage>(userQueryIndexName).Where(x => x.UserId == userId));
+                this.GetUpdateFromLastPakage(lastSyncedPackageId, this.indexAccessor.Query<UserSyncPackage>(userQueryIndexName).Where(x => x.UserId == userId))
+                .Select(x => new SynchronizationChunkMeta(x.PackageId))
+                .ToList(); 
 
             this.TrackArIdsRequestIfNeeded(userId, deviceId, SyncItemType.User, lastSyncedPackageId, updateFromLastPakageByUser);
 
@@ -123,8 +127,9 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         {
             this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
-            var updateFromLastPakageByInterview =
-                this.GetUpdateFromLastPakage(lastSyncedPackageId, this.indexAccessor.Query<InterviewSyncPackage>(interviewQueryIndexName).Where(x => x.UserId == userId));
+            var allUpdatesFromLastPakage = this.GetUpdateFromLastPakage(lastSyncedPackageId, this.indexAccessor.Query<InterviewSyncPackage>(interviewQueryIndexName).Where(x => x.UserId == userId));
+             
+            var updateFromLastPakageByInterview = FilterDeletedInterviews(allUpdatesFromLastPakage);
 
             this.TrackArIdsRequestIfNeeded(userId, deviceId, SyncItemType.Interview, lastSyncedPackageId, updateFromLastPakageByInterview);
 
@@ -134,16 +139,36 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             };
         }
 
+        
+        private List<SynchronizationChunkMeta> FilterDeletedInterviews(List<InterviewSyncPackage> packages)
+        {
+            var deletedInterviewMap = packages
+                .Where(x => x.ItemType == SyncItemType.DeleteInterview)
+                .GroupBy(x => x.InterviewId) // interview can be reassing from this user multiple times
+                .ToDictionary(x=> x.Key, x => x.Max(y => y.SortIndex));
+
+            var packagesToSkip = packages
+                .Where(x => deletedInterviewMap.ContainsKey(x.InterviewId) && x.SortIndex < deletedInterviewMap[x.InterviewId])
+                .Select(x => x.PackageId)
+                .ToList();
+
+            return packages
+                    .Where(x => !packagesToSkip.Contains(x.PackageId))
+                    .Select(x => new SynchronizationChunkMeta(x.PackageId))
+                    .ToList();
+        }
+
+
         public void LinkUserToDevice(Guid interviewerId, string androidId, string oldDeviceId)
         {
             if (interviewerId == Guid.Empty)
                 throw new ArgumentException("Interview id is not set.");
 
-            if (string.IsNullOrEmpty(oldDeviceId))
+            if (string.IsNullOrEmpty(androidId))
                 throw new ArgumentException("Device id is not set.");
 
-            commandService.Execute(new LinkUserToDevice(interviewerId, oldDeviceId));
-            TrackUserLinkingRequestIfNeeded(oldDeviceId.ToGuid(), interviewerId, oldDeviceId);
+            commandService.Execute(new LinkUserToDevice(interviewerId, androidId));
+            TrackUserLinkingRequestIfNeeded(androidId.ToGuid(), interviewerId, oldDeviceId);
         }
 
         public UserSyncPackageDto ReceiveUserSyncPackage(Guid deviceId, string packageId, Guid userId)
@@ -167,12 +192,14 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                    };
         }
 
-        public QuestionnaireSyncPackageDto ReceiveQuestionnaireSyncPackage(Guid clientRegistrationId, string packageId, Guid userId)
+        public QuestionnaireSyncPackageDto ReceiveQuestionnaireSyncPackage(Guid deviceId, string packageId, Guid userId)
         {
             var package = this.questionnairePackageStorage.GetById(packageId);
 
             if (package == null)
                 throw new ArgumentException(string.Format("Package {0} with questionnaire is absent", packageId));
+
+            this.TrackPackgeRequestIfNeeded(deviceId, SyncItemType.Questionnaire, packageId, userId);
 
             return new QuestionnaireSyncPackageDto
                    {
@@ -187,13 +214,16 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                    };
         }
 
-        public InterviewSyncPackageDto ReceiveInterviewSyncPackage(Guid clientRegistrationId, string packageId, Guid userId)
+        public InterviewSyncPackageDto ReceiveInterviewSyncPackage(Guid deviceId, string packageId, Guid userId)
         {
-            this.MakeSureThisDeviceIsRegisteredOrThrow(clientRegistrationId);
+            this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
             InterviewSyncPackage package = this.interviewPackageStore.GetById(packageId);
             if (package == null)
                 throw new ArgumentException(string.Format("Package {0} with interview is absent", packageId));
+
+            this.TrackPackgeRequestIfNeeded(deviceId, SyncItemType.Interview, packageId, userId);
+
             return new InterviewSyncPackageDto
                    {
                        PackageId = package.PackageId,
@@ -237,17 +267,11 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             return team;
         }
 
-        private List<SynchronizationChunkMeta> GetUpdateFromLastPakage<T>(string lastSyncedPackageId, IQueryable<T> items) where T : ISyncPackage
+        private List<T> GetUpdateFromLastPakage<T>(string lastSyncedPackageId, IQueryable<T> items) where T : ISyncPackage
         {
             if (lastSyncedPackageId == null)
             {
-                var orderedQueryable = items.OrderBy(x => x.SortIndex).ToList();
-
-                List<SynchronizationChunkMeta> fullListResult = orderedQueryable
-                    .Select(s => new SynchronizationChunkMeta(s.PackageId))
-                    .ToList();
-
-                return fullListResult;
+                return items.OrderBy(x => x.SortIndex).ToList();
             }
 
             var lastSyncedPackage = items.FirstOrDefault(x => x.PackageId == lastSyncedPackageId);
@@ -264,11 +288,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                 .OrderBy(x => x.SortIndex)
                 .ToList();
 
-            var deltas = orderedPackages
-                    .Select(s => new SynchronizationChunkMeta(s.PackageId))
-                    .ToList();
-
-            return deltas;
+            return orderedPackages;
         }
 
         private void TrackPackgeRequestIfNeeded(Guid deviceId, string packageType, string packageId, Guid userId)
@@ -285,10 +305,14 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             {
                 if (!string.IsNullOrEmpty(oldDeviceId))
                 {
-                    this.commandService.Execute(new UnlinkUserFromDeviceCommand(deviceId, userId));
+                    this.commandService.Execute(new UnlinkUserFromDeviceCommand(oldDeviceId.ToGuid(), userId));
                 }
-                
-                this.commandService.Execute(new TrackUserLinkingRequestCommand(deviceId, userId));
+
+                var device = this.devices.GetById(deviceId);
+                if (device != null)
+                {
+                    this.commandService.Execute(new TrackUserLinkingRequestCommand(deviceId, userId));
+                }
             }
         }
 
