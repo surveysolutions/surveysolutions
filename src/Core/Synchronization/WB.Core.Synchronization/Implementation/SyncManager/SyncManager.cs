@@ -46,9 +46,9 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             return this.CheckAndCreateNewSyncActivity(clientIdentifier);
         }
 
-        public void SendSyncItem(string item)
+        public void SendSyncItem(Guid interviewId, string item)
         {
-            this.incomingSyncPackagesQueue.Enqueue(item);
+            this.incomingSyncPackagesQueue.Enqueue(interviewId: interviewId, item: item);
         }
 
         public IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, string lastSyncedPackageId)
