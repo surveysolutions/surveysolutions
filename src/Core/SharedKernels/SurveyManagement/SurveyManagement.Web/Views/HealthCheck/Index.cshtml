@@ -1,6 +1,6 @@
 ﻿@using System.Web.Optimization
 @{
-    this.ViewBag.Title = "Heath Check Page";
+    this.ViewBag.Title = "Health Check Page";
 }
 
 <div class="row health-check">
@@ -27,12 +27,12 @@
                             <li class="list-group-item" data-bind="css: {'has-warning': numberOfUnhandledPackages() > 0, 'has-error': numberOfUnhandledPackages() == 'Error' }">
                                 <span class="badge" data-bind="text:numberOfUnhandledPackages"></span>
                                 Number of unhandled packages
-                                <p data-bind="text:numberOfUnhandledPackagesError"></p>
+                                <p data-bind="html:numberOfUnhandledPackagesError"></p>
                             </li>
                             <li class="list-group-item" data-bind="css: {'has-warning': numberOfSyncPackagesWithBigSize() > 0, 'has-error': numberOfSyncPackagesWithBigSize() == 'Error' }">
                                 <span class="badge" data-bind="text:numberOfSyncPackagesWithBigSize"></span>
                                 Number of sync packages with size more then 2Mb
-                                <p data-bind="text:numberOfSyncPackagesWithBigSizeError"></p>
+                                <p data-bind="html:numberOfSyncPackagesWithBigSizeError"></p>
                             </li>
                             <li class="list-group-item" data-bind="css: {'has-error': denidedFolders().length > 0 }">
                                 <span class="badge" data-bind="text:denidedFoldersStatus"></span>
