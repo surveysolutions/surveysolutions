@@ -1,4 +1,5 @@
-﻿using Machine.Specifications;
+﻿using System;
+using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
@@ -17,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
         };
 
         Because of = () =>
-            incomingSyncPackagesQueue.Enqueue(contentOfSyncItem);
+            incomingSyncPackagesQueue.Enqueue(Guid.Empty, contentOfSyncItem);
 
         It should_write_text_file_to_error_folder = () =>
           fileSystemAccessorMock.Verify(x => x.WriteAllText(Moq.It.IsAny<string>(), contentOfSyncItem), Times.Once);

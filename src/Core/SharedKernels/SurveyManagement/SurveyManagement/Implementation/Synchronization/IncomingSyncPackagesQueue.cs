@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using Main.Core.Events;
 using WB.Core.GenericSubdomains.Utils;
@@ -7,7 +6,6 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
@@ -40,12 +38,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                 fileSystemAccessor.CreateDirectory(this.incomingUnprocessedPackagesDirectory);
         }
 
-        public void Enqueue(string item)
+        public void Enqueue(Guid interviewId, string item)
         {
             if (string.IsNullOrWhiteSpace(item))
                 throw new ArgumentException("Sync Item is not set.");
 
-            string syncPackageFileName = string.Format("{0}.{1}", Guid.NewGuid().FormatGuid(), this.syncSettings.IncomingCapiPackageFileNameExtension);
+            string syncPackageFileName = string.Format("{0}-{1}.{2}", DateTime.Now.Ticks, interviewId.FormatGuid(), this.syncSettings.IncomingCapiPackageFileNameExtension);
             string fullPathToSyncPackage = this.fileSystemAccessor.CombinePath(this.incomingUnprocessedPackagesDirectory, syncPackageFileName);
 
             this.fileSystemAccessor.WriteAllText(fullPathToSyncPackage, item);
@@ -55,7 +53,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         {
             get
             {
-                return this.fileSystemAccessor.GetFilesInDirectory(this.incomingUnprocessedPackagesDirectory).Count();
+                return
+                    this.fileSystemAccessor.GetFilesInDirectory(this.incomingUnprocessedPackagesDirectory,
+                        string.Format("*{0}", this.syncSettings.IncomingCapiPackageFileNameExtension)).Count();
             }
         }
 
@@ -95,6 +95,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         public void DeleteSyncItem(string syncItemPath)
         {
             fileSystemAccessor.DeleteFile(syncItemPath);
+        }
+
+        public bool HasPackagesByInterviewId(Guid interviewId)
+        {
+            return
+                this.fileSystemAccessor.GetFilesInDirectory(this.incomingUnprocessedPackagesDirectory,
+                    string.Format("*{0}*{1}", interviewId.FormatGuid(),
+                        this.syncSettings.IncomingCapiPackageFileNameExtension)).Any();
         }
     }
 }
