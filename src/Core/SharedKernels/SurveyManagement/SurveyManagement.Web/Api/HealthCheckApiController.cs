@@ -64,7 +64,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     return NumberHealthCheckResult.Happy(count);
 
                 return NumberHealthCheckResult.Warning(count,
-                        "The error occurred during interview processing. Please contact Survey Solutions Team support@mysurvey.solutions to report the error.");
+                        "The error occurred during interview processing. Please contact Survey Solutions Team <a href='support@mysurvey.solutions'>support@mysurvey.solutions</a> to report the error.");
             }
             catch (Exception e)
             {
@@ -80,7 +80,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 if (count == 0)
                     return NumberHealthCheckResult.Happy(count);
                 return NumberHealthCheckResult.Warning(count,
-                        "Some interviews are oversized. Please contact Survey Solutions Team support@mysurvey.solutions to report the error.");
+                        "Some interviews are oversized. Please contact Survey Solutions Team <a href='support@mysurvey.solutions'>support@mysurvey.solutions</a> to report the error.");
             }
             catch (Exception e)
             {

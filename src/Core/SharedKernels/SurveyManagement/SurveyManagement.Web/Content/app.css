@@ -407,8 +407,8 @@ input::-ms-clear {
 .health-check b.has-error { color: red; text-transform: uppercase; }
 .health-check b.has-warning { color: orange; text-transform: uppercase; }
 .health-check li .badge { background-color: green; }
-.health-check li p, li table.table { width: 85%; }
+.health-check li p, .health-check li table.table { width: 85%; }
 .health-check li.has-error .badge { background-color: red; }
 .health-check li.has-error { color: red; }
 .health-check li.has-warning .badge { background-color: orange; }
-.health-check li.has-warning { color: orange; }
+.health-check li.has-warning, .health-check li.has-warning a { color: orange; }
