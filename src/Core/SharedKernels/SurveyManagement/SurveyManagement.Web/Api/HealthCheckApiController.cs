@@ -64,7 +64,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     return NumberHealthCheckResult.Happy(count);
 
                 return NumberHealthCheckResult.Warning(count,
-                        "The error occurred during interview processing. Please contactSurvey Solutions Team support@mysurvey.solutions to report the error.");
+                        "The error occurred during interview processing. Please contact Survey Solutions Team support@mysurvey.solutions to report the error.");
             }
             catch (Exception e)
             {
