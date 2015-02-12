@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.Revalidate;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
@@ -25,6 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private readonly IInterviewHistoryFactory interviewHistoryViewFactory;
         private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
         private readonly IInterviewDetailsViewFactory interviewDetailsViewFactory;
+        private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
 
         public InterviewController(
             ICommandService commandService, 
@@ -34,7 +36,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory,
             IInterviewSummaryViewFactory interviewSummaryViewFactory,
             IInterviewHistoryFactory interviewHistoryViewFactory, 
-            IInterviewDetailsViewFactory interviewDetailsViewFactory)
+            IInterviewDetailsViewFactory interviewDetailsViewFactory,
+            IIncomingSyncPackagesQueue incomingSyncPackagesQueue)
             : base(commandService, provider, logger)
         {
             this.changeStatusFactory = changeStatusFactory;
@@ -42,6 +45,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.interviewSummaryViewFactory = interviewSummaryViewFactory;
             this.interviewHistoryViewFactory = interviewHistoryViewFactory;
             this.interviewDetailsViewFactory = interviewDetailsViewFactory;
+            this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
         }
 
         private decimal[] ParseRosterVector(string rosterVectorAsString)
@@ -172,7 +176,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     InterviewDetails = interviewDetailsView,
                     FilteredGroups = selectedGroups,
                     History = interviewHistoryOfStatuses,
-                    Statistic = detailsStatisticView
+                    Statistic = detailsStatisticView,
+                    HasUnprocessedSyncPackages = this.incomingSyncPackagesQueue.HasPackagesByInterviewId(id)
                 });
         }
 

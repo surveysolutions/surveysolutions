@@ -412,3 +412,7 @@ input::-ms-clear {
 .health-check li.has-error { color: red; }
 .health-check li.has-warning .badge { background-color: orange; }
 .health-check li.has-warning, .health-check li.has-warning a { color: orange; }
+
+.badge-orange {
+    background-color: orange;
+}

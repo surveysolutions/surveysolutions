@@ -9,7 +9,7 @@ namespace WB.Core.Synchronization
     {
         HandshakePackage ItitSync(ClientIdentifier identifier);
 
-        void SendSyncItem(string package);
+        void SendSyncItem(Guid interviewId, string package);
 
         IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, string lastSyncedPackageId);
 
