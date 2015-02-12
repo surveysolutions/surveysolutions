@@ -108,14 +108,14 @@
                             <span class="dropdown-arrow"></span>
                         </button>
 
-                        <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1" ng-hide="activeQuestion.type == 'GpsCoordinates'">
+                        <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1" ng-hide="activeQuestion.type == 'GpsCoordinates' || activeQuestion.type == 'MultyOption'">
                             <li role="presentation" ng-repeat="scope in activeQuestion.allQuestionScopeOptions">
                                 <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="changeQuestionScope(scope)">
                                     {{scope.text}}
                                 </a>
                             </li>
                         </ul>
-                        <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1" ng-show="activeQuestion.type == 'GpsCoordinates'">
+                        <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1" ng-show="activeQuestion.type == 'GpsCoordinates' || activeQuestion.type == 'MultyOption'">
                             <li role="presentation" ng-repeat="scope in activeQuestion.notPrefilledQuestionScopeOptions">
                                 <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="changeQuestionScope(scope)">
                                     {{scope.text}}
