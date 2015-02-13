@@ -6,7 +6,6 @@ using WB.Core.Infrastructure.HealthCheck;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
-using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
@@ -16,15 +15,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IBrokenSyncPackagesStorage brokenSyncPackagesStorage;
         private readonly IDatabaseHealthCheck databaseHealthCheck;
         private readonly IEventStoreHealthCheck eventStoreHealthCheck;
-        private readonly IChunkReader chunkReader;
+        //private readonly IChunkReader chunkReader;
         private readonly IFolderPermissionChecker folderPermissionChecker;
 
         public HealthCheckApiController(IDatabaseHealthCheck databaseHealthCheck,
             IEventStoreHealthCheck eventStoreHealthCheck, IBrokenSyncPackagesStorage brokenSyncPackagesStorage, 
-            IChunkReader chunkReader, IFolderPermissionChecker folderPermissionChecker)
+           /* IChunkReader chunkReader,*/ IFolderPermissionChecker folderPermissionChecker)
         {
             this.folderPermissionChecker = folderPermissionChecker;
-            this.chunkReader = chunkReader;
+            //this.chunkReader = chunkReader;
             this.eventStoreHealthCheck = eventStoreHealthCheck;
             this.databaseHealthCheck = databaseHealthCheck;
             this.brokenSyncPackagesStorage = brokenSyncPackagesStorage;
@@ -76,7 +75,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             try
             {
-                int count = chunkReader.GetNumberOfSyncPackagesWithBigSize();
+                int count = 0; //  chunkReader.GetNumberOfSyncPackagesWithBigSize();
                 if (count == 0)
                     return NumberHealthCheckResult.Happy(count);
                 return NumberHealthCheckResult.Warning(count,
