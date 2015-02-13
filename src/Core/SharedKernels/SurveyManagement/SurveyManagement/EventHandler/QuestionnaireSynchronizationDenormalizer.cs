@@ -101,7 +101,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             var synchronizationDelta = new QuestionnaireSyncPackageMetaInformation(
                 questionnaireId,
-                questionnaireVersion, sortIndex, timestamp, itemType, content.Length, metaInfo.Length);
+                questionnaireVersion, sortIndex, timestamp, itemType, string.IsNullOrEmpty(content) ? 0 : content.Length, string.IsNullOrEmpty(metaInfo) ? 0 : metaInfo.Length);
 
             this.questionnairePackageStorageWriter.Store(synchronizationDelta, synchronizationDelta.PackageId);
             this.questionnairePackageContentStore.Store(new QuestionnaireSyncPackageContent(synchronizationDelta.PackageId, content, metaInfo), synchronizationDelta.PackageId);
