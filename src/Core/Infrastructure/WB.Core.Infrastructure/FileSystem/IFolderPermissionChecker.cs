@@ -12,13 +12,20 @@ namespace WB.Core.Infrastructure.FileSystem
 
     public class FolderPermissionCheckResult
     {
-        public string[] AllowedFolders { get; set; }
-        public string[] DenidedFolders { get; set; }
-        public string ProcessRunedUnder { get; set; }
+        public FolderPermissionCheckResult(string processRunedUnder, string[] allowedFolders, string[] denidedFolders)
+        {
+            ProcessRunedUnder = processRunedUnder;
+            AllowedFolders = allowedFolders;
+            DenidedFolders = denidedFolders;
+        }
+
+        public string[] AllowedFolders { get; private set; }
+        public string[] DenidedFolders { get; private set; }
+        public string ProcessRunedUnder { get; private set; }
 
         public HealthCheckStatus Status
         {
-            get { return DenidedFolders.Any() ? HealthCheckStatus.Down : HealthCheckStatus.Happy; }
+            get { return DenidedFolders != null && DenidedFolders.Any() ? HealthCheckStatus.Down : HealthCheckStatus.Happy; }
         }
     }
 }

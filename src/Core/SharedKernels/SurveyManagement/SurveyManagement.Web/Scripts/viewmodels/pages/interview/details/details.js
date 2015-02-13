@@ -85,42 +85,85 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
 
     }
 
-    self.saveFilteredComboboxAnswer = function (questionId, underscoreJoinedQuestionRosterVector) {
+    self.saveFilteredComboboxAnswer = function(questionId, underscoreJoinedQuestionRosterVector) {
+        var answerElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector));
+        var answerLabel = answerElement.val();
 
-        var filteredCombobox = _.find(self.filteredComboboxes, function(item) {
-            return item.id == getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector); 
+        var filteredCombobox = _.find(self.filteredComboboxes, function (item) {
+            return item.id == getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector);
         });
+
+        var answer = _.find(filteredCombobox.options, function(option) {
+            return option.value == filteredCombobox.selectedValue().id();
+        });
+
+        var observableSelectedOptionId = ko.observable(answerLabel).extend({
+            required: true,
+            equal: {
+                params: answer.label,
+                message: "Choose one of suggested values"
+            }
+        });
+
+        if (!observableSelectedOptionId.isValid()) {
+            self.ShowError(observableSelectedOptionId.error);
+            return;
+        }
 
         var selectedOptionId = filteredCombobox.selectedValue().id();
 
-        if (selectedOptionId) {
-            var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
-            question.selectedOption = ko.observable(selectedOptionId);
+        var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
+        question.selectedOption = ko.observable(selectedOptionId);
 
-            sendAnswerCommand(config.commands.answerSingleOptionQuestionCommand, question);
-        }
+        sendAnswerCommand(config.commands.answerSingleOptionQuestionCommand, question);
     };
 
     self.saveTextAnswer = function (questionId, underscoreJoinedQuestionRosterVector) {
         var answerElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector));
+        var answer = answerElement.val();
+        var observableTextAnswer = ko.observable(answer).extend({ required: true });
+
+        if (!observableTextAnswer.isValid()) {
+            self.ShowError(observableTextAnswer.error);
+            return;
+        }
 
         var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
-        question.answer = ko.observable(answerElement.val());
+        question.answer = ko.observable(observableTextAnswer());
 
         sendAnswerCommand(config.commands.answerTextQuestionCommand, question);
     };
 
     self.saveNumericIntegerAnswer = function (questionId, underscoreJoinedQuestionRosterVector) {
         var answerElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector));
+        var answer = answerElement.val();
+        var observableTextAnswer = ko.observable(answer).extend({ required: true, numericValidator: -1 });
+
+        if (!observableTextAnswer.isValid()) {
+            self.ShowError(observableTextAnswer.error);
+            return;
+        }
 
         var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
-        question.answer = ko.observable(answerElement.val());
+        question.answer = ko.observable(observableTextAnswer());
 
         sendAnswerCommand(config.commands.answerNumericIntegerQuestionCommand, question);
     };
 
     self.saveNumericRealAnswer = function (questionId, underscoreJoinedQuestionRosterVector, countOfDecimalPlaces) {
         var answerElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector));
+        var answer = answerElement.val();
+        var observableTextAnswer = ko.observable(answer).extend({ required: true });
+        if (countOfDecimalPlaces) {
+            observableTextAnswer.extend({ numericValidator: countOfDecimalPlaces });
+        } else {
+            observableTextAnswer.extend({ numericValidator: true });
+        }
+
+        if (!observableTextAnswer.isValid()) {
+            self.ShowError(observableTextAnswer.error);
+            return;
+        }
 
         var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
         question.answer = ko.observable(answerElement.val());
@@ -138,10 +181,38 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
         sendAnswerCommand(config.commands.answerSingleOptionQuestionCommand, question);
     };
 
-    self.saveCategoricalMultiAnswer = function (questionId, underscoreJoinedQuestionRosterVector, areAnswersOrdered, maxAnswersCount, selectedOptionsAsString) {
+    self.saveCategoricalMultiAnswer = function (questionId, underscoreJoinedQuestionRosterVector, areAnswersOrdered, maxAllowedAnswers, selectedOptionsAsString) {
         var answerElementId = getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector);
         var answerOptionValues = $("input:checkbox[name=" + answerElementId + "]:checked").map(function() { return parseFloat($(this).val()); }).get();
         
+        var observableSelectedOptionIds = ko.observableArray(answerOptionValues).extend({
+            validation: [
+                {
+                    validator: function (val) {
+                        if (_.isNull(val) || _.isUndefined(val) || _.isEmpty(val))
+                            return false;
+                        return val.length > 0;
+                    },
+                    message: 'At least one option should be checked'
+                },
+                {
+                    validator: function (val) {
+                        if (_.isUndefined(maxAllowedAnswers) || _.isNull(maxAllowedAnswers)) {
+                            return true;
+                        }
+
+                        return val.length <= maxAllowedAnswers;
+                    },
+                    message: 'Number of selected answers more than number of maximum permitted answers'
+                }
+            ]
+        });
+
+        if (!observableSelectedOptionIds.isValid()) {
+            self.ShowError(observableSelectedOptionIds.error);
+            return;
+        }
+
         var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
         question.areAnswersOrdered = false;
 

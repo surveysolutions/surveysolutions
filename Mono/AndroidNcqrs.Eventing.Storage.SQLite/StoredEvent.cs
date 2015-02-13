@@ -20,6 +20,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
             TimeStamp = timeStamp.Ticks;
             Data = GetJsonData(data);
         }
+
         private string GetJsonData(object payload)
         {
             return JsonConvert.SerializeObject(
