@@ -21,10 +21,12 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SimpleSynchronizationDataS
             var summaryItem = new InterviewSummary();
             var interviewSummarys = Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(x => x.GetById(interviewId.FormatGuid()) == summaryItem);
             interviewPackageStorageWriter = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation>>();
+            interviewSyncPackageContentStorage = new Mock<IReadSideKeyValueStorage<InterviewSyncPackageContent>>();
 
             denormalizer = CreateDenormalizer(
                 interviewSummarys: interviewSummarys,
-                interviewPackageStorageWriter: interviewPackageStorageWriter.Object);
+                interviewPackageStorageWriter: interviewPackageStorageWriter.Object,
+                interviewSyncPackageContentStorage: interviewSyncPackageContentStorage.Object);
         };
 
         Because of = () => denormalizer.Handle(Create.InterviewHardDeletedEvent(userId: responsibleId.FormatGuid(), interviewId: interviewId));
@@ -34,11 +36,14 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SimpleSynchronizationDataS
               Moq.It.Is<InterviewSyncPackageMetaInformation>(s => s.ItemType == SyncItemType.DeleteInterview &&
                   s.InterviewId == interviewId), Moq.It.IsAny<string>()), Times.Once);
 
-
+        It should_store_content_of_deletion_package = () =>
+          interviewSyncPackageContentStorage.Verify(x =>
+              x.Store(Moq.It.IsAny<InterviewSyncPackageContent>(), Moq.It.IsAny<string>()), Times.Once);
 
         private static InterviewSynchronizationDenormalizer denormalizer;
 
         private static Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation>> interviewPackageStorageWriter;
+        private static Mock<IReadSideKeyValueStorage<InterviewSyncPackageContent>> interviewSyncPackageContentStorage;
 
         private static Guid responsibleId = Guid.Parse("1BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static Guid interviewId = Guid.Parse("1BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBA");
