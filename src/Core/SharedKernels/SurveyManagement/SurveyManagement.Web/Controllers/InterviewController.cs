@@ -102,67 +102,41 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             {
                 if (currentGroup != null && currentGroup.ParentId.HasValue)
                 {
-                    if (interviewGroupView.Id == currentGroup.Id && interviewGroupView.RosterVector.SequenceEqual(currentGroup.RosterVector) || selectedGroups.Any(_ => _.Id == interviewGroupView.ParentId))
+                    if (interviewGroupView.Id == currentGroup.Id &&
+                        interviewGroupView.RosterVector.SequenceEqual(currentGroup.RosterVector) ||
+                        selectedGroups.Any(_ => _.Id == interviewGroupView.ParentId))
                     {
                         selectedGroups.Add(interviewGroupView);
                     }
                 }
                 else
                 {
+                    var filteredQuestions = interviewGroupView.Entities.OfType<InterviewQuestionView>();
                     switch (filter)
                     {
                         case InterviewDetailsFilter.Answered:
-                            interviewGroupView.Entities =
-                                interviewGroupView.Entities.Where(
-                                    x =>
-                                        x is InterviewStaticTextView ||
-                                        ((x is InterviewQuestionView) && ((InterviewQuestionView)x).IsAnswered)).ToList();
+                            filteredQuestions = filteredQuestions.Where(question => question.IsAnswered);
                             break;
                         case InterviewDetailsFilter.Unanswered:
-                            interviewGroupView.Entities =
-                                interviewGroupView.Entities.Where(
-                                    x =>
-                                        x is InterviewStaticTextView ||
-                                        ((x is InterviewQuestionView) && !((InterviewQuestionView)x).IsAnswered)).ToList();
+                            filteredQuestions = filteredQuestions.Where(question => question.IsEnabled && !question.IsAnswered);
                             break;
                         case InterviewDetailsFilter.Commented:
-                            interviewGroupView.Entities =
-                                interviewGroupView.Entities.Where(
-                                    x =>
-                                        x is InterviewStaticTextView ||
-                                        ((x is InterviewQuestionView) && ((InterviewQuestionView)x).Comments != null &&
-                                         ((InterviewQuestionView)x).Comments.Any())).ToList();
+                            filteredQuestions = filteredQuestions.Where(question => question.Comments != null && question.Comments.Any());
                             break;
                         case InterviewDetailsFilter.Enabled:
-                            interviewGroupView.Entities =
-                            interviewGroupView.Entities.Where(
-                                x =>
-                                    x is InterviewStaticTextView ||
-                                    ((x is InterviewQuestionView) && ((InterviewQuestionView)x).IsEnabled)).ToList();
+                            filteredQuestions = filteredQuestions.Where(question => question.IsEnabled);
                             break;
                         case InterviewDetailsFilter.Flagged:
-                            interviewGroupView.Entities =
-                            interviewGroupView.Entities.Where(
-                                x =>
-                                    x is InterviewStaticTextView ||
-                                    ((x is InterviewQuestionView) && ((InterviewQuestionView)x).IsFlagged)).ToList();
+                            filteredQuestions = filteredQuestions.Where(question => question.IsFlagged);
                             break;
                         case InterviewDetailsFilter.Invalid:
-                            interviewGroupView.Entities =
-                            interviewGroupView.Entities.Where(
-                                x =>
-                                    x is InterviewStaticTextView ||
-                                    ((x is InterviewQuestionView) && !((InterviewQuestionView)x).IsValid)).ToList();
+                            filteredQuestions = filteredQuestions.Where(question => !question.IsValid);
                             break;
                         case InterviewDetailsFilter.Supervisors:
-                            interviewGroupView.Entities =
-                            interviewGroupView.Entities.Where(
-                                x =>
-                                    x is InterviewStaticTextView ||
-                                    ((x is InterviewQuestionView) &&
-                                     ((InterviewQuestionView)x).Scope == QuestionScope.Supervisor)).ToList();
+                            filteredQuestions = filteredQuestions.Where(question => question.Scope == QuestionScope.Supervisor);
                             break;
                     }
+                    interviewGroupView.Entities = filteredQuestions.Select(x => (InterviewEntityView) x).ToList();
 
                     if (interviewGroupView.Entities.Any())
                         selectedGroups.Add(interviewGroupView);

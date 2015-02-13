@@ -1,14 +1,18 @@
 ﻿using System;
 using Moq;
 using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.HealthCheck;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
+using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 {
@@ -58,6 +62,21 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
                 logger ?? Mock.Of<ILogger>(),
                 allInterviewsViewViewFactory ?? Mock.Of<IViewFactory<AllInterviewsInputModel, AllInterviewsView>>(),
                 interviewDetailsView ?? Mock.Of<IViewFactory<InterviewDetailsInputModel, InterviewDetailsView>>(), Mock.Of<IInterviewHistoryFactory>());
+        }
+
+        protected static HealthCheckApiController CreateHealthCheckApiController(
+            IDatabaseHealthCheck databaseHealthCheck,
+            IEventStoreHealthCheck eventStoreHealthCheck, 
+            IBrokenSyncPackagesStorage brokenSyncPackagesStorage, 
+            IChunkReader chunkReader, 
+            IFolderPermissionChecker folderPermissionChecker)
+        {
+            return new HealthCheckApiController(
+                databaseHealthCheck ?? Mock.Of<IDatabaseHealthCheck>(),
+                eventStoreHealthCheck ?? Mock.Of<IEventStoreHealthCheck>(),
+                brokenSyncPackagesStorage ?? Mock.Of<IBrokenSyncPackagesStorage>(),
+                chunkReader ?? Mock.Of<IChunkReader>(),
+                folderPermissionChecker ?? Mock.Of<IFolderPermissionChecker>());
         }
     }
 }
