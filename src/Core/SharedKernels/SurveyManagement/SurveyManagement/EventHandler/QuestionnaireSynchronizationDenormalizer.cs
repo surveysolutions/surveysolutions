@@ -95,13 +95,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 eventSuquence);
         }
 
-        public void StoreChunk(Guid questionnaireId, long questionnaireVersion, string itemType, string content, string metaInfo, DateTime timestamp, long eventSuquence)
+        public void StoreChunk(Guid questionnaireId, long questionnaireVersion, string itemType, string content, string metaInfo, DateTime timestamp, long eventSequence)
         {
             long sortIndex = questionnairePackageStorageWriter.GetNextOrder();
 
             var synchronizationDelta = new QuestionnaireSyncPackageMetaInformation(
                 questionnaireId,
-                questionnaireVersion, sortIndex, timestamp, itemType);
+                questionnaireVersion, sortIndex, timestamp, itemType, content.Length, metaInfo.Length);
 
             this.questionnairePackageStorageWriter.Store(synchronizationDelta, synchronizationDelta.PackageId);
             this.questionnairePackageContentStore.Store(new QuestionnaireSyncPackageContent(synchronizationDelta.PackageId, content, metaInfo), synchronizationDelta.PackageId);
