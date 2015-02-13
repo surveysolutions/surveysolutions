@@ -1,15 +1,18 @@
 using System.Collections.Generic;
 using System.Linq;
+
+using Android.Content.Res;
+
 using Chance.MvvmCross.Plugins.UserInteraction;
 
 using Cirrious.CrossCore;
+using Cirrious.CrossCore.Droid.Platform;
 using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.ValueObjects;
 using WB.Core.GenericSubdomains.Utils;
-using WB.UI.Capi.Settings;
 
 namespace WB.UI.Capi.Views
 {
@@ -75,13 +78,19 @@ namespace WB.UI.Capi.Views
             IsLoginValid = false;
             IsPasswordValid = false;
 
-            Mvx.Resolve<IUserInteraction>().Confirm("Are you sure new user for this tablet?",
-                () => this.NavigationService.NavigateTo(CapiPages.Synchronization,
-                            new Dictionary<string, string>
-                            {
-                                { "Login", this.Login },
-                                { "PasswordHash", this.passwordHasher.Hash(this.Password) }
-                            }));
+            var activityContext = Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
+
+            Mvx.Resolve<IUserInteraction>().Confirm(
+                    activityContext.GetString(Resource.String.AryYouNewForThisTablet),
+                    okButton: activityContext.GetString(Resource.String.Yes),
+                    cancelButton: activityContext.GetString(Resource.String.No),
+                    okClicked: () => this.NavigationService.NavigateTo(
+                                CapiPages.Synchronization,
+                                new Dictionary<string, string>
+                                {
+                                    { "Login", this.Login },
+                                    { "PasswordHash", this.passwordHasher.Hash(this.Password) }
+                                }));
         }
     }
 }

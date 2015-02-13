@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
@@ -13,10 +11,6 @@ using Android.Widget;
 using System;
 using System.Text;
 using System.Threading;
-using CAPI.Android.Core.Model;
-
-using Chance.MvvmCross.Plugins.UserInteraction;
-using Cirrious.CrossCore;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
@@ -35,7 +29,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Controls;
 using WB.UI.Capi.Extensions;
-using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization;
 using WB.UI.Shared.Android.Extensions;
 
@@ -139,7 +132,7 @@ namespace WB.UI.Capi
                     this.RunOnUiThread(() =>
                     {
                         this.DestroyDialog();
-                        this.tvSyncResult.Text = "Sync is finished.";
+                        this.tvSyncResult.Text = Resources.GetString(Resource.String.SyncIsFinished);
                         bool result = CapiApplication.Membership.LogOnAsync(login, passwordHash, wasPasswordHashed: true).Result;
                         if (result)
                         {
@@ -198,14 +191,11 @@ namespace WB.UI.Capi
 
         private void btnRestore_Click(object sender, EventArgs e)
         {
-            AlertDialog.Builder alertWarningAboutRestore = new AlertDialog.Builder(this);
-            alertWarningAboutRestore.SetTitle("Warning");
-            alertWarningAboutRestore.SetMessage(
-                string.Format(
-                    "All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}",
-                    this.backupManager.RestorePath));
-            alertWarningAboutRestore.SetPositiveButton("Yes", this.btnRestoreConfirmed_Click);
-            alertWarningAboutRestore.SetNegativeButton("No", this.btnRestoreDeclined_Click);
+            var alertWarningAboutRestore =  this.CreateYesNoDialog(this,
+               this.Resources.GetString(Resource.String.Warning), 
+               this.btnRestoreConfirmed_Click, this.btnRestoreDeclined_Click, 
+               string.Format(this.Resources.GetString(Resource.String.AreYouSureYouWantToRestore), this.backupManager.RestorePath));
+
             alertWarningAboutRestore.Show();
         }
 
@@ -307,7 +297,7 @@ namespace WB.UI.Capi
             this.synchronizer.ProcessCanceling += this.synchronizer_ProcessCanceling;
             this.synchronizer.ProcessCanceled += this.synchronizer_ProcessCanceled;
 
-            this.CreateDialog(ProgressDialogStyle.Spinner, "Initializing", false, this.progressDialog_Cancel);
+            this.CreateDialog(ProgressDialogStyle.Spinner, Resources.GetString(Resource.String.Initializing), false, this.progressDialog_Cancel);
 
             await this.synchronizer.Run();
         }
@@ -337,23 +327,21 @@ namespace WB.UI.Capi
 
                     EventHandler<DialogClickEventArgs> noHandler = (s, ev) => { actionCompleted = true; this.synchronizer.Cancel(); };
 
-                    var firstConfirmationDialog = this.CreateYesNoDialog("Do you want to make this tablet your working device?",
+                    var firstConfirmationDialog = this.CreateYesNoDialog(this, title: this.Resources.GetString(Resource.String.MakeThisTabletWorkingDevice), 
                         yesHandler: (s, ev) =>
                         {
-                            var secondConfirmationDialog = this.CreateYesNoDialog("All your collected data on other devices will be removed. Are you sure?",
+                            var secondConfirmationDialog = this.CreateYesNoDialog(this, title: this.Resources.GetString(Resource.String.AllYourDataWillBeDeleted), 
                                 yesHandler: (s1, evnt) =>
                                 {
                                     if (this.progressDialog != null) 
                                         this.progressDialog.Show();
                                     shouldThisDeviceBeLinkedToUser = true;
                                     actionCompleted = true;
-                                },
-                                noHandler: noHandler);
-                            secondConfirmationDialog.Show();
+                                }, noHandler: noHandler);
+                                secondConfirmationDialog.Show();
 
-                        },
-                        noHandler: noHandler);
-                    firstConfirmationDialog.Show();
+                        }, noHandler: noHandler);
+                        firstConfirmationDialog.Show();
                 });
             while (!actionCompleted)
             {
@@ -362,15 +350,18 @@ namespace WB.UI.Capi
             return shouldThisDeviceBeLinkedToUser;
         }
 
-        private AlertDialog CreateYesNoDialog(string title, EventHandler<DialogClickEventArgs> yesHandler, EventHandler<DialogClickEventArgs> noHandler)
+        public AlertDialog CreateYesNoDialog(Activity activity, string title, EventHandler<DialogClickEventArgs> yesHandler, EventHandler<DialogClickEventArgs> noHandler, string message = null)
         {
-            var builder = new AlertDialog.Builder(this);
-            AlertDialog alertDialog = builder.Create();
-            alertDialog.SetTitle(title);
-            alertDialog.SetCancelable(false);
-            alertDialog.SetButton("No", noHandler);
-            alertDialog.SetButton2("Yes", yesHandler);
-            return alertDialog;
+            var builder = new AlertDialog.Builder(activity);
+            builder.SetNegativeButton(Resources.GetString(Resource.String.No), noHandler);
+            builder.SetPositiveButton(Resources.GetString(Resource.String.Yes), yesHandler);
+            builder.SetCancelable(false);
+            builder.SetTitle(title);
+            if (!string.IsNullOrWhiteSpace(message))
+            {
+                builder.SetMessage(message);
+            }
+            return builder.Create();
         }
 
         protected SyncCredentials? RequestCredentialsCallBack(object sender)
@@ -431,7 +422,7 @@ namespace WB.UI.Capi
             this.RunOnUiThread(() =>
                 {
                     this.DestroyDialog();
-                    this.tvSyncResult.Text = "Sync is finished.";
+                    this.tvSyncResult.Text =  Resources.GetString(Resource.String.SyncIsFinished);
                 });
             this.DestroySynchronizer();
         }
