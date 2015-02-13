@@ -21,8 +21,6 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
 
             syncItem = new InterviewSyncPackageDto
                        {
-                           InterviewId = interviewId,
-                           ItemType = SyncItemType.DeleteInterview, 
                            Content = interviewId.ToString(), MetaInfo = "some metadata"
                        };
 
@@ -38,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 plainQuestionnaireRepositoryMock.Object, null, cleanUpExecutorMock.Object);
         };
 
-        Because of = () => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem);
+        Because of = () => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem, SyncItemType.DeleteInterview);
 
         It should_never_call_any_command =
             () => commandService.Verify(x => x.Execute(Moq.It.IsAny<ICommand>(), null), Times.Never);

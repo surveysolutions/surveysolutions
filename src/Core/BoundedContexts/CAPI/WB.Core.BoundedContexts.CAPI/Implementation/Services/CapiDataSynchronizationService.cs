@@ -73,9 +73,9 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             this.commandService.Execute(userCommand);
         }
 
-        public void ProcessDownloadedPackage(QuestionnaireSyncPackageDto item)
+        public void ProcessDownloadedPackage(QuestionnaireSyncPackageDto item, string itemType)
         {
-            switch (item.ItemType)
+            switch (itemType)
             {
                 case SyncItemType.Questionnaire:
                     this.UpdateQuestionnaire(item);
@@ -89,9 +89,9 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             }
         }
 
-        public void ProcessDownloadedPackage(InterviewSyncPackageDto item)
+        public void ProcessDownloadedPackage(InterviewSyncPackageDto item, string itemType)
         {
-            switch (item.ItemType)
+            switch (itemType)
             {
                 case SyncItemType.Interview:
                     this.UpdateInterview(item);

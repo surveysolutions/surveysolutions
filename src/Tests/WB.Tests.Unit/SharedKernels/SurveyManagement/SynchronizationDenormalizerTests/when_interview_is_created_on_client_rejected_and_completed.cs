@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
                                     }
             });
 
-            interviewPackageStorageWriter = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackage>>();
+            interviewPackageStorageWriter = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation>>();
 
             synchronizationDenormalizer = CreateDenormalizer(
                 interviews: interviews.Object,
@@ -52,11 +52,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
 
         It should_create_deletion_synchronization_package = () =>
             interviewPackageStorageWriter.Verify(x => 
-                x.Store(Moq.It.Is<InterviewSyncPackage>(s => s.InterviewId == interviewId), Moq.It.IsAny<string>()), Times.Exactly(2));
+                x.Store(Moq.It.Is<InterviewSyncPackageMetaInformation>(s => s.InterviewId == interviewId), Moq.It.IsAny<string>()), Times.Exactly(2));
 
         static InterviewSynchronizationDenormalizer synchronizationDenormalizer;
         static Guid interviewId;
-        private static Mock<IOrderableSyncPackageWriter<InterviewSyncPackage>> interviewPackageStorageWriter;
+        private static Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation>> interviewPackageStorageWriter;
     }
 }
 

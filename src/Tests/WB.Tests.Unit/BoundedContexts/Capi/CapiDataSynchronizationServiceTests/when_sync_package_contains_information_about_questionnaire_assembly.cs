@@ -23,9 +23,6 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
 
             received = new QuestionnaireSyncPackageDto
             {
-                QuestionnaireId = questionnaireId,
-                QuestionnaireVersion = version,
-                ItemType = SyncItemType.QuestionnaireAssembly,
                 Content = assemblyAsBase64,
                 MetaInfo = GetItemAsContent(meta)
             };
@@ -38,7 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 jsonUtils: jsonUtils, questionnareAssemblyFileAccessor: questionnareAssemblyFileAccessor.Object);
         };
 
-        Because of = () => capiDataSynchronizationService.ProcessDownloadedPackage(received);
+        Because of = () => capiDataSynchronizationService.ProcessDownloadedPackage(received, SyncItemType.QuestionnaireAssembly);
 
         It should_call_StoreAssembly_once =
             () => questionnareAssemblyFileAccessor.Verify(x => x.StoreAssembly(questionnaireId, version, assemblyAsBase64), Times.Once);

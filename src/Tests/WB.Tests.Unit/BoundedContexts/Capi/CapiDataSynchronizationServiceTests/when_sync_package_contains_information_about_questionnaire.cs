@@ -25,8 +25,8 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
 
             var questionnaireMetadata = new QuestionnaireMetadata(questionnaireDocument.PublicKey, 1, false);
 
-            syncItem = new QuestionnaireSyncPackageDto { ItemType = SyncItemType.Questionnaire,
-                Content = "some content", MetaInfo = "some metadata", QuestionnaireId = Guid.NewGuid() };
+            syncItem = new QuestionnaireSyncPackageDto { 
+                Content = "some content", MetaInfo = "some metadata" };
 
             var jsonUtilsMock = new Mock<IJsonUtils>();
             jsonUtilsMock.Setup(x => x.Deserialize<QuestionnaireDocument>(syncItem.Content)).Returns(questionnaireDocument);
@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 plainQuestionnaireRepositoryMock.Object);
         };
 
-        Because of = () => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem);
+        Because of = () => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem, SyncItemType.Questionnaire);
 
         It should_call_RegisterPlainQuestionnaire_once =
             () =>

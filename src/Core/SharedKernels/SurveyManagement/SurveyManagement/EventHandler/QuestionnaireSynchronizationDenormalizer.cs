@@ -4,6 +4,7 @@ using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -23,23 +24,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IJsonUtils jsonUtils;
-        private readonly IOrderableSyncPackageWriter<QuestionnaireSyncPackage> questionnairePackageStorageWriter;
-
+        private readonly IOrderableSyncPackageWriter<QuestionnaireSyncPackageMetaInformation> questionnairePackageStorageWriter;
+        private readonly IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnairePackageContentStore;
         public QuestionnaireSynchronizationDenormalizer(
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
             IJsonUtils jsonUtils,
-            IOrderableSyncPackageWriter<QuestionnaireSyncPackage> questionnairePackageStorageWriter)
+            IOrderableSyncPackageWriter<QuestionnaireSyncPackageMetaInformation> questionnairePackageStorageWriter, IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnairePackageContentStore)
         {
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.jsonUtils = jsonUtils;
             this.questionnairePackageStorageWriter = questionnairePackageStorageWriter;
+            this.questionnairePackageContentStore = questionnairePackageContentStore;
         }
 
         public override object[] Writers
         {
-            get { return new object[] { this.questionnairePackageStorageWriter }; }
+            get { return new object[] { this.questionnairePackageStorageWriter, questionnairePackageContentStore }; }
         }
 
         public override object[] Readers
@@ -97,14 +99,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             long sortIndex = questionnairePackageStorageWriter.GetNextOrder();
 
-            var synchronizationDelta = new QuestionnaireSyncPackage(
-                questionnaireId, 
-                questionnaireVersion,
-                itemType, 
-                content, 
-                metaInfo, sortIndex, timestamp);
+            var synchronizationDelta = new QuestionnaireSyncPackageMetaInformation(
+                questionnaireId,
+                questionnaireVersion, sortIndex, timestamp, itemType);
 
             this.questionnairePackageStorageWriter.Store(synchronizationDelta, synchronizationDelta.PackageId);
+            this.questionnairePackageContentStore.Store(new QuestionnaireSyncPackageContent(synchronizationDelta.PackageId, content, metaInfo), synchronizationDelta.PackageId);
         }
 
         protected string GetItemAsContent(object item)

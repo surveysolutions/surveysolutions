@@ -1,42 +1,29 @@
 using System;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
-    public class InterviewResponsible : IView
-    {
-        public Guid InterviewId { get; set; }
-
-        public Guid UserId { get; set; }
-    }
-
-    public class InterviewSyncPackage : ISyncPackage
+    public class InterviewSyncPackageMetaInformation : ISyncPackage
     {
         [Obsolete("Probably used for deserialization")]
-        public InterviewSyncPackage()
+        public InterviewSyncPackageMetaInformation()
         {
         }
 
-        public InterviewSyncPackage(Guid interviewId,
+        public InterviewSyncPackageMetaInformation(Guid interviewId,
             Guid questionnaireId,
             long questionnaireVersion,
-            string content,
             DateTime timestamp,
             Guid? userId,
-            string itemType,
-            string metaInfo,
-            long sortIndex)
+            long sortIndex, string itemType)
         {
             this.InterviewId = interviewId;
             this.VersionedQuestionnaireId = string.Format("{0}_{1}", questionnaireId, questionnaireVersion);
             this.PackageId = interviewId.FormatGuid() + "$" + sortIndex;
-            this.Content = content;
             this.Timestamp = timestamp;
             this.UserId = userId ?? Guid.Empty;
-            this.ItemType = itemType;
-            this.MetaInfo = metaInfo;
             this.SortIndex = sortIndex;
+            ItemType = itemType;
         }
 
         public Guid InterviewId { get; private set; }
@@ -45,16 +32,12 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public string PackageId { get; private set; }
 
-        public string Content { get; private set; }
-
-        public string MetaInfo { get; private set; }
-
         public DateTime Timestamp { get; private set; }
 
         public Guid UserId { get; private set; }
 
-        public string ItemType { get; private set; }
-
         public long SortIndex { get; private set; }
+
+        public string ItemType { get; private set; }
     }
 }
