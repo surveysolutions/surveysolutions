@@ -20,6 +20,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
             TimeStamp = timeStamp.Ticks;
             Data = GetJsonData(data);
         }
+
         private string GetJsonData(object payload)
         {
             return JsonConvert.SerializeObject(
@@ -29,7 +30,6 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
                     NullValueHandling = NullValueHandling.Ignore,
                     FloatParseHandling = FloatParseHandling.Decimal
                 });
-        }
         }
 
         public string CommitId { get; set; }
