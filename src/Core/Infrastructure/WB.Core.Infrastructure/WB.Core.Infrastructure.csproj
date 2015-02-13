@@ -83,7 +83,6 @@
     <Compile Include="LinqUtils.cs" />
     <Compile Include="Modularity\IIocRegistry.cs" />
     <Compile Include="Modularity\Module.cs" />
-    <Compile Include="Ncqrs\BasicGuidGenerator.cs" />
     <Compile Include="Ncqrs\Commanding\CommandBase.cs" />
     <Compile Include="Ncqrs\Config\IEnvironmentConfiguration.cs" />
     <Compile Include="Ncqrs\Config\InstanceNotFoundInEnvironment.cs" />
@@ -92,7 +91,6 @@
     <Compile Include="Ncqrs\Domain\AggregateRoot.cs" />
     <Compile Include="Ncqrs\Domain\AggregateRootMappedByConvention.cs" />
     <Compile Include="Ncqrs\Domain\Entity.cs" />
-    <Compile Include="Ncqrs\Domain\EntityMappedByConvention.cs" />
     <Compile Include="Ncqrs\Domain\Storage\AggregateRootCreationException.cs" />
     <Compile Include="Ncqrs\Domain\Storage\AggregateRootCreationStrategy.cs" />
     <Compile Include="Ncqrs\Domain\Storage\AggregateRootNotFoundException.cs" />
@@ -137,11 +135,9 @@
     <Compile Include="Ncqrs\Eventing\Sourcing\Snapshotting\SimpleSnapshottingPolicy.cs" />
     <Compile Include="Ncqrs\Eventing\Sourcing\Snapshotting\Snapshot.cs" />
     <Compile Include="Ncqrs\Eventing\Sourcing\SourcedEvent.cs" />
-    <Compile Include="Ncqrs\Eventing\Sourcing\SourcedEventHandler.cs" />
     <Compile Include="Ncqrs\Eventing\Sourcing\TypeThresholdedActionBasedSourcedEventHandler.cs" />
     <Compile Include="Ncqrs\Eventing\Sourcing\UndefinedValues.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\AttributeEventTypeResolver.cs" />
-    <Compile Include="Ncqrs\Eventing\Storage\DuplicateCommitException.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\IEventStore.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\IEventTypeResolver.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\InMemoryEventStore.cs" />
@@ -150,17 +146,13 @@
     <Compile Include="Ncqrs\Eventing\Storage\NullSnapshotStore.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\PropertyBag.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\PropertyBagConvertionException.cs" />
-    <Compile Include="Ncqrs\Eventing\Storage\SimpleEventTypeResolver.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\StoredEvent.cs" />
     <Compile Include="Ncqrs\Eventing\UncommittedEvent.cs" />
     <Compile Include="Ncqrs\Eventing\UncommittedEventStream.cs" />
-    <Compile Include="Ncqrs\GuidCombGenerator.cs" />
     <Compile Include="Ncqrs\IClock.cs" />
     <Compile Include="Ncqrs\InternalExtensions.cs" />
-    <Compile Include="Ncqrs\IUniqueIdentifierGenerator.cs" />
     <Compile Include="Ncqrs\LoggerExtensions.cs" />
     <Compile Include="Ncqrs\LogManager.cs" />
-    <Compile Include="Ncqrs\NamespaceDoc.cs" />
     <Compile Include="Ncqrs\NcqrsEnvironment.cs" />
     <Compile Include="Ncqrs\NcqrsEnvironmentException.cs" />
     <Compile Include="Ncqrs\NcqrsModule.cs" />

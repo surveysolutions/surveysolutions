@@ -32,10 +32,9 @@ namespace Ncqrs.Eventing
         /// </summary>
         public Event()
         {
-            var idGenerator = NcqrsEnvironment.Get<IUniqueIdentifierGenerator>();
             var clock = NcqrsEnvironment.Get<IClock>();
 
-            EventIdentifier = idGenerator.GenerateNewId();
+            EventIdentifier = Guid.NewGuid();
             EventTimeStamp = clock.UtcNow();
             EventVersion = DefaultVersion;
         }
