@@ -2,13 +2,12 @@
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.User;
 using Ncqrs.Domain;
-using Ncqrs.Eventing.Sourcing.Snapshotting;
+using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Events.User;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public class User : AggregateRootMappedByConvention, ISnapshotable<UserState>
+    public class User : AggregateRootMappedByConvention
     {
         private bool isUserLockedBySupervisor;
         private bool isUserLockedByHQ;
@@ -61,6 +60,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
+        public void LinkUserToDevice(LinkUserToDevice command)
+        {
+            this.ApplyEvent(new UserLinkedToDevice
+                            {
+                                DeviceId = command.DeviceId
+                            });
+        }
+
         public void Lock()
         {
             this.ApplyEvent(new UserLocked());
@@ -79,6 +86,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void UnlockBySupervisor()
         {
             this.ApplyEvent(new UserUnlockedBySupervisor());
+        }
+
+        protected void Apply(UserLinkedToDevice @event)
+        {
         }
 
         protected void OnNewUserCreated(NewUserCreated e)
@@ -111,19 +122,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
         }
 
-        public UserState CreateSnapshot()
-        {
-            return new UserState
-            {
-                IsUserLockedByHQ = this.isUserLockedByHQ,
-                IsUserLockedBySupervisor = this.isUserLockedBySupervisor
-            };
-        }
-
-        public void RestoreFromSnapshot(UserState snapshot)
-        {
-            this.isUserLockedByHQ = snapshot.IsUserLockedByHQ;
-            this.isUserLockedBySupervisor = snapshot.IsUserLockedBySupervisor;
-        }
+       
     }
 }

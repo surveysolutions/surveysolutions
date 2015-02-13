@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
@@ -54,6 +52,8 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
         {
             get { return typeof(TEntity); }
         }
+
+        public bool IsCacheEnabled { get { return this.isCacheEnabled; } }
 
         public void Clear()
         {

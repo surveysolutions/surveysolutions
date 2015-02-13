@@ -49,9 +49,9 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 => writer.GetById(interviewId.FormatGuid()) == Create.InterviewSummary());
 
             var jsonUtils = Mock.Of<IJsonUtils>(utils
-                => utils.Serialize(Moq.It.IsAny<InterviewMetaInfo>()) == "metadata json"
-                && utils.Serialize(Moq.It.IsAny<AggregateRootEvent[]>()) == "events json"
-                && utils.Serialize(Moq.It.IsAny<SyncItem>()) == "sync item json"
+                => utils.Serialize(Moq.It.IsAny<InterviewMetaInfo>(), TypeSerializationSettings.ObjectsOnly) == "metadata json"
+                && utils.Serialize(Moq.It.IsAny<AggregateRootEvent[]>(), TypeSerializationSettings.ObjectsOnly) == "events json"
+                && utils.Serialize(Moq.It.IsAny<SyncItem>(), TypeSerializationSettings.ObjectsOnly) == "sync item json"
                 && utils.Deserialize<bool>(negativeResponse) == false);
 
             interviewsSynchronizer = Create.InterviewsSynchronizer(

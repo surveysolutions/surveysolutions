@@ -248,7 +248,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             if (targetLevel == null) return;
         }
 
-        public override void UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] selectedPropagationVector)
+        public override void 
+            UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] selectedPropagationVector)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;

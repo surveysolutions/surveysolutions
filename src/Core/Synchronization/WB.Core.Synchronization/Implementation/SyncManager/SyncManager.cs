@@ -1,35 +1,63 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Entities.SubEntities;
+
+using Raven.Abstractions.Smuggler;
+
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
+using WB.Core.SharedKernels.DataCollection.Commands.User;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.Synchronization.Commands;
 using WB.Core.Synchronization.Documents;
-using WB.Core.Synchronization.SyncProvider;
+using WB.Core.Synchronization.Implementation.ReadSide.Indexes;
+using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.Implementation.SyncManager
 {
     internal class SyncManager : ISyncManager
     {
-        private readonly IReadSideKeyValueStorage<ClientDeviceDocument> devices;
-        private readonly ISynchronizationDataStorage storage;
+        private readonly IReadSideRepositoryReader<TabletDocument> devices;
+        private readonly bool isSyncTrackingEnabled = true;
         private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
         private readonly ILogger logger;
         private readonly ICommandService commandService;
+        private readonly IQueryableReadSideRepositoryReader<UserDocument> userStorage;
+        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
 
-        public SyncManager(IReadSideKeyValueStorage<ClientDeviceDocument> devices,
-            ISynchronizationDataStorage storage,
+        private readonly IQueryableReadSideRepositoryReader<UserSyncPackage> userPackageStorage;
+        private readonly IQueryableReadSideRepositoryReader<QuestionnaireSyncPackage> questionnairePackageStorage;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSyncPackage> interviewPackageStore;
+
+        private readonly string userQueryIndexName = typeof(UserSyncPackagesByBriefFields).Name;
+        private readonly string interviewQueryIndexName = typeof(InterviewSyncPackagesByBriefFields).Name;
+        private readonly string questionnireQueryIndexName = typeof(QuestionnaireSyncPackagesByBriefFields).Name;
+
+        public SyncManager(IReadSideRepositoryReader<TabletDocument> devices, 
             IIncomingSyncPackagesQueue incomingSyncPackagesQueue,
             ILogger logger, 
-            ICommandService commandService)
+            ICommandService commandService, 
+            IQueryableReadSideRepositoryReader<UserDocument> userStorage,
+            IReadSideRepositoryIndexAccessor indexAccessor, 
+            IQueryableReadSideRepositoryReader<UserSyncPackage> userPackageStorage, 
+            IQueryableReadSideRepositoryReader<QuestionnaireSyncPackage> questionnairePackageStorage, 
+            IQueryableReadSideRepositoryReader<InterviewSyncPackage> interviewPackageStore)
         {
             this.devices = devices;
-            this.storage = storage;
+           
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.logger = logger;
             this.commandService = commandService;
+            this.userStorage = userStorage;
+            this.indexAccessor = indexAccessor;
+            this.userPackageStorage = userPackageStorage;
+            this.questionnairePackageStorage = questionnairePackageStorage;
+            this.interviewPackageStore = interviewPackageStore;
         }
 
         public HandshakePackage ItitSync(ClientIdentifier clientIdentifier)
@@ -37,13 +65,23 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             if (clientIdentifier.ClientInstanceKey == Guid.Empty)
                 throw new ArgumentException("ClientInstanceKey is incorrect.");
 
-            if (string.IsNullOrWhiteSpace(clientIdentifier.ClientDeviceKey))
-                throw new ArgumentException("ClientDeviceKey is incorrect.");
+            if (string.IsNullOrWhiteSpace(clientIdentifier.AndroidId))
+                throw new ArgumentException("AndroidId is incorrect.");
 
-            if (string.IsNullOrWhiteSpace(clientIdentifier.ClientVersionIdentifier))
-                throw new ArgumentException("ClientVersionIdentifier is incorrect.");
+            if (string.IsNullOrWhiteSpace(clientIdentifier.AppVersion))
+                throw new ArgumentException("AppVersion is incorrect.");
 
-            return this.CheckAndCreateNewSyncActivity(clientIdentifier);
+            Guid deviceId = clientIdentifier.AndroidId.ToGuid();
+            var device = this.devices.GetById(deviceId);
+
+            if (device == null)
+            {
+                this.commandService.Execute(new RegisterTabletCommand(deviceId, clientIdentifier.UserId, clientIdentifier.AndroidId, clientIdentifier.AppVersion));
+            }
+
+            this.commandService.Execute(new TrackHandshakeCommand(deviceId, clientIdentifier.UserId, clientIdentifier.AppVersion));
+
+            return new HandshakePackage(clientIdentifier.UserId, clientIdentifier.ClientInstanceKey, Guid.NewGuid(), deviceId);
         }
 
         public void SendSyncItem(Guid interviewId, string item)
@@ -51,88 +89,255 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             this.incomingSyncPackagesQueue.Enqueue(interviewId: interviewId, item: item);
         }
 
-        public IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, string lastSyncedPackageId)
+        public SyncItemsMetaContainer GetQuestionnaireArIdsWithOrder(Guid userId, Guid deviceId, string lastSyncedPackageId)
         {
-            var device = devices.GetById(clientRegistrationKey);
+            this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
-            if (device == null)
-                throw new ArgumentException("Device was not found.");
+            var updateFromLastPakageByQuestionnaire =
+                this.GetUpdateFromLastPakage(lastSyncedPackageId, this.indexAccessor.Query<QuestionnaireSyncPackage>(questionnireQueryIndexName))
+                .Select(x => new SynchronizationChunkMeta(x.PackageId))
+                .ToList();
 
-            return storage.GetChunkPairsCreatedAfter(lastSyncedPackageId, userId);
+            this.TrackArIdsRequestIfNeeded(userId, deviceId, SyncItemType.Questionnaire, lastSyncedPackageId, updateFromLastPakageByQuestionnaire);
+
+            return new SyncItemsMetaContainer
+            {
+                SyncPackagesMeta = updateFromLastPakageByQuestionnaire
+            };
         }
 
-        public SyncPackage ReceiveSyncPackage(Guid clientRegistrationId, string id)
+        public SyncItemsMetaContainer GetUserArIdsWithOrder(Guid userId, Guid deviceId, string lastSyncedPackageId)
         {
-            SyncItem item = this.GetSyncItem(clientRegistrationId, id);
+            this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
-            if (item == null)
+            var updateFromLastPakageByUser =
+                this.GetUpdateFromLastPakage(lastSyncedPackageId, this.indexAccessor.Query<UserSyncPackage>(userQueryIndexName).Where(x => x.UserId == userId))
+                .Select(x => new SynchronizationChunkMeta(x.PackageId))
+                .ToList(); 
+
+            this.TrackArIdsRequestIfNeeded(userId, deviceId, SyncItemType.User, lastSyncedPackageId, updateFromLastPakageByUser);
+
+            return new SyncItemsMetaContainer
             {
-                throw new Exception("Item was not found");
-            }
+                SyncPackagesMeta = updateFromLastPakageByUser
+            };
+        }
 
-            return new SyncPackage() {Id = Guid.NewGuid(), SyncItem = item};
+        public SyncItemsMetaContainer GetInterviewArIdsWithOrder(Guid userId, Guid deviceId, string lastSyncedPackageId)
+        {
+            this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
+
+            var allUpdatesFromLastPakage = this.GetUpdateFromLastPakage(lastSyncedPackageId, this.indexAccessor.Query<InterviewSyncPackage>(interviewQueryIndexName).Where(x => x.UserId == userId));
+             
+            var updateFromLastPakageByInterview = FilterDeletedInterviews(allUpdatesFromLastPakage);
+
+            this.TrackArIdsRequestIfNeeded(userId, deviceId, SyncItemType.Interview, lastSyncedPackageId, updateFromLastPakageByInterview);
+
+            return new SyncItemsMetaContainer
+            {
+                SyncPackagesMeta = updateFromLastPakageByInterview
+            };
+        }
+
+        
+        private List<SynchronizationChunkMeta> FilterDeletedInterviews(List<InterviewSyncPackage> packages)
+        {
+            var deletedInterviewMap = packages
+                .Where(x => x.ItemType == SyncItemType.DeleteInterview)
+                .GroupBy(x => x.InterviewId) // interview can be reassing from this user multiple times
+                .ToDictionary(x=> x.Key, x => x.Max(y => y.SortIndex));
+
+            var packagesToSkip = packages
+                .Where(x => deletedInterviewMap.ContainsKey(x.InterviewId) && x.SortIndex < deletedInterviewMap[x.InterviewId])
+                .Select(x => x.PackageId)
+                .ToList();
+
+            return packages
+                    .Where(x => !packagesToSkip.Contains(x.PackageId))
+                    .Select(x => new SynchronizationChunkMeta(x.PackageId))
+                    .ToList();
+        }
+
+
+        public void LinkUserToDevice(Guid interviewerId, string androidId, string oldDeviceId)
+        {
+            if (interviewerId == Guid.Empty)
+                throw new ArgumentException("Interview id is not set.");
+
+            if (string.IsNullOrEmpty(androidId))
+                throw new ArgumentException("Device id is not set.");
+
+            commandService.Execute(new LinkUserToDevice(interviewerId, androidId));
+            TrackUserLinkingRequestIfNeeded(androidId.ToGuid(), interviewerId, oldDeviceId);
+        }
+
+        public UserSyncPackageDto ReceiveUserSyncPackage(Guid deviceId, string packageId, Guid userId)
+        {
+            this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
+
+            var package = this.userPackageStorage.GetById(packageId);
+
+            if (package == null)
+                throw new ArgumentException(string.Format("Package {0} with user is absent", packageId));
+
+            this.TrackPackgeRequestIfNeeded(deviceId, SyncItemType.User, packageId, userId);
+
+            return new UserSyncPackageDto
+                   {
+                       PackageId = package.PackageId, 
+                       Content = package.Content, 
+                       Timestamp = package.Timestamp, 
+                       SortIndex = package.SortIndex,
+                       UserId = package.UserId
+                   };
+        }
+
+        public QuestionnaireSyncPackageDto ReceiveQuestionnaireSyncPackage(Guid deviceId, string packageId, Guid userId)
+        {
+            var package = this.questionnairePackageStorage.GetById(packageId);
+
+            if (package == null)
+                throw new ArgumentException(string.Format("Package {0} with questionnaire is absent", packageId));
+
+            this.TrackPackgeRequestIfNeeded(deviceId, SyncItemType.Questionnaire, packageId, userId);
+
+            return new QuestionnaireSyncPackageDto
+                   {
+                       PackageId = package.PackageId,
+                       Content = package.Content,
+                       Timestamp = package.Timestamp,
+                       SortIndex = package.SortIndex,
+                       QuestionnaireId = package.QuestionnaireId,
+                       QuestionnaireVersion = package.QuestionnaireVersion,
+                       ItemType = package.ItemType,
+                       MetaInfo = package.MetaInfo,
+                   };
+        }
+
+        public InterviewSyncPackageDto ReceiveInterviewSyncPackage(Guid deviceId, string packageId, Guid userId)
+        {
+            this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
+
+            InterviewSyncPackage package = this.interviewPackageStore.GetById(packageId);
+            if (package == null)
+                throw new ArgumentException(string.Format("Package {0} with interview is absent", packageId));
+
+            this.TrackPackgeRequestIfNeeded(deviceId, SyncItemType.Interview, packageId, userId);
+
+            return new InterviewSyncPackageDto
+                   {
+                       PackageId = package.PackageId,
+                       Content = package.Content,
+                       Timestamp = package.Timestamp,
+                       SortIndex = package.SortIndex,
+                       MetaInfo = package.MetaInfo,
+                       InterviewId = package.InterviewId,
+                       VersionedQuestionnaireId = package.VersionedQuestionnaireId,
+                       UserId = package.UserId,
+                       ItemType = package.ItemType,
+                   };
         }
 
         public string GetPackageIdByTimestamp(Guid userId, DateTime timestamp)
         {
-            return this.storage.GetChunkInfoByTimestamp(timestamp, userId).Id;
+            /*var users = this.GetUserTeamates(userId);
+            var items = this.indexAccessor.Query<SynchronizationDelta>(this.queryIndexName);
+            var userIds = users.Concat(new[] { Guid.Empty });
+
+            SynchronizationDelta meta = items.Where(x => timestamp >= x.Timestamp && x.UserId.In(userIds))
+                .ToList()
+                .OrderBy(x => x.SortIndex)
+                .Last();
+            return new SynchronizationChunkMeta(meta.PublicKey).Id;*/
+            return string.Empty;
         }
 
-        private SyncItem GetSyncItem(Guid clientRegistrationKey, string id)
+        private IEnumerable<Guid> GetUserTeamates(Guid userId)
         {
-            var device = devices.GetById(clientRegistrationKey);
+            var user = userStorage.Query(_ => _.Where(u => u.PublicKey == userId)).ToList().FirstOrDefault();
+            if (user == null)
+                return Enumerable.Empty<Guid>();
+
+            Guid supervisorId = user.Roles.Contains(UserRoles.Supervisor) ? userId : user.Supervisor.Id;
+
+            var team =
+                userStorage.Query(
+                    _ => _.Where(u => u.Supervisor != null && u.Supervisor.Id == supervisorId).Select(u => u.PublicKey)).ToList();
+            team.Add(supervisorId);
+            return team;
+        }
+
+        private List<T> GetUpdateFromLastPakage<T>(string lastSyncedPackageId, IQueryable<T> items) where T : ISyncPackage
+        {
+            if (lastSyncedPackageId == null)
+            {
+                return items.OrderBy(x => x.SortIndex).ToList();
+            }
+
+            var lastSyncedPackage = items.FirstOrDefault(x => x.PackageId == lastSyncedPackageId);
+
+            if (lastSyncedPackage == null)
+            {
+                throw new SyncPackageNotFoundException(string.Format("Sync package with id {0} was not found on server", lastSyncedPackageId));
+            }
+
+            long lastSyncedSortIndex = lastSyncedPackage.SortIndex;
+
+            var orderedPackages = items
+                .Where(x => x.SortIndex > lastSyncedSortIndex)
+                .OrderBy(x => x.SortIndex)
+                .ToList();
+
+            return orderedPackages;
+        }
+
+        private void TrackPackgeRequestIfNeeded(Guid deviceId, string packageType, string packageId, Guid userId)
+        {
+            if (isSyncTrackingEnabled)
+            {
+                this.commandService.Execute(new TrackPackageRequestCommand(deviceId, userId, packageType, packageId));
+            }
+        }
+
+        private void TrackUserLinkingRequestIfNeeded(Guid deviceId, Guid userId, string oldDeviceId)
+        {
+            if (isSyncTrackingEnabled)
+            {
+                if (!string.IsNullOrEmpty(oldDeviceId))
+                {
+                    this.commandService.Execute(new UnlinkUserFromDeviceCommand(oldDeviceId.ToGuid(), userId));
+                }
+
+                var device = this.devices.GetById(deviceId);
+                if (device != null)
+                {
+                    this.commandService.Execute(new TrackUserLinkingRequestCommand(deviceId, userId));
+                }
+            }
+        }
+
+        private void TrackArIdsRequestIfNeeded(Guid userId, Guid deviceId, string packageType, string lastSyncedPackageId, IEnumerable<SynchronizationChunkMeta> updateFromLastPakage)
+        {
+            if (isSyncTrackingEnabled)
+            {
+                this.commandService.Execute(
+                    new TrackArIdsRequestCommand(
+                        deviceId,
+                        userId,
+                        packageType,
+                        lastSyncedPackageId,
+                        updateFromLastPakage.Select(x => x.Id).ToArray()));
+            }
+        }
+
+        private void MakeSureThisDeviceIsRegisteredOrThrow(Guid deviceId)
+        {
+            var device = this.devices.GetById(deviceId);
+
             if (device == null)
+            {
                 throw new ArgumentException("Device was not found.");
-
-            // item could be changed on server and sequence would be different
-            var item = storage.GetLatestVersion(id);
-
-            return item;
-        }
-
-        private HandshakePackage CheckAndCreateNewSyncActivity(ClientIdentifier identifier)
-        {
-            Guid ClientRegistrationKey;
-
-            ClientDeviceDocument device = null;
-            if (identifier.ClientRegistrationKey.HasValue)
-            {
-                if (identifier.ClientRegistrationKey.Value == Guid.Empty)
-                    throw new ArgumentException("Unknown device.");
-
-                device = devices.GetById(identifier.ClientRegistrationKey.Value);
-                if (device == null)
-                {
-                    throw new Exception("Device was not found. It could be linked to other system.");
-                }
-
-                //old sync devices are already in use
-                //lets allow to sync them for awhile
-                //then we have to delete this code
-                if (device.SupervisorKey == Guid.Empty)
-                {
-                    logger.Error("Old registered device is synchronizing. Errors could be on client in case of different team.");
-                }
-                else if (device.SupervisorKey != identifier.SupervisorPublicKey)
-                {
-                    throw new Exception("Device was assigned to another Supervisor.");
-                }
-
-                //TODO: check device validity
-
-                ClientRegistrationKey = device.PublicKey;
             }
-            else //register new device
-            {
-                ClientRegistrationKey = Guid.NewGuid();
-
-                commandService.Execute(new CreateClientDeviceCommand(ClientRegistrationKey,
-                    identifier.ClientDeviceKey, identifier.ClientInstanceKey, identifier.SupervisorPublicKey));
-            }
-
-            Guid syncActivityKey = Guid.NewGuid();
-
-            return new HandshakePackage(identifier.ClientInstanceKey, syncActivityKey, ClientRegistrationKey);
         }
     }
 }

@@ -96,7 +96,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
 
             var jsonUtils = Mock.Of<IJsonUtils>(utils
                 => utils.Serialize(Moq.It.IsAny<InterviewMetaInfo>()) == "metadata json"
-                && utils.Serialize(Moq.It.IsAny<SyncItem>()) == "sync item json"
+                && utils.Serialize(Moq.It.IsAny<SyncItem>(), TypeSerializationSettings.ObjectsOnly) == "sync item json"
                 && utils.Deserialize<bool>(positiveResponse) == true);
 
             Mock.Get(jsonUtils)
