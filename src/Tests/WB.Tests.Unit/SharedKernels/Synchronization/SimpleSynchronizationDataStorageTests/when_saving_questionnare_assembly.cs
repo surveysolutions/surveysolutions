@@ -1,6 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 using Moq;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -16,7 +17,8 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SimpleSynchronizationDataS
         Establish context = () =>
         {
             questionnairePackageStorageWriter = new Mock<IOrderableSyncPackageWriter<QuestionnaireSyncPackageMetaInformation>>();
-            denormalizer = CreateDenormalizer(questionnairePackageStorageWriter: questionnairePackageStorageWriter.Object);
+            questionnaireSyncPackageContentStorageMock = new Mock<IReadSideKeyValueStorage<QuestionnaireSyncPackageContent>>();
+            denormalizer = CreateDenormalizer(questionnairePackageStorageWriter: questionnairePackageStorageWriter.Object, questionnaireSyncPackageContentStorage: questionnaireSyncPackageContentStorageMock.Object);
         };
 
         private Because of = () => denormalizer.Handle(Create.QuestionnaireAssemblyImported(qId, version));
@@ -27,9 +29,15 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SimpleSynchronizationDataS
                 Moq.It.IsAny<string>()), 
                 Times.Once);
 
+        It should_store_delete_package_content = () =>
+           questionnaireSyncPackageContentStorageMock.Verify(
+            x => x.Store(Moq.It.IsAny<QuestionnaireSyncPackageContent>(), Moq.It.IsAny<string>()),
+            Times.Once);
+
         private static QuestionnaireSynchronizationDenormalizer denormalizer;
         private static Guid qId = Guid.Parse("1BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static long version = 3;
         private static Mock<IOrderableSyncPackageWriter<QuestionnaireSyncPackageMetaInformation>> questionnairePackageStorageWriter;
+        private static Mock<IReadSideKeyValueStorage<QuestionnaireSyncPackageContent>> questionnaireSyncPackageContentStorageMock;
     }
 }

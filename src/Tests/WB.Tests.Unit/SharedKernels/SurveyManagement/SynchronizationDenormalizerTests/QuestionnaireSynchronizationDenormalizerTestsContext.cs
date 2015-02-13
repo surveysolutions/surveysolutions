@@ -19,13 +19,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor = null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
             IJsonUtils jsonUtils = null,
-            IOrderableSyncPackageWriter<QuestionnaireSyncPackageMetaInformation> questionnairePackageStorageWriter = null)
+            IOrderableSyncPackageWriter<QuestionnaireSyncPackageMetaInformation> questionnairePackageStorageWriter = null,
+            IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnaireSyncPackageContentStorage=null)
         {
             var result = new QuestionnaireSynchronizationDenormalizer(
                 questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 jsonUtils ?? Mock.Of<IJsonUtils>(),
-                questionnairePackageStorageWriter ?? Mock.Of<IOrderableSyncPackageWriter<QuestionnaireSyncPackageMetaInformation>>(), Mock.Of<IReadSideKeyValueStorage<QuestionnaireSyncPackageContent>>());
+                questionnairePackageStorageWriter ?? Mock.Of<IOrderableSyncPackageWriter<QuestionnaireSyncPackageMetaInformation>>(),
+                questionnaireSyncPackageContentStorage??Mock.Of<IReadSideKeyValueStorage<QuestionnaireSyncPackageContent>>());
 
             return result;
         }

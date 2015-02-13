@@ -199,7 +199,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             long sortIndex = interviewPackageStorageWriter.GetNextOrder();
 
             var synchronizationDelta = new InterviewSyncPackageMetaInformation(interviewId, questionnaireId,
-                questionnaireVersion, timestamp, userId, sortIndex, itemType, content.Length, metaInfo.Length);
+                questionnaireVersion, timestamp, userId, sortIndex, itemType,
+                string.IsNullOrEmpty(content) ? 0 : content.Length, string.IsNullOrEmpty(metaInfo) ? 0 : metaInfo.Length);
 
             this.interviewPackageStorageWriter.Store(synchronizationDelta, synchronizationDelta.PackageId);
 

@@ -37,11 +37,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             });
 
             interviewPackageStorageWriter = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation>>();
+            interviewSyncPackageContentStorage = new Mock<IReadSideKeyValueStorage<InterviewSyncPackageContent>>();
 
             synchronizationDenormalizer = CreateDenormalizer(
                 interviews: interviews.Object,
-                interviewPackageStorageWriter: interviewPackageStorageWriter.Object, 
-                interviewSummarys: interviewSummaryWriterMock.Object);
+                interviewPackageStorageWriter: interviewPackageStorageWriter.Object,
+                interviewSummarys: interviewSummaryWriterMock.Object,
+                interviewSyncPackageContentStorage: interviewSyncPackageContentStorage.Object);
         };
 
         Because of = () =>
@@ -54,9 +56,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             interviewPackageStorageWriter.Verify(x => 
                 x.Store(Moq.It.Is<InterviewSyncPackageMetaInformation>(s => s.InterviewId == interviewId), Moq.It.IsAny<string>()), Times.Exactly(2));
 
+        It should_store_content_of_sync_packages_twice = () =>
+            interviewSyncPackageContentStorage.Verify(x =>
+                x.Store(Moq.It.IsAny<InterviewSyncPackageContent>(), Moq.It.IsAny<string>()), Times.Exactly(2));
+
         static InterviewSynchronizationDenormalizer synchronizationDenormalizer;
         static Guid interviewId;
         private static Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation>> interviewPackageStorageWriter;
+        private static Mock<IReadSideKeyValueStorage<InterviewSyncPackageContent>> interviewSyncPackageContentStorage;
     }
 }
 
