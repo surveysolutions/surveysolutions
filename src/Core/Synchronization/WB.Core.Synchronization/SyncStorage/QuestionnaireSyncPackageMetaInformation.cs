@@ -11,13 +11,15 @@ namespace WB.Core.Synchronization.SyncStorage
         {
         }
 
-        public QuestionnaireSyncPackageMetaInformation(Guid questionnaireId, long questionnaireVersion, long sortIndex, DateTime timestamp, string itemType)
+        public QuestionnaireSyncPackageMetaInformation(Guid questionnaireId, long questionnaireVersion, long sortIndex, DateTime timestamp, string itemType, int contentSize, int metaInfoSize)
         {
             this.PackageId = string.Format("{0}_{1}${2}", questionnaireId.FormatGuid(), questionnaireVersion, sortIndex);
             this.QuestionnaireId = questionnaireId;
             this.QuestionnaireVersion = questionnaireVersion;
             this.Timestamp = timestamp;
             ItemType = itemType;
+            ContentSize = contentSize;
+            MetaInfoSize = metaInfoSize;
             this.SortIndex = sortIndex;
         }
 
@@ -32,5 +34,9 @@ namespace WB.Core.Synchronization.SyncStorage
         public long SortIndex { get; private set; }
 
         public string ItemType { get; private set; }
+
+        public int ContentSize { get; private set; }
+
+        public int MetaInfoSize { get; private set; }
     }
 }

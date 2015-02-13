@@ -15,7 +15,7 @@ namespace WB.Core.Synchronization.SyncStorage
             long questionnaireVersion,
             DateTime timestamp,
             Guid? userId,
-            long sortIndex, string itemType)
+            long sortIndex, string itemType, int contentSize, int metaInfoSize)
         {
             this.InterviewId = interviewId;
             this.VersionedQuestionnaireId = string.Format("{0}_{1}", questionnaireId, questionnaireVersion);
@@ -24,6 +24,8 @@ namespace WB.Core.Synchronization.SyncStorage
             this.UserId = userId ?? Guid.Empty;
             this.SortIndex = sortIndex;
             ItemType = itemType;
+            ContentSize = contentSize;
+            MetaInfoSize = metaInfoSize;
         }
 
         public Guid InterviewId { get; private set; }
@@ -39,5 +41,9 @@ namespace WB.Core.Synchronization.SyncStorage
         public long SortIndex { get; private set; }
 
         public string ItemType { get; private set; }
+
+        public int ContentSize { get; private set; }
+
+        public int MetaInfoSize { get; private set; }
     }
 }
