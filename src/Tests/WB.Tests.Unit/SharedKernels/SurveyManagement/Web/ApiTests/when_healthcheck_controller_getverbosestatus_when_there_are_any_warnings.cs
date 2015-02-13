@@ -18,14 +18,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
             var databaseHealthCheck = Mock.Of<IDatabaseHealthCheck>(m => m.Check() == ConnectionHealthCheckResult.Happy());
             var eventStoreHealthCheck = Mock.Of<IEventStoreHealthCheck>(m => m.Check() == ConnectionHealthCheckResult.Happy());
             var brokenSyncPackagesStorage = Mock.Of<IBrokenSyncPackagesStorage>(m => m.GetListOfUnhandledPackages() == unhandledPackagesList);
-            var chunkReader = Mock.Of<IChunkReader>(m => m.GetNumberOfSyncPackagesWithBigSize() == numberOfSyncPackagesWithBigSize);
+          /*KP-4929   var chunkReader = Mock.Of<IChunkReader>(m => m.GetNumberOfSyncPackagesWithBigSize() == numberOfSyncPackagesWithBigSize);*/
             var folderPermissionChecker = Mock.Of<IFolderPermissionChecker>(m => m.Check() == new FolderPermissionCheckResult(null, null, null));
 
             controller = CreateHealthCheckApiController(
                 databaseHealthCheck,
                 eventStoreHealthCheck,
                 brokenSyncPackagesStorage,
-                chunkReader,
+            /*KP-4929     chunkReader,*/
                 folderPermissionChecker);
         };
 
@@ -61,20 +61,20 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         It should_return_error_message_for_NumberOfUnhandledPackages_check = () =>
             result.NumberOfUnhandledPackages.ErrorMessage.ShouldNotBeEmpty();
 
-        It should_return_Warning_status_for_NumberOfSyncPackagesWithBigSize_check = () =>
+  /*KP-4929       It should_return_Warning_status_for_NumberOfSyncPackagesWithBigSize_check = () =>
             result.NumberOfSyncPackagesWithBigSize.Status.ShouldEqual(HealthCheckStatus.Warning);
 
         It should_return_5_packages_for_NumberOfSyncPackagesWithBigSize_check = () =>
             result.NumberOfSyncPackagesWithBigSize.Value.ShouldEqual(numberOfSyncPackagesWithBigSize);
 
         It should_return_error_message_for_NumberOfSyncPackagesWithBigSize_check = () =>
-            result.NumberOfSyncPackagesWithBigSize.ErrorMessage.ShouldNotBeEmpty();
+            result.NumberOfSyncPackagesWithBigSize.ErrorMessage.ShouldNotBeEmpty();*/
 
         It should_return_Down_status_for_FolderPermissionCheckResult_check = () =>
             result.FolderPermissionCheckResult.Status.ShouldEqual(HealthCheckStatus.Happy);
 
 
-        private static int      numberOfSyncPackagesWithBigSize = 5;
+   /*KP-4929      private static int      numberOfSyncPackagesWithBigSize = 5;*/
         private static string[] unhandledPackagesList = new[] { "package name" };
 
         private static HealthCheckModel result;
