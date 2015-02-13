@@ -7,7 +7,6 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.ValueObjects;
 using WB.UI.Capi.Extensions;
-using WB.UI.Capi.Settings;
 using WB.UI.Capi.Views;
 
 namespace WB.UI.Capi
