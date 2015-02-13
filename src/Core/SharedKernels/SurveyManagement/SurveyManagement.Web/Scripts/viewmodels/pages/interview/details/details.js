@@ -103,24 +103,50 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
 
     self.saveTextAnswer = function (questionId, underscoreJoinedQuestionRosterVector) {
         var answerElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector));
+        var answer = answerElement.val();
+        var observableTextAnswer = ko.observable(answer).extend({ required: true });
+
+        if (!observableTextAnswer.isValid()) {
+            self.ShowError(observableTextAnswer.error);
+            return;
+        }
 
         var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
-        question.answer = ko.observable(answerElement.val());
+        question.answer = ko.observable(observableTextAnswer());
 
         sendAnswerCommand(config.commands.answerTextQuestionCommand, question);
     };
 
     self.saveNumericIntegerAnswer = function (questionId, underscoreJoinedQuestionRosterVector) {
         var answerElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector));
+        var answer = answerElement.val();
+        var observableTextAnswer = ko.observable(answer).extend({ required: true, numericValidator: -1 });
+
+        if (!observableTextAnswer.isValid()) {
+            self.ShowError(observableTextAnswer.error);
+            return;
+        }
 
         var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
-        question.answer = ko.observable(answerElement.val());
+        question.answer = ko.observable(observableTextAnswer());
 
         sendAnswerCommand(config.commands.answerNumericIntegerQuestionCommand, question);
     };
 
     self.saveNumericRealAnswer = function (questionId, underscoreJoinedQuestionRosterVector, countOfDecimalPlaces) {
         var answerElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector));
+        var answer = answerElement.val();
+        var observableTextAnswer = ko.observable(answer).extend({ required: true });
+        if (countOfDecimalPlaces) {
+            observableTextAnswer.extend({ numericValidator: countOfDecimalPlaces });
+        } else {
+            observableTextAnswer.extend({ numericValidator: true });
+        }
+
+        if (!observableTextAnswer.isValid()) {
+            self.ShowError(observableTextAnswer.error);
+            return;
+        }
 
         var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
         question.answer = ko.observable(answerElement.val());
