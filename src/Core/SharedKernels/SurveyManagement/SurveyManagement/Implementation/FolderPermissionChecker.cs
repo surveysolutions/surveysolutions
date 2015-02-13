@@ -42,12 +42,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation
                 }
             }
 
-            FolderPermissionCheckResult result = new FolderPermissionCheckResult()
-            {
-                AllowedFolders = allowedFolders.ToArray(),
-                DenidedFolders = deniedFolders.ToArray(),
-                ProcessRunedUnder = windowsIdentity.Name
-            };
+            FolderPermissionCheckResult result = new FolderPermissionCheckResult(
+                processRunedUnder: windowsIdentity.Name,
+                allowedFolders: allowedFolders.ToArray(),
+                denidedFolders: deniedFolders.ToArray());
 
             return result;
         }
