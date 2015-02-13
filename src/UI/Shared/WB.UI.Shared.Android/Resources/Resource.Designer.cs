@@ -102,25 +102,28 @@ namespace WB.UI.Shared.Android
 			public static int ic_drawer_dark = 2130837512;
 			
 			// aapt resource value: 0x7f020009
-			public static int no_image_found = 2130837513;
+			public static int infowarningstyle = 2130837513;
 			
 			// aapt resource value: 0x7f02000a
-			public static int overlay = 2130837514;
+			public static int no_image_found = 2130837514;
 			
 			// aapt resource value: 0x7f02000b
-			public static int questionAnsweredShape = 2130837515;
+			public static int overlay = 2130837515;
 			
 			// aapt resource value: 0x7f02000c
-			public static int questionDisabledShape = 2130837516;
+			public static int questionAnsweredShape = 2130837516;
 			
 			// aapt resource value: 0x7f02000d
-			public static int questionInvalidShape = 2130837517;
+			public static int questionDisabledShape = 2130837517;
 			
 			// aapt resource value: 0x7f02000e
-			public static int questionShape = 2130837518;
+			public static int questionInvalidShape = 2130837518;
 			
 			// aapt resource value: 0x7f02000f
-			public static int statistics_row_style = 2130837519;
+			public static int questionShape = 2130837519;
+			
+			// aapt resource value: 0x7f020010
+			public static int statistics_row_style = 2130837520;
 			
 			static Drawable()
 			{
