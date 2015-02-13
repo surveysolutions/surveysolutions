@@ -1856,7 +1856,7 @@
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\when_load_interview_summary_and_interview_has_deleted_status.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\when_load_interview_summary_and_summary_does_not_exists.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\ApiTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_healthcheck_controller_getverbosestatus_when_there_are_any_errors - Copy.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_healthcheck_controller_getverbosestatus_when_there_are_any_errors.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_healthcheck_controller_getverbosestatus_when_there_are_any_warnings.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_healthcheck_controller_getverbosestatus.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_intervews_controller_interviews_filtered_with_empty_params.cs" />
