@@ -39,7 +39,6 @@ using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Files;
-using WB.Core.Infrastructure.Implementation.Services;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -327,7 +326,6 @@ namespace WB.UI.Capi
             this.kernel.Unbind<ISyncPackageRestoreService>();
             this.kernel.Bind<ISyncPackageRestoreService>().To<SyncPackageRestoreService>().InSingletonScope();
 
-            this.kernel.Bind<IWaitService>().To<WaitService>().InSingletonScope();
             this.kernel.Bind<IInterviewerSettings>().To<InterviewerSettings>().InSingletonScope();
             this.kernel.Bind<ISynchronizationService>().To<InterviewerSynchronizationService>().InSingletonScope();
 

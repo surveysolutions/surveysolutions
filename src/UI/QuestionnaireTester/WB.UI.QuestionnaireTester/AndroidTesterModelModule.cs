@@ -8,12 +8,9 @@ using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.Implementation;
-using WB.Core.Infrastructure.Implementation.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.UI.QuestionnaireTester.Services;
 
 namespace WB.UI.QuestionnaireTester
 {
@@ -41,7 +38,6 @@ namespace WB.UI.QuestionnaireTester
             this.Bind<IReadSideRepositoryReader<InterviewViewModel>>().ToConstant(bigSurveyStore);
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
             this.Bind<IStringCompressor>().To<JsonCompressor>();
-            this.Bind<IWaitService>().To<WaitService>().InSingletonScope();
             this.Bind<IPlainStorageAccessor<QuestionnaireDocument>>().ToConstant(plainQuestionnaireStore);
             this.Bind<IRestServiceSettings>().To<RestServiceSettings>().InSingletonScope();
         }

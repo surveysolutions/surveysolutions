@@ -72,7 +72,6 @@ namespace Ncqrs.Spec
 
         /// <summary>
         /// Releases unmanaged resources and performs other cleanup operations before the
-        /// <see cref="UnitOfWork"/> is reclaimed by garbage collection.
         /// </summary>
         ~EventContext()
         {
