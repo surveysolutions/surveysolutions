@@ -68,14 +68,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
             IDatabaseHealthCheck databaseHealthCheck,
             IEventStoreHealthCheck eventStoreHealthCheck, 
             IBrokenSyncPackagesStorage brokenSyncPackagesStorage, 
-            IChunkReader chunkReader, 
+         /*KP-4929   IChunkReader chunkReader, */
             IFolderPermissionChecker folderPermissionChecker)
         {
             return new HealthCheckApiController(
                 databaseHealthCheck ?? Mock.Of<IDatabaseHealthCheck>(),
                 eventStoreHealthCheck ?? Mock.Of<IEventStoreHealthCheck>(),
                 brokenSyncPackagesStorage ?? Mock.Of<IBrokenSyncPackagesStorage>(),
-                chunkReader ?? Mock.Of<IChunkReader>(),
+             /*KP-4929   chunkReader ?? Mock.Of<IChunkReader>(),*/
                 folderPermissionChecker ?? Mock.Of<IFolderPermissionChecker>());
         }
     }

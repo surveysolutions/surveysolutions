@@ -17,14 +17,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
             databaseHealthCheckMock = new Mock<IDatabaseHealthCheck>();
             eventStoreHealthCheckMock = new Mock<IEventStoreHealthCheck>();
             brokenSyncPackagesStorageMock = new Mock<IBrokenSyncPackagesStorage>();
-            chunkReaderMock = new Mock<IChunkReader>();
+        /*KP-4929     chunkReaderMock = new Mock<IChunkReader>();*/
             folderPermissionCheckerMock = new Mock<IFolderPermissionChecker>();
 
             controller = CreateHealthCheckApiController(
                 databaseHealthCheckMock.Object,
                 eventStoreHealthCheckMock.Object,
                 brokenSyncPackagesStorageMock.Object,
-                chunkReaderMock.Object,
+              /*KP-4929   chunkReaderMock.Object,*/
                 folderPermissionCheckerMock.Object);
         };
 
@@ -45,17 +45,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         It should_call_IBrokenSyncPackagesStorage_Check_once = () =>
             brokenSyncPackagesStorageMock.Verify(x => x.GetListOfUnhandledPackages(), Times.Once());
 
-        It should_call_IChunkReader_Check_once = () =>
-            chunkReaderMock.Verify(x => x.GetNumberOfSyncPackagesWithBigSize(), Times.Once());
+        /*KP-4929    It should_call_IChunkReader_Check_once = () =>
+               chunkReaderMock.Verify(x => x.GetNumberOfSyncPackagesWithBigSize(), Times.Once());*/
 
-        It should_call_IFolderPermissionChecker_Check_once = () =>
-            folderPermissionCheckerMock.Verify(x => x.Check(), Times.Once());
+           It should_call_IFolderPermissionChecker_Check_once = () =>
+               folderPermissionCheckerMock.Verify(x => x.Check(), Times.Once());
 
 
-        private static Mock<IDatabaseHealthCheck> databaseHealthCheckMock;
-        private static Mock<IEventStoreHealthCheck> eventStoreHealthCheckMock;
-        private static Mock<IBrokenSyncPackagesStorage> brokenSyncPackagesStorageMock;
-        private static Mock<IChunkReader> chunkReaderMock;
+           private static Mock<IDatabaseHealthCheck> databaseHealthCheckMock;
+           private static Mock<IEventStoreHealthCheck> eventStoreHealthCheckMock;
+           private static Mock<IBrokenSyncPackagesStorage> brokenSyncPackagesStorageMock;
+   /*KP-4929        private static Mock<IChunkReader> chunkReaderMock;*/
         private static Mock<IFolderPermissionChecker> folderPermissionCheckerMock;
 
         private static HealthCheckModel result;

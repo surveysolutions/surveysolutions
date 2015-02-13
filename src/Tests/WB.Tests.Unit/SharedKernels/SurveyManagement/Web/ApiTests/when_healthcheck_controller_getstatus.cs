@@ -17,14 +17,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
             var databaseHealthCheck = Mock.Of<IDatabaseHealthCheck>(m => m.Check() == ConnectionHealthCheckResult.Happy());
             var eventStoreHealthCheck = Mock.Of<IEventStoreHealthCheck>(m => m.Check() == ConnectionHealthCheckResult.Happy());
             var brokenSyncPackagesStorage = Mock.Of<IBrokenSyncPackagesStorage>(m => m.GetListOfUnhandledPackages() == Enumerable.Empty<string>());
-            var chunkReader = Mock.Of<IChunkReader>(m => m.GetNumberOfSyncPackagesWithBigSize() == 0);
+         /*KP-4929    var chunkReader = Mock.Of<IChunkReader>(m => m.GetNumberOfSyncPackagesWithBigSize() == 0);*/
             var folderPermissionChecker = Mock.Of<IFolderPermissionChecker>(m => m.Check() == new FolderPermissionCheckResult(null, null, null));
 
             controller = CreateHealthCheckApiController(
                 databaseHealthCheck,
                 eventStoreHealthCheck,
                 brokenSyncPackagesStorage,
-                chunkReader,
+          /*KP-4929       chunkReader,*/
                 folderPermissionChecker);
         };
 
