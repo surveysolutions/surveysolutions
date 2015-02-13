@@ -1,4 +1,5 @@
 using CAPI.Android.Core.Model.ViewModel.Login;
+
 using WB.Core.BoundedContexts.Capi.Views.Login;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;

@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.ChangeLog
                 {
                     Content = this.archiver.CompressString(this.jsonUtils.Serialize(recordData)),
                     IsCompressed = true,
-                    ItemType = SyncItemType.Questionnare,
+                    ItemType = SyncItemType.Interview,
                     MetaInfo = this.archiver.CompressString(this.jsonUtils.Serialize(metaData)),
                     RootId = eventSourceId
                 };

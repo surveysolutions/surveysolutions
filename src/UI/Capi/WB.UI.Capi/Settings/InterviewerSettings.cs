@@ -1,9 +1,12 @@
 ﻿using System;
 using Android.App;
 using Android.Content;
-using CAPI.Android.Settings;
+
 using Java.Util;
+
+using WB.Core.BoundedContexts.Capi.Services;
 using WB.UI.Capi.Properties;
+using WB.UI.Capi.SharedPreferences;
 
 namespace WB.UI.Capi.Settings
 {
@@ -64,6 +67,7 @@ namespace WB.UI.Capi.Settings
                 clientRegistrationId.HasValue ? clientRegistrationId.ToString() : string.Empty);
         }
 
+        [Obsolete]
         public void SetLastReceivedPackageId(string lastReceivedPackageId)
         {
             SetSetting(SettingsNames.LastTimestamp, lastReceivedPackageId);

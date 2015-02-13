@@ -1,36 +1,35 @@
 ﻿using System;
 using Machine.Specifications;
 using Moq;
-using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.Synchronization;
-using WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.Synchronization.SyncStorage;
+
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormalizerTests
 {
-    internal class when_interview_created_on_client_and_assigned_to_interviewer : SynchronizationDenormalizerTestsContext
+    internal class when_interview_created_on_client_and_assigned_to_interviewer : InterviewSynchronizationDenormalizerTestsContext
     {
         Establish context = () =>
         {
             interviewId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-            syncStorage = new Mock<ISynchronizationDataStorage>();
+            interviewPackageStorageWriter = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackage>>();
 
-            denormalizer = CreateDenormalizer(synchronizationDataStorage: syncStorage.Object);
+            denormalizer = CreateDenormalizer(interviewPackageStorageWriter: interviewPackageStorageWriter.Object);
         };
 
 
         Because of = () => denormalizer.Handle(Create.InterviewStatusChangedEvent(InterviewStatus.Completed));
 
         It should_not_send_deletion_package_to_tablets = () =>
-            syncStorage.Verify(x => x.MarkInterviewForClientDeleting(interviewId, Moq.It.IsAny<Guid?>(), Moq.It.IsAny<DateTime>()), Times.Never);
+            interviewPackageStorageWriter.Verify(x => x.Store(Moq.It.IsAny<InterviewSyncPackage>(), Moq.It.IsAny<string>()), Times.Never);
 
-        static SynchronizationDenormalizer denormalizer;
-        static Mock<ISynchronizationDataStorage> syncStorage;
+        static InterviewSynchronizationDenormalizer denormalizer;
+        static Mock<IOrderableSyncPackageWriter<InterviewSyncPackage>> interviewPackageStorageWriter;
         static Guid interviewId;
     }
 }

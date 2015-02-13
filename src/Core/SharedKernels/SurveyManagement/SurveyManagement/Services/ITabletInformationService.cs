@@ -8,5 +8,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services
         void SaveTabletInformation(byte[] content, string androidId, string registrationId);
         List<TabletInformationView> GetAllTabletInformationPackages();
         string GetFullPathToContentFile(string packageName);
+        TabletLogView GetTabletLog(string deviceId);
     }
 }

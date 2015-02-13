@@ -4,9 +4,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
 {
     public class InterviewersItem
     {
-        #region Constructors and Destructors
-
-        public InterviewersItem(Guid id, string name, string email, DateTime creationDate, bool isLockedBySupervisor, bool isLockedByHQ)
+        public InterviewersItem(Guid id, string name, string email, DateTime creationDate, bool isLockedBySupervisor, bool isLockedByHQ, string deviceId)
         {
             this.UserId = id;
             this.UserName = name;
@@ -14,11 +12,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
             this.CreationDate = creationDate.ToShortDateString();
             this.IsLockedBySupervisor = isLockedBySupervisor;
             this.IsLockedByHQ = isLockedByHQ;
+            this.DeviceId = deviceId;
         }
-
-        #endregion
-
-        #region Public 
 
         public bool IsLockedBySupervisor { get; private set; }
 
@@ -32,6 +27,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
 
         public string UserName { get; private set; }
 
-        #endregion
+        public string DeviceId { get; private set; }
     }
 }

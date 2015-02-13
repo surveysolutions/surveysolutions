@@ -76,61 +76,17 @@
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.7\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject">
-      <HintPath>..\..\packages\Portable.Ninject.3.3\lib\monoandroid\Ninject.dll</HintPath>
+    <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Portable.Ninject.3.3.1\lib\monoandroid\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Net">
-      <Private>True</Private>
-      <HintPath>..\..\packages\MvvmCross.PortableSupport.3.0.13\lib\MonoAndroid16\System.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Windows">
-      <Private>True</Private>
-      <HintPath>..\..\packages\MvvmCross.PortableSupport.3.0.13\lib\MonoAndroid16\System.Windows.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Serialization">
-      <Private>True</Private>
-      <HintPath>..\..\packages\MvvmCross.PortableSupport.3.0.13\lib\MonoAndroid16\System.Xml.Serialization.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AndroidModelModule.cs" />
-    <Compile Include="Authorization\AndroidAuthentication.cs" />
-    <Compile Include="Authorization\SyncCredentials.cs" />
-    <Compile Include="Backup\BackupableInMemoryReadSideRepositoryAccessor.cs" />
-    <Compile Include="Backup\DefaultBackup.cs" />
-    <Compile Include="Backup\FolderBackupable.cs" />
-    <Compile Include="EventHandlers\AndroidFileStoreDenormalizer.cs" />
-    <Compile Include="EventHandlers\DashboardDenormalizer.cs" />
-    <Compile Include="EventHandlers\UserDenormalizer.cs" />
-    <Compile Include="FileStorage\FileStorageService.cs" />
-    <Compile Include="IDataCollectionAuthentication.cs" />
-    <Compile Include="ISyncAuthenticator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadSideStore\FileReadSideRepositoryWriter.cs" />
-    <Compile Include="SharedPreferences\SettingsNames.cs" />
-    <Compile Include="SharedPreferences\SharedPreferencesBackupOperator.cs" />
-    <Compile Include="SnapshotStore\FileBasedSnapshotStore.cs" />
-    <Compile Include="FileStorage\IFileStorageService.cs" />
-    <Compile Include="ViewModel\Dashboard\DashboardFactory.cs" />
-    <Compile Include="ViewModel\Dashboard\DashboardInput.cs" />
-    <Compile Include="ViewModel\Dashboard\DashboardModel.cs" />
-    <Compile Include="ViewModel\Dashboard\DashboardQuestionnaireItem.cs" />
-    <Compile Include="ViewModel\Dashboard\DashboardSurveyItem.cs" />
-    <Compile Include="ViewModel\Dashboard\FeaturedCategoricalItem.cs" />
-    <Compile Include="ViewModel\Dashboard\FeaturedCategoricalOption.cs" />
-    <Compile Include="ViewModel\Dashboard\FeaturedItem.cs" />
-    <Compile Include="ViewModel\Dashboard\QuestionnaireDTO.cs" />
-    <Compile Include="ViewModel\Dashboard\SurveyDTO.cs" />
-    <Compile Include="ViewModel\InterviewMetaInfo\InterviewMetaInfoFactory.cs" />
-    <Compile Include="ViewModel\Login\LoginDTO.cs" />
-    <Compile Include="Synchronization\ChangeLogManipulator.cs" />
-    <Compile Include="ViewModel\Synchronization\DraftChangesetDTO.cs" />
-    <Compile Include="ViewModel\Synchronization\PublicChangeSetDTO.cs" />
-    <Compile Include="ViewModel\Synchronization\SyncViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.Capi.csproj">

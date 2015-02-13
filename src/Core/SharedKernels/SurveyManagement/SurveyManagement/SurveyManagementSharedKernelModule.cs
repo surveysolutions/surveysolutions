@@ -1,17 +1,16 @@
 ﻿using System;
-using Ninject;
 using Ninject.Modules;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
@@ -27,14 +26,12 @@ using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.Synchronization;
+using WB.Core.Synchronization.EventHandler;
 
 namespace WB.Core.SharedKernels.SurveyManagement
 {
-    using WB.Core.SharedKernels.SurveyManagement.Views.User;
-
     public class SurveyManagementSharedKernelModule : NinjectModule
     {
         private readonly string currentFolderPath;
@@ -116,8 +113,14 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
 
+            this.Bind(typeof(IOrderableSyncPackageWriter<>)).To(typeof(OrderableSyncPackageWriter<>)).InSingletonScope();
+
             this.Kernel.RegisterDenormalizer<InterviewEventHandlerFunctional>();
-            this.Kernel.RegisterDenormalizer<SynchronizationDenormalizer>();
+            this.Kernel.RegisterDenormalizer<InterviewSynchronizationDenormalizer>();
+            this.Kernel.RegisterDenormalizer<UserSynchronizationDenormalizer>();
+            this.Kernel.RegisterDenormalizer<QuestionnaireSynchronizationDenormalizer>();
+            this.Kernel.RegisterDenormalizer<TabletDenormalizer>();
+
             if (hqEnabled)
             {
                 this.Kernel.RegisterDenormalizer<InterviewExportedDataDenormalizer>();

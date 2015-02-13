@@ -1,7 +1,6 @@
 using System;
-using System.Collections.Generic;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.Synchronization.SyncStorage;
+using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 
 namespace WB.Core.Synchronization
 {
@@ -11,10 +10,20 @@ namespace WB.Core.Synchronization
 
         void SendSyncItem(Guid interviewId, string package);
 
-        IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, string lastSyncedPackageId);
+        SyncItemsMetaContainer GetQuestionnaireArIdsWithOrder(Guid userId, Guid clientRegistrationId, string lastSyncedPackageId);
 
-        SyncPackage ReceiveSyncPackage(Guid clientRegistrationId, string id);
+        SyncItemsMetaContainer GetUserArIdsWithOrder(Guid userId, Guid deviceId, string lastSyncedPackageId);
+
+        SyncItemsMetaContainer GetInterviewArIdsWithOrder(Guid userId, Guid deviceId, string lastSyncedPackageId);
+
+        UserSyncPackageDto ReceiveUserSyncPackage(Guid deviceId, string packageId, Guid userId);
+
+        QuestionnaireSyncPackageDto ReceiveQuestionnaireSyncPackage(Guid deviceId, string packageId, Guid userId);
+
+        InterviewSyncPackageDto ReceiveInterviewSyncPackage(Guid deviceId, string packageId, Guid userId);
 
         string GetPackageIdByTimestamp(Guid userId, DateTime timestamp);
+
+        void LinkUserToDevice(Guid interviewerId, string androidId, string oldDeviceId);
     }
 }
