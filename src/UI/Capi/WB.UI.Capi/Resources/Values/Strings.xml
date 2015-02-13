@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="ApplicationName">CAPI</string>
+  <string name="ActiveUsers">Active users</string>
   <string name="AreYouSureYouWantToRestore">All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}</string>
-  <string name="AryYouNewForThisTablet">"Are you sure new user for this tablet?"</string>
   <string name="MakeThisTabletWorkingDevice">Do you want to make this tablet your working device?</string>
   <string name="AllYourDataWillBeDeleted">All your collected data on other devices will be removed. Are you sure?</string>
   <string name="SyncIsFinished">Sync is finished</string>

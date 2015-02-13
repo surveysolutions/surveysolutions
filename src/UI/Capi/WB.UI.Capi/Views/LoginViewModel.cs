@@ -1,12 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-
-using Android.Content.Res;
-
-using Chance.MvvmCross.Plugins.UserInteraction;
-
-using Cirrious.CrossCore;
-using Cirrious.CrossCore.Droid.Platform;
+using Android.App;
 using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
@@ -32,7 +26,7 @@ namespace WB.UI.Capi.Views
         public string Password { get; private set; }
 
         public string KnownUsers {
-            get { return string.Join(", ", Users.Select(x => x.Name)); }
+            get { return string.Format("{0}: {1}", Application.Context.GetString(Resource.String.ActiveUsers), string.Join(", ", Users.Select(x => x.Name))); }
         }
 
         public List<UserLight> Users { get; private set; } 
@@ -51,6 +45,13 @@ namespace WB.UI.Capi.Views
             set { this.isPasswordValid = value; RaisePropertyChanged(() => this.IsPasswordValid); }
         }
 
+        private bool areCredentialsWrong = false;
+        public bool AreCredentialsWrong
+        {
+            get { return this.areCredentialsWrong; }
+            set { this.areCredentialsWrong = value; RaisePropertyChanged(() => this.AreCredentialsWrong); }
+        }
+
         public LoginActivityViewModel()
         {
             Users = CapiApplication.Membership.GetKnownUsers().Result;
@@ -66,8 +67,14 @@ namespace WB.UI.Capi.Views
             get { return new MvxCommand(this.StartLogin); }
         }
 
+        public IMvxCommand RegisterCommand
+        {
+            get { return new MvxCommand(this.StartRegister); }
+        }
+
         private void StartLogin()
         {
+           
             var result = CapiApplication.Membership.LogOnAsync(Login, Password).Result;
             if (result)
             {
@@ -77,20 +84,17 @@ namespace WB.UI.Capi.Views
 
             IsLoginValid = false;
             IsPasswordValid = false;
+            AreCredentialsWrong = true;
+        }
 
-            var activityContext = Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
-
-            Mvx.Resolve<IUserInteraction>().Confirm(
-                    activityContext.GetString(Resource.String.AryYouNewForThisTablet),
-                    okButton: activityContext.GetString(Resource.String.Yes),
-                    cancelButton: activityContext.GetString(Resource.String.No),
-                    okClicked: () => this.NavigationService.NavigateTo(
-                                CapiPages.Synchronization,
-                                new Dictionary<string, string>
-                                {
-                                    { "Login", this.Login },
-                                    { "PasswordHash", this.passwordHasher.Hash(this.Password) }
-                                }));
+        private void StartRegister()
+        {
+            this.NavigationService.NavigateTo(CapiPages.Synchronization,
+                new Dictionary<string, string>
+                {
+                    { "Login", this.Login },
+                    { "PasswordHash", this.passwordHasher.Hash(this.Password) }
+                });
         }
     }
 }

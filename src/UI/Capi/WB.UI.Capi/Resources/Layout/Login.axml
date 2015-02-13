@@ -13,8 +13,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:paddingTop="5dip"
-            android:paddingBottom="5dip">
-        </LinearLayout>
+            android:paddingBottom="5dip" />
     <!--  Header Ends -->
     <!-- Footer Start -->
         <LinearLayout
@@ -30,6 +29,16 @@
             android:layout_height="wrap_content"
             android:padding="10dip"
             android:layout_below="@id/header">
+            <TextView
+                android:id="@+id/knownUsers"
+                android:background="@drawable/infowarningstyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dip"
+                android:textColor="#1e5262"
+                android:textSize="20dip"
+                android:padding="15px"
+                local:MvxBind="Text KnownUsers" />
         <!--  Email Label -->
             <TextView
                 android:layout_width="fill_parent"
@@ -56,6 +65,17 @@
                 android:singleLine="true"
                 local:MvxBind="Text Password; TextColor IsPasswordValid, Converter=BooleanToTextColor"
                 android:password="true" />
+            <TextView
+                android:id="@+id/invalidUserNameOrPassword"
+                android:background="@drawable/errorwarningstyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:textColor="#000"
+                android:textSize="20dip"
+                android:padding="15px"
+                local:MvxBind="Visibility AreCredentialsWrong, Converter=Visibility"
+                android:text="Invalid username and/or password" />
         <!-- Login button -->
             <Button
                 android:id="@+id/startLogin"
@@ -63,13 +83,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dip"
                 android:text="Login"
-				        local:MvxBind="Click LoginCommand" />
-          <TextView
-                android:id="@+id/knownUsers"
+                local:MvxBind="Click LoginCommand" />
+            <Button
+                android:id="@+id/startRegister"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dip"
-                local:MvxBind="Text KnownUsers" />
+                android:layout_marginTop="10dip"
+                android:text="Register"
+                local:MvxBind="Click RegisterCommand" />
         <!-- Link to Registration Screen -->
         </LinearLayout>
     <!-- Login Form Ends -->
