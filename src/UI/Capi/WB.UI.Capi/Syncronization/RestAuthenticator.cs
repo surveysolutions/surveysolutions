@@ -1,11 +1,11 @@
 ﻿using CAPI.Android.Core.Model;
-using CAPI.Android.Core.Model.Authorization;
+
+using WB.Core.BoundedContexts.Capi.Implementation.Authorization;
 
 namespace WB.UI.Capi.Syncronization
 {
     public class RestAuthenticator : ISyncAuthenticator
     {
-
         public event RequestCredentialsCallBack RequestCredentialsCallback;
 
         protected SyncCredentials? OnRequestCredentials()
@@ -22,6 +22,5 @@ namespace WB.UI.Capi.Syncronization
 
             return credentials;
         }
-
     }
 }

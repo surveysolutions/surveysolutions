@@ -1,0 +1,13 @@
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveySolutions;
+using WB.Core.Synchronization.SyncStorage;
+
+namespace WB.Core.SharedKernels.SurveyManagement.Services
+{
+    public interface IOrderableSyncPackageWriter<T> : IReadSideRepositoryWriter<T>, IReadSideRepositoryCleaner, IReadSideRepositoryWriter
+        where T : class, IReadSideRepositoryEntity, IIndexedView
+    {
+        long GetNextOrder();
+    }
+}

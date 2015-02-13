@@ -10,11 +10,9 @@ using Android.Views;
 using Android.Widget;
 using Android.Content.PM;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Logging;
+using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.UI.Capi.Extensions;
-using WB.UI.Capi.Services;
-using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization.Update;
 using WB.UI.Shared.Android.GeolocationServices;
 using Xamarin.Geolocation;
@@ -123,7 +121,7 @@ namespace WB.UI.Capi
                         if (t.Exception != null && t.Exception.InnerException != null)
                         {
                             var innerException = t.Exception.InnerException as GeolocationException;
-                            if (innerException != null && innerException.Error != null)
+                            if (innerException != null)
                                 messageToShow += innerException.Error.ToString();
                         }
                     }
@@ -342,7 +340,7 @@ namespace WB.UI.Capi
                     interviewerSettings.SetSyncAddressPoint(editSettingsSync.Text);
                     editSettingsSync.SetBackgroundColor(Color.LightGreen);
                 }
-                catch(ArgumentException ex)
+                catch(ArgumentException)
                 {
                     editSettingsSync.SetBackgroundColor(Color.Red);
                 }

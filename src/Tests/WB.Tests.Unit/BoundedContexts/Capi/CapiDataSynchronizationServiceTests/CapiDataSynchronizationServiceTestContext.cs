@@ -28,8 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 loginViewFactory ?? Mock.Of<IViewFactory<LoginViewInput, LoginView>>(),
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 capiCleanUpService ?? Mock.Of<ICapiCleanUpService>(),
-                Mock.Of<ILogger>(), capiSynchronizationCacheService ?? Mock.Of<ICapiSynchronizationCacheService>(),
-                stringCompressor ?? mockOfCompressor.Object, jsonUtils ?? Mock.Of<IJsonUtils>(),
+                Mock.Of<ILogger>(), capiSynchronizationCacheService ?? Mock.Of<ICapiSynchronizationCacheService>(), jsonUtils ?? Mock.Of<IJsonUtils>(),
                 questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>());
         }
 

@@ -1,0 +1,86 @@
+﻿@using System.Globalization
+@using WB.Core.SharedKernel.Structures.Synchronization
+@using WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation
+@model WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation.TabletLogView
+
+@{
+    ViewBag.Title = "Tablet sync log";
+}
+<div class="container">
+    <h2>@Model.AndroidId</h2>
+    <h3>Active users on this tablet</h3>
+    <ul class="list-group">
+        @foreach (var user in Model.Users)
+        {
+            <li class="list-group-item">@user.Name</li>
+        }
+    </ul>
+    @foreach (UserSyncLogView userLog in Model.SyncLog)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">@userLog.User.Name [@userLog.User.Id]</div>
+            <div class="panel-body">
+                @foreach (var sync in userLog.TabletSyncLog)
+                {
+                    <table class="table">
+                        <caption>App version: @sync.AppVersion, handshake was on: @sync.HandshakeTime.ToLocalTime()</caption>
+                        <colgroup>
+                            <col style="width: 33%;" />
+                            <col style="width: 33%;" />
+                            <col />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>User's packages</th>
+                                <th>Questionnaire packages</th>
+                                <th>Interview's packages</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="info">
+                                <td>@(sync.PackagesTrackingInfo[SyncItemType.User].LastPackageId ?? "-")</td>
+                                <td>@(sync.PackagesTrackingInfo[SyncItemType.Questionnaire].LastPackageId ?? "-")</td>
+                                <td>@(sync.PackagesTrackingInfo[SyncItemType.Interview].LastPackageId ?? "-")</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @foreach (var requestInfo in sync.PackagesTrackingInfo[SyncItemType.User].PackagesRequestInfo)
+                                    {
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <span class="badge">@(requestInfo.Value.HasValue ? requestInfo.Value.Value.ToLocalTime().ToString(CultureInfo.InvariantCulture) : "-")</span>
+                                                @requestInfo.Key
+                                            </li>
+                                        </ul>
+                                    }
+                                </td>
+                                <td>
+                                    @foreach (var requestInfo in sync.PackagesTrackingInfo[SyncItemType.Questionnaire].PackagesRequestInfo)
+                                    {
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <span class="badge">@(requestInfo.Value.HasValue ? requestInfo.Value.Value.ToLocalTime().ToString(CultureInfo.InvariantCulture) : "-")</span>
+                                                @requestInfo.Key
+                                            </li>
+                                        </ul>
+                                    }
+                                </td>
+                                <td>
+                                    @foreach (var requestInfo in sync.PackagesTrackingInfo[SyncItemType.Interview].PackagesRequestInfo)
+                                    {
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <span class="badge">@(requestInfo.Value.HasValue ? requestInfo.Value.Value.ToLocalTime().ToString(CultureInfo.InvariantCulture) : "-")</span>
+                                                @requestInfo.Key
+                                            </li>
+                                        </ul>
+                                    }
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    }
+</div>

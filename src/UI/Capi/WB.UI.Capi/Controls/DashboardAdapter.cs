@@ -92,16 +92,12 @@ namespace WB.UI.Capi.Controls
             {
                 case InterviewStatus.InterviewerAssigned:
                     return "Initial";
-                    break;
                 case InterviewStatus.Completed:
                     return "Completed";
-                    break;
                 case InterviewStatus.Restarted:
                     return "Restarted";
-                    break;
                 case InterviewStatus.RejectedBySupervisor:
                     return "Rejected";
-                    break;
                 default:
                     return "Unknown";
             }

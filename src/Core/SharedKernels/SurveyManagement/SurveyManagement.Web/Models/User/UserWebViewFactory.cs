@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
                         return null;
                     }
 
-                    return new UserWebView(doc.PublicKey, doc.UserName, doc.Password, doc.Email, doc.CreationDate, doc.Roles, doc.IsLockedBySupervisor, doc.IsLockedByHQ, doc.Supervisor);
+                    return new UserWebView(doc.PublicKey, doc.UserName, doc.Password, doc.Email, doc.CreationDate, doc.Roles, doc.IsLockedBySupervisor, doc.IsLockedByHQ, doc.Supervisor, doc.DeviceId);
                 });
             return result;
         }

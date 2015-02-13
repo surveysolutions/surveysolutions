@@ -11,7 +11,9 @@ namespace WB.Core.BoundedContexts.Capi
         Guid SupervisorId { get; }
         
         bool IsLoggedIn { get; }
+        
         Task<bool> LogOnAsync(string userName, string password, bool wasPasswordHashed = false);
+
         void LogOff();
     }
 }
