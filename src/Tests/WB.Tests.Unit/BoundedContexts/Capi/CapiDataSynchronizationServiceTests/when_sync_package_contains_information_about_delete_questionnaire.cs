@@ -21,11 +21,8 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
 
             syncItem = new QuestionnaireSyncPackageDto
                        {
-                           ItemType = SyncItemType.DeleteQuestionnaire,
                            Content = "some content", 
-                           MetaInfo = "some metadata",
-                           QuestionnaireId = questionnaireMetadata.QuestionnaireId,
-                           QuestionnaireVersion = questionnaireMetadata.Version
+                           MetaInfo = "some metadata"
                        };
 
             var jsonUtilsMock = new Mock<IJsonUtils>();
@@ -40,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 plainQuestionnaireRepositoryMock.Object);
         };
 
-        Because of = () => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem);
+        Because of = () => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem, SyncItemType.DeleteQuestionnaire);
 
         It should_call_DeleteQuestionnaire_once =
             () => commandService.Verify(x => x.Execute(

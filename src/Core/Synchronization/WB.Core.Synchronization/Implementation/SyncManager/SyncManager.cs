@@ -31,8 +31,9 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         private readonly IReadSideRepositoryIndexAccessor indexAccessor;
 
         private readonly IQueryableReadSideRepositoryReader<UserSyncPackage> userPackageStorage;
-        private readonly IQueryableReadSideRepositoryReader<QuestionnaireSyncPackage> questionnairePackageStorage;
-        private readonly IQueryableReadSideRepositoryReader<InterviewSyncPackage> interviewPackageStore;
+        private readonly IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMetaInformation> questionnairePackageStorage;
+        private readonly IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore;
+        private readonly IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnaireSyncPackageContentStore;
 
         private readonly string userQueryIndexName = typeof(UserSyncPackagesByBriefFields).Name;
         private readonly string interviewQueryIndexName = typeof(InterviewSyncPackagesByBriefFields).Name;
@@ -45,8 +46,8 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             IQueryableReadSideRepositoryReader<UserDocument> userStorage,
             IReadSideRepositoryIndexAccessor indexAccessor, 
             IQueryableReadSideRepositoryReader<UserSyncPackage> userPackageStorage, 
-            IQueryableReadSideRepositoryReader<QuestionnaireSyncPackage> questionnairePackageStorage, 
-            IQueryableReadSideRepositoryReader<InterviewSyncPackage> interviewPackageStore)
+            IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMetaInformation> questionnairePackageStorage,
+            IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore, IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnaireSyncPackageContentStore)
         {
             this.devices = devices;
            
@@ -57,7 +58,8 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             this.indexAccessor = indexAccessor;
             this.userPackageStorage = userPackageStorage;
             this.questionnairePackageStorage = questionnairePackageStorage;
-            this.interviewPackageStore = interviewPackageStore;
+            this.interviewPackageContentStore = interviewPackageContentStore;
+            this.questionnaireSyncPackageContentStore = questionnaireSyncPackageContentStore;
         }
 
         public HandshakePackage ItitSync(ClientIdentifier clientIdentifier)
@@ -94,8 +96,8 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
             var updateFromLastPakageByQuestionnaire =
-                this.GetUpdateFromLastPakage(lastSyncedPackageId, this.indexAccessor.Query<QuestionnaireSyncPackage>(questionnireQueryIndexName))
-                .Select(x => new SynchronizationChunkMeta(x.PackageId))
+                this.GetUpdateFromLastPakage(lastSyncedPackageId, this.indexAccessor.Query<QuestionnaireSyncPackageMetaInformation>(questionnireQueryIndexName))
+                .Select(x => new SynchronizationChunkMeta(x.PackageId, x.SortIndex, null, x.ItemType))
                 .ToList();
 
             this.TrackArIdsRequestIfNeeded(userId, deviceId, SyncItemType.Questionnaire, lastSyncedPackageId, updateFromLastPakageByQuestionnaire);
@@ -112,7 +114,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
             var updateFromLastPakageByUser =
                 this.GetUpdateFromLastPakage(lastSyncedPackageId, this.indexAccessor.Query<UserSyncPackage>(userQueryIndexName).Where(x => x.UserId == userId))
-                .Select(x => new SynchronizationChunkMeta(x.PackageId))
+                .Select(x => new SynchronizationChunkMeta(x.PackageId,x.SortIndex,x.UserId, null))
                 .ToList(); 
 
             this.TrackArIdsRequestIfNeeded(userId, deviceId, SyncItemType.User, lastSyncedPackageId, updateFromLastPakageByUser);
@@ -127,8 +129,8 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         {
             this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
-            var allUpdatesFromLastPakage = this.GetUpdateFromLastPakage(lastSyncedPackageId, this.indexAccessor.Query<InterviewSyncPackage>(interviewQueryIndexName).Where(x => x.UserId == userId));
-             
+            var allUpdatesFromLastPakage = this.GetUpdateFromLastPakage(lastSyncedPackageId, this.indexAccessor.Query<InterviewSyncPackageMetaInformation>(interviewQueryIndexName).Where(x => x.UserId == userId));
+
             var updateFromLastPakageByInterview = FilterDeletedInterviews(allUpdatesFromLastPakage);
 
             this.TrackArIdsRequestIfNeeded(userId, deviceId, SyncItemType.Interview, lastSyncedPackageId, updateFromLastPakageByInterview);
@@ -139,13 +141,12 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             };
         }
 
-        
-        private List<SynchronizationChunkMeta> FilterDeletedInterviews(List<InterviewSyncPackage> packages)
+        private List<SynchronizationChunkMeta> FilterDeletedInterviews(List<InterviewSyncPackageMetaInformation> packages)
         {
             var deletedInterviewMap = packages
                 .Where(x => x.ItemType == SyncItemType.DeleteInterview)
                 .GroupBy(x => x.InterviewId) // interview can be reassing from this user multiple times
-                .ToDictionary(x=> x.Key, x => x.Max(y => y.SortIndex));
+                .ToDictionary(x => x.Key, x => x.Max(y => y.SortIndex));
 
             var packagesToSkip = packages
                 .Where(x => deletedInterviewMap.ContainsKey(x.InterviewId) && x.SortIndex < deletedInterviewMap[x.InterviewId])
@@ -154,10 +155,9 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
             return packages
                     .Where(x => !packagesToSkip.Contains(x.PackageId))
-                    .Select(x => new SynchronizationChunkMeta(x.PackageId))
+                    .Select(x => new SynchronizationChunkMeta(x.PackageId,x.SortIndex,x.UserId,x.ItemType))
                     .ToList();
         }
-
 
         public void LinkUserToDevice(Guid interviewerId, string androidId, string oldDeviceId)
         {
@@ -186,15 +186,13 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                    {
                        PackageId = package.PackageId, 
                        Content = package.Content, 
-                       Timestamp = package.Timestamp, 
-                       SortIndex = package.SortIndex,
                        UserId = package.UserId
                    };
         }
 
         public QuestionnaireSyncPackageDto ReceiveQuestionnaireSyncPackage(Guid deviceId, string packageId, Guid userId)
         {
-            var package = this.questionnairePackageStorage.GetById(packageId);
+            var package = this.questionnaireSyncPackageContentStore.GetById(packageId);
 
             if (package == null)
                 throw new ArgumentException(string.Format("Package {0} with questionnaire is absent", packageId));
@@ -205,11 +203,6 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                    {
                        PackageId = package.PackageId,
                        Content = package.Content,
-                       Timestamp = package.Timestamp,
-                       SortIndex = package.SortIndex,
-                       QuestionnaireId = package.QuestionnaireId,
-                       QuestionnaireVersion = package.QuestionnaireVersion,
-                       ItemType = package.ItemType,
                        MetaInfo = package.MetaInfo,
                    };
         }
@@ -218,23 +211,17 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         {
             this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
-            InterviewSyncPackage package = this.interviewPackageStore.GetById(packageId);
-            if (package == null)
+            InterviewSyncPackageContent packageMetaInformation = this.interviewPackageContentStore.GetById(packageId);
+            if (packageMetaInformation == null)
                 throw new ArgumentException(string.Format("Package {0} with interview is absent", packageId));
 
             this.TrackPackgeRequestIfNeeded(deviceId, SyncItemType.Interview, packageId, userId);
 
             return new InterviewSyncPackageDto
                    {
-                       PackageId = package.PackageId,
-                       Content = package.Content,
-                       Timestamp = package.Timestamp,
-                       SortIndex = package.SortIndex,
-                       MetaInfo = package.MetaInfo,
-                       InterviewId = package.InterviewId,
-                       VersionedQuestionnaireId = package.VersionedQuestionnaireId,
-                       UserId = package.UserId,
-                       ItemType = package.ItemType,
+                       PackageId = packageMetaInformation.PackageId,
+                       Content = packageMetaInformation.Content,
+                       MetaInfo = packageMetaInformation.MetaInfo
                    };
         }
 

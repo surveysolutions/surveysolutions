@@ -104,9 +104,12 @@
     </Compile>
     <Compile Include="SyncSettings.cs" />
     <Compile Include="SyncStorage\IIndexedView.cs" />
-    <Compile Include="SyncStorage\InterviewSyncPackage.cs" />
+    <Compile Include="SyncStorage\InterviewResponsible.cs" />
+    <Compile Include="SyncStorage\InterviewSyncPackageContent.cs" />
+    <Compile Include="SyncStorage\InterviewSyncPackageMetaInformation.cs" />
     <Compile Include="SyncStorage\ISyncPackage.cs" />
-    <Compile Include="SyncStorage\QuestionnaireSyncPackage.cs" />
+    <Compile Include="SyncStorage\QuestionnaireSyncPackageContent.cs" />
+    <Compile Include="SyncStorage\QuestionnaireSyncPackageMetaInformation.cs" />
     <Compile Include="SyncStorage\SyncPackageNotFoundException.cs" />
     <Compile Include="SyncStorage\UserSyncPackage.cs" />
     <Compile Include="ZipFileData.cs" />

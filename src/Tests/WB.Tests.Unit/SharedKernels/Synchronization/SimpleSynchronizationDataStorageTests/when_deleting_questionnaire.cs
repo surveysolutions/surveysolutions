@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SimpleSynchronizationDataS
     {
         Establish context = () =>
         {
-            questionnairePackageStorageWriter = new Mock<IOrderableSyncPackageWriter<QuestionnaireSyncPackage>>();
+            questionnairePackageStorageWriter = new Mock<IOrderableSyncPackageWriter<QuestionnaireSyncPackageMetaInformation>>();
             denormalizer = CreateDenormalizer(questionnairePackageStorageWriter: questionnairePackageStorageWriter.Object);
         };
 
@@ -24,13 +24,13 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SimpleSynchronizationDataS
 
         It should_store_delete_package = () =>
             questionnairePackageStorageWriter.Verify(
-                x => x.Store(Moq.It.Is<QuestionnaireSyncPackage>(s => s.ItemType == SyncItemType.DeleteQuestionnaire), Moq.It.IsAny<string>()), 
+                x => x.Store(Moq.It.Is<QuestionnaireSyncPackageMetaInformation>(s => s.ItemType == SyncItemType.DeleteQuestionnaire), Moq.It.IsAny<string>()),
                 Times.Once);
 
 
         private static QuestionnaireSynchronizationDenormalizer denormalizer;
         private static Guid questionnaireId = Guid.Parse("1BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static long version = 4;
-        private static Mock<IOrderableSyncPackageWriter<QuestionnaireSyncPackage>> questionnairePackageStorageWriter;
+        private static Mock<IOrderableSyncPackageWriter<QuestionnaireSyncPackageMetaInformation>> questionnairePackageStorageWriter;
     }
 }

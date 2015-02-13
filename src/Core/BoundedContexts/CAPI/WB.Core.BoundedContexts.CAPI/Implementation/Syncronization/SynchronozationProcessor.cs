@@ -278,21 +278,21 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
         {
             var package = await this.synchronizationService.RequestUserPackageAsync(credentials: this.credentials, chunkId: chunk.Id);
             this.dataProcessor.ProcessDownloadedPackage(package);
-            this.packageIdStorage.Append(package.PackageId, SyncItemType.User, package.UserId, package.SortIndex);
+            this.packageIdStorage.Append(package.PackageId, SyncItemType.User, package.UserId, chunk.SortIndex);
         }
 
         private async Task DownloadAndProcessQuestionnirePackage(SynchronizationChunkMeta chunk)
         {
             var package = await this.synchronizationService.RequestQuestionnairePackageAsync(this.credentials, chunk.Id);
-            this.dataProcessor.ProcessDownloadedPackage(package);
-            this.packageIdStorage.Append(package.PackageId, SyncItemType.Questionnaire, Guid.Empty, package.SortIndex);
+            this.dataProcessor.ProcessDownloadedPackage(package, chunk.ItemType);
+            this.packageIdStorage.Append(package.PackageId, SyncItemType.Questionnaire, Guid.Empty, chunk.SortIndex);
         }
 
         private async Task DownloadAndProcessInterviewPackage(SynchronizationChunkMeta chunk)
         {
             var package = await this.synchronizationService.RequestInterviewPackageAsync(this.credentials, chunk.Id);
-            this.dataProcessor.ProcessDownloadedPackage(package);
-            this.packageIdStorage.Append(package.PackageId, SyncItemType.Interview, package.UserId, package.SortIndex);
+            this.dataProcessor.ProcessDownloadedPackage(package, chunk.ItemType);
+            this.packageIdStorage.Append(package.PackageId, SyncItemType.Interview, chunk.UserId ?? Guid.Empty, chunk.SortIndex);
         }
 
         private async Task MigrateOldSyncTimestampToId()

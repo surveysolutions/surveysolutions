@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SimpleSynchronizationDataS
         {
             var summaryItem = new InterviewSummary();
             var interviewSummarys = Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(x => x.GetById(interviewId.FormatGuid()) == summaryItem);
-            interviewPackageStorageWriter = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackage>>();
+            interviewPackageStorageWriter = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation>>();
 
             denormalizer = CreateDenormalizer(
                 interviewSummarys: interviewSummarys,
@@ -30,14 +30,15 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SimpleSynchronizationDataS
         Because of = () => denormalizer.Handle(Create.InterviewHardDeletedEvent(userId: responsibleId.FormatGuid(), interviewId: interviewId));
 
         It should_store_chunck = () =>
-            interviewPackageStorageWriter.Verify(x => x.Store(
-                Moq.It.Is<InterviewSyncPackage>(s => s.ItemType == SyncItemType.DeleteInterview && 
-                    s.InterviewId == interviewId), Moq.It.IsAny<string>()), Times.Once);
+          interviewPackageStorageWriter.Verify(x => x.Store(
+              Moq.It.Is<InterviewSyncPackageMetaInformation>(s => s.ItemType == SyncItemType.DeleteInterview &&
+                  s.InterviewId == interviewId), Moq.It.IsAny<string>()), Times.Once);
+
 
 
         private static InterviewSynchronizationDenormalizer denormalizer;
 
-        private static Mock<IOrderableSyncPackageWriter<InterviewSyncPackage>> interviewPackageStorageWriter;
+        private static Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation>> interviewPackageStorageWriter;
 
         private static Guid responsibleId = Guid.Parse("1BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static Guid interviewId = Guid.Parse("1BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBA");

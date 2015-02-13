@@ -36,10 +36,8 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
 
             syncItem = new InterviewSyncPackageDto
                        {
-                           ItemType = SyncItemType.Interview,
                            Content = "some content",
-                           MetaInfo = "some metadata",
-                           InterviewId = questionnaireMetadata.PublicKey
+                           MetaInfo = "some metadata"
                        };
 
             var jsonUtilsMock = new Mock<IJsonUtils>();
@@ -56,7 +54,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 plainQuestionnaireRepositoryMock.Object, syncCacher.Object);
         };
 
-        Because of = () => exception = Catch.Exception(() => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem));
+        Because of = () => exception = Catch.Exception(() => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem, SyncItemType.Interview));
 
         It should_call_ApplySynchronizationMetadata_once =
             () =>
@@ -75,13 +73,6 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 syncCacher.Verify(
                     x => x.SaveItem(questionnaireMetadata.PublicKey, syncItem.Content),
                     Times.Never);
-
-        It should_not_create_public_record_in_change_log_for_sync_item =
-        () =>
-            changeLogManipulator.Verify(
-                x =>
-                    x.CreatePublicRecord(syncItem.InterviewId),
-                Times.Never);
 
         It should_throw_NullReferenceException = () =>
             exception.ShouldBeOfType<NullReferenceException>();

@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SimpleSynchronizationDataS
     {
         Establish context = () =>
         {
-            questionnairePackageStorageWriter = new Mock<IOrderableSyncPackageWriter<QuestionnaireSyncPackage>>();
+            questionnairePackageStorageWriter = new Mock<IOrderableSyncPackageWriter<QuestionnaireSyncPackageMetaInformation>>();
             denormalizer = CreateDenormalizer(questionnairePackageStorageWriter: questionnairePackageStorageWriter.Object);
         };
 
@@ -23,13 +23,13 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SimpleSynchronizationDataS
 
         It should_store_chunck = () =>
             questionnairePackageStorageWriter.Verify(x => x.Store(
-                Moq.It.Is<QuestionnaireSyncPackage>(s => s.ItemType == SyncItemType.QuestionnaireAssembly && s.QuestionnaireId == qId && s.QuestionnaireVersion == version),
+                Moq.It.Is<QuestionnaireSyncPackageMetaInformation>(s => s.ItemType == SyncItemType.QuestionnaireAssembly && s.QuestionnaireId == qId && s.QuestionnaireVersion == version),
                 Moq.It.IsAny<string>()), 
                 Times.Once);
 
         private static QuestionnaireSynchronizationDenormalizer denormalizer;
         private static Guid qId = Guid.Parse("1BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static long version = 3;
-        private static Mock<IOrderableSyncPackageWriter<QuestionnaireSyncPackage>> questionnairePackageStorageWriter;
+        private static Mock<IOrderableSyncPackageWriter<QuestionnaireSyncPackageMetaInformation>> questionnairePackageStorageWriter;
     }
 }

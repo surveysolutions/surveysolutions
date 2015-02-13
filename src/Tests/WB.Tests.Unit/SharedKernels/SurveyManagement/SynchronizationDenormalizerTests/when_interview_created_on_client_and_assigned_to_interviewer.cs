@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
         {
             interviewId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-            interviewPackageStorageWriter = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackage>>();
+            interviewPackageStorageWriter = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation>>();
 
             denormalizer = CreateDenormalizer(interviewPackageStorageWriter: interviewPackageStorageWriter.Object);
         };
@@ -26,10 +26,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
         Because of = () => denormalizer.Handle(Create.InterviewStatusChangedEvent(InterviewStatus.Completed));
 
         It should_not_send_deletion_package_to_tablets = () =>
-            interviewPackageStorageWriter.Verify(x => x.Store(Moq.It.IsAny<InterviewSyncPackage>(), Moq.It.IsAny<string>()), Times.Never);
+            interviewPackageStorageWriter.Verify(x => x.Store(Moq.It.IsAny<InterviewSyncPackageMetaInformation>(), Moq.It.IsAny<string>()), Times.Never);
 
         static InterviewSynchronizationDenormalizer denormalizer;
-        static Mock<IOrderableSyncPackageWriter<InterviewSyncPackage>> interviewPackageStorageWriter;
+        static Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation>> interviewPackageStorageWriter;
         static Guid interviewId;
     }
 }

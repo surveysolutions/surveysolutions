@@ -4,22 +4,20 @@ using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
-    public class QuestionnaireSyncPackage : ISyncPackage
+    public class QuestionnaireSyncPackageMetaInformation : ISyncPackage
     {
         [Obsolete("Probably used for deserialization")]
-        public QuestionnaireSyncPackage()
+        public QuestionnaireSyncPackageMetaInformation()
         {
         }
 
-        public QuestionnaireSyncPackage(Guid questionnaireId, long questionnaireVersion, string itemType, string content, string metaInfo, long sortIndex, DateTime timestamp)
+        public QuestionnaireSyncPackageMetaInformation(Guid questionnaireId, long questionnaireVersion, long sortIndex, DateTime timestamp, string itemType)
         {
             this.PackageId = string.Format("{0}_{1}${2}", questionnaireId.FormatGuid(), questionnaireVersion, sortIndex);
             this.QuestionnaireId = questionnaireId;
             this.QuestionnaireVersion = questionnaireVersion;
-            this.Content = content;
             this.Timestamp = timestamp;
-            this.ItemType = itemType;
-            this.MetaInfo = metaInfo;
+            ItemType = itemType;
             this.SortIndex = sortIndex;
         }
 
@@ -29,14 +27,10 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public string PackageId { get; private set; }
 
-        public string Content { get; private set; }
-
         public DateTime Timestamp { get; private set; }
 
-        public string ItemType { get; private set; }
-
-        public string MetaInfo { get; private set; }
-
         public long SortIndex { get; private set; }
+
+        public string ItemType { get; private set; }
     }
 }

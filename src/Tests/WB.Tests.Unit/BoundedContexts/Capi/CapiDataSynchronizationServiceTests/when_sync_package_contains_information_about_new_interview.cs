@@ -34,8 +34,8 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 FeaturedQuestionsMeta = new FeaturedQuestionMeta[] { new FeaturedQuestionMeta(Guid.NewGuid(), "t1", "v1"), new FeaturedQuestionMeta(Guid.NewGuid(), "t2", "v2") }
             };
 
-            syncItem = new InterviewSyncPackageDto { ItemType = SyncItemType.Interview, 
-                Content = "some content", MetaInfo = "some metadata", InterviewId = Guid.NewGuid() };
+            syncItem = new InterviewSyncPackageDto { 
+                Content = "some content", MetaInfo = "some metadata"};
 
             var jsonUtilsMock = new Mock<IJsonUtils>();
             jsonUtilsMock.Setup(x => x.Deserialize<InterviewMetaInfo>(syncItem.MetaInfo)).Returns(questionnaireMetadata);
@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 plainQuestionnaireRepositoryMock.Object, syncCacher.Object);
         };
 
-        Because of = () => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem);
+        Because of = () => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem, SyncItemType.Interview);
 
         It should_call_ApplySynchronizationMetadata_once =
             () =>

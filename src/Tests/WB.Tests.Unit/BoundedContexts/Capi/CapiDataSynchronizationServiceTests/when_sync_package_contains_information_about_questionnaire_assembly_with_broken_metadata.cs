@@ -20,9 +20,6 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
 
             syncItem = new QuestionnaireSyncPackageDto
             {
-                QuestionnaireId = questionnaireId,
-                QuestionnaireVersion = version,
-                ItemType = SyncItemType.QuestionnaireAssembly,
                 Content = "some_content",
                 MetaInfo = "dummy meta"
             };
@@ -38,7 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 jsonUtils : jsonUtilsMock.Object, questionnareAssemblyFileAccessor: questionnareAssemblyFileAccessor.Object);
         };
 
-        Because of = () => exception = Catch.Exception(() => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem));
+        Because of = () => exception = Catch.Exception(() => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem, SyncItemType.QuestionnaireAssembly));
 
         It should_call_StoreAssembly_zero_time =
             () =>
