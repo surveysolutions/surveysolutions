@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             IReadSideRepositoryWriter<InterviewSummary> interviewSummarys = null,
             IJsonUtils jsonUtils = null,
             IMetaInfoBuilder metaBuilder = null,
-            IOrderableSyncPackageWriter<InterviewSyncPackage> interviewPackageStorageWriter = null)
+            IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation> interviewPackageStorageWriter = null)
         {
             var result = new InterviewSynchronizationDenormalizer(
                 questionnriePropagationStructures ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(),
@@ -28,8 +28,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
                 interviewSummarys ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
                 jsonUtils ?? Mock.Of<IJsonUtils>(),
                 metaBuilder ?? Mock.Of<IMetaInfoBuilder>(),
-                interviewPackageStorageWriter ?? Mock.Of<IOrderableSyncPackageWriter<InterviewSyncPackage>>(),
-                Mock.Of<IReadSideRepositoryWriter<InterviewResponsible>>());
+                interviewPackageStorageWriter ?? Mock.Of<IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation>>(),
+                Mock.Of<IReadSideRepositoryWriter<InterviewResponsible>>(), Mock.Of<IReadSideKeyValueStorage<InterviewSyncPackageContent>>());
 
             return result;
         }

@@ -20,8 +20,6 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
 
             syncItem = new InterviewSyncPackageDto
                        {
-                           InterviewId = interviewId,
-                           ItemType = SyncItemType.DeleteInterview, 
                            Content = interviewId.ToString(), 
                            MetaInfo = "some metadata", 
                        };
@@ -39,16 +37,13 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 plainQuestionnaireRepositoryMock.Object, null, cleanUpExecutorMock.Object);
         };
 
-        Because of = () => exception = Catch.Exception(() =>capiDataSynchronizationService.ProcessDownloadedPackage(syncItem));
+        Because of = () => exception = Catch.Exception(() => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem, SyncItemType.DeleteInterview));
 
         It should_never_call_any_command =
             () => commandService.Verify(x => x.Execute(Moq.It.IsAny<ICommand>(), null), Times.Never);
 
         It should_cleanup_data_for_interview =
             () => cleanUpExecutorMock.Verify(x => x.DeleteInterview(interviewId), Times.Once);
-
-        It should_not_create_public_record_in_change_log_for_sync_item =
-            () => changeLogManipulator.Verify(x => x.CreatePublicRecord(syncItem.InterviewId), Times.Never);
 
         It should_throw_NullReferenceException = () =>
             exception.ShouldBeOfType<NullReferenceException>();

@@ -9,7 +9,7 @@ using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.Implementation.ReadSide.Indexes
 {
-    public class QuestionnaireSyncPackagesByBriefFields : AbstractIndexCreationTask<QuestionnaireSyncPackage, QuestionnaireSyncPackagesByBriefFields.SyncPackageBrief>
+    public class QuestionnaireSyncPackagesByBriefFields : AbstractIndexCreationTask<QuestionnaireSyncPackageMetaInformation, QuestionnaireSyncPackagesByBriefFields.SyncPackageBrief>
     {
         public class SyncPackageBrief
         {

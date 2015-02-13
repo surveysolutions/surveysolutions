@@ -3,6 +3,7 @@ using Machine.Specifications;
 using Moq;
 
 using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
@@ -18,13 +19,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor = null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
             IJsonUtils jsonUtils = null,
-            IOrderableSyncPackageWriter<QuestionnaireSyncPackage> questionnairePackageStorageWriter = null)
+            IOrderableSyncPackageWriter<QuestionnaireSyncPackageMetaInformation> questionnairePackageStorageWriter = null)
         {
             var result = new QuestionnaireSynchronizationDenormalizer(
                 questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 jsonUtils ?? Mock.Of<IJsonUtils>(),
-                questionnairePackageStorageWriter ?? Mock.Of<IOrderableSyncPackageWriter<QuestionnaireSyncPackage>>());
+                questionnairePackageStorageWriter ?? Mock.Of<IOrderableSyncPackageWriter<QuestionnaireSyncPackageMetaInformation>>(), Mock.Of<IReadSideKeyValueStorage<QuestionnaireSyncPackageContent>>());
 
             return result;
         }

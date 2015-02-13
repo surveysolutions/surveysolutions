@@ -26,9 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
 
             syncItem = new QuestionnaireSyncPackageDto
                        {
-                           ItemType = SyncItemType.Questionnaire, 
-                           Content = "some content", MetaInfo = "some metadata",
-                           QuestionnaireId = questionnaireDocument.PublicKey
+                           Content = "some content", MetaInfo = "some metadata"
                        };
 
             var jsonUtilsMock = new Mock<IJsonUtils>();
@@ -43,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 plainQuestionnaireRepositoryMock.Object);
         };
 
-        Because of = () => exception = Catch.Exception(() => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem));
+        Because of = () => exception = Catch.Exception(() => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem, SyncItemType.Questionnaire));
 
         It should_not_call_RegisterPlainQuestionnaire =
             () =>
@@ -63,13 +61,6 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
 
         It should_throw_ArgumentException = () =>
             exception.ShouldBeOfType<ArgumentException>();
-
-        It should_not_create_public_record_in_change_log_for_sync_item =
-        () =>
-            changeLogManipulator.Verify(
-                x =>
-                    x.CreatePublicRecord(syncItem.QuestionnaireId),
-                Times.Never);
 
         private static CapiDataSynchronizationService capiDataSynchronizationService;
         private static QuestionnaireSyncPackageDto syncItem;
