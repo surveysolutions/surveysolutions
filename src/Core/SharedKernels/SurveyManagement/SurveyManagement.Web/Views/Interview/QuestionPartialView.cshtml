@@ -217,8 +217,8 @@
 
         @if (!Model.IsValid)
         {
-            <small class="text-error">@Model.ValidationExpression</small>
-            <small class="text-error">@Model.ValidationMessage</small>
+            <small class="text-error"><b>Expression:</b> @Model.ValidationExpression</small>
+            <small class="text-error"><b>Message:</b> @Model.ValidationMessage</small>
         }
     </td>
 
