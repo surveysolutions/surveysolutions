@@ -325,6 +325,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 }
 
                 UpdateStatusMessage("Rebuild specific views succeeded.");
+                logger.Info("Rebuild views succeeded");
             }
             catch (Exception exception)
             {

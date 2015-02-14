@@ -19,7 +19,7 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
 
         private bool isCacheEnabled = false;
 
-        private readonly Dictionary<string, TEntity> cache = new Dictionary<string, TEntity>();
+        protected readonly Dictionary<string, TEntity> cache = new Dictionary<string, TEntity>();
 
         public MemoryCachedReadSideStore(IReadSideStorage<TEntity> readSideStorage)
         {
@@ -93,6 +93,11 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
             }
         }
 
+        public void BulkStore(List<Tuple<TEntity, string>> bulk)
+        {
+            throw new NotImplementedException();
+        }
+
         private TEntity GetByIdUsingCache(string id)
         {
             if (cache.ContainsKey(id))
@@ -134,15 +139,20 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
             this.StoreBulkEntitiesToRepository(bulk);
         }
 
-        private void StoreBulkEntitiesToRepository(List<string> bulk)
+        protected virtual void StoreBulkEntitiesToRepository(List<string> bulk)
         {
             foreach (var entityId in bulk)
             {
                 var entity = cache[entityId];
-                if(entity==null)
+                if (entity == null)
+                {
                     readSideStorage.Remove(entityId);
+                }
                 else
+                {
                     readSideStorage.Store(entity, entityId);
+                }
+
                 cache.Remove(entityId);
             }
         }
