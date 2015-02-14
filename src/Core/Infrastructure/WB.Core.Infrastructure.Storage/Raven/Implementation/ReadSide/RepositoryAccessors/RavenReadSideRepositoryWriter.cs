@@ -34,7 +34,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         public void BulkStore(List<Tuple<TEntity, string>> bulk)
         {
-            using (var bulkOperation = this.RavenStore.BulkInsert())
+            using (var bulkOperation = this.RavenStore.BulkInsert(options: new BulkInsertOptions{OverwriteExisting = true}))
             {
                 foreach (var bulkItem in bulk)
                 {
