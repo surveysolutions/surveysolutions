@@ -150,5 +150,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
         }
 
         public Type ViewType { get { return typeof (InterviewHistoryView); } }
+
+        public void BulkStore(List<Tuple<InterviewHistoryView, string>> bulk)
+        {
+            foreach (var tuple in bulk)
+            {
+                Store(tuple.Item1, tuple.Item2);
+            }
+        }
     }
 }
