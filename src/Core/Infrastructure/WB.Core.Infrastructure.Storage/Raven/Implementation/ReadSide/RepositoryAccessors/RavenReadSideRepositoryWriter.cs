@@ -38,7 +38,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
             {
                 foreach (var bulkItem in bulk)
                 {
-                    bulkOperation.Store(bulkItem.Item1, bulkItem.Item2);
+                    bulkOperation.Store(bulkItem.Item1, this.ToRavenId(bulkItem.Item2));
                 }
             }
         }
