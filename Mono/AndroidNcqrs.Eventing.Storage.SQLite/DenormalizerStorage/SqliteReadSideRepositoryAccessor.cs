@@ -44,5 +44,13 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
         {
             this.documentStore.Store<TView>(view,id);
         }
+
+        public void BulkStore(List<Tuple<TView, string>> bulk)
+        {
+            foreach (var tuple in bulk)
+            {
+                this.Store(tuple.Item1, tuple.Item2);
+            }
+        }
     }
 }
