@@ -28,7 +28,7 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
             string value;
             if (this.storage.TryGetValue(id, out value))
             {
-                return JsonConvert.DeserializeObject<TEntity>(this.storage[id], JsonSerializerSettings);
+                return JsonConvert.DeserializeObject<TEntity>(value, JsonSerializerSettings);
             }
 
             return null;
