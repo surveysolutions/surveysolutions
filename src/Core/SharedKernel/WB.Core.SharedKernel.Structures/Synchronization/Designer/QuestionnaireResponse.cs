@@ -2,9 +2,9 @@
 
 namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
 {
-    public class QuestionnaireCommunicationPackage
+    public class QuestionnaireResponse
     {
-        public string Questionnaire { get; set; }
+        public QuestionnaireDocument Questionnaire { get; set; }
         public string QuestionnaireAssembly { get; set; }
     }
 }

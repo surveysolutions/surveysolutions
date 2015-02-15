@@ -19,17 +19,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     public class DashboardViewModel : BaseViewModel
     {
         private readonly IRestService restService;
-        private readonly IPlainStorageAccessor<DashboardStorageViewModel> dashboardStorage;
+        private readonly IQueryablePlainStorageAccessor<QuestionnaireMetaInfo> questionnairesStorageAccessor;
         private readonly IMvxWebBrowserTask webBrowser;
 
         private readonly QuestionnaireVersion supportedQuestionnaireVersion;
 
         public DashboardViewModel(IPrincipal principal, IRestService restService, ILogger logger,
-            IUserInteraction uiDialogs, IPlainStorageAccessor<DashboardStorageViewModel> dashboardStorage, IMvxWebBrowserTask webBrowser)
+            IUserInteraction uiDialogs, IQueryablePlainStorageAccessor<QuestionnaireMetaInfo> questionnairesStorageAccessor, IMvxWebBrowserTask webBrowser)
             : base(logger, principal: principal, uiDialogs: uiDialogs)
         {
             this.restService = restService;
-            this.dashboardStorage = dashboardStorage;
+            this.questionnairesStorageAccessor = questionnairesStorageAccessor;
             this.webBrowser = webBrowser;
 
             var engineVersion = QuestionnaireVersionProvider.GetCurrentEngineVersion();
@@ -45,18 +45,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             if (this.Principal.CurrentIdentity.IsAuthenticated)
             {
-                await this.LoadDashboardViewModelFromStorage();   
+                await this.LoadQuestionnairesMetaInfoFromStorage();   
             }
             else
             {
                 this.ShowViewModel<LoginViewModel>();
             }
         }
-        
-        private IList<QuestionnaireListItem> allQuestionnaires;
-        private IList<QuestionnaireListItem> questionnaires;
 
-        public IList<QuestionnaireListItem> Questionnaires
+        private IList<QuestionnaireMetaInfo> allQuestionnaires;
+        private IList<QuestionnaireMetaInfo> questionnaires;
+
+        public IList<QuestionnaireMetaInfo> Questionnaires
         {
             get { return questionnaires; }
             set
@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             get
             {
-                return loadQuestionnaireCommand ?? (loadQuestionnaireCommand =  new MvxCommand<QuestionnaireListItem>(this.LoadQuestionnaire,
+                return loadQuestionnaireCommand ?? (loadQuestionnaireCommand = new MvxCommand<QuestionnaireMetaInfo>(this.LoadQuestionnaire,
                         (questionnaire) => questionnaire.Version <= supportedQuestionnaireVersion));
             }
         }
@@ -130,7 +130,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         }
 
 
-        private void LoadQuestionnaire(QuestionnaireListItem questionnaire)
+        private void LoadQuestionnaire(QuestionnaireMetaInfo questionnaire)
         {
             this.ShowViewModel<QuestionnairePrefilledQuestionsViewModel>(questionnaire);
         }
@@ -161,22 +161,21 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
-        private Task LoadDashboardViewModelFromStorage()
+        private Task LoadQuestionnairesMetaInfoFromStorage()
         {
             return Task.Run(() =>
             {
-                var dashboardStorageViewModel = this.dashboardStorage.GetById(this.Principal.CurrentIdentity.Name);
-                if (dashboardStorageViewModel != null)
-                    this.Questionnaires = dashboardStorageViewModel.Questionnaires; 
+                this.Questionnaires = questionnairesStorageAccessor.LoadAll().ToList();
             });
         }
 
-        private Task SaveDashboardViewModelToStorage(List<QuestionnaireListItem> questionnaireListItems)
+        private Task SaveQuestionnairesMetaInfoToStorage(IEnumerable<QuestionnaireMetaInfo> questionnaireListItems)
         {
             return Task.Run(() =>
             {
-                this.dashboardStorage.Store(new DashboardStorageViewModel(){Questionnaires = questionnaireListItems},  this.Principal.CurrentIdentity.Name);
-                this.Questionnaires = questionnaireListItems;
+                this.questionnairesStorageAccessor.RemoveAll();
+                this.questionnairesStorageAccessor.Store(questionnaireListItems.Select(qli => new Tuple<QuestionnaireMetaInfo, string>(qli, qli.Id)));
+                this.Questionnaires = questionnaireListItems.ToList();
             });
         }
 
@@ -185,16 +184,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.IsInProgress = true;
             try
             {
-                var questionnaireListCommunicationPackage = await this.restService.GetAsync<QuestionnaireListCommunicationPackage>(
-                        url: "questionnairelist",
-                        credentials:
-                            new RestCredentials()
-                            {
-                                Login = this.Principal.CurrentIdentity.Name,
-                                Password = this.Principal.CurrentIdentity.Password
-                            });
-                
-                await this.SaveDashboardViewModelToStorage(questionnaireListCommunicationPackage.Items.ToList());
+                var questionnaires = await this.restService.GetAsync<IEnumerable<QuestionnaireMetaInfo>>(
+                    url: "questionnaires",
+                    credentials:
+                        new RestCredentials()
+                        {
+                            Login = this.Principal.CurrentIdentity.Name,
+                            Password = this.Principal.CurrentIdentity.Password
+                        });
+
+                await this.SaveQuestionnairesMetaInfoToStorage(questionnaires);
             }
             catch (RestException ex)
             {
