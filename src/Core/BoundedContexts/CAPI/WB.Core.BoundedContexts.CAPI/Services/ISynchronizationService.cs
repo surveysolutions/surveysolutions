@@ -21,8 +21,6 @@ namespace WB.Core.BoundedContexts.Capi.Services
 
         Task PushBinaryAsync(SyncCredentials credentials, Guid interviewId, string fileName, byte[] fileData);
 
-        Task<string> GetChunkIdByTimestampAsync(SyncCredentials credentials, long timestamp);
-
         Task<bool> NewVersionAvailableAsync();
 
         Task<bool> CheckExpectedDeviceAsync(SyncCredentials credentials);

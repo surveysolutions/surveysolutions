@@ -1,18 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Entities.SubEntities;
-
-using Raven.Abstractions.Smuggler;
-
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
-using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.Synchronization.Commands;
 using WB.Core.Synchronization.Documents;
 using WB.Core.Synchronization.Implementation.ReadSide.Indexes;
@@ -25,13 +19,10 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         private readonly IReadSideRepositoryReader<TabletDocument> devices;
         private readonly bool isSyncTrackingEnabled = true;
         private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
-        private readonly ILogger logger;
         private readonly ICommandService commandService;
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> userStorage;
         private readonly IReadSideRepositoryIndexAccessor indexAccessor;
 
         private readonly IQueryableReadSideRepositoryReader<UserSyncPackage> userPackageStorage;
-        private readonly IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMetaInformation> questionnairePackageStorage;
         private readonly IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore;
         private readonly IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnaireSyncPackageContentStore;
 
@@ -40,24 +31,19 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         private readonly string questionnireQueryIndexName = typeof(QuestionnaireSyncPackagesByBriefFields).Name;
 
         public SyncManager(IReadSideRepositoryReader<TabletDocument> devices, 
-            IIncomingSyncPackagesQueue incomingSyncPackagesQueue,
-            ILogger logger, 
-            ICommandService commandService, 
-            IQueryableReadSideRepositoryReader<UserDocument> userStorage,
+            IIncomingSyncPackagesQueue incomingSyncPackagesQueue, 
+            ICommandService commandService,
             IReadSideRepositoryIndexAccessor indexAccessor, 
-            IQueryableReadSideRepositoryReader<UserSyncPackage> userPackageStorage, 
-            IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMetaInformation> questionnairePackageStorage,
-            IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore, IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnaireSyncPackageContentStore)
+            IQueryableReadSideRepositoryReader<UserSyncPackage> userPackageStorage,
+            IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore, 
+            IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnaireSyncPackageContentStore)
         {
             this.devices = devices;
            
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
-            this.logger = logger;
             this.commandService = commandService;
-            this.userStorage = userStorage;
             this.indexAccessor = indexAccessor;
             this.userPackageStorage = userPackageStorage;
-            this.questionnairePackageStorage = questionnairePackageStorage;
             this.interviewPackageContentStore = interviewPackageContentStore;
             this.questionnaireSyncPackageContentStore = questionnaireSyncPackageContentStore;
         }
@@ -223,35 +209,6 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                        Content = packageMetaInformation.Content,
                        MetaInfo = packageMetaInformation.MetaInfo
                    };
-        }
-
-        public string GetPackageIdByTimestamp(Guid userId, DateTime timestamp)
-        {
-            /*var users = this.GetUserTeamates(userId);
-            var items = this.indexAccessor.Query<SynchronizationDelta>(this.queryIndexName);
-            var userIds = users.Concat(new[] { Guid.Empty });
-
-            SynchronizationDelta meta = items.Where(x => timestamp >= x.Timestamp && x.UserId.In(userIds))
-                .ToList()
-                .OrderBy(x => x.SortIndex)
-                .Last();
-            return new SynchronizationChunkMeta(meta.PublicKey).Id;*/
-            return string.Empty;
-        }
-
-        private IEnumerable<Guid> GetUserTeamates(Guid userId)
-        {
-            var user = userStorage.Query(_ => _.Where(u => u.PublicKey == userId)).ToList().FirstOrDefault();
-            if (user == null)
-                return Enumerable.Empty<Guid>();
-
-            Guid supervisorId = user.Roles.Contains(UserRoles.Supervisor) ? userId : user.Supervisor.Id;
-
-            var team =
-                userStorage.Query(
-                    _ => _.Where(u => u.Supervisor != null && u.Supervisor.Id == supervisorId).Select(u => u.PublicKey)).ToList();
-            team.Add(supervisorId);
-            return team;
         }
 
         private List<T> GetUpdateFromLastPakage<T>(string lastSyncedPackageId, IQueryable<T> items) where T : ISyncPackage

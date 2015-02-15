@@ -134,8 +134,6 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
             this.ExitIfCanceled();
             this.OnStatusChanged(new SynchronizationEventArgsWithPercent("Pulling", Operation.Pull, true, 0));
 
-            await this.MigrateOldSyncTimestampToId();
-
             await this.PullUserPackages();
             await this.PullQuestionnairePackages();
             await this.PullInterviewPackages();
@@ -295,27 +293,6 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
             this.packageIdStorage.Append(package.PackageId, SyncItemType.Interview, chunk.UserId ?? Guid.Empty, chunk.SortIndex);
         }
 
-        private async Task MigrateOldSyncTimestampToId()
-        {
-            string lastReceivedPackageId = this.interviewerSettings.GetLastReceivedPackageId();
-            
-
-            if (!string.IsNullOrEmpty(lastReceivedPackageId))
-            {
-                this.logger.Warn(string.Format("Migration of old version of sync. Last received package id: {0}", lastReceivedPackageId));
-
-                long lastReceivedPackageIdOfLongType;
-                if (!long.TryParse(lastReceivedPackageId, out lastReceivedPackageIdOfLongType))
-                    return;
-                this.OnStatusChanged(new SynchronizationEventArgs("Tablet had old installation. Migrating package timestamp to it's id", Operation.Pull, true));
-                string lastReceivedChunkId = await this.synchronizationService.GetChunkIdByTimestampAsync(timestamp: lastReceivedPackageIdOfLongType, credentials: this.credentials);
-                
-                //this.packageIdStorage.Append(lastReceivedChunkId);
-                
-                this.interviewerSettings.SetLastReceivedPackageId(null);
-            }
-        }
-       
         public void Cancel(Exception exception = null)
         {
             this.OnStatusChanged(new SynchronizationEventArgs("Cancelling", Operation.Pull, false));
