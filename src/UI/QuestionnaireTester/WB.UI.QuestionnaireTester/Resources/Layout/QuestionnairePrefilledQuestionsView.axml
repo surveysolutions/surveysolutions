@@ -78,6 +78,6 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:background="@drawable/rounded_button"
-            local:MvxBind="Click OpenInterviewCommand; Hidden IsInProgress" />
+            local:MvxBind="Click OpenInterviewCommand; Visible CanCreateInterview" />
     </RelativeLayout>
 </LinearLayout>
