@@ -280,6 +280,8 @@
     <Compile Include="SharedKernels\DataCollection\QuestionnaireAssemblyFileAccessorTests\when_storing_assembly_with_empty_content.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_creating_questionnaire_imported_from_designer_in_census_mode.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_import_questionnaire_and_base64string_of_assembly_is_empty.cs" />
+    <Compile Include="SharedKernels\DataCollection\UserTests\UserTestContext.cs" />
+    <Compile Include="SharedKernels\DataCollection\UserTests\when_user_linking_to_device.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_all_available_descendants_of_QuestionAnswered_recived.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\QuestionnaireListViewItemDenormalizerTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_NewQuestionnaireCreated_recived.cs" />
@@ -312,6 +314,9 @@
     <Compile Include="SharedKernels\SurveyManagement\UnhandledPackageStorageTests\when_StoreUnhandledPackage_called_and_interviewId_is_null.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\InterviewSynchronizationDenormalizerTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\QuestionnaireSynchronizationDenormalizerTestsContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\UserDenormalizerTests\UserDenormalizerTests.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\UserDenormalizerTests\when_user_linked_to_device_for_the_second_time.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\UserViewFactoryTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\ApiBasicAuthAttributeTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorizing_and_request_header_has_bad_basic_auth_info.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorizing_non_existant_user.cs" />
@@ -1508,7 +1513,7 @@
     <Compile Include="SharedKernels\DataCollection\RepositoryKeyHelperTests\when_creating_key_for_readside_versioned_repository_reader_from_guid_and_version.cs" />
     <Compile Include="SharedKernels\DataCollection\RepositoryKeyHelperTests\when_creating_key_for_variable_by_questionnaire_readside_versioned_repositories.cs" />
     <Compile Include="SharedKernels\DataCollection\StronglyTypedInterviewEvaluator.cs" />
-    <Compile Include="SharedKernels\DataCollection\UserARTests.cs" />
+    <Compile Include="SharedKernels\DataCollection\UserTests\UserARTests.cs" />
     <Compile Include="SharedKernels\DataCollection\ValueVectorTests\when_call_ToString_for_ValueVector_with_empty_vector_inside.cs" />
     <Compile Include="SharedKernels\DataCollection\ValueVectorTests\when_call_ToString_for_ValueVector_with_not_empty_vector_inside.cs" />
     <Compile Include="SharedKernels\DataCollection\ValueVectorTests\when_comparing_ValueVector_with_non_ValueVector_object.cs" />
@@ -1885,6 +1890,7 @@
     <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\TabletReportControllerTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\when_info_package_requested.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\when_list_of_info_packages_is_requested.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\UserDenormalizerTests\when_user_linked_to_device_for_the_firts_time.cs" />
     <Compile Include="SharedKernels\SurveySolutions\Documents\QuestionnaireDocumentTests.cs" />
     <Compile Include="SharedKernels\Synchronization\DefaultBackupManagerTests.cs" />
     <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\when_marking_interview_for_deleting.cs" />

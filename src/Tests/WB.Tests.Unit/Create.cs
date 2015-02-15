@@ -44,10 +44,12 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -72,13 +74,23 @@ namespace WB.Tests.Unit
     {
         public static IPublishedEvent<T> ToPublishedEvent<T>(this T @event, 
             Guid? eventSourceId = null,
-            string origin = null)
+            string origin = null,
+            DateTime? eventTimeStamp = null)
             where T : class
         {
             return Mock.Of<IPublishedEvent<T>>(publishedEvent
                 => publishedEvent.Payload == @event
-                && publishedEvent.EventSourceId == (eventSourceId ?? Guid.NewGuid()) &&
-                publishedEvent.Origin == origin);
+                && publishedEvent.EventSourceId == (eventSourceId ?? Guid.NewGuid()) 
+                && publishedEvent.Origin == origin
+                && publishedEvent.EventTimeStamp == (eventTimeStamp ?? DateTime.Now));
+        }
+
+        public static class Command
+        {
+            public static LinkUserToDevice LinkUserToDeviceCommand(Guid userId, string deviceId)
+            {
+                return new LinkUserToDevice(userId, deviceId);
+            }
         }
 
         public static class Event
@@ -211,6 +223,14 @@ namespace WB.Tests.Unit
                     ParentId =  parentId ?? Guid.NewGuid(),
                     Text = text
                 };
+            }
+
+            public static IPublishedEvent<UserLinkedToDevice> UserLinkedToDevice(Guid userId, string deviceId, DateTime eventTimeStamp)
+            {
+                return new UserLinkedToDevice
+                {
+                    DeviceId = deviceId
+                }.ToPublishedEvent(eventSourceId: userId, eventTimeStamp: eventTimeStamp);
             }
         }
 
