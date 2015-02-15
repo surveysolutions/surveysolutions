@@ -15,7 +15,7 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
         private readonly IReadSideStorage<TEntity> readSideStorage;
 
         private const int MaxCountOfCachedEntities = 256;
-        private const int MaxCountOfEntitiesInOneStoreOperation = 256;
+        private const int MaxCountOfEntitiesInOneStoreOperation = 128;
 
         private bool isCacheEnabled = false;
 
