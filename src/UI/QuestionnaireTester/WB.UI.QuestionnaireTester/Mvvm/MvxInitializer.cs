@@ -1,6 +1,7 @@
 using Cirrious.CrossCore;
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
@@ -25,6 +26,7 @@ namespace WB.UI.QuestionnaireTester.Mvvm
             Mvx.RegisterSingleton(() => ServiceLocator.Current.GetInstance<IAnswerProgressIndicator>());
             Mvx.RegisterSingleton(() => ServiceLocator.Current.GetInstance<IQueryablePlainStorageAccessor<QuestionnaireMetaInfo>>());
             Mvx.RegisterSingleton(() => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireDocument>>());
+            Mvx.RegisterSingleton(() => ServiceLocator.Current.GetInstance<IApplicationSettings>());
         }
     }
 }

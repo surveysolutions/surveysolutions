@@ -117,14 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AboutTitle" xml:space="preserve">
+    <value>О программе</value>
+  </data>
   <data name="DashboardTitleText" xml:space="preserve">
     <value>Опросники</value>
   </data>
   <data name="EmptyQuestionnaireListText" xml:space="preserve">
     <value>Нет опросников.  Потяните вниз, чтобы обновить список</value>
-  </data>
-  <data name="HelpText" xml:space="preserve">
-    <value>Справка/отзыв</value>
   </data>
   <data name="LastModifiedDateTitle" xml:space="preserve">
     <value>Изменено:</value>

@@ -17,6 +17,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.UIDialogs = uiDialogs;
         }
 
+        private IMvxCommand goBackCommand;
+        public IMvxCommand GoBackCommand
+        {
+            get
+            {
+                return goBackCommand ?? (goBackCommand = new MvxCommand(this.GoBack));
+            }
+        }
         public virtual void GoBack()
         {
             this.ShowViewModel<DashboardViewModel>();

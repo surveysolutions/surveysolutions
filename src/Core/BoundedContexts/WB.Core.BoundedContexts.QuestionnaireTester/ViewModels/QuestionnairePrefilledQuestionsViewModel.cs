@@ -108,15 +108,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
-        private IMvxCommand goBackCommand;
-        public IMvxCommand GoBackCommand
-        {
-            get
-            {
-                return goBackCommand ?? (goBackCommand = new MvxCommand(this.GoBack));
-            }
-        }
-
         public async void Init(QuestionnaireMetaInfo questionnaire)
         {
             this.Questionnaire = questionnaire;
@@ -194,12 +185,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                             this.UIDialogs.Alert(UIResources.ImportQuestionnaire_Error_UpgradeRequired);
                             break;
                         case HttpStatusCode.PreconditionFailed:
-                            this.UIDialogs.Alert(string.Format((string) UIResources.ImportQuestionnaire_Error_PreconditionFailed,
-                                (object) this.Questionnaire.Title));
+                            this.UIDialogs.Alert(string.Format(UIResources.ImportQuestionnaire_Error_PreconditionFailed, this.Questionnaire.Title));
                             break;
                         case HttpStatusCode.NotFound:
-                            this.UIDialogs.Alert(string.Format((string) UIResources.ImportQuestionnaire_Error_NotFound,
-                                (object) this.Questionnaire.Title));
+                            this.UIDialogs.Alert(string.Format(UIResources.ImportQuestionnaire_Error_NotFound, this.Questionnaire.Title));
                             break;
                         case HttpStatusCode.ServiceUnavailable:
                             this.UIDialogs.Alert(ex.Message.Contains("maintenance")

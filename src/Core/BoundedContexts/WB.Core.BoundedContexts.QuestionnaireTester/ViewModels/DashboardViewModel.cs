@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private IMvxCommand showHelpCommand;
         public IMvxCommand ShowHelpCommand
         {
-            get { return showHelpCommand ?? (showHelpCommand = new MvxCommand(() => this.ShowViewModel<HelpViewModel>())); }
+            get { return showHelpCommand ?? (showHelpCommand = new MvxCommand(() => this.ShowViewModel<AboutViewModel>())); }
         }
 
         private IMvxCommand loadQuestionnaireCommand;

@@ -236,7 +236,7 @@
     <Compile Include="Mvvm\Views\BaseActivityView.cs" />
     <Compile Include="Mvvm\Views\BaseFragmentActivityView.cs" />
     <Compile Include="Mvvm\Views\DashboardView.cs" />
-    <Compile Include="Mvvm\Views\HelpView.cs" />
+    <Compile Include="Mvvm\Views\AboutView.cs" />
     <Compile Include="Mvvm\Views\InterviewView.cs" />
     <Compile Include="Mvvm\Views\LoginView.cs" />
     <Compile Include="Mvvm\Views\QuestionnairePrefilledQuestionsView.cs" />
@@ -274,7 +274,7 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\Settings.axml" />
-    <AndroidResource Include="Resources\Layout\Help.axml" />
+    <AndroidResource Include="Resources\Layout\About.axml" />
     <AndroidResource Include="Resources\Layout\questionnairelistitem.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
@@ -289,7 +289,6 @@
       <SubType>Designer</SubType>
     </Content>
     <AndroidResource Include="Resources\Drawable\splash.png" />
-    <AndroidResource Include="Resources\Drawable\icon.png" />
     <AndroidResource Include="Resources\Values\styles.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -440,26 +439,19 @@
     <AndroidResource Include="Resources\Drawable\btn_shadow_img.png" />
     <AndroidResource Include="Resources\Drawable\ic_action_new.png" />
     <AndroidResource Include="Resources\Drawable\ic_action_web_site.png" />
-    <AndroidResource Include="Resources\Drawable\bgsplash.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\Drawable\world_background.png" />
     <AndroidResource Include="Resources\Drawable\world_background_1.png" />
-    <AndroidResource Include="Resources\Drawable\world_background_10.png" />
     <AndroidResource Include="Resources\Drawable\world_background_11.png" />
-    <AndroidResource Include="Resources\Drawable\world_background_12.png" />
     <AndroidResource Include="Resources\Drawable\world_background_13.png" />
-    <AndroidResource Include="Resources\Drawable\world_background_14.png" />
     <AndroidResource Include="Resources\Drawable\world_background_15.png" />
-    <AndroidResource Include="Resources\Drawable\world_background_16.png" />
-    <AndroidResource Include="Resources\Drawable\world_background_2.png" />
     <AndroidResource Include="Resources\Drawable\world_background_3.png" />
-    <AndroidResource Include="Resources\Drawable\world_background_4.png" />
     <AndroidResource Include="Resources\Drawable\world_background_5.png" />
-    <AndroidResource Include="Resources\Drawable\world_background_6.png" />
     <AndroidResource Include="Resources\Drawable\world_background_7.png" />
-    <AndroidResource Include="Resources\Drawable\world_background_8.png" />
     <AndroidResource Include="Resources\Drawable\world_background_9.png" />
+    <AndroidResource Include="Resources\Drawable\icon.png" />
+    <AndroidResource Include="Resources\Drawable\wb_logo.png" />
+    <AndroidResource Include="Resources\Drawable\bgsplash.xml" />
+    <AndroidResource Include="Resources\Drawable\about_logo.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Mono\Mono.Android.Crasher\Mono.Android.Crasher.csproj">

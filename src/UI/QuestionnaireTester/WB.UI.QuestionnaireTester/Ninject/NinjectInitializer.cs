@@ -16,6 +16,7 @@ using Sqo;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.EventHandler;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
@@ -163,6 +164,7 @@ namespace WB.UI.QuestionnaireTester.Ninject
             kernel.Bind<IPrincipal>().ToConstant(new Principal(Mvx.Resolve<IKeychain>(), Mvx.Resolve<ISettings>()));
             kernel.Bind<IQueryablePlainStorageAccessor<QuestionnaireMetaInfo>>().To<QuestionnaireMetaInfoAccessor>().InSingletonScope();
             kernel.Bind<IDocumentSerializer>().To<StorageSerializer>().InSingletonScope();
+            kernel.Bind<IApplicationSettings>().To<ApplicationSettings>().InSingletonScope();
             
             #region register handlers
 
