@@ -117,8 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AboutTitle" xml:space="preserve">
+    <value>About</value>
+  </data>
   <data name="AccountIsLockedOnServer" xml:space="preserve">
     <value>Your account was locked. Please, contact to the Survey Solutions team</value>
+  </data>
+  <data name="ApplicationNameText" xml:space="preserve">
+    <value>Application name:</value>
+  </data>
+  <data name="ApplicationVersionText" xml:space="preserve">
+    <value>Application version:</value>
   </data>
   <data name="CheckForUpdatesText" xml:space="preserve">
     <value>Check for updates</value>
@@ -129,8 +138,8 @@
   <data name="EmptyQuestionnaireListText" xml:space="preserve">
     <value>No questionnaires found.  Pull down to refresh list.</value>
   </data>
-  <data name="HelpText" xml:space="preserve">
-    <value>Help/Comment</value>
+  <data name="EngineVersionText" xml:space="preserve">
+    <value>Engine version:</value>
   </data>
   <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
     <value>Creating interview</value>
@@ -165,6 +174,9 @@
   <data name="LastModifiedDateTitle" xml:space="preserve">
     <value>Modified on:</value>
   </data>
+  <data name="LegacyText" xml:space="preserve">
+    <value>@ 2015 The World Bank Group, All Rights Reserved.</value>
+  </data>
   <data name="LoginNameHint" xml:space="preserve">
     <value>User name</value>
   </data>
@@ -176,6 +188,9 @@
   </data>
   <data name="Maintenance" xml:space="preserve">
     <value>Server is on the maintenance mode now. Sorry for the inconvenience. Please, try again later.</value>
+  </data>
+  <data name="OSVersionText" xml:space="preserve">
+    <value>Android version:</value>
   </data>
   <data name="OwnerNameTitle" xml:space="preserve">
     <value>Owner:</value>

@@ -83,7 +83,8 @@
     </Compile>
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\DashboardViewModel.cs" />
-    <Compile Include="ViewModels\HelpViewModel.cs" />
+    <Compile Include="ViewModels\AboutViewModel.cs" />
+    <Compile Include="Services\IApplicationSettings.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\QuestionnairePrefilledQuestionsViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />

@@ -61,11 +61,38 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string AboutTitle {
+            get {
+                return ResourceManager.GetString("AboutTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your account was locked. Please, contact to the Survey Solutions team.
         /// </summary>
         public static string AccountIsLockedOnServer {
             get {
                 return ResourceManager.GetString("AccountIsLockedOnServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application name:.
+        /// </summary>
+        public static string ApplicationNameText {
+            get {
+                return ResourceManager.GetString("ApplicationNameText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application version:.
+        /// </summary>
+        public static string ApplicationVersionText {
+            get {
+                return ResourceManager.GetString("ApplicationVersionText", resourceCulture);
             }
         }
         
@@ -97,11 +124,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Help/Comment.
+        ///   Looks up a localized string similar to Engine version:.
         /// </summary>
-        public static string HelpText {
+        public static string EngineVersionText {
             get {
-                return ResourceManager.GetString("HelpText", resourceCulture);
+                return ResourceManager.GetString("EngineVersionText", resourceCulture);
             }
         }
         
@@ -205,6 +232,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to @ 2015 The World Bank Group, All Rights Reserved..
+        /// </summary>
+        public static string LegacyText {
+            get {
+                return ResourceManager.GetString("LegacyText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User name.
         /// </summary>
         public static string LoginNameHint {
@@ -237,6 +273,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         public static string Maintenance {
             get {
                 return ResourceManager.GetString("Maintenance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Android version:.
+        /// </summary>
+        public static string OSVersionText {
+            get {
+                return ResourceManager.GetString("OSVersionText", resourceCulture);
             }
         }
         
