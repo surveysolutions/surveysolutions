@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Raven.Client;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Storage.Raven.PlainStorage;
@@ -18,6 +20,11 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.PlainStorage
                 return query.Invoke(session.Query<TEntity>().Customize(customization => customization.WaitForNonStaleResultsAsOfLastWrite()));
             }
 
+        }
+
+        public IEnumerable<TEntity> Where(Expression<Func<TEntity, bool>> predicate)
+        {
+            throw new NotImplementedException();
         }
     }
 }

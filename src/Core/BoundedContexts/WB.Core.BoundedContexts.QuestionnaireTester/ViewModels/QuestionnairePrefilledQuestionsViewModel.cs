@@ -17,7 +17,6 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
-using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
@@ -27,7 +26,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
         private readonly ICommandService commandService;
         private readonly IPlainStorageAccessor<QuestionnaireDocument> questionnairesStorage;
-        public QuestionnaireListItem Questionnaire { get; private set; }
+        public QuestionnaireMetaInfo Questionnaire { get; private set; }
         public Action<Guid> OnInterviewCreated { get; set; }
         public Action<Guid> OnInterviewDetailsOpened { get; set; }
 
@@ -107,7 +106,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
-        public async void Init(QuestionnaireListItem questionnaire)
+        public async void Init(QuestionnaireMetaInfo questionnaire)
         {
             this.Questionnaire = questionnaire;
 
@@ -133,7 +132,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 {
                     this.ProgressIndicator = UIResources.ImportQuestionnaire_VerifyOnServer;
 
-                    var questionnaireDocumentFromStorage = this.questionnairesStorage.GetById(this.Questionnaire.Id.FormatGuid());
+                    var questionnaireDocumentFromStorage = this.questionnairesStorage.GetById(this.Questionnaire.Id);
 
                     if (questionnaireDocumentFromStorage == null ||
                         questionnaireDocumentFromStorage.LastEntryDate != (await this.GetQuestionnaireLastEntryDate()).LastEntryDate)
@@ -219,44 +218,30 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.commandService.Execute(new ImportFromDesignerForTester(template));
         }
 
-        private async Task<QuestionnaireLastEntryDateResponse> GetQuestionnaireLastEntryDate()
+        private async Task<QuestionnaireMetaInfo> GetQuestionnaireLastEntryDate()
         {
-            return await this.restService.GetAsync<QuestionnaireLastEntryDateResponse>(
-                url: "GetQuestionnaireLastModifiedDate",
+            return await this.restService.GetAsync<QuestionnaireMetaInfo>(
+                url: string.Format("questionnaires/{0}/meta", Questionnaire.Id),
                 credentials:
                     new RestCredentials()
                     {
                         Login = this.Principal.CurrentIdentity.Name,
                         Password = this.Principal.CurrentIdentity.Password
-                    },
-                queryString: new QuestionnaireLastEntryDateRequest()
-                {
-                    QuestionnaireId = Questionnaire.Id
-                });
+                    }
+                );
         }
 
-        public async Task<QuestionnaireCommunicationPackage> GetQuestionnaireFromServer(Action<decimal> downloadProgress)
+        public async Task<QuestionnaireResponse> GetQuestionnaireFromServer(Action<decimal> downloadProgress)
         {
-            var supportedVersion = QuestionnaireVersionProvider.GetCurrentEngineVersion();
-
-            return await this.restService.PostWithProgressAsync<QuestionnaireCommunicationPackage>(
-                url: "questionnaire",
+            return await this.restService.GetWithProgressAsync<QuestionnaireResponse>(
+                url: string.Format("questionnaires/{0}", Questionnaire.Id),
                 credentials:
                     new RestCredentials()
                     {
                         Login = this.Principal.CurrentIdentity.Name,
                         Password = this.Principal.CurrentIdentity.Password
                     },
-                request: new DownloadQuestionnaireRequest()
-                {
-                    QuestionnaireId = Questionnaire.Id,
-                    SupportedVersion = new QuestionnaireVersion()
-                    {
-                        Major = supportedVersion.Major,
-                        Minor = supportedVersion.Minor,
-                        Patch = supportedVersion.Patch
-                    }
-                }, progressPercentage: downloadProgress, token: new CancellationToken());
+                progressPercentage: downloadProgress, token: new CancellationToken());
         }
     }
 }
