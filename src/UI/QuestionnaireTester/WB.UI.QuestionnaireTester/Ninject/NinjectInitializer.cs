@@ -16,7 +16,6 @@ using Sqo;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.EventHandler;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
@@ -24,6 +23,7 @@ using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
@@ -161,7 +161,7 @@ namespace WB.UI.QuestionnaireTester.Ninject
 
             kernel.Bind<IAuthentication>().To<DesignerAuthentication>();
             kernel.Bind<IPrincipal>().ToConstant(new Principal(Mvx.Resolve<IKeychain>(), Mvx.Resolve<ISettings>()));
-            kernel.Bind<IPlainStorageAccessor<DashboardStorageViewModel>>().To<DashboardStorageViewModelRepository>().InSingletonScope();
+            kernel.Bind<IQueryablePlainStorageAccessor<QuestionnaireMetaInfo>>().To<QuestionnaireMetaInfoAccessor>().InSingletonScope();
             kernel.Bind<IDocumentSerializer>().To<StorageSerializer>().InSingletonScope();
             
             #region register handlers

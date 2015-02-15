@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="ApplicationName">Capi.Tester</string>
-  <string name="DesignerPath">http://192.168.1.135/designer/api/import</string>
+  <string name="DesignerPath">http://192.168.1.135/designer/api/v1</string>
   <string name="HttpResponseTimeout">30</string>
   <string name="QuestionnaireLoadingError">Questionnaire loading error</string>
   <string name="Oops">Oops! Questionnaire can\'t be loaded.</string>

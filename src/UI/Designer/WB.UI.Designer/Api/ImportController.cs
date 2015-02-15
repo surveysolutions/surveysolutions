@@ -8,9 +8,9 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Designer.Api.Attributes;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Resources;
@@ -22,7 +22,8 @@ namespace WB.UI.Designer.Api
     [ApiBasicAuth]
     public class ImportController : ApiController
     {
-        private readonly IQuestionnaireVersioner questionnaireVersioner;
+        private readonly IQuestionnaireExportService exportService;
+        private readonly IStringCompressor zipUtils;
         private readonly IMembershipUserService userHelper;
         private readonly IQuestionnaireListViewFactory viewFactory;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
@@ -31,16 +32,18 @@ namespace WB.UI.Designer.Api
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireHelper questionnaireHelper;
 
-        public ImportController(IQuestionnaireVersioner questionnaireVersioner,
+        public ImportController(IQuestionnaireExportService exportService,
+            IStringCompressor zipUtils,
             IMembershipUserService userHelper,
             IQuestionnaireListViewFactory viewFactory,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
-            IQuestionnaireHelper questionnaireHelper)
+            IQuestionnaireHelper questionnaireHelper, ILogger logger)
         {
-            this.questionnaireVersioner = questionnaireVersioner;
+            this.exportService = exportService;
+            this.zipUtils = zipUtils;
             this.userHelper = userHelper;
             this.viewFactory = viewFactory;
             this.questionnaireViewFactory = questionnaireViewFactory;
@@ -52,32 +55,6 @@ namespace WB.UI.Designer.Api
 
         [HttpGet]
         public void Login() { }
-
-        [HttpGet]
-        public QuestionnaireLastEntryDateResponse GetQuestionnaireLastModifiedDate([FromUri]QuestionnaireLastEntryDateRequest request)
-        {
-            if (request == null) throw new ArgumentNullException("request");
-
-             var questionnaireView =
-                questionnaireViewFactory.Load(new QuestionnaireViewInputModel(request.QuestionnaireId));
-            if (questionnaireView == null)
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound)
-                {
-                    ReasonPhrase = string.Format(ErrorMessages.TemplateNotFound, request.QuestionnaireId)
-                });
-            }
-
-            if (!this.ValidateAccessPermissions(questionnaireView))
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden)
-                {
-                    ReasonPhrase = ErrorMessages.User_Not_authorized
-                });
-            }
-
-            return new QuestionnaireLastEntryDateResponse() { LastEntryDate = questionnaireView.Source.LastEntryDate };
-        }
 
         [HttpPost]
         public QuestionnaireCommunicationPackage Questionnaire(DownloadQuestionnaireRequest request)
@@ -102,14 +79,26 @@ namespace WB.UI.Designer.Api
                 });
             }
 
-            var supportedClientVersion = new QuestionnaireVersion(request.SupportedVersion.Major, request.SupportedVersion.Minor, request.SupportedVersion.Patch);
-            var designerEngineVersion = this.questionnaireVersioner.GetVersion(questionnaireView.Source);
+            var templateInfo = this.exportService.GetQuestionnaireTemplateInfo(questionnaireView.Source);
 
-            if (designerEngineVersion > supportedClientVersion)
+            if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    ReasonPhrase = string.Format(ErrorMessages.TemplateNotFound, request.QuestionnaireId)
+                });
+            }
+
+            var supportedClientVersion = new QuestionnaireVersion(request.SupportedVersion.Major,
+                request.SupportedVersion.Minor,
+                request.SupportedVersion.Patch);
+            if (templateInfo.Version > supportedClientVersion)
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
                 {
-                    ReasonPhrase = string.Format(ErrorMessages.ClientVersionLessThenDocument, supportedClientVersion, designerEngineVersion)
+                    ReasonPhrase =
+                        string.Format(ErrorMessages.ClientVersionLessThenDocument, supportedClientVersion,
+                            templateInfo.Version)
                 });
             }
 
@@ -119,7 +108,7 @@ namespace WB.UI.Designer.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
                 {
-                    ReasonPhrase = string.Format(ErrorMessages.Questionnaire_verification_failed, questionnaireView.Title)
+                    ReasonPhrase = string.Format(ErrorMessages.Questionnaire_verification_failed, templateInfo.Title)
                 });
             }
 
@@ -150,13 +139,13 @@ namespace WB.UI.Designer.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
                 {
-                    ReasonPhrase = string.Format(ErrorMessages.Questionnaire_verification_failed, questionnaireView.Title)
+                    ReasonPhrase = string.Format(ErrorMessages.Questionnaire_verification_failed, templateInfo.Title)
                 });
             }
 
             return new QuestionnaireCommunicationPackage
             {
-                Questionnaire = questionnaireView.Source,
+                Questionnaire = this.zipUtils.CompressString(templateInfo.Source),
                 QuestionnaireAssembly = resultAssembly
             };
         }
@@ -164,7 +153,7 @@ namespace WB.UI.Designer.Api
         [HttpPost]
         public PagedQuestionnaireCommunicationPackage PagedQuestionnaireList(QuestionnaireListRequest request)
         {
-            if(request == null) throw new ArgumentNullException("request");
+            if (request == null) throw new ArgumentNullException("request");
 
             var questionnaireListView = this.viewFactory.Load(
                 new QuestionnaireListInputModel
@@ -198,15 +187,6 @@ namespace WB.UI.Designer.Api
         {
             var questionnaireItemList = new List<QuestionnaireListItem>();
             int pageIndex = 1;
-
-            var engineVersion = QuestionnaireVersionProvider.GetCurrentEngineVersion();
-            var supportedVersion = new Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion()
-            {
-                Major = engineVersion.Major,
-                Minor = engineVersion.Minor,
-                Patch = engineVersion.Patch
-            };
-
             while (true)
             {
                 var questionnaireList =
@@ -214,21 +194,14 @@ namespace WB.UI.Designer.Api
                         pageIndex: pageIndex);
 
                 questionnaireItemList.AddRange(
-                    questionnaireList.Select(q => new QuestionnaireListItem()
-                    {
-                        Id = q.Id,
-                        Title = q.Title,
-                        LastModifiedDate = q.LastEntryDate,
-                        OwnerName = q.Owner,
-                        Version = supportedVersion
-                    }).ToList());
+                    questionnaireList.Select(q => new QuestionnaireListItem() { Id = q.Id, Title = q.Title }).ToList());
 
                 pageIndex++;
                 if (pageIndex > questionnaireList.TotalPages)
                     break;
             }
 
-            return new QuestionnaireListCommunicationPackage {Items = questionnaireItemList};
+            return new QuestionnaireListCommunicationPackage { Items = questionnaireItemList };
         }
 
         private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)

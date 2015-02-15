@@ -14,6 +14,8 @@ namespace WB.UI.Designer
             if (AppSettings.Instance.IsApiSslVerificationEnabled)
                 config.MessageHandlers.Add(new HttpsVerifier());
 
+            config.MapHttpAttributeRoutes();
+
             config.Routes.MapHttpRoute(
                 name: "DefaultApiWithAction",
                 routeTemplate: "api/{controller}/{action}/{id}",
