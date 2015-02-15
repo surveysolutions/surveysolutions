@@ -19,8 +19,7 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
 
         protected override void StoreBulkEntitiesToRepository(List<string> bulk)
         {
-            var entitiesToStore = cache.Where(x => bulk.Contains(x.Key) && x.Value != null).Select(x => Tuple.Create(x.Value, x.Key)).ToList();
-            writer.BulkStore(entitiesToStore);
+            var entitiesToStore = new List<Tuple<TEntity, string>>();
             foreach (var entityId in bulk)
             {
                 var entity = cache[entityId];
@@ -28,9 +27,14 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
                 {
                     this.writer.Remove(entityId);
                 }
-
+                else
+                {
+                    entitiesToStore.Add(Tuple.Create(entity, entityId));
+                }
                 cache.Remove(entityId);
             }
+
+            writer.BulkStore(entitiesToStore);
         }
 
     }
