@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Net.Http;
 using Ninject.Activation;
 using Raven.Client;
 using Raven.Client.Document;
@@ -41,6 +42,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation
 
         private DocumentStore CreateServerStorage(string databaseName)
         {
+            
             var store = new DocumentStore
             {
                 Url = this.settings.StoragePath,
@@ -54,7 +56,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation
                         serializer.TypeNameHandling = TypeNameHandling.All;
                         serializer.NullValueHandling = NullValueHandling.Ignore;
                     }
-                }
+                },
             };
 
             if (!string.IsNullOrWhiteSpace(this.settings.Username))
@@ -76,6 +78,19 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation
             {
                 store.ActivateBundles(this.settings.ActiveBundles, databaseName);
             }
+
+            if (store.HasJsonRequestFactory)
+            {
+                store.JsonRequestFactory.ConfigureRequest += (sender, args) =>
+                {
+                    var webRequestHandler = new WebRequestHandler();
+                    webRequestHandler.UnsafeAuthenticatedConnectionSharing = true;
+                    webRequestHandler.PreAuthenticate = true;
+                    args.Client = new HttpClient(webRequestHandler);
+
+                };
+            }
+
             return store;
         }
     }
