@@ -5,6 +5,7 @@ using Ninject.Activation;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Imports.Newtonsoft.Json;
+using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation
 {
@@ -79,17 +80,11 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation
                 store.ActivateBundles(this.settings.ActiveBundles, databaseName);
             }
 
-            if (store.HasJsonRequestFactory)
-            {
-                store.JsonRequestFactory.ConfigureRequest += (sender, args) =>
-                {
-                    var webRequestHandler = new WebRequestHandler();
-                    webRequestHandler.UnsafeAuthenticatedConnectionSharing = true;
-                    webRequestHandler.PreAuthenticate = true;
-                    args.Client = new HttpClient(webRequestHandler);
+            var webRequestHandler = new WebRequestHandler();
+            webRequestHandler.UnsafeAuthenticatedConnectionSharing = true;
+            webRequestHandler.PreAuthenticate = true;
 
-                };
-            }
+            store.HttpMessageHandler = webRequestHandler;
 
             return store;
         }
