@@ -52,6 +52,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
+        private bool canCreateInterview = false;
+        public bool CanCreateInterview
+        {
+            get { return canCreateInterview; }
+            set
+            {
+                canCreateInterview = value;
+                RaisePropertyChanged(() => CanCreateInterview);
+            }
+        }
+
         private string progressIndicator;
         public string ProgressIndicator
         {
@@ -167,6 +178,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     {
                         this.InvokeOnMainThread(() => this.OnInterviewCreated(interviewId));
                     }
+                    this.CanCreateInterview = true;
                 }
                 catch (RestException ex)
                 {
