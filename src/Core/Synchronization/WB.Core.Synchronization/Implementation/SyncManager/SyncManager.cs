@@ -117,7 +117,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
             var allUpdatesFromLastPakage = this.GetUpdateFromLastPakage(lastSyncedPackageId, this.indexAccessor.Query<InterviewSyncPackageMetaInformation>(interviewQueryIndexName).Where(x => x.UserId == userId));
 
-            var updateFromLastPakageByInterview = FilterDeletedInterviews(allUpdatesFromLastPakage);
+            var updateFromLastPakageByInterview = FilterInterviews(allUpdatesFromLastPakage);
 
             this.TrackArIdsRequestIfNeeded(userId, deviceId, SyncItemType.Interview, lastSyncedPackageId, updateFromLastPakageByInterview);
 
@@ -127,22 +127,16 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             };
         }
 
-        private List<SynchronizationChunkMeta> FilterDeletedInterviews(List<InterviewSyncPackageMetaInformation> packages)
+        private List<SynchronizationChunkMeta> FilterInterviews(List<InterviewSyncPackageMetaInformation> packages)
         {
-            var deletedInterviewMap = packages
-                .Where(x => x.ItemType == SyncItemType.DeleteInterview)
-                .GroupBy(x => x.InterviewId) // interview can be reassing from this user multiple times
+            var lastInterviewPackageMap = packages
+                .GroupBy(x => x.InterviewId)
                 .ToDictionary(x => x.Key, x => x.Max(y => y.SortIndex));
 
-            var packagesToSkip = packages
-                .Where(x => deletedInterviewMap.ContainsKey(x.InterviewId) && x.SortIndex < deletedInterviewMap[x.InterviewId])
-                .Select(x => x.PackageId)
-                .ToList();
-
             return packages
-                    .Where(x => !packagesToSkip.Contains(x.PackageId))
-                    .Select(x => new SynchronizationChunkMeta(x.PackageId,x.SortIndex,x.UserId,x.ItemType))
-                    .ToList();
+                .Where(x => lastInterviewPackageMap.ContainsKey(x.InterviewId) && x.SortIndex == lastInterviewPackageMap[x.InterviewId])
+                .Select(x => new SynchronizationChunkMeta(x.PackageId,x.SortIndex,x.UserId,x.ItemType))
+                .ToList();
         }
 
         public void LinkUserToDevice(Guid interviewerId, string androidId, string oldDeviceId)
