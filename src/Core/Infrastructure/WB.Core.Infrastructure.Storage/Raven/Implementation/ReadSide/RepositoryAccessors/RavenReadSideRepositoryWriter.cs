@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Raven.Abstractions.Data;
 using Raven.Client;
-using Raven.Client.Document;
 using Raven.Client.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
@@ -13,13 +12,9 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         IReadSideRepositoryWriter<TEntity>, IReadSideRepositoryCleaner
         where TEntity : class, IReadSideRepositoryEntity
     {
-        private readonly BulkInsertOperation bulkOperation;
-
         public RavenReadSideRepositoryWriter(IDocumentStore ravenStore)
             : base(ravenStore)
         {
-            var bulkInsertOptions = new BulkInsertOptions { OverwriteExisting = true, BatchSize = 256 };
-            bulkOperation = this.RavenStore.BulkInsert(options: bulkInsertOptions);
         }
 
         public TEntity GetById(string id)
@@ -39,9 +34,12 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         public void BulkStore(List<Tuple<TEntity, string>> bulk)
         {
-            foreach (var bulkItem in bulk)
+            using (var bulkOperation = this.RavenStore.BulkInsert(options: new BulkInsertOptions{OverwriteExisting = true, BatchSize = 256}))
             {
-                bulkOperation.Store(bulkItem.Item1, this.ToRavenId(bulkItem.Item2));
+                foreach (var bulkItem in bulk)
+                {
+                    bulkOperation.Store(bulkItem.Item1, this.ToRavenId(bulkItem.Item2));
+                }
             }
         }
 
@@ -91,7 +89,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
                 this.RavenStore.DatabaseCommands.DeleteByIndex(DefaultIndexName, new IndexQuery()
                 {
                     Query = string.Format("Tag: *{0}*", global::Raven.Client.Util.Inflector.Pluralize(ViewName))
-                }, new BulkOperationOptions { AllowStale = false }).WaitForCompletion();
+                }, new BulkOperationOptions {AllowStale = false}).WaitForCompletion();
         }
 
         protected override TResult QueryImpl<TResult>(Func<IRavenQueryable<TEntity>, TResult> query)
