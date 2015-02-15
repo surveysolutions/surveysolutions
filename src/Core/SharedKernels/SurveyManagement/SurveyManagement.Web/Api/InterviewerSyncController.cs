@@ -264,13 +264,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             }
         }
 
-        [HttpGet]
-        [ApiBasicAuth]
-        public string GetPackageIdByTimeStamp(long timestamp)
-        {
-            return this.syncManager.GetPackageIdByTimestamp(this.GlobalInfo.GetCurrentUser().Id, new DateTime(timestamp));
-        }
-
         [HttpPost]
         [ApiBasicAuth]
         public void PostFile(PostFileRequest request)

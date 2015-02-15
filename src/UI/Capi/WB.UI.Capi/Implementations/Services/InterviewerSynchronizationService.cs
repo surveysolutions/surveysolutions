@@ -146,14 +146,6 @@ namespace WB.UI.Capi.Implementations.Services
             }
         }
 
-        public async Task<string> GetChunkIdByTimestampAsync(SyncCredentials credentials, long timestamp)
-        {
-            return await this.restService.GetAsync<string>(
-                url: "api/InterviewerSync/GetPackageIdByTimeStamp",
-                credentials: new RestCredentials() {Login = credentials.Login, Password = credentials.Password},
-                queryString: new { timestamp });
-        }
-
         public async Task<bool> NewVersionAvailableAsync()
         {
             return await this.restService.GetAsync<bool>(

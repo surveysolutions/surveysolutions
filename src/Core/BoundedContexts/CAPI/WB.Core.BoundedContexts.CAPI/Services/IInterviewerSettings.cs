@@ -10,8 +10,6 @@ namespace WB.Core.BoundedContexts.Capi.Services
 
         Guid? GetClientRegistrationId();
 
-        string GetLastReceivedPackageId();
-
         string GetSyncAddressPoint();
 
         string GetApplicationVersionName();
@@ -21,9 +19,6 @@ namespace WB.Core.BoundedContexts.Capi.Services
         string GetOperatingSystemVersion();
 
         void SetClientRegistrationId(Guid? clientRegistrationId);
-
-        [Obsolete]
-        void SetLastReceivedPackageId(string lastReceivedPackageId);
 
         void SetSyncAddressPoint(string syncAddressPoint);
     }
