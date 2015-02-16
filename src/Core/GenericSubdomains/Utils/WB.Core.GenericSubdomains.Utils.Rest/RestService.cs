@@ -32,11 +32,11 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
                 throw new RestException(Resources.NoNetwork);
             }
 
-            var restClient = this.restServiceSettings.BaseAddress()
+            var restClient = this.restServiceSettings.Endpoint
                 .AppendPathSegment(url)
                 .SetQueryParams(queryString)
                 .ConfigureHttpClient(http => new HttpClient(new RestMessageHandler(token)))
-                .WithTimeout(this.restServiceSettings.GetTimeout())
+                .WithTimeout(this.restServiceSettings.Timeout)
                 .WithHeader("Accept-Encoding", "gzip,deflate");
 
             if (credentials != null)

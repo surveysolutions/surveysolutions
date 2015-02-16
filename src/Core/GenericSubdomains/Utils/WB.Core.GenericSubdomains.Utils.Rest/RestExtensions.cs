@@ -21,6 +21,11 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
             get { return ServiceLocator.Current.GetInstance<IStringCompressor>(); }
         }
 
+        private static IRestServiceSettings restServiceSettings
+        {
+            get { return ServiceLocator.Current.GetInstance<IRestServiceSettings>(); }
+        }
+
         private static IJsonUtils jsonUtils
         {
             get { return ServiceLocator.Current.GetInstance<IJsonUtils>(); }
@@ -48,7 +53,7 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
                     token.ThrowIfCancellationRequested();
                 }
 
-                var buffer = new byte[512];
+                var buffer = new byte[restServiceSettings.BufferSize];
                 using (var ms = new MemoryStream())
                 {
                     int read;

@@ -12,7 +12,7 @@ namespace WB.UI.Headquarters.Views
             this.configurationManager = configurationManager;
         }
 
-        public string BaseAddress()
+        public string Endpoint()
         {
             return configurationManager.AppSettings["DesignerAddress"];
         }
