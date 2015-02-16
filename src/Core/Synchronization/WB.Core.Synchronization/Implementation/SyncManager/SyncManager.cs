@@ -48,7 +48,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             this.questionnaireSyncPackageContentStore = questionnaireSyncPackageContentStore;
         }
 
-        public HandshakePackage ItitSync(ClientIdentifier clientIdentifier)
+        public HandshakePackage InitSync(ClientIdentifier clientIdentifier)
         {
             if (clientIdentifier.ClientInstanceKey == Guid.Empty)
                 throw new ArgumentException("ClientInstanceKey is incorrect.");
