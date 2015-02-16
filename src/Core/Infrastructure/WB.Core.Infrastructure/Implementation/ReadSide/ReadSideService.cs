@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Diagnostics;
 using System.Linq;
@@ -325,6 +324,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 }
 
                 UpdateStatusMessage("Rebuild specific views succeeded.");
+                logger.Info("Rebuild views succeeded");
             }
             catch (Exception exception)
             {

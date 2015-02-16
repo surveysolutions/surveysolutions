@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Client.Linq;
@@ -7,7 +8,6 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors
 {
-#warning TLK: make string identifiers here after switch to new storage
     public class RavenReadSideRepositoryWriter<TEntity> : RavenReadSideRepositoryAccessor<TEntity>,
         IReadSideRepositoryWriter<TEntity>, IReadSideRepositoryCleaner
         where TEntity : class, IReadSideRepositoryEntity
@@ -30,6 +30,17 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         public void Store(TEntity view, string id)
         {
             this.StoreAvoidingCache(view, id);
+        }
+
+        public void BulkStore(List<Tuple<TEntity, string>> bulk)
+        {
+            using (var bulkOperation = this.RavenStore.BulkInsert(options: new BulkInsertOptions{OverwriteExisting = true, BatchSize = 256}))
+            {
+                foreach (var bulkItem in bulk)
+                {
+                    bulkOperation.Store(bulkItem.Item1, this.ToRavenId(bulkItem.Item2));
+                }
+            }
         }
 
         private TEntity GetByIdAvoidingCache(string id)
