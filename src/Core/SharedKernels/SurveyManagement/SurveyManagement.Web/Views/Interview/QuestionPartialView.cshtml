@@ -217,8 +217,15 @@
 
         @if (!Model.IsValid)
         {
-            <small class="text-error"><b>Expression:</b> @Model.ValidationExpression</small>
-            <small class="text-error"><b>Message:</b> @Model.ValidationMessage</small>
+            if (!string.IsNullOrEmpty(Model.ValidationExpression))
+            {
+                <div class="row-fluid"><small class="text-error"><b>Expression:</b> @Model.ValidationExpression</small></div>
+            }
+
+            if (string.IsNullOrEmpty(Model.ValidationMessage))
+            {
+                <div class="row-fluid"><small class="text-error"><b>Message:</b> @Model.ValidationMessage</small></div>
+            }
         }
     </td>
 
