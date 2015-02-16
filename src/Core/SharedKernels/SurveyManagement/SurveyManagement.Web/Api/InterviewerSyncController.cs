@@ -151,7 +151,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 {
                     this.syncManager.LinkUserToDevice(interviewerInfo.PublicKey, request.AndroidId, interviewerInfo.DeviceId);
                 }
-                return syncManager.ItitSync(identifier);
+                return syncManager.InitSync(identifier);
             }
             catch (Exception exc)
             {

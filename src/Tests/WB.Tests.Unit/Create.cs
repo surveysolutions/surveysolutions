@@ -1279,14 +1279,17 @@ namespace WB.Tests.Unit
             return new WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire(new Guid(), document, false, "base65 string of assembly");
         }
 
-        public static EnablementChanges EnablementChanges(List<Core.SharedKernels.DataCollection.Identity> groupsToBeDisabled = null, List<Core.SharedKernels.DataCollection.Identity> groupsToBeEnabled = null,
-            List<Core.SharedKernels.DataCollection.Identity> questionsToBeDisabled = null, List<Core.SharedKernels.DataCollection.Identity> questionsToBeEnabled = null)
+        public static EnablementChanges EnablementChanges(
+            List<WB.Core.SharedKernels.DataCollection.Identity> groupsToBeDisabled = null, 
+            List<WB.Core.SharedKernels.DataCollection.Identity> groupsToBeEnabled = null,
+            List<WB.Core.SharedKernels.DataCollection.Identity> questionsToBeDisabled = null, 
+            List<WB.Core.SharedKernels.DataCollection.Identity> questionsToBeEnabled = null)
         {
             return new EnablementChanges(
-                groupsToBeDisabled ?? new List<Core.SharedKernels.DataCollection.Identity>(),
-                groupsToBeEnabled ?? new List<Core.SharedKernels.DataCollection.Identity>(),
-                questionsToBeDisabled ?? new List<Core.SharedKernels.DataCollection.Identity>(),
-                questionsToBeEnabled ?? new List<Core.SharedKernels.DataCollection.Identity>());
+                groupsToBeDisabled ?? new List<WB.Core.SharedKernels.DataCollection.Identity>(),
+                groupsToBeEnabled ?? new List<WB.Core.SharedKernels.DataCollection.Identity>(),
+                questionsToBeDisabled ?? new List<WB.Core.SharedKernels.DataCollection.Identity>(),
+                questionsToBeEnabled ?? new List<WB.Core.SharedKernels.DataCollection.Identity>());
         }
 
         public static InterviewState InterviewState(InterviewStatus? status = null, List<AnswerComment> answerComments = null)
@@ -1300,9 +1303,9 @@ namespace WB.Tests.Unit
                 new HashSet<string>(), new HashSet<string>(), true, Mock.Of<IInterviewExpressionState>());
         }
 
-        public static Core.SharedKernels.DataCollection.Identity Identity(Guid id, decimal[] rosterVector)
+        public static WB.Core.SharedKernels.DataCollection.Identity Identity(Guid id, decimal[] rosterVector)
         {
-            return new Core.SharedKernels.DataCollection.Identity(id, rosterVector);
+            return new WB.Core.SharedKernels.DataCollection.Identity(id, rosterVector);
         }
 
         public static IQuestionnaireRepository QuestionnaireRepositoryStubWithOneQuestionnaire(

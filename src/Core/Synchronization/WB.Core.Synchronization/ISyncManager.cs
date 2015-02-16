@@ -6,7 +6,7 @@ namespace WB.Core.Synchronization
 {
     public interface ISyncManager
     {
-        HandshakePackage ItitSync(ClientIdentifier identifier);
+        HandshakePackage InitSync(ClientIdentifier identifier);
 
         void SendSyncItem(Guid interviewId, string package);
 

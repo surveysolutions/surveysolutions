@@ -41,10 +41,12 @@ namespace WB.Core.GenericSubdomains.Utils
 
         public static Guid ToGuid(this string value)
         {
+            if (string.IsNullOrWhiteSpace(value)) 
+                return Guid.Empty;
             int chuncksCount = (int)Math.Ceiling((decimal)((value.Length) * sizeof(char))/16);
             int arraySize = chuncksCount*16;
             var data = new byte[arraySize];
-            Buffer.BlockCopy(value.ToCharArray(), 0, data, 0, data.Length);
+            Buffer.BlockCopy(value.ToCharArray(), 0, data, 0, value.Length);
 
             var bytes16 = new byte[16];
             for (int i = 0; i < chuncksCount; i++)
