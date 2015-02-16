@@ -50,7 +50,7 @@ namespace Main.DenormalizerStorage
                 this.repository.Remove(id);
             }
         }
-        
+
         public void Store(TView view, string id)
         {
             lock (locker)
@@ -63,6 +63,14 @@ namespace Main.DenormalizerStorage
                 {
                     this.repository[id] = view;
                 }
+            }
+        }
+
+        public void BulkStore(List<Tuple<TView, string>> bulk)
+        {
+            foreach (var tuple in bulk)
+            {
+                Store(tuple.Item1, tuple.Item2);                
             }
         }
 
