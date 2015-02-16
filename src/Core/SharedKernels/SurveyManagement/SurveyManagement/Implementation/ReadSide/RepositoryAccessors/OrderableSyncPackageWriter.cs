@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using WB.Core.Infrastructure.ReadSide;
@@ -100,6 +101,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Reposit
                 return query.First() + 1;
             }
             return 0;
+        }
+
+        public void BulkStore(List<Tuple<T, string>> bulk)
+        {
+            foreach (var tuple in bulk)
+            {
+                Store(tuple.Item1, tuple.Item2);
+            }
         }
     }
 }
