@@ -10,8 +10,9 @@ namespace WB.UI.QuestionnaireTester.Implementation.Services
     internal class ApplicationSettings : IApplicationSettings
     {
         private const string ApplicationNameParameterName = "ApplicationName";
-        private const string DesignerPathParameterName = "DesignerPath";
-        private const string HttpResponseTimeout = "HttpResponseTimeout";
+        private const string DesignerEndpointParameterName = "DesignerEndpoint";
+        private const string HttpResponseTimeoutParameterName = "HttpResponseTimeout";
+        private const string BufferSizeParameterName = "BufferSize";
         
         private static ISharedPreferences sharedPreferences
         {
@@ -22,23 +23,34 @@ namespace WB.UI.QuestionnaireTester.Implementation.Services
             }
         }
 
-        public static void SetPathToDesigner(string path)
+        private static void SavePreferenceValue(string preferenceParameterName, string value)
         {
             ISharedPreferencesEditor prefEditor = sharedPreferences.Edit();
-            prefEditor.PutString(DesignerPathParameterName, path);
+            prefEditor.PutString(preferenceParameterName, value);
             prefEditor.Commit();
         }
 
-        public string GetPathToDesigner()
+        private static string GetPreferenceString(string preferenceParameterName, int preferenceResourceId)
         {
-            return sharedPreferences.GetString(DesignerPathParameterName, Application.Context.Resources.GetString(Resource.String.DesignerPath));
+            return sharedPreferences.GetString(preferenceParameterName, Application.Context.Resources.GetString(preferenceResourceId));
         }
 
-        public TimeSpan GetHttpTimeout()
+        public string DesignerEndpoint
         {
-            string stringTimeout = Application.Context.Resources.GetString(Resource.String.HttpResponseTimeout);
+            get { return GetPreferenceString(DesignerEndpointParameterName, Resource.String.DesignerEndpoint); }
+            set { SavePreferenceValue(DesignerEndpointParameterName, value); }
+        }
 
-            return new TimeSpan(0, 0, 0, string.IsNullOrEmpty(stringTimeout) ? 30 : int.Parse(stringTimeout));
+        public TimeSpan HttpResponseTimeout
+        {
+            get { return new TimeSpan(0, 0, int.Parse(GetPreferenceString(HttpResponseTimeoutParameterName, Resource.String.HttpResponseTimeout))); }
+            set { SavePreferenceValue(HttpResponseTimeoutParameterName, value.Seconds.ToString()); }
+        }
+
+        public int BufferSize
+        {
+            get { return int.Parse(GetPreferenceString(BufferSizeParameterName, Resource.String.BufferSize)); }
+            set { SavePreferenceValue(BufferSizeParameterName, value.ToString()); }
         }
 
         public string ApplicationVersion
@@ -61,10 +73,7 @@ namespace WB.UI.QuestionnaireTester.Implementation.Services
 
         public string ApplicationName
         {
-            get
-            {
-                return sharedPreferences.GetString(ApplicationNameParameterName, Application.Context.Resources.GetString(Resource.String.ApplicationName));
-            }
+            get { return GetPreferenceString(ApplicationNameParameterName, Resource.String.ApplicationName); }
         }
     }
 }

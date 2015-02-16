@@ -705,8 +705,11 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f060004
 			public const int AreYouSureYouWantToRemoveRowFromRosterFormat = 2131099652;
 			
+			// aapt resource value: 0x7f06000c
+			public const int BufferSize = 2131099660;
+			
 			// aapt resource value: 0x7f06000a
-			public const int DesignerPath = 2131099658;
+			public const int DesignerEndpoint = 2131099658;
 			
 			// aapt resource value: 0x7f060008
 			public const int Hello = 2131099656;

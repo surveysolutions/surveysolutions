@@ -97,11 +97,47 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The approximate number of bytes consumed by web service synchronizer.
+        /// </summary>
+        public static string BufferSizeText {
+            get {
+                return ResourceManager.GetString("BufferSizeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check for updates.
         /// </summary>
         public static string CheckForUpdatesText {
             get {
                 return ResourceManager.GetString("CheckForUpdatesText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string ConfirmationNoText {
+            get {
+                return ResourceManager.GetString("ConfirmationNoText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirmation.
+        /// </summary>
+        public static string ConfirmationText {
+            get {
+                return ResourceManager.GetString("ConfirmationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string ConfirmationYesText {
+            get {
+                return ResourceManager.GetString("ConfirmationYesText", resourceCulture);
             }
         }
         
@@ -124,11 +160,29 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Web Service Endpoint:.
+        /// </summary>
+        public static string EndpointText {
+            get {
+                return ResourceManager.GetString("EndpointText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Engine version:.
         /// </summary>
         public static string EngineVersionText {
             get {
                 return ResourceManager.GetString("EngineVersionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The time for waiting response from web server in seconds:.
+        /// </summary>
+        public static string HttpResponseTimeoutText {
+            get {
+                return ResourceManager.GetString("HttpResponseTimeoutText", resourceCulture);
             }
         }
         
@@ -318,6 +372,51 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         public static string RequestTimeout {
             get {
                 return ResourceManager.GetString("RequestTimeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure to reset all settings to default parameters?.
+        /// </summary>
+        public static string ResetSettingsConfirmationText {
+            get {
+                return ResourceManager.GetString("ResetSettingsConfirmationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All parameters were successfully reset to the default state.
+        /// </summary>
+        public static string ResetSettingsSuccessText {
+            get {
+                return ResourceManager.GetString("ResetSettingsSuccessText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore.
+        /// </summary>
+        public static string ResetSettingsText {
+            get {
+                return ResourceManager.GetString("ResetSettingsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your setting parameters successfully saved.
+        /// </summary>
+        public static string SaveSettingsSuccessText {
+            get {
+                return ResourceManager.GetString("SaveSettingsSuccessText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string SaveSettingsText {
+            get {
+                return ResourceManager.GetString("SaveSettingsText", resourceCulture);
             }
         }
         

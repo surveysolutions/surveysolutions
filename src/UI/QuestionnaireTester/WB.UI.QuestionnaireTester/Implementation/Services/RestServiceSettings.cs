@@ -12,14 +12,22 @@ namespace WB.UI.QuestionnaireTester.Implementation.Services
             this.applicationSettings = applicationSettings;
         }
 
-        public string BaseAddress()
+        public string Endpoint
         {
-            return this.applicationSettings.GetPathToDesigner();
+            get { return this.applicationSettings.DesignerEndpoint; }
+            set { this.applicationSettings.DesignerEndpoint = value; }
         }
 
-        public TimeSpan GetTimeout()
+        public TimeSpan Timeout
         {
-            return this.applicationSettings.GetHttpTimeout();
+            get { return this.applicationSettings.HttpResponseTimeout; }
+            set { this.applicationSettings.HttpResponseTimeout = value; }
+        }
+
+        public int BufferSize
+        {
+            get { return this.applicationSettings.BufferSize; }
+            set { this.applicationSettings.BufferSize = value; }
         }
     }
 }

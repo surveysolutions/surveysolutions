@@ -27,6 +27,7 @@ namespace WB.UI.QuestionnaireTester.Mvvm
             Mvx.RegisterSingleton(() => ServiceLocator.Current.GetInstance<IQueryablePlainStorageAccessor<QuestionnaireMetaInfo>>());
             Mvx.RegisterSingleton(() => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireDocument>>());
             Mvx.RegisterSingleton(() => ServiceLocator.Current.GetInstance<IApplicationSettings>());
+            Mvx.RegisterSingleton(() => ServiceLocator.Current.GetInstance<IRestServiceSettings>());
         }
     }
 }

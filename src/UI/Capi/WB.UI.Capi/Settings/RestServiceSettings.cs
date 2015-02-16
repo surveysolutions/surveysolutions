@@ -11,7 +11,7 @@ namespace WB.UI.Capi.Settings
             this.interviewerSettings = interviewerSettings;
         }
 
-        public string BaseAddress()
+        public string Endpoint()
         {
             return this.interviewerSettings.GetSyncAddressPoint();
         }

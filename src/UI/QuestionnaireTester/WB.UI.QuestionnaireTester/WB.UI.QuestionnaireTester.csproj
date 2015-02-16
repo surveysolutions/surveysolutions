@@ -454,10 +454,6 @@
     <AndroidResource Include="Resources\Drawable\about_logo.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Mono\Mono.Android.Crasher\Mono.Android.Crasher.csproj">
-      <Project>{4ECE2C97-13A0-46D6-95D1-7BB50A48267B}</Project>
-      <Name>Mono.Android.Crasher</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.Capi.csproj">
       <Project>{c6ed30a9-4d14-48d1-8311-c2267dfd424f}</Project>
       <Name>WB.Core.BoundedContexts.Capi</Name>
