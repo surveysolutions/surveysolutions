@@ -143,7 +143,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IQuestion>(QuestionHasVariableNameReservedForServiceNeeds, "WB0058", VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
                     Verifier<IQuestion>(CategoricalQuestionHasLessThan2Options, "WB0060", VerificationMessages.WB0060_CategoricalQuestionHasLessThan2Options),
                     Verifier<IMultyOptionsQuestion>(CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2, "WB0061", VerificationMessages.WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2),
-                    Verifier<IMultyOptionsQuestion>(CategoricalMultiAnswersQuestionIsPreFilledQuestion, "WB0098", VerificationMessages.WB0098_CategoricalMultiAnswersQuestionIsPreFilledQuestion),
                     Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInValidationExpression, "WB0063", VerificationMessages.WB0063_CategoricalLinkedQuestionUsedInValidationExpression),
                     Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInQuestionEnablementCondition, "WB0064", VerificationMessages.WB0064_CategoricalLinkedQuestionUsedInEnablementCondition),
                     Verifier<IGroup, IComposite>(this.CategoricalLinkedQuestionUsedInGroupEnablementCondition, "WB0064", VerificationMessages.WB0064_CategoricalLinkedQuestionUsedInEnablementCondition),
@@ -402,11 +401,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2(IMultyOptionsQuestion question)
         {
             return question.MaxAllowedAnswers.HasValue && question.MaxAllowedAnswers < 2;
-        }
-
-        private static bool CategoricalMultiAnswersQuestionIsPreFilledQuestion(IMultyOptionsQuestion question)
-        {
-            return IsPreFilledQuestion(question);
         }
 
         private static bool CategoricalQuestionHasLessThan2Options(IQuestion question)
