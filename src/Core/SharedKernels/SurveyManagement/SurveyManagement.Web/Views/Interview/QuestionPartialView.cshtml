@@ -84,7 +84,14 @@
 
                                 <label class="checkbox" for="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", optionValue))">
                                     <input type="checkbox" name="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector)" id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", optionValue))" value="@optionValue" @(isChecked ? "checked" : "")
-                                           data-bind="click: saveCategoricalMultiAnswer.bind($data, '@Model.Id', '@Stringify(Model.RosterVector)', @(multiQuestionSettings.AreAnswersOrdered.ToString().ToLower()), @(multiQuestionSettings.MaxAllowedAnswers ?? 0), '@selectedOptions')">
+                                           data-bind="click: saveCategoricalMultiAnswer.bind($data, '@Model.Id', '@Stringify(Model.RosterVector)', @(multiQuestionSettings.AreAnswersOrdered.ToString().ToLower()),   @if (multiQuestionSettings.MaxAllowedAnswers.HasValue)
+                                                                                                                                                                                                                      {
+                                                                                                                                                                                                                          @(multiQuestionSettings.MaxAllowedAnswers.Value)
+                                                                                                                                                                                                                      }
+                                                                                                                                                                                                                      else
+                                                                                                                                                                                                                      {
+                                                                                                                                                                                                                          @("null")
+                                                                                                                                                                                                                      }, '@selectedOptions')">
 
                                     <span>@option.Label</span>
                                     @if (multiQuestionSettings.AreAnswersOrdered && isChecked)

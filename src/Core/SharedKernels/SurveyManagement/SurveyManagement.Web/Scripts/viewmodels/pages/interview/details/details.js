@@ -197,7 +197,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
                 },
                 {
                     validator: function (val) {
-                        if (_.isUndefined(maxAllowedAnswers) || _.isNull(maxAllowedAnswers)) {
+                        if (_.isUndefined(maxAllowedAnswers) || _.isNull(maxAllowedAnswers) || !_.isNumber(maxAllowedAnswers)) {
                             return true;
                         }
 
