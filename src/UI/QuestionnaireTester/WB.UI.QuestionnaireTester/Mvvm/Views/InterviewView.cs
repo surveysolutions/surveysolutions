@@ -14,7 +14,7 @@ using WB.UI.QuestionnaireTester.Extensions;
 
 namespace WB.UI.QuestionnaireTester.Mvvm.Views
 {
-    [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
+    [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize, Icon = "@drawable/icon")]
     public class InterviewView : DetailsActivity
     {
         protected override ContentFrameAdapter CreateFrameAdapter(InterviewItemId? screenId)
