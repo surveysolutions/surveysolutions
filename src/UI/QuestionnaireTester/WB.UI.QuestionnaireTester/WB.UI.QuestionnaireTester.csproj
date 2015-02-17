@@ -230,6 +230,7 @@
     <Compile Include="Mvvm\CustomBindings\SwipeRefreshLayoutRefreshingBinding.cs" />
     <Compile Include="Mvvm\MvxInitializer.cs" />
     <Compile Include="Mvvm\ValueContervers\LocalizationValueConverter.cs" />
+    <Compile Include="Mvvm\ValueContervers\NullToVisibleValueConverter.cs" />
     <Compile Include="Mvvm\ValueContervers\QuestionnaireVersionToColorValueConverter.cs" />
     <Compile Include="Mvvm\ValueContervers\VisibleIfListHasItemsValueConverter.cs" />
     <Compile Include="Mvvm\ValueContervers\VisibleIfListIsEmptyValueConverter.cs" />
