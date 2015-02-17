@@ -1,6 +1,9 @@
-﻿using System;
+using System;
+
 using Machine.Specifications;
+
 using Moq;
+
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -9,15 +12,17 @@ using WB.Core.Synchronization;
 using WB.Core.Synchronization.Commands;
 using WB.Core.Synchronization.Documents;
 using WB.Core.Synchronization.Implementation.SyncManager;
+
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Core.Synchronization
 {
-    internal class when_sync_is_initialized_and_device_is_not_registered : SyncManagerTestContext
+    internal class when_sync_is_initialized_and_device_is_registered : SyncManagerTestContext
     {
         Establish context = () =>
         {
-            devices = Mock.Of<IReadSideRepositoryReader<TabletDocument>>();
+            tabletDocument = CreateTabletDocument(deviceId, androidId);
+            devices = Mock.Of<IReadSideRepositoryReader<TabletDocument>>(x => x.GetById(deviceId.FormatGuid()) == tabletDocument);
 
             clientIdentifier = CreateClientIdentifier(userId: userId, androidId: androidId, appVersion: appVersion);
             commandServiceMock = new Mock<ICommandService>();
@@ -36,39 +41,28 @@ namespace WB.Tests.Unit.Core.Synchronization
         Because of = () =>
             handshakePackage = syncManager.InitSync(clientIdentifier);
 
-        It should_send_RegisterTabletCommand = () =>
-            registerTabletCommand.ShouldNotBeNull();
-
-        It should_send_RegisterTabletCommand_DeviceId_specified = () =>
-           registerTabletCommand.DeviceId.ShouldEqual(deviceId);
-
-        It should_send_RegisterTabletCommand_AndroidId_specified = () =>
-           registerTabletCommand.AndroidId.ShouldEqual(androidId);
-
-        It should_send_RegisterTabletCommand_UserId_specified = () =>
-           registerTabletCommand.UserId.ShouldEqual(userId);
-
-        It should_send_RegisterTabletCommand_AppVersion_specified = () =>
-           registerTabletCommand.AppVersion.ShouldEqual(appVersion);
+        It should_not_send_RegisterTabletCommand = () =>
+            registerTabletCommand.ShouldBeNull();
 
         It should_send_TrackHandshakeCommand = () =>
             trackHandshakeCommand.ShouldNotBeNull();
 
         It should_send_TrackHandshakeCommand_DeviceId_specified = () =>
-           trackHandshakeCommand.DeviceId.ShouldEqual(deviceId);
+            trackHandshakeCommand.DeviceId.ShouldEqual(deviceId);
 
         It should_send_TrackHandshakeCommand_UserId_specified = () =>
-           trackHandshakeCommand.UserId.ShouldEqual(userId);
+            trackHandshakeCommand.UserId.ShouldEqual(userId);
 
         It should_send_TrackHandshakeCommand_AppVersion_specified = () =>
-           trackHandshakeCommand.AppVersion.ShouldEqual(appVersion);
+            trackHandshakeCommand.AppVersion.ShouldEqual(appVersion);
 
-        It should_return_package_with_ClientInstanceKey_specified = () => 
+        It should_return_package_with_ClientInstanceKey_specified = () =>
             handshakePackage.ClientInstanceKey.ShouldEqual(clientIdentifier.ClientInstanceKey);
 
         It should_return_package_with_UserId_specified = () =>
             handshakePackage.UserId.ShouldEqual(clientIdentifier.UserId);
 
+        private static TabletDocument tabletDocument;
         private static RegisterTabletCommand registerTabletCommand;
         private static TrackHandshakeCommand trackHandshakeCommand;
         private static SyncManager syncManager;

@@ -149,7 +149,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             {
                 if (string.IsNullOrEmpty(interviewerInfo.DeviceId) || request.ShouldDeviceBeLinkedToUser)
                 {
-                    this.syncManager.LinkUserToDevice(interviewerInfo.PublicKey, request.AndroidId, interviewerInfo.DeviceId);
+                    this.syncManager.LinkUserToDevice(interviewerInfo.PublicKey, request.AndroidId, identifier.AppVersion, interviewerInfo.DeviceId);
                 }
                 return syncManager.InitSync(identifier);
             }

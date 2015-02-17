@@ -22,6 +22,6 @@ namespace WB.Core.Synchronization
 
         InterviewSyncPackageDto ReceiveInterviewSyncPackage(Guid deviceId, string packageId, Guid userId);
 
-        void LinkUserToDevice(Guid interviewerId, string androidId, string oldDeviceId);
+        void LinkUserToDevice(Guid interviewerId, string androidId, string appVersion, string oldDeviceId);
     }
 }
