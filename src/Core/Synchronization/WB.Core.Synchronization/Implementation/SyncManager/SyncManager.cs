@@ -64,7 +64,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
             if (device == null)
             {
-                this.commandService.Execute(new RegisterTabletCommand(deviceId, clientIdentifier.UserId, clientIdentifier.AndroidId, clientIdentifier.AppVersion));
+                this.commandService.Execute(new RegisterTabletCommand(deviceId, clientIdentifier.UserId, clientIdentifier.AppVersion, clientIdentifier.AndroidId));
             }
 
             this.commandService.Execute(new TrackHandshakeCommand(deviceId, clientIdentifier.UserId, clientIdentifier.AppVersion));
