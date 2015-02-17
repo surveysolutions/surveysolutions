@@ -1,7 +1,7 @@
 ﻿using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck;
-using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck.Checks;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 using It = Machine.Specifications.It;
 
@@ -11,15 +11,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
     {
         private Establish context = () =>
         {
-            databaseHealthCheckMock = new Mock<IDatabaseHealthCheck>();
-            databaseHealthCheckMock.Setup(m => m.Check()).Returns(ConnectionHealthCheckResult.Happy());
-            eventStoreHealthCheckMock = new Mock<IEventStoreHealthCheck>();
-            eventStoreHealthCheckMock.Setup(m => m.Check()).Returns(ConnectionHealthCheckResult.Happy());
-            numberOfUnhandledPackagesCheckerMock = new Mock<INumberOfUnhandledPackagesChecker>();
-            numberOfUnhandledPackagesCheckerMock.Setup(m => m.Check()).Returns(NumberHealthCheckResult.Happy(0));
-            numberOfSyncPackagesWithBigSizeCheckerMock = new Mock<INumberOfSyncPackagesWithBigSizeChecker>();
-            numberOfSyncPackagesWithBigSizeCheckerMock.Setup(m => m.Check()).Returns(NumberHealthCheckResult.Happy(0));
-            folderPermissionCheckerMock = new Mock<IFolderPermissionChecker>();
+            databaseHealthCheckMock = new Mock<IAtomicHealthCheck<RavenHealthCheckResult>>();
+            databaseHealthCheckMock.Setup(m => m.Check()).Returns(RavenHealthCheckResult.Happy());
+            eventStoreHealthCheckMock = new Mock<IAtomicHealthCheck<EventStoreHealthCheckResult>>();
+            eventStoreHealthCheckMock.Setup(m => m.Check()).Returns(EventStoreHealthCheckResult.Happy());
+            numberOfUnhandledPackagesCheckerMock = new Mock<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>();
+            numberOfUnhandledPackagesCheckerMock.Setup(m => m.Check()).Returns(NumberOfUnhandledPackagesHealthCheckResult.Happy(0));
+            numberOfSyncPackagesWithBigSizeCheckerMock = new Mock<IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>>();
+            numberOfSyncPackagesWithBigSizeCheckerMock.Setup(m => m.Check()).Returns(NumberOfSyncPackagesWithBigSizeCheckResult.Happy(0));
+            folderPermissionCheckerMock = new Mock<IAtomicHealthCheck<FolderPermissionCheckResult>>();
             folderPermissionCheckerMock.Setup(m => m.Check()).Returns(new FolderPermissionCheckResult(HealthCheckStatus.Happy, null, null, null));
 
             service = CreateHealthCheckService(
@@ -54,11 +54,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
             folderPermissionCheckerMock.Verify(x => x.Check(), Times.Once());
 
 
-        private static Mock<IDatabaseHealthCheck> databaseHealthCheckMock;
-        private static Mock<IEventStoreHealthCheck> eventStoreHealthCheckMock;
-        private static Mock<INumberOfUnhandledPackagesChecker> numberOfUnhandledPackagesCheckerMock;
-        private static Mock<INumberOfSyncPackagesWithBigSizeChecker> numberOfSyncPackagesWithBigSizeCheckerMock;
-        private static Mock<IFolderPermissionChecker> folderPermissionCheckerMock;
+        private static Mock<IAtomicHealthCheck<RavenHealthCheckResult>> databaseHealthCheckMock;
+        private static Mock<IAtomicHealthCheck<EventStoreHealthCheckResult>> eventStoreHealthCheckMock;
+        private static Mock<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>> numberOfUnhandledPackagesCheckerMock;
+        private static Mock<IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>> numberOfSyncPackagesWithBigSizeCheckerMock;
+        private static Mock<IAtomicHealthCheck<FolderPermissionCheckResult>> folderPermissionCheckerMock;
 
         private static HealthCheckResults result;
         private static HealthCheckService service;

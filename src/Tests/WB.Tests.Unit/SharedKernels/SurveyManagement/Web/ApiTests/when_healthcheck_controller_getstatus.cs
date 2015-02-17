@@ -1,13 +1,8 @@
-﻿using System.Linq;
-using Machine.Specifications;
+﻿using Machine.Specifications;
 using Moq;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
-using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck.Checks;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-using WB.Core.Synchronization.SyncStorage;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests

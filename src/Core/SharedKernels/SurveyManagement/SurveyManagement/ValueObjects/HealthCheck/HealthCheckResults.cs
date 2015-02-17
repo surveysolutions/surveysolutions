@@ -4,11 +4,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck
 {
     public class HealthCheckResults
     {
-        public HealthCheckResults(HealthCheckStatus status, 
-            ConnectionHealthCheckResult databaseConnectionStatus,
-            ConnectionHealthCheckResult eventstoreConnectionStatus, 
-            NumberHealthCheckResult numberOfUnhandledPackages,
-            NumberHealthCheckResult numberOfSyncPackagesWithBigSize, 
+        public HealthCheckResults(HealthCheckStatus status,
+            RavenHealthCheckResult databaseConnectionStatus,
+            EventStoreHealthCheckResult eventstoreConnectionStatus, 
+            NumberOfUnhandledPackagesHealthCheckResult numberOfUnhandledPackages,
+            NumberOfSyncPackagesWithBigSizeCheckResult numberOfSyncPackagesWithBigSize, 
             FolderPermissionCheckResult folderPermissionCheckResult)
         {
             DatabaseConnectionStatus = databaseConnectionStatus;
@@ -20,10 +20,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck
             Status = status;
         }
 
-        public ConnectionHealthCheckResult DatabaseConnectionStatus { get; private set; }
-        public ConnectionHealthCheckResult EventstoreConnectionStatus { get; private set; }
-        public NumberHealthCheckResult NumberOfUnhandledPackages { get; private set; }
-        public NumberHealthCheckResult NumberOfSyncPackagesWithBigSize { get; private set; }
+        public RavenHealthCheckResult DatabaseConnectionStatus { get; private set; }
+        public EventStoreHealthCheckResult EventstoreConnectionStatus { get; private set; }
+        public NumberOfUnhandledPackagesHealthCheckResult NumberOfUnhandledPackages { get; private set; }
+        public NumberOfSyncPackagesWithBigSizeCheckResult NumberOfSyncPackagesWithBigSize { get; private set; }
         public FolderPermissionCheckResult FolderPermissionCheckResult { get; private set; }
 
 

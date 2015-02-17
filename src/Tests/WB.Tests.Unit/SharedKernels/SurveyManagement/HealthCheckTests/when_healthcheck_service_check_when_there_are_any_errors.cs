@@ -1,7 +1,7 @@
 ﻿using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck;
-using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck.Checks;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 using It = Machine.Specifications.It;
 
@@ -11,11 +11,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
     {
         private Establish context = () =>
         {
-            var databaseHealthCheck = Mock.Of<IDatabaseHealthCheck>(m => m.Check() == ConnectionHealthCheckResult.Down(databaseErrorMessage));
-            var eventStoreHealthCheck = Mock.Of<IEventStoreHealthCheck>(m => m.Check() == ConnectionHealthCheckResult.Down(eventStoreErrorMessage));
-            var numberOfUnhandledPackagesChecker = Mock.Of<INumberOfUnhandledPackagesChecker>(m => m.Check() == NumberHealthCheckResult.Warning(numberOfunhandledPackages, numberOfUnhandledPackagesErrorMessage));
-            var numberOfSyncPackagesWithBigSizeChecker = Mock.Of<INumberOfSyncPackagesWithBigSizeChecker>(m => m.Check() == NumberHealthCheckResult.Warning(numberOfSyncPackagesWithBigSize, numberOfSyncPackagesWithBigSizeErrorMessage));
-            var folderPermissionChecker = Mock.Of<IFolderPermissionChecker>(m => m.Check() == new FolderPermissionCheckResult(HealthCheckStatus.Down, currentUserName, allowedFoldersList, denidedFoldersList));
+            var databaseHealthCheck = Mock.Of<IAtomicHealthCheck<RavenHealthCheckResult>>(m => m.Check() == RavenHealthCheckResult.Down(databaseErrorMessage));
+            var eventStoreHealthCheck = Mock.Of<IAtomicHealthCheck<EventStoreHealthCheckResult>>(m => m.Check() == EventStoreHealthCheckResult.Down(eventStoreErrorMessage));
+            var numberOfUnhandledPackagesChecker = Mock.Of<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>(m => m.Check() == NumberOfUnhandledPackagesHealthCheckResult.Warning(numberOfunhandledPackages, numberOfUnhandledPackagesErrorMessage));
+            var numberOfSyncPackagesWithBigSizeChecker = Mock.Of<IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>>(m => m.Check() == NumberOfSyncPackagesWithBigSizeCheckResult.Warning(numberOfSyncPackagesWithBigSize, numberOfSyncPackagesWithBigSizeErrorMessage));
+            var folderPermissionChecker = Mock.Of<IAtomicHealthCheck<FolderPermissionCheckResult>>(m => m.Check() == new FolderPermissionCheckResult(HealthCheckStatus.Down, currentUserName, allowedFoldersList, denidedFoldersList));
 
             service = CreateHealthCheckService(
                 databaseHealthCheck,

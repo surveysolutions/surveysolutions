@@ -24,13 +24,13 @@ using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
-using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck.Checks;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.Synchronization;
 
@@ -137,8 +137,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
               .To<IncomingSyncPackagesQueue>()
               .InSingletonScope();
 
-            this.Bind<IFolderPermissionChecker>().To<FolderPermissionChecker>().WithConstructorArgument("folderPath", this.currentFolderPath); ;
-            
             this.Bind<InterviewHistorySettings>().ToConstant(interviewHistorySettings);
             
             this.Bind<IInterviewHistoryFactory>().To<InterviewHistoryFactory>();
@@ -150,11 +148,11 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 this.Kernel.RegisterDenormalizer<InterviewHistoryDenormalizer>();
             }
 
-            this.Bind<IDatabaseHealthCheck>().To<DatabaseHealthCheck>();
-            this.Bind<IEventStoreHealthCheck>().To<EventStoreHealthCheck>();
-            this.Bind<IFolderPermissionChecker>().To<FolderPermissionChecker>();
-            this.Bind<INumberOfSyncPackagesWithBigSizeChecker>().To<NumberOfSyncPackagesWithBigSizeChecker>();
-            this.Bind<INumberOfUnhandledPackagesChecker>().To<NumberOfUnhandledPackagesChecker>();
+            this.Bind<IAtomicHealthCheck<RavenHealthCheckResult>>().To<RavenHealthCheck>();
+            this.Bind<IAtomicHealthCheck<EventStoreHealthCheckResult>>().To<EventStoreHealthCheck>();
+            this.Bind<IAtomicHealthCheck<FolderPermissionCheckResult>>().To<FolderPermissionChecker>().WithConstructorArgument("folderPath", this.currentFolderPath); 
+            this.Bind<IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>>().To<NumberOfSyncPackagesWithBigSizeChecker>();
+            this.Bind<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>().To<NumberOfUnhandledPackagesChecker>();
             this.Bind<IHealthCheckService>().To<HealthCheckService>();
         }
     }

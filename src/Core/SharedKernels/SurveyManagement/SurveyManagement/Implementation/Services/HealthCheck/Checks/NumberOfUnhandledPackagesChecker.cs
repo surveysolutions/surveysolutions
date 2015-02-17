@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Linq;
-using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck.Checks;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck
+namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks
 {
-    class NumberOfUnhandledPackagesChecker : INumberOfUnhandledPackagesChecker
+    class NumberOfUnhandledPackagesChecker : IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>
     {
         private readonly IBrokenSyncPackagesStorage brokenSyncPackagesStorage;
 
@@ -15,21 +14,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthC
             this.brokenSyncPackagesStorage = brokenSyncPackagesStorage;
         }
 
-        public NumberHealthCheckResult Check()
+        public NumberOfUnhandledPackagesHealthCheckResult Check()
         {
             try
             {
                 int count = brokenSyncPackagesStorage.GetListOfUnhandledPackages().Count();
 
                 if (count == 0)
-                    return NumberHealthCheckResult.Happy(count);
+                    return NumberOfUnhandledPackagesHealthCheckResult.Happy(count);
 
-                return NumberHealthCheckResult.Warning(count,
+                return NumberOfUnhandledPackagesHealthCheckResult.Warning(count,
                     "The error occurred during interview processing. Please contact Survey Solutions Team <a href='support@mysurvey.solutions'>support@mysurvey.solutions</a> to report the error.");
             }
             catch (Exception e)
             {
-                return NumberHealthCheckResult.Error("The information about unhandled packages can't be collected. " + e.Message);
+                return NumberOfUnhandledPackagesHealthCheckResult.Error("The information about unhandled packages can't be collected. " + e.Message);
             }
         }
     }

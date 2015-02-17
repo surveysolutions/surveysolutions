@@ -1,23 +1,24 @@
 ﻿using System.Collections.Generic;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks;
 using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
-using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck.Checks;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck
 {
     class HealthCheckService : IHealthCheckService
     {
-        private readonly INumberOfUnhandledPackagesChecker numberOfUnhandledPackagesChecker;
-        private readonly IDatabaseHealthCheck databaseHealthCheck;
-        private readonly IEventStoreHealthCheck eventStoreHealthCheck;
-        private readonly INumberOfSyncPackagesWithBigSizeChecker numberOfSyncPackagesWithBigSizeChecker;
-        private readonly IFolderPermissionChecker folderPermissionChecker;
+        private readonly IAtomicHealthCheck<RavenHealthCheckResult> databaseHealthCheck;
+        private readonly IAtomicHealthCheck<EventStoreHealthCheckResult> eventStoreHealthCheck;
+        private readonly IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult> numberOfSyncPackagesWithBigSizeChecker;
+        private readonly IAtomicHealthCheck<FolderPermissionCheckResult> folderPermissionChecker;
+        private readonly IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult> numberOfUnhandledPackagesChecker;
 
-        public HealthCheckService(IDatabaseHealthCheck databaseHealthCheck,
-            IEventStoreHealthCheck eventStoreHealthCheck, 
-            INumberOfUnhandledPackagesChecker numberOfUnhandledPackagesChecker,
-            INumberOfSyncPackagesWithBigSizeChecker numberOfSyncPackagesWithBigSizeChecker, 
-            IFolderPermissionChecker folderPermissionChecker)
+        public HealthCheckService(
+            IAtomicHealthCheck<RavenHealthCheckResult> databaseHealthCheck,
+            IAtomicHealthCheck<EventStoreHealthCheckResult> eventStoreHealthCheck,
+            IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult> numberOfUnhandledPackagesChecker,
+            IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult> numberOfSyncPackagesWithBigSizeChecker,
+            IAtomicHealthCheck<FolderPermissionCheckResult> folderPermissionChecker)
         {
             this.folderPermissionChecker = folderPermissionChecker;
             this.numberOfSyncPackagesWithBigSizeChecker = numberOfSyncPackagesWithBigSizeChecker;
@@ -46,10 +47,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthC
                 numberOfUnhandledPackages, numberOfSyncPackagesWithBigSize, folderPermissionCheckResult);
         }
 
-        private HealthCheckStatus GetGlobalStatus(ConnectionHealthCheckResult databaseHealthCheckResult, 
-            ConnectionHealthCheckResult eventStoreHealthCheckResult, 
-            NumberHealthCheckResult numberOfUnhandledPackages, 
-            NumberHealthCheckResult numberOfSyncPackagesWithBigSize, 
+        private HealthCheckStatus GetGlobalStatus(RavenHealthCheckResult databaseHealthCheckResult, 
+            EventStoreHealthCheckResult eventStoreHealthCheckResult, 
+            NumberOfUnhandledPackagesHealthCheckResult numberOfUnhandledPackages, 
+            NumberOfSyncPackagesWithBigSizeCheckResult numberOfSyncPackagesWithBigSize, 
             FolderPermissionCheckResult folderPermissionCheckResult)
         {
             HashSet<HealthCheckStatus> statuses = new HashSet<HealthCheckStatus>(
