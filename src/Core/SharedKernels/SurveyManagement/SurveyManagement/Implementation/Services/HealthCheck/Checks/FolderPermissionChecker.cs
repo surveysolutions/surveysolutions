@@ -4,20 +4,19 @@ using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Principal;
-using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck.Checks;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck
+namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks
 {
-    public class FolderPermissionChecker : IFolderPermissionChecker
+    public class FolderPermissionChecker : IAtomicHealthCheck<FolderPermissionCheckResult>
     {
         private readonly string folderPath;
 
         public FolderPermissionChecker(string folderPath)
         {
             this.folderPath = folderPath;
-        }
-
+        }        
+        
         public FolderPermissionCheckResult Check()
         {
             HashSet<string> allowedFolders = new HashSet<string>();

@@ -134,7 +134,7 @@
     <Compile Include="Implementation\Factories\ExportViewFactory.cs" />
     <Compile Include="Implementation\Factories\ReferenceInfoForLinkedQuestionsFactory.cs" />
     <Compile Include="Implementation\Factories\PreloadedDataServiceFactory.cs" />
-    <Compile Include="Implementation\Services\HealthCheck\Checks\DatabaseHealthCheck.cs" />
+    <Compile Include="Implementation\Services\HealthCheck\Checks\RavenHealthCheck.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\FolderPermissionChecker.cs" />
     <Compile Include="Implementation\IRecordsAccessor.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\InterviewsSearchIndex.cs" />
@@ -192,18 +192,15 @@
     </Compile>
     <Compile Include="Services\Export\IDataExportService.cs" />
     <Compile Include="Services\Export\IFilebasedExportedDataAccessor.cs" />
-    <Compile Include="Implementation\Services\HealthCheck\Checks\IFolderPermissionChecker.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\EventStoreHealthCheck.cs" />
-    <Compile Include="Implementation\Services\HealthCheck\Checks\INumberOfSyncPackagesWithBigSizeChecker.cs" />
-    <Compile Include="Implementation\Services\HealthCheck\Checks\INumberOfUnhandledPackagesChecker.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\NumberOfUnhandledPackagesChecker.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\NumberOfSyncPackagesWithBigSizeChecker.cs" />
+    <Compile Include="ValueObjects\HealthCheck\NumberOfSyncPackagesWithBigSizeCheckResult.cs" />
+    <Compile Include="ValueObjects\HealthCheck\RavenHealthCheckResult.cs" />
     <Compile Include="ValueObjects\HealthCheck\HealthCheckResults.cs" />
-    <Compile Include="ValueObjects\HealthCheck\ConnectionHealthCheckResult.cs" />
+    <Compile Include="ValueObjects\HealthCheck\EventStoreHealthCheckResult.cs" />
     <Compile Include="ValueObjects\HealthCheck\FolderPermissionCheckResult.cs" />
     <Compile Include="ValueObjects\HealthCheck\HealthCheckStatus.cs" />
-    <Compile Include="Implementation\Services\HealthCheck\Checks\IDatabaseHealthCheck.cs" />
-    <Compile Include="Implementation\Services\HealthCheck\Checks\IEventStoreHealthCheck.cs" />
     <Compile Include="Implementation\Services\HealthCheck\HealthCheckService.cs" />
     <Compile Include="Services\HealthCheck\IHealthCheckService.cs" />
     <Compile Include="Services\ICsvWriterService.cs" />
@@ -254,7 +251,7 @@
     <Compile Include="Views\DataExport\InterviewExportedLevel.cs" />
     <Compile Include="Views\DataExport\RecordFirstAnswerMarkerView.cs" />
     <Compile Include="Views\Device\RegisterData.cs" />
-    <Compile Include="ValueObjects\HealthCheck\NumberHealthCheckResult.cs" />
+    <Compile Include="ValueObjects\HealthCheck\NumberOfUnhandledPackagesHealthCheckResult.cs" />
     <Compile Include="Views\InterviewHistory\IInterviewHistoryFactory.cs" />
     <Compile Include="Views\InterviewHistory\InterviewHistoricalAction.cs" />
     <Compile Include="Views\InterviewHistory\InterviewHistoricalRecordView.cs" />

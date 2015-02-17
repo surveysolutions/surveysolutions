@@ -1,6 +1,7 @@
 ﻿using Moq;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck;
-using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck.Checks;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
@@ -8,18 +9,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
     internal class HealthCheckTestContext
     {
         protected static HealthCheckService CreateHealthCheckService(
-            IDatabaseHealthCheck databaseHealthCheck,
-            IEventStoreHealthCheck eventStoreHealthCheck,
-            INumberOfUnhandledPackagesChecker numberOfUnhandledPackagesChecker,
-            INumberOfSyncPackagesWithBigSizeChecker numberOfSyncPackagesWithBigSizeChecker, 
-            IFolderPermissionChecker folderPermissionChecker)
+            IAtomicHealthCheck<RavenHealthCheckResult> databaseHealthCheck,
+            IAtomicHealthCheck<EventStoreHealthCheckResult> eventStoreHealthCheck,
+            IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult> numberOfUnhandledPackagesChecker,
+            IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult> numberOfSyncPackagesWithBigSizeChecker,
+            IAtomicHealthCheck<FolderPermissionCheckResult> folderPermissionChecker)
         {
             return new HealthCheckService(
-                databaseHealthCheck ?? Mock.Of<IDatabaseHealthCheck>(),
-                eventStoreHealthCheck ?? Mock.Of<IEventStoreHealthCheck>(),
-                numberOfUnhandledPackagesChecker ?? Mock.Of<INumberOfUnhandledPackagesChecker>(),
-                numberOfSyncPackagesWithBigSizeChecker ?? Mock.Of<INumberOfSyncPackagesWithBigSizeChecker>(),
-                folderPermissionChecker ?? Mock.Of<IFolderPermissionChecker>());
+                databaseHealthCheck ?? Mock.Of<IAtomicHealthCheck<RavenHealthCheckResult>>(),
+                eventStoreHealthCheck ?? Mock.Of<IAtomicHealthCheck<EventStoreHealthCheckResult>>(),
+                numberOfUnhandledPackagesChecker ?? Mock.Of<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>(),
+                numberOfSyncPackagesWithBigSizeChecker ?? Mock.Of<IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>>(),
+                folderPermissionChecker ?? Mock.Of<IAtomicHealthCheck<FolderPermissionCheckResult>>());
         }
     }
 }

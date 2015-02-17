@@ -1,11 +1,10 @@
 ﻿using System;
 using Ncqrs.Eventing.Storage;
-using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck.Checks;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck
+namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks
 {
-    public class EventStoreHealthCheck : IEventStoreHealthCheck
+    public class EventStoreHealthCheck : IAtomicHealthCheck<EventStoreHealthCheckResult>
     {
         private readonly IStreamableEventStore eventStore;
 
@@ -14,16 +13,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthC
             this.eventStore = eventStore;
         }
 
-        public ConnectionHealthCheckResult Check()
+        public EventStoreHealthCheckResult Check()
         {
             try
             {
                 int count = eventStore.CountOfAllEvents();
-                return ConnectionHealthCheckResult.Happy();
+                return EventStoreHealthCheckResult.Happy();
             }
             catch (Exception e)
             {
-                return ConnectionHealthCheckResult.Down("Can't connect to Event Store. " + e.Message);
+                return EventStoreHealthCheckResult.Down("Can't connect to Event Store. " + e.Message);
             }
         }
     }
