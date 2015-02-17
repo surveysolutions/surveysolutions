@@ -6,7 +6,7 @@ using WB.Core.Synchronization.SyncStorage;
 namespace WB.Core.Synchronization.Implementation.ReadSide.Indexes
 {
     public class SynchronizationDeltasByRecordSize :
-        AbstractIndexCreationTask<SynchronizationDelta, SynchronizationDeltasByRecordSize.Result>
+        AbstractIndexCreationTask<SynchronizationDeltaMetaInformation, SynchronizationDeltasByRecordSize.Result>
     {
         private const int WarningLength = 2097152;
 
@@ -21,12 +21,12 @@ namespace WB.Core.Synchronization.Implementation.ReadSide.Indexes
         public SynchronizationDeltasByRecordSize()
         {
             Map = deltas => from delta in deltas
-                            where delta.Content.Length + delta.MetaInfo.Length > WarningLength
+                            where delta.ContentLength + delta.MetaDataLength > WarningLength
                             select new
                             {
                                 RootId = delta.RootId,
-                                ContentSize = delta.Content.Length,
-                                MetaInfoSize = delta.MetaInfo.Length,
+                                ContentSize = delta.ContentLength,
+                                MetaInfoSize = delta.MetaDataLength,
                                 Count = 1
                             };
 
