@@ -20,17 +20,19 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
             arId = Guid.NewGuid();
             userId = Guid.NewGuid();
             someContent = "some content";
-            querableStorageMock = new InMemoryReadSideRepositoryAccessor<SynchronizationDelta>();
-            target = new ReadSideChunkWriter(querableStorageMock, storageReader: querableStorageMock);
+            querableStorageMock = new InMemoryReadSideRepositoryAccessor<SynchronizationDeltaMetaInformation>();
+            contentStorageMock= new InMemoryReadSideRepositoryAccessor<SynchronizationDeltaContent>();
+            target = new ReadSideChunkWriter(querableStorageMock, storageReader: querableStorageMock, contentStorage: contentStorageMock);
             
         };
 
         Because of = () => target.StoreChunk(new SyncItem() { RootId = arId, Content = someContent, IsCompressed = false }, userId, DateTime.Now);
 
-        It should_save_content = () => querableStorageMock.GetById(arId.FormatGuid() + "$0").Content.ShouldEqual(someContent);
+        It should_save_content = () => contentStorageMock.GetById(arId.FormatGuid() + "$0").Content.ShouldEqual(someContent);
 
         static ReadSideChunkWriter target;
-        static InMemoryReadSideRepositoryAccessor<SynchronizationDelta> querableStorageMock;
+        static InMemoryReadSideRepositoryAccessor<SynchronizationDeltaMetaInformation> querableStorageMock;
+        static InMemoryReadSideRepositoryAccessor<SynchronizationDeltaContent> contentStorageMock;
         static Guid arId;
         static Guid userId;
         static string someContent;

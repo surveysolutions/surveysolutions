@@ -4,40 +4,33 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
-    public class SynchronizationDelta : IView
+    public class SynchronizationDeltaMetaInformation : IView
     {
         [Obsolete("Probably used for deserialization")]
-        public SynchronizationDelta()
+        public SynchronizationDeltaMetaInformation()
         {
         }
 
-        public SynchronizationDelta(Guid publicKey, 
-            string content, 
+        public SynchronizationDeltaMetaInformation(Guid publicKey, 
             DateTime timestamp, 
             Guid? userId, 
-            bool isCompressed, 
-            string itemType, 
-            string metaInfo,
-            int sortIndex)
+            int sortIndex, int contentLength, int metaDataLength)
         {
             this.RootId = publicKey;
             this.PublicKey = publicKey.FormatGuid() + "$" + sortIndex;
-            this.Content = content;
             this.Timestamp = timestamp;
             this.UserId = userId ?? Guid.Empty;
-            this.IsCompressed = isCompressed;
-            this.ItemType = itemType;
-            this.MetaInfo = metaInfo;
             this.SortIndex = sortIndex;
+            ContentLength = contentLength;
+            MetaDataLength = metaDataLength;
         }
         public Guid RootId { get; private set; }
         public string PublicKey { get; private set; }
-        public string Content { get; private set; }
         public DateTime Timestamp { get; private set; }
         public Guid UserId { get; private set; }
-        public bool IsCompressed { get; private set; }
-        public string ItemType { get; private set; }
-        public string MetaInfo { get; private set; }
         public int SortIndex { get; private set; }
+
+        public int ContentLength { get; private set; }
+        public int MetaDataLength { get; private set; }
     }
 }

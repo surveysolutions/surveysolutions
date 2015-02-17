@@ -33,16 +33,16 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 MetaInfo = compressor.CompressString(GetItemAsContent(meta))
             };
 
-            var item = new SynchronizationDelta(syncItem.RootId, syncItem.Content, DateTime.Now, userId, syncItem.IsCompressed,
-                syncItem.ItemType, syncItem.MetaInfo, 1);
+            var item = new SynchronizationDeltaMetaInformation(syncItem.RootId, DateTime.Now, userId, 1,
+                syncItem.Content.Length, 0);
 
             received = new SyncItem
             {
                 RootId = syncItem.RootId,
-                IsCompressed = item.IsCompressed,
-                ItemType = item.ItemType,
-                Content = item.Content,
-                MetaInfo = item.MetaInfo
+                IsCompressed = syncItem.IsCompressed,
+                ItemType = syncItem.ItemType,
+                Content = syncItem.Content,
+                MetaInfo = syncItem.MetaInfo
             };
 
             changeLogManipulator = new Mock<IChangeLogManipulator>();
