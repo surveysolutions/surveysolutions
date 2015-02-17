@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using Raven.Client;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
@@ -13,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -26,16 +28,16 @@ namespace WB.UI.Headquarters.Controllers
     public class QuestionnairesApiController : BaseApiController
     {
         private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory;
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
+        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
 
         public QuestionnairesApiController(
             ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviews)
+            IReadSideRepositoryIndexAccessor indexAccessor)
             : base(commandService, globalInfo, logger)
         {
-            this.interviews = interviews;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.indexAccessor = indexAccessor;
         }
 
         [HttpPost]
@@ -64,11 +66,13 @@ namespace WB.UI.Headquarters.Controllers
         {
             var response = new JsonCommandResponse() { IsSuccess = true };
 
-            var interviewByQuestionnaire =
-                this.interviews.QueryAll(
-                    interview =>
-                        !interview.IsDeleted && interview.QuestionnaireId == request.QuestionnaireId &&
-                        interview.QuestionnaireVersion == request.Version);
+            string indexName = typeof(InterviewsSearchIndex).Name;
+            var interviewByQuestionnaire = indexAccessor.Query<SeachIndexContent>(indexName)
+                                     .Where(interview => !interview.IsDeleted && 
+                                                          interview.QuestionnaireId == request.QuestionnaireId && 
+                                                          interview.QuestionnaireVersion == request.Version)
+                                    .ProjectFromIndexFieldsInto<InterviewSummary>();
+            
 
             var hasInterviewDeletionExceptions = false;
             foreach (var interviewSummary in interviewByQuestionnaire)
