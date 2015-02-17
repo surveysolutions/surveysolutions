@@ -1,38 +1,33 @@
-﻿using System.Linq;
-using Machine.Specifications;
+﻿using Machine.Specifications;
 using Moq;
-using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck.Checks;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
-using WB.Core.Synchronization.SyncStorage;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
 {
-    internal class when_healthcheck_controller_getverbosestatus_when_there_are_any_warnings : ApiTestContext
+    internal class when_healthcheck_service_check_when_there_are_any_warnings : HealthCheckTestContext
     {
         private Establish context = () =>
         {
             var databaseHealthCheck = Mock.Of<IDatabaseHealthCheck>(m => m.Check() == ConnectionHealthCheckResult.Happy());
             var eventStoreHealthCheck = Mock.Of<IEventStoreHealthCheck>(m => m.Check() == ConnectionHealthCheckResult.Happy());
-            var brokenSyncPackagesStorage = Mock.Of<IBrokenSyncPackagesStorage>(m => m.GetListOfUnhandledPackages() == unhandledPackagesList);
-            var chunkReader = Mock.Of<IChunkReader>(m => m.GetNumberOfSyncPackagesWithBigSize() == numberOfSyncPackagesWithBigSize);
-            var folderPermissionChecker = Mock.Of<IFolderPermissionChecker>(m => m.Check() == new FolderPermissionCheckResult(null, null, null));
+            var numberOfUnhandledPackagesChecker = Mock.Of<INumberOfUnhandledPackagesChecker>(m => m.Check() == NumberHealthCheckResult.Warning(numberOfunhandledPackages, numberOfUnhandledPackagesErrorMessage));
+            var numberOfSyncPackagesWithBigSizeChecker = Mock.Of<INumberOfSyncPackagesWithBigSizeChecker>(m => m.Check() == NumberHealthCheckResult.Warning(numberOfSyncPackagesWithBigSize, numberOfSyncPackagesWithBigSizeErrorMessage));
+            var folderPermissionChecker = Mock.Of<IFolderPermissionChecker>(m => m.Check() == new FolderPermissionCheckResult(HealthCheckStatus.Happy, null, null, null));
 
-            controller = CreateHealthCheckApiController(
+            service = CreateHealthCheckService(
                 databaseHealthCheck,
                 eventStoreHealthCheck,
-                brokenSyncPackagesStorage,
-                chunkReader,
+                numberOfUnhandledPackagesChecker,
+                numberOfSyncPackagesWithBigSizeChecker,
                 folderPermissionChecker);
         };
 
         Because of = () =>
         {
-            result = controller.GetVerboseStatus();
+            result = service.Check();
         };
 
         It should_return_HealthCheckStatus = () =>
@@ -56,30 +51,32 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         It should_return_Warning_status_for_NumberOfUnhandledPackages_check = () =>
             result.NumberOfUnhandledPackages.Status.ShouldEqual(HealthCheckStatus.Warning);
 
-        It should_return_1_package_for_NumberOfUnhandledPackages_check = () =>
-            result.NumberOfUnhandledPackages.Value.ShouldEqual(unhandledPackagesList.Length);
-
         It should_return_error_message_for_NumberOfUnhandledPackages_check = () =>
-            result.NumberOfUnhandledPackages.ErrorMessage.ShouldNotBeEmpty();
+            result.NumberOfUnhandledPackages.ErrorMessage.ShouldEqual(numberOfUnhandledPackagesErrorMessage);
+
+        It should_return_4_packages_for_NumberOfUnhandledPackages_check = () =>
+            result.NumberOfUnhandledPackages.Value.ShouldEqual(numberOfunhandledPackages);
 
         It should_return_Warning_status_for_NumberOfSyncPackagesWithBigSize_check = () =>
             result.NumberOfSyncPackagesWithBigSize.Status.ShouldEqual(HealthCheckStatus.Warning);
 
-        It should_return_5_packages_for_NumberOfSyncPackagesWithBigSize_check = () =>
-            result.NumberOfSyncPackagesWithBigSize.Value.ShouldEqual(numberOfSyncPackagesWithBigSize);
-
         It should_return_error_message_for_NumberOfSyncPackagesWithBigSize_check = () =>
-            result.NumberOfSyncPackagesWithBigSize.ErrorMessage.ShouldNotBeEmpty();
+            result.NumberOfSyncPackagesWithBigSize.ErrorMessage.ShouldEqual(numberOfSyncPackagesWithBigSizeErrorMessage);
+
+        It should_return_5_sync_packages_for_NumberOfSyncPackagesWithBigSize_check = () =>
+            result.NumberOfSyncPackagesWithBigSize.Value.ShouldEqual(numberOfSyncPackagesWithBigSize);
 
         It should_return_Down_status_for_FolderPermissionCheckResult_check = () =>
             result.FolderPermissionCheckResult.Status.ShouldEqual(HealthCheckStatus.Happy);
 
 
-        private static int      numberOfSyncPackagesWithBigSize = 5;
-        private static string[] unhandledPackagesList = new[] { "package name" };
+        private static string numberOfUnhandledPackagesErrorMessage = "numberOfUnhandledPackagesErrorMessage error message";
+        private static string numberOfSyncPackagesWithBigSizeErrorMessage = "numberOfSyncPackagesWithBigSizeErrorMessage error message";
+        private static int numberOfSyncPackagesWithBigSize = 5;
+        private static int numberOfunhandledPackages = 4;
 
         private static HealthCheckResults result;
-        private static HealthCheckApiController controller;
+        private static HealthCheckService service;
         
     }
 }

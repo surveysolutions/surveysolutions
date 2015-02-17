@@ -1,18 +1,16 @@
 ﻿using System;
 using Moq;
 using WB.Core.GenericSubdomains.Utils.Services;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
-using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck.Checks;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization;
+using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-using WB.Core.Synchronization.SyncStorage;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 {
@@ -25,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 
         protected static InterviewDetailsView CreateInterviewDetailsView(Guid interviewId)
         {
-            return new InterviewDetailsView() { PublicKey = interviewId};
+            return new InterviewDetailsView() { PublicKey = interviewId };
         }
 
         protected static UsersController CreateUsersController(
@@ -65,18 +63,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         }
 
         protected static HealthCheckApiController CreateHealthCheckApiController(
-            IDatabaseHealthCheck databaseHealthCheck,
-            IEventStoreHealthCheck eventStoreHealthCheck, 
-            IBrokenSyncPackagesStorage brokenSyncPackagesStorage, 
-            IChunkReader chunkReader, 
-            IFolderPermissionChecker folderPermissionChecker)
+            IHealthCheckService healthCheckService)
         {
-            return new HealthCheckApiController(
-                databaseHealthCheck ?? Mock.Of<IDatabaseHealthCheck>(),
-                eventStoreHealthCheck ?? Mock.Of<IEventStoreHealthCheck>(),
-                brokenSyncPackagesStorage ?? Mock.Of<IBrokenSyncPackagesStorage>(),
-                chunkReader ?? Mock.Of<IChunkReader>(),
-                folderPermissionChecker ?? Mock.Of<IFolderPermissionChecker>());
+            return new HealthCheckApiController(healthCheckService ?? Mock.Of<IHealthCheckService>());
         }
     }
 }
