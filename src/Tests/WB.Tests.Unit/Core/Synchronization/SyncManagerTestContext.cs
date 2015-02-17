@@ -42,5 +42,14 @@ namespace WB.Tests.Unit.Core.Synchronization
                 UserId = userId
             };
         }
+
+        protected static TabletDocument CreateTabletDocument(Guid deviceId, string androidId)
+        {
+            return new TabletDocument
+                   {
+                       DeviceId = deviceId,
+                       AndroidId = androidId
+                   };
+        }
     }
 }
