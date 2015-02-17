@@ -194,11 +194,11 @@
                     {
                         var geoLocationAnswer = Model.Answer as GeoPosition;
                         <span>
-                            <div>latitude: <span>@geoLocationAnswer.Latitude</span></div>
-                            <div>longitude: <span>@geoLocationAnswer.Longitude</span></div>
-                            <div>accuracy: <span>@geoLocationAnswer.Accuracy</span></div>
-                            <div>altitude: <span>@geoLocationAnswer.Altitude</span></div>
-                            <div>time stamp: <span data-bind="text: moment('@geoLocationAnswer.Timestamp.ToLocalTime()').format('lll')"></span></div>
+                            <div>latitude: <span>@Math.Round(geoLocationAnswer.Latitude, 5)</span></div>
+                            <div>longitude: <span>@Math.Round(geoLocationAnswer.Longitude, 5)</span></div>
+                            <div>accuracy: <span>@Math.Round(geoLocationAnswer.Accuracy, 2)</span></div>
+                            <div>altitude: <span>@Math.Round(geoLocationAnswer.Altitude, 5)</span></div>
+                            <div>time stamp: <span data-bind="text: moment('@geoLocationAnswer.Timestamp.UtcDateTime').format('lll')"></span></div>
                         </span>
                     }
                     break;
