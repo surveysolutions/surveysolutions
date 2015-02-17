@@ -8,7 +8,7 @@ namespace WB.UI.QuestionnaireTester.Mvvm.ValueContervers
         protected override bool IsATrueValue(object value, object parameter, bool defaultValue)
         {
             var collection = value as ICollection;
-            return collection == null || (collection.Count == 0);
+            return collection != null && collection.Count == 0;
         }
     }
 }

@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     <!-- The main content view -->
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
             <WB.UI.QuestionnaireTester.Controls.MvxSwipeRefreshLayout
@@ -83,11 +83,20 @@
                     local:MvxBind="ItemsSource Questionnaires; ItemClick LoadQuestionnaireCommand"
                     local:MvxItemTemplate="@layout/questionnairelistitem" />
             </WB.UI.QuestionnaireTester.Controls.MvxSwipeRefreshLayout>
-        </LinearLayout>
+            <ProgressBar
+                android:layout_height="50dp"
+                android:layout_width="50dp"
+                android:indeterminateOnly="true"
+                android:keepScreenOn="false"
+                android:layout_centerHorizontal="true"
+				android:layout_centerVertical="true"
+				android:layout_centerInParent="true"
+                local:MvxBind="Visibility NullToVisible(Questionnaires)" />
+        </RelativeLayout>
     <!-- The navigation drawer -->
         <LinearLayout
             android:id="@+id/sidebar"
-            android:layout_width="300dp"
+            android:layout_width="320dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:orientation="vertical"
@@ -125,7 +134,7 @@
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="32dp"
-                        android:layout_marginTop="10dip"
+                        android:layout_marginTop="13dip"
                         local:MvxBind="Click ShowSettingsCommand">
                         <ImageView
                             android:layout_weight="0.15"
@@ -147,7 +156,7 @@
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="32dp"
-                        android:layout_marginTop="10dip"
+                        android:layout_marginTop="13dip"
                         local:MvxBind="Click ShowHelpCommand">
                         <ImageView
                             android:layout_weight="0.15"
@@ -168,13 +177,8 @@
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="fill_parent"
-                        android:layout_height="2dp"
-                        android:layout_margin="10dp"
-                        android:background="@drawable/back" />
-                    <LinearLayout
-                        android:layout_width="fill_parent"
                         android:layout_height="32dp"
-                        android:layout_marginTop="10dip"
+                        android:layout_marginTop="13dip"
                         local:MvxBind="Click NavigateToApplicationStorePageCommand">
                         <ImageView
                             android:layout_weight="0.15"
@@ -195,8 +199,13 @@
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="fill_parent"
+                        android:layout_height="2dp"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/back" />
+                    <LinearLayout
+                        android:layout_width="fill_parent"
                         android:layout_height="32dp"
-                        android:layout_marginTop="10dip"
+                        android:layout_marginTop="13dip"
                         local:MvxBind="Click SignOutCommand">
                         <ImageView
                             android:layout_weight="0.15"
