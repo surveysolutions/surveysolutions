@@ -1,8 +1,9 @@
 ﻿using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.HealthCheck;
+using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck.Checks;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 using WB.Core.Synchronization.SyncStorage;
@@ -34,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         };
 
         It should_return_HealthCheckModel = () =>
-            result.ShouldBeOfExactType<HealthCheckModel>();
+            result.ShouldBeOfExactType<HealthCheckResults>();
 
         It should_call_IDatabaseHealthCheck_Check_once = () =>
             databaseHealthCheckMock.Verify(x => x.Check(), Times.Once());
@@ -58,7 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         private static Mock<IChunkReader> chunkReaderMock;
         private static Mock<IFolderPermissionChecker> folderPermissionCheckerMock;
 
-        private static HealthCheckModel result;
+        private static HealthCheckResults result;
         private static HealthCheckApiController controller;
 
     }

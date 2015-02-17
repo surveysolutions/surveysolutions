@@ -1,4 +1,4 @@
-﻿namespace WB.Core.Infrastructure.HealthCheck
+﻿namespace WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck
 {
     public class ConnectionHealthCheckResult
     {

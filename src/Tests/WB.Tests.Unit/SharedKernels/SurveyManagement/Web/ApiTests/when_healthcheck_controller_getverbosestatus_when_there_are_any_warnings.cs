@@ -2,8 +2,9 @@
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.HealthCheck;
+using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck.Checks;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 using WB.Core.Synchronization.SyncStorage;
@@ -35,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         };
 
         It should_return_HealthCheckStatus = () =>
-            result.ShouldBeOfExactType<HealthCheckModel>();
+            result.ShouldBeOfExactType<HealthCheckResults>();
 
         It should_return_Down_status = () =>
             result.Status.ShouldEqual(HealthCheckStatus.Warning);
@@ -77,7 +78,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         private static int      numberOfSyncPackagesWithBigSize = 5;
         private static string[] unhandledPackagesList = new[] { "package name" };
 
-        private static HealthCheckModel result;
+        private static HealthCheckResults result;
         private static HealthCheckApiController controller;
         
     }
