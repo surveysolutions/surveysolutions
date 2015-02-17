@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Linq;
 using Machine.Specifications;
+using Moq;
 using Ncqrs;
 using Ncqrs.Eventing;
+using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.Infrastructure.Storage.EventStore;
 using WB.Core.Infrastructure.Storage.EventStore.Implementation;
 using WB.UI.Designer.Providers.CQRS.Accounts.Events;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.EventStoreTests
 {
@@ -43,7 +47,7 @@ namespace WB.Tests.Integration.EventStoreTests
                 DateTime.UtcNow,
                 new AccountLocked()));
 
-            WriteSideEventStorage = new WriteSideEventStore(ConnectionProvider);
+            WriteSideEventStorage = new WriteSideEventStore(ConnectionProvider, Mock.Of<ILogger>(), new EventStoreConnectionSettings{InitializeProjections = false});
         };
 
         Because of = () => WriteSideEventStorage.Store(events);
