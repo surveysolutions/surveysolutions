@@ -77,6 +77,27 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             this.incomingSyncPackagesQueue.Enqueue(interviewId: interviewId, item: item);
         }
 
+        public void LinkUserToDevice(Guid interviewerId, string androidId, string appVersion, string oldDeviceId)
+        {
+            if (interviewerId == Guid.Empty)
+                throw new ArgumentException("Interview id is not set.");
+
+            if (string.IsNullOrEmpty(androidId))
+                throw new ArgumentException("Device id is not set.");
+
+            Guid deviceId = androidId.ToGuid();
+            var device = this.devices.GetById(deviceId);
+            if (device == null)
+            {
+                this.commandService.Execute(new RegisterTabletCommand(deviceId, interviewerId, appVersion, androidId));
+            }
+            else
+            {
+                this.commandService.Execute(new LinkUserToDevice(interviewerId, androidId));
+            }
+            this.TrackUserLinkingRequestIfNeeded(androidId.ToGuid(), interviewerId, oldDeviceId);
+        }
+
         public SyncItemsMetaContainer GetQuestionnaireArIdsWithOrder(Guid userId, Guid deviceId, string lastSyncedPackageId)
         {
             this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
@@ -125,30 +146,6 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             {
                 SyncPackagesMeta = updateFromLastPakageByInterview
             };
-        }
-
-        private List<SynchronizationChunkMeta> FilterInterviews(List<InterviewSyncPackageMetaInformation> packages)
-        {
-            var lastInterviewPackageMap = packages
-                .GroupBy(x => x.InterviewId)
-                .ToDictionary(x => x.Key, x => x.Max(y => y.SortIndex));
-
-            return packages
-                .Where(x => lastInterviewPackageMap.ContainsKey(x.InterviewId) && x.SortIndex == lastInterviewPackageMap[x.InterviewId])
-                .Select(x => new SynchronizationChunkMeta(x.PackageId,x.SortIndex,x.UserId,x.ItemType))
-                .ToList();
-        }
-
-        public void LinkUserToDevice(Guid interviewerId, string androidId, string oldDeviceId)
-        {
-            if (interviewerId == Guid.Empty)
-                throw new ArgumentException("Interview id is not set.");
-
-            if (string.IsNullOrEmpty(androidId))
-                throw new ArgumentException("Device id is not set.");
-
-            commandService.Execute(new LinkUserToDevice(interviewerId, androidId));
-            TrackUserLinkingRequestIfNeeded(androidId.ToGuid(), interviewerId, oldDeviceId);
         }
 
         public UserSyncPackageDto ReceiveUserSyncPackage(Guid deviceId, string packageId, Guid userId)
@@ -205,6 +202,18 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                    };
         }
 
+        private List<SynchronizationChunkMeta> FilterInterviews(List<InterviewSyncPackageMetaInformation> packages)
+        {
+            var lastInterviewPackageMap = packages
+                .GroupBy(x => x.InterviewId)
+                .ToDictionary(x => x.Key, x => x.Max(y => y.SortIndex));
+
+            return packages
+                .Where(x => lastInterviewPackageMap.ContainsKey(x.InterviewId) && x.SortIndex == lastInterviewPackageMap[x.InterviewId])
+                .Select(x => new SynchronizationChunkMeta(x.PackageId,x.SortIndex,x.UserId,x.ItemType))
+                .ToList();
+        }
+
         private List<T> GetUpdateFromLastPakage<T>(string lastSyncedPackageId, IQueryable<T> items) where T : ISyncPackage
         {
             if (lastSyncedPackageId == null)
@@ -237,13 +246,18 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             }
         }
 
-        private void TrackUserLinkingRequestIfNeeded(Guid deviceId, Guid userId, string oldDeviceId)
+        private void TrackUserLinkingRequestIfNeeded(Guid deviceId, Guid userId, string oldAndroidId)
         {
             if (isSyncTrackingEnabled)
             {
-                if (!string.IsNullOrEmpty(oldDeviceId))
+                if (!string.IsNullOrEmpty(oldAndroidId))
                 {
-                    this.commandService.Execute(new UnlinkUserFromDeviceCommand(oldDeviceId.ToGuid(), userId));
+                    Guid oldDeviceId = oldAndroidId.ToGuid();
+                    var oldDevice = this.devices.GetById(oldDeviceId);
+                    if (oldDevice != null)
+                    {
+                        this.commandService.Execute(new UnlinkUserFromDeviceCommand(oldDeviceId, userId));
+                    }
                 }
 
                 var device = this.devices.GetById(deviceId);
