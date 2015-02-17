@@ -97,11 +97,18 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
             return option.value == filteredCombobox.selectedValue().id();
         });
 
+        var chooseOneOfSuggestedValuesError = "Choose one of suggested values";
+
+        if (_.isEmpty(answer)) {
+            self.ShowError(chooseOneOfSuggestedValuesError);
+            return;
+        }
+
         var observableSelectedOptionId = ko.observable(answerLabel).extend({
             required: true,
             equal: {
                 params: answer.label,
-                message: "Choose one of suggested values"
+                message: chooseOneOfSuggestedValuesError
             }
         });
 
