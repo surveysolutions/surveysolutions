@@ -33,23 +33,20 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_2_errors = () =>
-            resultErrors.Count().ShouldEqual(2);
+        It should_return_1_error = () =>
+            resultErrors.Count().ShouldEqual(1);
 
         It should_return_error_with_code__WB0022 = () =>
-            resultErrors.ShouldContain(er => er.Code == "WB0022");
+            resultErrors.Single().Code.ShouldEqual("WB0022");
 
-        It should_return_error_with_code__WB0098 = () =>
-            resultErrors.ShouldContain(er => er.Code == "WB0098");
+        It should_return_error_with_1_references = () =>
+            resultErrors.Single().References.Count().ShouldEqual(1);
 
-        It should_return_errors_with_1_references = () =>
-            resultErrors.ShouldEachConformTo(er => er.References.Count() == 1);
+        It should_return_error_reference_with_type_Question = () =>
+            resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_errors_reference_with_type_Question = () =>
-            resultErrors.ShouldEachConformTo(er => er.References.First().Type == QuestionnaireVerificationReferenceType.Question);
-
-        It should_return_errors_reference_with_id_of_featuredQuestionIllegalTypeId = () =>
-            resultErrors.ShouldEachConformTo(er => er.References.First().Id == featuredQuestionId);
+        It should_return_error_reference_with_id_of_featuredQuestionIllegalTypeId = () =>
+            resultErrors.Single().References.First().Id.ShouldEqual(featuredQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
         private static QuestionnaireVerifier verifier;
