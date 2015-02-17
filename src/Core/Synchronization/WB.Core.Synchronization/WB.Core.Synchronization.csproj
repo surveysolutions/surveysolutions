@@ -105,7 +105,8 @@
     <Compile Include="SyncStorage\ReadSideChunkWriter.cs" />
     <Compile Include="SyncStorage\SimpleSynchronizationDataStorage.cs" />
     <Compile Include="SyncStorage\IChunkWriter.cs" />
-    <Compile Include="SyncStorage\SynchronizationDelta.cs" />
+    <Compile Include="SyncStorage\SynchronizationDeltaContent.cs" />
+    <Compile Include="SyncStorage\SynchronizationDeltaMetaInformation.cs" />
     <Compile Include="ZipFileData.cs" />
   </ItemGroup>
   <ItemGroup>
