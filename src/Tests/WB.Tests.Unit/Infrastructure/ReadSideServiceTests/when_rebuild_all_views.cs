@@ -37,8 +37,8 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
 
             committedEvent = new CommittedEvent(Guid.NewGuid(), "test", Guid.NewGuid(), Guid.NewGuid(), 1, DateTime.Now, new object());
             streamableEventStoreMock=new Mock<IStreamableEventStore>();
-            streamableEventStoreMock.Setup(x => x.GetAllEvents(Moq.It.IsAny<int>(), Moq.It.IsAny<int>()))
-                .Returns(new[] { new[] { committedEvent } });
+            streamableEventStoreMock.Setup(x => x.GetAllEvents())
+                .Returns(new[] { committedEvent });
             ravenReadSideService = CreateRavenReadSideService(eventDispatcher: eventDispatcherMock.Object, streamableEventStore: streamableEventStoreMock.Object);
         };
 
