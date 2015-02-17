@@ -91,17 +91,29 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             return new CommittedEventStream(id, storedEvents);
         }
 
-        public IEnumerable<CommittedEvent[]> GetAllEvents(int bulkSize = 200, int skipEvents = 0)
+        public IEnumerable<CommittedEvent> GetAllEvents()
         {
-            var nextPosition = skipEvents;
-            StreamEventsSlice currentSlice;
+            var position = Position.Start;
+            AllEventsSlice slice;
+
             do
             {
-                currentSlice = this.RunWithDefaultTimeout(connection.ReadStreamEventsForwardAsync(AllEventsStream, nextPosition, bulkSize, true));
-                nextPosition = currentSlice.NextEventNumber;
+                slice = this.RunWithDefaultTimeout(this.connection.ReadAllEventsForwardAsync(position, 1024, resolveLinkTos: false));
 
-                yield return currentSlice.Events.Select(this.ToCommittedEvent).ToArray();
-            } while (!currentSlice.IsEndOfStream);
+                position = slice.NextPosition;
+
+                foreach (var @event in slice.Events)
+                {
+                    if (!IsSystemEvent(@event))
+                        yield return this.ToCommittedEvent(@event);
+                }
+
+            } while (!slice.IsEndOfStream);
+        }
+
+        private static bool IsSystemEvent(ResolvedEvent @event)
+        {
+            return !@event.Event.EventStreamId.StartsWith(EventsPrefix);
         }
 
         public void Store(UncommittedEventStream eventStream)
@@ -134,7 +146,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                 count = 0
             });
 
-            return value.count;
+            return value != null ? value.count : 0;
         }
 
         public long GetLastEventSequence(Guid id)

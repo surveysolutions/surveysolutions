@@ -316,7 +316,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 try
                 {
                     this.EnableWritersCacheForHandlers(handlers);
-                    this.RepublishAllEvents(this.GetEventStream(skipEvents), this.eventStore.CountOfAllEvents(),skipEventsCount: skipEvents, handlers: handlers);
+                    this.RepublishAllEvents(this.GetEventStream(skipEvents), this.eventStore.CountOfAllEvents(), skipEventsCount: skipEvents, handlers: handlers);
                 }
                 finally
                 {
@@ -340,16 +340,23 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
         private IEnumerable<CommittedEvent> GetEventStream(int skipEventsCount)
         {
+            if (skipEventsCount > 0)
+            {
+                UpdateStatusMessage(string.Format("Skipping {0} events.", skipEventsCount));
+            }
+
+            return this.GetEventStream().Skip(skipEventsCount);
+        }
+
+        private IEnumerable<CommittedEvent> GetEventStream()
+        {
             var eventSourcesAndSequences = new Dictionary<Guid, long>();
 
-            foreach (CommittedEvent[] eventBulk in this.eventStore.GetAllEvents(skipEvents: skipEventsCount))
+            foreach (CommittedEvent committedEvent in this.eventStore.GetAllEvents())
             {
-                foreach (var committedEvent in eventBulk)
-                {
-                    EnsureEventSequenceIsCorrect(committedEvent, eventSourcesAndSequences);
+                EnsureEventSequenceIsCorrect(committedEvent, eventSourcesAndSequences);
 
-                    yield return committedEvent;
-                }
+                yield return committedEvent;
             }
         }
 
