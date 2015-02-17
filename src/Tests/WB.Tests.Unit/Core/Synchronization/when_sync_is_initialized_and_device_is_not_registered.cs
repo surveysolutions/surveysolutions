@@ -34,6 +34,18 @@ namespace WB.Tests.Unit.Core.Synchronization
         It should_send_RegisterTabletCommand = () =>
             registerTabletCommand.ShouldNotBeNull();
 
+        It should_send_RegisterTabletCommand_DeviceId_specified = () =>
+           registerTabletCommand.DeviceId.ShouldEqual(deviceId);
+
+        It should_send_RegisterTabletCommand_AndroidId_specified = () =>
+           registerTabletCommand.AndroidId.ShouldEqual(androidId);
+
+        It should_send_RegisterTabletCommand_UserId_specified = () =>
+           registerTabletCommand.UserId.ShouldEqual(userId);
+
+        It should_send_RegisterTabletCommand_AppVersion_specified = () =>
+           registerTabletCommand.AppVersion.ShouldEqual(appVersion);
+
         It should_return_package_with_ClientInstanceKey_specified = () => 
             handshakePackage.ClientInstanceKey.ShouldEqual(clientIdentifier.ClientInstanceKey);
 
