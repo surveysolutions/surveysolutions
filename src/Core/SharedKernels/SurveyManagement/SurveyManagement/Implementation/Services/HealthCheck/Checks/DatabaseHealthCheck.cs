@@ -1,11 +1,11 @@
 ﻿using System;
 using Raven.Client;
-using WB.Core.Infrastructure.HealthCheck;
+using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck.Checks;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 
-
-namespace WB.Core.Infrastructure.Storage.Raven.Implementation
+namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck
 {
-    public class DatabaseHealthCheck : IDatabaseHealthCheck, IEventStoreHealthCheck
+    public class DatabaseHealthCheck : IDatabaseHealthCheck
     {
         private readonly IDocumentStore documentStore;
 

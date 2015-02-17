@@ -148,12 +148,10 @@
     <Compile Include="Controllers\HealthCheckController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
-    <Compile Include="Models\Api\NumberHealthCheckResult.cs" />
     <Compile Include="Models\DeleteQuestionnaireRequestModel.cs" />
     <Compile Include="Models\AllQuestionnairesRequestModel.cs" />
     <Compile Include="Models\DetailsStatisticView.cs" />
     <Compile Include="Models\EventHandlerDescriptionModel.cs" />
-    <Compile Include="Models\Api\HealthCheckModel.cs" />
     <Compile Include="Models\ImportQuestionnaireRequest.cs" />
     <Compile Include="Models\InterviewDetailsFilter.cs" />
     <Compile Include="Models\DetailsViewModel.cs" />

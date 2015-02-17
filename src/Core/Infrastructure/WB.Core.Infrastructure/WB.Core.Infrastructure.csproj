@@ -52,12 +52,6 @@
     <Compile Include="EventBus\BaseDenormalizer.cs" />
     <Compile Include="EventBus\IAtomicEventHandler.cs" />
     <Compile Include="EventBus\IEventHandler.cs" />
-    <Compile Include="FileSystem\IFolderPermissionChecker.cs" />
-    <Compile Include="HealthCheck\ConnectionHealthCheckResult.cs" />
-    <Compile Include="HealthCheck\HealthCheckStatus.cs" />
-    <Compile Include="HealthCheck\IConnectionHealthCheck.cs" />
-    <Compile Include="HealthCheck\IDatabaseHealthCheck.cs" />
-    <Compile Include="HealthCheck\IEventStoreHealthCheck.cs" />
     <Compile Include="Implementation\Aggregates\AggregateRootRepository.cs" />
     <Compile Include="Implementation\CommandBus\CommandService.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideDenormalizerStatistic.cs" />

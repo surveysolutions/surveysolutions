@@ -23,6 +23,9 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataStorage
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
+using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
+using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck.Checks;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
@@ -146,6 +149,13 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 this.Bind<IReadSideRepositoryWriter<InterviewHistoryView>>().To<InterviewHistoryWriter>().InSingletonScope();
                 this.Kernel.RegisterDenormalizer<InterviewHistoryDenormalizer>();
             }
+
+            this.Bind<IDatabaseHealthCheck>().To<DatabaseHealthCheck>();
+            this.Bind<IEventStoreHealthCheck>().To<EventStoreHealthCheck>();
+            this.Bind<IFolderPermissionChecker>().To<FolderPermissionChecker>();
+            this.Bind<INumberOfSyncPackagesWithBigSizeChecker>().To<NumberOfSyncPackagesWithBigSizeChecker>();
+            this.Bind<INumberOfUnhandledPackagesChecker>().To<NumberOfUnhandledPackagesChecker>();
+            this.Bind<IHealthCheckService>().To<HealthCheckService>();
         }
     }
 }

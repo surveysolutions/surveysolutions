@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security;
 using System.Security.AccessControl;
-using System.Security.Permissions;
 using System.Security.Principal;
-using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck.Checks;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Implementation
+namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck
 {
     public class FolderPermissionChecker : IFolderPermissionChecker
     {
@@ -42,7 +41,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation
                 }
             }
 
+            var status = deniedFolders.Any() ? HealthCheckStatus.Down : HealthCheckStatus.Happy; 
+
+
             FolderPermissionCheckResult result = new FolderPermissionCheckResult(
+                status: status,
                 processRunedUnder: windowsIdentity.Name,
                 allowedFolders: allowedFolders.ToArray(),
                 denidedFolders: deniedFolders.ToArray());

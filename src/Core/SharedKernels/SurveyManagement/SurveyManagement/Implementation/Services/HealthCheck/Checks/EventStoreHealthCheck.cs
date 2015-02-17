@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Net;
-using System.Threading;
-using EventStore.ClientAPI;
 using Ncqrs.Eventing.Storage;
-using Nito.AsyncEx.Synchronous;
-using WB.Core.Infrastructure.HealthCheck;
+using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck.Checks;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 
-namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
+namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck
 {
     public class EventStoreHealthCheck : IEventStoreHealthCheck
     {

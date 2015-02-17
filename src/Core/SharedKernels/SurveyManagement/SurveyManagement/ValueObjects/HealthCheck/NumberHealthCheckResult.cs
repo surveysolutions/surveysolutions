@@ -1,6 +1,4 @@
-﻿using WB.Core.Infrastructure.HealthCheck;
-
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
+﻿namespace WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck
 {
     public class NumberHealthCheckResult
     {
