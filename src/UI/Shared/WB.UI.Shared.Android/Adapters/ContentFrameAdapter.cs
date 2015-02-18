@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Frames;
@@ -27,7 +28,7 @@ namespace WB.UI.Shared.Android.Adapters
         {
             this.questionnaire = questionnaire;
             this.screensHolder = (screenId.HasValue
-                                     ? questionnaire.Screens[InterviewViewModel.ConvertInterviewItemId(screenId.Value)].Siblings
+                                     ? questionnaire.Screens[ConversionHelper.ConvertIdAndRosterVectorToString(screenId.Value.Id, screenId.Value.InterviewItemPropagationVector)].Siblings
                                      : questionnaire.Chapters.Select(c=>c.ScreenId)).ToList();
             this.screenId = screenId;
             this.isRoot = questionnaire.Chapters.Any(s => s.ScreenId == screenId) || !screenId.HasValue;
@@ -61,7 +62,7 @@ namespace WB.UI.Shared.Android.Adapters
             else
             {
                 var param = this.screensHolder[position];
-                var model = this.questionnaire.Screens[InterviewViewModel.ConvertInterviewItemId(param)];
+                var model = this.questionnaire.Screens[ConversionHelper.ConvertIdAndRosterVectorToString(param.Id, param.InterviewItemPropagationVector)];
                 var screenModel = model as QuestionnaireScreenViewModel;
                 if (screenModel != null)
                 {
@@ -121,7 +122,7 @@ namespace WB.UI.Shared.Android.Adapters
         public void UpdateScreenData(InterviewItemId? newScreenId)
         {
             var screenIdNotNull = newScreenId ?? this.questionnaire.Chapters.First().ScreenId;
-            this.screensHolder = this.questionnaire.Screens[InterviewViewModel.ConvertInterviewItemId(screenIdNotNull)].Siblings.ToList();
+            this.screensHolder = this.questionnaire.Screens[ConversionHelper.ConvertIdAndRosterVectorToString(screenIdNotNull.Id, screenIdNotNull.InterviewItemPropagationVector)].Siblings.ToList();
             this.screenId = newScreenId;
             this.isRoot = this.questionnaire.Chapters.Any(s => s.ScreenId == screenIdNotNull);
             this.mFragments = new AbstractScreenChangingFragment[this.Count];

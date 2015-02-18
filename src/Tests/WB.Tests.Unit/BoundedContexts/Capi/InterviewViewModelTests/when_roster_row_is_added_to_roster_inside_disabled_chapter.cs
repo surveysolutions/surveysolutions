@@ -9,6 +9,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -56,7 +57,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
                 propagatedGroupInstanceCounts: new Dictionary<InterviewItemId, RosterSynchronizationDto[]>());
             interviewViewModel = CreateInterviewViewModel(questionnarie, rosterStructure, interviewSynchronizationDto);
 
-            interviewViewModel.SetScreenStatus(InterviewViewModel.ConvertIdAndRosterVectorToString(chapterId, new decimal[0]), false);
+            interviewViewModel.SetScreenStatus(ConversionHelper.ConvertIdAndRosterVectorToString(chapterId, new decimal[0]), false);
         };
 
         Because of = () =>
@@ -64,16 +65,16 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
 
 
         It should_first_row_of_Roster_be_disabled_as_screen = () =>
-            ((QuestionnaireScreenViewModel)interviewViewModel.Screens[InterviewViewModel.ConvertIdAndRosterVectorToString(rosterGroupId, new decimal[] { 0 })]).Enabled.ShouldEqual(false);
+            ((QuestionnaireScreenViewModel)interviewViewModel.Screens[ConversionHelper.ConvertIdAndRosterVectorToString(rosterGroupId, new decimal[] { 0 })]).Enabled.ShouldEqual(false);
 
         It should_roster_row_be_disabled = () =>
-            ((QuestionnaireGridViewModel)interviewViewModel.Screens[InterviewViewModel.ConvertIdAndRosterVectorToString(rosterGroupId, new decimal[0])]).Rows.First().Enabled.ShouldEqual(false);
+            ((QuestionnaireGridViewModel)interviewViewModel.Screens[ConversionHelper.ConvertIdAndRosterVectorToString(rosterGroupId, new decimal[0])]).Rows.First().Enabled.ShouldEqual(false);
 
         It should_roster_total_question_count_be_equal_to_0 = () =>
-            ((QuestionnaireGridViewModel)interviewViewModel.Screens[InterviewViewModel.ConvertIdAndRosterVectorToString(rosterGroupId, new decimal[0])]).Total.ShouldEqual(0);
+            ((QuestionnaireGridViewModel)interviewViewModel.Screens[ConversionHelper.ConvertIdAndRosterVectorToString(rosterGroupId, new decimal[0])]).Total.ShouldEqual(0);
 
         It should_roster_answered_question_count_be_equal_to_1 = () =>
-           ((QuestionnaireGridViewModel)interviewViewModel.Screens[InterviewViewModel.ConvertIdAndRosterVectorToString(rosterGroupId, new decimal[0])]).Answered.ShouldEqual(0);
+           ((QuestionnaireGridViewModel)interviewViewModel.Screens[ConversionHelper.ConvertIdAndRosterVectorToString(rosterGroupId, new decimal[0])]).Answered.ShouldEqual(0);
 
         private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;
