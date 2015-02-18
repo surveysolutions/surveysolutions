@@ -1,51 +1,45 @@
 ﻿using System;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using Raven.Client;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.User
 {
     public class UserListViewFactory : IViewFactory<UserListViewInputModel, UserListView>
     {
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
-
-        public UserListViewFactory(IQueryableReadSideRepositoryReader<UserDocument> users)
+        private readonly IQueryableReadSideRepositoryReader<UserDocument> userStore;
+        private readonly IReadSideRepositoryIndexAccessor readSideRepositoryIndexAccessor;
+        public UserListViewFactory(IQueryableReadSideRepositoryReader<UserDocument> users, IReadSideRepositoryIndexAccessor readSideRepositoryIndexAccessor)
         {
-            this.users = users;
+            this.userStore = users;
+            this.readSideRepositoryIndexAccessor = readSideRepositoryIndexAccessor;
         }
-        
+
         public UserListView Load(UserListViewInputModel input)
         {
-            Func<UserDocument, bool> query =
-                _ => !_.IsDeleted && (input.Role == UserRoles.Undefined || _.Roles.Contains(input.Role));
+            var allUsers = this.readSideRepositoryIndexAccessor.Query<UserDocumentBrief>(
+                typeof (UserDocumentsByBriefFields).Name).Search(x => x.Roles, input.Role.ToString());
+            var users = allUsers.OrderUsingSortExpression(input.Order)
+                    .Skip((input.Page - 1)*input.PageSize)
+                    .Take(input.PageSize).ProjectFromIndexFieldsInto<UserDocument>().ToList().Select(
+                        x =>
+                            new UserListItem
+                                (
+                                id: x.PublicKey,
+                                creationDate: x.CreationDate,
+                                email: x.Email,
+                                isLockedBySupervisor: x.IsLockedBySupervisor,
+                                isLockedByHQ: x.IsLockedByHQ,
+                                name: x.UserName,
+                                roles: x.Roles
+                                ));
 
-            return this.users.Query(
-                _ =>
-                    {
-                        var all = _.Where(query).AsQueryable().OrderUsingSortExpression(input.Order);
-
-                        var selection =
-                            all.Skip((input.Page - 1)*input.PageSize)
-                                .Take(input.PageSize)
-                                .ToList()
-                                .Select(
-                                    x =>
-                                        new UserListItem
-                                            (
-                                            id: x.PublicKey,
-                                            creationDate: x.CreationDate,
-                                            email: x.Email,
-                                            isLockedBySupervisor: x.IsLockedBySupervisor,
-                                            isLockedByHQ:x.IsLockedByHQ,
-                                            name: x.UserName,
-                                            roles: x.Roles
-                                            ));
-
-                        return new UserListView {Page = input.Page, PageSize = input.PageSize, TotalCount = all.Count(), Items = selection};
-                    });
+            return new UserListView { Page = input.Page, PageSize = input.PageSize, TotalCount = allUsers.Count(), Items = users };
         }
     }
 }
