@@ -10,7 +10,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
-    internal class when_verifying_questionnaire_with_question_that_has_substitutions_and_marked_as_featured : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_featured_categorical_multi_answers_question : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
