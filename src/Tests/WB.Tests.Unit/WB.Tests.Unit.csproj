@@ -943,7 +943,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_custom_validation_with_unrecognized_variable_name.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_empty_variable_name.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_missing_options_value.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_substitutions_and_marked_as_featured.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_featured_categorical_multi_answers_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_substitutions_references_with_deeper_roster_level.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_substitution_reference_of_not_supported_type.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_substitution_reference_on_MultiAnswer_question.cs" />
