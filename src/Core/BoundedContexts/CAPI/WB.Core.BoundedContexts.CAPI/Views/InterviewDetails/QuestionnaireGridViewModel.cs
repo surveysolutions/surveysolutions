@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails.GridItems;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
@@ -63,7 +64,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         [JsonIgnore]
         public IEnumerable<QuestionnairePropagatedScreenViewModel> Rows
         {
-            get { return this.rowsValue(InterviewViewModel.ConvertInterviewItemId(ScreenId)); }
+            get { return this.rowsValue(ConversionHelper.ConvertIdAndRosterVectorToString(ScreenId.Id, ScreenId.InterviewItemPropagationVector)); }
         }
 
         public IEnumerable<InterviewItemId> Siblings

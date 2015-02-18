@@ -4,6 +4,7 @@ using System.Linq;
 using Android.OS;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Frames;
@@ -35,7 +36,7 @@ namespace WB.UI.QuestionnaireTester.Implementations.Fragments
 
         protected override QuestionnaireScreenViewModel GetScreenViewModel()
         {
-            return Questionnaire.Screens[InterviewViewModel.ConvertInterviewItemId(ScreenId)] as QuestionnaireScreenViewModel;
+            return Questionnaire.Screens[ConversionHelper.ConvertIdAndRosterVectorToString(ScreenId.Id, ScreenId.InterviewItemPropagationVector)] as QuestionnaireScreenViewModel;
         }
 
         protected override List<IQuestionnaireViewModel> GetBreadcrumbs()
