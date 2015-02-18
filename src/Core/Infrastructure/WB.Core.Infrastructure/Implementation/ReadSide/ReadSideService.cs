@@ -208,7 +208,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     if (!areViewsBeingRebuiltNow)
                     {
                         var handlers = this.GetListOfEventHandlersForRebuild(handlerNames);
-                        this.RebuildViewsImpl(skipEvents, handlers);
+                        this.RebuildViewsImpl(skipEvents, handlers, true);
                     }
                 }
             }
@@ -222,7 +222,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 {
                     if (!areViewsBeingRebuiltNow)
                     {
-                        this.RebuildViewsImpl(skipEvents, this.eventBus.GetAllRegistredEventHandlers());
+                        this.RebuildViewsImpl(skipEvents, this.eventBus.GetAllRegistredEventHandlers(), false);
                     }
                 }
             }
@@ -300,7 +300,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             }
         }
 
-        private void RebuildViewsImpl(int skipEvents, IEventHandler[] handlers)
+        private void RebuildViewsImpl(int skipEvents, IEventHandler[] handlers, bool isPartiallyRebuild)
         {
             try
             {
@@ -310,7 +310,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                 if (skipEvents == 0)
                 {
-                    this.CleanUpWritersForHandlers(handlers);
+                    this.CleanUpWritersForHandlers(handlers, isPartiallyRebuild);
                 }
 
                 try
@@ -381,7 +381,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         }
 
 
-        private void CleanUpWritersForHandlers(IEnumerable<IEventHandler> handlers)
+        private void CleanUpWritersForHandlers(IEnumerable<IEventHandler> handlers, bool isPartiallyRebuild)
         {
             var cleaners = handlers.SelectMany(x=>x.Writers.OfType<IReadSideRepositoryCleaner>())
                   .Distinct()
@@ -393,7 +393,10 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                 var cleanerName = this.CreateViewName(readSideRepositoryCleaner);
                 UpdateStatusMessage(string.Format("Deleting views for {0}", cleanerName));
-                readSideRepositoryCleaner.Clear();
+                if (isPartiallyRebuild)
+                    readSideRepositoryCleaner.Clear();
+                else
+                    readSideRepositoryCleaner.ClearAll();
                 UpdateStatusMessage(string.Format("Views for {0} was deleted.", cleanerName));
             }
         }

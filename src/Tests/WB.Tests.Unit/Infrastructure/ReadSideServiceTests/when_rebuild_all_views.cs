@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
             ravenReadSideService.AreViewsBeingRebuiltNow().ShouldEqual(false);
 
         It should_call_clean_method_for_registered_writers_once = () =>
-            readSideRepositoryCleanerMock.Verify(x=>x.Clear(), Times.Once);
+            readSideRepositoryCleanerMock.Verify(x=>x.ClearAll(), Times.Once);
 
         It should_enable_cache_for_registered_writers_once = () =>
             readSideRepositoryWriterMock.Verify(x=>x.EnableCache(), Times.Once);
