@@ -154,7 +154,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                 },
                 StatusByRepositoryWriters = this.eventBus.GetAllRegistredEventHandlers()
-                    .SelectMany(x => x.Writers.OfType<IReadSideRepositoryWriter>())
+                    .SelectMany(x => x.Writers.OfType<IChacheableRepositoryWriter>())
                     .Distinct()
                     .Select(
                         writer =>
@@ -176,7 +176,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
         private string CreateViewName(object storage)
         {
-            var readSideRepositoryWriter = storage as IReadSideRepositoryWriter;
+            var readSideRepositoryWriter = storage as IChacheableRepositoryWriter;
             if (readSideRepositoryWriter != null)
                 return this.GetRepositoryEntityName(readSideRepositoryWriter);
 
@@ -402,11 +402,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         {
             UpdateStatusMessage("Enabling cache in repository writers.");
 
-            var writers = handlers.SelectMany(x => x.Writers.OfType<IReadSideRepositoryWriter>())
+            var writers = handlers.SelectMany(x => x.Writers.OfType<IChacheableRepositoryWriter>())
                .Distinct()
                .ToArray();
 
-            foreach (IReadSideRepositoryWriter writer in writers)
+            foreach (IChacheableRepositoryWriter writer in writers)
             {
                 writer.EnableCache();
             }
@@ -418,11 +418,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         {
             UpdateStatusMessage("Disabling cache in repository writers.");
 
-            var writers = handlers.SelectMany(x => x.Writers.OfType<IReadSideRepositoryWriter>())
+            var writers = handlers.SelectMany(x => x.Writers.OfType<IChacheableRepositoryWriter>())
              .Distinct()
              .ToArray();
 
-            foreach (IReadSideRepositoryWriter writer in writers)
+            foreach (IChacheableRepositoryWriter writer in writers)
             {
                 UpdateStatusMessage(string.Format(
                     "Disabling cache in repository writer for entity {0}.",
@@ -543,7 +543,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             statusMessage = string.Format("{0}: {1}", DateTime.Now, newMessage);
         }
 
-        private string GetRepositoryEntityName(IReadSideRepositoryWriter writer)
+        private string GetRepositoryEntityName(IChacheableRepositoryWriter writer)
         {
            /* var arguments = writer.ViewType.GetGenericArguments();
             if (!arguments.Any())*/

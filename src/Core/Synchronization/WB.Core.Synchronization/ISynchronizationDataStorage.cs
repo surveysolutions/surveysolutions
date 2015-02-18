@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.Synchronization
 {
-    public interface ISynchronizationDataStorage : IReadSideRepositoryCleaner, IReadSideRepositoryWriter
+    public interface ISynchronizationDataStorage : IReadSideRepositoryCleaner, IChacheableRepositoryWriter
     {
         void SaveInterview(InterviewSynchronizationDto doc, Guid responsibleId, DateTime timestamp);
         void SaveQuestionnaire(QuestionnaireDocument doc, long version, bool allowCensusMode, DateTime timestamp);
