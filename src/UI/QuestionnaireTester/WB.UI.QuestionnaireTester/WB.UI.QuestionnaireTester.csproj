@@ -194,8 +194,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v4.20.0.0.4\lib\MonoAndroid32\Xamarin.Android.Support.v4.dll</HintPath>
     </Reference>
-    <Reference Include="Xamarin.Insights">
-      <HintPath>..\..\..\..\packages\Xamarin.Insights.1.8.3\lib\MonoAndroid10\Xamarin.Insights.dll</HintPath>
+    <Reference Include="Xamarin.Insights, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Xamarin.Insights.1.9.0.106\lib\MonoAndroid10\Xamarin.Insights.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -486,10 +487,6 @@
     <ProjectReference Include="..\..\Shared\WB.UI.Shared.Android\WB.UI.Shared.Android.csproj">
       <Project>{596bdadc-eff5-474d-b028-2f5c60b59050}</Project>
       <Name>WB.UI.Shared.Android</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.AndroidLogger\WB.Core.GenericSubdomains.Logging.AndroidLogger.csproj">
-      <Project>{a3369307-fdfa-4cd2-9ff4-6a7e23c47dd6}</Project>
-      <Name>WB.Core.GenericSubdomains.Logging.AndroidLogger</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>

@@ -57,13 +57,14 @@
                         android:layout_height="wrap_content">
                         <ImageView
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="150px"
                             android:scaleType="centerInside"
                             android:src="@drawable/ic_questionnaire_list_refresh" />
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginTop="10dp"
+							android:gravity="center"
                             local:MvxBind="Text Localization('EmptyQuestionnaireListText')" />
                     </LinearLayout>
                 </RelativeLayout>
