@@ -50,5 +50,10 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         {
             readSideRepositoryWriter.Clear();
         }
+
+        public void ClearAll()
+        {
+            readSideRepositoryWriter.ClearAll();
+        }
     }
 }

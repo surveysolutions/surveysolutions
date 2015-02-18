@@ -45,6 +45,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
             filebasedExportedDataAccessor.CleanExportHistoryFolder();
         }
 
+        public void ClearAll()
+        {
+            this.Clear();
+        }
+
         public InterviewHistoryView GetById(string id)
         {
             if (cacheEnabled)
