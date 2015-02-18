@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using Raven.Client.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -44,34 +45,52 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public IEnumerable<SynchronizationChunkMeta> GetChunkMetaDataCreatedAfter(string lastSyncedPackageId, IEnumerable<Guid> users)
         {
-            var items = this.indexAccessor.Query<SynchronizationDeltaMetaInformation>(queryByBriefFieldsIndexName);
-
             var userIds = users.Concat(new[] { Guid.Empty });
 
             if (lastSyncedPackageId == null)
             {
-                List<SynchronizationDeltaMetaInformation> fullStreamDeltas = items.Where(x => x.UserId.In(userIds))
-                                                                   .OrderBy(x => x.SortIndex)
-                                                                   .ToList();
+                List<SynchronizationDeltaMetaInformation> fullStreamDeltas = GetAllSynchronizationDeltaMetaInformation(
+                    x => x.UserId.In(userIds))
+                    .OrderBy(x => x.SortIndex).ToList();
 
                 var fullListResult = fullStreamDeltas.Select(s => new SynchronizationChunkMeta(s.PublicKey))
                                                      .ToList();
                 return fullListResult; 
             }
 
-            SynchronizationDeltaMetaInformation lastSyncedPackage = items.FirstOrDefault(x => x.PublicKey == lastSyncedPackageId);
+            SynchronizationDeltaMetaInformation lastSyncedPackage =
+                this.indexAccessor.Query<SynchronizationDeltaMetaInformation>(queryByBriefFieldsIndexName)
+                    .FirstOrDefault(x => x.PublicKey == lastSyncedPackageId);
 
             if (lastSyncedPackage == null)
             {
                 throw new SyncPackageNotFoundException(string.Format("Sync package with id {0} was not found on server", lastSyncedPackageId));
             }
 
-            var deltas = items.Where(x => x.SortIndex > lastSyncedPackage.SortIndex && x.UserId.In(userIds))
+            var deltas = GetAllSynchronizationDeltaMetaInformation(x => x.SortIndex > lastSyncedPackage.SortIndex && x.UserId.In(userIds))
                               .OrderBy(x => x.SortIndex)
                               .ToList();
 
             var result = deltas.Select(s => new SynchronizationChunkMeta(s.PublicKey)).ToList();
             return result; 
+        }
+
+        private List<SynchronizationDeltaMetaInformation> GetAllSynchronizationDeltaMetaInformation(Expression<Func<SynchronizationDeltaMetaInformation, bool>> condition)
+        {
+            var result = new List<SynchronizationDeltaMetaInformation>();
+            int skipResults = 0;
+            while (true)
+            {
+                var chunk =
+                    this.indexAccessor.Query<SynchronizationDeltaMetaInformation>(queryByBriefFieldsIndexName)
+                        .Where(condition).Skip(skipResults).ToList();
+
+                if (!chunk.Any())
+                    break;
+                result.AddRange(chunk);
+                skipResults = result.Count;
+            }
+            return result;
         }
 
         public SynchronizationChunkMeta GetChunkMetaDataByTimestamp(DateTime timestamp, IEnumerable<Guid> users)
