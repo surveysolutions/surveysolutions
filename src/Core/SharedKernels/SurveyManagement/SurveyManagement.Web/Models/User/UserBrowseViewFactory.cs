@@ -48,22 +48,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
         /// </returns>
         public UserBrowseView Load(UserBrowseInputModel input)
         {
-            return this.documentItemSession.Query(queryableItems =>
-            {
-                int count = queryableItems.Count();
-                if (count == 0)
-                    return new UserBrowseView(input.Page, input.PageSize, count, new UserBrowseItem[0]);
+            int count = this.documentItemSession.Query(queryableItems => queryableItems.Count());
+            if (count == 0)
+                return new UserBrowseView(input.Page, input.PageSize, count, new UserBrowseItem[0]);
 
-                // Perform the paged query
-                #warning ReadLayer: ToList
-                IEnumerable<UserDocument> query =
-                    queryableItems.ToList().Where(input.Expression).Skip((input.Page - 1) * input.PageSize).Take(
+            IEnumerable<UserDocument> query =
+                documentItemSession.Query(_ => _.Where(u => input.Expression(u)))
+                    .ToList()
+                    .Skip((input.Page - 1)*input.PageSize)
+                    .Take(
                         input.PageSize);
-
-                // And enact this query
-                UserBrowseItem[] items = query.Select(x => new UserBrowseItem(x.PublicKey, x.UserName, x.Email, x.CreationDate, x.IsLockedBySupervisor, x.IsLockedByHQ, x.Supervisor)).ToArray();
-                return new UserBrowseView(input.Page, input.PageSize, count, items.ToArray());
-            });
+            UserBrowseItem[] items = query.Select(x => new UserBrowseItem(x.PublicKey, x.UserName, x.Email, x.CreationDate, x.IsLockedBySupervisor, x.IsLockedByHQ, x.Supervisor)).ToArray();
+            return new UserBrowseView(input.Page, input.PageSize, count, items.ToArray());
         }
 
         #endregion
