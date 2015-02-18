@@ -210,6 +210,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     case HttpStatusCode.RequestTimeout:
                         this.UIDialogs.Alert(UIResources.RequestTimeout);
                         break;
+                    case HttpStatusCode.InternalServerError:
+                        this.Logger.Error("Internal server error when getting questionnaires.", ex);
+                        this.UIDialogs.Alert(UIResources.InternalServerError);
+                        break;
                     default:
                         throw;
                 }

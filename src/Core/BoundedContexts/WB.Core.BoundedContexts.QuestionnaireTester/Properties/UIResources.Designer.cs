@@ -277,6 +277,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to At the moment, the server is unavailable. We apologize for any inconvenience. Server will be restored in the near future.
+        /// </summary>
+        public static string InternalServerError {
+            get {
+                return ResourceManager.GetString("InternalServerError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Modified on:.
         /// </summary>
         public static string LastModifiedDateTitle {

@@ -126,6 +126,9 @@
   <data name="EmptyQuestionnaireListText" xml:space="preserve">
     <value>Нет опросников.  Потяните вниз, чтобы обновить список</value>
   </data>
+  <data name="InternalServerError" xml:space="preserve">
+    <value>На данный момент сервер недоступен. Просим прощения за неудобства. Работа сервера будет восстановлена в ближайшее время</value>
+  </data>
   <data name="LastModifiedDateTitle" xml:space="preserve">
     <value>Изменено:</value>
   </data>
