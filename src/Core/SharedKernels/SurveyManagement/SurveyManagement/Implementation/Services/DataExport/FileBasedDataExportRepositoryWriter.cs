@@ -77,6 +77,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.filebasedExportedDataAccessor.CleanExportFileFolder();
         }
 
+        public void ClearAll()
+        {
+            this.Clear();
+        }
+
         public void CreateExportStructureByTemplate(QuestionnaireExportStructure questionnaireExportStructure)
         {
             this.CreateExportedDataStructure(questionnaireExportStructure);

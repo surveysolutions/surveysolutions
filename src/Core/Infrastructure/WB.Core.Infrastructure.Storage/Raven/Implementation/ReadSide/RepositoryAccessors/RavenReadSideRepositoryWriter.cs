@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Raven.Abstractions.Data;
 using Raven.Client;
+using Raven.Client.Document;
+using Raven.Client.Extensions;
 using Raven.Client.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
@@ -93,6 +95,13 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
                 {
                     Query = string.Format("Tag: *{0}*", global::Raven.Client.Util.Inflector.Pluralize(ViewName))
                 }, new BulkOperationOptions {AllowStale = false}).WaitForCompletion();
+        }
+
+        public void ClearAll()
+        {
+            string ravenDbName = ((DocumentStore)this.RavenStore).DefaultDatabase;
+            this.RavenStore.DatabaseCommands.GlobalAdmin.DeleteDatabase(ravenDbName, hardDelete: true);
+            this.RavenStore.DatabaseCommands.GlobalAdmin.EnsureDatabaseExists(ravenDbName, ignoreFailures: false);
         }
 
         protected override TResult QueryImpl<TResult>(Func<IRavenQueryable<TEntity>, TResult> query)

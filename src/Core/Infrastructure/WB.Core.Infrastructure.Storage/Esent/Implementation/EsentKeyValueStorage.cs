@@ -51,6 +51,11 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
             this.storage = new PersistentDictionary<string, string>(collectionFolder);
         }
 
+        public void ClearAll()
+        {
+            this.Clear();
+        }
+
         public void Dispose()
         {
             Dispose(true);
