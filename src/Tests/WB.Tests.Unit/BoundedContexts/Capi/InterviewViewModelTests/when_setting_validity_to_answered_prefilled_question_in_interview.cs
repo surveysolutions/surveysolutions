@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -32,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
                 answers: new AnsweredQuestionSynchronizationDto[0],
                 propagatedGroupInstanceCounts: new Dictionary<InterviewItemId, RosterSynchronizationDto[]>());
 
-            questionIdentity = InterviewViewModel.ConvertIdAndRosterVectorToString(targetQuestionId, Empty.RosterVector);
+            questionIdentity = ConversionHelper.ConvertIdAndRosterVectorToString(targetQuestionId, Empty.RosterVector);
             interviewViewModel = CreateInterviewViewModel(questionnarie, rosterStructure, interviewSynchronizationDto);
             interviewViewModel.SetAnswer(questionIdentity, 3);
         };
