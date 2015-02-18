@@ -266,6 +266,7 @@
     <Compile Include="Core\Synchronization\when_linking_user_to_device_and_device_is_registered.cs" />
     <Compile Include="Core\Synchronization\when_sync_is_initialized_and_device_is_not_registered.cs" />
     <Compile Include="Core\Synchronization\when_sync_is_initialized_and_device_is_registered.cs" />
+    <Compile Include="Infrastructure\MemoryCachedReadSideRepositoryWriterTests\when_inserting_last_item_in_store.cs" />
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\MemoryCachedReadSideStoreTestContext.cs" />
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_Clear_called.cs" />
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_disable_cache_is_called.cs" />
@@ -955,7 +956,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_custom_validation_with_unrecognized_variable_name.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_empty_variable_name.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_missing_options_value.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_substitutions_and_marked_as_featured.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_featured_categorical_multi_answers_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_substitutions_references_with_deeper_roster_level.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_substitution_reference_of_not_supported_type.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_substitution_reference_on_MultiAnswer_question.cs" />
@@ -1861,14 +1862,17 @@
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\when_load_interview_summary.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\when_load_interview_summary_and_interview_has_deleted_status.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\when_load_interview_summary_and_summary_does_not_exists.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\HealthCheckTests\HealthCheckTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\HealthCheckTests\when_healthcheck_service_check_when_there_are_any_errors.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\HealthCheckTests\when_healthcheck_service_check_when_there_are_any_warnings.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\HealthCheckTests\when_healthcheck_service_check.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\ApiTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_healthcheck_controller_getverbosestatus_when_there_are_any_errors.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_healthcheck_controller_getverbosestatus_when_there_are_any_warnings.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_healthcheck_controller_getstatus.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_healthcheck_controller_getverbosestatus.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_intervews_controller_interviews_filtered_with_empty_params.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_intervews_controller_interviews_filtered_with_not_empty_params.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_intervews_controller_interviews_with_not_empty_params.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_healthcheck_controller_getstatus.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\HealthCheckTests\when_healthcheck_service_check_when_all_is_ok.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_intervews_controller_interview_details_with_not_empty_params.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_questionnaires_controller_questionnaries_by_id.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_questionnaires_controller_questionnaries_statuses.cs" />

@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
         Establish context = () =>
         {
             readSideRepositoryCleanerMock = new Mock<IReadSideRepositoryCleaner>();
-            readSideRepositoryWriterMock = new Mock<IReadSideRepositoryWriter>();
+            readSideRepositoryWriterMock = new Mock<IChacheableRepositoryWriter>();
             readSideRepositoryWriterMock.Setup(x => x.ViewType).Returns(typeof(object));
 
             eventHandlerMock = new Mock<IEventHandler>();
@@ -42,8 +42,8 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
 
             committedEvent = new CommittedEvent(Guid.NewGuid(), "test", Guid.NewGuid(), Guid.NewGuid(), 1, DateTime.Now, new object());
             streamableEventStoreMock = new Mock<IStreamableEventStore>();
-            streamableEventStoreMock.Setup(x => x.GetAllEvents(Moq.It.IsAny<int>(), Moq.It.IsAny<int>()))
-                .Returns(new[] { new[] { committedEvent } });
+            streamableEventStoreMock.Setup(x => x.GetAllEvents())
+                .Returns(new[] { committedEvent });
             ravenReadSideService = CreateRavenReadSideService(eventDispatcher: eventDispatcherMock.Object, streamableEventStore: streamableEventStoreMock.Object);
         };
 
@@ -72,7 +72,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
         private static Mock<IStreamableEventStore> streamableEventStoreMock;
         private static Mock<IEventHandler> eventHandlerMock;
         private static Mock<IReadSideRepositoryCleaner> readSideRepositoryCleanerMock;
-        private static Mock<IReadSideRepositoryWriter> readSideRepositoryWriterMock;
+        private static Mock<IChacheableRepositoryWriter> readSideRepositoryWriterMock;
 
         private static CommittedEvent committedEvent;
         private static string HandlerToRebuild = "handler to rebuild";

@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Memory.Implementation
 {
-    internal class MemoryCachedReadSideStore<TEntity> : IReadSideStorage<TEntity>, IReadSideRepositoryWriter, IReadSideRepositoryCleaner
+    internal class MemoryCachedReadSideStore<TEntity> : IReadSideStorage<TEntity>, IChacheableRepositoryWriter, IReadSideRepositoryCleaner
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly IReadSideStorage<TEntity> readSideStorage;
@@ -93,11 +93,6 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
             }
         }
 
-        public void BulkStore(List<Tuple<TEntity, string>> bulk)
-        {
-            throw new NotImplementedException();
-        }
-
         private TEntity GetByIdUsingCache(string id)
         {
             if (cache.ContainsKey(id))
@@ -139,7 +134,7 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
             this.StoreBulkEntitiesToRepository(bulk);
         }
 
-        protected virtual void StoreBulkEntitiesToRepository(List<string> bulk)
+        protected virtual void StoreBulkEntitiesToRepository(IEnumerable<string> bulk)
         {
             foreach (var entityId in bulk)
             {

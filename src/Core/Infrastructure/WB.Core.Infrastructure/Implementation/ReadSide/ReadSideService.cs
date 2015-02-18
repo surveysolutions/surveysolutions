@@ -154,7 +154,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                 },
                 StatusByRepositoryWriters = this.eventBus.GetAllRegistredEventHandlers()
-                    .SelectMany(x => x.Writers.OfType<IReadSideRepositoryWriter>())
+                    .SelectMany(x => x.Writers.OfType<IChacheableRepositoryWriter>())
                     .Distinct()
                     .Select(
                         writer =>
@@ -176,7 +176,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
         private string CreateViewName(object storage)
         {
-            var readSideRepositoryWriter = storage as IReadSideRepositoryWriter;
+            var readSideRepositoryWriter = storage as IChacheableRepositoryWriter;
             if (readSideRepositoryWriter != null)
                 return this.GetRepositoryEntityName(readSideRepositoryWriter);
 
@@ -316,7 +316,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 try
                 {
                     this.EnableWritersCacheForHandlers(handlers);
-                    this.RepublishAllEvents(this.GetEventStream(skipEvents), this.eventStore.CountOfAllEvents(),skipEventsCount: skipEvents, handlers: handlers);
+                    this.RepublishAllEvents(this.GetEventStream(skipEvents), this.eventStore.CountOfAllEvents(), skipEventsCount: skipEvents, handlers: handlers);
                 }
                 finally
                 {
@@ -340,16 +340,23 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
         private IEnumerable<CommittedEvent> GetEventStream(int skipEventsCount)
         {
+            if (skipEventsCount > 0)
+            {
+                UpdateStatusMessage(string.Format("Skipping {0} events.", skipEventsCount));
+            }
+
+            return this.GetEventStream().Skip(skipEventsCount);
+        }
+
+        private IEnumerable<CommittedEvent> GetEventStream()
+        {
             var eventSourcesAndSequences = new Dictionary<Guid, long>();
 
-            foreach (CommittedEvent[] eventBulk in this.eventStore.GetAllEvents(skipEvents: skipEventsCount))
+            foreach (CommittedEvent committedEvent in this.eventStore.GetAllEvents())
             {
-                foreach (var committedEvent in eventBulk)
-                {
-                    EnsureEventSequenceIsCorrect(committedEvent, eventSourcesAndSequences);
+                EnsureEventSequenceIsCorrect(committedEvent, eventSourcesAndSequences);
 
-                    yield return committedEvent;
-                }
+                yield return committedEvent;
             }
         }
 
@@ -395,11 +402,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         {
             UpdateStatusMessage("Enabling cache in repository writers.");
 
-            var writers = handlers.SelectMany(x => x.Writers.OfType<IReadSideRepositoryWriter>())
+            var writers = handlers.SelectMany(x => x.Writers.OfType<IChacheableRepositoryWriter>())
                .Distinct()
                .ToArray();
 
-            foreach (IReadSideRepositoryWriter writer in writers)
+            foreach (IChacheableRepositoryWriter writer in writers)
             {
                 writer.EnableCache();
             }
@@ -411,11 +418,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         {
             UpdateStatusMessage("Disabling cache in repository writers.");
 
-            var writers = handlers.SelectMany(x => x.Writers.OfType<IReadSideRepositoryWriter>())
+            var writers = handlers.SelectMany(x => x.Writers.OfType<IChacheableRepositoryWriter>())
              .Distinct()
              .ToArray();
 
-            foreach (IReadSideRepositoryWriter writer in writers)
+            foreach (IChacheableRepositoryWriter writer in writers)
             {
                 UpdateStatusMessage(string.Format(
                     "Disabling cache in repository writer for entity {0}.",
@@ -488,6 +495,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     this.logger.Error(message);
                     throw new Exception(message);
                 }
+
+                UpdateStatusMessage(string.Format("Done publishing event {0}, {1}. EventSourceId: {2:N}. Waiting for next event or stream end...", 
+                    this.processedEventsCount, 
+                    @event.Payload.GetType().Name, 
+                    @event.EventSourceId));
             }
 
             this.logger.Info(String.Format("Rebuild of read side finished sucessfuly. Processed {0} events, failed {1}", this.processedEventsCount, this.failedEventsCount));
@@ -536,7 +548,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             statusMessage = string.Format("{0}: {1}", DateTime.Now, newMessage);
         }
 
-        private string GetRepositoryEntityName(IReadSideRepositoryWriter writer)
+        private string GetRepositoryEntityName(IChacheableRepositoryWriter writer)
         {
            /* var arguments = writer.ViewType.GetGenericArguments();
             if (!arguments.Any())*/
