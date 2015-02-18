@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
         {
             // arrange
             var eventStore=new Mock<IStreamableEventStore>();
-            var eventList = new List<CommittedEvent[]>();
+            var eventList = new List<CommittedEvent>();
             const int ArCount = 2;
             const int EventsPerArCount = 3;
             for (int i = 0; i < ArCount; i++)
@@ -65,10 +65,10 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
                     eventsPerAr[j] = new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), eventSourceId,
                                                                        j + 1, DateTime.Now, new object());
                 }
-                eventList.Add(eventsPerAr);
+                eventList.AddRange(eventsPerAr);
             }
 
-            eventStore.Setup(x => x.GetAllEvents(It.IsAny<int>(), It.IsAny<int>())).Returns(eventList);
+            eventStore.Setup(x => x.GetAllEvents()).Returns(eventList);
             NcqrsEnvironment.SetDefault(eventStore.Object as IEventStore);
 
             DefaultBackupManager target = CreateDefaultBackupManager();

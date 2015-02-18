@@ -1,90 +1,29 @@
-﻿using System;
-using System.Linq;
 using System.Web.Http;
-using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.HealthCheck;
-using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
+using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
+
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
     [AllowAnonymous]
     public class HealthCheckApiController : ApiController
     {
-        private readonly IBrokenSyncPackagesStorage brokenSyncPackagesStorage;
-        private readonly IDatabaseHealthCheck databaseHealthCheck;
-        private readonly IEventStoreHealthCheck eventStoreHealthCheck;
-        //private readonly IChunkReader chunkReader;
-        private readonly IFolderPermissionChecker folderPermissionChecker;
+        private readonly IHealthCheckService healthCheckService;
 
-        public HealthCheckApiController(IDatabaseHealthCheck databaseHealthCheck,
-            IEventStoreHealthCheck eventStoreHealthCheck, IBrokenSyncPackagesStorage brokenSyncPackagesStorage, 
-           /* IChunkReader chunkReader,*/ IFolderPermissionChecker folderPermissionChecker)
+        public HealthCheckApiController(IHealthCheckService healthCheckService)
         {
-            this.folderPermissionChecker = folderPermissionChecker;
-            //this.chunkReader = chunkReader;
-            this.eventStoreHealthCheck = eventStoreHealthCheck;
-            this.databaseHealthCheck = databaseHealthCheck;
-            this.brokenSyncPackagesStorage = brokenSyncPackagesStorage;
+            this.healthCheckService = healthCheckService;
         }
 
         public HealthCheckStatus GetStatus()
         {
-            var healthCheckStatus = GetHealthCheckModel();
+            var healthCheckStatus = healthCheckService.Check();
             return healthCheckStatus.Status;
         }
 
-        public HealthCheckModel GetVerboseStatus()
+        public HealthCheckResults GetVerboseStatus()
         {
-            return GetHealthCheckModel();
-        }
-
-        private HealthCheckModel GetHealthCheckModel()
-        {
-            var databaseHealthCheckResult = databaseHealthCheck.Check();
-            var eventStoreHealthCheckResult = eventStoreHealthCheck.Check();
-            var numberOfUnhandledPackages = GetNumberOfUnhandledPackages();
-            var numberOfSyncPackagesWithBigSize = GetNumberOfSyncPackagesWithBigSize();
-            var folderPermissionCheckResult = folderPermissionChecker.Check();
-
-            return new HealthCheckModel(databaseHealthCheckResult, eventStoreHealthCheckResult,
-                numberOfUnhandledPackages, numberOfSyncPackagesWithBigSize,
-                folderPermissionCheckResult);
-        }
-
-        private NumberHealthCheckResult GetNumberOfUnhandledPackages()
-        {
-            try
-            {
-                int count = brokenSyncPackagesStorage.GetListOfUnhandledPackages().Count();
-
-                if (count == 0)
-                    return NumberHealthCheckResult.Happy(count);
-
-                return NumberHealthCheckResult.Warning(count,
-                        "The error occurred during interview processing. Please contact Survey Solutions Team <a href='support@mysurvey.solutions'>support@mysurvey.solutions</a> to report the error.");
-            }
-            catch (Exception e)
-            {
-                return NumberHealthCheckResult.Error("The information about unhandled packages can't be collected. " + e.Message);
-            }
-        }
-
-        private NumberHealthCheckResult GetNumberOfSyncPackagesWithBigSize()
-        {
-            try
-            {
-                int count = 0; //  chunkReader.GetNumberOfSyncPackagesWithBigSize();
-                if (count == 0)
-                    return NumberHealthCheckResult.Happy(count);
-                return NumberHealthCheckResult.Warning(count,
-                        "Some interviews are oversized. Please contact Survey Solutions Team <a href='support@mysurvey.solutions'>support@mysurvey.solutions</a> to report the error.");
-            }
-            catch (Exception e)
-            {
-                return NumberHealthCheckResult.Error("The information about sync packages with big size can't be collected. " + e.Message);
-            }
+            return healthCheckService.Check();
         }
     }
 }

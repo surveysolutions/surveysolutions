@@ -1,11 +1,8 @@
 ﻿using Machine.Specifications;
 using Moq;
-using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.HealthCheck;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization;
+using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
-using WB.Core.Synchronization.SyncStorage;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
@@ -33,14 +30,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
             result = controller.GetVerboseStatus();
         };
 
-        It should_return_HealthCheckModel = () =>
-            result.ShouldBeOfExactType<HealthCheckModel>();
+        It should_return_HealthCheckResults = () =>
+            result.ShouldBeOfExactType<HealthCheckResults>();
 
-        It should_call_IDatabaseHealthCheck_Check_once = () =>
-            databaseHealthCheckMock.Verify(x => x.Check(), Times.Once());
+        It should_return_Happy_status = () =>
+            result.Status.ShouldEqual(checkResults.Status);
 
-        It should_call_IEventStoreHealthCheck_Check_once = () =>
-            eventStoreHealthCheckMock.Verify(x => x.Check(), Times.Once());
+        It should_call_IHealthCheckService_Check_once = () =>
+            serviceMock.Verify(x => x.Check(), Times.Once());
+
 
         It should_call_IBrokenSyncPackagesStorage_Check_once = () =>
             brokenSyncPackagesStorageMock.Verify(x => x.GetListOfUnhandledPackages(), Times.Once());
@@ -60,6 +58,5 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 
         private static HealthCheckModel result;
         private static HealthCheckApiController controller;
-
     }
 }

@@ -515,8 +515,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 .Skip(countOfEventsSentToHeadquarters)
                 .Where(
                     storedEvent =>
-                        storedEvent.Origin != Constants.HeadquartersSynchronizationOrigin &&
-                            storedEvent.Origin != Constants.CapiSynchronizationOrigin)
+                        storedEvent.Origin != Constants.HeadquartersSynchronizationOrigin)
                 .Select(storedEvent => new AggregateRootEvent(storedEvent))
                 .ToArray();
 

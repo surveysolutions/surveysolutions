@@ -1,11 +1,8 @@
-﻿using System.Linq;
-using Machine.Specifications;
+﻿using Machine.Specifications;
 using Moq;
-using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.HealthCheck;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization;
+using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-using WB.Core.Synchronization.SyncStorage;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
@@ -37,11 +34,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
             result.ShouldBeOfExactType<HealthCheckStatus>();
 
         It should_return_Happy_status = () =>
-            result.ShouldEqual(HealthCheckStatus.Happy);
+            result.ShouldEqual(checkResults.Status);
+
+        It should_call_IHealthCheckService_Check_once = () =>
+            serviceMock.Verify(x => x.Check(), Times.Once());
 
 
+        private static HealthCheckResults checkResults;
         private static HealthCheckStatus result;
+        private static Mock<IHealthCheckService> serviceMock;
         private static HealthCheckApiController controller;
-        
+
     }
 }

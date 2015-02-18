@@ -22,6 +22,9 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataStorage
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
+using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
@@ -137,8 +140,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
               .To<IncomingSyncPackagesQueue>()
               .InSingletonScope();
 
-            this.Bind<IFolderPermissionChecker>().To<FolderPermissionChecker>().WithConstructorArgument("folderPath", this.currentFolderPath); ;
-            
             this.Bind<InterviewHistorySettings>().ToConstant(interviewHistorySettings);
             
             this.Bind<IInterviewHistoryFactory>().To<InterviewHistoryFactory>();
@@ -149,6 +150,13 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 this.Bind<IReadSideRepositoryWriter<InterviewHistoryView>>().To<InterviewHistoryWriter>().InSingletonScope();
                 this.Kernel.RegisterDenormalizer<InterviewHistoryDenormalizer>();
             }
+
+            this.Bind<IAtomicHealthCheck<RavenHealthCheckResult>>().To<RavenHealthCheck>();
+            this.Bind<IAtomicHealthCheck<EventStoreHealthCheckResult>>().To<EventStoreHealthCheck>();
+            this.Bind<IAtomicHealthCheck<FolderPermissionCheckResult>>().To<FolderPermissionChecker>().WithConstructorArgument("folderPath", this.currentFolderPath); 
+            this.Bind<IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>>().To<NumberOfSyncPackagesWithBigSizeChecker>();
+            this.Bind<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>().To<NumberOfUnhandledPackagesChecker>();
+            this.Bind<IHealthCheckService>().To<HealthCheckService>();
         }
     }
 }

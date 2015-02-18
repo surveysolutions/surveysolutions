@@ -5,7 +5,7 @@ namespace WB.Core.Infrastructure.ReadSide
     /// <summary>
     /// Interface which is implemented by each Raven-specific read side repository writer.
     /// </summary>
-    public interface IReadSideRepositoryWriter 
+    public interface IChacheableRepositoryWriter 
     {
         /// <summary>
         /// Enables caching of repository entities.

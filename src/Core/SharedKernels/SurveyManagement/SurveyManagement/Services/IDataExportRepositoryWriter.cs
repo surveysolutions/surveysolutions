@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Services
 {
-    public interface IDataExportRepositoryWriter : IReadSideRepositoryCleaner, IReadSideRepositoryWriter
+    public interface IDataExportRepositoryWriter : IReadSideRepositoryCleaner, IChacheableRepositoryWriter
     {
         void AddExportedDataByInterview(Guid interviewId);
         void DeleteInterview(Guid interviewId);

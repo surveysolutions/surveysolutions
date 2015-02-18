@@ -84,7 +84,14 @@
 
                                 <label class="checkbox" for="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", optionValue))">
                                     <input type="checkbox" name="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector)" id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", optionValue))" value="@optionValue" @(isChecked ? "checked" : "")
-                                           data-bind="click: saveCategoricalMultiAnswer.bind($data, '@Model.Id', '@Stringify(Model.RosterVector)', @(multiQuestionSettings.AreAnswersOrdered.ToString().ToLower()), @(multiQuestionSettings.MaxAllowedAnswers ?? 0), '@selectedOptions')">
+                                           data-bind="click: saveCategoricalMultiAnswer.bind($data, '@Model.Id', '@Stringify(Model.RosterVector)', @(multiQuestionSettings.AreAnswersOrdered.ToString().ToLower()),   @if (multiQuestionSettings.MaxAllowedAnswers.HasValue)
+                                                                                                                                                                                                                      {
+                                                                                                                                                                                                                          @(multiQuestionSettings.MaxAllowedAnswers.Value)
+                                                                                                                                                                                                                      }
+                                                                                                                                                                                                                      else
+                                                                                                                                                                                                                      {
+                                                                                                                                                                                                                          @("null")
+                                                                                                                                                                                                                      }, '@selectedOptions')">
 
                                     <span>@option.Label</span>
                                     @if (multiQuestionSettings.AreAnswersOrdered && isChecked)
@@ -194,11 +201,11 @@
                     {
                         var geoLocationAnswer = Model.Answer as GeoPosition;
                         <span>
-                            <div>latitude: <span>@geoLocationAnswer.Latitude</span></div>
-                            <div>longitude: <span>@geoLocationAnswer.Longitude</span></div>
-                            <div>accuracy: <span>@geoLocationAnswer.Accuracy</span></div>
-                            <div>altitude: <span>@geoLocationAnswer.Altitude</span></div>
-                            <div>time stamp: <span data-bind="text: moment('@geoLocationAnswer.Timestamp.ToLocalTime()').format('lll')"></span></div>
+                            <div>latitude: <span>@Math.Round(geoLocationAnswer.Latitude, 5)</span></div>
+                            <div>longitude: <span>@Math.Round(geoLocationAnswer.Longitude, 5)</span></div>
+                            <div>accuracy: <span>@Math.Round(geoLocationAnswer.Accuracy, 2)</span></div>
+                            <div>altitude: <span>@Math.Round(geoLocationAnswer.Altitude, 5)</span></div>
+                            <div>time stamp: <span data-bind="text: moment('@geoLocationAnswer.Timestamp.UtcDateTime').format('lll')"></span></div>
                         </span>
                     }
                     break;
@@ -209,7 +216,7 @@
                         }
                     break;
                 case QuestionType.Multimedia:
-                <img src="@Url.RouteUrl("Default", new {httproute = "", controller = "Resource", action = "InterviewFile", interviewid = ViewData["InterviewId"], filename = Model.Answer})" />
+                <img src="@Url.RouteUrl("Default", new {httproute = "", controller = "Resource", action = "InterviewFile", interviewid = ViewData["InterviewId"], filename = Model.Answer})" width="100%" height="auto" />
                     break;
             }
         }
@@ -217,10 +224,12 @@
 
         @if (!Model.IsValid)
         {
-            <small class="text-error"><b>Expression:</b> @Model.ValidationExpression</small>
-            <small class="text-error"><b>Message:</b> @Model.ValidationMessage</small>
+            <small class="text-error">@Model.ValidationExpression</small>
+            <small class="text-error">@Model.ValidationMessage</small>
         }
     </td>
+
+
 
     <td class="comments col-sm-3">
         <dl id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, "commentList")" class="@css("hidden", Model.Comments == null || Model.Comments.Count == 0)">
@@ -230,7 +239,7 @@
                 {
                     <dt>@comment.CommenterName <span class="text-normal">@comment.Text</span></dt>
                     <dd>
-                        <small class="comment-date" date="@comment.Date.ToLocalTime()"></small>
+                        <small class="comment-date" date="@comment.Date.ToString("u")"></small>
                     </dd>
                 }
             }
@@ -246,6 +255,11 @@
         </div>
     </td>
 </tr>
+
+<script type="text/html" id="comment-template">
+    <dt><span data-bind="text: userName"></span>&nbsp;<span class="text-normal" data-bind="text: comment"></span></dt>
+    <dd><small class="comment-date" data-bind="attr: { 'data': date }, text: moment(date).fromNow()"></small></dd>
+</script>
 
 @helper css(string style, bool shouldBeAdded = true)
 {

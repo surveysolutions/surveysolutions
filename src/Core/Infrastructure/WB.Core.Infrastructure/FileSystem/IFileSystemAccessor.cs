@@ -37,5 +37,7 @@ namespace WB.Core.Infrastructure.FileSystem
         void MarkFileAsReadonly(string pathToFile);
 
         Assembly LoadAssembly(string assemblyFile);
+
+        bool IsWritePermissionExists(string path);
     }
 }
