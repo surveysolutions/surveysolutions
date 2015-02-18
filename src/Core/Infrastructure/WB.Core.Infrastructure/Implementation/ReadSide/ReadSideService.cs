@@ -495,6 +495,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     this.logger.Error(message);
                     throw new Exception(message);
                 }
+
+                UpdateStatusMessage(string.Format("Done publishing event {0}, {1}. EventSourceId: {2:N}. Waiting for next event or stream end...", 
+                    this.processedEventsCount, 
+                    @event.Payload.GetType().Name, 
+                    @event.EventSourceId));
             }
 
             this.logger.Info(String.Format("Rebuild of read side finished sucessfuly. Processed {0} events, failed {1}", this.processedEventsCount, this.failedEventsCount));
