@@ -2,6 +2,7 @@
 using Moq;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 using It = Machine.Specifications.It;
 
@@ -11,17 +12,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
     {
         private Establish context = () =>
         {
-            var databaseHealthCheck = Mock.Of<IDatabaseHealthCheck>(m => m.Check() == ConnectionHealthCheckResult.Down(databaseErrorMessage));
-            var eventStoreHealthCheck = Mock.Of<IEventStoreHealthCheck>(m => m.Check() == ConnectionHealthCheckResult.Down(eventStoreErrorMessage));
-            var brokenSyncPackagesStorage = Mock.Of<IBrokenSyncPackagesStorage>(m => m.GetListOfUnhandledPackages() == unhandledPackagesList);
-        /*KP-4929     var chunkReader = Mock.Of<IChunkReader>(m => m.GetNumberOfSyncPackagesWithBigSize() == numberOfSyncPackagesWithBigSize);*/
-            var folderPermissionChecker = Mock.Of<IFolderPermissionChecker>(m => m.Check() == new FolderPermissionCheckResult(currentUserName, allowedFoldersList, denidedFoldersList));
+            var databaseHealthCheck = Mock.Of<IAtomicHealthCheck<RavenHealthCheckResult>>(m => m.Check() == RavenHealthCheckResult.Down(databaseErrorMessage));
+            var eventStoreHealthCheck = Mock.Of<IAtomicHealthCheck<EventStoreHealthCheckResult>>(m => m.Check() == EventStoreHealthCheckResult.Down(eventStoreErrorMessage));
+            var brokenSyncPackagesStorage = Mock.Of<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>(m => m.Check() == NumberOfUnhandledPackagesHealthCheckResult.Warning(numberOfunhandledPackages,numberOfUnhandledPackagesErrorMessage));
+            var chunkReader = Mock.Of<IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>>(m => m.Check() == NumberOfSyncPackagesWithBigSizeCheckResult.Warning(numberOfSyncPackagesWithBigSize, ""));
+            var folderPermissionChecker = Mock.Of<IAtomicHealthCheck<FolderPermissionCheckResult>>(m => m.Check() == new FolderPermissionCheckResult(HealthCheckStatus.Down, currentUserName, allowedFoldersList, denidedFoldersList));
 
             service = CreateHealthCheckService(
                 databaseHealthCheck,
                 eventStoreHealthCheck,
                 brokenSyncPackagesStorage,
-           /*KP-4929      chunkReader,*/
+                chunkReader,
                 folderPermissionChecker);
         };
 
@@ -57,11 +58,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
         It should_return_4_packages_for_NumberOfUnhandledPackages_check = () =>
             result.NumberOfUnhandledPackages.Value.ShouldEqual(numberOfunhandledPackages);
 
-      /*KP-4929   It should_return_Warning_status_for_NumberOfSyncPackagesWithBigSize_check = () =>
+      It should_return_Warning_status_for_NumberOfSyncPackagesWithBigSize_check = () =>
             result.NumberOfSyncPackagesWithBigSize.Status.ShouldEqual(HealthCheckStatus.Warning);
 
         It should_return_error_message_for_NumberOfSyncPackagesWithBigSize_check = () =>
-            result.NumberOfSyncPackagesWithBigSize.ErrorMessage.ShouldNotBeEmpty();*/
+            result.NumberOfSyncPackagesWithBigSize.ErrorMessage.ShouldNotBeEmpty();
 
         It should_return_Down_status_for_FolderPermissionCheckResult_check = () =>
             result.FolderPermissionCheckResult.Status.ShouldEqual(HealthCheckStatus.Down);
@@ -78,7 +79,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
 
         private static string   databaseErrorMessage = "database error message";
         private static string   eventStoreErrorMessage = "eventStore error message";
-    /*KP-4929     private static int      numberOfSyncPackagesWithBigSize = 5;*/
+        private static int      numberOfSyncPackagesWithBigSize = 5;
+        private static int numberOfunhandledPackages = 3;
+        private static string numberOfUnhandledPackagesErrorMessage = "numberOfUnhandledPackagesErrorMessage error message";
         private static string[] unhandledPackagesList = new[] { "package name" };
         private static string   currentUserName = "user name";
         private static string[] allowedFoldersList = new[] { "allow folder" };

@@ -29,6 +29,7 @@ using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.Synchronization;
 using WB.Core.Synchronization.EventHandler;

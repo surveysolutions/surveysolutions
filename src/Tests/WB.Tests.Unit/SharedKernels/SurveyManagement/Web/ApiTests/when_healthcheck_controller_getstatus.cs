@@ -11,18 +11,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
     {
         private Establish context = () =>
         {
-            var databaseHealthCheck = Mock.Of<IDatabaseHealthCheck>(m => m.Check() == ConnectionHealthCheckResult.Happy());
+            /*KP-4929    var databaseHealthCheck = Mock.Of<IDatabaseHealthCheck>(m => m.Check() == ConnectionHealthCheckResult.Happy());
             var eventStoreHealthCheck = Mock.Of<IEventStoreHealthCheck>(m => m.Check() == ConnectionHealthCheckResult.Happy());
             var brokenSyncPackagesStorage = Mock.Of<IBrokenSyncPackagesStorage>(m => m.GetListOfUnhandledPackages() == Enumerable.Empty<string>());
-         /*KP-4929    var chunkReader = Mock.Of<IChunkReader>(m => m.GetNumberOfSyncPackagesWithBigSize() == 0);*/
-            var folderPermissionChecker = Mock.Of<IFolderPermissionChecker>(m => m.Check() == new FolderPermissionCheckResult(null, null, null));
-
-            controller = CreateHealthCheckApiController(
-                databaseHealthCheck,
-                eventStoreHealthCheck,
-                brokenSyncPackagesStorage,
-          /*KP-4929       chunkReader,*/
-                folderPermissionChecker);
+         var chunkReader = Mock.Of<IChunkReader>(m => m.GetNumberOfSyncPackagesWithBigSize() == 0);
+            var folderPermissionChecker = Mock.Of<IFolderPermissionChecker>(m => m.Check() == new FolderPermissionCheckResult(null, null, null));*/
+            healthCheckService = new Mock<IHealthCheckService>();
+            controller = CreateHealthCheckApiController(healthCheckService.Object
+                /*KP-4929        databaseHealthCheck,
+                      eventStoreHealthCheck,
+                      brokenSyncPackagesStorage,
+                     chunkReader,
+                folderPermissionChecker*/);
         };
 
         Because of = () =>
@@ -37,13 +37,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
             result.ShouldEqual(checkResults.Status);
 
         It should_call_IHealthCheckService_Check_once = () =>
-            serviceMock.Verify(x => x.Check(), Times.Once());
+            healthCheckService.Verify(x => x.Check(), Times.Once());
 
 
         private static HealthCheckResults checkResults;
         private static HealthCheckStatus result;
-        private static Mock<IHealthCheckService> serviceMock;
         private static HealthCheckApiController controller;
+
+        private static Mock<IHealthCheckService> healthCheckService;
 
     }
 }
