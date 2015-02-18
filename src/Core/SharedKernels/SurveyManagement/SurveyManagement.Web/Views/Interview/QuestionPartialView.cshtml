@@ -224,17 +224,12 @@
 
         @if (!Model.IsValid)
         {
-            if (!string.IsNullOrEmpty(Model.ValidationExpression))
-            {
-                <div class="row-fluid"><small class="text-error"><b>Expression:</b> @Model.ValidationExpression</small></div>
-            }
-
-            if (string.IsNullOrEmpty(Model.ValidationMessage))
-            {
-                <div class="row-fluid"><small class="text-error"><b>Message:</b> @Model.ValidationMessage</small></div>
-            }
+            <small class="text-error">@Model.ValidationExpression</small>
+            <small class="text-error">@Model.ValidationMessage</small>
         }
     </td>
+
+
 
     <td class="comments col-sm-3">
         <dl id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, "commentList")" class="@css("hidden", Model.Comments == null || Model.Comments.Count == 0)">
