@@ -32,8 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewControllerTests
                 revalidateInterviewViewFactory ?? Mock.Of<IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView>>(),
                 interviewSummaryViewFactory ?? Stub<IInterviewSummaryViewFactory>.WithNotEmptyValues,
                 Mock.Of<IInterviewHistoryFactory>(),
-                interviewDetailsViewFactory ?? Mock.Of<IInterviewDetailsViewFactory>(),
-                incomingSyncPackagesQueue ?? Mock.Of<IIncomingSyncPackagesQueue>());
+                interviewDetailsViewFactory ?? Mock.Of<IInterviewDetailsViewFactory>());
         }
     }
 }

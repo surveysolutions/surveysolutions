@@ -5,6 +5,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
+using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
@@ -21,9 +22,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
             return new UserView() { PublicKey = userId, UserName = userName };
         }
 
-        protected static InterviewDetailsView CreateInterviewDetailsView(Guid interviewId)
+        protected static DetailsViewModel CreateInterviewDetailsView(Guid interviewId)
         {
-            return new InterviewDetailsView() { PublicKey = interviewId };
+            return new DetailsViewModel() {InterviewDetails = new InterviewDetailsView() {PublicKey = interviewId}};
         }
 
         protected static UsersController CreateUsersController(
@@ -54,12 +55,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         protected static InterviewsController CreateInterviewsController(
             ILogger logger = null,
             IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewViewFactory = null,
-            IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsView = null)
+            IInterviewDetailsViewFactory interviewDetailsView = null)
         {
             return new InterviewsController(
                 logger ?? Mock.Of<ILogger>(),
                 allInterviewsViewViewFactory ?? Mock.Of<IViewFactory<AllInterviewsInputModel, AllInterviewsView>>(),
-                interviewDetailsView ?? Mock.Of<IViewFactory<InterviewDetailsInputModel, InterviewDetailsView>>(), Mock.Of<IInterviewHistoryFactory>());
+                interviewDetailsView ?? Mock.Of<IInterviewDetailsViewFactory>(), Mock.Of<IInterviewHistoryFactory>());
         }
 
         protected static HealthCheckApiController CreateHealthCheckApiController(

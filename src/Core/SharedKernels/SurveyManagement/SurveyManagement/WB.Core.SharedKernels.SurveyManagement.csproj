@@ -250,8 +250,11 @@
     <Compile Include="Views\DataExport\InterviewDataExportView.cs" />
     <Compile Include="Views\DataExport\InterviewExportedLevel.cs" />
     <Compile Include="Views\DataExport\RecordFirstAnswerMarkerView.cs" />
+    <Compile Include="Views\DetailsStatisticView.cs" />
+    <Compile Include="Views\DetailsViewModel.cs" />
     <Compile Include="Views\Device\RegisterData.cs" />
     <Compile Include="ValueObjects\HealthCheck\NumberOfUnhandledPackagesHealthCheckResult.cs" />
+    <Compile Include="Views\InterviewDetailsFilter.cs" />
     <Compile Include="Views\InterviewHistory\IInterviewHistoryFactory.cs" />
     <Compile Include="Views\InterviewHistory\InterviewHistoricalAction.cs" />
     <Compile Include="Views\InterviewHistory\InterviewHistoricalRecordView.cs" />
@@ -289,12 +292,12 @@
     <Compile Include="Views\Interview\InterviewData.cs" />
     <Compile Include="Views\Interview\InterviewDetailsForChart.cs" />
     <Compile Include="Views\Interview\InterviewDetailsInputModel.cs" />
+    <Compile Include="Views\Interview\InterviewDetailsViewFactory.cs" />
     <Compile Include="Views\Interview\InterviewEntityView.cs" />
     <Compile Include="Views\Interview\InterviewStaticTextView.cs" />
     <Compile Include="Views\Interview\InterviewSummaryViewFactory.cs" />
     <Compile Include="Views\Interview\InterviewSummaryForMapPointView.cs" />
     <Compile Include="Views\Interview\InterviewDetailsView.cs" />
-    <Compile Include="Views\Interview\InterviewDetailsViewFactory.cs" />
     <Compile Include="Views\Interview\InterviewFeaturedQuestion.cs" />
     <Compile Include="Synchronization\Interview\InterviewFeedEntry.cs" />
     <Compile Include="Views\Interview\InterviewGroupView.cs" />

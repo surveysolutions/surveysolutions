@@ -1,4 +1,4 @@
-﻿namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
+namespace WB.Core.SharedKernels.SurveyManagement.Views
 {
     public class DetailsStatisticView
     {
