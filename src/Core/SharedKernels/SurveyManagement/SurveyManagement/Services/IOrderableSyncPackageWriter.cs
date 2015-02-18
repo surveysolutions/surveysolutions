@@ -5,7 +5,7 @@ using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Services
 {
-    public interface IOrderableSyncPackageWriter<T> : IReadSideRepositoryWriter<T>, IReadSideRepositoryCleaner, IReadSideRepositoryWriter
+    public interface IOrderableSyncPackageWriter<T> : IReadSideRepositoryWriter<T>, IReadSideRepositoryCleaner, IChacheableRepositoryWriter
         where T : class, IReadSideRepositoryEntity, IIndexedView
     {
         long GetNextOrder();

@@ -14,14 +14,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Reposit
         where T : class, IReadSideRepositoryEntity, IIndexedView
     {
         private long currentSortIndex = 1;
-        private readonly IReadSideRepositoryWriter writer;
+        private readonly IChacheableRepositoryWriter writer;
         private readonly IReadSideRepositoryWriter<T> readSideRepositoryWriter;
         private readonly IQueryableReadSideRepositoryReader<T> packageStorageReader;
         public OrderableSyncPackageWriter(
             IReadSideRepositoryWriter<T> readSideRepositoryWriter, 
             IQueryableReadSideRepositoryReader<T> packageStorageReader)
         {
-            this.writer = readSideRepositoryWriter as IReadSideRepositoryWriter;
+            this.writer = readSideRepositoryWriter as IChacheableRepositoryWriter;
             this.readSideRepositoryWriter = readSideRepositoryWriter;
             this.packageStorageReader = packageStorageReader;
         }
