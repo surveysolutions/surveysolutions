@@ -150,11 +150,8 @@
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
     <Compile Include="Models\DeleteQuestionnaireRequestModel.cs" />
     <Compile Include="Models\AllQuestionnairesRequestModel.cs" />
-    <Compile Include="Models\DetailsStatisticView.cs" />
     <Compile Include="Models\EventHandlerDescriptionModel.cs" />
     <Compile Include="Models\ImportQuestionnaireRequest.cs" />
-    <Compile Include="Models\InterviewDetailsFilter.cs" />
-    <Compile Include="Models\DetailsViewModel.cs" />
     <Compile Include="Models\RebuildReadSideInputViewModel.cs" />
     <Compile Include="Models\RebuildReadSideType.cs" />
     <Compile Include="Resources\InterviewerSyncStrings.Designer.cs">
