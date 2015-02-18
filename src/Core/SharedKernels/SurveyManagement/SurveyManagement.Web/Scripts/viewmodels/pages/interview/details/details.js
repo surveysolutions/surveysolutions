@@ -31,16 +31,16 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
         self.SendCommand(command, function () {
             commentInputElement.val('');
 
+            var commentInfo = { userName: settings.UserName, comment: comment, date: new Date() };
+            var commentTemplate = $("<div/>").html($('#comment-template').html())[0];
+            ko.applyBindings(commentInfo, commentTemplate);
+
             var commentListElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "commentList"));
             if (commentListElement.children().length == 0) {
                 var commentsCounterElement = $("#commentsCounter");
                 commentsCounterElement.text(parseInt(commentsCounterElement.text()) + 1);
             }
-
-            var commentInfo = { userName: settings.UserName, comment: comment, date: new Date() };
-            var commentTemplate = $("<div/>").html($('#comment-template').html())[0];
-            ko.applyBindings(commentInfo, commentTemplate);
-
+            commentListElement.removeClass("hidden");
             commentListElement.append($(commentTemplate).html());
         });
     };
