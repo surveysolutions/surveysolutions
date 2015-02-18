@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
+namespace WB.Core.SharedKernels.SurveyManagement.Views
 {
     public class DetailsViewModel
     {

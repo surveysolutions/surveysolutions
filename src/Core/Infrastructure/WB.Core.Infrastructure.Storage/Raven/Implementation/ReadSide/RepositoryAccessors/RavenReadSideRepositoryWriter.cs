@@ -12,9 +12,12 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         IReadSideRepositoryWriter<TEntity>, IReadSideRepositoryCleaner
         where TEntity : class, IReadSideRepositoryEntity
     {
-        public RavenReadSideRepositoryWriter(IDocumentStore ravenStore)
+        private readonly RavenReadSideRepositoryWriterSettings ravenReadSideRepositoryWriterSettings;
+
+        public RavenReadSideRepositoryWriter(IDocumentStore ravenStore, RavenReadSideRepositoryWriterSettings ravenReadSideRepositoryWriterSettings)
             : base(ravenStore)
         {
+            this.ravenReadSideRepositoryWriterSettings = ravenReadSideRepositoryWriterSettings;
         }
 
         public TEntity GetById(string id)
@@ -34,7 +37,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         public void BulkStore(List<Tuple<TEntity, string>> bulk)
         {
-            using (var bulkOperation = this.RavenStore.BulkInsert(options: new BulkInsertOptions{OverwriteExisting = true, BatchSize = 256}))
+            using (var bulkOperation = this.RavenStore.BulkInsert(options: new BulkInsertOptions { OverwriteExisting = true, BatchSize = ravenReadSideRepositoryWriterSettings .BulkInsertBatchSize}))
             {
                 foreach (var bulkItem in bulk)
                 {

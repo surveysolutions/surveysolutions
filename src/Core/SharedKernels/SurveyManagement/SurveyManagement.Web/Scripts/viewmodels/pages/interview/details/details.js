@@ -31,25 +31,17 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
         self.SendCommand(command, function () {
             commentInputElement.val('');
 
+            var commentInfo = { userName: settings.UserName, comment: comment, date: new Date() };
+            var commentTemplate = $("<div/>").html($('#comment-template').html())[0];
+            ko.applyBindings(commentInfo, commentTemplate);
+
             var commentListElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "commentList"));
             if (commentListElement.children().length == 0) {
                 var commentsCounterElement = $("#commentsCounter");
                 commentsCounterElement.text(parseInt(commentsCounterElement.text()) + 1);
             }
-            var commentDate = new Date();
-            var commentHeaderElement = $('<dt/>');
-            var commentDateElement = $('<dd/>');
-            var commentElement = $('<span class="text-normal"/>');
-
-            commentListElement.append(commentHeaderElement);
-            commentListElement.append(commentDateElement);
             commentListElement.removeClass("hidden");
-
-            commentHeaderElement.append(settings.UserName);
-            commentHeaderElement.append(' ');
-            commentHeaderElement.append(commentElement);
-            commentDateElement.html('<small class="comment-date" date="' + commentDate + '">' + moment(commentDate).fromNow() + '</small>');
-            commentElement.text(comment);
+            commentListElement.append($(commentTemplate).html());
         });
     };
 
@@ -97,11 +89,18 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
             return option.value == filteredCombobox.selectedValue().id();
         });
 
+        var chooseOneOfSuggestedValuesError = "Choose one of suggested values";
+
+        if (_.isEmpty(answer)) {
+            self.ShowError(chooseOneOfSuggestedValuesError);
+            return;
+        }
+
         var observableSelectedOptionId = ko.observable(answerLabel).extend({
             required: true,
             equal: {
                 params: answer.label,
-                message: "Choose one of suggested values"
+                message: chooseOneOfSuggestedValuesError
             }
         });
 
@@ -197,7 +196,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
                 },
                 {
                     validator: function (val) {
-                        if (_.isUndefined(maxAllowedAnswers) || _.isNull(maxAllowedAnswers)) {
+                        if (_.isUndefined(maxAllowedAnswers) || _.isNull(maxAllowedAnswers) || !_.isNumber(maxAllowedAnswers)) {
                             return true;
                         }
 

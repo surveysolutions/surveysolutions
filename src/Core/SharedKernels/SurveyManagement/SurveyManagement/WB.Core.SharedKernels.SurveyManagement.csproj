@@ -138,7 +138,8 @@
     <Compile Include="Implementation\Factories\ExportViewFactory.cs" />
     <Compile Include="Implementation\Factories\ReferenceInfoForLinkedQuestionsFactory.cs" />
     <Compile Include="Implementation\Factories\PreloadedDataServiceFactory.cs" />
-    <Compile Include="Implementation\FolderPermissionChecker.cs" />
+    <Compile Include="Implementation\Services\HealthCheck\Checks\RavenHealthCheck.cs" />
+    <Compile Include="Implementation\Services\HealthCheck\Checks\FolderPermissionChecker.cs" />
     <Compile Include="Implementation\IRecordsAccessor.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\InterviewsSearchIndex.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\SeachIndexContent.cs" />
@@ -146,6 +147,7 @@
     <Compile Include="Implementation\Services\DataExport\CsvWriterService.cs" />
     <Compile Include="Implementation\Services\DataExport\FileBasedDataExportRepositorySettings.cs" />
     <Compile Include="Implementation\Services\DataExport\FilebasedExportedDataAccessor.cs" />
+    <Compile Include="Implementation\Services\HealthCheck\Checks\IAtomicHealthCheck.cs" />
     <Compile Include="Implementation\Services\QuestionnaireUpgradeService.cs" />
     <Compile Include="Implementation\Services\DataExport\SqlDataExportWriter.cs" />
     <Compile Include="Implementation\Services\DataExport\SqlToTabDataExportService.cs" />
@@ -194,6 +196,17 @@
     </Compile>
     <Compile Include="Services\Export\IDataExportService.cs" />
     <Compile Include="Services\Export\IFilebasedExportedDataAccessor.cs" />
+    <Compile Include="Implementation\Services\HealthCheck\Checks\EventStoreHealthCheck.cs" />
+    <Compile Include="Implementation\Services\HealthCheck\Checks\NumberOfUnhandledPackagesChecker.cs" />
+    <Compile Include="Implementation\Services\HealthCheck\Checks\NumberOfSyncPackagesWithBigSizeChecker.cs" />
+    <Compile Include="ValueObjects\HealthCheck\NumberOfSyncPackagesWithBigSizeCheckResult.cs" />
+    <Compile Include="ValueObjects\HealthCheck\RavenHealthCheckResult.cs" />
+    <Compile Include="ValueObjects\HealthCheck\HealthCheckResults.cs" />
+    <Compile Include="ValueObjects\HealthCheck\EventStoreHealthCheckResult.cs" />
+    <Compile Include="ValueObjects\HealthCheck\FolderPermissionCheckResult.cs" />
+    <Compile Include="ValueObjects\HealthCheck\HealthCheckStatus.cs" />
+    <Compile Include="Implementation\Services\HealthCheck\HealthCheckService.cs" />
+    <Compile Include="Services\HealthCheck\IHealthCheckService.cs" />
     <Compile Include="Services\ICsvWriterService.cs" />
     <Compile Include="Services\IDataExportRepositoryWriter.cs" />
     <Compile Include="Services\IDataExportWriter.cs" />
@@ -241,7 +254,11 @@
     <Compile Include="Views\DataExport\InterviewDataExportView.cs" />
     <Compile Include="Views\DataExport\InterviewExportedLevel.cs" />
     <Compile Include="Views\DataExport\RecordFirstAnswerMarkerView.cs" />
+    <Compile Include="Views\DetailsStatisticView.cs" />
+    <Compile Include="Views\DetailsViewModel.cs" />
     <Compile Include="Views\Device\RegisterData.cs" />
+    <Compile Include="ValueObjects\HealthCheck\NumberOfUnhandledPackagesHealthCheckResult.cs" />
+    <Compile Include="Views\InterviewDetailsFilter.cs" />
     <Compile Include="Views\InterviewHistory\IInterviewHistoryFactory.cs" />
     <Compile Include="Views\InterviewHistory\InterviewHistoricalAction.cs" />
     <Compile Include="Views\InterviewHistory\InterviewHistoricalRecordView.cs" />
@@ -278,12 +295,12 @@
     <Compile Include="Views\Interview\InterviewData.cs" />
     <Compile Include="Views\Interview\InterviewDetailsForChart.cs" />
     <Compile Include="Views\Interview\InterviewDetailsInputModel.cs" />
+    <Compile Include="Views\Interview\InterviewDetailsViewFactory.cs" />
     <Compile Include="Views\Interview\InterviewEntityView.cs" />
     <Compile Include="Views\Interview\InterviewStaticTextView.cs" />
     <Compile Include="Views\Interview\InterviewSummaryViewFactory.cs" />
     <Compile Include="Views\Interview\InterviewSummaryForMapPointView.cs" />
     <Compile Include="Views\Interview\InterviewDetailsView.cs" />
-    <Compile Include="Views\Interview\InterviewDetailsViewFactory.cs" />
     <Compile Include="Views\Interview\InterviewFeaturedQuestion.cs" />
     <Compile Include="Synchronization\Interview\InterviewFeedEntry.cs" />
     <Compile Include="Views\Interview\InterviewGroupView.cs" />
@@ -429,9 +446,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Denormalizer\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

@@ -1,17 +1,13 @@
-﻿using System.Linq;
-using Machine.Specifications;
+﻿using Machine.Specifications;
 using Moq;
-using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.HealthCheck;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
-using WB.Core.Synchronization.SyncStorage;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
 {
-    internal class when_healthcheck_controller_getverbosestatus_when_there_are_any_errors : ApiTestContext
+    internal class when_healthcheck_service_check_when_there_are_any_errors : HealthCheckTestContext
     {
         private Establish context = () =>
         {
@@ -21,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         /*KP-4929     var chunkReader = Mock.Of<IChunkReader>(m => m.GetNumberOfSyncPackagesWithBigSize() == numberOfSyncPackagesWithBigSize);*/
             var folderPermissionChecker = Mock.Of<IFolderPermissionChecker>(m => m.Check() == new FolderPermissionCheckResult(currentUserName, allowedFoldersList, denidedFoldersList));
 
-            controller = CreateHealthCheckApiController(
+            service = CreateHealthCheckService(
                 databaseHealthCheck,
                 eventStoreHealthCheck,
                 brokenSyncPackagesStorage,
@@ -31,11 +27,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 
         Because of = () =>
         {
-            result = controller.GetVerboseStatus();
+            result = service.Check();
         };
 
         It should_return_HealthCheckStatus = () =>
-            result.ShouldBeOfExactType<HealthCheckModel>();
+            result.ShouldBeOfExactType<HealthCheckResults>();
 
         It should_return_Down_status = () =>
             result.Status.ShouldEqual(HealthCheckStatus.Down);
@@ -55,17 +51,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         It should_return_Warning_status_for_NumberOfUnhandledPackages_check = () =>
             result.NumberOfUnhandledPackages.Status.ShouldEqual(HealthCheckStatus.Warning);
 
-        It should_return_1_package_for_NumberOfUnhandledPackages_check = () =>
-            result.NumberOfUnhandledPackages.Value.ShouldEqual(unhandledPackagesList.Length);
-
         It should_return_error_message_for_NumberOfUnhandledPackages_check = () =>
-            result.NumberOfUnhandledPackages.ErrorMessage.ShouldNotBeEmpty();
+            result.NumberOfUnhandledPackages.ErrorMessage.ShouldEqual(numberOfUnhandledPackagesErrorMessage);
+
+        It should_return_4_packages_for_NumberOfUnhandledPackages_check = () =>
+            result.NumberOfUnhandledPackages.Value.ShouldEqual(numberOfunhandledPackages);
 
       /*KP-4929   It should_return_Warning_status_for_NumberOfSyncPackagesWithBigSize_check = () =>
             result.NumberOfSyncPackagesWithBigSize.Status.ShouldEqual(HealthCheckStatus.Warning);
-
-        It should_return_5_packages_for_NumberOfSyncPackagesWithBigSize_check = () =>
-            result.NumberOfSyncPackagesWithBigSize.Value.ShouldEqual(numberOfSyncPackagesWithBigSize);
 
         It should_return_error_message_for_NumberOfSyncPackagesWithBigSize_check = () =>
             result.NumberOfSyncPackagesWithBigSize.ErrorMessage.ShouldNotBeEmpty();*/
@@ -91,8 +84,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         private static string[] allowedFoldersList = new[] { "allow folder" };
         private static string[] denidedFoldersList = new[] { "deny folder" };
 
-        private static HealthCheckModel result;
-        private static HealthCheckApiController controller;
+        private static HealthCheckResults result;
+        private static HealthCheckService service;
         
     }
 }
