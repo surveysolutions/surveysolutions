@@ -23,7 +23,7 @@
     @Scripts.Render("~/js/interview-general", "~/js/details")
     <script type="text/javascript">
         var urlReferrer = null;
-        @if (Request.UrlReferrer != null && Request.UrlReferrer.OriginalString.Contains("Interviews") && Request.UrlReferrer.OriginalString.Contains("Survey"))
+        @if (Request.UrlReferrer != null && Request.UrlReferrer.OriginalString.Contains("Interviews"))
         {
             <text>urlReferrer = '@Html.Raw(Request.UrlReferrer)';</text>
         }
@@ -34,6 +34,7 @@
 
         settings.Interview.InterviewId = '@Model.InterviewDetails.PublicKey';
         settings.Urls.CommandExecution = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "Execute"})';
+        settings.Urls.Interviews = '@(GlobalInfo.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ", new {area=""}))';
 
         var filter = { filteredBy: '@Model.Filter' };
 
