@@ -59,7 +59,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public void EnableCache()
         {
-            var readSideRepositoryWriter = storage as IReadSideRepositoryWriter;
+            var readSideRepositoryWriter = storage as IChacheableRepositoryWriter;
             if (readSideRepositoryWriter != null)
                 readSideRepositoryWriter.EnableCache();
 
@@ -69,7 +69,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public void DisableCache()
         {
-            var readSideRepositoryWriter = storage as IReadSideRepositoryWriter;
+            var readSideRepositoryWriter = storage as IChacheableRepositoryWriter;
             if (readSideRepositoryWriter != null)
                 readSideRepositoryWriter.DisableCache();
 
@@ -79,7 +79,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public string GetReadableStatus()
         {
-            var readSideRepositoryWriter = storage as IReadSideRepositoryWriter;
+            var readSideRepositoryWriter = storage as IChacheableRepositoryWriter;
             if (readSideRepositoryWriter != null)
                 return readSideRepositoryWriter.GetReadableStatus();
             return "";

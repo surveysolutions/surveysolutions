@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
@@ -17,7 +16,7 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
             this.writer = readSideStorage;
         }
 
-        protected override void StoreBulkEntitiesToRepository(List<string> bulk)
+        protected override void StoreBulkEntitiesToRepository(IEnumerable<string> bulk)
         {
             var entitiesToStore = new List<Tuple<TEntity, string>>();
             foreach (var entityId in bulk)
@@ -31,11 +30,16 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
                 {
                     entitiesToStore.Add(Tuple.Create(entity, entityId));
                 }
+
                 cache.Remove(entityId);
             }
 
-            writer.BulkStore(entitiesToStore);
+            this.writer.BulkStore(entitiesToStore);
         }
 
+        public void BulkStore(List<Tuple<TEntity, string>> bulk)
+        {
+            this.writer.BulkStore(bulk);
+        }
     }
 }

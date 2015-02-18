@@ -261,6 +261,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_cloned_numeric_integer_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_cloned_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_title_has_invalid_characters.cs" />
+    <Compile Include="Infrastructure\MemoryCachedReadSideRepositoryWriterTests\when_inserting_last_item_in_store.cs" />
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\MemoryCachedReadSideStoreTestContext.cs" />
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_Clear_called.cs" />
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_disable_cache_is_called.cs" />
