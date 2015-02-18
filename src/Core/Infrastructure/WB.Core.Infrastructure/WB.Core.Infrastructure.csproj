@@ -161,7 +161,7 @@
     <Compile Include="Ncqrs\Utils.cs" />
     <Compile Include="PlainStorage\IPlainStorageAccessor.cs" />
     <Compile Include="PlainStorage\IQueryablePlainStorageAccessor.cs" />
-    <Compile Include="ReadSide\IReadSideRepositoryWriter.cs" />
+    <Compile Include="ReadSide\IChacheableRepositoryWriter.cs" />
     <Compile Include="ReadSide\IReadSideAdministrationService.cs" />
     <Compile Include="ReadSide\IReadSideStatusService.cs" />
     <Compile Include="ReadSide\IViewFactory.cs" />
