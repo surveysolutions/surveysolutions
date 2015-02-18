@@ -1,6 +1,8 @@
 using System;
 using Machine.Specifications;
 using Moq;
+using WB.Core.SharedKernels.SurveyManagement.Views;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -15,7 +17,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
             var globalInfoProvider = Mock.Of<IGlobalInfoProvider>(_
                 => _.IsHeadquarter == true);
 
-            controller = CreateController(globalInfoProvider: globalInfoProvider);
+            var interviewDetailsViewFactory =
+                Mock.Of<IInterviewDetailsViewFactory>(
+                    x =>
+                        x.GetInterviewDetails(Moq.It.IsAny<Guid>(), Moq.It.IsAny<Guid?>(), Moq.It.IsAny<decimal[]>(),
+                            Moq.It.IsAny<InterviewDetailsFilter?>()) ==
+                        new DetailsViewModel() {InterviewDetails = new InterviewDetailsView()});
+
+            controller = CreateController(globalInfoProvider: globalInfoProvider, interviewDetailsFactory: interviewDetailsViewFactory);
         };
 
         Because of = () =>
