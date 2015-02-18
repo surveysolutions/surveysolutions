@@ -189,6 +189,9 @@
   <data name="ImportQuestionnaire_VerifyOnServer" xml:space="preserve">
     <value>Checking questionnaire for errors on the server</value>
   </data>
+  <data name="InternalServerError" xml:space="preserve">
+    <value>At the moment, the server is unavailable. We apologize for any inconvenience. Server will be restored in the near future</value>
+  </data>
   <data name="LastModifiedDateTitle" xml:space="preserve">
     <value>Modified on:</value>
   </data>
