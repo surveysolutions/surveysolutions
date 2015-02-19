@@ -79,6 +79,7 @@
     <Compile Include="IIncomingSyncPackagesQueue.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\InterviewSyncPackagesByBriefFields.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\QuestionnaireSyncPackagesByBriefFields.cs" />
+    <Compile Include="Implementation\ReadSide\Indexes\SynchronizationDeltasByRecordSize.cs" />
     <Compile Include="IncomingSyncPackage.cs" />
     <Compile Include="IncomingSyncPackageException.cs" />
     <Compile Include="ISyncPackagesProcessor.cs" />
