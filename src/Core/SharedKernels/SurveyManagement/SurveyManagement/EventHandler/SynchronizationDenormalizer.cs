@@ -86,14 +86,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             }
             else
             {
-                if (this.IsNewStatusCompletedOrDeleted(newStatus) && this.IsInterviewWereRejectedAtLeastOnceBeboreOrNotCreateOnClient(evnt.EventSourceId))
-                    this.syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, null, evnt.EventTimeStamp);
+                if (this.IsNewStatusCompletedOrDeleted(newStatus))
+                {
+                    var interviewSummary = interviewSummarys.GetById(evnt.EventSourceId);
+                    if (interviewSummary == null)
+                        return;
+
+                    if (this.IsInterviewWereRejectedAtLeastOnceBeboreOrNotCreateOnClient(interviewSummary))
+                        this.syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, interviewSummary.ResponsibleId, evnt.EventTimeStamp);
+                }
             }
         }
 
         public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
         {
-            if (this.IsInterviewWereRejectedAtLeastOnceBeboreOrNotCreateOnClient(evnt.EventSourceId))
+            var interviewSummary = interviewSummarys.GetById(evnt.EventSourceId);
+            if (interviewSummary == null)
+                return;
+
+            if (this.IsInterviewWereRejectedAtLeastOnceBeboreOrNotCreateOnClient(interviewSummary))
             {
                 var interviewWithVersion = interviews.GetById(evnt.EventSourceId);
                 if (interviewWithVersion == null)
@@ -233,12 +244,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return newStatus == InterviewStatus.Completed || newStatus == InterviewStatus.Deleted;
         }
 
-        private bool IsInterviewWereRejectedAtLeastOnceBeboreOrNotCreateOnClient(Guid interviewId)
+        private bool IsInterviewWereRejectedAtLeastOnceBeboreOrNotCreateOnClient(InterviewSummary interviewSummary)
         {
-            var interviewSummary = interviewSummarys.GetById(interviewId);
-            if (interviewSummary == null)
-                return false;
-
             return !interviewSummary.WasCreatedOnClient ||
                 interviewSummary.CommentedStatusesHistory.Any(s => s.Status == InterviewStatus.RejectedBySupervisor);
         }
