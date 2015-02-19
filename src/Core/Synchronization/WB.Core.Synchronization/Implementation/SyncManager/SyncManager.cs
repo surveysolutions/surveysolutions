@@ -102,10 +102,10 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         {
             this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
-            var updateFromLastPakageByQuestionnaire =
-                this.GetUpdateFromLastPackage(lastSyncedPackageId, this.indexAccessor.Query<QuestionnaireSyncPackageMetaInformation>(questionnireQueryIndexName))
-                .Select(x => new SynchronizationChunkMeta(x.PackageId, x.SortIndex, null, x.ItemType))
-                .ToList();
+            var allFromLastPakageByQuestionnaire =
+                this.GetUpdateFromLastPackage(lastSyncedPackageId, this.indexAccessor.Query<QuestionnaireSyncPackageMetaInformation>(questionnireQueryIndexName));
+
+            var updateFromLastPakageByQuestionnaire = FilterDeletedQuestionnaires(allFromLastPakageByQuestionnaire);
 
             this.TrackArIdsRequestIfNeeded(userId, deviceId, SyncItemType.Questionnaire, lastSyncedPackageId, updateFromLastPakageByQuestionnaire);
 
@@ -114,6 +114,8 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                 SyncPackagesMeta = updateFromLastPakageByQuestionnaire
             };
         }
+
+       
 
         public SyncItemsMetaContainer GetUserArIdsWithOrder(Guid userId, Guid deviceId, string lastSyncedPackageId)
         {
@@ -128,7 +130,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
             return new SyncItemsMetaContainer
             {
-                SyncPackagesMeta = updateFromLastPakageByUser
+                SyncPackagesMeta = updateFromLastPakageByUser.Skip(Math.Max(0, updateFromLastPakageByUser.Count() - 1)).Take(1)
             };
         }
 
@@ -202,6 +204,31 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                        Content = packageMetaInformation.Content,
                        MetaInfo = packageMetaInformation.MetaInfo
                    };
+        }
+
+        private List<SynchronizationChunkMeta> FilterDeletedQuestionnaires(IList<QuestionnaireSyncPackageMetaInformation> packages)
+        {
+            Func<Guid, long, string> stringifyId = (questionnaireId, questionnaireVersion) => string.Format("{0}-{1}", questionnaireId.FormatGuid(), questionnaireVersion);
+            
+            var deletedMap = packages
+                .Where(x => x.ItemType == SyncItemType.DeleteQuestionnaire)
+                .GroupBy(x => stringifyId(x.QuestionnaireId, x.QuestionnaireVersion))
+                .ToDictionary(x => x.Key, x => x.Max(y => y.SortIndex));
+
+            var packagesToSkip = packages
+                .Select(x => new
+                        {
+                            x.PackageId, 
+                            Id = stringifyId(x.QuestionnaireId, x.QuestionnaireVersion), 
+                            x.SortIndex
+                        })
+                .Where(x => deletedMap.ContainsKey(x.Id) && x.SortIndex < deletedMap[x.Id])
+                .Select(x => x.PackageId);
+
+            return packages
+                .Where(x => !packagesToSkip.Contains(x.PackageId))
+                .Select(x => new SynchronizationChunkMeta(x.PackageId, x.SortIndex, Guid.Empty, x.ItemType))
+                .ToList();
         }
 
         private List<SynchronizationChunkMeta> FilterInterviews(IList<InterviewSyncPackageMetaInformation> packages)

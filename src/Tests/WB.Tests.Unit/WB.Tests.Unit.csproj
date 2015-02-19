@@ -299,6 +299,7 @@
     <Compile Include="Core\Synchronization\when_getting_user_ids_and_device_is_not_registered.cs" />
     <Compile Include="Core\Synchronization\when_getting_user_ids_and_device_is_registered_and_last_package_id_is_empty.cs" />
     <Compile Include="Core\Synchronization\when_getting_user_ids_and_device_is_registered_and_last_package_id_is_not_empty.cs" />
+    <Compile Include="Core\Synchronization\when_getting_user_ids_and_device_is_registered_and_last_package_id_is_not_empty_but_no_more_packages.cs" />
     <Compile Include="Core\Synchronization\when_getting_user_sync_package_and_device_is_not_registered.cs" />
     <Compile Include="Core\Synchronization\when_getting_user_sync_package_and_device_is_registered_and_package_is_absent.cs" />
     <Compile Include="Core\Synchronization\when_getting_user_sync_package_and_device_is_registered_and_package_is_present.cs" />
