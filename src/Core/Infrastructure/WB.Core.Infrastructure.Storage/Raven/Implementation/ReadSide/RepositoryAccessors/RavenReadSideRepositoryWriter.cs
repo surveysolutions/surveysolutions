@@ -97,13 +97,6 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
                 }, new BulkOperationOptions {AllowStale = false}).WaitForCompletion();
         }
 
-        public void ClearAll()
-        {
-            string ravenDbName = ((DocumentStore)this.RavenStore).DefaultDatabase;
-            this.RavenStore.DatabaseCommands.GlobalAdmin.DeleteDatabase(ravenDbName, hardDelete: true);
-            this.RavenStore.DatabaseCommands.GlobalAdmin.EnsureDatabaseExists(ravenDbName, ignoreFailures: false);
-        }
-
         protected override TResult QueryImpl<TResult>(Func<IRavenQueryable<TEntity>, TResult> query)
         {
             throw new NotImplementedException();

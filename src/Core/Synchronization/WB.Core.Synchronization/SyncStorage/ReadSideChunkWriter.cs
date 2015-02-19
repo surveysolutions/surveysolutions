@@ -57,13 +57,6 @@ namespace WB.Core.Synchronization.SyncStorage
                 readSideRepositoryCleaner.Clear();
         }
 
-        public void ClearAll()
-        {
-            var readSideRepositoryCleaner = storage as IReadSideRepositoryCleaner;
-            if (readSideRepositoryCleaner != null)
-                readSideRepositoryCleaner.ClearAll();
-        }
-
         public void EnableCache()
         {
             var readSideRepositoryWriter = storage as IChacheableRepositoryWriter;

@@ -60,13 +60,6 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
                 readSideRepositoryCleaner.Clear();
         }
 
-        public void ClearAll()
-        {
-            var readSideRepositoryCleaner = readSideStorage as IReadSideRepositoryCleaner;
-            if (readSideRepositoryCleaner != null)
-                readSideRepositoryCleaner.ClearAll();
-        }
-
         public TEntity GetById(string id)
         {
             return this.isCacheEnabled
