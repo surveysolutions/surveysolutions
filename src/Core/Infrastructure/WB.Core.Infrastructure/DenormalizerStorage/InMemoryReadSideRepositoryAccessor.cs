@@ -78,10 +78,5 @@ namespace Main.DenormalizerStorage
         {
            this.repository.Clear();
        }
-
-        public void ClearAll()
-        {
-            this.Clear();
-        }
     }
 }

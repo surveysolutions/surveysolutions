@@ -12,6 +12,7 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Services;
 
 namespace WB.Core.Infrastructure.Implementation.ReadSide
 {
@@ -40,6 +41,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         private readonly IStreamableEventStore eventStore;
         private readonly IEventDispatcher eventBus;
         private readonly ILogger logger;
+        private readonly IRavenReadSideRepositoryCleaner ravenReadSideRepositoryCleaner;
         private Dictionary<IEventHandler, Stopwatch> handlersWithStopwatches;
 
         static ReadSideService()
@@ -47,7 +49,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             UpdateStatusMessage("No administration operations were performed so far.");
         }
 
-        public ReadSideService(IStreamableEventStore eventStore, IEventDispatcher eventBus, ILogger logger)
+        public ReadSideService(IStreamableEventStore eventStore, IEventDispatcher eventBus, ILogger logger, IRavenReadSideRepositoryCleaner ravenReadSideRepositoryCleaner)
         {
             if (InstanceCount > 0)
                 throw new Exception(string.Format("Trying to create a new instance of RavenReadSideService when following count of instances exists: {0}.", InstanceCount));
@@ -57,6 +59,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             this.eventStore = eventStore;
             this.eventBus = eventBus;
             this.logger = logger;
+            this.ravenReadSideRepositoryCleaner = ravenReadSideRepositoryCleaner;
         }
 
         #region IReadLayerStatusService implementation
@@ -387,16 +390,15 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                   .Distinct()
                   .ToArray();
 
+            if(!isPartiallyRebuild && this.ravenReadSideRepositoryCleaner != null) this.ravenReadSideRepositoryCleaner.ReCreateViewDatabase();
+
             foreach (var readSideRepositoryCleaner in cleaners)
             {
                 ThrowIfShouldStopViewsRebuilding();
 
                 var cleanerName = this.CreateViewName(readSideRepositoryCleaner);
                 UpdateStatusMessage(string.Format("Deleting views for {0}", cleanerName));
-                if (isPartiallyRebuild)
-                    readSideRepositoryCleaner.Clear();
-                else
-                    readSideRepositoryCleaner.ClearAll();
+                readSideRepositoryCleaner.Clear();
                 UpdateStatusMessage(string.Format("Views for {0} was deleted.", cleanerName));
             }
         }
