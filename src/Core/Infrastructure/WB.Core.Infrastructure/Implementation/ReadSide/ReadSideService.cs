@@ -324,6 +324,9 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 finally
                 {
                     this.DisableWritersCacheForHandlers(handlers);
+
+                    if(!isPartiallyRebuild && this.ravenReadSideRepositoryCleaner != null) 
+                        this.ravenReadSideRepositoryCleaner.CreateIndexesAfterRebuildReadSide();
                 }
 
                 UpdateStatusMessage("Rebuild specific views succeeded.");
