@@ -1,34 +1,52 @@
-using System.Collections.Generic;
 using System.Linq;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
 {
     public class UserBrowseViewFactory : IViewFactory<UserBrowseInputModel, UserBrowseView>
     {
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> documentItemSession;
+        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
 
-        public UserBrowseViewFactory(IQueryableReadSideRepositoryReader<UserDocument> documentItemSession)
+        public UserBrowseViewFactory(IReadSideRepositoryIndexAccessor indexAccessor)
         {
-            this.documentItemSession = documentItemSession;
+            this.indexAccessor = indexAccessor;
         }
 
         public UserBrowseView Load(UserBrowseInputModel input)
         {
-            int count = this.documentItemSession.Query(queryableItems => queryableItems.Count());
-            if (count == 0)
-                return new UserBrowseView(input.Page, input.PageSize, count, new UserBrowseItem[0]);
+            var indexName = typeof (UserDocumentsByBriefFields).Name;
 
-            IEnumerable<UserDocument> query =
-                documentItemSession.Query(_ => _.Where(u => input.Expression(u)))
-                    .ToList()
-                    .Skip((input.Page - 1)*input.PageSize)
-                    .Take(
-                        input.PageSize);
-            UserBrowseItem[] items = query.Select(x => new UserBrowseItem(x.PublicKey, x.UserName, x.Email, x.CreationDate, x.IsLockedBySupervisor, x.IsLockedByHQ, x.Supervisor)).ToArray();
-            return new UserBrowseView(input.Page, input.PageSize, count, items.ToArray());
+            bool anyUserExists = this.indexAccessor.Query<UserDocument>(indexName).Any(x => !x.IsDeleted);
+            if (!anyUserExists)
+            {
+                return new UserBrowseView(input.Page, input.PageSize, 0, new UserBrowseItem[0]);
+            }
+
+            var query = this.indexAccessor.Query<UserDocument>(indexName)
+                                          .Where(x => !x.IsDeleted);
+
+            if (input.Role.HasValue)
+            {
+                query = query.Where(x => x.Roles.Contains(input.Role.Value));
+            }
+
+            var pagedQuery = query.Skip((input.Page - 1) * input.PageSize)
+                                  .Take(input.PageSize);
+                
+            UserBrowseItem[] items = pagedQuery.ToList()
+                                               .Select(x => new UserBrowseItem(x.PublicKey, 
+                                                                               x.UserName, 
+                                                                               x.Email, 
+                                                                               x.CreationDate, 
+                                                                               x.IsLockedBySupervisor, 
+                                                                               x.IsLockedByHQ, 
+                                                                               x.Supervisor))
+                                               .ToArray();
+
+            return new UserBrowseView(input.Page, input.PageSize, query.Count(), items);
         }
     }
 }
