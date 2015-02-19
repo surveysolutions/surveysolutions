@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Text;
@@ -86,7 +87,7 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
         protected static void SetControllerContextWithStream(ApiController controller, Stream stream)
         {
             controller.Request = new HttpRequestMessage(HttpMethod.Post, "http://localhost");
-            controller.Configuration = new System.Web.Http.HttpConfiguration(new System.Web.Http.HttpRouteCollection());
+            controller.Configuration = new HttpConfiguration(new HttpRouteCollection());
         }
 
         protected static void SetControllerContextWithFiles(ApiController controller, Stream stream, string fileName = null)
@@ -99,7 +100,7 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             
             requestMessage.Content = content;
             controller.Request = requestMessage; 
-            controller.Configuration = new System.Web.Http.HttpConfiguration(new System.Web.Http.HttpRouteCollection());
+            controller.Configuration = new HttpConfiguration(new HttpRouteCollection());
         }
 
         protected static SyncPackageRequest CreateSyncPackageRequest(string packageId, Guid deviceId)
@@ -134,6 +135,23 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             {
                 PackageId = packageId
             };
+        }
+
+        protected static SyncItemsMetaContainer CreateSyncItemsMetaContainer()
+        {
+            return new SyncItemsMetaContainer
+                   {
+                       SyncPackagesMeta = new List<SynchronizationChunkMeta>()
+                   };
+        }
+
+        protected static SyncItemsMetaContainerRequest CreateSyncItemsMetaContainerRequest(string lastPackageId, Guid deviceId)
+        {
+            return new SyncItemsMetaContainerRequest
+                   {
+                       ClientRegistrationId = deviceId,
+                       LastSyncedPackageId = lastPackageId
+                   };
         }
     }
 }
