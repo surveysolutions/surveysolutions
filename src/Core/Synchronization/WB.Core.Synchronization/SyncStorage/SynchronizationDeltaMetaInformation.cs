@@ -12,8 +12,8 @@ namespace WB.Core.Synchronization.SyncStorage
         }
 
         public SynchronizationDeltaMetaInformation(Guid publicKey, 
-            DateTime timestamp, 
-            Guid? userId, 
+            DateTime timestamp,
+            Guid? userId, string itemType, 
             int sortIndex, int contentLength, int metaDataLength)
         {
             this.RootId = publicKey;
@@ -21,15 +21,16 @@ namespace WB.Core.Synchronization.SyncStorage
             this.Timestamp = timestamp;
             this.UserId = userId ?? Guid.Empty;
             this.SortIndex = sortIndex;
-            ContentLength = contentLength;
-            MetaDataLength = metaDataLength;
+            this.ItemType = itemType;
+            this.ContentLength = contentLength;
+            this.MetaDataLength = metaDataLength;
         }
         public Guid RootId { get; private set; }
         public string PublicKey { get; private set; }
         public DateTime Timestamp { get; private set; }
         public Guid UserId { get; private set; }
         public int SortIndex { get; private set; }
-
+        public string ItemType { get; set; }
         public int ContentLength { get; private set; }
         public int MetaDataLength { get; private set; }
     }

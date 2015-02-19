@@ -40,7 +40,7 @@ namespace WB.Core.Synchronization.SyncStorage
             }
 
             var synchronizationDelta = new SynchronizationDeltaMetaInformation(syncItem.RootId, timestamp,
-                userId, sortIndex, string.IsNullOrEmpty(syncItem.Content) ? 0 : syncItem.Content.Length,
+                userId, syncItem.ItemType, sortIndex, string.IsNullOrEmpty(syncItem.Content) ? 0 : syncItem.Content.Length,
                 string.IsNullOrEmpty(syncItem.MetaInfo) ? 0 : syncItem.MetaInfo.Length);
 
             storage.Store(synchronizationDelta, synchronizationDelta.PublicKey);

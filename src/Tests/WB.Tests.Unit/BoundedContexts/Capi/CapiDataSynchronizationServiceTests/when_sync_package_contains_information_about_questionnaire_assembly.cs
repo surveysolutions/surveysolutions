@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.Core.Synchronization.SyncStorage;
@@ -33,7 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 MetaInfo = compressor.CompressString(GetItemAsContent(meta))
             };
 
-            var item = new SynchronizationDeltaMetaInformation(syncItem.RootId, DateTime.Now, userId, 1,
+            var item = new SynchronizationDeltaMetaInformation(syncItem.RootId, DateTime.Now, userId, "q", 1,
                 syncItem.Content.Length, 0);
 
             received = new SyncItem
