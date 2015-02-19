@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TakeNew
                     .Skip(taken)
                     .Take(batchSize)
                     .ToList();
-
+                taken += batch.Count;
                 supervisorsListForViewer.AddRange(batch);
 
             } while (batch.Count == batchSize);
