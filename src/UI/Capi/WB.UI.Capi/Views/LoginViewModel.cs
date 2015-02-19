@@ -26,10 +26,10 @@ namespace WB.UI.Capi.Views
         public string Password { get; private set; }
 
         public string KnownUsers {
-            get { return string.Format("{0}: {1}", Application.Context.GetString(Resource.String.ActiveUsers), string.Join(", ", Users.Select(x => x.Name))); }
+            get { return string.Format("{0}: {1}", Application.Context.GetString(Resource.String.ActiveUsers), string.Join(", ", this.Logins)); }
         }
 
-        public List<UserLight> Users { get; private set; } 
+        public List<string> Logins { get; private set; } 
 
         private bool isLoginValid = true;
         public bool IsLoginValid
@@ -54,7 +54,7 @@ namespace WB.UI.Capi.Views
 
         public LoginActivityViewModel()
         {
-            Users = CapiApplication.Membership.GetKnownUsers().Result;
+            this.Logins = CapiApplication.Membership.GetKnownUsers().Result;
             RaisePropertyChanged(() => this.KnownUsers);
 #if DEBUG
             this.Login = "inter";

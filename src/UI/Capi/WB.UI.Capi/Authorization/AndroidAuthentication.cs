@@ -74,14 +74,14 @@ namespace WB.UI.Capi.Authorization
             }
         }
 
-        public Task<List<UserLight>> GetKnownUsers()
+        public Task<List<string>> GetKnownUsers()
         {
-            var users = this.documentStorage
+            var logins = this.documentStorage
                 .Filter(x => true)
-                .Select(x => new UserLight(Guid.Empty, x.Login))
+                .Select(x => x.Login)
                 .ToList();
 
-            return Task.FromResult(users);
+            return Task.FromResult(logins);
         }
 
         public Task<Guid?> GetUserIdByLoginIfExists(string login)
