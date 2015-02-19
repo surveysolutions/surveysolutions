@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.HQControllerTests
                 Mock.Of<IGlobalInfoProvider>(),
                 Mock.Of<ILogger>(),
                 Mock.Of<IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView>>(),
-                Mock.Of<IViewFactory<UserListViewInputModel, UserListView>>(),
+                Mock.Of<IUserListViewFactory>(),
                 sampleImportServiceMock ?? Mock.Of<ISampleImportService>(),
                 Mock.Of<IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>>(),
                 Mock.Of<IPreloadingTemplateService>(), Mock.Of<IPreloadedDataRepository>(),
