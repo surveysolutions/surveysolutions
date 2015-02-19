@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
-using Main.Core.Entities.SubEntities;
-
 using WB.Core.BoundedContexts.Capi.Implementation.Authorization;
 
 namespace WB.Core.BoundedContexts.Capi.Services
@@ -12,7 +9,7 @@ namespace WB.Core.BoundedContexts.Capi.Services
     {
         SyncCredentials? RequestSyncCredentials();
 
-        Task<List<UserLight>> GetKnownUsers();
+        Task<List<string>> GetKnownUsers();
 
         Task<Guid?> GetUserIdByLoginIfExists(string login);
     }
