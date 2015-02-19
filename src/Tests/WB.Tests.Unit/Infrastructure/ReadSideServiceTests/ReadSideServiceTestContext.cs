@@ -9,6 +9,7 @@ using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Implementation.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide;
 
 namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
@@ -16,12 +17,15 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
     [Subject(typeof(ReadSideService))]
     internal class ReadSideServiceTestContext
     {
-        protected static ReadSideService CreateRavenReadSideService(IStreamableEventStore streamableEventStore = null, IEventDispatcher eventDispatcher=null)
+        protected static ReadSideService CreateRavenReadSideService(IStreamableEventStore streamableEventStore = null,
+            IEventDispatcher eventDispatcher = null,
+            IRavenReadSideRepositoryCleaner ravenReadSideRepositoryCleaner = null)
         {
             ReadSideService.InstanceCount = 0;
 
             return new ReadSideService(streamableEventStore ?? Mock.Of<IStreamableEventStore>(),
-                eventDispatcher ?? Mock.Of<IEventDispatcher>(), Mock.Of<ILogger>());
+                eventDispatcher ?? Mock.Of<IEventDispatcher>(), Mock.Of<ILogger>(),
+                ravenReadSideRepositoryCleaner: ravenReadSideRepositoryCleaner ?? Mock.Of<IRavenReadSideRepositoryCleaner>());
         }
     }
 }
