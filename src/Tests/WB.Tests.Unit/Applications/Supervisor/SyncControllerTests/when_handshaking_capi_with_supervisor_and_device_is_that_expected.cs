@@ -30,6 +30,8 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             var userFactory = Mock.Of<IUserWebViewFactory>(x => x.Load(Moq.It.IsAny<UserWebViewInputModel>()) == user);
             var syncVersionProvider = Mock.Of<ISyncProtocolVersionProvider>(x => x.GetProtocolVersion() == supervisorVersion);
 
+            handshakePackage = Mock.Of<HandshakePackage>();
+
             syncManagerMock = new Mock<ISyncManager>();
 
             syncManagerMock.Setup(x => x.InitSync(Moq.It.IsAny<ClientIdentifier>())).Returns(handshakePackage);
