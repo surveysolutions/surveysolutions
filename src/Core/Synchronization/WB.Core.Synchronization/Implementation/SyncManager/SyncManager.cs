@@ -103,7 +103,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
             var updateFromLastPakageByQuestionnaire =
-                this.GetUpdateFromLastPakage(lastSyncedPackageId, this.indexAccessor.Query<QuestionnaireSyncPackageMetaInformation>(questionnireQueryIndexName))
+                this.GetUpdateFromLastPackage(lastSyncedPackageId, this.indexAccessor.Query<QuestionnaireSyncPackageMetaInformation>(questionnireQueryIndexName))
                 .Select(x => new SynchronizationChunkMeta(x.PackageId, x.SortIndex, null, x.ItemType))
                 .ToList();
 
@@ -120,7 +120,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
             var updateFromLastPakageByUser =
-                this.GetUpdateFromLastPakage(lastSyncedPackageId, this.indexAccessor.Query<UserSyncPackage>(userQueryIndexName).Where(x => x.UserId == userId))
+                this.GetUpdateFromLastPackage(lastSyncedPackageId, this.indexAccessor.Query<UserSyncPackage>(userQueryIndexName).Where(x => x.UserId == userId))
                 .Select(x => new SynchronizationChunkMeta(x.PackageId,x.SortIndex,x.UserId, null))
                 .ToList(); 
 
@@ -136,7 +136,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         {
             this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
-            var allUpdatesFromLastPakage = this.GetUpdateFromLastPakage(lastSyncedPackageId, this.indexAccessor.Query<InterviewSyncPackageMetaInformation>(interviewQueryIndexName).Where(x => x.UserId == userId));
+            var allUpdatesFromLastPakage = this.GetUpdateFromLastPackage(lastSyncedPackageId, this.indexAccessor.Query<InterviewSyncPackageMetaInformation>(interviewQueryIndexName).Where(x => x.UserId == userId));
 
             var updateFromLastPakageByInterview = FilterInterviews(allUpdatesFromLastPakage);
 
@@ -204,7 +204,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                    };
         }
 
-        private List<SynchronizationChunkMeta> FilterInterviews(List<InterviewSyncPackageMetaInformation> packages)
+        private List<SynchronizationChunkMeta> FilterInterviews(IList<InterviewSyncPackageMetaInformation> packages)
         {
             var lastInterviewPackageMap = packages
                 .GroupBy(x => x.InterviewId)
@@ -216,11 +216,12 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                 .ToList();
         }
 
-        private List<T> GetUpdateFromLastPakage<T>(string lastSyncedPackageId, IQueryable<T> items) where T : ISyncPackage
+        private IList<T> GetUpdateFromLastPackage<T>(string lastSyncedPackageId, IQueryable<T> items) where T : ISyncPackage
         {
             if (lastSyncedPackageId == null)
             {
-                return items.OrderBy(x => x.SortIndex).ToList();
+                return items.OrderBy(x => x.SortIndex)
+                    .QueryAll();
             }
 
             var lastSyncedPackage = items.FirstOrDefault(x => x.PackageId == lastSyncedPackageId);
@@ -235,7 +236,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             var orderedPackages = items
                 .Where(x => x.SortIndex > lastSyncedSortIndex)
                 .OrderBy(x => x.SortIndex)
-                .ToList();
+                .QueryAll();
 
             return orderedPackages;
         }
