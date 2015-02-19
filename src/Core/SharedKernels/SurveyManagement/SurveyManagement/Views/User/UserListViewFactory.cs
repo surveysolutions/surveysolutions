@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Main.Core.Entities.SubEntities;
+﻿using System.Linq;
 using Raven.Client;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
@@ -12,34 +10,41 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
 {
     public class UserListViewFactory : IViewFactory<UserListViewInputModel, UserListView>
     {
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> userStore;
         private readonly IReadSideRepositoryIndexAccessor readSideRepositoryIndexAccessor;
-        public UserListViewFactory(IQueryableReadSideRepositoryReader<UserDocument> users, IReadSideRepositoryIndexAccessor readSideRepositoryIndexAccessor)
+
+        public UserListViewFactory(IReadSideRepositoryIndexAccessor readSideRepositoryIndexAccessor)
         {
-            this.userStore = users;
             this.readSideRepositoryIndexAccessor = readSideRepositoryIndexAccessor;
         }
 
         public UserListView Load(UserListViewInputModel input)
         {
-            var allUsers = this.readSideRepositoryIndexAccessor.Query<UserDocumentBrief>(
-                typeof (UserDocumentsByBriefFields).Name).Search(x => x.Roles, input.Role.ToString());
-            var users = allUsers.OrderUsingSortExpression(input.Order)
-                    .Skip((input.Page - 1)*input.PageSize)
-                    .Take(input.PageSize).ProjectFromIndexFieldsInto<UserDocument>().ToList().Select(
-                        x =>
-                            new UserListItem
-                                (
-                                id: x.PublicKey,
-                                creationDate: x.CreationDate,
-                                email: x.Email,
-                                isLockedBySupervisor: x.IsLockedBySupervisor,
-                                isLockedByHQ: x.IsLockedByHQ,
-                                name: x.UserName,
-                                roles: x.Roles
-                                ));
+            string indexName = typeof (UserDocumentsByBriefFields).Name;
 
-            return new UserListView { Page = input.Page, PageSize = input.PageSize, TotalCount = allUsers.Count(), Items = users };
+            var allUsers = this.readSideRepositoryIndexAccessor.Query<UserDocument>(indexName)
+                                                               .Where(x => x.Roles.Contains(input.Role));
+
+            var users = allUsers.OrderUsingSortExpression(input.Order)
+                .Skip((input.Page - 1)*input.PageSize)
+                .Take(input.PageSize)
+                .ToList()
+                .Select(x => new UserListItem(
+                    id: x.PublicKey,
+                    creationDate: x.CreationDate,
+                    email: x.Email,
+                    isLockedBySupervisor: x.IsLockedBySupervisor,
+                    isLockedByHQ: x.IsLockedByHQ,
+                    name: x.UserName,
+                    roles: x.Roles
+                    ));
+
+            return new UserListView
+            {
+                Page = input.Page, 
+                PageSize = input.PageSize, 
+                TotalCount = allUsers.Count(), 
+                Items = users
+            };
         }
     }
 }
