@@ -38,7 +38,7 @@ namespace WB.Core.Synchronization.Implementation.ReadSide.Indexes
                                 group result by result.GroupingKey into g
                                 select new
                                 {
-                                    RootId = g.Key,
+                                    GroupingKey = g.Key,
                                     Count = g.Sum(x => x.Count)
                                 };
 
