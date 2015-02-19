@@ -15,13 +15,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes
             public Guid Supervisor_Id { get; set; }
             public Guid PublicKey { get; set; }
             public string UserName { get; set; }
+            public string Password { get; set; }
             public List<UserRoles> Roles { get; set; }
         }
 
         public UserDocumentsByBriefFields()
         {
-            this.Map = interviews => from doc in interviews
-                select new UserDocumentBrief { Supervisor_Id = doc.Supervisor.Id, PublicKey = doc.PublicKey, Roles = doc.Roles, UserName = doc.UserName };
+            this.Map = users => from doc in users
+                select new UserDocumentBrief
+                {
+                    Supervisor_Id = doc.Supervisor.Id, 
+                    PublicKey = doc.PublicKey, 
+                    Roles = doc.Roles, 
+                    Password = doc.Password,
+                    UserName = doc.UserName
+                };
         }
     }
 }
