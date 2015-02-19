@@ -44,11 +44,6 @@ namespace WB.Core.Synchronization.SyncStorage
             chunkStorageWriter.Clear();
         }
 
-        public void ClearAll()
-        {
-            chunkStorageWriter.ClearAll();
-        }
-
         public void SaveInterview(InterviewSynchronizationDto doc, Guid responsibleId, DateTime timestamp)
         {
             var syncItem = CreateSyncItem(doc.Id, SyncItemType.Questionnare, GetItemAsContent(doc), GetItemAsContent(metaBuilder.GetInterviewMetaInfo(doc)));
