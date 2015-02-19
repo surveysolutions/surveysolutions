@@ -213,7 +213,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                 if (firstFinishedTask == timeoutTask)
                     throw new TimeoutException(string.Format("Failed to perform eventstore operation using timeout {0}", this.defaultTimeout));
 
-                return ((Task<TResult>)firstFinishedTask).Result;
+                return ((Task<TResult>)firstFinishedTask).Result; // this .Result will not invoke task. it is already complete on this stage
             }
         }
 
