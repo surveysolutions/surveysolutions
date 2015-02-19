@@ -3,7 +3,6 @@ using System.ComponentModel.Composition.Hosting;
 using System.Linq;
 using System.Reflection;
 using Raven.Client;
-using Raven.Client.Document;
 using Raven.Client.Indexes;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -60,8 +59,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
 
         private void RegisterIndexesFromAssembly(Assembly assembly)
         {
-            var catalog = new CompositionContainer(new AssemblyCatalog(assembly));
-            IndexCreation.CreateIndexes(catalog, this.ravenStore);
+            IndexCreation.CreateIndexes(assembly, this.ravenStore);
         }
     }
 }
