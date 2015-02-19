@@ -49,8 +49,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TakeNew
 
             var indexName = typeof(UserDocumentsByBriefFields).Name;
 
-            return this.indexAccessor.Query<UserDocument>(indexName)
-                .Where(user => user.Roles.Any(role => role == UserRoles.Supervisor));
+            var supervisorsListForViewer = new List<UserDocument>();
+            var batch = new List<UserDocument>();
+            int taken = 0;
+            int batchSize = 128;
+            do
+            {
+                batch = this.indexAccessor.Query<UserDocument>(indexName)
+                    .OrderBy(x => x.UserName)
+                    .Where(user => user.Roles.Any(role => role == UserRoles.Supervisor))
+                    .Skip(taken)
+                    .Take(batchSize)
+                    .ToList();
+
+                supervisorsListForViewer.AddRange(batch);
+
+            } while (batch.Count == batchSize);
+
+            return supervisorsListForViewer;
         }
     }
 }
