@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.User
 {
-    public class UserListViewFactory : IViewFactory<UserListViewInputModel, UserListView>
+    public class UserListViewFactory : IUserListViewFactory
     {
         private readonly IReadSideRepositoryIndexAccessor readSideRepositoryIndexAccessor;
 

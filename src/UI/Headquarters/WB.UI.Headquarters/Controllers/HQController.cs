@@ -31,7 +31,7 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory;
         private readonly ISampleImportService sampleImportService;
-        private readonly IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory;
+        private readonly IUserListViewFactory supervisorsFactory;
         private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
         private readonly IPreloadingTemplateService preloadingTemplateService;
         private readonly IPreloadedDataRepository preloadedDataRepository;
@@ -41,7 +41,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory,
-            IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory,
+            IUserListViewFactory supervisorsFactory,
             ISampleImportService sampleImportService,
             IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>
                 allUsersAndQuestionnairesFactory,
