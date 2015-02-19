@@ -46,16 +46,14 @@ namespace WB.Tests.Unit.Core.Synchronization
         It should_return_not_null_result = () =>
             result.ShouldNotBeNull();
 
-        It should_return_list_with_2_package_ids = () =>
-            result.SyncPackagesMeta.Count().ShouldEqual(2);
+        It should_return_list_with_single_package_id = () =>
+            result.SyncPackagesMeta.Count().ShouldEqual(1);
 
-        It should_return_list_with_package_ids_specified = () =>
-            result.SyncPackagesMeta.Select(x => x.Id).ShouldContainOnly(
-                "11111111111111111111111111111111$2",
-                "11111111111111111111111111111111$3");
+        It should_return_list_with_last_package_id = () =>
+            result.SyncPackagesMeta.Select(x => x.Id).ShouldContainOnly("11111111111111111111111111111111$3");
 
         It should_return_list_with_ordered_by_index_items = () =>
-            result.SyncPackagesMeta.Select(x => x.SortIndex).ShouldContainOrderedItems(new long[] { 2, 3 });
+            result.SyncPackagesMeta.Select(x => x.SortIndex).ShouldContainOrderedItems(new long[] { 3 });
 
         private static SyncManager syncManager;
         private static SyncItemsMetaContainer result;

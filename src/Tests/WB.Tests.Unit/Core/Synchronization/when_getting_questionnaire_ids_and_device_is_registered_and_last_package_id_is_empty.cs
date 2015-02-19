@@ -1,15 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Machine.Specifications;
-
 using Moq;
-
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.Synchronization.Documents;
 using WB.Core.Synchronization.Implementation.ReadSide.Indexes;
 using WB.Core.Synchronization.Implementation.SyncManager;
@@ -30,7 +26,9 @@ namespace WB.Tests.Unit.Core.Synchronization
             {
                 CreateQuestionnaireSyncPackageMetaInformation(questionnaireId, questionnaireVersion:1, sortIndex:1, itemType: SyncItemType.Questionnaire),
                 CreateQuestionnaireSyncPackageMetaInformation(questionnaireId, questionnaireVersion:1, sortIndex:2, itemType: SyncItemType.QuestionnaireAssembly),
-                CreateQuestionnaireSyncPackageMetaInformation(questionnaireId, questionnaireVersion:1, sortIndex:3, itemType: SyncItemType.DeleteQuestionnaire)
+                CreateQuestionnaireSyncPackageMetaInformation(questionnaireId, questionnaireVersion:2, sortIndex:3, itemType: SyncItemType.Questionnaire),
+                CreateQuestionnaireSyncPackageMetaInformation(questionnaireId, questionnaireVersion:1, sortIndex:4, itemType: SyncItemType.DeleteQuestionnaire),
+                CreateQuestionnaireSyncPackageMetaInformation(questionnaireId, questionnaireVersion:2, sortIndex:5, itemType: SyncItemType.QuestionnaireAssembly),
             };
 
             indexAccessorMock = new Mock<IReadSideRepositoryIndexAccessor>();
@@ -50,12 +48,12 @@ namespace WB.Tests.Unit.Core.Synchronization
 
         It should_return_list_with_package_ids_specified = () =>
             result.SyncPackagesMeta.Select(x => x.Id).ShouldContainOnly(
-                "22222222222222222222222222222222_1$1",
-                "22222222222222222222222222222222_1$2",
-                "22222222222222222222222222222222_1$3");
+                "22222222222222222222222222222222_2$3",
+                "22222222222222222222222222222222_2$5",
+                "22222222222222222222222222222222_1$4");
 
         It should_return_list_with_ordered_by_index_items = () =>
-            result.SyncPackagesMeta.Select(x => x.SortIndex).ShouldContainOrderedItems(new long[] { 1, 2, 3 });
+            result.SyncPackagesMeta.Select(x => x.SortIndex).ShouldContainOrderedItems(new long[] { 3, 4, 5 });
 
         private static SyncManager syncManager;
         private static SyncItemsMetaContainer result;
