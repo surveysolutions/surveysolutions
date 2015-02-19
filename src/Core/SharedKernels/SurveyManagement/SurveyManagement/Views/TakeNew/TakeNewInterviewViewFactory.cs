@@ -33,10 +33,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TakeNew
                 ? this.surveys.AsVersioned().Get(input.QuestionnaireId.FormatGuid(), input.QuestionnaireVersion.Value)
                 : this.surveys.GetById(input.QuestionnaireId);
 
-            var view = new TakeNewInterviewView(questionnaire.Questionnaire, questionnaire.Version)
-                {
-                    Supervisors = this.GetSupervisorsListForViewer(input.ViewerId).ToList()
-                };
+            var view = new TakeNewInterviewView(questionnaire.Questionnaire, questionnaire.Version) {
+                Supervisors = this.GetSupervisorsListForViewer(input.ViewerId).ToList()
+            };
 
             return view;
         }
