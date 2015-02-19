@@ -265,8 +265,11 @@
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_checking_expected_device_and_user_linked_to_another_device.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_checking_expected_device_and_user_linked_to_the_same_device.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_checking_expected_device_and_user_not_linked_to_any_device.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_interview_packages_keys.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_interview_sync_package.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_questionnaire_packages_keys.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_questionnaire_sync_package.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_user_packages_keys.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_user_sync_package.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_handshaking_capi_with_supervisor_and_android_id_is_missing.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_handshaking_capi_with_supervisor_and_changing_device_is_requested.cs" />
