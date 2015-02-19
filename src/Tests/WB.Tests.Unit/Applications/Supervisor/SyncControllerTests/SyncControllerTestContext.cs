@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Web.Http;
@@ -8,6 +9,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -98,6 +100,40 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             requestMessage.Content = content;
             controller.Request = requestMessage; 
             controller.Configuration = new System.Web.Http.HttpConfiguration(new System.Web.Http.HttpRouteCollection());
+        }
+
+        protected static SyncPackageRequest CreateSyncPackageRequest(string packageId, Guid deviceId)
+        {
+            return new SyncPackageRequest
+            {
+                ClientRegistrationId = deviceId,
+                PackageId = packageId
+            };
+        }
+
+        protected static UserSyncPackageDto CreateUserSyncPackageDto(Guid userId, string packageId)
+        {
+            return new UserSyncPackageDto
+            {
+                UserId = userId,
+                PackageId = packageId
+            };
+        }
+
+        protected static QuestionnaireSyncPackageDto CreateQuestionnaireSyncPackageDto(string packageId)
+        {
+            return new QuestionnaireSyncPackageDto
+            {
+                PackageId = packageId
+            };
+        }
+
+        protected static InterviewSyncPackageDto CreateInterviewSyncPackageDto(string packageId)
+        {
+            return new InterviewSyncPackageDto
+            {
+                PackageId = packageId
+            };
         }
     }
 }

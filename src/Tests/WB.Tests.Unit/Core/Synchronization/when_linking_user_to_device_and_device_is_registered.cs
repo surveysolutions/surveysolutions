@@ -1,6 +1,10 @@
 using System;
+
 using Machine.Specifications;
 using Moq;
+
+using NUnit.Framework;
+
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;

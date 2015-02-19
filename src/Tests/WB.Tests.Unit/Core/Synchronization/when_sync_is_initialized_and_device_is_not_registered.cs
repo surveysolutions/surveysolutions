@@ -76,7 +76,7 @@ namespace WB.Tests.Unit.Core.Synchronization
         private static HandshakePackage handshakePackage;
         private static Mock<ICommandService> commandServiceMock;
         private static IReadSideRepositoryReader<TabletDocument> devices;
-        private static Guid userId = Guid.Parse("11111111111111111111111111111111");
+        private static Guid userId = Guid.Parse("11111111111111111111111111111111");        
         private static string androidId = "Android";
         private static Guid deviceId = androidId.ToGuid();
         private static string appVersion = "6002";
