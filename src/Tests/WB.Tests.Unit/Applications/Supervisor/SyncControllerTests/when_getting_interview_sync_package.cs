@@ -1,18 +1,13 @@
 using System;
-
 using Machine.Specifications;
-
 using Main.Core.Entities.SubEntities;
-
 using Moq;
-
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
-
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
