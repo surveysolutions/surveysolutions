@@ -3,5 +3,6 @@
     public interface IRavenReadSideRepositoryCleaner
     {
         void ReCreateViewDatabase();
+        void CreateIndexesAfterRebuildReadSide();
     }
 }
