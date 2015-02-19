@@ -20,7 +20,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes
                                     Roles = doc.Roles,
                                     Password = doc.Password,
                                     UserName = doc.UserName,
-                                    IsDeleted = doc.IsDeleted
+                                    IsDeleted = doc.IsDeleted,
+                                    CreationDate = doc.CreationDate,
+                                    Email = doc.Email
                                 };
 
             Store(x => x.Roles, FieldStorage.Yes);
@@ -37,5 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes
         public string Password { get; set; }
         public List<UserRoles> Roles { get; set; }
         public bool IsDeleted { get; set; }
+        public DateTime CreationDate { get; set; }
+        public string Email { get; set; }
     }
 }
