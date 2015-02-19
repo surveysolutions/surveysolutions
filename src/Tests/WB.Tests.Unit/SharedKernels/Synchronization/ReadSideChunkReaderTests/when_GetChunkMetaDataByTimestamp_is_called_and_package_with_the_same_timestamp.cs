@@ -15,11 +15,11 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.ReadSideChunkReaderTests
         Establish context = () =>
         {
             _synchronizationDeltaMetaInformationBehind = new SynchronizationDeltaMetaInformation(Guid.NewGuid(),
-                DateTime.Now, null, 2, 1, 0);
+                DateTime.Now, null, "q", 2, 1, 0);
 
             var synchronizationDelta = new List<SynchronizationDeltaMetaInformation>
             {
-                new SynchronizationDeltaMetaInformation(Guid.NewGuid(), _synchronizationDeltaMetaInformationBehind.Timestamp.AddMinutes(-1), null, 1,2,1),
+                new SynchronizationDeltaMetaInformation(Guid.NewGuid(), _synchronizationDeltaMetaInformationBehind.Timestamp.AddMinutes(-1), null, "q", 1,2,1),
                 _synchronizationDeltaMetaInformationBehind
             }.AsQueryable();
 
