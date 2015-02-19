@@ -142,7 +142,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 ClientInstanceKey = request.ClientId,
                 AppVersion = request.Version.ToString(CultureInfo.InvariantCulture),
                 ClientRegistrationKey = request.ClientRegistrationId,
-                SupervisorPublicKey = interviewerInfo.Supervisor.Id,
                 UserId = interviewerInfo.PublicKey
             };
             try

@@ -169,6 +169,8 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
         public QuestionnaireSyncPackageDto ReceiveQuestionnaireSyncPackage(Guid deviceId, string packageId, Guid userId)
         {
+            this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
+
             var package = this.questionnaireSyncPackageContentStore.GetById(packageId);
 
             if (package == null)
@@ -288,7 +290,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
             if (device == null)
             {
-                throw new ArgumentException("Device was not found.");
+                throw new ArgumentException("Device was not found");
             }
         }
     }
