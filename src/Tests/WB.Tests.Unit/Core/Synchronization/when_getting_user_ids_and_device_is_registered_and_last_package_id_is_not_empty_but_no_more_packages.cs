@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Machine.Specifications;
+
 using Moq;
+
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -15,7 +18,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Core.Synchronization
 {
-    internal class when_getting_user_ids_and_device_is_registered_and_last_package_id_is_empty : SyncManagerTestContext
+    internal class when_getting_user_ids_and_device_is_registered_and_last_package_id_is_not_empty_but_no_more_packages : SyncManagerTestContext
     {
         Establish context = () =>
         {
@@ -29,6 +32,8 @@ namespace WB.Tests.Unit.Core.Synchronization
                                    CreateUserSyncPackage(userId, sortIndex:3)
                                };
 
+            lastSyncedPackageId = userSyncPackages.Last().PackageId;
+
             indexAccessorMock = new Mock<IReadSideRepositoryIndexAccessor>();
             indexAccessorMock.Setup(x => x.Query<UserSyncPackage>(userQueryIndexName))
                 .Returns(userSyncPackages.AsQueryable());
@@ -41,14 +46,8 @@ namespace WB.Tests.Unit.Core.Synchronization
         It should_return_not_null_result = () =>
             result.ShouldNotBeNull();
 
-        It should_return_list_with_single_package_id = () =>
-            result.SyncPackagesMeta.Count().ShouldEqual(1);
-
-        It should_return_list_with_last_package_id = () =>
-            result.SyncPackagesMeta.Select(x => x.Id).ShouldContainOnly("11111111111111111111111111111111$3");
-
-        It should_return_list_with_ordered_by_index_items = () =>
-            result.SyncPackagesMeta.Select(x => x.SortIndex).ShouldContainOrderedItems(new long[] { 3 });
+        It should_return_empty_list = () =>
+            result.SyncPackagesMeta.Count().ShouldEqual(0);
 
         private static SyncManager syncManager;
         private static SyncItemsMetaContainer result;

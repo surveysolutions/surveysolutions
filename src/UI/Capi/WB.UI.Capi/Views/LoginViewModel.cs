@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
 using Android.App;
 using Cirrious.MvvmCross.ViewModels;
-using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.ValueObjects;
