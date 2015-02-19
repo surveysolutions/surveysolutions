@@ -15,14 +15,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public class UsersApiController : BaseApiController
     {
         private readonly IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory;
-        private readonly IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory;
+        private readonly IUserListViewFactory supervisorsFactory;
 
         public UsersApiController(
             ICommandService commandService,
             IGlobalInfoProvider provider,
             ILogger logger,
             IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory,
-            IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory)
+            IUserListViewFactory supervisorsFactory)
             : base(commandService, provider, logger)
         {
             this.interviewersFactory = interviewersFactory;
