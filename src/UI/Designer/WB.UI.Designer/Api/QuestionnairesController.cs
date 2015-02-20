@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
@@ -27,6 +28,7 @@ namespace WB.UI.Designer.Api
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireHelper questionnaireHelper;
+        private readonly IQuestionnaireListViewFactory viewFactory;
         private readonly Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion engineVersion;
 
         public QuestionnairesController(IMembershipUserService userHelper,
@@ -34,7 +36,8 @@ namespace WB.UI.Designer.Api
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
-            IQuestionnaireHelper questionnaireHelper)
+            IQuestionnaireHelper questionnaireHelper,
+            IQuestionnaireListViewFactory viewFactory)
         {
             this.userHelper = userHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
@@ -42,6 +45,7 @@ namespace WB.UI.Designer.Api
             this.questionnaireVerifier = questionnaireVerifier;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.questionnaireHelper = questionnaireHelper;
+            this.viewFactory = viewFactory;
 
             var engineVersion = QuestionnaireVersionProvider.GetCurrentEngineVersion();
             this.engineVersion = new Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion()
@@ -113,31 +117,34 @@ namespace WB.UI.Designer.Api
         }
 
         [Route("")]
-        public IEnumerable<QuestionnaireMetaInfo> Get()
+        public QuestionnairesResponse Get([FromUri]int pageIndex = 1, [FromUri]int pageSize = 128, [FromUri]string sortBy = "", [FromUri]string filter = "")
         {
-            var questionnaireItemList = new List<QuestionnaireMetaInfo>();
-            int pageIndex = 1;
-
-            while (true)
-            {
-                var questionnaireList = this.questionnaireHelper.GetQuestionnaires(viewerId: this.userHelper.WebUser.UserId, pageIndex: pageIndex);
-
-                questionnaireItemList.AddRange(questionnaireList.Select(q => new QuestionnaireMetaInfo()
+            var questionnaireListView = this.viewFactory.Load(
+                new QuestionnaireListInputModel
                 {
-                    Id = q.Id.FormatGuid(),
+
+                    ViewerId = this.userHelper.WebUser.UserId,
+                    IsAdminMode = this.userHelper.WebUser.IsAdmin,
+                    Page = pageIndex,
+                    PageSize = pageSize,
+                    Order = sortBy,
+                    Filter = filter
+                });
+
+            return new QuestionnairesResponse()
+            {
+                TotalCount = questionnaireListView.TotalCount,
+                Items = questionnaireListView.Items.Select(q => new QuestionnaireMetaInfo()
+                {
+                    Id = q.PublicId.FormatGuid(),
                     Title = q.Title,
                     LastEntryDate = q.LastEntryDate,
                     OwnerName = q.Owner,
                     Version = this.engineVersion
-                }).ToList());
-
-                pageIndex++;
-                if (pageIndex > questionnaireList.TotalPages)
-                    break;
-            }
-
-            return questionnaireItemList;
+                })
+            };
         }
+
 
         private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)
         {
