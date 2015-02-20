@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
 
         private static readonly Regex VariableNameRegex = new Regex("^[_A-Za-z][_A-Za-z0-9]*$");
-        private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w ]*$");
+        private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w \-\(\)\\/]*$");
 
         public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, IFileSystemAccessor fileSystemAccessor,
             ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider,
