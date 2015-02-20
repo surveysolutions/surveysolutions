@@ -275,6 +275,10 @@
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_Store_called_and_cache_is_enabled_and_cache_limit_is_reached.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_3_functional_handlers_and_first_and_last_of_them_fail.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_3_old_school_handlers_and_first_and_last_of_them_fail.cs" />
+    <Compile Include="Infrastructure\ReadSideStorageVersionedWrapperTests\when_view_is_stored_in_old_format.cs" />
+    <Compile Include="Infrastructure\ReadSideStorageVersionedWrapperTests\when_view_is_stored_in_old_format_without_version.cs" />
+    <Compile Include="Infrastructure\ReadSideStorageVersionedWrapperTests\when_view_is_stored_in_old_format_without_version_and_Versions_inside_doesnt_match.cs" />
+    <Compile Include="Infrastructure\ReadSideStorageVersionedWrapperTests\when_view_is_stored_in_old_format_without_version_and_version_property_is_missing_in_stored_view.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_created_on_client_interview_events.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_deleted_interview_events.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_interview_events.cs" />
