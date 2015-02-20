@@ -11,11 +11,16 @@ namespace WB.Core.Infrastructure.Storage.EventStore
     public class EventStoreWriteSideModule : NinjectModule
     {
         private readonly EventStoreConnectionSettings settings;
+        private readonly EventStoreWriteSideSettings writerSettings;
 
-        public EventStoreWriteSideModule(EventStoreConnectionSettings settings)
+        public EventStoreWriteSideModule(EventStoreConnectionSettings settings, EventStoreWriteSideSettings writerSettings)
         {
             if (settings == null) throw new ArgumentNullException("settings");
             this.settings = settings;
+
+            if (writerSettings == null) throw new ArgumentNullException("writerSettings");
+            this.writerSettings = writerSettings;
+
         }
 
         public override void Load()
@@ -28,7 +33,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore
 
         private IStreamableEventStore GetEventStore()
         {
-            return new WriteSideEventStore(new EventStoreConnectionProvider(this.settings), this.Kernel.Get<ILogger>(), this.settings);
+            return new WriteSideEventStore(new EventStoreConnectionProvider(this.settings), this.Kernel.Get<ILogger>(), this.settings, this.writerSettings);
         }
     }
 }
