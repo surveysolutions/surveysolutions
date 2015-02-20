@@ -285,6 +285,24 @@ namespace WB.Tests.Unit
                     Roles = new[] { UserRoles.Operator }
                 }.ToPublishedEvent(eventSourceId: userId);
             }
+
+            public static IPublishedEvent<InterviewStatusChanged> InterviewStatusChanged(Guid interviewId, InterviewStatus status, string comment = "hello")
+            {
+                return new InterviewStatusChanged(status, comment)
+                        .ToPublishedEvent(eventSourceId: interviewId);
+            }
+
+            public static IPublishedEvent<InterviewerAssigned> InterviewerAssigned(Guid interviewId, Guid userId, Guid interviewerId)
+            {
+                return new InterviewerAssigned(userId, interviewerId)
+                        .ToPublishedEvent(eventSourceId: interviewId);
+            }
+
+            public static IPublishedEvent<InterviewHardDeleted> InterviewHardDeleted(Guid interviewId, Guid userId)
+            {
+                return new InterviewHardDeleted(userId)
+                        .ToPublishedEvent(eventSourceId: interviewId);
+            }
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
@@ -1318,12 +1336,16 @@ namespace WB.Tests.Unit
 
         public static InterviewData InterviewData(bool createdOnClient = false,
             InterviewStatus status = InterviewStatus.Created,
-            Guid? interviewId = null)
+            Guid? interviewId = null, 
+            Guid? responsibleId = null)
         {
-            var result = new InterviewData();
-            result.CreatedOnClient = createdOnClient;
-            result.Status = status;
-            result.InterviewId = interviewId.GetValueOrDefault();
+            var result = new InterviewData
+                         {
+                             CreatedOnClient = createdOnClient,
+                             Status = status,
+                             InterviewId = interviewId.GetValueOrDefault(),
+                             ResponsibleId = responsibleId.GetValueOrDefault()
+                         };
             return result;
         }
 

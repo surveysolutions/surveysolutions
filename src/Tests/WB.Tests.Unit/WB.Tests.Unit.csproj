@@ -344,6 +344,16 @@
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_method_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_called_and_folder_with_packages_is_empty.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_HasPackagesByInterviewId_called.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_ApprovedByHeadquarters.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_ApprovedBySupervisor.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_Completed.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_Created.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_Deleted.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_InterviewerAssigned.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_RejectedByHeadquarters.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_RejectedBySupervisor.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_Restored.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_SupervisorAssigned.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_new_user_created.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_user_changed.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_user_locked.cs" />
