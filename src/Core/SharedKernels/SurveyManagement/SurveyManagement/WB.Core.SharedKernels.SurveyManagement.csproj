@@ -241,7 +241,6 @@
     <Compile Include="ValueObjects\PreloadedData\PreloadedDataVerificationReferenceType.cs" />
     <Compile Include="ValueObjects\ValueParsingResult.cs" />
     <Compile Include="Views\BaseInterviewGridItem.cs" />
-    <Compile Include="Views\BaseUserViewFactory.cs" />
     <Compile Include="Views\ChangeStatus\ChangeStatusFactory.cs" />
     <Compile Include="Views\ChangeStatus\ChangeStatusInputModel.cs" />
     <Compile Include="Views\ChangeStatus\ChangeStatusView.cs" />
@@ -385,6 +384,7 @@
     <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesFactory.cs" />
     <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesInputModel.cs" />
     <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesView.cs" />
+    <Compile Include="Views\User\IUserListViewFactory.cs" />
     <Compile Include="Views\User\UserListItem.cs" />
     <Compile Include="Views\User\UserListView.cs" />
     <Compile Include="Views\User\UserListViewFactory.cs" />

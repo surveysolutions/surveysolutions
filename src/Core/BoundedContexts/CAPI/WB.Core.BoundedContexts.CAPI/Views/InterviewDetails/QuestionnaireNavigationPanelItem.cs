@@ -1,4 +1,5 @@
 using System;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
@@ -58,7 +59,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             {
                 if (screen == null)
                 {
-                    screen = getFullScreen(InterviewViewModel.ConvertInterviewItemId(PublicKey));
+                    screen = getFullScreen(ConversionHelper.ConvertIdAndRosterVectorToString(PublicKey.Id, PublicKey.InterviewItemPropagationVector));
                     screen.PropertyChanged += screen_PropertyChanged;
                 }
                 return this.screen;

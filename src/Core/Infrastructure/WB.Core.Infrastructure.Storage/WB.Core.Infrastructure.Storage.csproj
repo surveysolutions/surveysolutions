@@ -112,6 +112,7 @@
     <Compile Include="Raven\Implementation\PlainStorage\RavenPlainStorageProvider.cs" />
     <Compile Include="Raven\Implementation\PlainStorage\RavenQueryablePlainStorageAccessor.cs" />
     <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenDataStoreRepositoryAccessor.cs" />
+    <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryCleaner.cs" />
     <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryWriterSettings.cs" />
     <Compile Include="Raven\PlainStorage\IRavenPlainStorageProvider.cs" />
     <Compile Include="Raven\RavenConnectionSettings.cs" />

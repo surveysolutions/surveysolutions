@@ -12,9 +12,16 @@ namespace WB.Core.SharedKernels.DataCollection
         /// This is one-way transformation. Opposite operation is too slow.
         /// If you need to compactify data and get it back, you should use another datatype, not a string.
         /// </remarks>
-        public static string ConvertIdAndRosterVectorToString(Guid id, decimal[] rosterVector)
+        public static string ConvertIdAndRosterVectorToString(Guid id, decimal[] rosterVector = null)
         {
-            return string.Format("{0:N}[{1}]", id, string.Join((string) "-", (IEnumerable<string>) rosterVector.Select(v => v.ToString("0.############################", CultureInfo.InvariantCulture))));
+            if (rosterVector == null || !rosterVector.Any())
+                return id.ToString("N");
+
+            return String.Format("{0}[{1}]", id.ToString("N"),
+                String.Join((string)"-",
+                    (IEnumerable<string>)
+                        rosterVector.Select(
+                            v => v.ToString("0.############################", CultureInfo.InvariantCulture))));
         }
 
         public static string ConvertIdentityToString(Identity identity)

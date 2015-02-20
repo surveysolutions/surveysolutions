@@ -6,6 +6,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -59,10 +60,10 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
         };
 
         Because of = () =>
-            interviewViewModel.SetAnswer(InterviewViewModel.ConvertIdAndRosterVectorToString(rosterTitleQuestionId, new decimal[] { 0 }), rosterTitle);
+            interviewViewModel.SetAnswer(ConversionHelper.ConvertIdAndRosterVectorToString(rosterTitleQuestionId, new decimal[] { 0 }), rosterTitle);
 
         It should_roster_title_be_equal_set_answer = () =>
-            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[InterviewViewModel.ConvertIdAndRosterVectorToString(rosterGroupId, new decimal[] { 0 })]).ScreenName.ShouldEqual(rosterTitle);
+            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[ConversionHelper.ConvertIdAndRosterVectorToString(rosterGroupId, new decimal[] { 0 })]).ScreenName.ShouldEqual(rosterTitle);
 
         private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;

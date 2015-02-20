@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -44,7 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
             interviewViewModel.RemovePropagatedScreen(rosterId, new decimal[0], 0);
 
         It should_contain_screen_with_added_roster_row = () =>
-            interviewViewModel.Screens.Keys.ShouldNotContain(InterviewViewModel.ConvertIdAndRosterVectorToString(rosterId, new decimal[] { 0 }));
+            interviewViewModel.Screens.Keys.ShouldNotContain(ConversionHelper.ConvertIdAndRosterVectorToString(rosterId, new decimal[] { 0 }));
 
         private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;
