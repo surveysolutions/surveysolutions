@@ -6,7 +6,6 @@ using System.Reflection;
 using Android.App;
 using Android.Content;
 using Android.Runtime;
-using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using Cirrious.CrossCore.Core;
@@ -31,19 +30,15 @@ using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.BoundedContexts.Supervisor.Factories;
-using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.ErrorReporting;
 using WB.Core.GenericSubdomains.Logging.AndroidLogger;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Services;
-using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
@@ -57,7 +52,6 @@ using WB.UI.Capi.Implementations.Navigation;
 using WB.UI.Capi.Implementations.Services;
 using WB.UI.Capi.Injections;
 using WB.UI.Capi.Settings;
-using WB.UI.Capi.Syncronization;
 using WB.UI.Capi.Syncronization.Implementation;
 using WB.UI.Shared.Android;
 using WB.UI.Shared.Android.Controls.ScreenItems;
@@ -377,9 +371,8 @@ namespace WB.UI.Capi
         {
             this.ClearAllBackStack<SplashScreen>();
 
-            var questionnarieDenormalizer =
-                this.kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>() as
-                InMemoryReadSideRepositoryAccessor<InterviewViewModel>;
+            var questionnarieDenormalizer = this.kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>() 
+                                                as InMemoryReadSideRepositoryAccessor<InterviewViewModel>;
             if (questionnarieDenormalizer != null)
                 questionnarieDenormalizer.Clear();
         }

@@ -117,7 +117,8 @@ namespace WB.UI.Capi.SnapshotStore
 
         public void DeleteSnapshot(Guid eventSourceId)
         {
-            this.snapshots.Remove(eventSourceId);
+            if (this.snapshots.ContainsKey(eventSourceId))
+                this.snapshots.Remove(eventSourceId);
             this.DeleteItem(eventSourceId);
         }
 
