@@ -26,9 +26,24 @@
 
 @section gridnavigation
 {
-    <a class="btn btn-default" href="@Url.Action("Create", "Supervisor", new { area = string.Empty })">
-        <i class="glyphicon glyphicon-user"></i> Add supervisor
-    </a>
+     <div class="btn-group">
+        <div class="form-inline">
+            <a class="btn btn-default" href="@Url.Action("Create", "Supervisor", new { area = string.Empty })">
+                <i class="glyphicon glyphicon-user"></i> Add supervisor
+            </a>
+
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: search">
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="button" data-bind="click: search">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ 
 }
 
 @section grid
