@@ -88,7 +88,8 @@ namespace WB.Tests.Integration.EventHandler
             typeof (ILogger), typeof (IQuestionnaireEntityFactory), typeof (IQuestionnaireCacheInitializer),
             typeof (IPlainQuestionnaireRepository), typeof (IQuestionnaireAssemblyFileAccessor), typeof (IExportViewFactory),
             typeof (IQuestionnaireRosterStructureFactory), typeof (IReferenceInfoForLinkedQuestionsFactory),
-            typeof (IQuestionDetailsViewMapper), typeof(IJsonUtils), typeof(IMetaInfoBuilder)
+            typeof (IQuestionDetailsViewMapper), typeof(IJsonUtils), typeof(IMetaInfoBuilder),
+            typeof(IInterviewSynchronizationDtoFactory)
         };
       
         private static IEnumerable<ParameterInfo> ExcludeExpectedParameters(ParameterInfo[] allParameters)
