@@ -4,12 +4,13 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.User;
 using Ncqrs.Eventing.ServiceModel.Bus;
+
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.Synchronization.SyncStorage;
 
@@ -52,10 +53,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             var doc = new UserDocument
                       {
+                          PublicKey = evnt.EventSourceId,
+                          CreationDate = evnt.EventTimeStamp,
+
                           UserName = evnt.Payload.Name,
                           Password = evnt.Payload.Password,
-                          PublicKey = evnt.Payload.PublicKey,
-                          CreationDate = evnt.EventTimeStamp,
                           Email = evnt.Payload.Email,
                           IsLockedBySupervisor = evnt.Payload.IsLockedBySupervisor,
                           IsLockedByHQ = evnt.Payload.IsLocked,
@@ -67,7 +69,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void Handle(IPublishedEvent<UserChanged> evnt)
         {
-            UserDocument item = this.users.GetById(evnt.EventSourceId);
+            UserDocument item = this.users.GetById(evnt.EventSourceId.FormatGuid());
 
             item.Email = evnt.Payload.Email;
             item.Roles = evnt.Payload.Roles.ToList();
@@ -126,7 +128,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.userPackageStorageWriter.Store(synchronizationDelta, synchronizationDelta.PackageId);
         }
 
-        protected string GetItemAsContent(object item)
+        protected string GetItemAsContent(UserDocument item)
         {
             return this.jsonUtils.Serialize(item, TypeSerializationSettings.AllTypes);
         }

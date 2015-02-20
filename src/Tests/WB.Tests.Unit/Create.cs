@@ -9,6 +9,8 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
+using Main.Core.Events.User;
+
 using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -231,6 +233,57 @@ namespace WB.Tests.Unit
                 {
                     DeviceId = deviceId
                 }.ToPublishedEvent(eventSourceId: userId, eventTimeStamp: eventTimeStamp);
+            }
+
+            public static IPublishedEvent<UserUnlockedBySupervisor> UserUnlockedBySupervisor(Guid userId)
+            {
+                return new UserUnlockedBySupervisor
+                {
+                }.ToPublishedEvent(eventSourceId: userId);
+            }
+
+            public static IPublishedEvent<UserLockedBySupervisor> UserLockedBySupervisor(Guid userId)
+            {
+                return new UserLockedBySupervisor
+                {
+                }.ToPublishedEvent(eventSourceId: userId);
+            }
+
+            public static IPublishedEvent<UserUnlocked> UserUnlocked(Guid userId)
+            {
+                return new UserUnlocked
+                {
+                }.ToPublishedEvent(eventSourceId: userId);
+            }
+
+            public static IPublishedEvent<UserLocked> UserLocked(Guid userId)
+            {
+                return new UserLocked
+                {
+                }.ToPublishedEvent(eventSourceId: userId);
+            }
+
+            public static IPublishedEvent<UserChanged> UserChanged(Guid userId, string password, string email)
+            {
+                return new UserChanged
+                {
+                    PasswordHash = password,
+                    Email = email,
+                    Roles = new [] { UserRoles.Operator }
+                }.ToPublishedEvent(eventSourceId: userId);
+            }
+
+            public static IPublishedEvent<NewUserCreated> NewUserCreated(Guid userId, string name, string password, string email, bool islockedBySupervisor, bool isLocked)
+            {
+                return new NewUserCreated
+                {
+                    Name = name,
+                    Password = password,
+                    Email = email,
+                    IsLockedBySupervisor = islockedBySupervisor,
+                    IsLocked = isLocked,
+                    Roles = new[] { UserRoles.Operator }
+                }.ToPublishedEvent(eventSourceId: userId);
             }
         }
 
