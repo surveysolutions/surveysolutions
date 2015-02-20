@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
 {
@@ -10,47 +11,58 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
         UserWebView Load(UserWebViewInputModel input);
     }
 
-    public class UserWebViewFactory : IUserWebViewFactory //IUserWebViewFactory
+    public class UserWebViewFactory : IUserWebViewFactory 
     {
-        // in this case we use writer here because we want to make sure login is performed on the latest version of data and we understand that indexing may take some time
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
+        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
+        private readonly IReadSideRepositoryReader<UserDocument> users;
 
-        public UserWebViewFactory(IQueryableReadSideRepositoryReader<UserDocument> users)
+        public UserWebViewFactory(IReadSideRepositoryIndexAccessor indexAccessor,
+            IReadSideRepositoryReader<UserDocument> users)
         {
+            this.indexAccessor = indexAccessor;
             this.users = users;
         }
-        
+
         public UserWebView Load(UserWebViewInputModel input)
         {
-            UserWebView result = this.users.Query(queryableUsers =>
-                {
-                    UserDocument doc = null;
-                    if (input.UserId != Guid.Empty)
-                    {
-                        doc = queryableUsers.FirstOrDefault(u => u.PublicKey == input.UserId);
-                    }
-                    else if (!string.IsNullOrEmpty(input.UserName) && string.IsNullOrEmpty(input.Password))
-                    {
-                        doc = queryableUsers.FirstOrDefault(u => u.UserName == input.UserName);
-                    }
+            var indexName = typeof (UserDocumentsByBriefFields).Name;
 
-                    if (!string.IsNullOrEmpty(input.UserName) && !string.IsNullOrEmpty(input.Password))
-                    {
-                        doc = queryableUsers.FirstOrDefault(u => u.UserName == input.UserName);
-                        if (doc != null && doc.Password != input.Password)
-                        {
-                            return null;
-                        }
-                    }
+            if (input.UserId != Guid.Empty)
+            {
+                return ToWebView(users.GetById(input.UserId));
+            }
 
-                    if (doc == null || doc.IsDeleted)
-                    {
-                        return null;
-                    }
+            if (!string.IsNullOrEmpty(input.UserName) && string.IsNullOrEmpty(input.Password))
+            {
+                var user = this.indexAccessor.Query<UserDocument>(indexName).FirstOrDefault(u => u.UserName == input.UserName);
 
-                    return new UserWebView(doc.PublicKey, doc.UserName, doc.Password, doc.Email, doc.CreationDate, doc.Roles, doc.IsLockedBySupervisor, doc.IsLockedByHQ, doc.Supervisor, doc.DeviceId);
-                });
-            return result;
+                return ToWebView(user);
+            }
+
+            if (!string.IsNullOrEmpty(input.UserName) && !string.IsNullOrEmpty(input.Password))
+            {
+                var doc = this.indexAccessor.Query<UserDocument>(indexName).FirstOrDefault(u => u.UserName == input.UserName && u.Password == input.Password);
+                return ToWebView(doc);
+            }
+
+            return null;
+        }
+
+        private static UserWebView ToWebView(UserDocument doc)
+        {
+            if (doc == null || doc.IsDeleted) 
+                return null;
+
+            return new UserWebView(doc.PublicKey, 
+                doc.UserName, 
+                doc.Password, 
+                doc.Email, 
+                doc.CreationDate, 
+                doc.Roles, 
+                doc.IsLockedBySupervisor, 
+                doc.IsLockedByHQ, 
+                doc.Supervisor,
+                doc.DeviceId);
         }
     }
 }

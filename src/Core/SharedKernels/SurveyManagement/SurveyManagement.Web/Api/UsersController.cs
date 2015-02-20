@@ -14,12 +14,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     public class UsersController : BaseApiServiceController
     {
         private readonly IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory;
-        private readonly IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory;
+        private readonly IUserListViewFactory supervisorsFactory;
         private readonly IUserViewFactory userViewFactory;
 
         public UsersController(ILogger logger, 
             IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory,
-            IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory,
+            IUserListViewFactory supervisorsFactory,
             IUserViewFactory userViewFactory)
             :base(logger)
         {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -30,6 +31,11 @@ namespace WB.Core.SharedKernels.DataCollection.Views
         public List<UserRoles> Roles { get; set; }
         public UserLight Supervisor { get; set; }
         public string UserName { get; set; }
+
+        public bool IsHq()
+        {
+            return Roles.Any(role => role == UserRoles.Headquarter);
+        }
 
         public DateTime LastChangeDate { get; set; }
 

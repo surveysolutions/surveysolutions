@@ -1,71 +1,52 @@
-using System.Collections.Generic;
 using System.Linq;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
 {
-    /// <summary>
-    /// The user browse view factory.
-    /// </summary>
     public class UserBrowseViewFactory : IViewFactory<UserBrowseInputModel, UserBrowseView>
     {
-        #region Fields
+        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
 
-        /// <summary>
-        /// The document item session.
-        /// </summary>
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> documentItemSession;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UserBrowseViewFactory"/> class.
-        /// </summary>
-        /// <param name="documentItemSession">
-        /// The document item session.
-        /// </param>
-        public UserBrowseViewFactory(IQueryableReadSideRepositoryReader<UserDocument> documentItemSession)
+        public UserBrowseViewFactory(IReadSideRepositoryIndexAccessor indexAccessor)
         {
-            this.documentItemSession = documentItemSession;
+            this.indexAccessor = indexAccessor;
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The load.
-        /// </summary>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <returns>
-        /// The RavenQuestionnaire.Core.Views.User.UserBrowseView.
-        /// </returns>
         public UserBrowseView Load(UserBrowseInputModel input)
         {
-            return this.documentItemSession.Query(queryableItems =>
+            var indexName = typeof (UserDocumentsByBriefFields).Name;
+
+            bool anyUserExists = this.indexAccessor.Query<UserDocument>(indexName).Any(x => !x.IsDeleted);
+            if (!anyUserExists)
             {
-                int count = queryableItems.Count();
-                if (count == 0)
-                    return new UserBrowseView(input.Page, input.PageSize, count, new UserBrowseItem[0]);
+                return new UserBrowseView(input.Page, input.PageSize, 0, new UserBrowseItem[0]);
+            }
 
-                // Perform the paged query
-                #warning ReadLayer: ToList
-                IEnumerable<UserDocument> query =
-                    queryableItems.ToList().Where(input.Expression).Skip((input.Page - 1) * input.PageSize).Take(
-                        input.PageSize);
+            var query = this.indexAccessor.Query<UserDocument>(indexName)
+                                          .Where(x => !x.IsDeleted);
 
-                // And enact this query
-                UserBrowseItem[] items = query.Select(x => new UserBrowseItem(x.PublicKey, x.UserName, x.Email, x.CreationDate, x.IsLockedBySupervisor, x.IsLockedByHQ, x.Supervisor)).ToArray();
-                return new UserBrowseView(input.Page, input.PageSize, count, items.ToArray());
-            });
+            if (input.Role.HasValue)
+            {
+                query = query.Where(x => x.Roles.Contains(input.Role.Value));
+            }
+
+            var pagedQuery = query.Skip((input.Page - 1) * input.PageSize)
+                                  .Take(input.PageSize);
+                
+            UserBrowseItem[] items = pagedQuery.ToList()
+                                               .Select(x => new UserBrowseItem(x.PublicKey, 
+                                                                               x.UserName, 
+                                                                               x.Email, 
+                                                                               x.CreationDate, 
+                                                                               x.IsLockedBySupervisor, 
+                                                                               x.IsLockedByHQ, 
+                                                                               x.Supervisor))
+                                               .ToArray();
+
+            return new UserBrowseView(input.Page, input.PageSize, query.Count(), items);
         }
-
-        #endregion
     }
 }

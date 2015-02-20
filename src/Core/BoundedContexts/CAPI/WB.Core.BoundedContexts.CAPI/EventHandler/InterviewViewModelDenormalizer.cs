@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -122,7 +123,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         public void Handle(IPublishedEvent<AnswerCommented> evnt)
         {
             var doc = this.GetStoredViewModel(evnt.EventSourceId);
-            doc.SetComment(InterviewViewModel.ConvertIdAndRosterVectorToString(evnt.Payload.QuestionId, evnt.Payload.PropagationVector),
+            doc.SetComment(ConversionHelper.ConvertIdAndRosterVectorToString(evnt.Payload.QuestionId, evnt.Payload.PropagationVector),
                            evnt.Payload.Comment);
         }
 
@@ -213,7 +214,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
             foreach (var group in evnt.Payload.Groups)
             {
-                doc.SetScreenStatus(InterviewViewModel.ConvertIdAndRosterVectorToString(group.Id, group.RosterVector), false);
+                doc.SetScreenStatus(ConversionHelper.ConvertIdAndRosterVectorToString(group.Id, group.RosterVector), false);
             }
         }
 
@@ -223,7 +224,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
             foreach (var group in evnt.Payload.Groups)
             {
-                doc.SetScreenStatus(InterviewViewModel.ConvertIdAndRosterVectorToString(group.Id, group.RosterVector), true);
+                doc.SetScreenStatus(ConversionHelper.ConvertIdAndRosterVectorToString(group.Id, group.RosterVector), true);
             }
         }
 
@@ -233,7 +234,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
             foreach (var question in evnt.Payload.Questions)
             {
-                doc.SetQuestionStatus(InterviewViewModel.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector), false);
+                doc.SetQuestionStatus(ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector), false);
             }
         }
 
@@ -243,7 +244,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
             foreach (var question in evnt.Payload.Questions)
             {
-                doc.SetQuestionStatus(InterviewViewModel.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector), true);
+                doc.SetQuestionStatus(ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector), true);
             }
         }
 
@@ -253,7 +254,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
             foreach (var question in evnt.Payload.Questions)
             {
-                doc.SetQuestionValidity(InterviewViewModel.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector), false);
+                doc.SetQuestionValidity(ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector), false);
             }
         }
 
@@ -263,7 +264,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
             foreach (var question in evnt.Payload.Questions)
             {
-                doc.SetQuestionValidity(InterviewViewModel.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector), true);
+                doc.SetQuestionValidity(ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector), true);
             }
         }
 
@@ -276,20 +277,20 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         private void SetSelectableAnswer(Guid interviewId, Guid questionId, decimal[] protagationVector, decimal[] answers)
         {
             var doc = this.GetStoredViewModel(interviewId);
-            doc.SetAnswer(InterviewViewModel.ConvertIdAndRosterVectorToString(questionId, protagationVector), answers);
+            doc.SetAnswer(ConversionHelper.ConvertIdAndRosterVectorToString(questionId, protagationVector), answers);
         }
 
         private void SetValueAnswer(Guid interviewId, Guid questionId, decimal[] protagationVector, object answer)
         {
             var doc = this.GetStoredViewModel(interviewId);
-            doc.SetAnswer(InterviewViewModel.ConvertIdAndRosterVectorToString(questionId, protagationVector), answer);
+            doc.SetAnswer(ConversionHelper.ConvertIdAndRosterVectorToString(questionId, protagationVector), answer);
         }
 
         private void RemoveAnswer(Guid interviewId, Guid questionId, decimal[] propagationVector)
         {
             InterviewViewModel viewModel = this.GetStoredViewModel(interviewId);
 
-            viewModel.RemoveAnswer(InterviewViewModel.ConvertIdAndRosterVectorToString(questionId, propagationVector));
+            viewModel.RemoveAnswer(ConversionHelper.ConvertIdAndRosterVectorToString(questionId, propagationVector));
         }
 
         public void Handle(IPublishedEvent<GroupPropagated> evnt)

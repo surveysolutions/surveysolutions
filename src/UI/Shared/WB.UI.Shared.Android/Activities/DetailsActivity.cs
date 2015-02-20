@@ -8,6 +8,7 @@ using Android.Support.V4.Widget;
 using Android.Views;
 using Android.Widget;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Shared.Android.Adapters;
 using WB.UI.Shared.Android.Controls;
@@ -165,7 +166,7 @@ namespace WB.UI.Shared.Android.Activities
 
             if (e.ScreenId.HasValue)
             {
-                var screen = this.Model.Screens[InterviewViewModel.ConvertInterviewItemId(e.ScreenId.Value)];
+                var screen = this.Model.Screens[ConversionHelper.ConvertIdAndRosterVectorToString(e.ScreenId.Value.Id, e.ScreenId.Value.InterviewItemPropagationVector)];
                 var chapterKey = screen.Breadcrumbs.First();
                 for (int i = 0; i < this.Model.Chapters.Count; i++)
                 {
