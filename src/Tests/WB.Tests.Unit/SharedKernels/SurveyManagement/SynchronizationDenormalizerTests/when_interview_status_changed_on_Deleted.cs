@@ -34,7 +34,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             denormalizer = CreateDenormalizer(
                 interviewSummarys: interviews,
                 interviewPackageStorageWriter: interviewPackageStorageWriterMock.Object,
-                synchronizationDtoFactory: synchronizationDtoFactory,
                 interviewSyncPackageContentStorage: interviewSyncPackageContentMock.Object);
         };
 
@@ -55,7 +54,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
         private static Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation>> interviewPackageStorageWriterMock;
         private static Mock<IReadSideKeyValueStorage<InterviewSyncPackageContent>> interviewSyncPackageContentMock;
         private static readonly Guid interviewId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        private static IInterviewSynchronizationDtoFactory synchronizationDtoFactory;
         private static int sortIndex = 5;
         private static string packageId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$5";
         private static string comments = "comment";
