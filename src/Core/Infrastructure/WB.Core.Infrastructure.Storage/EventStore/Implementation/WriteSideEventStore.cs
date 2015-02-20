@@ -26,7 +26,8 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
     {
         private const string CountProjectionName = "AllEventsCount";
         private readonly ILogger logger;
-        private readonly EventStoreConnectionSettings settings;
+        private readonly EventStoreConnectionSettings connectionSettings;
+        private readonly EventStoreWriteSideSettings writerSettings;
         private static readonly Encoding Encoding = Encoding.UTF8;
         private const string EventsPrefix = EventsCategory + "-";
         private const string EventsCategory = "WB";
@@ -48,10 +49,12 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public WriteSideEventStore(IEventStoreConnectionProvider connectionProvider, 
             ILogger logger,
-            EventStoreConnectionSettings settings)
+            EventStoreConnectionSettings connectionSettings,
+            EventStoreWriteSideSettings writerSettings)
         {
             this.logger = logger;
-            this.settings = settings;
+            this.connectionSettings = connectionSettings;
+            this.writerSettings = writerSettings;
             ConfigureEventStore();
             this.connection = connectionProvider.Open();
 
@@ -98,7 +101,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
             do
             {
-                slice = this.RunWithDefaultTimeout(this.connection.ReadAllEventsForwardAsync(position, 1024, resolveLinkTos: false));
+                slice = this.RunWithDefaultTimeout(this.connection.ReadAllEventsForwardAsync(position, writerSettings.MaxCountToRead, resolveLinkTos: false));
 
                 position = slice.NextPosition;
 
@@ -137,10 +140,10 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public int CountOfAllEvents()
         {
-            var httpEndPoint = new IPEndPoint(IPAddress.Parse(settings.ServerIP), settings.ServerHttpPort);
+            var httpEndPoint = new IPEndPoint(IPAddress.Parse(connectionSettings.ServerIP), connectionSettings.ServerHttpPort);
             var manager = new ProjectionsManager(new EventStoreLogger(this.logger), httpEndPoint, defaultTimeout);
 
-            string projectionresult = AsyncContext.Run(() => manager.GetStateAsync(CountProjectionName, new UserCredentials(this.settings.Login, this.settings.Password)));
+            string projectionresult = AsyncContext.Run(() => manager.GetStateAsync(CountProjectionName, new UserCredentials(this.connectionSettings.Login, this.connectionSettings.Password)));
             var value = JsonConvert.DeserializeAnonymousType(projectionresult, new
             {
                 count = 0
@@ -243,12 +246,12 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         private void ConfigureEventStore()
         {
-            if (settings.InitializeProjections)
+            if (connectionSettings.InitializeProjections)
             {
-                var httpEndPoint = new IPEndPoint(IPAddress.Parse(this.settings.ServerIP), this.settings.ServerHttpPort);
+                var httpEndPoint = new IPEndPoint(IPAddress.Parse(this.connectionSettings.ServerIP), this.connectionSettings.ServerHttpPort);
                 var manager = new ProjectionsManager(new EventStoreLogger(this.logger), httpEndPoint, defaultTimeout);
 
-                var userCredentials = new UserCredentials(settings.Login, settings.Password);
+                var userCredentials = new UserCredentials(connectionSettings.Login, connectionSettings.Password);
                 string projectionStatus = AsyncContext.Run(() => manager.GetStatusAsync("$by_category"));
                 var status = JsonConvert.DeserializeAnonymousType(projectionStatus, new { status = "" });
                 if (status.status != "Running")
