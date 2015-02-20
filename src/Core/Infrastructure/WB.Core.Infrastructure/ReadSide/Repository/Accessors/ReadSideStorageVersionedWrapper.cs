@@ -53,7 +53,7 @@ namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
             }
             catch (Exception e)
             {
-                Logger.Error(e.Message, e);
+                Logger.Error(String.Format("Error on getting entity with id: {0}, version: {1}", id, version), e);
             }
             return null;
         }
