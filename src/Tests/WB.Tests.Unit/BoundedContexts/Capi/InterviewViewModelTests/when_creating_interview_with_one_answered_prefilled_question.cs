@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -50,7 +51,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
             interviewViewModel.FeaturedQuestions.Count.ShouldEqual(1);
 
         It should_interview_has_1_prefilled_question_with_answer_equal_to_answerForNumeric = () =>
-            interviewViewModel.FeaturedQuestions[InterviewViewModel.ConvertIdAndRosterVectorToString(answeredQuestionId)].AnswerString.ShouldEqual(answerForNumeric.ToString());
+            interviewViewModel.FeaturedQuestions[ConversionHelper.ConvertIdAndRosterVectorToString(answeredQuestionId)].AnswerString.ShouldEqual(answerForNumeric.ToString());
 
         It should_invalidQuestions_in_statistic_be_empty = () =>
             interviewViewModel.Statistics.InvalidQuestions.ShouldBeEmpty();

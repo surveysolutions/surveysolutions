@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
@@ -11,8 +10,8 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails.GridItems;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -1315,19 +1314,12 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             return x.InterviewItemPropagationVector.SequenceEqual(linkedQuestionRosterVector.Take(x.InterviewItemPropagationVector.Length));
         }
 
-        public static string ConvertIdAndRosterVectorToString(Guid id, decimal[] rosterVector = null)
+        private string ConvertIdAndRosterVectorToString(Guid id, decimal[] rosterVector = null)
         {
-            if (rosterVector == null || !rosterVector.Any())
-                return id.FormatGuid();
-
-            return String.Format("{0}[{1}]", id.FormatGuid(),
-                String.Join((string) "-",
-                    (IEnumerable<string>)
-                        rosterVector.Select(
-                            v => v.ToString("0.############################", CultureInfo.InvariantCulture))));
+            return ConversionHelper.ConvertIdAndRosterVectorToString(id, rosterVector);
         }
 
-        public static string ConvertInterviewItemId(InterviewItemId interviewItemId)
+        private string ConvertInterviewItemId(InterviewItemId interviewItemId)
         {
             return ConvertIdAndRosterVectorToString(interviewItemId.Id, interviewItemId.InterviewItemPropagationVector);
         }

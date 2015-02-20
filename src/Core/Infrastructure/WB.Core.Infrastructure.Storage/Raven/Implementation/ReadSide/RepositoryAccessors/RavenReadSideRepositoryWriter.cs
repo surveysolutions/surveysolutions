@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Raven.Abstractions.Data;
 using Raven.Client;
+using Raven.Client.Document;
+using Raven.Client.Extensions;
 using Raven.Client.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;

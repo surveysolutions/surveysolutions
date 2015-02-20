@@ -6,6 +6,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -54,7 +55,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
         private static StaticTextViewModel getStaticText()
         {
             return
-                ((QuestionnaireScreenViewModel)interviewViewModel.Screens[InterviewViewModel.ConvertInterviewItemId(interviewItemId)]).Items.FirstOrDefault() as
+                ((QuestionnaireScreenViewModel)interviewViewModel.Screens[ConversionHelper.ConvertIdAndRosterVectorToString(interviewItemId.Id, interviewItemId.InterviewItemPropagationVector)]).Items.FirstOrDefault() as
                     StaticTextViewModel;
         }
 

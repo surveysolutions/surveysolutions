@@ -7,6 +7,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -54,7 +55,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
 
             var extendedVector = outerVector.ToList();
             extendedVector.Add(rosterInstanceId);
-            var newScreen = interviewViewModel.Screens[ InterviewViewModel.ConvertIdAndRosterVectorToString(screenId, extendedVector.ToArray())] as QuestionnaireScreenViewModel;
+            var newScreen = interviewViewModel.Screens[ConversionHelper.ConvertIdAndRosterVectorToString(screenId, extendedVector.ToArray())] as QuestionnaireScreenViewModel;
             SubscribeScreen(interviewViewModel, newScreen);
         }
 
@@ -71,7 +72,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
 
                     var questionnaireNavigationPanelItem = item as QuestionnaireNavigationPanelItem;
                     if (questionnaireNavigationPanelItem != null)
-                        SubscribeScreen(interviewViewModel, interviewViewModel.Screens[InterviewViewModel.ConvertInterviewItemId(questionnaireNavigationPanelItem.PublicKey)]);
+                        SubscribeScreen(interviewViewModel, interviewViewModel.Screens[ConversionHelper.ConvertIdAndRosterVectorToString(questionnaireNavigationPanelItem.PublicKey.Id, questionnaireNavigationPanelItem.PublicKey.InterviewItemPropagationVector)]);
                 }
 
             }

@@ -4,6 +4,7 @@ using Ninject.Activation;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Services;
 using WB.Core.Infrastructure.Storage.Esent.Implementation;
 using WB.Core.Infrastructure.Storage.Memory.Implementation;
 using WB.Core.Infrastructure.Storage.Raven.Implementation;
@@ -37,6 +38,8 @@ namespace WB.Core.Infrastructure.Storage.Raven
             this.Bind<IReadSideAdministrationService>().ToMethod(context => this.Kernel.Get<ReadSideService>());
            
             this.Bind<RavenReadSideRepositoryWriterSettings>().ToConstant(ravenReadSideRepositoryWriterSettings);
+            this.Bind<IRavenReadSideRepositoryCleaner>().To<RavenReadSideRepositoryCleaner>().InSingletonScope()
+                .WithConstructorArgument("assembliesWithIndexes", this.assembliesWithIndexes);
 
           
             this.Kernel.Bind(typeof(IReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);

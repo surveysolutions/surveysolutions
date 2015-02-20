@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -34,12 +32,12 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
 
             interviewViewModel = CreateInterviewViewModel(questionnarie, rosterStructure,
             interviewSynchronizationDto);
-            interviewViewModel.SetAnswer(InterviewViewModel.ConvertIdAndRosterVectorToString(targetQuestionId, new decimal[0]), 3);
-            interviewViewModel.SetQuestionValidity(InterviewViewModel.ConvertIdAndRosterVectorToString(targetQuestionId, new decimal[0]), false);
+            interviewViewModel.SetAnswer(ConversionHelper.ConvertIdAndRosterVectorToString(targetQuestionId, new decimal[0]), 3);
+            interviewViewModel.SetQuestionValidity(ConversionHelper.ConvertIdAndRosterVectorToString(targetQuestionId, new decimal[0]), false);
         };
 
         Because of = () =>
-             interviewViewModel.SetQuestionStatus(InterviewViewModel.ConvertIdAndRosterVectorToString(targetQuestionId, new decimal[0]), false);
+             interviewViewModel.SetQuestionStatus(ConversionHelper.ConvertIdAndRosterVectorToString(targetQuestionId, new decimal[0]), false);
 
         It should_UnansweredQuestions_in_statistic_cont_has_zero_elements = () =>
            interviewViewModel.Statistics.UnansweredQuestions.ShouldBeEmpty();
