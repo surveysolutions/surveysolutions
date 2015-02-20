@@ -17,7 +17,7 @@
         }).success(function (data) {
             self.updateIconByStatus(data);
         }).complete(function () {
-            _.delay(self.updateHealthCheckStatus, 3000);
+            _.delay(self.updateHealthCheckStatus, 3 * 60 * 1000);
         });
     };
 
