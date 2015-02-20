@@ -45,8 +45,8 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
         It should_cleanup_data_for_interview =
             () => cleanUpExecutorMock.Verify(x => x.DeleteInterview(interviewId), Times.Once);
 
-        It should_throw_NullReferenceException = () =>
-            exception.ShouldBeOfType<NullReferenceException>();
+        It should_not_throw_Exception = () => 
+            exception.ShouldBeNull();
 
         private static CapiDataSynchronizationService capiDataSynchronizationService;
         private static InterviewSyncPackageDto syncItem;

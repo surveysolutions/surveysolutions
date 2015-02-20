@@ -110,18 +110,16 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
 
         private void DeleteInterview(InterviewSyncPackageDto item)
         {
-            var questionnarieId = Guid.Parse(item.Content);
+            var interviewId = Guid.Parse(item.Content);
 
             try
             {
-                this.capiCleanUpService.DeleteInterview(questionnarieId);
+                this.capiCleanUpService.DeleteInterview(interviewId);
             }
-
-            #warning replace catch with propper handler of absent questionnaries
             catch (Exception ex)
             {
-                this.logger.Error("Error on item deletion " + questionnarieId, ex);
-                throw;
+                #warning replace catch with propper handler of absent questionnaries
+                this.logger.Error("Error on item deletion " + interviewId, ex);
             }
         }
 

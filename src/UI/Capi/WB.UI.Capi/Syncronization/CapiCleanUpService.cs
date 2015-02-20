@@ -72,8 +72,14 @@ namespace WB.UI.Capi.Syncronization
             //todo: notify denormalizes
 
             //think about more elegant solution
-            CapiApplication.Kernel.Get<IReadSideRepositoryWriter<QuestionnaireDTO>>().Remove(id);
-            CapiApplication.Kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>().Remove(id);
+            var questionnaireDtoWriter = CapiApplication.Kernel.Get<IReadSideRepositoryWriter<QuestionnaireDTO>>();
+            if (questionnaireDtoWriter!=null)
+                questionnaireDtoWriter.Remove(id);
+
+            var interviewViewModelWriter = CapiApplication.Kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>();
+            if (interviewViewModelWriter!=null)
+                interviewViewModelWriter.Remove(id);
+
             this.plainInterviewFileStorage.RemoveAllBinaryDataForInterview(id);
         }
     }
