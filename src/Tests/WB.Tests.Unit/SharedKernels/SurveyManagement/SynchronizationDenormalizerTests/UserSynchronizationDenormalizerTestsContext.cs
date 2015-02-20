@@ -1,5 +1,9 @@
-﻿using Machine.Specifications;
+﻿using System;
+using System.Collections.Generic;
+using Machine.Specifications;
+using Main.Core.Entities.SubEntities;
 using Moq;
+
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -23,6 +27,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
                 userPackageStorageWriter ?? Mock.Of<IOrderableSyncPackageWriter<UserSyncPackage>>());
 
             return result;
+        }
+
+        protected static UserDocument CreateUserDocument(Guid userId)
+        {
+            var userDocument = new UserDocument
+                               {
+                                   PublicKey = userId,
+                                   Roles = new List<UserRoles> { UserRoles.Operator }
+                               };
+
+            return userDocument;
         }
     }
 }
