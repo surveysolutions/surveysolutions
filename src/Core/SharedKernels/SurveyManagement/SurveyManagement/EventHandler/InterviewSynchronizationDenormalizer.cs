@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.Synchronization.MetaInfo;
@@ -31,6 +31,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore;
         private readonly IReadSideRepositoryWriter<InterviewResponsible> interviewResponsibleStorageWriter;
 
+        private readonly IInterviewSynchronizationDtoFactory synchronizationDtoFactory;
         private readonly IMetaInfoBuilder metaBuilder;
 
         public InterviewSynchronizationDenormalizer(
@@ -40,7 +41,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             IJsonUtils jsonUtils,
             IMetaInfoBuilder metaBuilder,
             IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation> interviewPackageStorageWriter,
-            IReadSideRepositoryWriter<InterviewResponsible> interviewResponsibleStorageWriter, IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore)
+            IReadSideRepositoryWriter<InterviewResponsible> interviewResponsibleStorageWriter, 
+            IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore,
+            IInterviewSynchronizationDtoFactory synchronizationDtoFactory)
         {
             this.questionnriePropagationStructures = questionnriePropagationStructures;
             this.interviews = interviews;
@@ -50,6 +53,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.interviewPackageStorageWriter = interviewPackageStorageWriter;
             this.interviewResponsibleStorageWriter = interviewResponsibleStorageWriter;
             this.interviewPackageContentStore = interviewPackageContentStore;
+            this.synchronizationDtoFactory = synchronizationDtoFactory;
         }
 
         public override object[] Writers
@@ -67,19 +71,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             var newStatus = evnt.Payload.Status;
 
-            if (this.IsNewStatusRejectedBySupervisor(newStatus))
+            switch (newStatus)
             {
-                var interviewWithVersion = interviews.GetById(evnt.EventSourceId);
-                this.ResendInterviewInNewStatus(interviewWithVersion, newStatus, evnt.Payload.Comment, evnt.EventTimeStamp);
-            }
-            else
-            {
-                var interviewSummary = interviewSummarys.GetById(evnt.EventSourceId);
-                if (interviewSummary == null)
-                    return;
+                case InterviewStatus.Completed:
+                case InterviewStatus.Deleted:
+                    var interviewSummary = interviewSummarys.GetById(evnt.EventSourceId);
+                    if (interviewSummary == null)
+                        return;
 
-                if (this.IsNewStatusCompletedOrDeleted(newStatus))
                     this.MarkInterviewForClientDeleting(evnt.EventSourceId, interviewSummary.ResponsibleId, evnt.EventTimeStamp, interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
+                    break;
+
+                case InterviewStatus.RejectedBySupervisor:
+                    var interviewWithVersion = interviews.GetById(evnt.EventSourceId);
+                    this.ResendInterviewInNewStatus(interviewWithVersion, newStatus, evnt.Payload.Comment, evnt.EventTimeStamp);
+                    break;
             }
         }
 
@@ -121,8 +127,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             this.MarkInterviewForClientDeleting(evnt.EventSourceId, interviewSummary.ResponsibleId, evnt.EventTimeStamp, 
                 interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
-
-            //interviewResponsibleStorageWriter.Remove(evnt.EventSourceId);
         }
 
         private void ResendInterviewInNewStatus(InterviewData interviewData, InterviewStatus newStatus, string comments, DateTime timestamp)
@@ -130,34 +134,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             if (interviewData == null)
                 return;
 
-            var interview = interviewData;
+            var interviewSyncData = this.synchronizationDtoFactory.BuildFrom(interviewData, interviewData.ResponsibleId, newStatus, comments);
 
-            var interviewSyncData = this.BuildSynchronizationDtoWhichIsAssignedToUser(interview, interview.ResponsibleId, newStatus, comments);
-
-            this.SaveInterview(interviewSyncData, interview.ResponsibleId, timestamp, interviewData.QuestionnaireId, interviewData.QuestionnaireVersion);
-        }
-
-        private InterviewSynchronizationDto BuildSynchronizationDtoWhichIsAssignedToUser(InterviewData interview, Guid userId,
-            InterviewStatus status, string comments)
-        {
-            var factory = new InterviewSynchronizationDtoFactory(this.questionnriePropagationStructures);
-            return factory.BuildFrom(interview, userId, status, comments);
+            this.SaveInterview(interviewSyncData, interviewData.ResponsibleId, timestamp, interviewData.QuestionnaireId, interviewData.QuestionnaireVersion);
         }
 
         private void ResendInterviewForPerson(InterviewData interview, Guid responsibleId, DateTime timestamp)
         {
-            InterviewSynchronizationDto interviewSyncData = this.BuildSynchronizationDtoWhichIsAssignedToUser(interview, responsibleId, InterviewStatus.InterviewerAssigned, null);
+            InterviewSynchronizationDto interviewSyncData = this.synchronizationDtoFactory.BuildFrom(interview, responsibleId, InterviewStatus.InterviewerAssigned, null);
             this.SaveInterview(interviewSyncData, interview.ResponsibleId, timestamp, interview.QuestionnaireId, interview.QuestionnaireVersion);
-        }
-
-        private bool IsNewStatusRejectedBySupervisor(InterviewStatus newStatus)
-        {
-            return newStatus == InterviewStatus.RejectedBySupervisor;
-        }
-
-        private bool IsNewStatusCompletedOrDeleted(InterviewStatus newStatus)
-        {
-            return newStatus == InterviewStatus.Completed || newStatus == InterviewStatus.Deleted;
         }
 
         private bool IsInterviewWereRejectedAtLeastOnceBeboreOrNotCreateOnClient(InterviewSummary interviewSummary)

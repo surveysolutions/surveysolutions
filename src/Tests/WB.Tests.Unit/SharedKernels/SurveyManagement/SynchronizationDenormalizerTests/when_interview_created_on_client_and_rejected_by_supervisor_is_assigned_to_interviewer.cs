@@ -5,6 +5,7 @@ using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.Synchronization.SyncStorage;
@@ -26,7 +27,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             var interviews = new Mock<IReadSideKeyValueStorage<InterviewData>>();
             interviews.SetReturnsDefault(data);
 
+            var synchronizationDto = CreateSynchronizationDto(interviewId);
 
+            var synchronizationDtoFactory = Mock.Of<IInterviewSynchronizationDtoFactory>(
+                    x => x.BuildFrom(data, Moq.It.IsAny<Guid>(), InterviewStatus.InterviewerAssigned, Moq.It.IsAny<string>()) == synchronizationDto);
+            
             var interviewSummaryWriterMock = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
             interviewSummaryWriterMock.SetReturnsDefault(new InterviewSummary()
             {
@@ -45,7 +50,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
                 interviews: interviews.Object,
                 interviewPackageStorageWriter: interviewPackageStorageWriter.Object, 
                 interviewSummarys: interviewSummaryWriterMock.Object,
-                interviewSyncPackageContentStorage: interviewSyncPackageContentStorage.Object);
+                interviewSyncPackageContentStorage: interviewSyncPackageContentStorage.Object,
+                synchronizationDtoFactory: synchronizationDtoFactory);
         };
 
         Because of = () => synchronizationDenormalizer.Handle(Create.InterviewerAssignedEvent());
