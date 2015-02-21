@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.ChapterInfoViewDenormalizerTest
     {
         protected static ChaptersInfoViewDenormalizer CreateDenormalizer(GroupInfoView view = null, IExpressionProcessor expressionProcessor = null)
         {
-            var readSideRepositoryWriter = new Mock<IReadSideRepositoryWriter<GroupInfoView>>();
+            var readSideRepositoryWriter = new Mock<IReadSideKeyValueStorage<GroupInfoView>>();
             readSideRepositoryWriter.Setup(x => x.GetById(It.IsAny<string>())).Returns(view);
 
             return new ChaptersInfoViewDenormalizer(readSideRepositoryWriter.Object);

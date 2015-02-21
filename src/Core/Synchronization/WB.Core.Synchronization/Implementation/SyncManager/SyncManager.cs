@@ -13,21 +13,21 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 {
     internal class SyncManager : ISyncManager
     {
-        private readonly IReadSideRepositoryWriter<ClientDeviceDocument> devices;
+        private readonly IReadSideKeyValueStorage<ClientDeviceDocument> devices;
         private readonly ISynchronizationDataStorage storage;
-        private readonly IIncomePackagesRepository incomeRepository;
+        private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
         private readonly ILogger logger;
         private readonly ICommandService commandService;
 
-        public SyncManager(IReadSideRepositoryWriter<ClientDeviceDocument> devices,
-            ISynchronizationDataStorage storage, 
-            IIncomePackagesRepository incomeRepository,
+        public SyncManager(IReadSideKeyValueStorage<ClientDeviceDocument> devices,
+            ISynchronizationDataStorage storage,
+            IIncomingSyncPackagesQueue incomingSyncPackagesQueue,
             ILogger logger, 
             ICommandService commandService)
         {
             this.devices = devices;
             this.storage = storage;
-            this.incomeRepository = incomeRepository;
+            this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.logger = logger;
             this.commandService = commandService;
         }
@@ -46,19 +46,9 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             return this.CheckAndCreateNewSyncActivity(clientIdentifier);
         }
 
-        public bool SendSyncItem(SyncItem item)
+        public void SendSyncItem(Guid interviewId, string item)
         {
-            if (item == null)
-                throw new ArgumentException("Sync Item is not set.");
-
-            if (string.IsNullOrWhiteSpace(item.Content))
-                throw new ArgumentException("Sync Item content is not set.");
-
-            if (item.RootId == Guid.Empty)
-                throw new ArgumentException("Sync Item id is not set.");
-
-            this.incomeRepository.StoreIncomingItem(item);
-            return true;
+            this.incomingSyncPackagesQueue.Enqueue(interviewId: interviewId, item: item);
         }
 
         public IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, string lastSyncedPackageId)

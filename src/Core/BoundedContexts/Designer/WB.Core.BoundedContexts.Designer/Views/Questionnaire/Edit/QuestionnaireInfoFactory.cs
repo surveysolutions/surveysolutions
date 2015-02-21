@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             public string Text { get; set; }
         }
 
-        private readonly IReadSideRepositoryReader<QuestionsAndGroupsCollectionView> questionDetailsReader;
+        private readonly IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView> questionDetailsReader;
 
         private static readonly SelectOption InterviewerQuestionScope = new SelectOption { Value = "Interviewer", Text = "Interviewer" };
         private static readonly SelectOption SupervisorQuestionScope = new SelectOption { Value = "Supervisor", Text = "Supervisor" };
@@ -95,7 +95,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             new SelectOption() {Value = RosterType.Numeric.ToString(), Text = Properties.Roster.RosterType_Numeric}
         };
 
-        public QuestionnaireInfoFactory(IReadSideRepositoryReader<QuestionsAndGroupsCollectionView> questionDetailsReader)
+        public QuestionnaireInfoFactory(IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView> questionDetailsReader)
         {
             this.questionDetailsReader = questionDetailsReader;
         }

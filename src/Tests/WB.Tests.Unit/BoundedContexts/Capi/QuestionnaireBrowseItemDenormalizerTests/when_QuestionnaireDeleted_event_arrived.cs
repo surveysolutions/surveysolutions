@@ -8,8 +8,8 @@ using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Capi.EventHandler;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using It = Machine.Specifications.It;
@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.QuestionnaireBrowseItemDenormalizer
     {
         Establish context = () =>
         {
-            questionnaireBrowseItemStorageMock = new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem>>();
+            questionnaireBrowseItemStorageMock = new Mock<IReadSideRepositoryWriter<QuestionnaireBrowseItem>>();
             plainQuestionnaireRepositoryMock = new Mock<IPlainQuestionnaireRepository>();
 
             questionnaireBrowseItemDenormalizer = CreateQuestionnaireBrowseItemDenormalizer(questionnaireBrowseItemStorageMock.Object, plainQuestionnaireRepositoryMock.Object);
@@ -30,11 +30,11 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.QuestionnaireBrowseItemDenormalizer
             questionnaireBrowseItemDenormalizer.Handle(CreatePublishedEvent(questionnaireId, new QuestionnaireDeleted() {QuestionnaireVersion = 1}));
 
         It should_questionnaireBrowseItem_be_removed_from_versionedReadSideRepositoryWriter_once = () =>
-           questionnaireBrowseItemStorageMock.Verify(x => x.Remove(questionnaireId.FormatGuid(),1), Times.Once);
+           questionnaireBrowseItemStorageMock.Verify(x => x.Remove(questionnaireId.FormatGuid()+"$"+1), Times.Once);
 
         private static QuestionnaireBrowseItemDenormalizer questionnaireBrowseItemDenormalizer;
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
-        private static Mock<IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem>> questionnaireBrowseItemStorageMock;
+        private static Mock<IReadSideRepositoryWriter<QuestionnaireBrowseItem>> questionnaireBrowseItemStorageMock;
         private static Mock<IPlainQuestionnaireRepository> plainQuestionnaireRepositoryMock;
     }
 }

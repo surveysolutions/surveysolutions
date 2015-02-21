@@ -88,6 +88,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly IKeywordsProvider keywordsProvider;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
 
+        private static readonly Regex VariableNameRegex = new Regex("^[_A-Za-z][_A-Za-z0-9]*$");
+        private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w \-\(\)\\/]*$");
+
         public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, IFileSystemAccessor fileSystemAccessor,
             ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider,
             IExpressionProcessorGenerator expressionProcessorGenerator)
@@ -119,7 +122,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IGroup>(GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion, "WB0035", VerificationMessages.WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion),
                     Verifier<IGroup>(GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion, "WB0036", VerificationMessages.WB0036_GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion),
                     Verifier<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles, "WB0037", VerificationMessages.WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles),
-                    Verifier<IGroup>(RosterFixedTitlesHaveMoreThan250Items, "WB0038", VerificationMessages.WB0038_RosterFixedTitlesHaveMoreThan250Items),
+                    Verifier<IGroup>(RosterFixedTitlesHaveMoreThanAllowedItems, "WB0038", VerificationMessages.WB0038_RosterFixedTitlesHaveMoreThan40Items),
                     Verifier<ITextListQuestion>(TextListQuestionCannotBePrefilled, "WB0039", VerificationMessages.WB0039_TextListQuestionCannotBePrefilled),
                     Verifier<ITextListQuestion>(TextListQuestionCannotBeFilledBySupervisor, "WB0040", VerificationMessages.WB0040_TextListQuestionCannotBeFilledBySupervisor),
                     Verifier<ITextListQuestion>(TextListQuestionCannotHaveCustomValidation, "WB0041", VerificationMessages.WB0041_TextListQuestionCannotCustomValidation),
@@ -172,7 +175,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<SingleQuestion>(CascadingQuestionHasValidationExpresssion, "WB0092", VerificationMessages.WB0092_CascadingChildQuesionShouldNotContainValidation),
                     Verifier<IComposite>(ConditionExpresssionHasLengthMoreThan10000Characters, "WB0094", VerificationMessages.WB0094_ConditionExpresssionHasLengthMoreThan10000Characters),
                     Verifier<IQuestion>(ValidationExpresssionHasLengthMoreThan10000Characters, "WB0095", VerificationMessages.WB0095_ValidationExpresssionHasLengthMoreThan10000Characters),
-
+                    Verifier(QuestionnaireTitleHasInvalidCharacters, "WB0097", VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
@@ -570,12 +573,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return group.RosterFixedTitles.Any(string.IsNullOrWhiteSpace);
         }
 
-        private static bool RosterFixedTitlesHaveMoreThan250Items(IGroup group)
+        private static bool RosterFixedTitlesHaveMoreThanAllowedItems(IGroup group)
         {
             if (!IsRosterByFixedTitles(group))
                 return false;
 
-            return group.RosterFixedTitles.Length > 250;
+            return group.RosterFixedTitles.Length > 40;
         }
 
         private static bool RosterSizeQuestionMaxValueCouldNotBeEmpty(IQuestion question, QuestionnaireDocument questionnaire)
@@ -680,6 +683,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return question.Answers.Any(option => string.IsNullOrEmpty(option.AnswerValue));
         }
 
+        private static bool QuestionnaireTitleHasInvalidCharacters(QuestionnaireDocument questionnaire)
+        {
+            if (string.IsNullOrWhiteSpace(questionnaire.Title))
+            {
+                return false;
+            }
+
+            return !QuestionnaireNameRegex.IsMatch(questionnaire.Title);
+        }
+
         private static bool QuestionHasInvalidVariableName(IQuestion arg)
         {
             return !IsVariableNameValid(arg.StataExportCaption);
@@ -692,8 +705,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             if (variableName.Length > 32)
                 return false;
-            var regExp = new Regex("^[_A-Za-z][_A-Za-z0-9]*$");
-            return regExp.IsMatch(variableName);
+            return VariableNameRegex.IsMatch(variableName);
         }
 
         private static bool RosterHasEmptyVariableName(IGroup group)

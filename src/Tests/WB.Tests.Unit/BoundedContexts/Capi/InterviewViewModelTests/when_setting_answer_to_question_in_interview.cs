@@ -10,6 +10,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -40,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
         };
 
         Because of = () =>
-            interviewViewModel.SetAnswer(new InterviewItemId(targetQuestionId, new decimal[0]), answer);
+            interviewViewModel.SetAnswer(ConversionHelper.ConvertIdAndRosterVectorToString(targetQuestionId, new decimal[0]), answer);
 
         It should_unansweredQuestions_in_statistic_count_has_zero_elements = () =>
            interviewViewModel.Statistics.UnansweredQuestions.ShouldBeEmpty();

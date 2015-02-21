@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.Revalidate;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.Core.Synchronization;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewControllerTests
 {
@@ -20,7 +21,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewControllerTests
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory = null,
             IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory = null,
             IInterviewSummaryViewFactory interviewSummaryViewFactory = null,
-            IInterviewDetailsViewFactory interviewDetailsViewFactory = null)
+            IInterviewDetailsViewFactory interviewDetailsViewFactory = null,
+            IIncomingSyncPackagesQueue incomingSyncPackagesQueue = null)
         {
             return new InterviewController(
                 commandService ?? Mock.Of<ICommandService>(),

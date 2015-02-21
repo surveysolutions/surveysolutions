@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.A
     {
         Establish context = () =>
         {
-            answersByVariableStorageMock = new Mock<IReadSideRepositoryWriter<AnswersByVariableCollection>>();
+            answersByVariableStorageMock = new Mock<IReadSideKeyValueStorage<AnswersByVariableCollection>>();
             interviewBriefStorage = Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>();
             denormalizer = CreateAnswersByVariableDenormalizer(interviewBriefStorage, answersByVariableStorage:  answersByVariableStorageMock.Object);
             evnt = CreateGeoLocationQuestionAnsweredEvent(interviewId);
@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.A
 
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static Guid interviewId = Guid.Parse("22222222222222222222222222222222");
-        private static Mock<IReadSideRepositoryWriter<AnswersByVariableCollection>> answersByVariableStorageMock;
+        private static Mock<IReadSideKeyValueStorage<AnswersByVariableCollection>> answersByVariableStorageMock;
         private static IReadSideRepositoryWriter<InterviewSummary> interviewBriefStorage;
         private static AnswersByVariableDenormalizer denormalizer;
         private static IPublishedEvent<GeoLocationQuestionAnswered> evnt;

@@ -2,9 +2,10 @@
 using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
@@ -13,12 +14,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     public class ReferenceInfoForLinkedQuestionsDenormalizer : BaseDenormalizer, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>
     {
-        private readonly IVersionedReadSideRepositoryWriter<ReferenceInfoForLinkedQuestions> questionnaires;
+        private readonly IReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions> questionnaires;
         private readonly IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
         public ReferenceInfoForLinkedQuestionsDenormalizer(
-            IVersionedReadSideRepositoryWriter<ReferenceInfoForLinkedQuestions> questionnaires,
+            IReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions> questionnaires,
             IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory,
             IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
@@ -57,12 +58,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions =
                 this.referenceInfoForLinkedQuestionsFactory.CreateReferenceInfoForLinkedQuestions(questionnaireDocument, version);
 
-            this.questionnaires.Store(referenceInfoForLinkedQuestions, id);
+            this.questionnaires.AsVersioned().Store(referenceInfoForLinkedQuestions, id.FormatGuid(), version);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
         {
-            this.questionnaires.Remove(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
+            this.questionnaires.AsVersioned().Remove(evnt.EventSourceId.FormatGuid(), evnt.Payload.QuestionnaireVersion);
         }
     }
 }

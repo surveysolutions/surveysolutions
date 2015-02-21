@@ -84,6 +84,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.1.1\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -136,6 +137,7 @@
   <ItemGroup>
     <Compile Include="Api\BaseApiServiceController.cs" />
     <Compile Include="Api\ControlPanelApiController.cs" />
+    <Compile Include="Api\HealthCheckApiController.cs" />
     <Compile Include="Api\InterviewerSyncController.cs" />
     <Compile Include="Api\InterviewsController.cs" />
     <Compile Include="Api\QuestionnairesController.cs" />
@@ -143,15 +145,13 @@
     <Compile Include="Code\ApiBasicAuthAttribute.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\HealthCheckController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
     <Compile Include="Models\DeleteQuestionnaireRequestModel.cs" />
     <Compile Include="Models\AllQuestionnairesRequestModel.cs" />
     <Compile Include="Models\EventHandlerDescriptionModel.cs" />
     <Compile Include="Models\ImportQuestionnaireRequest.cs" />
-    <Compile Include="Models\InterviewDetailsFilter.cs" />
-    <Compile Include="Models\InterviewDetailsSortBy.cs" />
-    <Compile Include="Models\DetailsViewModel.cs" />
     <Compile Include="Models\RebuildReadSideInputViewModel.cs" />
     <Compile Include="Models\RebuildReadSideType.cs" />
     <Compile Include="Resources\InterviewerSyncStrings.Designer.cs">
@@ -276,9 +276,9 @@
     <Compile Include="Models\User\UserBrowseItem.cs" />
     <Compile Include="Models\User\UserBrowseView.cs" />
     <Compile Include="Models\User\UserBrowseViewFactory.cs" />
-    <Compile Include="Models\User\UserView.cs" />
-    <Compile Include="Models\User\UserViewFactory.cs" />
-    <Compile Include="Models\User\UserViewInputModel.cs" />
+    <Compile Include="Models\User\UserWebView.cs" />
+    <Compile Include="Models\User\UserWebViewFactory.cs" />
+    <Compile Include="Models\User\UserWebViewInputModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\FieldsAndValidations.resx">
@@ -431,6 +431,13 @@
     <None Include="Scripts\moment.min.js.map">
       <DependentUpon>moment.min.js</DependentUpon>
     </None>
+    <EmbeddedResource Include="Views\HealthCheck\Index.cshtml" />
+    <EmbeddedResource Include="Content\interview.css" />
+    <EmbeddedResource Include="Views\Interview\Details.cshtml" />
+    <EmbeddedResource Include="Views\Interview\HistoryOfStatusesPartialView.cshtml" />
+    <EmbeddedResource Include="Views\Interview\ApproveRejectPartialView.cshtml" />
+    <EmbeddedResource Include="Views\Interview\StaticTextPartialView.cshtml" />
+    <EmbeddedResource Include="Views\Interview\QuestionPartialView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
@@ -507,6 +514,18 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Implementation\Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\viewmodels\pages\interview\details\details.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\viewmodels\surveymanagmentheader.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\viewmodels\pages\healthcheck.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\viewmodels\healthcheckheader.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

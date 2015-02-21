@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTes
             pdfQuestionnaireDocument = CreatePdfQuestionnaire(pdfGroupView);
 
             var documentStorage =
-                Mock.Of<IReadSideRepositoryWriter<PdfQuestionnaireView>>(
+                Mock.Of<IReadSideKeyValueStorage<PdfQuestionnaireView>>(
                     writer => writer.GetById(Moq.It.IsAny<string>()) == pdfQuestionnaireDocument);
 
             denormalizer = CreatePdfQuestionnaireDenormalizer(documentStorage: documentStorage);

@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
@@ -16,11 +17,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public abstract class ControlPanelController : BaseController
     {
         private readonly IServiceLocator serviceLocator;
-        private readonly IIncomePackagesRepository incomePackagesRepository;
+        private readonly IBrokenSyncPackagesStorage brokenSyncPackagesStorage;
         private readonly ISettingsProvider settingsProvider;
 
-        public ControlPanelController(IServiceLocator serviceLocator, 
-            IIncomePackagesRepository incomePackagesRepository,
+        public ControlPanelController(IServiceLocator serviceLocator,
+            IBrokenSyncPackagesStorage brokenSyncPackagesStorage,
             ICommandService commandService, 
             IGlobalInfoProvider globalInfo, 
             ILogger logger,
@@ -28,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             : base(commandService: commandService, globalInfo: globalInfo, logger: logger)
         {
             this.serviceLocator = serviceLocator;
-            this.incomePackagesRepository = incomePackagesRepository;
+            this.brokenSyncPackagesStorage = brokenSyncPackagesStorage;
             this.settingsProvider = settingsProvider;
         }
 
@@ -49,12 +50,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         public ActionResult IncomingDataWithErrors()
         {
-            return this.View(this.incomePackagesRepository.GetListOfUnhandledPackages());
+            return this.View(this.brokenSyncPackagesStorage.GetListOfUnhandledPackages());
         }
 
-        public FileResult GetIncomingDataWithError(Guid id)
+        public FileResult GetIncomingDataWithError(string packageId)
         {
-            return this.File(this.incomePackagesRepository.GetUnhandledPackagePath(id), System.Net.Mime.MediaTypeNames.Application.Octet);
+            return this.File(this.brokenSyncPackagesStorage.GetUnhandledPackagePath(packageId), System.Net.Mime.MediaTypeNames.Application.Octet, packageId);
         }
         
         public ActionResult Settings()

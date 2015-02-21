@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Raven.Abstractions.Extensions;
@@ -8,71 +7,24 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveySolutions;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class QuestionnaireStatisticsForChart : IView
-    {
-        public QuestionnaireStatisticsForChart()
-        {
-
-        }
-        public QuestionnaireStatisticsForChart(QuestionnaireStatisticsForChart statisticsToDublicate)
-        {
-            CreatedCount = statisticsToDublicate.CreatedCount;
-            SupervisorAssignedCount = statisticsToDublicate.SupervisorAssignedCount;
-            InterviewerAssignedCount = statisticsToDublicate.InterviewerAssignedCount;
-            CompletedCount = statisticsToDublicate.CompletedCount;
-            ApprovedBySupervisorCount = statisticsToDublicate.ApprovedBySupervisorCount;
-            RejectedBySupervisorCount = statisticsToDublicate.RejectedBySupervisorCount;
-            ApprovedByHeadquartersCount = statisticsToDublicate.ApprovedByHeadquartersCount;
-            RejectedByHeadquartersCount = statisticsToDublicate.RejectedByHeadquartersCount;
-            OtherStatusesCount = statisticsToDublicate.OtherStatusesCount;
-        }
-
-        public int CreatedCount { get; set; }
-        public int SupervisorAssignedCount { get; set; }
-        public int InterviewerAssignedCount { get; set; }
-        public int CompletedCount { get; set; }
-        public int ApprovedBySupervisorCount { get; set; }
-        public int RejectedBySupervisorCount { get; set; }
-        public int ApprovedByHeadquartersCount { get; set; }
-        public int RejectedByHeadquartersCount { get; set; }
-        public int OtherStatusesCount { get; set; }
-    }
-
-    public class StatisticsGroupedByDateAndTemplate : IReadSideRepositoryEntity, IView
-    {
-        public Dictionary<DateTime, QuestionnaireStatisticsForChart> StatisticsByDate { get; set; }
-
-        public StatisticsGroupedByDateAndTemplate()
-        {
-            StatisticsByDate = new Dictionary<DateTime, QuestionnaireStatisticsForChart>();
-        }
-    }
-
     public class InterviewsChartDenormalizer : BaseDenormalizer,
         IEventHandler<InterviewCreated>,
         IEventHandler<InterviewFromPreloadedDataCreated>,
         IEventHandler<InterviewOnClientCreated>,
         IEventHandler<InterviewStatusChanged>
     {
-        private readonly IReadSideRepositoryWriter<StatisticsGroupedByDateAndTemplate> statisticsStorage;
-        private readonly IReadSideRepositoryWriter<InterviewDetailsForChart> interviewDetailsStorage;
+        private readonly IReadSideKeyValueStorage<StatisticsGroupedByDateAndTemplate> statisticsStorage;
+        private readonly IReadSideKeyValueStorage<InterviewDetailsForChart> chartItemsStorage;
 
         public InterviewsChartDenormalizer(
-            IReadSideRepositoryWriter<InterviewDetailsForChart> interviewDetailsStorage,
-            IReadSideRepositoryWriter<StatisticsGroupedByDateAndTemplate> statisticsStorage)
+            IReadSideKeyValueStorage<InterviewDetailsForChart> chartItemsStorage,
+            IReadSideKeyValueStorage<StatisticsGroupedByDateAndTemplate> statisticsStorage)
         {
-            this.interviewDetailsStorage = interviewDetailsStorage;
+            this.chartItemsStorage = chartItemsStorage;
             this.statisticsStorage = statisticsStorage;
-        }
-
-        public override object[] Writers
-        {
-            get { return new object[] { interviewDetailsStorage, statisticsStorage }; }
         }
 
         private void HandleCreation(Guid eventSourceId, Guid questionnaireId, long questionnaireVersion, DateTime date)
@@ -84,11 +36,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 QuestionnaireVersion = questionnaireVersion,
                 Status = InterviewStatus.Created
             };
-            this.interviewDetailsStorage.Store(interviewDetails, eventSourceId);
+            this.chartItemsStorage.Store(interviewDetails, eventSourceId);
 
             var statisticsKey = this.GetStatisticsKey(questionnaireId, questionnaireVersion);
 
-            var stat = this.statisticsStorage.GetById(statisticsKey) ?? this.CreateEmptyStatisticsLine();
+            var stat = this.statisticsStorage.GetById(statisticsKey) ?? new StatisticsGroupedByDateAndTemplate();
 
             if (!stat.StatisticsByDate.ContainsKey(date))
             {
@@ -171,10 +123,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
         {
-            var interviewDetails = this.interviewDetailsStorage.GetById(evnt.EventSourceId);
+            var interviewDetails = this.chartItemsStorage.GetById(evnt.EventSourceId);
             var previousStatus = interviewDetails.Status;
             interviewDetails.Status = evnt.Payload.Status;
-            this.interviewDetailsStorage.Store(interviewDetails, interviewDetails.InterviewId);
+            this.chartItemsStorage.Store(interviewDetails, interviewDetails.InterviewId);
 
             var date = evnt.EventTimeStamp.Date;
 
@@ -195,7 +147,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 .Where(x => x.Key.Date >= date.Date)
                 .ForEach(x => this.IncreaseStatisticsByStatus(x.Value, evnt.Payload.Status));
 
-        
+
             this.statisticsStorage.Store(stat, statisticsKey);
         }
 
@@ -226,9 +178,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 questionnaireVersion.ToString().PadLeft(3, '_'));
         }
 
-        private StatisticsGroupedByDateAndTemplate CreateEmptyStatisticsLine()
+        public override object[] Writers
         {
-            return new StatisticsGroupedByDateAndTemplate();
+            get { return new object[] { this.chartItemsStorage, this.statisticsStorage }; }
         }
     }
 

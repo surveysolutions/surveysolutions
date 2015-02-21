@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Web;
 using System.Web.Configuration;
 using Microsoft.Practices.ServiceLocation;
@@ -22,6 +23,7 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
+using WB.Core.Infrastructure.Storage.Esent;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.UI.Designer.App_Start;
@@ -81,6 +83,10 @@ namespace WB.UI.Designer.App_Start
 
             var ravenReadSideRepositoryWriterSettings = new RavenReadSideRepositoryWriterSettings(int.Parse(WebConfigurationManager.AppSettings["Raven.Readside.BulkInsertBatchSize"]));
 
+            string appDataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
+            string esentDataFolder = Path.Combine(appDataDirectory,
+                WebConfigurationManager.AppSettings["Esent.DbFolder"]);
+
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
                 new InfrastructureModule().AsNinject(),
@@ -90,6 +96,7 @@ namespace WB.UI.Designer.App_Start
                 new RavenReadSideInfrastructureModule(ravenSettings, ravenReadSideRepositoryWriterSettings, typeof(DesignerReportQuestionnaireListViewItem).Assembly),
                 new DesignerRegistry(),
                 new DesignerCommandDeserializationModule(),
+                new EsentReadSideModule(esentDataFolder),
                 new DesignerBoundedContextModule(dynamicCompilerSettings),
                 new QuestionnaireVerificationModule(),
                 new MembershipModule(),

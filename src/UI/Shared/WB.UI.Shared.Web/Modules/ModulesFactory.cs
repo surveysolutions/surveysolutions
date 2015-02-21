@@ -22,43 +22,11 @@ namespace WB.UI.Shared.Web.Modules
                 eventStoreConnectionSettings.Login = WebConfigurationManager.AppSettings["EventStore.Login"];
                 eventStoreConnectionSettings.Password = WebConfigurationManager.AppSettings["EventStore.Password"];
 
-                return new EventStoreWriteSideModule(eventStoreConnectionSettings);
+                var eventStoreWriteSideSettings = new EventStoreWriteSideSettings(int.Parse(WebConfigurationManager.AppSettings["EventStore.MaxCountToRead"]));
+
+                return new EventStoreWriteSideModule(eventStoreConnectionSettings, eventStoreWriteSideSettings);
             }
 
-            if (storeProvider == StoreProviders.Raven)
-            {
-                string storePath = WebConfigurationManager.AppSettings["Raven.DocumentStore"];
-
-                var ravenSettings = new RavenConnectionSettings(
-                    storagePath: storePath,
-                    username: WebConfigurationManager.AppSettings["Raven.Username"],
-                    password: WebConfigurationManager.AppSettings["Raven.Password"],
-                    viewsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Views"],
-                    plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"],
-                    failoverBehavior: WebConfigurationManager.AppSettings["Raven.Databases.FailoverBehavior"],
-                    activeBundles: WebConfigurationManager.AppSettings["Raven.Databases.ActiveBundles"],
-                    ravenFileSystemName: WebConfigurationManager.AppSettings["Raven.Databases.RavenFileSystemName"]);
-
-                bool useStreamingForAllEvents;
-                if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.UseStreamingForAllEvents"], out useStreamingForAllEvents))
-                {
-                    useStreamingForAllEvents = true;
-                }
-                int? pageSize = GetEventStorePageSize();
-                return pageSize.HasValue
-                    ? new RavenWriteSideInfrastructureModule(ravenSettings, useStreamingForAllEvents, pageSize.Value)
-                    : new RavenWriteSideInfrastructureModule(ravenSettings, useStreamingForAllEvents);
-            }
-
-            return null;
-        }
-
-        private static int? GetEventStorePageSize()
-        {
-            int pageSize;
-
-            if (int.TryParse(WebConfigurationManager.AppSettings["EventStorePageSize"], out pageSize))
-                return pageSize;
             return null;
         }
     }

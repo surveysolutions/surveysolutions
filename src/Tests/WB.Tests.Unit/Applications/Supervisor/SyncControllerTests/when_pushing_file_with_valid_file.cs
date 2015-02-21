@@ -23,8 +23,8 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             var userLight = new UserLight() { Name = "test" };
             var globalInfo = Mock.Of<IGlobalInfoProvider>(x => x.GetCurrentUser() == userLight);
 
-            var user = new UserView();
-            var userFactory = Mock.Of<IViewFactory<UserViewInputModel, UserView>>(x => x.Load(Moq.It.IsAny<UserViewInputModel>()) == user);
+            var user = new UserWebView();
+            var userFactory = Mock.Of<IUserWebViewFactory>(x => x.Load(Moq.It.IsAny<UserWebViewInputModel>()) == user);
             plainFileRepository = new Mock<IPlainInterviewFileStorage>();
             
             controller = CreateSyncControllerWithFile(viewFactory: userFactory, stream: new MemoryStream(), plainFileRepository: plainFileRepository.Object, fileName: fileName, globalInfo: globalInfo);

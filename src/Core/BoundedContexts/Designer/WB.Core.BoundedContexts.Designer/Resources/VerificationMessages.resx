@@ -204,8 +204,8 @@
   <data name="WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles" xml:space="preserve">
     <value>Fixed titles roster cannot have empty titles.</value>
   </data>
-  <data name="WB0038_RosterFixedTitlesHaveMoreThan250Items" xml:space="preserve">
-    <value>Fixed titles roster cannot have more than 250 rows.</value>
+  <data name="WB0038_RosterFixedTitlesHaveMoreThan40Items" xml:space="preserve">
+    <value>Fixed titles roster cannot have more than 40 rows.</value>
   </data>
   <data name="WB0039_TextListQuestionCannotBePrefilled" xml:space="preserve">
     <value>List question cannot be prefilled.</value>
@@ -376,12 +376,15 @@
     <value>Question with the same variable name already exists.</value>
   </data>
   <data name="WB0094_ConditionExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
-    <value>Condition expression has length more than 10000 characters</value>
+    <value>Condition expression has length more than 10000 characters.</value>
   </data>
   <data name="WB0095_ValidationExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
-    <value>Validation expression has length more than 10000 characters</value>
+    <value>Validation expression has length more than 10000 characters.</value>
   </data>
   <data name="WB0096_GeneralCompilationError" xml:space="preserve">
-    <value>Error occurred during questionnaire compilation</value>
+    <value>Error occurred during questionnaire compilation.</value>
+  </data>
+  <data name="WB0097_QuestionnaireTitleHasInvalidCharacters" xml:space="preserve">
+    <value>Questionnaire title contains characters that are not allowed. Only letters, numbers, space and _ are allowed.</value>
   </data>
 </root>

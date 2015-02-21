@@ -42,39 +42,22 @@ namespace WB.Core.Infrastructure.EventHandlers
         {
             var eventType = typeof(IPublishedEvent<>).MakeGenericType(evt.Payload.GetType());
 
-            if (this.IsUpgrader(evt))
-            {
-                TEntity currentState = GetViewById(evt.EventSourceId, storage);
-                var newState = (TEntity)this.GetType().GetMethod("Update", new[] { typeof(TEntity), eventType }).Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
-
-                if (newState != null)
-                {
-                    SaveView(evt.EventSourceId, newState, storage);
-                }
-                else
-                {
-                    RemoveView(evt.EventSourceId, storage);
-                }
-
+            if (!this.Handles(evt))
                 return;
-            }
 
-            if (this.IsCreator(evt))
-            {
-                var newObject =
-                    (TEntity) this.GetType()
-                        .GetMethod("Create", new[] { eventType })
-                        .Invoke(this, new object[] { this.CreatePublishedEvent(evt) });
-                if (newObject != null)
-                    SaveView(evt.EventSourceId, newObject, storage);
-                return;
-            }
+            TEntity currentState = GetViewById(evt.EventSourceId, storage);
 
-            if (this.IsDeleter(evt))
+            var newState = (TEntity) this
+                .GetType()
+                .GetMethod("Update", new[] { typeof(TEntity), eventType })
+                .Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
+
+            if (newState != null)
             {
-                TEntity currentState = GetViewById(evt.EventSourceId, storage);
-                var methodInfo = this.GetType().GetMethod("Delete", new[] { typeof(TEntity), eventType });
-                var newState = (TEntity)methodInfo.Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
+                SaveView(evt.EventSourceId, newState, storage);
+            }
+            else
+            {
                 RemoveView(evt.EventSourceId, storage);
             }
         }
@@ -123,22 +106,10 @@ namespace WB.Core.Infrastructure.EventHandlers
             return (PublishedEvent)Activator.CreateInstance(publishedEventClosedType, evt);
         }
 
-        private bool IsUpgrader(IPublishableEvent evt)
+        private bool Handles(IPublishableEvent evt)
         {
             Type genericUpgrader = typeof(IUpdateHandler<,>);
             return genericUpgrader.MakeGenericType(typeof(TEntity), evt.Payload.GetType()).IsInstanceOfType(this.GetType());
-        }
-
-        private bool IsCreator(IPublishableEvent evt)
-        {
-            Type genericUpgrader = typeof(ICreateHandler<,>);
-            return genericUpgrader.MakeGenericType(typeof(TEntity), evt.Payload.GetType()).IsInstanceOfType(this.GetType());
-        }
-
-        private bool IsDeleter(IPublishableEvent evt)
-        {
-            Type genericDeleter = typeof(IDeleteHandler<,>);
-            return genericDeleter.MakeGenericType(typeof(TEntity), evt.Payload.GetType()).IsInstanceOfType(this.GetType());
         }
 
         public string Name { get { return this.GetType().Name; } }

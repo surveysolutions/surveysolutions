@@ -13,7 +13,6 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -26,7 +25,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     internal class InterviewHistoryDenormalizer : AbstractFunctionalEventHandler<InterviewHistoryView, IReadSideRepositoryWriter<InterviewHistoryView>>,
-        ICreateHandler<InterviewHistoryView, SupervisorAssigned>,
+        IUpdateHandler<InterviewHistoryView, SupervisorAssigned>,
         IUpdateHandler<InterviewHistoryView, InterviewApprovedByHQ>,
         IUpdateHandler<InterviewHistoryView, InterviewerAssigned>,
         IUpdateHandler<InterviewHistoryView, InterviewStatusChanged>,
@@ -48,15 +47,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewHistoryView, PictureQuestionAnswered>,
         IUpdateHandler<InterviewHistoryView, AnswerCommented>,
         IUpdateHandler<InterviewHistoryView, InterviewDeleted>,
-        IDeleteHandler<InterviewHistoryView, InterviewHardDeleted>
+        IUpdateHandler<InterviewHistoryView, InterviewHardDeleted>
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireReader;
+        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader;
 
         public InterviewHistoryDenormalizer(IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader, IReadSideRepositoryWriter<UserDocument> userReader,
-            IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireReader)
+            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader)
             : base(readSideStorage)
         {
             this.interviewSummaryReader = interviewSummaryReader;
@@ -69,7 +68,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             get { return new object[] { interviewSummaryReader, userReader, questionnaireReader }; }
         }
 
-        public InterviewHistoryView Create(IPublishedEvent<SupervisorAssigned> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView currentState, IPublishedEvent<SupervisorAssigned> evnt)
         {
             var interviewSummary = interviewSummaryReader.GetById(evnt.EventSourceId);
             if (interviewSummary == null)
@@ -104,8 +103,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             if (newStatus != InterviewStatus.Completed && newStatus != InterviewStatus.Restarted)
                 return view;
 
-            AddHistoricalRecord(view, newStatus == InterviewStatus.Completed ? InterviewHistoricalAction.Completed : InterviewHistoricalAction.Restarted, Guid.Empty, evnt.EventTimeStamp,
-               CreateCommentParameters(evnt.Payload.Comment));
+            InterviewHistoricalAction interviewHistoricalAction = newStatus == InterviewStatus.Completed ? InterviewHistoricalAction.Completed : InterviewHistoricalAction.Restarted;
+            AddHistoricalRecord(view, interviewHistoricalAction, Guid.Empty, evnt.EventTimeStamp, CreateCommentParameters(evnt.Payload.Comment));
 
             return view;
         }
@@ -274,7 +273,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return view;
         }
 
-        public InterviewHistoryView Delete(InterviewHistoryView view, IPublishedEvent<InterviewHardDeleted> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewHardDeleted> evnt)
         {
             return null;
         }
@@ -369,7 +368,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             if(view ==null)
                 return;
 
-            var questionnaireWithVersion = questionnaireReader.GetById(view.QuestionnaireId, view.QuestionnaireVersion);
+            var questionnaireWithVersion = questionnaireReader.AsVersioned().Get(view.QuestionnaireId.FormatGuid(), view.QuestionnaireVersion);
             if (questionnaireWithVersion == null || questionnaireWithVersion.Questionnaire == null)
                 return;
 

@@ -27,14 +27,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private readonly IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory;
         private readonly IViewFactory<TeamInterviewsInputModel, TeamInterviewsView> teamInterviewViewFactory;
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
-        private readonly IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsFactory;
+        private readonly IInterviewDetailsViewFactory interviewDetailsFactory;
         private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
 
         public InterviewApiController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
             IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory,
             IViewFactory<TeamInterviewsInputModel, TeamInterviewsView> teamInterviewViewFactory,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
-            IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsFactory,
+            IInterviewDetailsViewFactory interviewDetailsFactory,
             IInterviewSummaryViewFactory interviewSummaryViewFactory)
             : base(commandService, globalInfo, logger)
         {
@@ -121,15 +121,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [Authorize(Roles = "Supervisor, Headquarter")]
         public NewInterviewDetailsView InterviewDetails(InterviewDetailsViewModel data)
         {
-            var view = this.interviewDetailsFactory.Load(
-                new InterviewDetailsInputModel()
-                {
-                    CompleteQuestionnaireId = data.InterviewId,
-                    CurrentGroupPublicKey = data.CurrentGroupId,
-                    PropagationKey = data.CurrentPropagationKey,
-                    User = this.GlobalInfo.GetCurrentUser()
-                });
-
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(data.InterviewId);
 
             bool isAccessAllowed =
@@ -138,6 +129,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             if (!isAccessAllowed)
                 throw new HttpResponseException(HttpStatusCode.Forbidden);
+
+            var view = this.interviewDetailsFactory.GetInterviewDetails(interviewId: data.InterviewId).InterviewDetails;
 
             return new NewInterviewDetailsView()
             {

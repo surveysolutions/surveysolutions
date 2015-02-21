@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.User
 {
-    public class UserViewFactory : IViewFactory<UserViewInputModel, UserView>
+    public interface IUserViewFactory
+    {
+        UserView Load(UserViewInputModel input);
+    }
+
+    public class UserViewFactory : IUserViewFactory 
     {
         private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
 

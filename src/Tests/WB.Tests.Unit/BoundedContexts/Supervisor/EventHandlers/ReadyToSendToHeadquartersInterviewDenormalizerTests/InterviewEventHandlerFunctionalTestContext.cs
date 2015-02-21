@@ -8,10 +8,10 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.EventHandlers;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.EventHandlers.ReadyToSendToHeadquartersInterviewDenormalizerTests
 {
     [Subject(typeof(ReadyToSendToHeadquartersInterviewDenormalizer))]

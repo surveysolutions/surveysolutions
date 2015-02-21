@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
     {
         private Establish context = () =>
         {
-            supervisorsFactoryMock = new Mock<IViewFactory<UserListViewInputModel, UserListView>>();
+            supervisorsFactoryMock = new Mock<IUserListViewFactory>();
             controller = CreateUsersController(userListViewViewFactory: supervisorsFactoryMock.Object);
         };
 
@@ -30,6 +30,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         
         private static UserApiView actionResult;
         private static UsersController controller;
-        private static Mock<IViewFactory<UserListViewInputModel, UserListView>> supervisorsFactoryMock;
+        private static Mock<IUserListViewFactory> supervisorsFactoryMock;
     }
 }

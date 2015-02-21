@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -25,7 +26,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         {
             this.eventStore = eventStore;
             this.handlersToIgnore = handlersToIgnore.ToArray();
-            this.getInProcessEventBus = () => new InProcessEventBus(true, eventStore);
+            this.getInProcessEventBus = () => new InProcessEventBus(eventStore);
         }
 
         internal NcqrCompatibleEventDispatcher(Func<InProcessEventBus> getInProcessEventBus, IEventStore eventStore, IEnumerable<Type> handlersToIgnore)
@@ -123,13 +124,24 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             aggregateRoot.MarkChangesAsCommitted();
         }
 
-        public void PublishEventToHandlers(IPublishableEvent eventMessage, IEnumerable<IEventHandler> handlers)
+        public void PublishEventToHandlers(IPublishableEvent eventMessage,
+            Dictionary<IEventHandler, Stopwatch> handlersWithStopwatch)
         {
-            var handlersToPublishEvent = this.GetListOfBusesForRebuild(handlers).ToList();
-
             var occurredExceptions = new List<Exception>();
-            foreach (var bus in handlersToPublishEvent)
+
+            foreach (var handlerWithStopwatch in handlersWithStopwatch)
             {
+                var handlerType = handlerWithStopwatch.Key.GetType();
+
+                if (!this.registredHandlers.ContainsKey(handlerType))
+                    return;
+
+                var bus = this.registredHandlers[handlerType].Bus;
+
+                Stopwatch stopWatch = handlerWithStopwatch.Value;
+
+                stopWatch.Start();
+
                 try
                 {
                     bus.Publish(eventMessage);
@@ -138,11 +150,17 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                 {
                     occurredExceptions.Add(exception);
                 }
+
+                stopWatch.Stop();
             }
+
             if (occurredExceptions.Count > 0)
                 throw new AggregateException(
-                     string.Format("{0} handler(s) failed to handle published event '{1}' by event source '{2}' with sequence '{3}'.", occurredExceptions.Count, eventMessage.EventIdentifier, eventMessage.EventSourceId, eventMessage.EventSequence),
-                     occurredExceptions);
+                    string.Format(
+                        "{0} handler(s) failed to handle published event '{1}' by event source '{2}' with sequence '{3}'.",
+                        occurredExceptions.Count, eventMessage.EventIdentifier, eventMessage.EventSourceId,
+                        eventMessage.EventSequence),
+                    occurredExceptions);
         }
 
         public void Register(IEventHandler handler)
@@ -171,7 +189,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             this.registredHandlers.Remove(handler.GetType());
         }
 
-        public IEnumerable<IEventHandler> GetAllRegistredEventHandlers()
+        public IEventHandler[] GetAllRegistredEventHandlers()
         {
             return this.registredHandlers.Values.Select(v => v.Handler).ToArray();
         }
@@ -180,11 +198,6 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         {
             var typeInfo = type.GetTypeInfo();
             return typeInfo.IsInterface && typeInfo.IsGenericType && typeInfo.GetGenericTypeDefinition() == typeof (IEventHandler<>);
-        }
-
-        private IEnumerable<InProcessEventBus> GetListOfBusesForRebuild(IEnumerable<IEventHandler> enabledHandlers)
-        {
-            return this.registredHandlers.Values.Where(h => enabledHandlers.Contains(h.Handler)).Select(h => h.Bus);
         }
     }
 }

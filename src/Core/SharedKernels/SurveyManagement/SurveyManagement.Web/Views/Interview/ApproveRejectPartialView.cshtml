@@ -1,0 +1,45 @@
+﻿@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
+@using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
+@model InterviewStatus
+
+
+@if (((Model == InterviewStatus.Completed || Model == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor) || (Model == InterviewStatus.ApprovedBySupervisor && GlobalInfo.IsHeadquarter))
+{
+    <div class="modal fade" id="approveModal" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="approveModalLabel">Approve interview</h4>
+                </div>
+                <div class="modal-body">
+                    <label>Comment:</label>
+                    <textarea data-bind="value: changeStateComment" class="form-control" rows="10"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button class="btn btn-success" data-bind="click: @(GlobalInfo.IsSupervisor ? "approveInterview" : "hQApproveInterview")">Approve</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="rejectModalLabel">Reject interview</h4>
+                </div>
+                <div class="modal-body">
+                    <label>Comment:</label>
+                    <textarea data-bind="value: changeStateComment" class="form-control" rows="10"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button class="btn btn-danger" data-bind="click: @(GlobalInfo.IsSupervisor ? "rejectInterview" : "hQRejectInterview")">Reject</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

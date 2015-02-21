@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Text;
 
 namespace WB.Core.Infrastructure.FileSystem
 {
@@ -36,5 +37,7 @@ namespace WB.Core.Infrastructure.FileSystem
         void MarkFileAsReadonly(string pathToFile);
 
         Assembly LoadAssembly(string assemblyFile);
+
+        bool IsWritePermissionExists(string path);
     }
 }

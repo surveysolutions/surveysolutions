@@ -16,8 +16,8 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
     {
         Establish context = () =>
         {
-            var user = new UserView();
-            var userFactory = Mock.Of<IViewFactory<UserViewInputModel, UserView>>(x => x.Load(Moq.It.IsAny<UserViewInputModel>()) == user);
+            var user = new UserWebView();
+            var userFactory = Mock.Of<IUserWebViewFactory>(x => x.Load(Moq.It.IsAny<UserWebViewInputModel>()) == user);
             plainFileRepository = new Mock<IPlainInterviewFileStorage>();
             plainFileRepository.Setup(x => x.StoreInterviewBinaryData(interviewId, Moq.It.IsAny<string>(), Moq.It.IsAny<byte[]>()))
                 .Throws<ArgumentException>();

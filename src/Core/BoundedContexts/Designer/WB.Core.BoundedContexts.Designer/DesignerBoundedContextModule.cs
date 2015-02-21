@@ -44,7 +44,6 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IQuestionnaireDocumentUpgrader>().To<QuestionnaireDocumentUpgrader>().InSingletonScope();
             this.Bind<IQuestionnaireEntityFactory>().To<QuestionnaireEntityFactory>().InSingletonScope();
             this.Bind<IQuestionnaireVersioner>().To<QuestionnaireVersioner>().InSingletonScope();
-            this.Bind<INCalcToCSharpConverter>().To<NCalcToCSharpConverter>();
             this.Bind<IKeywordsProvider>().To<KeywordsProvider>();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
             this.Bind<IQuestionnaireListViewFactory>().To<QuestionnaireListViewFactory>();
@@ -108,7 +107,6 @@ namespace WB.Core.BoundedContexts.Designer
                 .Handles<DeleteGroupCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.DeleteGroup(command.GroupId, command.ResponsibleId))
                 .Handles<DeleteQuestionnaireCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.DeleteQuestionnaire())
                 .Handles<DeleteStaticTextCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.DeleteStaticText(command.EntityId, command.ResponsibleId))
-                .Handles<MigrateExpressionsToCSharp>(command => command.QuestionnaireId, (command, aggregate) => aggregate.MigrateExpressionsToCSharp())
                 .Handles<MoveGroupCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.MoveGroup(command.GroupId, command.TargetGroupId, command.TargetIndex, command.ResponsibleId))
                 .Handles<MoveQuestionCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.MoveQuestion(command.QuestionId, command.TargetGroupId, command.TargetIndex, command.ResponsibleId))
                 .Handles<MoveStaticTextCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.MoveStaticText(command.EntityId, command.TargetEntityId, command.TargetIndex, command.ResponsibleId))

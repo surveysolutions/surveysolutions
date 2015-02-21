@@ -111,7 +111,7 @@ ko.bindingHandlers.typeahead = {
 };
 ko.bindingHandlers.numericformatter = {
     init: function (element, valueAccessor) {
-        ko.utils.registerEventHandler(element, 'keyup', function () {
+        ko.utils.registerEventHandler(element, 'change', function () {
             var observable = valueAccessor();
             observable($(element).val());
         });
@@ -123,29 +123,20 @@ ko.bindingHandlers.numericformatter = {
 
         var jElement = $(element);
 
-        if (ko.bindingHandlers.numericformatter.endWith(value, '.')) {
-            jElement.text(value);
-            jElement.val(value);
-            return;
-        }
-
-        if (ko.bindingHandlers.numericformatter.endWith(value, ',')) {
-            value = value.slice(0, -1) + '.';
-            jElement.text(value);
-            jElement.val(value);
-            return;
-        }
         var newValue = ko.bindingHandlers.numericformatter.format(value.split(',').join(''));
 
         if (jElement.is('input')) {
-            var oldCursorPosition = ko.bindingHandlers.numericformatter.getCursorPosition(element);
-            var newPosition = ko.bindingHandlers.numericformatter.getNewCursorPosition(value, newValue, oldCursorPosition);
-            jElement.val(newValue);
-            if (newValue != value)
+            if (newValue !== value) {
+                jElement.val(newValue);
+
+                var oldCursorPosition = ko.bindingHandlers.numericformatter.getCursorPosition(element);
+                var newPosition = ko.bindingHandlers.numericformatter.getNewCursorPosition(value, newValue, oldCursorPosition);
+                
                 ko.bindingHandlers.numericformatter.selectRange(element, newPosition);
+            }
         }
 
-        if ($.isFunction(jElement.text)) {
+        if ($.isFunction(jElement.text) && newValue !== value) {
             jElement.text(newValue);
         }
     },

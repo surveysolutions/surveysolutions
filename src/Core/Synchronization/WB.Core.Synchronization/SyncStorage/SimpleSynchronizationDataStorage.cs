@@ -122,9 +122,10 @@ namespace WB.Core.Synchronization.SyncStorage
 
             Guid supervisorId = user.Roles.Contains(UserRoles.Supervisor) ? userId : user.Supervisor.Id;
 
-            var team=
-                userStorage.Query(
-                    _ => _.Where(u => u.Supervisor != null && u.Supervisor.Id == supervisorId).Select(u => u.PublicKey)).ToList();
+            var team =
+                userStorage.QueryAll(u => u.Supervisor != null && u.Supervisor.Id == supervisorId)
+                    .Select(u => u.PublicKey)
+                    .ToList();
             team.Add(supervisorId);
             return team;
         }
@@ -143,7 +144,7 @@ namespace WB.Core.Synchronization.SyncStorage
             var meta = new QuestionnaireAssemblyMetadata(publicKey, version);
 
             var syncItem = CreateSyncItem(publicKey.Combine(AssemblySeed).Combine(version), SyncItemType.QuestionnaireAssembly,
-                GetItemAsContent(assemblyAsBase64String), GetItemAsContent(meta));
+                GetItemAsContent(assemblyAsBase64String ?? string.Empty), GetItemAsContent(meta));
 
             chunkStorageWriter.StoreChunk(syncItem, null, timestamp);
         }

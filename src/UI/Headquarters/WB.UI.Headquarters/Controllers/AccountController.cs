@@ -20,7 +20,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IFormsAuthentication authentication;
 
         public AccountController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
-            IFormsAuthentication authentication, IViewFactory<UserViewInputModel, UserView> userViewFactory,
+            IFormsAuthentication authentication, IUserViewFactory userViewFactory,
             IPasswordHasher passwordHasher)
             : base(commandService, globalInfo, logger, userViewFactory, passwordHasher)
         {

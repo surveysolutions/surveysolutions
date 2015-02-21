@@ -103,12 +103,15 @@
             $('#wrapper').css('margin-top', navigationHeight + 'px');
             $('#umbrella').css('top', navigationHeight + 'px');
         };
-
+        var $updateIncomingPackagesQueueApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "GetIncomingPackagesQueueLength" })';
+        var $healthCheckStatusApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "HealthCheckApi", action = "GetStatus" })';
         $(document).ready(function () {
             setMinHeight();
             $(window).resize(function () {
                 setMinHeight();
             });
+            new Supervisor.VM.SurveyManagmentHeader($updateIncomingPackagesQueueApiUrl, "#IncomingPackagesQueueIndicator").load();
+            new Supervisor.VM.HealthCheckHeader($healthCheckStatusApiUrl, "#HealthCheckIndicator").load();
         });
     </script>
     <script>
