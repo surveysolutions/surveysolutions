@@ -9,5 +9,6 @@ namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
         public DateTime LastEntryDate { get; set; }
         public string OwnerName { get; set; }
         public QuestionnaireVersion Version { get; set; }
+        public string Email { get; set; }
     }
 }
