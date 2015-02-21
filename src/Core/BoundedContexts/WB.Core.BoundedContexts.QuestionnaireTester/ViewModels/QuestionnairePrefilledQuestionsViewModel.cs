@@ -244,5 +244,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     },
                 progressPercentage: downloadProgress, token: new CancellationToken());
         }
+
+        public override void GoBack()
+        {
+            this.ShowViewModel<DashboardViewModel>();
+        }
     }
 }

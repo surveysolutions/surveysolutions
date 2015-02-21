@@ -86,5 +86,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
             this.UIDialogs.Alert(UIResources.SaveSettingsSuccessText);
         }
+
+        public override void GoBack()
+        {
+            this.ShowViewModel<DashboardViewModel>();
+        }
     }
 }

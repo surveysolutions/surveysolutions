@@ -27,10 +27,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         }
         public virtual void GoBack()
         {
-            this.ShowViewModel<DashboardViewModel>();
         }
 
-        protected virtual void SignOut()
+        protected void SignOut()
         {
             this.Principal.SignOut();
             this.ShowViewModel<LoginViewModel>();

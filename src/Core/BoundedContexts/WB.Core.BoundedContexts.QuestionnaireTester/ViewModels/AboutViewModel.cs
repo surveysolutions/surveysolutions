@@ -32,5 +32,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             get { return applicationSettings.ApplicationName; }
         }
+
+        public override void GoBack()
+        {
+            this.ShowViewModel<DashboardViewModel>();
+        }
     }
 }
