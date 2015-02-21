@@ -27,6 +27,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly ICommandService commandService;
         private readonly IPlainStorageAccessor<QuestionnaireDocument> questionnairesStorage;
         private readonly IRestServiceSettings restServiceSettings;
+        private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
 
         public QuestionnaireMetaInfo SelectedQuestionnaire { get; private set; }
 
@@ -278,8 +279,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     {
                         Login = this.Principal.CurrentIdentity.Name,
                         Password = this.Principal.CurrentIdentity.Password
-                    }
-                );
+                    },
+                token: tokenSource.Token);
         }
 
         public async Task<QuestionnaireResponse> GetQuestionnaireFromServer(Action<decimal> downloadProgress)
@@ -292,11 +293,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                         Login = this.Principal.CurrentIdentity.Name,
                         Password = this.Principal.CurrentIdentity.Password
                     },
-                progressPercentage: downloadProgress, token: new CancellationToken());
+                progressPercentage: downloadProgress, token: tokenSource.Token);
         }
 
         public override void GoBack()
         {
+            this.tokenSource.Cancel();
             this.ShowViewModel<DashboardViewModel>();
         }
     }
