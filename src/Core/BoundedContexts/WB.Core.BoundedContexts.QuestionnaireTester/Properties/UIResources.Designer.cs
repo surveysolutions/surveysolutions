@@ -439,6 +439,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allow to send an anonymous information about crashes of application.
+        /// </summary>
+        public static string Settings_AllowToSendInfoByCrashesText {
+            get {
+                return ResourceManager.GetString("Settings_AllowToSendInfoByCrashesText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string SettingsText {
