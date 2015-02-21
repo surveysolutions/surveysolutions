@@ -176,11 +176,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
                     var questionnaireDocumentFromStorage = this.questionnairesStorage.GetById(this.SelectedQuestionnaire.Id);
 
-                    if (questionnaireDocumentFromStorage == null ||
-                        questionnaireDocumentFromStorage.LastEntryDate != (await this.GetQuestionnaireLastEntryDate()).LastEntryDate)
+                    if (questionnaireDocumentFromStorage == null || questionnaireDocumentFromStorage.LastEntryDate != (await this.GetQuestionnaireLastEntryDate()).LastEntryDate)
                     {
                         var questionnaireCommunicationPackage = await this.GetQuestionnaireFromServer(
-                            (downloadProgress) => { this.ProgressIndicator = string.Format(UIResources.ImportQuestionnaire_DownloadProgress, downloadProgress); });
+                            (downloadProgress) =>
+                            {
+                                this.ProgressIndicator = string.Format(UIResources.ImportQuestionnaire_DownloadProgress, downloadProgress);
+                            });
 
                         this.ProgressIndicator = UIResources.ImportQuestionnaire_StoreQuestionnaire;
 
@@ -189,12 +191,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
                         this.ProgressIndicator = UIResources.ImportQuestionnaire_StoreAssembly;
 
-                        this.questionnaireAssemblyFileAccessor.StoreAssembly(questionnaireCommunicationPackage.Questionnaire.PublicKey, 0,
-                            questionnaireCommunicationPackage.QuestionnaireAssembly);
+                        this.questionnaireAssemblyFileAccessor.StoreAssembly(questionnaireCommunicationPackage.Questionnaire.PublicKey, 0, questionnaireCommunicationPackage.QuestionnaireAssembly);
                     }
 
                     this.ProgressIndicator = UIResources.ImportQuestionnaire_PrepareQuestionnaire;
 
+                    if (tokenSource.IsCancellationRequested) return;
                     this.ExecuteImportFromDesignerForTesterCommand(questionnaireDocumentFromStorage);
 
                     Guid interviewUserId = Guid.NewGuid();
@@ -202,8 +204,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
                     this.ProgressIndicator = UIResources.ImportQuestionnaire_CreateInterview;
 
-                    this.ExecuteCreateInterviewCommand(interviewId, interviewUserId, questionnaireDocumentFromStorage.PublicKey);
+                    if (tokenSource.IsCancellationRequested) return;
+                    this.ExecuteCreateInterviewCommand(interviewId, interviewUserId,questionnaireDocumentFromStorage.PublicKey);
 
+                    if (tokenSource.IsCancellationRequested) return;
                     this.interviewId = interviewId;
                     if (this.OnInterviewCreated != null)
                     {
@@ -249,15 +253,25 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                             this.ErrorMessage = UIResources.RequestTimeout;
                             this.ShowTryAgainLink = true;
                             break;
+                        case HttpStatusCode.InternalServerError:
+                            this.Logger.Error("Internal server error when getting questionnaires.", ex);
+                            this.ErrorMessage = UIResources.InternalServerError;
+                            this.ShowTryAgainLink = true;
+                            break;
                         default:
                             throw;
                     }
+                }
+                catch (OperationCanceledException ex)
+                {
+                    // show here the message that loading questionnaire was canceled
+                    // don't needed in the current implementation
                 }
                 finally
                 {
                     this.IsInProgress = false;
                 }
-            });
+            }, tokenSource.Token);
         }
 
         private void ExecuteCreateInterviewCommand(Guid interviewId, Guid interviewUserId, Guid questionnaireId)
