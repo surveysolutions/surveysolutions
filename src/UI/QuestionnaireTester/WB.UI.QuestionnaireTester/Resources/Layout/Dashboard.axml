@@ -74,7 +74,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 local:MvxBind="RefreshCommand RefreshQuestionnairesCommand; Refreshing IsInProgress; Visibility VisibleIfListHasItems(Questionnaires)">
-                <Mvx.MvxBindableListView
+                <Mvx.MvxListView
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:paddingTop="25dp"

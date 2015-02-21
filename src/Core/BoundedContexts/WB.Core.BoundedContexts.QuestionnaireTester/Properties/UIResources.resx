@@ -208,7 +208,7 @@
     <value>Authorization</value>
   </data>
   <data name="Maintenance" xml:space="preserve">
-    <value>Server is on the maintenance mode now. Sorry for the inconvenience. Please, try again later.</value>
+    <value>The website of survey solutions designer is on the maintenance mode now. Sorry for the inconvenience</value>
   </data>
   <data name="OSVersionText" xml:space="preserve">
     <value>Android version:</value>
@@ -223,7 +223,7 @@
     <value>prefilled questions</value>
   </data>
   <data name="RequestTimeout" xml:space="preserve">
-    <value>Timeout when connecting to 'Designer' website. Check your internet connection</value>
+    <value>Timeout when connecting to the survey solutions designer website. Check your internet connection</value>
   </data>
   <data name="ResetSettingsConfirmationText" xml:space="preserve">
     <value>Are you sure to reset all settings to default parameters?</value>
@@ -241,7 +241,7 @@
     <value>Save</value>
   </data>
   <data name="ServiceUnavailable" xml:space="preserve">
-    <value>No connection to 'Designer'. Please make sure that the 'Designer' website is available and it's not in the maintenance mode</value>
+    <value>No connection to the survey solutions website. Please make sure that the website is available</value>
   </data>
   <data name="SettingsText" xml:space="preserve">
     <value>Settings</value>
