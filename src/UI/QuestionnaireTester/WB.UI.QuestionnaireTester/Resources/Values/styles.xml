@@ -6,6 +6,7 @@
 
   <color name="text">#FFFFFFFF</color>
   <color name="background">#FF2A81CB</color>
+  <color name="errorMessage">#FFE32102</color>
 
   <color name="enabledQuestionnaire">#FF2FC507</color>
   <color name="disabledQuestionnaire">#FFE9E9E9</color>

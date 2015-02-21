@@ -176,23 +176,26 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f040000
 			public const int capi_orange = 2130968576;
 			
+			// aapt resource value: 0x7f040005
+			public const int disabledQuestionnaire = 2130968581;
+			
 			// aapt resource value: 0x7f040004
-			public const int disabledQuestionnaire = 2130968580;
+			public const int enabledQuestionnaire = 2130968580;
 			
 			// aapt resource value: 0x7f040003
-			public const int enabledQuestionnaire = 2130968579;
-			
-			// aapt resource value: 0x7f040005
-			public const int progressIndicatorFirst = 2130968581;
-			
-			// aapt resource value: 0x7f040008
-			public const int progressIndicatorFourth = 2130968584;
+			public const int errorMessage = 2130968579;
 			
 			// aapt resource value: 0x7f040006
-			public const int progressIndicatorSecond = 2130968582;
+			public const int progressIndicatorFirst = 2130968582;
+			
+			// aapt resource value: 0x7f040009
+			public const int progressIndicatorFourth = 2130968585;
 			
 			// aapt resource value: 0x7f040007
-			public const int progressIndicatorThird = 2130968583;
+			public const int progressIndicatorSecond = 2130968583;
+			
+			// aapt resource value: 0x7f040008
+			public const int progressIndicatorThird = 2130968584;
 			
 			// aapt resource value: 0x7f040001
 			public const int text = 2130968577;

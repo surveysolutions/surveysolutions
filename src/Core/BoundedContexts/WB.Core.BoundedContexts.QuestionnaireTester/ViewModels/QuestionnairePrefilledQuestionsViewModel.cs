@@ -26,7 +26,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
         private readonly ICommandService commandService;
         private readonly IPlainStorageAccessor<QuestionnaireDocument> questionnairesStorage;
-        public QuestionnaireMetaInfo Questionnaire { get; private set; }
+        private readonly IRestServiceSettings restServiceSettings;
+
+        public QuestionnaireMetaInfo SelectedQuestionnaire { get; private set; }
+
         public Action<Guid> OnInterviewCreated { get; set; }
         public Action<Guid> OnInterviewDetailsOpened { get; set; }
 
@@ -63,6 +66,39 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
+        private bool hasErrors = false;
+        public bool HasErrors
+        {
+            get { return hasErrors; }
+            set
+            {
+                hasErrors = value;
+                RaisePropertyChanged(() => HasErrors);
+            }
+        }
+
+        private bool showTryAgainLink = false;
+        public bool ShowTryAgainLink
+        {
+            get { return showTryAgainLink; }
+            set
+            {
+                showTryAgainLink = value;
+                RaisePropertyChanged(() => ShowTryAgainLink);
+            }
+        }
+
+        private string errorMessage;
+        public string ErrorMessage
+        {
+            get { return errorMessage; }
+            set
+            {
+                errorMessage = value;
+                RaisePropertyChanged(() => ErrorMessage);
+            }
+        }
+
         private string progressIndicator;
         public string ProgressIndicator
         {
@@ -77,7 +113,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public QuestionnairePrefilledQuestionsViewModel(ILogger logger, IRestService restService,
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor, ICommandService commandService,
             IPrincipal principal, IAnswerProgressIndicator answerProgressIndicator, IUserInteraction uiDialogs,
-            IPlainStorageAccessor<QuestionnaireDocument> questionnairesStorage)
+            IPlainStorageAccessor<QuestionnaireDocument> questionnairesStorage, IRestServiceSettings restServiceSettings)
             : base(logger, principal: principal, uiDialogs: uiDialogs)
         {
             answerProgressIndicator.Setup(() => this.IsAnswering = true, () => this.IsAnswering = false);
@@ -86,6 +122,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
             this.commandService = commandService;
             this.questionnairesStorage = questionnairesStorage;
+            this.restServiceSettings = restServiceSettings;
         }
 
         private IMvxCommand loadQuestionnaireCommand;
@@ -110,7 +147,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public async void Init(QuestionnaireMetaInfo questionnaire)
         {
-            this.Questionnaire = questionnaire;
+            this.SelectedQuestionnaire = questionnaire;
 
             await this.LoadQuestionnaireAndCreateInterivew();
         }
@@ -128,13 +165,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             return Task.Run(async () =>
             {
+                this.ShowTryAgainLink = false;
+                this.HasErrors = false;
                 this.IsInProgress = true;
 
                 try
                 {
                     this.ProgressIndicator = UIResources.ImportQuestionnaire_VerifyOnServer;
 
-                    var questionnaireDocumentFromStorage = this.questionnairesStorage.GetById(this.Questionnaire.Id);
+                    var questionnaireDocumentFromStorage = this.questionnairesStorage.GetById(this.SelectedQuestionnaire.Id);
 
                     if (questionnaireDocumentFromStorage == null ||
                         questionnaireDocumentFromStorage.LastEntryDate != (await this.GetQuestionnaireLastEntryDate()).LastEntryDate)
@@ -173,30 +212,39 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 }
                 catch (RestException ex)
                 {
+                    this.HasErrors = true;
+
                     switch (ex.StatusCode)
                     {
                         case HttpStatusCode.Unauthorized:
                             this.SignOut();
                             break;
                         case HttpStatusCode.Forbidden:
-                            this.UIDialogs.Alert(UIResources.ImportQuestionnaire_Error_Forbidden);
+                            this.ErrorMessage = string.Format(UIResources.ImportQuestionnaire_Error_Forbidden, this.restServiceSettings.Endpoint.GetDomainName(), this.SelectedQuestionnaire.Id,
+                                this.SelectedQuestionnaire.Title, this.SelectedQuestionnaire.OwnerName, this.SelectedQuestionnaire.LastEntryDate);
                             break;
                         case HttpStatusCode.UpgradeRequired:
-                            this.UIDialogs.Alert(UIResources.ImportQuestionnaire_Error_UpgradeRequired);
+                            this.ErrorMessage = UIResources.ImportQuestionnaire_Error_UpgradeRequired;
                             break;
                         case HttpStatusCode.PreconditionFailed:
-                            this.UIDialogs.Alert(string.Format(UIResources.ImportQuestionnaire_Error_PreconditionFailed, this.Questionnaire.Title));
+                            this.ErrorMessage = string.Format(UIResources.ImportQuestionnaire_Error_PreconditionFailed,
+                                this.restServiceSettings.Endpoint.GetDomainName(), this.SelectedQuestionnaire.Id,
+                                this.SelectedQuestionnaire.Title);
                             break;
                         case HttpStatusCode.NotFound:
-                            this.UIDialogs.Alert(string.Format(UIResources.ImportQuestionnaire_Error_NotFound, this.Questionnaire.Title));
+                            this.ErrorMessage = string.Format(UIResources.ImportQuestionnaire_Error_NotFound,
+                                this.restServiceSettings.Endpoint.GetDomainName(), this.SelectedQuestionnaire.Id,
+                                this.SelectedQuestionnaire.Title);
                             break;
                         case HttpStatusCode.ServiceUnavailable:
-                            this.UIDialogs.Alert(ex.Message.Contains("maintenance")
+                            this.ErrorMessage = ex.Message.Contains("maintenance")
                                 ? UIResources.Maintenance
-                                : UIResources.ServiceUnavailable);
+                                : UIResources.ServiceUnavailable;
+                            this.ShowTryAgainLink = true;
                             break;
                         case HttpStatusCode.RequestTimeout:
-                            this.UIDialogs.Alert(UIResources.RequestTimeout);
+                            this.ErrorMessage = UIResources.RequestTimeout;
+                            this.ShowTryAgainLink = true;
                             break;
                         default:
                             throw;
@@ -222,7 +270,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private async Task<QuestionnaireMetaInfo> GetQuestionnaireLastEntryDate()
         {
             return await this.restService.GetAsync<QuestionnaireMetaInfo>(
-                url: string.Format("questionnaires/{0}/meta", Questionnaire.Id),
+                url: string.Format("questionnaires/{0}/meta", SelectedQuestionnaire.Id),
                 credentials:
                     new RestCredentials()
                     {
@@ -235,7 +283,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public async Task<QuestionnaireResponse> GetQuestionnaireFromServer(Action<decimal> downloadProgress)
         {
             return await this.restService.GetWithProgressAsync<QuestionnaireResponse>(
-                url: string.Format("questionnaires/{0}", Questionnaire.Id),
+                url: string.Format("questionnaires/{0}", SelectedQuestionnaire.Id),
                 credentials:
                     new RestCredentials()
                     {
