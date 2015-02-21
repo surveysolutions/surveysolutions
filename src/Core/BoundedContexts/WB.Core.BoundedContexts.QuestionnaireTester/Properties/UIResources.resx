@@ -166,16 +166,16 @@
     <value>Downloading questionnaire -  {0}%</value>
   </data>
   <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
-    <value>You don't have permissions to look this questionnaire</value>
+    <value>You don't have permissions to look this &lt;a href="{0}/Designer/app/open/{1}"&gt;{2}&lt;/a&gt; questionnaire.  Most likely the author(&lt;font color="black"&gt;"{3}"&lt;/font&gt;) of the questionnaire removed you from the list of shared persons by that questionnaire. You can contact to him via email: &lt;a href="mailto:{4}"&gt;Contact to the owner of questionnaire&lt;/a&gt;</value>
   </data>
   <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
-    <value>Requested questionnaire "{0}" cannot be found. Please check the list of available questionnaires.</value>
+    <value>Requested questionnaire &lt;a href="{0}/Designer/app/open/{1}"&gt;{2}&lt;/a&gt; is no longer available</value>
   </data>
   <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
-    <value>Requested questionnaire "{0}" has errors. Please verify the questionnaire on Designer.</value>
+    <value>Requested questionnaire &lt;font color="black"&gt;{2}&lt;/font&gt; has errors. &lt;br/&gt; Please verify the questionnaire in the &lt;br/&gt; &lt;a href="{0}/Designer/app/open/{1}"&gt;Questionnaire Editor&lt;/a&gt;</value>
   </data>
   <data name="ImportQuestionnaire_Error_UpgradeRequired" xml:space="preserve">
-    <value>Your version of application does not support of this questionnaire. Please, update application</value>
+    <value>Your version of application does not support of this questionnaire &lt;br/&gt;&lt;br/&gt; &lt;a href="market://details?id=org.worldbank.solutions.Vtester"&gt;Update application&lt;/a&gt;</value>
   </data>
   <data name="ImportQuestionnaire_PrepareQuestionnaire" xml:space="preserve">
     <value>Preparing questionnaire to creating interview</value>
@@ -190,7 +190,7 @@
     <value>Checking questionnaire for errors on the server</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
-    <value>At the moment, the server is unavailable. We apologize for any inconvenience. Server will be restored in the near future</value>
+    <value>At the moment, the server is unavailable. We apologize for any inconvenience</value>
   </data>
   <data name="LastModifiedDateTitle" xml:space="preserve">
     <value>Modified on:</value>
@@ -241,7 +241,7 @@
     <value>Save</value>
   </data>
   <data name="ServiceUnavailable" xml:space="preserve">
-    <value>No connection to the survey solutions website. Please make sure that the website is available</value>
+    <value>No connection to the survey solutions designer. Please make sure that the website is available</value>
   </data>
   <data name="SettingsText" xml:space="preserve">
     <value>Settings</value>
@@ -254,6 +254,9 @@
   </data>
   <data name="StaySignedInText" xml:space="preserve">
     <value>Stay signed in</value>
+  </data>
+  <data name="TryAgainLink" xml:space="preserve">
+    <value>&lt;b&gt;&lt;u&gt;Try again&lt;/u&gt;&lt;/b&gt;</value>
   </data>
   <data name="Unauthorized" xml:space="preserve">
     <value>Your login or password is incorrect</value>
