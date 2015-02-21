@@ -67,8 +67,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             var result = this.GetFolderPathOfFilesByQuestionnaireImpl( questionnaireId, version);
 
-            this.ThrowArgumentExceptionIfFilesFolderMissing(questionnaireId, version, result);
-
             return result;
         }
 
@@ -82,14 +80,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             return this.fileSystemAccessor.CombinePath(this.pathToExportedFiles,
                 string.Format("exported_files_{0}_{1}", questionnaireId, version));
-        }
-
-        private void ThrowArgumentExceptionIfFilesFolderMissing(Guid templateId, long templateVersion, string filesFolderForTemplatePath)
-        {
-            if (!this.fileSystemAccessor.IsDirectoryExists(filesFolderForTemplatePath))
-                throw new InterviewDataExportException(
-                    string.Format("files folder is absent for questionnaire with id '{0}' and version '{1}'",
-                        templateId, templateVersion));
         }
 
         public string CreateExportDataFolder(Guid questionnaireId, long version)
