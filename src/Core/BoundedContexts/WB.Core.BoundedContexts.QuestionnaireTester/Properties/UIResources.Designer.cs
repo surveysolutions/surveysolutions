@@ -331,7 +331,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Server is on the maintenance mode now. Sorry for the inconvenience. Please, try again later..
+        ///   Looks up a localized string similar to The website of survey solutions designer is on the maintenance mode now. Sorry for the inconvenience.
         /// </summary>
         public static string Maintenance {
             get {
@@ -376,7 +376,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Timeout when connecting to &apos;Designer&apos; website. Check your internet connection.
+        ///   Looks up a localized string similar to Timeout when connecting to the survey solutions designer website. Check your internet connection.
         /// </summary>
         public static string RequestTimeout {
             get {
@@ -430,7 +430,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No connection to &apos;Designer&apos;. Please make sure that the &apos;Designer&apos; website is available and it&apos;s not in the maintenance mode.
+        ///   Looks up a localized string similar to No connection to the survey solutions website. Please make sure that the website is available.
         /// </summary>
         public static string ServiceUnavailable {
             get {
