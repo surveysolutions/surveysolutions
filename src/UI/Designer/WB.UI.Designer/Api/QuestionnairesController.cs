@@ -135,6 +135,7 @@ namespace WB.UI.Designer.Api
                     Title = q.Title,
                     LastEntryDate = q.LastEntryDate,
                     OwnerName = q.Owner,
+                    Email = string.Empty,
                     Version = this.engineVersion
                 })
             };

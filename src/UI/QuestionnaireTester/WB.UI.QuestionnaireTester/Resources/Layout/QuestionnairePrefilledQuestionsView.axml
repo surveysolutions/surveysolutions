@@ -32,7 +32,7 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textStyle="bold"
-                local:MvxBind="Text Questionnaire.Title" />
+                local:MvxBind="Text SelectedQuestionnaire.Title" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

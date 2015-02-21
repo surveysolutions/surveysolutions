@@ -220,8 +220,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                             this.SignOut();
                             break;
                         case HttpStatusCode.Forbidden:
-                            this.ErrorMessage = string.Format(UIResources.ImportQuestionnaire_Error_Forbidden, this.restServiceSettings.Endpoint.GetDomainName(), this.SelectedQuestionnaire.Id,
-                                this.SelectedQuestionnaire.Title, this.SelectedQuestionnaire.OwnerName, this.SelectedQuestionnaire.LastEntryDate);
+                            this.ErrorMessage = string.Format(UIResources.ImportQuestionnaire_Error_Forbidden,
+                                this.restServiceSettings.Endpoint.GetDomainName(), this.SelectedQuestionnaire.Id,
+                                this.SelectedQuestionnaire.Title, this.SelectedQuestionnaire.OwnerName,
+                                this.SelectedQuestionnaire.Email);
                             break;
                         case HttpStatusCode.UpgradeRequired:
                             this.ErrorMessage = UIResources.ImportQuestionnaire_Error_UpgradeRequired;
