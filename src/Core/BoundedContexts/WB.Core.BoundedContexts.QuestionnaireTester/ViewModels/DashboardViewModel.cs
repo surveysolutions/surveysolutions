@@ -54,10 +54,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
-        private IEnumerable<QuestionnaireMetaInfo> allQuestionnaires;
-        private ObservableCollection<QuestionnaireMetaInfo> questionnaires;
+        private IList<QuestionnaireMetaInfo> allQuestionnaires;
+        private IList<QuestionnaireMetaInfo> questionnaires;
 
-        public ObservableCollection<QuestionnaireMetaInfo> Questionnaires
+        public IList<QuestionnaireMetaInfo> Questionnaires
         {
             get { return questionnaires; }
             set
@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             {
                 if (this.allQuestionnaires == null) return;
 
-                //this.Questionnaires = this.allQuestionnaires;
+                this.Questionnaires = this.allQuestionnaires;
                 this.allQuestionnaires = null;
             }
             else
@@ -154,10 +154,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
                 if (this.allQuestionnaires != null)
                 {
-                    //this.Questionnaires = this.allQuestionnaires.Where(
-                    //    item =>
-                    //        item.Title.IndexOf(query, StringComparison.OrdinalIgnoreCase) > -1 ||
-                    //        item.OwnerName.IndexOf(query, StringComparison.OrdinalIgnoreCase) > -1).ToList();
+                    this.Questionnaires = this.allQuestionnaires.Where(
+                        item =>
+                            item.Title.IndexOf(query, StringComparison.OrdinalIgnoreCase) > -1 ||
+                            item.OwnerName.IndexOf(query, StringComparison.OrdinalIgnoreCase) > -1).ToList();
                 }
             }
         }
@@ -166,8 +166,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             return Task.Run(() =>
             {
-                //this.Questionnaires = questionnairesStorageAccessor.LoadAll().ToList();
-                this.Questionnaires = new ObservableCollection<QuestionnaireMetaInfo>();
+                this.Questionnaires = questionnairesStorageAccessor.LoadAll().ToList();
             });
         }
 
@@ -177,7 +176,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             {
                 this.questionnairesStorageAccessor.RemoveAll();
                 this.questionnairesStorageAccessor.Store(questionnaireListItems.Select(qli => new Tuple<QuestionnaireMetaInfo, string>(qli, qli.Id)));
-                //this.Questionnaires = questionnaireListItems.ToList();
+                this.Questionnaires = questionnaireListItems.ToList();
             });
         }
 
@@ -186,22 +185,19 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.IsInProgress = true;
             try
             {
-                const int pageSize = 1;
+                const int pageSize = 20;
                 var totalCountOfQuestionnaires = (await GetPagedQuestionnaires(0, 0)).TotalCount;
                 var numberOfPagesByQuestionnaires = (totalCountOfQuestionnaires / pageSize) +
                                                     (totalCountOfQuestionnaires % pageSize == 0 ? 0 : 1);
 
-                this.Questionnaires.Clear();
+                var questionnaires = new List<QuestionnaireMetaInfo>();
                 for (int pageIndex = 1; pageIndex <= numberOfPagesByQuestionnaires; pageIndex++)
                 {
                     var questionnairesResponse = await GetPagedQuestionnaires(pageIndex, pageSize);
-                    foreach (var questionnaireMetaInfo in questionnairesResponse.Items)
-                    {
-                        this.InvokeOnMainThread(() => this.Questionnaires.Add(questionnaireMetaInfo));
-                    }
+                    questionnaires.AddRange(questionnairesResponse.Items);
                 }
 
-                //await this.SaveQuestionnairesMetaInfoToStorage(questionnaires);
+                await this.SaveQuestionnairesMetaInfoToStorage(questionnaires);
             }
             catch (RestException ex)
             {
