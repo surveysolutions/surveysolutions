@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.Plugins.WebBrowser;
@@ -24,6 +24,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly IMvxWebBrowserTask webBrowser;
 
         private readonly QuestionnaireVersion supportedQuestionnaireVersion;
+        private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
 
         public DashboardViewModel(IPrincipal principal, IRestService restService, ILogger logger,
             IUserInteraction uiDialogs, IQueryablePlainStorageAccessor<QuestionnaireMetaInfo> questionnairesStorageAccessor, IMvxWebBrowserTask webBrowser)
@@ -133,6 +134,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private void LoadQuestionnaire(QuestionnaireMetaInfo questionnaire)
         {
+            this.tokenSource.Cancel();
             this.ShowViewModel<QuestionnairePrefilledQuestionsViewModel>(questionnaire);
         }
 
@@ -232,6 +234,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             return await this.restService.GetAsync<QuestionnairesResponse>(
                 url: "questionnaires",
+                token: tokenSource.Token,
                 credentials:
                     new RestCredentials()
                     {
