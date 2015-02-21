@@ -21,5 +21,10 @@ namespace WB.UI.QuestionnaireTester.Mvvm.Views
 
             this.SetContentView(this.ViewResourceId);
         }
+
+        public override void OnBackPressed()
+        {
+            this.ViewModel.GoBack();
+        }
     }
 }

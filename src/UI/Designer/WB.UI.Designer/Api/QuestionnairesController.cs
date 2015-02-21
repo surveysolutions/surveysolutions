@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -13,7 +12,6 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Designer.Api.Attributes;
-using WB.UI.Designer.Code;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Api
@@ -27,7 +25,6 @@ namespace WB.UI.Designer.Api
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
-        private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IQuestionnaireListViewFactory viewFactory;
         private readonly Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion engineVersion;
 
@@ -36,7 +33,6 @@ namespace WB.UI.Designer.Api
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
-            IQuestionnaireHelper questionnaireHelper,
             IQuestionnaireListViewFactory viewFactory)
         {
             this.userHelper = userHelper;
@@ -44,7 +40,6 @@ namespace WB.UI.Designer.Api
             this.sharedPersonsViewFactory = sharedPersonsViewFactory;
             this.questionnaireVerifier = questionnaireVerifier;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
-            this.questionnaireHelper = questionnaireHelper;
             this.viewFactory = viewFactory;
 
             var engineVersion = QuestionnaireVersionProvider.GetCurrentEngineVersion();
