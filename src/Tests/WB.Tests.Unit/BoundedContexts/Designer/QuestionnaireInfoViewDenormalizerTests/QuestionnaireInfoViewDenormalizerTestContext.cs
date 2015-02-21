@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoViewDenormaliz
     {
         protected static QuestionnaireInfoViewDenormalizer CreateDenormalizer(QuestionnaireInfoView view = null)
         {
-            var readSideRepositoryWriter = new Mock<IReadSideRepositoryWriter<QuestionnaireInfoView>>();
+            var readSideRepositoryWriter = new Mock<IReadSideKeyValueStorage<QuestionnaireInfoView>>();
             readSideRepositoryWriter.Setup(x => x.GetById(It.IsAny<string>())).Returns(view);
 
             return new QuestionnaireInfoViewDenormalizer(readSideRepositoryWriter.Object);

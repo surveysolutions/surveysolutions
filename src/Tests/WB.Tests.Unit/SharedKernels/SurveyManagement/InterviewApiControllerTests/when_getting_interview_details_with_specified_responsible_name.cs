@@ -3,6 +3,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -16,14 +17,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
         private Establish context = () =>
         {
             var interviewDetailsFactoryMock =
-                new Mock<IViewFactory<InterviewDetailsInputModel, InterviewDetailsView>>();
-            interviewDetailsFactoryMock.Setup(_ => _.Load(Moq.It.IsAny<InterviewDetailsInputModel>()))
+                new Mock<IInterviewDetailsViewFactory>();
+            interviewDetailsFactoryMock.Setup(_ => _.GetInterviewDetails(Moq.It.IsAny<Guid>(), Moq.It.IsAny<Guid?>(), Moq.It.IsAny<decimal[]>(), Moq.It.IsAny<InterviewDetailsFilter?>()))
                 .Returns(
-                    () =>
-                        new InterviewDetailsView()
+                    () =>new DetailsViewModel()
+                    {
+                        InterviewDetails = new InterviewDetailsView()
                         {
                             Responsible = new UserLight(new Guid(), responsibleUserName)
-                        });
+                        }
+                    });
 
             var globalInfoProvider = Mock.Of<IGlobalInfoProvider>(_
                 => _.IsHeadquarter == true);

@@ -2,21 +2,20 @@
 {
     public class SyncSettings
     {
-        public SyncSettings(bool reevaluateInterviewWhenSynchronized, string appDataDirectory,
-            string incomingCapiPackagesDirectoryName, string incomingCapiPackagesWithErrorsDirectoryName,
-            string incomingCapiPackageFileNameExtension)
+        public SyncSettings(string appDataDirectory, string incomingCapiPackagesWithErrorsDirectoryName,
+            string incomingCapiPackageFileNameExtension, string incomingUnprocessedPackagesDirectoryName, string origin)
         {
-            this.ReevaluateInterviewWhenSynchronized = reevaluateInterviewWhenSynchronized;
             this.AppDataDirectory = appDataDirectory;
-            this.IncomingCapiPackagesDirectoryName = incomingCapiPackagesDirectoryName;
             this.IncomingCapiPackagesWithErrorsDirectoryName = incomingCapiPackagesWithErrorsDirectoryName;
             this.IncomingCapiPackageFileNameExtension = incomingCapiPackageFileNameExtension;
+            this.IncomingUnprocessedPackagesDirectoryName = incomingUnprocessedPackagesDirectoryName;
+            this.Origin = origin;
         }
 
-        public bool ReevaluateInterviewWhenSynchronized { get; private set; }
         public string AppDataDirectory { get; private set; }
-        public string IncomingCapiPackagesDirectoryName { get; private set; }
+        public string IncomingUnprocessedPackagesDirectoryName { get; private set; }
         public string IncomingCapiPackagesWithErrorsDirectoryName { get; private set; }
         public string IncomingCapiPackageFileNameExtension { get; private set; }
+        public string Origin { get; private set; }
     }
 }

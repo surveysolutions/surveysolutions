@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
 
             baseDate = new DateTime(2014, 8, 22);
 
-            var readSideRepositoryReader = Mock.Of<IReadSideRepositoryReader<StatisticsGroupedByDateAndTemplate>>(_
+            var readSideRepositoryReader = Mock.Of<IReadSideKeyValueStorage<StatisticsGroupedByDateAndTemplate>>(_
                 => _.GetById(Moq.It.IsAny<string>()) == null as StatisticsGroupedByDateAndTemplate);
 
             chartStatisticsViewFactory = CreateChartStatisticsViewFactory(readSideRepositoryReader);

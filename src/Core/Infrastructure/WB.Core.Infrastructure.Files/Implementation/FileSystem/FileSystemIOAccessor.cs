@@ -1,8 +1,12 @@
 ﻿using System;
 using System.CodeDom;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.AccessControl;
+using System.Security.Principal;
+using System.Text;
 using System.Text.RegularExpressions;
 using WB.Core.Infrastructure.FileSystem;
 using ZetaLongPaths;
@@ -192,6 +196,57 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             //dependent assemblies could not be resolved
             return Assembly.LoadFrom(assemblyFile);
         }
+
+        public bool IsWritePermissionExists(string path)
+        {
+            if (string.IsNullOrEmpty(path) || !Directory.Exists(path))
+                return false;
+
+            try
+            {
+                DirectorySecurity security = Directory.GetAccessControl(path);
+                var authorizationRuleCollection = security.GetAccessRules(true, true, typeof(SecurityIdentifier));
+
+                var windowsIdentity = WindowsIdentity.GetCurrent();
+                var identityReferences = new List<IdentityReference> { windowsIdentity.User };
+                if (windowsIdentity.Groups != null)
+                    identityReferences.AddRange(windowsIdentity.Groups);
+
+                var isAllowWriteForUser = IsAllowWriteForIdentityReferance(authorizationRuleCollection, identityReferences);
+                return isAllowWriteForUser;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return false;
+            }
+        }
+
+        private bool IsAllowWriteForIdentityReferance(
+            AuthorizationRuleCollection authorizationRuleCollection, List<IdentityReference> identityReferences)
+        {
+            var writeAllow = false;
+            var writeDeny = false;
+
+            foreach (AuthorizationRule authorizationRule in authorizationRuleCollection)
+            {
+                var isUserPermission = identityReferences.Any(ir => ir.Equals(authorizationRule.IdentityReference));
+                if (isUserPermission)
+                {
+                    FileSystemAccessRule rule = ((FileSystemAccessRule)authorizationRule);
+
+                    if ((rule.FileSystemRights & FileSystemRights.WriteData) == FileSystemRights.WriteData)
+                    {
+                        if (rule.AccessControlType == AccessControlType.Allow)
+                            writeAllow = true;
+                        else if (rule.AccessControlType == AccessControlType.Deny)
+                            writeDeny = true;
+                    }
+                }
+            }
+
+            return writeAllow && !writeDeny;
+        }
+
 
         private string RemoveNonAscii(string s)
         {

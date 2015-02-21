@@ -5,6 +5,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Utils;
@@ -775,14 +776,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.CreateInterviewCreatedOnClient(questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, isValid, userId);
         }
 
-        public void CreateInterviewCreatedOnClient(Guid questionnaireId, long questionnaireVersion, InterviewStatus interviewStatus,
+        public void CreateInterviewCreatedOnClient(Guid questionnaireId, long questionnaireVersion,
+            InterviewStatus interviewStatus,
             AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, bool isValid, Guid userId)
         {
             this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
 
             GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
             this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
-            this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, true, null));
+            this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, questionnaireVersion,
+                interviewStatus, featuredQuestionsMeta, true, null));
             this.ApplyEvent(new InterviewStatusChanged(interviewStatus, string.Empty));
             this.ApplyValidationEvent(isValid);
         }
@@ -1753,8 +1756,37 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyValidityChangesEvents(validityChanges);
         }
 
-        public void ApplySynchronizationMetadata(Guid id, Guid userId, Guid questionnaireId, long questionnaireVersion, InterviewStatus interviewStatus,
-            AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid, bool createdOnClient)
+        public void SynchronizeInterviewEvents(Guid userId, Guid questionnaireId, long questionnaireVersion,
+            InterviewStatus interviewStatus, object[] synchronizedEvents, bool createdOnClient)
+        {
+            SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
+
+            GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
+
+            var isInterviewNeedToBeCreated = createdOnClient && this.Version == 0;
+
+            if (isInterviewNeedToBeCreated)
+            {
+                this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
+            }
+            else
+            {
+                if (this.status == InterviewStatus.Deleted)
+                    this.Restore(userId);
+                else
+                    this.ThrowIfStatusNotAllowedToBeChangedWithMetadata(interviewStatus);
+            }
+
+            foreach (var synchronizedEvent in synchronizedEvents)
+            {
+                this.ApplyEvent(synchronizedEvent);
+            }
+        }
+
+        public void ApplySynchronizationMetadata(Guid id, Guid userId, Guid questionnaireId, long questionnaireVersion,
+            InterviewStatus interviewStatus,
+            AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid,
+            bool createdOnClient)
         {
             this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
 
@@ -3115,7 +3147,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             object answer = interviewState.AnswersSupportedInExpressions[questionKey];
             string parentAnswer = AnswerUtils.AnswerToString(answer);
 
-            var answerNotExistsInParent = Convert.ToDecimal(parentAnswer) != childParentValue;
+            var answerNotExistsInParent = Convert.ToDecimal(parentAnswer, CultureInfo.InvariantCulture) != childParentValue;
             if (answerNotExistsInParent)
                 throw new InterviewException(string.Format(
                     "For question {0} was provided selected value {1} as answer with parent value {2}, but this do not correspond to the parent answer selected value {3}. InterviewId: {4}",

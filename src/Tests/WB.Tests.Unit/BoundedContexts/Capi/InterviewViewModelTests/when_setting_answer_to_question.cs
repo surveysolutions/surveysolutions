@@ -8,6 +8,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -55,7 +56,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
         };
 
         Because of = () =>
-            interviewViewModel.SetAnswer(mandatoryQuestionToBeAnsweredItemId, answer);
+            interviewViewModel.SetAnswer(ConversionHelper.ConvertIdAndRosterVectorToString(mandatoryQuestionToBeAnsweredItemId.Id, mandatoryQuestionToBeAnsweredItemId.InterviewItemPropagationVector), answer);
 
         It should_answered_question_has_IsMandatoryAndEmpty_property_value_false = () =>
             interviewViewModel.FindQuestion(q => q.PublicKey == mandatoryQuestionToBeAnsweredItemId).SingleOrDefault().IsMandatoryAndEmpty.ShouldEqual(false);

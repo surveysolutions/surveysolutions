@@ -74,9 +74,13 @@
     <Compile Include="Events\Sync\NewDeviceRegistered.cs" />
     <Compile Include="Events\Sync\UpdateRegisteredDevice.cs" />
     <Compile Include="IBackupManager.cs" />
-    <Compile Include="IIncomePackagesRepository.cs" />
+    <Compile Include="IIncomingSyncPackagesQueue.cs" />
+    <Compile Include="IncomingSyncPackage.cs" />
+    <Compile Include="IncomingSyncPackageException.cs" />
+    <Compile Include="ISyncPackagesProcessor.cs" />
     <Compile Include="Implementation\ImportManager\DefaultBackupManager.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\SynchronizationDeltasByBriefFields.cs" />
+    <Compile Include="Implementation\ReadSide\Indexes\SynchronizationDeltasByRecordSize.cs" />
     <Compile Include="Implementation\SyncManager\SyncManager.cs" />
     <Compile Include="ISynchronizationDataStorage.cs" />
     <Compile Include="ISyncManager.cs" />
@@ -101,7 +105,8 @@
     <Compile Include="SyncStorage\ReadSideChunkWriter.cs" />
     <Compile Include="SyncStorage\SimpleSynchronizationDataStorage.cs" />
     <Compile Include="SyncStorage\IChunkWriter.cs" />
-    <Compile Include="SyncStorage\SynchronizationDelta.cs" />
+    <Compile Include="SyncStorage\SynchronizationDeltaContent.cs" />
+    <Compile Include="SyncStorage\SynchronizationDeltaMetaInformation.cs" />
     <Compile Include="ZipFileData.cs" />
   </ItemGroup>
   <ItemGroup>

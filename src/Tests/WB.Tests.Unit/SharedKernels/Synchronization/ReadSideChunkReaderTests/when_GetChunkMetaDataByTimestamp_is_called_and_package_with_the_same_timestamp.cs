@@ -14,30 +14,29 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.ReadSideChunkReaderTests
     {
         Establish context = () =>
         {
-            synchronizationDeltaBehind = new SynchronizationDelta(Guid.NewGuid(), "test", DateTime.Now, null, false, "t",
-                "meta", 2);
+            _synchronizationDeltaMetaInformationBehind = new SynchronizationDeltaMetaInformation(Guid.NewGuid(),
+                DateTime.Now, null, "q", 2, 1, 0);
 
-            var synchronizationDelta = new List<SynchronizationDelta>
+            var synchronizationDelta = new List<SynchronizationDeltaMetaInformation>
             {
-                new SynchronizationDelta(Guid.NewGuid(), "test", synchronizationDeltaBehind.Timestamp.AddMinutes(-1), null, false, "t",
-                "meta", 1),
-                synchronizationDeltaBehind
+                new SynchronizationDeltaMetaInformation(Guid.NewGuid(), _synchronizationDeltaMetaInformationBehind.Timestamp.AddMinutes(-1), null, "q", 1,2,1),
+                _synchronizationDeltaMetaInformationBehind
             }.AsQueryable();
 
             readSideChunkReader =
-                new ReadSideChunkReader(Mock.Of<IQueryableReadSideRepositoryReader<SynchronizationDelta>>(),
+                new ReadSideChunkReader(Mock.Of<IQueryableReadSideRepositoryReader<SynchronizationDeltaMetaInformation>>(),
                     Mock.Of<IReadSideRepositoryIndexAccessor>(
-                        _ => _.Query<SynchronizationDelta>("SynchronizationDeltasByBriefFields") == synchronizationDelta));
+                        _ => _.Query<SynchronizationDeltaMetaInformation>("SynchronizationDeltasByBriefFields") == synchronizationDelta), Mock.Of<IReadSideKeyValueStorage<SynchronizationDeltaContent>>());
         };
 
         Because of = () =>
-            result = readSideChunkReader.GetChunkMetaDataByTimestamp(synchronizationDeltaBehind.Timestamp, Enumerable.Empty<Guid>());
+            result = readSideChunkReader.GetChunkMetaDataByTimestamp(_synchronizationDeltaMetaInformationBehind.Timestamp, Enumerable.Empty<Guid>());
 
         It should_return_last_created_chunk_before_passed_time_stamp = () =>
-            result.Id.ShouldEqual(synchronizationDeltaBehind.PublicKey);
+            result.Id.ShouldEqual(_synchronizationDeltaMetaInformationBehind.PublicKey);
 
         private static ReadSideChunkReader readSideChunkReader;
-        private static SynchronizationDelta synchronizationDeltaBehind;
+        private static SynchronizationDeltaMetaInformation _synchronizationDeltaMetaInformationBehind;
         private static SynchronizationChunkMeta result;
     }
 }

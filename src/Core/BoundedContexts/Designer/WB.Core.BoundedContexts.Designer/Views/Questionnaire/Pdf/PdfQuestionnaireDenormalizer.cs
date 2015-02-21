@@ -43,11 +43,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         IEventHandler<StaticTextCloned>,
         IEventHandler<StaticTextDeleted>
     {
-        private readonly IReadSideRepositoryWriter<PdfQuestionnaireView> repositoryWriter;
+        private readonly IReadSideKeyValueStorage<PdfQuestionnaireView> repositoryWriter;
         private readonly IReadSideRepositoryWriter<AccountDocument> accounts;
         private readonly ILogger logger;
 
-        public PdfQuestionnaireDenormalizer(IReadSideRepositoryWriter<PdfQuestionnaireView> repositoryWriter,
+        public PdfQuestionnaireDenormalizer(IReadSideKeyValueStorage<PdfQuestionnaireView> repositoryWriter,
             ILogger logger,
             IReadSideRepositoryWriter<AccountDocument> accounts)
         {

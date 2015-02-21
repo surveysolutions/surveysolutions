@@ -3,7 +3,6 @@ using Moq;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -22,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             var result = new SynchronizationDenormalizer(
                 synchronizationDataStorage ?? Mock.Of<ISynchronizationDataStorage>(), 
                 Mock.Of<IReadSideRepositoryWriter<UserDocument>>(),
-                Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>(),
+                Mock.Of<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(),
                 interviews ?? Mock.Of<IReadSideKeyValueStorage<InterviewData>>(),
                 interviewSummaryWriter??Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
                 Mock.Of<IQuestionnaireAssemblyFileAccessor>(), 

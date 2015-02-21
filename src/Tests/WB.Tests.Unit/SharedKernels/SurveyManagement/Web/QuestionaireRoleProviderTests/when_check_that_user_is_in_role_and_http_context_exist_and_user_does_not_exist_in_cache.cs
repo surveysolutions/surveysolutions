@@ -16,11 +16,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.QuestionaireRoleProvi
     {
         Establish context = () =>
         {
-            var userViewFactoryMock = new Mock<IViewFactory<UserViewInputModel, UserView>>();
-            userViewFactoryMock.Setup(_ => _.Load(Moq.It.IsAny<UserViewInputModel>()))
-                .Returns(new UserView() {Roles = new List<UserRoles>()});
+            var userViewFactoryMock = new Mock<IUserWebViewFactory>();
+            userViewFactoryMock.Setup(_ => _.Load(Moq.It.IsAny<UserWebViewInputModel>()))
+                .Returns(new UserWebView() {Roles = new List<UserRoles>()});
 
-            Setup.InstanceToMockedServiceLocator<IViewFactory<UserViewInputModel, UserView>>(userViewFactoryMock.Object);
+            Setup.InstanceToMockedServiceLocator<IUserWebViewFactory>(userViewFactoryMock.Object);
 
             HttpContext.Current = new HttpContext(new HttpRequest(null, "http://tempuri.org", null), new HttpResponse(null));
             

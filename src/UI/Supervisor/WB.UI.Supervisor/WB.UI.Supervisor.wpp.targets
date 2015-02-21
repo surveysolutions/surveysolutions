@@ -32,6 +32,12 @@
         <AbsolutePath>\\App_Data\\IncomingData\\.*</AbsolutePath>
         <XPath></XPath>
       </MsDeploySkipRules>
+      <MsDeploySkipRules Include="SkipReadSideFolder">
+        <SkipAction>Delete</SkipAction>
+        <ObjectName>dirPath</ObjectName>
+        <AbsolutePath>\\App_Data\\ReadSide\\.*\\*</AbsolutePath>
+        <XPath></XPath>
+      </MsDeploySkipRules>
       <MsDeploySkipRules Include="SkipIncomingDataFolder">
         <SkipAction>Delete</SkipAction>
         <ObjectName>dirPath</ObjectName>

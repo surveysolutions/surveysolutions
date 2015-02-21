@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly ILogger logger;
         private readonly Action<ICommand> executeCommand;
         private readonly IQueryablePlainStorageAccessor<LocalInterviewFeedEntry> plainStorage;
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
+        private readonly IReadSideRepositoryReader<UserDocument> users;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IHeadquartersInterviewReader headquartersInterviewReader;
         private readonly HeadquartersPullContext headquartersPullContext;
@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly IEventStore eventStore;
         private readonly IJsonUtils jsonUtils;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter;
-        private readonly IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter;
+        private readonly IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryReader;
         private readonly Func<HttpMessageHandler> httpMessageHandler;
         private readonly IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage;
         private readonly IArchiveUtils archiver;
@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             IEventStore eventStore,
             IJsonUtils jsonUtils,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter,
-            IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter,
+            IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryReader,
             Func<HttpMessageHandler> httpMessageHandler, IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage,
             IArchiveUtils archiver)
         {
@@ -93,7 +93,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             if (jsonUtils == null) throw new ArgumentNullException("jsonUtils");
             if (archiver == null) throw new ArgumentNullException("archiver");
             if (interviewSummaryRepositoryWriter == null) throw new ArgumentNullException("interviewSummaryRepositoryWriter");
-            if (readyToSendInterviewsRepositoryWriter == null) throw new ArgumentNullException("readyToSendInterviewsRepositoryWriter");
+            if (readyToSendInterviewsRepositoryReader == null) throw new ArgumentNullException("readyToSendInterviewsRepositoryReader");
             if (httpMessageHandler == null) throw new ArgumentNullException("httpMessageHandler");
 
             this.feedReader = feedReader;
@@ -109,7 +109,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.eventStore = eventStore;
             this.jsonUtils = jsonUtils;
             this.interviewSummaryRepositoryWriter = interviewSummaryRepositoryWriter;
-            this.readyToSendInterviewsRepositoryWriter = readyToSendInterviewsRepositoryWriter;
+            this.readyToSendInterviewsRepositoryReader = readyToSendInterviewsRepositoryReader;
             this.httpMessageHandler = httpMessageHandler;
             this.interviewSynchronizationFileStorage = interviewSynchronizationFileStorage;
             this.archiver = archiver;
@@ -381,7 +381,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private List<Guid> GetInterviewsToPush()
         {
-            return this.readyToSendInterviewsRepositoryWriter
+            return this.readyToSendInterviewsRepositoryReader
                 .QueryAll()
                 .Select(interview => interview.InterviewId)
                 .ToList();
@@ -454,7 +454,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         {
             using (var client = new HttpClient(this.httpMessageHandler()).AppendAuthToken(this.settings))
             {
-                var request = new HttpRequestMessage(HttpMethod.Post, this.settings.InterviewsPushUrl) {
+                var request = new HttpRequestMessage(HttpMethod.Post, string.Format("{0}?interviewId={1}", this.settings.InterviewsPushUrl, interviewId)) {
                     Content = new StringContent(interviewData)
                 };
 
@@ -519,8 +519,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 .Skip(countOfEventsSentToHeadquarters)
                 .Where(
                     storedEvent =>
-                        storedEvent.Origin != Constants.HeadquartersSynchronizationOrigin &&
-                            storedEvent.Origin != Constants.CapiSynchronizationOrigin)
+                        storedEvent.Origin != Constants.HeadquartersSynchronizationOrigin)
                 .Select(storedEvent => new AggregateRootEvent(storedEvent))
                 .ToArray();
 

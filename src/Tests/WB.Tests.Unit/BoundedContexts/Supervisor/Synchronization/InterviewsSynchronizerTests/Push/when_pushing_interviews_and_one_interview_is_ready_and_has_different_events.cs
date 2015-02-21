@@ -124,11 +124,11 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
         It should_not_push_events_produced_by_synchronization_with_hq = () =>
             events.Select(e => e.EventIdentifier).ShouldNotContain(hqSynchronizationEvents);
 
-        It should_not_push_events_produced_by_synchronization_meta = () =>
-            events.Select(e => e.EventIdentifier).ShouldNotContain(capiSynchronizationEvents);
+        It should_push_capi_events = () =>
+            events.Select(e => e.EventIdentifier).ShouldContain(capiSynchronizationEvents);
 
-        It should_push_only_events_with_empty_origin_after_last_push = () =>
-            events.Select(e => e.EventIdentifier).ShouldContainOnly(eventsWithEmptyOriginAfterLastPush);
+        It should_push_supervisor_events = () =>
+            events.Select(e => e.EventIdentifier).ShouldContain(eventsWithEmptyOriginAfterLastPush);
 
         private static InterviewsSynchronizer interviewsSynchronizer;
         private static Guid userId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
