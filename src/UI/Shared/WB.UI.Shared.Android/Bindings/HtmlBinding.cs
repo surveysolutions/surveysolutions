@@ -3,6 +3,7 @@ using System.Linq;
 using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Text;
+using Android.Text.Method;
 using Android.Util;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding;
@@ -15,6 +16,7 @@ namespace WB.UI.Shared.Android.Bindings
         public HtmlBinding(TextView control):base(control)
         {
             this.imageGetter = new ImageGetter(control.Resources);
+            control.MovementMethod = LinkMovementMethod.Instance;
         }
 
         protected override void SetValueToView(TextView view, object value)

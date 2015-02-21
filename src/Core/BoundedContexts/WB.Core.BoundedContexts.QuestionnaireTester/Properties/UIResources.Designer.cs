@@ -205,7 +205,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You don&apos;t have permissions to look this questionnaire.
+        ///   Looks up a localized string similar to You don&apos;t have permissions to look this &lt;a href=&quot;{0}/Designer/app/open/{1}&quot;&gt;{2}&lt;/a&gt; questionnaire.  Most likely the author(&lt;font color=&quot;black&quot;&gt;&quot;{3}&quot;&lt;/font&gt;) of the questionnaire removed you from the list of shared persons by that questionnaire. You can contact to him via email: &lt;a href=&quot;mailto:{4}&quot;&gt;Contact to the owner of questionnaire&lt;/a&gt;.
         /// </summary>
         public static string ImportQuestionnaire_Error_Forbidden {
             get {
@@ -214,7 +214,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Requested questionnaire &quot;{0}&quot; cannot be found. Please check the list of available questionnaires..
+        ///   Looks up a localized string similar to Requested questionnaire &lt;a href=&quot;{0}/Designer/app/open/{1}&quot;&gt;{2}&lt;/a&gt; is no longer available.
         /// </summary>
         public static string ImportQuestionnaire_Error_NotFound {
             get {
@@ -223,7 +223,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Requested questionnaire &quot;{0}&quot; has errors. Please verify the questionnaire on Designer..
+        ///   Looks up a localized string similar to Requested questionnaire &lt;font color=&quot;black&quot;&gt;{2}&lt;/font&gt; has errors. &lt;br/&gt; Please verify the questionnaire in the &lt;br/&gt; &lt;a href=&quot;{0}/Designer/app/open/{1}&quot;&gt;Questionnaire Editor&lt;/a&gt;.
         /// </summary>
         public static string ImportQuestionnaire_Error_PreconditionFailed {
             get {
@@ -232,7 +232,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your version of application does not support of this questionnaire. Please, update application.
+        ///   Looks up a localized string similar to Your version of application does not support of this questionnaire &lt;br/&gt;&lt;br/&gt; &lt;a href=&quot;market://details?id=org.worldbank.solutions.Vtester&quot;&gt;Update application&lt;/a&gt;.
         /// </summary>
         public static string ImportQuestionnaire_Error_UpgradeRequired {
             get {
@@ -277,7 +277,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to At the moment, the server is unavailable. We apologize for any inconvenience. Server will be restored in the near future.
+        ///   Looks up a localized string similar to At the moment, the server is unavailable. We apologize for any inconvenience.
         /// </summary>
         public static string InternalServerError {
             get {
@@ -430,7 +430,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No connection to the survey solutions website. Please make sure that the website is available.
+        ///   Looks up a localized string similar to No connection to the survey solutions designer. Please make sure that the website is available.
         /// </summary>
         public static string ServiceUnavailable {
             get {
@@ -471,6 +471,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         public static string StaySignedInText {
             get {
                 return ResourceManager.GetString("StaySignedInText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;b&gt;&lt;u&gt;Try again&lt;/u&gt;&lt;/b&gt;.
+        /// </summary>
+        public static string TryAgainLink {
+            get {
+                return ResourceManager.GetString("TryAgainLink", resourceCulture);
             }
         }
         

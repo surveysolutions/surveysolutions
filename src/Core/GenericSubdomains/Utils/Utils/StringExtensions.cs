@@ -141,5 +141,16 @@ namespace WB.Core.GenericSubdomains.Utils
         {
             return string.IsNullOrWhiteSpace(src) ? null : src;
         }
+
+        public static string GetDomainName(this string url)
+        {
+            if(string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException("url");
+            Uri uri;
+
+            if(!Uri.TryCreate(url, UriKind.Absolute,  out uri))
+                throw new ArgumentException("invalid url string");
+
+            return uri.ToString().Replace(uri.PathAndQuery, "");
+        }
     }
 }
