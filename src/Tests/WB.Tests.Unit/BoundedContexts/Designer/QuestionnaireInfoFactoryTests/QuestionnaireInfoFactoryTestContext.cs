@@ -10,9 +10,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
 {
     internal class QuestionnaireInfoFactoryTestContext
     {
-        protected static QuestionnaireInfoFactory CreateQuestionnaireInfoFactory(IReadSideRepositoryReader<QuestionsAndGroupsCollectionView> questionDetailsReader = null)
+        protected static QuestionnaireInfoFactory CreateQuestionnaireInfoFactory(IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView> questionDetailsReader = null)
         {
-            return new QuestionnaireInfoFactory(questionDetailsReader ?? Mock.Of<IReadSideRepositoryReader<QuestionsAndGroupsCollectionView>>());
+            return new QuestionnaireInfoFactory(questionDetailsReader ?? Mock.Of<IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView>>());
         }
 
         protected static QuestionsAndGroupsCollectionView CreateQuestionsAndGroupsCollectionView()

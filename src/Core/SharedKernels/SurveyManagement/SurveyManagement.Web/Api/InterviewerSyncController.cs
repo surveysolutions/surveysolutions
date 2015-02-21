@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     public class InterviewerSyncController : BaseApiController
     {
         private readonly ISyncManager syncManager;
-        private readonly IViewFactory<UserViewInputModel, UserView> userInfoViewFactory;
+        private readonly IUserWebViewFactory userInfoViewFactory;
         private readonly ISupportedVersionProvider versionProvider;
         private readonly ISyncProtocolVersionProvider syncVersionProvider;
         private readonly IPlainInterviewFileStorage plainFileRepository;
@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IGlobalInfoProvider globalInfo,
             ISyncManager syncManager,
             ILogger logger,
-            IViewFactory<UserViewInputModel, UserView> userInfoViewFactory, 
+            IUserWebViewFactory userInfoViewFactory, 
             ISupportedVersionProvider versionProvider,
             IPlainInterviewFileStorage plainFileRepository,
             IFileSystemAccessor fileSystemAccessor,
@@ -105,7 +105,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 });
             }
 
-            var interviewerInfo = userInfoViewFactory.Load(new UserViewInputModel(this.GlobalInfo.GetCurrentUser().Name, null));
+            var interviewerInfo = userInfoViewFactory.Load(new UserWebViewInputModel(this.GlobalInfo.GetCurrentUser().Name, null));
 
             var identifier = new ClientIdentifier
             {
@@ -202,9 +202,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             try
             {
-                var syncItem = this.jsonUtils.Deserialize<SyncItem>(request.SynchronizationPackage);
-
-                syncManager.SendSyncItem(syncItem);
+                syncManager.SendSyncItem(interviewId: request.InterviewId, package: request.SynchronizationPackage);
             }
             catch (Exception ex)
             {

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
@@ -8,5 +10,8 @@ namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
     /// All needed querying methods are already in this interface and should be used because they might be optimized for such operations.
     /// </summary>
     public interface IReadSideRepositoryWriter<TEntity> : IReadSideStorage<TEntity>
-        where TEntity : class, IReadSideRepositoryEntity { }
+        where TEntity : class, IReadSideRepositoryEntity
+    {
+        void BulkStore(List<Tuple<TEntity, string>> bulk);
+    }
 }

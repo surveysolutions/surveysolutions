@@ -2,9 +2,10 @@ using System;
 using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
@@ -15,10 +16,10 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<TemplateImported>, IEventHandler<QuestionnaireDeleted>,
         IEventHandler<PlainQuestionnaireRegistered>
     {
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
+        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnarieStorage;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
-        public QuestionnaireDenormalizer(IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage, 
+        public QuestionnaireDenormalizer(IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnarieStorage, 
             IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.questionnarieStorage = questionnarieStorage;
@@ -36,7 +37,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
         {
-            this.questionnarieStorage.Remove(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
+            this.questionnarieStorage.AsVersioned().Remove(evnt.EventSourceId.FormatGuid(), evnt.Payload.QuestionnaireVersion);
         }
 
         public void Handle(IPublishedEvent<PlainQuestionnaireRegistered> evnt)
@@ -56,7 +57,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
                 Version = version
             };
 
-            this.questionnarieStorage.Store(template, id);
+            this.questionnarieStorage.AsVersioned().Store(template, id.FormatGuid(), version);
         }
 
         public override object[] Writers

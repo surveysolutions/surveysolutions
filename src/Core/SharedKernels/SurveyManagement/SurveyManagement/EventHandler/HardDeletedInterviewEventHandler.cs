@@ -11,14 +11,14 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    internal class HardDeletedInterviewEventHandler : AbstractFunctionalEventHandler<HardDeletedInterview, IReadSideRepositoryWriter<HardDeletedInterview>>, ICreateHandler<HardDeletedInterview, InterviewHardDeleted>
+    internal class HardDeletedInterviewEventHandler : AbstractFunctionalEventHandler<HardDeletedInterview, IReadSideKeyValueStorage<HardDeletedInterview>>, IUpdateHandler<HardDeletedInterview, InterviewHardDeleted>
     {
-        public HardDeletedInterviewEventHandler(IReadSideRepositoryWriter<HardDeletedInterview> readSideStorage)
+        public HardDeletedInterviewEventHandler(IReadSideKeyValueStorage<HardDeletedInterview> readSideStorage)
             : base(readSideStorage)
         {
         }
 
-        public HardDeletedInterview Create(IPublishedEvent<InterviewHardDeleted> evnt)
+        public HardDeletedInterview Update(HardDeletedInterview currentState, IPublishedEvent<InterviewHardDeleted> evnt)
         {
             return new HardDeletedInterview() { InterviewId = evnt.EventSourceId };
         }

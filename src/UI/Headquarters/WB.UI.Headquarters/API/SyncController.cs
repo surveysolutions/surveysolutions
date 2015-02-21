@@ -31,16 +31,13 @@ namespace WB.UI.Headquarters.API
             this.logger = logger;
         }
 
-        public async Task<HttpResponseMessage> Post()
+        public async Task<HttpResponseMessage> Post([FromUri]Guid interviewId)
         {
-            var syncItem = JsonConvert.DeserializeObject<SyncItem>(await this.Request.Content.ReadAsStringAsync(),
-                new JsonSerializerSettings {
-                    TypeNameHandling = TypeNameHandling.Objects
-                });
+            var syncItem = await this.Request.Content.ReadAsStringAsync();
 
-            bool result = this.syncManager.SendSyncItem(syncItem);
+            this.syncManager.SendSyncItem(interviewId: interviewId, package: syncItem);
 
-            return Request.CreateResponse(HttpStatusCode.OK, result);
+            return Request.CreateResponse(HttpStatusCode.OK, true);
         }
 
         [ActionName("postfile")]

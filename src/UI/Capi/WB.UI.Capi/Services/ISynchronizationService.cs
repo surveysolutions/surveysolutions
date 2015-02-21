@@ -11,7 +11,7 @@ namespace WB.UI.Capi.Services
         Task<Guid> HandshakeAsync(SyncCredentials credentials);
         Task<IEnumerable<SynchronizationChunkMeta>> GetChunksAsync(SyncCredentials credentials, string lastKnownPackageId);
         Task<SyncItem> RequestChunkAsync(SyncCredentials credentials, string chunkId);
-        Task PushChunkAsync(SyncCredentials credentials, string chunkAsString);
+        Task PushChunkAsync(SyncCredentials credentials, Guid interviewId, string chunkAsString);
         Task PushBinaryAsync(SyncCredentials credentials, Guid interviewId, string fileName, byte[] fileData);
         Task<string> GetChunkIdByTimestampAsync(SyncCredentials credentials, long timestamp);
         Task<bool> NewVersionAvailableAsync();

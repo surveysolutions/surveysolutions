@@ -37,7 +37,6 @@ using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement;
@@ -137,8 +136,8 @@ namespace WB.UI.QuestionnaireTester
         {
             var eventHandler =
                 new InterviewViewModelDenormalizer(
-                    this.kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>(), this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>(),
-                    this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>(), this.kernel.Get<IQuestionnaireRosterStructureFactory>());
+                    this.kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>(), this.kernel.Get<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
+                    this.kernel.Get<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(), this.kernel.Get<IQuestionnaireRosterStructureFactory>());
 
             bus.RegisterHandler(eventHandler, typeof (InterviewSynchronized));
             bus.RegisterHandler(eventHandler, typeof (MultipleOptionsQuestionAnswered));
@@ -191,7 +190,7 @@ namespace WB.UI.QuestionnaireTester
         private void InitTemplateStorage(InProcessEventBus bus)
         {
             var templateDenoramalizer = new QuestionnaireDenormalizer(
-                this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>(),
+                this.kernel.Get<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
                 this.kernel.Get<IPlainQuestionnaireRepository>());
 
             bus.RegisterHandler(templateDenoramalizer, typeof(TemplateImported));
@@ -199,7 +198,7 @@ namespace WB.UI.QuestionnaireTester
             bus.RegisterHandler(templateDenoramalizer, typeof(PlainQuestionnaireRegistered));
             
             var propagationStructureDenormalizer = new QuestionnaireRosterStructureDenormalizer(
-                this.kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>(),
+                this.kernel.Get<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(),
                 this.kernel.Get<IQuestionnaireRosterStructureFactory>(),
                 this.kernel.Get<IPlainQuestionnaireRepository>());
 
@@ -253,7 +252,7 @@ namespace WB.UI.QuestionnaireTester
             kernel.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
             kernel.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
 
-            var bus = new InProcessEventBus(true, Kernel.Get<IEventStore>());
+            var bus = new InProcessEventBus(Kernel.Get<IEventStore>());
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
             //kernel.Bind<IEventBus>().ToConstant(bus);
             this.kernel.Bind<IEventBus>().ToConstant(bus).Named("interviewViewBus");

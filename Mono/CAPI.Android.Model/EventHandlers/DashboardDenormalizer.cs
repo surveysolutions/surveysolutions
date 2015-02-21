@@ -7,12 +7,12 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -48,14 +48,14 @@ namespace CAPI.Android.Core.Model.EventHandlers
                                       IEventHandler<SupervisorAssigned>
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDtOdocumentStorage;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireStorage;
+        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStorage;
         private readonly IReadSideRepositoryWriter<SurveyDto> surveyDtoDocumentStorage;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly QuestionType[] questionTypesWithOptions = new[] { QuestionType.SingleOption, QuestionType.MultyOption, QuestionType.DropDownList, QuestionType.YesNo };
 
         public DashboardDenormalizer(IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDTOdocumentStorage,
-                                     IReadSideRepositoryWriter<SurveyDto> surveyDTOdocumentStorage, 
-                                     IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireStorage,
+                                     IReadSideRepositoryWriter<SurveyDto> surveyDTOdocumentStorage,
+                                     IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStorage,
                                      IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.questionnaireDtOdocumentStorage = questionnaireDTOdocumentStorage;
@@ -112,7 +112,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
             bool createdOnClient, 
             bool canBeDeleted)
         {
-            var questionnaireTemplate = questionnaireStorage.GetById(questionnaireId, questionnaireVersion);
+            var questionnaireTemplate = questionnaireStorage.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
             if (questionnaireTemplate == null)
                 return;
 

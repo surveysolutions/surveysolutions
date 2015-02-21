@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             var numericQuestion = question as INumericQuestion;
             if (numericQuestion != null)
             {
-                this.Settings = new
+                this.Settings = new NumericQuestionSettings
                 {
                     IsInteger = numericQuestion.IsInteger,
                     CountOfDecimalPlaces = numericQuestion.CountOfDecimalPlaces
@@ -70,12 +70,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 };
             }
 
+            var textQuestion = question as TextQuestion;
+            if (textQuestion != null)
+            {
+                this.Settings = new TextQuestionSettings
+                {
+                    Mask = textQuestion.Mask
+                };
+            }
+
             if (answeredQuestion == null) return;
 
-            this.IsAnswered = answeredQuestion.IsAnswered;
-            this.IsEnabled = !isParentGroupDisabled && !answeredQuestion.Disabled;
-            this.IsFlagged = answeredQuestion.IsFlagged;
-            this.Comments = answeredQuestion.Comments.Select(x => new InterviewQuestionCommentView
+            this.IsAnswered = answeredQuestion.IsAnswered();
+            this.IsEnabled = !isParentGroupDisabled && !answeredQuestion.IsDisabled();
+            this.IsFlagged = answeredQuestion.IsFlagged();
+            this.Comments = (answeredQuestion.Comments?? new List<InterviewQuestionComment>()).Select(x => new InterviewQuestionCommentView
             {
                 Id = x.Id,
                 Text = x.Text,
@@ -100,18 +109,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 }
             }
 
-            var textQuestion = question as TextQuestion;
-            if (textQuestion != null)
-            {
-                this.Settings = new
-                {
-                    Mask = textQuestion.Mask
-                };
-            }
-
             bool shouldBeValidByConvention = !this.IsEnabled;
 
-            this.IsValid = shouldBeValidByConvention || !answeredQuestion.Invalid;
+            this.IsValid = shouldBeValidByConvention || !answeredQuestion.IsInvalid();
             this.AnswerString = FormatAnswerAsString(answeredQuestion.Answer, question);
         }
 
@@ -217,6 +217,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public object Answer { get; set; }
 
         public dynamic Settings { get; set; }
+    }
+
+    public class TextQuestionSettings
+    {
+        public string Mask { get; set; }
+    }
+
+    public class NumericQuestionSettings
+    {
+        public bool IsInteger { get; set; }
+        public int? CountOfDecimalPlaces { get; set; }
     }
 
     public class MultiQuestionSettings

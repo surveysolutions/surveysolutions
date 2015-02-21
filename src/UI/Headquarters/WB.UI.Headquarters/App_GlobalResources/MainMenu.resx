@@ -120,6 +120,9 @@
   <data name="CumulativeChart" xml:space="preserve">
     <value>Cumulative Interview Chart</value>
   </data>
+  <data name="HealthCheck" xml:space="preserve">
+    <value>Health Check</value>
+  </data>
   <data name="Interviews" xml:space="preserve">
     <value>Interviews</value>
   </data>
@@ -128,6 +131,9 @@
   </data>
   <data name="Questionnaires" xml:space="preserve">
     <value>Questionnaires</value>
+  </data>
+  <data name="QueueSizeTitle" xml:space="preserve">
+    <value>Number of synchronized interviews, but unprocessed yet</value>
   </data>
   <data name="Reports" xml:space="preserve">
     <value>Reports</value>

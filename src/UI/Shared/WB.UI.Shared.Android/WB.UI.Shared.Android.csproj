@@ -87,9 +87,6 @@
     <Reference Include="Ninject">
       <HintPath>..\..\..\..\packages\Portable.Ninject.3.3\lib\monoandroid\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="RestSharp.MonoDroid">
-      <HintPath>..\..\..\..\ExternalsMonodroid\RestSharp.MonoDroid.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net">
@@ -247,6 +244,10 @@
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
+      <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>

@@ -3,6 +3,7 @@ using Machine.Specifications;
 using Main.DenormalizerStorage;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
 using It = Machine.Specifications.It;
@@ -19,8 +20,8 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
             userId = Guid.NewGuid();
             const string SomeContent1 = "some content1";
             someContent2 = "some content2";
-            querableStorageMock = new InMemoryReadSideRepositoryAccessor<SynchronizationDelta>();
-            target = new ReadSideChunkWriter(querableStorageMock, storageReader: querableStorageMock);
+            querableStorageMock = new InMemoryReadSideRepositoryAccessor<SynchronizationDeltaMetaInformation>();
+            target = new ReadSideChunkWriter(querableStorageMock, storageReader: querableStorageMock, contentStorage:Mock.Of<IReadSideKeyValueStorage<SynchronizationDeltaContent>>());
 
             target.StoreChunk(new SyncItem { RootId = arId, Content = SomeContent1, IsCompressed = false }, userId, DateTime.Now);
         };
@@ -33,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
        static ReadSideChunkWriter target;
        static Guid arId;
        static Guid userId;
-       static InMemoryReadSideRepositoryAccessor<SynchronizationDelta> querableStorageMock;
+       static InMemoryReadSideRepositoryAccessor<SynchronizationDeltaMetaInformation> querableStorageMock;
     }
 }
 

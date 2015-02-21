@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                 anotherGroup = CreateGroup(groupId: anotherGroupId),
             });
 
-            var documentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(storage
+            var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(storage
                 => storage.GetById(it.IsAny<string>()) == questionnaire);
 
             denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage);

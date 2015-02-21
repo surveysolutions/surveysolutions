@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -23,7 +24,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
         Establish context = () =>
         {
             readSideRepositoryCleanerMock = new Mock<IReadSideRepositoryCleaner>();
-            readSideRepositoryWriterMock = new Mock<IReadSideRepositoryWriter>();
+            readSideRepositoryWriterMock = new Mock<IChacheableRepositoryWriter>();
             readSideRepositoryWriterMock.Setup(x => x.ViewType).Returns(typeof(object));
 
             eventHandlerMock = new Mock<IEventHandler>();
@@ -41,8 +42,8 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
 
             committedEvent = new CommittedEvent(Guid.NewGuid(), "test", Guid.NewGuid(), Guid.NewGuid(), 1, DateTime.Now, new object());
             streamableEventStoreMock = new Mock<IStreamableEventStore>();
-            streamableEventStoreMock.Setup(x => x.GetAllEvents(Moq.It.IsAny<int>(), Moq.It.IsAny<int>()))
-                .Returns(new[] { new[] { committedEvent } });
+            streamableEventStoreMock.Setup(x => x.GetAllEvents())
+                .Returns(new[] { committedEvent });
             ravenReadSideService = CreateRavenReadSideService(eventDispatcher: eventDispatcherMock.Object, streamableEventStore: streamableEventStoreMock.Object);
         };
 
@@ -61,7 +62,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
            readSideRepositoryWriterMock.Verify(x => x.DisableCache(), Times.Once);
 
         It should_publish_one_event_on_event_dispatcher = () =>
-            eventDispatcherMock.Verify(x => x.PublishEventToHandlers(committedEvent, Moq.It.Is<IEnumerable<IEventHandler>>(handlers => handlers.Count() == 1 && handlers.First() == eventHandlerMock.Object)), Times.Once);
+            eventDispatcherMock.Verify(x => x.PublishEventToHandlers(committedEvent, Moq.It.Is<Dictionary<IEventHandler, Stopwatch>>(handlers => handlers.Count() == 1 && handlers.First().Key == eventHandlerMock.Object)), Times.Once);
 
         It should_return_readble_status = () =>
             ravenReadSideService.GetRebuildStatus().CurrentRebuildStatus.ShouldContain("Rebuild specific views succeeded.");
@@ -71,7 +72,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
         private static Mock<IStreamableEventStore> streamableEventStoreMock;
         private static Mock<IEventHandler> eventHandlerMock;
         private static Mock<IReadSideRepositoryCleaner> readSideRepositoryCleanerMock;
-        private static Mock<IReadSideRepositoryWriter> readSideRepositoryWriterMock;
+        private static Mock<IChacheableRepositoryWriter> readSideRepositoryWriterMock;
 
         private static CommittedEvent committedEvent;
         private static string HandlerToRebuild = "handler to rebuild";

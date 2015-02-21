@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Flurl;
@@ -29,7 +30,6 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
             {
                 throw new RestException(Resources.NoNetwork);
             }
-
             Url fullUrl = this.restServiceSettings.BaseAddress()
                 .AppendPathSegment(url)
                 .SetQueryParams(queryString);

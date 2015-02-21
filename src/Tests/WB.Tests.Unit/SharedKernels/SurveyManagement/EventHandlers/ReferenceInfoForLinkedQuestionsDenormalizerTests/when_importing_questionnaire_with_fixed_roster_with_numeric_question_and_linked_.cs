@@ -11,7 +11,6 @@ using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
@@ -29,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.ReferenceIn
         {
             var id = Guid.Parse("33332222111100000000111122223333");
             importeDocument = CreateQuestionnaireDocumentWithRosterAndNumericQuestionAndLinedQuestionAfter(id, rosterId, linkedId);
-            referenceInfoForLinkedQuestionsWriter = new Mock<IVersionedReadSideRepositoryWriter<ReferenceInfoForLinkedQuestions>>();
+            referenceInfoForLinkedQuestionsWriter = new Mock<IReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions>>();
             denormalizer = CreateReferenceInfoForLinkedQuestionsDenormalizer(referenceInfoForLinkedQuestionsWriter.Object);
             evnt = CreateTemplateImportedEvent(importeDocument);
         };
@@ -40,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.ReferenceIn
         It should_create_one_row_with_mapping_of_linked_question_on_roster_scope = () =>
             referenceInfoForLinkedQuestionsWriter.Verify(s => s.Store(
                 it.Is<ReferenceInfoForLinkedQuestions>(d => d.ReferencesOnLinkedQuestions.Count == 1),
-                it.Is<string>(g => g == importeDocument.PublicKey.FormatGuid())));
+                it.Is<string>(g => g == importeDocument.PublicKey.FormatGuid() + "$0")));
 
         It should_put_linkedId_as_key_and_value_should_contains_rosterId_in__ScopeId__field_of_created_row = () =>
             referenceInfoForLinkedQuestionsWriter.Verify(s => s.Store(
@@ -53,6 +52,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.ReferenceIn
         private static QuestionnaireDocument importeDocument;
         private static ReferenceInfoForLinkedQuestionsDenormalizer denormalizer;
         private static IPublishedEvent<TemplateImported> evnt;
-        private static Mock<IVersionedReadSideRepositoryWriter<ReferenceInfoForLinkedQuestions>> referenceInfoForLinkedQuestionsWriter;
+        private static Mock<IReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions>> referenceInfoForLinkedQuestionsWriter;
     }
 }

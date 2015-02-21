@@ -4,14 +4,13 @@ using Ninject.Modules;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.Implementation.ReadSide;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Services;
-using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
-using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Implementation;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
@@ -19,21 +18,26 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletInformation;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.Schedulers.InterviewDetailsDataScheduler;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataStorage;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
+using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement
 {
+    using WB.Core.SharedKernels.SurveyManagement.Views.User;
+
     public class SurveyManagementSharedKernelModule : NinjectModule
     {
         private readonly string currentFolderPath;
@@ -43,8 +47,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly Func<bool> isDebug;
         private readonly InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings;
         private readonly Version applicationBuildVersion;
-        private readonly bool overrideReceivedEventTimeStamp;
-        private readonly string origin;
         private readonly bool hqEnabled;
         private readonly int maxCountOfCachedEntitiesForSqliteDb;
         private readonly InterviewHistorySettings interviewHistorySettings;
@@ -53,8 +55,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             int supportedQuestionnaireVersionMajor, int supportedQuestionnaireVersionMinor,
             int supportedQuestionnaireVersionPatch,
             Func<bool> isDebug, Version applicationBuildVersion,
-            InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool overrideReceivedEventTimeStamp,
-            string origin, bool hqEnabled, int maxCountOfCachedEntitiesForSqliteDb,
+            InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool hqEnabled, int maxCountOfCachedEntitiesForSqliteDb,
             InterviewHistorySettings interviewHistorySettings)
         {
             this.currentFolderPath = currentFolderPath;
@@ -64,8 +65,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.isDebug = isDebug;
             this.interviewDetailsDataLoaderSettings = interviewDetailsDataLoaderSettings;
             this.applicationBuildVersion = applicationBuildVersion;
-            this.overrideReceivedEventTimeStamp = overrideReceivedEventTimeStamp;
-            this.origin = origin;
             this.hqEnabled = hqEnabled;
             this.maxCountOfCachedEntitiesForSqliteDb = maxCountOfCachedEntitiesForSqliteDb;
             this.interviewHistorySettings = interviewHistorySettings;
@@ -73,6 +72,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
         public override void Load()
         {
+            //this.Bind<IUserViewFactory>().To<UserViewFactory>(); // binded automatically but should not
+
             this.Bind<ISampleImportService>().To<SampleImportService>();
             this.Bind<IFilebasedExportedDataAccessor>().To<FilebasedExportedDataAccessor>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IDataExportService>().To<SqlToTabDataExportService>();
@@ -104,9 +105,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind(typeof (ITemporaryDataStorage<>)).To(typeof (FileTemporaryDataStorage<>));
 
             this.Bind<IQuestionnaireCacheInitializer>().To<QuestionnaireCacheInitializer>();
-            this.Bind<IInterviewDetailsDataLoader>().To<InterviewDetailsDataLoader>();
-            this.Bind<IInterviewDetailsDataProcessor>().To<InterviewDetailsDataProcessor>();
-            this.Bind<InterviewDetailsDataProcessorContext>().ToSelf().InSingletonScope();
             this.Bind<InterviewDetailsDataLoaderSettings>().ToConstant(this.interviewDetailsDataLoaderSettings);
             this.Bind<InterviewDetailsBackgroundSchedulerTask>().ToSelf();
 
@@ -128,21 +126,34 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 this.Kernel.RegisterDenormalizer<InterviewExportedDataDenormalizer>();
                 this.Kernel.RegisterDenormalizer<QuestionnaireExportStructureDenormalizer>();
             }
+            this.Bind<IBrokenSyncPackagesStorage>()
+                .To<BrokenSyncPackagesStorage>();
 
-            this.Bind<IIncomePackagesRepository, IAdditionalDataService<InterviewData>>()
-                .To<IncomePackagesRepository>()
-                .InSingletonScope()
-                .WithConstructorArgument("overrideReceivedEventTimeStamp", overrideReceivedEventTimeStamp)
-                .WithConstructorArgument("origin", origin);
+            this.Bind<ISyncPackagesProcessor>()
+                .To<SyncPackagesProcessor>()
+                .InSingletonScope();
+
+            this.Bind<IIncomingSyncPackagesQueue>()
+              .To<IncomingSyncPackagesQueue>()
+              .InSingletonScope();
 
             this.Bind<InterviewHistorySettings>().ToConstant(interviewHistorySettings);
+            
             this.Bind<IInterviewHistoryFactory>().To<InterviewHistoryFactory>();
+
             if (interviewHistorySettings.EnableInterviewHistory)
             {
                 this.Unbind<IReadSideRepositoryWriter<InterviewHistoryView>>();
                 this.Bind<IReadSideRepositoryWriter<InterviewHistoryView>>().To<InterviewHistoryWriter>().InSingletonScope();
                 this.Kernel.RegisterDenormalizer<InterviewHistoryDenormalizer>();
             }
+
+            this.Bind<IAtomicHealthCheck<RavenHealthCheckResult>>().To<RavenHealthCheck>();
+            this.Bind<IAtomicHealthCheck<EventStoreHealthCheckResult>>().To<EventStoreHealthCheck>();
+            this.Bind<IAtomicHealthCheck<FolderPermissionCheckResult>>().To<FolderPermissionChecker>().WithConstructorArgument("folderPath", this.currentFolderPath); 
+            this.Bind<IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>>().To<NumberOfSyncPackagesWithBigSizeChecker>();
+            this.Bind<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>().To<NumberOfUnhandledPackagesChecker>();
+            this.Bind<IHealthCheckService>().To<HealthCheckService>();
         }
     }
 }

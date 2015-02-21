@@ -150,6 +150,11 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             return Assembly.LoadFrom(assemblyFile); 
         }
 
+        public bool IsWritePermissionExists(string path)
+        {
+            throw new NotImplementedException();
+        }
+
         private string RemoveNonAscii(string s)
         {
             return Regex.Replace(s, @"[^\u0000-\u007F]", string.Empty);

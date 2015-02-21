@@ -14,8 +14,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             denormalizer = CreateDenormalizer(userId: responsibleId, userName: responsibleName);
         };
 
-        Because of = () => 
-            viewModel = denormalizer.Create(Create.InterviewFromPreloadedDataCreatedEvent(userId: responsibleId));
+        Because of = () =>
+            viewModel = denormalizer.Update(null, Create.InterviewFromPreloadedDataCreatedEvent(userId: responsibleId));
 
         It should_commented_statuses_history_not_be_empty = () =>
             viewModel.CommentedStatusesHistory.ShouldNotBeEmpty();

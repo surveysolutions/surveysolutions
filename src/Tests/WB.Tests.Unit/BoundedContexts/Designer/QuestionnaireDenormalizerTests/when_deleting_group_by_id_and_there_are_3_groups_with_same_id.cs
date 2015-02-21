@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                 thirdGroup = CreateGroup(groupId: groupId, title: "Group 3"),
             });
 
-            var documentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(storage
+            var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(storage
                 => storage.GetById(it.IsAny<string>()) == questionnaire);
 
             denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage);

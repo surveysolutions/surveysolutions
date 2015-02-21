@@ -9,7 +9,7 @@ using Environment = System.Environment;
 
 namespace CAPI.Android.Core.Model.ReadSideStore
 {
-    public class FileReadSideRepositoryWriter<TEntity> : IReadSideRepositoryWriter<TEntity>, IBackupable
+    public class FileReadSideRepositoryWriter<TEntity> : IReadSideKeyValueStorage<TEntity>, IBackupable
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly IJsonUtils jsonUtils;

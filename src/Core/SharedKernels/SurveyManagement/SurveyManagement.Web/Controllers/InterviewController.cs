@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
@@ -42,19 +42,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.interviewDetailsViewFactory = interviewDetailsViewFactory;
         }
 
-        public ActionResult Details(Guid id, InterviewDetailsSortBy? sortBy,  InterviewDetailsFilter? filter)
+        private decimal[] ParseRosterVector(string rosterVectorAsString)
+        {
+            if (string.IsNullOrEmpty(rosterVectorAsString))
+                return new decimal[0];
+
+            return rosterVectorAsString.Split('_').Select(vector => decimal.Parse(vector.Replace('-', '.'))).ToArray();
+        }
+
+        public ActionResult Details(Guid id, InterviewDetailsFilter? filter, Guid? currentGroupId, string rosterVector)
         {
             this.ViewBag.ActivePage = MenuItem.Docs;
 
-            sortBy = sortBy.HasValue ? sortBy : InterviewDetailsSortBy.All;
-            filter = filter.HasValue ? filter : InterviewDetailsFilter.None;
+            filter = filter.HasValue ? filter : InterviewDetailsFilter.All;
 
-            ChangeStatusView interviewInfo = this.changeStatusFactory.Load(new ChangeStatusInputModel() { InterviewId = id });
+
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
-            ChangeStatusView interviewHistoryOfStatuses = this.changeStatusFactory.Load(new ChangeStatusInputModel { InterviewId = id });
-
-            if (interviewInfo == null || interviewSummary == null)
-                return HttpNotFound();
 
             bool isAccessAllowed =
                 this.GlobalInfo.IsHeadquarter ||
@@ -63,31 +66,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (!isAccessAllowed)
                 return HttpNotFound();
 
-            InterviewDetailsView interviewDetailsView = interviewDetailsViewFactory.GetInterviewDetails(id);
+            ChangeStatusView interviewInfo =
+                this.changeStatusFactory.Load(new ChangeStatusInputModel() {InterviewId = id});
 
-            var allGroups = interviewDetailsView.Groups.ToArray();
-
-            foreach (var interviewGroupView in interviewDetailsView.Groups)
-            {
-                if (sortBy.Value == InterviewDetailsSortBy.Answered)
-                {
-                    interviewGroupView.Entities =
-                        interviewGroupView.Entities.Where(
-                            x =>
-                                x is InterviewStaticTextView ||
-                                ((x is InterviewQuestionView) && ((InterviewQuestionView) x).IsAnswered)).ToList();
-                }
-            }
+            if (interviewInfo == null || interviewSummary == null)
+                return HttpNotFound();
 
             return
-                View(new DetailsViewModel()
-                {
-                    SortBy = sortBy.Value,
-                    Filter = filter.Value,
-                    FilteredInterviewDetails = interviewDetailsView,
-                    Groups = allGroups,
-                    History = interviewHistoryOfStatuses
-                });
+                View(interviewDetailsViewFactory.GetInterviewDetails(interviewId: id, currentGroupId: currentGroupId,
+                    filter: filter, currentGroupRosterVector: this.ParseRosterVector(rosterVector)));
         }
 
         public ActionResult InterviewDetails(Guid id, string template, Guid? group, Guid? question, Guid? propagationKey)
@@ -100,21 +87,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (interviewInfo == null || interviewSummary == null)
                 return HttpNotFound();
 
-            bool isAccessAllowed =
-                this.GlobalInfo.IsHeadquarter ||
-                (this.GlobalInfo.IsSurepvisor && this.GlobalInfo.GetCurrentUser().Id == interviewSummary.TeamLeadId);
+            bool isAccessAllowed = this.GlobalInfo.IsHeadquarter ||
+                                   (this.GlobalInfo.IsSurepvisor && this.GlobalInfo.GetCurrentUser().Id == interviewSummary.TeamLeadId);
 
             if (!isAccessAllowed)
                 return HttpNotFound();
 
-            return
-                this.View(new InterviewModel()
-                {
-                    InterviewId = id,
-                    CurrentGroupId = group,
-                    CurrentPropagationKeyId = propagationKey,
-                    InterviewStatus = interviewInfo.Status
-                });
+            return this.View(new InterviewModel()
+            {
+                InterviewId = id,
+                CurrentGroupId = group,
+                CurrentPropagationKeyId = propagationKey,
+                InterviewStatus = interviewInfo.Status
+            });
         }
 
         public ActionResult InterviewHistory(Guid id)

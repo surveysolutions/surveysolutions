@@ -14,14 +14,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 {
     public class QuestionnaireInfoViewFactory : IQuestionnaireInfoViewFactory
     {
-        private readonly IReadSideRepositoryReader<QuestionnaireInfoView> questionnaireStorage;
-        private readonly IReadSideRepositoryReader<QuestionnaireSharedPersons> sharedPersons;
-        private readonly IQueryableReadSideRepositoryReader<QuestionnaireDocument> questionnaireDocumentReader;
+        private readonly IReadSideKeyValueStorage<QuestionnaireInfoView> questionnaireStorage;
+        private readonly IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersons;
+        private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
         private readonly IReadSideRepositoryReader<AccountDocument> accountsDocumentReader;
 
-        public QuestionnaireInfoViewFactory(IReadSideRepositoryReader<QuestionnaireInfoView> questionnaireStorage,
-            IReadSideRepositoryReader<QuestionnaireSharedPersons> sharedPersons,
-            IQueryableReadSideRepositoryReader<QuestionnaireDocument> questionnaireDocumentReader,
+        public QuestionnaireInfoViewFactory(IReadSideKeyValueStorage<QuestionnaireInfoView> questionnaireStorage,
+            IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersons,
+            IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
             IReadSideRepositoryReader<AccountDocument> accountsDocumentReader)
         {
             this.questionnaireStorage = questionnaireStorage;
@@ -71,18 +71,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 }
             }
             return questionnaireInfoView;
-        }
-
-        public int CountQuestionnairesNotMigratedToCSharp()
-        {
-            return this.questionnaireDocumentReader.Query(_ => _.Count(document => !document.UsesCSharp));
-        }
-
-        public IEnumerable<Guid> GetQuestionnairesNotMigratedToCSharp()
-        {
-            return this.questionnaireDocumentReader
-                .QueryAll(document => !document.UsesCSharp)
-                .Select(document => document.PublicKey);
         }
     }
 }

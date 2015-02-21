@@ -440,6 +440,9 @@
     <Content Include="Configuration\SlavaDesktop.Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Configuration\SPuV.Designer.Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="parameters.xml">
       <SubType>Designer</SubType>
     </None>
@@ -627,10 +630,6 @@
     <Content Include="Scripts\json2.min.js" />
     <Content Include="Scripts\knockout.validation.debug.js" />
     <Content Include="Scripts\knockout.validation.js" />
-    <Content Include="Scripts\lib\ace\ace.js" />
-    <Content Include="Scripts\lib\ace\knockout-ace.js" />
-    <Content Include="Scripts\lib\ace\mode-ncalc.js" />
-    <Content Include="Scripts\lib\ace\theme-designer.js" />
     <Content Include="Scripts\lib\jquery.autogrow-textarea.js" />
     <Content Include="Scripts\lib\knockout.activity.js" />
     <Content Include="Scripts\lib\knockout.asyncCommand.js" />
@@ -678,6 +677,7 @@
     <Content Include="Views\Questionnaire\Index.cshtml">
       <SubType>Code</SubType>
     </Content>
+    <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

@@ -4,6 +4,7 @@ using System.Linq;
 using Android.OS;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Frames;
@@ -32,14 +33,16 @@ namespace WB.UI.Capi.Implementations.Fragments
 
         protected override QuestionnaireScreenViewModel GetScreenViewModel()
         {
-            if (!this.Interview.Screens.ContainsKey(ScreenId))
+            var screenKey = ConversionHelper.ConvertIdAndRosterVectorToString(ScreenId.Id, ScreenId.InterviewItemPropagationVector);
+
+            if (!this.Interview.Screens.ContainsKey(screenKey))
                 throw new NullReferenceException("Screen is missing inside interview");
 
-            var questionnaireScreenViewModel = this.Interview.Screens[ScreenId] as QuestionnaireScreenViewModel;
+            var questionnaireScreenViewModel = this.Interview.Screens[screenKey] as QuestionnaireScreenViewModel;
             if (questionnaireScreenViewModel == null)
                 throw new InvalidOperationException(string.Format("Screen with id {0} is {1}, but must be {2}",
                     ScreenId,
-                    Interview.Screens[ScreenId].GetType().Name, typeof (QuestionnaireScreenViewModel).Name));
+                    Interview.Screens[screenKey].GetType().Name, typeof(QuestionnaireScreenViewModel).Name));
             return questionnaireScreenViewModel;
         }
 

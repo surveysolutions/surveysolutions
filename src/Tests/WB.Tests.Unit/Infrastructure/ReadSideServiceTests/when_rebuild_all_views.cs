@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -24,7 +25,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
         Establish context = () =>
         {
             readSideRepositoryCleanerMock=new Mock<IReadSideRepositoryCleaner>();
-            readSideRepositoryWriterMock=new Mock<IReadSideRepositoryWriter>();
+            readSideRepositoryWriterMock=new Mock<IChacheableRepositoryWriter>();
             readSideRepositoryWriterMock.Setup(x => x.ViewType).Returns(typeof (object));
 
             eventHandlerMock=new Mock<IEventHandler>();
@@ -36,8 +37,8 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
 
             committedEvent = new CommittedEvent(Guid.NewGuid(), "test", Guid.NewGuid(), Guid.NewGuid(), 1, DateTime.Now, new object());
             streamableEventStoreMock=new Mock<IStreamableEventStore>();
-            streamableEventStoreMock.Setup(x => x.GetAllEvents(Moq.It.IsAny<int>(), Moq.It.IsAny<int>()))
-                .Returns(new[] { new[] { committedEvent } });
+            streamableEventStoreMock.Setup(x => x.GetAllEvents())
+                .Returns(new[] { committedEvent });
             ravenReadSideService = CreateRavenReadSideService(eventDispatcher: eventDispatcherMock.Object, streamableEventStore: streamableEventStoreMock.Object);
         };
 
@@ -56,14 +57,14 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
            readSideRepositoryWriterMock.Verify(x => x.DisableCache(), Times.Once);
 
         It should_publish_one_event_on_event_dispatcher = () =>
-            eventDispatcherMock.Verify(x=>x.PublishEventToHandlers(committedEvent, Moq.It.IsAny<IEnumerable<IEventHandler>>()), Times.Once);
+            eventDispatcherMock.Verify(x => x.PublishEventToHandlers(committedEvent, Moq.It.IsAny<Dictionary<IEventHandler, Stopwatch>>()), Times.Once);
 
         private static ReadSideService ravenReadSideService;
         private static Mock<IEventDispatcher> eventDispatcherMock;
         private static Mock<IStreamableEventStore> streamableEventStoreMock;
         private static Mock<IEventHandler> eventHandlerMock;
         private static Mock<IReadSideRepositoryCleaner> readSideRepositoryCleanerMock;
-        private static Mock<IReadSideRepositoryWriter> readSideRepositoryWriterMock;
+        private static Mock<IChacheableRepositoryWriter> readSideRepositoryWriterMock;
 
         private static CommittedEvent committedEvent;
 

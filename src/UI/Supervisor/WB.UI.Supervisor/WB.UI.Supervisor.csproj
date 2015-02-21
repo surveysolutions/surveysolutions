@@ -318,6 +318,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_GlobalResources\MainMenu.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MainMenu.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Code\Bundling\PathExtension.cs" />
@@ -362,6 +367,10 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Configuration\SlavaDesktop.Supervisor.Web.config" />
+    <Content Include="Configuration\SPuV.Supervisor.Web.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="parameters.xml">
       <SubType>Designer</SubType>
     </None>
@@ -492,6 +501,12 @@
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\MainMenu.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>MainMenu.Designer.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

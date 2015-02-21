@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -28,17 +29,17 @@ namespace WB.UI.Headquarters.Controllers
     [LocalOrDevelopmentAccessOnly]
     public class ControlPanelController : WB.Core.SharedKernels.SurveyManagement.Web.Controllers.ControlPanelController
     {
-        private readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
+        private readonly IUserViewFactory userViewFactory;
         private readonly IPasswordHasher passwordHasher;
         private static string lastReexportMessage = "no reexport performed";
         private readonly IDataExportRepositoryWriter dataExportRepositoryWriter;
         private readonly IReadSideRepositoryIndexAccessor readSideRepositoryIndexAccessor;
 
-        public ControlPanelController(IServiceLocator serviceLocator, IIncomePackagesRepository incomePackagesRepository,
+        public ControlPanelController(IServiceLocator serviceLocator, IBrokenSyncPackagesStorage brokenSyncPackagesStorage,
             ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
-            IViewFactory<UserViewInputModel, UserView> userViewFactory, IPasswordHasher passwordHasher, ISettingsProvider settingsProvider,
+            IUserViewFactory userViewFactory, IPasswordHasher passwordHasher, ISettingsProvider settingsProvider,
             IDataExportRepositoryWriter dataExportRepositoryWriter, IReadSideRepositoryIndexAccessor readSideRepositoryIndexAccessor)
-            : base(serviceLocator, incomePackagesRepository, commandService, globalInfo, logger, settingsProvider)
+            : base(serviceLocator, brokenSyncPackagesStorage, commandService, globalInfo, logger, settingsProvider)
         {
             this.userViewFactory = userViewFactory;
             this.passwordHasher = passwordHasher;

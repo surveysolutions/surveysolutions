@@ -9,8 +9,8 @@ using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.ReferenceIn
         Establish context = () =>
         {
             questionnaireId = Guid.Parse("33332222111100000000111122223333");
-            referenceInfoForLinkedQuestionsWriter = new Mock<IVersionedReadSideRepositoryWriter<ReferenceInfoForLinkedQuestions>>();
+            referenceInfoForLinkedQuestionsWriter = new Mock<IReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions>>();
             denormalizer = CreateReferenceInfoForLinkedQuestionsDenormalizer(referenceInfoForLinkedQuestionsWriter.Object);
             evnt = CreateQuestionnaireDeletedEvent(questionnaireId,2);
         };
@@ -33,13 +33,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.ReferenceIn
             denormalizer.Handle(evnt);
 
         It should_remove_view_from_read_side = () =>
-            referenceInfoForLinkedQuestionsWriter.Verify(s => s.Remove(questionnaireId.FormatGuid(),2), Times.Once);
+            referenceInfoForLinkedQuestionsWriter.Verify(s => s.Remove(questionnaireId.FormatGuid() + "$" + 2), Times.Once);
 
         private static Guid rosterId = Guid.Parse("11111111111111111111111111111111");
         private static Guid linkedId = Guid.Parse("22222222222222222222222222222222");
         private static ReferenceInfoForLinkedQuestionsDenormalizer denormalizer;
         private static IPublishedEvent<QuestionnaireDeleted> evnt;
-        private static Mock<IVersionedReadSideRepositoryWriter<ReferenceInfoForLinkedQuestions>> referenceInfoForLinkedQuestionsWriter;
+        private static Mock<IReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions>> referenceInfoForLinkedQuestionsWriter;
         private static Guid questionnaireId;
     }
 }

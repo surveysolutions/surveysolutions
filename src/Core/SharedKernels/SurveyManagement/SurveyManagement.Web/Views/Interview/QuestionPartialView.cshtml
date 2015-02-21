@@ -1,0 +1,280 @@
+﻿@using System.Globalization
+@using Main.Core.Entities.SubEntities
+@using WB.Core.SharedKernels.DataCollection.Views.Interview
+@using WB.Core.SharedKernels.SurveyManagement.Views.Interview
+@using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
+@model WB.Core.SharedKernels.SurveyManagement.Views.Interview.InterviewQuestionView
+
+<tr id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, "answerRow")" class="@css("danger", !Model.IsValid && Model.IsEnabled) @css("mandatory", Model.IsMandatory) @css("text-muted", !Model.IsEnabled)">
+    <td class="answer-status">
+        <div class="btn btn-xs @css("btn-info", Model.IsFlagged) @css("btn-default", !Model.IsFlagged)" data-bind="click: flagAnswer.bind($data, $element, '@Model.Id', '@Stringify(Model.RosterVector)')">
+            <i class="glyphicon glyphicon-flag"></i>
+        </div>
+    </td>
+    <td style="width: 50%">
+        <div class="@css("featured", Model.IsFeatured)">
+            <span class="icon-star"></span>
+            <span>@Html.Raw(Model.Title)</span>
+        </div>
+    </td>
+    <td class="question-answer">
+        @if (!Model.IsReadOnly && Model.Scope == QuestionScope.Supervisor && GlobalInfo.IsSupervisor)
+        {
+            switch (Model.QuestionType)
+            {
+                case QuestionType.Text:
+                    var textQuestionSettings = Model.Settings as TextQuestionSettings;
+                    <div class="input-group">
+                        <input id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector)" class="form-control mask" type="text" value="@Model.Answer" mask="@(textQuestionSettings.Mask)" />
+                        <span class="input-group-btn">
+                            <button class="btn btn-success" type="button" data-bind="click: saveTextAnswer.bind($data, '@Model.Id', '@Stringify(Model.RosterVector)')">Save</button>
+                        </span>
+                    </div>
+                    break;
+                case QuestionType.Numeric:
+                    var numericQuestionSetting = Model.Settings as NumericQuestionSettings;
+                    <div class="input-group">
+                        <input id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector)" class="form-control numeric" type="text" value="@Model.Answer" />
+                        <span class="input-group-btn">
+                            @if (numericQuestionSetting.IsInteger)
+                            {
+                                <button class="btn btn-success" type="button" data-bind="click: saveNumericIntegerAnswer.bind($data, '@Model.Id', '@Stringify(Model.RosterVector)')">Save</button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-success" type="button" data-bind="click: saveNumericRealAnswer.bind($data, '@Model.Id', '@Stringify(Model.RosterVector)', @(numericQuestionSetting.CountOfDecimalPlaces ?? 0))">Save</button>
+                            }
+                        </span>
+                    </div>
+                            break;
+                case QuestionType.SingleOption:
+                            var singleOptionSettings = Model.Settings as SingleQuestionSettings;
+                            if (singleOptionSettings.IsFilteredCombobox)
+                            {
+                                <div class="input-group">
+                                    <input id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector)" class="form-control" type="text" value="@Model.Answer" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-success filtered-combobox-button" type="button" data-bind="click: saveFilteredComboboxAnswer.bind($data, '@Model.Id', '@Stringify(Model.RosterVector)')">Save</button>
+                                    </span>
+                                </div>
+                            }
+                            else
+                            {
+                                foreach (var option in Model.Options)
+                                {
+                                    var optionValue = option.Value.ToString();
+                                    var isChecked = Model.Answer != null && Convert.ToDecimal(Model.Answer) == Convert.ToDecimal(option.Value);
+
+                                    <label class="radio" for="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", optionValue))">
+                                        <input type="radio" name="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector)" id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", optionValue))" value="@optionValue" @(isChecked ? "checked" : "")
+                                               data-bind="click: saveCategoricalOneAnswer.bind($data, '@Model.Id', '@Stringify(Model.RosterVector)')">
+                                        <span>@option.Label</span>
+                                    </label>
+                                }
+                            }
+                            break;
+                case QuestionType.MultyOption:
+                            var multiQuestionSettings = Model.Settings as MultiQuestionSettings;
+                            var answers = (decimal[])Model.Answer;
+                            var selectedOptions = answers == null ? "" : string.Join(",", answers);
+                            foreach (var option in Model.Options)
+                            {
+                                var optionValue = option.Value.ToString();
+                                var isChecked = answers != null && answers.Contains(Convert.ToDecimal(option.Value));
+
+                                <label class="checkbox" for="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", optionValue))">
+                                    <input type="checkbox" name="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector)" id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", optionValue))" value="@optionValue" @(isChecked ? "checked" : "")
+                                           data-bind="click: saveCategoricalMultiAnswer.bind($data, '@Model.Id', '@Stringify(Model.RosterVector)', @(multiQuestionSettings.AreAnswersOrdered.ToString().ToLower()),   @if (multiQuestionSettings.MaxAllowedAnswers.HasValue)
+                                                                                                                                                                                                                      {
+                                                                                                                                                                                                                          @(multiQuestionSettings.MaxAllowedAnswers.Value)
+                                                                                                                                                                                                                      }
+                                                                                                                                                                                                                      else
+                                                                                                                                                                                                                      {
+                                                                                                                                                                                                                          @("null")
+                                                                                                                                                                                                                      }, '@selectedOptions')">
+
+                                    <span>@option.Label</span>
+                                    @if (multiQuestionSettings.AreAnswersOrdered && isChecked)
+                                    {
+                                        <span class="badge">@(answers.Select((item, index) => new { index, item }).First(_ => _.item == (decimal)option.Value).index + 1)</span>
+                                    }
+                                </label>
+                            }
+                            break;
+            }
+        }
+        else
+        {
+            switch (Model.QuestionType)
+            {
+                case QuestionType.SingleOption:
+                    var singleOptionSetting = Model.Settings as SingleQuestionSettings;
+                    if (singleOptionSetting.IsCascade || singleOptionSetting.IsFilteredCombobox)
+                    {
+                        if (Model.Answer != null)
+                        {
+                            var answer = Convert.ToDecimal(Model.Answer);
+                            @Model.Options.First(option => answer == Convert.ToDecimal(option.Value)).Label
+                        }
+                    }
+                    else
+                    {
+                        foreach (var option in Model.Options)
+                        {
+                            string optionValue;
+                            bool isChecked;
+                            if (singleOptionSetting.IsLinked)
+                            {
+                                optionValue = Stringify((decimal[])option.Value);
+                                isChecked = Model.Answer != null && ((decimal[])Model.Answer).SequenceEqual((decimal[])option.Value);
+                            }
+                            else
+                            {
+                                optionValue = option.Value.ToString();
+                                isChecked = Model.Answer != null && Convert.ToDecimal(Model.Answer) == Convert.ToDecimal(option.Value);
+                            }
+
+                            <label class="radio" for="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", optionValue))">
+                                <input type="radio" name="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector)" id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", optionValue))" @(isChecked ? "checked" : "") disabled="disabled">
+                                <span>@option.Label</span>
+                            </label>
+                        }
+                    }
+
+                    break;
+                case QuestionType.MultyOption:
+                    var multiQuestionSettings = Model.Settings as MultiQuestionSettings;
+
+                    foreach (var option in Model.Options)
+                    {
+                        string optionValue;
+                        bool isChecked = false;
+                        int orderIndex = 0;
+                        if (multiQuestionSettings.IsLinked)
+                        {
+                            optionValue = Stringify((decimal[])option.Value);
+
+                            if (Model.Answer != null)
+                            {
+                                var answers = (decimal[][])Model.Answer;
+                                isChecked = answers.Any(answer => answer.SequenceEqual((decimal[])option.Value));
+                                if (isChecked)
+                                {
+                                    orderIndex = answers.Select((item, index) => new { index, item }).First(_ => _.item.SequenceEqual((decimal[])option.Value)).index + 1;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            optionValue = option.Value.ToString();
+
+                            if (Model.Answer != null)
+                            {
+                                var answers = (decimal[])Model.Answer;
+                                isChecked = answers.Contains((decimal)option.Value);
+                                if (isChecked)
+                                {
+                                    orderIndex = answers.Any() ? answers.Select((item, index) => new { index, item }).First(_ => _.item == Convert.ToDecimal(option.Value)).index + 1 : 0;
+                                }
+                            }
+                        }
+
+                        <label class="checkbox" for="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", optionValue))">
+                            <input type="checkbox" name="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector)" id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", optionValue))" @(isChecked ? "checked" : "") disabled="disabled">
+
+                            <span>@option.Label</span>
+                            @if (multiQuestionSettings.AreAnswersOrdered && isChecked)
+                            {
+                                <span class="badge">@orderIndex</span>
+                            }
+                        </label>
+                    }
+                    break;
+                case QuestionType.Numeric:
+                case QuestionType.DateTime:
+                case QuestionType.Text:
+                case QuestionType.QRBarcode:
+                @Model.AnswerString
+                    break;
+                case QuestionType.GpsCoordinates:
+                    if (Model.Answer != null)
+                    {
+                        var geoLocationAnswer = Model.Answer as GeoPosition;
+                        <span>
+                            <div>latitude: <span>@Math.Round(geoLocationAnswer.Latitude, 5)</span></div>
+                            <div>longitude: <span>@Math.Round(geoLocationAnswer.Longitude, 5)</span></div>
+                            <div>accuracy: <span>@Math.Round(geoLocationAnswer.Accuracy, 2)</span></div>
+                            <div>altitude: <span>@Math.Round(geoLocationAnswer.Altitude, 5)</span></div>
+                            <div>time stamp: <span data-bind="text: moment('@geoLocationAnswer.Timestamp.UtcDateTime').format('lll')"></span></div>
+                        </span>
+                    }
+                    break;
+                case QuestionType.TextList:
+                    foreach (var option in Model.Options)
+                        {
+                            <div><span>@option.Label</span></div>
+                        }
+                    break;
+                case QuestionType.Multimedia:
+                <img src="@Url.RouteUrl("Default", new {httproute = "", controller = "Resource", action = "InterviewFile", interviewid = ViewData["InterviewId"], filename = Model.Answer})" width="100%" height="auto" />
+                    break;
+            }
+        }
+
+
+        @if (!Model.IsValid)
+        {
+            <small class="text-error">@Model.ValidationExpression</small>
+            <small class="text-error">@Model.ValidationMessage</small>
+        }
+    </td>
+
+
+
+    <td class="comments col-sm-3">
+        <dl id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, "commentList")" class="@css("hidden", Model.Comments == null || Model.Comments.Count == 0)">
+            @if (Model.Comments != null && Model.Comments.Count > 0)
+            {
+                foreach (var comment in Model.Comments)
+                {
+                    <dt>@comment.CommenterName <span class="text-normal">@comment.Text</span></dt>
+                    <dd>
+                        <small class="comment-date" date="@comment.Date.ToString("u")"></small>
+                    </dd>
+                }
+            }
+        </dl>
+
+        <div class="form-horizontal">
+            <div class="has-feedback">
+                <div>
+                    <input type="text" class="form-control" placeholder="Write a comment..." data-bind="enterKey: addComment.bind($data, $element, '@Model.Id', '@Stringify(Model.RosterVector)')">
+                    <span class="glyphicon glyphicon-comment form-control-feedback" aria-hidden="true"></span>
+                </div>
+            </div>
+        </div>
+    </td>
+</tr>
+
+<script type="text/html" id="comment-template">
+    <dt><span data-bind="text: userName"></span>&nbsp;<span class="text-normal" data-bind="text: comment"></span></dt>
+    <dd><small class="comment-date" data-bind="attr: { 'data': date }, text: moment(date).fromNow()"></small></dd>
+</script>
+
+@helper css(string style, bool shouldBeAdded = true)
+{
+    @(shouldBeAdded ? style : string.Empty)
+}
+@functions
+    {
+
+    public string getInterviewItemIdWithPostfix(Guid questionId, decimal[] rosterVector, string postfix = "")
+    {
+        return string.Format("{0}_{1}_{2}", questionId, Stringify(rosterVector), postfix);
+    }
+
+    public string Stringify(decimal[] array)
+    {
+        return string.Join("_", array.Select(x => x.ToString(CultureInfo.InvariantCulture).Replace('.', '-')));
+    }
+}

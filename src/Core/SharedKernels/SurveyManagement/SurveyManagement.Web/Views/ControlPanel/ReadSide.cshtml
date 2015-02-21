@@ -104,7 +104,7 @@
 
 <div>
     <div class="panel-body">
-        <div class="well well-sm">Current rebuild stage: &nbsp;<b data-bind="text: currentRebuildStatus"></b></div>
+        <div class="well well-sm">Current rebuild stage: &nbsp;<b data-bind="text: currentRebuildStatus, css: {'has-error': hasErrors}"></b></div>
         <div class="row">
             <div class="col-md-8">
                 <!-- ko if: readSideRepositoryWriters().length > 0 -->
@@ -113,6 +113,19 @@
                         <tr>
                             <td data-bind="text: WriterName"></td>
                             <td data-bind="text: Status"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- /ko -->
+
+                <!-- ko if: rebuildDenormalizerStatistic().length > 0 -->
+
+                <table class="table table-striped table-bordered table-condensed table-hover">
+                    <tbody data-bind="foreach: rebuildDenormalizerStatistic()">
+                        <tr>
+                            <td data-bind="text: DenormalizerName"></td>
+                            <td data-bind="text: timeSpentDescription"></td>
+                            <td data-bind="text: timeSpentInPersentDescription"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -163,7 +176,7 @@
                         Estimated time
                     </li>
                 </ul>
-            </div>
+</div>
         </div>
     </div>
 </div>
@@ -220,6 +233,9 @@
         .accordion-caret .accordion-toggle.collapsed:before {
             content: "▸";
             margin-right: 0px;
+        }
+        .has-error {
+            color: red;
         }
     </style>
     @Scripts.Render("~/Scripts/components/moment-duration-format.js", "~/Scripts/components/bindings.js", "~/Scripts/viewmodels/pages/controlpanel/readside.js")

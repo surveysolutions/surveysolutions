@@ -14,10 +14,10 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
     internal class ChaptersInfoViewDenormalizer :
-        AbstractFunctionalEventHandler<GroupInfoView, IReadSideRepositoryWriter<GroupInfoView>>,
-        ICreateHandler<GroupInfoView, NewQuestionnaireCreated>,
-        ICreateHandler<GroupInfoView, TemplateImported>,
-        ICreateHandler<GroupInfoView, QuestionnaireCloned>,
+        AbstractFunctionalEventHandler<GroupInfoView, IReadSideKeyValueStorage<GroupInfoView>>,
+        IUpdateHandler<GroupInfoView, NewQuestionnaireCreated>,
+        IUpdateHandler<GroupInfoView, TemplateImported>,
+        IUpdateHandler<GroupInfoView, QuestionnaireCloned>,
         IUpdateHandler<GroupInfoView, NewGroupAdded>,
         IUpdateHandler<GroupInfoView, GroupCloned>,
         IUpdateHandler<GroupInfoView, GroupUpdated>,
@@ -45,17 +45,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         IUpdateHandler<GroupInfoView, GroupStoppedBeingARoster>
     {
 
-        public ChaptersInfoViewDenormalizer(IReadSideRepositoryWriter<GroupInfoView> writer)
+        public ChaptersInfoViewDenormalizer(IReadSideKeyValueStorage<GroupInfoView> writer)
             : base(writer)
         {
         }
 
-        public GroupInfoView Create(IPublishedEvent<NewQuestionnaireCreated> evnt)
+        public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<NewQuestionnaireCreated> evnt)
         {
             return CreateQuestionnaire(evnt.EventSourceId);
         }
 
-        public GroupInfoView Create(IPublishedEvent<TemplateImported> evnt)
+        public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<TemplateImported> evnt)
         {
             GroupInfoView questionnaire = CreateQuestionnaire(evnt.EventSourceId);
             this.BuildQuestionnaireFrom(evnt.Payload.Source, questionnaire);
@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             return questionnaire;
         }
 
-        public GroupInfoView Create(IPublishedEvent<QuestionnaireCloned> evnt)
+        public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<QuestionnaireCloned> evnt)
         {
             GroupInfoView questionnaire = CreateQuestionnaire(evnt.EventSourceId);
             this.BuildQuestionnaireFrom(evnt.Payload.QuestionnaireDocument, questionnaire);

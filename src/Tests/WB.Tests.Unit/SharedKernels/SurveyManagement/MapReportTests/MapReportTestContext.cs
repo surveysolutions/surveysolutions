@@ -12,9 +12,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportTests
 {
     internal class MapReportTestContext
     {
-        protected static MapReport CreateMapReport(IReadSideRepositoryReader<AnswersByVariableCollection> answersByVariableStorage = null)
+        protected static MapReport CreateMapReport(IReadSideKeyValueStorage<AnswersByVariableCollection> answersByVariableStorage = null)
         {
-            return new MapReport(answersByVariableStorage ?? Mock.Of<IReadSideRepositoryReader<AnswersByVariableCollection>>());
+            return new MapReport(answersByVariableStorage ?? Mock.Of<IReadSideKeyValueStorage<AnswersByVariableCollection>>());
         }
     }
 }

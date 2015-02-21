@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 
             @event = CreateGroupBecameARosterEvent(groupId: groupId);
 
-            var documentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(writer
+            var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(writer
                 => writer.GetById(Moq.It.IsAny<string>()) == questionnaireDocument);
 
             denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage);

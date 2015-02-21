@@ -9,7 +9,6 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
@@ -23,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireQuestionInfo
     {
         private Establish context = () =>
         {
-            questionnaireDocumentReaderMock = new Mock<IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned>>();
+            questionnaireDocumentReaderMock = new Mock<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>();
 
             var questionnaire = new QuestionnaireDocument()
             {
@@ -42,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireQuestionInfo
 
             var questionnaireVersioned = Mock.Of<QuestionnaireDocumentVersioned>(x => x.Questionnaire == questionnaire && x.Version == version);
 
-            questionnaireDocumentReaderMock.Setup(x => x.GetById(questionnaireId.FormatGuid(), version)).Returns(questionnaireVersioned);
+            questionnaireDocumentReaderMock.Setup(x => x.GetById(questionnaireId.FormatGuid() + "$" + version)).Returns(questionnaireVersioned);
 
             factory = CreateQuestionnaireQuestionInfoFactory(questionnaireStore: questionnaireDocumentReaderMock.Object);
 
@@ -70,6 +69,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireQuestionInfo
         private static QuestionnaireQuestionInfoFactory factory;
         private static QuestionnaireQuestionInfoInputModel input;
         private static QuestionnaireQuestionInfoView view;
-        private static Mock<IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned>> questionnaireDocumentReaderMock;
+        private static Mock<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>> questionnaireDocumentReaderMock;
     }
 }

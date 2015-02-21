@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
     {
         Establish context = () =>
         {
-            questionDetailsReaderMock = new Mock<IReadSideRepositoryReader<QuestionsAndGroupsCollectionView>>();
+            questionDetailsReaderMock = new Mock<IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView>>();
             factory = CreateQuestionnaireInfoFactory(questionDetailsReaderMock.Object);
         };
 
@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
 
         private static QuestionnaireInfoFactory factory;
         private static NewEditRosterView result;
-        private static Mock<IReadSideRepositoryReader<QuestionsAndGroupsCollectionView>> questionDetailsReaderMock;
+        private static Mock<IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView>> questionDetailsReaderMock;
         private static string questionnaireId = "11111111111111111111111111111111";
         private static Guid rosterId = g4Id;
     }

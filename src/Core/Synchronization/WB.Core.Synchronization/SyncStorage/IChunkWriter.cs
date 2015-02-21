@@ -6,7 +6,7 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
-    internal interface IChunkWriter : IReadSideRepositoryCleaner, IReadSideRepositoryWriter
+    internal interface IChunkWriter : IReadSideRepositoryCleaner, IChacheableRepositoryWriter
     {
         void StoreChunk(SyncItem syncItem, Guid? userId, DateTime timestamp);
     }

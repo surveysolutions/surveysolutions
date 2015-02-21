@@ -6,8 +6,5 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
     public interface IQuestionnaireInfoViewFactory
     {
         QuestionnaireInfoView Load(string questionnaireId);
-
-        int CountQuestionnairesNotMigratedToCSharp();
-        IEnumerable<Guid> GetQuestionnairesNotMigratedToCSharp();
     }
 }

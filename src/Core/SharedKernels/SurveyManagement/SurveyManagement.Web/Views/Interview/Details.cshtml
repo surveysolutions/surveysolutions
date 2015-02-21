@@ -1,0 +1,180 @@
+﻿@using System.Globalization
+@using System.Web.Optimization
+@using Main.Core.Entities.SubEntities
+@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
+@using WB.Core.SharedKernels.SurveyManagement.Views
+@using WB.Core.SharedKernels.SurveyManagement.Views.Interview
+@using WB.Core.SharedKernels.SurveyManagement.Web.Code
+@using WB.Core.SharedKernels.SurveyManagement.Web.Models
+@using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
+@model DetailsViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles
+{
+    @Styles.Render("~/css/list")
+    @Styles.Render("~/css/interview")
+    @Styles.Render("~/Content/interview.css")
+}
+
+@section scripts
+{
+    @Scripts.Render("~/js/interview-general", "~/js/details")
+    <script type="text/javascript">
+        var urlReferrer = null;
+        @if (Request.UrlReferrer != null && Request.UrlReferrer.OriginalString.Contains("Interviews"))
+        {
+            <text>urlReferrer = '@Html.Raw(Request.UrlReferrer)';</text>
+        }
+
+        var settings = new Supervisor.VM.InterviewDetailsSettings();
+        settings.UserName = '@User.Identity.Name';
+        settings.UrlReferrer = urlReferrer;
+
+        settings.Interview.InterviewId = '@Model.InterviewDetails.PublicKey';
+        settings.Urls.CommandExecution = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "Execute"})';
+        settings.Urls.Interviews = '@(GlobalInfo.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ", new {area=""}))';
+
+        var filter = { filteredBy: '@Model.Filter' };
+
+        var filteredComboboxes = [@(Html.Raw( string.Join(",", Model.InterviewDetails.Groups.SelectMany(_ => _.Entities).OfType<InterviewQuestionView>().Where(IsFilteredCombobox).Select(_ => string.Format("{{id:'{0}', options:[{1}]}}", getInterviewItemIdWithPostfix(_.Id, _.RosterVector),string.Join(",", _.Options.Select(x=>string.Format("{{value:'{0}', label:'{1}'}}", x.Value, HttpUtility.UrlEncode(x.Label)))))))))];
+
+        $(function () {
+            window.model = new Supervisor.VM.Details(settings, filter, filteredComboboxes);
+            ko.applyBindings(model);
+            model.load();
+        });
+    </script>
+}
+
+<div>
+    <div id="menu" class="col-md-3 sidebar">
+        <div class="panel panel-default">
+            <div class="panel-heading with-btn">
+                Groups
+                <div class="btn-group btn-group-sm pull-right">
+                    <button data-bind="click: ToggleFilter" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span> Hide groups</button>
+                </div>
+            </div>
+            <ul id="groups-menu" class="list-group">
+                @foreach (var group in Model.InterviewDetails.Groups)
+                {
+                    <li class="list-group-item @SetGroupLevelClass(group.Depth)">
+                        <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.All, currentGroupId = group.Id, rosterVector=Stringify(group.RosterVector)})">@group.Title</a>
+                    </li>
+                }
+            </ul>
+        </div>
+
+    </div>
+    <div id="content" class="col-md-9 col-md-offset-3 main">
+        <div class="row-fluid">
+            <h3 class="span10 text-overflow-ellipsis">
+                <span>@Model.InterviewDetails.Title</span>
+                <span class="small">Status:</span><a class="btn-link" data-toggle="modal" data-target="#statusHistoryModal">@Model.InterviewDetails.Status.ToLocalizeString()</a>
+                <span class="small">Responsible:</span><span>@Model.InterviewDetails.Responsible.Name</span>
+                @if (Model.HasUnprocessedSyncPackages)
+                {
+                    <span class="badge badge-orange"><i class="glyphicon glyphicon-refresh"></i> Interview has pending synchronization packages in queue</span>
+                }
+            </h3>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <span><button data-bind="visible: !IsFilterOpen(), click: ToggleFilter" class="btn btn-default  btn-xs"><span class="glyphicon glyphicon-arrow-right"></span> Show groups</button></span>
+                @if (((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor)
+                         || (Model.InterviewDetails.Status == InterviewStatus.ApprovedBySupervisor && GlobalInfo.IsHeadquarter))
+                {
+                    <button class="btn btn-success " data-bind="click: showApproveModal">Approve</button>
+                    <button class="btn btn-danger" data-bind="click: showRejectModal">Reject</button>
+                }
+                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.All})" class="btn btn-default btn-xs @SetFilterActiveClass(InterviewDetailsFilter.All)">all</a>
+                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Enabled})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Enabled)"><i class="glyphicon glyphicon-pencil @SetFilterIconActiveClass(InterviewDetailsFilter.Enabled)"></i> enabled (<span>@Model.Statistic.EnabledCount</span>)</a>
+                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Answered})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Answered)"><i class="glyphicon glyphicon-ok @SetFilterIconActiveClass(InterviewDetailsFilter.Answered)"></i> answered (<span>@Model.Statistic.AnsweredCount</span>)</a>
+                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Unanswered})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Unanswered)"><i class="glyphicon glyphicon-ok @SetFilterIconActiveClass(InterviewDetailsFilter.Unanswered)"></i> unanswered (<span>@Model.Statistic.UnansweredCount</span>)</a>
+                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Invalid})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Invalid)"><i class="glyphicon glyphicon-warning-sign @SetFilterIconActiveClass(InterviewDetailsFilter.Invalid)"></i> invalid (<span>@Model.Statistic.InvalidCount</span>)</a>
+                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Commented})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Commented)"><i class="glyphicon glyphicon-comment @SetFilterIconActiveClass(InterviewDetailsFilter.Commented)"></i> commented (<span id="commentsCounter">@Model.Statistic.CommentedCount</span>)</a>
+                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Flagged})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Flagged)"><i class="glyphicon glyphicon-flag @SetFilterIconActiveClass(InterviewDetailsFilter.Flagged)"></i> flagged (<span id="flagsCounter">@Model.Statistic.FlaggedCount</span>)</a>
+                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Supervisors})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Supervisors)"><i class="glyphicon glyphicon-pencil @SetFilterIconActiveClass(InterviewDetailsFilter.Supervisors)"></i> supervisor's (<span>@Model.Statistic.SupervisorsCount</span>)</a>
+
+            </div>
+        </div>
+        <div id="list">
+            @foreach (var group in Model.FilteredGroups)
+            {
+                <div id="group-@group.Id" class="group-item-content">
+                    <h2 class="heading">@group.Title</h2>
+                    <div class="questions">
+                        <table class="table table-bordered table-hover">
+                            <tbody>
+                                @foreach (var entity in group.Entities)
+                                {
+                                    if (entity is InterviewStaticTextView)
+                                    {
+                                        @Html.Partial("StaticTextPartialView", entity as InterviewStaticTextView)
+                                    }
+                                    if (entity is InterviewQuestionView)
+                                    {
+                                        @Html.Partial("QuestionPartialView", entity as InterviewQuestionView, new ViewDataDictionary{{ "InterviewId", Model.InterviewDetails.PublicKey}})
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@Html.Partial("HistoryOfStatusesPartialView", Model.History)
+@Html.Partial("ApproveRejectPartialView", Model.InterviewDetails.Status)
+
+@helper SetGroupLevelClass(int level)
+{
+    <text>level</text>@level
+
+}
+
+@helper SetFilterActiveClass(InterviewDetailsFilter filter)
+{
+    if (filter == Model.Filter)
+    {
+        <text>btn-primary</text>
+    }
+}
+
+@helper SetFilterIconActiveClass(InterviewDetailsFilter filter)
+{
+    if (filter == Model.Filter)
+    {
+        <text>icon-white</text>
+    }
+}
+
+
+@functions
+    {
+
+    public string getInterviewItemIdWithPostfix(Guid questionId, decimal[] rosterVector, string postfix = "")
+    {
+        return string.Format("{0}_{1}_{2}", questionId, Stringify(rosterVector), postfix);
+    }
+
+    public string Stringify(decimal[] array)
+    {
+        return string.Join("_", array.Select(x => x.ToString(CultureInfo.InvariantCulture).Replace('.', '-')));
+    }
+    
+    private static bool IsFilteredCombobox(InterviewQuestionView entityView)
+    {
+        if (entityView.QuestionType == QuestionType.SingleOption)
+        {
+            var interviewQuestionViewSettings = entityView.Settings as SingleQuestionSettings;
+
+            return interviewQuestionViewSettings != null && interviewQuestionViewSettings.IsFilteredCombobox;
+        }
+        return false;
+    }
+
+}

@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportTests
 
                 });
 
-            var repositoryReader = new Mock<IReadSideRepositoryReader<AnswersByVariableCollection>>();
+            var repositoryReader = new Mock<IReadSideKeyValueStorage<AnswersByVariableCollection>>();
 
             repositoryReader.Setup(x => x.GetById(repositoryId)).Returns(answersCollectionMock);
 

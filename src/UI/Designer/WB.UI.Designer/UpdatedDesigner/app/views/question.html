@@ -108,14 +108,14 @@
                             <span class="dropdown-arrow"></span>
                         </button>
 
-                        <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1" ng-hide="activeQuestion.type == 'GpsCoordinates'">
+                        <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1" ng-hide="activeQuestion.type == 'GpsCoordinates' || activeQuestion.type == 'MultyOption'">
                             <li role="presentation" ng-repeat="scope in activeQuestion.allQuestionScopeOptions">
                                 <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="changeQuestionScope(scope)">
                                     {{scope.text}}
                                 </a>
                             </li>
                         </ul>
-                        <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1" ng-show="activeQuestion.type == 'GpsCoordinates'">
+                        <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1" ng-show="activeQuestion.type == 'GpsCoordinates' || activeQuestion.type == 'MultyOption'">
                             <li role="presentation" ng-repeat="scope in activeQuestion.notPrefilledQuestionScopeOptions">
                                 <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="changeQuestionScope(scope)">
                                     {{scope.text}}
@@ -328,13 +328,25 @@
                     </div>
                 </div>
                 <div class="col-xs-8 inline-inputs">
-                    <div class="form-group" ng-show="!activeQuestion.isInteger">
+                    <div class="form-group" ng-show="!activeQuestion.isInteger" ng-class="{'has-error': !questionForm.countOfDecimalPlaces.$valid}">
                         <label for="edit-question-count-decimal">Count Of Decimal Places</label>
-                        <input id="edit-question-count-decimal" type="text" ng-model="activeQuestion.countOfDecimalPlaces" class="form-control small-numeric-input">
+                        <input id="edit-question-count-decimal" type="text"
+                               name="countOfDecimalPlaces"
+                               ng-pattern="/^\d+$/"
+                               ng-model="activeQuestion.countOfDecimalPlaces"
+                               class="form-control small-numeric-input">
+                        <p class="help-block ng-cloak" ng-show="questionForm.countOfDecimalPlaces.$error.pattern">
+                            Only integers are allowed
+                        </p>
                     </div>
-                    <div class="form-group" ng-show="activeQuestion.isInteger">
+                    <div class="form-group" ng-show="activeQuestion.isInteger" ng-class="{'has-error': !questionForm.maxValue.$valid}">
                         <label for="edit-question-max-value">Roster upper bound</label>
-                        <input id="edit-question-max-value" type="text" ng-model="activeQuestion.maxValue" class="form-control  small-numeric-input">
+                        <input id="edit-question-max-value"
+                               ng-pattern="/^\d+$/"
+                               type="text" name="maxValue" ng-model="activeQuestion.maxValue" class="form-control  small-numeric-input">
+                        <p class="help-block ng-cloak" ng-show="questionForm.maxValue.$error.pattern">
+                            Only integers are allowed
+                        </p>
                     </div>
                 </div>
             </div>

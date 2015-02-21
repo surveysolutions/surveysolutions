@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewQuestionViewTest
         {
             question = Mock.Of<IQuestion>();
 
-            answeredQuestion = new InterviewQuestion { Invalid = true, Disabled = true };
+            answeredQuestion = new InterviewQuestion {QuestionState = QuestionState.Valid | QuestionState.Valid};
         };
 
         Because of = () =>

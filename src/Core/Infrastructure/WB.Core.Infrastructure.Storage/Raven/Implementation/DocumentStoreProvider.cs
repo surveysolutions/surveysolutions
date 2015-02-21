@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Net;
+using System.Net.Http;
 using Ninject.Activation;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Imports.Newtonsoft.Json;
-using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
+using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation
 {
@@ -18,16 +19,6 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation
         {
             if (settings == null) throw new ArgumentNullException("settings");
             this.settings = settings;
-        }
-
-        /// <summary>
-        /// Creates a separate instance for event store.
-        /// This is needed because event store substitutes conventions and substituted are not compatible with read side.
-        /// Always creates a new instance, so should be called only once per app.
-        /// </summary>
-        public IDocumentStore CreateSeparateInstanceForEventStore()
-        {
-            return this.CreateServerStorage(this.settings.EventsDatabase);
         }
 
         public IDocumentStore CreateInstanceForPlainStorage()
@@ -52,11 +43,11 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation
 
         private DocumentStore CreateServerStorage(string databaseName)
         {
+            
             var store = new DocumentStore
             {
                 Url = this.settings.StoragePath,
                 DefaultDatabase = databaseName,
-                
                 Conventions =
                 {
                     FailoverBehavior = this.settings.FailoverBehavior,
@@ -66,7 +57,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation
                         serializer.TypeNameHandling = TypeNameHandling.All;
                         serializer.NullValueHandling = NullValueHandling.Ignore;
                     }
-                }
+                },
             };
 
             if (!string.IsNullOrWhiteSpace(this.settings.Username))
@@ -88,6 +79,13 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation
             {
                 store.ActivateBundles(this.settings.ActiveBundles, databaseName);
             }
+
+            var webRequestHandler = new WebRequestHandler();
+            webRequestHandler.UnsafeAuthenticatedConnectionSharing = true;
+            webRequestHandler.PreAuthenticate = true;
+
+            store.HttpMessageHandler = webRequestHandler;
+
             return store;
         }
     }

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
@@ -22,6 +23,7 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
+using WB.Core.Infrastructure.Storage.Esent;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernels.SurveyManagement;
@@ -106,21 +108,21 @@ namespace WB.UI.Headquarters
 
             var interviewDetailsDataLoaderSettings =
                 new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled,
-                    LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval,
-                    LegacyOptions.InterviewDetailsDataSchedulerNumberOfInterviewsProcessedAtTime);
+                    LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval);
 
-            bool reevaluateInterviewWhenSynchronized = LegacyOptions.SupervisorFunctionsEnabled;
-            var synchronizationSettings = new SyncSettings(reevaluateInterviewWhenSynchronized: reevaluateInterviewWhenSynchronized,
-                appDataDirectory: AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
-                incomingCapiPackagesDirectoryName: LegacyOptions.SynchronizationIncomingCapiPackagesDirectory,
+            string appDataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
+
+            var synchronizationSettings = new SyncSettings(appDataDirectory: appDataDirectory,
                 incomingCapiPackagesWithErrorsDirectoryName:
-                    LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
-                incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension);
+                LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
+                incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension, incomingUnprocessedPackagesDirectoryName: LegacyOptions.IncomingUnprocessedPackageFileNameExtension, origin:Constants.SupervisorSynchronizationOrigin);
 
-            var basePath = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
+            var basePath = appDataDirectory;
             //const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
 
             var ravenReadSideRepositoryWriterSettings = new RavenReadSideRepositoryWriterSettings(int.Parse(WebConfigurationManager.AppSettings["Raven.Readside.BulkInsertBatchSize"]));
+
+            string esentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.DbFolder"]);
 
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
@@ -137,6 +139,7 @@ namespace WB.UI.Headquarters
                 new HeadquartersRegistry(),
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
+                new EsentReadSideModule(esentDataFolder),
                 new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled));
 
             NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
@@ -144,7 +147,6 @@ namespace WB.UI.Headquarters
 
 
             var eventStoreModule = ModulesFactory.GetEventStoreModule();
-            var overrideReceivedEventTimeStamp = CoreSettings.EventStoreProvider == StoreProviders.Raven;
 
             kernel.Load(
                 eventStoreModule,
@@ -152,8 +154,7 @@ namespace WB.UI.Headquarters
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]), isDebug,
-                    applicationBuildVersion, interviewDetailsDataLoaderSettings, overrideReceivedEventTimeStamp,
-                    Constants.SupervisorSynchronizationOrigin, true,
+                    applicationBuildVersion, interviewDetailsDataLoaderSettings, true,
                     int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"]),
                     new InterviewHistorySettings(basePath, bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"]))));
 
@@ -185,9 +186,6 @@ namespace WB.UI.Headquarters
 
             kernel.Bind<IPasswordPolicy>().ToMethod(_ => PasswordPolicyFactory.CreatePasswordPolicy()).InSingletonScope();
 
-            
-#warning dirty index registrations
-            // SuccessMarker.Start(kernel);
             return kernel;
         }
 

@@ -10,7 +10,6 @@ using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
@@ -22,13 +21,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireReader;
+        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader;
         private readonly IEventStore eventStore;
         private readonly ILogger logger;
 
         public InterviewHistoryFactory(IEventStore eventStore, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
             IReadSideRepositoryWriter<UserDocument> userReader,
-            IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireReader, ILogger logger)
+            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader, ILogger logger)
         {
             this.eventStore = eventStore;
             this.interviewSummaryReader = interviewSummaryReader;

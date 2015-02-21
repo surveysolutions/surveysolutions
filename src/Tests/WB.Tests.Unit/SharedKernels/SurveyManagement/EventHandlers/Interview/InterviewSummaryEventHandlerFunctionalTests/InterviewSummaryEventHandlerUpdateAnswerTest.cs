@@ -10,7 +10,6 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -176,7 +175,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         {
             var mockOfInterviewSummary = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
             return new InterviewSummaryEventHandlerFunctional(mockOfInterviewSummary.Object,
-                new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>().Object,
+                new Mock<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>().Object,
                 new Mock<IReadSideRepositoryWriter<UserDocument>>().Object);
         }
 

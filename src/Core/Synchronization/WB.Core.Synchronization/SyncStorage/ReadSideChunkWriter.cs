@@ -9,15 +9,19 @@ namespace WB.Core.Synchronization.SyncStorage
 {
     internal class ReadSideChunkWriter : IChunkWriter
     {
-        private readonly IReadSideRepositoryWriter<SynchronizationDelta> storage;
-        private readonly IQueryableReadSideRepositoryReader<SynchronizationDelta> storageReader;
+        private readonly IReadSideRepositoryWriter<SynchronizationDeltaMetaInformation> storage;
+        private readonly IReadSideKeyValueStorage<SynchronizationDeltaContent> contentStorage;
+        private readonly IQueryableReadSideRepositoryReader<SynchronizationDeltaMetaInformation> storageReader;
         private bool cacheEnabled = false;
         private static int currentSortIndex = 0;
 
-        public ReadSideChunkWriter(IReadSideRepositoryWriter<SynchronizationDelta> storage, IQueryableReadSideRepositoryReader<SynchronizationDelta> storageReader)
+        public ReadSideChunkWriter(IReadSideRepositoryWriter<SynchronizationDeltaMetaInformation> storage,
+            IQueryableReadSideRepositoryReader<SynchronizationDeltaMetaInformation> storageReader,
+            IReadSideKeyValueStorage<SynchronizationDeltaContent> contentStorage)
         {
             this.storage = storage;
             this.storageReader = storageReader;
+            this.contentStorage = contentStorage;
         }
 
         public void StoreChunk(SyncItem syncItem, Guid? userId, DateTime timestamp)
@@ -35,10 +39,15 @@ namespace WB.Core.Synchronization.SyncStorage
                     sortIndex = query.First() + 1;
             }
 
-            var synchronizationDelta = new SynchronizationDelta(syncItem.RootId, syncItem.Content, timestamp, 
-                userId, syncItem.IsCompressed, syncItem.ItemType, syncItem.MetaInfo, sortIndex);
+            var synchronizationDelta = new SynchronizationDeltaMetaInformation(syncItem.RootId, timestamp,
+                userId, syncItem.ItemType, sortIndex, string.IsNullOrEmpty(syncItem.Content) ? 0 : syncItem.Content.Length,
+                string.IsNullOrEmpty(syncItem.MetaInfo) ? 0 : syncItem.MetaInfo.Length);
 
             storage.Store(synchronizationDelta, synchronizationDelta.PublicKey);
+
+            contentStorage.Store(
+                new SynchronizationDeltaContent(synchronizationDelta.PublicKey, syncItem.Content, syncItem.MetaInfo,
+                    syncItem.IsCompressed, syncItem.ItemType, syncItem.RootId), synchronizationDelta.PublicKey);
         }
 
         public void Clear()
@@ -50,7 +59,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public void EnableCache()
         {
-            var readSideRepositoryWriter = storage as IReadSideRepositoryWriter;
+            var readSideRepositoryWriter = storage as IChacheableRepositoryWriter;
             if (readSideRepositoryWriter != null)
                 readSideRepositoryWriter.EnableCache();
 
@@ -60,7 +69,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public void DisableCache()
         {
-            var readSideRepositoryWriter = storage as IReadSideRepositoryWriter;
+            var readSideRepositoryWriter = storage as IChacheableRepositoryWriter;
             if (readSideRepositoryWriter != null)
                 readSideRepositoryWriter.DisableCache();
 
@@ -70,12 +79,12 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public string GetReadableStatus()
         {
-            var readSideRepositoryWriter = storage as IReadSideRepositoryWriter;
+            var readSideRepositoryWriter = storage as IChacheableRepositoryWriter;
             if (readSideRepositoryWriter != null)
                 return readSideRepositoryWriter.GetReadableStatus();
             return "";
         }
 
-        public Type ViewType { get { return typeof (SynchronizationDelta); } }
+        public Type ViewType { get { return typeof (SynchronizationDeltaMetaInformation); } }
     }
 }
