@@ -246,6 +246,9 @@
   <data name="SettingsText" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="Settings_AllowToSendInfoByCrashesText" xml:space="preserve">
+    <value>Allow to send an anonymous information about crashes of application</value>
+  </data>
   <data name="SignOutText" xml:space="preserve">
     <value>Sign out</value>
   </data>

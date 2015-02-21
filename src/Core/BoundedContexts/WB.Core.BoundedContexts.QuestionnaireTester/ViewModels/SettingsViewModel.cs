@@ -38,6 +38,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             set { bufferSize = value; RaisePropertyChanged(() => BufferSize); }
         }
 
+        private bool allowToSendInfoByCrashes = true;
+        public bool AllowToSendInfoByCrashes
+        {
+            get { return allowToSendInfoByCrashes; }
+            set { allowToSendInfoByCrashes = value; RaisePropertyChanged(() => BufferSize); }
+        }
+
+
         private IMvxCommand saveSettingsCommand;
         public IMvxCommand SaveSettingsCommand
         {
