@@ -95,18 +95,18 @@ namespace WB.Tests.Unit.Applications.Designer
             Guid templateId = Guid.NewGuid();
             TemplateInfo dataForZip = new TemplateInfo() { Source = "zipped data", Title = "template" };
 
-            var doc = new QuestionnaireDocument();
+            var doc = new QuestionnaireDocument(){Title = "title"};
             var view = new QuestionnaireView(doc);
             this.questionnaireViewFactoryMock.Setup(x => x.Load(Moq.It.IsAny<QuestionnaireViewInputModel>())).Returns(view);
 
             this.ExportServiceMock.Setup(x => x.GetQuestionnaireTemplateInfo(Moq.It.IsAny<QuestionnaireDocument>())).Returns(dataForZip);
-            this.ZipUtilsMock.Setup(x => x.Compress(dataForZip.Source)).Returns(new MemoryStream());
+            this.ZipUtilsMock.Setup(x => x.CompressGZip(It.IsAny<object>())).Returns(new MemoryStream());
             // act
             controller.Export(templateId);
 
             // assert
-            this.ExportServiceMock.Verify(x => x.GetQuestionnaireTemplateInfo(Moq.It.IsAny<QuestionnaireDocument>()), Times.Once());
-            this.ZipUtilsMock.Verify(x => x.Compress(dataForZip.Source), Times.Once());
+            this.questionnaireViewFactoryMock.Verify(x => x.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()), Times.Once());
+            this.ZipUtilsMock.Verify(x => x.CompressGZip(It.IsAny<object>()), Times.Once());
         }
 
         [Test]
@@ -121,7 +121,7 @@ namespace WB.Tests.Unit.Applications.Designer
 
             var doc = new QuestionnaireDocument();
             var view = new QuestionnaireView(doc);
-            this.questionnaireViewFactoryMock.Setup(x => x.Load(Moq.It.IsAny<QuestionnaireViewInputModel>())).Returns(view);
+            this.questionnaireViewFactoryMock.Setup(x => x.Load(Moq.It.IsAny<QuestionnaireViewInputModel>())).Returns((QuestionnaireView)null);
 
             this.ExportServiceMock.Setup(x => x.GetQuestionnaireTemplateInfo(Moq.It.IsAny<QuestionnaireDocument>())).Returns(template);
 
@@ -139,7 +139,6 @@ namespace WB.Tests.Unit.Applications.Designer
             return new SynchronizationController(this.CommandServiceMock.Object,
                                                  this.UserHelperMock.Object,
                                                  this.ZipUtilsMock.Object, 
-                                                 this.ExportServiceMock.Object,
                                                  this.questionnaireViewFactoryMock.Object);
         }
     }
