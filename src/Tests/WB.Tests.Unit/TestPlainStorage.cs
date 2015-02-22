@@ -50,7 +50,12 @@ namespace WB.Tests.Unit
             return query.Invoke(this.entites.Values.AsQueryable());
         }
 
-        public IEnumerable<T> Where(Expression<Func<T, bool>> predicate)
+        public IEnumerable<T> LoadAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveAll()
         {
             throw new NotImplementedException();
         }
