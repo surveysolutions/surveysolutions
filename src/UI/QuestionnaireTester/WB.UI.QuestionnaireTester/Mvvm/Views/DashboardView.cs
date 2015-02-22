@@ -6,7 +6,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 
 namespace WB.UI.QuestionnaireTester.Mvvm.Views
 {
-    [Activity(Theme = "@style/Theme.Tester")]
+    [Activity(Theme = "@style/Theme.Tester", HardwareAccelerated = true)]
     public class DashboardView : BaseActivityView<DashboardViewModel>
     {
         protected override int ViewResourceId
