@@ -30,7 +30,7 @@ namespace WB.UI.QuestionnaireTester.Implementation.Services
 
         public void Store(QuestionnaireDocument view, string id)
         {
-            SiaqodbFactory.GetInstance().StoreObject(new QuestionnaireStorageViewModel{ Id = id, Questionnaire = view});
+            this.Store(new[] {new Tuple<QuestionnaireDocument, string>(view, id),});
         }
 
         public void Store(IEnumerable<Tuple<QuestionnaireDocument, string>> entities)
@@ -42,7 +42,7 @@ namespace WB.UI.QuestionnaireTester.Implementation.Services
             {
                 foreach (var entity in entities)
                 {
-                    siaqodb.StoreObject(entity, transaction);
+                    siaqodb.StoreObject(new QuestionnaireStorageViewModel { Id = entity.Item2, Questionnaire = entity.Item1 }, transaction);
                 }
 
                 transaction.Commit();
