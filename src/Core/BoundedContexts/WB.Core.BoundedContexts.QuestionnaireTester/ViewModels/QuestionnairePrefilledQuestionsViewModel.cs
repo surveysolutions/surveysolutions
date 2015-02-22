@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
-        private string errorMessage;
+        private string errorMessage = string.Empty;
         public string ErrorMessage
         {
             get { return errorMessage; }
