@@ -475,7 +475,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;b&gt;&lt;u&gt;Try again&lt;/u&gt;&lt;/b&gt;.
+        ///   Looks up a localized string similar to Try again.
         /// </summary>
         public static string TryAgainLink {
             get {
