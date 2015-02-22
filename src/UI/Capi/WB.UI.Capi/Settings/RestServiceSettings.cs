@@ -1,3 +1,4 @@
+using System;
 using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.UI.Capi.Settings
@@ -11,9 +12,22 @@ namespace WB.UI.Capi.Settings
             this.interviewerSettings = interviewerSettings;
         }
 
-        public string Endpoint()
+        public string Endpoint
         {
-            return this.interviewerSettings.GetSyncAddressPoint();
+            get { return this.interviewerSettings.GetSyncAddressPoint(); }
+            set { throw new NotImplementedException(); }
+        }
+
+        public TimeSpan Timeout
+        {
+            get { return new TimeSpan(0, 0, 0, 30); }
+            set { throw new NotImplementedException(); }
+        }
+
+        public int BufferSize
+        {
+            get { return 512; }
+            set { throw new NotImplementedException(); }
         }
     }
 }
