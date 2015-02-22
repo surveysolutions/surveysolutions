@@ -81,6 +81,9 @@
                     android:orientation="vertical"
                     android:divider="@null"
                     android:dividerHeight="0dp"
+					android:smoothScrollbar="true"
+					android:scrollingCache="false"
+					android:animationCache="false"
                     local:MvxBind="ItemsSource Questionnaires; ItemClick LoadQuestionnaireCommand"
                     local:MvxItemTemplate="@layout/questionnairelistitem" />
             </WB.UI.QuestionnaireTester.Controls.MvxSwipeRefreshLayout>
