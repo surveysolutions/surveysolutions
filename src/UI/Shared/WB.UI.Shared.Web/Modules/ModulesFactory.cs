@@ -22,7 +22,9 @@ namespace WB.UI.Shared.Web.Modules
                 eventStoreConnectionSettings.Login = WebConfigurationManager.AppSettings["EventStore.Login"];
                 eventStoreConnectionSettings.Password = WebConfigurationManager.AppSettings["EventStore.Password"];
 
-                return new EventStoreWriteSideModule(eventStoreConnectionSettings);
+                var eventStoreWriteSideSettings = new EventStoreWriteSideSettings(int.Parse(WebConfigurationManager.AppSettings["EventStore.MaxCountToRead"]));
+
+                return new EventStoreWriteSideModule(eventStoreConnectionSettings, eventStoreWriteSideSettings);
             }
 
             return null;
