@@ -15,16 +15,15 @@ namespace WB.UI.Shared.Web.Modules
 
             if (storeProvider == StoreProviders.EventStore)
             {
-                var eventStoreConnectionSettings = new EventStoreConnectionSettings();
+                var eventStoreConnectionSettings = new EventStoreSettings();
                 eventStoreConnectionSettings.ServerIP = WebConfigurationManager.AppSettings["EventStore.ServerIP"];
                 eventStoreConnectionSettings.ServerTcpPort = Convert.ToInt32(WebConfigurationManager.AppSettings["EventStore.ServerTcpPort"]);
                 eventStoreConnectionSettings.ServerHttpPort = Convert.ToInt32(WebConfigurationManager.AppSettings["EventStore.ServerHttpPort"]);
                 eventStoreConnectionSettings.Login = WebConfigurationManager.AppSettings["EventStore.Login"];
                 eventStoreConnectionSettings.Password = WebConfigurationManager.AppSettings["EventStore.Password"];
-
-                var eventStoreWriteSideSettings = new EventStoreWriteSideSettings(int.Parse(WebConfigurationManager.AppSettings["EventStore.MaxCountToRead"]));
-
-                return new EventStoreWriteSideModule(eventStoreConnectionSettings, eventStoreWriteSideSettings);
+                eventStoreConnectionSettings.MaxCountToRead = int.Parse(WebConfigurationManager.AppSettings["EventStore.MaxCountToRead"]);
+                
+                return new EventStoreWriteSideModule(eventStoreConnectionSettings);
             }
 
             return null;
