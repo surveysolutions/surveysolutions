@@ -18,9 +18,9 @@ using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    internal class InterviewSynchronizationDenormalizer : BaseDenormalizer, 
-        IEventHandler<InterviewStatusChanged>, 
-        IEventHandler<InterviewerAssigned>, 
+    internal class InterviewSynchronizationDenormalizer : BaseDenormalizer,
+        IEventHandler<InterviewStatusChanged>,
+        IEventHandler<InterviewerAssigned>,
         IEventHandler<InterviewHardDeleted>
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures;
@@ -31,17 +31,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore;
         private readonly IReadSideRepositoryWriter<InterviewResponsible> interviewResponsibleStorageWriter;
 
+        private const string CounterId = "InterviewSyncPackageСounter";
+
         private readonly IInterviewSynchronizationDtoFactory synchronizationDtoFactory;
         private readonly IMetaInfoBuilder metaBuilder;
 
         public InterviewSynchronizationDenormalizer(
             IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures,
             IReadSideKeyValueStorage<InterviewData> interviews,
-            IReadSideRepositoryWriter<InterviewSummary> interviewSummarys, 
+            IReadSideRepositoryWriter<InterviewSummary> interviewSummarys,
             IJsonUtils jsonUtils,
             IMetaInfoBuilder metaBuilder,
             IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation> interviewPackageStorageWriter,
-            IReadSideRepositoryWriter<InterviewResponsible> interviewResponsibleStorageWriter, 
+            IReadSideRepositoryWriter<InterviewResponsible> interviewResponsibleStorageWriter,
             IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore,
             IInterviewSynchronizationDtoFactory synchronizationDtoFactory)
         {
@@ -107,7 +109,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 var interviewWithVersion = this.interviews.GetById(evnt.EventSourceId);
                 if (interviewWithVersion != null)
                 {
-                    if (interviewWithVersion.Status != InterviewStatus.RejectedByHeadquarters) 
+                    if (interviewWithVersion.Status != InterviewStatus.RejectedByHeadquarters)
                         this.ResendInterviewForPerson(interviewWithVersion, evnt.Payload.InterviewerId, evnt.EventTimeStamp);
                 }
             }
@@ -125,7 +127,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             if (interviewSummary == null)
                 return;
 
-            this.MarkInterviewForClientDeleting(evnt.EventSourceId, interviewSummary.ResponsibleId, evnt.EventTimeStamp, 
+            this.MarkInterviewForClientDeleting(evnt.EventSourceId, interviewSummary.ResponsibleId, evnt.EventTimeStamp,
                 interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
         }
 
@@ -155,13 +157,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             Guid questionnaireId, long questionnaireVersion)
         {
             this.StoreChunk(
-                doc.Id, 
-                questionnaireId, 
-                questionnaireVersion, 
-                responsibleId, 
-                SyncItemType.Interview, 
-                this.jsonUtils.Serialize(doc, TypeSerializationSettings.AllTypes), 
-                this.jsonUtils.Serialize(this.metaBuilder.GetInterviewMetaInfo(doc), TypeSerializationSettings.AllTypes), 
+                doc.Id,
+                questionnaireId,
+                questionnaireVersion,
+                responsibleId,
+                SyncItemType.Interview,
+                this.jsonUtils.Serialize(doc, TypeSerializationSettings.AllTypes),
+                this.jsonUtils.Serialize(this.metaBuilder.GetInterviewMetaInfo(doc), TypeSerializationSettings.AllTypes),
                 timestamp);
         }
 
@@ -169,27 +171,44 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             Guid questionnaireId, long questionnaireVersion)
         {
             this.StoreChunk(
-                interviewId, 
+                interviewId,
                 questionnaireId,
-                questionnaireVersion, 
-                responsibleId, 
-                SyncItemType.DeleteInterview, 
-                interviewId.ToString(), 
-                string.Empty, 
+                questionnaireVersion,
+                responsibleId,
+                SyncItemType.DeleteInterview,
+                interviewId.ToString(),
+                string.Empty,
                 timestamp);
         }
 
-        public void StoreChunk(Guid interviewId, Guid questionnaireId, long questionnaireVersion, Guid? userId, string itemType, string content, string metaInfo, DateTime timestamp)
+        public void StoreChunk(
+            Guid interviewId,
+            Guid questionnaireId,
+            long questionnaireVersion,
+            Guid? userId,
+            string itemType,
+            string content,
+            string metaInfo,
+            DateTime timestamp)
         {
-            long sortIndex = interviewPackageStorageWriter.GetNextOrder();
+            interviewPackageStorageWriter.StoreNextPackage(
+                CounterId,
+                nextSortIndex =>
+                {
+                    var synchronizationDelta = new InterviewSyncPackageMetaInformation(
+                        interviewId,
+                        questionnaireId,
+                        questionnaireVersion,
+                        timestamp,
+                        userId,
+                        nextSortIndex,
+                        itemType,
+                        string.IsNullOrEmpty(content) ? 0 : content.Length,
+                        string.IsNullOrEmpty(metaInfo) ? 0 : metaInfo.Length);
 
-            var synchronizationDelta = new InterviewSyncPackageMetaInformation(interviewId, questionnaireId,
-                questionnaireVersion, timestamp, userId, sortIndex, itemType,
-                string.IsNullOrEmpty(content) ? 0 : content.Length, string.IsNullOrEmpty(metaInfo) ? 0 : metaInfo.Length);
-
-            this.interviewPackageStorageWriter.Store(synchronizationDelta, synchronizationDelta.PackageId);
-
-            this.interviewPackageContentStore.Store(new InterviewSyncPackageContent(synchronizationDelta.PackageId, content, metaInfo), synchronizationDelta.PackageId);
+                    this.interviewPackageContentStore.Store(new InterviewSyncPackageContent(synchronizationDelta.PackageId, content, metaInfo), synchronizationDelta.PackageId);
+                    return synchronizationDelta;
+                });
         }
     }
 }

@@ -11,19 +11,25 @@ using WB.Core.Synchronization.SyncStorage;
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.RepositoryAccessors
 {
     public class OrderableSyncPackageWriter<T> : IOrderableSyncPackageWriter<T>
-        where T : class, IReadSideRepositoryEntity, IIndexedView
+        where T : class, IReadSideRepositoryEntity, ISyncPackage
     {
         private long currentSortIndex = 1;
         private readonly IChacheableRepositoryWriter writer;
         private readonly IReadSideRepositoryWriter<T> readSideRepositoryWriter;
         private readonly IQueryableReadSideRepositoryReader<T> packageStorageReader;
+
+        private static readonly object StoreSyncDeltaLockObject = new object();
+        private readonly IReadSideKeyValueStorage<SynchronizationDeltasCounter> counterStorage;
+
         public OrderableSyncPackageWriter(
             IReadSideRepositoryWriter<T> readSideRepositoryWriter, 
-            IQueryableReadSideRepositoryReader<T> packageStorageReader)
+            IQueryableReadSideRepositoryReader<T> packageStorageReader, 
+            IReadSideKeyValueStorage<SynchronizationDeltasCounter> counterStorage)
         {
             this.writer = readSideRepositoryWriter as IChacheableRepositoryWriter;
             this.readSideRepositoryWriter = readSideRepositoryWriter;
             this.packageStorageReader = packageStorageReader;
+            this.counterStorage = counterStorage;
         }
 
         public void Clear()
@@ -87,20 +93,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Reposit
             this.readSideRepositoryWriter.Store(view, id);
         }
 
-        public long GetNextOrder()
+        public void StoreNextPackage(string counterId, Func<int, T> createSyncPackage)
         {
-            var sortIndex = this.currentSortIndex;
-            if (this.writer != null && this.writer.IsCacheEnabled)
+            lock (StoreSyncDeltaLockObject)
             {
-                Interlocked.Increment(ref this.currentSortIndex);
-                return sortIndex;
+                SynchronizationDeltasCounter deltasCounter = this.counterStorage.GetById(counterId);
+                int storedDeltasCount = deltasCounter != null ? deltasCounter.CountOfStoredDeltas : 1;
+
+                int nextSortIndex = storedDeltasCount;
+
+                storedDeltasCount++;
+                this.counterStorage.Store(new SynchronizationDeltasCounter(storedDeltasCount), counterId);
+
+                T synchronizationDelta = createSyncPackage(nextSortIndex);
+
+                this.readSideRepositoryWriter.Store(synchronizationDelta, synchronizationDelta.PackageId);
             }
-            var query = this.packageStorageReader.Query(_ => _.OrderByDescending(x => x.SortIndex).Select(x => x.SortIndex));
-            if (query.Any())
-            {
-                return query.First() + 1;
-            }
-            return 0;
         }
 
         public void BulkStore(List<Tuple<T, string>> bulk)

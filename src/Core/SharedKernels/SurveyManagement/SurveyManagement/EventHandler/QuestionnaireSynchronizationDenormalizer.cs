@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -9,7 +9,6 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.Synchronization.SyncStorage;
 
@@ -26,11 +25,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IJsonUtils jsonUtils;
         private readonly IOrderableSyncPackageWriter<QuestionnaireSyncPackageMetaInformation> questionnairePackageStorageWriter;
         private readonly IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnairePackageContentStore;
+
+        private const string CounterId = "QuestionnaireSyncPackageСounter";
+
         public QuestionnaireSynchronizationDenormalizer(
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
             IJsonUtils jsonUtils,
-            IOrderableSyncPackageWriter<QuestionnaireSyncPackageMetaInformation> questionnairePackageStorageWriter, IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnairePackageContentStore)
+            IOrderableSyncPackageWriter<QuestionnaireSyncPackageMetaInformation> questionnairePackageStorageWriter, 
+            IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnairePackageContentStore)
         {
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
@@ -95,21 +98,32 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 eventSuquence);
         }
 
-        public void StoreChunk(Guid questionnaireId, long questionnaireVersion, string itemType, string content, string metaInfo, DateTime timestamp, long eventSequence)
-        {
-            long sortIndex = questionnairePackageStorageWriter.GetNextOrder();
-
-            var synchronizationDelta = new QuestionnaireSyncPackageMetaInformation(
-                questionnaireId,
-                questionnaireVersion, sortIndex, timestamp, itemType, string.IsNullOrEmpty(content) ? 0 : content.Length, string.IsNullOrEmpty(metaInfo) ? 0 : metaInfo.Length);
-
-            this.questionnairePackageStorageWriter.Store(synchronizationDelta, synchronizationDelta.PackageId);
-            this.questionnairePackageContentStore.Store(new QuestionnaireSyncPackageContent(synchronizationDelta.PackageId, content, metaInfo), synchronizationDelta.PackageId);
-        }
-
         protected string GetItemAsContent(object item)
         {
             return this.jsonUtils.Serialize(item, TypeSerializationSettings.AllTypes);
+        }
+
+        public void StoreChunk(Guid questionnaireId, long questionnaireVersion, string itemType, string content, string metaInfo, DateTime timestamp, long eventSequence)
+        {
+            questionnairePackageStorageWriter.StoreNextPackage(
+                CounterId,
+                nextSortIndex =>
+                {
+                    var synchronizationDelta = new QuestionnaireSyncPackageMetaInformation(
+                        questionnaireId,
+                        questionnaireVersion,
+                        nextSortIndex,
+                        timestamp,
+                        itemType,
+                        string.IsNullOrEmpty(content) ? 0 : content.Length,
+                        string.IsNullOrEmpty(metaInfo) ? 0 : metaInfo.Length);
+
+                    this.questionnairePackageContentStore.Store(
+                        new QuestionnaireSyncPackageContent(synchronizationDelta.PackageId, content, metaInfo),
+                        synchronizationDelta.PackageId);
+
+                    return synchronizationDelta;
+                });
         }
     }
 }
