@@ -108,6 +108,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 questionnaire.ImportFromDesigner(new ImportFromDesigner(responsibleId, newState, false, "base64 string of assembly"));
+                questionnaire.PrepareQuestionnaireForDelete(new PrepareQuestionnaireForDelete(Guid.NewGuid(), 1, responsibleId));
                 // act
                 questionnaire.DeleteQuestionnaire(new DeleteQuestionnaire(Guid.NewGuid(), 1, responsibleId));
                 // assert
@@ -128,6 +129,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 questionnaire.ImportFromDesigner(new ImportFromDesigner(responsibleId, newState, false, "base64 string of assembly"));
+                questionnaire.PrepareQuestionnaireForDelete(new PrepareQuestionnaireForDelete(Guid.NewGuid(), 1, responsibleId));
                 // act
                 questionnaire.DeleteQuestionnaire(new DeleteQuestionnaire(Guid.NewGuid(), 1, responsibleId));
                 // assert
@@ -254,7 +256,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 
                 // act
                 questionnaire.ImportFromDesigner(new ImportFromDesigner(responsibleId, document, false, "base64 string of assembly"));
-                questionnaire.DeleteQuestionnaire(new DeleteQuestionnaire(Guid.NewGuid(), 2, responsibleId));
+                questionnaire.PrepareQuestionnaireForDelete(new PrepareQuestionnaireForDelete(Guid.NewGuid(), 2, responsibleId));
                 questionnaire.ImportFromDesigner(new ImportFromDesigner(responsibleId, document, false, "base64 string of assembly"));
 
                 // assert
