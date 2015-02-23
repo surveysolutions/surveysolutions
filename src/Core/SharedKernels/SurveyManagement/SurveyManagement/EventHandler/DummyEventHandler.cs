@@ -27,8 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         //IEventHandler<SynchronizationMetadataApplied>,
         IEventHandler<InterviewApproved>,
         IEventHandler<InterviewRejected>,
-        IEventHandler<InterviewDeclaredInvalid>,
-        IEventHandler<QuestionnairePreparedForDelete>
+        IEventHandler<InterviewDeclaredInvalid>
     {
         public void Handle(IPublishedEvent<AnswersDeclaredValid> evnt) { }
 
@@ -84,7 +83,5 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<InterviewDeclaredInvalid> evnt)
         {
         }
-
-        public void Handle(IPublishedEvent<QuestionnairePreparedForDelete> evnt){}
     }
 }

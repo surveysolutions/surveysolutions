@@ -12,7 +12,8 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     [Obsolete("Remove it when HQ is a separate application")]
-    public class QuestionnaireBrowseItemEventHandler : BaseDenormalizer, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted> 
+    public class QuestionnaireBrowseItemEventHandler : BaseDenormalizer, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>,
+        IEventHandler<QuestionnairePreparedForDelete>
     {
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IReadSideRepositoryWriter<QuestionnaireBrowseItem> readsideRepositoryWriter;
@@ -55,6 +56,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
         {
             readsideRepositoryWriter.AsVersioned().Remove(evnt.EventSourceId.FormatGuid(), evnt.Payload.QuestionnaireVersion);
+        }
+
+
+        public void Handle(IPublishedEvent<QuestionnairePreparedForDelete> evnt)
+        {
+            var browseItem = this.readsideRepositoryWriter.AsVersioned().Get(evnt.EventSourceId.FormatGuid(), evnt.Payload.QuestionnaireVersion);
+            if (browseItem == null)
+                return;
+
+            browseItem.PreparedForDelete = true;
+
+            this.readsideRepositoryWriter.AsVersioned().Store(browseItem, evnt.EventSourceId.FormatGuid(), evnt.Payload.QuestionnaireVersion);
         }
     }
 }
