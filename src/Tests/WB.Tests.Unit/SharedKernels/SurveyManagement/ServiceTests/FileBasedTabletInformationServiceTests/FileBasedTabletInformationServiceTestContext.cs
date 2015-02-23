@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTab
                 fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(It.IsAny<string>())).Returns(() => fileNamesInDirectory);
 
             return new FileBasedTabletInformationService(string.Empty, fileSystemAccessorMock.Object, 
-                Mock.Of< IReadSideRepositoryReader<TabletDocument>>(),
+                Mock.Of< IReadSideRepositoryReader<TabletSyncLogByUsers>>(),
                 Mock.Of<IReadSideRepositoryReader<UserDocument>>());
         }
     }

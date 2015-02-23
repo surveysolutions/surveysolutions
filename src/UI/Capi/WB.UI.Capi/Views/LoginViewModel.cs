@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+
 using Android.App;
 using Cirrious.MvvmCross.ViewModels;
 using Microsoft.Practices.ServiceLocation;
@@ -58,6 +60,10 @@ namespace WB.UI.Capi.Views
             this.Login = "inter";
             this.Password = "P@$$w0rd";
 #endif
+            if (this.Logins.Count == 1)
+            {
+                this.Login = this.Logins.First();
+            }
         }
 
         public IMvxCommand LoginCommand
@@ -72,7 +78,6 @@ namespace WB.UI.Capi.Views
 
         private void StartLogin()
         {
-           
             var result = CapiApplication.Membership.LogOnAsync(Login, Password).Result;
             if (result)
             {

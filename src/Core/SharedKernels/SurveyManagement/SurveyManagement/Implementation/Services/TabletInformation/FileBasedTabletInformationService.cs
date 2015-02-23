@@ -22,12 +22,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletI
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string zipExtension = ".zip";
 
-        private readonly IReadSideRepositoryReader<TabletDocument> tabletDocumentsStrogeReader;
+        private readonly IReadSideRepositoryReader<TabletSyncLogByUsers> tabletDocumentsStrogeReader;
         private readonly IReadSideRepositoryReader<UserDocument> usersStorageReader;
 
         public FileBasedTabletInformationService(string parentFolder, 
             IFileSystemAccessor fileSystemAccessor, 
-            IReadSideRepositoryReader<TabletDocument> tabletDocumentsStrogeReader, IReadSideRepositoryReader<UserDocument> usersStorageReader)
+            IReadSideRepositoryReader<TabletSyncLogByUsers> tabletDocumentsStrogeReader, IReadSideRepositoryReader<UserDocument> usersStorageReader)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.tabletDocumentsStrogeReader = tabletDocumentsStrogeReader;
@@ -88,7 +88,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletI
         {
             string deviceId = androidId.ToGuid().FormatGuid();
             var tabletLogView = new TabletLogView();
-            TabletDocument tabletLog = tabletDocumentsStrogeReader.GetById(deviceId);
+            TabletSyncLogByUsers tabletLog = tabletDocumentsStrogeReader.GetById(deviceId);
             if (tabletLog == null)
                 return tabletLogView;
 

@@ -22,7 +22,7 @@
             <div class="panel-body">
                 @foreach (var sync in userLog.TabletSyncLog)
                 {
-                    <table class="table">
+                    <table class="table table-condensed">
                         <caption>App version: @sync.AppVersion, handshake was on: @sync.HandshakeTime.ToLocalTime()</caption>
                         <colgroup>
                             <col style="width: 33%;" />
@@ -44,37 +44,37 @@
                             </tr>
                             <tr>
                                 <td>
-                                    @foreach (var requestInfo in sync.PackagesTrackingInfo[SyncItemType.User].PackagesRequestInfo)
-                                    {
-                                        <ul class="list-group">
+                                    <ul class="list-group">
+                                        @foreach (var requestInfo in sync.PackagesTrackingInfo[SyncItemType.User].PackagesRequestInfo)
+                                        {
                                             <li class="list-group-item">
                                                 <span class="badge">@(requestInfo.Value.HasValue ? requestInfo.Value.Value.ToLocalTime().ToString(CultureInfo.InvariantCulture) : "-")</span>
                                                 @requestInfo.Key
                                             </li>
-                                        </ul>
-                                    }
+                                        }
+                                    </ul>
                                 </td>
                                 <td>
-                                    @foreach (var requestInfo in sync.PackagesTrackingInfo[SyncItemType.Questionnaire].PackagesRequestInfo)
-                                    {
-                                        <ul class="list-group">
+                                    <ul class="list-group">
+                                        @foreach (var requestInfo in sync.PackagesTrackingInfo[SyncItemType.Questionnaire].PackagesRequestInfo)
+                                        {
                                             <li class="list-group-item">
                                                 <span class="badge">@(requestInfo.Value.HasValue ? requestInfo.Value.Value.ToLocalTime().ToString(CultureInfo.InvariantCulture) : "-")</span>
                                                 @requestInfo.Key
                                             </li>
-                                        </ul>
-                                    }
+                                        }
+                                    </ul>
                                 </td>
                                 <td>
-                                    @foreach (var requestInfo in sync.PackagesTrackingInfo[SyncItemType.Interview].PackagesRequestInfo)
-                                    {
-                                        <ul class="list-group">
+                                    <ul class="list-group">
+                                        @foreach (var requestInfo in sync.PackagesTrackingInfo[SyncItemType.Interview].PackagesRequestInfo)
+                                        {
                                             <li class="list-group-item">
                                                 <span class="badge">@(requestInfo.Value.HasValue ? requestInfo.Value.Value.ToLocalTime().ToString(CultureInfo.InvariantCulture) : "-")</span>
                                                 @requestInfo.Key
                                             </li>
-                                        </ul>
-                                    }
+                                        }
+                                    </ul>
                                 </td>
                             </tr>
                         </tbody>
