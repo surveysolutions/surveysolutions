@@ -34,6 +34,9 @@ namespace WB.Core.Synchronization.SyncStorage
 
                 int nextSortIndex = storedDeltasCount;
 
+                storedDeltasCount++;
+                this.counterStorage.Store(new SynchronizationDeltasCounter(storedDeltasCount), CounterId);
+
                 var synchronizationDelta = new SynchronizationDeltaMetaInformation(syncItem.RootId, timestamp,
                     userId, syncItem.ItemType, nextSortIndex,
                     string.IsNullOrEmpty(syncItem.Content) ? 0 : syncItem.Content.Length,
@@ -44,10 +47,6 @@ namespace WB.Core.Synchronization.SyncStorage
                 this.contentStorage.Store(
                     new SynchronizationDeltaContent(synchronizationDelta.PublicKey, syncItem.Content, syncItem.MetaInfo,
                         syncItem.IsCompressed, syncItem.ItemType, syncItem.RootId), synchronizationDelta.PublicKey);
-
-                storedDeltasCount++;
-
-                this.counterStorage.Store(new SynchronizationDeltasCounter(storedDeltasCount), CounterId);
             }
         }
 
