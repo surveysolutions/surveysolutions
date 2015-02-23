@@ -9,45 +9,45 @@ namespace WB.Core.Synchronization.SyncStorage
 {
     internal class ReadSideChunkWriter : IChunkWriter
     {
+        private const string CounterId = "counter";
         private readonly IReadSideRepositoryWriter<SynchronizationDeltaMetaInformation> storage;
         private readonly IReadSideKeyValueStorage<SynchronizationDeltaContent> contentStorage;
-        private readonly IQueryableReadSideRepositoryReader<SynchronizationDeltaMetaInformation> storageReader;
-        private bool cacheEnabled = false;
-        private static int currentSortIndex = 0;
+        private readonly IReadSideKeyValueStorage<SynchronizationDeltasCounter> counterStorage;
+        private static readonly object StoreSyncDeltaLockObject = new object();
 
-        public ReadSideChunkWriter(IReadSideRepositoryWriter<SynchronizationDeltaMetaInformation> storage,
-            IQueryableReadSideRepositoryReader<SynchronizationDeltaMetaInformation> storageReader,
-            IReadSideKeyValueStorage<SynchronizationDeltaContent> contentStorage)
+        public ReadSideChunkWriter(
+            IReadSideRepositoryWriter<SynchronizationDeltaMetaInformation> storage,
+            IReadSideKeyValueStorage<SynchronizationDeltaContent> contentStorage,
+            IReadSideKeyValueStorage<SynchronizationDeltasCounter> counterStorage)
         {
             this.storage = storage;
-            this.storageReader = storageReader;
             this.contentStorage = contentStorage;
+            this.counterStorage = counterStorage;
         }
 
         public void StoreChunk(SyncItem syncItem, Guid? userId, DateTime timestamp)
         {
-            int sortIndex = 0;
-            if (cacheEnabled)
+            lock (StoreSyncDeltaLockObject)
             {
-                sortIndex = currentSortIndex;
-                Interlocked.Increment(ref currentSortIndex);
+                SynchronizationDeltasCounter deltasCounter = this.counterStorage.GetById(CounterId);
+                int storedDeltasCount = deltasCounter != null ? deltasCounter.CountOfStoredDeltas : 0;
+
+                int nextSortIndex = storedDeltasCount;
+
+                storedDeltasCount++;
+                this.counterStorage.Store(new SynchronizationDeltasCounter(storedDeltasCount), CounterId);
+
+                var synchronizationDelta = new SynchronizationDeltaMetaInformation(syncItem.RootId, timestamp,
+                    userId, syncItem.ItemType, nextSortIndex,
+                    string.IsNullOrEmpty(syncItem.Content) ? 0 : syncItem.Content.Length,
+                    string.IsNullOrEmpty(syncItem.MetaInfo) ? 0 : syncItem.MetaInfo.Length);
+
+                this.storage.Store(synchronizationDelta, synchronizationDelta.PublicKey);
+
+                this.contentStorage.Store(
+                    new SynchronizationDeltaContent(synchronizationDelta.PublicKey, syncItem.Content, syncItem.MetaInfo,
+                        syncItem.IsCompressed, syncItem.ItemType, syncItem.RootId), synchronizationDelta.PublicKey);
             }
-            else
-            {
-                var query = storageReader.Query(_ => _.OrderByDescending(x => x.SortIndex).Select(x => x.SortIndex));
-                if (query.Any())
-                    sortIndex = query.First() + 1;
-            }
-
-            var synchronizationDelta = new SynchronizationDeltaMetaInformation(syncItem.RootId, timestamp,
-                userId, syncItem.ItemType, sortIndex, string.IsNullOrEmpty(syncItem.Content) ? 0 : syncItem.Content.Length,
-                string.IsNullOrEmpty(syncItem.MetaInfo) ? 0 : syncItem.MetaInfo.Length);
-
-            storage.Store(synchronizationDelta, synchronizationDelta.PublicKey);
-
-            contentStorage.Store(
-                new SynchronizationDeltaContent(synchronizationDelta.PublicKey, syncItem.Content, syncItem.MetaInfo,
-                    syncItem.IsCompressed, syncItem.ItemType, syncItem.RootId), synchronizationDelta.PublicKey);
         }
 
         public void Clear()
@@ -62,9 +62,6 @@ namespace WB.Core.Synchronization.SyncStorage
             var readSideRepositoryWriter = storage as IChacheableRepositoryWriter;
             if (readSideRepositoryWriter != null)
                 readSideRepositoryWriter.EnableCache();
-
-            cacheEnabled = true;
-            currentSortIndex = 0;
         }
 
         public void DisableCache()
@@ -72,9 +69,6 @@ namespace WB.Core.Synchronization.SyncStorage
             var readSideRepositoryWriter = storage as IChacheableRepositoryWriter;
             if (readSideRepositoryWriter != null)
                 readSideRepositoryWriter.DisableCache();
-
-            cacheEnabled = false;
-            currentSortIndex = 0;
         }
 
         public string GetReadableStatus()

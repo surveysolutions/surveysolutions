@@ -11,7 +11,7 @@ using It = Machine.Specifications.It;
 namespace WB.Tests.Unit.SharedKernels.Synchronization
 {
     [Subject(typeof(ReadSideChunkWriter))]
-    public class when_chunk_with_same_guid_is_present
+    internal class when_chunk_with_same_guid_is_present
     {
         Establish context = () =>
         {
@@ -21,7 +21,9 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
             const string SomeContent1 = "some content1";
             someContent2 = "some content2";
             querableStorageMock = new InMemoryReadSideRepositoryAccessor<SynchronizationDeltaMetaInformation>();
-            target = new ReadSideChunkWriter(querableStorageMock, storageReader: querableStorageMock, contentStorage:Mock.Of<IReadSideKeyValueStorage<SynchronizationDeltaContent>>());
+            target = new ReadSideChunkWriter(querableStorageMock,
+                new InMemoryReadSideRepositoryAccessor<SynchronizationDeltaContent>(),
+                new InMemoryReadSideRepositoryAccessor<SynchronizationDeltasCounter>());
 
             target.StoreChunk(new SyncItem { RootId = arId, Content = SomeContent1, IsCompressed = false }, userId, DateTime.Now);
         };
