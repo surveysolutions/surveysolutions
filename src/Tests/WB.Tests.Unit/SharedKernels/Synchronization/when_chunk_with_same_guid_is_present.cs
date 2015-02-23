@@ -21,7 +21,9 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
             const string SomeContent1 = "some content1";
             someContent2 = "some content2";
             querableStorageMock = new InMemoryReadSideRepositoryAccessor<SynchronizationDeltaMetaInformation>();
-            target = new ReadSideChunkWriter(querableStorageMock, storageReader: querableStorageMock, contentStorage:Mock.Of<IReadSideKeyValueStorage<SynchronizationDeltaContent>>());
+            target = new ReadSideChunkWriter(querableStorageMock,
+                Mock.Of<IReadSideKeyValueStorage<SynchronizationDeltaContent>>(),
+                Mock.Of<IReadSideKeyValueStorage<SynchronizationDeltasCounter>>());
 
             target.StoreChunk(new SyncItem { RootId = arId, Content = SomeContent1, IsCompressed = false }, userId, DateTime.Now);
         };
