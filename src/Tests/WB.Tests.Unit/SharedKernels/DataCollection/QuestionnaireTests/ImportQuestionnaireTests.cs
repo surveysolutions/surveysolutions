@@ -140,6 +140,68 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         }
 
         [Test]
+        public void DeleteQuestionnaire_When_Valid_Questionnaire_Imported__but_not_prepared_for_delete_with_specified_responsible_Then_QuestionnaireException_thrown()
+        {
+            // arrange
+            var responsibleId = Guid.Parse("11111111111111111111111111111111");
+            Questionnaire questionnaire = CreateQuestionnaire(creatorId: responsibleId);
+            var newState = CreateQuestionnaireDocumentWithOneChapter();
+
+            using (var eventContext = new EventContext())
+            {
+                questionnaire.ImportFromDesigner(new ImportFromDesigner(responsibleId, newState, false, "base64 string of assembly"));
+
+                TestDelegate act =
+                    () =>
+                        questionnaire.DeleteQuestionnaire(new DeleteQuestionnaire(Guid.NewGuid(), 1, responsibleId));
+
+                // assert
+                Assert.Throws<QuestionnaireException>(act);
+            }
+        }
+
+        [Test]
+        public void PrepareQuestionnaireForDelete_When_Questionnaire_is_absent_Then_QuestionnaireException_thrown()
+        {
+            // arrange
+            var responsibleId = Guid.Parse("11111111111111111111111111111111");
+            Questionnaire questionnaire = CreateQuestionnaire(creatorId: responsibleId);
+
+            using (var eventContext = new EventContext())
+            {
+
+                TestDelegate act =
+                    () =>
+                        questionnaire.PrepareQuestionnaireForDelete(new PrepareQuestionnaireForDelete(Guid.NewGuid(), 3, responsibleId));
+
+                // assert
+                Assert.Throws<QuestionnaireException>(act);
+            }
+        }
+
+        [Test]
+        public void PrepareQuestionnaireForDelete_When_Valid_Questionnaire_Imported_but_already_prepared_for_delete_Then_QuestionnaireException_thrown()
+        {
+            // arrange
+            var responsibleId = Guid.Parse("11111111111111111111111111111111");
+            Questionnaire questionnaire = CreateQuestionnaire(creatorId: responsibleId);
+            var newState = CreateQuestionnaireDocumentWithOneChapter();
+
+            using (var eventContext = new EventContext())
+            {
+                questionnaire.ImportFromDesigner(new ImportFromDesigner(responsibleId, newState, false, "base64 string of assembly"));
+                questionnaire.PrepareQuestionnaireForDelete(new PrepareQuestionnaireForDelete(Guid.NewGuid(), 1,
+                    responsibleId));
+                TestDelegate act =
+                    () =>
+                        questionnaire.PrepareQuestionnaireForDelete(new PrepareQuestionnaireForDelete(Guid.NewGuid(), 1, responsibleId));
+
+                // assert
+                Assert.Throws<QuestionnaireException>(act);
+            }
+        }
+
+        [Test]
         public void DeleteQuestionnaire_When_Valid_Questionnaire_Version_is_invalid_Imported_Then_QuestionnaireException_sould_be_thrown()
         {
             // arrange
