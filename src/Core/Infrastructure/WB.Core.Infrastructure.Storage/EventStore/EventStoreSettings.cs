@@ -1,10 +1,11 @@
 namespace WB.Core.Infrastructure.Storage.EventStore
 {
-    public class EventStoreConnectionSettings
+    public class EventStoreSettings
     {
-        public EventStoreConnectionSettings()
+        public EventStoreSettings()
         {
             InitializeProjections = true;
+            MaxCountToRead = 1024;
         }
 
         public string ServerIP { get; set; }
@@ -21,5 +22,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore
         public string Login { get; set; }
 
         public string Password { get; set; }
+
+        public int MaxCountToRead { get; set; }
     }
 }
