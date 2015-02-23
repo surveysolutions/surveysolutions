@@ -101,6 +101,7 @@
     <Compile Include="EventStore\Implementation\EventStoreConnectionProvider.cs" />
     <Compile Include="EventStore\Implementation\EventStoreLogger.cs" />
     <Compile Include="EventStore\IEventStoreConnectionProvider.cs" />
+    <Compile Include="EventStore\EventStoreWriteSideSettings.cs" />
     <Compile Include="EventStore\Implementation\WriteSideEventStore.cs" />
     <Compile Include="Memory\Implementation\MemoryCachedReadSideRepositoryWriter.cs" />
     <Compile Include="Memory\Implementation\MemoryCachedReadSideStore.cs" />
