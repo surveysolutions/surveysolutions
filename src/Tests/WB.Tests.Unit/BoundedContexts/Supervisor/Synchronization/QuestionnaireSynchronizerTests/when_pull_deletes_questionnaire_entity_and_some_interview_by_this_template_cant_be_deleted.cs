@@ -70,8 +70,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.Questionnaire
         Because of = () =>
             questionnaireSynchronizer.Pull();
 
-        It should_1_questionnaire_be_not_deleted_in_plain_questionnaire_repository = () =>
-            plainQuestionnaireRepositoryMock.Verify(x => x.DeleteQuestionnaireDocument(deleteLocalQuestionnaireFeedEntry.QuestionnaireId, deleteLocalQuestionnaireFeedEntry.QuestionnaireVersion), Times.Never);
+        It should_1_questionnaire_be_deleted_in_plain_questionnaire_repository = () =>
+            plainQuestionnaireRepositoryMock.Verify(x => x.DeleteQuestionnaireDocument(deleteLocalQuestionnaireFeedEntry.QuestionnaireId, deleteLocalQuestionnaireFeedEntry.QuestionnaireVersion), Times.Once);
 
         It should_DeleteQuestionnaire_command_never_be_called = () =>
             commandServiceMock.Verify(

@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                         case QuestionnaireEntryType.QuestionnaireCreated:
                         case QuestionnaireEntryType.QuestionnaireCreatedInCensusMode:
 
-                            if (this.IsQuestionnnaireAlreadyStoredLocally(questionnaireFeedEntry.QuestionnaireId,
+                            if (this.IsQuestionnaireAlreadyStoredLocally(questionnaireFeedEntry.QuestionnaireId,
                                 questionnaireFeedEntry.QuestionnaireVersion))
                                 break;
 
@@ -152,6 +152,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         {
             this.headquartersPullContext.PushMessage(string.Format("Deleting questionnaire '{0}' version '{1}'", id, version));
 
+            this.executeCommand(new PrepareQuestionnaireForDelete(id, version, null));
+
+            this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(id, version);
+
             var interviewByQuestionnaire =
                               interviews.QueryAll(i => !i.IsDeleted && i.QuestionnaireId == id && i.QuestionnaireVersion == version);
 
@@ -180,10 +184,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     string.Format("Failed to delete one or more interviews which were created from questionnaire {0} version {1}.", id.FormatGuid(), version), interviewDeletionErrors);
 
             this.executeCommand(new DeleteQuestionnaire(id, version, null));
-            this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(id, version);
         }
 
-        private bool IsQuestionnnaireAlreadyStoredLocally(Guid id, long version)
+        private bool IsQuestionnaireAlreadyStoredLocally(Guid id, long version)
         {
             QuestionnaireDocument localQuestionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
 
