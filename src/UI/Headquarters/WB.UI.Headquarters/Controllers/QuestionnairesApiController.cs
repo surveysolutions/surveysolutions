@@ -74,7 +74,7 @@ namespace WB.UI.Headquarters.Controllers
                                      .Where(interview => !interview.IsDeleted && 
                                                           interview.QuestionnaireId == request.QuestionnaireId && 
                                                           interview.QuestionnaireVersion == request.Version)
-                                    .ProjectFromIndexFieldsInto<InterviewSummary>();
+                                    .ProjectFromIndexFieldsInto<InterviewSummary>().QueryAll();
             
 
             var hasInterviewDeletionExceptions = false;
