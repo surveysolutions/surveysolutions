@@ -22,8 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
             someContent = "some content";
             querableStorageMock = new InMemoryReadSideRepositoryAccessor<SynchronizationDeltaMetaInformation>();
             contentStorageMock= new InMemoryReadSideRepositoryAccessor<SynchronizationDeltaContent>();
-            target = new ReadSideChunkWriter(querableStorageMock, storageReader: querableStorageMock, contentStorage: contentStorageMock);
-            
+            target = new ReadSideChunkWriter(querableStorageMock, contentStorageMock, Mock.Of<IReadSideKeyValueStorage<SynchronizationDeltasCounter>>());
         };
 
         Because of = () => target.StoreChunk(new SyncItem() { RootId = arId, Content = someContent, IsCompressed = false }, userId, DateTime.Now);
