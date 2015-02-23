@@ -17,7 +17,6 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
     internal class SyncManager : ISyncManager
     {
         private readonly IReadSideRepositoryReader<TabletDocument> devices;
-        private readonly bool isSyncTrackingEnabled = true;
         private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
         private readonly ICommandService commandService;
         private readonly IReadSideRepositoryIndexAccessor indexAccessor;
@@ -25,6 +24,8 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         private readonly IQueryableReadSideRepositoryReader<UserSyncPackage> userPackageStorage;
         private readonly IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore;
         private readonly IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnaireSyncPackageContentStore;
+
+        private readonly ISyncLogger syncLogger;
 
         private readonly string userQueryIndexName = typeof(UserSyncPackagesByBriefFields).Name;
         private readonly string interviewQueryIndexName = typeof(InterviewSyncPackagesByBriefFields).Name;
@@ -36,16 +37,17 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             IReadSideRepositoryIndexAccessor indexAccessor, 
             IQueryableReadSideRepositoryReader<UserSyncPackage> userPackageStorage,
             IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore, 
-            IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnaireSyncPackageContentStore)
+            IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnaireSyncPackageContentStore,
+            ISyncLogger syncLogger)
         {
             this.devices = devices;
-           
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.commandService = commandService;
             this.indexAccessor = indexAccessor;
             this.userPackageStorage = userPackageStorage;
             this.interviewPackageContentStore = interviewPackageContentStore;
             this.questionnaireSyncPackageContentStore = questionnaireSyncPackageContentStore;
+            this.syncLogger = syncLogger;
         }
 
         public HandshakePackage InitSync(ClientIdentifier clientIdentifier)
@@ -65,10 +67,10 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             if (device == null)
             {
                 this.commandService.Execute(new RegisterTabletCommand(deviceId, clientIdentifier.UserId, clientIdentifier.AppVersion, clientIdentifier.AndroidId));
+                this.TrackDeviceRegistration(deviceId, clientIdentifier.UserId, clientIdentifier.AppVersion, clientIdentifier.AndroidId);
             }
 
-            this.commandService.Execute(new TrackHandshakeCommand(deviceId, clientIdentifier.UserId, clientIdentifier.AppVersion));
-
+            this.TraceHandshake(deviceId, clientIdentifier.UserId, clientIdentifier.AppVersion);
             return new HandshakePackage(clientIdentifier.UserId, clientIdentifier.ClientInstanceKey, Guid.NewGuid(), deviceId);
         }
 
@@ -90,12 +92,10 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             if (device == null)
             {
                 this.commandService.Execute(new RegisterTabletCommand(deviceId, interviewerId, appVersion, androidId));
+                this.TrackDeviceRegistration(deviceId, interviewerId, appVersion, androidId);
             }
-            else
-            {
-                this.commandService.Execute(new LinkUserToDevice(interviewerId, androidId));
-            }
-            this.TrackUserLinkingRequestIfNeeded(androidId.ToGuid(), interviewerId, oldDeviceId);
+            this.commandService.Execute(new LinkUserToDevice(interviewerId, androidId));
+            this.TrackUserLinkingRequest(androidId.ToGuid(), interviewerId, oldDeviceId);
         }
 
         public SyncItemsMetaContainer GetQuestionnaireArIdsWithOrder(Guid userId, Guid deviceId, string lastSyncedPackageId)
@@ -114,8 +114,6 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                 SyncPackagesMeta = updateFromLastPakageByQuestionnaire
             };
         }
-
-       
 
         public SyncItemsMetaContainer GetUserArIdsWithOrder(Guid userId, Guid deviceId, string lastSyncedPackageId)
         {
@@ -159,7 +157,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             if (package == null)
                 throw new ArgumentException(string.Format("Package {0} with user is absent", packageId));
 
-            this.TrackPackgeRequestIfNeeded(deviceId, SyncItemType.User, packageId, userId);
+            this.TrackPackgeRequest(deviceId, SyncItemType.User, packageId, userId);
 
             return new UserSyncPackageDto
                    {
@@ -178,7 +176,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             if (package == null)
                 throw new ArgumentException(string.Format("Package {0} with questionnaire is absent", packageId));
 
-            this.TrackPackgeRequestIfNeeded(deviceId, SyncItemType.Questionnaire, packageId, userId);
+            this.TrackPackgeRequest(deviceId, SyncItemType.Questionnaire, packageId, userId);
 
             return new QuestionnaireSyncPackageDto
                    {
@@ -196,7 +194,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             if (packageMetaInformation == null)
                 throw new ArgumentException(string.Format("Package {0} with interview is absent", packageId));
 
-            this.TrackPackgeRequestIfNeeded(deviceId, SyncItemType.Interview, packageId, userId);
+            this.TrackPackgeRequest(deviceId, SyncItemType.Interview, packageId, userId);
 
             return new InterviewSyncPackageDto
                    {
@@ -253,50 +251,6 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             return orderedPackages;
         }
 
-        private void TrackPackgeRequestIfNeeded(Guid deviceId, string packageType, string packageId, Guid userId)
-        {
-            if (isSyncTrackingEnabled)
-            {
-                this.commandService.Execute(new TrackPackageRequestCommand(deviceId, userId, packageType, packageId));
-            }
-        }
-
-        private void TrackUserLinkingRequestIfNeeded(Guid deviceId, Guid userId, string oldAndroidId)
-        {
-            if (isSyncTrackingEnabled)
-            {
-                if (!string.IsNullOrEmpty(oldAndroidId))
-                {
-                    Guid oldDeviceId = oldAndroidId.ToGuid();
-                    var oldDevice = this.devices.GetById(oldDeviceId);
-                    if (oldDevice != null)
-                    {
-                        this.commandService.Execute(new UnlinkUserFromDeviceCommand(oldDeviceId, userId));
-                    }
-                }
-
-                var device = this.devices.GetById(deviceId);
-                if (device != null)
-                {
-                    this.commandService.Execute(new TrackUserLinkingRequestCommand(deviceId, userId));
-                }
-            }
-        }
-
-        private void TrackArIdsRequestIfNeeded(Guid userId, Guid deviceId, string packageType, string lastSyncedPackageId, IEnumerable<SynchronizationChunkMeta> updateFromLastPakage)
-        {
-            if (isSyncTrackingEnabled)
-            {
-                this.commandService.Execute(
-                    new TrackArIdsRequestCommand(
-                        deviceId,
-                        userId,
-                        packageType,
-                        lastSyncedPackageId,
-                        updateFromLastPakage.Select(x => x.Id).ToArray()));
-            }
-        }
-
         private void MakeSureThisDeviceIsRegisteredOrThrow(Guid deviceId)
         {
             var device = this.devices.GetById(deviceId);
@@ -305,6 +259,36 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             {
                 throw new ArgumentException("Device was not found");
             }
+        }
+
+        private void TrackPackgeRequest(Guid deviceId, string packageType, string packageId, Guid userId)
+        {
+            this.syncLogger.TrackPackageRequest(deviceId, userId, packageType, packageId);
+        }
+
+        private void TrackUserLinkingRequest(Guid deviceId, Guid userId, string oldAndroidId)
+        {
+            if (!string.IsNullOrEmpty(oldAndroidId))
+            {
+                this.syncLogger.UnlinkUserFromDevice(oldAndroidId.ToGuid(), userId);
+            }
+            
+            this.syncLogger.TrackUserLinkingRequest(deviceId, userId);
+        }
+
+        private void TraceHandshake(Guid deviceId, Guid userId, string appVersion)
+        {
+            this.syncLogger.TraceHandshake(deviceId, userId, appVersion);
+        }
+
+        private void TrackArIdsRequestIfNeeded(Guid userId, Guid deviceId, string packageType, string lastSyncedPackageId, IEnumerable<SynchronizationChunkMeta> updateFromLastPakage)
+        {
+            this.syncLogger.TrackArIdsRequest(deviceId, userId, packageType, lastSyncedPackageId, updateFromLastPakage.Select(x => x.Id).ToArray());
+        }
+
+        private void TrackDeviceRegistration(Guid deviceId, Guid userId, string appVersion, string androidId)
+        {
+            this.syncLogger.TrackDeviceRegistration(deviceId, userId, appVersion, androidId);
         }
     }
 }

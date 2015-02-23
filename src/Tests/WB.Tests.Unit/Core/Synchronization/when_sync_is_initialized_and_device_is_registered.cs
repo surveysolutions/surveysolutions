@@ -31,10 +31,6 @@ namespace WB.Tests.Unit.Core.Synchronization
                 .Setup(x => x.Execute(Moq.It.IsAny<RegisterTabletCommand>(), Moq.It.IsAny<string>()))
                 .Callback((ICommand command, string origin) => registerTabletCommand = command as RegisterTabletCommand);
 
-            commandServiceMock
-                .Setup(x => x.Execute(Moq.It.IsAny<TrackHandshakeCommand>(), Moq.It.IsAny<string>()))
-                .Callback((ICommand command, string origin) => trackHandshakeCommand = command as TrackHandshakeCommand);
-
             syncManager = CreateSyncManager(commandService: commandServiceMock.Object, devices: devices);
         };
 
@@ -44,18 +40,6 @@ namespace WB.Tests.Unit.Core.Synchronization
         It should_not_send_RegisterTabletCommand = () =>
             registerTabletCommand.ShouldBeNull();
 
-        It should_send_TrackHandshakeCommand = () =>
-            trackHandshakeCommand.ShouldNotBeNull();
-
-        It should_send_TrackHandshakeCommand_DeviceId_specified = () =>
-            trackHandshakeCommand.DeviceId.ShouldEqual(deviceId);
-
-        It should_send_TrackHandshakeCommand_UserId_specified = () =>
-            trackHandshakeCommand.UserId.ShouldEqual(userId);
-
-        It should_send_TrackHandshakeCommand_AppVersion_specified = () =>
-            trackHandshakeCommand.AppVersion.ShouldEqual(appVersion);
-
         It should_return_package_with_ClientInstanceKey_specified = () =>
             handshakePackage.ClientInstanceKey.ShouldEqual(clientIdentifier.ClientInstanceKey);
 
@@ -64,7 +48,6 @@ namespace WB.Tests.Unit.Core.Synchronization
 
         private static TabletDocument tabletDocument;
         private static RegisterTabletCommand registerTabletCommand;
-        private static TrackHandshakeCommand trackHandshakeCommand;
         private static SyncManager syncManager;
         private static ClientIdentifier clientIdentifier;
         private static HandshakePackage handshakePackage;

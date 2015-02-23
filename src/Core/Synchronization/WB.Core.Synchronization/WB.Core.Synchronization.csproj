@@ -66,9 +66,9 @@
     <Compile Include="Aggregates\Tablet.cs" />
     <Compile Include="ClientIdentifier.cs" />
     <Compile Include="Commands\RegisterTabletCommand.cs" />
-    <Compile Include="Commands\TrackHandshakeCommand.cs" />
     <Compile Include="Documents\ClientDeviceDocument.cs" />
     <Compile Include="Documents\TabletDocument.cs" />
+    <Compile Include="Documents\TabletSyncLogByUsers.cs" />
     <Compile Include="EventHandler\TabletDenormalizer.cs" />
     <Compile Include="Events\Sync\ClientDeviceLastSyncItemUpdated.cs" />
     <Compile Include="Events\Sync\NewClientDeviceCreated.cs" />
@@ -80,6 +80,7 @@
     <Compile Include="Implementation\ReadSide\Indexes\InterviewSyncPackagesByBriefFields.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\QuestionnaireSyncPackagesByBriefFields.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\SynchronizationDeltasByRecordSize.cs" />
+    <Compile Include="Implementation\SyncLogger\SyncLogger.cs" />
     <Compile Include="IncomingSyncPackage.cs" />
     <Compile Include="IncomingSyncPackageException.cs" />
     <Compile Include="ISyncPackagesProcessor.cs" />
@@ -108,6 +109,7 @@
     <Compile Include="SyncStorage\InterviewResponsible.cs" />
     <Compile Include="SyncStorage\InterviewSyncPackageContent.cs" />
     <Compile Include="SyncStorage\InterviewSyncPackageMetaInformation.cs" />
+    <Compile Include="SyncStorage\ISyncLogger.cs" />
     <Compile Include="SyncStorage\ISyncPackage.cs" />
     <Compile Include="SyncStorage\QuestionnaireSyncPackageContent.cs" />
     <Compile Include="SyncStorage\QuestionnaireSyncPackageMetaInformation.cs" />
