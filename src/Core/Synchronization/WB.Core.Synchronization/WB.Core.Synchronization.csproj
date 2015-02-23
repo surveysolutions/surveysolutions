@@ -113,6 +113,7 @@
     <Compile Include="SyncStorage\ISyncPackage.cs" />
     <Compile Include="SyncStorage\QuestionnaireSyncPackageContent.cs" />
     <Compile Include="SyncStorage\QuestionnaireSyncPackageMetaInformation.cs" />
+    <Compile Include="SyncStorage\SynchronizationDeltasCounter.cs" />
     <Compile Include="SyncStorage\SyncPackageNotFoundException.cs" />
     <Compile Include="SyncStorage\UserSyncPackage.cs" />
     <Compile Include="ZipFileData.cs" />
