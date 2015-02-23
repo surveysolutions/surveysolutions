@@ -63,12 +63,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthC
             {
                 var directories = fileSystemAccessor.GetDirectoriesInDirectory(path);
                 folders.UnionWith(directories);
-
-                foreach (var directory in directories)
-                {
-                    var subFolders = GetAllSubFolders(directory, deniedFolders);
-                    folders.UnionWith(subFolders);
-                }
             }
             catch (UnauthorizedAccessException)
             {
