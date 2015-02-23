@@ -21,7 +21,8 @@ namespace WB.Tests.Unit.Core.Synchronization
             IReadSideRepositoryIndexAccessor indexAccessor = null,
             IQueryableReadSideRepositoryReader<UserSyncPackage> userPackageStorage = null,
             IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore = null,
-            IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnaireSyncPackageContentStore = null)
+            IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnaireSyncPackageContentStore = null,
+            ISyncLogger syncLogger = null)
         {
             return new SyncManager(
                 devices ?? Mock.Of<IReadSideRepositoryReader<TabletDocument>>(),
@@ -30,7 +31,8 @@ namespace WB.Tests.Unit.Core.Synchronization
                 indexAccessor ?? Mock.Of<IReadSideRepositoryIndexAccessor>(),
                 userPackageStorage ?? Mock.Of<IQueryableReadSideRepositoryReader<UserSyncPackage>>(),
                 interviewPackageContentStore ?? Mock.Of<IReadSideKeyValueStorage<InterviewSyncPackageContent>>(),
-                questionnaireSyncPackageContentStore ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireSyncPackageContent>>());
+                questionnaireSyncPackageContentStore ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireSyncPackageContent>>(),
+                syncLogger ?? Mock.Of<ISyncLogger>());
         }
 
         protected static ClientIdentifier CreateClientIdentifier(Guid userId, string androidId, string appVersion)
