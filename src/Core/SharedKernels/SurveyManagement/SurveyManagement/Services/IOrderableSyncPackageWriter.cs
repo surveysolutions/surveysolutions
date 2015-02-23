@@ -1,3 +1,5 @@
+using System;
+
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
@@ -8,6 +10,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services
     public interface IOrderableSyncPackageWriter<T> : IReadSideRepositoryWriter<T>, IReadSideRepositoryCleaner, IChacheableRepositoryWriter
         where T : class, IReadSideRepositoryEntity, IIndexedView
     {
-        long GetNextOrder();
+        void StoreNextPackage(string counterId, Func<int, T> createSyncPackage);
     }
 }

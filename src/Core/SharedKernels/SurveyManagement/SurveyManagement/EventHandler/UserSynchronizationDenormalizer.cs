@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
@@ -27,6 +27,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IJsonUtils jsonUtils;
         private readonly IOrderableSyncPackageWriter<UserSyncPackage> userPackageStorageWriter;
+
+        private const string CounterId = "UserSyncPackageСounter";
 
         public UserSynchronizationDenormalizer(
             IReadSideRepositoryWriter<UserDocument> users, 
@@ -117,15 +119,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return;
             }
 
-            var sortIndex = userPackageStorageWriter.GetNextOrder();
-
-            var synchronizationDelta = new UserSyncPackage(
-                userId: user.PublicKey,
-                content: this.GetItemAsContent(user),
-                timestamp: timestamp,
-                sortIndex: sortIndex);
-
-            this.userPackageStorageWriter.Store(synchronizationDelta, synchronizationDelta.PackageId);
+            userPackageStorageWriter.StoreNextPackage(
+                CounterId,
+                nextSortIndex =>
+                {
+                    var synchronizationDelta = new UserSyncPackage(
+                        userId: user.PublicKey,
+                        content: this.GetItemAsContent(user),
+                        timestamp: timestamp,
+                        sortIndex: nextSortIndex);
+                    return synchronizationDelta;
+                });
         }
 
         protected string GetItemAsContent(UserDocument item)
