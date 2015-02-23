@@ -7,9 +7,9 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 {
     public class EventStoreConnectionProvider : IEventStoreConnectionProvider
     {
-        private readonly EventStoreConnectionSettings connectionSettings;
+        private readonly EventStoreSettings connectionSettings;
 
-        public EventStoreConnectionProvider(EventStoreConnectionSettings connectionSettings)
+        public EventStoreConnectionProvider(EventStoreSettings connectionSettings)
         {
             if (connectionSettings == null) throw new ArgumentNullException("connectionSettings");
 
