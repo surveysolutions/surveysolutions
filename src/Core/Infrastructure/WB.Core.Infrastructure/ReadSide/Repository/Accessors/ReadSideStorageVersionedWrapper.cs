@@ -31,31 +31,7 @@ namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
         {
             string versionedId = GetVersionedId(id, version);
 
-            var newStyleResult = this.storage.GetById(versionedId);
-            if (newStyleResult != null)
-                return newStyleResult;
-
-#warning this code provide backward compatablity with old VersionedReadSideRepositoryWriter removed with commit https://bitbucket.org/wbcapi/surveysolutions/commits/8e26ffa2
-            var entity = this.storage.GetById(GetOldVersionedKey(id, version));
-            if (entity != null)
-                return entity;
-
-            entity = this.storage.GetById(id);
-
-            if (entity == null)
-                return null;
-            try
-            {
-#warning this code is need to restore IVersionedView(deleted interface) prperty Version commit https://bitbucket.org/wbcapi/surveysolutions/commits/8e26ffa2
-                var entityVersion = (long)entity.GetType().GetProperty("Version").GetValue(entity, null);
-                if (entityVersion == version)
-                    return entity;
-            }
-            catch (Exception e)
-            {
-                Logger.Error(String.Format("Error on getting entity with id: {0}, version: {1}", id, version), e);
-            }
-            return null;
+            return this.storage.GetById(versionedId);
         }
 
         public void Remove(string id, long version)
@@ -75,11 +51,6 @@ namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
         private static string GetVersionedId(string id, long version)
         {
             return string.Format("{0}${1}", id, version);
-        }
-
-        public static string GetOldVersionedKey(string id, long version)
-        {
-            return String.Format("{0}-{1}", id, version);
         }
     }
 }
