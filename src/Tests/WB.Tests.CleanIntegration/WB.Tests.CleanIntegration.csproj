@@ -69,6 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Create.cs" />
     <Compile Include="EsentTests\TestStoredEntity.cs" />
     <Compile Include="EsentTests\when_esent_store_is_cleared.cs" />
     <Compile Include="EsentTests\when_item_removed.cs" />

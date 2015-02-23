@@ -11,7 +11,7 @@ using WB.Tests.CleanIntegration.EsentTests;
 namespace WB.Tests.CleanIntegration.Synchronization.Concurrency
 {
     [Subject(typeof(ReadSideChunkWriter))]
-    internal class when_multiple_threads_saving_chunks : with_esent_store<SynchronizationDeltaContent>
+    internal class when_multiple_threads_saving_chunks : with_esent_store<SynchronizationDeltasCounter>
     {
         Establish context = () =>
         {
@@ -32,9 +32,9 @@ namespace WB.Tests.CleanIntegration.Synchronization.Concurrency
 
             storedMetas = new List<SynchronizationDeltaMetaInformation>();
 
-            writer = new ReadSideChunkWriter(metaWriter, 
-                metaWriter, 
-                storage);
+
+            var deltaContentStore = new InMemoryReadSideRepositoryAccessor<SynchronizationDeltaContent>();
+            writer = Create.ReadSideChunkWriter(metaWriter, deltaContentStore, storage);
         };
 
         Because of = () =>
