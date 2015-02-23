@@ -187,12 +187,13 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             {
                 throw new ArgumentException("Failed to extract questionnaire version. Please upgrade supervisor to the latest version.", exception);
             }
-
-            this.questionnaireRepository.DeleteQuestionnaireDocument(metadata.QuestionnaireId, metadata.Version);
-            this.questionnareAssemblyFileAccessor.RemoveAssembly(metadata.QuestionnaireId, metadata.Version);
             
             try
             {
+                this.commandService.Execute(new PrepareQuestionnaireForDelete(metadata.QuestionnaireId, metadata.Version, null));
+
+                this.questionnaireRepository.DeleteQuestionnaireDocument(metadata.QuestionnaireId, metadata.Version);
+                this.questionnareAssemblyFileAccessor.RemoveAssembly(metadata.QuestionnaireId, metadata.Version);
 
                 this.commandService.Execute(new DeleteQuestionnaire(metadata.QuestionnaireId, metadata.Version, null));
             }

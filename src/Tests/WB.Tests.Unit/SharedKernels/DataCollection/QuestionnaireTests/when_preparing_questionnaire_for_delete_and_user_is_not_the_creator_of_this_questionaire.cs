@@ -7,7 +7,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
-    internal class when_deleting_questionnaire_and_user_is_not_the_creator_of_this_questionaire : QuestionnaireTestsContext
+    internal class when_preparing_questionnaire_for_delete_and_user_is_not_the_creator_of_this_questionaire : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 
         Because of = () =>
                 exception = Catch.Exception(
-                        () => questionnaire.DeleteQuestionnaire(new DeleteQuestionnaire(questionnaireVersion: 1, responsibleId: unknownUserId, questionnaireId: Guid.NewGuid())));
+                        () => questionnaire.PrepareQuestionnaireForDelete(new PrepareQuestionnaireForDelete(questionnaireVersion: 1, responsibleId: unknownUserId, questionnaireId: Guid.NewGuid())));
 
         It should_not_exception_be_null = () =>
             exception.ShouldNotBeNull();

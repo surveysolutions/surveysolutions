@@ -66,6 +66,9 @@ namespace WB.UI.Headquarters.Controllers
         {
             var response = new JsonCommandResponse() { IsSuccess = true };
 
+            this.CommandService.Execute(new PrepareQuestionnaireForDelete(request.QuestionnaireId, request.Version,
+                     this.GlobalInfo.GetCurrentUser().Id));
+
             string indexName = typeof(InterviewsSearchIndex).Name;
             var interviewByQuestionnaire = indexAccessor.Query<SeachIndexContent>(indexName)
                                      .Where(interview => !interview.IsDeleted && 

@@ -60,8 +60,10 @@
     <Compile Include="Accessors\QuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="Aggregates\IQuestionnaire.cs" />
     <Compile Include="Commands\Interview\SynchronizeInterviewEventsCommand.cs" />
+    <Compile Include="Commands\Questionnaire\PrepareQuestionnaireForDelete.cs" />
     <Compile Include="Commands\User\LinkUserToDevice.cs" />
-     <Compile Include="Events\User\UserLinkedToDevice.cs" />   
+    <Compile Include="Events\Questionnaire\QuestionnairePreparedForDelete.cs" />
+    <Compile Include="Events\User\UserLinkedToDevice.cs" />
     <Compile Include="Implementation\Aggregates\User.cs" />
     <Compile Include="Implementation\Aggregates\Snapshots\UserState.cs" />
     <Compile Include="Commands\Interview\AnswerMultipleOptionsLinkedQuestionCommand.cs" />

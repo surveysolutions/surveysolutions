@@ -24,6 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private bool isProxyToPlainQuestionnaireRepository;
         private Dictionary<long, IQuestionnaire> availableVersions = new Dictionary <long, IQuestionnaire>();
+        private HashSet<long> preparingForDelete = new HashSet<long>();
 
         protected internal void Apply(TemplateImported e)
         {
@@ -34,6 +35,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected internal void Apply(QuestionnaireDeleted e)
         {
             availableVersions[e.QuestionnaireVersion] = null;
+            preparingForDelete.Remove(e.QuestionnaireVersion);
+        }
+
+        protected internal void Apply(QuestionnairePreparedForDelete e)
+        {
+            preparingForDelete.Add(e.QuestionnaireVersion);
         }
 
         private void Apply(PlainQuestionnaireRegistered e)
@@ -94,8 +101,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public IQuestionnaire GetHistoricalQuestionnaire(long version)
         {
-            if (availableVersions.ContainsKey(version))
+            if (availableVersions.ContainsKey(version) && !preparingForDelete.Contains(version))
                 return availableVersions[version];
+
             return null;
         }
 
@@ -103,9 +111,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             return this.isProxyToPlainQuestionnaireRepository
                 ? new QuestionnaireState(
-                    isProxyToPlainQuestionnaireRepository: true, availableVersions: this.availableVersions)
+                    isProxyToPlainQuestionnaireRepository: true, availableVersions: this.availableVersions, preparingForDelete: preparingForDelete)
                 : new QuestionnaireState(
-                    isProxyToPlainQuestionnaireRepository: false, availableVersions: this.availableVersions);
+                    isProxyToPlainQuestionnaireRepository: false, availableVersions: this.availableVersions, preparingForDelete: preparingForDelete);
         }
 
         public void RestoreFromSnapshot(QuestionnaireState snapshot)
@@ -113,6 +121,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.isProxyToPlainQuestionnaireRepository = snapshot.IsProxyToPlainQuestionnaireRepository;
 
             this.availableVersions = snapshot.AvailableVersions;
+            this.preparingForDelete = snapshot.PreparingForDelete;
         }
 
         public void ImportFromDesigner(ImportFromDesigner command)
@@ -150,12 +159,49 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ImportFromQuestionnaireDocument(command.Source);
         }
 
+        public void PrepareQuestionnaireForDelete(PrepareQuestionnaireForDelete command)
+        {
+            if (!availableVersions.ContainsKey(command.QuestionnaireVersion))
+                throw new QuestionnaireException(string.Format(
+                    "Questionnaire {0} ver {1} cannot be deleted because it is absent in repository.",
+                    this.EventSourceId.FormatGuid(), command.QuestionnaireVersion));
+
+            var questionnaireTemplateVersion = availableVersions.ContainsKey(command.QuestionnaireVersion) ? availableVersions[command.QuestionnaireVersion] : null;
+
+            if(preparingForDelete.Contains(command.QuestionnaireVersion))
+                throw new QuestionnaireException(string.Format(
+                 "Questionnaire {0} ver {1} is already in delete process.",
+                 this.EventSourceId.FormatGuid(), command.QuestionnaireVersion));
+
+            var createdById = questionnaireTemplateVersion != null
+                ? questionnaireTemplateVersion.ResponsibleId
+                : null;
+
+            if (createdById.HasValue && createdById != command.ResponsibleId)
+            {
+                throw new QuestionnaireException(
+                    string.Format("You don't have permissions to delete this questionnaire. QuestionnaireId: {0}", this.EventSourceId));
+            }
+
+            this.ApplyEvent(new QuestionnairePreparedForDelete()
+            {
+                QuestionnaireVersion = command.QuestionnaireVersion,
+                ResponsibleId = command.ResponsibleId
+            });
+        }
+
         public void DeleteQuestionnaire(DeleteQuestionnaire command)
         {
             if (!availableVersions.ContainsKey(command.QuestionnaireVersion))
                 throw new QuestionnaireException(string.Format(
                     "Questionnaire {0} ver {1} cannot be deleted because it is absent in repository.",
                     this.EventSourceId.FormatGuid(), command.QuestionnaireVersion));
+
+            if (!preparingForDelete.Contains(command.QuestionnaireVersion))
+                throw new QuestionnaireException(string.Format(
+                 "Questionnaire {0} ver {1} is not prepared to be delete.",
+                 this.EventSourceId.FormatGuid(), command.QuestionnaireVersion));
+
             var questionnaireTemplateVersion = availableVersions.ContainsKey(command.QuestionnaireVersion) ? availableVersions[command.QuestionnaireVersion] : null;
 
             var createdById = questionnaireTemplateVersion != null
