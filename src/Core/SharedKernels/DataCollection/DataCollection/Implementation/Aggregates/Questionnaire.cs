@@ -111,9 +111,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             return this.isProxyToPlainQuestionnaireRepository
                 ? new QuestionnaireState(
-                    isProxyToPlainQuestionnaireRepository: true, availableVersions: this.availableVersions, preparingForDelete: disabledQuestionnaires)
+                    isProxyToPlainQuestionnaireRepository: true, availableVersions: this.availableVersions, disabledQuestionnaires: disabledQuestionnaires)
                 : new QuestionnaireState(
-                    isProxyToPlainQuestionnaireRepository: false, availableVersions: this.availableVersions, preparingForDelete: disabledQuestionnaires);
+                    isProxyToPlainQuestionnaireRepository: false, availableVersions: this.availableVersions, disabledQuestionnaires: disabledQuestionnaires);
         }
 
         public void RestoreFromSnapshot(QuestionnaireState snapshot)
@@ -121,7 +121,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.isProxyToPlainQuestionnaireRepository = snapshot.IsProxyToPlainQuestionnaireRepository;
 
             this.availableVersions = snapshot.AvailableVersions;
-            this.disabledQuestionnaires = snapshot.PreparingForDelete;
+            this.disabledQuestionnaires = snapshot.DisabledQuestionnaires;
         }
 
         public void ImportFromDesigner(ImportFromDesigner command)
@@ -199,7 +199,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (!disabledQuestionnaires.Contains(command.QuestionnaireVersion))
                 throw new QuestionnaireException(string.Format(
-                 "Questionnaire {0} ver {1} is not prepared to be delete.",
+                 "Questionnaire {0} ver {1} is not disabled.",
                  this.EventSourceId.FormatGuid(), command.QuestionnaireVersion));
 
             var questionnaireTemplateVersion = availableVersions.ContainsKey(command.QuestionnaireVersion) ? availableVersions[command.QuestionnaireVersion] : null;
