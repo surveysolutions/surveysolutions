@@ -1,12 +1,12 @@
 using System;
 
-namespace CAPI.Android.Core.Model.ViewModel.Dashboard
+namespace WB.UI.Capi.ViewModel.Dashboard
 {
     public class DashboardInput
     {
         public DashboardInput(Guid userId)
         {
-            UserId = userId;
+            this.UserId = userId;
         }
 
         public Guid UserId { get; private set; }
