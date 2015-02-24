@@ -8,7 +8,6 @@ using Moq;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection;
@@ -27,11 +26,14 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             ICommandService commandService = null,
             IGlobalInfoProvider globalInfo = null,
             ISyncManager syncManager = null,
-            ILogger logger = null, IUserWebViewFactory viewFactory = null,
+            ILogger logger = null, 
+            IUserWebViewFactory viewFactory = null,
             ISupportedVersionProvider versionProvider = null,
-            ISyncProtocolVersionProvider syncVersionProvider = null)
+            ISyncProtocolVersionProvider syncVersionProvider = null,
+            IJsonUtils jsonUtils = null)
         {
-            var controller = CreateSyncControllerImpl(commandService, globalInfo, syncManager, logger, viewFactory, versionProvider, syncVersionProvider);
+            var controller = CreateSyncControllerImpl(commandService, globalInfo, syncManager, logger, viewFactory, versionProvider, syncVersionProvider,
+                jsonUtils: jsonUtils);
             SetControllerContextWithStream(controller, stream: null);
             
             return controller;

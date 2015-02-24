@@ -1,13 +1,11 @@
 using System;
 using System.Net;
-using System.Web.Http;
-
+using System.Net.Http;
 using Machine.Specifications;
-
 using Main.Core.Entities.SubEntities;
-
 using Moq;
-
+using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
@@ -28,27 +26,24 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             var user = new UserWebView();
             var userFactory = Mock.Of<IUserWebViewFactory>(x => x.Load(Moq.It.IsAny<UserWebViewInputModel>()) == user);
             var syncVersionProvider = Mock.Of<ISyncProtocolVersionProvider>(x => x.GetProtocolVersion() == supervisorVersion);
-            controller = CreateSyncController(viewFactory: userFactory, syncVersionProvider: syncVersionProvider, globalInfo: globalInfo);
+            var jsonUtils = Mock.Of<IJsonUtils>(x => x.Serialize(Moq.It.IsAny<RestErrorDescription>()) == "some serialized error");
+            controller = CreateSyncController(viewFactory: userFactory, jsonUtils: jsonUtils, syncVersionProvider: syncVersionProvider, globalInfo: globalInfo);
         };
 
         Because of = () =>
-            exception = Catch.Exception(() => 
-                controller.GetHandshakePackage(new HandshakePackageRequest
+            response = controller.GetHandshakePackage(new HandshakePackageRequest
                                                {
                                                    ClientId = Guid.NewGuid(), 
                                                    AndroidId = null, 
                                                    ClientRegistrationId = Guid.NewGuid(), 
                                                    Version = capiVersion
-                                               }));
-
-        It should_exception_be_type_of_HttpResponseException = () =>
-            exception.ShouldBeOfExactType<HttpResponseException>();
+                                               });
 
         It should_have_NotAcceptable_status_code = () =>
-            ((HttpResponseException)exception).Response.StatusCode.ShouldEqual(HttpStatusCode.NotAcceptable);
+            response.StatusCode.ShouldEqual(HttpStatusCode.NotAcceptable);
 
         private static InterviewerSyncController controller;
-        private static Exception exception;
+        private static HttpResponseMessage response;
         private static int capiVersion = 13;
         private static int supervisorVersion = 13;
     }
