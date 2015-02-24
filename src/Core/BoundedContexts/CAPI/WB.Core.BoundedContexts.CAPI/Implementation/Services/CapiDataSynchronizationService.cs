@@ -190,7 +190,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             
             try
             {
-                this.commandService.Execute(new PrepareQuestionnaireForDelete(metadata.QuestionnaireId, metadata.Version, null));
+                this.commandService.Execute(new DisableQuestionnaire(metadata.QuestionnaireId, metadata.Version, null));
 
                 this.questionnaireRepository.DeleteQuestionnaireDocument(metadata.QuestionnaireId, metadata.Version);
                 this.questionnareAssemblyFileAccessor.RemoveAssembly(metadata.QuestionnaireId, metadata.Version);

@@ -95,7 +95,7 @@
                     <!-- /ko -->
                 </td>
                 <td>
-                     <!-- ko ifnot:PreparedForDelete -->
+                     <!-- ko ifnot:Disabled -->
                     <div class="btn-group">
                         <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
                             <i class=" glyphicon glyphicon-download">
@@ -139,8 +139,8 @@
                         </a>
                     </div>
                     <!-- /ko -->
-                    <!-- ko if:PreparedForDelete -->
-                    Delete in process
+                    <!-- ko if:Disabled -->
+                    Disabled
                     <!-- /ko -->
                 </td>
             </tr>
