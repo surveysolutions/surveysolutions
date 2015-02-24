@@ -1,21 +1,15 @@
-using System;
 using System.Linq;
-
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
-
-using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.Implementation.ReadSide.Indexes
 {
-    public class QuestionnaireSyncPackagesByBriefFields : AbstractIndexCreationTask<QuestionnaireSyncPackageMetaInformation, QuestionnaireSyncPackagesByBriefFields.SyncPackageBrief>
+    public class QuestionnaireSyncPackagesByBriefFields : AbstractIndexCreationTask<QuestionnaireSyncPackageMeta, QuestionnaireSyncPackagesByBriefFields.SyncPackageBrief>
     {
         public class SyncPackageBrief
         {
             public string PackageId { get; set; }
-
-            public DateTime Timestamp { get; set; }
 
             public long SortIndex { get; set; }
         }
@@ -26,7 +20,6 @@ namespace WB.Core.Synchronization.Implementation.ReadSide.Indexes
                 select new SyncPackageBrief
                        {
                            PackageId = doc.PackageId,
-                           Timestamp = doc.Timestamp,
                            SortIndex = doc.SortIndex
                        };
 

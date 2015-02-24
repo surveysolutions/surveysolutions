@@ -116,7 +116,6 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
         {
             return new UserSyncPackageDto
             {
-                UserId = userId,
                 PackageId = packageId
             };
         }

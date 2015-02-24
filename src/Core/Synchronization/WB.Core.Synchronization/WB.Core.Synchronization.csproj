@@ -105,17 +105,17 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SyncSettings.cs" />
-    <Compile Include="SyncStorage\IIndexedView.cs" />
     <Compile Include="SyncStorage\InterviewResponsible.cs" />
     <Compile Include="SyncStorage\InterviewSyncPackageContent.cs" />
-    <Compile Include="SyncStorage\InterviewSyncPackageMetaInformation.cs" />
+    <Compile Include="SyncStorage\InterviewSyncPackageMeta.cs" />
     <Compile Include="SyncStorage\ISyncLogger.cs" />
     <Compile Include="SyncStorage\ISyncPackage.cs" />
     <Compile Include="SyncStorage\QuestionnaireSyncPackageContent.cs" />
-    <Compile Include="SyncStorage\QuestionnaireSyncPackageMetaInformation.cs" />
+    <Compile Include="SyncStorage\QuestionnaireSyncPackageMeta.cs" />
     <Compile Include="SyncStorage\SynchronizationDeltasCounter.cs" />
     <Compile Include="SyncStorage\SyncPackageNotFoundException.cs" />
-    <Compile Include="SyncStorage\UserSyncPackage.cs" />
+    <Compile Include="SyncStorage\UserSyncPackageMeta.cs" />
+    <Compile Include="SyncStorage\UserSyncPackageContent.cs" />
     <Compile Include="ZipFileData.cs" />
   </ItemGroup>
   <ItemGroup>

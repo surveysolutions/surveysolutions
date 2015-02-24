@@ -117,7 +117,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
 
-            this.Bind(typeof(IOrderableSyncPackageWriter<>)).To(typeof(OrderableSyncPackageWriter<>)).InSingletonScope();
+            this.Bind(typeof(IOrderableSyncPackageWriter<,>)).To(typeof(OrderableSyncPackageWriter<,>)).InSingletonScope();
 
             this.Kernel.RegisterDenormalizer<InterviewEventHandlerFunctional>();
             this.Kernel.RegisterDenormalizer<InterviewSynchronizationDenormalizer>();

@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -10,31 +7,55 @@ using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.RepositoryAccessors
 {
-    public class OrderableSyncPackageWriter<T> : IOrderableSyncPackageWriter<T>
-        where T : class, IReadSideRepositoryEntity, ISyncPackage
+    public class OrderableSyncPackageWriter<TMeta, TContent> : IOrderableSyncPackageWriter<TMeta, TContent>
+        where TMeta : class, IReadSideRepositoryEntity, IOrderableSyncPackage
+        where TContent : class, IReadSideRepositoryEntity, ISyncPackage
     {
-        private long currentSortIndex = 1;
         private readonly IChacheableRepositoryWriter writer;
-        private readonly IReadSideRepositoryWriter<T> readSideRepositoryWriter;
-        private readonly IQueryableReadSideRepositoryReader<T> packageStorageReader;
+        private readonly IReadSideRepositoryWriter<TMeta> packageMetaWriter;
+        private readonly IReadSideKeyValueStorage<TContent> packageContentWriter;
 
         private static readonly object StoreSyncDeltaLockObject = new object();
         private readonly IReadSideKeyValueStorage<SynchronizationDeltasCounter> counterStorage;
 
         public OrderableSyncPackageWriter(
-            IReadSideRepositoryWriter<T> readSideRepositoryWriter, 
-            IQueryableReadSideRepositoryReader<T> packageStorageReader, 
-            IReadSideKeyValueStorage<SynchronizationDeltasCounter> counterStorage)
+            IReadSideRepositoryWriter<TMeta> packageMetaWriter, 
+            IReadSideKeyValueStorage<SynchronizationDeltasCounter> counterStorage, 
+            IReadSideKeyValueStorage<TContent> packageContentWriter)
         {
-            this.writer = readSideRepositoryWriter as IChacheableRepositoryWriter;
-            this.readSideRepositoryWriter = readSideRepositoryWriter;
-            this.packageStorageReader = packageStorageReader;
+            this.writer = packageMetaWriter as IChacheableRepositoryWriter;
+            this.packageMetaWriter = packageMetaWriter;
             this.counterStorage = counterStorage;
+            this.packageContentWriter = packageContentWriter;
+        }
+
+        public void Store(TContent content, TMeta syncPackageMeta, string partialPackageId, string counterId)
+        {
+            lock (StoreSyncDeltaLockObject)
+            {
+                SynchronizationDeltasCounter deltasCounter = this.counterStorage.GetById(counterId);
+                int storedDeltasCount = deltasCounter != null ? deltasCounter.CountOfStoredDeltas : 1;
+
+                int nextSortIndex = storedDeltasCount;
+
+                storedDeltasCount++;
+                this.counterStorage.Store(new SynchronizationDeltasCounter(storedDeltasCount), counterId);
+                
+                var packageId = string.Format("{0}${1}", partialPackageId, nextSortIndex);
+
+                syncPackageMeta.SortIndex = nextSortIndex;
+                syncPackageMeta.PackageId = packageId;
+
+                content.PackageId = packageId;
+
+                this.packageMetaWriter.Store(syncPackageMeta, packageId);
+                this.packageContentWriter.Store(content, packageId);
+            }
         }
 
         public void Clear()
         {
-            var repositoryCleaner = readSideRepositoryWriter as IReadSideRepositoryCleaner;
+            var repositoryCleaner = this.packageMetaWriter as IReadSideRepositoryCleaner;
             if (repositoryCleaner != null)
             {
                 repositoryCleaner.Clear();
@@ -43,7 +64,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Reposit
 
         public void EnableCache()
         {
-            this.currentSortIndex = 1;
             if (this.writer != null)
             {
                 this.writer.EnableCache();
@@ -66,7 +86,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Reposit
         public Type ViewType {
             get
             {
-                return this.writer != null ? this.writer.ViewType : typeof(T);
+                return this.writer != null ? this.writer.ViewType : typeof(TMeta);
             }
         }
 
@@ -75,47 +95,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Reposit
             get
             {
                 return this.writer != null && this.writer.IsCacheEnabled;
-            }
-        }
-
-        public T GetById(string id)
-        {
-            return this.readSideRepositoryWriter.GetById(id);
-        }
-
-        public void Remove(string id)
-        {
-            this.readSideRepositoryWriter.Remove(id);
-        }
-
-        public void Store(T view, string id)
-        {
-            this.readSideRepositoryWriter.Store(view, id);
-        }
-
-        public void StoreNextPackage(string counterId, Func<int, T> createSyncPackage)
-        {
-            lock (StoreSyncDeltaLockObject)
-            {
-                SynchronizationDeltasCounter deltasCounter = this.counterStorage.GetById(counterId);
-                int storedDeltasCount = deltasCounter != null ? deltasCounter.CountOfStoredDeltas : 1;
-
-                int nextSortIndex = storedDeltasCount;
-
-                storedDeltasCount++;
-                this.counterStorage.Store(new SynchronizationDeltasCounter(storedDeltasCount), counterId);
-
-                T synchronizationDelta = createSyncPackage(nextSortIndex);
-
-                this.readSideRepositoryWriter.Store(synchronizationDelta, synchronizationDelta.PackageId);
-            }
-        }
-
-        public void BulkStore(List<Tuple<T, string>> bulk)
-        {
-            foreach (var tuple in bulk)
-            {
-                Store(tuple.Item1, tuple.Item2);
             }
         }
     }

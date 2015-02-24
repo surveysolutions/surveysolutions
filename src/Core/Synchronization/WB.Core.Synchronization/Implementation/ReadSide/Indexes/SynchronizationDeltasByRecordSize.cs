@@ -18,7 +18,7 @@ namespace WB.Core.Synchronization.Implementation.ReadSide.Indexes
 
         public SynchronizationDeltasByRecordSize()
         {
-            AddMap<InterviewSyncPackageMetaInformation>(packages => from package in packages
+            AddMap<InterviewSyncPackageMeta>(packages => from package in packages
                     where package.ContentSize + package.MetaInfoSize > WarningLength
                     select new Result
                         {
@@ -26,7 +26,7 @@ namespace WB.Core.Synchronization.Implementation.ReadSide.Indexes
                             Count = 1
                         });
 
-            AddMap<QuestionnaireSyncPackageMetaInformation>(packages => from package in packages
+            AddMap<QuestionnaireSyncPackageMeta>(packages => from package in packages
                     where package.ContentSize + package.MetaInfoSize > WarningLength
                     select new Result
                         {
