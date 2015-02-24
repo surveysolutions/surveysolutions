@@ -27,8 +27,8 @@ namespace WB.Tests.Unit.Core.Synchronization
 
             indexAccessorMock = new Mock<IReadSideRepositoryIndexAccessor>();
 
-            indexAccessorMock.Setup(x => x.Query<QuestionnaireSyncPackageMetaInformation>(questionnireQueryIndexName))
-                .Returns(Enumerable.Empty<QuestionnaireSyncPackageMetaInformation>().AsQueryable());
+            indexAccessorMock.Setup(x => x.Query<QuestionnaireSyncPackageMeta>(questionnireQueryIndexName))
+                .Returns(Enumerable.Empty<QuestionnaireSyncPackageMeta>().AsQueryable());
 
             syncManager = CreateSyncManager(devices: devices, indexAccessor: indexAccessorMock.Object);
         };

@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Core.Synchronization
             tabletDocument = CreateTabletDocument(deviceId, androidId);
             devices = Mock.Of<IReadSideRepositoryReader<TabletDocument>>(x => x.GetById(deviceId.FormatGuid()) == tabletDocument);
 
-            userSyncPackages = new List<UserSyncPackage>
+            userSyncPackages = new List<UserSyncPackageMeta>
                                {
                                    CreateUserSyncPackage(userId, sortIndex:1),
                                    CreateUserSyncPackage(userId, sortIndex:2),
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Core.Synchronization
                                };
 
             indexAccessorMock = new Mock<IReadSideRepositoryIndexAccessor>();
-            indexAccessorMock.Setup(x => x.Query<UserSyncPackage>(userQueryIndexName))
+            indexAccessorMock.Setup(x => x.Query<UserSyncPackageMeta>(userQueryIndexName))
                 .Returns(userSyncPackages.AsQueryable());
             syncManager = CreateSyncManager(devices: devices, indexAccessor: indexAccessorMock.Object);
         };
@@ -63,6 +63,6 @@ namespace WB.Tests.Unit.Core.Synchronization
 
         private static Mock<IReadSideRepositoryIndexAccessor> indexAccessorMock;
         private static readonly string userQueryIndexName = typeof(UserSyncPackagesByBriefFields).Name;
-        private static List<UserSyncPackage> userSyncPackages;
+        private static List<UserSyncPackageMeta> userSyncPackages;
     }
 }

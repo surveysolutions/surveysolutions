@@ -43,31 +43,26 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
                                     }
             });
 
-            interviewPackageStorageWriter = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation>>();
-
-            interviewSyncPackageContentStorage = new Mock<IReadSideKeyValueStorage<InterviewSyncPackageContent>>();
             synchronizationDenormalizer = CreateDenormalizer(
                 interviews: interviews.Object,
-                interviewPackageStorageWriter: interviewPackageStorageWriter.Object, 
+                interviewPackageStorageWriter: interviewPackageStorageWriterMock.Object, 
                 interviewSummarys: interviewSummaryWriterMock.Object,
-                interviewSyncPackageContentStorage: interviewSyncPackageContentStorage.Object,
                 synchronizationDtoFactory: synchronizationDtoFactory);
         };
 
         Because of = () => synchronizationDenormalizer.Handle(Create.InterviewerAssignedEvent());
 
-        It should_store_meta_information_of_package = () => 
-            interviewPackageStorageWriter.Verify(x => 
-                x.Store(Moq.It.IsAny<InterviewSyncPackageMetaInformation>(), Moq.It.IsAny<string>()), Times.Once);
-
-        It should_store_content_of_package = () =>
-            interviewSyncPackageContentStorage.Verify(x =>
-                x.Store(Moq.It.IsAny<InterviewSyncPackageContent>(), Moq.It.IsAny<string>()), Times.Once);
+        It should_store_meta_information_of_package = () =>
+            interviewPackageStorageWriterMock.Verify(x => 
+                x.Store(
+                Moq.It.IsAny<InterviewSyncPackageContent>(),
+                Moq.It.IsAny<InterviewSyncPackageMeta>(), 
+                Moq.It.IsAny<string>(),
+                CounterId), Times.Once);
 
         static InterviewSynchronizationDenormalizer synchronizationDenormalizer;
         static Guid interviewId;
-        private static Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation>> interviewPackageStorageWriter;
-        private static Mock<IReadSideKeyValueStorage<InterviewSyncPackageContent>> interviewSyncPackageContentStorage;
+        private static Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent>> interviewPackageStorageWriterMock = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent>>();
     }
 }
 

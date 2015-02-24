@@ -34,23 +34,25 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
                                     }
             });
 
-            interviewPackageStorageWriter = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation>>();
-
-
             denormalizer = CreateDenormalizer(
-                interviewPackageStorageWriter: interviewPackageStorageWriter.Object,
+                interviewPackageStorageWriter: interviewPackageStorageWriterMock.Object,
                 interviewSummarys: interviewSummaryWriterMock.Object);
         };
 
         Because of = () => denormalizer.Handle(Create.InterviewerAssignedEvent());
 
-        It should_not_send_interview_back_to_tablet = () =>
-            interviewPackageStorageWriter.Verify(x =>
-                x.Store(Moq.It.IsAny<InterviewSyncPackageMetaInformation>(), Moq.It.IsAny<string>()), Times.Never);
+        It should_not_store_any_sync_package = () =>
+            interviewPackageStorageWriterMock.Verify(
+                x => x.Store(
+                    Moq.It.IsAny<InterviewSyncPackageContent>(),
+                    Moq.It.IsAny<InterviewSyncPackageMeta>(),
+                    Moq.It.IsAny<string>(),
+                    Moq.It.IsAny<string>()), Times.Never);
 
         static InterviewSynchronizationDenormalizer denormalizer;
         static Guid interviewId;
-        private static Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation>> interviewPackageStorageWriter;
+        private static Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent>> interviewPackageStorageWriterMock = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent>>();
+
     }
 }
 

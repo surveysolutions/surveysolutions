@@ -1,4 +1,4 @@
-using Machine.Specifications;
+﻿using Machine.Specifications;
 
 using Moq;
 
@@ -15,19 +15,20 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
     [Subject(typeof(QuestionnaireSynchronizationDenormalizer))]
     internal class QuestionnaireSynchronizationDenormalizerTestsContext
     {
+        protected const string CounterId = "QuestionnaireSyncPackageСounter";
+
         protected static QuestionnaireSynchronizationDenormalizer CreateDenormalizer(
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor = null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
             IJsonUtils jsonUtils = null,
-            IOrderableSyncPackageWriter<QuestionnaireSyncPackageMetaInformation> questionnairePackageStorageWriter = null,
+            IOrderableSyncPackageWriter<QuestionnaireSyncPackageMeta, QuestionnaireSyncPackageContent> questionnairePackageStorageWriter = null,
             IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnaireSyncPackageContentStorage=null)
         {
             var result = new QuestionnaireSynchronizationDenormalizer(
                 questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 jsonUtils ?? Mock.Of<IJsonUtils>(),
-                questionnairePackageStorageWriter ?? Mock.Of<IOrderableSyncPackageWriter<QuestionnaireSyncPackageMetaInformation>>(),
-                questionnaireSyncPackageContentStorage??Mock.Of<IReadSideKeyValueStorage<QuestionnaireSyncPackageContent>>());
+                questionnairePackageStorageWriter ?? Mock.Of<IOrderableSyncPackageWriter<QuestionnaireSyncPackageMeta, QuestionnaireSyncPackageContent>>());
 
             return result;
         }
