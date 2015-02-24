@@ -23,6 +23,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Controls;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Syncronization;
+using WB.UI.Capi.ViewModel.Dashboard;
 
 namespace WB.UI.Capi
 {
