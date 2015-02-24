@@ -12,7 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserDenormalizerTests
 {
-    internal class when_user_linked_to_device_for_the_firts_time : UserDenormalizerTests
+    internal class when_user_linked_to_device_for_the_first_time : UserDenormalizerTests
     {
         Establish context = () =>
         {
