@@ -29,15 +29,17 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory;
         private readonly IReadSideRepositoryIndexAccessor indexAccessor;
+        private readonly IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaireBrowseItemReader;
 
         public QuestionnairesApiController(
             ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
-            IReadSideRepositoryIndexAccessor indexAccessor)
+            IReadSideRepositoryIndexAccessor indexAccessor, IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaireBrowseItemReader)
             : base(commandService, globalInfo, logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.indexAccessor = indexAccessor;
+            this.questionnaireBrowseItemReader = questionnaireBrowseItemReader;
         }
 
         [HttpPost]
@@ -66,8 +68,15 @@ namespace WB.UI.Headquarters.Controllers
         {
             var response = new JsonCommandResponse() { IsSuccess = true };
 
-            this.CommandService.Execute(new DisableQuestionnaire(request.QuestionnaireId, request.Version,
-                     this.GlobalInfo.GetCurrentUser().Id));
+            var questionnaire = questionnaireBrowseItemReader.AsVersioned()
+                .Get(request.QuestionnaireId.FormatGuid(), request.Version);
+            if(questionnaire==null)
+                throw new ArgumentException(string.Format("questionnaire with id {0} and version {1} is absent", request.QuestionnaireId.FormatGuid(), request.Version));
+
+            if (!questionnaire.Disabled)
+                this.CommandService.Execute(new DisableQuestionnaire(request.QuestionnaireId, request.Version,
+                    this.GlobalInfo.GetCurrentUser().Id));
+
 
             string indexName = typeof(InterviewsSearchIndex).Name;
             var interviewByQuestionnaire = indexAccessor.Query<SeachIndexContent>(indexName)
@@ -117,7 +126,6 @@ namespace WB.UI.Headquarters.Controllers
                     response.DomainException = domainEx.Message;
                 }    
             }
-
             return response;
         }
     }
