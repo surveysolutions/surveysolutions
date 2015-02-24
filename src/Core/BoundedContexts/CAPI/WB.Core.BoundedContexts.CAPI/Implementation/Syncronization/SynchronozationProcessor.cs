@@ -276,7 +276,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
         {
             var package = await this.synchronizationService.RequestUserPackageAsync(credentials: this.credentials, chunkId: chunk.Id);
             this.dataProcessor.ProcessDownloadedPackage(package);
-            this.packageIdStorage.Append(package.PackageId, SyncItemType.User, package.UserId, chunk.SortIndex);
+            this.packageIdStorage.Append(package.PackageId, SyncItemType.User, userId, chunk.SortIndex);
         }
 
         private async Task DownloadAndProcessQuestionnirePackage(SynchronizationChunkMeta chunk)
@@ -290,7 +290,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
         {
             var package = await this.synchronizationService.RequestInterviewPackageAsync(this.credentials, chunk.Id);
             this.dataProcessor.ProcessDownloadedPackage(package, chunk.ItemType);
-            this.packageIdStorage.Append(package.PackageId, SyncItemType.Interview, chunk.UserId ?? Guid.Empty, chunk.SortIndex);
+            this.packageIdStorage.Append(package.PackageId, SyncItemType.Interview, userId, chunk.SortIndex);
         }
 
         public void Cancel(Exception exception = null)

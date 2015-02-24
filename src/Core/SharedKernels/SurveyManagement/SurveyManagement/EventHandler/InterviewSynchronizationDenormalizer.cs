@@ -2,6 +2,7 @@
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -27,8 +28,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IReadSideKeyValueStorage<InterviewData> interviews;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummarys;
         private readonly IJsonUtils jsonUtils;
-        private readonly IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation> interviewPackageStorageWriter;
-        private readonly IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore;
+        private readonly IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent> syncPackageWriter;
+
         private readonly IReadSideRepositoryWriter<InterviewResponsible> interviewResponsibleStorageWriter;
 
         private const string CounterId = "InterviewSyncPackageСounter";
@@ -42,9 +43,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             IReadSideRepositoryWriter<InterviewSummary> interviewSummarys,
             IJsonUtils jsonUtils,
             IMetaInfoBuilder metaBuilder,
-            IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation> interviewPackageStorageWriter,
+            IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent> syncPackageWriter,
             IReadSideRepositoryWriter<InterviewResponsible> interviewResponsibleStorageWriter,
-            IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore,
             IInterviewSynchronizationDtoFactory synchronizationDtoFactory)
         {
             this.questionnriePropagationStructures = questionnriePropagationStructures;
@@ -52,15 +52,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.interviewSummarys = interviewSummarys;
             this.metaBuilder = metaBuilder;
             this.jsonUtils = jsonUtils;
-            this.interviewPackageStorageWriter = interviewPackageStorageWriter;
+            this.syncPackageWriter = syncPackageWriter;
             this.interviewResponsibleStorageWriter = interviewResponsibleStorageWriter;
-            this.interviewPackageContentStore = interviewPackageContentStore;
             this.synchronizationDtoFactory = synchronizationDtoFactory;
         }
 
         public override object[] Writers
         {
-            get { return new object[] { this.interviewPackageStorageWriter, interviewResponsibleStorageWriter, interviewPackageContentStore }; }
+            get { return new object[] { this.syncPackageWriter, this.interviewResponsibleStorageWriter }; }
         }
 
         public override object[] Readers
@@ -191,24 +190,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             string metaInfo,
             DateTime timestamp)
         {
-            interviewPackageStorageWriter.StoreNextPackage(
-                CounterId,
-                nextSortIndex =>
-                {
-                    var synchronizationDelta = new InterviewSyncPackageMetaInformation(
-                        interviewId,
-                        questionnaireId,
-                        questionnaireVersion,
-                        timestamp,
-                        userId,
-                        nextSortIndex,
-                        itemType,
-                        string.IsNullOrEmpty(content) ? 0 : content.Length,
-                        string.IsNullOrEmpty(metaInfo) ? 0 : metaInfo.Length);
+            var syncPackageMeta = new InterviewSyncPackageMeta(
+                       interviewId,
+                       questionnaireId,
+                       questionnaireVersion,
+                       timestamp,
+                       userId,
+                       itemType,
+                       string.IsNullOrEmpty(content) ? 0 : content.Length,
+                       string.IsNullOrEmpty(metaInfo) ? 0 : metaInfo.Length);
 
-                    this.interviewPackageContentStore.Store(new InterviewSyncPackageContent(synchronizationDelta.PackageId, content, metaInfo), synchronizationDelta.PackageId);
-                    return synchronizationDelta;
-                });
+            var syncPackageContent = new InterviewSyncPackageContent(content, metaInfo);
+
+            syncPackageWriter.Store(syncPackageContent, syncPackageMeta, interviewId.FormatGuid(), CounterId);
         }
     }
 }
