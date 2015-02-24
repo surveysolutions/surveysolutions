@@ -24,6 +24,7 @@ namespace WB.UI.Capi
             get { return ServiceLocator.Current.GetInstance<INavigationService>(); }
         }
 
+        private bool isResumeFirstRun = true;
         protected override void OnStart()
         {
             base.OnStart();
@@ -47,6 +48,20 @@ namespace WB.UI.Capi
             this.DataContext = new LoginActivityViewModel();
             base.OnCreate(bundle);
             this.SetContentView(Resource.Layout.Login);
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+            if (isResumeFirstRun)
+            {
+                isResumeFirstRun = false;
+                return;
+            }
+            var viewModel = this.DataContext as LoginActivityViewModel;
+            if(viewModel==null)
+                return;
+            viewModel.UpdateViewModel();
         }
     }
 }
