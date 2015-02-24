@@ -1,11 +1,8 @@
 using System;
-
+using System.Net.Http;
 using Machine.Specifications;
-
 using Main.Core.Entities.SubEntities;
-
 using Moq;
-
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
@@ -41,7 +38,7 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
         };
 
         Because of = () =>
-            result = controller.GetQuestionnaireSyncPackage(request);
+            result = controller.GetQuestionnaireSyncPackage(request).Content.ReadAsAsync<QuestionnaireSyncPackageDto>().Result;
 
         It should_return_not_null_package = () =>
             result.ShouldNotBeNull();
