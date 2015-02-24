@@ -70,6 +70,7 @@
                 <td data-bind="date: CreationDate"></td>
                 <td data-bind="date: LastEntryDate"></td>
                 <td>
+                    <!-- ko ifnot:Disabled -->
                     <!-- ko ifnot:AllowCensusMode -->
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -91,11 +92,13 @@
                             </li>
                         </ul>
                     </div>
-
+                    <!-- /ko -->
+                    <!-- /ko -->
+                    <!-- ko if:Disabled -->
+                    Disabled
                     <!-- /ko -->
                 </td>
                 <td>
-                     <!-- ko ifnot:Disabled -->
                     <div class="btn-group">
                         <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
                             <i class=" glyphicon glyphicon-download">
@@ -138,10 +141,6 @@
                             <i class="glyphicon glyphicon-remove"></i>
                         </a>
                     </div>
-                    <!-- /ko -->
-                    <!-- ko if:Disabled -->
-                    Disabled
-                    <!-- /ko -->
                 </td>
             </tr>
             <!-- /ko -->
