@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Questionnaire
 {
-    public class PrepareQuestionnaireForDelete : QuestionnaireCommand
+    public class DisableQuestionnaire : QuestionnaireCommand
     {
-        public PrepareQuestionnaireForDelete(Guid questionnaireId, long questionnaireVersion, Guid? responsibleId)
+        public DisableQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? responsibleId)
             : base(questionnaireId, questionnaireId)
         {
             this.ResponsibleId = responsibleId;

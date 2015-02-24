@@ -54,6 +54,6 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 
         public bool AllowCensusMode { get; set; }
 
-        public bool PreparedForDelete { get; set; }
+        public bool Disabled { get; set; }
     }
 }

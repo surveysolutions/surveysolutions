@@ -152,7 +152,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         {
             this.headquartersPullContext.PushMessage(string.Format("Deleting questionnaire '{0}' version '{1}'", id, version));
 
-            this.executeCommand(new PrepareQuestionnaireForDelete(id, version, null));
+            this.executeCommand(new DisableQuestionnaire(id, version, null));
 
             this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(id, version);
 
