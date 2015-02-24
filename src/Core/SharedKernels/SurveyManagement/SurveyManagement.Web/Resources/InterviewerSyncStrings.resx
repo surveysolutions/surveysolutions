@@ -136,7 +136,7 @@
     <value>Synchronization failed. Android device id was not provided.</value>
   </data>
   <data name="WrongAndroidDeviceIdWasProvided" xml:space="preserve">
-    <value>Synchronization failed. Wrong adroid device id was provided.</value>
+    <value>Synchronization failed. Wrong android device id was provided.</value>
   </data>
   <data name="ServerError" xml:space="preserve">
     <value>Internal server error occurred. Please contact developers.</value>
