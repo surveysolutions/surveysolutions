@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthC
                 if (count == 0) 
                     return NumberOfSyncPackagesWithBigSizeCheckResult.Happy(count);
 
-                return NumberOfSyncPackagesWithBigSizeCheckResult.Warning(count, "Some interviews are oversized.<br />Please contact Survey Solutions Team <a href='mailto:support@mysurvey.solutions'>support@mysurvey.solutions</a> to inform about the issue.");
+                return NumberOfSyncPackagesWithBigSizeCheckResult.Warning(count, "Some interviews are oversized.<br />Please, contact Survey Solutions Team <a href='mailto:support@mysurvey.solutions'>support@mysurvey.solutions</a> to inform about the issue.");
             }
             catch (Exception e)
             {
