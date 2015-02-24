@@ -46,7 +46,7 @@
                 $scope.activeQuestion.optionsCount = question.optionsCount || 0;
 
                 $scope.activeQuestion.wereOptionsTruncated = question.wereOptionsTruncated || false;
-                $scope.activeQuestion.isInteger = question.isInteger;
+                $scope.activeQuestion.isInteger = (question.type === 'Numeric') ? question.isInteger : true;
                 $scope.activeQuestion.maxValue = question.maxValue;
                 $scope.activeQuestion.countOfDecimalPlaces = question.countOfDecimalPlaces;
 
