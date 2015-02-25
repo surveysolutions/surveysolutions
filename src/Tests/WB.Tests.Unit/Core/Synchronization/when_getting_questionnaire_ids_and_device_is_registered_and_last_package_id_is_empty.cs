@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.Core.Synchronization
                 "22222222222222222222222222222222_1$4");
 
         It should_return_list_with_ordered_by_index_items = () =>
-            result.SyncPackagesMeta.Select(x => x.SortIndex).ShouldContainOrderedItems(new long[] { 3, 4, 5 });
+            result.SyncPackagesMeta.Select(x => x.SortIndex).ShouldEqual(new long[] { 3, 4, 5 });
 
         private static SyncManager syncManager;
         private static SyncItemsMetaContainer result;
