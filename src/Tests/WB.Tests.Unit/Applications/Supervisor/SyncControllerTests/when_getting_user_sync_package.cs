@@ -3,6 +3,9 @@ using System.Net.Http;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
+
+using NSubstitute.Core;
+
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;

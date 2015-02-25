@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.Core.Synchronization
         };
 
         Because of = () =>
-            result = syncManager.GetUserArIdsWithOrder(userId, deviceId, lastSyncedPackageId);
+            result = syncManager.GetUserPackageIdsWithOrder(userId, deviceId, lastSyncedPackageId);
 
         It should_return_not_null_result = () =>
             result.ShouldNotBeNull();

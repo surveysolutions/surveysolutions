@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             syncItemsMetaContainer = CreateSyncItemsMetaContainer();
             request = CreateSyncItemsMetaContainerRequest(lastSyncedPackageId, deviceId);
 
-            syncManagerMock = Mock.Of<ISyncManager>(x => x.GetInterviewArIdsWithOrder(userId, deviceId, lastSyncedPackageId) == syncItemsMetaContainer);
+            syncManagerMock = Mock.Of<ISyncManager>(x => x.GetInterviewPackageIdsWithOrder(userId, deviceId, lastSyncedPackageId) == syncItemsMetaContainer);
 
             controller = CreateSyncController(syncManager: syncManagerMock, globalInfo: globalInfo);
         };
