@@ -438,6 +438,7 @@
     <EmbeddedResource Include="Views\Interview\ApproveRejectPartialView.cshtml" />
     <EmbeddedResource Include="Views\Interview\StaticTextPartialView.cshtml" />
     <EmbeddedResource Include="Views\Interview\QuestionPartialView.cshtml" />
+    <EmbeddedResource Include="Views\Shared\Error.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
