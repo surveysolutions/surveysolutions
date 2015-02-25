@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.Core.Synchronization
         };
 
         Because of = () =>
-            result = syncManager.GetQuestionnaireArIdsWithOrder(userId, deviceId, lastSyncedPackageId);
+            result = syncManager.GetQuestionnairePackageIdsWithOrder(userId, deviceId, lastSyncedPackageId);
 
         It should_return_not_null_result = () =>
             result.ShouldNotBeNull();

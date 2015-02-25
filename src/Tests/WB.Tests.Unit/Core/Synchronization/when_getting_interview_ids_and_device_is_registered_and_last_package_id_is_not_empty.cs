@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.Core.Synchronization
         
 
         Because of = () =>
-            result = syncManager.GetInterviewArIdsWithOrder(userId, deviceId, lastSyncedPackageId);
+            result = syncManager.GetInterviewPackageIdsWithOrder(userId, deviceId, lastSyncedPackageId);
 
         It should_return_not_null_result = () =>
             result.ShouldNotBeNull();
