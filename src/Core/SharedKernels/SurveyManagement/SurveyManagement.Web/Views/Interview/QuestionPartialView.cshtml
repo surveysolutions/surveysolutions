@@ -18,7 +18,7 @@
         </div>
     </td>
     <td class="question-answer">
-        @if (!Model.IsReadOnly && Model.Scope == QuestionScope.Supervisor && GlobalInfo.IsSupervisor)
+        @if (!Model.IsReadOnly && Model.Scope == QuestionScope.Supervisor && GlobalInfo.IsSupervisor && Model.IsEnabled)
         {
             switch (Model.QuestionType)
             {
