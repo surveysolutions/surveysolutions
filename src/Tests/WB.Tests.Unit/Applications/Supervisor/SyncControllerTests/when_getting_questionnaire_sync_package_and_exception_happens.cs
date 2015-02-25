@@ -1,6 +1,8 @@
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Web.Http;
+
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -38,18 +40,21 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
         };
 
         Because of = () =>
-            result = controller.GetQuestionnaireSyncPackage(request);
+            exception = Catch.Exception(() => controller.GetQuestionnaireSyncPackage(request));
+
+        It should_throw_HttpResponse_exception = () =>
+            exception.ShouldBeOfExactType<HttpResponseException>();
 
         It should_return_response_with_status_ServiceUnavailable = () =>
-            result.StatusCode.ShouldEqual(HttpStatusCode.ServiceUnavailable);
+           ((HttpResponseException)exception).Response.StatusCode.ShouldEqual(HttpStatusCode.ServiceUnavailable);
 
-        It should_return_response_with_ = () =>
-            result.Content.ReadAsStringAsync().Result.ShouldContain(errorMessage);
+        It should_return_response_with_error_message_specified = () =>
+            ((HttpResponseException)exception).Response.ReasonPhrase.ShouldContain(errorMessage);
 
         It should_return_error_message_with_code_ServerError = () =>
             errorDescription.Message.ShouldEqual(InterviewerSyncStrings.ServerError);
 
-        private static HttpResponseMessage result;
+        private static Exception exception;
         private static InterviewerSyncController controller;
         private static string androidId = "Android";
         private static Guid userId = Guid.Parse("11111111111111111111111111111111");

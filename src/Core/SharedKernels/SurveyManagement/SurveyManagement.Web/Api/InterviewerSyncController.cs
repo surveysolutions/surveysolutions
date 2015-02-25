@@ -74,8 +74,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
             Logger.Info(string.Format("Old version client. Client has protocol version {0} but current app protocol is {1} ", version, supervisorRevisionNumber));
 
-            return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
-                InterviewerSyncStrings.InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication);
+            return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, InterviewerSyncStrings.InterviewerIsNotCompatibleWithThisVersion);
         }
 
         private HttpResponseMessage CreateErrorResponse(HttpStatusCode httpStatusCode, SyncStatusCode code, string message)
@@ -86,6 +85,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
             return Request.CreateErrorResponse(httpStatusCode, serializedError);
         }
+
+        private HttpResponseException CreateRestException(HttpStatusCode httpStatusCode, SyncStatusCode code, string message)
+        {
+            var restErrorDescription = new RestErrorDescription { Code = code, Message = message };
+            return new HttpResponseException(new HttpResponseMessage(httpStatusCode)
+            {
+                ReasonPhrase = jsonUtils.Serialize(restErrorDescription)
+            });
+        }
+
 
         [HttpPost]
         [ApiBasicAuth]
@@ -158,7 +167,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     string.Format("Sync Handshake Error. ClientId:{0}, AndroidId : {1}, ClientRegistrationId:{2}, version: {3}",
                         request.ClientId, request.AndroidId, request.ClientRegistrationId, request.Version), exc);
 
-                return this.CreateErrorResponse(HttpStatusCode.InternalServerError, SyncStatusCode.General, exc.Message);
+                throw this.CreateRestException(HttpStatusCode.InternalServerError, SyncStatusCode.General, exc.Message);
             }
         }
 
@@ -185,7 +194,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             catch (Exception ex)
             {
                 Logger.Error(ex.Message, ex);
-                return this.CreateErrorResponse(HttpStatusCode.ServiceUnavailable, SyncStatusCode.General, InterviewerSyncStrings.ServerError);
+                throw this.CreateRestException(HttpStatusCode.ServiceUnavailable, SyncStatusCode.General, InterviewerSyncStrings.ServerError);
             }
         }
 
@@ -203,7 +212,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             catch (Exception ex)
             {
                 Logger.Error(ex.Message, ex);
-                return this.CreateErrorResponse(HttpStatusCode.ServiceUnavailable, SyncStatusCode.General, InterviewerSyncStrings.ServerError);
+                throw this.CreateRestException(HttpStatusCode.ServiceUnavailable, SyncStatusCode.General, InterviewerSyncStrings.ServerError);
             }
         }
 
@@ -221,7 +230,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             catch (Exception ex)
             {
                 Logger.Error(ex.Message, ex);
-                return this.CreateErrorResponse(HttpStatusCode.ServiceUnavailable, SyncStatusCode.General, InterviewerSyncStrings.ServerError);
+                throw this.CreateRestException(HttpStatusCode.ServiceUnavailable, SyncStatusCode.General, InterviewerSyncStrings.ServerError);
             }
         }
 

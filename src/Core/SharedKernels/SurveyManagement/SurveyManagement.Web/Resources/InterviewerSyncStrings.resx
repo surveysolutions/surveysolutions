@@ -132,6 +132,9 @@
   <data name="InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication" xml:space="preserve">
     <value>Synchronization failed. Your application is not compatible with server one. Update Interviewer application</value>
   </data>
+  <data name="InterviewerIsNotCompatibleWithThisVersion" xml:space="preserve">
+    <value>Synchronization failed. Your application is not compatible with server one. Uninstall your application and download new version of Interviewer app</value>
+  </data>
   <data name="AndroidDeviceIdWasNotProvided" xml:space="preserve">
     <value>Synchronization failed. Android device id was not provided.</value>
   </data>
