@@ -144,7 +144,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
             this.ExitIfCanceled();
             this.OnStatusChanged(new SynchronizationEventArgsWithPercent("Pushing interview data", Operation.Push, true, 0));
 
-            var dataByChuncks = this.dataProcessor.GetItemsForPush();
+            var dataByChuncks = this.dataProcessor.GetItemsToPush();
             int chunksCounter = 1;
             foreach (var chunckDescription in dataByChuncks)
             {
@@ -212,36 +212,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
             this.OnStatusChanged(new SynchronizationEventArgsWithPercent(
                 string.Format("Pulling packages for {0}", type.ToLower()), Operation.Pull, true, 0));
 
-            SyncItemsMetaContainer syncItemsMetaContainer = null;
-
-            bool foundNeededPackages = false;
-            int returnedBackCount = 0;
-
-            var lastKnownPackageId = this.packageIdStorage.GetLastStoredPackageId(packageType, currentUserId);
-            do
-            {
-                this.OnStatusChanged(new SynchronizationEventArgsWithPercent(
-                    string.Format("Receiving list of packageIds for {0} to download", type.ToLower()), Operation.Pull, true, 0));
-
-                syncItemsMetaContainer = await this.synchronizationService.GetPackageIdsToDownloadAsync(this.credentials, type, lastKnownPackageId);
-
-                if (syncItemsMetaContainer == null)
-                {
-                    returnedBackCount++;
-                    this.OnStatusChanged(
-                        new SynchronizationEventArgsWithPercent(
-                            string.Format("Last known package for {0} not found on server. Searching for previous. Tried {1} packageIdStorage",
-                                type.ToLower(),
-                                returnedBackCount),
-                            Operation.Pull, true, 0));
-
-                    lastKnownPackageId = this.packageIdStorage.GetChunkBeforeChunkWithId(packageType, lastKnownPackageId, currentUserId);
-                    continue;
-                }
-
-                foundNeededPackages = true;
-            }
-            while (!foundNeededPackages);
+            var syncItemsMetaContainer = await this.GetSyncItemsMetaContainer(currentUserId, type, packageType);
 
             int progressCounter = 0;
             int chunksToDownload = syncItemsMetaContainer.SyncPackagesMeta.Count();
@@ -270,6 +241,49 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
                         true,
                         ((progressCounter++) * 100) / chunksToDownload));
             }
+        }
+
+        private async Task<SyncItemsMetaContainer> GetSyncItemsMetaContainer(Guid currentUserId, string type, string packageType)
+        {
+            SyncItemsMetaContainer syncItemsMetaContainer = null;
+
+            bool foundNeededPackages = false;
+            int returnedBackCount = 0;
+
+            var lastKnownPackageId = this.packageIdStorage.GetLastStoredPackageId(packageType, currentUserId);
+            do
+            {
+                this.OnStatusChanged(
+                    new SynchronizationEventArgsWithPercent(
+                        string.Format("Receiving list of packageIds for {0} to download", type.ToLower()),
+                        Operation.Pull,
+                        true,
+                        0));
+
+                syncItemsMetaContainer =
+                    await this.synchronizationService.GetPackageIdsToDownloadAsync(this.credentials, type, lastKnownPackageId);
+
+                if (syncItemsMetaContainer == null)
+                {
+                    returnedBackCount++;
+                    this.OnStatusChanged(
+                        new SynchronizationEventArgsWithPercent(
+                            string.Format(
+                                "Last known package for {0} not found on server. Searching for previous. Tried {1} packageIdStorage",
+                                type.ToLower(),
+                                returnedBackCount),
+                            Operation.Pull,
+                            true,
+                            0));
+
+                    lastKnownPackageId = this.packageIdStorage.GetChunkBeforeChunkWithId(lastKnownPackageId,
+                        currentUserId);
+                    continue;
+                }
+                foundNeededPackages = true;
+            }
+            while (!foundNeededPackages);
+            return syncItemsMetaContainer;
         }
 
         private async Task DownloadAndProcessUserPackage(SynchronizationChunkMeta chunk)
