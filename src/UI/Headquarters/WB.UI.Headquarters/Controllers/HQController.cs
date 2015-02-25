@@ -171,7 +171,7 @@ namespace WB.UI.Headquarters.Controllers
             var preloadedPanelData = this.preloadedDataRepository.GetPreloadedDataOfPanel(id);
             var errors = this.preloadedDataVerifier.VerifyPanel(questionnaireId, version, preloadedPanelData).ToList();
             this.ViewBag.SupervisorList =
-              this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue }).Items;
+              this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue, Order = "UserName" }).Items;
 
             //clean up for security reasons
             if (errors.Any())
