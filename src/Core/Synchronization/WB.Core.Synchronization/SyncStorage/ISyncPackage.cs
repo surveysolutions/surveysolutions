@@ -1,11 +1,14 @@
-using System;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
-    public interface ISyncPackage : IIndexedView
+    public interface ISyncPackage : IView
     {
-        string PackageId { get; }
+        string PackageId { get; set; }
+    }
 
-        DateTime Timestamp { get; }
+    public interface IOrderableSyncPackage : ISyncPackage
+    {
+        long SortIndex { get; set; }
     }
 }

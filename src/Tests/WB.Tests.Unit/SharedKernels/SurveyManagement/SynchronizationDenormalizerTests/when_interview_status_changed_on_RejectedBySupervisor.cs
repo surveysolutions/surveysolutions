@@ -35,39 +35,32 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
                 x => x.BuildFrom(storedInterview, userId, InterviewStatus.RejectedBySupervisor, comments) == synchronizationDto);
             
 
-            interviewPackageStorageWriterMock = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation>>();
-            interviewPackageStorageWriterMock.Setup(x => x.GetNextOrder()).Returns(sortIndex);
-
             interviewSyncPackageContentMock = new Mock<IReadSideKeyValueStorage<InterviewSyncPackageContent>>();
 
             denormalizer = CreateDenormalizer(
                 interviews : interviews,
                 interviewPackageStorageWriter: interviewPackageStorageWriterMock.Object,
-                synchronizationDtoFactory: synchronizationDtoFactory,
-                interviewSyncPackageContentStorage: interviewSyncPackageContentMock.Object);
+                synchronizationDtoFactory: synchronizationDtoFactory);
         };
 
         Because of = () =>
             denormalizer.Handle(Create.Event.InterviewStatusChanged(interviewId, InterviewStatus.RejectedBySupervisor,comments));
 
         It should_create_interview_package = () =>
-            interviewPackageStorageWriterMock.Verify(x => x.Store(Moq.It.Is<InterviewSyncPackageMetaInformation>(
-                i => i.InterviewId == interviewId
-                     && i.ItemType == SyncItemType.Interview
-                     && i.PackageId == packageId
-                     && i.SortIndex == sortIndex), packageId), Times.Once);
-
-        It should_store_package_content_once = () =>
-            interviewSyncPackageContentMock.Verify(x => x.Store(Moq.It.IsAny<InterviewSyncPackageContent>(), packageId), Times.Once);
+            interviewPackageStorageWriterMock.Verify(x => x.Store(
+                Moq.It.IsAny<InterviewSyncPackageContent>(),
+                Moq.It.Is<InterviewSyncPackageMeta>(i => i.InterviewId == interviewId && i.ItemType == SyncItemType.Interview),
+                partialPackageId,
+                CounterId), Times.Once);
 
         private static InterviewSynchronizationDenormalizer denormalizer;
-        private static Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation>> interviewPackageStorageWriterMock;
+        private static Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent>> interviewPackageStorageWriterMock = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent>>();
+
         private static Mock<IReadSideKeyValueStorage<InterviewSyncPackageContent>> interviewSyncPackageContentMock;
         private static readonly Guid interviewId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         private static readonly Guid userId = Guid.Parse("11111111111111111111111111111111");
         private static IInterviewSynchronizationDtoFactory synchronizationDtoFactory;
-        private static int sortIndex = 5;
-        private static string packageId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$5";
+        private static string partialPackageId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         private static string comments = "comment";
     }
 }

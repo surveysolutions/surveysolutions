@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Questionnaire
 {
-    public class QuestionnairePreparedForDelete
+    public class QuestionnaireDisabled
     {
         public long QuestionnaireVersion { get; set; }
         public Guid? ResponsibleId { get; set; }

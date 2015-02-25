@@ -19,14 +19,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
     [Subject(typeof(InterviewSynchronizationDenormalizer))]
     internal class InterviewSynchronizationDenormalizerTestsContext
     {
+        protected const string CounterId = "InterviewSyncPackageСounter";
+
         protected static InterviewSynchronizationDenormalizer CreateDenormalizer(
             IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures = null,
             IReadSideKeyValueStorage<InterviewData> interviews = null,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummarys = null,
             IJsonUtils jsonUtils = null,
             IMetaInfoBuilder metaBuilder = null,
-            IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation> interviewPackageStorageWriter = null,
-            IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewSyncPackageContentStorage=null,
+            IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent> interviewPackageStorageWriter = null,
             IInterviewSynchronizationDtoFactory synchronizationDtoFactory = null)
         {
             var result = new InterviewSynchronizationDenormalizer(
@@ -36,9 +37,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
                 jsonUtils ?? Mock.Of<IJsonUtils>(),
                 metaBuilder ?? Mock.Of<IMetaInfoBuilder>(),
                 interviewPackageStorageWriter ??
-                Mock.Of<IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation>>(),
+                Mock.Of<IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent>>(),
                 Mock.Of<IReadSideRepositoryWriter<InterviewResponsible>>(),
-                interviewSyncPackageContentStorage ?? Mock.Of<IReadSideKeyValueStorage<InterviewSyncPackageContent>>(),
                 synchronizationDtoFactory ?? Mock.Of<IInterviewSynchronizationDtoFactory>());
 
             return result;

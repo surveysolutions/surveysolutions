@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 
         Because of = () =>
                 exception = Catch.Exception(
-                        () => questionnaire.PrepareQuestionnaireForDelete(new PrepareQuestionnaireForDelete(questionnaireVersion: 1, responsibleId: unknownUserId, questionnaireId: Guid.NewGuid())));
+                        () => questionnaire.DisableQuestionnaire(new DisableQuestionnaire(questionnaireVersion: 1, responsibleId: unknownUserId, questionnaireId: Guid.NewGuid())));
 
         It should_not_exception_be_null = () =>
             exception.ShouldNotBeNull();

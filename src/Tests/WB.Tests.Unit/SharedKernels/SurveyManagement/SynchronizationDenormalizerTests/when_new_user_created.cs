@@ -21,10 +21,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
         {
             usersRepository = Mock.Of<IReadSideRepositoryWriter<UserDocument>>();
 
-            userSyncPackageWriter = new Mock<IOrderableSyncPackageWriter<UserSyncPackage>>();
-
-            userSyncPackageWriter.Setup(x => x.GetNextOrder()).Returns(sortIndex);
-
             jsonUtilsMock = new Mock<IJsonUtils>();
 
             jsonUtilsMock.Setup(x => x.Serialize(Moq.It.IsAny<object>(), TypeSerializationSettings.AllTypes))
@@ -42,9 +38,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
         It should_create_new_user_package = () =>
             userSyncPackageWriter.Verify(
                 x => x.Store(
-                    Moq.It.Is<UserSyncPackage>(
-                        u => u.PackageId == packageId && u.SortIndex == sortIndex && u.UserId == userId),
-                    packageId),
+                    Moq.It.IsAny<UserSyncPackageContent>(),
+                    Moq.It.Is<UserSyncPackageMeta>(u => u.UserId == userId),
+                    partialPackageId,
+                    CounterId),
                 Times.Once);
 
         It should_serialize_not_empty_user = () => 
@@ -66,10 +63,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             user.IsLockedByHQ.ShouldEqual(isLocked);
 
         private static UserSynchronizationDenormalizer denormalizer;
-        private static Mock<IOrderableSyncPackageWriter<UserSyncPackage>> userSyncPackageWriter;
+        private static Mock<IOrderableSyncPackageWriter<UserSyncPackageMeta, UserSyncPackageContent>> userSyncPackageWriter= new Mock<IOrderableSyncPackageWriter<UserSyncPackageMeta, UserSyncPackageContent>>();
         private static Guid userId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        private static int sortIndex = 5;
-        private static string packageId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$5";
+        private static string partialPackageId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         private static UserDocument user;
         private static IReadSideRepositoryWriter<UserDocument> usersRepository;
         private static string name = "vasya";

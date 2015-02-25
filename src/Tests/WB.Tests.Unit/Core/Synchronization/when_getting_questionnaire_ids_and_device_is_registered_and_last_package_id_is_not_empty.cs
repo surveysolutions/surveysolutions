@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Core.Synchronization
             tabletDocument = CreateTabletDocument(deviceId, androidId);
             devices = Mock.Of<IReadSideRepositoryReader<TabletDocument>>(x => x.GetById(deviceId.FormatGuid()) == tabletDocument);
 
-            questionnaireSyncPackageMetas = new List<QuestionnaireSyncPackageMetaInformation>
+            questionnaireSyncPackageMetas = new List<QuestionnaireSyncPackageMeta>
             {
                 CreateQuestionnaireSyncPackageMetaInformation(questionnaireId, questionnaireVersion:1, sortIndex:1, itemType: SyncItemType.Questionnaire),
                 CreateQuestionnaireSyncPackageMetaInformation(questionnaireId, questionnaireVersion:1, sortIndex:2, itemType: SyncItemType.QuestionnaireAssembly),
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.Core.Synchronization
             lastSyncedPackageId = questionnaireSyncPackageMetas[0].PackageId;
 
             indexAccessorMock = new Mock<IReadSideRepositoryIndexAccessor>();
-            indexAccessorMock.Setup(x => x.Query<QuestionnaireSyncPackageMetaInformation>(questionnireQueryIndexName))
+            indexAccessorMock.Setup(x => x.Query<QuestionnaireSyncPackageMeta>(questionnireQueryIndexName))
                 .Returns(questionnaireSyncPackageMetas.AsQueryable());
             syncManager = CreateSyncManager(devices: devices, indexAccessor: indexAccessorMock.Object);
         };
@@ -70,6 +70,6 @@ namespace WB.Tests.Unit.Core.Synchronization
         private static Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");
         private static Mock<IReadSideRepositoryIndexAccessor> indexAccessorMock;
         private static readonly string questionnireQueryIndexName = typeof(QuestionnaireSyncPackagesByBriefFields).Name;
-        private static List<QuestionnaireSyncPackageMetaInformation> questionnaireSyncPackageMetas;
+        private static List<QuestionnaireSyncPackageMeta> questionnaireSyncPackageMetas;
     }
 }
