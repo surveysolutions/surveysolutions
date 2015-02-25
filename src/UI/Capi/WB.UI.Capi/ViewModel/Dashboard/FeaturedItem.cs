@@ -1,6 +1,6 @@
 using System;
 
-namespace CAPI.Android.Core.Model.ViewModel.Dashboard
+namespace WB.UI.Capi.ViewModel.Dashboard
 {
     public class FeaturedItem
     {
