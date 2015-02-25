@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+
 using WB.Core.BoundedContexts.Capi.Implementation.Authorization;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.GenericSubdomains.Utils.Implementation;
@@ -11,7 +12,7 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
-namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
+namespace WB.Core.BoundedContexts.Capi.Implementation.Synchronization
 {
     public class SynchronozationProcessor
     {
@@ -110,13 +111,13 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
 
                 HandshakePackage package = await this.synchronizationService.HandshakeAsync(credentials: this.credentials, shouldThisDeviceBeLinkedToUser: shouldThisDeviceBeLinkedToUser);
                 
-                userId = package.UserId;
+                this.userId = package.UserId;
 
                 this.interviewerSettings.SetClientRegistrationId(package.ClientRegistrationKey);
 
                 if (shouldThisDeviceBeLinkedToUser)
                 {
-                    this.cleanUpExecutor.DeleteAllInterviewsForUser(userId);
+                    this.cleanUpExecutor.DeleteAllInterviewsForUser(this.userId);
                 }
             }
             catch (Exception e)
@@ -150,7 +151,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
             {
                 this.ExitIfCanceled();
 
-                await this.synchronizationService.PushChunkAsync(credentials : credentials,  chunkAsString: chunckDescription.Content);
+                await this.synchronizationService.PushChunkAsync(credentials : this.credentials,  chunkAsString: chunckDescription.Content);
 
                 this.fileSyncRepository.MoveInterviewsBinaryDataToSyncFolder(chunckDescription.EventSourceId);
 
@@ -190,19 +191,19 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
 
         private async Task PullUserPackages()
         {
-            var packageProcessor = new Func<SynchronizationChunkMeta, Task>(DownloadAndProcessUserPackage);
+            var packageProcessor = new Func<SynchronizationChunkMeta, Task>(this.DownloadAndProcessUserPackage);
             await this.PullPackages(this.userId, "User", packageProcessor, SyncItemType.User);
         }
 
         private async Task PullQuestionnairePackages()
         {
-            var packageProcessor = new Func<SynchronizationChunkMeta, Task>(DownloadAndProcessQuestionnirePackage);
+            var packageProcessor = new Func<SynchronizationChunkMeta, Task>(this.DownloadAndProcessQuestionnirePackage);
             await this.PullPackages(Guid.Empty, "Questionnaire", packageProcessor, SyncItemType.Questionnaire);
         }
 
         private async Task PullInterviewPackages()
         {
-            var packageProcessor = new Func<SynchronizationChunkMeta, Task>(DownloadAndProcessInterviewPackage);
+            var packageProcessor = new Func<SynchronizationChunkMeta, Task>(this.DownloadAndProcessInterviewPackage);
             await this.PullPackages(this.userId, "Interview", packageProcessor, SyncItemType.Interview);
         }
 
@@ -290,7 +291,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
         {
             var package = await this.synchronizationService.RequestUserPackageAsync(credentials: this.credentials, chunkId: chunk.Id);
             this.dataProcessor.ProcessDownloadedPackage(package);
-            this.packageIdStorage.Append(package.PackageId, SyncItemType.User, userId, chunk.SortIndex);
+            this.packageIdStorage.Append(package.PackageId, SyncItemType.User, this.userId, chunk.SortIndex);
         }
 
         private async Task DownloadAndProcessQuestionnirePackage(SynchronizationChunkMeta chunk)
@@ -304,7 +305,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
         {
             var package = await this.synchronizationService.RequestInterviewPackageAsync(this.credentials, chunk.Id);
             this.dataProcessor.ProcessDownloadedPackage(package, chunk.ItemType);
-            this.packageIdStorage.Append(package.PackageId, SyncItemType.Interview, userId, chunk.SortIndex);
+            this.packageIdStorage.Append(package.PackageId, SyncItemType.Interview, this.userId, chunk.SortIndex);
         }
 
         public void Cancel(Exception exception = null)

@@ -231,7 +231,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             try
             {
-                var userArIdsWithOrder = this.syncManager.GetUserArIdsWithOrder(this.GlobalInfo.GetCurrentUser().Id, request.ClientRegistrationId, request.LastSyncedPackageId);
+                var userArIdsWithOrder = this.syncManager.GetUserPackageIdsWithOrder(this.GlobalInfo.GetCurrentUser().Id, request.ClientRegistrationId, request.LastSyncedPackageId);
                 
                 return Request.CreateResponse(HttpStatusCode.OK, userArIdsWithOrder);
             }
@@ -248,14 +248,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             try
             {
-                var questionnaireArIdsWithOrder = this.syncManager.GetQuestionnaireArIdsWithOrder(this.GlobalInfo.GetCurrentUser().Id, request.ClientRegistrationId, request.LastSyncedPackageId);
+                var questionnaireArIdsWithOrder = this.syncManager.GetQuestionnairePackageIdsWithOrder(this.GlobalInfo.GetCurrentUser().Id, request.ClientRegistrationId, request.LastSyncedPackageId);
                 
                 return Request.CreateResponse(HttpStatusCode.OK, questionnaireArIdsWithOrder);
             }
             catch (SyncPackageNotFoundException ex)
             {
                 this.Logger.Error(ex.Message, ex);
-                return this.CreateErrorResponse(HttpStatusCode.ServiceUnavailable, SyncStatusCode.General, InterviewerSyncStrings.ServerError);
+                return this.CreateErrorResponse(HttpStatusCode.NotFound, SyncStatusCode.General, InterviewerSyncStrings.ServerError);
             }
         }
 
@@ -265,14 +265,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             try
             {
-                var interviewArIdsWithOrder = this.syncManager.GetInterviewArIdsWithOrder(this.GlobalInfo.GetCurrentUser().Id, request.ClientRegistrationId, request.LastSyncedPackageId);
+                var interviewArIdsWithOrder = this.syncManager.GetInterviewPackageIdsWithOrder(this.GlobalInfo.GetCurrentUser().Id, request.ClientRegistrationId, request.LastSyncedPackageId);
 
                 return Request.CreateResponse(HttpStatusCode.OK, interviewArIdsWithOrder);
             }
             catch (SyncPackageNotFoundException ex)
             {
                 this.Logger.Error(ex.Message, ex);
-                return this.CreateErrorResponse(HttpStatusCode.ServiceUnavailable, SyncStatusCode.General, InterviewerSyncStrings.ServerError);
+                return this.CreateErrorResponse(HttpStatusCode.NotFound, SyncStatusCode.General, InterviewerSyncStrings.ServerError);
             }
         }
 

@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Core.Synchronization
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                syncManager.GetQuestionnaireArIdsWithOrder(userId, deviceId, lastSyncedPackageId));
+                syncManager.GetQuestionnairePackageIdsWithOrder(userId, deviceId, lastSyncedPackageId));
 
         It should_throw_SyncPackageNotFoundException_exception = () =>
             exception.ShouldBeOfExactType<SyncPackageNotFoundException>();
