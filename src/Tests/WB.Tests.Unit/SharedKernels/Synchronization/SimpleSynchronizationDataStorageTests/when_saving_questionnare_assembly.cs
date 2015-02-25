@@ -16,28 +16,22 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SimpleSynchronizationDataS
     {
         Establish context = () =>
         {
-            questionnairePackageStorageWriter = new Mock<IOrderableSyncPackageWriter<QuestionnaireSyncPackageMetaInformation>>();
-            questionnaireSyncPackageContentStorageMock = new Mock<IReadSideKeyValueStorage<QuestionnaireSyncPackageContent>>();
-            denormalizer = CreateDenormalizer(questionnairePackageStorageWriter: questionnairePackageStorageWriter.Object, questionnaireSyncPackageContentStorage: questionnaireSyncPackageContentStorageMock.Object);
+            denormalizer = CreateDenormalizer(questionnairePackageStorageWriter: questionnairePackageStorageWriter.Object);
         };
 
         private Because of = () => denormalizer.Handle(Create.QuestionnaireAssemblyImported(qId, version));
 
         It should_store_chunck = () =>
             questionnairePackageStorageWriter.Verify(x => x.Store(
-                Moq.It.Is<QuestionnaireSyncPackageMetaInformation>(s => s.ItemType == SyncItemType.QuestionnaireAssembly && s.QuestionnaireId == qId && s.QuestionnaireVersion == version),
-                Moq.It.IsAny<string>()), 
+                Moq.It.IsAny<QuestionnaireSyncPackageContent>(),
+                Moq.It.Is<QuestionnaireSyncPackageMeta>(s => s.ItemType == SyncItemType.QuestionnaireAssembly && s.QuestionnaireId == qId && s.QuestionnaireVersion == version),
+                Moq.It.IsAny<string>(),
+                CounterId), 
                 Times.Once);
-
-        It should_store_delete_package_content = () =>
-           questionnaireSyncPackageContentStorageMock.Verify(
-            x => x.Store(Moq.It.IsAny<QuestionnaireSyncPackageContent>(), Moq.It.IsAny<string>()),
-            Times.Once);
 
         private static QuestionnaireSynchronizationDenormalizer denormalizer;
         private static Guid qId = Guid.Parse("1BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static long version = 3;
-        private static Mock<IOrderableSyncPackageWriter<QuestionnaireSyncPackageMetaInformation>> questionnairePackageStorageWriter;
-        private static Mock<IReadSideKeyValueStorage<QuestionnaireSyncPackageContent>> questionnaireSyncPackageContentStorageMock;
+        private static Mock<IOrderableSyncPackageWriter<QuestionnaireSyncPackageMeta, QuestionnaireSyncPackageContent>> questionnairePackageStorageWriter = new Mock<IOrderableSyncPackageWriter<QuestionnaireSyncPackageMeta, QuestionnaireSyncPackageContent>>();
     }
 }

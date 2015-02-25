@@ -21,10 +21,10 @@ namespace WB.Tests.Unit.Core.Synchronization
         {
             tabletDocument = CreateTabletDocument(deviceId, androidId);
             devices = Mock.Of<IReadSideRepositoryReader<TabletDocument>>(x => x.GetById(deviceId.FormatGuid()) == tabletDocument);
-            userSyncPackage = CreateUserSyncPackageDto(userId, content, sortIndex);
+            userSyncPackageMeta = CreateUserSyncPackageContent(content, syncedPackageId);
 
-            userPackageStorage = Mock.Of<IQueryableReadSideRepositoryReader<UserSyncPackage>>
-                (x => x.GetById(syncedPackageId) == userSyncPackage);
+            userPackageStorage = Mock.Of<IReadSideKeyValueStorage<UserSyncPackageContent>>
+                (x => x.GetById(syncedPackageId) == userSyncPackageMeta);
 
             syncManager = CreateSyncManager(devices: devices, userPackageStorage: userPackageStorage);
         };
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.Core.Synchronization
             package.ShouldNotBeNull();
 
         It should_return_package_with_PackageId_specified = () =>
-            package.PackageId.ShouldEqual("11111111111111111111111111111111$18");
+            package.PackageId.ShouldEqual(syncedPackageId);
 
         It should_return_package_with_Content_specified = () =>
             package.Content.ShouldEqual(content);
@@ -51,10 +51,9 @@ namespace WB.Tests.Unit.Core.Synchronization
 
         private const string syncedPackageId = "some_sync_package_id";
         private const string content = "some_sync_package_content";
-        private static IQueryableReadSideRepositoryReader<UserSyncPackage> userPackageStorage;
+        private static IReadSideKeyValueStorage<UserSyncPackageContent> userPackageStorage;
 
         private static Guid userId = Guid.Parse("11111111111111111111111111111111");
-        private static long sortIndex = 18;
-        private static UserSyncPackage userSyncPackage;
+        private static UserSyncPackageContent userSyncPackageMeta;
     }
 }

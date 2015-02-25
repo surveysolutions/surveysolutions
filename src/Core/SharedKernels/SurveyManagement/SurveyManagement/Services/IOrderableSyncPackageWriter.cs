@@ -5,9 +5,10 @@ using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Services
 {
-    public interface IOrderableSyncPackageWriter<T> : IReadSideRepositoryWriter<T>, IReadSideRepositoryCleaner, IChacheableRepositoryWriter
-        where T : class, IReadSideRepositoryEntity, IIndexedView
+    public interface IOrderableSyncPackageWriter<TMeta, TContent> : IReadSideRepositoryCleaner, IChacheableRepositoryWriter
+        where TMeta : class, IReadSideRepositoryEntity, IOrderableSyncPackage
+        where TContent : class, IReadSideRepositoryEntity, ISyncPackage
     {
-        long GetNextOrder();
+        void Store(TContent content, TMeta syncPackageMeta, string partialPackageId, string counterId);
     }
 }

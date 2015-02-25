@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
@@ -26,21 +26,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IJsonUtils jsonUtils;
-        private readonly IOrderableSyncPackageWriter<UserSyncPackage> userPackageStorageWriter;
+        private readonly IOrderableSyncPackageWriter<UserSyncPackageMeta, UserSyncPackageContent> syncPackageWriter;
+
+        private const string CounterId = "UserSyncPackageСounter";
 
         public UserSynchronizationDenormalizer(
             IReadSideRepositoryWriter<UserDocument> users, 
             IJsonUtils jsonUtils,
-            IOrderableSyncPackageWriter<UserSyncPackage> userPackageStorageWriter)
+            IOrderableSyncPackageWriter<UserSyncPackageMeta, UserSyncPackageContent> syncPackageWriter)
         {
             this.users = users;
             this.jsonUtils = jsonUtils;
-            this.userPackageStorageWriter = userPackageStorageWriter;
+            this.syncPackageWriter = syncPackageWriter;
         }
 
         public override object[] Writers
         {
-            get { return new object[] { this.userPackageStorageWriter }; }
+            get { return new object[] { this.syncPackageWriter }; }
         }
 
         public override object[] Readers
@@ -55,7 +57,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                       {
                           PublicKey = evnt.EventSourceId,
                           CreationDate = evnt.EventTimeStamp,
-
                           UserName = evnt.Payload.Name,
                           Password = evnt.Payload.Password,
                           Email = evnt.Payload.Email,
@@ -117,20 +118,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return;
             }
 
-            var sortIndex = userPackageStorageWriter.GetNextOrder();
+            string content = this.jsonUtils.Serialize(user, TypeSerializationSettings.AllTypes);
 
-            var synchronizationDelta = new UserSyncPackage(
-                userId: user.PublicKey,
-                content: this.GetItemAsContent(user),
-                timestamp: timestamp,
-                sortIndex: sortIndex);
+            var syncPackageMeta = new UserSyncPackageMeta(user.PublicKey, timestamp);
+            
+            var syncPackageContent = new UserSyncPackageContent(content);
 
-            this.userPackageStorageWriter.Store(synchronizationDelta, synchronizationDelta.PackageId);
-        }
-
-        protected string GetItemAsContent(UserDocument item)
-        {
-            return this.jsonUtils.Serialize(item, TypeSerializationSettings.AllTypes);
+            syncPackageWriter.Store(syncPackageContent, syncPackageMeta, user.PublicKey.FormatGuid(), CounterId);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         private readonly ICommandService commandService;
         private readonly IReadSideRepositoryIndexAccessor indexAccessor;
 
-        private readonly IQueryableReadSideRepositoryReader<UserSyncPackage> userPackageStorage;
+        private readonly IReadSideKeyValueStorage<UserSyncPackageContent> userPackageStorage;
         private readonly IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore;
         private readonly IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnaireSyncPackageContentStore;
 
@@ -34,8 +34,8 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         public SyncManager(IReadSideRepositoryReader<TabletDocument> devices, 
             IIncomingSyncPackagesQueue incomingSyncPackagesQueue, 
             ICommandService commandService,
-            IReadSideRepositoryIndexAccessor indexAccessor, 
-            IQueryableReadSideRepositoryReader<UserSyncPackage> userPackageStorage,
+            IReadSideRepositoryIndexAccessor indexAccessor,
+            IReadSideKeyValueStorage<UserSyncPackageContent> userPackageStorage,
             IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore, 
             IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnaireSyncPackageContentStore,
             ISyncLogger syncLogger)
@@ -103,7 +103,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
             var allFromLastPakageByQuestionnaire =
-                this.GetUpdateFromLastPackage(lastSyncedPackageId, this.indexAccessor.Query<QuestionnaireSyncPackageMetaInformation>(questionnireQueryIndexName));
+                this.GetUpdateFromLastPackage(lastSyncedPackageId, this.indexAccessor.Query<QuestionnaireSyncPackageMeta>(questionnireQueryIndexName));
 
             var updateFromLastPakageByQuestionnaire = FilterDeletedQuestionnaires(allFromLastPakageByQuestionnaire);
 
@@ -120,7 +120,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
             var updateFromLastPakageByUser =
-                this.GetUpdateFromLastPackage(lastSyncedPackageId, this.indexAccessor.Query<UserSyncPackage>(userQueryIndexName).Where(x => x.UserId == userId))
+                this.GetUpdateFromLastPackage(lastSyncedPackageId, this.indexAccessor.Query<UserSyncPackageMeta>(userQueryIndexName).Where(x => x.UserId == userId))
                 .Select(x => new SynchronizationChunkMeta(x.PackageId,x.SortIndex,x.UserId, null))
                 .ToList(); 
 
@@ -136,7 +136,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         {
             this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
-            var allUpdatesFromLastPakage = this.GetUpdateFromLastPackage(lastSyncedPackageId, this.indexAccessor.Query<InterviewSyncPackageMetaInformation>(interviewQueryIndexName).Where(x => x.UserId == userId));
+            var allUpdatesFromLastPakage = this.GetUpdateFromLastPackage(lastSyncedPackageId, this.indexAccessor.Query<InterviewSyncPackageMeta>(interviewQueryIndexName).Where(x => x.UserId == userId));
 
             var updateFromLastPakageByInterview = FilterInterviews(allUpdatesFromLastPakage);
 
@@ -162,8 +162,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             return new UserSyncPackageDto
                    {
                        PackageId = package.PackageId, 
-                       Content = package.Content, 
-                       UserId = package.UserId
+                       Content = package.Content
                    };
         }
 
@@ -204,7 +203,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                    };
         }
 
-        private List<SynchronizationChunkMeta> FilterDeletedQuestionnaires(IList<QuestionnaireSyncPackageMetaInformation> packages)
+        private List<SynchronizationChunkMeta> FilterDeletedQuestionnaires(IList<QuestionnaireSyncPackageMeta> packages)
         {
             var deletedQuestionnaires = packages.Where(x => x.ItemType == SyncItemType.DeleteQuestionnaire);
 
@@ -214,7 +213,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                 .ToList();
         }
 
-        private List<SynchronizationChunkMeta> FilterInterviews(IList<InterviewSyncPackageMetaInformation> packages)
+        private List<SynchronizationChunkMeta> FilterInterviews(IList<InterviewSyncPackageMeta> packages)
         {
             var lastInterviewPackageMap = packages
                 .GroupBy(x => x.InterviewId)
@@ -226,7 +225,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                 .ToList();
         }
 
-        private IList<T> GetUpdateFromLastPackage<T>(string lastSyncedPackageId, IQueryable<T> items) where T : ISyncPackage
+        private IList<T> GetUpdateFromLastPackage<T>(string lastSyncedPackageId, IQueryable<T> items) where T : IOrderableSyncPackage
         {
             if (lastSyncedPackageId == null)
             {

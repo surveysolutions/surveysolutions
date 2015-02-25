@@ -6,7 +6,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace CAPI.Android.Core.Model.ViewModel.Dashboard
+namespace WB.UI.Capi.ViewModel.Dashboard
 {
     public class QuestionnaireDTO : DenormalizerRow
     {

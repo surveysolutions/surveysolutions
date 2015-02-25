@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
@@ -28,7 +29,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [Authorize(Roles = "Headquarter, Supervisor")]
         public ActionResult Device(string id)
         {
-            return this.View(this.tabletInformationService.GetTabletLog(id));
+            TabletLogView model = this.tabletInformationService.GetTabletLog(id);
+            return this.View(model);
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http;
 
 using Machine.Specifications;
 
@@ -34,7 +35,7 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
 
 
         Because of = () =>
-            result = controller.GetQuestionnaireArKeys(request);
+            result = controller.GetQuestionnaireArKeys(request).Content.ReadAsAsync<SyncItemsMetaContainer>().Result;
 
         It should_return_not_null_package = () =>
             result.ShouldNotBeNull();

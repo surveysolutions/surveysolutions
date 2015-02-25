@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
-using Java.IO;
 
-namespace CAPI.Android.Core.Model.ViewModel.Dashboard
+namespace WB.UI.Capi.ViewModel.Dashboard
 {
     public class DashboardModel : MvxViewModel
     {

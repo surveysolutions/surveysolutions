@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace CAPI.Android.Core.Model.ViewModel.Dashboard
+namespace WB.UI.Capi.ViewModel.Dashboard
 {
     public class DashboardQuestionnaireItem
     {

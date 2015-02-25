@@ -6,7 +6,7 @@ using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.Implementation.ReadSide.Indexes
 {
-    public class InterviewSyncPackagesByBriefFields : AbstractIndexCreationTask<InterviewSyncPackageMetaInformation, InterviewSyncPackagesByBriefFields.SyncPackageBrief>
+    public class InterviewSyncPackagesByBriefFields : AbstractIndexCreationTask<InterviewSyncPackageMeta, InterviewSyncPackagesByBriefFields.SyncPackageBrief>
     {
         public class SyncPackageBrief
         {

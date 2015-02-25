@@ -6,7 +6,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace CAPI.Android.Core.Model.ViewModel.Dashboard
+namespace WB.UI.Capi.ViewModel.Dashboard
 {
     public class DashboardFactory : IViewFactory<DashboardInput, DashboardModel>
     {
@@ -26,7 +26,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 
             var userId = input.UserId.FormatGuid();
 
-            var surveys = surveyDtoDocumentStorage.Filter(s => true).ToList();
+            var surveys = this.surveyDtoDocumentStorage.Filter(s => true).ToList();
             List<QuestionnaireDTO> questionnaires = this.questionnaireDtoDocumentStorage.Filter(q => q.Responsible == userId).ToList();
 
             foreach (SurveyDto surveyDto in surveys)

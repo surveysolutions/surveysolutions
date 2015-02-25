@@ -1,8 +1,8 @@
 using System;
+using System.Net.Http;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
-
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection;
@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
                 ClientRegistrationId = Guid.NewGuid(),
                 Version = capiVersion,
                 ShouldDeviceBeLinkedToUser = false
-            });
+            }).Content.ReadAsAsync<HandshakePackage>().Result;
 
         It should_call_LinkUserToDevice_method = () =>
            syncManagerMock.Verify(
