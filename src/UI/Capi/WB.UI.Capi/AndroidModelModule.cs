@@ -5,8 +5,6 @@ using Android.OS;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
 using AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage;
-
-using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using Main.Core.Documents;

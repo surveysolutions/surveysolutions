@@ -2,7 +2,7 @@ using System;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
 using WB.Core.GenericSubdomains.Utils;
 
-namespace CAPI.Android.Core.Model.ViewModel.Dashboard
+namespace WB.UI.Capi.ViewModel.Dashboard
 {
     public class SurveyDto : DenormalizerRow
     {

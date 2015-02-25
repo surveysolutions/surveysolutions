@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace CAPI.Android.Core.Model.ViewModel.Dashboard
+namespace WB.UI.Capi.ViewModel.Dashboard
 {
     public class FeaturedCategoricalItem : FeaturedItem
     {

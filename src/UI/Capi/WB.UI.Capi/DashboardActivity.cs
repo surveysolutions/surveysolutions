@@ -10,7 +10,6 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Android.Content.PM;
-using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.ChangeLog;

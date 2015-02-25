@@ -1,6 +1,6 @@
 using Cirrious.MvvmCross.ViewModels;
 
-namespace CAPI.Android.Core.Model.ViewModel.Synchronization
+namespace WB.UI.Capi.ViewModel.Synchronization
 {
     public class SyncViewModel : MvxViewModel
     {
