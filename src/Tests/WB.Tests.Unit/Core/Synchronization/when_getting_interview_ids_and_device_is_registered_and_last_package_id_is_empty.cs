@@ -58,11 +58,11 @@ namespace WB.Tests.Unit.Core.Synchronization
                 interviewSyncPackageMetas[5].PackageId);
 
         It should_return_list_with_ordered_by_index_items = () =>
-            result.SyncPackagesMeta.Select(x => x.SortIndex).ShouldContainOrderedItems(new long[]
-                                                                                       {
-                                                                                           interviewSyncPackageMetas[4].SortIndex,
-                                                                                           interviewSyncPackageMetas[5].SortIndex
-                                                                                       });
+            result.SyncPackagesMeta.Select(x => x.SortIndex).ShouldEqual(new long[]
+                                                                        {
+                                                                            interviewSyncPackageMetas[4].SortIndex,
+                                                                            interviewSyncPackageMetas[5].SortIndex
+                                                                        });
 
         private static SyncManager syncManager;
         private static SyncItemsMetaContainer result;

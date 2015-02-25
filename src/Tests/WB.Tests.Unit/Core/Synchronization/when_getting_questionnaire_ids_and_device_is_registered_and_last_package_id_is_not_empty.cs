@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.Core.Synchronization
             result.SyncPackagesMeta.Select(x => x.Id).ShouldContainOnly("22222222222222222222222222222222_1$3");
 
         It should_return_list_with_ordered_by_index_items = () =>
-            result.SyncPackagesMeta.Select(x => x.SortIndex).ShouldContainOrderedItems(new long[] { 3 });
+            result.SyncPackagesMeta.Select(x => x.SortIndex).ShouldEqual(new long[] { 3 });
 
         private static SyncManager syncManager;
         private static SyncItemsMetaContainer result;
