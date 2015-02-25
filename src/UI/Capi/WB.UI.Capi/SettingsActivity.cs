@@ -337,7 +337,6 @@ namespace WB.UI.Capi
             {
                 try
                 {
-                    interviewerSettings.SetSyncAddressPoint(editSettingsSync.Text);
                     editSettingsSync.SetBackgroundColor(Color.LightGreen);
                 }
                 catch(ArgumentException)

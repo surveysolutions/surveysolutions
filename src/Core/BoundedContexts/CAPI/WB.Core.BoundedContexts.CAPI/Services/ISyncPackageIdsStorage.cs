@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Capi.Services
     {
         void Append(string packageId, string packageType, Guid userId, long sortIndex);
 
-        string GetChunkBeforeChunkWithId(string type, string lastKnownPackageId, Guid userId);
+        string GetChunkBeforeChunkWithId(string lastKnownPackageId, Guid userId);
 
         string GetLastStoredPackageId(string type, Guid currentUserId);
 

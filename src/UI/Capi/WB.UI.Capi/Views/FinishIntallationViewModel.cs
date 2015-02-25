@@ -69,7 +69,6 @@ namespace WB.UI.Capi.Views
         {
             try
             {
-                this.interviewerSettings.SetSyncAddressPoint(this.SyncEndpoint);
                 NavigationService.NavigateTo(CapiPages.Synchronization, new Dictionary<string, string>
                 {
                     {"Login", Login},

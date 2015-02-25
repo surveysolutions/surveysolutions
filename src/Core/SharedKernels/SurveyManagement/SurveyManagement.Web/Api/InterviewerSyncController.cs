@@ -227,7 +227,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpPost]
         [ApiBasicAuth]
-        public HttpResponseMessage GetUserArKeys(SyncItemsMetaContainerRequest request)
+        public HttpResponseMessage GetUserPackageIds(SyncItemsMetaContainerRequest request)
         {
             try
             {
@@ -238,13 +238,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             catch (SyncPackageNotFoundException ex)
             {
                 this.Logger.Error(ex.Message, ex);
-                return this.CreateErrorResponse(HttpStatusCode.ServiceUnavailable, SyncStatusCode.General, InterviewerSyncStrings.ServerError);
+                return this.CreateErrorResponse(HttpStatusCode.NotFound, SyncStatusCode.General, InterviewerSyncStrings.ServerError);
             }
         }
 
         [HttpPost]
         [ApiBasicAuth]
-        public HttpResponseMessage GetQuestionnaireArKeys(SyncItemsMetaContainerRequest request)
+        public HttpResponseMessage GetQuestionnairePackageIds(SyncItemsMetaContainerRequest request)
         {
             try
             {
@@ -261,7 +261,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpPost]
         [ApiBasicAuth]
-        public HttpResponseMessage GetInterviewArKeys(SyncItemsMetaContainerRequest request)
+        public HttpResponseMessage GetInterviewPackageIds(SyncItemsMetaContainerRequest request)
         {
             try
             {

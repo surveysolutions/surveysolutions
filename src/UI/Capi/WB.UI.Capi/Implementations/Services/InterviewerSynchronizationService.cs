@@ -66,7 +66,7 @@ namespace WB.UI.Capi.Implementations.Services
                           };
 
             var syncItemsMetaContainer = await this.restService.PostAsync<SyncItemsMetaContainer>(
-                        url: string.Format("api/InterviewerSync/Get{0}ArKeys", type),
+                        url: string.Format("api/InterviewerSync/Get{0}PackageIds", type),
                         credentials: new RestCredentials { Login = credentials.Login, Password = credentials.Password },
                         request: request);
 
