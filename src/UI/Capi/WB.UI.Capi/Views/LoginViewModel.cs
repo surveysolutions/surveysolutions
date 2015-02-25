@@ -17,6 +17,11 @@ namespace WB.UI.Capi.Views
             get { return ServiceLocator.Current.GetInstance<INavigationService>(); }
         }
 
+        private IDataCollectionAuthentication DataCollectionAuthentication
+        {
+            get { return ServiceLocator.Current.GetInstance<IDataCollectionAuthentication>(); }
+        }
+
         private IPasswordHasher passwordHasher
         {
             get { return ServiceLocator.Current.GetInstance<IPasswordHasher>(); }
@@ -54,22 +59,20 @@ namespace WB.UI.Capi.Views
 
         public LoginActivityViewModel()
         {
-            this.Logins = CapiApplication.Membership.GetKnownUsers().Result;
-            RaisePropertyChanged(() => this.KnownUsers);
 #if DEBUG
             this.Login = "inter";
             this.Password = "Qwerty1234";
 #endif
+        }
+
+        public void Init()
+        {
+            this.Logins = DataCollectionAuthentication.GetKnownUsers().Result;
+            RaisePropertyChanged(() => this.KnownUsers);
             if (this.Logins.Count == 1)
             {
                 this.Login = this.Logins.First();
             }
-        }
-
-        public void UpdateViewModel()
-        {
-            this.Logins = CapiApplication.Membership.GetKnownUsers().Result;
-            RaisePropertyChanged(() => this.KnownUsers);
         }
 
         public IMvxCommand LoginCommand

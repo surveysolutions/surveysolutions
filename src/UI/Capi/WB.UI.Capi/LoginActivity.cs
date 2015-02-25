@@ -61,7 +61,7 @@ namespace WB.UI.Capi
             var viewModel = this.DataContext as LoginActivityViewModel;
             if(viewModel==null)
                 return;
-            viewModel.UpdateViewModel();
+            viewModel.Init();
         }
     }
 }
