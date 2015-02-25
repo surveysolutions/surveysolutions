@@ -37,8 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
             jsonUtilsMock.Setup(x => x.Deserialize<UserDocument>(Moq.It.IsAny<string>())).Returns(userDocument);
             syncItem = new UserSyncPackageDto()
                        {
-                           Content = "some content",
-                           UserId = userDocument.PublicKey
+                           Content = "some content"
                        };
 
             commandService=new Mock<ICommandService>();

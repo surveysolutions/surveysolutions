@@ -16,15 +16,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
     [Subject(typeof(UserSynchronizationDenormalizer))]
     internal class UserSynchronizationDenormalizerTestsContext
     {
+        protected const string CounterId = "UserSyncPackageСounter";
+
         protected static UserSynchronizationDenormalizer CreateDenormalizer(
              IReadSideRepositoryWriter<UserDocument> users = null,
             IJsonUtils jsonUtils = null,
-            IOrderableSyncPackageWriter<UserSyncPackage> userPackageStorageWriter = null)
+            IOrderableSyncPackageWriter<UserSyncPackageMeta, UserSyncPackageContent> userPackageStorageWriter = null)
         {
             var result = new UserSynchronizationDenormalizer(
                 users ?? Mock.Of<IReadSideRepositoryWriter<UserDocument>>(),
                 jsonUtils ?? Mock.Of<IJsonUtils>(),
-                userPackageStorageWriter ?? Mock.Of<IOrderableSyncPackageWriter<UserSyncPackage>>());
+                userPackageStorageWriter ?? Mock.Of<IOrderableSyncPackageWriter<UserSyncPackageMeta, UserSyncPackageContent>>());
 
             return result;
         }

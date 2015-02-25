@@ -17,6 +17,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Services.DeleteQuestionnaireTemplate;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -29,14 +30,14 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.Questionnaire
             IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry> plainStorage = null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
             IHeadquartersQuestionnaireReader headquartersQuestionnaireReader = null, HeadquartersPullContext headquartersPullContext = null,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviews = null, ICommandService commandService = null)
+            IDeleteQuestionnaireService deleteQuestionnaireService = null, ICommandService commandService = null)
         {
             return new QuestionnaireSynchronizer(atomFeedReader ?? Mock.Of<IAtomFeedReader>(), Create.HeadquartersSettings(questionnaireDetailsEndpoint: "http://localhost", questionnaireAssemblyEndpoint: "http://localhost"),
                 headquartersPullContext ?? new HeadquartersPullContext(Mock.Of<IPlainStorageAccessor<SynchronizationStatus>>()),
                 plainStorage ?? Mock.Of<IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry>>(), Mock.Of<ILogger>(),
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(), commandService ?? Mock.Of<ICommandService>(),
                 headquartersQuestionnaireReader ?? Mock.Of<IHeadquartersQuestionnaireReader>(),
-                interviews ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>());
+                deleteQuestionnaireService ?? Mock.Of<IDeleteQuestionnaireService>());
 
         }
 

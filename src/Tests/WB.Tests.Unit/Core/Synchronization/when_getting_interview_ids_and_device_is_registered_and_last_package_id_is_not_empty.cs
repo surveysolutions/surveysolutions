@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.Core.Synchronization
             tabletDocument = CreateTabletDocument(deviceId, androidId);
             devices = Mock.Of<IReadSideRepositoryReader<TabletDocument>>(x => x.GetById(deviceId.FormatGuid()) == tabletDocument);
 
-            interviewSyncPackageMetas = new List<InterviewSyncPackageMetaInformation>
+            interviewSyncPackageMetas = new List<InterviewSyncPackageMeta>
                                         {
                                             CreateInterviewSyncPackageMetaInformation(interviewId, sortIndex:1, itemType: SyncItemType.Interview, userId:userId),
                                             CreateInterviewSyncPackageMetaInformation(interviewId, sortIndex:2, itemType: SyncItemType.DeleteInterview, userId:userId),
@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.Core.Synchronization
             lastSyncedPackageId = interviewSyncPackageMetas[0].PackageId;
 
             indexAccessorMock = new Mock<IReadSideRepositoryIndexAccessor>();
-            indexAccessorMock.Setup(x => x.Query<InterviewSyncPackageMetaInformation>(interviewQueryIndexName))
+            indexAccessorMock.Setup(x => x.Query<InterviewSyncPackageMeta>(interviewQueryIndexName))
                 .Returns(interviewSyncPackageMetas.AsQueryable());
             syncManager = CreateSyncManager(devices: devices, indexAccessor: indexAccessorMock.Object);
         };
@@ -82,6 +82,6 @@ namespace WB.Tests.Unit.Core.Synchronization
         private static readonly Guid interview1Id = Guid.Parse("44444444444444444444444444444444");
         private static Mock<IReadSideRepositoryIndexAccessor> indexAccessorMock;
         private static readonly string interviewQueryIndexName = typeof(InterviewSyncPackagesByBriefFields).Name;
-        private static List<InterviewSyncPackageMetaInformation> interviewSyncPackageMetas;
+        private static List<InterviewSyncPackageMeta> interviewSyncPackageMetas;
     }
 }

@@ -31,7 +31,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             var synchronizationDtoFactory = Mock.Of<IInterviewSynchronizationDtoFactory>(
                     x => x.BuildFrom(data, Moq.It.IsAny<Guid>(), InterviewStatus.RejectedBySupervisor, Moq.It.IsAny<string>()) == synchronizationDto);
             
-
             var interviewSummaryWriterMock = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
             interviewSummaryWriterMock.SetReturnsDefault(new InterviewSummary
             {
@@ -43,14 +42,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
                                     }
             });
 
-            interviewPackageStorageWriter = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation>>();
-            interviewSyncPackageContentStorage = new Mock<IReadSideKeyValueStorage<InterviewSyncPackageContent>>();
-
             synchronizationDenormalizer = CreateDenormalizer(
                 interviews: interviews.Object,
                 interviewPackageStorageWriter: interviewPackageStorageWriter.Object,
                 interviewSummarys: interviewSummaryWriterMock.Object,
-                interviewSyncPackageContentStorage: interviewSyncPackageContentStorage.Object,
                 synchronizationDtoFactory: synchronizationDtoFactory);
         };
 
@@ -62,16 +57,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
 
         It should_create_deletion_synchronization_package = () =>
             interviewPackageStorageWriter.Verify(x => 
-                x.Store(Moq.It.Is<InterviewSyncPackageMetaInformation>(s => s.InterviewId == interviewId), Moq.It.IsAny<string>()), Times.Exactly(2));
-
-        It should_store_content_of_sync_packages_twice = () =>
-            interviewSyncPackageContentStorage.Verify(x =>
-                x.Store(Moq.It.IsAny<InterviewSyncPackageContent>(), Moq.It.IsAny<string>()), Times.Exactly(2));
+                x.Store(Moq.It.IsAny<InterviewSyncPackageContent>(),
+                Moq.It.Is<InterviewSyncPackageMeta>(s => s.InterviewId == interviewId),
+                Moq.It.IsAny<string>(),
+                CounterId), Times.Exactly(2));
 
         static InterviewSynchronizationDenormalizer synchronizationDenormalizer;
         static Guid interviewId;
-        private static Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation>> interviewPackageStorageWriter;
-        private static Mock<IReadSideKeyValueStorage<InterviewSyncPackageContent>> interviewSyncPackageContentStorage;
+        private static Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent>> interviewPackageStorageWriter = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent>>();
     }
 }
-

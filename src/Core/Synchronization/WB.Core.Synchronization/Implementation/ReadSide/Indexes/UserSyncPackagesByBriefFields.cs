@@ -6,13 +6,11 @@ using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.Implementation.ReadSide.Indexes
 {
-    public class UserSyncPackagesByBriefFields : AbstractIndexCreationTask<UserSyncPackage, UserSyncPackagesByBriefFields.SyncPackageBrief>
+    public class UserSyncPackagesByBriefFields : AbstractIndexCreationTask<UserSyncPackageMeta, UserSyncPackagesByBriefFields.SyncPackageBrief>
     {
         public class SyncPackageBrief
         {
             public string PackageId { get; set; }
-
-            public DateTime Timestamp { get; set; }
 
             public Guid UserId { get; set; }
 
@@ -24,7 +22,6 @@ namespace WB.Core.Synchronization.Implementation.ReadSide.Indexes
             Map = interviews => from doc in interviews
                                      select new SyncPackageBrief {
                                          PackageId = doc.PackageId, 
-                                         Timestamp = doc.Timestamp, 
                                          UserId = doc.UserId,
                                          SortIndex = doc.SortIndex 
                                      };

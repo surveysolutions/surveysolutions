@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Core.Synchronization
             tabletDocument = CreateTabletDocument(deviceId, androidId);
             devices = Mock.Of<IReadSideRepositoryReader<TabletDocument>>(x => x.GetById(deviceId.FormatGuid()) == tabletDocument);
 
-            userPackageStorage = Mock.Of<IQueryableReadSideRepositoryReader<UserSyncPackage>>();
+            userPackageStorage = Mock.Of<IReadSideKeyValueStorage<UserSyncPackageContent>>();
 
             syncManager = CreateSyncManager(devices: devices, userPackageStorage: userPackageStorage);
         };
@@ -46,6 +46,6 @@ namespace WB.Tests.Unit.Core.Synchronization
         private static IReadSideRepositoryReader<TabletDocument> devices;
 
         private const string syncedPackageId = "some_sync_package_id";
-        private static IQueryableReadSideRepositoryReader<UserSyncPackage> userPackageStorage;
+        private static IReadSideKeyValueStorage<UserSyncPackageContent> userPackageStorage;
     }
 }

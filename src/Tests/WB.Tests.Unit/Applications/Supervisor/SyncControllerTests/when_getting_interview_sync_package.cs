@@ -1,4 +1,6 @@
 using System;
+using System.Net.Http;
+
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -36,7 +38,7 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
         };
 
         Because of = () =>
-            result = controller.GetInterviewSyncPackage(request);
+            result = controller.GetInterviewSyncPackage(request).Content.ReadAsAsync<InterviewSyncPackageDto>().Result;
 
         It should_return_not_null_package = () =>
             result.ShouldNotBeNull();

@@ -10,7 +10,6 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Android.Content.PM;
-using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
@@ -23,6 +22,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Controls;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Syncronization;
+using WB.UI.Capi.ViewModel.Dashboard;
 
 namespace WB.UI.Capi
 {

@@ -1,12 +1,12 @@
 using System;
 using System.Linq;
-using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using WB.Core.BoundedContexts.Capi.Views.InterviewMetaInfo;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.UI.Capi.ViewModel.Dashboard;
 
-namespace CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo
+namespace WB.UI.Capi.ViewModel.InterviewMetaInfo
 {
     public class InterviewMetaInfoFactory :
         IViewFactory<InterviewMetaInfoInputModel, WB.Core.SharedKernel.Structures.Synchronization.InterviewMetaInfo>

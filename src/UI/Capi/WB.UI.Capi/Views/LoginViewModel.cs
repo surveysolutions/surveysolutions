@@ -66,6 +66,12 @@ namespace WB.UI.Capi.Views
             }
         }
 
+        public void UpdateViewModel()
+        {
+            this.Logins = CapiApplication.Membership.GetKnownUsers().Result;
+            RaisePropertyChanged(() => this.KnownUsers);
+        }
+
         public IMvxCommand LoginCommand
         {
             get { return new MvxCommand(this.StartLogin); }

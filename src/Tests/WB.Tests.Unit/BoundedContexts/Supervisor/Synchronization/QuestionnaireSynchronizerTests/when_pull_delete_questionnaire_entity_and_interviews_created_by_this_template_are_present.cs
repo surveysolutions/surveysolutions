@@ -15,6 +15,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Services.DeleteQuestionnaireTemplate;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
@@ -48,45 +49,23 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.Questionnaire
 
             headquartersPullContext = new HeadquartersPullContextStub();
 
-            var interviewsMock = new Mock<IQueryableReadSideRepositoryReader<InterviewSummary>>();
-            interviewsMock.Setup(x => x.QueryAll(Moq.It.IsAny<Expression<Func<InterviewSummary, bool>>>())).Returns(new[]
-            {
-                new InterviewSummary() { WasCreatedOnClient = true, InterviewId = censusModeInterviewId },
-                new InterviewSummary() { WasCreatedOnClient = false, InterviewId = hqCreatedInterviewId }
-            });
+            deleteQuestionnaireServiceMock = new Mock<IDeleteQuestionnaireService>();
 
             commandServiceMock=new Mock<ICommandService>();
             questionnaireSynchronizer = CreateQuestionnaireSynchronizer(plainStorage: plainStorageMock.Object,
                 plainQuestionnaireRepository: plainQuestionnaireRepositoryMock.Object,
-                headquartersQuestionnaireReader: headquartersQuestionnaireReaderMock.Object, headquartersPullContext: headquartersPullContext, interviews: interviewsMock.Object, commandService: commandServiceMock.Object);
+                headquartersQuestionnaireReader: headquartersQuestionnaireReaderMock.Object, headquartersPullContext: headquartersPullContext, 
+                deleteQuestionnaireService: deleteQuestionnaireServiceMock.Object, commandService: commandServiceMock.Object);
         };
 
         Because of = () =>
             questionnaireSynchronizer.Pull();
 
-        It should_1_questionnaire_be_deleted_in_plain_questionnaire_repository = () =>
-            plainQuestionnaireRepositoryMock.Verify(x => x.DeleteQuestionnaireDocument(deleteLocalQuestionnaireFeedEntry.QuestionnaireId, deleteLocalQuestionnaireFeedEntry.QuestionnaireVersion), Times.Once);
-
-        It should_DeleteQuestionnaire_command_be_called_once = () =>
-            commandServiceMock.Verify(
-                x =>
-                    x.Execute(
-                        Moq.It.Is<DeleteQuestionnaire>(
-                            c =>
-                                c.QuestionnaireId == deleteLocalQuestionnaireFeedEntry.QuestionnaireId &&
-                                    c.QuestionnaireVersion == deleteLocalQuestionnaireFeedEntry.QuestionnaireVersion),
-                        Moq.It.IsAny<string>()), Times.Once);
-
-        It should_HardDeleteInterview_command_never_be_called_once_for_interview_created_on_hq = () =>
-           commandServiceMock.Verify(
-               x =>
-                   x.Execute(
-                       Moq.It.Is<HardDeleteInterview>(
-                           c =>
-                               c.InterviewId == hqCreatedInterviewId),
-                       Moq.It.IsAny<string>()), Times.Never);
+        It should_1_questionnaire_be_deleted_via_delete_questionnaire_service = () =>
+             deleteQuestionnaireServiceMock.Verify(x => x.DeleteQuestionnaire(deleteLocalQuestionnaireFeedEntry.QuestionnaireId, deleteLocalQuestionnaireFeedEntry.QuestionnaireVersion, null), Times.Once);
 
 
+        private static Mock<IDeleteQuestionnaireService> deleteQuestionnaireServiceMock;
         private static QuestionnaireSynchronizer questionnaireSynchronizer;
         private static LocalQuestionnaireFeedEntry deleteLocalQuestionnaireFeedEntry;
         private static Mock<IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry>> plainStorageMock;

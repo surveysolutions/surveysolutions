@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.RepositoryA
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQuestionnaireTemplate;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletInformation;
@@ -25,6 +26,7 @@ using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks;
+using WB.Core.SharedKernels.SurveyManagement.Services.DeleteQuestionnaireTemplate;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
@@ -117,7 +119,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
 
-            this.Bind(typeof(IOrderableSyncPackageWriter<>)).To(typeof(OrderableSyncPackageWriter<>)).InSingletonScope();
+            this.Bind(typeof(IOrderableSyncPackageWriter<,>)).To(typeof(OrderableSyncPackageWriter<,>)).InSingletonScope();
 
             this.Kernel.RegisterDenormalizer<InterviewEventHandlerFunctional>();
             this.Kernel.RegisterDenormalizer<InterviewSynchronizationDenormalizer>();
@@ -140,6 +142,9 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IIncomingSyncPackagesQueue>()
               .To<IncomingSyncPackagesQueue>()
               .InSingletonScope();
+
+
+            this.Bind<IDeleteQuestionnaireService>().To<DeleteQuestionnaireService>();
 
             this.Bind<InterviewHistorySettings>().ToConstant(interviewHistorySettings);
             

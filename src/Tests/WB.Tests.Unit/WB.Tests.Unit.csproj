@@ -112,8 +112,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NSubstitute">
-      <HintPath>..\..\..\packages\NSubstitute.1.7.2.0\lib\NET45\NSubstitute.dll</HintPath>
+    <Reference Include="NSubstitute, Version=1.8.1.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\NSubstitute.1.8.1.0\lib\net45\NSubstitute.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
@@ -321,10 +322,6 @@
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_Store_called_and_cache_is_enabled_and_cache_limit_is_reached.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_3_functional_handlers_and_first_and_last_of_them_fail.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_3_old_school_handlers_and_first_and_last_of_them_fail.cs" />
-    <Compile Include="Infrastructure\ReadSideStorageVersionedWrapperTests\when_view_is_stored_in_old_format.cs" />
-    <Compile Include="Infrastructure\ReadSideStorageVersionedWrapperTests\when_view_is_stored_in_old_format_without_version.cs" />
-    <Compile Include="Infrastructure\ReadSideStorageVersionedWrapperTests\when_view_is_stored_in_old_format_without_version_and_Versions_inside_doesnt_match.cs" />
-    <Compile Include="Infrastructure\ReadSideStorageVersionedWrapperTests\when_view_is_stored_in_old_format_without_version_and_version_property_is_missing_in_stored_view.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_created_on_client_interview_events.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_deleted_interview_events.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_interview_events.cs" />
@@ -1960,10 +1957,9 @@
     <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\TabletReportControllerTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\when_info_package_requested.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\when_list_of_info_packages_is_requested.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\UserDenormalizerTests\when_user_linked_to_device_for_the_firts_time.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\UserDenormalizerTests\when_user_linked_to_device_for_the_first_time.cs" />
     <Compile Include="SharedKernels\SurveySolutions\Documents\QuestionnaireDocumentTests.cs" />
     <Compile Include="SharedKernels\Synchronization\DefaultBackupManagerTests.cs" />
-    <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\when_marking_interview_for_deleting.cs" />
     <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\when_saving_questionnare_assembly.cs" />
     <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\when_deleting_questionnaire.cs" />
     <Compile Include="Applications\Shared\Web\LocalOrDevelopmentAccessOnlyAttributeTests\LocalOrDevelopmentAccessOnlyAttributeTestsContext.cs" />

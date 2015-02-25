@@ -22,12 +22,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletI
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string zipExtension = ".zip";
 
-        private readonly IReadSideRepositoryReader<TabletSyncLogByUsers> tabletDocumentsStrogeReader;
+        private readonly IReadSideKeyValueStorage<TabletSyncLogByUsers> tabletDocumentsStrogeReader;
         private readonly IReadSideRepositoryReader<UserDocument> usersStorageReader;
 
         public FileBasedTabletInformationService(string parentFolder, 
-            IFileSystemAccessor fileSystemAccessor, 
-            IReadSideRepositoryReader<TabletSyncLogByUsers> tabletDocumentsStrogeReader, IReadSideRepositoryReader<UserDocument> usersStorageReader)
+            IFileSystemAccessor fileSystemAccessor,
+            IReadSideKeyValueStorage<TabletSyncLogByUsers> tabletDocumentsStrogeReader, IReadSideRepositoryReader<UserDocument> usersStorageReader)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.tabletDocumentsStrogeReader = tabletDocumentsStrogeReader;

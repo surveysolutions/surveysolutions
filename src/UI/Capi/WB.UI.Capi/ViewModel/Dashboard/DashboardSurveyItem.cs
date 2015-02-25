@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CAPI.Android.Core.Model.ViewModel.Dashboard
+namespace WB.UI.Capi.ViewModel.Dashboard
 {
     public class DashboardSurveyItem
     {

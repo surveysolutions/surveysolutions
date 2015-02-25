@@ -17,19 +17,23 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
     {
         Establish context = () =>
         {
-            interviewPackageStorageWriterMock = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation>>();
-
             denormalizer = CreateDenormalizer(interviewPackageStorageWriter: interviewPackageStorageWriterMock.Object);
         };
 
         Because of = () =>
             denormalizer.Handle(Create.Event.InterviewStatusChanged(interviewId, InterviewStatus.RejectedByHeadquarters));
 
-        It should_not_create_any_packages = () =>
-            interviewPackageStorageWriterMock.Verify(x => x.Store(Moq.It.IsAny<InterviewSyncPackageMetaInformation>(), Moq.It.IsAny<string>()), Times.Never);
+        It should_not_store_any_sync_package = () =>
+            interviewPackageStorageWriterMock.Verify(
+                x => x.Store(
+                    Moq.It.IsAny<InterviewSyncPackageContent>(),
+                    Moq.It.IsAny<InterviewSyncPackageMeta>(),
+                    Moq.It.IsAny<string>(),
+                    Moq.It.IsAny<string>()), Times.Never);
 
         private static InterviewSynchronizationDenormalizer denormalizer;
-        private static Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMetaInformation>> interviewPackageStorageWriterMock;
+        private static Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent>> interviewPackageStorageWriterMock = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent>>();
+
         private static readonly Guid interviewId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     }
 }

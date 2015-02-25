@@ -2,9 +2,12 @@
 
 @Html.Partial("UserEditFormWithoutLock")
 <div class="form-group">
-    @Html.LabelFor(x => x.IsLocked, new { @class = "col-sm-4 control-label" })
-    <div class="col-sm-8">
+    @Html.LabelFor(x => x.IsLocked, new { @class = "col-sm-2 control-label" })
+    <div class="col-sm-2">
         @Html.CheckBoxFor(x => x.IsLocked)
+        
+    </div>
+    <div class="col-sm-4">
         @Html.ValidationMessageFor(x => x.IsLocked, null, new { @class = "help-block" })
     </div>
 </div>
