@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
 {
     internal class DeleteQuestionnaireService : IDeleteQuestionnaireService
     {
-        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
+        private readonly IInterviewsToDeleteFactory interviewsToDeleteFactory;
         private readonly IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaireBrowseItemReader;
         private readonly ICommandService commandService;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
@@ -29,17 +29,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
         private static readonly object DeleteInProcessLockObject = new object();
         private static readonly HashSet<string> DeleteInProcess = new HashSet<string>();
 
-        public DeleteQuestionnaireService(IReadSideRepositoryIndexAccessor indexAccessor, ICommandService commandService,
+        public DeleteQuestionnaireService(IInterviewsToDeleteFactory interviewsToDeleteFactory, ICommandService commandService,
             ILogger logger, IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaireBrowseItemReader, IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
-            this.indexAccessor = indexAccessor;
+            this.interviewsToDeleteFactory = interviewsToDeleteFactory;
             this.commandService = commandService;
             this.logger = logger;
             this.questionnaireBrowseItemReader = questionnaireBrowseItemReader;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
         }
 
-        public void DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? userId)
+        public Task DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? userId)
         {
             var questionnaire = questionnaireBrowseItemReader.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
 
@@ -47,16 +47,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
                 throw new ArgumentException(string.Format("questionnaire with id {0} and version {1} is absent", questionnaireId.FormatGuid(), questionnaireVersion));
 
             if (!questionnaire.Disabled)
-                commandService.Execute(new DisableQuestionnaire(questionnaireId, questionnaireVersion,
+            {
+                this.commandService.Execute(new DisableQuestionnaire(questionnaireId, questionnaireVersion,
                     userId));
 
-            this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(questionnaireId, questionnaireVersion);
+                this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(questionnaireId, questionnaireVersion);
+            }
 
-            new Task(() =>
+            return Task.Factory.StartNew(() =>
             {
                 DeleteInterviewsAndQuestionnaireAfter(questionnaireId, questionnaireVersion, userId);
-
-            }).Start();
+            });
         }
 
         private void DeleteInterviewsAndQuestionnaireAfter(Guid questionnaireId,
@@ -89,24 +90,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
             }
         }
 
-        private IList<InterviewSummary> CreateInterviewForDeleteQuery(Guid questionnaireId,
-         long questionnaireVersion)
-        {
-            return
-                indexAccessor.Query<SeachIndexContent>(typeof (InterviewsSearchIndex).Name)
-                    .Where(interview => !interview.IsDeleted &&
-                                        interview.QuestionnaireId == questionnaireId &&
-                                        interview.QuestionnaireVersion == questionnaireVersion)
-                    .ProjectFromIndexFieldsInto<InterviewSummary>().ToList();
-        }
-
         private void DeleteInterviews(Guid questionnaireId, long questionnaireVersion, Guid? userId)
         {
             var exceptionsDuringDelete=new List<Exception>();
             while (true)
             {
                 var chunk =
-                    CreateInterviewForDeleteQuery(questionnaireId, questionnaireVersion);
+                    interviewsToDeleteFactory.Load(questionnaireId, questionnaireVersion);
 
                 if (!chunk.Any())
                     break;
