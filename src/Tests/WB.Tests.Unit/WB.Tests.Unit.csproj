@@ -356,6 +356,10 @@
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_disabled_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_questionnaire_and_one_interview.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_questionnaire_and_one_interview_which_thows_exception.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\OrderableSyncPackageWriterTests\OrderableSyncPackageWriterTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\OrderableSyncPackageWriterTests\when_storing_interview_packages.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\OrderableSyncPackageWriterTests\when_storing_questionnaire_packages.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\OrderableSyncPackageWriterTests\when_storing_user_packages.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_questionnaire_the_same_simultaneously.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_unexisting_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_ApprovedByHeadquarters.cs" />
