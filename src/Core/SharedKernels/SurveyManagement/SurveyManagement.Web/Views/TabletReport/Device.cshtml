@@ -1,12 +1,28 @@
 ﻿@using System.Globalization
 @using WB.Core.SharedKernel.Structures.Synchronization
 @using WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation
-@model WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation.TabletLogView
+@model TabletLogView
+
+@functions {
+    private static string ShowTime(KeyValuePair<string, DateTime?> requestInfo)
+    {
+        return requestInfo.Value.HasValue ? requestInfo.Value.Value.ToLocalTime().ToString("HH:mm:ss", CultureInfo.InvariantCulture) : "-";
+    }
+}
 
 @section Scripts{
     <script type="text/javascript">
-            $('#umbrella').hide();
+        $('#umbrella').hide();
     </script>
+}
+
+@section styles
+{
+    <style>
+        .monospace {
+            font-family:monospace;
+        }
+    </style>
 }
 
 @{
@@ -18,45 +34,73 @@
     <ul class="list-group">
         @foreach (var user in Model.Users)
         {
-            <li class="list-group-item">@user.Name</li>
+            <li class="list-group-item"><a href="#user-@user.Id">@user.Name</a></li>
         }
     </ul>
     @foreach (UserSyncLogView userLog in Model.SyncLog)
     {
         <div class="panel panel-default">
-            <div class="panel-heading">@userLog.User.Name [@userLog.User.Id]</div>
-            <div class="panel-body">
-                @foreach (var sync in userLog.TabletSyncLog)
-                {
-                    <table class="table table-condensed">
-                        <caption>App version: @sync.AppVersion, handshake was on: @sync.HandshakeTime.ToLocalTime()</caption>
-                        <colgroup>
-                            <col style="width: 33%;" />
-                            <col style="width: 33%;" />
-                            <col />
-                        </colgroup>
-                        <thead>
+            <div class="panel-heading" id="user-@userLog.User.Id">
+                @userLog.User.Name <span class="monospace">[@userLog.User.Id]</span>
+            </div>
+            @foreach (var sync in userLog.TabletSyncLog)
+            {
+                var isTabletClear = string.IsNullOrWhiteSpace((sync.PackagesTrackingInfo[SyncItemType.User].LastPackageId ?? "") + (sync.PackagesTrackingInfo[SyncItemType.Questionnaire].LastPackageId ?? "") + (sync.PackagesTrackingInfo[SyncItemType.Interview].LastPackageId ?? ""));
+                var countOfTransferedPackages = sync.PackagesTrackingInfo[SyncItemType.User].PackagesRequestInfo.Count + sync.PackagesTrackingInfo[SyncItemType.Questionnaire].PackagesRequestInfo.Count + sync.PackagesTrackingInfo[SyncItemType.Interview].PackagesRequestInfo.Count;
+                <table class="table table-condensed table-bordered" style="margin-bottom: 40px; border-bottom: 1px solid #ddd;">
+                    <colgroup>
+                        <col style="width: 33%;" />
+                        <col />
+                        <col style="width: 33%;" />
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <td colspan="2">
+                                <b>@sync.HandshakeTime.ToLocalTime().ToString("HH:mm:ss, dd MMM, dddd")</b>
+                                @if (countOfTransferedPackages == 0)
+                                {
+                                    <span class="label label-primary">no packages was transferred</span>
+                                }
+                                else if (isTabletClear)
+                                {
+                                    <span class="label label-warning">tablet was clear</span>
+                                }
+                            </td>
+                            <td>
+                                Sync protocol version: @sync.AppVersion
+                            </td>
+                        </tr>
+                        @if (!isTabletClear || countOfTransferedPackages > 0)
+                        {
                             <tr>
-                                <th>User's packages</th>
-                                <th>Questionnaire packages</th>
-                                <th>Interview's packages</th>
+                                <td>User's packages</td>
+                                <td>Questionnaire packages</td>
+                                <td>Interview's packages</td>
                             </tr>
-                        </thead>
-                        <tbody>
+                        }
+                        @if (!isTabletClear)
+                        {
                             <tr class="info">
-                                <td>@(sync.PackagesTrackingInfo[SyncItemType.User].LastPackageId ?? "-")</td>
-                                <td>@(sync.PackagesTrackingInfo[SyncItemType.Questionnaire].LastPackageId ?? "-")</td>
-                                <td>@(sync.PackagesTrackingInfo[SyncItemType.Interview].LastPackageId ?? "-")</td>
+                                <td class="monospace">@(sync.PackagesTrackingInfo[SyncItemType.User].LastPackageId ?? "-")</td>
+                                <td class="monospace">@(sync.PackagesTrackingInfo[SyncItemType.Questionnaire].LastPackageId ?? "-")</td>
+                                <td class="monospace">@(sync.PackagesTrackingInfo[SyncItemType.Interview].LastPackageId ?? "-")</td>
                             </tr>
+                        }
+                        @if (countOfTransferedPackages > 0)
+                        {
                             <tr>
                                 <td>
                                     <ul class="list-group">
                                         @foreach (var requestInfo in sync.PackagesTrackingInfo[SyncItemType.User].PackagesRequestInfo)
                                         {
                                             <li class="list-group-item">
-                                                <span class="badge">@(requestInfo.Value.HasValue ? requestInfo.Value.Value.ToLocalTime().ToString(CultureInfo.InvariantCulture) : "-")</span>
-                                                @requestInfo.Key
+                                                <span class="monospace">@requestInfo.Key</span>
+                                                <span class="label label-info">@ShowTime(requestInfo)</span>
                                             </li>
+                                        }
+                                        @if (sync.PackagesTrackingInfo[SyncItemType.User].PackagesRequestInfo.Count > 1)
+                                        {
+                                            <div class="alert alert-danger" role="alert">No more than one user package should be transferred</div>
                                         }
                                     </ul>
                                 </td>
@@ -65,8 +109,8 @@
                                         @foreach (var requestInfo in sync.PackagesTrackingInfo[SyncItemType.Questionnaire].PackagesRequestInfo)
                                         {
                                             <li class="list-group-item">
-                                                <span class="badge">@(requestInfo.Value.HasValue ? requestInfo.Value.Value.ToLocalTime().ToString(CultureInfo.InvariantCulture) : "-")</span>
-                                                @requestInfo.Key
+                                                <span class="monospace">@requestInfo.Key</span>
+                                                <span class="label label-info">@ShowTime(requestInfo)</span>
                                             </li>
                                         }
                                     </ul>
@@ -76,17 +120,17 @@
                                         @foreach (var requestInfo in sync.PackagesTrackingInfo[SyncItemType.Interview].PackagesRequestInfo)
                                         {
                                             <li class="list-group-item">
-                                                <span class="badge">@(requestInfo.Value.HasValue ? requestInfo.Value.Value.ToLocalTime().ToString(CultureInfo.InvariantCulture) : "-")</span>
-                                                @requestInfo.Key
+                                                <span class="monospace">@requestInfo.Key</span>
+                                                <span class="label label-info">@ShowTime(requestInfo)</span>
                                             </li>
                                         }
                                     </ul>
                                 </td>
                             </tr>
-                        </tbody>
-                    </table>
-                }
-            </div>
+                        }
+                    </tbody>
+                </table>
+            }
         </div>
     }
 </div>
