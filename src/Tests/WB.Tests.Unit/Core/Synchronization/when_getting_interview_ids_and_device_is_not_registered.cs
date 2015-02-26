@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.Core.Synchronization
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                syncManager.GetInterviewArIdsWithOrder(userId, deviceId, lastSyncedPackageId: null));
+                syncManager.GetInterviewPackageIdsWithOrder(userId, deviceId, lastSyncedPackageId: null));
 
         It should_throw_ArgumentException_exception = () =>
             exception.ShouldBeOfExactType<ArgumentException>();

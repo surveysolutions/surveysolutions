@@ -479,7 +479,8 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             {
                 ThrowIfShouldStopViewsRebuilding();
 
-                UpdateStatusMessage(string.Format("Publishing event {0}. ", this.processedEventsCount + 1));
+                string eventTypeName = @event.Payload.GetType().Name;
+                UpdateStatusMessage(string.Format("Publishing event {0} {1}. ", this.processedEventsCount + 1, eventTypeName));
 
                 try
                 {
@@ -506,7 +507,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                 UpdateStatusMessage(string.Format("Done publishing event {0}, {1}. EventSourceId: {2:N}. Waiting for next event or stream end...", 
                     this.processedEventsCount, 
-                    @event.Payload.GetType().Name, 
+                    eventTypeName, 
                     @event.EventSourceId));
             }
 
