@@ -89,7 +89,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                 {
                     "~/Scripts/ko.pager.js",
                     "~/Scripts/viewmodels/listview.js",
-                    "~/Scripts/components/bindings.js"
+                    "~/Scripts/components/bindings.js",
+                    "~/Scripts/bootbox.min.js"
                 }
             },
             {
