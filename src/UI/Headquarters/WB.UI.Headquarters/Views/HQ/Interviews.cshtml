@@ -34,6 +34,8 @@
     <div class="btn-group">
         <div class="form-inline" >
             <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.deleteInterview">Delete interview</button>
+            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.approveInterview">Approve interview</button>
+            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.rejectInterview">Reject interview</button>
 
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: search">
@@ -77,7 +79,7 @@
             <!-- ko foreach:Items -->
             <tr>
                 <td>
-                    <input type="checkbox" data-bind="checked: IsSelected, enable: CanDelete" />
+                    <input type="checkbox" data-bind="checked: IsSelected, enable: CanDelete() || CanApproveOrReject()" />
                 </td>
                 <!-- ko if:$root.SelectedTemplate() == '' -->
                 <td data-bind="text: FeaturedQuestions().joinArrayOfObjects('Question', 'Answer')"></td>
