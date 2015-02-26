@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
+namespace WB.Core.BoundedContexts.Capi.Implementation.Synchronization
 {
     public class SynchronizationEventArgs:EventArgs
     {

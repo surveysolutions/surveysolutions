@@ -102,7 +102,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             }
         }
 
-        public IList<ChangeLogRecordWithContent> GetItemsForPush()
+        public IList<ChangeLogRecordWithContent> GetItemsToPush()
         {
             var records = this.changelog.GetClosedDraftChunksIds();
             return records.Select(chunk => new ChangeLogRecordWithContent(chunk.RecordId, chunk.EventSourceId, this.changelog.GetDraftRecordContent(chunk.RecordId))).ToList();
@@ -128,7 +128,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             var metaInfo = this.jsonUtils.Deserialize<WB.Core.SharedKernel.Structures.Synchronization.InterviewMetaInfo>(item.MetaInfo);
             try
             {
-                bool createdOnClient = metaInfo.CreatedOnClient.HasValue && metaInfo.CreatedOnClient.Value;
+                bool createdOnClient = metaInfo.CreatedOnClient.GetValueOrDefault();
 
                 var featuredQuestionsMeta = metaInfo
                     .FeaturedQuestionsMeta
@@ -152,7 +152,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             }
             catch (Exception ex)
             {
-                this.logger.Error("Error meta applying " + metaInfo.PublicKey, ex);
+                this.logger.Error(string.Format("Error while meta applying. Sync package: {0}, interview id: {1}", item.PackageId, metaInfo.PublicKey), ex);
                 throw;
             }
         }

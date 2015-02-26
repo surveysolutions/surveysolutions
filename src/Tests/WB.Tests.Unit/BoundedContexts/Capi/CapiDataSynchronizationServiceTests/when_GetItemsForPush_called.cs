@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
             capiDataSynchronizationService = CreateCapiDataSynchronizationService(changeLogManipulator.Object);
         };
 
-        Because of = () => result = capiDataSynchronizationService.GetItemsForPush();
+        Because of = () => result = capiDataSynchronizationService.GetItemsToPush();
 
         It should_result_has_2_items = () => result.Count.ShouldEqual(2);
 

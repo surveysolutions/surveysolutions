@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             long questionnaireVersion = evnt.Payload.QuestionnaireVersion;
             var questionnaireMetadata = new QuestionnaireMetadata(questionnaireId, questionnaireVersion, false);
             
-            this.StoreChunk(questionnaireId, questionnaireVersion, SyncItemType.DeleteQuestionnaire, questionnaireId.ToString(), this.GetItemAsContent(questionnaireMetadata), evnt.EventTimeStamp, evnt.EventSequence);
+            this.StoreChunk(questionnaireId, questionnaireVersion, SyncItemType.DeleteQuestionnaire, questionnaireId.ToString(), this.GetItemAsContent(questionnaireMetadata), evnt.EventTimeStamp);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireAssemblyImported> evnt)
@@ -66,7 +66,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             long version = evnt.Payload.Version;
             var meta = new QuestionnaireAssemblyMetadata(publicKey, version);
 
-            this.StoreChunk(evnt.EventSourceId, version, SyncItemType.QuestionnaireAssembly, assemblyAsBase64String, this.GetItemAsContent(meta), evnt.EventTimeStamp, evnt.EventSequence);
+            this.StoreChunk(evnt.EventSourceId, version, SyncItemType.QuestionnaireAssembly, assemblyAsBase64String, this.GetItemAsContent(meta), evnt.EventTimeStamp);
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
@@ -92,8 +92,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 SyncItemType.Questionnaire, 
                 this.GetItemAsContent(questionnaireDocument), 
                 this.GetItemAsContent(questionnaireMetadata), 
-                timestamp,
-                eventSuquence);
+                timestamp);
         }
 
         protected string GetItemAsContent(object item)
@@ -101,7 +100,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return this.jsonUtils.Serialize(item, TypeSerializationSettings.AllTypes);
         }
 
-        public void StoreChunk(Guid questionnaireId, long questionnaireVersion, string itemType, string content, string metaInfo, DateTime timestamp, long eventSequence)
+        public void StoreChunk(Guid questionnaireId, long questionnaireVersion, string itemType, string content, string metaInfo, DateTime timestamp)
         {
             var partialPackageId = string.Format("{0}_{1}", questionnaireId.FormatGuid(), questionnaireVersion);
 

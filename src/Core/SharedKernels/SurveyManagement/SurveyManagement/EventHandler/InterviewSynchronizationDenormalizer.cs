@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures;
         private readonly IReadSideKeyValueStorage<InterviewData> interviews;
-        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummarys;
+        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaries;
         private readonly IJsonUtils jsonUtils;
         private readonly IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent> syncPackageWriter;
 
@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public InterviewSynchronizationDenormalizer(
             IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures,
             IReadSideKeyValueStorage<InterviewData> interviews,
-            IReadSideRepositoryWriter<InterviewSummary> interviewSummarys,
+            IReadSideRepositoryWriter<InterviewSummary> interviewSummaries,
             IJsonUtils jsonUtils,
             IMetaInfoBuilder metaBuilder,
             IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent> syncPackageWriter,
@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             this.questionnriePropagationStructures = questionnriePropagationStructures;
             this.interviews = interviews;
-            this.interviewSummarys = interviewSummarys;
+            this.interviewSummaries = interviewSummaries;
             this.metaBuilder = metaBuilder;
             this.jsonUtils = jsonUtils;
             this.syncPackageWriter = syncPackageWriter;
@@ -64,7 +64,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public override object[] Readers
         {
-            get { return new object[] { questionnriePropagationStructures, interviews, interviewSummarys }; }
+            get { return new object[] { questionnriePropagationStructures, interviews, this.interviewSummaries }; }
 
         }
 
@@ -76,7 +76,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             {
                 case InterviewStatus.Completed:
                 case InterviewStatus.Deleted:
-                    var interviewSummary = interviewSummarys.GetById(evnt.EventSourceId);
+                    var interviewSummary = this.interviewSummaries.GetById(evnt.EventSourceId);
                     if (interviewSummary == null)
                         return;
 
@@ -92,7 +92,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
         {
-            var interviewSummary = interviewSummarys.GetById(evnt.EventSourceId);
+            var interviewSummary = this.interviewSummaries.GetById(evnt.EventSourceId);
             if (interviewSummary == null)
                 return;
 
@@ -122,7 +122,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
         {
-            var interviewSummary = interviewSummarys.GetById(evnt.EventSourceId);
+            var interviewSummary = this.interviewSummaries.GetById(evnt.EventSourceId);
             if (interviewSummary == null)
                 return;
 
