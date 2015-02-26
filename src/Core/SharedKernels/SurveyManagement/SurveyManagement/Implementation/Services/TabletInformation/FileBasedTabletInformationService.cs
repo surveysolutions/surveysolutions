@@ -101,7 +101,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletI
                                           User = new UserLight(userSyncLog.Key, this.usersStorageReader.GetById(userSyncLog.Key).UserName)
                                       };
 
-                foreach (var tabletSyncLog in userSyncLog.Value)
+                foreach (var tabletSyncLog in userSyncLog.Value.OrderByDescending(x => x.HandshakeTime))
                 {
                     var tabletSyncLogView = new TabletSyncLogView
                                             {
