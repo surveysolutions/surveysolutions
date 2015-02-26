@@ -3,7 +3,19 @@
 
     var self = this;
 
-    self.deleteInterview = function() {
+    self.deleteInterview = function () {
+        self._sendCommand("DeleteInterviewCommand");
+    };
+
+    self.approveInterview = function () {
+        self._sendCommand("HqApproveInterviewCommand");
+    };
+
+    self.rejectInterview = function () {
+        self._sendCommand("HqRejectInterviewCommand");
+    };
+
+    self._sendCommand = function (commandName) {
         var commands = ko.utils.arrayMap(self.SelectedItems(), function (rawItem) {
             var item = ko.mapping.toJS(rawItem);
             return ko.toJSON({
@@ -12,7 +24,7 @@
         });
 
         var command = {
-            type: "DeleteInterviewCommand",
+            type: commandName,
             commands: commands
         };
 
@@ -24,7 +36,7 @@
     self.selectAll = function (checkbox) {
         var isCheckboxSelected = $(checkbox).is(":checked");
         ko.utils.arrayForEach(self.Items(), function (item) {
-            if (item.CanDelete()) {
+            if (item.CanDelete() || item.CanApproveOrReject()) {
                 item.IsSelected(isCheckboxSelected);
             }
         });
