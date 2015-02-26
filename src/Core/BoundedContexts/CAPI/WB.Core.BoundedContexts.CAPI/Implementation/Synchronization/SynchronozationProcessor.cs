@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+
 using WB.Core.BoundedContexts.Capi.Implementation.Authorization;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.GenericSubdomains.Utils.Implementation;
@@ -11,7 +12,7 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
-namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
+namespace WB.Core.BoundedContexts.Capi.Implementation.Synchronization
 {
     public class SynchronozationProcessor
     {
@@ -110,13 +111,13 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
 
                 HandshakePackage package = await this.synchronizationService.HandshakeAsync(credentials: this.credentials, shouldThisDeviceBeLinkedToUser: shouldThisDeviceBeLinkedToUser);
                 
-                userId = package.UserId;
+                this.userId = package.UserId;
 
                 this.interviewerSettings.SetClientRegistrationId(package.ClientRegistrationKey);
 
                 if (shouldThisDeviceBeLinkedToUser)
                 {
-                    this.cleanUpExecutor.DeleteAllInterviewsForUser(userId);
+                    this.cleanUpExecutor.DeleteAllInterviewsForUser(this.userId);
                 }
             }
             catch (Exception e)
@@ -144,13 +145,13 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
             this.ExitIfCanceled();
             this.OnStatusChanged(new SynchronizationEventArgsWithPercent("Pushing interview data", Operation.Push, true, 0));
 
-            var dataByChuncks = this.dataProcessor.GetItemsForPush();
+            var dataByChuncks = this.dataProcessor.GetItemsToPush();
             int chunksCounter = 1;
             foreach (var chunckDescription in dataByChuncks)
             {
                 this.ExitIfCanceled();
 
-                await this.synchronizationService.PushChunkAsync(credentials : credentials,  chunkAsString: chunckDescription.Content);
+                await this.synchronizationService.PushChunkAsync(credentials : this.credentials,  chunkAsString: chunckDescription.Content);
 
                 this.fileSyncRepository.MoveInterviewsBinaryDataToSyncFolder(chunckDescription.EventSourceId);
 
@@ -190,19 +191,19 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
 
         private async Task PullUserPackages()
         {
-            var packageProcessor = new Func<SynchronizationChunkMeta, Task>(DownloadAndProcessUserPackage);
+            var packageProcessor = new Func<SynchronizationChunkMeta, Task>(this.DownloadAndProcessUserPackage);
             await this.PullPackages(this.userId, "User", packageProcessor, SyncItemType.User);
         }
 
         private async Task PullQuestionnairePackages()
         {
-            var packageProcessor = new Func<SynchronizationChunkMeta, Task>(DownloadAndProcessQuestionnirePackage);
+            var packageProcessor = new Func<SynchronizationChunkMeta, Task>(this.DownloadAndProcessQuestionnirePackage);
             await this.PullPackages(Guid.Empty, "Questionnaire", packageProcessor, SyncItemType.Questionnaire);
         }
 
         private async Task PullInterviewPackages()
         {
-            var packageProcessor = new Func<SynchronizationChunkMeta, Task>(DownloadAndProcessInterviewPackage);
+            var packageProcessor = new Func<SynchronizationChunkMeta, Task>(this.DownloadAndProcessInterviewPackage);
             await this.PullPackages(this.userId, "Interview", packageProcessor, SyncItemType.Interview);
         }
 
@@ -212,36 +213,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
             this.OnStatusChanged(new SynchronizationEventArgsWithPercent(
                 string.Format("Pulling packages for {0}", type.ToLower()), Operation.Pull, true, 0));
 
-            SyncItemsMetaContainer syncItemsMetaContainer = null;
-
-            bool foundNeededPackages = false;
-            int returnedBackCount = 0;
-
-            var lastKnownPackageId = this.packageIdStorage.GetLastStoredPackageId(packageType, currentUserId);
-            do
-            {
-                this.OnStatusChanged(new SynchronizationEventArgsWithPercent(
-                    string.Format("Receiving list of packageIds for {0} to download", type.ToLower()), Operation.Pull, true, 0));
-
-                syncItemsMetaContainer = await this.synchronizationService.GetPackageIdsToDownloadAsync(this.credentials, type, lastKnownPackageId);
-
-                if (syncItemsMetaContainer == null)
-                {
-                    returnedBackCount++;
-                    this.OnStatusChanged(
-                        new SynchronizationEventArgsWithPercent(
-                            string.Format("Last known package for {0} not found on server. Searching for previous. Tried {1} packageIdStorage",
-                                type.ToLower(),
-                                returnedBackCount),
-                            Operation.Pull, true, 0));
-
-                    lastKnownPackageId = this.packageIdStorage.GetChunkBeforeChunkWithId(packageType, lastKnownPackageId, currentUserId);
-                    continue;
-                }
-
-                foundNeededPackages = true;
-            }
-            while (!foundNeededPackages);
+            var syncItemsMetaContainer = await this.GetSyncItemsMetaContainer(currentUserId, type, packageType);
 
             int progressCounter = 0;
             int chunksToDownload = syncItemsMetaContainer.SyncPackagesMeta.Count();
@@ -272,11 +244,54 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
             }
         }
 
+        private async Task<SyncItemsMetaContainer> GetSyncItemsMetaContainer(Guid currentUserId, string type, string packageType)
+        {
+            SyncItemsMetaContainer syncItemsMetaContainer = null;
+
+            bool foundNeededPackages = false;
+            int returnedBackCount = 0;
+
+            var lastKnownPackageId = this.packageIdStorage.GetLastStoredPackageId(packageType, currentUserId);
+            do
+            {
+                this.OnStatusChanged(
+                    new SynchronizationEventArgsWithPercent(
+                        string.Format("Receiving list of packageIds for {0} to download", type.ToLower()),
+                        Operation.Pull,
+                        true,
+                        0));
+
+                syncItemsMetaContainer =
+                    await this.synchronizationService.GetPackageIdsToDownloadAsync(this.credentials, type, lastKnownPackageId);
+
+                if (syncItemsMetaContainer == null)
+                {
+                    returnedBackCount++;
+                    this.OnStatusChanged(
+                        new SynchronizationEventArgsWithPercent(
+                            string.Format(
+                                "Last known package for {0} not found on server. Searching for previous. Tried {1} packageIdStorage",
+                                type.ToLower(),
+                                returnedBackCount),
+                            Operation.Pull,
+                            true,
+                            0));
+
+                    lastKnownPackageId = this.packageIdStorage.GetChunkBeforeChunkWithId(lastKnownPackageId,
+                        currentUserId);
+                    continue;
+                }
+                foundNeededPackages = true;
+            }
+            while (!foundNeededPackages);
+            return syncItemsMetaContainer;
+        }
+
         private async Task DownloadAndProcessUserPackage(SynchronizationChunkMeta chunk)
         {
             var package = await this.synchronizationService.RequestUserPackageAsync(credentials: this.credentials, chunkId: chunk.Id);
             this.dataProcessor.ProcessDownloadedPackage(package);
-            this.packageIdStorage.Append(package.PackageId, SyncItemType.User, userId, chunk.SortIndex);
+            this.packageIdStorage.Append(package.PackageId, SyncItemType.User, this.userId, chunk.SortIndex);
         }
 
         private async Task DownloadAndProcessQuestionnirePackage(SynchronizationChunkMeta chunk)
@@ -290,7 +305,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Syncronization
         {
             var package = await this.synchronizationService.RequestInterviewPackageAsync(this.credentials, chunk.Id);
             this.dataProcessor.ProcessDownloadedPackage(package, chunk.ItemType);
-            this.packageIdStorage.Append(package.PackageId, SyncItemType.Interview, userId, chunk.SortIndex);
+            this.packageIdStorage.Append(package.PackageId, SyncItemType.Interview, this.userId, chunk.SortIndex);
         }
 
         public void Cancel(Exception exception = null)
