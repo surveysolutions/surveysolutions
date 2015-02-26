@@ -33,9 +33,9 @@
 @section  actionbar{
     <div class="btn-group">
         <div class="form-inline" >
-            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.deleteInterview">Delete interview</button>
             <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.approveInterview">Approve interview</button>
             <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.rejectInterview">Reject interview</button>
+            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.deleteInterview">Delete interview</button>
 
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: search">
@@ -79,7 +79,7 @@
             <!-- ko foreach:Items -->
             <tr>
                 <td>
-                    <input type="checkbox" data-bind="checked: IsSelected, enable: CanDelete() || CanApproveOrReject()" />
+                    <input type="checkbox" data-bind="checked: IsSelected" />
                 </td>
                 <!-- ko if:$root.SelectedTemplate() == '' -->
                 <td data-bind="text: FeaturedQuestions().joinArrayOfObjects('Question', 'Answer')"></td>
@@ -109,6 +109,23 @@
             <!-- /ko -->
         </tbody>
     </table>
+
+
+    <script type="text/html" id="confirm-delete-template">
+        <h3><b><span class="text-normal" data-bind="text: length"></span></b> interviews will be deleted.</h3>
+        <b>Note!</b> You can delete interviews with the following statuses only: <i>Created</i>, <i>SupervisorAssigned</i> and <i>InterviewerAssigned</i>.<br />
+    </script>
+    <script type="text/html" id="confirm-approve-template">
+        <h3><b><span class="text-normal" data-bind="text: length"></span></b> interviews will be approved.</h3>
+        <b>Note!</b> You can approve interviews with the following status only: <i>ApprovedBySupervisor</i>.<br />
+    </script>
+    <script type="text/html" id="confirm-reject-template">
+        <h3><b><span class="text-normal" data-bind="text: length"></span></b> interviews will be rejected.</h3>
+        <b>Note!</b> You can reject interviews with the following status only: <i>ApprovedBySupervisor</i>.<br />
+    </script>
+    <script type="text/html" id="confirm-continue-message-template">
+        Do you want to continue?
+    </script>
 }
 
 @section filters
