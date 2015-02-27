@@ -130,7 +130,10 @@
     <value>Application version:</value>
   </data>
   <data name="BufferSizeText" xml:space="preserve">
-    <value>The approximate number of bytes consumed by web service synchronizer</value>
+    <value>Buffer size for receiving/transmitting data stream:</value>
+  </data>
+  <data name="BufferSizeUnitsText" xml:space="preserve">
+    <value>bytes</value>
   </data>
   <data name="CheckForUpdatesText" xml:space="preserve">
     <value>Check for updates</value>
@@ -157,7 +160,7 @@
     <value>Engine version:</value>
   </data>
   <data name="HttpResponseTimeoutText" xml:space="preserve">
-    <value>The time for waiting response from web server in seconds:</value>
+    <value>The time for waiting response from web server:</value>
   </data>
   <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
     <value>Creating interview</value>
@@ -229,7 +232,7 @@
     <value>Are you sure to reset all settings to default parameters?</value>
   </data>
   <data name="ResetSettingsSuccessText" xml:space="preserve">
-    <value>All parameters were successfully reset to the default state</value>
+    <value>All parameters were successfully reset to default state</value>
   </data>
   <data name="ResetSettingsText" xml:space="preserve">
     <value>Restore</value>
@@ -254,6 +257,9 @@
   </data>
   <data name="StaySignedInText" xml:space="preserve">
     <value>Stay signed in</value>
+  </data>
+  <data name="TimeoutUnitsText" xml:space="preserve">
+    <value>seconds</value>
   </data>
   <data name="TryAgainLink" xml:space="preserve">
     <value>Try again</value>
