@@ -141,5 +141,10 @@ namespace WB.Core.GenericSubdomains.Utils
         {
             return string.IsNullOrWhiteSpace(src) ? null : src;
         }
+
+        public static string F(this string source, params object[] args)
+        {
+            return string.Format(source, args);
+        }
     }
 }
