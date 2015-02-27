@@ -98,7 +98,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             this.TrackUserLinkingRequest(androidId.ToGuid(), interviewerId, oldDeviceId);
         }
 
-        public SyncItemsMetaContainer GetQuestionnaireArIdsWithOrder(Guid userId, Guid deviceId, string lastSyncedPackageId)
+        public SyncItemsMetaContainer GetQuestionnairePackageIdsWithOrder(Guid userId, Guid deviceId, string lastSyncedPackageId)
         {
             this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
@@ -115,7 +115,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             };
         }
 
-        public SyncItemsMetaContainer GetUserArIdsWithOrder(Guid userId, Guid deviceId, string lastSyncedPackageId)
+        public SyncItemsMetaContainer GetUserPackageIdsWithOrder(Guid userId, Guid deviceId, string lastSyncedPackageId)
         {
             this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
@@ -132,7 +132,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             };
         }
 
-        public SyncItemsMetaContainer GetInterviewArIdsWithOrder(Guid userId, Guid deviceId, string lastSyncedPackageId)
+        public SyncItemsMetaContainer GetInterviewPackageIdsWithOrder(Guid userId, Guid deviceId, string lastSyncedPackageId)
         {
             this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 

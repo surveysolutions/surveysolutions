@@ -56,9 +56,12 @@
     <Reference Include="Cirrious.MvvmCross.Wpf">
       <HintPath>..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.1.1\lib\net45\Cirrious.MvvmCross.Wpf.dll</HintPath>
     </Reference>
-    <Reference Include="Common.Logging, Version=2.1.2.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+    <Reference Include="Common.Logging, Version=3.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
+      <HintPath>..\..\..\packages\Common.Logging.3.0.0\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Core">
+      <HintPath>..\..\..\packages\Common.Logging.Core.3.0.0\lib\net40\Common.Logging.Core.dll</HintPath>
     </Reference>
     <Reference Include="FluentAssertions">
       <HintPath>..\..\..\packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.dll</HintPath>
@@ -119,9 +122,9 @@
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Quartz, Version=2.2.3.400, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+    <Reference Include="Quartz, Version=2.3.1.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Quartz.2.2.3\lib\net40\Quartz.dll</HintPath>
+      <HintPath>..\..\..\packages\Quartz.2.3.1\lib\net40\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="Raven.Abstractions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -267,16 +270,23 @@
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_checking_expected_device_and_user_linked_to_the_same_device.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_checking_expected_device_and_user_not_linked_to_any_device.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_interview_packages_keys.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_interview_packages_keys_and_exception_happens.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_interview_sync_package.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_interview_sync_package_and_exception_happens.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_questionnaire_packages_keys.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_questionnaire_packages_keys_and_exception_happens.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_questionnaire_sync_package.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_questionnaire_sync_package_and_exception_happens.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_user_packages_keys.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_user_packages_keys_and_exception_happens.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_user_sync_package.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_user_sync_package_and_exception_happens.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_handshaking_capi_with_supervisor_and_android_id_is_missing.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_handshaking_capi_with_supervisor_and_changing_device_is_requested.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_handshaking_capi_with_supervisor_and_device_is_not_that_expected.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_handshaking_capi_with_supervisor_and_device_is_that_expected.cs" />
     <Compile Include="BoundedContexts\Capi\InterviewViewModelTests\when_setting_validity_to_answered_prefilled_question_in_interview.cs" />
+    <Compile Include="BoundedContexts\Capi\SynchronozationProcessorTests\SynchronozationProcessorTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_and_providing_existing_targetId.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_and_source_not_present.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_without_permissions_to_edit_questionnaire.cs" />

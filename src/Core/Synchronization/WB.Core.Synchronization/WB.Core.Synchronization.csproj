@@ -87,7 +87,6 @@
     <Compile Include="Implementation\ImportManager\DefaultBackupManager.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\UserSyncPackagesByBriefFields.cs" />
     <Compile Include="Implementation\SyncManager\SyncManager.cs" />
-    <Compile Include="ISynchronizationDataStorage.cs" />
     <Compile Include="ISyncManager.cs" />
     <Compile Include="MetaInfo\IMetaInfoBuilder.cs" />
     <Compile Include="MetaInfo\MetaInfoBuilder.cs" />

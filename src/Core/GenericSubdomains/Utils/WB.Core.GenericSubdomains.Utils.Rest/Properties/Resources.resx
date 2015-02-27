@@ -120,6 +120,9 @@
   <data name="BadConnection" xml:space="preserve">
     <value>Bad connection</value>
   </data>
+  <data name="BaseAddressNotSet" xml:space="preserve">
+    <value>Base server address is not set. Check synchronization settings</value>
+  </data>
   <data name="CheckServerSettings" xml:space="preserve">
     <value>Check server settings </value>
   </data>
