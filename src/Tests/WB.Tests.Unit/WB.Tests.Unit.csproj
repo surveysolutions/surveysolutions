@@ -355,13 +355,13 @@
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\DeleteQuestionnaireServiceTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_disabled_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_questionnaire_and_one_interview.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_questionnaire_and_one_interview_which_thows_exception.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_questionnaire_with_dependent_interview_which_throws_an_exception.cs" />
     <Compile Include="SharedKernels\SurveyManagement\OrderableSyncPackageWriterTests\OrderableSyncPackageWriterTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\OrderableSyncPackageWriterTests\when_storing_interview_packages.cs" />
     <Compile Include="SharedKernels\SurveyManagement\OrderableSyncPackageWriterTests\when_storing_questionnaire_packages.cs" />
     <Compile Include="SharedKernels\SurveyManagement\OrderableSyncPackageWriterTests\when_storing_user_packages.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_questionnaire_the_same_simultaneously.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_unexisting_questionnaire.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_the_same_questionnaire_simultaneously.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_not_existing_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_ApprovedByHeadquarters.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_ApprovedBySupervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_Completed.cs" />
@@ -1580,7 +1580,7 @@
     <Compile Include="SharedKernels\DataCollection\QuestionnaireAssemblyFileAccessorTests\when_storing_assembly.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\ImportQuestionnaireTests.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\QuestionnaireTestsContext.cs" />
-    <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_preparing_questionnaire_for_delete_and_user_is_not_the_creator_of_this_questionaire.cs" />
+    <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_disabling_questionnaire_for_delete_and_user_is_not_the_creator_of_this_questionaire.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_questionnaire_has_cascading_options.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_questionnaire_has_multi_question_and_its_type_does_not_support_GetMaxSelectedAnswerOptions_method.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_questionnaire_has_multi_question_and_we_can_get_max_answers_number_for_it.cs" />

@@ -56,14 +56,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
 
             return Task.Factory.StartNew(() =>
             {
-                DeleteInterviewsAndQuestionnaireAfter(questionnaireId, questionnaireVersion, userId);
+                this.DeleteInterviewsAndQuestionnaireAfter(questionnaireId, questionnaireVersion, userId);
             });
         }
 
         private void DeleteInterviewsAndQuestionnaireAfter(Guid questionnaireId,
             long questionnaireVersion, Guid? userId)
         {
-            var questionnaireKey = CreateQuestionnaireWithVersionKey(questionnaireId, questionnaireVersion);
+            var questionnaireKey =ReadSideExtensions.AsCompositeKey(questionnaireId.FormatGuid(), questionnaireVersion);
 
             lock (DeleteInProcessLockObject)
             {
@@ -93,15 +93,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
         private void DeleteInterviews(Guid questionnaireId, long questionnaireVersion, Guid? userId)
         {
             var exceptionsDuringDelete=new List<Exception>();
-            while (true)
+
+            var listOfInterviews = interviewsToDeleteFactory.Load(questionnaireId, questionnaireVersion);
+            do
             {
-                var chunk =
-                    interviewsToDeleteFactory.Load(questionnaireId, questionnaireVersion);
-
-                if (!chunk.Any())
-                    break;
-
-                foreach (var interviewSummary in chunk)
+                foreach (var interviewSummary in listOfInterviews)
                 {
                     try
                     {
@@ -113,15 +109,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
                        exceptionsDuringDelete.Add(e);
                     }
                 }
-            }
+                listOfInterviews = interviewsToDeleteFactory.Load(questionnaireId, questionnaireVersion);
+
+            } while (listOfInterviews.Any());
 
             if(exceptionsDuringDelete.Count>0)
                 throw new AggregateException(string.Format("interview delete process failed for questionnaire {0} v. {1}", questionnaireId.FormatGuid(),questionnaireVersion), exceptionsDuringDelete);
-        }
-
-        private string CreateQuestionnaireWithVersionKey(Guid questionnaireId, long questionnaireVersion)
-        {
-            return string.Format("{0}${1}", questionnaireId.FormatGuid(), questionnaireVersion);
         }
     }
 }

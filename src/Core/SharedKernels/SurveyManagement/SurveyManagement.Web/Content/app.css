@@ -294,6 +294,9 @@ input::-ms-clear {
     font-style: italic;
     font-weight: bold;
 }
+.text-italic {
+    font-style: italic;
+}
 
 #interviewChart {
     width: 100%;

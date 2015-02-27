@@ -12,7 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuestionnaireServiceTests
 {
-    internal class when_delete_unexisting_questionnaire : DeleteQuestionnaireServiceTestContext
+    internal class when_delete_not_existing_questionnaire : DeleteQuestionnaireServiceTestContext
     {
         Establish context = () =>
         {
@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                deleteQuestionnaireService.DeleteQuestionnaire(questionnaireId, questionnaireVersion, userId)) as ArgumentException;
+                deleteQuestionnaireService.DeleteQuestionnaire(questionnaireId, questionnaireVersion, userId));
 
         It should_throw_ArgumentException = () =>
             exception.ShouldBeOfExactType<ArgumentException>();
@@ -32,6 +32,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
         private static long questionnaireVersion = 5;
         private static Guid userId = Guid.Parse("22222222222222222222222222222222");
         private static Mock<ICommandService> commandServiceMock;
-        private static ArgumentException exception;
+        private static Exception exception;
     }
 }
