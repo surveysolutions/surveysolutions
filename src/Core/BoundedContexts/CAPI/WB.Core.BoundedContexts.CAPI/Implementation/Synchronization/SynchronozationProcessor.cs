@@ -145,7 +145,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Synchronization
             this.ExitIfCanceled();
             this.OnStatusChanged(new SynchronizationEventArgsWithPercent("Pushing interview data", Operation.Push, true, 0));
 
-            var dataByChuncks = this.dataProcessor.GetItemsToPush();
+            var dataByChuncks = this.dataProcessor.GetItemsToPush(userId);
             int chunksCounter = 1;
             foreach (var chunckDescription in dataByChuncks)
             {

@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.UI.Capi.ViewModel.Synchronization;
 
 namespace WB.UI.Capi.Syncronization
 {
@@ -31,10 +32,9 @@ namespace WB.UI.Capi.Syncronization
             this.fileChangeLogStore = changeLogStore;
         }
 
-        public IList<ChangeLogShortRecord> GetClosedDraftChunksIds()
+        public IList<ChangeLogShortRecord> GetClosedDraftChunksIds(Guid userId)
         {
-            return
-                this.draftChangeLog.Filter(c => c.IsClosed)
+            return this.draftChangeLog.Filter(c => c.IsClosed && c.UserId == userId.FormatGuid())
                               .Select(d => new ChangeLogShortRecord(Guid.Parse(d.Id), Guid.Parse(d.EventSourceId)))
                               .ToList();
 
@@ -47,8 +47,7 @@ namespace WB.UI.Capi.Syncronization
 
         public void CreatePublicRecord(Guid recordId)
         {
-            this.publicChangeLog.Store(new PublicChangeSetDTO(recordId, DateTime.Now),
-                                  recordId);
+            this.publicChangeLog.Store(new PublicChangeSetDTO(recordId, DateTime.Now), recordId);
         }
 
         #endregion
@@ -56,7 +55,7 @@ namespace WB.UI.Capi.Syncronization
 
         #region draft
 
-        public void CreateOrReopenDraftRecord(Guid eventSourceId)
+        public void CreateOrReopenDraftRecord(Guid eventSourceId, Guid userId)
         {
             var record = this.GetLastDraftRecord(eventSourceId);
             if (record != null)
@@ -66,10 +65,10 @@ namespace WB.UI.Capi.Syncronization
                 return;
             }
             var recordId = Guid.NewGuid();
-            this.draftChangeLog.Store(new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, false), recordId);
+            this.draftChangeLog.Store(new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, false, userId.FormatGuid()), recordId);
         }
 
-        public void CloseDraftRecord(Guid eventSourceId)
+        public void CloseDraftRecord(Guid eventSourceId, Guid userId)
         {
             var record = this.GetLastDraftRecord(eventSourceId);
             Guid recordId;
@@ -77,7 +76,7 @@ namespace WB.UI.Capi.Syncronization
             if (record == null)
             {
                 recordId = Guid.NewGuid();
-                record = new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, true);
+                record = new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, true, userId.FormatGuid());
             }
             else
             {

@@ -1,24 +1,27 @@
 using System;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace CAPI.Android.Core.Model.ViewModel.Synchronization
+using CAPI.Android.Core.Model.ViewModel.Synchronization;
+
+using WB.Core.GenericSubdomains.Utils;
+
+namespace WB.UI.Capi.ViewModel.Synchronization
 {
     public class DraftChangesetDTO : PublicChangeSetDTO
     {
-        public DraftChangesetDTO(Guid id, Guid eventSourceId, DateTime timeStamp, /*long start,*/ bool isClosed)
+        public DraftChangesetDTO(Guid id, Guid eventSourceId, DateTime timeStamp, bool isClosed, string userId)
             : base(id, timeStamp)
         {
-            EventSourceId = eventSourceId.FormatGuid();
-            //Start = start;
-            IsClosed = isClosed;
+            this.EventSourceId = eventSourceId.FormatGuid();
+            this.IsClosed = isClosed;
+            this.UserId = userId;
         }
 
         public DraftChangesetDTO()
         {
         }
+
         public string EventSourceId { get; set; }
-        //public long Start { get; set; }
         public bool IsClosed { get; set; }
+        public string UserId { get; set; }
     }
 }
