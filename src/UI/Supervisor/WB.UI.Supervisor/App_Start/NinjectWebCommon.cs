@@ -100,7 +100,13 @@ namespace WB.UI.Supervisor.App_Start
             Func<bool> isDebug = () => AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
             Version applicationBuildVersion = typeof(AccountController).Assembly.GetName().Version;
 
-            string appDataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
+            string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
+            if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
+            {
+                appDataDirectory = System.Web.Hosting.HostingEnvironment.MapPath(appDataDirectory);
+            }
+
+            //string appDataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
             var synchronizationSettings = new SyncSettings(appDataDirectory: appDataDirectory,
                 incomingCapiPackagesWithErrorsDirectoryName:
                 LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
