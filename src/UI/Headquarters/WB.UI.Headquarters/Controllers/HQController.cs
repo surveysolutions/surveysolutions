@@ -155,7 +155,7 @@ namespace WB.UI.Headquarters.Controllers
             //null is handled inside 
             var errors = this.preloadedDataVerifier.VerifySample(questionnaireId, version, preloadedSample).ToList();
 
-            this.ViewBag.SupervisorList = this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue }).Items;
+            this.ViewBag.SupervisorList = this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue, Order = "UserName"}).Items;
 
             //clean up for security reasons
             if (errors.Any())
