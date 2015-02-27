@@ -47,25 +47,25 @@
 {
     <table class="table table-striped table-bordered table-condensed table-hover">
         <thead>
-            <tr>
-                <th class="fit-column-by-content" data-bind='sortby : "AllowCensusMode"'>@Dashboard.Census</th>
-                <th data-bind='sortby : "Title"'>@Dashboard.Title</th>
-                <th data-bind='sortby : "Version"'>@Dashboard.Version</th>
-                <th data-bind='sortby : "CreationDate"'>@Dashboard.CreationDate</th>
-                <th data-bind='sortby : "LastEntryDate"'>@Dashboard.LastEntryDate</th>
-                <th></th>
-                <th></th>
-            </tr>
+        <tr>
+            <th class="fit-column-by-content" data-bind='sortby : "AllowCensusMode"'>@Dashboard.Census</th>
+            <th data-bind='sortby : "Title"'>@Dashboard.Title</th>
+            <th data-bind='sortby : "Version"'>@Dashboard.Version</th>
+            <th data-bind='sortby : "CreationDate"'>@Dashboard.CreationDate</th>
+            <th data-bind='sortby : "LastEntryDate"'>@Dashboard.LastEntryDate</th>
+            <th></th>
+            <th></th>
+        </tr>
         </thead>
         <tbody>
-            <!-- ko foreach:Items -->
-            <tr>
+        <!-- ko foreach:Items -->
+            <tr data-bind="css: {'text-muted':Disabled }">
                 <td>
                     <!-- ko if:AllowCensusMode -->
                     <span class="glyphicon glyphicon-ok pull-right margin-right-5"></span>
                     <!-- /ko -->
                 </td>
-                <td data-bind="text: Title"></td>
+                <td data-bind="text: Title, css: {'text-italic':Disabled }"></td>
                 <td data-bind="text: Version"></td>
                 <td data-bind="date: CreationDate"></td>
                 <td data-bind="date: LastEntryDate"></td>
@@ -94,11 +94,9 @@
                     </div>
                     <!-- /ko -->
                     <!-- /ko -->
-                    <!-- ko if:Disabled -->
-                    Deleting
-                    <!-- /ko -->
                 </td>
                 <td>
+                    <!-- ko ifnot:Disabled -->
                     <div class="btn-group">
                         <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
                             <i class=" glyphicon glyphicon-download">
@@ -132,10 +130,8 @@
                                 }
                             </li>
                         </ul>
-
-
-
                     </div>
+                    <!-- /ko -->
                     <div class="btn-group">
                         <a class="btn btn-danger" data-bind="click : $parent.deleteQuestionnaire">
                             <i class="glyphicon glyphicon-remove"></i>
@@ -143,7 +139,7 @@
                     </div>
                 </td>
             </tr>
-            <!-- /ko -->
+        <!-- /ko -->
         </tbody>
     </table>
 }
