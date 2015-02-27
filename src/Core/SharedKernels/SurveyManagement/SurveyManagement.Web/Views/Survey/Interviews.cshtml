@@ -116,7 +116,7 @@
     </table>
 
     <script type="text/html" id="confirm-assign-template">
-        @Html.Raw(WB.Core.SharedKernels.SurveyManagement.Web.Resources.Interviews.AssignConfirmMessage.F(
+        @Html.Raw(WB.Core.SharedKernels.SurveyManagement.Web.Resources.Interviews.AssignConfirmMessage.FormatString(
             "<span class='text-normal' data-bind='text: length'></span>",
             InterviewStatus.Created.ToLocalizeString(),
             InterviewStatus.SupervisorAssigned.ToLocalizeString(),
@@ -124,13 +124,13 @@
             InterviewStatus.RejectedBySupervisor.ToLocalizeString()))
     </script>
     <script type="text/html" id="confirm-approve-template">
-        @Html.Raw(WB.Core.SharedKernels.SurveyManagement.Web.Resources.Interviews.ApproveConfirmMessage.F(
+        @Html.Raw(WB.Core.SharedKernels.SurveyManagement.Web.Resources.Interviews.ApproveConfirmMessage.FormatString(
             "<span class='text-normal' data-bind='text: length'></span>",
             InterviewStatus.Completed.ToLocalizeString(),
             InterviewStatus.RejectedByHeadquarters.ToLocalizeString()))
     </script>
     <script type="text/html" id="confirm-reject-template">
-        @Html.Raw(WB.Core.SharedKernels.SurveyManagement.Web.Resources.Interviews.RejectConfirmMessage.F(
+        @Html.Raw(WB.Core.SharedKernels.SurveyManagement.Web.Resources.Interviews.RejectConfirmMessage.FormatString(
             "<span class='text-normal' data-bind='text: length'></span>",
             InterviewStatus.Completed.ToLocalizeString(),
             InterviewStatus.RejectedByHeadquarters.ToLocalizeString()))
