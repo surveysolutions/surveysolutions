@@ -5,10 +5,10 @@ namespace WB.Core.BoundedContexts.Capi.ChangeLog
 {
     public interface IChangeLogManipulator
     {
-        void CreateOrReopenDraftRecord(Guid eventSourceId);
-        void CloseDraftRecord(Guid eventSourceId);
+        void CreateOrReopenDraftRecord(Guid eventSourceId, Guid userId);
+        void CloseDraftRecord(Guid eventSourceId, Guid userId);
         
-        IList<ChangeLogShortRecord> GetClosedDraftChunksIds();
+        IList<ChangeLogShortRecord> GetClosedDraftChunksIds(Guid userId);
         string GetDraftRecordContent(Guid recordId);
 
         void CreatePublicRecord(Guid recordId);
