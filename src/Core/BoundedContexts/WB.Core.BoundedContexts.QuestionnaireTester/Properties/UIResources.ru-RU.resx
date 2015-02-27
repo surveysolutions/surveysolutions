@@ -130,7 +130,10 @@
     <value>Версия приложения:</value>
   </data>
   <data name="BufferSizeText" xml:space="preserve">
-    <value>Размер пакета принимаемых/передаваемых данных, который используется при синхронизации с сервером( в байтах)</value>
+    <value>Размер пакета принимаемых/передаваемых данных, который используется при синхронизации с сервером</value>
+  </data>
+  <data name="BufferSizeUnitsText" xml:space="preserve">
+    <value>байт</value>
   </data>
   <data name="CheckForUpdatesText" xml:space="preserve">
     <value>Проверить обновления</value>
@@ -160,7 +163,10 @@
     <value>Версия ядра:</value>
   </data>
   <data name="HttpResponseTimeoutText" xml:space="preserve">
-    <value>Время ожидания отвера от сервера(в секундах):</value>
+    <value>Время ожидания отвера от сервера:</value>
+  </data>
+  <data name="HttpResponseTimeoutUnitsText" xml:space="preserve">
+    <value>секунд</value>
   </data>
   <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
     <value>Создание интервью</value>
@@ -259,7 +265,7 @@
     <value>Запомнить меня</value>
   </data>
   <data name="TryAgainLink" xml:space="preserve">
-    <value>Попробывать снова</value>
+    <value>Попробовать снова</value>
   </data>
   <data name="Unauthorized" xml:space="preserve">
     <value>Вы ввели неправильное имя или пароль</value>

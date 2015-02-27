@@ -60,22 +60,42 @@
             android:textStyle="bold"
             android:layout_marginTop="10dp"
             local:MvxBind="Text Localization('HttpResponseTimeoutText')" />
+			<LinearLayout
+			android:layout_height="wrap_content"
+            android:layout_width="fill_parent">
         <EditText
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:inputType="number"
             local:MvxBind="Text Timeout" />
+			<TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginLeft="5dp"
+            local:MvxBind="Text Localization('HttpResponseTimeoutUnitsText')" />
+			</LinearLayout>
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textStyle="bold"
             android:layout_marginTop="10dp"
             local:MvxBind="Text Localization('BufferSizeText')" />
-        <EditText
-            android:layout_height="fill_parent"
+			<LinearLayout
+			android:layout_height="wrap_content"
+            android:layout_width="fill_parent">
+			<EditText
+            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:inputType="number"
             local:MvxBind="Text BufferSize" />
+			<TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginLeft="5dp"
+            local:MvxBind="Text Localization('BufferSizeUnitsText')" />
+			</LinearLayout>
 			<TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
