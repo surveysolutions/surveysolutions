@@ -14,6 +14,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             string variableName, string variableLabel,
             bool isMandatory,
             string enablementCondition,
+            string validationExpression,
+            string validationMessage,
             string instructions,
             Guid responsibleId,
             QuestionScope scope)
@@ -22,8 +24,12 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
                 variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions,variableLabel:variableLabel)
         {
             this.Scope = scope;
+            this.ValidationExpression = validationExpression;
+            this.ValidationMessage = validationMessage;
         }
 
+        public string ValidationMessage { get; set; }
+        public string ValidationExpression { get; set; }
         public QuestionScope Scope { get; set; }
     }
 }

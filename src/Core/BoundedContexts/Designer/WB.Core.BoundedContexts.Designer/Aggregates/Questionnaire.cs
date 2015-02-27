@@ -1609,6 +1609,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isMandatory,
             QuestionScope scope,
             string enablementCondition,
+            string validationExpression,
+            string validationMessage,
             string instructions,
             Guid responsibleId)
         {
@@ -1619,7 +1621,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, responsibleId);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, string.Empty, variableName);
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
 
             this.ApplyEvent(new QuestionChanged
             {
@@ -1631,6 +1633,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Mandatory = isMandatory,
                 QuestionScope = scope,
                 ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
                 Instructions = instructions,
                 ResponsibleId = responsibleId
             });
