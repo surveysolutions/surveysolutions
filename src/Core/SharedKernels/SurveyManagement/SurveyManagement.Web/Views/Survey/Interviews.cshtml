@@ -1,5 +1,8 @@
 ﻿@using System.Web.Optimization
 @using Newtonsoft.Json
+@using WB.Core.GenericSubdomains.Utils
+@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
+@using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.DocumentFilter
 @{
     Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
@@ -35,6 +38,9 @@
                 <li><a href="javascript:void(0)" data-bind="click: $root.Assign, text: UserName">Action</a></li>
             </ul>
         </div>
+
+        <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.approveInterview">Approve interview</button>
+        <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.rejectInterview">Reject interview</button>
 
         <div class="input-group">
             <input type="text" id="searchBox" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: search">
@@ -78,7 +84,7 @@
             <!-- ko foreach:Items -->
             <tr>
                 <td>
-                    <input type="checkbox" data-bind="checked: IsSelected, enable: CanBeReassigned" />
+                    <input type="checkbox" data-bind="checked: IsSelected" />
                 </td>
                 <!-- ko if:$root.SelectedTemplate() == '' -->
                 <td data-bind="text: FeaturedQuestions().joinArrayOfObjects('Question', 'Answer')"></td>
@@ -108,6 +114,31 @@
             <!-- /ko -->
         </tbody>
     </table>
+
+    <script type="text/html" id="confirm-assign-template">
+        @Html.Raw(WB.Core.SharedKernels.SurveyManagement.Web.Resources.Interviews.AssignConfirmMessage.F(
+            "<span class='text-normal' data-bind='text: length'></span>",
+            InterviewStatus.Created.ToLocalizeString(),
+            InterviewStatus.SupervisorAssigned.ToLocalizeString(),
+            InterviewStatus.InterviewerAssigned.ToLocalizeString(),
+            InterviewStatus.RejectedBySupervisor.ToLocalizeString()))
+    </script>
+    <script type="text/html" id="confirm-approve-template">
+        @Html.Raw(WB.Core.SharedKernels.SurveyManagement.Web.Resources.Interviews.ApproveConfirmMessage.F(
+            "<span class='text-normal' data-bind='text: length'></span>",
+            InterviewStatus.Completed.ToLocalizeString(),
+            InterviewStatus.RejectedByHeadquarters.ToLocalizeString()))
+    </script>
+    <script type="text/html" id="confirm-reject-template">
+        @Html.Raw(WB.Core.SharedKernels.SurveyManagement.Web.Resources.Interviews.RejectConfirmMessage.F(
+            "<span class='text-normal' data-bind='text: length'></span>",
+            InterviewStatus.Completed.ToLocalizeString(),
+            InterviewStatus.RejectedByHeadquarters.ToLocalizeString()))
+    </script>
+    <script type="text/html" id="confirm-continue-message-template">
+        @WB.Core.SharedKernels.SurveyManagement.Web.Resources.Interviews.ContinueConfirmMessage
+    </script>
+
 }
 
 @section filters

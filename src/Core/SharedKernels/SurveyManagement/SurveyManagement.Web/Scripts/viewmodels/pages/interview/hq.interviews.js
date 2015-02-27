@@ -44,7 +44,7 @@
             return;
         }
 
-        confirmMessage += $("#confirm-continue-message-template").html();
+        confirmMessage += '<br/>' + $("#confirm-continue-message-template").html();
 
         bootbox.confirm(confirmMessage, function (result) {
             if (result)
