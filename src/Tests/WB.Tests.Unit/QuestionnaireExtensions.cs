@@ -42,7 +42,7 @@ namespace WB.Tests.Unit
             Guid responsibleId)
         {
             questionnaire.AddDefaultTypeQuestion(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
-            questionnaire.UpdateGpsCoordinatesQuestion(questionId, title, variableName, variableLabel, isMandatory, scope, enablementCondition, instructions, responsibleId);
+            questionnaire.UpdateGpsCoordinatesQuestion(questionId, title, variableName, variableLabel, isMandatory, scope, enablementCondition, string.Empty, string.Empty, instructions, responsibleId);
         }
 
         public static void AddDateTimeQuestion(
