@@ -60,5 +60,10 @@ namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
             }
             return result;
         }
+
+        public static string AsCompositeKey(object key, object value)
+        {
+            return string.Format("{0}${1}", key, value);
+        }
     }
 }
