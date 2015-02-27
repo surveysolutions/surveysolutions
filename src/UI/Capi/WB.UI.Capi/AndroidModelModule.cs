@@ -38,6 +38,7 @@ using WB.UI.Capi.SnapshotStore;
 using WB.UI.Capi.Syncronization;
 using WB.UI.Capi.ViewModel.Dashboard;
 using WB.UI.Capi.ViewModel.InterviewMetaInfo;
+using WB.UI.Capi.ViewModel.Synchronization;
 
 namespace WB.UI.Capi
 {
