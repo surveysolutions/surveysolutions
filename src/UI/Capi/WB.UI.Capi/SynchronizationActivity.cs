@@ -191,10 +191,9 @@ namespace WB.UI.Capi
 
         private void btnRestore_Click(object sender, EventArgs e)
         {
-            var alertWarningAboutRestore =  this.CreateYesNoDialog(this,
-               this.Resources.GetString(Resource.String.Warning), 
+            var alertWarningAboutRestore =  this.CreateYesNoDialog(this, 
                this.btnRestoreConfirmed_Click, this.btnRestoreDeclined_Click, 
-               string.Format(this.Resources.GetString(Resource.String.AreYouSureYouWantToRestore), this.backupManager.RestorePath));
+               this.Resources.GetString(Resource.String.Warning), message: string.Format(this.Resources.GetString(Resource.String.AreYouSureYouWantToRestore), this.backupManager.RestorePath));
 
             alertWarningAboutRestore.Show();
         }
@@ -327,20 +326,20 @@ namespace WB.UI.Capi
 
                     EventHandler<DialogClickEventArgs> noHandler = (s, ev) => { actionCompleted = true; this.synchronizer.Cancel(); };
 
-                    var firstConfirmationDialog = this.CreateYesNoDialog(this, title: this.Resources.GetString(Resource.String.MakeThisTabletWorkingDevice), 
+                    var firstConfirmationDialog = this.CreateYesNoDialog(this, 
                         yesHandler: (s, ev) =>
                         {
-                            var secondConfirmationDialog = this.CreateYesNoDialog(this, title: this.Resources.GetString(Resource.String.AllYourDataWillBeDeleted), 
+                            var secondConfirmationDialog = this.CreateYesNoDialog(this, 
                                 yesHandler: (s1, evnt) =>
                                 {
                                     if (this.progressDialog != null) 
                                         this.progressDialog.Show();
                                     shouldThisDeviceBeLinkedToUser = true;
                                     actionCompleted = true;
-                                }, noHandler: noHandler);
-                                secondConfirmationDialog.Show();
+                                }, noHandler: noHandler, title: this.Resources.GetString(Resource.String.ConfirmDeviceChanging), message: this.Resources.GetString(Resource.String.AllYourDataWillBeDeleted));
+                            secondConfirmationDialog.Show();
 
-                        }, noHandler: noHandler);
+                        }, noHandler: noHandler, title: this.Resources.GetString(Resource.String.ConfirmDeviceChanging), message: this.Resources.GetString(Resource.String.MakeThisTabletWorkingDevice));
                         firstConfirmationDialog.Show();
                 });
             while (!actionCompleted)
@@ -350,13 +349,16 @@ namespace WB.UI.Capi
             return shouldThisDeviceBeLinkedToUser;
         }
 
-        public AlertDialog CreateYesNoDialog(Activity activity, string title, EventHandler<DialogClickEventArgs> yesHandler, EventHandler<DialogClickEventArgs> noHandler, string message = null)
+        public AlertDialog CreateYesNoDialog(Activity activity, EventHandler<DialogClickEventArgs> yesHandler, EventHandler<DialogClickEventArgs> noHandler, string title = null, string message = null)
         {
             var builder = new AlertDialog.Builder(activity);
             builder.SetNegativeButton(Resources.GetString(Resource.String.No), noHandler);
             builder.SetPositiveButton(Resources.GetString(Resource.String.Yes), yesHandler);
             builder.SetCancelable(false);
-            builder.SetTitle(title);
+            if (!string.IsNullOrWhiteSpace(title))
+            {
+                builder.SetTitle(title);
+            }
             if (!string.IsNullOrWhiteSpace(message))
             {
                 builder.SetMessage(message);

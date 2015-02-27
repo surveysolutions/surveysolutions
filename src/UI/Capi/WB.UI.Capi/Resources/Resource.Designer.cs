@@ -649,8 +649,8 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f06000a
 			public const int ActiveUsers = 2131099658;
 			
-			// aapt resource value: 0x7f06000d
-			public const int AllYourDataWillBeDeleted = 2131099661;
+			// aapt resource value: 0x7f06000e
+			public const int AllYourDataWillBeDeleted = 2131099662;
 			
 			// aapt resource value: 0x7f060005
 			public const int AnswerIsNotPresentInFilteredComboboxOptionsList = 2131099653;
@@ -661,92 +661,95 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f060004
 			public const int AreYouSureYouWantToRemoveRowFromRosterFormat = 2131099652;
 			
+			// aapt resource value: 0x7f06000c
+			public const int AreYouSureYouWantToRestore = 2131099660;
+			
+			// aapt resource value: 0x7f060011
+			public const int Cancel = 2131099665;
+			
 			// aapt resource value: 0x7f06000b
-			public const int AreYouSureYouWantToRestore = 2131099659;
+			public const int ConfirmDeviceChanging = 2131099659;
 			
-			// aapt resource value: 0x7f060010
-			public const int Cancel = 2131099664;
+			// aapt resource value: 0x7f06001b
+			public const int CreatingInformationPackage = 2131099675;
 			
-			// aapt resource value: 0x7f06001a
-			public const int CreatingInformationPackage = 2131099674;
-			
-			// aapt resource value: 0x7f060012
-			public const int DetailsFormat = 2131099666;
+			// aapt resource value: 0x7f060013
+			public const int DetailsFormat = 2131099667;
 			
 			// aapt resource value: 0x7f060008
 			public const int Hello = 2131099656;
 			
-			// aapt resource value: 0x7f060019
-			public const int InformationPackage = 2131099673;
+			// aapt resource value: 0x7f06001a
+			public const int InformationPackage = 2131099674;
 			
-			// aapt resource value: 0x7f060016
-			public const int InformationPackageIsSuccessfullySent = 2131099670;
+			// aapt resource value: 0x7f060017
+			public const int InformationPackageIsSuccessfullySent = 2131099671;
 			
-			// aapt resource value: 0x7f06001b
-			public const int InformationPackageSizeWarningFormat = 2131099675;
+			// aapt resource value: 0x7f06001c
+			public const int InformationPackageSizeWarningFormat = 2131099676;
 			
-			// aapt resource value: 0x7f060011
-			public const int Initializing = 2131099665;
-			
-			// aapt resource value: 0x7f060014
-			public const int InterviewLoadingError = 2131099668;
+			// aapt resource value: 0x7f060012
+			public const int Initializing = 2131099666;
 			
 			// aapt resource value: 0x7f060015
-			public const int InterviewWithIdIsAbsentFormat = 2131099669;
+			public const int InterviewLoadingError = 2131099669;
 			
-			// aapt resource value: 0x7f06000c
-			public const int MakeThisTabletWorkingDevice = 2131099660;
+			// aapt resource value: 0x7f060016
+			public const int InterviewWithIdIsAbsentFormat = 2131099670;
 			
-			// aapt resource value: 0x7f060020
-			public const int NetworkStatus = 2131099680;
+			// aapt resource value: 0x7f06000d
+			public const int MakeThisTabletWorkingDevice = 2131099661;
 			
-			// aapt resource value: 0x7f060024
-			public const int NewHtmlLine = 2131099684;
+			// aapt resource value: 0x7f060021
+			public const int NetworkStatus = 2131099681;
+			
+			// aapt resource value: 0x7f060025
+			public const int NewHtmlLine = 2131099685;
 			
 			// aapt resource value: 0x7f060003
 			public const int No = 2131099651;
 			
-			// aapt resource value: 0x7f06001d
-			public const int NoAssignments = 2131099677;
-			
-			// aapt resource value: 0x7f060021
-			public const int NowYouareConnectedToMobileNetwork = 2131099681;
-			
-			// aapt resource value: 0x7f060023
-			public const int NowYouareConnectedToWifiNetwork = 2131099683;
-			
-			// aapt resource value: 0x7f060013
-			public const int Oops = 2131099667;
-			
 			// aapt resource value: 0x7f06001e
-			public const int PleaseCheckURLInSettingsFormat = 2131099678;
+			public const int NoAssignments = 2131099678;
+			
+			// aapt resource value: 0x7f060022
+			public const int NowYouareConnectedToMobileNetwork = 2131099682;
+			
+			// aapt resource value: 0x7f060024
+			public const int NowYouareConnectedToWifiNetwork = 2131099684;
+			
+			// aapt resource value: 0x7f060014
+			public const int Oops = 2131099668;
+			
+			// aapt resource value: 0x7f06001f
+			public const int PleaseCheckURLInSettingsFormat = 2131099679;
+			
+			// aapt resource value: 0x7f060010
+			public const int Send = 2131099664;
+			
+			// aapt resource value: 0x7f06001d
+			public const int SendingInformationPackage = 2131099677;
+			
+			// aapt resource value: 0x7f060019
+			public const int SendingOfInformationPackageIsCanceled = 2131099673;
 			
 			// aapt resource value: 0x7f06000f
-			public const int Send = 2131099663;
-			
-			// aapt resource value: 0x7f06001c
-			public const int SendingInformationPackage = 2131099676;
+			public const int SyncIsFinished = 2131099663;
 			
 			// aapt resource value: 0x7f060018
-			public const int SendingOfInformationPackageIsCanceled = 2131099672;
-			
-			// aapt resource value: 0x7f06000e
-			public const int SyncIsFinished = 2131099662;
-			
-			// aapt resource value: 0x7f060017
-			public const int ThankYouForPackage = 2131099671;
+			public const int ThankYouForPackage = 2131099672;
 			
 			// aapt resource value: 0x7f060001
 			public const int Warning = 2131099649;
 			
-			// aapt resource value: 0x7f06001f
-			public const int WebErrorWithStatus = 2131099679;
+			// aapt resource value: 0x7f060020
+			public const int WebErrorWithStatus = 2131099680;
 			
 			// aapt resource value: 0x7f060002
 			public const int Yes = 2131099650;
 			
-			// aapt resource value: 0x7f060022
-			public const int YouAreNotConnectedToAnyNetwork = 2131099682;
+			// aapt resource value: 0x7f060023
+			public const int YouAreNotConnectedToAnyNetwork = 2131099683;
 			
 			// aapt resource value: 0x7f060007
 			public const int drawer_close = 2131099655;
