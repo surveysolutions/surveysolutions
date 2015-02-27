@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace WB.Core.GenericSubdomains.Utils
 {
@@ -142,7 +143,8 @@ namespace WB.Core.GenericSubdomains.Utils
             return string.IsNullOrWhiteSpace(src) ? null : src;
         }
 
-        public static string F(this string source, params object[] args)
+        [StringFormatMethod("source")]
+        public static string FormatString(this string source, params object[] args)
         {
             return string.Format(source, args);
         }
