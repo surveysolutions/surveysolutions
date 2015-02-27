@@ -109,6 +109,8 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Synchronization
                     shouldThisDeviceBeLinkedToUser = this.deviceChangingVerifier.ConfirmDeviceChanging();
                 }
 
+                this.ExitIfCanceled();
+
                 HandshakePackage package = await this.synchronizationService.HandshakeAsync(credentials: this.credentials, shouldThisDeviceBeLinkedToUser: shouldThisDeviceBeLinkedToUser);
                 
                 this.userId = package.UserId;
