@@ -38,7 +38,6 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="External\JetBrains.Annotations.cs" />
     <Compile Include="NamedLocker.cs" />
     <Compile Include="FileSizeUtils.cs" />
     <Compile Include="IAsyncExecutor.cs" />
