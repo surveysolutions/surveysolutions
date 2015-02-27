@@ -124,7 +124,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             if (isCacheEnabled)
             {
-                var cacheByInterview = this.GetOrCreateQuestionnaireExportEntityByInterviewId(interviewId);
+                QuestionnaireExportEntity cacheByInterview = this.GetOrCreateQuestionnaireExportEntityByInterviewId(interviewId);
                 cacheByInterview.InterviewIds.Remove(interviewId);
                 cacheByInterview.InterviewForDeleteIds.Add(interviewId);
                 return;
@@ -317,7 +317,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             var dataFolderForTemplatePath = this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
 
             if (!cache.ContainsKey(dataFolderForTemplatePath))
-                cache.Add(dataFolderForTemplatePath, new QuestionnaireExportEntity(dataFolderForTemplatePath, interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion));
+            {
+                cache.Add(dataFolderForTemplatePath, 
+                    new QuestionnaireExportEntity(dataFolderForTemplatePath, interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion));
+            }
+
             return cache[dataFolderForTemplatePath];
         }
 
