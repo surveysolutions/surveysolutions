@@ -35,13 +35,7 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
                 .Setup(x => x.GetUserPackageIdsWithOrder(userId, deviceId, lastSyncedPackageId))
                 .Throws<SyncPackageNotFoundException>();
 
-            var jsonUtilsMock = new Mock<IJsonUtils>();
-            jsonUtilsMock
-                .Setup(x => x.Serialize(Moq.It.IsAny<RestErrorDescription>()))
-                .Returns(errorMessage)
-                .Callback((RestErrorDescription error) => errorDescription = error);
-
-            controller = CreateSyncController(syncManager: syncManagerMock.Object, jsonUtils: jsonUtilsMock.Object, globalInfo: globalInfo);
+            controller = CreateSyncController(syncManager: syncManagerMock.Object, globalInfo: globalInfo);
         };
 
         Because of = () =>
@@ -50,11 +44,8 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
         It should_return_response_with_status_NotFound = () =>
             result.StatusCode.ShouldEqual(HttpStatusCode.NotFound);
 
-        It should_return_response_with_ = () =>
-            result.Content.ReadAsStringAsync().Result.ShouldContain(errorMessage);
-
         It should_return_error_message_with_code_ServerError = () =>
-            errorDescription.Message.ShouldEqual(InterviewerSyncStrings.ServerError);
+            result.Content.ReadAsStringAsync().Result.ShouldContain(InterviewerSyncStrings.ServerError);
 
         private static HttpResponseMessage result;
 
@@ -64,7 +55,5 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
         private static Guid deviceId = androidId.ToGuid();
         private static string lastSyncedPackageId = "some package";
         private static SyncItemsMetaContainerRequest request;
-        private static string errorMessage = "error";
-        private static RestErrorDescription errorDescription;
     }
 }

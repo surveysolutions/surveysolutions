@@ -57,9 +57,13 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
                 this.logger.Error(string.Format("Request to '{0}'. QueryParams: {1} failed. ", fullUrl, fullUrl.QueryParams), ex);
 
                 if (ex.Call.Response != null)
-                {
+                { 
                     var response = ex.Call.Response;
-                    var errorDescription = this.TryParseRestErrorDescription(response.ReasonPhrase);
+                    var message = response.Content.ReadAsStringAsync().Result;
+                    var errorDescription =
+                        this.TryParseRestErrorDescription(string.IsNullOrEmpty(message)
+                            ? response.ReasonPhrase
+                            : message);
                     throw new RestException(errorDescription.Message, statusCode: response.StatusCode, internalCode: errorDescription.Code, innerException: ex);
                 }
 
