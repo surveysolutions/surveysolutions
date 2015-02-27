@@ -34,7 +34,8 @@ namespace WB.UI.Capi.Syncronization
 
         public IList<ChangeLogShortRecord> GetClosedDraftChunksIds(Guid userId)
         {
-            return this.draftChangeLog.Filter(c => c.IsClosed && c.UserId == userId.FormatGuid())
+            var userIdAsString = userId.FormatGuid();
+            return this.draftChangeLog.Filter(c => c.IsClosed && c.UserId == userIdAsString)
                               .Select(d => new ChangeLogShortRecord(Guid.Parse(d.Id), Guid.Parse(d.EventSourceId)))
                               .ToList();
 
