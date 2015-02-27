@@ -20,6 +20,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<NewUserCreated>,
         IEventHandler<UserChanged>,
         IEventHandler<UserLocked>,
+
         IEventHandler<UserUnlocked>,
         IEventHandler<UserLockedBySupervisor>,
         IEventHandler<UserUnlockedBySupervisor>

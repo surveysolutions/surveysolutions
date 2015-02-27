@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Reposit
         where TMeta : class, IReadSideRepositoryEntity, IOrderableSyncPackage
         where TContent : class, IReadSideRepositoryEntity, ISyncPackage
     {
-        private readonly IChacheableRepositoryWriter writer;
+        private readonly IChacheableRepositoryWriter packageMetaCacheableWriter;
         private readonly IReadSideRepositoryWriter<TMeta> packageMetaWriter;
         private readonly IReadSideKeyValueStorage<TContent> packageContentWriter;
 
@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Reposit
             IReadSideKeyValueStorage<SynchronizationDeltasCounter> counterStorage, 
             IReadSideKeyValueStorage<TContent> packageContentWriter)
         {
-            this.writer = packageMetaWriter as IChacheableRepositoryWriter;
+            this.packageMetaCacheableWriter = packageMetaWriter as IChacheableRepositoryWriter;
             this.packageMetaWriter = packageMetaWriter;
             this.counterStorage = counterStorage;
             this.packageContentWriter = packageContentWriter;
@@ -55,38 +55,74 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Reposit
 
         public void Clear()
         {
-            var repositoryCleaner = this.packageMetaWriter as IReadSideRepositoryCleaner;
-            if (repositoryCleaner != null)
+            var packageMetaCleaner = this.packageMetaWriter as IReadSideRepositoryCleaner;
+            if (packageMetaCleaner != null)
             {
-                repositoryCleaner.Clear();
+                packageMetaCleaner.Clear();
+            }
+
+            var packageContenCleaner = this.packageContentWriter as IReadSideRepositoryCleaner;
+            if (packageContenCleaner != null)
+            {
+                packageContenCleaner.Clear();
+            }
+
+            var counterStorageCleaner = this.counterStorage as IReadSideRepositoryCleaner;
+            if (counterStorageCleaner != null)
+            {
+                counterStorageCleaner.Clear();
             }
         }
 
         public void EnableCache()
         {
-            if (this.writer != null)
+            if (this.packageMetaCacheableWriter != null)
             {
-                this.writer.EnableCache();
+                this.packageMetaCacheableWriter.EnableCache();
+            }
+
+            var packageContentCacheableWriter = this.packageContentWriter as IChacheableRepositoryWriter;
+            if (packageContentCacheableWriter != null)
+            {
+                packageContentCacheableWriter.EnableCache();
+            }
+
+            var counterCacheableWriter = this.counterStorage as IChacheableRepositoryWriter;
+            if (counterCacheableWriter != null)
+            {
+                counterCacheableWriter.EnableCache();
             }
         }
 
         public void DisableCache()
         {
-            if (this.writer != null)
+            if (this.packageMetaCacheableWriter != null)
             {
-                this.writer.DisableCache();
+                this.packageMetaCacheableWriter.DisableCache();
+            }
+
+            var packageContentCacheableWriter = this.packageContentWriter as IChacheableRepositoryWriter;
+            if (packageContentCacheableWriter != null)
+            {
+                packageContentCacheableWriter.DisableCache();
+            }
+
+            var counterCacheableWriter = this.counterStorage as IChacheableRepositoryWriter;
+            if (counterCacheableWriter != null)
+            {
+                counterCacheableWriter.DisableCache();
             }
         }
 
         public string GetReadableStatus()
         {
-            return this.writer != null ? this.writer.GetReadableStatus() : string.Empty;
+            return this.packageMetaCacheableWriter != null ? this.packageMetaCacheableWriter.GetReadableStatus() : string.Empty;
         }
 
         public Type ViewType {
             get
             {
-                return this.writer != null ? this.writer.ViewType : typeof(TMeta);
+                return this.packageMetaCacheableWriter != null ? this.packageMetaCacheableWriter.ViewType : typeof(TMeta);
             }
         }
 
@@ -94,7 +130,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Reposit
         {
             get
             {
-                return this.writer != null && this.writer.IsCacheEnabled;
+                return this.packageMetaCacheableWriter != null && this.packageMetaCacheableWriter.IsCacheEnabled;
             }
         }
     }

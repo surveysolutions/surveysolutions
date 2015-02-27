@@ -16,7 +16,7 @@ using Ninject;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Implementation.Authorization;
 using WB.Core.BoundedContexts.Capi.Implementation.Services;
-using WB.Core.BoundedContexts.Capi.Implementation.Syncronization;
+using WB.Core.BoundedContexts.Capi.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.Login;
 using WB.Core.GenericSubdomains.Utils;
@@ -32,8 +32,8 @@ using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Syncronization;
 using WB.UI.Shared.Android.Extensions;
 
-using SynchronizationEventArgs = WB.Core.BoundedContexts.Capi.Implementation.Syncronization.SynchronizationEventArgs;
-using SynchronizationEventArgsWithPercent = WB.Core.BoundedContexts.Capi.Implementation.Syncronization.SynchronizationEventArgsWithPercent;
+using SynchronizationEventArgs = WB.Core.BoundedContexts.Capi.Implementation.Synchronization.SynchronizationEventArgs;
+using SynchronizationEventArgsWithPercent = WB.Core.BoundedContexts.Capi.Implementation.Synchronization.SynchronizationEventArgsWithPercent;
 
 namespace WB.UI.Capi
 {

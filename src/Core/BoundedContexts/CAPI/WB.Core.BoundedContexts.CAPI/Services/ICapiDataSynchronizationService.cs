@@ -8,6 +8,6 @@ namespace WB.Core.BoundedContexts.Capi.Services
         void ProcessDownloadedPackage(UserSyncPackageDto item);
         void ProcessDownloadedPackage(QuestionnaireSyncPackageDto item, string itemType);
         void ProcessDownloadedPackage(InterviewSyncPackageDto item, string itemType);
-        IList<ChangeLogRecordWithContent> GetItemsForPush();
+        IList<ChangeLogRecordWithContent> GetItemsToPush();
     }
 }

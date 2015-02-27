@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Machine.Specifications;
@@ -13,18 +12,6 @@ namespace WB.Tests.Unit
 {
     internal static class ShouldExtensions
     {
-        public static void ShouldContainOrderedItems<T>(this IEnumerable<T> left, IEnumerable<T> right)
-        {
-            var leftList = left.ToList();
-            var rightList = right.ToList();
-
-            leftList.ShouldContainOnly(rightList);
-            for (int i = 0; i < leftList.Count(); i++)
-            {
-                leftList.ElementAt(i).ShouldEqual(rightList.ElementAt(i));
-            }
-        }
-
         public static void ShouldMatchMethodInfo(this MetodInfo left, MetodInfo right)
         {
             left.Name.ShouldEqual(right.Name);

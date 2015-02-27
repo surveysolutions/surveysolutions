@@ -10,11 +10,11 @@ namespace WB.Core.Synchronization
 
         void SendSyncItem(Guid interviewId, string package);
 
-        SyncItemsMetaContainer GetQuestionnaireArIdsWithOrder(Guid userId, Guid clientRegistrationId, string lastSyncedPackageId);
+        SyncItemsMetaContainer GetQuestionnairePackageIdsWithOrder(Guid userId, Guid clientRegistrationId, string lastSyncedPackageId);
 
-        SyncItemsMetaContainer GetUserArIdsWithOrder(Guid userId, Guid deviceId, string lastSyncedPackageId);
+        SyncItemsMetaContainer GetUserPackageIdsWithOrder(Guid userId, Guid deviceId, string lastSyncedPackageId);
 
-        SyncItemsMetaContainer GetInterviewArIdsWithOrder(Guid userId, Guid deviceId, string lastSyncedPackageId);
+        SyncItemsMetaContainer GetInterviewPackageIdsWithOrder(Guid userId, Guid deviceId, string lastSyncedPackageId);
 
         UserSyncPackageDto ReceiveUserSyncPackage(Guid deviceId, string packageId, Guid userId);
 
