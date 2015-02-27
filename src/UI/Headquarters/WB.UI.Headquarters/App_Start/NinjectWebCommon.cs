@@ -110,7 +110,13 @@ namespace WB.UI.Headquarters
                 new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled,
                     LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval);
 
-            string appDataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
+            string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
+            if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
+            {
+                appDataDirectory = System.Web.Hosting.HostingEnvironment.MapPath(appDataDirectory);
+            }
+
+            //string appDataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
 
             var synchronizationSettings = new SyncSettings(appDataDirectory: appDataDirectory,
                 incomingCapiPackagesWithErrorsDirectoryName:
