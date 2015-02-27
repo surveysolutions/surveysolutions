@@ -97,11 +97,20 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The approximate number of bytes consumed by web service synchronizer.
+        ///   Looks up a localized string similar to Buffer size for receiving/transmitting data stream:.
         /// </summary>
         public static string BufferSizeText {
             get {
                 return ResourceManager.GetString("BufferSizeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to bytes.
+        /// </summary>
+        public static string BufferSizeUnitsText {
+            get {
+                return ResourceManager.GetString("BufferSizeUnitsText", resourceCulture);
             }
         }
         
@@ -178,7 +187,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The time for waiting response from web server in seconds:.
+        ///   Looks up a localized string similar to The time for waiting response from web server:.
         /// </summary>
         public static string HttpResponseTimeoutText {
             get {
@@ -394,7 +403,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All parameters were successfully reset to the default state.
+        ///   Looks up a localized string similar to All parameters were successfully reset to default state.
         /// </summary>
         public static string ResetSettingsSuccessText {
             get {
@@ -471,6 +480,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         public static string StaySignedInText {
             get {
                 return ResourceManager.GetString("StaySignedInText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to seconds.
+        /// </summary>
+        public static string TimeoutUnitsText {
+            get {
+                return ResourceManager.GetString("TimeoutUnitsText", resourceCulture);
             }
         }
         
