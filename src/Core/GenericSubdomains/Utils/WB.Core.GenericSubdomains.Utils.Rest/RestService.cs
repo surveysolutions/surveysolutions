@@ -32,7 +32,14 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
             {
                 throw new RestException(Resources.NoNetwork);
             }
-            Url fullUrl = this.restServiceSettings.BaseAddress()
+
+            string baseAddress = this.restServiceSettings.BaseAddress();
+            if (string.IsNullOrWhiteSpace(baseAddress))
+            {
+                throw new ArgumentNullException("baseAddress", Resources.BaseAddressNotSet);
+            }
+
+            Url fullUrl = baseAddress
                 .AppendPathSegment(url)
                 .SetQueryParams(queryString);
             var restClient = fullUrl

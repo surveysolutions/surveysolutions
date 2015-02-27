@@ -59,7 +59,6 @@
     <Compile Include="Synchronization\FileSyncDescription.cs" />
     <Compile Include="Synchronization\HandshakePackage.cs" />
     <Compile Include="Synchronization\InterviewMetaInfo.cs" />
-    <Compile Include="Synchronization\PackagesToPullMeta.cs" />
     <Compile Include="Synchronization\SurveyManagement\BaseSyncPackageDto.cs" />
     <Compile Include="Synchronization\SurveyManagement\HandshakePackageRequest.cs" />
     <Compile Include="Synchronization\SurveyManagement\InterviewSyncPackageDto.cs" />

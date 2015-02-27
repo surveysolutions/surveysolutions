@@ -24,14 +24,14 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             syncItemsMetaContainer = CreateSyncItemsMetaContainer();
             request = CreateSyncItemsMetaContainerRequest(lastSyncedPackageId, deviceId);
 
-            syncManagerMock = Mock.Of<ISyncManager>(x => x.GetUserArIdsWithOrder(userId, deviceId, lastSyncedPackageId) == syncItemsMetaContainer);
+            syncManagerMock = Mock.Of<ISyncManager>(x => x.GetUserPackageIdsWithOrder(userId, deviceId, lastSyncedPackageId) == syncItemsMetaContainer);
 
             controller = CreateSyncController(syncManager: syncManagerMock, globalInfo: globalInfo);
         };
 
         
         Because of = () =>
-            result = controller.GetUserArKeys(request).Content.ReadAsAsync<SyncItemsMetaContainer>().Result;
+            result = controller.GetUserPackageIds(request).Content.ReadAsAsync<SyncItemsMetaContainer>().Result;
 
         It should_return_not_null_package = () =>
             result.ShouldNotBeNull();

@@ -90,7 +90,7 @@ namespace WB.UI.Capi.Syncronization.Implementation
             }
         }
 
-        public string GetChunkBeforeChunkWithId(string type, string lastKnownPackageId, Guid userId)
+        public string GetChunkBeforeChunkWithId(string lastKnownPackageId, Guid userId)
         {
             if (string.IsNullOrWhiteSpace(lastKnownPackageId))
             {
