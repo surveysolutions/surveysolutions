@@ -276,8 +276,7 @@
             var questionTypesDoesNotSupportValidations = [
                 "TextList",
                 "QRBarcode",
-                "Multimedia",
-                "GpsCoordinates"];
+                "Multimedia"];
             
             $scope.doesQuestionSupportValidations = function () {
                 return $scope.activeQuestion && !_.contains(questionTypesDoesNotSupportValidations, $scope.activeQuestion.type)
