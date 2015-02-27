@@ -159,6 +159,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InterviewerSyncStrings.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\Interviews.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Interviews.resx</DependentUpon>
+    </Compile>
     <Compile Include="Utils\Binding\GenericBinderResolver.cs" />
     <Compile Include="Utils\Binding\IModelBinder.cs" />
     <Compile Include="Utils\Binding\ModelBinder.cs" />
@@ -295,6 +300,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>InterviewerSyncStrings.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Interviews.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Interviews.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\web.config" />
   </ItemGroup>
