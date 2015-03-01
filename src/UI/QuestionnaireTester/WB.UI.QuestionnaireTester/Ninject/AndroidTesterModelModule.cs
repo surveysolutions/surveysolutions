@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Implementation.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -39,7 +40,7 @@ namespace WB.UI.QuestionnaireTester.Ninject
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
             this.Bind<IStringCompressor>().To<JsonCompressor>();
             this.Bind<IWaitService>().To<WaitService>().InSingletonScope();
-            this.Bind<IPlainStorageAccessor<QuestionnaireDocument>>().To<QuestionnaireDocumentRepository>().InSingletonScope();
+            this.Bind<IPlainStorageAccessor<QuestionnaireDocument>>().To<InMemoryPlainStorageAccessor<QuestionnaireDocument>>().InSingletonScope();
             this.Bind<IRestServiceSettings>().To<RestServiceSettings>().InSingletonScope();
         }
     }

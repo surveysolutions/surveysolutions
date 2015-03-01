@@ -1,6 +1,6 @@
 using WB.Core.GenericSubdomains.Utils.Services;
 
-namespace WB.UI.QuestionnaireTester.Implementation.Services
+namespace WB.Core.BoundedContexts.QuestionnaireTester.Views
 {
     public class Identity : IIdentity
     {

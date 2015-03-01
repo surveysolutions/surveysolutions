@@ -216,15 +216,10 @@
     <Compile Include="Extensions\ActivityExtensions.cs" />
     <Compile Include="Implementation\Services\ApplicationInitializer.cs" />
     <Compile Include="Implementation\Services\ApplicationSettings.cs" />
-    <Compile Include="Implementation\Services\QuestionnaireDocumentRepository.cs" />
-    <Compile Include="Implementation\Services\QuestionnaireMetaInfoAccessor.cs" />
     <Compile Include="Implementation\Services\DesignerAuthentication.cs" />
-    <Compile Include="Implementation\Services\Identity.cs" />
     <Compile Include="Implementation\Services\Principal.cs" />
     <Compile Include="Implementation\Services\QuestionnareAssemblyTesterFileAccessor.cs" />
     <Compile Include="Implementation\Services\RestServiceSettings.cs" />
-    <Compile Include="Implementation\Services\SiaqodbFactory.cs" />
-    <Compile Include="Implementation\Services\StorageSerializer.cs" />
     <Compile Include="Mvvm\CustomBindings\SearchViewQueryTextChangeBinding.cs" />
     <Compile Include="Mvvm\CustomBindings\SearchViewQueryTextSubmitBinding.cs" />
     <Compile Include="Mvvm\CustomBindings\SwipeRefreshLayoutRefreshBinding.cs" />

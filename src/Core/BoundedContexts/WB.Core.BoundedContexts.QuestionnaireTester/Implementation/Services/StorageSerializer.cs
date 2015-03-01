@@ -3,9 +3,9 @@ using System.IO;
 using Sqo;
 using WB.Core.GenericSubdomains.Utils.Services;
 
-namespace WB.UI.QuestionnaireTester.Implementation.Services
+namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 {
-    class StorageSerializer : IDocumentSerializer
+    public class StorageSerializer : IDocumentSerializer
     {
         private readonly IJsonUtils jsonUtils;
 

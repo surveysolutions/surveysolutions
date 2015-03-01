@@ -16,6 +16,7 @@ using Sqo;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.EventHandler;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Utils.Services;
@@ -162,7 +163,7 @@ namespace WB.UI.QuestionnaireTester.Ninject
 
             kernel.Bind<IAuthentication>().To<DesignerAuthentication>();
             kernel.Bind<IPrincipal>().ToConstant(new Principal(Mvx.Resolve<IKeychain>(), Mvx.Resolve<ISettings>()));
-            kernel.Bind<IQueryablePlainStorageAccessor<QuestionnaireMetaInfo>>().To<QuestionnaireMetaInfoAccessor>().InSingletonScope();
+            kernel.Bind(typeof(IQueryablePlainStorageAccessor<>)).To(typeof(SiaqoDbAccessor<>)).InSingletonScope();
             kernel.Bind<IDocumentSerializer>().To<StorageSerializer>().InSingletonScope();
             kernel.Bind<IApplicationSettings>().To<ApplicationSettings>().InSingletonScope();
             

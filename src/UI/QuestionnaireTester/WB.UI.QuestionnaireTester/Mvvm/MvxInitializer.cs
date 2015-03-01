@@ -1,11 +1,10 @@
 using Cirrious.CrossCore;
-using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
+using WB.Core.BoundedContexts.QuestionnaireTester.Views;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 
@@ -24,8 +23,8 @@ namespace WB.UI.QuestionnaireTester.Mvvm
             Mvx.RegisterSingleton(() => ServiceLocator.Current.GetInstance<ICommandService>());
             Mvx.RegisterSingleton(() => ServiceLocator.Current.GetInstance<IQuestionnaireAssemblyFileAccessor>());
             Mvx.RegisterSingleton(() => ServiceLocator.Current.GetInstance<IAnswerProgressIndicator>());
-            Mvx.RegisterSingleton(() => ServiceLocator.Current.GetInstance<IQueryablePlainStorageAccessor<QuestionnaireMetaInfo>>());
-            Mvx.RegisterSingleton(() => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireDocument>>());
+            Mvx.RegisterSingleton(() => ServiceLocator.Current.GetInstance<IQueryablePlainStorageAccessor<QuestionnaireMetaInfoStorageViewModel>>());
+            Mvx.RegisterSingleton(() => ServiceLocator.Current.GetInstance<IQueryablePlainStorageAccessor<QuestionnaireStorageViewModel>>());
             Mvx.RegisterSingleton(() => ServiceLocator.Current.GetInstance<IApplicationSettings>());
             Mvx.RegisterSingleton(() => ServiceLocator.Current.GetInstance<IRestServiceSettings>());
         }
