@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No questionnaires found.  Pull down to refresh list..
+        ///   Looks up a localized string similar to No questionnaires found. &lt;br/&gt; Pull down to refresh list.
         /// </summary>
         public static string EmptyQuestionnaireListText {
             get {

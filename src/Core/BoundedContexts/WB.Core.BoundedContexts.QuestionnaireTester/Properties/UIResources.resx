@@ -151,7 +151,7 @@
     <value>Questionnaires</value>
   </data>
   <data name="EmptyQuestionnaireListText" xml:space="preserve">
-    <value>No questionnaires found.  Pull down to refresh list.</value>
+    <value>No questionnaires found. &lt;br/&gt; Pull down to refresh list</value>
   </data>
   <data name="EndpointText" xml:space="preserve">
     <value>Web Service Endpoint:</value>

@@ -98,11 +98,10 @@
 				<TextView
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-				android:maxWidth="300dp"
 				android:layout_marginTop="8dp"
 				android:gravity="center"
-				android:textColor="@color/background"
-				local:MvxBind="Text Localization('TryAgainLink'); Click LoadQuestionnaireCommand; Visible ShowTryAgainLink" />
+				android:clickable="true"
+				local:MvxBind="Click LoadQuestionnaireCommand; Html Localization('TryAgainLink'); Visible ShowTryAgainLink" />
 		</LinearLayout>
         <RelativeLayout
             android:layout_width="match_parent"

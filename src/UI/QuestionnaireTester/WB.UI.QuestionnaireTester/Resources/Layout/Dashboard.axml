@@ -65,7 +65,7 @@
                             android:layout_height="match_parent"
                             android:layout_marginTop="10dp"
 							android:gravity="center"
-                            local:MvxBind="Text Localization('EmptyQuestionnaireListText')" />
+                            local:MvxBind="Html Localization('EmptyQuestionnaireListText')" />
                     </LinearLayout>
                 </RelativeLayout>
             </WB.UI.QuestionnaireTester.Controls.MvxSwipeRefreshLayout>
@@ -78,6 +78,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:paddingTop="25dp"
+					android:paddingBottom="25dp"
                     android:orientation="vertical"
                     android:divider="@null"
                     android:dividerHeight="0dp"

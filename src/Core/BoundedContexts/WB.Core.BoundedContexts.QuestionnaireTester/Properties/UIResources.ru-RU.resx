@@ -154,7 +154,7 @@
     <value>Опросники</value>
   </data>
   <data name="EmptyQuestionnaireListText" xml:space="preserve">
-    <value>Нет опросников.  Потяните вниз, чтобы обновить список</value>
+    <value>Нет опросников.  &lt;br/&gt; Потяните вниз, чтобы обновить список</value>
   </data>
   <data name="EndpointText" xml:space="preserve">
     <value>Адрес веб-сервиса:</value>
@@ -187,7 +187,7 @@
     <value>Ваша версия приложения не поддерживает открытие данного опросника &lt;br/&gt;&lt;br/&gt; &lt;a href="market://details?id=org.worldbank.solutions.Vtester"&gt;Обновить приложение&lt;/a&gt;</value>
   </data>
   <data name="ImportQuestionnaire_PrepareQuestionnaire" xml:space="preserve">
-    <value>Погдотовка опросника с созданию интервью</value>
+    <value>Погдотовка опросника к созданию интервью</value>
   </data>
   <data name="ImportQuestionnaire_StoreAssembly" xml:space="preserve">
     <value>Сохранение динамически подключаемой библиотеки интервью на диск</value>
@@ -265,7 +265,7 @@
     <value>Запомнить меня</value>
   </data>
   <data name="TryAgainLink" xml:space="preserve">
-    <value>Попробовать снова</value>
+    <value>&lt;a href=""&gt;Попробовать снова&lt;/a&gt;</value>
   </data>
   <data name="Unauthorized" xml:space="preserve">
     <value>Вы ввели неправильное имя или пароль</value>
