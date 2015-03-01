@@ -49,6 +49,11 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.PlainStorage
             }
         }
 
+        public void Remove(IEnumerable<TEntity> entities)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Store(IEnumerable<Tuple<TEntity, string>> entities)
         {
             using (IDocumentSession session = this.OpenSession())

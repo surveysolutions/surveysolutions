@@ -22,6 +22,11 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.PlainStorage
 
         }
 
+        public IEnumerable<TEntity> Query(Func<TEntity, bool> query)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<TEntity> Query(Expression<TEntity> query)
         {
             throw new NotImplementedException();
