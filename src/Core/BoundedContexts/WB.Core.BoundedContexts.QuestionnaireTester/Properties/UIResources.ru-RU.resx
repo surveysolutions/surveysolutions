@@ -150,6 +150,9 @@
   <data name="Dashboard_SearchText" xml:space="preserve">
     <value>Поиск (по имени, автору)</value>
   </data>
+  <data name="EmptyQuestionnaireListBySearchText" xml:space="preserve">
+    <value>По Вашему запросу ничего не найдено</value>
+  </data>
   <data name="EmptyQuestionnaireListText" xml:space="preserve">
     <value>Нет опросников.  &lt;br/&gt; Потяните вниз, чтобы обновить список</value>
   </data>
