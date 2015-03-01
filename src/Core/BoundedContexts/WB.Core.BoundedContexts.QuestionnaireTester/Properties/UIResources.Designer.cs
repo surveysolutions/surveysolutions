@@ -151,11 +151,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaires.
+        ///   Looks up a localized string similar to Search (by name, author).
         /// </summary>
-        public static string DashboardTitleText {
+        public static string Dashboard_SearchText {
             get {
-                return ResourceManager.GetString("DashboardTitleText", resourceCulture);
+                return ResourceManager.GetString("Dashboard_SearchText", resourceCulture);
             }
         }
         
