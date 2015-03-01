@@ -223,6 +223,7 @@
     <Compile Include="Mvvm\CustomBindings\SearchViewQueryTextChangeBinding.cs" />
     <Compile Include="Mvvm\CustomBindings\SearchViewQueryTextSubmitBinding.cs" />
     <Compile Include="Mvvm\CustomBindings\SwipeRefreshLayoutRefreshBinding.cs" />
+    <Compile Include="Mvvm\CustomBindings\SearchViewQueryHintBinding.cs" />
     <Compile Include="Mvvm\CustomBindings\SwipeRefreshLayoutRefreshingBinding.cs" />
     <Compile Include="Mvvm\MvxInitializer.cs" />
     <Compile Include="Mvvm\ValueContervers\LocalizationValueConverter.cs" />
@@ -449,6 +450,7 @@
     <AndroidResource Include="Resources\Drawable\wb_logo.png" />
     <AndroidResource Include="Resources\Drawable\bgsplash.xml" />
     <AndroidResource Include="Resources\Drawable\about_logo.png" />
+    <AndroidResource Include="Resources\Drawable\color_cursor.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.Capi.csproj">

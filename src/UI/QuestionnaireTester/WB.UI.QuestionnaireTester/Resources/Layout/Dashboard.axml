@@ -8,30 +8,22 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/background">
-        <ImageView
+			<SearchView
+			android:id="@+id/search"
+			android:layout_toLeftOf="@id/logo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+			android:iconifiedByDefault="false"
+            local:MvxBind="QueryHint Localization('Dashboard_SearchText'); QueryTextChange FindQuestionnairesCommand; QueryTextSubmit FindQuestionnairesCommand" />
+			<ImageView
             android:id="@+id/logo"
             android:layout_width="35dp"
             android:layout_height="35dp"
+			android:layout_marginRight="8dp"
+			android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="8dp"
             android:src="@drawable/ic_drawer_light" />
-        <SearchView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/logo"
-            android:layout_alignParentRight="true"
-            android:textColor="@color/text"
-            android:layout_centerVertical="true"
-            local:MvxBind="Hint Localization('DashboardTitleText'); QueryTextChange FindQuestionnairesCommand; QueryTextSubmit FindQuestionnairesCommand" />
-    <!--<TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/logo"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/text"
-            android:layout_marginLeft="15dp"
-            android:layout_centerVertical="true"
-            local:MvxBind="Text Localization('DashboardTitleText')" />-->
     </RelativeLayout>
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer"
@@ -103,7 +95,7 @@
             android:id="@+id/sidebar"
             android:layout_width="320dp"
             android:layout_height="match_parent"
-            android:layout_gravity="start"
+            android:layout_gravity="right" 
             android:orientation="vertical"
             android:background="?android:attr/colorBackground">
             <LinearLayout

@@ -4,7 +4,14 @@
     <item name="android:windowNoTitle">true</item>
   </style>
 
+  <style name="dashboardSearchEditText" parent="@android:style/Widget.Holo.Light.EditText">
+    <item name="android:textCursorDrawable">@drawable/color_cursor</item>
+    <item name="android:textColor">@color/text</item>
+    <item name="android:textColorHint">@color/hint</item>
+  </style>
+
   <color name="text">#FFFFFFFF</color>
+  <color name="hint">#ffd3d3d3</color>
   <color name="background">#FF2A81CB</color>
   <color name="errorMessage">#FFE32102</color>
 

@@ -1,14 +1,12 @@
 using System.Reflection;
 using Android.Content;
 using Android.Widget;
-using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Binding.Bindings.Target.Construction;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.UI.QuestionnaireTester.Controls;
 using WB.UI.QuestionnaireTester.Mvvm.CustomBindings;
 using WB.UI.Shared.Android;
-using Xamarin;
 
 namespace WB.UI.QuestionnaireTester
 {
@@ -30,6 +28,7 @@ namespace WB.UI.QuestionnaireTester
             registry.RegisterFactory(new MvxCustomBindingFactory<MvxSwipeRefreshLayout>("Refreshing", (view) => new SwipeRefreshLayoutRefreshingBinding(view)));
             registry.RegisterFactory(new MvxCustomBindingFactory<SearchView>("QueryTextChange", (view) => new SearchViewQueryTextChangeBinding(view)));
             registry.RegisterFactory(new MvxCustomBindingFactory<SearchView>("QueryTextSubmit", (view) => new SearchViewQueryTextSubmitBinding(view)));
+            registry.RegisterFactory(new MvxCustomBindingFactory<SearchView>("QueryHint", (view) => new SearchViewQueryHintBinding(view)));
 
             base.FillTargetFactories(registry);
         }
