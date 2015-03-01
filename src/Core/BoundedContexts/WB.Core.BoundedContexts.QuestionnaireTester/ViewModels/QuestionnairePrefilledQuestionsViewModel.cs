@@ -7,6 +7,7 @@ using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
+using WB.Core.BoundedContexts.QuestionnaireTester.Views;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
@@ -25,7 +26,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly IRestService restService;
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
         private readonly ICommandService commandService;
-        private readonly IPlainStorageAccessor<QuestionnaireDocument> questionnairesStorage;
+        private readonly IQueryablePlainStorageAccessor<QuestionnaireStorageViewModel> questionnairesStorage;
         private readonly IRestServiceSettings restServiceSettings;
         private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
 
@@ -114,7 +115,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public QuestionnairePrefilledQuestionsViewModel(ILogger logger, IRestService restService,
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor, ICommandService commandService,
             IPrincipal principal, IAnswerProgressIndicator answerProgressIndicator, IUserInteraction uiDialogs,
-            IPlainStorageAccessor<QuestionnaireDocument> questionnairesStorage, IRestServiceSettings restServiceSettings)
+            IQueryablePlainStorageAccessor<QuestionnaireStorageViewModel> questionnairesStorage, IRestServiceSettings restServiceSettings)
             : base(logger, principal: principal, uiDialogs: uiDialogs)
         {
             answerProgressIndicator.Setup(() => this.IsAnswering = true, () => this.IsAnswering = false);
@@ -176,7 +177,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
                     var questionnaireDocumentFromStorage = this.questionnairesStorage.GetById(this.SelectedQuestionnaire.Id);
 
-                    if (questionnaireDocumentFromStorage == null || questionnaireDocumentFromStorage.LastEntryDate != (await this.GetQuestionnaireLastEntryDate()).LastEntryDate)
+                    if (questionnaireDocumentFromStorage == null || questionnaireDocumentFromStorage.Questionnaire.LastEntryDate != (await this.GetQuestionnaireLastEntryDate()).LastEntryDate)
                     {
                         var questionnaireCommunicationPackage = await this.GetQuestionnaireFromServer(
                             (downloadProgress) =>
@@ -186,8 +187,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
                         this.ProgressIndicator = UIResources.ImportQuestionnaire_StoreQuestionnaire;
 
-                        this.questionnairesStorage.Store(questionnaireCommunicationPackage.Questionnaire, questionnaireCommunicationPackage.Questionnaire.PublicKey.FormatGuid());
-                        questionnaireDocumentFromStorage = questionnaireCommunicationPackage.Questionnaire;
+                        questionnaireDocumentFromStorage = new QuestionnaireStorageViewModel()
+                        {
+                            Id = questionnaireCommunicationPackage.Questionnaire.PublicKey.FormatGuid(),
+                            Questionnaire = questionnaireCommunicationPackage.Questionnaire
+                        };
+
+                        this.questionnairesStorage.Store(questionnaireDocumentFromStorage, questionnaireCommunicationPackage.Questionnaire.PublicKey.FormatGuid());
 
                         this.ProgressIndicator = UIResources.ImportQuestionnaire_StoreAssembly;
 
@@ -197,7 +203,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     this.ProgressIndicator = UIResources.ImportQuestionnaire_PrepareQuestionnaire;
 
                     if (tokenSource.IsCancellationRequested) return;
-                    this.ExecuteImportFromDesignerForTesterCommand(questionnaireDocumentFromStorage);
+                    this.ExecuteImportFromDesignerForTesterCommand(questionnaireDocumentFromStorage.Questionnaire);
 
                     Guid interviewUserId = Guid.NewGuid();
                     Guid interviewId = Guid.NewGuid();
@@ -205,7 +211,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     this.ProgressIndicator = UIResources.ImportQuestionnaire_CreateInterview;
 
                     if (tokenSource.IsCancellationRequested) return;
-                    this.ExecuteCreateInterviewCommand(interviewId, interviewUserId,questionnaireDocumentFromStorage.PublicKey);
+                    this.ExecuteCreateInterviewCommand(interviewId, interviewUserId,questionnaireDocumentFromStorage.Questionnaire.PublicKey);
 
                     if (tokenSource.IsCancellationRequested) return;
                     this.interviewId = interviewId;

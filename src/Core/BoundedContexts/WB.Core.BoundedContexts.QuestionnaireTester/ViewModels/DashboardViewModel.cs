@@ -8,6 +8,7 @@ using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.Plugins.WebBrowser;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
+using WB.Core.BoundedContexts.QuestionnaireTester.Views;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.PlainStorage;
@@ -20,14 +21,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     public class DashboardViewModel : BaseViewModel
     {
         private readonly IRestService restService;
-        private readonly IQueryablePlainStorageAccessor<QuestionnaireMetaInfo> questionnairesStorageAccessor;
+        private readonly IQueryablePlainStorageAccessor<QuestionnaireMetaInfoStorageViewModel> questionnairesStorageAccessor;
         private readonly IMvxWebBrowserTask webBrowser;
 
         private readonly QuestionnaireVersion supportedQuestionnaireVersion;
         private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
 
         public DashboardViewModel(IPrincipal principal, IRestService restService, ILogger logger,
-            IUserInteraction uiDialogs, IQueryablePlainStorageAccessor<QuestionnaireMetaInfo> questionnairesStorageAccessor, IMvxWebBrowserTask webBrowser)
+            IUserInteraction uiDialogs, IQueryablePlainStorageAccessor<QuestionnaireMetaInfoStorageViewModel> questionnairesStorageAccessor, IMvxWebBrowserTask webBrowser)
             : base(logger, principal: principal, uiDialogs: uiDialogs)
         {
             this.restService = restService;
@@ -168,7 +169,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             return Task.Run(() =>
             {
-                this.Questionnaires = questionnairesStorageAccessor.LoadAll().ToList();
+                this.Questionnaires = this.questionnairesStorageAccessor.Query(storageModel => storageModel.UserName == this.Principal.CurrentIdentity.Name)
+                                                                        .Select(storageModel => storageModel.MetaInfo)
+                                                                        .ToList();
             });
         }
 
@@ -176,8 +179,20 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             return Task.Run(() =>
             {
-                this.questionnairesStorageAccessor.RemoveAll();
-                this.questionnairesStorageAccessor.Store(questionnaireListItems.Select(qli => new Tuple<QuestionnaireMetaInfo, string>(qli, qli.Id)));
+                foreach (var questionnaire in this.questionnairesStorageAccessor.Query(storageModel => storageModel.UserName == this.Principal.CurrentIdentity.Name))
+                {
+                    this.questionnairesStorageAccessor.Remove(questionnaire.Id);
+                }
+
+                this.questionnairesStorageAccessor.Store(questionnaireListItems.Select(
+                    qli => new Tuple<QuestionnaireMetaInfoStorageViewModel, string>(
+                        new QuestionnaireMetaInfoStorageViewModel()
+                        {
+                            Id = qli.Id,
+                            UserName = this.Principal.CurrentIdentity.Name,
+                            MetaInfo = qli
+                        }, qli.Id)));
+
                 this.Questionnaires = questionnaireListItems.ToList();
             });
         }

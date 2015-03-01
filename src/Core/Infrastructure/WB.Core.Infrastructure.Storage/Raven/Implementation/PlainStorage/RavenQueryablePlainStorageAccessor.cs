@@ -22,12 +22,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.PlainStorage
 
         }
 
-        public IEnumerable<TEntity> LoadAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveAll()
+        public IEnumerable<TEntity> Query(Expression<TEntity> query)
         {
             throw new NotImplementedException();
         }
