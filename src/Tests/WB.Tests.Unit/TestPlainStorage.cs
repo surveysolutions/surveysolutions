@@ -50,12 +50,7 @@ namespace WB.Tests.Unit
             return query.Invoke(this.entites.Values.AsQueryable());
         }
 
-        public IEnumerable<T> LoadAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveAll()
+        public IEnumerable<T> Query(Expression<T> query)
         {
             throw new NotImplementedException();
         }
