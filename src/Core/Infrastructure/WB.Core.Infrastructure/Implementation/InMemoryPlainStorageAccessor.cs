@@ -21,6 +21,11 @@ namespace WB.Core.Infrastructure.Implementation
                 this.inMemroyStorage.Remove(id);
         }
 
+        public void Remove(IEnumerable<TEntity> entities)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Store(TEntity entity, string id)
         {
             this.inMemroyStorage[id] = entity;
