@@ -160,6 +160,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Questionnaires not found by your request.
+        /// </summary>
+        public static string EmptyQuestionnaireListBySearchText {
+            get {
+                return ResourceManager.GetString("EmptyQuestionnaireListBySearchText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No questionnaires found. &lt;br/&gt; Pull down to refresh list.
         /// </summary>
         public static string EmptyQuestionnaireListText {

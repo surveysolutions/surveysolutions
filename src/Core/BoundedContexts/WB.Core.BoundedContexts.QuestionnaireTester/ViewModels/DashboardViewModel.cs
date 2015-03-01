@@ -81,6 +81,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
+        private bool hasSearchText = false;
+        public bool HasSearchText
+        {
+            get { return hasSearchText; }
+            set
+            {
+                hasSearchText = value;
+                RaisePropertyChanged(() => HasSearchText);
+            }
+        }
+
         public string LoginName
         {
             get { return this.Principal.CurrentIdentity.Name; }
@@ -141,27 +152,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private void FindQuestionnaires(string query)
         {
-            if (string.IsNullOrEmpty(query))
-            {
-                if (this.allQuestionnaires == null) return;
+            this.HasSearchText = !string.IsNullOrEmpty(query);
 
-                this.Questionnaires = this.allQuestionnaires;
-                this.allQuestionnaires = null;
+            if (this.HasSearchText && this.allQuestionnaires != null)
+            {
+                this.Questionnaires = this.allQuestionnaires.Where(item =>
+                    item.Title.IndexOf(query, StringComparison.OrdinalIgnoreCase) > -1 ||
+                    item.OwnerName.IndexOf(query, StringComparison.OrdinalIgnoreCase) > -1).ToList();
+
             }
             else
             {
-                if (this.allQuestionnaires == null)
-                {
-                    this.allQuestionnaires = this.Questionnaires;
-                }
-
-                if (this.allQuestionnaires != null)
-                {
-                    this.Questionnaires = this.allQuestionnaires.Where(
-                        item =>
-                            item.Title.IndexOf(query, StringComparison.OrdinalIgnoreCase) > -1 ||
-                            item.OwnerName.IndexOf(query, StringComparison.OrdinalIgnoreCase) > -1).ToList();
-                }
+                this.Questionnaires = this.allQuestionnaires;
             }
         }
 
@@ -169,7 +171,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             return Task.Run(() =>
             {
-                this.Questionnaires = this.questionnairesStorageAccessor.Query(storageModel => storageModel.UserName == this.Principal.CurrentIdentity.Name)
+                this.Questionnaires = this.allQuestionnaires = this.questionnairesStorageAccessor.Query(storageModel => storageModel.UserName == this.Principal.CurrentIdentity.Name)
                                                                         .Select(storageModel => storageModel.MetaInfo)
                                                                         .ToList();
             });
@@ -193,7 +195,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                             MetaInfo = qli
                         }, qli.Id)));
 
-                this.Questionnaires = questionnaireListItems.ToList();
+                this.Questionnaires = this.allQuestionnaires = questionnaireListItems.ToList();
             });
         }
 

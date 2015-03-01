@@ -46,7 +46,8 @@
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
                         android:layout_width="250dp"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+						local:MvxBind="Hidden HasSearchText">
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="150px"
@@ -58,6 +59,19 @@
                             android:layout_marginTop="10dp"
 							android:gravity="center"
                             local:MvxBind="Html Localization('EmptyQuestionnaireListText')" />
+                    </LinearLayout>
+					<LinearLayout
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+						local:MvxBind="Visible HasSearchText">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp"
+							android:gravity="center"
+                            local:MvxBind="Html Localization('EmptyQuestionnaireListBySearchText')" />
                     </LinearLayout>
                 </RelativeLayout>
             </WB.UI.QuestionnaireTester.Controls.MvxSwipeRefreshLayout>
