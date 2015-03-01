@@ -179,11 +179,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             return Task.Run(() =>
             {
-                foreach (var questionnaire in this.questionnairesStorageAccessor.Query(storageModel => storageModel.UserName == this.Principal.CurrentIdentity.Name))
-                {
-                    this.questionnairesStorageAccessor.Remove(questionnaire.Id);
-                }
+                var questionnaires = this.questionnairesStorageAccessor.Query(
+                    storageModel => storageModel.UserName == this.Principal.CurrentIdentity.Name);
 
+                this.questionnairesStorageAccessor.Remove(questionnaires);
+                
                 this.questionnairesStorageAccessor.Store(questionnaireListItems.Select(
                     qli => new Tuple<QuestionnaireMetaInfoStorageViewModel, string>(
                         new QuestionnaireMetaInfoStorageViewModel()

@@ -16,7 +16,29 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 
         public void Remove(string id)
         {
-            SiaqodbFactory.GetInstance().DeleteObjectBy<TEntity>(new Dictionary<string, object>() { { "Id", id } });
+            TEntity entity = this.GetById(id);
+
+            this.Remove(new[] {entity});
+        }
+
+        public void Remove(IEnumerable<TEntity> entities)
+        {
+            var siaqodb = SiaqodbFactory.GetInstance();
+
+            ITransaction transaction = siaqodb.BeginTransaction();
+            try
+            {
+                foreach (var entity in entities)
+                {
+                    siaqodb.Delete(entity, transaction);
+                }
+
+                transaction.Commit();
+            }
+            catch
+            {
+                transaction.Rollback();
+            }
         }
 
         public void Store(TEntity view, string id)
