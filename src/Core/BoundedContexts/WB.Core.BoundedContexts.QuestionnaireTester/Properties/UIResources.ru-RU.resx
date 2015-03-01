@@ -147,11 +147,8 @@
   <data name="ConfirmationYesText" xml:space="preserve">
     <value>Да</value>
   </data>
-  <data name="DashboardTitleText" xml:space="preserve">
-    <value>Опросники</value>
-  </data>
-  <data name="DashboardTitleText1" xml:space="preserve">
-    <value>Опросники</value>
+  <data name="Dashboard_SearchText" xml:space="preserve">
+    <value>Поиск (по имени, автору)</value>
   </data>
   <data name="EmptyQuestionnaireListText" xml:space="preserve">
     <value>Нет опросников.  &lt;br/&gt; Потяните вниз, чтобы обновить список</value>
