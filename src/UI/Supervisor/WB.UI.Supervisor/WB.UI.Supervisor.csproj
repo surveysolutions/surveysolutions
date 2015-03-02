@@ -356,8 +356,6 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="NLog.Debug.config" />
-    <Content Include="NLog.common.config" />
     <Content Include="Configuration\ANK.Supervisor.Web.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -477,12 +475,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="NLog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Configuration\Slava.Supervisor.Web.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -498,9 +490,6 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="NLog.xsd">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_GlobalResources\MainMenu.resx">
