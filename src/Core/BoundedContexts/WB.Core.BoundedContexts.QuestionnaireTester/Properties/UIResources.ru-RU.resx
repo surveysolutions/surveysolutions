@@ -189,6 +189,9 @@
   <data name="ImportQuestionnaire_Error_UpgradeRequired" xml:space="preserve">
     <value>Ваша версия приложения не поддерживает открытие данного опросника &lt;br/&gt;&lt;br/&gt; &lt;a href="market://details?id=org.worldbank.solutions.Vtester"&gt;Обновить приложение&lt;/a&gt;</value>
   </data>
+  <data name="ImportQuestionnaire_OpenLocalInterview" xml:space="preserve">
+    <value>Нет связи с дизайнером Survey Solutions. Открыть локальную копию опросника?</value>
+  </data>
   <data name="ImportQuestionnaire_PrepareQuestionnaire" xml:space="preserve">
     <value>Погдотовка опросника к созданию интервью</value>
   </data>

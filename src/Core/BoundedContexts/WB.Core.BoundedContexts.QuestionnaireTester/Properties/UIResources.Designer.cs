@@ -268,6 +268,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No connection to the Survey Solutions designer. Open a local copy of questionnaire?.
+        /// </summary>
+        public static string ImportQuestionnaire_OpenLocalInterview {
+            get {
+                return ResourceManager.GetString("ImportQuestionnaire_OpenLocalInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preparing questionnaire to creating interview.
         /// </summary>
         public static string ImportQuestionnaire_PrepareQuestionnaire {
@@ -457,7 +466,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No connection to the survey solutions designer. Please make sure that the website is available.
+        ///   Looks up a localized string similar to No connection to the Survey Solutions designer. Please make sure that the website is available.
         /// </summary>
         public static string ServiceUnavailable {
             get {
