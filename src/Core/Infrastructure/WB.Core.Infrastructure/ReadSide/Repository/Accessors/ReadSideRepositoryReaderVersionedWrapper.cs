@@ -1,3 +1,4 @@
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
@@ -14,14 +15,9 @@ namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
 
         public TEntity Get(string id, long version)
         {
-            string versionedId = GetVersionedId(id, version);
+            string versionedId = ObjectExtensions.AsCompositeKey(id, version);
 
             return this.reader.GetById(versionedId);
-        }
-
-        private static string GetVersionedId(string id, long version)
-        {
-            return string.Format("{0}${1}", id, version);
         }
     }
 }
