@@ -63,7 +63,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
         private void DeleteInterviewsAndQuestionnaireAfter(Guid questionnaireId,
             long questionnaireVersion, Guid? userId)
         {
-            var questionnaireKey =ReadSideExtensions.AsCompositeKey(questionnaireId.FormatGuid(), questionnaireVersion);
+            var questionnaireKey = ObjectExtensions.AsCompositeKey(questionnaireId.FormatGuid(), questionnaireVersion);
 
             lock (DeleteInProcessLockObject)
             {
