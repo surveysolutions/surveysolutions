@@ -205,6 +205,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connecting to server.
+        /// </summary>
+        public static string ImportQuestionnaire_CheckConnectionToServer {
+            get {
+                return ResourceManager.GetString("ImportQuestionnaire_CheckConnectionToServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Creating interview.
         /// </summary>
         public static string ImportQuestionnaire_CreateInterview {
