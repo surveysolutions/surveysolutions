@@ -59,5 +59,45 @@
 
         self.search();
     };
+
+    self.sendCommandAfterFilterAndConfirm = function (commandName, parametersFunc, filterFunc, messageTemplateId, continueMessageTemplateId) {
+        var filteredItems = self.GetSelectedItemsAfterFilter(filterFunc);
+        var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, filteredItems);
+
+        if (filteredItems.length === 0) {
+            bootbox.alert(messageHtml);
+            return;
+        }
+
+        messageHtml += $(continueMessageTemplateId).html();
+
+        bootbox.confirm(messageHtml, function (result) {
+            if (result)
+                self.sendCommand(commandName, parametersFunc, filteredItems);
+        });
+    };
+
+    self.sendCommand = function (commandName, parametersFunc, items) {
+        var commands = ko.utils.arrayMap(items, function (rawItem) {
+            var item = ko.mapping.toJS(rawItem);
+            return ko.toJSON(parametersFunc(item));
+        });
+
+        var command = {
+            type: commandName,
+            commands: commands
+        };
+
+        self.SendCommands(command, function () {
+            self.load();
+        });
+    };
+
+    self.getBindedHtmlTemplate = function (templateId, bindObject) {
+        var messageTemplate = $("<div/>").html($(templateId).html())[0];
+        ko.applyBindings(bindObject, messageTemplate);
+        var html = $(messageTemplate).html();
+        return html;
+    }
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.InterviewsBase, Supervisor.VM.ListView);

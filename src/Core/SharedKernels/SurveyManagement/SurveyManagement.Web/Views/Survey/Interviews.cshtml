@@ -39,8 +39,8 @@
             </ul>
         </div>
 
-        <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.approveInterview">Approve interview</button>
-        <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.rejectInterview">Reject interview</button>
+        <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.ApproveInterview">Approve interview</button>
+        <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.RejectInterview">Reject interview</button>
 
         <div class="input-group">
             <input type="text" id="searchBox" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: search">
@@ -136,7 +136,7 @@
             InterviewStatus.RejectedByHeadquarters.ToLocalizeString()))
     </script>
     <script type="text/html" id="confirm-continue-message-template">
-        @WB.Core.SharedKernels.SurveyManagement.Web.Resources.Interviews.ContinueConfirmMessage
+        <br/>@WB.Core.SharedKernels.SurveyManagement.Web.Resources.Interviews.ContinueConfirmMessage
     </script>
 
 }

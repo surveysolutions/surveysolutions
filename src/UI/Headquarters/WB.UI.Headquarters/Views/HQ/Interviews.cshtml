@@ -36,9 +36,9 @@
 @section  actionbar{
     <div class="btn-group">
         <div class="form-inline" >
-            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.approveInterview">Approve interview</button>
-            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.rejectInterview">Reject interview</button>
-            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.deleteInterview">Delete interview</button>
+            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.ApproveInterview">Approve interview</button>
+            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.RejectInterview">Reject interview</button>
+            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.DeleteInterview">Delete interview</button>
 
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: search">
@@ -132,7 +132,7 @@
             InterviewStatus.ApprovedBySupervisor.ToLocalizeString()))
     </script>
     <script type="text/html" id="confirm-continue-message-template">
-        @Resources.Interviews.ContinueConfirmMessage
+        <br />@Resources.Interviews.ContinueConfirmMessage
     </script>
 }
 
