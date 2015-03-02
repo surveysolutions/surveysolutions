@@ -186,6 +186,9 @@
   <data name="ImportQuestionnaire_Error_UpgradeRequired" xml:space="preserve">
     <value>Your version of application does not support of this questionnaire &lt;br/&gt;&lt;br/&gt; &lt;a href="market://details?id=org.worldbank.solutions.Vtester"&gt;Update application&lt;/a&gt;</value>
   </data>
+  <data name="ImportQuestionnaire_OpenLocalInterview" xml:space="preserve">
+    <value>No connection to the Survey Solutions designer. Open a local copy of questionnaire?</value>
+  </data>
   <data name="ImportQuestionnaire_PrepareQuestionnaire" xml:space="preserve">
     <value>Preparing questionnaire to creating interview</value>
   </data>
@@ -250,7 +253,7 @@
     <value>Save</value>
   </data>
   <data name="ServiceUnavailable" xml:space="preserve">
-    <value>No connection to the survey solutions designer. Please make sure that the website is available</value>
+    <value>No connection to the Survey Solutions designer. Please make sure that the website is available</value>
   </data>
   <data name="SettingsText" xml:space="preserve">
     <value>Settings</value>
