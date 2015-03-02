@@ -43,7 +43,7 @@
         <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.RejectInterview">Reject interview</button>
 
         <div class="input-group">
-            <input type="text" id="searchBox" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: search">
+            <input type="text" id="searchBox" class="form-control" placeholder="Search" data-bind="value: SearchBy, valueUpdate:'afterkeydown', enterKey: search">
             <div class="input-group-btn">
                 <button class="btn btn-default" type="button" data-bind="click: search">
                     <i class="glyphicon glyphicon-search"></i>

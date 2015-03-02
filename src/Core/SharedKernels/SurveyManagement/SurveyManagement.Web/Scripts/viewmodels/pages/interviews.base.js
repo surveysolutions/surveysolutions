@@ -55,7 +55,6 @@
         self.SelectedTemplate.subscribe(self.filter);
         self.SelectedResponsible.subscribe(self.filter);
         self.SelectedStatus.subscribe(self.filter);
-        self.SearchBy.subscribe(self.filter);
 
         self.search();
     };
