@@ -165,6 +165,9 @@
   <data name="HttpResponseTimeoutText" xml:space="preserve">
     <value>The time for waiting response from web server:</value>
   </data>
+  <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
+    <value>Connecting to server</value>
+  </data>
   <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
     <value>Creating interview</value>
   </data>
