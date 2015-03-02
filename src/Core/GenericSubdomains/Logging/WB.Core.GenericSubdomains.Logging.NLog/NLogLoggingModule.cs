@@ -1,27 +1,14 @@
-﻿using System.IO;
-using NLog;
-using NLog.Config;
-using Ninject.Modules;
+﻿using Ninject.Modules;
 using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.Core.GenericSubdomains.Logging.NLog
 {
     public class NLogLoggingModule : NinjectModule
     {
-        private readonly string fileDirectory;
-
-        public NLogLoggingModule(string fileDirectory)
-        {
-            this.fileDirectory = fileDirectory;
-        }
+        public NLogLoggingModule(){}
 
         public override void Load()
         {
-#if DEBUG
-            var filePath = Path.Combine(fileDirectory, "NLog.Debug.config");
-            if (File.Exists(filePath))
-                LogManager.Configuration = new XmlLoggingConfiguration(filePath);
-#endif
             this.Bind<ILogger>().To<NLogLogger>();
         }
     }
