@@ -10,7 +10,7 @@ namespace WB.Core.Synchronization.Implementation.SyncLogger
     internal class SyncLogger : ISyncLogger
     {
         private readonly IReadSideKeyValueStorage<TabletSyncLogByUsers> tabletLogWriter;
-        private const int lastSyncLimit = 10;
+        private const int lastSyncLimit = 15;
 
         public SyncLogger(IReadSideKeyValueStorage<TabletSyncLogByUsers> tabletLogWriter)
         {
@@ -50,7 +50,6 @@ namespace WB.Core.Synchronization.Implementation.SyncLogger
             this.UpdateState(deviceId, currentState =>
                {
                    currentState.Users.Remove(userId);
-                   currentState.SyncLog.Remove(userId);
                    return currentState;
                });
         }
