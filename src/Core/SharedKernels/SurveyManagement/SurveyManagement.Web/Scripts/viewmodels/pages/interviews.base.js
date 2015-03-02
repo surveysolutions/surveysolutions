@@ -90,7 +90,7 @@
 
         self.SendCommands(command, function () {
             self.load();
-        });
+        }, true);
     };
 
     self.getBindedHtmlTemplate = function (templateId, bindObject) {
