@@ -334,139 +334,142 @@ namespace WB.UI.QuestionnaireTester
 			public const int icon = 2130837542;
 			
 			// aapt resource value: 0x7f020027
-			public const int list_focused_tester = 2130837543;
+			public const int infowarningstyle = 2130837543;
 			
 			// aapt resource value: 0x7f020028
-			public const int list_pressed_tester = 2130837544;
+			public const int list_focused_tester = 2130837544;
 			
 			// aapt resource value: 0x7f020029
-			public const int menu_dropdown_panel_tester = 2130837545;
+			public const int list_pressed_tester = 2130837545;
 			
 			// aapt resource value: 0x7f02002a
-			public const int menu_logo = 2130837546;
+			public const int menu_dropdown_panel_tester = 2130837546;
 			
 			// aapt resource value: 0x7f02002b
-			public const int no_image_found = 2130837547;
+			public const int menu_logo = 2130837547;
 			
 			// aapt resource value: 0x7f02002c
-			public const int overlay = 2130837548;
+			public const int no_image_found = 2130837548;
 			
 			// aapt resource value: 0x7f02002d
-			public const int progress_bg_tester = 2130837549;
+			public const int overlay = 2130837549;
 			
 			// aapt resource value: 0x7f02002e
-			public const int progress_horizontal_tester = 2130837550;
+			public const int progress_bg_tester = 2130837550;
 			
 			// aapt resource value: 0x7f02002f
-			public const int progress_primary_tester = 2130837551;
+			public const int progress_horizontal_tester = 2130837551;
 			
 			// aapt resource value: 0x7f020030
-			public const int progress_secondary_tester = 2130837552;
+			public const int progress_primary_tester = 2130837552;
 			
 			// aapt resource value: 0x7f020031
-			public const int questionAnsweredShape = 2130837553;
+			public const int progress_secondary_tester = 2130837553;
 			
 			// aapt resource value: 0x7f020032
-			public const int questionDisabledShape = 2130837554;
+			public const int questionAnsweredShape = 2130837554;
 			
 			// aapt resource value: 0x7f020033
-			public const int questionInvalidShape = 2130837555;
+			public const int questionDisabledShape = 2130837555;
 			
 			// aapt resource value: 0x7f020034
-			public const int questionnaire_item_border = 2130837556;
+			public const int questionInvalidShape = 2130837556;
 			
 			// aapt resource value: 0x7f020035
-			public const int questionShape = 2130837557;
+			public const int questionnaire_item_border = 2130837557;
 			
 			// aapt resource value: 0x7f020036
-			public const int rounded_button = 2130837558;
+			public const int questionShape = 2130837558;
 			
 			// aapt resource value: 0x7f020037
-			public const int rounded_button_focus = 2130837559;
+			public const int rounded_button = 2130837559;
 			
 			// aapt resource value: 0x7f020038
-			public const int rounded_button_press = 2130837560;
+			public const int rounded_button_focus = 2130837560;
 			
 			// aapt resource value: 0x7f020039
-			public const int rounded_button_unfocused = 2130837561;
+			public const int rounded_button_press = 2130837561;
 			
 			// aapt resource value: 0x7f02003a
-			public const int selectable_background_tester = 2130837562;
+			public const int rounded_button_unfocused = 2130837562;
 			
 			// aapt resource value: 0x7f02003b
-			public const int spinner_ab_default_tester = 2130837563;
+			public const int selectable_background_tester = 2130837563;
 			
 			// aapt resource value: 0x7f02003c
-			public const int spinner_ab_disabled_tester = 2130837564;
+			public const int spinner_ab_default_tester = 2130837564;
 			
 			// aapt resource value: 0x7f02003d
-			public const int spinner_ab_focused_tester = 2130837565;
+			public const int spinner_ab_disabled_tester = 2130837565;
 			
 			// aapt resource value: 0x7f02003e
-			public const int spinner_ab_pressed_tester = 2130837566;
+			public const int spinner_ab_focused_tester = 2130837566;
 			
 			// aapt resource value: 0x7f02003f
-			public const int spinner_background_ab_tester = 2130837567;
+			public const int spinner_ab_pressed_tester = 2130837567;
 			
 			// aapt resource value: 0x7f020040
-			public const int splash = 2130837568;
+			public const int spinner_background_ab_tester = 2130837568;
 			
 			// aapt resource value: 0x7f020041
-			public const int statistics_row_style = 2130837569;
+			public const int splash = 2130837569;
 			
 			// aapt resource value: 0x7f020042
-			public const int tab_indicator_ab_tester = 2130837570;
+			public const int statistics_row_style = 2130837570;
 			
 			// aapt resource value: 0x7f020043
-			public const int tab_selected_focused_tester = 2130837571;
+			public const int tab_indicator_ab_tester = 2130837571;
 			
 			// aapt resource value: 0x7f020044
-			public const int tab_selected_pressed_tester = 2130837572;
+			public const int tab_selected_focused_tester = 2130837572;
 			
 			// aapt resource value: 0x7f020045
-			public const int tab_selected_tester = 2130837573;
+			public const int tab_selected_pressed_tester = 2130837573;
 			
 			// aapt resource value: 0x7f020046
-			public const int tab_unselected_focused_tester = 2130837574;
+			public const int tab_selected_tester = 2130837574;
 			
 			// aapt resource value: 0x7f020047
-			public const int tab_unselected_pressed_tester = 2130837575;
+			public const int tab_unselected_focused_tester = 2130837575;
 			
 			// aapt resource value: 0x7f020048
-			public const int tab_unselected_tester = 2130837576;
+			public const int tab_unselected_pressed_tester = 2130837576;
 			
 			// aapt resource value: 0x7f020049
-			public const int unknownUser = 2130837577;
+			public const int tab_unselected_tester = 2130837577;
 			
 			// aapt resource value: 0x7f02004a
-			public const int wb_logo = 2130837578;
+			public const int unknownUser = 2130837578;
 			
 			// aapt resource value: 0x7f02004b
-			public const int world_background = 2130837579;
+			public const int wb_logo = 2130837579;
 			
 			// aapt resource value: 0x7f02004c
-			public const int world_background_1 = 2130837580;
+			public const int world_background = 2130837580;
 			
 			// aapt resource value: 0x7f02004d
-			public const int world_background_11 = 2130837581;
+			public const int world_background_1 = 2130837581;
 			
 			// aapt resource value: 0x7f02004e
-			public const int world_background_13 = 2130837582;
+			public const int world_background_11 = 2130837582;
 			
 			// aapt resource value: 0x7f02004f
-			public const int world_background_15 = 2130837583;
+			public const int world_background_13 = 2130837583;
 			
 			// aapt resource value: 0x7f020050
-			public const int world_background_3 = 2130837584;
+			public const int world_background_15 = 2130837584;
 			
 			// aapt resource value: 0x7f020051
-			public const int world_background_5 = 2130837585;
+			public const int world_background_3 = 2130837585;
 			
 			// aapt resource value: 0x7f020052
-			public const int world_background_7 = 2130837586;
+			public const int world_background_5 = 2130837586;
 			
 			// aapt resource value: 0x7f020053
-			public const int world_background_9 = 2130837587;
+			public const int world_background_7 = 2130837587;
+			
+			// aapt resource value: 0x7f020054
+			public const int world_background_9 = 2130837588;
 			
 			static Drawable()
 			{

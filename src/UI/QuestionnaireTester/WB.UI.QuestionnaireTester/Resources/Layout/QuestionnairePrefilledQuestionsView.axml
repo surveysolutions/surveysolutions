@@ -101,7 +101,7 @@
 				android:layout_marginTop="8dp"
 				android:gravity="center"
 				android:clickable="true"
-				local:MvxBind="Click LoadQuestionnaireCommand; Html Localization('TryAgainLink'); Visible ShowTryAgainLink" />
+				local:MvxBind="Text Localization('TryAgainLink'); Visible ShowTryAgainLink; Click TryAgainToLoadQuestionnaireCommand" />
 		</LinearLayout>
         <RelativeLayout
             android:layout_width="match_parent"

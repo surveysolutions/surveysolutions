@@ -139,6 +139,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
+        private IMvxCommand tryAgainToLoadQuestionnaireCommand;
+        public IMvxCommand TryAgainToLoadQuestionnaireCommand
+        {
+            get
+            {
+                return tryAgainToLoadQuestionnaireCommand ?? (tryAgainToLoadQuestionnaireCommand =
+                    new MvxCommand(async () => await this.LoadQuestionnaireAndCreateInterivew(), () => !this.IsInProgress));
+            }
+        }
+
         private IMvxCommand openInterviewCommand;
         public IMvxCommand OpenInterviewCommand
         {
