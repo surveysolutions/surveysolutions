@@ -29,6 +29,7 @@ namespace WB.UI.QuestionnaireTester
             registry.RegisterFactory(new MvxCustomBindingFactory<SearchView>("QueryTextChange", (view) => new SearchViewQueryTextChangeBinding(view)));
             registry.RegisterFactory(new MvxCustomBindingFactory<SearchView>("QueryTextSubmit", (view) => new SearchViewQueryTextSubmitBinding(view)));
             registry.RegisterFactory(new MvxCustomBindingFactory<SearchView>("QueryHint", (view) => new SearchViewQueryHintBinding(view)));
+            registry.RegisterFactory(new MvxCustomBindingFactory<TextView>("Hint", (view) => new TextViewHintBinding(view)));
 
             base.FillTargetFactories(registry);
         }
