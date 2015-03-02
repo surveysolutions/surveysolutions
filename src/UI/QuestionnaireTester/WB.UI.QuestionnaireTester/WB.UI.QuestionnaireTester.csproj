@@ -220,7 +220,7 @@
     <Compile Include="Implementation\Services\Principal.cs" />
     <Compile Include="Implementation\Services\QuestionnareAssemblyTesterFileAccessor.cs" />
     <Compile Include="Implementation\Services\RestServiceSettings.cs" />
-    <Compile Include="Mvvm\CustomBindings\ViewHintBinding.cs" />
+    <Compile Include="Mvvm\CustomBindings\TextViewHintBinding.cs" />
     <Compile Include="Mvvm\CustomBindings\SearchViewQueryTextChangeBinding.cs" />
     <Compile Include="Mvvm\CustomBindings\SearchViewQueryTextSubmitBinding.cs" />
     <Compile Include="Mvvm\CustomBindings\SwipeRefreshLayoutRefreshBinding.cs" />
