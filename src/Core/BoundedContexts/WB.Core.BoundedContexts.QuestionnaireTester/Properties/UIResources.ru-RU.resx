@@ -133,7 +133,7 @@
     <value>Размер пакета принимаемых/передаваемых данных, который используется при синхронизации с сервером</value>
   </data>
   <data name="BufferSizeUnitsText" xml:space="preserve">
-    <value>байт</value>
+    <value>в байтах</value>
   </data>
   <data name="CheckForUpdatesText" xml:space="preserve">
     <value>Проверить обновления</value>
@@ -166,7 +166,7 @@
     <value>Время ожидания отвера от сервера:</value>
   </data>
   <data name="HttpResponseTimeoutUnitsText" xml:space="preserve">
-    <value>секунд</value>
+    <value>в секундах</value>
   </data>
   <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
     <value>Подключение к серверу</value>
