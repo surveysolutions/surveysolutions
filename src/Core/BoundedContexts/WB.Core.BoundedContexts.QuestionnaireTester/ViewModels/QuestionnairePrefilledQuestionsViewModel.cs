@@ -30,6 +30,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly IRestServiceSettings restServiceSettings;
         private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
 
+        private Guid interviewId;
+
         public QuestionnaireMetaInfo SelectedQuestionnaire { get; private set; }
 
         public Action<Guid> OnInterviewCreated { get; set; }
@@ -142,8 +144,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             get
             {
-                return openInterviewCommand ?? (openInterviewCommand =
-                    new MvxCommand(this.OpenInterview));
+                return openInterviewCommand ?? (openInterviewCommand = new MvxCommand(this.OpenInterview, () => this.CanCreateInterview));
             }
         }
 
@@ -156,12 +157,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private void OpenInterview()
         {
-            if (this.interviewId.HasValue && this.OnInterviewDetailsOpened != null)
-                this.OnInterviewDetailsOpened(this.interviewId.Value);
-
+            this.OnInterviewDetailsOpened(this.interviewId);
         }
-
-        private Guid? interviewId;
 
         public Task LoadQuestionnaireAndCreateInterivew()
         {
@@ -171,14 +168,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 this.HasErrors = false;
                 this.IsInProgress = true;
 
+                var questionnaireDocumentFromStorage = this.questionnairesStorage.GetById(this.SelectedQuestionnaire.Id);
+
                 try
                 {
-                    this.ProgressIndicator = UIResources.ImportQuestionnaire_VerifyOnServer;
+                    this.ProgressIndicator = UIResources.ImportQuestionnaire_CheckConnectionToServer;
 
-                    var questionnaireDocumentFromStorage = this.questionnairesStorage.GetById(this.SelectedQuestionnaire.Id);
+                    var questionnaireMetaInfo = await this.GetQuestionnaireMetaInfo();
 
-                    if (questionnaireDocumentFromStorage == null || questionnaireDocumentFromStorage.Questionnaire.LastEntryDate != (await this.GetQuestionnaireLastEntryDate()).LastEntryDate)
+                    if (questionnaireDocumentFromStorage == null || questionnaireDocumentFromStorage.Questionnaire.LastEntryDate != questionnaireMetaInfo.LastEntryDate)
                     {
+                        this.ProgressIndicator = UIResources.ImportQuestionnaire_VerifyOnServer;
+
                         var questionnaireCommunicationPackage = await this.GetQuestionnaireFromServer(
                             (downloadProgress) =>
                             {
@@ -200,26 +201,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                         this.questionnaireAssemblyFileAccessor.StoreAssembly(questionnaireCommunicationPackage.Questionnaire.PublicKey, 0, questionnaireCommunicationPackage.QuestionnaireAssembly);
                     }
 
-                    this.ProgressIndicator = UIResources.ImportQuestionnaire_PrepareQuestionnaire;
-
-                    if (tokenSource.IsCancellationRequested) return;
-                    this.ExecuteImportFromDesignerForTesterCommand(questionnaireDocumentFromStorage.Questionnaire);
-
-                    Guid interviewUserId = Guid.NewGuid();
-                    Guid interviewId = Guid.NewGuid();
-
-                    this.ProgressIndicator = UIResources.ImportQuestionnaire_CreateInterview;
-
-                    if (tokenSource.IsCancellationRequested) return;
-                    this.ExecuteCreateInterviewCommand(interviewId, interviewUserId,questionnaireDocumentFromStorage.Questionnaire.PublicKey);
-
-                    if (tokenSource.IsCancellationRequested) return;
-                    this.interviewId = interviewId;
-                    if (this.OnInterviewCreated != null)
-                    {
-                        this.InvokeOnMainThread(() => this.OnInterviewCreated(interviewId));
-                    }
-                    this.CanCreateInterview = true;
+                    this.CreateInterview(questionnaireDocumentFromStorage.Questionnaire);
                 }
                 catch (RestException ex)
                 {
@@ -280,6 +262,27 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }, tokenSource.Token);
         }
 
+        private void CreateInterview(QuestionnaireDocument questionnaireDocument)
+        {
+            this.ProgressIndicator = UIResources.ImportQuestionnaire_PrepareQuestionnaire;
+
+            if (tokenSource.IsCancellationRequested) return;
+            this.ExecuteImportFromDesignerForTesterCommand(questionnaireDocument);
+
+            this.ProgressIndicator = UIResources.ImportQuestionnaire_CreateInterview;
+
+            Guid interviewUserId = Guid.NewGuid();
+            this.interviewId = Guid.NewGuid();
+
+            if (tokenSource.IsCancellationRequested) return;
+            this.ExecuteCreateInterviewCommand(this.interviewId, interviewUserId, questionnaireDocument.PublicKey);
+
+            if (tokenSource.IsCancellationRequested) return;
+            this.InvokeOnMainThread(() => this.OnInterviewCreated(this.interviewId));
+            
+            this.CanCreateInterview = true;
+        }
+
         private void ExecuteCreateInterviewCommand(Guid interviewId, Guid interviewUserId, Guid questionnaireId)
         {
             this.commandService.Execute(new CreateInterviewForTestingCommand(interviewId, interviewUserId, questionnaireId, new Dictionary<Guid, object>(), DateTime.UtcNow));
@@ -290,7 +293,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.commandService.Execute(new ImportFromDesignerForTester(template));
         }
 
-        private async Task<QuestionnaireMetaInfo> GetQuestionnaireLastEntryDate()
+        private async Task<QuestionnaireMetaInfo> GetQuestionnaireMetaInfo()
         {
             return await this.restService.GetAsync<QuestionnaireMetaInfo>(
                 url: string.Format("questionnaires/{0}/meta", SelectedQuestionnaire.Id),

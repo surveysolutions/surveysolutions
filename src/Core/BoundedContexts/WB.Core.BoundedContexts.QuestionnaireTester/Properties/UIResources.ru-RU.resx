@@ -168,6 +168,9 @@
   <data name="HttpResponseTimeoutUnitsText" xml:space="preserve">
     <value>секунд</value>
   </data>
+  <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
+    <value>Подключение к серверу</value>
+  </data>
   <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
     <value>Создание интервью</value>
   </data>
