@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Services.DeleteQuestionnaireTemplate
 {
     public interface IDeleteQuestionnaireService
     {
-        void DeleteQuestionnaire(Guid questionnaireId,
+        Task DeleteQuestionnaire(Guid questionnaireId,
             long questionnaireVersion, Guid? userId);
     }
 }

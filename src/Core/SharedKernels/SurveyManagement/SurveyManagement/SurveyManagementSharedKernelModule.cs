@@ -102,7 +102,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
 
-            this.Bind(typeof (ITemporaryDataStorage<>)).To(typeof (FileTemporaryDataStorage<>));
+            this.Bind(typeof(ITemporaryDataStorage<>)).To(typeof(FileTemporaryDataStorage<>)).WithConstructorArgument("rootPath", this.currentFolderPath);
 
             this.Bind<IQuestionnaireCacheInitializer>().To<QuestionnaireCacheInitializer>();
             this.Bind<InterviewDetailsDataLoaderSettings>().ToConstant(this.interviewDetailsDataLoaderSettings);
@@ -143,8 +143,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
               .To<IncomingSyncPackagesQueue>()
               .InSingletonScope();
 
-
-            this.Bind<IDeleteQuestionnaireService>().To<DeleteQuestionnaireService>();
+            this.Bind<IInterviewsToDeleteFactory>().To<InterviewsToDeleteFactory>();
+            this.Bind<IDeleteQuestionnaireService>().To<DeleteQuestionnaireService>().InSingletonScope();
 
             this.Bind<InterviewHistorySettings>().ToConstant(interviewHistorySettings);
             

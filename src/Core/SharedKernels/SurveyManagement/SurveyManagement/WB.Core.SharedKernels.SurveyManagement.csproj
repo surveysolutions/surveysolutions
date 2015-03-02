@@ -117,7 +117,9 @@
     <Compile Include="EventHandler\InterviewsChartDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewSummaryEventHandlerFunctional.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\DeleteQuestionnaireService.cs" />
+    <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\InterviewsToDeleteFactory.cs" />
     <Compile Include="Services\DeleteQuestionnaireTemplate\IDeleteQuestionnaireService.cs" />
+    <Compile Include="Services\DeleteQuestionnaireTemplate\IInterviewsToDeleteFactory.cs" />
     <Compile Include="Services\IOrderableSyncPackageWriter.cs" />
     <Compile Include="EventHandler\QuestionnaireDetailsForChart.cs" />
     <Compile Include="EventHandler\QuestionnaireStatisticsForChart.cs" />

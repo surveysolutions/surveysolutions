@@ -83,9 +83,14 @@ namespace WB.UI.Designer.App_Start
 
             var ravenReadSideRepositoryWriterSettings = new RavenReadSideRepositoryWriterSettings(int.Parse(WebConfigurationManager.AppSettings["Raven.Readside.BulkInsertBatchSize"]));
 
-            string appDataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
-            string esentDataFolder = Path.Combine(appDataDirectory,
-                WebConfigurationManager.AppSettings["Esent.DbFolder"]);
+            string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
+            if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
+            {
+                appDataDirectory = System.Web.Hosting.HostingEnvironment.MapPath(appDataDirectory);
+            }
+
+            //string appDataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
+            string esentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.DbFolder"]);
 
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),

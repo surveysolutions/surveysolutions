@@ -2,9 +2,10 @@
 <resources>
   <string name="ApplicationName">CAPI</string>
   <string name="ActiveUsers">Active users</string>
+  <string name="ConfirmDeviceChanging">Tablet changing confirmation</string>
   <string name="AreYouSureYouWantToRestore">All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}</string>
-  <string name="MakeThisTabletWorkingDevice">Do you want to make this tablet your working device?</string>
-  <string name="AllYourDataWillBeDeleted">All your collected data on other devices will be removed. Are you sure?</string>
+  <string name="MakeThisTabletWorkingDevice">Your account is associated with a different tablet. Do you want to sign off that tablet and make the current tablet your working device?</string>
+  <string name="AllYourDataWillBeDeleted">All data collected by you on the other tablet will be deleted. You can save these data by canceling this registration and synchronizing that tablet. Do you want to proceed with deleting data on the other tablet?</string>
   <string name="SyncIsFinished">Sync is finished</string>
   <string name="Yes">Yes</string>
   <string name="No">No</string>

@@ -34,14 +34,8 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             syncManagerMock
                 .Setup(x => x.GetQuestionnairePackageIdsWithOrder(userId, deviceId, lastSyncedPackageId))
                 .Throws<SyncPackageNotFoundException>();
-            
-            var jsonUtilsMock = new Mock<IJsonUtils>();
-            jsonUtilsMock
-                .Setup(x => x.Serialize(Moq.It.IsAny<RestErrorDescription>()))
-                .Returns(errorMessage)
-                .Callback((RestErrorDescription error) => errorDescription = error);
 
-            controller = CreateSyncController(syncManager: syncManagerMock.Object, jsonUtils:jsonUtilsMock.Object, globalInfo: globalInfo);
+            controller = CreateSyncController(syncManager: syncManagerMock.Object, globalInfo: globalInfo);
         };
 
         Because of = () =>
@@ -53,9 +47,6 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
         It should_return_response_with_ = () =>
             result.Content.ReadAsStringAsync().Result.ShouldContain(errorMessage);
 
-        It should_return_error_message_with_code_ServerError = () =>
-            errorDescription.Message.ShouldEqual(InterviewerSyncStrings.ServerError);
-
         private static HttpResponseMessage result;
 
         private static InterviewerSyncController controller;
@@ -65,6 +56,5 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
         private static string lastSyncedPackageId = "some package";
         private static SyncItemsMetaContainerRequest request;
         private static string errorMessage = "error";
-        private static RestErrorDescription errorDescription;
     }
 }
