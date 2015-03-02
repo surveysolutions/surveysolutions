@@ -81,14 +81,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
-        private bool showTryAgainLink = false;
-        public bool ShowTryAgainLink
+        private bool isServerUnavailable = false;
+        public bool IsServerUnavailable
         {
-            get { return showTryAgainLink; }
+            get { return isServerUnavailable; }
             set
             {
-                showTryAgainLink = value;
-                RaisePropertyChanged(() => ShowTryAgainLink);
+                isServerUnavailable = value;
+                RaisePropertyChanged(() => IsServerUnavailable);
             }
         }
 
@@ -174,16 +174,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             return Task.Run(async () =>
             {
-                this.ShowTryAgainLink = false;
+                this.IsServerUnavailable = false;
                 this.HasErrors = false;
                 this.IsInProgress = true;
+
+                this.ProgressIndicator = UIResources.ImportQuestionnaire_CheckConnectionToServer;
 
                 var questionnaireDocumentFromStorage = this.questionnairesStorage.GetById(this.SelectedQuestionnaire.Id);
 
                 try
                 {
-                    this.ProgressIndicator = UIResources.ImportQuestionnaire_CheckConnectionToServer;
-
                     var questionnaireMetaInfo = await this.GetQuestionnaireMetaInfo();
 
                     if (questionnaireDocumentFromStorage == null || questionnaireDocumentFromStorage.Questionnaire.LastEntryDate != questionnaireMetaInfo.LastEntryDate)
@@ -209,9 +209,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                         this.ProgressIndicator = UIResources.ImportQuestionnaire_StoreAssembly;
 
                         this.questionnaireAssemblyFileAccessor.StoreAssembly(questionnaireCommunicationPackage.Questionnaire.PublicKey, 0, questionnaireCommunicationPackage.QuestionnaireAssembly);
-                    }
 
-                    this.CreateInterview(questionnaireDocumentFromStorage.Questionnaire);
+                        await this.CreateInterview(questionnaireDocumentFromStorage.Questionnaire);   
+                    }
                 }
                 catch (RestException ex)
                 {
@@ -245,19 +245,28 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                             this.ErrorMessage = ex.Message.Contains("maintenance")
                                 ? UIResources.Maintenance
                                 : UIResources.ServiceUnavailable;
-                            this.ShowTryAgainLink = true;
+                            this.IsServerUnavailable = true;
                             break;
                         case HttpStatusCode.RequestTimeout:
                             this.ErrorMessage = UIResources.RequestTimeout;
-                            this.ShowTryAgainLink = true;
+                            this.IsServerUnavailable = true;
                             break;
                         case HttpStatusCode.InternalServerError:
                             this.Logger.Error("Internal server error when getting questionnaires.", ex);
                             this.ErrorMessage = UIResources.InternalServerError;
-                            this.ShowTryAgainLink = true;
+                            this.IsServerUnavailable = true;
                             break;
                         default:
                             throw;
+                    }
+
+                    if (questionnaireDocumentFromStorage != null && this.IsServerUnavailable)
+                    {
+                        if (this.tokenSource.IsCancellationRequested) return;
+                        this.UIDialogs.Confirm(UIResources.ImportQuestionnaire_OpenLocalInterview, async () =>
+                        {
+                            await this.CreateInterview(questionnaireDocumentFromStorage.Questionnaire);
+                        }, UIResources.ConfirmationText, UIResources.ConfirmationYesText, UIResources.ConfirmationNoText);
                     }
                 }
                 catch (OperationCanceledException ex)
@@ -269,28 +278,38 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 {
                     this.IsInProgress = false;
                 }
+
             }, tokenSource.Token);
         }
 
-        private void CreateInterview(QuestionnaireDocument questionnaireDocument)
+        private Task CreateInterview(QuestionnaireDocument questionnaireDocument)
         {
-            this.ProgressIndicator = UIResources.ImportQuestionnaire_PrepareQuestionnaire;
+            return Task.Run(() =>
+            {
+                this.IsServerUnavailable = false;
+                this.HasErrors = false;
+                this.IsInProgress = true;
 
-            if (tokenSource.IsCancellationRequested) return;
-            this.ExecuteImportFromDesignerForTesterCommand(questionnaireDocument);
+                this.ProgressIndicator = UIResources.ImportQuestionnaire_PrepareQuestionnaire;
 
-            this.ProgressIndicator = UIResources.ImportQuestionnaire_CreateInterview;
+                if (tokenSource.IsCancellationRequested) return;
+                this.ExecuteImportFromDesignerForTesterCommand(questionnaireDocument);
 
-            Guid interviewUserId = Guid.NewGuid();
-            this.interviewId = Guid.NewGuid();
+                this.ProgressIndicator = UIResources.ImportQuestionnaire_CreateInterview;
 
-            if (tokenSource.IsCancellationRequested) return;
-            this.ExecuteCreateInterviewCommand(this.interviewId, interviewUserId, questionnaireDocument.PublicKey);
+                Guid interviewUserId = Guid.NewGuid();
+                this.interviewId = Guid.NewGuid();
 
-            if (tokenSource.IsCancellationRequested) return;
-            this.InvokeOnMainThread(() => this.OnInterviewCreated(this.interviewId));
-            
-            this.CanCreateInterview = true;
+                if (tokenSource.IsCancellationRequested) return;
+                this.ExecuteCreateInterviewCommand(this.interviewId, interviewUserId, questionnaireDocument.PublicKey);
+
+                if (tokenSource.IsCancellationRequested) return;
+                this.InvokeOnMainThread(() => this.OnInterviewCreated(this.interviewId));
+
+                this.CanCreateInterview = true;
+                this.IsInProgress = false;
+
+            }, this.tokenSource.Token);
         }
 
         private void ExecuteCreateInterviewCommand(Guid interviewId, Guid interviewUserId, Guid questionnaireId)
