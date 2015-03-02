@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to bytes.
+        ///   Looks up a localized string similar to in bytes.
         /// </summary>
         public static string BufferSizeUnitsText {
             get {
@@ -502,7 +502,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to seconds.
+        ///   Looks up a localized string similar to in seconds.
         /// </summary>
         public static string TimeoutUnitsText {
             get {
