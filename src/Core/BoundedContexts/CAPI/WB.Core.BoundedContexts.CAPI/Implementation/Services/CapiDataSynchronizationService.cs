@@ -102,9 +102,9 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             }
         }
 
-        public IList<ChangeLogRecordWithContent> GetItemsToPush()
+        public IList<ChangeLogRecordWithContent> GetItemsToPush(Guid userId)
         {
-            var records = this.changelog.GetClosedDraftChunksIds();
+            var records = this.changelog.GetClosedDraftChunksIds(userId);
             return records.Select(chunk => new ChangeLogRecordWithContent(chunk.RecordId, chunk.EventSourceId, this.changelog.GetDraftRecordContent(chunk.RecordId))).ToList();
         }
 

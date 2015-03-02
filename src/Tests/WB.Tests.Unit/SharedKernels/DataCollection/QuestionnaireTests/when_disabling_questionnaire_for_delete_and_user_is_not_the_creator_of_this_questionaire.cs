@@ -7,7 +7,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
-    internal class when_preparing_questionnaire_for_delete_and_user_is_not_the_creator_of_this_questionaire : QuestionnaireTestsContext
+    internal class when_disabling_questionnaire_for_delete_and_user_is_not_the_creator_of_this_questionaire : QuestionnaireTestsContext
     {
         Establish context = () =>
         {

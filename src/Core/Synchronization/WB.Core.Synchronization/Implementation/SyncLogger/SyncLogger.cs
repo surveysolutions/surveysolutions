@@ -10,6 +10,7 @@ namespace WB.Core.Synchronization.Implementation.SyncLogger
     internal class SyncLogger : ISyncLogger
     {
         private readonly IReadSideKeyValueStorage<TabletSyncLogByUsers> tabletLogWriter;
+        private const int lastSyncLimit = 10;
 
         public SyncLogger(IReadSideKeyValueStorage<TabletSyncLogByUsers> tabletLogWriter)
         {
@@ -42,36 +43,39 @@ namespace WB.Core.Synchronization.Implementation.SyncLogger
               });
         }
 
-        public void TrackArIdsRequest(Guid deviceId, Guid userId, string packageType, string lastSyncedPackageId, string[] updateFromLastPakage)
-        {
-            this.UpdateState(deviceId, currentState =>
-               {
-                   if (!currentState.SyncLog.ContainsKey(userId))
-                       return currentState;
-
-                   TabletSyncLog lastUserSyncLog = currentState.SyncLog[userId].Last();
-                   if (lastUserSyncLog == null)
-                       return currentState;
-
-                   PackagesTrackingInfo lastPackageInfo = lastUserSyncLog.PackagesTrackingInfo[packageType];
-
-                   lastPackageInfo.LastPackageId = lastSyncedPackageId;
-                   foreach (var packageId in updateFromLastPakage)
-                   {
-                       lastPackageInfo.PackagesRequestInfo.Add(packageId, null);
-                   }
-
-                   return currentState;
-               });
-        }
+      
 
         public void UnlinkUserFromDevice(Guid deviceId, Guid userId)
         {
             this.UpdateState(deviceId, currentState =>
                {
                    currentState.Users.Remove(userId);
+                   currentState.SyncLog.Remove(userId);
                    return currentState;
                });
+        }
+
+        public void TrackArIdsRequest(Guid deviceId, Guid userId, string packageType, string lastSyncedPackageId, string[] updateFromLastPakage)
+        {
+            this.UpdateState(deviceId, currentState =>
+            {
+                if (!currentState.SyncLog.ContainsKey(userId))
+                    return currentState;
+
+                TabletSyncLog lastUserSyncLog = currentState.SyncLog[userId].Last();
+                if (lastUserSyncLog == null)
+                    return currentState;
+
+                PackagesTrackingInfo lastPackageInfo = lastUserSyncLog.PackagesTrackingInfo[packageType];
+
+                lastPackageInfo.LastPackageId = lastSyncedPackageId;
+                foreach (var packageId in updateFromLastPakage)
+                {
+                    lastPackageInfo.PackagesRequestInfo.Add(packageId, null);
+                }
+
+                return currentState;
+            });
         }
 
         public void TrackPackageRequest(Guid deviceId, Guid userId, string packageType, string packageId)
@@ -102,7 +106,16 @@ namespace WB.Core.Synchronization.Implementation.SyncLogger
                    {
                        currentState.SyncLog.Add(userId, new List<TabletSyncLog>());
                    }
-                   currentState.SyncLog[userId].Add(new TabletSyncLog { AppVersion = appVersion, HandshakeTime = DateTime.Now });
+
+                   var syncInfoCount = currentState.SyncLog[userId].Count;
+
+                   var syncTail = syncInfoCount < lastSyncLimit 
+                       ? currentState.SyncLog[userId]
+                       : currentState.SyncLog[userId].Skip(syncInfoCount - lastSyncLimit + 1).Take(lastSyncLimit - 1).ToList();
+
+                   syncTail.Add(new TabletSyncLog { AppVersion = appVersion, HandshakeTime = DateTime.Now });
+                   
+                   currentState.SyncLog[userId] = syncTail;
 
                    return currentState;
                });
