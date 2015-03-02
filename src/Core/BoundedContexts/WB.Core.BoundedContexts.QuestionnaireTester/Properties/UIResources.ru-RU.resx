@@ -268,7 +268,7 @@
     <value>Запомнить меня</value>
   </data>
   <data name="TryAgainLink" xml:space="preserve">
-    <value>&lt;a href=""&gt;Попробовать снова&lt;/a&gt;</value>
+    <value>Попробовать снова</value>
   </data>
   <data name="Unauthorized" xml:space="preserve">
     <value>Вы ввели неправильное имя или пароль</value>
