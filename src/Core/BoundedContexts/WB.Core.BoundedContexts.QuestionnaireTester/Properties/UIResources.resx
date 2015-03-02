@@ -133,7 +133,7 @@
     <value>Buffer size for receiving/transmitting data stream:</value>
   </data>
   <data name="BufferSizeUnitsText" xml:space="preserve">
-    <value>bytes</value>
+    <value>in bytes</value>
   </data>
   <data name="CheckForUpdatesText" xml:space="preserve">
     <value>Check for updates</value>
@@ -265,7 +265,7 @@
     <value>Stay signed in</value>
   </data>
   <data name="TimeoutUnitsText" xml:space="preserve">
-    <value>seconds</value>
+    <value>in seconds</value>
   </data>
   <data name="TryAgainLink" xml:space="preserve">
     <value>Try again</value>
