@@ -575,10 +575,6 @@
     <Content Include="Configuration\Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="NLog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Configuration\Slava.Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -594,8 +590,6 @@
     <Content Include="Configuration\Vitalii.Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="NLog.Debug.config" />
-    <Content Include="NLog.common.config" />
     <Content Include="Configuration\ANK.Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>

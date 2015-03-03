@@ -106,7 +106,6 @@ namespace WB.UI.Supervisor.App_Start
                 appDataDirectory = System.Web.Hosting.HostingEnvironment.MapPath(appDataDirectory);
             }
 
-            //string appDataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
             var synchronizationSettings = new SyncSettings(appDataDirectory: appDataDirectory,
                 incomingCapiPackagesWithErrorsDirectoryName:
                 LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
@@ -124,7 +123,7 @@ namespace WB.UI.Supervisor.App_Start
                 new InfrastructureModule().AsNinject(),
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
-                new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
+                new NLogLoggingModule(),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath),
                 new QuestionnaireUpgraderModule(),
                 new RavenReadSideInfrastructureModule(ravenSettings, ravenReadSideRepositoryWriterSettings, typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly, typeof(UserSyncPackagesByBriefFields).Assembly),
