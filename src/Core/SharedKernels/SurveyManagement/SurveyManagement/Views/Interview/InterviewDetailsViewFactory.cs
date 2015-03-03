@@ -108,12 +108,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             return new DetailsViewModel()
             {
                 Filter = filter.Value,
+                SelectedGroupId = currentGroupId,
+                SelectedGroupRosterVector = currentGroupRosterVector,
                 InterviewDetails = interviewDetailsView,
                 FilteredGroups = selectedGroups,
                 Statistic = detailsStatisticView,
                 History = this.changeStatusFactory.Load(new ChangeStatusInputModel { InterviewId = interviewId }),
                 HasUnprocessedSyncPackages = this.incomingSyncPackagesQueue.HasPackagesByInterviewId(interviewId)
             };
+        }
+
+        public Guid? GetFirstChapterId(Guid interviewId)
+        {
+            var interview = interviewStore.GetById(interviewId);
+
+            if (interview != null && !interview.IsDeleted)
+            {
+                QuestionnaireDocumentVersioned questionnaire = this.questionnaireStore.AsVersioned()
+                    .Get(interview.QuestionnaireId.FormatGuid(), interview.QuestionnaireVersion);
+
+                return questionnaire.Questionnaire.Children[0].PublicKey;
+            }
+
+            return null;
         }
 
         private bool IsQuestionInFilter(InterviewDetailsFilter? filter, InterviewQuestionView question)
