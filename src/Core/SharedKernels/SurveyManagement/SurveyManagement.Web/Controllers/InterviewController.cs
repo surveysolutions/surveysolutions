@@ -52,10 +52,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         public ActionResult Details(Guid id, InterviewDetailsFilter? filter, Guid? currentGroupId, string rosterVector)
         {
+            if (!filter.HasValue)
+                return this.RedirectToAction("Details",
+                    new
+                    {
+                        id = id,
+                        filter = InterviewDetailsFilter.All,
+                        currentGroupId = this.interviewDetailsViewFactory.GetFirstChapterId(id)
+                    });
+
             this.ViewBag.ActivePage = MenuItem.Docs;
-
-            filter = filter.HasValue ? filter : InterviewDetailsFilter.All;
-
 
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
 
