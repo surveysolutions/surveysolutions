@@ -46,6 +46,7 @@
                 <th data-bind='sortby : "UserName"'>Name</th>
                 <th data-bind='sortby : "CreationDate"'>Creation date</th>
                 <th data-bind='sortby : "Email"'>Email</th>
+                <th data-bind='sortby : "DeviceId"'>Connected to device</th>
                 <th></th>
             </tr>
         </thead>
@@ -55,10 +56,14 @@
                 <td data-bind="text: UserName"></td>
                 <td data-bind="text: CreationDate"></td>
                 <td data-bind="text: Email"></td>
+                <td data-bind="text: DeviceId() == null ? 'No': 'Yes'"></td>
                 <td>
                     <a class="btn btn-info" data-bind="attr: { href: $editUrl + '/' + UserId() }">
                         <i class="icon icon-edit icon-white"></i> Edit
                     </a>
+                    <!-- ko if:DeviceId()!=null -->
+                    <a class="btn btn-info" data-bind="attr: { href: $deviceUrl + '/' + DeviceId() }"><span class="glyphicon glyphicon-list"></span> Show sync log</a>
+                    <!-- /ko -->
                 </td>
             </tr>
             <!-- /ko -->
