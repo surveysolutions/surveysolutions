@@ -85,12 +85,12 @@
                 android:text="Login"
                 local:MvxBind="Click LoginCommand" />
             <Button
-                android:id="@+id/startRegister"
+                android:id="@+id/startActivation"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dip"
-                android:text="Register"
-                local:MvxBind="Click RegisterCommand" />
+                android:text="Activate"
+                local:MvxBind="Click ActivationCommand; Visibility ShouldActivationButtonBeVisible, Converter=Visibility" />
         <!-- Link to Registration Screen -->
         </LinearLayout>
     <!-- Login Form Ends -->

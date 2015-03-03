@@ -162,4 +162,7 @@
   <data name="InvalidUserRole" xml:space="preserve">
     <value>Synchronization failed. Your account does not have an interviewer role. Please contact your supervisor.</value>
   </data>
+  <data name="InterviewerApplicationHasVersion_butSupervisorHas_PleaseReinstallInterviewerApplication" xml:space="preserve">
+    <value>Synchronization failed. Please uninstall Interviewer application and install it.</value>
+  </data>
 </root>

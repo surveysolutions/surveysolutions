@@ -205,7 +205,11 @@
                             <div>longitude: <span>@Math.Round(geoLocationAnswer.Longitude, 5)</span></div>
                             <div>accuracy: <span>@Math.Round(geoLocationAnswer.Accuracy, 2)</span></div>
                             <div>altitude: <span>@Math.Round(geoLocationAnswer.Altitude, 5)</span></div>
-                            <div>time stamp: <span data-bind="text: moment('@geoLocationAnswer.Timestamp.UtcDateTime').format('lll')"></span></div>
+                            @{ var gpsUtcDateTime = geoLocationAnswer.Timestamp.UtcDateTime; }
+                            <div>
+                                time stamp:
+                                <span data-bind="text: moment.utc([@gpsUtcDateTime.Year, @(gpsUtcDateTime.Month - 1), @gpsUtcDateTime.Day, @gpsUtcDateTime.Hour, @gpsUtcDateTime.Minute, @gpsUtcDateTime.Second]).format('lll')"></span>
+                            </div>
                         </span>
                     }
                     break;
@@ -228,6 +232,10 @@
             <small class="text-error">@Model.ValidationMessage</small>
         }
     </td>
+
+
+
+
 
 
 

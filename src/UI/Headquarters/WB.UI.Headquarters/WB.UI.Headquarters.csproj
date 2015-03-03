@@ -429,12 +429,6 @@
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="NLog.common.config" />
-    <Content Include="NLog.config">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="NLog.Debug.config" />
     <Content Include="Configuration\Headquarters.Web.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -446,9 +440,6 @@
     <Content Include="Configuration\Stacy.Headquarters.Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <None Include="NLog.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

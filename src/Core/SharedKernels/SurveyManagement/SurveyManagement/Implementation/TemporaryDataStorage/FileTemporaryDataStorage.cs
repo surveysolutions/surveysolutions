@@ -17,12 +17,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataSto
             this.rootPath = rootPath;
             this.jsonSerrializer = jsonSerrializer;
         }
-
-        /*public FileTemporaryDataStorage(IJsonUtils jsonSerrializer)
-            : this(jsonSerrializer, AppDomain.CurrentDomain.GetData("DataDirectory").ToString())
-        {
-        }*/
-
+       
         public void Store(T payload, string name)
         {
             var path = this.GetOrCreateObjectStoreFolder();

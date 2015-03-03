@@ -89,7 +89,6 @@ namespace WB.UI.Designer.App_Start
                 appDataDirectory = System.Web.Hosting.HostingEnvironment.MapPath(appDataDirectory);
             }
 
-            //string appDataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
             string esentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.DbFolder"]);
 
             var kernel = new StandardKernel(
@@ -97,7 +96,7 @@ namespace WB.UI.Designer.App_Start
                 new InfrastructureModule().AsNinject(),
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
-                new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
+                new NLogLoggingModule(),
                 new RavenReadSideInfrastructureModule(ravenSettings, ravenReadSideRepositoryWriterSettings, typeof(DesignerReportQuestionnaireListViewItem).Assembly),
                 new DesignerRegistry(),
                 new DesignerCommandDeserializationModule(),
