@@ -48,6 +48,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings;
         private readonly Version applicationBuildVersion;
         private readonly bool hqEnabled;
+        private readonly bool isSupervisorFunctionsEnabled;
         private readonly int maxCountOfCachedEntitiesForSqliteDb;
         private readonly InterviewHistorySettings interviewHistorySettings;
 
@@ -56,7 +57,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
             int supportedQuestionnaireVersionPatch,
             Func<bool> isDebug, Version applicationBuildVersion,
             InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool hqEnabled, int maxCountOfCachedEntitiesForSqliteDb,
-            InterviewHistorySettings interviewHistorySettings)
+            InterviewHistorySettings interviewHistorySettings,
+            bool isSupervisorFunctionsEnabled)
         {
             this.currentFolderPath = currentFolderPath;
             this.supportedQuestionnaireVersionMajor = supportedQuestionnaireVersionMajor;
@@ -68,6 +70,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.hqEnabled = hqEnabled;
             this.maxCountOfCachedEntitiesForSqliteDb = maxCountOfCachedEntitiesForSqliteDb;
             this.interviewHistorySettings = interviewHistorySettings;
+            this.isSupervisorFunctionsEnabled = isSupervisorFunctionsEnabled;
         }
 
         public override void Load()
@@ -122,10 +125,14 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind(typeof(IOrderableSyncPackageWriter<,>)).To(typeof(OrderableSyncPackageWriter<,>)).InSingletonScope();
 
             this.Kernel.RegisterDenormalizer<InterviewEventHandlerFunctional>();
-            this.Kernel.RegisterDenormalizer<InterviewSynchronizationDenormalizer>();
-            this.Kernel.RegisterDenormalizer<UserSynchronizationDenormalizer>();
-            this.Kernel.RegisterDenormalizer<QuestionnaireSynchronizationDenormalizer>();
-            this.Kernel.RegisterDenormalizer<TabletDenormalizer>();
+
+            if (isSupervisorFunctionsEnabled)
+            {
+                this.Kernel.RegisterDenormalizer<InterviewSynchronizationDenormalizer>();
+                this.Kernel.RegisterDenormalizer<UserSynchronizationDenormalizer>();
+                this.Kernel.RegisterDenormalizer<QuestionnaireSynchronizationDenormalizer>();
+                this.Kernel.RegisterDenormalizer<TabletDenormalizer>();
+            }
 
             if (hqEnabled)
             {
