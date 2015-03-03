@@ -3,5 +3,6 @@
     public interface ISyncProtocolVersionProvider
     {
         int GetProtocolVersion();
+        int GetLastNonUpdatableVersion();
     }
 }
