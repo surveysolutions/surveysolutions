@@ -6,5 +6,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     {
         DetailsViewModel GetInterviewDetails(Guid interviewId, Guid? currentGroupId = null,
             decimal[] currentGroupRosterVector = null, InterviewDetailsFilter? filter = null);
+
+        Guid? GetFirstChapterId(Guid interviewId);
     }
 }
