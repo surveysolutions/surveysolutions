@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -18,7 +15,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly IArchiveUtils archiveUtils;
         private readonly IDataExportService dataExportService;
         private readonly IEnvironmentContentService environmentContentService;
-        private readonly InterviewHistorySettings interviewHistorySettings;
         private readonly ILogger logger;
 
         private const string ExportedDataFolderName = "ExportedData";
@@ -44,8 +40,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             if (!fileSystemAccessor.IsDirectoryExists(this.pathToExportedFiles))
                 fileSystemAccessor.CreateDirectory(this.pathToExportedFiles);
-            
-            this.interviewHistorySettings = interviewHistorySettings;
 
             if (interviewHistorySettings.EnableInterviewHistory)
             {
@@ -60,7 +54,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         public string GetFolderPathOfDataByQuestionnaire(Guid questionnaireId, long version)
         {
             var result = this.GetFolderPathOfDataByQuestionnaireImpl(questionnaireId, version);
-
             return result;
         }
 
