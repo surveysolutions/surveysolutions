@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.Core.SharedKernels.SurveyManagement.Services.DeleteQuestionnaireTemplate;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
@@ -28,16 +29,16 @@ namespace WB.UI.Headquarters.Controllers
     public class QuestionnairesApiController : BaseApiController
     {
         private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory;
-        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
+        private readonly IDeleteQuestionnaireService deleteQuestionnaireService;
 
         public QuestionnairesApiController(
             ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
-            IReadSideRepositoryIndexAccessor indexAccessor)
+            IDeleteQuestionnaireService deleteQuestionnaireService)
             : base(commandService, globalInfo, logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
-            this.indexAccessor = indexAccessor;
+            this.deleteQuestionnaireService = deleteQuestionnaireService;
         }
 
         [HttpPost]
@@ -66,54 +67,8 @@ namespace WB.UI.Headquarters.Controllers
         {
             var response = new JsonCommandResponse() { IsSuccess = true };
 
-            string indexName = typeof(InterviewsSearchIndex).Name;
-            var interviewByQuestionnaire = indexAccessor.Query<SeachIndexContent>(indexName)
-                                     .Where(interview => !interview.IsDeleted && 
-                                                          interview.QuestionnaireId == request.QuestionnaireId && 
-                                                          interview.QuestionnaireVersion == request.Version)
-                                    .ProjectFromIndexFieldsInto<InterviewSummary>();
-            
-
-            var hasInterviewDeletionExceptions = false;
-            foreach (var interviewSummary in interviewByQuestionnaire)
-            {
-                try
-                {
-                    this.CommandService.Execute(new HardDeleteInterview(interviewSummary.InterviewId,
-                        this.GlobalInfo.GetCurrentUser().Id));
-                }
-                catch(Exception e)
-                {
-                    this.Logger.Error(string.Format("Error on command of type ({0}) handling ", typeof(HardDeleteInterview)), e);
-                    hasInterviewDeletionExceptions = true;
-                }
-
-            }
-
-            if (hasInterviewDeletionExceptions)
-            {
-                response.DomainException = string.Format("Failed to delete one or more interviews which were created from questionnaire {0} version {1}.",
-                        request.QuestionnaireId.FormatGuid(), request.Version);
-            }
-            else
-            {
-                try
-                {
-                    this.CommandService.Execute(new DeleteQuestionnaire(request.QuestionnaireId, request.Version,
-                        this.GlobalInfo.GetCurrentUser().Id));
-                }
-                catch (Exception e)
-                {
-                    var domainEx = e.GetSelfOrInnerAs<QuestionnaireException>();
-                    if (domainEx == null)
-                    {
-                        this.Logger.Error(string.Format("Error on command of type ({0}) handling ", typeof(DeleteQuestionnaire)), e);
-                        throw;
-                    }
-
-                    response.DomainException = domainEx.Message;
-                }    
-            }
+            deleteQuestionnaireService.DeleteQuestionnaire(request.QuestionnaireId, request.Version,
+                this.GlobalInfo.GetCurrentUser().Id);
 
             return response;
         }

@@ -11,11 +11,22 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
     {
         private Establish context = () =>
         {
-            checkResults = new HealthCheckResults(HealthCheckStatus.Warning, null, null, null, null, null);
-            serviceMock = new Mock<IHealthCheckService>();
-            serviceMock.Setup(m => m.Check()).Returns(checkResults);
-
-            controller = CreateHealthCheckApiController(serviceMock.Object);
+            /*KP-4929    var databaseHealthCheck = Mock.Of<IDatabaseHealthCheck>(m => m.Check() == ConnectionHealthCheckResult.Happy());
+            var eventStoreHealthCheck = Mock.Of<IEventStoreHealthCheck>(m => m.Check() == ConnectionHealthCheckResult.Happy());
+            var brokenSyncPackagesStorage = Mock.Of<IBrokenSyncPackagesStorage>(m => m.GetListOfUnhandledPackages() == Enumerable.Empty<string>());
+         var chunkReader = Mock.Of<IChunkReader>(m => m.GetNumberOfSyncPackagesWithBigSize() == 0);
+            var folderPermissionChecker = Mock.Of<IFolderPermissionChecker>(m => m.Check() == new FolderPermissionCheckResult(null, null, null));*/
+            healthCheckService = new Mock<IHealthCheckService>();
+            healthCheckService.Setup(x => x.Check())
+                .Returns(new HealthCheckResults(HealthCheckStatus.Happy, RavenHealthCheckResult.Happy(),
+                    EventStoreHealthCheckResult.Happy(), NumberOfUnhandledPackagesHealthCheckResult.Happy(0),
+                    NumberOfSyncPackagesWithBigSizeCheckResult.Happy(0), new FolderPermissionCheckResult(HealthCheckStatus.Happy, "", new string[0], new string[0])));
+            controller = CreateHealthCheckApiController(healthCheckService.Object
+                /*KP-4929        databaseHealthCheck,
+                      eventStoreHealthCheck,
+                      brokenSyncPackagesStorage,
+                     chunkReader,
+                folderPermissionChecker*/);
         };
 
         Because of = () =>
@@ -27,16 +38,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
             result.ShouldBeOfExactType<HealthCheckStatus>();
 
         It should_return_Happy_status = () =>
-            result.ShouldEqual(checkResults.Status);
+            result.ShouldEqual(HealthCheckStatus.Happy);
 
         It should_call_IHealthCheckService_Check_once = () =>
-            serviceMock.Verify(x => x.Check(), Times.Once());
+            healthCheckService.Verify(x => x.Check(), Times.Once());
 
-
-        private static HealthCheckResults checkResults;
         private static HealthCheckStatus result;
-        private static Mock<IHealthCheckService> serviceMock;
         private static HealthCheckApiController controller;
+
+        private static Mock<IHealthCheckService> healthCheckService;
 
     }
 }

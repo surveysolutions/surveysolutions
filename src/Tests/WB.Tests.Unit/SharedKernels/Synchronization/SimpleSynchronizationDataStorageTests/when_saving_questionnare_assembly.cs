@@ -1,40 +1,37 @@
 ﻿using System;
 using Machine.Specifications;
 using Moq;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.Synchronization.SyncStorage;
+using WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormalizerTests;
+
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Synchronization.SimpleSynchronizationDataStorageTests
 {
-    internal class when_saving_questionnare_assembly : SimpleSynchronizationDataStorageTestContext
+    internal class when_saving_questionnare_assembly : QuestionnaireSynchronizationDenormalizerTestsContext
     {
         Establish context = () =>
         {
-            timestamp = DateTime.MinValue;
-            chunkStorageWriter = CreateIChunkWriter();
-            simpleSynchronizationDataStorage = GetSimpleSynchronizationDataStorage(chunkStorageWriter: chunkStorageWriter.Object);
+            denormalizer = CreateDenormalizer(questionnairePackageStorageWriter: questionnairePackageStorageWriter.Object);
         };
 
-        private Because of = () => simpleSynchronizationDataStorage.SaveQuestionnaireAssembly(qId, version, assembly, timestamp);
+        private Because of = () => denormalizer.Handle(Create.QuestionnaireAssemblyImported(qId, version));
 
         It should_store_chunck = () =>
-            chunkStorageWriter.Verify(x => x.StoreChunk(
-                Moq.It.Is<SyncItem>(s => s.ItemType == SyncItemType.QuestionnaireAssembly && 
-                    s.RootId == qId.Combine(SimpleSynchronizationDataStorage.AssemblySeed).Combine(version)), 
-                null, 
-                timestamp), Times.Once);
+            questionnairePackageStorageWriter.Verify(x => x.Store(
+                Moq.It.IsAny<QuestionnaireSyncPackageContent>(),
+                Moq.It.Is<QuestionnaireSyncPackageMeta>(s => s.ItemType == SyncItemType.QuestionnaireAssembly && s.QuestionnaireId == qId && s.QuestionnaireVersion == version),
+                Moq.It.IsAny<string>(),
+                CounterId), 
+                Times.Once);
 
-        
-        private static SimpleSynchronizationDataStorage simpleSynchronizationDataStorage;
-
+        private static QuestionnaireSynchronizationDenormalizer denormalizer;
         private static Guid qId = Guid.Parse("1BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-        private static string assembly = "dummy";
         private static long version = 3;
-        private static DateTime timestamp;
-
-        private static Mock<IChunkWriter> chunkStorageWriter;
-
+        private static Mock<IOrderableSyncPackageWriter<QuestionnaireSyncPackageMeta, QuestionnaireSyncPackageContent>> questionnairePackageStorageWriter = new Mock<IOrderableSyncPackageWriter<QuestionnaireSyncPackageMeta, QuestionnaireSyncPackageContent>>();
     }
 }

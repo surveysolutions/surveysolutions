@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveySolutions.Services;
@@ -34,7 +35,10 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
 
             var jsonUtilsMock = new Mock<IJsonUtils>();
             jsonUtilsMock.Setup(x => x.Deserialize<UserDocument>(Moq.It.IsAny<string>())).Returns(userDocument);
-            syncItem = new SyncItem() { ItemType = SyncItemType.User, IsCompressed = false, Content = "some content", RootId = Guid.NewGuid() };
+            syncItem = new UserSyncPackageDto()
+                       {
+                           Content = "some content"
+                       };
 
             commandService=new Mock<ICommandService>();
 
@@ -42,7 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
             capiDataSynchronizationService = CreateCapiDataSynchronizationService(changeLogManipulator.Object, commandService.Object, jsonUtilsMock.Object);
         };
 
-        Because of = () => capiDataSynchronizationService.SavePulledItem(syncItem);
+        Because of = () => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem);
 
         private It should_call_CreateUserCommand_once =
             () =>
@@ -57,15 +61,9 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                                         param.Roles.SequenceEqual(userDocument.Roles)&&
                                         param.Password==userDocument.Password), null),
                     Times.Once);
-        It should_create_public_record_in_change_log_for_sync_item_once =
-        () =>
-            changeLogManipulator.Verify(
-                x =>
-                    x.CreatePublicRecord(syncItem.RootId),
-                Times.Once);
 
         private static CapiDataSynchronizationService capiDataSynchronizationService;
-        private static SyncItem syncItem;
+        private static UserSyncPackageDto syncItem;
         private static UserDocument userDocument;
         private static Mock<ICommandService> commandService;
         private static Mock<IChangeLogManipulator> changeLogManipulator;

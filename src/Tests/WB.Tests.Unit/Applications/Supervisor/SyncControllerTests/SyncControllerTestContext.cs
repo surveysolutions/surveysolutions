@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Web.Http;
@@ -6,8 +8,8 @@ using Moq;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -24,11 +26,14 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             ICommandService commandService = null,
             IGlobalInfoProvider globalInfo = null,
             ISyncManager syncManager = null,
-            ILogger logger = null, IUserWebViewFactory viewFactory = null,
+            ILogger logger = null, 
+            IUserWebViewFactory viewFactory = null,
             ISupportedVersionProvider versionProvider = null,
-            ISyncProtocolVersionProvider syncVersionProvider = null)
+            ISyncProtocolVersionProvider syncVersionProvider = null,
+            IJsonUtils jsonUtils = null)
         {
-            var controller = CreateSyncControllerImpl(commandService, globalInfo, syncManager, logger, viewFactory, versionProvider, syncVersionProvider);
+            var controller = CreateSyncControllerImpl(commandService, globalInfo, syncManager, logger, viewFactory, versionProvider, syncVersionProvider,
+                jsonUtils: jsonUtils);
             SetControllerContextWithStream(controller, stream: null);
             
             return controller;
@@ -84,7 +89,7 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
         protected static void SetControllerContextWithStream(ApiController controller, Stream stream)
         {
             controller.Request = new HttpRequestMessage(HttpMethod.Post, "http://localhost");
-            controller.Configuration = new System.Web.Http.HttpConfiguration(new System.Web.Http.HttpRouteCollection());
+            controller.Configuration = new HttpConfiguration(new HttpRouteCollection());
         }
 
         protected static void SetControllerContextWithFiles(ApiController controller, Stream stream, string fileName = null)
@@ -97,7 +102,57 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             
             requestMessage.Content = content;
             controller.Request = requestMessage; 
-            controller.Configuration = new System.Web.Http.HttpConfiguration(new System.Web.Http.HttpRouteCollection());
+            controller.Configuration = new HttpConfiguration(new HttpRouteCollection());
+        }
+
+        protected static SyncPackageRequest CreateSyncPackageRequest(string packageId, Guid deviceId)
+        {
+            return new SyncPackageRequest
+            {
+                ClientRegistrationId = deviceId,
+                PackageId = packageId
+            };
+        }
+
+        protected static UserSyncPackageDto CreateUserSyncPackageDto(Guid userId, string packageId)
+        {
+            return new UserSyncPackageDto
+            {
+                PackageId = packageId
+            };
+        }
+
+        protected static QuestionnaireSyncPackageDto CreateQuestionnaireSyncPackageDto(string packageId)
+        {
+            return new QuestionnaireSyncPackageDto
+            {
+                PackageId = packageId
+            };
+        }
+
+        protected static InterviewSyncPackageDto CreateInterviewSyncPackageDto(string packageId)
+        {
+            return new InterviewSyncPackageDto
+            {
+                PackageId = packageId
+            };
+        }
+
+        protected static SyncItemsMetaContainer CreateSyncItemsMetaContainer()
+        {
+            return new SyncItemsMetaContainer
+                   {
+                       SyncPackagesMeta = new List<SynchronizationChunkMeta>()
+                   };
+        }
+
+        protected static SyncItemsMetaContainerRequest CreateSyncItemsMetaContainerRequest(string lastPackageId, Guid deviceId)
+        {
+            return new SyncItemsMetaContainerRequest
+                   {
+                       ClientRegistrationId = deviceId,
+                       LastSyncedPackageId = lastPackageId
+                   };
         }
     }
 }

@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
 using Ncqrs.Domain;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Spec;
-using Rhino.Mocks;
 using NUnit.Framework;
 using WB.Tests.Unit;
 using MockRepository = Rhino.Mocks.MockRepository;
@@ -22,8 +19,6 @@ namespace Ncqrs.Tests.Domain
         public void SetUp()
         {
             AssemblyContext.SetupServiceLocator();
-            var generator = MockRepository.GenerateMock<IUniqueIdentifierGenerator>();
-            NcqrsEnvironment.SetDefault<IUniqueIdentifierGenerator>(generator);
         }
 
         public class HandledEvent
@@ -75,18 +70,6 @@ namespace Ncqrs.Tests.Domain
             {
                 return _uncomittedEvents;
             }
-        }
-
-        [Test]
-        public void It_should_initialize_with_a_new_id_given_by_the_generator_from_the_environment()
-        {
-            var generator = MockRepository.GenerateMock<IUniqueIdentifierGenerator>();
-            NcqrsEnvironment.SetDefault<IUniqueIdentifierGenerator>(generator);
-            NcqrsEnvironment.SetGetter<IUniqueIdentifierGenerator>(() => generator);
-
-            var theAggregate = new MyAggregateRoot();
-
-            generator.AssertWasCalled(g => g.GenerateNewId());
         }
 
         [Test]

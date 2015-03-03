@@ -123,6 +123,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Quartz.2.2.3\lib\net40\Quartz.dll</HintPath>
     </Reference>
+    <Reference Include="Raven.Abstractions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\RavenDB.Client.3.0.3528\lib\net45\Raven.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Lightweight, Version=3.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\RavenDB.Client.3.0.3528\lib\net45\Raven.Client.Lightweight.dll</HintPath>
+    </Reference>
     <Reference Include="Rhino.Mocks">
       <HintPath>..\..\..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
       <Private>True</Private>
@@ -255,13 +263,58 @@
     <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\DesignerQuestionnairesApiControllerTestsContext.cs" />
     <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception.cs" />
     <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\when_requesting_questionnaire_and_designer_service_throws_fault_exception.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_checking_expected_device_and_user_linked_to_another_device.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_checking_expected_device_and_user_linked_to_the_same_device.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_checking_expected_device_and_user_not_linked_to_any_device.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_interview_packages_keys.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_interview_packages_keys_and_exception_happens.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_interview_sync_package.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_interview_sync_package_and_exception_happens.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_questionnaire_packages_keys.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_questionnaire_packages_keys_and_exception_happens.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_questionnaire_sync_package.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_questionnaire_sync_package_and_exception_happens.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_user_packages_keys.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_user_packages_keys_and_exception_happens.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_user_sync_package.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_getting_user_sync_package_and_exception_happens.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_handshaking_capi_with_supervisor_and_android_id_is_missing.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_handshaking_capi_with_supervisor_and_changing_device_is_requested.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_handshaking_capi_with_supervisor_and_device_is_not_that_expected.cs" />
+    <Compile Include="Applications\Supervisor\SyncControllerTests\when_handshaking_capi_with_supervisor_and_device_is_that_expected.cs" />
     <Compile Include="BoundedContexts\Capi\InterviewViewModelTests\when_setting_validity_to_answered_prefilled_question_in_interview.cs" />
+    <Compile Include="BoundedContexts\Capi\SynchronozationProcessorTests\SynchronozationProcessorTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_and_providing_existing_targetId.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_and_source_not_present.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_without_permissions_to_edit_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_cloned_numeric_integer_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_cloned_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_title_has_invalid_characters.cs" />
+    <Compile Include="Core\Synchronization\SyncManagerTestContext.cs" />
+    <Compile Include="Core\Synchronization\when_getting_interview_ids_and_device_is_not_registered.cs" />
+    <Compile Include="Core\Synchronization\when_getting_interview_ids_and_device_is_registered_and_last_package_id_is_empty.cs" />
+    <Compile Include="Core\Synchronization\when_getting_interview_ids_and_device_is_registered_and_last_package_id_is_not_empty.cs" />
+    <Compile Include="Core\Synchronization\when_getting_interview_sync_package_and_device_is_not_registered.cs" />
+    <Compile Include="Core\Synchronization\when_getting_interview_sync_package_and_device_is_registered_and_package_is_absent.cs" />
+    <Compile Include="Core\Synchronization\when_getting_interview_sync_package_and_device_is_registered_and_package_is_present.cs" />
+    <Compile Include="Core\Synchronization\when_getting_questionnaire_ids_and_device_is_not_registered.cs" />
+    <Compile Include="Core\Synchronization\when_getting_questionnaire_ids_and_device_is_registered_and_last_package_id_is_empty.cs" />
+    <Compile Include="Core\Synchronization\when_getting_questionnaire_ids_and_device_is_registered_and_last_package_id_is_not_empty.cs" />
+    <Compile Include="Core\Synchronization\when_getting_questionnaire_ids_and_device_is_registered_and_last_package_id_is_not_empty_but_package_is_absent.cs" />
+    <Compile Include="Core\Synchronization\when_getting_questionnaire_sync_package_and_device_is_not_registered.cs" />
+    <Compile Include="Core\Synchronization\when_getting_questionnaire_sync_package_and_device_is_registered_and_package_is_absent.cs" />
+    <Compile Include="Core\Synchronization\when_getting_questionnaire_sync_package_and_device_is_registered_and_package_is_present.cs" />
+    <Compile Include="Core\Synchronization\when_getting_user_ids_and_device_is_not_registered.cs" />
+    <Compile Include="Core\Synchronization\when_getting_user_ids_and_device_is_registered_and_last_package_id_is_empty.cs" />
+    <Compile Include="Core\Synchronization\when_getting_user_ids_and_device_is_registered_and_last_package_id_is_not_empty.cs" />
+    <Compile Include="Core\Synchronization\when_getting_user_ids_and_device_is_registered_and_last_package_id_is_not_empty_but_no_more_packages.cs" />
+    <Compile Include="Core\Synchronization\when_getting_user_sync_package_and_device_is_not_registered.cs" />
+    <Compile Include="Core\Synchronization\when_getting_user_sync_package_and_device_is_registered_and_package_is_absent.cs" />
+    <Compile Include="Core\Synchronization\when_getting_user_sync_package_and_device_is_registered_and_package_is_present.cs" />
+    <Compile Include="Core\Synchronization\when_linking_user_to_device_and_device_is_not_registered.cs" />
+    <Compile Include="Core\Synchronization\when_linking_user_to_device_and_device_is_registered.cs" />
+    <Compile Include="Core\Synchronization\when_sync_is_initialized_and_device_is_not_registered.cs" />
+    <Compile Include="Core\Synchronization\when_sync_is_initialized_and_device_is_registered.cs" />
     <Compile Include="Infrastructure\MemoryCachedReadSideRepositoryWriterTests\when_inserting_last_item_in_store.cs" />
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\MemoryCachedReadSideStoreTestContext.cs" />
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_Clear_called.cs" />
@@ -276,16 +329,14 @@
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_Store_called_and_cache_is_enabled_and_cache_limit_is_reached.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_3_functional_handlers_and_first_and_last_of_them_fail.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_3_old_school_handlers_and_first_and_last_of_them_fail.cs" />
-    <Compile Include="Infrastructure\ReadSideStorageVersionedWrapperTests\when_view_is_stored_in_old_format.cs" />
-    <Compile Include="Infrastructure\ReadSideStorageVersionedWrapperTests\when_view_is_stored_in_old_format_without_version.cs" />
-    <Compile Include="Infrastructure\ReadSideStorageVersionedWrapperTests\when_view_is_stored_in_old_format_without_version_and_Versions_inside_doesnt_match.cs" />
-    <Compile Include="Infrastructure\ReadSideStorageVersionedWrapperTests\when_view_is_stored_in_old_format_without_version_and_version_property_is_missing_in_stored_view.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_created_on_client_interview_events.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_deleted_interview_events.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_interview_events.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireAssemblyFileAccessorTests\when_storing_assembly_with_empty_content.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_creating_questionnaire_imported_from_designer_in_census_mode.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_import_questionnaire_and_base64string_of_assembly_is_empty.cs" />
+    <Compile Include="SharedKernels\DataCollection\UserTests\UserTestContext.cs" />
+    <Compile Include="SharedKernels\DataCollection\UserTests\when_user_linking_to_device.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_all_available_descendants_of_QuestionAnswered_recived.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\QuestionnaireListViewItemDenormalizerTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_NewQuestionnaireCreated_recived.cs" />
@@ -301,6 +352,32 @@
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_method_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_called_and_folder_with_packages_is_empty.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_HasPackagesByInterviewId_called.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\DeleteQuestionnaireServiceTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_disabled_questionnaire.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_questionnaire_and_one_interview.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_questionnaire_with_dependent_interview_which_throws_an_exception.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\OrderableSyncPackageWriterTests\OrderableSyncPackageWriterTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\OrderableSyncPackageWriterTests\when_storing_interview_packages.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\OrderableSyncPackageWriterTests\when_storing_questionnaire_packages.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\OrderableSyncPackageWriterTests\when_storing_user_packages.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_the_same_questionnaire_simultaneously.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_not_existing_questionnaire.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_ApprovedByHeadquarters.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_ApprovedBySupervisor.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_Completed.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_Created.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_Deleted.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_InterviewerAssigned.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_RejectedByHeadquarters.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_RejectedBySupervisor.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_Restored.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_SupervisorAssigned.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_new_user_created.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_user_changed.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_user_locked.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_user_locked_by_supervisor.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_user_unlocked.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_user_unlocked_by_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SyncPackagesProcessorTests\when_ProcessNextSyncPackage_called_and_interview_were_created_on_client.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_called_and_package_cant_be_opened.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_called_and_package_content_cant_be_opened.cs" />
@@ -316,6 +393,11 @@
     <Compile Include="SharedKernels\SurveyManagement\UnhandledPackageStorageTests\UnhandledPackageStorageTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UnhandledPackageStorageTests\when_StoreUnhandledPackage_called_and_interviewId_is_not_null.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UnhandledPackageStorageTests\when_StoreUnhandledPackage_called_and_interviewId_is_null.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\InterviewSynchronizationDenormalizerTestsContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\QuestionnaireSynchronizationDenormalizerTestsContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\UserDenormalizerTests\UserDenormalizerTests.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\UserDenormalizerTests\when_user_linked_to_device_for_the_second_time.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\UserViewFactoryTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\ApiBasicAuthAttributeTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorizing_and_request_header_has_bad_basic_auth_info.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorizing_non_existant_user.cs" />
@@ -1302,25 +1384,20 @@
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\whent_publish_10_events_on_bus_with_functional_style_denormalizer_registred.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\whent_publish_10_events_on_bus_with_ncqrs_style_denormalizer_registred.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_registering_event_handler_from_ignore_list.cs" />
-    <Compile Include="Infrastructure\Ncqrs\BasicGuidGeneratorSpecs.cs" />
     <Compile Include="Infrastructure\Ncqrs\Config\InstanceNotFoundInEnvironmentConfigurationExceptionTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\DateTimeBasedClockSpecs.cs" />
     <Compile Include="Infrastructure\Ncqrs\Domain\AggregateRootTests.cs" />
-    <Compile Include="Infrastructure\Ncqrs\Domain\EntityTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\Domain\EventNotHandledExceptionTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\Domain\Storage\AggregateRootCreationExceptionTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\Domain\Storage\SimpleAggregateRootCreationStrategyTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\Domain\TypeThresholdedActionBasedInternalEventHandlerSpecs.cs" />
     <Compile Include="Infrastructure\Ncqrs\EventContext.cs" />
     <Compile Include="Infrastructure\Ncqrs\Eventing\CommittedEventStreamTests.cs" />
-    <Compile Include="Infrastructure\Ncqrs\Eventing\EventBaseSpecs.cs" />
     <Compile Include="Infrastructure\Ncqrs\Eventing\ServiceModel\Bus\InProcessEventBusSpecs.cs" />
     <Compile Include="Infrastructure\Ncqrs\Eventing\Storage\AttributeEventTypeResolverTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\Eventing\Storage\InMemoryEventStoreSpecs.cs" />
     <Compile Include="Infrastructure\Ncqrs\Eventing\Storage\PropertyBagTests.cs" />
-    <Compile Include="Infrastructure\Ncqrs\Eventing\Storage\SimpleEventTypeResolverTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\Eventing\UncommittedEventStreamTests.cs" />
-    <Compile Include="Infrastructure\Ncqrs\GuidCombGenerator.cs" />
     <Compile Include="Infrastructure\Ncqrs\InternalExtensionsTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\NcqrsEnvironmentConfigurationExceptionSpecs.cs" />
     <Compile Include="Infrastructure\Ncqrs\NcqrsEnvironmentSpecs.cs" />
@@ -1503,7 +1580,7 @@
     <Compile Include="SharedKernels\DataCollection\QuestionnaireAssemblyFileAccessorTests\when_storing_assembly.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\ImportQuestionnaireTests.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\QuestionnaireTestsContext.cs" />
-    <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_deleting_questionnaire_and_user_is_not_the_creator_of_this_questionaire.cs" />
+    <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_disabling_questionnaire_for_delete_and_user_is_not_the_creator_of_this_questionaire.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_questionnaire_has_cascading_options.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_questionnaire_has_multi_question_and_its_type_does_not_support_GetMaxSelectedAnswerOptions_method.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_questionnaire_has_multi_question_and_we_can_get_max_answers_number_for_it.cs" />
@@ -1517,7 +1594,7 @@
     <Compile Include="SharedKernels\DataCollection\RepositoryKeyHelperTests\when_creating_key_for_readside_versioned_repository_reader_from_guid_and_version.cs" />
     <Compile Include="SharedKernels\DataCollection\RepositoryKeyHelperTests\when_creating_key_for_variable_by_questionnaire_readside_versioned_repositories.cs" />
     <Compile Include="SharedKernels\DataCollection\StronglyTypedInterviewEvaluator.cs" />
-    <Compile Include="SharedKernels\DataCollection\UserARTests.cs" />
+    <Compile Include="SharedKernels\DataCollection\UserTests\UserARTests.cs" />
     <Compile Include="SharedKernels\DataCollection\ValueVectorTests\when_call_ToString_for_ValueVector_with_empty_vector_inside.cs" />
     <Compile Include="SharedKernels\DataCollection\ValueVectorTests\when_call_ToString_for_ValueVector_with_not_empty_vector_inside.cs" />
     <Compile Include="SharedKernels\DataCollection\ValueVectorTests\when_comparing_ValueVector_with_non_ValueVector_object.cs" />
@@ -1561,7 +1638,6 @@
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_InterviewCreated_event_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_InterviewOnClientCreated_event_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_interview_is_assigned_to_interviewer.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_interview_is_assigned_to_interviewer_in_RejectedByHQ_status.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_PictureQuestionAnswered_received.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_QRBarcodeQuestionAnswered_received.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_adding_flag_to_question.cs" />
@@ -1843,7 +1919,7 @@
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\InMemoryTemporaryDataRepositoryAccessor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SupportedVersionProviderTests\SupportedVersionProviderTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SupportedVersionProviderTests\when_getting_supported_questionnaire_version_for_supervisor_app.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\SynchronizationDenormalizerTestsContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\UserSynchronizationDenormalizerTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_created_on_client_and_assigned_to_interviewer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_is_created_on_client_and_sent_to_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_created_on_client_and_rejected_by_supervisor_is_assigned_to_interviewer.cs" />
@@ -1898,22 +1974,11 @@
     <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\TabletReportControllerTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\when_info_package_requested.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\when_list_of_info_packages_is_requested.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\UserDenormalizerTests\when_user_linked_to_device_for_the_first_time.cs" />
     <Compile Include="SharedKernels\SurveySolutions\Documents\QuestionnaireDocumentTests.cs" />
     <Compile Include="SharedKernels\Synchronization\DefaultBackupManagerTests.cs" />
-    <Compile Include="SharedKernels\Synchronization\ReadSideChunkReaderTests\when_GetChunkMetaDataByTimestamp_is_called_and_packages_behind_are_present.cs" />
-    <Compile Include="SharedKernels\Synchronization\ReadSideChunkReaderTests\when_GetChunkMetaDataByTimestamp_is_called_and_package_with_the_same_timestamp.cs" />
-    <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\SimpleSynchronizationDataStorageTestContext.cs" />
-    <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\when_getting_chunk_info_by_timestamp.cs" />
-    <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\when_marking_interview_for_deleting.cs" />
-    <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\when_getting_chunk_pairs_created_after.cs" />
-    <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\when_getting_latest_version.cs" />
-    <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\when_saving_interview.cs" />
-    <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\when_saving_questionnaire.cs" />
     <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\when_saving_questionnare_assembly.cs" />
     <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\when_deleting_questionnaire.cs" />
-    <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests\when_saving_user.cs" />
-    <Compile Include="SharedKernels\Synchronization\when_chunk_with_same_guid_is_present.cs" />
-    <Compile Include="SharedKernels\Synchronization\when_content_is_not_empty.cs" />
     <Compile Include="Applications\Shared\Web\LocalOrDevelopmentAccessOnlyAttributeTests\LocalOrDevelopmentAccessOnlyAttributeTestsContext.cs" />
     <Compile Include="Applications\Shared\Web\LocalOrDevelopmentAccessOnlyAttributeTests\when_action_executing_and_web_site_called_by_localhost.cs" />
     <Compile Include="Applications\Shared\Web\LocalOrDevelopmentAccessOnlyAttributeTests\when_action_executing_and_web_site_in_development.cs" />
@@ -1928,6 +1993,7 @@
     <Folder Include="Applications\Designer\CommandUtilsTests\" />
     <Folder Include="GenericSubdomains\Logging\" />
     <Folder Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewsChartDenormalizerTests\" />
+    <Folder Include="SharedKernels\Synchronization\ReadSideChunkReaderTests\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

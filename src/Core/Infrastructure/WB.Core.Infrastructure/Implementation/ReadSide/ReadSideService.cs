@@ -381,7 +381,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 {
                     throw new InvalidDataException(string.Format(
                         "Event {0} {1} (event source {2}) appears in all events stream not when expected. Event sequence: {3}. Expected sequence: {4}.",
-                        committedEvent.EventIdentifier.FormatGuid(), committedEvent.Payload.GetType().Name, 
+                        committedEvent.EventIdentifier.FormatGuid(), committedEvent.Payload.GetType().Name,
                         committedEvent.EventSourceId.FormatGuid(),
                         committedEvent.EventSequence, expectedEventSequence));
                 }
@@ -483,7 +483,8 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             {
                 ThrowIfShouldStopViewsRebuilding();
 
-                UpdateStatusMessage(string.Format("Publishing event {0}. ", this.processedEventsCount + 1));
+                string eventTypeName = @event.Payload.GetType().Name;
+                UpdateStatusMessage(string.Format("Publishing event {0} {1}. ", this.processedEventsCount + 1, eventTypeName));
 
                 try
                 {
@@ -509,7 +510,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                 UpdateStatusMessage(string.Format("Done publishing event {0}, {1}. EventSourceId: {2:N}. Waiting for next event or stream end...", 
                     this.processedEventsCount, 
-                    @event.Payload.GetType().Name, 
+                    eventTypeName, 
                     @event.EventSourceId));
             }
 

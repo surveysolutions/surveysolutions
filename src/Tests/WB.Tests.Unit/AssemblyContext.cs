@@ -35,7 +35,6 @@ namespace WB.Tests.Unit
             Setup.InstanceToMockedServiceLocator<IFileSystemAccessor>(new FileSystemIOAccessor());
 
             NcqrsEnvironment.SetGetter<ILogger>(Mock.Of<ILogger>);
-            NcqrsEnvironment.SetGetter<IUniqueIdentifierGenerator>(Mock.Of<IUniqueIdentifierGenerator>);
             NcqrsEnvironment.SetGetter<IClock>(Mock.Of<IClock>);
         }
     }

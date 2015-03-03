@@ -64,9 +64,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         }
 
         protected static HealthCheckApiController CreateHealthCheckApiController(
+            /*KP-4929    IDatabaseHealthCheck databaseHealthCheck,
+              IEventStoreHealthCheck eventStoreHealthCheck, 
+              IBrokenSyncPackagesStorage brokenSyncPackagesStorage, 
+            IChunkReader chunkReader, 
+              IFolderPermissionChecker folderPermissionChecker,*/
             IHealthCheckService healthCheckService)
         {
-            return new HealthCheckApiController(healthCheckService ?? Mock.Of<IHealthCheckService>());
+            return new HealthCheckApiController(
+                /*KP-4929    databaseHealthCheck ?? Mock.Of<IDatabaseHealthCheck>(),
+                  eventStoreHealthCheck ?? Mock.Of<IEventStoreHealthCheck>(),
+                  brokenSyncPackagesStorage ?? Mock.Of<IBrokenSyncPackagesStorage>(),
+                chunkReader ?? Mock.Of<IChunkReader>(),
+                folderPermissionChecker ?? Mock.Of<IFolderPermissionChecker>()*/healthCheckService ?? Mock.Of<IHealthCheckService>());
         }
     }
 }

@@ -22,5 +22,7 @@ namespace WB.Core.Infrastructure.ReadSide
         string GetReadableStatus();
 
         Type ViewType { get; }
+
+        bool IsCacheEnabled { get; }
     }
 }

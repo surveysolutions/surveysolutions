@@ -100,7 +100,12 @@ namespace WB.UI.Supervisor.App_Start
             Func<bool> isDebug = () => AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
             Version applicationBuildVersion = typeof(AccountController).Assembly.GetName().Version;
 
-            string appDataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
+            string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
+            if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
+            {
+                appDataDirectory = System.Web.Hosting.HostingEnvironment.MapPath(appDataDirectory);
+            }
+
             var synchronizationSettings = new SyncSettings(appDataDirectory: appDataDirectory,
                 incomingCapiPackagesWithErrorsDirectoryName:
                 LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
@@ -118,10 +123,10 @@ namespace WB.UI.Supervisor.App_Start
                 new InfrastructureModule().AsNinject(),
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
-                new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
+                new NLogLoggingModule(),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath),
                 new QuestionnaireUpgraderModule(),
-                new RavenReadSideInfrastructureModule(ravenSettings, ravenReadSideRepositoryWriterSettings, typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly, typeof(SynchronizationDeltasByBriefFields).Assembly),
+                new RavenReadSideInfrastructureModule(ravenSettings, ravenReadSideRepositoryWriterSettings, typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly, typeof(UserSyncPackagesByBriefFields).Assembly),
                 new RavenPlainStorageInfrastructureModule(ravenSettings),
                 new FileInfrastructureModule(),
                 new SupervisorCoreRegistry(),

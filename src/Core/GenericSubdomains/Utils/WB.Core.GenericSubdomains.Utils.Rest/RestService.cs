@@ -15,12 +15,14 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
         private readonly IRestServiceSettings restServiceSettings;
         private readonly ILogger logger;
         private readonly INetworkService networkService;
+        private readonly IJsonUtils jsonUtils;
 
-        public RestService(IRestServiceSettings restServiceSettings, ILogger logger, INetworkService networkService)
+        public RestService(IRestServiceSettings restServiceSettings, ILogger logger, INetworkService networkService, IJsonUtils jsonUtils)
         {
             this.restServiceSettings = restServiceSettings;
             this.logger = logger;
             this.networkService = networkService;
+            this.jsonUtils = jsonUtils;
         }
 
         private async Task<HttpResponseMessage> ExecuteRequestAsync(string url, Func<FlurlClient, Task<HttpResponseMessage>> request,
@@ -30,7 +32,14 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
             {
                 throw new RestException(Resources.NoNetwork);
             }
-            Url fullUrl = this.restServiceSettings.BaseAddress()
+
+            string baseAddress = this.restServiceSettings.BaseAddress();
+            if (string.IsNullOrWhiteSpace(baseAddress))
+            {
+                throw new ArgumentNullException("baseAddress", Resources.BaseAddressNotSet);
+            }
+
+            Url fullUrl = baseAddress
                 .AppendPathSegment(url)
                 .SetQueryParams(queryString);
             var restClient = fullUrl
@@ -48,9 +57,33 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
                 this.logger.Error(string.Format("Request to '{0}'. QueryParams: {1} failed. ", fullUrl, fullUrl.QueryParams), ex);
 
                 if (ex.Call.Response != null)
-                    throw new RestException(ex.Call.Response.ReasonPhrase, statusCode: ex.Call.Response.StatusCode, innerException: ex);
+                { 
+                    var response = ex.Call.Response;
+                    var message = response.Content.ReadAsStringAsync().Result;
+                    var errorDescription =
+                        this.TryParseRestErrorDescription(string.IsNullOrEmpty(message)
+                            ? response.ReasonPhrase
+                            : message);
+                    throw new RestException(errorDescription.Message, statusCode: response.StatusCode, internalCode: errorDescription.Code, innerException: ex);
+                }
 
                 throw new RestException(message: Resources.NoConnection, innerException: ex);
+            }
+        }
+
+        private RestErrorDescription TryParseRestErrorDescription(string response)
+        {
+            try
+            {
+                return jsonUtils.Deserialize<RestErrorDescription>(response);
+            }
+            catch (Exception)
+            {
+                return new RestErrorDescription
+                       {
+                           Message = response,
+                           Code = SyncStatusCode.General
+                       };
             }
         }
 
