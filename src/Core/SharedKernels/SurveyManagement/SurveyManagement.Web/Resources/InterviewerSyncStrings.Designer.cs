@@ -106,6 +106,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Synchronization failed. Please uninstall Interviewer application and install it..
+        /// </summary>
+        internal static string InterviewerApplicationHasVersion_butSupervisorHas_PleaseReinstallInterviewerApplication {
+            get {
+                return ResourceManager.GetString("InterviewerApplicationHasVersion_butSupervisorHas_PleaseReinstallInterviewerAppli" +
+                        "cation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Synchronization failed. Interviewer application has version &apos;{0}&apos; but Supervisor has &apos;{1}&apos;. Please update Interviewer application..
         /// </summary>
         internal static string InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication {

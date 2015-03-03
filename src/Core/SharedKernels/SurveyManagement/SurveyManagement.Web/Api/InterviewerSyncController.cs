@@ -98,11 +98,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             int supervisorRevisionNumber = syncVersionProvider.GetProtocolVersion();
 
+            int supervisorShiftVersionNumber = syncVersionProvider.GetLastNonUpdatableVersion();
+
             if (request.Version > supervisorRevisionNumber)
             {
                 Logger.Info(string.Format("Version mismatch. Client from the future. Client has protocol version {0} but current app protocol is {1} ", request.Version, supervisorRevisionNumber));
 
                 return this.CreateErrorResponse(HttpStatusCode.NotAcceptable, string.Format(InterviewerSyncStrings.InterviewerApplicationHasHigherVersion_thanSupervisor_Format, request.Version, supervisorRevisionNumber));
+            }
+
+            if (request.Version < supervisorShiftVersionNumber)
+            {
+                Logger.Info(string.Format(" Client has protocol version {0} but current app protocol is {1}. Major change.", request.Version, supervisorRevisionNumber));
+
+                return this.CreateErrorResponse(
+                    HttpStatusCode.NotAcceptable,
+                    InterviewerSyncStrings.InterviewerApplicationHasVersion_butSupervisorHas_PleaseReinstallInterviewerApplication);
             }
 
             if (request.Version < supervisorRevisionNumber)

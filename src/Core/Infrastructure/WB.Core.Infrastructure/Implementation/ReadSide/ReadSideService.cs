@@ -21,7 +21,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         internal static int InstanceCount = 0;
 
         private int totalEventsToRebuildCount = 0;
-        private int failedEventsCount = 0;
+
+        private int FailedEventsCount
+        {
+            get { return errors.Count; }
+        }
 
         private int processedEventsCount = 0;
         private int skippedEventsCount = 0;
@@ -149,7 +153,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 {
                     ProcessedEvents = republishedEventsCount,
                     EstimatedTime = estimatedTotalRepublishTime,
-                    FailedEvents = this.failedEventsCount,
+                    FailedEvents = this.FailedEventsCount,
                     SkippedEvents = this.skippedEventsCount,
                     Speed = speedInEventsPerMinute,
                     TimeSpent = republishTimeSpent,
@@ -471,7 +475,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             UpdateStatusMessage(
                 "Acquiring first portion of events."
                 + Environment.NewLine
-                + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
+                + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, this.FailedEventsCount, skipEventsCount));
 
             handlersWithStopwatches = handlers.ToDictionary(x => x, x => new Stopwatch());
 
@@ -492,14 +496,13 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     this.SaveErrorForStatusReport(message, exception);
                     this.logger.Error(message, exception);
 
-                    this.failedEventsCount++;
                 }
 
                 this.processedEventsCount++;
 
-                if (this.failedEventsCount >= MaxAllowedFailedEvents)
+                if (this.FailedEventsCount >= MaxAllowedFailedEvents)
                 {
-                    var message = string.Format("Failed to rebuild read layer. Too many events failed: {0}. Last processed event count: {1}", this.failedEventsCount, this.processedEventsCount);
+                    var message = string.Format("Failed to rebuild read layer. Too many events failed: {0}. Last processed event count: {1}", this.FailedEventsCount, this.processedEventsCount);
                     UpdateStatusMessage(message);
                     this.logger.Error(message);
                     throw new Exception(message);
@@ -511,7 +514,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     @event.EventSourceId));
             }
 
-            this.logger.Info(String.Format("Rebuild of read side finished sucessfuly. Processed {0} events, failed {1}", this.processedEventsCount, this.failedEventsCount));
+            this.logger.Info(String.Format("Rebuild of read side finished sucessfuly. Processed {0} events, failed {1}", this.processedEventsCount, this.FailedEventsCount));
         }
 
         private static string GetReadablePublishingDetails(DateTime republishStarted,
