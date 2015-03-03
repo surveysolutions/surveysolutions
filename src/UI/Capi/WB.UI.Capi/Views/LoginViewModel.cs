@@ -78,7 +78,7 @@ namespace WB.UI.Capi.Views
         {
             this.Logins = DataCollectionAuthentication.GetKnownUsers().Result;
             RaisePropertyChanged(() => this.KnownUsers);
-            if (this.Logins.Count == 1)
+            if (this.Logins.Count == 1 && this.Login.IsNullOrEmpty())
             {
                 this.Login = this.Logins.First();
             }
