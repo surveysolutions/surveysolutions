@@ -108,6 +108,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 questionnaire.ImportFromDesigner(new ImportFromDesigner(responsibleId, newState, false, "base64 string of assembly"));
+                questionnaire.DisableQuestionnaire(new DisableQuestionnaire(Guid.NewGuid(), 1, responsibleId));
                 // act
                 questionnaire.DeleteQuestionnaire(new DeleteQuestionnaire(Guid.NewGuid(), 1, responsibleId));
                 // assert
@@ -128,12 +129,75 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 questionnaire.ImportFromDesigner(new ImportFromDesigner(responsibleId, newState, false, "base64 string of assembly"));
+                questionnaire.DisableQuestionnaire(new DisableQuestionnaire(Guid.NewGuid(), 1, responsibleId));
                 // act
                 questionnaire.DeleteQuestionnaire(new DeleteQuestionnaire(Guid.NewGuid(), 1, responsibleId));
                 // assert
                 var lastEvent = GetLastEvent<QuestionnaireDeleted>(eventContext);
 
                 Assert.That(lastEvent.ResponsibleId, Is.EqualTo(responsibleId));
+            }
+        }
+
+        [Test]
+        public void DeleteQuestionnaire_When_Valid_Questionnaire_Imported_but_not_disabled_for_delete_with_specified_responsible_Then_QuestionnaireException_thrown()
+        {
+            // arrange
+            var responsibleId = Guid.Parse("11111111111111111111111111111111");
+            Questionnaire questionnaire = CreateQuestionnaire(creatorId: responsibleId);
+            var newState = CreateQuestionnaireDocumentWithOneChapter();
+
+            using (var eventContext = new EventContext())
+            {
+                questionnaire.ImportFromDesigner(new ImportFromDesigner(responsibleId, newState, false, "base64 string of assembly"));
+
+                TestDelegate act =
+                    () =>
+                        questionnaire.DeleteQuestionnaire(new DeleteQuestionnaire(Guid.NewGuid(), 1, responsibleId));
+
+                // assert
+                Assert.Throws<QuestionnaireException>(act);
+            }
+        }
+
+        [Test]
+        public void DisableQuestionnaire_When_Questionnaire_is_absent_Then_QuestionnaireException_thrown()
+        {
+            // arrange
+            var responsibleId = Guid.Parse("11111111111111111111111111111111");
+            Questionnaire questionnaire = CreateQuestionnaire(creatorId: responsibleId);
+
+            using (var eventContext = new EventContext())
+            {
+
+                TestDelegate act =
+                    () =>
+                        questionnaire.DisableQuestionnaire(new DisableQuestionnaire(Guid.NewGuid(), 3, responsibleId));
+
+                // assert
+                Assert.Throws<QuestionnaireException>(act);
+            }
+        }
+
+        [Test]
+        public void DisableQuestionnaire_When_Valid_Questionnaire_Imported_but_already_disabled_Then_QuestionnaireException_thrown()
+        {
+            // arrange
+            var responsibleId = Guid.Parse("11111111111111111111111111111111");
+            Questionnaire questionnaire = CreateQuestionnaire(creatorId: responsibleId);
+            var newState = CreateQuestionnaireDocumentWithOneChapter();
+
+            using (var eventContext = new EventContext())
+            {
+                questionnaire.ImportFromDesigner(new ImportFromDesigner(responsibleId, newState, false, "base64 string of assembly"));
+                questionnaire.DisableQuestionnaire(new DisableQuestionnaire(Guid.NewGuid(), 1,
+                    responsibleId));
+                TestDelegate act =
+                    () =>
+                        questionnaire.DisableQuestionnaire(new DisableQuestionnaire(Guid.NewGuid(), 1, responsibleId));
+
+                // assert
+                Assert.Throws<QuestionnaireException>(act);
             }
         }
 
@@ -254,7 +318,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 
                 // act
                 questionnaire.ImportFromDesigner(new ImportFromDesigner(responsibleId, document, false, "base64 string of assembly"));
-                questionnaire.DeleteQuestionnaire(new DeleteQuestionnaire(Guid.NewGuid(), 2, responsibleId));
+                questionnaire.DisableQuestionnaire(new DisableQuestionnaire(Guid.NewGuid(), 2, responsibleId));
                 questionnaire.ImportFromDesigner(new ImportFromDesigner(responsibleId, document, false, "base64 string of assembly"));
 
                 // assert

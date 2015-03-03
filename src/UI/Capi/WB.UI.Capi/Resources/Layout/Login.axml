@@ -1,79 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:local="http://schemas.android.com/apk/res-auto"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent"
-  android:fillViewport="true">
-  <RelativeLayout
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true">
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
-
+        android:layout_height="wrap_content">
     <!--  Header  Starts-->
-    <!--android:background="@layout/header_gradient"-->
-    <LinearLayout android:id="@+id/header"
+        <LinearLayout
+            android:id="@+id/header"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-          
             android:paddingTop="5dip"
-            android:paddingBottom="5dip">
-      <!-- Logo Start-->
-      <!--<ImageView android:src="@drawable/logo"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_marginLeft="10dip"/>-->
-      <!-- Logo Ends -->
-    </LinearLayout>
+            android:paddingBottom="5dip" />
     <!--  Header Ends -->
     <!-- Footer Start -->
-    <!--android:background="@layout/footer_repeat"-->
-    <LinearLayout android:id="@+id/footer"
+        <LinearLayout
+            android:id="@+id/footer"
             android:layout_width="fill_parent"
             android:layout_height="90dip"
-           
-            android:layout_alignParentBottom="true">
-    </LinearLayout>
+            android:layout_alignParentBottom="true" />
     <!-- Footer Ends -->
-
     <!-- Login Form -->
-    <LinearLayout
-      xmlns:android="http://schemas.android.com/apk/res/android"
-      android:orientation="vertical"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:padding="10dip"
-      android:layout_below="@id/header">
-      <!--  Email Label -->
-      <TextView android:layout_width="fill_parent"
-               
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Login"/>
-      <EditText android:layout_width="fill_parent"
-                  android:id="@+id/teLogin"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dip"
-            android:layout_marginBottom="20dip"
-            local:MvxBind="Text Login"
-            android:singleLine="true"/>
-      <!--  Password Label -->
-      <TextView android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Password"/>
-      <EditText android:layout_width="fill_parent"
-                 android:id="@+id/tePassword"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dip"
-            android:singleLine="true"
-            local:MvxBind="Text Password"
-            android:password="true"/>
-      <!-- Login button -->
-      <Button android:id="@+id/btnLogin"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dip"
-            android:text="Login"/>
-      <!-- Link to Registration Screen -->
-    </LinearLayout>
+            android:padding="10dip"
+            android:layout_below="@id/header">
+            <TextView
+                android:id="@+id/knownUsers"
+                android:background="@drawable/infowarningstyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dip"
+                android:textColor="#1e5262"
+                android:textSize="20dip"
+                android:padding="15px"
+                local:MvxBind="Text KnownUsers" />
+        <!--  Email Label -->
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Login" />
+            <EditText
+                android:layout_width="fill_parent"
+                android:id="@+id/teLogin"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:layout_marginBottom="20dip"
+                local:MvxBind="Text Login; TextColor IsLoginValid, Converter=BooleanToTextColor"
+                android:singleLine="true" />
+        <!--  Password Label -->
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Password" />
+            <EditText
+                android:layout_width="fill_parent"
+                android:id="@+id/tePassword"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:singleLine="true"
+                local:MvxBind="Text Password; TextColor IsPasswordValid, Converter=BooleanToTextColor"
+                android:password="true" />
+            <TextView
+                android:id="@+id/invalidUserNameOrPassword"
+                android:background="@drawable/errorwarningstyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:textColor="#000"
+                android:textSize="20dip"
+                android:padding="15px"
+                local:MvxBind="Visibility AreCredentialsWrong, Converter=Visibility"
+                android:text="Invalid username and/or password" />
+        <!-- Login button -->
+            <Button
+                android:id="@+id/startLogin"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:text="Login"
+                local:MvxBind="Click LoginCommand" />
+            <Button
+                android:id="@+id/startActivation"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:text="Activate"
+                local:MvxBind="Click ActivationCommand; Visibility ShouldActivationButtonBeVisible, Converter=Visibility" />
+        <!-- Link to Registration Screen -->
+        </LinearLayout>
     <!-- Login Form Ends -->
-  </RelativeLayout>
+    </RelativeLayout>
 </ScrollView>

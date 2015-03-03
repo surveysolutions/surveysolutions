@@ -21,8 +21,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
         {
             string indexName = typeof (UserDocumentsByBriefFields).Name;
 
-            var allUsers = this.readSideRepositoryIndexAccessor.Query<UserDocument>(indexName)
-                                                               .Where(x => x.Roles.Contains(input.Role));
+            var allUsers = this.readSideRepositoryIndexAccessor.Query<UserDocument>(indexName);
+                                                               
+
+            if (!string.IsNullOrWhiteSpace(input.SearchBy))
+            {
+                allUsers = allUsers.Search(x => x.UserName, input.SearchBy, escapeQueryOptions: EscapeQueryOptions.AllowAllWildcards)
+                                   .Search(x => x.Email, input.SearchBy, escapeQueryOptions: EscapeQueryOptions.AllowAllWildcards);
+            }
+
+            allUsers = allUsers.Where(x => x.Roles.Contains(input.Role));
 
             var users = allUsers.OrderUsingSortExpression(input.Order)
                 .Skip((input.Page - 1)*input.PageSize)
@@ -35,7 +43,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
                     isLockedBySupervisor: x.IsLockedBySupervisor,
                     isLockedByHQ: x.IsLockedByHQ,
                     name: x.UserName,
-                    roles: x.Roles
+                                            roles: x.Roles,
+                                            deviceId:x.DeviceId
                     ));
 
             return new UserListView
@@ -43,7 +52,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
                 Page = input.Page, 
                 PageSize = input.PageSize, 
                 TotalCount = allUsers.Count(), 
-                Items = users
+                Items = users.ToList()
             };
         }
     }

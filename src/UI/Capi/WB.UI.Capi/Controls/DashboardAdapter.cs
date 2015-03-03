@@ -6,9 +6,9 @@ using Android.Content;
 using Android.Graphics;
 using Android.Views;
 using Android.Widget;
-using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.UI.Capi.ViewModel.Dashboard;
 using WB.UI.Shared.Android.Adapters;
 
 namespace WB.UI.Capi.Controls
@@ -92,16 +92,12 @@ namespace WB.UI.Capi.Controls
             {
                 case InterviewStatus.InterviewerAssigned:
                     return "Initial";
-                    break;
                 case InterviewStatus.Completed:
                     return "Completed";
-                    break;
                 case InterviewStatus.Restarted:
                     return "Restarted";
-                    break;
                 case InterviewStatus.RejectedBySupervisor:
                     return "Rejected";
-                    break;
                 default:
                     return "Unknown";
             }

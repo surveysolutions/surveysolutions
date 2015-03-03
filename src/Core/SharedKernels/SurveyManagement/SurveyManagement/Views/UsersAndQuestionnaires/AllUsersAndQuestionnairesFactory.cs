@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires
 
             var interviewItems = items.ToList();
 
-            var users = interviewItems.Select(x => new UsersViewItem { UserId = x.ResponsibleId, UserName = x.ResponsibleName }).Distinct(new SurveyUsersViewItemComparer());
+            var users = interviewItems.Select(x => new UsersViewItem { UserId = x.ResponsibleId, UserName = x.ResponsibleName }).Distinct(new SurveyUsersViewItemComparer()).OrderBy(x => x.UserName);
             var questionnaires = interviewItems.Select(x => new TemplateViewItem { TemplateId = x.QuestionnaireId, TemplateName = x.QuestionnaireTitle, TemplateVersion = x.QuestionnaireVersion }).Distinct(new SummaryTemplateItemComparer());
 
             return new AllUsersAndQuestionnairesView

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 
@@ -60,16 +59,13 @@ namespace Ncqrs.Eventing.Sourcing
         /// </summary>
         [NonSerialized]
         private readonly List<ISourcedEventHandler> _eventHandlers = new List<ISourcedEventHandler>();
-        [NonSerialized]
-        private readonly IUniqueIdentifierGenerator _idGenerator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EventSource"/> class.
         /// </summary>
         protected EventSource()
         {
-            _idGenerator = NcqrsEnvironment.Get<IUniqueIdentifierGenerator>();
-            EventSourceId = _idGenerator.GenerateNewId();
+            EventSourceId = Guid.NewGuid();
         }
 
         protected EventSource(Guid eventSourceId) 
@@ -148,7 +144,7 @@ namespace Ncqrs.Eventing.Sourcing
         internal protected void ApplyEvent(object evnt)
         {
             var eventSequence = GetNextSequence();
-            var wrappedEvent = new UncommittedEvent(_idGenerator.GenerateNewId(), EventSourceId, eventSequence, _initialVersion, DateTime.UtcNow, evnt);
+            var wrappedEvent = new UncommittedEvent(Guid.NewGuid(), EventSourceId, eventSequence, _initialVersion, DateTime.UtcNow, evnt);
 
             //Legacy stuff...
             var sourcedEvent = evnt as ISourcedEvent;

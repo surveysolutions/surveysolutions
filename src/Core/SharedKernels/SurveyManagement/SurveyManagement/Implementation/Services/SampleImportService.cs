@@ -87,7 +87,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 
             if (bigTemplate == null || questionnaireExportStructure == null || questionnaireRosterStructure==null)
             {
-                result.SetErrorMessage("Template is absent");
+                result.SetErrorMessage("Questionnaire is absent");
                 this.tempSampleCreationStorage.Store(result, id);
                 return;
             }

@@ -72,7 +72,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .InitializesWith<ImportFromDesignerForTester>   (aggregate => aggregate.ImportFromDesignerForTester)
                 .InitializesWith<ImportFromSupervisor>          (aggregate => aggregate.ImportFromSupervisor)
                 .InitializesWith<RegisterPlainQuestionnaire>    (aggregate => aggregate.RegisterPlainQuestionnaire)
-                .Handles<DeleteQuestionnaire>                   (aggregate => aggregate.DeleteQuestionnaire);
+                .Handles<DeleteQuestionnaire>                   (aggregate => aggregate.DeleteQuestionnaire)
+                .Handles<DisableQuestionnaire>(aggregate => aggregate.DisableQuestionnaire);
 
             CommandRegistry
                 .Setup<User>()
@@ -81,7 +82,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .Handles<LockUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.Lock())
                 .Handles<LockUserBySupervisorCommand>(command => command.UserId, (command, aggregate) => aggregate.LockBySupervisor())
                 .Handles<UnlockUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.Unlock())
-                .Handles<UnlockUserBySupervisorCommand>(command => command.PublicKey, (command, aggregate) => aggregate.UnlockBySupervisor());
+                .Handles<UnlockUserBySupervisorCommand>(command => command.PublicKey, (command, aggregate) => aggregate.UnlockBySupervisor())
+                .Handles<LinkUserToDevice>(command => command.Id, (command, aggregate) => aggregate.LinkUserToDevice(command));
 
             CommandRegistry
                 .Setup<Interview>()

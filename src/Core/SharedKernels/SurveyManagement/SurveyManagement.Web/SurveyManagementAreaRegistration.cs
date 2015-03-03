@@ -66,7 +66,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/modernizr-2.7.2.js",
                     "~/Scripts/bootstrap.js",
                     "~/Scripts/director.js",
-                    "~/Scripts/knockout-3.1.0.js",
+                    "~/Scripts/knockout-3.2.0.js",
                     "~/Scripts/knockout.mapping-latest.js",
                     "~/Scripts/lodash.underscore.js",
                     "~/Scripts/query-string.js",

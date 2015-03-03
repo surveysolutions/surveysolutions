@@ -38,13 +38,17 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="NamedLocker.cs" />
     <Compile Include="FileSizeUtils.cs" />
     <Compile Include="IAsyncExecutor.cs" />
     <Compile Include="Implementation\AsyncExecutor.cs" />
     <Compile Include="Implementation\JsonCompressor.cs" />
     <Compile Include="Implementation\RestAttachment.cs" />
     <Compile Include="Implementation\RestCredentials.cs" />
+    <Compile Include="ObjectExtensions.cs" />
+    <Compile Include="RestErrorDescription.cs" />
     <Compile Include="Implementation\RestException.cs" />
+    <Compile Include="SyncStatusCode.cs" />
     <Compile Include="Implementation\TopologicalSorter\StronglyConnectedComponent.cs" />
     <Compile Include="Implementation\TopologicalSorter.cs" />
     <Compile Include="Implementation\TopologicalSorter\StronglyConnectedComponentList.cs" />

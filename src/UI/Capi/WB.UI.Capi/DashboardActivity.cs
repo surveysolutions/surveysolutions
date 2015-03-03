@@ -10,10 +10,10 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Android.Content.PM;
-using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
+using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -22,6 +22,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Controls;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Syncronization;
+using WB.UI.Capi.ViewModel.Dashboard;
 
 namespace WB.UI.Capi
 {
@@ -135,7 +136,7 @@ namespace WB.UI.Capi
 
             alert.SetPositiveButton("OK", (e, s) =>
             {
-                new CapiCleanUpService(logManipulator, this.plainInterviewFileStorage).DeleteInterview(itemId);
+                new CapiCleanUpService(logManipulator, this.plainInterviewFileStorage, CapiApplication.Kernel.Get<ISyncPackageIdsStorage>()).DeleteInterview(itemId);
                 ((LinearLayout)view.Parent).RemoveView(view);
             });
 

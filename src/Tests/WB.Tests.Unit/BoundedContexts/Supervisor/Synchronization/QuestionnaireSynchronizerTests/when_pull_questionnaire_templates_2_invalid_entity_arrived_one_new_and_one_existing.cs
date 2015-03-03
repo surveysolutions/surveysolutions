@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Services.DeleteQuestionnaireTemplate;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
 using It = Machine.Specifications.It;
 
@@ -66,10 +67,11 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.Questionnaire
                        existingLocalQuestionnaireFeedEntry.QuestionnaireVersion)).Returns(new QuestionnaireDocument());
 
             headquartersPullContext=new HeadquartersPullContextStub();
-
+            deleteQuestionnaireServiceMock = new Mock<IDeleteQuestionnaireService>();
             questionnaireSynchronizer = CreateQuestionnaireSynchronizer(plainStorage: plainStorageMock.Object,
                 plainQuestionnaireRepository: plainQuestionnaireRepositoryMock.Object,
-                headquartersQuestionnaireReader: headquartersQuestionnaireReaderMock.Object, headquartersPullContext: headquartersPullContext);
+                headquartersQuestionnaireReader: headquartersQuestionnaireReaderMock.Object, headquartersPullContext: headquartersPullContext,
+                deleteQuestionnaireService: deleteQuestionnaireServiceMock.Object);
         };
 
         Because of = () =>
@@ -84,8 +86,9 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.Questionnaire
         It should_1_questionnaire_be_stored_in_plain_questionnaire_repository = () =>
             plainQuestionnaireRepositoryMock.Verify(x=>x.StoreQuestionnaire(newLocalQuestionnaireFeedEntry.QuestionnaireId,newLocalQuestionnaireFeedEntry.QuestionnaireVersion, Moq.It.IsAny<QuestionnaireDocument>()), Times.Once);
 
-        It should_1_questionnaire_be_deleted_in_plain_questionnaire_repository = () =>
-            plainQuestionnaireRepositoryMock.Verify(x => x.DeleteQuestionnaireDocument(deleteLocalQuestionnaireFeedEntry.QuestionnaireId, deleteLocalQuestionnaireFeedEntry.QuestionnaireVersion), Times.Once);
+        It should_1_questionnaire_be_deleted_via_delete_questionnaire_service = () =>
+         deleteQuestionnaireServiceMock.Verify(x => x.DeleteQuestionnaire(deleteLocalQuestionnaireFeedEntry.QuestionnaireId, deleteLocalQuestionnaireFeedEntry.QuestionnaireVersion, null), Times.Once);
+
 
         private static QuestionnaireSynchronizer questionnaireSynchronizer;
         private static LocalQuestionnaireFeedEntry emptyLocalQuestionnaireFeedEntry;
@@ -96,6 +99,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.Questionnaire
         private static Mock<IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry>> plainStorageMock;
         private static Mock<IHeadquartersQuestionnaireReader> headquartersQuestionnaireReaderMock;
         private static Mock<IPlainQuestionnaireRepository> plainQuestionnaireRepositoryMock;
+        private static Mock<IDeleteQuestionnaireService> deleteQuestionnaireServiceMock;
         private static HeadquartersPullContextStub headquartersPullContext;
     }
 }

@@ -8,9 +8,9 @@
 @section scripts
 {
     @Scripts.Render("~/validate")
-<script type="text/javascript">
+    <script type="text/javascript">
         $('#umbrella').hide();
-</script>
+    </script>
 }
 <div class="page-header">
     <h2>
@@ -20,20 +20,50 @@
         </small>
     </h2>
 </div>
-
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    <fieldset class="form-horizontal">
-        @{
+<div class="row">
+    <div class="col-md-6">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <fieldset class="form-horizontal">
+                @{
             this.Html.RenderPartial("UserEditForm");
+                }
+                <div class="form-group">
+                    <div class="col-sm-offset-2">
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        @Html.ActionLink("Cancel", "Back", new { id = Model.Id }, new { @class = "btn btn-default" })
+                    </div>
+                </div>
+            </fieldset>
         }
-        <div class="form-group">
-            <div class="col-sm-offset-2">
-                <button type="submit" class="btn btn-primary">Save changes</button>
-                @Html.ActionLink("Cancel", "Back", new { id = Model.Id }, new { @class = "btn btn-default" })
-            </div>
-        </div>
-    </fieldset>
-}
+    </div>
+    <div class="col-md-6">
+        <h4>Device using history</h4>
+        @if (Model.DevicesHistory == null || !Model.DevicesHistory.Any())
+        {
+            <p>Interviewer did not synchronize yet. There is no information about devices in use.</p>
+        }
+        else
+        {
+            <table class="table table-striped table-bordered table-condensed">
+                <thead>
+                    <tr>
+                        <th>Device id</th>
+                        <th>Start using date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var deviceInfo in Model.DevicesHistory)
+                    {
+                        <tr>
+                            <td>@deviceInfo.DeviceId</td>
+                            <td>@deviceInfo.Date.ToLocalTime()</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+

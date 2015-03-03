@@ -53,5 +53,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
         public FeaturedQuestionItem[] FeaturedQuestions { get;  set; }
 
         public bool AllowCensusMode { get; set; }
+
+        public bool Disabled { get; set; }
     }
 }

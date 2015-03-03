@@ -29,7 +29,6 @@ namespace Ncqrs
         {
             // Initialize defaults.
             SetDefault<IClock>(new DateTimeBasedClock());
-            SetDefault<IUniqueIdentifierGenerator>(new BasicGuidGenerator());
             var eventStore = new InMemoryEventStore();
             SetDefault<IEventBus>(new InProcessEventBus(eventStore));
             SetDefault<IEventStore>(eventStore);

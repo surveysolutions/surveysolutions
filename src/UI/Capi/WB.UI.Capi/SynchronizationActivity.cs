@@ -1,4 +1,3 @@
-using System.Net;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
@@ -12,31 +11,29 @@ using Android.Widget;
 using System;
 using System.Text;
 using System.Threading;
-using CAPI.Android.Core.Model;
-using CAPI.Android.Core.Model.Authorization;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
+using WB.Core.BoundedContexts.Capi.Implementation.Authorization;
 using WB.Core.BoundedContexts.Capi.Implementation.Services;
+using WB.Core.BoundedContexts.Capi.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.Login;
-using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Controls;
 using WB.UI.Capi.Extensions;
-using WB.UI.Capi.Services;
-using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization;
 using WB.UI.Shared.Android.Extensions;
+
+using SynchronizationEventArgs = WB.Core.BoundedContexts.Capi.Implementation.Synchronization.SynchronizationEventArgs;
+using SynchronizationEventArgsWithPercent = WB.Core.BoundedContexts.Capi.Implementation.Synchronization.SynchronizationEventArgsWithPercent;
 
 namespace WB.UI.Capi
 {
@@ -135,7 +132,7 @@ namespace WB.UI.Capi
                     this.RunOnUiThread(() =>
                     {
                         this.DestroyDialog();
-                        this.tvSyncResult.Text = "Sync is finished.";
+                        this.tvSyncResult.Text = Resources.GetString(Resource.String.SyncIsFinished);
                         bool result = CapiApplication.Membership.LogOnAsync(login, passwordHash, wasPasswordHashed: true).Result;
                         if (result)
                         {
@@ -194,14 +191,10 @@ namespace WB.UI.Capi
 
         private void btnRestore_Click(object sender, EventArgs e)
         {
-            AlertDialog.Builder alertWarningAboutRestore = new AlertDialog.Builder(this);
-            alertWarningAboutRestore.SetTitle("Warning");
-            alertWarningAboutRestore.SetMessage(
-                string.Format(
-                    "All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}",
-                    this.backupManager.RestorePath));
-            alertWarningAboutRestore.SetPositiveButton("Yes", this.btnRestoreConfirmed_Click);
-            alertWarningAboutRestore.SetNegativeButton("No", this.btnRestoreDeclined_Click);
+            var alertWarningAboutRestore =  this.CreateYesNoDialog(this, 
+               this.btnRestoreConfirmed_Click, this.btnRestoreDeclined_Click, 
+               this.Resources.GetString(Resource.String.Warning), message: string.Format(this.Resources.GetString(Resource.String.AreYouSureYouWantToRestore), this.backupManager.RestorePath));
+
             alertWarningAboutRestore.Show();
         }
 
@@ -220,7 +213,7 @@ namespace WB.UI.Capi
             {
                 Logger.Fatal("Error occured during Backup. ", exception);
             }
-            
+
             var alert = new AlertDialog.Builder(this);
             if (string.IsNullOrWhiteSpace(path))
             {
@@ -230,11 +223,11 @@ namespace WB.UI.Capi
             else
             {
                 alert.SetTitle("Success");
-                alert.SetMessage(string.Format("Backup was saved to {0}", path));    
+                alert.SetMessage(string.Format("Backup was saved to {0}", path));
             }
-            
-            
-            
+
+
+
             alert.Show();
         }
 
@@ -267,10 +260,12 @@ namespace WB.UI.Capi
             this.PrepareUI();
             try
             {
+                var deviceChangeVerifier = this.CreateDeviceChangeVerifier();
                 var changeLogManipulator = CapiApplication.Kernel.Get<IChangeLogManipulator>();
                 var plainFileRepository = CapiApplication.Kernel.Get<IPlainInterviewFileStorage>();
-                var cleaner = new CapiCleanUpService(changeLogManipulator, plainFileRepository);
+                var cleaner = new CapiCleanUpService(changeLogManipulator, plainFileRepository, CapiApplication.Kernel.Get<ISyncPackageIdsStorage>());
                 this.synchronizer = new SynchronozationProcessor(
+                    deviceChangeVerifier,
                     authenticator,
                     new CapiDataSynchronizationService(
                         changeLogManipulator,
@@ -280,7 +275,6 @@ namespace WB.UI.Capi
                         cleaner,
                         ServiceLocator.Current.GetInstance<ILogger>(),
                         CapiApplication.Kernel.Get<ICapiSynchronizationCacheService>(),
-                        CapiApplication.Kernel.Get<IStringCompressor>(),
                         CapiApplication.Kernel.Get<IJsonUtils>(),
                         CapiApplication.Kernel.Get<IQuestionnaireAssemblyFileAccessor>()),
                     cleaner,
@@ -302,17 +296,74 @@ namespace WB.UI.Capi
             this.synchronizer.ProcessCanceling += this.synchronizer_ProcessCanceling;
             this.synchronizer.ProcessCanceled += this.synchronizer_ProcessCanceled;
 
-            this.CreateDialog(ProgressDialogStyle.Spinner, "Initializing", false, this.progressDialog_Cancel);
+            this.CreateDialog(ProgressDialogStyle.Spinner, Resources.GetString(Resource.String.Initializing), false, this.progressDialog_Cancel);
 
             await this.synchronizer.Run();
         }
 
+        protected IDeviceChangingVerifier CreateDeviceChangeVerifier()
+        {
+            var deviceChangeVerifier = new DeviceChangingVerifier();
+            deviceChangeVerifier.ConfirmDeviceChangeCallback += this.ConfirmDeviceChangeCallback;
+            return deviceChangeVerifier;
+        }
 
         protected ISyncAuthenticator CreateAuthenticator()
         {
             var authentificator = new RestAuthenticator();
             authentificator.RequestCredentialsCallback += this.RequestCredentialsCallBack;
             return authentificator;
+        }
+
+        protected bool ConfirmDeviceChangeCallback(object sender)
+        {
+            bool shouldThisDeviceBeLinkedToUser = false;
+            bool actionCompleted = false;
+            this.RunOnUiThread(
+                () =>
+                {
+                    if (this.progressDialog != null) this.progressDialog.Dismiss();
+
+                    EventHandler<DialogClickEventArgs> noHandler = (s, ev) => { actionCompleted = true; this.synchronizer.Cancel(); };
+
+                    var firstConfirmationDialog = this.CreateYesNoDialog(this, 
+                        yesHandler: (s, ev) =>
+                        {
+                            var secondConfirmationDialog = this.CreateYesNoDialog(this, 
+                                yesHandler: (s1, evnt) =>
+                                {
+                                    if (this.progressDialog != null) 
+                                        this.progressDialog.Show();
+                                    shouldThisDeviceBeLinkedToUser = true;
+                                    actionCompleted = true;
+                                }, noHandler: noHandler, title: this.Resources.GetString(Resource.String.ConfirmDeviceChanging), message: this.Resources.GetString(Resource.String.AllYourDataWillBeDeleted));
+                            secondConfirmationDialog.Show();
+
+                        }, noHandler: noHandler, title: this.Resources.GetString(Resource.String.ConfirmDeviceChanging), message: this.Resources.GetString(Resource.String.MakeThisTabletWorkingDevice));
+                        firstConfirmationDialog.Show();
+                });
+            while (!actionCompleted)
+            {
+                Thread.Sleep(200);
+            }
+            return shouldThisDeviceBeLinkedToUser;
+        }
+
+        public AlertDialog CreateYesNoDialog(Activity activity, EventHandler<DialogClickEventArgs> yesHandler, EventHandler<DialogClickEventArgs> noHandler, string title = null, string message = null)
+        {
+            var builder = new AlertDialog.Builder(activity);
+            builder.SetNegativeButton(Resources.GetString(Resource.String.No), noHandler);
+            builder.SetPositiveButton(Resources.GetString(Resource.String.Yes), yesHandler);
+            builder.SetCancelable(false);
+            if (!string.IsNullOrWhiteSpace(title))
+            {
+                builder.SetTitle(title);
+            }
+            if (!string.IsNullOrWhiteSpace(message))
+            {
+                builder.SetMessage(message);
+            }
+            return builder.Create();
         }
 
         protected SyncCredentials? RequestCredentialsCallBack(object sender)
@@ -373,7 +424,7 @@ namespace WB.UI.Capi
             this.RunOnUiThread(() =>
                 {
                     this.DestroyDialog();
-                    this.tvSyncResult.Text = "Sync is finished.";
+                    this.tvSyncResult.Text =  Resources.GetString(Resource.String.SyncIsFinished);
                 });
             this.DestroySynchronizer();
         }

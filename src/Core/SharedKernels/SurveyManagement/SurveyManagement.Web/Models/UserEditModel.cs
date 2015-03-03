@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 using WB.UI.Shared.Web.DataAnnotations;
 
@@ -24,8 +27,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
             ErrorMessageResourceType = typeof (FieldsAndValidations))]
         public string ConfirmPassword { get; set; }
 
-        [Required(ErrorMessageResourceName = "RequiredEmailErrorMessage",
-            ErrorMessageResourceType = typeof (FieldsAndValidations))]
         [EmailAddress(ErrorMessageResourceName = "EmailErrorMessage",
             ErrorMessageResourceType = typeof (FieldsAndValidations), ErrorMessage = null)]
         [Display(Name = "EmailFieldName", ResourceType = typeof (FieldsAndValidations), Order = 3)]
@@ -33,5 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 
         [Display(Name = "IsLockedFieldName", ResourceType = typeof (FieldsAndValidations), Order = 4)]
         public bool IsLocked { get; set; }
+
+        public List<DeviceInfo> DevicesHistory { get; set; }
     }
 }

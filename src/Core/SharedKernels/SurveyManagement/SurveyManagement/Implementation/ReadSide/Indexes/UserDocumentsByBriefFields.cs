@@ -25,6 +25,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes
                                     Email = doc.Email
                                 };
 
+            Sort(x => x.UserName, SortOptions.StringVal);
+
+            Index(x => x.UserName, FieldIndexing.Analyzed);
+            Index(x => x.Email, FieldIndexing.Analyzed);
+
             Store(x => x.Roles, FieldStorage.Yes);
             Index(x => x.Roles, FieldIndexing.Analyzed);
         }

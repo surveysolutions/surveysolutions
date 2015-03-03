@@ -95,13 +95,12 @@
     <Compile Include="Esent\EsentReadSideModule.cs" />
     <Compile Include="Esent\Implementation\EsentKeyValueStorage.cs" />
     <Compile Include="Esent\Implementation\EsentSettings.cs" />
-    <Compile Include="EventStore\EventStoreConnectionSettings.cs" />
+    <Compile Include="EventStore\EventStoreSettings.cs" />
     <Compile Include="EventStore\EventStoreWriteSideModule.cs" />
     <Compile Include="EventStore\Implementation\EventMetada.cs" />
     <Compile Include="EventStore\Implementation\EventStoreConnectionProvider.cs" />
     <Compile Include="EventStore\Implementation\EventStoreLogger.cs" />
     <Compile Include="EventStore\IEventStoreConnectionProvider.cs" />
-    <Compile Include="EventStore\EventStoreWriteSideSettings.cs" />
     <Compile Include="EventStore\Implementation\WriteSideEventStore.cs" />
     <Compile Include="Memory\Implementation\MemoryCachedReadSideRepositoryWriter.cs" />
     <Compile Include="Memory\Implementation\MemoryCachedReadSideStore.cs" />

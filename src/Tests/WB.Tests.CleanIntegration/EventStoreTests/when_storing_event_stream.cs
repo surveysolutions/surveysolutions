@@ -47,7 +47,7 @@ namespace WB.Tests.Integration.EventStoreTests
                 DateTime.UtcNow,
                 new AccountLocked()));
 
-            WriteSideEventStorage = new WriteSideEventStore(ConnectionProvider, Mock.Of<ILogger>(), new EventStoreConnectionSettings{InitializeProjections = false}, new EventStoreWriteSideSettings(256));
+            WriteSideEventStorage = new WriteSideEventStore(ConnectionProvider, Mock.Of<ILogger>(), new EventStoreSettings{InitializeProjections = false});
         };
 
         Because of = () => WriteSideEventStorage.Store(events);
