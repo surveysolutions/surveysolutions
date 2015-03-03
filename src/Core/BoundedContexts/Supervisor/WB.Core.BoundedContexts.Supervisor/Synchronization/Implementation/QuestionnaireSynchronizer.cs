@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
+using WB.Core.SharedKernels.SurveyManagement.Services.DeleteQuestionnaireTemplate;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -29,7 +30,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly HeadquartersPullContext headquartersPullContext;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry> plainStorage;
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
+        private readonly IDeleteQuestionnaireService deleteQuestionnaireService;
         private readonly IHeadquartersQuestionnaireReader headquartersQuestionnaireReader;
         private readonly Action<ICommand> executeCommand;
         private readonly ILogger logger;
@@ -37,7 +38,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         public QuestionnaireSynchronizer(IAtomFeedReader feedReader, IHeadquartersSettings settings,
             HeadquartersPullContext headquartersPullContext, IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry> plainStorage, ILogger logger, IPlainQuestionnaireRepository plainQuestionnaireRepository,
 
-            ICommandService commandService, IHeadquartersQuestionnaireReader headquartersQuestionnaireReader, IQueryableReadSideRepositoryReader<InterviewSummary> interviews)
+            ICommandService commandService, IHeadquartersQuestionnaireReader headquartersQuestionnaireReader, IDeleteQuestionnaireService deleteQuestionnaireService)
         {
             this.feedReader = feedReader;
             this.settings = settings;
@@ -46,7 +47,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.logger = logger;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.headquartersQuestionnaireReader = headquartersQuestionnaireReader;
-            this.interviews = interviews;
+            this.deleteQuestionnaireService = deleteQuestionnaireService;
             this.executeCommand = command => commandService.Execute(command, origin: Constants.HeadquartersSynchronizationOrigin);
             
         }
@@ -73,7 +74,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                         case QuestionnaireEntryType.QuestionnaireCreated:
                         case QuestionnaireEntryType.QuestionnaireCreatedInCensusMode:
 
-                            if (this.IsQuestionnnaireAlreadyStoredLocally(questionnaireFeedEntry.QuestionnaireId,
+                            if (this.IsQuestionnaireAlreadyStoredLocally(questionnaireFeedEntry.QuestionnaireId,
                                 questionnaireFeedEntry.QuestionnaireVersion))
                                 break;
 
@@ -152,38 +153,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         {
             this.headquartersPullContext.PushMessage(string.Format("Deleting questionnaire '{0}' version '{1}'", id, version));
 
-            var interviewByQuestionnaire =
-                              interviews.QueryAll(i => !i.IsDeleted && i.QuestionnaireId == id && i.QuestionnaireVersion == version);
-
-            var interviewDeletionErrors = new List<Exception>();
-
-            foreach (var interviewSummary in interviewByQuestionnaire)
-            {
-                try
-                {
-                    if (interviewSummary.WasCreatedOnClient)
-                    {
-                        this.headquartersPullContext.PushMessage(string.Format("Hard deleting interview '{0}' for '{1}' because {2} questionnaire deleted",
-                                interviewSummary.InterviewId, interviewSummary.ResponsibleName, id));
-
-                        this.executeCommand(new HardDeleteInterview(interviewSummary.InterviewId, interviewSummary.ResponsibleId));
-                    }
-                }
-                catch (Exception e)
-                {
-                    interviewDeletionErrors.Add(e);
-                }
-            }
-
-            if (interviewDeletionErrors.Any())
-                throw new AggregateException(
-                    string.Format("Failed to delete one or more interviews which were created from questionnaire {0} version {1}.", id.FormatGuid(), version), interviewDeletionErrors);
-
-            this.executeCommand(new DeleteQuestionnaire(id, version, null));
-            this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(id, version);
+            deleteQuestionnaireService.DeleteQuestionnaire(id, version, null);
         }
 
-        private bool IsQuestionnnaireAlreadyStoredLocally(Guid id, long version)
+        private bool IsQuestionnaireAlreadyStoredLocally(Guid id, long version)
         {
             QuestionnaireDocument localQuestionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
 

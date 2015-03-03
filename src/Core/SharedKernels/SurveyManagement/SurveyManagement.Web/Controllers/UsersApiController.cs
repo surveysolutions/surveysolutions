@@ -40,7 +40,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             {
                 var input = new InterviewersInputModel(viewerId.Value)
                     {
-                        Orders = data.SortOrder
+                        Orders = data.SortOrder,
+                        SearchBy = data.SearchBy
                     };
                 if (data.Pager != null)
                 {
@@ -59,7 +60,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             var input = new UserListViewInputModel
                 {
                     Role = UserRoles.Supervisor,
-                    Orders = data.SortOrder
+                    Orders = data.SortOrder,
+                    SearchBy = data.SearchBy
                 };
 
             if (data.Pager != null)
@@ -68,7 +70,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 input.PageSize = data.Pager.PageSize;
             }
 
-            return this.supervisorsFactory.Load(input);
+            UserListView result = this.supervisorsFactory.Load(input);
+            return result;
         }
     }
 }

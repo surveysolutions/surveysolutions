@@ -1,16 +1,17 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Machine.Specifications;
-using Main.Core;
 using Main.Core.Events;
 using Moq;
+using Moq.Language.Flow;
 using Moq.Protected;
-using Ncqrs.Commanding;
 
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
@@ -25,7 +26,6 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSynchronizerTests.Push

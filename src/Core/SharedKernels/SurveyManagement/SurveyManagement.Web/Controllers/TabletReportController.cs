@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
@@ -23,6 +24,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public ActionResult DownloadPackages(string fileName)
         {
             return this.File(this.tabletInformationService.GetFullPathToContentFile(fileName), "application/zip", fileName);
+        }
+
+        [Authorize(Roles = "Headquarter, Supervisor")]
+        public ActionResult Device(string id)
+        {
+            TabletLogView model = this.tabletInformationService.GetTabletLog(id);
+            return this.View(model);
         }
     }
 }

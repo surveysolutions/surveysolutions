@@ -61,7 +61,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
                 doc.Roles, 
                 doc.IsLockedBySupervisor, 
                 doc.IsLockedByHQ, 
-                doc.Supervisor);
+                doc.Supervisor,
+                doc.DeviceId);
         }
     }
 }

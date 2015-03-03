@@ -39,7 +39,6 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <Folder Include="Ncqrs\_WB\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregates\IAggregateRoot.cs" />
@@ -60,7 +59,6 @@
     <Compile Include="Implementation\ReadSide\ReadSideRepositoryWriterStatus.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideService.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideEventPublishingDetails.cs" />
-    <Compile Include="Implementation\Services\WaitService.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideStatus.cs" />
     <Compile Include="EventHandlers\AbstractFunctionalEventHandler.cs" />
     <Compile Include="EventHandlers\IFunctionalEventHandler.cs" />
@@ -77,7 +75,6 @@
     <Compile Include="LinqUtils.cs" />
     <Compile Include="Modularity\IIocRegistry.cs" />
     <Compile Include="Modularity\Module.cs" />
-    <Compile Include="Ncqrs\BasicGuidGenerator.cs" />
     <Compile Include="Ncqrs\Commanding\CommandBase.cs" />
     <Compile Include="Ncqrs\Config\IEnvironmentConfiguration.cs" />
     <Compile Include="Ncqrs\Config\InstanceNotFoundInEnvironment.cs" />
@@ -85,14 +82,11 @@
     <Compile Include="Ncqrs\Domain\AggregateExtensions.cs" />
     <Compile Include="Ncqrs\Domain\AggregateRoot.cs" />
     <Compile Include="Ncqrs\Domain\AggregateRootMappedByConvention.cs" />
-    <Compile Include="Ncqrs\Domain\Entity.cs" />
-    <Compile Include="Ncqrs\Domain\EntityMappedByConvention.cs" />
     <Compile Include="Ncqrs\Domain\Storage\AggregateRootCreationException.cs" />
     <Compile Include="Ncqrs\Domain\Storage\AggregateRootCreationStrategy.cs" />
     <Compile Include="Ncqrs\Domain\Storage\AggregateRootNotFoundException.cs" />
     <Compile Include="Ncqrs\Domain\Storage\AggregateSupportsSnapshotValidator.cs" />
     <Compile Include="Ncqrs\Domain\Storage\DefaultAggregateSnapshotter.cs" />
-    <Compile Include="Ncqrs\Domain\Storage\DelegateAggregateRootCreationStrategy.cs" />
     <Compile Include="Ncqrs\Domain\Storage\DomainRepository.cs" />
     <Compile Include="Ncqrs\Domain\Storage\IAggregateRootCreationStrategy.cs" />
     <Compile Include="Ncqrs\Domain\Storage\IAggregateSnapshotter.cs" />
@@ -113,7 +107,6 @@
     <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\IPublishableEvent.cs" />
     <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\PublishedEvent.cs" />
     <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\RegisterAllHandlersInAssemblyExtension.cs" />
-    <Compile Include="Ncqrs\Eventing\Sourcing\EntitySourcedEventBase.cs" />
     <Compile Include="Ncqrs\Eventing\Sourcing\EntityThresholdedDomainEventHandlerWrapper.cs" />
     <Compile Include="Ncqrs\Eventing\Sourcing\EventAppliedEventArgs.cs" />
     <Compile Include="Ncqrs\Eventing\Sourcing\EventSource.cs" />
@@ -130,12 +123,9 @@
     <Compile Include="Ncqrs\Eventing\Sourcing\Snapshotting\NoSnapshottingPolicy.cs" />
     <Compile Include="Ncqrs\Eventing\Sourcing\Snapshotting\SimpleSnapshottingPolicy.cs" />
     <Compile Include="Ncqrs\Eventing\Sourcing\Snapshotting\Snapshot.cs" />
-    <Compile Include="Ncqrs\Eventing\Sourcing\SourcedEvent.cs" />
-    <Compile Include="Ncqrs\Eventing\Sourcing\SourcedEventHandler.cs" />
     <Compile Include="Ncqrs\Eventing\Sourcing\TypeThresholdedActionBasedSourcedEventHandler.cs" />
     <Compile Include="Ncqrs\Eventing\Sourcing\UndefinedValues.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\AttributeEventTypeResolver.cs" />
-    <Compile Include="Ncqrs\Eventing\Storage\DuplicateCommitException.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\IEventStore.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\IEventTypeResolver.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\InMemoryEventStore.cs" />
@@ -144,17 +134,13 @@
     <Compile Include="Ncqrs\Eventing\Storage\NullSnapshotStore.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\PropertyBag.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\PropertyBagConvertionException.cs" />
-    <Compile Include="Ncqrs\Eventing\Storage\SimpleEventTypeResolver.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\StoredEvent.cs" />
     <Compile Include="Ncqrs\Eventing\UncommittedEvent.cs" />
     <Compile Include="Ncqrs\Eventing\UncommittedEventStream.cs" />
-    <Compile Include="Ncqrs\GuidCombGenerator.cs" />
     <Compile Include="Ncqrs\IClock.cs" />
     <Compile Include="Ncqrs\InternalExtensions.cs" />
-    <Compile Include="Ncqrs\IUniqueIdentifierGenerator.cs" />
     <Compile Include="Ncqrs\LoggerExtensions.cs" />
     <Compile Include="Ncqrs\LogManager.cs" />
-    <Compile Include="Ncqrs\NamespaceDoc.cs" />
     <Compile Include="Ncqrs\NcqrsEnvironment.cs" />
     <Compile Include="Ncqrs\NcqrsEnvironmentException.cs" />
     <Compile Include="Ncqrs\NcqrsModule.cs" />
@@ -181,7 +167,6 @@
     <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryWriter.cs" />
     <Compile Include="ReadSide\Repository\Accessors\ReadSideStorageVersionedWrapper.cs" />
     <Compile Include="Services\IAdditionalDataService.cs" />
-    <Compile Include="Services\IWaitService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">

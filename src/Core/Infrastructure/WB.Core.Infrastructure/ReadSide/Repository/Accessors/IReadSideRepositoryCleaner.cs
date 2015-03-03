@@ -1,5 +1,4 @@
-﻿
-namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
+﻿namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
 {
     public interface IReadSideRepositoryCleaner
     {

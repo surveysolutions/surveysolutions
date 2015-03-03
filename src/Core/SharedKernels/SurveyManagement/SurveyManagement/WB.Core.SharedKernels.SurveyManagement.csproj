@@ -101,6 +101,7 @@
     <Compile Include="DataCollectionSharedKernelModule.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="EventHandler\AnswersByVariableDenormalizer.cs" />
+    <Compile Include="Implementation\ReadSide\RepositoryAccessors\OrderableSyncPackageWriter.cs" />
     <Compile Include="EventHandler\ClientDeviceDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewHistoryDenormalizer.cs" />
     <Compile Include="EventHandler\DummyEventHandler.cs" />
@@ -110,10 +111,17 @@
     <Compile Include="EventHandler\InterviewExportedDataDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewsChartDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewSummaryEventHandlerFunctional.cs" />
+    <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\DeleteQuestionnaireService.cs" />
+    <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\InterviewsToDeleteFactory.cs" />
+    <Compile Include="Services\DeleteQuestionnaireTemplate\IDeleteQuestionnaireService.cs" />
+    <Compile Include="Services\DeleteQuestionnaireTemplate\IInterviewsToDeleteFactory.cs" />
+    <Compile Include="Services\IOrderableSyncPackageWriter.cs" />
     <Compile Include="EventHandler\QuestionnaireDetailsForChart.cs" />
     <Compile Include="EventHandler\QuestionnaireStatisticsForChart.cs" />
+    <Compile Include="EventHandler\QuestionnaireSynchronizationDenormalizer.cs" />
     <Compile Include="EventHandler\StatisticsGroupedByDateAndTemplate.cs" />
-    <Compile Include="EventHandler\SynchronizationDenormalizer.cs" />
+    <Compile Include="EventHandler\InterviewSynchronizationDenormalizer.cs" />
+    <Compile Include="EventHandler\UserSynchronizationDenormalizer.cs" />
     <Compile Include="Factories\ICsvWriterFactory.cs" />
     <Compile Include="Factories\IChartStatisticsViewFactory.cs" />
     <Compile Include="Factories\IPreloadedDataServiceFactory.cs" />
@@ -260,7 +268,6 @@
     <Compile Include="Views\InterviewHistory\InterviewHistoryFactory.cs" />
     <Compile Include="Views\DataExport\QuestionnaireExportStructure.cs" />
     <Compile Include="Views\Device\DeviceView.cs" />
-    <Compile Include="Views\Device\DeviceViewFactory.cs" />
     <Compile Include="Views\Device\DeviceViewInputModel.cs" />
     <Compile Include="Views\IInterviewDataAndQuestionnaireMerger.cs" />
     <Compile Include="Views\IListView.cs" />
@@ -365,6 +372,7 @@
     <Compile Include="Views\Survey\SurveyUsersViewFactory.cs" />
     <Compile Include="Views\Survey\SurveyUsersViewInputModel.cs" />
     <Compile Include="Views\TabletInformation\TabletInformationView.cs" />
+    <Compile Include="Views\TabletInformation\TabletLogView.cs" />
     <Compile Include="Views\TakeNew\FeaturedAnswerView.cs" />
     <Compile Include="Views\TakeNew\FeaturedQuestionView.cs" />
     <Compile Include="Views\TakeNew\TakeNewInterviewInputModel.cs" />

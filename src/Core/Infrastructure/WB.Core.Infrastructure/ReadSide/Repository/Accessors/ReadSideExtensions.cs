@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.SurveySolutions;
 
@@ -40,6 +42,23 @@ namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
             where T : class, IReadSideRepositoryEntity
         {
             return reader.GetById(id.FormatGuid());
+        }
+
+        public static IList<T> QueryAll<T>(this IQueryable<T> reader)
+        {
+            var result = new List<T>();
+            int skipResults = 0;
+            while (true)
+            {
+                var chunk = reader.Skip(skipResults).ToList();
+
+                if (!chunk.Any())
+                    break;
+
+                result.AddRange(chunk);
+                skipResults = result.Count;
+            }
+            return result;
         }
     }
 }

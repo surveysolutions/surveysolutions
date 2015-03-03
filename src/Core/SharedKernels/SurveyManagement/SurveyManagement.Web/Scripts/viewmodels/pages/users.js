@@ -2,7 +2,7 @@
     Supervisor.VM.Users.superclass.constructor.apply(this, arguments);
     
     var self = this;
-    
+
     self.load = function() {
         self.search();
     };

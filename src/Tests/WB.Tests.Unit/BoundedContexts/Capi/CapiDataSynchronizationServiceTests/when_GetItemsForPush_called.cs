@@ -19,13 +19,13 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
             };
 
             changeLogManipulator = new Mock<IChangeLogManipulator>();
-            changeLogManipulator.Setup(x => x.GetClosedDraftChunksIds()).Returns(changeLogShortRecords);
+            changeLogManipulator.Setup(x => x.GetClosedDraftChunksIds(userId)).Returns(changeLogShortRecords);
             changeLogManipulator.Setup(x => x.GetDraftRecordContent(Moq.It.IsAny<Guid>())).Returns<Guid>(key => key.ToString());
 
             capiDataSynchronizationService = CreateCapiDataSynchronizationService(changeLogManipulator.Object);
         };
 
-        Because of = () => result = capiDataSynchronizationService.GetItemsForPush();
+        Because of = () => result = capiDataSynchronizationService.GetItemsToPush(userId);
 
         It should_result_has_2_items = () => result.Count.ShouldEqual(2);
 
@@ -34,5 +34,6 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
         private static CapiDataSynchronizationService capiDataSynchronizationService;
         private static IList<ChangeLogRecordWithContent> result;
         private static Mock<IChangeLogManipulator> changeLogManipulator;
+        private static Guid userId = Guid.Parse("11111111111111111111111111111111");
     }
 }

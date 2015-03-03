@@ -1,20 +1,20 @@
 ﻿using System;
-using Ninject;
 using Ninject.Modules;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQuestionnaireTemplate;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletInformation;
@@ -26,6 +26,7 @@ using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks;
+using WB.Core.SharedKernels.SurveyManagement.Services.DeleteQuestionnaireTemplate;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
@@ -33,11 +34,10 @@ using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.Intervie
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.Synchronization;
+using WB.Core.Synchronization.EventHandler;
 
 namespace WB.Core.SharedKernels.SurveyManagement
 {
-    using WB.Core.SharedKernels.SurveyManagement.Views.User;
-
     public class SurveyManagementSharedKernelModule : NinjectModule
     {
         private readonly string currentFolderPath;
@@ -102,7 +102,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
 
-            this.Bind(typeof (ITemporaryDataStorage<>)).To(typeof (FileTemporaryDataStorage<>));
+            this.Bind(typeof(ITemporaryDataStorage<>)).To(typeof(FileTemporaryDataStorage<>)).WithConstructorArgument("rootPath", this.currentFolderPath);
 
             this.Bind<IQuestionnaireCacheInitializer>().To<QuestionnaireCacheInitializer>();
             this.Bind<InterviewDetailsDataLoaderSettings>().ToConstant(this.interviewDetailsDataLoaderSettings);
@@ -119,8 +119,14 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
 
+            this.Bind(typeof(IOrderableSyncPackageWriter<,>)).To(typeof(OrderableSyncPackageWriter<,>)).InSingletonScope();
+
             this.Kernel.RegisterDenormalizer<InterviewEventHandlerFunctional>();
-            this.Kernel.RegisterDenormalizer<SynchronizationDenormalizer>();
+            this.Kernel.RegisterDenormalizer<InterviewSynchronizationDenormalizer>();
+            this.Kernel.RegisterDenormalizer<UserSynchronizationDenormalizer>();
+            this.Kernel.RegisterDenormalizer<QuestionnaireSynchronizationDenormalizer>();
+            this.Kernel.RegisterDenormalizer<TabletDenormalizer>();
+
             if (hqEnabled)
             {
                 this.Kernel.RegisterDenormalizer<InterviewExportedDataDenormalizer>();
@@ -136,6 +142,9 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IIncomingSyncPackagesQueue>()
               .To<IncomingSyncPackagesQueue>()
               .InSingletonScope();
+
+            this.Bind<IInterviewsToDeleteFactory>().To<InterviewsToDeleteFactory>();
+            this.Bind<IDeleteQuestionnaireService>().To<DeleteQuestionnaireService>().InSingletonScope();
 
             this.Bind<InterviewHistorySettings>().ToConstant(interviewHistorySettings);
             

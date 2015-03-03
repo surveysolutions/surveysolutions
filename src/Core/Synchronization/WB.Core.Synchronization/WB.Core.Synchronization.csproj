@@ -63,26 +63,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aggregates\ClientDeviceAR.cs" />
+    <Compile Include="Aggregates\Tablet.cs" />
     <Compile Include="ClientIdentifier.cs" />
-    <Compile Include="Commands\CreateClientDeviceCommand.cs" />
+    <Compile Include="Commands\RegisterTabletCommand.cs" />
     <Compile Include="Documents\ClientDeviceDocument.cs" />
-    <Compile Include="Documents\SyncDeviceRegisterDocument.cs" />
-    <Compile Include="EventHandler\DeviceDenormalizer.cs" />
+    <Compile Include="Documents\TabletDocument.cs" />
+    <Compile Include="Documents\TabletSyncLogByUsers.cs" />
+    <Compile Include="EventHandler\TabletDenormalizer.cs" />
     <Compile Include="Events\Sync\ClientDeviceLastSyncItemUpdated.cs" />
     <Compile Include="Events\Sync\NewClientDeviceCreated.cs" />
     <Compile Include="Events\Sync\NewDeviceRegistered.cs" />
+    <Compile Include="Events\Sync\TabletRegistered.cs" />
     <Compile Include="Events\Sync\UpdateRegisteredDevice.cs" />
     <Compile Include="IBackupManager.cs" />
     <Compile Include="IIncomingSyncPackagesQueue.cs" />
+    <Compile Include="Implementation\ReadSide\Indexes\InterviewSyncPackagesByBriefFields.cs" />
+    <Compile Include="Implementation\ReadSide\Indexes\QuestionnaireSyncPackagesByBriefFields.cs" />
+    <Compile Include="Implementation\ReadSide\Indexes\SynchronizationDeltasByRecordSize.cs" />
+    <Compile Include="Implementation\SyncLogger\SyncLogger.cs" />
     <Compile Include="IncomingSyncPackage.cs" />
     <Compile Include="IncomingSyncPackageException.cs" />
     <Compile Include="ISyncPackagesProcessor.cs" />
     <Compile Include="Implementation\ImportManager\DefaultBackupManager.cs" />
-    <Compile Include="Implementation\ReadSide\Indexes\SynchronizationDeltasByBriefFields.cs" />
-    <Compile Include="Implementation\ReadSide\Indexes\SynchronizationDeltasByRecordSize.cs" />
+    <Compile Include="Implementation\ReadSide\Indexes\UserSyncPackagesByBriefFields.cs" />
     <Compile Include="Implementation\SyncManager\SyncManager.cs" />
-    <Compile Include="ISynchronizationDataStorage.cs" />
     <Compile Include="ISyncManager.cs" />
     <Compile Include="MetaInfo\IMetaInfoBuilder.cs" />
     <Compile Include="MetaInfo\MetaInfoBuilder.cs" />
@@ -100,14 +104,17 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SyncSettings.cs" />
-    <Compile Include="SyncStorage\IChunkReader.cs" />
-    <Compile Include="SyncStorage\ReadSideChunkReader.cs" />
-    <Compile Include="SyncStorage\ReadSideChunkWriter.cs" />
-    <Compile Include="SyncStorage\SimpleSynchronizationDataStorage.cs" />
-    <Compile Include="SyncStorage\IChunkWriter.cs" />
-    <Compile Include="SyncStorage\SynchronizationDeltaContent.cs" />
-    <Compile Include="SyncStorage\SynchronizationDeltaMetaInformation.cs" />
+    <Compile Include="SyncStorage\InterviewResponsible.cs" />
+    <Compile Include="SyncStorage\InterviewSyncPackageContent.cs" />
+    <Compile Include="SyncStorage\InterviewSyncPackageMeta.cs" />
+    <Compile Include="SyncStorage\ISyncLogger.cs" />
+    <Compile Include="SyncStorage\ISyncPackage.cs" />
+    <Compile Include="SyncStorage\QuestionnaireSyncPackageContent.cs" />
+    <Compile Include="SyncStorage\QuestionnaireSyncPackageMeta.cs" />
     <Compile Include="SyncStorage\SynchronizationDeltasCounter.cs" />
+    <Compile Include="SyncStorage\SyncPackageNotFoundException.cs" />
+    <Compile Include="SyncStorage\UserSyncPackageMeta.cs" />
+    <Compile Include="SyncStorage\UserSyncPackageContent.cs" />
     <Compile Include="ZipFileData.cs" />
   </ItemGroup>
   <ItemGroup>

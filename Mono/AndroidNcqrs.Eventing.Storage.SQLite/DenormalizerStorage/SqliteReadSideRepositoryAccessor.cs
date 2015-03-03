@@ -1,11 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Linq.Expressions;
-using Cirrious.CrossCore;
-using SQLite;
-using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage

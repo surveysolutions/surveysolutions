@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.User;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -9,9 +8,6 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.SurveyManagement.Views;
-using WB.Core.Synchronization;
-using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
@@ -22,6 +18,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                                     IEventHandler<UserUnlocked>,
                                     IEventHandler<UserLockedBySupervisor>,
                                     IEventHandler<UserUnlockedBySupervisor>,
+                                    IEventHandler<UserLinkedToDevice>,
                                     IEventHandler
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
@@ -92,6 +89,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             UserDocument item = this.users.GetById(evnt.EventSourceId);
 
             item.IsLockedBySupervisor = false;
+            this.users.Store(item, item.PublicKey);
+        }
+
+        public void Handle(IPublishedEvent<UserLinkedToDevice> evnt)
+        {
+            UserDocument item = this.users.GetById(evnt.EventSourceId);
+
+            item.DeviceId = evnt.Payload.DeviceId;
+            item.DeviceChangingHistory.Add(
+                new DeviceInfo { Date = evnt.EventTimeStamp, DeviceId = evnt.Payload.DeviceId });
             this.users.Store(item, item.PublicKey);
         }
     }

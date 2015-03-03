@@ -2,6 +2,7 @@
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {

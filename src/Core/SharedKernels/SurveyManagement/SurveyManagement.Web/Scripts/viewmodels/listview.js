@@ -12,6 +12,8 @@
     self.Items = ko.observableArray([]);
     self.ItemsSummary = ko.observable(null);
 
+    self.SearchBy = ko.observable('');
+
     self.Filter = function () {
         return self.GetFilterMethod ? self.GetFilterMethod.apply() : null;
     };
@@ -75,7 +77,8 @@
                 PageSize: self.Pager().PageSize()
             },
             SortOrder: self.OrderBy(),
-            Request: self.Filter()
+            Request: self.Filter(),
+            SearchBy: self.SearchBy()
         };
 
         self.SendRequest(self.ServiceUrl, params, function(data) {

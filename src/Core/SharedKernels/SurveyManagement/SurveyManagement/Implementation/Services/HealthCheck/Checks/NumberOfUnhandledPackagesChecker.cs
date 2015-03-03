@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthC
                     return NumberOfUnhandledPackagesHealthCheckResult.Happy(count);
 
                 return NumberOfUnhandledPackagesHealthCheckResult.Warning(count,
-                    "The error occurred during interview processing. Please contact Survey Solutions Team <a href='support@mysurvey.solutions'>support@mysurvey.solutions</a> to report the error.");
+                    "The error occurred during processing of the interview.<br />Please, contact Survey Solutions Team <a href='mailto:support@mysurvey.solutions'>support@mysurvey.solutions</a> to inform about the issue.");
             }
             catch (Exception e)
             {

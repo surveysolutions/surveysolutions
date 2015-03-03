@@ -1,18 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Resources;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
@@ -151,6 +143,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
 
         public Type ViewType { get { return typeof (InterviewHistoryView); } }
 
+        public bool IsCacheEnabled { get { return this.cacheEnabled; } }
+        
         public void BulkStore(List<Tuple<InterviewHistoryView, string>> bulk)
         {
             foreach (var tuple in bulk)

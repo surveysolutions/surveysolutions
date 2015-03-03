@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Services;
@@ -23,7 +24,10 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 PublicKey = Guid.NewGuid()
             };
 
-            syncItem = new SyncItem() { ItemType = SyncItemType.Template, IsCompressed = true, Content = "some content", MetaInfo = "some metadata", RootId = Guid.NewGuid()};
+            syncItem = new QuestionnaireSyncPackageDto
+                       {
+                           Content = "some content", MetaInfo = "some metadata"
+                       };
 
             var jsonUtilsMock = new Mock<IJsonUtils>();
             jsonUtilsMock.Setup(x => x.Deserialize<QuestionnaireDocument>(syncItem.Content)).Returns(questionnaireDocument);
@@ -37,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 plainQuestionnaireRepositoryMock.Object);
         };
 
-        Because of = () => exception = Catch.Exception(() => capiDataSynchronizationService.SavePulledItem(syncItem));
+        Because of = () => exception = Catch.Exception(() => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem, SyncItemType.Questionnaire));
 
         It should_not_call_RegisterPlainQuestionnaire =
             () =>
@@ -58,15 +62,8 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
         It should_throw_ArgumentException = () =>
             exception.ShouldBeOfType<ArgumentException>();
 
-        It should_not_create_public_record_in_change_log_for_sync_item =
-        () =>
-            changeLogManipulator.Verify(
-                x =>
-                    x.CreatePublicRecord(syncItem.RootId),
-                Times.Never);
-
         private static CapiDataSynchronizationService capiDataSynchronizationService;
-        private static SyncItem syncItem;
+        private static QuestionnaireSyncPackageDto syncItem;
         private static QuestionnaireDocument questionnaireDocument;
         private static Mock<ICommandService> commandService;
         private static Mock<IPlainQuestionnaireRepository> plainQuestionnaireRepositoryMock;

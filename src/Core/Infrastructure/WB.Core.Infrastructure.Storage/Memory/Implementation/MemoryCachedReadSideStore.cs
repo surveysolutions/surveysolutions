@@ -53,6 +53,8 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
             get { return typeof(TEntity); }
         }
 
+        public bool IsCacheEnabled { get { return this.isCacheEnabled; } }
+
         public void Clear()
         {
             var readSideRepositoryCleaner = readSideStorage as IReadSideRepositoryCleaner;

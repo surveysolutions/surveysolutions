@@ -152,6 +152,7 @@ namespace WB.UI.Capi
             }
 
         }
+
         protected void Restore(CancellationToken ct, Guid interviewId, bool createdOnClient)
         {
             try

@@ -8,9 +8,9 @@
 @section scripts
 {
     @Scripts.Render("~/validate")
-<script type="text/javascript">
+    <script type="text/javascript">
         $('#umbrella').hide();
-</script>
+    </script>
 }
 @Html.Partial("_alerts")
 
@@ -23,19 +23,22 @@
     </h2>
 </div>
 
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    <fieldset class="form-horizontal">
-        @{
+<div class="row">
+    <div class="col-md-6">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <fieldset class="form-horizontal">
+                @{
             this.Html.RenderPartial("UserEditForm");
+                }
+                <div class="form-group">
+                    <div class="col-sm-offset-2">
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
+                    </div>
+                </div>
+            </fieldset>
         }
-        <div class="form-group">
-            <div class="col-sm-offset-2">
-                <button type="submit" class="btn btn-primary">Save changes</button>
-                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
-            </div>
-        </div>
-    </fieldset>
-}
+    </div>
+</div>

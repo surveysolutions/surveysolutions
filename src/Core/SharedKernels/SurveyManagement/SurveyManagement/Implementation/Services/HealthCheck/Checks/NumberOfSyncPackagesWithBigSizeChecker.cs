@@ -1,27 +1,34 @@
 ﻿using System;
+using System.Linq;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
-using WB.Core.Synchronization.SyncStorage;
+using WB.Core.Synchronization.Implementation.ReadSide.Indexes;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks
 {
-    class NumberOfSyncPackagesWithBigSizeChecker : IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>
+    internal class NumberOfSyncPackagesWithBigSizeChecker : IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>
     {
-        private readonly IChunkReader chunkReader;
+        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
 
-        public NumberOfSyncPackagesWithBigSizeChecker(IChunkReader chunkReader)
+        private readonly string interviewQueryIndexName = typeof(SynchronizationDeltasByRecordSize).Name;
+
+        public NumberOfSyncPackagesWithBigSizeChecker(IReadSideRepositoryIndexAccessor indexAccessor)
         {
-            this.chunkReader = chunkReader;
+            this.indexAccessor = indexAccessor;
         }
 
         public NumberOfSyncPackagesWithBigSizeCheckResult Check()
         {
             try
             {
-                int count = chunkReader.GetNumberOfSyncPackagesWithBigSize();
-                if (count == 0)
+                var groupedCount = indexAccessor.Query<SynchronizationDeltasByRecordSize.Result>(interviewQueryIndexName).FirstOrDefault();
+
+                int count = groupedCount == null ? 0 : groupedCount.Count;
+
+                if (count == 0) 
                     return NumberOfSyncPackagesWithBigSizeCheckResult.Happy(count);
-                return NumberOfSyncPackagesWithBigSizeCheckResult.Warning(count,
-                    "Some interviews are oversized. Please contact Survey Solutions Team <a href='support@mysurvey.solutions'>support@mysurvey.solutions</a> to report the error.");
+
+                return NumberOfSyncPackagesWithBigSizeCheckResult.Warning(count, "Some interviews are oversized.<br />Please, contact Survey Solutions Team <a href='mailto:support@mysurvey.solutions'>support@mysurvey.solutions</a> to inform about the issue.");
             }
             catch (Exception e)
             {

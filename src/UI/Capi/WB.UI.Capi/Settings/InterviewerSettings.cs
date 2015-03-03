@@ -1,9 +1,12 @@
 ﻿using System;
 using Android.App;
 using Android.Content;
-using CAPI.Android.Settings;
+
 using Java.Util;
+
+using WB.Core.BoundedContexts.Capi.Services;
 using WB.UI.Capi.Properties;
+using WB.UI.Capi.SharedPreferences;
 
 namespace WB.UI.Capi.Settings
 {
@@ -33,11 +36,6 @@ namespace WB.UI.Capi.Settings
             return string.IsNullOrEmpty(sClientRegistrationId) ? (Guid?) null : Guid.Parse(sClientRegistrationId);
         }
 
-        public string GetLastReceivedPackageId()
-        {
-            return GetSetting(SettingsNames.LastTimestamp);
-        }
-
         public string GetSyncAddressPoint()
         {
             return GetSetting(SettingsNames.SyncAddressSettingsName);
@@ -62,11 +60,6 @@ namespace WB.UI.Capi.Settings
         {
             SetSetting(SettingsNames.RegistrationKeyName,
                 clientRegistrationId.HasValue ? clientRegistrationId.ToString() : string.Empty);
-        }
-
-        public void SetLastReceivedPackageId(string lastReceivedPackageId)
-        {
-            SetSetting(SettingsNames.LastTimestamp, lastReceivedPackageId);
         }
 
         public void SetSyncAddressPoint(string syncAddressPoint)

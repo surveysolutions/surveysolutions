@@ -1,4 +1,4 @@
-﻿using System.Web.Http;
+using System.Web.Http;
 using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 
