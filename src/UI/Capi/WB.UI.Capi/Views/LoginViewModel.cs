@@ -57,6 +57,15 @@ namespace WB.UI.Capi.Views
             set { this.areCredentialsWrong = value; RaisePropertyChanged(() => this.AreCredentialsWrong); }
         }
 
+        private bool shouldActivationButtonBeVisible = false;
+        public bool ShouldActivationButtonBeVisible
+        {
+            get { return this.shouldActivationButtonBeVisible; }
+            set { this.shouldActivationButtonBeVisible = value; RaisePropertyChanged(() => this.ShouldActivationButtonBeVisible); }
+        }
+
+        private int countOfUnsuccessfulLogins = 0;
+
         public LoginActivityViewModel()
         {
 #if DEBUG
@@ -73,6 +82,8 @@ namespace WB.UI.Capi.Views
             {
                 this.Login = this.Logins.First();
             }
+            this.countOfUnsuccessfulLogins = 0;
+            ShouldActivationButtonBeVisible = false;
         }
 
         public IMvxCommand LoginCommand
@@ -80,9 +91,9 @@ namespace WB.UI.Capi.Views
             get { return new MvxCommand(this.StartLogin); }
         }
 
-        public IMvxCommand RegisterCommand
+        public IMvxCommand ActivationCommand
         {
-            get { return new MvxCommand(this.StartRegister); }
+            get { return new MvxCommand(this.StartActivation); }
         }
 
         private void StartLogin()
@@ -97,9 +108,14 @@ namespace WB.UI.Capi.Views
             IsLoginValid = false;
             IsPasswordValid = false;
             AreCredentialsWrong = true;
+            this.countOfUnsuccessfulLogins++;
+            if (this.countOfUnsuccessfulLogins > 3)
+            {
+                ShouldActivationButtonBeVisible = true;
+            }
         }
 
-        private void StartRegister()
+        private void StartActivation()
         {
             this.NavigationService.NavigateTo(CapiPages.Synchronization,
                 new Dictionary<string, string>
