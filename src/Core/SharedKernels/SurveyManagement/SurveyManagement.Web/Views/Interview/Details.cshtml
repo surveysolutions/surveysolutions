@@ -60,7 +60,7 @@
             <ul id="groups-menu" class="list-group">
                 @foreach (var group in Model.InterviewDetails.Groups)
                 {
-                    <li class="list-group-item @SetGroupLevelClass(group.Depth)">
+                    <li class="list-group-item @SetGroupLevelClass(group.Depth) @css("active", group.Id == Model.SelectedGroupId && group.RosterVector.SequenceEqual(Model.SelectedGroupRosterVector))">
                         <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.All, currentGroupId = group.Id, rosterVector=Stringify(group.RosterVector)})">@group.Title</a>
                     </li>
                 }
@@ -151,7 +151,10 @@
         <text>icon-white</text>
     }
 }
-
+@helper css(string style, bool shouldBeAdded = true)
+{
+    @(shouldBeAdded ? style : string.Empty)
+}
 
 @functions
     {

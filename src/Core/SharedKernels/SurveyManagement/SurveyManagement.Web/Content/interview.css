@@ -39,3 +39,7 @@ visibility: visible !important;
 .filtered-combobox-button {
     margin-top: -5px;
 }
+
+#groups-menu>li.active>a {
+    color: white;
+}
