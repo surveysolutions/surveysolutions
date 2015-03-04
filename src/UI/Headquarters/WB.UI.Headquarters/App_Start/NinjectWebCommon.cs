@@ -24,6 +24,7 @@ using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.Storage.Esent;
+using WB.Core.Infrastructure.Storage.Postgre;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernels.SurveyManagement;
@@ -126,8 +127,6 @@ namespace WB.UI.Headquarters
 
             var ravenReadSideRepositoryWriterSettings = new RavenReadSideRepositoryWriterSettings(int.Parse(WebConfigurationManager.AppSettings["Raven.Readside.BulkInsertBatchSize"]));
 
-            string esentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.DbFolder"]);
-
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
@@ -143,7 +142,8 @@ namespace WB.UI.Headquarters
                 new HeadquartersRegistry(),
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
-                new EsentReadSideModule(esentDataFolder),
+                //new EsentReadSideModule(esentDataFolder),
+                new PostgreModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString),
                 new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled));
 
             NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
