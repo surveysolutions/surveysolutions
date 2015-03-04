@@ -872,5 +872,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0097_QuestionnaireTitleHasInvalidCharacters", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire is too big..
+        /// </summary>
+        internal static string WB0098_QuestionnaireSizeLimit {
+            get {
+                return ResourceManager.GetString("WB0098_QuestionnaireSizeLimit", resourceCulture);
+            }
+        }
     }
 }
