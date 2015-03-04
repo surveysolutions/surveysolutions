@@ -387,4 +387,7 @@
   <data name="WB0097_QuestionnaireTitleHasInvalidCharacters" xml:space="preserve">
     <value>Questionnaire title contains characters that are not allowed. Only letters, numbers, space and _ are allowed.</value>
   </data>
+  <data name="WB0098_QuestionnaireSizeLimit" xml:space="preserve">
+    <value>Questionnaire is too big.</value>
+  </data>
 </root>
