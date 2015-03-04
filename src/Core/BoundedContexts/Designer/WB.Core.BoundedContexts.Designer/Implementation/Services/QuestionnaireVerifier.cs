@@ -250,7 +250,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             QuestionnaireDocument questionnaire, VerificationState state)
         {
             var jsonQuestionnaire = JsonConvert.SerializeObject(questionnaire, Formatting.None);
-            if (Encoding.UTF8.GetByteCount(jsonQuestionnaire) > 5 * 1024 * 1024) // 5MB
+            if (Encoding.UTF8.GetByteCount(jsonQuestionnaire) > 10 * 1024 * 1024) // 10MB
                 yield return new QuestionnaireVerificationError("WB0098", VerificationMessages.WB0098_QuestionnaireSizeLimit);
         }
         

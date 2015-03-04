@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         {
             questionnaire = CreateQuestionnaireDocument();
             questionnaire.Children.Add(
-                new TextQuestion(new string('q', 5 * 1024 * 1024))
+                new TextQuestion(new string('q', 10 * 1024 * 1024))
                 {
                     StataExportCaption = "var0"
                 }); 
