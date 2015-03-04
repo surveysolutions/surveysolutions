@@ -294,6 +294,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_cloned_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_title_has_invalid_characters.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_validation_contains_2_id_references_and_1_of_them_invalid.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_size_more_then_5MB.cs" />
     <Compile Include="Core\Synchronization\SyncManagerTestContext.cs" />
     <Compile Include="Core\Synchronization\when_getting_interview_ids_and_device_is_not_registered.cs" />
     <Compile Include="Core\Synchronization\when_getting_interview_ids_and_device_is_registered_and_last_package_id_is_empty.cs" />

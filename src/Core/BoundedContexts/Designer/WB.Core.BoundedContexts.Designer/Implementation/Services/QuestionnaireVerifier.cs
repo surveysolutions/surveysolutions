@@ -10,8 +10,11 @@ using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveySolutions.Services;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
@@ -184,7 +187,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     ErrorsByQuestionsWithSubstitutions,
                     ErrorsByQuestionsWithDuplicateVariableName,
                     ErrorsByRostersWithDuplicateVariableName,
-                    ErrorsByConditionAndValidationExpressions
+                    ErrorsByConditionAndValidationExpressions,
+                    ErrorsByQuestionnaireSize
                 };
             }
         }
@@ -240,6 +244,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             {
                 yield return CreateExpressionSyntaxError(new ExpressionLocation(locationOfExpressionError));
             }
+        }
+
+        private IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionnaireSize(
+            QuestionnaireDocument questionnaire, VerificationState state)
+        {
+            var jsonQuestionnaire = JsonConvert.SerializeObject(questionnaire, Formatting.None);
+            if (Encoding.UTF8.GetByteCount(jsonQuestionnaire) > 5 * 1024 * 1024) // 5MB
+                yield return new QuestionnaireVerificationError("WB0098", VerificationMessages.WB0098_QuestionnaireSizeLimit);
         }
         
         private GenerationResult GetCompilationResult(QuestionnaireDocument questionnaire)
