@@ -7,6 +7,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires
@@ -22,29 +23,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires
 
        public AllUsersAndQuestionnairesView Load(AllUsersAndQuestionnairesInputModel input)
         {
-           var indexName = typeof (HeadquarterReportsTeamsAndStatusesGroupByTeam).Name;
-
            string userIndexName = typeof(UserDocumentsByBriefFields).Name;
+           string questionnaireIndexName = typeof(QuestionnaireBrowseItemsGroupByQuestionnaireIdIndex).Name;
 
            var allUsers = indexAccessor.Query<UserDocument>(userIndexName).Where(u => !u.IsLockedByHQ  && !u.IsDeleted && u.Roles.Contains(UserRoles.Supervisor))
                .QueryAll()
                .Select(x => new UsersViewItem { UserId = x.PublicKey, UserName = x.UserName });
 
-           var questionnaires =
-               this.indexAccessor.Query<StatisticsLineGroupedByUserAndTemplate>(indexName)
-                   .Where(x => x.QuestionnaireId != Guid.Empty)
-                   .QueryAll()
-                   .Select(
-                       x =>
-                           new TemplateViewItem
-                           {
-                               TemplateId = x.QuestionnaireId,
-                               TemplateName = x.QuestionnaireTitle,
-                               TemplateVersion = x.QuestionnaireVersion
-                           })
-                   .Distinct(new SummaryTemplateItemComparer());
+           var allQuestionnaires = indexAccessor.Query<QuestionnaireAndVersionsItem>(questionnaireIndexName).QueryAll();
 
-            return new AllUsersAndQuestionnairesView
+           var questionnaires = allQuestionnaires.SelectMany(questionnaire => questionnaire.Versions.Select(version => new TemplateViewItem
+           {
+               TemplateId = questionnaire.QuestionnaireId,
+               TemplateName = questionnaire.Title,
+               TemplateVersion = version
+           })).ToList();
+
+           return new AllUsersAndQuestionnairesView
             {
                 Users = allUsers,
                 Questionnaires = questionnaires
