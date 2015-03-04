@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires
@@ -20,23 +22,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires
 
         public TeamUsersAndQuestionnairesView Load(TeamUsersAndQuestionnairesInputModel input)
         {
-            string interviewIndexName = typeof(InterviewsSearchIndex).Name;
+            string questionnaireIndexName = typeof(QuestionnaireBrowseItemsGroupByQuestionnaireIdIndex).Name;
             string userIndexName = typeof(UserDocumentsByBriefFields).Name;
 
             var allUsers = indexAccessor.Query<UserDocument>(userIndexName).Where(u => u.Supervisor.Id == input.ViewerId && !u.IsLockedByHQ && !u.IsLockedBySupervisor && !u.IsDeleted && u.Roles.Contains(UserRoles.Operator))
                 .QueryAll()
                 .Select(x => new UsersViewItem { UserId = x.PublicKey, UserName = x.UserName });
 
-            var questionnaires = indexAccessor.Query<SeachIndexContent>(interviewIndexName).Where(x => !x.IsDeleted && x.TeamLeadId == input.ViewerId)
-               .Select(i => new { i.QuestionnaireId, i.QuestionnaireTitle, i.QuestionnaireVersion })
-               .Distinct()
-               .ToList()
-               .Select(x =>  new TemplateViewItem
-                        {
-                            TemplateId = x.QuestionnaireId,
-                            TemplateName = x.QuestionnaireTitle,
-                            TemplateVersion = x.QuestionnaireVersion
-                        });
+            var allQuestionnaires = indexAccessor.Query<QuestionnaireAndVersionsItem>(questionnaireIndexName).QueryAll();
+
+            var questionnaires = allQuestionnaires.SelectMany(questionnaire => questionnaire.Versions.Select(version => new TemplateViewItem
+            {
+                TemplateId = questionnaire.QuestionnaireId,
+                TemplateName = questionnaire.Title,
+                TemplateVersion = version
+            })).ToList();
 
             return new TeamUsersAndQuestionnairesView
                 {
