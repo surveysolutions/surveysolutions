@@ -98,6 +98,38 @@ namespace WB.Tests.Integration.SurveyManagement.RavenIndexes
             return documentStore;
         }
 
+        protected static EmbeddableDocumentStore CreateDocumentStore<T>(IEnumerable<T> documents, AbstractIndexCreationTask task)
+        {
+            var documentStore = new EmbeddableDocumentStore
+            {
+                Configuration =
+                {
+                    RunInUnreliableYetFastModeThatIsNotSuitableForProduction = true,
+                    RunInMemory = true
+                }
+            };
+
+            documentStore.Initialize();
+
+            // Create Default Index
+            var defaultIndex = new RavenDocumentsByEntityName();
+            defaultIndex.Execute(documentStore);
+
+            // Create Custom Indexes
+            task.Execute(documentStore);
+
+            // Insert Documents from Abstract Property
+            using (var bulkInsert = documentStore.BulkInsert())
+            {
+                foreach (var document in documents)
+                {
+                    bulkInsert.Store(document);
+                }
+            }
+
+            return documentStore;
+        }
+
         protected static T[] QueryUsingIndex<T>(EmbeddableDocumentStore documentStore, Type indexType)
         {
             

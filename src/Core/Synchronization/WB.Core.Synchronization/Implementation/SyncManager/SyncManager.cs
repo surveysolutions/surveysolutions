@@ -107,7 +107,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             var allFromLastPackageByQuestionnaire =
                 this.GetUpdateFromLastPackage(userId, lastSyncedPackageId, GetGroupedQuestionnaireSyncPackage, GetLastQuestionnaireSyncPackage);
 
-            var updateFromLastPackageByQuestionnaire = FilterDeletedQuestionnaires(allFromLastPackageByQuestionnaire);
+            var updateFromLastPackageByQuestionnaire = FilterDeletedQuestionnaires(allFromLastPackageByQuestionnaire, lastSyncedPackageId);
 
             this.TrackArIdsRequestIfNeeded(userId, deviceId, SyncItemType.Questionnaire, lastSyncedPackageId, updateFromLastPackageByQuestionnaire);
 
@@ -208,14 +208,18 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                    };
         }
 
-        private List<SynchronizationChunkMeta> FilterDeletedQuestionnaires(IList<QuestionnaireSyncPackageMeta> packages)
+        private List<SynchronizationChunkMeta> FilterDeletedQuestionnaires(IList<QuestionnaireSyncPackageMeta> packages, string lastSyncedPackageId)
         {
             var deletedQuestionnaires = packages.Where(x => x.ItemType == SyncItemType.DeleteQuestionnaire);
 
-            return packages
+            var result =  packages
                 .Where(x => x.ItemType == SyncItemType.DeleteQuestionnaire || !deletedQuestionnaires.Any(p => p.QuestionnaireId == x.QuestionnaireId && p.QuestionnaireVersion == x.QuestionnaireVersion))
                 .Select(x => new SynchronizationChunkMeta(x.PackageId, x.SortIndex, Guid.Empty, x.ItemType))
                 .ToList();
+            if (!string.IsNullOrEmpty(lastSyncedPackageId))
+                return result;
+
+            return result.Where(x => x.ItemType != SyncItemType.DeleteQuestionnaire).ToList();
         }
 
         private IQueryable<InterviewSyncPackageMeta> GetLastInterviewSyncPackage(Guid userId)
