@@ -349,6 +349,8 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_deleted_by_synchronization.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_restored_by_synchronization.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\AllUsersAndQuestionnairesFactoryTests\when_unlocked_supervisors_and_active_templates_should_be_returned.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\TeamUsersAndQuestionnairesFactoryTests\when_unlocked_interviewers_and_active_templates_should_be_returned.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\IncomingPackagesQueueTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_method_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_called_and_folder_with_packages_is_empty.cs" />

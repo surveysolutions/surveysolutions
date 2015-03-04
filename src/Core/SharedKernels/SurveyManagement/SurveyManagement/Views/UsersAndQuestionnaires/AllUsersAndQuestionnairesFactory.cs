@@ -45,39 +45,5 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires
                 Questionnaires = questionnaires
             };
         }
-
-        public class SummaryTemplateItemComparer : IEqualityComparer<TemplateViewItem>
-        {
-            public bool Equals(TemplateViewItem x, TemplateViewItem y)
-            {
-                if (ReferenceEquals(y, null)) return false;
-
-                if (ReferenceEquals(x, y)) return true;
-
-                return x.TemplateId.Equals(y.TemplateId) && x.TemplateName.Equals(y.TemplateName);
-            }
-
-            public int GetHashCode(TemplateViewItem x)
-            {
-                return 37 + x.TemplateId.GetHashCode() * 23 + x.TemplateName.GetHashCode() * 29 + x.TemplateVersion.GetHashCode() * 47;
-            }
-        }
-
-        public class SurveyUsersViewItemComparer : IEqualityComparer<UsersViewItem>
-        {
-            public bool Equals(UsersViewItem x, UsersViewItem y)
-            {
-                if (ReferenceEquals(y, null)) return false;
-
-                if (ReferenceEquals(x, y)) return true;
-
-                return x.UserId.Equals(y.UserId) && x.UserName.Equals(y.UserName);
-            }
-
-            public int GetHashCode(UsersViewItem x)
-            {
-                return 41 + x.UserId.GetHashCode() * 37 + x.UserName.GetHashCode() * 17;
-            }
-        }
     }
 }
