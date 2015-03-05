@@ -7,7 +7,7 @@ namespace WB.UI.Headquarters.API.Filters
     {
         public override void OnException(HttpActionExecutedContext context)
         {
-            Elmah.ErrorLog.GetDefault(HttpContext.Current).Log(new Elmah.Error(context.Exception));
+            Elmah.ErrorSignal.FromCurrentContext().Raise(context.Exception);
         }
     }
 }
