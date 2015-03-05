@@ -2,8 +2,8 @@
 {
     public class InterviewGeolocationQuestion : InterviewQuestion
     {
-        private GeoLocation answer;
-        public GeoLocation Answer
+        private InterviewGeoLocation answer;
+        public InterviewGeoLocation Answer
         {
             get { return answer; }
             set
