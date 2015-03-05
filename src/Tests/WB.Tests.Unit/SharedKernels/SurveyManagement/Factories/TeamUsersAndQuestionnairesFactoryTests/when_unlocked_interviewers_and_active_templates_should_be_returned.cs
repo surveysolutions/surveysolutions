@@ -97,6 +97,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.TeamUsersAndQue
                             IsDeleted = false,
                             Roles = new List<UserRoles> {UserRoles.Operator},
                             Supervisor = new UserLight(vieweverId,"correct")
+                        },
+                         new UserDocument()
+                        {
+                            PublicKey = vieweverId,
+                            IsLockedByHQ = false,
+                            IsLockedBySupervisor = false,
+                            IsDeleted = false,
+                            Roles = new List<UserRoles> {UserRoles.Supervisor}
                         }
                     }.AsQueryable());
 
@@ -115,11 +123,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.TeamUsersAndQue
         It should_return_result_with_3_different_questionnaire_ids = () =>
          result.Questionnaires.Select(x => x.TemplateVersion).ShouldEqual(new long[] { 2, 3, 1 });
 
-        It should_return_result_with_1_interviewer = () =>
-           result.Users.Count().ShouldEqual(1);
+        It should_return_result_with_1_interviewer_and_1_supervisor = () =>
+           result.Users.Count().ShouldEqual(2);
 
         It should_return_interviewer_which_is_unlocked_undeleted_in_operator_role_and_has_supervisor_equal_to_viewerId = () =>
             result.Users.First().UserId.ShouldEqual(interviewerId);
+
+        It should_return_supervisor_which_is_viewer = () =>
+            result.Users.Last().UserId.ShouldEqual(vieweverId);
 
         private static TeamUsersAndQuestionnairesFactory teamUsersAndQuestionnairesFactory;
         private static TeamUsersAndQuestionnairesView result;
