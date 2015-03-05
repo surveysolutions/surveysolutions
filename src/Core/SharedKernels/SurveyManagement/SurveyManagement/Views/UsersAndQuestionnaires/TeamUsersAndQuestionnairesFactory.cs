@@ -25,9 +25,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires
             string questionnaireIndexName = typeof(QuestionnaireBrowseItemsGroupByQuestionnaireIdIndex).Name;
             string userIndexName = typeof(UserDocumentsByBriefFields).Name;
 
-            var allUsers = indexAccessor.Query<UserDocument>(userIndexName).Where(u => u.Supervisor.Id == input.ViewerId && !u.IsLockedByHQ && !u.IsLockedBySupervisor && !u.IsDeleted && u.Roles.Contains(UserRoles.Operator))
+            var allUsers = indexAccessor.Query<UserDocument>(userIndexName)
+                .Where(
+                    u =>
+                        (u.Roles.Contains(UserRoles.Operator) && !u.IsLockedByHQ && !u.IsLockedBySupervisor &&
+                         !u.IsDeleted && u.Supervisor != null && u.Supervisor.Id == input.ViewerId) ||
+                        (u.PublicKey == input.ViewerId))
                 .QueryAll()
-                .Select(x => new UsersViewItem { UserId = x.PublicKey, UserName = x.UserName });
+                .Select(x => new UsersViewItem {UserId = x.PublicKey, UserName = x.UserName});
 
             var allQuestionnaires = indexAccessor.Query<QuestionnaireAndVersionsItem>(questionnaireIndexName).QueryAll();
 
