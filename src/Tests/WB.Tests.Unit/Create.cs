@@ -591,13 +591,13 @@ namespace WB.Tests.Unit
         }
 
         public static IPublishedEvent<QuestionnaireItemMoved> QuestionnaireItemMovedEvent(string itemId,
-            string targetGroupId = null)
+            string targetGroupId = null, int? targetIndex = null)
         {
             return ToPublishedEvent(new QuestionnaireItemMoved()
             {
                 PublicKey = Guid.Parse(itemId),
                 GroupKey = GetQuestionnaireItemParentId(targetGroupId),
-                TargetIndex = 0
+                TargetIndex = targetIndex ?? 0
             });
         }
 
