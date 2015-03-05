@@ -2,7 +2,7 @@
 
 namespace WB.Core.BoundedContexts.Capi.ViewModel
 {
-    public class InterviewLinkedSinleChoiceQuestion<T> : InterviewQuestion
+    public class InterviewLinkedSingleChoiceQuestion<T> : InterviewQuestion
     {
         private ObservableCollection<InterviewDynamicOption<T>> options;
         public ObservableCollection<InterviewDynamicOption<T>> Options

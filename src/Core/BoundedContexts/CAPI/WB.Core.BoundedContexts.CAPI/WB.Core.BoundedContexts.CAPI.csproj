@@ -109,10 +109,10 @@
     <Compile Include="Services\ISyncPackageIdsStorage.cs" />
     <Compile Include="Services\ISyncPackageRestoreService.cs" />
     <Compile Include="ValueObjects\CapiPages.cs" />
-    <Compile Include="ViewModel\AutocompleteSingleChoiceQuestion.cs" />
-    <Compile Include="ViewModel\CascadingSingleChoiceQuestion.cs" />
+    <Compile Include="ViewModel\InterviewAutocompleteSingleChoiceQuestion.cs" />
+    <Compile Include="ViewModel\InterviewCascadingSingleChoiceQuestion.cs" />
     <Compile Include="ViewModel\InterviewDynamicOption.cs" />
-    <Compile Include="ViewModel\GeoLocation.cs" />
+    <Compile Include="ViewModel\InterviewGeoLocation.cs" />
     <Compile Include="ViewModel\InterviewDateQuestion.cs" />
     <Compile Include="ViewModel\InterviewDecimalQuestion.cs" />
     <Compile Include="ViewModel\InterviewGeolocationQuestion.cs" />
@@ -125,11 +125,12 @@
     <Compile Include="ViewModel\InterviewQuestion.cs" />
     <Compile Include="ViewModel\InterviewRoster.cs" />
     <Compile Include="ViewModel\InterviewSingleChoiceQuestion.cs" />
+    <Compile Include="ViewModel\InterviewStaticText.cs" />
     <Compile Include="ViewModel\InterviewTextQuestion.cs" />
     <Compile Include="ViewModel\InterviewViewModel.cs" />
     <Compile Include="ViewModel\InterviewListQuestion.cs" />
     <Compile Include="ViewModel\InterviewLinkedMultiChoiceQuestion.cs" />
-    <Compile Include="ViewModel\InterviewLinkedSinleChoiceQuestion.cs" />
+    <Compile Include="ViewModel\InterviewLinkedSingleChoiceQuestion.cs" />
     <Compile Include="ViewModel\InterviewStaticOption.cs" />
     <Compile Include="Views\InterviewDetails\AnswerViewModel.cs" />
     <Compile Include="Views\InterviewDetails\BreadCrumbsUtils.cs" />
