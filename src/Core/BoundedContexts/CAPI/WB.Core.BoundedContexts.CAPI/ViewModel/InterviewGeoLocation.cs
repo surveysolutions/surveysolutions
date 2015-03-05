@@ -3,7 +3,7 @@ using Cirrious.MvvmCross.ViewModels;
 
 namespace WB.Core.BoundedContexts.Capi.ViewModel
 {
-    public class GeoLocation : MvxNotifyPropertyChanged
+    public class InterviewGeoLocation : MvxNotifyPropertyChanged
     {
         private double latitude;
         public double Latitude
