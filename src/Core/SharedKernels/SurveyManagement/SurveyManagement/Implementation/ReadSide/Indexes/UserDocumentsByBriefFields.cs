@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes
                                 {
                                     Supervisor_Id = doc.Supervisor.Id,
                                     PublicKey = doc.PublicKey,
-                                    Roles = doc.Roles,
+                                    Roles = doc.Roles.ToList(),
                                     Password = doc.Password,
                                     UserName = doc.UserName,
                                     IsDeleted = doc.IsDeleted,

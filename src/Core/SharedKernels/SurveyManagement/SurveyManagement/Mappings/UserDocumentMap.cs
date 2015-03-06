@@ -1,0 +1,48 @@
+﻿using Main.Core.Entities.SubEntities;
+using NHibernate.Mapping.ByCode.Conformist;
+using WB.Core.SharedKernels.DataCollection.Views;
+
+namespace WB.Core.SharedKernels.SurveyManagement.Mappings
+{
+    public class UserDocumentMap : ClassMapping<UserDocument>
+    {
+        public UserDocumentMap()
+        {
+            Table("Users");
+            Id(x => x.PublicKey);
+            Property(x => x.CreationDate);
+            Property(x => x.Email);
+            Property(x => x.IsDeleted);
+            Property(x => x.IsLockedByHQ);
+            Property(x => x.IsLockedBySupervisor);
+            Property(x => x.Password);
+            Property(x => x.UserName);
+            Property(x => x.LastChangeDate);
+            Property(x => x.DeviceId);
+            Component(x => x.Supervisor, cmp =>
+            {
+                cmp.Property(x => x.Id);
+                cmp.Property(x => x.Name);
+            });
+
+            Bag(x => x.Roles, m =>
+            {
+                m.Key(km => km.Column("UserId"));
+                m.Table("Roles");
+            },
+             r => r.Element(e => e.Column("RoleId")));
+
+            Bag(x => x.DeviceChangingHistory, // TODO: This can be soted in hstore
+             bagMap =>
+             {
+                 bagMap.Table("DeviceInfos");
+                 bagMap.Key(key => key.Column("UserId"));
+             },
+             relation => relation.Component(element =>
+             {
+                 element.Property(x => x.Date);
+                 element.Property(x => x.DeviceId);
+             }));
+        }
+    }
+}

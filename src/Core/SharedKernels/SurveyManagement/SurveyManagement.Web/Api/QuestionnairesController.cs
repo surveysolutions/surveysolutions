@@ -14,12 +14,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     [Authorize(Roles = "Headquarter, Supervisor")]
     public class QuestionnairesController : BaseApiServiceController
     {
-        private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory;
+        private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory;
 
 
         public QuestionnairesController(ILogger logger,
-            IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory)
             :base(logger)
         {

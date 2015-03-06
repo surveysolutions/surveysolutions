@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
                     isLockedBySupervisor: x.IsLockedBySupervisor,
                     isLockedByHQ: x.IsLockedByHQ,
                     name: x.UserName,
-                                            roles: x.Roles,
+                                            roles: x.Roles.ToList(),
                                             deviceId:x.DeviceId
                     ));
 

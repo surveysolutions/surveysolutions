@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
         }
 
         [DataMember]
-        public List<UserRoles> Roles { get; private set; }
+        public IList<UserRoles> Roles { get; private set; }
 
         [DataMember]
         public bool IsLocked { get; private set; }
