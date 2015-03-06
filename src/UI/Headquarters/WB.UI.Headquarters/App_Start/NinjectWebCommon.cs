@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
@@ -23,13 +25,17 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage.Esent;
 using WB.Core.Infrastructure.Storage.Postgre;
+using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
+using WB.Core.SharedKernels.SurveyManagement.Mappings;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Web;
@@ -90,6 +96,7 @@ namespace WB.UI.Headquarters
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
+            HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             Global.Initialize(); // pinging global.asax to perform it's part of static initialization
 
            string storePath = WebConfigurationManager.AppSettings["Raven.DocumentStore"];
@@ -127,6 +134,7 @@ namespace WB.UI.Headquarters
 
             var ravenReadSideRepositoryWriterSettings = new RavenReadSideRepositoryWriterSettings(int.Parse(WebConfigurationManager.AppSettings["Raven.Readside.BulkInsertBatchSize"]));
 
+            var mappingAssemblies = new List<Assembly> { typeof (QuestionnaireBrowseItemMap).Assembly }; // TODO : make list by modules here
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
@@ -143,7 +151,7 @@ namespace WB.UI.Headquarters
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
                 //new EsentReadSideModule(esentDataFolder),
-                new PostgreModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString),
+                new PostgreModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, mappingAssemblies),
                 new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled));
 
             NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
@@ -190,6 +198,8 @@ namespace WB.UI.Headquarters
             ServiceLocator.Current.GetInstance<IScheduler>().Start();
 
             kernel.Bind<IPasswordPolicy>().ToMethod(_ => PasswordPolicyFactory.CreatePasswordPolicy()).InSingletonScope();
+            kernel.Bind<IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem>>()
+                .To<PostgreReadSideRepository<QuestionnaireBrowseItem>>();
 
             return kernel;
         }

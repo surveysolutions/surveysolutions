@@ -50,6 +50,9 @@
     <Reference Include="Dapper">
       <HintPath>..\..\..\..\..\packages\Dapper.1.37\lib\net45\Dapper.dll</HintPath>
     </Reference>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\..\..\..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+    </Reference>
     <Reference Include="Ionic.Zip, Version=1.9.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\DotNetZip.1.9.3\lib\net20\Ionic.Zip.dll</HintPath>
@@ -70,6 +73,9 @@
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\..\..\..\..\packages\NHibernate.4.0.3.4000\lib\net40\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -120,6 +126,8 @@
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\InterviewsToDeleteFactory.cs" />
     <Compile Include="QuartzIntegration\QuartzNinjectModule.cs" />
     <Compile Include="QuartzIntegration\NinjectSchedulerFactory.cs" />
+    <Compile Include="Mappings\QuestionnaireBrowseItemMap.cs" />
+    <Compile Include="Mappings\UserDocumentMap.cs" />
     <Compile Include="QuartzIntegration\NinjectJobFactory.cs" />
     <Compile Include="Services\DeleteQuestionnaireTemplate\IDeleteQuestionnaireService.cs" />
     <Compile Include="Services\DeleteQuestionnaireTemplate\IInterviewsToDeleteFactory.cs" />
@@ -135,7 +143,6 @@
     <Compile Include="Factories\IPreloadedDataServiceFactory.cs" />
     <Compile Include="Implementation\Factories\CsvWriterFactory.cs" />
     <Compile Include="Implementation\Factories\InterviewSynchronizationDtoFactory.cs" />
-    <Compile Include="EventHandler\QuestionnaireBrowseItemEventHandler.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireExportStructureDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireQuestionsInfoDenormalizer.cs" />

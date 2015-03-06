@@ -5,7 +5,7 @@ namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
     public interface IReadSideStorage<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
     {
-        TEntity GetById(string id);
+        TEntity GetById(object id);
 
         void Remove(string id);
 

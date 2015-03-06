@@ -6,6 +6,7 @@ using Main.Core.Events.User;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.Views;
 
@@ -23,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
 
-        public UserDenormalizer(IReadSideRepositoryWriter<UserDocument> users)
+        public UserDenormalizer(PostgreReadSideRepository<UserDocument> users)
         {
             this.users = users;
         }

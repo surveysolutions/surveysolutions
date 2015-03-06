@@ -267,6 +267,7 @@
     <Compile Include="Views\Questionnaire\FeaturedQuestionItem.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Views\Questionnaire\IQuestionnaireBrowseViewFactory.cs" />
     <Compile Include="Views\Questionnaire\QuestionDescription.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireBrowseInputModel.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireBrowseItem.cs">

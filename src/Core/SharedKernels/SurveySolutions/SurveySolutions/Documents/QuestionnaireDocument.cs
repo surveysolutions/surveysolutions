@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace Main.Core.Documents
@@ -14,12 +15,14 @@ namespace Main.Core.Documents
             this.CreationDate = DateTime.Now;
             this.LastEntryDate = DateTime.Now;
             this.PublicKey = Guid.NewGuid();
+            this.Id = this.PublicKey.FormatGuid();
             this.Children = new List<IComposite>();
             this.ConditionExpression = string.Empty;
             this.IsPublic = false;
             this.SharedPersons = new List<Guid>();
         }
 
+        public string Id { get; set; }
 
         public List<IComposite> Children { get; set; }
 
