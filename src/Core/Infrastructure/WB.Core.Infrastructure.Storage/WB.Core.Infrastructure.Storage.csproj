@@ -88,6 +88,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Services.Client" />
@@ -115,9 +116,9 @@
     <Compile Include="Memory\Implementation\MemoryCachedReadSideRepositoryWriter.cs" />
     <Compile Include="Memory\Implementation\MemoryCachedReadSideStore.cs" />
     <Compile Include="Memory\Implementation\MemoryCachedKeyValueStorage.cs" />
-    <Compile Include="Postgre\Implementation\Mapping\StoredEntityMap.cs" />
+    <Compile Include="Postgre\IRepository.cs" />
     <Compile Include="Postgre\Implementation\PostgreKeyValueStorage.cs" />
-    <Compile Include="Postgre\Implementation\StoredEntity.cs" />
+    <Compile Include="Postgre\Implementation\PostgreReadSideRepository.cs" />
     <Compile Include="Postgre\PostgreConnectionSettings.cs" />
     <Compile Include="Postgre\PostgreReadSideModule.cs" />
     <Compile Include="Raven\Implementation\PropertiesOnlyContractResolver.cs" />

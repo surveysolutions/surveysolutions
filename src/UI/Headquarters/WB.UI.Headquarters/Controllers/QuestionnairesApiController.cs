@@ -1,21 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using Raven.Client;
-using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -28,12 +18,12 @@ namespace WB.UI.Headquarters.Controllers
     [ApiValidationAntiForgeryToken]
     public class QuestionnairesApiController : BaseApiController
     {
-        private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory;
+        private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IDeleteQuestionnaireService deleteQuestionnaireService;
 
         public QuestionnairesApiController(
             ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
-            IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IDeleteQuestionnaireService deleteQuestionnaireService)
             : base(commandService, globalInfo, logger)
         {
@@ -44,7 +34,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         public QuestionnaireBrowseView AllQuestionnaires(AllQuestionnairesListViewModel data)
         {
-            var input = new QuestionnaireBrowseInputModel()
+            var input = new QuestionnaireBrowseInputModel
             {
                 Orders = data.SortOrder  == null ? new List<OrderRequestItem>() : data.SortOrder.ToList()
             };
