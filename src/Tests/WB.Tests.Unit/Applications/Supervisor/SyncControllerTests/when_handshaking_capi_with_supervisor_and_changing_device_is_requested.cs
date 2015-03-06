@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
                                                         ClientRegistrationId = Guid.NewGuid(),
                                                         Version = capiVersion,
                                                         ShouldDeviceBeLinkedToUser = true
-                                                    }).Content.ReadAsAsync<HandshakePackage>().Result;
+                                                    });
 
         It should_call_LinkUserToDevice_method = () =>
             syncManagerMock.Verify(
