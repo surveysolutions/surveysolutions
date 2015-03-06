@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires
                 .Where(
                     u =>
                         (u.Roles.Contains(UserRoles.Operator) && !u.IsLockedByHQ && !u.IsLockedBySupervisor &&
-                         !u.IsDeleted && u.Supervisor != null && u.Supervisor.Id == input.ViewerId) ||
+                         !u.IsDeleted && u.Supervisor.Id == input.ViewerId) ||
                         (u.PublicKey == input.ViewerId))
                 .QueryAll()
                 .Select(x => new UsersViewItem {UserId = x.PublicKey, UserName = x.UserName});
