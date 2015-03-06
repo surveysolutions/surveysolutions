@@ -111,7 +111,7 @@
                 }
             } else {
                 self.isVariablesEnabled(false);
-                self.ShowNotification("No Geo Location question", "Where is no any Geo Location questions in chosen questionnaire");
+                self.ShowNotification("No Geo Location question", "There are no any Geo Locations in chosen questionnaire");
             }
         });
     });
