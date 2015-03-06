@@ -179,6 +179,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IComposite>(ConditionExpresssionHasLengthMoreThan10000Characters, "WB0094", VerificationMessages.WB0094_ConditionExpresssionHasLengthMoreThan10000Characters),
                     Verifier<IQuestion>(ValidationExpresssionHasLengthMoreThan10000Characters, "WB0095", VerificationMessages.WB0095_ValidationExpresssionHasLengthMoreThan10000Characters),
                     Verifier(QuestionnaireTitleHasInvalidCharacters, "WB0097", VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
+                    Verifier(ErrorsByQuestionnaireSize, "WB0098", VerificationMessages.WB0098_QuestionnaireSizeLimit),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
@@ -188,7 +189,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     ErrorsByQuestionsWithDuplicateVariableName,
                     ErrorsByRostersWithDuplicateVariableName,
                     ErrorsByConditionAndValidationExpressions,
-                    ErrorsByQuestionnaireSize
                 };
             }
         }
@@ -246,12 +246,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
         }
 
-        private IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionnaireSize(
-            QuestionnaireDocument questionnaire, VerificationState state)
+        private static bool ErrorsByQuestionnaireSize(QuestionnaireDocument questionnaire)
         {
             var jsonQuestionnaire = JsonConvert.SerializeObject(questionnaire, Formatting.None);
-            if (Encoding.UTF8.GetByteCount(jsonQuestionnaire) > 10 * 1024 * 1024) // 10MB
-                yield return new QuestionnaireVerificationError("WB0098", VerificationMessages.WB0098_QuestionnaireSizeLimit);
+            return Encoding.UTF8.GetByteCount(jsonQuestionnaire) > 10 * 1024 * 1024; // 10MB
         }
         
         private GenerationResult GetCompilationResult(QuestionnaireDocument questionnaire)
