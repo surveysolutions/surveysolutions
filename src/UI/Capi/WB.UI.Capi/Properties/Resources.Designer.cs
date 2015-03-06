@@ -115,6 +115,15 @@ namespace WB.UI.Capi.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Synchronization was canceled.
+        /// </summary>
+        internal static string SynchronizationCanceledExceptionMessage {
+            get {
+                return ResourceManager.GetString("SynchronizationCanceledExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Synchronization failed. Internal server error occurred. Please contact to Survey Solutions team..
         /// </summary>
         internal static string SynchronizationInternalServerError {
