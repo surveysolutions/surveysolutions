@@ -86,7 +86,11 @@
             self.ItemsSummary(data.ItemsSummary);
         }, true);
     };
-    
+    self.clear = function() {
+        self.SearchBy("");
+        self.search();
+    };
+
     self.SelectedItems = ko.computed(function () {
         return ko.utils.arrayFilter(self.Items(), function (item) {
             var value = item.IsSelected();
