@@ -34,7 +34,8 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.CapiInformatio
 
             foreach (var infoFilePath in this.infoFileSupplierRegistry.GetAll())
             {
-                this.fileSystemAccessor.CopyFileOrDirectory(infoFilePath, infoPackageFolderPath);
+                if (fileSystemAccessor.IsFileExists(infoFilePath))
+                    this.fileSystemAccessor.CopyFileOrDirectory(infoFilePath, infoPackageFolderPath);
             }
 
             var infoPackageFilePath = this.fileSystemAccessor.CombinePath(this.infoPackagesPath, infoPackageFolderName + ".zip");

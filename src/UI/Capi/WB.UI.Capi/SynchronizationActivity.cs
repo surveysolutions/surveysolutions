@@ -20,6 +20,7 @@ using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.BoundedContexts.Capi.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.Login;
+using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
@@ -242,9 +243,9 @@ namespace WB.UI.Capi
             this.tvSyncResult.Text = Resources.GetText(Resource.String.InformationPackageIsSuccessfullySent);
         }
 
-        private void btnSendTabletInfo_ProcessCanceled(object sender, EventArgs e)
+        private void btnSendTabletInfo_ProcessCanceled(object sender, InformationPackageCancellationEventArgs e)
         {
-            this.tvSyncResult.Text = Resources.GetText(Resource.String.SendingOfInformationPackageIsCanceled);
+            this.tvSyncResult.Text = string.Format(Resources.GetText(Resource.String.SendingOfInformationPackageIsCanceled), e.Reason);
         }
 
         protected override void OnStart()

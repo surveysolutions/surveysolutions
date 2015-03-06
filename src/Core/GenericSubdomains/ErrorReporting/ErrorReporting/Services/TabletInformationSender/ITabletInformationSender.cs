@@ -4,7 +4,7 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSen
 {
     public interface ITabletInformationSender {
         event EventHandler<InformationPackageEventArgs> InformationPackageCreated;
-        event EventHandler ProcessCanceled;
+        event EventHandler<InformationPackageCancellationEventArgs> ProcessCanceled;
         event EventHandler ProcessFinished;
         void Run();
         void Cancel();

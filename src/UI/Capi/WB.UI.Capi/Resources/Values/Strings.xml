@@ -19,8 +19,7 @@
   <string name="InterviewWithIdIsAbsentFormat">Interview with id is absent \'{0}\'</string>
   <string name="InformationPackageIsSuccessfullySent">Information package is successfully sent.</string>
   <string name="ThankYouForPackage">Thank you! We\'ll try to fix your issue as soon as we can. We are sorry for inconvenience.</string>
-  <string name="SendingOfInformationPackageIsCanceled">Sending of information package is cancelled.</string>
-
+  <string name="SendingOfInformationPackageIsCanceled">Sending of information package is cancelled. Reason: {0}</string>
   <string name="InformationPackage">Information package</string>
   <string name="CreatingInformationPackage">Creating information package</string>
   <string name="InformationPackageSizeWarningFormat">Information package of size {0} will be sent via network. Are you sure you want to send it?</string>

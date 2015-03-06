@@ -4,6 +4,7 @@ using Moq;
 using WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformation;
 using WB.Core.GenericSubdomains.ErrorReporting.Services;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.CapiInformationService;
+using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.FileSystem;
 
@@ -13,7 +14,7 @@ namespace WB.Tests.Unit.GenericSubdomains.ErrorReporting.TabletInformationSender
     {
         protected static TabletInformationSender CreateTabletInformationSender(bool isNetworkEnabled = true,
             string pathToInfoArchive = "",
-            bool isSentSuccessfully = false)
+            bool isSentSuccessfully = false, IErrorReportingSettings errorReportingSettings = null)
         {
             return new TabletInformationSender(
                 Mock.Of<ICapiInformationService>(_ => _.CreateInformationPackage() == pathToInfoArchive),
@@ -21,7 +22,7 @@ namespace WB.Tests.Unit.GenericSubdomains.ErrorReporting.TabletInformationSender
                     _.IsFileExists(It.IsAny<string>()) == true
                     && _.ReadAllBytes(It.IsAny<string>()) == new byte[0]),
                 Mock.Of<IRestService>(),
-                Mock.Of<IErrorReportingSettings>(),
+                errorReportingSettings??Mock.Of<IErrorReportingSettings>(),
                 Mock.Of<ILogger>());
         }
 
