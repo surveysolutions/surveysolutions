@@ -221,6 +221,7 @@
     <Compile Include="SurveyManagement\RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_initial_statuses.cs" />
     <Compile Include="SurveyManagement\RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_redo_statuses.cs" />
     <Compile Include="SurveyManagement\RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_unassigned_statuses.cs" />
+    <Compile Include="Synchronization\RavenIndexes\InterviewSyncPackagesGroupedByRootTests\when_applying_index_to_3_misc_InterviewSyncPackageMeta.cs" />
     <Compile Include="ZipUtilsTests\ZipUtilsTestsFixture.cs" />
   </ItemGroup>
   <ItemGroup>
