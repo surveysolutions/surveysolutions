@@ -45,8 +45,8 @@
         <div class="input-group">
             <input type="text" id="searchBox" class="form-control" placeholder="Search" data-bind="value: SearchBy, valueUpdate:'afterkeydown', enterKey: search">
             <div class="input-group-btn">
-                <button class="btn btn-default" type="button" data-bind="click: search">
-                    <i class="glyphicon glyphicon-search"></i>
+                <button class="btn btn-default" type="button" data-bind="click: clear">
+                    <i class="glyphicon glyphicon-remove"></i>
                 </button>
             </div>
         </div>
@@ -99,7 +99,9 @@
                 </td>
                 <td data-bind="text: LastEntryDate"></td>
                 <td>
-                    <input type="checkbox" data-bind="checked: HasErrors, enable: false" />
+                    <!-- ko if:HasErrors -->
+                    <span class="glyphicon glyphicon-ok pull-right margin-right-5" style="color:red"></span>
+                    <!-- /ko -->
                 </td>
                 <td data-bind="text: Status"></td>
                 <td>
