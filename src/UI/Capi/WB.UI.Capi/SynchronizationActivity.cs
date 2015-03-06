@@ -1,3 +1,4 @@
+using System.Net;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
@@ -446,36 +447,50 @@ namespace WB.UI.Capi
             this.RunOnUiThread(() =>
                 {
                     this.DestroyDialog();
-                    if (evt.Exceptions != null && evt.Exceptions.Count > 0)
+                    if (evt.Exception != null)
                     {
-                        var settingsManager = ServiceLocator.Current.GetInstance<IInterviewerSettings>();
-                        var sb = new StringBuilder();
-                        foreach (var exception in evt.Exceptions)
-                        {
-                            var restException = exception as RestException;
-                            if (restException != null)
-                            {
-                                if (string.IsNullOrEmpty(restException.Message))
-                                {
-                                    sb.AppendLine(
-                                        string.Format(
-                                            Resources.GetString(Resource.String.PleaseCheckURLInSettingsFormat),
-                                            settingsManager.GetSyncAddressPoint(), GetNetworkDescription(),
-                                            GetNetworkStatus((int)restException.StatusCode)));
-                                }
-                                else
-                                {
-                                    sb.AppendLine(restException.Message);
-                                }
-                                sb.AppendLine(Resources.GetString(Resource.String.NewHtmlLine));
-                                continue;
-                            }
-                            sb.AppendLine(exception.Message);
+                        var errorMessage = Properties.Resources.SynchronizationUnhandledExceptionMessage;
 
-                            sb.AppendLine(Resources.GetString(Resource.String.NewHtmlLine));
+                        var restException = evt.Exception as RestException;
+                        if (restException != null)
+                        {
+                            switch (restException.StatusCode)
+                            {
+                                case HttpStatusCode.Redirect:
+                                case HttpStatusCode.UpgradeRequired:
+                                case HttpStatusCode.Unauthorized:
+                                case HttpStatusCode.NotAcceptable:
+                                    errorMessage = restException.Message;
+                                    break;
+                                case HttpStatusCode.NotFound:
+                                case HttpStatusCode.InternalServerError:
+                                    errorMessage = Properties.Resources.SynchronizationInternalServerError;
+                                    break;
+                                case HttpStatusCode.RequestTimeout:
+                                    errorMessage = Properties.Resources.SynchronizationRequestTimeout;
+                                    break;
+                                case HttpStatusCode.ServiceUnavailable:
+                                    if (restException.Message.Contains("maintenance"))
+                                    {
+                                        errorMessage = Properties.Resources.SynchronizationMaintenance;
+                                    }
+                                    else
+                                    {
+                                        goto default;    
+                                    }
+                                    break;
+                                default:
+                                    var settingsManager = ServiceLocator.Current.GetInstance<IInterviewerSettings>();
+
+                                    errorMessage = string.Format(Properties.Resources.PleaseCheckURLInSettingsFormat,
+                                        settingsManager.GetSyncAddressPoint(), GetNetworkDescription(),
+                                        GetNetworkStatus((int) restException.StatusCode));
+                                    break;
+                            }
                         }
+
                         tvSyncResult.MovementMethod = LinkMovementMethod.Instance;
-                        this.tvSyncResult.SetText(Html.FromHtml(sb.ToString()), TextView.BufferType.Spannable);
+                        this.tvSyncResult.SetText(Html.FromHtml(errorMessage), TextView.BufferType.Spannable);
                     }
                     remoteCommandDoneEvent.Set();
                 });

@@ -165,4 +165,7 @@
   <data name="InterviewerApplicationHasVersion_butSupervisorHas_PleaseReinstallInterviewerApplication" xml:space="preserve">
     <value>Synchronization failed. Please uninstall Interviewer application and install it.</value>
   </data>
+  <data name="Maintenance" xml:space="preserve">
+    <value>Server is on the maintenance mode now. Sorry for the inconvenience. Please, try again later.</value>
+  </data>
 </root>

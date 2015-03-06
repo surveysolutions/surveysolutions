@@ -132,4 +132,19 @@
   <data name="InvalidSyncPointAddressUrl" xml:space="preserve">
     <value>Synchronization point address is invalid. Make sure that you entered correct url address.</value>
   </data>
+  <data name="PleaseCheckURLInSettingsFormat" xml:space="preserve">
+    <value>Connection failed. Synchronization point &lt;a href='{0}'&gt;{0}&lt;/a&gt; appears to be wrong. Please check URL in Settings. If URL is correct then check Network Connection. {1} {2}</value>
+  </data>
+  <data name="SynchronizationUnhandledExceptionMessage" xml:space="preserve">
+    <value>Synchronization failed. Send your tablet's information and contact your Supervisor.</value>
+  </data>
+  <data name="SynchronizationInternalServerError" xml:space="preserve">
+    <value>Synchronization failed. Internal server error occurred. Please contact to Survey Solutions team.</value>
+  </data>
+  <data name="SynchronizationRequestTimeout" xml:space="preserve">
+    <value>Ran out of time waiting for a response from the server. Please, check your internet connection and try again.</value>
+  </data>
+  <data name="SynchronizationMaintenance" xml:space="preserve">
+    <value>Server is on the maintenance mode now. Sorry for the inconvenience. Please, try again later.</value>
+  </data>
 </root>
