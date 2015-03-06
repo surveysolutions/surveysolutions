@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -28,7 +29,8 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         private readonly ISyncLogger syncLogger;
 
         private readonly string userQueryIndexName = typeof(UserSyncPackagesByBriefFields).Name;
-        private readonly string interviewQueryIndexName = typeof(InterviewSyncPackagesByBriefFields).Name;
+        private readonly string interviewGroupQueryIndexName = typeof(InterviewSyncPackagesGroupedByRoot).Name;
+        private readonly string allInterviewQueryIndexName = typeof(InterviewSyncPackagesByBriefFields).Name;
         private readonly string questionnireQueryIndexName = typeof(QuestionnaireSyncPackagesByBriefFields).Name;
 
         public SyncManager(IReadSideRepositoryReader<TabletDocument> devices, 
@@ -102,16 +104,16 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         {
             this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
-            var allFromLastPakageByQuestionnaire =
-                this.GetUpdateFromLastPackage(lastSyncedPackageId, this.indexAccessor.Query<QuestionnaireSyncPackageMeta>(questionnireQueryIndexName));
+            var allFromLastPackageByQuestionnaire =
+                this.GetUpdateFromLastPackage(userId, lastSyncedPackageId, GetGroupedQuestionnaireSyncPackage, GetLastQuestionnaireSyncPackage);
 
-            var updateFromLastPakageByQuestionnaire = FilterDeletedQuestionnaires(allFromLastPakageByQuestionnaire);
+            var updateFromLastPackageByQuestionnaire = FilterDeletedQuestionnaires(allFromLastPackageByQuestionnaire, lastSyncedPackageId);
 
-            this.TrackArIdsRequestIfNeeded(userId, deviceId, SyncItemType.Questionnaire, lastSyncedPackageId, updateFromLastPakageByQuestionnaire);
+            this.TrackArIdsRequestIfNeeded(userId, deviceId, SyncItemType.Questionnaire, lastSyncedPackageId, updateFromLastPackageByQuestionnaire);
 
             return new SyncItemsMetaContainer
             {
-                SyncPackagesMeta = updateFromLastPakageByQuestionnaire
+                SyncPackagesMeta = updateFromLastPackageByQuestionnaire
             };
         }
 
@@ -120,9 +122,9 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
             var updateFromLastPakageByUser =
-                this.GetUpdateFromLastPackage(lastSyncedPackageId, this.indexAccessor.Query<UserSyncPackageMeta>(userQueryIndexName).Where(x => x.UserId == userId))
-                .Select(x => new SynchronizationChunkMeta(x.PackageId,x.SortIndex,x.UserId, null))
-                .ToList(); 
+                this.GetUpdateFromLastPackage(userId, lastSyncedPackageId, GetGroupedUserSyncPackage, GetLastUserSyncPackage)
+                    .Select(x => new SynchronizationChunkMeta(x.PackageId, x.SortIndex, x.UserId, null))
+                    .ToList(); 
 
             this.TrackArIdsRequestIfNeeded(userId, deviceId, SyncItemType.User, lastSyncedPackageId, updateFromLastPakageByUser);
 
@@ -136,15 +138,18 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         {
             this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
-            var allUpdatesFromLastPakage = this.GetUpdateFromLastPackage(lastSyncedPackageId, this.indexAccessor.Query<InterviewSyncPackageMeta>(interviewQueryIndexName).Where(x => x.UserId == userId));
+            var allUpdatesFromLastPackage = this.GetUpdateFromLastPackage(userId, lastSyncedPackageId, GetGroupedInterviewSyncPackage, GetLastInterviewSyncPackage);
 
-            var updateFromLastPakageByInterview = FilterInterviews(allUpdatesFromLastPakage);
+            var updateFromLastPackageByInterview =
+                allUpdatesFromLastPackage.Select(
+                    x => new SynchronizationChunkMeta(x.PackageId, x.SortIndex, x.UserId, x.ItemType))
+                    .ToList();
 
-            this.TrackArIdsRequestIfNeeded(userId, deviceId, SyncItemType.Interview, lastSyncedPackageId, updateFromLastPakageByInterview);
+            this.TrackArIdsRequestIfNeeded(userId, deviceId, SyncItemType.Interview, lastSyncedPackageId, updateFromLastPackageByInterview);
 
             return new SyncItemsMetaContainer
             {
-                SyncPackagesMeta = updateFromLastPakageByInterview
+                SyncPackagesMeta = updateFromLastPackageByInterview
             };
         }
 
@@ -203,51 +208,93 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                    };
         }
 
-        private List<SynchronizationChunkMeta> FilterDeletedQuestionnaires(IList<QuestionnaireSyncPackageMeta> packages)
+        private List<SynchronizationChunkMeta> FilterDeletedQuestionnaires(IList<QuestionnaireSyncPackageMeta> packages, string lastSyncedPackageId)
         {
             var deletedQuestionnaires = packages.Where(x => x.ItemType == SyncItemType.DeleteQuestionnaire);
 
-            return packages
+            var result =  packages
                 .Where(x => x.ItemType == SyncItemType.DeleteQuestionnaire || !deletedQuestionnaires.Any(p => p.QuestionnaireId == x.QuestionnaireId && p.QuestionnaireVersion == x.QuestionnaireVersion))
                 .Select(x => new SynchronizationChunkMeta(x.PackageId, x.SortIndex, Guid.Empty, x.ItemType))
                 .ToList();
+            if (!string.IsNullOrEmpty(lastSyncedPackageId))
+                return result;
+
+            return result.Where(x => x.ItemType != SyncItemType.DeleteQuestionnaire).ToList();
         }
 
-        private List<SynchronizationChunkMeta> FilterInterviews(IList<InterviewSyncPackageMeta> packages)
+        private IQueryable<InterviewSyncPackageMeta> GetLastInterviewSyncPackage(Guid userId)
         {
-            var lastInterviewPackageMap = packages
-                .GroupBy(x => x.InterviewId)
-                .ToDictionary(x => x.Key, x => x.Max(y => y.SortIndex));
-
-            return packages
-                .Where(x => lastInterviewPackageMap.ContainsKey(x.InterviewId) && x.SortIndex == lastInterviewPackageMap[x.InterviewId])
-                .Select(x => new SynchronizationChunkMeta(x.PackageId,x.SortIndex,x.UserId,x.ItemType))
-                .ToList();
+           return 
+                indexAccessor.Query<InterviewSyncPackageMeta>(allInterviewQueryIndexName).Where(x=>x.UserId==userId);
         }
 
-        private IList<T> GetUpdateFromLastPackage<T>(string lastSyncedPackageId, IQueryable<T> items) where T : IOrderableSyncPackage
+        private IQueryable<UserSyncPackageMeta> GetLastUserSyncPackage(Guid userId)
+        {
+            return
+              indexAccessor.Query<UserSyncPackageMeta>(userQueryIndexName).Where(x => x.UserId == userId);
+        }
+
+        private IQueryable<QuestionnaireSyncPackageMeta> GetLastQuestionnaireSyncPackage(Guid userId)
+        {
+            return
+                indexAccessor.Query<QuestionnaireSyncPackageMeta>(questionnireQueryIndexName);
+        }
+
+        private IQueryable<InterviewSyncPackageMeta> GetGroupedInterviewSyncPackage(Guid userId, long? lastSyncedSortIndex)
+        {
+            var items = indexAccessor.Query<InterviewSyncPackageMeta>(interviewGroupQueryIndexName).Where(x => x.UserId == userId);
+            const string deleteInterviewItemType = SyncItemType.DeleteInterview;
+            var filteredItems = lastSyncedSortIndex.HasValue
+                ? items.Where(x => x.SortIndex > lastSyncedSortIndex.Value)
+                : items.Where(x => x.ItemType != deleteInterviewItemType);
+
+            return filteredItems.OrderBy(x => x.SortIndex);
+        }
+
+        private IQueryable<UserSyncPackageMeta> GetGroupedUserSyncPackage(Guid userId, long? lastSyncedSortIndex)
+        {
+            var items = indexAccessor.Query<UserSyncPackageMeta>(userQueryIndexName).Where(x => x.UserId == userId);
+
+            var filteredItems = lastSyncedSortIndex.HasValue
+             ? items.Where(x => x.SortIndex > lastSyncedSortIndex.Value)
+             : items;
+
+            return filteredItems.OrderBy(x => x.SortIndex);
+        }
+
+        private IQueryable<QuestionnaireSyncPackageMeta> GetGroupedQuestionnaireSyncPackage(Guid userId,
+            long? lastSyncedSortIndex)
+        {
+            var items = indexAccessor.Query<QuestionnaireSyncPackageMeta>(questionnireQueryIndexName);
+
+            var filteredItems = lastSyncedSortIndex.HasValue
+                ? items.Where(x => x.SortIndex > lastSyncedSortIndex.Value)
+                : items;
+
+            return filteredItems.OrderBy(x => x.SortIndex);
+        }
+
+        private IList<T> GetUpdateFromLastPackage<T>(Guid userId, string lastSyncedPackageId,
+            Func<Guid, long?, IQueryable<T>> groupedQuery, Func<Guid, IQueryable<T>> allQuery)
+            where T : IOrderableSyncPackage
         {
             if (lastSyncedPackageId == null)
             {
-                return items.OrderBy(x => x.SortIndex)
-                    .QueryAll();
+                return QueryAll<T>(() => groupedQuery(userId, null));
             }
 
-            var lastSyncedPackage = items.FirstOrDefault(x => x.PackageId == lastSyncedPackageId);
+            var lastSyncedPackage = allQuery(userId)
+                .FirstOrDefault(x => x.PackageId == lastSyncedPackageId);
 
             if (lastSyncedPackage == null)
             {
-                throw new SyncPackageNotFoundException(string.Format("Sync package with id {0} was not found on server", lastSyncedPackageId));
+                throw new SyncPackageNotFoundException(string.Format(
+                    "Sync package with id {0} was not found on server", lastSyncedPackageId));
             }
 
             long lastSyncedSortIndex = lastSyncedPackage.SortIndex;
 
-            var orderedPackages = items
-                .Where(x => x.SortIndex > lastSyncedSortIndex)
-                .OrderBy(x => x.SortIndex)
-                .QueryAll();
-
-            return orderedPackages;
+            return QueryAll<T>(() => groupedQuery(userId, lastSyncedSortIndex));
         }
 
         private void MakeSureThisDeviceIsRegisteredOrThrow(Guid deviceId)
@@ -288,6 +335,24 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         private void TrackDeviceRegistration(Guid deviceId, Guid userId, string appVersion, string androidId)
         {
             this.syncLogger.TrackDeviceRegistration(deviceId, userId, appVersion, androidId);
+        }
+
+       
+        public IList<T> QueryAll<T>(Func<IQueryable<T>> query)
+        {
+            var result = new List<T>();
+            int skipResults = 0;
+            while (true)
+            {
+                var chunk = query().Skip(skipResults).ToList();
+
+                if (!chunk.Any())
+                    break;
+
+                result.AddRange(chunk);
+                skipResults = result.Count;
+            }
+            return result;
         }
     }
 }
