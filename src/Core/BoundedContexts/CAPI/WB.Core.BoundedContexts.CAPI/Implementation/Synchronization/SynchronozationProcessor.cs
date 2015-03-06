@@ -1,13 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
 using WB.Core.BoundedContexts.Capi.Implementation.Authorization;
 using WB.Core.BoundedContexts.Capi.Services;
-using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -78,7 +75,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Synchronization
                 }
                 catch (Exception e)
                 {
-                    this.OnProcessCanceled(new List<Exception>() { e });
+                    this.OnProcessCanceled(e);
                 }
 
             }, this.cancellationToken);
@@ -99,36 +96,25 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Synchronization
 
             this.OnStatusChanged(new SynchronizationEventArgs("Connecting...", Operation.Handshake, true));
 
-            try
+            var isThisExpectedDevice = await this.synchronizationService.CheckExpectedDeviceAsync(credentials: this.credentials);
+
+            var shouldThisDeviceBeLinkedToUser = false;
+            if (!isThisExpectedDevice)
             {
-                var isThisExpectedDevice = await this.synchronizationService.CheckExpectedDeviceAsync(credentials: this.credentials);
-
-                var shouldThisDeviceBeLinkedToUser = false;
-                if (!isThisExpectedDevice)
-                {
-                    shouldThisDeviceBeLinkedToUser = this.deviceChangingVerifier.ConfirmDeviceChanging();
-                }
-
-                this.ExitIfCanceled();
-
-                HandshakePackage package = await this.synchronizationService.HandshakeAsync(credentials: this.credentials, shouldThisDeviceBeLinkedToUser: shouldThisDeviceBeLinkedToUser);
-                
-                this.userId = package.UserId;
-
-                this.interviewerSettings.SetClientRegistrationId(package.ClientRegistrationKey);
-
-                if (shouldThisDeviceBeLinkedToUser)
-                {
-                    this.cleanUpExecutor.DeleteAllInterviewsForUser(this.userId);
-                }
+                shouldThisDeviceBeLinkedToUser = this.deviceChangingVerifier.ConfirmDeviceChanging();
             }
-            catch (Exception e)
+
+            this.ExitIfCanceled();
+
+            HandshakePackage package = await this.synchronizationService.HandshakeAsync(credentials: this.credentials, shouldThisDeviceBeLinkedToUser: shouldThisDeviceBeLinkedToUser);
+
+            this.userId = package.UserId;
+
+            this.interviewerSettings.SetClientRegistrationId(package.ClientRegistrationKey);
+
+            if (shouldThisDeviceBeLinkedToUser)
             {
-                var knownHttpStatusCodes = new[] { HttpStatusCode.NotAcceptable, HttpStatusCode.InternalServerError, HttpStatusCode.Unauthorized };
-                var restException = e as RestException;
-                if (restException != null && !knownHttpStatusCodes.Contains(restException.StatusCode))
-                    throw new RestException(string.Empty, restException.StatusCode, e);
-                throw;
+                this.cleanUpExecutor.DeleteAllInterviewsForUser(this.userId);
             }
         }
 
@@ -332,11 +318,11 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Synchronization
                 handler(this, EventArgs.Empty);
         }
         
-        protected void OnProcessCanceled(IList<Exception> exceptions)
+        protected void OnProcessCanceled(Exception exception)
         {
             var handler = this.ProcessCanceled;
             if (handler != null)
-                handler(this, new SynchronizationCanceledEventArgs(exceptions));
+                handler(this, new SynchronizationCanceledEventArgs(exception));
         }
 
         protected void OnStatusChanged(SynchronizationEventArgs evt)
