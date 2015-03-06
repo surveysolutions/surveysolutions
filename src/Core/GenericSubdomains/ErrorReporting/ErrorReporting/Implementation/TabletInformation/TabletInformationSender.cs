@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.ErrorReporting.Resources;
 using WB.Core.GenericSubdomains.ErrorReporting.Services;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.CapiInformationService;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
@@ -35,7 +36,7 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformat
         }
 
         public event EventHandler<InformationPackageEventArgs> InformationPackageCreated;
-        public event EventHandler ProcessCanceled;
+        public event EventHandler<InformationPackageCancellationEventArgs> ProcessCanceled;
         public event EventHandler ProcessFinished;
 
         public void Run()
@@ -47,25 +48,33 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformat
 
         public void Cancel()
         {
+            Cancel(TabletInformationSenderStrings.CanceledByUser);
+        }
+
+        private void Cancel(string reason)
+        {
             if (this.tokenSource2.IsCancellationRequested)
                 return;
-            Task.Factory.StartNew(this.CancelInternal, ct);
+            Task.Factory.StartNew(() => this.CancelInternal(reason), ct);
         }
 
         private async void RunInternal()
         {
             try
             {
+                var clientRegistrationId = this.errorReportingSettings.GetClientRegistrationId();
+
                 this.pathToInfoArchive = this.capiInformationService.CreateInformationPackage();
 
-
-                if (string.IsNullOrEmpty(this.pathToInfoArchive) || !this.fileSystemAccessor.IsFileExists(this.pathToInfoArchive))
+                if (string.IsNullOrEmpty(this.pathToInfoArchive) ||
+                    !this.fileSystemAccessor.IsFileExists(this.pathToInfoArchive))
                 {
                     this.OnProcessFinished();
                     return;
                 }
 
-                this.OnInformationPackageCreated(this.pathToInfoArchive, this.fileSystemAccessor.GetFileSize(this.pathToInfoArchive));
+                this.OnInformationPackageCreated(this.pathToInfoArchive,
+                    this.fileSystemAccessor.GetFileSize(this.pathToInfoArchive));
 
                 this.ExitIfCanceled();
 
@@ -75,30 +84,29 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformat
                     {
                         Content = Convert.ToBase64String(this.fileSystemAccessor.ReadAllBytes(this.pathToInfoArchive)),
                         AndroidId = this.errorReportingSettings.GetDeviceId(),
-                        ClientRegistrationId = this.errorReportingSettings.GetClientRegistrationId()
+                        ClientRegistrationId = clientRegistrationId
                     });
 
             }
             catch (Exception e)
             {
                 this.logger.Error("Error occurred during the process. Process is being canceled.", e);
-                this.Cancel();
-                throw;
+                this.Cancel(e.Message);
+                return;
             }
             finally
             {
-                this.fileSystemAccessor.DeleteFile(this.pathToInfoArchive);
+                this.DeleteInfoPackageIfExists();
             }
 
             this.OnProcessFinished();
-            this.DeleteInfoPackageIfExists();
         }
 
-        private void OnProcessCanceled()
+        private void OnProcessCanceled(string reason)
         {
             var handler = this.ProcessCanceled;
             if (handler != null)
-                handler(this, EventArgs.Empty);
+                handler(this, new InformationPackageCancellationEventArgs(reason));
         }
 
         private void OnInformationPackageCreated(string filePath, long fileSize)
@@ -125,7 +133,7 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformat
                 this.ct.ThrowIfCancellationRequested();
         }
 
-        private void CancelInternal()
+        private void CancelInternal(string reason)
         {
             this.tokenSource2.Cancel();
 
@@ -140,7 +148,7 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformat
                     this.logger.Error("Error occurred during the process. Process is being canceled.", exception);
                 }
             }
-            this.OnProcessCanceled();
+            this.OnProcessCanceled(reason);
             this.DeleteInfoPackageIfExists();
         }
 
