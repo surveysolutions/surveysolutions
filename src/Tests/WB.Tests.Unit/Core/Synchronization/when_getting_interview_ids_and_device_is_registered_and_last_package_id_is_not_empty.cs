@@ -38,8 +38,17 @@ namespace WB.Tests.Unit.Core.Synchronization
             lastSyncedPackageId = interviewSyncPackageMetas[0].PackageId;
 
             indexAccessorMock = new Mock<IReadSideRepositoryIndexAccessor>();
-            indexAccessorMock.Setup(x => x.Query<InterviewSyncPackageMeta>(interviewQueryIndexName))
-                .Returns(interviewSyncPackageMetas.AsQueryable());
+            indexAccessorMock.Setup(x => x.Query<InterviewSyncPackageMeta>(interviewGroupedQueryIndexName))
+                .Returns(new List<InterviewSyncPackageMeta>
+                                        {
+                                            CreateInterviewSyncPackageMetaInformation(interviewId, sortIndex:3, itemType: SyncItemType.Interview, userId:user1Id),
+                                            CreateInterviewSyncPackageMetaInformation(interviewId, sortIndex:4, itemType: SyncItemType.DeleteInterview, userId:user1Id),
+                                            CreateInterviewSyncPackageMetaInformation(interviewId, sortIndex:5, itemType: SyncItemType.Interview, userId:userId),
+                                            CreateInterviewSyncPackageMetaInformation(interview1Id, sortIndex:6, itemType: SyncItemType.Interview, userId:userId)
+                                        }.AsQueryable());
+
+            indexAccessorMock.Setup(x => x.Query<InterviewSyncPackageMeta>(allInterviewQueryIndexName))
+               .Returns(interviewSyncPackageMetas.AsQueryable());
             syncManager = CreateSyncManager(devices: devices, indexAccessor: indexAccessorMock.Object);
         };
 
@@ -81,7 +90,8 @@ namespace WB.Tests.Unit.Core.Synchronization
         private static readonly Guid interviewId = Guid.Parse("33333333333333333333333333333333");
         private static readonly Guid interview1Id = Guid.Parse("44444444444444444444444444444444");
         private static Mock<IReadSideRepositoryIndexAccessor> indexAccessorMock;
-        private static readonly string interviewQueryIndexName = typeof(InterviewSyncPackagesByBriefFields).Name;
+        private static readonly string interviewGroupedQueryIndexName = typeof(InterviewSyncPackagesGroupedByRoot).Name;
+        private static readonly string allInterviewQueryIndexName = typeof(InterviewSyncPackagesByBriefFields).Name;
         private static List<InterviewSyncPackageMeta> interviewSyncPackageMetas;
     }
 }

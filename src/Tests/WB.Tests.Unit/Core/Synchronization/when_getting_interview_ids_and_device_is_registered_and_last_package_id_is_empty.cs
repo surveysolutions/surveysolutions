@@ -27,8 +27,6 @@ namespace WB.Tests.Unit.Core.Synchronization
 
             interviewSyncPackageMetas = new List<InterviewSyncPackageMeta>
                                         {
-                                            CreateInterviewSyncPackageMetaInformation(interviewId, sortIndex:1, itemType: SyncItemType.Interview, userId:userId),
-                                            CreateInterviewSyncPackageMetaInformation(interviewId, sortIndex:2, itemType: SyncItemType.DeleteInterview, userId:userId),
                                             CreateInterviewSyncPackageMetaInformation(interviewId, sortIndex:3, itemType: SyncItemType.Interview, userId:user1Id),
                                             CreateInterviewSyncPackageMetaInformation(interviewId, sortIndex:4, itemType: SyncItemType.DeleteInterview, userId:user1Id),
                                             CreateInterviewSyncPackageMetaInformation(interviewId, sortIndex:5, itemType: SyncItemType.Interview, userId:userId),
@@ -54,14 +52,14 @@ namespace WB.Tests.Unit.Core.Synchronization
 
         It should_return_list_with_package_ids_specified = () =>
             result.SyncPackagesMeta.Select(x => x.Id).ShouldContainOnly(
-                interviewSyncPackageMetas[4].PackageId,
-                interviewSyncPackageMetas[5].PackageId);
+                interviewSyncPackageMetas[2].PackageId,
+                interviewSyncPackageMetas[3].PackageId);
 
         It should_return_list_with_ordered_by_index_items = () =>
             result.SyncPackagesMeta.Select(x => x.SortIndex).ShouldEqual(new long[]
                                                                         {
-                                                                            interviewSyncPackageMetas[4].SortIndex,
-                                                                            interviewSyncPackageMetas[5].SortIndex
+                                                                            interviewSyncPackageMetas[2].SortIndex,
+                                                                            interviewSyncPackageMetas[3].SortIndex
                                                                         });
 
         private static SyncManager syncManager;
@@ -79,7 +77,7 @@ namespace WB.Tests.Unit.Core.Synchronization
         private static readonly Guid interviewId = Guid.Parse("33333333333333333333333333333333");
         private static readonly Guid interview1Id = Guid.Parse("44444444444444444444444444444444");
         private static Mock<IReadSideRepositoryIndexAccessor> indexAccessorMock;
-        private static readonly string interviewQueryIndexName = typeof(InterviewSyncPackagesByBriefFields).Name;
+        private static readonly string interviewQueryIndexName = typeof(InterviewSyncPackagesGroupedByRoot).Name;
         private static List<InterviewSyncPackageMeta> interviewSyncPackageMetas;
     }
 }
