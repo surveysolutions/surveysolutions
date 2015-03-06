@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -32,6 +33,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
+        [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
         public ActionResult Create(UserModel model)
         {
