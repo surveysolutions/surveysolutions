@@ -22,6 +22,7 @@ namespace WB.Core.Infrastructure.Storage.Raven
                 return;
 
             var storeProvider = new DocumentStoreProvider(this.settings);
+            this.Bind<RavenConnectionSettings>().ToSelf();
             this.Bind<DocumentStoreProvider>().ToConstant(storeProvider);
             this.Bind<IDocumentStore>().ToProvider<DocumentStoreProvider>();
 
