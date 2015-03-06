@@ -147,4 +147,7 @@
   <data name="SynchronizationMaintenance" xml:space="preserve">
     <value>Server is on the maintenance mode now. Sorry for the inconvenience. Please, try again later.</value>
   </data>
+  <data name="SynchronizationCanceledExceptionMessage" xml:space="preserve">
+    <value>Synchronization was canceled</value>
+  </data>
 </root>

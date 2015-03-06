@@ -32,7 +32,7 @@ using WB.UI.Capi.Controls;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Syncronization;
 using WB.UI.Shared.Android.Extensions;
-
+using OperationCanceledException = System.OperationCanceledException;
 using SynchronizationEventArgs = WB.Core.BoundedContexts.Capi.Implementation.Synchronization.SynchronizationEventArgs;
 using SynchronizationEventArgsWithPercent = WB.Core.BoundedContexts.Capi.Implementation.Synchronization.SynchronizationEventArgsWithPercent;
 
@@ -450,6 +450,12 @@ namespace WB.UI.Capi
                     if (evt.Exception != null)
                     {
                         var errorMessage = Properties.Resources.SynchronizationUnhandledExceptionMessage;
+
+                        var taskCancellationException = evt.Exception as OperationCanceledException;
+                        if (taskCancellationException != null)
+                        {
+                            errorMessage = Properties.Resources.SynchronizationCanceledExceptionMessage;
+                        }
 
                         var restException = evt.Exception as RestException;
                         if (restException != null)
