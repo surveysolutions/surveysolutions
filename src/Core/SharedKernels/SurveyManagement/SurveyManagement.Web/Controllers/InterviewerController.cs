@@ -7,6 +7,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
@@ -29,6 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Headquarter")]
+        [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
         public ActionResult Create(InterviewerModel model)
         {
