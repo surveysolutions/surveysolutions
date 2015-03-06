@@ -45,7 +45,7 @@ namespace WB.UI.Capi.Controls
         }
 
         public EventHandler ProcessFinished;
-        public EventHandler ProcessCanceled;
+        public EventHandler<InformationPackageCancellationEventArgs> ProcessCanceled;
         public EventHandler InformationPackageCreated;
         public EventHandler SenderCanceled;
         
@@ -100,7 +100,7 @@ namespace WB.UI.Capi.Controls
             this.DestroyReportSending();
         }
 
-        void TabletInformationSenderProcessCanceled(object sender, EventArgs e)
+        void TabletInformationSenderProcessCanceled(object sender, InformationPackageCancellationEventArgs e)
         {
             activity.RunOnUiThread(() =>
             {
