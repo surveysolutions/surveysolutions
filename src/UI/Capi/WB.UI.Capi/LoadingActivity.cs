@@ -82,24 +82,28 @@ namespace WB.UI.Capi
                         (ct) => this.CreateNewInterviewOnClient(ct, questionnaireId, questionnaireVersion));
             }
         }
-
+        
         public override void OnBackPressed()
         {
-            if (this.cancellationToken != null)
+            this.RunOnUiThread(this.Finish);
+            base.OnBackPressed();
+        }
+
+        public override void Finish()
+        {
+            if (this.cancellationToken != null && cancellationToken.Token.CanBeCanceled)
             {
                 this.cancellationToken.Cancel();
-                this.cancellationToken = null;
-                return;
             }
-            base.OnBackPressed();
+
+            base.Finish();
         }
 
         protected override void OnStop()
         {
-            if (this.cancellationToken != null)
+            if (this.cancellationToken != null && cancellationToken.Token.CanBeCanceled)
             {
                 this.cancellationToken.Cancel();
-                this.cancellationToken = null;
             }
             base.OnStop();
         }
@@ -139,6 +143,11 @@ namespace WB.UI.Capi
 
                 LogManipulator.CreatePublicRecord(interviewId);
 
+                if (ct.IsCancellationRequested)
+                {
+                    return;
+                }
+
                 var intent = new Intent(this, typeof(CreateInterviewActivity));
                 intent.PutExtra("publicKey", interviewId.ToString());
                 intent.AddFlags(ActivityFlags.NoHistory);
@@ -147,9 +156,11 @@ namespace WB.UI.Capi
             catch (Exception e)
             {
                 Logger.Error(e.Message, e);
-                #if DEBUG
-                ShowErrorMassageToUser(e.Message);
-                #endif
+
+                if (!ct.IsCancellationRequested)
+                {
+                    ShowErrorMassageToUser(e.Message);
+                }
             }
 
         }
@@ -162,7 +173,6 @@ namespace WB.UI.Capi
 
                 if (ct.IsCancellationRequested)
                 {
-                    ShowErrorMassageToUser(string.Empty);
                     return;
                 }
 
@@ -171,7 +181,6 @@ namespace WB.UI.Capi
 
                 if (ct.IsCancellationRequested)
                 {
-                    ShowErrorMassageToUser(string.Empty);
                     return;
                 }
 
@@ -183,7 +192,17 @@ namespace WB.UI.Capi
             }
             catch (Exception e)
             {
-                ShowErrorMassageToUser(e.Message);
+                Logger.Error(e.Message, e);
+
+                if (!ct.IsCancellationRequested)
+                {
+                    ShowErrorMassageToUser(e.Message);
+                }
+                return;
+            }
+
+            if (ct.IsCancellationRequested)
+            {
                 return;
             }
 
