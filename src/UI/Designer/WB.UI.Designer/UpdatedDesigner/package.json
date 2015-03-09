@@ -7,9 +7,11 @@
   "directories": {
     "test": "test"
   },
-  "dependencies": {},
+  "dependencies": {
+    "gulp-install": "^0.2.0"
+  },
   "devDependencies": {
-    "gulp": "^3.8.6",
+    "gulp": "^3.8.11",
     "gulp-clean": "^0.3.1",
     "gulp-concat": "^2.3.4",
     "gulp-css-url-adjuster": "^0.2.1",

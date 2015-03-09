@@ -6943,6 +6943,9 @@ input#edit-group-title {
   background-position-x: 0;
   overflow: hidden;
 }
+.mono {
+  font-family: monospace !important;
+}
 #roster-editor .dropdown-with-breadcrumbs-and-icons label,
 #sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons label {
   font-weight: normal;
@@ -7116,7 +7119,7 @@ input#edit-group-title {
   width: 100%;
 }
 .question-editor .checkbox-in-column {
-  margin-top: 0px;
+  margin-top: 5px;
 }
 .question-editor .checkbox-in-column input.wb-checkbox + label {
   font-family: "Lucida Console", Monaco, monospace;
