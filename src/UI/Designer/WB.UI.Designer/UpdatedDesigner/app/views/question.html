@@ -72,7 +72,7 @@
             <label for="edit-question-enablement-condition">Condition expression <help key="conditionExpression" /></label>
             <textarea id="edit-question-enablement-condition"
                       name="enablementCondition"
-                      deny-this-keyword msd-elastic
+                      msd-elastic
                       ng-model="activeQuestion.enablementCondition"
                       spellcheck="false"
                       class="form-control"></textarea>
@@ -127,7 +127,7 @@
             </div>
         </div>
 
-    <script type="text/ng-template" id="SingleOption-template.html">
+        <script type="text/ng-template" id="SingleOption-template.html">
             <div class="singleOption">
                 <div class="well well-sm" ng-if="!(activeQuestion.isCascade || activeQuestion.isFilteredCombobox) && !activeQuestion.isLinked && activeQuestion.wereOptionsTruncated">As the question was marked as "Is filtered combobox" or "Is cascading" while uploading question's details and contained many options, its value is reduced up to 200</div>
                 <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isCascade">
@@ -146,8 +146,8 @@
                             </div>
                         </div>
                         <p>
-                            <button class="btn pull-right" ng-click="showOptionsInTextarea()">Show strings</button>
-                            <button ng-hide="activeQuestion.optionsCount>=200" class="btn " ng-click="addOption()">Add Option</button>
+                            <button class="btn btn-link pull-right" ng-click="showOptionsInTextarea()">Show strings</button>
+                            <button class="btn btn-link" ng-hide="activeQuestion.optionsCount>=200" ng-click=" addoption()">Add Option</button>
                         </p>
                     </div>
                     <div ng-if="!activeQuestion.useListAsOptionsEditor">
@@ -297,22 +297,41 @@
         <script type="text/ng-template" id="MultyOption-template.html">
             <div class="multyOption">
                 <div ng-if="!activeQuestion.isLinked">
-                    <div class="table-holder">
-                        <div class="table-row" ng-repeat="option in activeQuestion.options">
-                            <div class="column-2">
-                                <input type="text" ng-model="option.value" class="form-control">
-                            </div>
-                            <div class="column-3">
-                                <input type="text" ng-model="option.title" class="form-control">
-                            </div>
-                            <div class="column-4">
-                                <a href ng:click="removeOption($index)" class="btn"></a>
+
+                    <div ng-if="activeQuestion.useListAsOptionsEditor">
+                        <div class="table-holder">
+                            <div class="table-row" ng-repeat="option in activeQuestion.options">
+                                <div class="column-2">
+                                    <input type="text" ng-model="option.value" class="form-control">
+                                </div>
+                                <div class="column-3">
+                                    <input type="text" ng-model="option.title" class="form-control">
+                                </div>
+                                <div class="column-4">
+                                    <a href ng:click="removeOption($index)" class="btn"></a>
+                                </div>
                             </div>
                         </div>
+                        <p>
+                            <button class="btn btn-link pull-right" ng-click="showOptionsInTextarea()">Show strings</button>
+                            <button class="btn btn-link" ng-if="!activeQuestion.isLinked" id="edit-question-save-button" ng-click="addOption()">Add Option</button>
+                        </p>
                     </div>
-                    <p>
-                        <input type="button" ng-if="!activeQuestion.isLinked" class="btn btn-link" value="Add Option" id="edit-question-save-button" ng-click="addOption()">
-                    </p>
+                    <div ng-if="!activeQuestion.useListAsOptionsEditor">
+                        <div class="form-group" ng-class="{'has-error': !questionForm.stringifiedOptions.$valid}">
+                            <textarea name="stringifiedOptions"
+                                      class="form-control mono"
+                                      ng-model="activeQuestion.stringifiedOptions"
+                                      match-options-pattern
+                                      msd-elastic></textarea>
+                            <p class="help-block">
+                                <input class="btn btn-link" type="button" value="Show list" ng-click="showOptionsInList()" ng-disabled="!questionForm.stringifiedOptions.$valid" />
+                            </p>
+                            <p class="help-block ng-cloak" ng-show="questionForm.stringifiedOptions.$error.matchOptionsPattern">
+                                Each line should match pattern "Value...Title", where 'Value' must be decimal number
+                            </p>
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-3">
