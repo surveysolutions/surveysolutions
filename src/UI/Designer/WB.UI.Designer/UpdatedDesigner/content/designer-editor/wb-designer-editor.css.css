@@ -5860,8 +5860,7 @@ button.close {
 .dropdown.width60 {
   width: 60%;
 }
-.dropdown > .wb-dropdown-button,
-.dropdown ul.dropdown-menu {
+.dropdown > .wb-dropdown-button{
   width: 100%;
 }
 .dropdown > .wb-dropdown-button .arrow,

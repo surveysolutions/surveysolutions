@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddStaticTextHandlerTests
         };
 
         Because of = () =>            
-                questionnaire.AddStaticText(entityId: entityId, parentId: chapterId, text: text, responsibleId: responsibleId);
+                questionnaire.AddStaticTextAndMoveIfNeeded(entityId: entityId, parentId: chapterId, text: text, responsibleId: responsibleId);
 
         Cleanup stuff = () =>
         {

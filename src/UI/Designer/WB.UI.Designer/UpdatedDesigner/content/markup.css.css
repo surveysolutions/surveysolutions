@@ -6410,7 +6410,7 @@ body {
 }
 .dropdown > .wb-dropdown-button,
 .dropdown ul.dropdown-menu {
-  width: 100%;
+  /*width: 100%;*/
 }
 .dropdown > .wb-dropdown-button .arrow,
 .dropdown ul.dropdown-menu .arrow {

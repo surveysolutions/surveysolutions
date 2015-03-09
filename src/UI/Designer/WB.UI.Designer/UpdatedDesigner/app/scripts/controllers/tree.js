@@ -146,6 +146,8 @@
                 }
             };
 
+           
+
             $scope.toggle = function(scope) {
                 scope.toggle();
             };
@@ -300,7 +302,33 @@
                     var indexOf = _.indexOf(parentItem.items, clonnedItem);
                     parentItem.items.splice(indexOf + 1, 0, cloneDeep);
                     connectTree();
+                    //$state.go('questionnaire.chapter.question', { chapterId: $state.params.chapterId, itemId: newId });
                     $rootScope.$emit('questionAdded');
+                });
+            };
+
+            $scope.addQuestionAfter = function (item) {
+                var parent = item.getParentItem() || $scope.currentChapter;
+
+                var index = _.findIndex(parent.items, function (i) {
+                    return i.itemId === item.itemId;
+                }) + 1;
+
+                var newId = utilityService.guid();
+                var emptyQuestion = {
+                    "itemId": newId,
+                    "title": '',
+                    "type": 'Text',
+                    itemType: 'Question',
+                    getParentItem: function () { return parent; }
+                };
+
+                commandService.addQuestion($state.params.questionnaireId, parent.itemId, newId, index).success(function (result) {
+                    if (result.IsSuccess) {
+                        parent.items.splice(index, 0, emptyQuestion);
+                        $state.go('questionnaire.chapter.question', { chapterId: $state.params.chapterId, itemId: newId });
+                        $rootScope.$emit('questionAdded');
+                    }
                 });
             };
 
@@ -321,6 +349,73 @@
                     };
 
                     publishAdd(clonnedItem);
+                });
+            };
+
+            $scope.addGroupAfter = function (item) {
+                var parent = item.getParentItem() || $scope.currentChapter;
+
+                var index = _.findIndex(parent.items, function (i) {
+                    return i.itemId === item.itemId;
+                }) + 1;
+
+                var newId = utilityService.guid();
+                var emptyGroup = {
+                    "itemId": newId,
+                    "title": "New group",
+                    "items": [],
+                    itemType: 'Group',
+                    getParentItem: function () { return parent; }
+                };
+                commandService.addGroup($state.params.questionnaireId, emptyGroup, parent.itemId, index).success(function () {
+                    parent.items.splice(index, 0, emptyGroup);
+                    $rootScope.$emit('groupAdded');
+                    $state.go('questionnaire.chapter.group', { chapterId: $state.params.chapterId, itemId: newId });
+                });
+            };
+
+            $scope.addRosterAfter = function (item) {
+                var parent = item.getParentItem() || $scope.currentChapter;
+
+                var index = _.findIndex(parent.items, function (i) {
+                    return i.itemId === item.itemId;
+                }) + 1;
+
+                var newId = utilityService.guid();
+                var emptyRoster = {
+                    "itemId": newId,
+                    "title": "New roster",
+                    "items": [],
+                    itemType: 'Group',
+                    isRoster: true,
+                    getParentItem: function () { return parent; }
+                };
+
+                commandService.addRoster($state.params.questionnaireId, emptyRoster, parent.itemId, index).success(function () {
+                    parent.items.splice(index, 0, emptyRoster);
+                    $rootScope.$emit('rosterAdded');
+                    $state.go('questionnaire.chapter.roster', { chapterId: $state.params.chapterId, itemId: newId });
+                });
+            };
+
+            $scope.addStaticTextAfter = function (item) {
+                var parent = item.getParentItem() || $scope.currentChapter;
+
+                var index = _.findIndex(parent.items, function (i) {
+                    return i.itemId === item.itemId;
+                }) + 1;
+
+                var newId = utilityService.guid();
+                var emptyStaticText = {
+                    "itemId": newId,
+                    "text": "New static text",
+                    itemType: 'StaticText',
+                    getParentItem: function () { return parent; }
+                };
+
+                commandService.addStaticText($state.params.questionnaireId, emptyStaticText, parent.itemId, index).success(function () {
+                    parent.items.splice(index, 0, emptyStaticText);
+                    $state.go('questionnaire.chapter.statictext', { chapterId: $state.params.chapterId, itemId: newId });
                 });
             };
 

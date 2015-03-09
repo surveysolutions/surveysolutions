@@ -108,6 +108,8 @@ angular.module('designerApp')
                 });
             };
 
+          
+
             $scope.addGroup = function (parent) {
                 var newId = utilityService.guid();
                 var emptyGroup = {
