@@ -9,14 +9,18 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group
     {
         public AddGroupCommand(Guid questionnaireId, Guid groupId, Guid responsibleId,
             string title, string variableName, Guid? rosterSizeQuestionId, string condition,
-            Guid? parentGroupId, bool isRoster, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
+            Guid? parentGroupId, bool isRoster, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles, Guid? rosterTitleQuestionId,
+            int? index = null)
             : base(
                 questionnaireId, groupId, responsibleId, title, variableName, rosterSizeQuestionId, condition, isRoster, rosterSizeSource,
                 rosterFixedTitles, rosterTitleQuestionId)
         {
             this.ParentGroupId = parentGroupId;
+            this.Index = index;
         }
 
         public Guid? ParentGroupId { get; private set; }
+
+        public int? Index { get; private set; }
     }
 }

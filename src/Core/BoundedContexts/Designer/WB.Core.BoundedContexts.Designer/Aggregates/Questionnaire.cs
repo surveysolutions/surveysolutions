@@ -932,10 +932,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Group command handlers
 
-        public void AddGroup(Guid groupId, Guid responsibleId,
-            string title, string variableName, Guid? rosterSizeQuestionId, string description, string condition,
-            Guid? parentGroupId, bool isRoster, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles,
-            Guid? rosterTitleQuestionId)
+        public void AddGroupAndMoveIfNeeded(Guid groupId, Guid responsibleId, string title, string variableName, Guid? rosterSizeQuestionId, string description, string condition, Guid? parentGroupId, bool isRoster, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles, Guid? rosterTitleQuestionId, int? index = null)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -978,6 +975,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             else
             {
                 this.ApplyEvent(new GroupStoppedBeingARoster(responsibleId, groupId));
+            }
+
+            if (index.HasValue)
+            {
+                this.ApplyEvent(new QuestionnaireItemMoved
+                {
+                    PublicKey = groupId,
+                    GroupKey = parentGroupId,
+                    TargetIndex = index.Value,
+                    ResponsibleId = responsibleId
+                });
             }
         }
 
@@ -1474,14 +1482,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void AddDefaultTypeQuestion(AddDefaultTypeQuestionCommand command)
+        public void AddDefaultTypeQuestionAdnMoveIfNeeded(AddDefaultTypeQuestionCommand command)
         {
             this.ThrowDomainExceptionIfQuestionAlreadyExists(command.QuestionId);
             var parentGroup = this.GetGroupById(command.ParentGroupId);
             this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentGroupId);
 
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-            this.ThrowDomainExceptionIfTitleIsEmptyOrTooLong(command.Title);
 
             this.innerDocument.ConnectChildrenWithParent();
             if (parentGroup != null)
@@ -1512,6 +1519,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 IsFilteredCombobox = false,
                 CascadeFromQuestionId = null
             });
+
+            if (command.Index.HasValue)
+            {
+                this.ApplyEvent(new QuestionnaireItemMoved
+                {
+                    PublicKey = command.QuestionId,
+                    GroupKey = command.ParentGroupId,
+                    TargetIndex = command.Index.Value,
+                    ResponsibleId = command.ResponsibleId
+                });
+            }
         }
 
         public void DeleteQuestion(Guid questionId, Guid responsibleId)
@@ -2004,7 +2022,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         #region Static text command handlers
-        public void AddStaticText(Guid entityId, Guid parentId, string text, Guid responsibleId)
+        public void AddStaticTextAndMoveIfNeeded(Guid entityId, Guid parentId, string text, Guid responsibleId, int? index = null)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
@@ -2014,13 +2032,24 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ConnectChildrenWithParent();
             this.ThrowIfChapterHasMoreThanAllowedLimit(parentId);
 
-            this.ApplyEvent(new StaticTextAdded()
+            this.ApplyEvent(new StaticTextAdded
             {
                 EntityId = entityId,
                 ParentId = parentId,
                 ResponsibleId = responsibleId,
                 Text = text
             });
+
+            if (index.HasValue)
+            {
+                this.ApplyEvent(new QuestionnaireItemMoved
+                {
+                    PublicKey = entityId,
+                    GroupKey = parentId,
+                    TargetIndex = index.Value,
+                    ResponsibleId = responsibleId
+                });
+            }
         }
 
         public void UpdateStaticText(Guid entityId, string text, Guid responsibleId)

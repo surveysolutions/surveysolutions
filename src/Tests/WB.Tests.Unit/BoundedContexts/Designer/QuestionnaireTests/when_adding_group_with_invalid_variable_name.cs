@@ -16,19 +16,18 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         };
 
         Because of = () =>
-            exception = Catch.Exception(() => questionnaire.AddGroup(
+            exception = Catch.Exception(() => questionnaire.AddGroupAndMoveIfNeeded(
                 groupId: rosterId,
-                parentGroupId:chapterId,
                 responsibleId: responsibleId,
                 title: "title",
                 variableName: "fixed",
                 rosterSizeQuestionId: null,
                 description: null,
                 condition: null,
+                parentGroupId: chapterId,
                 isRoster: true,
                 rosterSizeSource: RosterSizeSourceType.FixedTitles,
-                rosterFixedTitles: new string[] { "1", "2" },
-                rosterTitleQuestionId: null));
+                rosterFixedTitles: new string[] { "1", "2" }, rosterTitleQuestionId: null));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

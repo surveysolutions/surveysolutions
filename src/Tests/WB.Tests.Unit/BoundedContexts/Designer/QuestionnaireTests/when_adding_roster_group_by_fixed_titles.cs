@@ -33,10 +33,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         };
 
         Because of = () =>
-            questionnaire.AddGroup(groupId: groupId, responsibleId: responsibleId, title: "title", variableName: null, parentGroupId: parentGroupId, description: null,
-                condition: null,
-                rosterSizeQuestionId: null, isRoster: true, rosterSizeSource: rosterSizeSourceType, rosterFixedTitles: rosterFixedTitles,
-                rosterTitleQuestionId: null);
+            questionnaire.AddGroupAndMoveIfNeeded(groupId: groupId, responsibleId: responsibleId, title: "title", variableName: null,
+                rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: parentGroupId,
+                isRoster: true, rosterSizeSource: rosterSizeSourceType, rosterFixedTitles: rosterFixedTitles, rosterTitleQuestionId: null);
 
         Cleanup stuff = () =>
         {
