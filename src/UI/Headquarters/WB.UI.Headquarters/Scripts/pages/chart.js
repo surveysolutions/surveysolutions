@@ -48,14 +48,15 @@
     };
 
     self.drawChart = function () {
-        if (self.Stats.Lines.length === 0 ||self.Stats.Lines[0].length === 0)
-            return;
-
+       
         $('#interviewChart').empty();
 
         if (self.Plot != null) {
             self.Plot.destroy();
         }
+
+        if (self.Stats.Lines.length === 0 || self.Stats.Lines[0].length === 0)
+            return;
 
         self.Plot = $.jqplot('interviewChart',
             self.Stats.Lines,
