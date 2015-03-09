@@ -32,7 +32,7 @@
                 };
 
                 utilityService.createQuestionForDeleteConfirmationPopup = function(title) {
-                    var trimmedTitle = title.substring(0, 15) + (title.length > 15 ? "..." : "");
+                    var trimmedTitle = title.substring(0, 25) + (title.length > 25 ? "..." : "");
                     var message = 'Are you sure you want to delete "' + trimmedTitle + '"?';
                     return {
                         title: message,

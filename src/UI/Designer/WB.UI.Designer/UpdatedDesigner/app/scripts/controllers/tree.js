@@ -146,8 +146,6 @@
                 }
             };
 
-           
-
             $scope.toggle = function(scope) {
                 scope.toggle();
             };
@@ -262,8 +260,6 @@
                 });
             };
 
-            
-
             $scope.cloneStaticText = function(staticTextId) {
                 var itemIdToClone = staticTextId || $state.params.itemId;
                 var newId = utilityService.guid();
@@ -273,13 +269,14 @@
 
                     var cloneDeep = {
                         itemId: newId,
-                            itemType: "StaticText",
+                        itemType: "StaticText",
                         text: clonnedItem.text
                     };
 
                     var indexOf = _.indexOf(parentItem.items, clonnedItem);
                     parentItem.items.splice(indexOf + 1, 0, cloneDeep);
                     connectTree();
+                    $state.go('questionnaire.chapter.statictext', { chapterId: $state.params.chapterId, itemId: newId });
                     $rootScope.$emit('staticTextCloned');
                 });
             };
@@ -302,7 +299,7 @@
                     var indexOf = _.indexOf(parentItem.items, clonnedItem);
                     parentItem.items.splice(indexOf + 1, 0, cloneDeep);
                     connectTree();
-                    //$state.go('questionnaire.chapter.question', { chapterId: $state.params.chapterId, itemId: newId });
+                    $state.go('questionnaire.chapter.question', { chapterId: $state.params.chapterId, itemId: newId });
                     $rootScope.$emit('questionAdded');
                 });
             };
@@ -349,6 +346,11 @@
                     };
 
                     publishAdd(clonnedItem);
+                    if (clonnedItem.isRoster) {
+                        $state.go('questionnaire.chapter.roster', { chapterId: $state.params.chapterId, itemId: newId });
+                    } else {
+                        $state.go('questionnaire.chapter.group', { chapterId: $state.params.chapterId, itemId: newId });
+                    }
                 });
             };
 
@@ -422,7 +424,7 @@
             $scope.deleteQuestion = function(item) {
                 var itemIdToDelete = item.itemId || $state.params.itemId;
 
-                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(item.title));
+                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(item.title || "Untitled question"));
 
                 modalInstance.result.then(function(confirmResult) {
                     if (confirmResult === 'ok') {
