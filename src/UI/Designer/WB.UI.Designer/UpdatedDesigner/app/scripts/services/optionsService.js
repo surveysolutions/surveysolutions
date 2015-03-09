@@ -16,7 +16,6 @@
                         var maxLength = _.max(_.map(options, function (o) { return o.title.length })) + 3;
                         _.each(options, function (option) {
                             if (!_.isEmpty(option)) {
-                                //stringifiedOptions += (option.title || "") + "..." + (option.value || "");
                                 stringifiedOptions += _.padRight(option.title || "", maxLength, '.') + (option.value || "");
                                 stringifiedOptions += "\n";
                             }

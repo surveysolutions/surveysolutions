@@ -147,7 +147,7 @@
                         </div>
                         <p>
                             <button class="btn btn-link pull-right" ng-click="showOptionsInTextarea()">Show strings</button>
-                            <button class="btn btn-link" ng-hide="activeQuestion.optionsCount>=200" ng-click=" addoption()">Add Option</button>
+                            <button class="btn btn-link" ng-hide="activeQuestion.optionsCount >=200" ng-click=" addoption()">Add Option</button>
                         </p>
                     </div>
                     <div ng-if="!activeQuestion.useListAsOptionsEditor">
@@ -161,7 +161,7 @@
                                 <input class="btn btn-link" type="button" value="Show list" ng-click="showOptionsInList()" ng-disabled="!questionForm.stringifiedOptions.$valid" />
                             </p>
                             <p class="help-block ng-cloak" ng-show="questionForm.stringifiedOptions.$error.matchOptionsPattern">
-                                Each line should match pattern "Value...Title", where 'Value' must be decimal number
+                                Each line should match pattern "Title...Value", where 'Value' must be decimal number
                             </p>
                         </div>
                     </div>
