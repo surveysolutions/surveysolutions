@@ -514,20 +514,24 @@ namespace WB.UI.Capi
         {
             var connectivityManager = (ConnectivityManager)this.GetSystemService(ConnectivityService);
 
-            var networkInfo = connectivityManager.GetNetworkInfo(ConnectivityType.Wifi);
-            if (networkInfo.IsConnected)
+            if (connectivityManager != null)
             {
-                var wifiManager = (WifiManager)this.GetSystemService(WifiService);
-                var connectionInfo = wifiManager.ConnectionInfo;
-                if (connectionInfo != null && !string.IsNullOrEmpty(connectionInfo.SSID))
+                var networkInfoWiFi = connectivityManager.GetNetworkInfo(ConnectivityType.Wifi);
+                if (networkInfoWiFi != null && networkInfoWiFi.IsConnected)
                 {
-                    return string.Format(Resources.GetString(Resource.String.NowYouareConnectedToWifiNetwork), connectionInfo.SSID);
+                    var wifiManager = (WifiManager) this.GetSystemService(WifiService);
+                    if (wifiManager != null && wifiManager.ConnectionInfo != null && !string.IsNullOrEmpty(wifiManager.ConnectionInfo.SSID))
+                    {
+                        return string.Format(Resources.GetString(Resource.String.NowYouareConnectedToWifiNetwork),
+                            wifiManager.ConnectionInfo.SSID);
+                    }
                 }
-            }
-            var mobileState = connectivityManager.GetNetworkInfo(ConnectivityType.Mobile).GetState();
-            if (mobileState == NetworkInfo.State.Connected)
-            {
-                return Resources.GetString(Resource.String.NowYouareConnectedToMobileNetwork);
+
+                var mobileInfoMobile = connectivityManager.GetNetworkInfo(ConnectivityType.Mobile);
+                if (mobileInfoMobile != null && mobileInfoMobile.GetState() == NetworkInfo.State.Connected)
+                {
+                    return Resources.GetString(Resource.String.NowYouareConnectedToMobileNetwork);
+                }
             }
             return Resources.GetString(Resource.String.YouAreNotConnectedToAnyNetwork);
         }
