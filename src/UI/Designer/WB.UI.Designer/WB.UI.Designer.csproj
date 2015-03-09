@@ -370,6 +370,8 @@
     <Content Include="Scripts\viewmodels\pages\controlpanel\readside.js" />
     <Content Include="Scripts\viewmodels\viewmodelbase.js" />
     <Content Include="Scripts\viewmodels\designer.framework.js" />
+    <Content Include="UpdatedDesigner\app\scripts\directives\matchOptionsPattern.js" />
+    <Content Include="UpdatedDesigner\app\scripts\services\optionsService.js" />
     <Content Include="UpdatedDesigner\content\wb-options-window.css" />
     <Content Include="Content\themes\base\images\animated-overlay.gif" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -488,7 +490,6 @@
     <Content Include="UpdatedDesigner\app\scripts\controllers\tree.js" />
     <Content Include="UpdatedDesigner\app\scripts\decorators\exceptionhandlerdecorator.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\animations.js" />
-    <Content Include="UpdatedDesigner\app\scripts\directives\denyThisKeyword.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\directives.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\help.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\itemBreadcrumbs.js" />
