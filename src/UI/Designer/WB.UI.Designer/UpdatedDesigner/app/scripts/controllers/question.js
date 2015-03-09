@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('QuestionCtrl',
-        function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, $log, confirmService, hotkeys) {
+        function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, $log, confirmService, hotkeys, optionsService) {
             $scope.currentChapterId = $state.params.chapterId;
             var dictionnaires = {};
             hotkeys.bindTo($scope)
@@ -14,6 +14,7 @@
                       event.preventDefault();
                   }
               });
+
             var bindQuestion = function(question) {
                 $scope.activeQuestion = $scope.activeQuestion || {};
                 $scope.activeQuestion.breadcrumbs = question.breadcrumbs;
@@ -41,7 +42,8 @@
                 _.each(options, function(option) {
                     option.id = utilityService.guid();
                 });
-
+                
+                $scope.activeQuestion.useListAsOptionsEditor = true;
                 $scope.activeQuestion.options = options;
                 $scope.activeQuestion.optionsCount = question.optionsCount || 0;
 
@@ -79,6 +81,7 @@
 
             $scope.saveQuestion = function (callback) {
                 if ($scope.questionForm.$valid) {
+                    $scope.showOptionsInList();
                     var shouldGetOptionsOnServer = wasThereOptionsLooseWhileChanginQuestionProperties($scope.initialQuestion, $scope.activeQuestion) && $scope.activeQuestion.isCascade;
                     commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion, shouldGetOptionsOnServer).success(function () {
                         $scope.initialQuestion = angular.copy($scope.activeQuestion);
@@ -228,6 +231,22 @@
             $scope.removeOption = function (index) {
                 $scope.activeQuestion.options.splice(index, 1);
                 $scope.activeQuestion.optionsCount -= 1;
+            };
+
+            $scope.showOptionsInTextarea = function () {
+                $scope.activeQuestion.stringifiedOptions = optionsService.stringifyOptions($scope.activeQuestion.options);
+                $scope.activeQuestion.useListAsOptionsEditor = false;
+            };
+
+            $scope.showOptionsInList = function () {
+                if ($scope.activeQuestion.useListAsOptionsEditor) {
+                    return;
+                }
+                if (!$scope.questionForm.stringifiedOptions.$valid) {
+                    return;
+                }
+                $scope.activeQuestion.options = optionsService.parseOptions($scope.activeQuestion.stringifiedOptions);
+                $scope.activeQuestion.useListAsOptionsEditor = true;
             };
 
             $scope.changeQuestionScope = function (scope) {

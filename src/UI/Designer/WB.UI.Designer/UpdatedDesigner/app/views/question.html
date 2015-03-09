@@ -29,7 +29,7 @@
             </div>
 
             <div class="form-group input-variable-name col-xs-4 pull-right">
-                <label for="edit-question-variable-name" class="wb-label">Variable name<help key="variableName" placement="left" /></label><br/>
+                <label for="edit-question-variable-name" class="wb-label">Variable name<help key="variableName" placement="left" /></label><br />
                 <input id="edit-question-variable-name" type="text" ng-model="activeQuestion.variable" spellcheck="false"
                        class="form-control" maxlength="32">
             </div>
@@ -127,78 +127,101 @@
             </div>
         </div>
 
-        <script type="text/ng-template" id="SingleOption-template.html">
+    <script type="text/ng-template" id="SingleOption-template.html">
             <div class="singleOption">
                 <div class="well well-sm" ng-if="!(activeQuestion.isCascade || activeQuestion.isFilteredCombobox) && !activeQuestion.isLinked && activeQuestion.wereOptionsTruncated">As the question was marked as "Is filtered combobox" or "Is cascading" while uploading question's details and contained many options, its value is reduced up to 200</div>
-                <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isCascade" class="table-holder">
-                    <div class="table-row" ng-repeat="option in activeQuestion.options">
-                        <div class="column-2">
-                            <input type="text" ng-model="option.value" class="form-control">
+                <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isCascade">
+                    <div ng-if="activeQuestion.useListAsOptionsEditor">
+                        <div class="table-holder">
+                            <div class="table-row" ng-repeat="option in activeQuestion.options">
+                                <div class="column-2">
+                                    <input type="text" ng-model="option.value" class="form-control">
+                                </div>
+                                <div class="column-3">
+                                    <input type="text" ng-model="option.title" class="form-control">
+                                </div>
+                                <div class="column-4">
+                                    <a href ng:click="removeOption($index)" class="btn" tabindex="-1"></a>
+                                </div>
+                            </div>
                         </div>
-                        <div class="column-3">
-                            <input type="text" ng-model="option.title" class="form-control">
-                        </div>
-                        <div class="column-4">
-                            <a href ng:click="removeOption($index)" class="btn" tabindex="-1"></a>
+                        <p>
+                            <button class="btn pull-right" ng-click="showOptionsInTextarea()">Show strings</button>
+                            <button ng-hide="activeQuestion.optionsCount>=200" class="btn " ng-click="addOption()">Add Option</button>
+                        </p>
+                    </div>
+                    <div ng-if="!activeQuestion.useListAsOptionsEditor">
+                        <div class="form-group" ng-class="{'has-error': !questionForm.stringifiedOptions.$valid}">
+                            <textarea name="stringifiedOptions"
+                                      class="form-control mono"
+                                      ng-model="activeQuestion.stringifiedOptions"
+                                      match-options-pattern
+                                      msd-elastic></textarea>
+                            <p class="help-block">
+                                <input class="btn btn-link" type="button" value="Show list" ng-click="showOptionsInList()" ng-disabled="!questionForm.stringifiedOptions.$valid" />
+                            </p>
+                            <p class="help-block ng-cloak" ng-show="questionForm.stringifiedOptions.$error.matchOptionsPattern">
+                                Each line should match pattern "Value...Title", where 'Value' must be decimal number
+                            </p>
                         </div>
                     </div>
                 </div>
-                <p>
-                    <input ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isCascade" ng-hide="activeQuestion.optionsCount>=200" class="btn btn-link" type="button" value="Add Option" ng-click="addOption()">
-                    <a ng-if="activeQuestion.isFilteredCombobox"
-                       href="javascript:void(0);"
-                       class="btn btn-link"
-                       ng-click="editFilteredComboboxOptions()">
-                        <ng-pluralize count="activeQuestion.optionsCount"
-                                      when="{'0': 'Add options',
+            </div>
+            <p>
+                <a ng-if="activeQuestion.isFilteredCombobox"
+                   href="javascript:void(0);"
+                   class="btn btn-link"
+                   ng-click="editFilteredComboboxOptions()">
+                    <ng-pluralize count="activeQuestion.optionsCount"
+                                  when="{'0': 'Add options',
                                      'one': 'Edit 1 option',
                                      'other': 'Edit {} options'}">
-                        </ng-pluralize>
-                    </a>
-                    <a ng-if="activeQuestion.isCascade && (activeQuestion.cascadeFromQuestionId || '') !== ''"
-                       href="javascript:void(0);"
-                       class="btn btn-link"
-                       ng-click="editCascadingComboboxOptions()">
-                        <ng-pluralize count="activeQuestion.optionsCount"
-                                      when="{'0': 'Add options',
+                    </ng-pluralize>
+                </a>
+                <a ng-if="activeQuestion.isCascade && (activeQuestion.cascadeFromQuestionId || '') !== ''"
+                   href="javascript:void(0);"
+                   class="btn btn-link"
+                   ng-click="editCascadingComboboxOptions()">
+                    <ng-pluralize count="activeQuestion.optionsCount"
+                                  when="{'0': 'Add options',
                                      'one': 'Edit 1 option',
                                      'other': 'Edit {} options'}">
-                        </ng-pluralize>
-                    </a>
-                </p>
-                <div class="table-holder">
-                    <div class="row">
-                        <div class="col-xs-4">
-                            <div ng-if="!activeQuestion.isCascade && !activeQuestion.isLinked" class="checkbox checkbox-in-column">
-                                <input id="cb-is-filtered-combobox" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isFilteredCombobox" />
-                                <label for="cb-is-filtered-combobox"><span></span>Is filtered combobox</label>
-                            </div>
+                    </ng-pluralize>
+                </a>
+            </p>
+            <div class="table-holder">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div ng-if="!activeQuestion.isCascade && !activeQuestion.isLinked" class="checkbox checkbox-in-column">
+                            <input id="cb-is-filtered-combobox" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isFilteredCombobox" />
+                            <label for="cb-is-filtered-combobox"><span></span>Is filtered combobox</label>
                         </div>
-                        <div class="col-xs-4">
-                            <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isCascade" class="checkbox checkbox-in-column">
-                                <input id="cb-is-linked" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isLinked" />
-                                <label for="cb-is-linked"><span></span>Is linked</label>
-                            </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isCascade" class="checkbox checkbox-in-column">
+                            <input id="cb-is-linked" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isLinked" />
+                            <label for="cb-is-linked"><span></span>Is linked</label>
                         </div>
-                        <div class="col-xs-4">
-                            <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked" class="checkbox checkbox-in-column">
-                                <input id="cb-is-cascading" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isCascade" />
-                                <label for="cb-is-cascading"><span></span>Is cascading</label>
-                            </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked" class="checkbox checkbox-in-column">
+                            <input id="cb-is-cascading" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isCascade" />
+                            <label for="cb-is-cascading"><span></span>Is cascading</label>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div>
-                    <div ng-if="!activeQuestion.isFilteredCombobox || !activeQuestion.isCascadingCombobox" class="form-group"
-                         ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}" />
-                </div>
+            <div>
+                <div ng-if="!activeQuestion.isFilteredCombobox || !activeQuestion.isCascadingCombobox" class="form-group"
+                     ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}" />
+            </div>
 
-                <div>
-                    <div ng-if="activeQuestion.isCascade && !activeQuestion.isLinked"
-                         ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}"
-                         class="form-group" ng-include="'CascadingComboBox-Template.html'" />
-                </div>
+            <div>
+                <div ng-if="activeQuestion.isCascade && !activeQuestion.isLinked"
+                     ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}"
+                     class="form-group" ng-include="'CascadingComboBox-Template.html'" />
+            </div>
         </script>
 
         <script type="text/ng-template" id="linkTemplate.html">
