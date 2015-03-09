@@ -672,6 +672,9 @@
     <Content Include="Views\Questionnaire\Index.cshtml">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="UpdatedDesigner\content\designer-editor\wb-question-list.css.css.map">
+      <DependentUpon>wb-question-list.css.css</DependentUpon>
+    </Content>
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
