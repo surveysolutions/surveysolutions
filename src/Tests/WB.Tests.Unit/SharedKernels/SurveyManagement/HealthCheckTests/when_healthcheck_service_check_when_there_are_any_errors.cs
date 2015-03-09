@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
             result.FolderPermissionCheckResult.AllowedFolders.ShouldEqual(allowedFoldersList);
 
         It should_return_denided_folders_for_FolderPermissionCheckResult_check = () =>
-            result.FolderPermissionCheckResult.DenidedFolders.ShouldEqual(denidedFoldersList);
+            result.FolderPermissionCheckResult.DeniedFolders.ShouldEqual(denidedFoldersList);
 
 
         private static string   databaseErrorMessage = "database error message";

@@ -21,8 +21,8 @@
     self.numberOfSyncPackagesWithBigSizeStatus = ko.observable('');
     self.numberOfSyncPackagesWithBigSize = ko.observable('');
     self.numberOfSyncPackagesWithBigSizeError = ko.observable('');
-    self.denidedFoldersStatus = ko.observable('');
-    self.denidedFolders = ko.observableArray([]);
+    self.deniedFoldersStatus = ko.observable('');
+    self.deniedFolders = ko.observableArray([]);
 
     self.load = function () {
         self.SendRequest(self.apiUrl, {}, function (data) {
@@ -46,8 +46,8 @@
                 : data.NumberOfSyncPackagesWithBigSize.Value;
             self.numberOfSyncPackagesWithBigSize(numberOfSyncPackagesText);
             self.numberOfSyncPackagesWithBigSizeError(data.NumberOfSyncPackagesWithBigSize.ErrorMessage);
-            self.denidedFoldersStatus(self.getTextStatus(data.FolderPermissionCheckResult.Status));
-            self.denidedFolders(data.FolderPermissionCheckResult.DenidedFolders);
+            self.deniedFoldersStatus(self.getTextStatus(data.FolderPermissionCheckResult.Status));
+            self.deniedFolders(data.FolderPermissionCheckResult.DeniedFolders);
         }, true, true);
     };
 
