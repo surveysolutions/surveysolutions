@@ -89,75 +89,6 @@ angular.module('designerApp')
 
             $scope.currentChapter = null;
 
-            $scope.addQuestion = function (parent) {
-                var newId = utilityService.guid();
-                var emptyQuestion = {
-                    "itemId": newId,
-                    "title": 'New Question',
-                    "type": 'Text',
-                    itemType: 'Question',
-                    getParentItem: function () { return parent; }
-                };
-
-                commandService.addQuestion($state.params.questionnaireId, parent.itemId, newId).success(function (result) {
-                    if (result.IsSuccess) {
-                        parent.items.push(emptyQuestion);
-                        $state.go('questionnaire.chapter.question', { chapterId: $state.params.chapterId, itemId: newId });
-                        $rootScope.$emit('questionAdded');
-                    }
-                });
-            };
-
-          
-
-            $scope.addGroup = function (parent) {
-                var newId = utilityService.guid();
-                var emptyGroup = {
-                    "itemId": newId,
-                    "title": "New group",
-                    "items": [],
-                    itemType: 'Group',
-                    getParentItem: function () { return parent; }
-                };
-                commandService.addGroup($state.params.questionnaireId, emptyGroup, parent.itemId).success(function () {
-                    parent.items.push(emptyGroup);
-                    $rootScope.$emit('groupAdded');
-                    $state.go('questionnaire.chapter.group', { chapterId: $state.params.chapterId, itemId: newId });
-                });
-            };
-
-            $scope.addRoster = function (parent) {
-                var newId = utilityService.guid();
-                var emptyRoster = {
-                    "itemId": newId,
-                    "title": "New roster",
-                    "items": [],
-                    itemType: 'Group',
-                    isRoster: true,
-                    getParentItem: function () { return parent; }
-                };
-
-                commandService.addRoster($state.params.questionnaireId, emptyRoster, parent.itemId).success(function () {
-                    parent.items.push(emptyRoster);
-                    $rootScope.$emit('rosterAdded');
-                    $state.go('questionnaire.chapter.roster', { chapterId: $state.params.chapterId, itemId: newId });
-                });
-            };
-
-            $scope.addStaticText = function (parent) {
-                var newId = utilityService.guid();
-                var emptyStaticText = {
-                    "itemId": newId,
-                    "text": "New static text",
-                    itemType: 'StaticText',
-                    getParentItem: function () { return parent; }
-                };
-
-                commandService.addStaticText($state.params.questionnaireId, emptyStaticText, parent.itemId).success(function () {
-                    parent.items.push(emptyStaticText);
-                    $state.go('questionnaire.chapter.statictext', { chapterId: $state.params.chapterId, itemId: newId });
-                });
-            };
 
             $rootScope.$on('groupDeleted', function () {
                 $scope.questionnaire.groupsCount--;
@@ -190,6 +121,10 @@ angular.module('designerApp')
             $rootScope.$on('chapterDeleted', function () {
                 getQuestionnaire();
             });
+
+            $rootScope.$on('statictextAdded', function () {
+            });
+
             $scope.getPersonsSharedWith = function(questionnaire) {
                 if (!questionnaire)
                     return [];
