@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.User;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage.Postgre.Implementation;
@@ -24,7 +25,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
 
-        public UserDenormalizer(PostgreReadSideRepository<UserDocument> users)
+        public UserDenormalizer(IReadSideRepositoryWriter<UserDocument> users)
         {
             this.users = users;
         }
@@ -38,6 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             var doc = new UserDocument
                 {
+                    UserId = evnt.Payload.PublicKey.FormatGuid(),
                     UserName = evnt.Payload.Name,
                     Password = evnt.Payload.Password,
                     PublicKey = evnt.Payload.PublicKey,
@@ -48,7 +50,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     Supervisor = evnt.Payload.Supervisor,
                     Roles = new List<UserRoles>(evnt.Payload.Roles)
                 };
-            this.users.Store(doc, evnt.Payload.PublicKey);
+            this.users.Store(doc, doc.UserId);
         }
 
         public void Handle(IPublishedEvent<UserChanged> evnt)

@@ -5,7 +5,9 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
@@ -172,6 +174,10 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>>().To<NumberOfSyncPackagesWithBigSizeChecker>();
             this.Bind<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>().To<NumberOfUnhandledPackagesChecker>();
             this.Bind<IHealthCheckService>().To<HealthCheckService>();
+
+
+            this.Bind<IReadSideRepositoryWriter<UserDocument>>().To<PostgreReadSideRepository<UserDocument>>();
+            this.Bind<IReadSideRepositoryReader<UserDocument>>().To<PostgreReadSideRepository<UserDocument>>();
         }
     }
 }
