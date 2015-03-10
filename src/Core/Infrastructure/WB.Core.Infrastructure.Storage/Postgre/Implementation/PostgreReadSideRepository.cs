@@ -31,7 +31,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         }
 
 
-        public TEntity GetById(object id)
+        public TEntity GetById(string id)
         {
             using (var session = sessionFactory.OpenSession())
             {
