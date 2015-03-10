@@ -47,10 +47,12 @@
     <li class="dropdown">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Hi, <strong>@User.Identity.Name</strong> <b class="caret"></b></a>
         <ul class="dropdown-menu">
-            <li>@Html.ActionLink("Logoff", "LogOff", "Account", new {area = string.Empty}, null)</li>
+            <li>@Html.ActionLink("Logoff", "LogOff", "Account", new { area = string.Empty }, null)</li>
         </ul>
     </li>
-    <a href="http://siteresources.worldbank.org/INTCOMPTOOLS/Resources/8213623-1380598436379/HQ_draft_manual.pdf" target="_blank">
-        <i class="glyphicon glyphicon-question-sign"></i>
-    </a>
+    <li>
+        <a href="http://siteresources.worldbank.org/INTCOMPTOOLS/Resources/8213623-1380598436379/HQ_draft_manual.pdf" target="_blank">
+            <i class="glyphicon glyphicon-question-sign"></i>
+        </a>
+    </li>
 </ul>
