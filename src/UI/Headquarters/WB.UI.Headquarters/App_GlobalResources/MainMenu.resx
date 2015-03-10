@@ -123,6 +123,9 @@
   <data name="HealthCheck" xml:space="preserve">
     <value>Health Check</value>
   </data>
+  <data name="Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
   <data name="Interviews" xml:space="preserve">
     <value>Interviews</value>
   </data>
