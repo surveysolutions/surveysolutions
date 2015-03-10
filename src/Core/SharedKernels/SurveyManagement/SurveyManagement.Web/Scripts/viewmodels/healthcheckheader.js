@@ -24,10 +24,13 @@
     self.updateIconByStatus = function(status) {
         if (status == 1) { // good
             self.holder.css('color', 'green');
+            self.holder.prop('title', 'Health Check: OK');
         } else if (status == 2) { // warning
             self.holder.css('color', 'yellow');
+            self.holder.prop('title', 'Health Check: Warning');
         } else { // down
             self.holder.css('color', 'red');
+            self.holder.prop('title', 'Health Check: Error');
         }
     }
 }
