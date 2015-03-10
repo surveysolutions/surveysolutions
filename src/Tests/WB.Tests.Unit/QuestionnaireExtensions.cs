@@ -22,9 +22,10 @@ namespace WB.Tests.Unit
             string validationMessage,
             string instructions,
             string mask,
-            Guid responsibleId)
+            Guid responsibleId,
+            int? index = null)
         {
-            questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
+            questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId, index));
             questionnaire.UpdateTextQuestion(questionId, title, variableName, variableLabel, isMandatory, isPreFilled, scope, enablementCondition, validationExpression, validationMessage, instructions, mask, responsibleId);
         }
 
