@@ -1,4 +1,5 @@
 ﻿using Main.Core.Entities.SubEntities;
+using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.SharedKernels.DataCollection.Views;
 
@@ -8,8 +9,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
     {
         public UserDocumentMap()
         {
-            Table("Users");
-            Id(x => x.PublicKey);
+            Table("UserDocuments");
+            Id(x => x.UserId, idMap =>
+            {
+                idMap.Generator(Generators.Assigned);
+                idMap.Column("Id");
+            });
+            Property(x => x.PublicKey);
             Property(x => x.CreationDate);
             Property(x => x.Email);
             Property(x => x.IsDeleted);
@@ -21,8 +27,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.DeviceId);
             Component(x => x.Supervisor, cmp =>
             {
-                cmp.Property(x => x.Id);
-                cmp.Property(x => x.Name);
+                cmp.Property(x => x.Id, ptp => ptp.Column("SupervisorId"));
+                cmp.Property(x => x.Name, ptp => ptp.Column("SupervisorName"));
             });
 
             Bag(x => x.Roles, m =>

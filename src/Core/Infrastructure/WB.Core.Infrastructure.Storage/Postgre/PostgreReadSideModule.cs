@@ -57,6 +57,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
             {
                 db.ConnectionString = connectionString;
                 db.Dialect<NHibernate.Dialect.PostgreSQL82Dialect>();
+                db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
             });
 
             cfg.AddDeserializedMapping(GetMappings(), "Main");

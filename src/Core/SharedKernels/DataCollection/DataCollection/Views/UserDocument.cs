@@ -12,12 +12,11 @@ namespace WB.Core.SharedKernels.DataCollection.Views
     {
         public UserDocument()
         {
-            this.CreationDate = DateTime.Now;
-            this.PublicKey = Guid.NewGuid();
             this.Roles = new List<UserRoles>();
             this.DeviceChangingHistory = new List<DeviceInfo>();
         }
 
+        public virtual string UserId { get; set; }
         public virtual DateTime CreationDate { get; set; }
         public virtual string Email { get; set; }
         public virtual bool IsDeleted { get; set; }
