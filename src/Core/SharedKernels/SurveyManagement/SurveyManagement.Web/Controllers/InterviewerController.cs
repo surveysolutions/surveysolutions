@@ -22,14 +22,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
         }
 
-        [Authorize(Roles = "Headquarter")]
+        [Authorize(Roles = "Administrator, Headquarter")]
         public ActionResult Create(Guid supervisorId)
         {
             return this.View(new InterviewerModel() {SupervisorId = supervisorId});
         }
 
         [HttpPost]
-        [Authorize(Roles = "Headquarter")]
+        [Authorize(Roles = "Administrator, Headquarter")]
         [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
         public ActionResult Create(InterviewerModel model)
@@ -52,13 +52,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.View(model);
         }
 
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Administrator, Supervisor")]
         public ActionResult Index()
         {
             return this.View(this.GlobalInfo.GetCurrentUser().Id);
         }
 
-        [Authorize(Roles = "Headquarter, Supervisor")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public ActionResult Edit(Guid id)
         {
             var user = this.GetUserById(id);
@@ -69,13 +69,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 {
                     Id = user.PublicKey,
                     Email = user.Email,
-                    IsLocked = this.GlobalInfo.IsHeadquarter ? user.IsLockedByHQ : user.IsLockedBySupervisor,
+                    IsLocked = this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator ? user.IsLockedByHQ : user.IsLockedBySupervisor,
                     UserName = user.UserName,
                     DevicesHistory = user.DeviceChangingHistory
                 });
         }
 
-        [Authorize(Roles = "Headquarter, Supervisor")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(UserEditModel model)
@@ -98,10 +98,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.View(model);
         }
 
-        [Authorize(Roles = "Headquarter, Supervisor")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public ActionResult Back(Guid id)
         {
-            if(!this.GlobalInfo.IsHeadquarter)
+            if (!(this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator))
                 return this.RedirectToAction("Index");
 
             var user = this.GetUserById(id);

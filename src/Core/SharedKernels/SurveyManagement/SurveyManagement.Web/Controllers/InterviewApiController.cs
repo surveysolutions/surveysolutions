@@ -97,7 +97,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Supervisor, Headquarter")]
+        [Authorize(Roles = "Administrator, Supervisor, Headquarter")]
         public InverviewChangeStateHistoryView ChangeStateHistory(ChangeStateHistoryViewModel data)
         {
             var interviewSummary = this.changeStatusFactory.Load(new ChangeStatusInputModel { InterviewId = data.InterviewId });
@@ -118,13 +118,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Supervisor, Headquarter")]
+        [Authorize(Roles = "Administrator, Supervisor, Headquarter")]
         public NewInterviewDetailsView InterviewDetails(InterviewDetailsViewModel data)
         {
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(data.InterviewId);
 
             bool isAccessAllowed =
-                this.GlobalInfo.IsHeadquarter ||
+                this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator ||
                 (this.GlobalInfo.IsSurepvisor && this.GlobalInfo.GetCurrentUser().Id == interviewSummary.TeamLeadId);
 
             if (!isAccessAllowed)
@@ -153,7 +153,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             };
         }
 
-        [Authorize(Roles = "Headquarter")]
+        [Authorize(Roles = "Administrator, Headquarter")]
         public InterviewSummaryForMapPointView InterviewSummaryForMapPoint(InterviewSummaryForMapPointViewModel data)
         {
             if (data == null)

@@ -44,6 +44,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
             }
         }
 
+        public static bool IsAdministrator
+        {
+            get
+            {
+                return Roles.IsUserInRole("Administrator");
+            }
+        }
+
         /// <summary>
         /// The is any user exist.
         /// </summary>
