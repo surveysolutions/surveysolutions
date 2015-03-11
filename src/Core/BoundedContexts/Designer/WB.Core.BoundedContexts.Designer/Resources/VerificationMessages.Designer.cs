@@ -874,7 +874,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire is too big..
+        ///   Looks up a localized string similar to Size of questionnaire is bigger than 10MB..
         /// </summary>
         internal static string WB0098_QuestionnaireSizeLimit {
             get {
