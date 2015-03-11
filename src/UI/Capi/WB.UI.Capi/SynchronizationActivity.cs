@@ -463,7 +463,6 @@ namespace WB.UI.Capi
                         {
                             switch (restException.StatusCode)
                             {
-                                case HttpStatusCode.Redirect:
                                 case HttpStatusCode.UpgradeRequired:
                                 case HttpStatusCode.Unauthorized:
                                 case HttpStatusCode.NotAcceptable:
@@ -477,14 +476,7 @@ namespace WB.UI.Capi
                                     errorMessage = Properties.Resources.SynchronizationRequestTimeout;
                                     break;
                                 case HttpStatusCode.ServiceUnavailable:
-                                    if (restException.Message.Contains("maintenance"))
-                                    {
-                                        errorMessage = Properties.Resources.SynchronizationMaintenance;
-                                    }
-                                    else
-                                    {
-                                        goto default;    
-                                    }
+                                    errorMessage = restException.Message.Contains("maintenance") ? Properties.Resources.SynchronizationMaintenance : restException.Message;
                                     break;
                                 default:
                                     var settingsManager = ServiceLocator.Current.GetInstance<IInterviewerSettings>();
