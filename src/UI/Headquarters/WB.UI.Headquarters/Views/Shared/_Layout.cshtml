@@ -24,7 +24,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @if (User.IsInRole("Headquarter"))
+                @if (User.IsInRole("Administrator"))
+                {
+                    <a class="navbar-brand" href="@Url.Action("Index", "Headquarters", new { area = "" })">Admin</a>
+                }
+                else if (User.IsInRole("Headquarter"))
                 {
                     <a class="navbar-brand" href="@Url.Action("Index", "HQ", new { area = "" })">Headquarters</a>
                 }
@@ -34,7 +38,11 @@
                 }
             </div>
             <div class="collapse navbar-collapse">
-                @if (User.IsInRole("Headquarter"))
+                @if (User.IsInRole("Administrator"))
+                {
+                    @Html.Partial("AdminMainMenu")
+                }
+                else if (User.IsInRole("Headquarter"))
                 {
                     @Html.Partial("HeadquartersMainMenu")
                 }

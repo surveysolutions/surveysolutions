@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Web;
 using System.Web.Mvc;
-using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -14,7 +12,7 @@ using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [Authorize(Roles = "Headquarter")]
+    [Authorize(Roles = "Administrator, Headquarter")]
     public class SupervisorController : TeamController
     {
         public SupervisorController(ICommandService commandService, 
