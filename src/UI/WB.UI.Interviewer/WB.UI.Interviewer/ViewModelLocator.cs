@@ -12,7 +12,7 @@ namespace WB.UI.Interviewer
             SimpleIoc.Default.Register<InterviewViewModel>();
         }
 
-        public InterviewViewModel InterviewDetails
+        public static InterviewViewModel InterviewDetails
         {
             get
             {

@@ -9,7 +9,7 @@ using Android.OS;
 
 namespace WB.UI.Interviewer.Droid
 {
-    [Activity(Label = "WB.UI.Interviewer", Icon = "@drawable/icon", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "WB.UI.Interviewer", HardwareAccelerated = true, WindowSoftInputMode = SoftInput.AdjustPan, Icon = "@drawable/icon", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
     {
         protected override void OnCreate(Bundle bundle)

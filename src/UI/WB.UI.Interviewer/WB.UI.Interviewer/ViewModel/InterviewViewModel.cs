@@ -37,7 +37,7 @@ namespace WB.UI.Interviewer.ViewModel
             }
         }
 
-        private ObservableCollection<InterviewEntity> groupsAndQuestions;
+        private ObservableCollection<InterviewEntity> groupsAndQuestions = new ObservableCollection<InterviewEntity>();
         public ObservableCollection<InterviewEntity> GroupsAndQuestions
         {
             get { return groupsAndQuestions; }
@@ -63,9 +63,9 @@ namespace WB.UI.Interviewer.ViewModel
             {
                 var collection = new InterviewEntity[]
                 {
-                    new InterviewStaticText(){Text = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}, 
-                    new InterviewGroup() {Title = string.Format("Group {0}", i)},
-                    new InterviewRoster() {Title = string.Format("Roster {0}", i)},
+                    //new InterviewStaticText(){Text = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}, 
+                    //new InterviewGroup() {Title = string.Format("Group {0}", i)},
+                    //new InterviewRoster() {Title = string.Format("Roster {0}", i)},
                     new InterviewDateQuestion(){ Answer = new DateTime(rnd.Next()) },
                     new InterviewDecimalQuestion(){ Answer = 12.2323m},
                     new InterviewImageQuestion(),
@@ -100,17 +100,18 @@ namespace WB.UI.Interviewer.ViewModel
                     question.Id = Guid.NewGuid().ToString();
                     question.ParentId = Guid.NewGuid().ToString();
                     question.RosterVector = new decimal[] { };
-                    question.Title = string.Format("{1} {0}  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", rnd.Next(), question.GetType());
+                    question.Title = string.Format("{0} {1} Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", question.GetType().Name, rnd.Next());
                     question.Enabled = RandBool(rnd);
                     question.IsMandatory = RandBool(rnd);
                     question.IsValid = RandBool(rnd);
                     question.Instructions = "some instructions about";
                 };
 
-                interviewEntities.AddRange(collection);
+                foreach (var interviewEntity in collection)
+                {
+                    this.GroupsAndQuestions.Add(interviewEntity);
+                }
             }
-
-            this.GroupsAndQuestions = new ObservableCollection<InterviewEntity>(interviewEntities);
         }
 
         private IEnumerable<InterviewDynamicOption<T>> GenerateDynamicOptions<T>(Random rnd, bool oneAnswerSelectedOnly)
