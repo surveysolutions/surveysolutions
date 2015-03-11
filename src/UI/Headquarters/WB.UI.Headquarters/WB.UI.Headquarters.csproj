@@ -416,9 +416,14 @@
     <Content Include="Views\HQ\VerifySample.cshtml" />
     <Content Include="Views\ControlPanel\CreateHeadquarters.cshtml" />
     <None Include="Properties\PublishProfiles\nastya.pubxml" />
-    <Content Include="Views\ControlPanel\ResetHeadquartersPassword.cshtml" />
+    <Content Include="Views\ControlPanel\ResetPrivilegedUserPassword.cshtml" />
     <Content Include="Views\Shared\SupervisorMainMenu.cshtml" />
     <Content Include="Views\ControlPanel\ReexportInterviews.cshtml" />
+    <Content Include="Views\ControlPanel\CreateAdmin.cshtml" />
+    <Content Include="Views\Shared\AdminMainMenu.cshtml" />
+    <Content Include="Views\Headquarter\Create.cshtml" />
+    <Content Include="Views\Headquarter\Edit.cshtml" />
+    <Content Include="Views\Headquarter\Index.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -489,6 +494,7 @@
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
     <Compile Include="Controllers\HQController.cs" />
     <Compile Include="Controllers\InstallController.cs" />
+    <Compile Include="Controllers\HeadquarterController.cs" />
     <Compile Include="Filters\MaintenanceFilter.cs" />
     <Compile Include="Filters\InstallationAttribute.cs" />
     <Compile Include="Filters\SupervisorFunctionsEnabledAttribute.cs" />

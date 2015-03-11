@@ -24,11 +24,12 @@ namespace WB.UI.Headquarters.Filters
 
             var isInstallController = filterContext.Controller is InstallController;
             var isHQUserExists = identityManager.GetUsersInRole(UserRoles.Headquarter.ToString()).Any();
+            var isAdminExists = identityManager.GetUsersInRole(UserRoles.Administrator.ToString()).Any();
 
-            if (isInstallController && isHQUserExists)
+            if (isInstallController && (isHQUserExists || isAdminExists))
                 throw new HttpException(404, string.Empty);
 
-            if (!isInstallController && !isHQUserExists)
+            if (!isInstallController && !(isHQUserExists || isAdminExists))
             {
                 filterContext.Result =
                     new RedirectToRouteResult(

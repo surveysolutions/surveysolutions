@@ -14,7 +14,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [Authorize(Roles = "Headquarter")]
+    [Authorize(Roles = "Administrator, Headquarter")]
     public class TemplateController : BaseController
     {
         private readonly IRestService designerQuestionnaireApiRestService;

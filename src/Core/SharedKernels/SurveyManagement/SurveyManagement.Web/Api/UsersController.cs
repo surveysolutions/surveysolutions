@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
-    [Authorize(Roles = "Headquarter, Supervisor")]
+    [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public class UsersController : BaseApiServiceController
     {
         private readonly IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory;
