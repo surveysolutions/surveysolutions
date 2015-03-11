@@ -62,8 +62,8 @@
     <Compile Include="ViewModel\InterviewStaticText.cs" />
     <Compile Include="ViewModel\InterviewTextQuestion.cs" />
     <Compile Include="ViewModel\InterviewViewModel.cs" />
-    <Compile Include="View\InverviewDetails.xaml.cs">
-      <DependentUpon>InverviewDetails.xaml</DependentUpon>
+    <Compile Include="View\InterviewDetails.xaml.cs">
+      <DependentUpon>InterviewDetails.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -87,7 +87,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="View\InverviewDetails.xaml">
+    <EmbeddedResource Include="View\InterviewDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

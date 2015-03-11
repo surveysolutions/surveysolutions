@@ -13,7 +13,7 @@ namespace WB.UI.Interviewer
 
         public static Page GetInverviewDetails()
         {
-            return new InverviewDetails();
+            return new InterviewDetails();
         }
     }
 }
