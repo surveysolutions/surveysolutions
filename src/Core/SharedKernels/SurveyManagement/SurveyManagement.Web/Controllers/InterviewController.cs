@@ -83,31 +83,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     filter: filter, currentGroupRosterVector: this.ParseRosterVector(rosterVector)));
         }
 
-        public ActionResult InterviewDetails(Guid id, string template, Guid? group, Guid? question, Guid? propagationKey)
-        {
-            this.ViewBag.ActivePage = MenuItem.Docs;
-
-            ChangeStatusView interviewInfo = this.changeStatusFactory.Load(new ChangeStatusInputModel() {InterviewId = id});
-            InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
-            
-            if (interviewInfo == null || interviewSummary == null)
-                return HttpNotFound();
-
-            bool isAccessAllowed = this.GlobalInfo.IsHeadquarter ||
-                                   (this.GlobalInfo.IsSurepvisor && this.GlobalInfo.GetCurrentUser().Id == interviewSummary.TeamLeadId);
-
-            if (!isAccessAllowed)
-                return HttpNotFound();
-
-            return this.View(new InterviewModel()
-            {
-                InterviewId = id,
-                CurrentGroupId = group,
-                CurrentPropagationKeyId = propagationKey,
-                InterviewStatus = interviewInfo.Status
-            });
-        }
-
         public ActionResult InterviewHistory(Guid id)
         {
             return this.View(interviewHistoryViewFactory.Load(id));

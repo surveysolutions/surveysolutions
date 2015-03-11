@@ -115,16 +115,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                 }
             },
             {
-                "~/js/interview-details", new[]
-                {
-                    "~/Scripts/director.js",
-                    "~/Scripts/viewmodels/pages/interview/details/config.js",
-                    "~/Scripts/viewmodels/pages/interview/details/datacontext.js",
-                    "~/Scripts/viewmodels/pages/interview/details/interviewdetailssettings.js",
-                    "~/Scripts/viewmodels/pages/interview/details/interviewdetails.js",
-                }
-            },
-            {
                 "~/js/details", new[]
                 {
                     "~/Scripts/components/bindings.js",
