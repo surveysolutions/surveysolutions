@@ -12,8 +12,8 @@ namespace WB.Core.SharedKernels.DataCollection.Views
     {
         public UserDocument()
         {
-            this.Roles = new List<UserRoles>();
-            this.DeviceChangingHistory = new List<DeviceInfo>();
+            this.Roles = new HashSet<UserRoles>();
+            this.DeviceChangingHistory = new HashSet<DeviceInfo>();
         }
 
         public virtual string UserId { get; set; }
@@ -24,12 +24,12 @@ namespace WB.Core.SharedKernels.DataCollection.Views
         public virtual bool IsLockedBySupervisor { get; set; }
         public virtual string Password { get; set; }
         public virtual Guid PublicKey { get; set; }
-        public virtual IList<UserRoles> Roles { get; set; }
         public virtual UserLight Supervisor { get; set; }
         public virtual string UserName { get; set; }
         public virtual DateTime LastChangeDate { get; set; }
         public virtual string DeviceId { get; set; }
-        public virtual IList<DeviceInfo> DeviceChangingHistory { get; set; }
+        public virtual ISet<UserRoles> Roles { get; set; }
+        public virtual ISet<DeviceInfo> DeviceChangingHistory { get; set; }
 
         public virtual bool IsHq()
         {

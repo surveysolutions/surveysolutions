@@ -15,6 +15,7 @@ using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Web.Common;
+using Ninject.Web.Mvc.FilterBindingSyntax;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters;
@@ -31,6 +32,8 @@ using WB.Core.Infrastructure.Storage.Postgre;
 using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
+using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
@@ -175,6 +178,10 @@ namespace WB.UI.Headquarters
             kernel.Bind<ISettingsProvider>().To<SettingsProvider>();
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
+
+            kernel.BindFilter<TransactionFilter>(FilterScope.Global, 0);
+            kernel.BindHttpFilter<ApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Global);
+
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             
@@ -198,8 +205,6 @@ namespace WB.UI.Headquarters
             ServiceLocator.Current.GetInstance<IScheduler>().Start();
 
             kernel.Bind<IPasswordPolicy>().ToMethod(_ => PasswordPolicyFactory.CreatePasswordPolicy()).InSingletonScope();
-            kernel.Bind<IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem>>()
-                .To<PostgreReadSideRepository<QuestionnaireBrowseItem>>();
 
             return kernel;
         }
@@ -224,6 +229,7 @@ namespace WB.UI.Headquarters
                 (IgnoredDenormalizersConfigSection) WebConfigurationManager.GetSection("IgnoredDenormalizersSection");
             Type[] handlersToIgnore = ignoredDenormalizersConfigSection == null ? new Type[0] : ignoredDenormalizersConfigSection.GetIgnoredTypes();
             var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(), handlersToIgnore);
+            bus.TransactionManager = kernel.Get<ITransactionManagerProvider>();
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
             kernel.Bind<IEventBus>().ToConstant(bus);
             kernel.Bind<IEventDispatcher>().ToConstant(bus);

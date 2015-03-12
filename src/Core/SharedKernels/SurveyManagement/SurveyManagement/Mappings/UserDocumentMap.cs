@@ -31,14 +31,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
                 cmp.Property(x => x.Name, ptp => ptp.Column("SupervisorName"));
             });
 
-            Bag(x => x.Roles, m =>
+            Set(x => x.Roles, m =>
             {
                 m.Key(km => km.Column("UserId"));
                 m.Table("Roles");
             },
              r => r.Element(e => e.Column("RoleId")));
 
-            Bag(x => x.DeviceChangingHistory, // TODO: This can be soted in hstore
+            Set(x => x.DeviceChangingHistory, // TODO: This can be soted in hstore
              bagMap =>
              {
                  bagMap.Table("DeviceInfos");
