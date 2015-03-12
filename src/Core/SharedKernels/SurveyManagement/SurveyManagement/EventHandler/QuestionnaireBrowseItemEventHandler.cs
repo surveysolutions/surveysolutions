@@ -5,12 +5,11 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
-namespace WB.Core.BoundedContexts.Headquarters.Denormalizers
+namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     public class QuestionnaireBrowseItemEventHandler : BaseDenormalizer, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>,
         IEventHandler<QuestionnaireDisabled>
@@ -18,7 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Denormalizers
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IReadSideRepositoryWriter<QuestionnaireBrowseItem> readsideRepositoryWriter;
 
-        public QuestionnaireBrowseItemEventHandler(PostgreReadSideRepository<QuestionnaireBrowseItem> readsideRepositoryWriter, IPlainQuestionnaireRepository plainQuestionnaireRepository)
+        public QuestionnaireBrowseItemEventHandler(IReadSideRepositoryWriter<QuestionnaireBrowseItem> readsideRepositoryWriter, IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.readsideRepositoryWriter = readsideRepositoryWriter;

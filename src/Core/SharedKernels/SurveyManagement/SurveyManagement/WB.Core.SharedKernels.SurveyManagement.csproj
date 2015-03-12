@@ -112,6 +112,7 @@
     <Compile Include="DataCollectionSharedKernelModule.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="EventHandler\AnswersByVariableDenormalizer.cs" />
+    <Compile Include="EventHandler\QuestionnaireBrowseItemEventHandler.cs" />
     <Compile Include="Implementation\ReadSide\RepositoryAccessors\OrderableSyncPackageWriter.cs" />
     <Compile Include="EventHandler\ClientDeviceDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewHistoryDenormalizer.cs" />
@@ -162,7 +163,6 @@
     <Compile Include="Implementation\IRecordsAccessor.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\InterviewsSearchIndex.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\SeachIndexContent.cs" />
-    <Compile Include="Implementation\ReadSide\Indexes\UserDocumentsByBriefFields.cs" />
     <Compile Include="Implementation\Services\DataExport\CsvWriterService.cs" />
     <Compile Include="Implementation\Services\DataExport\FileBasedDataExportRepositorySettings.cs" />
     <Compile Include="Implementation\Services\DataExport\FilebasedExportedDataAccessor.cs" />

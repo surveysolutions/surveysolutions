@@ -47,26 +47,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TakeNew
             if (viewer == null || !viewer.IsHq())
                 return Enumerable.Empty<UserDocument>();
 
-            var indexName = typeof(UserDocumentsByBriefFields).Name;
-
-            var supervisorsListForViewer = new List<UserDocument>();
-            var batch = new List<UserDocument>();
-            int taken = 0;
-            int batchSize = 128;
-            do
-            {
-                batch = this.indexAccessor.Query<UserDocument>(indexName)
-                    .OrderBy(x => x.UserName)
-                    .Where(user => user.Roles.Any(role => role == UserRoles.Supervisor))
-                    .Skip(taken)
-                    .Take(batchSize)
-                    .ToList();
-                taken += batch.Count;
-                supervisorsListForViewer.AddRange(batch);
-
-            } while (batch.Count == batchSize);
-
-            return supervisorsListForViewer;
+            return this.users.Query(_ => 
+                _.OrderBy(x => x.UserName)
+                .Where(user => user.Roles.Any(role => role == UserRoles.Supervisor))
+                .ToList());
         }
     }
 }

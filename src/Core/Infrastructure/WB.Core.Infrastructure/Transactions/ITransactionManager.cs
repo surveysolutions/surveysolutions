@@ -8,5 +8,6 @@
 
         void BeginQueryTransaction();
         void RollbackQueryTransaction();
+        bool IsQueryTransactionStarted { get; }
     }
 }

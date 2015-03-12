@@ -1,59 +1,61 @@
 ﻿using System.Linq;
-using Raven.Client;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.User
 {
     public class UserListViewFactory : IUserListViewFactory
     {
-        private readonly IReadSideRepositoryIndexAccessor readSideRepositoryIndexAccessor;
+        private readonly IQueryableReadSideRepositoryReader<UserDocument> readSideRepositoryIndexAccessor;
 
-        public UserListViewFactory(IReadSideRepositoryIndexAccessor readSideRepositoryIndexAccessor)
+        public UserListViewFactory(IQueryableReadSideRepositoryReader<UserDocument> readSideRepositoryIndexAccessor)
         {
             this.readSideRepositoryIndexAccessor = readSideRepositoryIndexAccessor;
         }
 
         public UserListView Load(UserListViewInputModel input)
         {
-            string indexName = typeof (UserDocumentsByBriefFields).Name;
-
-            var allUsers = this.readSideRepositoryIndexAccessor.Query<UserDocument>(indexName);
-                                                               
-
-            if (!string.IsNullOrWhiteSpace(input.SearchBy))
+            var users = this.readSideRepositoryIndexAccessor.Query(_ =>
             {
-                allUsers = allUsers.Search(x => x.UserName, input.SearchBy, escapeQueryOptions: EscapeQueryOptions.AllowAllWildcards)
-                                   .Search(x => x.Email, input.SearchBy, escapeQueryOptions: EscapeQueryOptions.AllowAllWildcards);
-            }
+                var allUsers = ApplyFilter(_, input);
 
-            allUsers = allUsers.Where(x => x.Roles.Contains(input.Role));
+                allUsers = allUsers.OrderUsingSortExpression(input.Order)
+                    .Skip((input.Page - 1) * input.PageSize)
+                    .Take(input.PageSize);
 
-            var users = allUsers.OrderUsingSortExpression(input.Order)
-                .Skip((input.Page - 1)*input.PageSize)
-                .Take(input.PageSize)
-                .ToList()
-                .Select(x => new UserListItem(
-                    id: x.PublicKey,
-                    creationDate: x.CreationDate,
-                    email: x.Email,
-                    isLockedBySupervisor: x.IsLockedBySupervisor,
-                    isLockedByHQ: x.IsLockedByHQ,
-                    name: x.UserName,
-                                            roles: x.Roles.ToList(),
-                                            deviceId:x.DeviceId
-                    ));
+                return allUsers.ToList();
+            }).Select(x => new UserListItem(
+                        id: x.PublicKey,
+                        creationDate: x.CreationDate,
+                        email: x.Email,
+                        isLockedBySupervisor: x.IsLockedBySupervisor,
+                        isLockedByHQ: x.IsLockedByHQ,
+                        name: x.UserName,
+                        roles: x.Roles.ToList(),
+                        deviceId: x.DeviceId
+                        ));
+
+
+            var totalCount = this.readSideRepositoryIndexAccessor.Query(_ => ApplyFilter(_, input)).Count();
 
             return new UserListView
             {
-                Page = input.Page, 
-                PageSize = input.PageSize, 
-                TotalCount = allUsers.Count(), 
+                Page = input.Page,
+                PageSize = input.PageSize,
+                TotalCount = totalCount,
                 Items = users.ToList()
             };
+        }
+
+        private static IQueryable<UserDocument> ApplyFilter(IQueryable<UserDocument> _, UserListViewInputModel input)
+        {
+            var allUsers = _.Where(x => x.Roles.Contains(input.Role));
+            if (!string.IsNullOrWhiteSpace(input.SearchBy))
+            {
+                allUsers = allUsers.Where(x => x.UserName.Contains(input.SearchBy) || x.Email.Contains(input.SearchBy));
+            }
+            return allUsers;
         }
     }
 }

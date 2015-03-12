@@ -2,24 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using Raven.Client;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
 {
     public class InterviewersViewFactory : IViewFactory<InterviewersInputModel, InterviewersView>
     {
         private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
-        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
 
-        public InterviewersViewFactory(IQueryableReadSideRepositoryReader<UserDocument> users, IReadSideRepositoryIndexAccessor indexAccessor)
+        public InterviewersViewFactory(IQueryableReadSideRepositoryReader<UserDocument> users)
         {
             this.users = users;
-            this.indexAccessor = indexAccessor;
         }
 
         public InterviewersView Load(InterviewersInputModel input)
@@ -61,28 +57,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
 
         protected IQueryable<UserDocument> GetTeamMembersForSupervisor(Guid supervisorId, string searchBy)
         {
-            var indexName = typeof (UserDocumentsByBriefFields).Name;
-
-            IQueryable<UserDocument> userDocuments = this.indexAccessor.Query<UserDocument>(indexName);
-            if (!string.IsNullOrWhiteSpace(searchBy))
+            List<UserDocument> userDocuments = this.users.Query(_ =>
             {
-                userDocuments = userDocuments.Search(x => x.UserName, searchBy, escapeQueryOptions: EscapeQueryOptions.AllowAllWildcards)
-                                   .Search(x => x.Email, searchBy, escapeQueryOptions: EscapeQueryOptions.AllowAllWildcards);
-            }
+                var all = _;
+                if (!string.IsNullOrWhiteSpace(searchBy))
+                {
+                    all = all.Where(x => x.UserName.Contains(searchBy) || x.Email.Contains(searchBy));
+                }
 
-            return userDocuments
-                .Where(user => 
-                    (user.Roles.Any(role => role == UserRoles.Operator) && user.Supervisor.Id == supervisorId) || 
+                all = all.Where(user =>
+                    (user.Roles.Any(role => role == UserRoles.Operator) && user.Supervisor.Id == supervisorId) ||
                         user.PublicKey == supervisorId);
+
+                return all.ToList();
+            });
+            return userDocuments.AsQueryable();
         }
 
         protected IQueryable<UserDocument> GetTeamMembersForHeadquarter()
         {
-            var indexName = typeof (UserDocumentsByBriefFields).Name;
-
-            return this.indexAccessor.Query<UserDocument>(indexName)
-                .Where(user => user.Roles.Any(role => role == UserRoles.Operator) || 
-                    user.Roles.Any(role => role == UserRoles.Supervisor));
+            var result = this.users.Query(_ => _.Where(user => user.Roles.Any(role => role == UserRoles.Operator) ||
+                user.Roles.Any(role => role == UserRoles.Supervisor)).ToList()
+                );
+            return result.AsQueryable();
         }
     }
 }

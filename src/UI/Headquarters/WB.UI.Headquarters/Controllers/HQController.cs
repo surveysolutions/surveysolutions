@@ -26,7 +26,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [Authorize(Roles = "Headquarter")]
+    [Authorize(Roles = "Headquarter", Order = 5)]
     public class HQController : BaseController
     {
         private readonly IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory;
