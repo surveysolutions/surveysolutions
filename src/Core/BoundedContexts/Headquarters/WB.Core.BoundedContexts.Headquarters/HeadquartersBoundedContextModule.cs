@@ -1,11 +1,11 @@
 ﻿using Ninject.Modules;
-using WB.Core.BoundedContexts.Headquarters.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Users.Denormalizers;
 using WB.Core.SharedKernels.SurveyManagement;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
@@ -27,7 +27,6 @@ namespace WB.Core.BoundedContexts.Headquarters
                 this.Kernel.RegisterDenormalizer<VersionedQustionnaireDocumentDenormalizer>();
                 this.Kernel.RegisterDenormalizer<UsersFeedDenormalizer>();
                 this.Kernel.RegisterDenormalizer<QuestionnaireFeedDenormalizer>();
-                this.Kernel.RegisterDenormalizer<QuestionnaireBrowseItemEventHandler>();
             }
         }
     }
