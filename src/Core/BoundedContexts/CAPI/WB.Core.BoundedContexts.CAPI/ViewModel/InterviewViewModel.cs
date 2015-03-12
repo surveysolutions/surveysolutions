@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Dynamic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using Cirrious.MvvmCross.Platform;
 using Cirrious.MvvmCross.ViewModels;
 
 namespace WB.Core.BoundedContexts.Capi.ViewModel
@@ -42,6 +46,18 @@ namespace WB.Core.BoundedContexts.Capi.ViewModel
             }
         }
 
+        private static string DefaultValueForStaticText = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
+        private void ChangeStaticTextQuestions(string text)
+        {
+            foreach (var interviewEntity in GroupsAndQuestions)
+            {
+                var interviewStaticText = interviewEntity as InterviewStaticText;
+                if (interviewStaticText != null)
+                    interviewStaticText.Text = DefaultValueForStaticText + text;
+            }
+        }
+
         public async void Init(Guid interviewId)
         {
             await Task.Run(() => LoadInterview());
@@ -57,7 +73,7 @@ namespace WB.Core.BoundedContexts.Capi.ViewModel
             {
                 var collection = new InterviewEntity[]
                 {
-                    new InterviewStaticText(){Text = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}, 
+                    new InterviewStaticText(){Text = DefaultValueForStaticText}, 
                     new InterviewGroup() {Title = string.Format("Group {0}", i)},
                     new InterviewRoster() {Title = string.Format("Roster {0}", i)},
                     new InterviewDateQuestion(){ Answer = new DateTime(rnd.Next()) },
@@ -99,6 +115,20 @@ namespace WB.Core.BoundedContexts.Capi.ViewModel
                     question.IsMandatory = RandBool(rnd);
                     question.IsValid = RandBool(rnd);
                     question.Instructions = "some instructions about";
+                    question.PropertyChanged += (sender, args) =>
+                    {
+                        try
+                        {
+                            if (args.PropertyName == "Answer")
+                            {
+                                var runtimeProperty = sender.GetType().GetRuntimeProperty("Answer");
+                                var text = runtimeProperty.GetValue(sender).ToString();
+                                //var text = sender.GetType().GetPropertyValueAsString(runtimeProperty);
+                                ChangeStaticTextQuestions(text);
+                            }
+                        }
+                        catch { }
+                    };
                 });
 
                 interviewEntities.AddRange(collection);
