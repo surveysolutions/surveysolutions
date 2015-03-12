@@ -1,9 +1,9 @@
 using System;
-using GalaSoft.MvvmLight;
+using Cirrious.MvvmCross.ViewModels;
 
-namespace WB.UI.Interviewer.ViewModel
+namespace WB.Core.BoundedContexts.Capi.ViewModel
 {
-    public class InterviewGeoLocation : ObservableObject
+    public class InterviewGeoLocation : MvxNotifyPropertyChanged
     {
         private double latitude;
         public double Latitude

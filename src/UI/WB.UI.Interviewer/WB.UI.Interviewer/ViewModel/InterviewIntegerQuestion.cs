@@ -1,4 +1,4 @@
-﻿namespace WB.UI.Interviewer.ViewModel
+﻿namespace WB.Core.BoundedContexts.Capi.ViewModel
 {
     public class InterviewIntegerQuestion : InterviewQuestion
     {

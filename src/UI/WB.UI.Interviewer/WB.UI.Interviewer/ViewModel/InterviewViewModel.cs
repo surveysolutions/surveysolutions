@@ -3,18 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
-using WB.Core.BoundedContexts.Capi.ViewModel;
+using Cirrious.MvvmCross.ViewModels;
 
-namespace WB.UI.Interviewer.ViewModel
+namespace WB.Core.BoundedContexts.Capi.ViewModel
 {
-    public class InterviewViewModel : ViewModelBase
+    public class InterviewViewModel : MvxViewModel
     {
-        public InterviewViewModel()
-        {
-            Init(Guid.NewGuid());
-        }   
-
         private IList<InterviewEntity> prefilledQuestions;
         public IList<InterviewEntity> PrefilledQuestions
         {
@@ -55,17 +49,15 @@ namespace WB.UI.Interviewer.ViewModel
 
         private void LoadInterview()
         {
-            var interviewEntities = new List<InterviewEntity>();
-
             var rnd = new Random();
 
-            for (int i = 0; i < 25; i++)
+            for (int i = 0; i < 50; i++)
             {
                 var collection = new InterviewEntity[]
                 {
-                    //new InterviewStaticText(){Text = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}, 
-                    //new InterviewGroup() {Title = string.Format("Group {0}", i)},
-                    //new InterviewRoster() {Title = string.Format("Roster {0}", i)},
+                    new InterviewStaticText(){Text = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}, 
+                    new InterviewGroup() {Title = string.Format("Group {0}", i)},
+                    new InterviewRoster() {Title = string.Format("Roster {0}", i)},
                     new InterviewDateQuestion(){ Answer = new DateTime(rnd.Next()) },
                     new InterviewDecimalQuestion(){ Answer = 12.2323m},
                     new InterviewImageQuestion(),
@@ -95,21 +87,22 @@ namespace WB.UI.Interviewer.ViewModel
                     }}
                 };
 
-                foreach (var question in collection.OfType<InterviewQuestion>())
+                foreach (var entity in collection)
                 {
-                    question.Id = Guid.NewGuid().ToString();
-                    question.ParentId = Guid.NewGuid().ToString();
-                    question.RosterVector = new decimal[] { };
-                    question.Title = string.Format("{0} {1} Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", question.GetType().Name, rnd.Next());
-                    question.Enabled = RandBool(rnd);
-                    question.IsMandatory = RandBool(rnd);
-                    question.IsValid = RandBool(rnd);
-                    question.Instructions = "some instructions about";
-                };
+                    var question = entity as InterviewQuestion;
+                    if (question != null)
+                    {
+                        question.Id = Guid.NewGuid().ToString();
+                        question.ParentId = Guid.NewGuid().ToString();
+                        question.RosterVector = new decimal[] { };
+                        question.Title = string.Format("{1} {0}", rnd.Next(), question.GetType().Name);
+                        question.Enabled = RandBool(rnd);
+                        question.IsMandatory = RandBool(rnd);
+                        question.IsValid = RandBool(rnd);
+                        question.Instructions = "some instructions about";   
+                    }
 
-                foreach (var interviewEntity in collection)
-                {
-                    this.GroupsAndQuestions.Add(interviewEntity);
+                    this.GroupsAndQuestions.Add(entity);
                 }
             }
         }
