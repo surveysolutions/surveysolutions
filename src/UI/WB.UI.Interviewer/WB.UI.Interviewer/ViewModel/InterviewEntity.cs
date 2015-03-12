@@ -1,8 +1,8 @@
-﻿using GalaSoft.MvvmLight;
+﻿using Cirrious.MvvmCross.ViewModels;
 
-namespace WB.UI.Interviewer.ViewModel
+namespace WB.Core.BoundedContexts.Capi.ViewModel
 {
-    public class InterviewEntity : ObservableObject
+    public class InterviewEntity : MvxNotifyPropertyChanged
     {
         public string Id { get; set; }
         public string ParentId { get; set; }

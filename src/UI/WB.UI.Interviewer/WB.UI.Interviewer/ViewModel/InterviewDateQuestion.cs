@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.UI.Interviewer.ViewModel
+namespace WB.Core.BoundedContexts.Capi.ViewModel
 {
     public class InterviewDateQuestion : InterviewQuestion
     {

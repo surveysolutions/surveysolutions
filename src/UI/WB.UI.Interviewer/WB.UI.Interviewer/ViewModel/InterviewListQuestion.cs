@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace WB.UI.Interviewer.ViewModel
+namespace WB.Core.BoundedContexts.Capi.ViewModel
 {
     public class InterviewListQuestion : InterviewQuestion
     {

@@ -1,8 +1,8 @@
-﻿using GalaSoft.MvvmLight;
+﻿using Cirrious.MvvmCross.ViewModels;
 
-namespace WB.UI.Interviewer.ViewModel
+namespace WB.Core.BoundedContexts.Capi.ViewModel
 {
-    public class InterviewStaticOption : ObservableObject
+    public class InterviewStaticOption : MvxNotifyPropertyChanged
     {
         public string Label { get; set; }
         public string Value { get; set; }
