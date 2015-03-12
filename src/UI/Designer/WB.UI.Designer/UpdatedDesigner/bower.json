@@ -25,7 +25,6 @@
     "angular-ui-tree": "2.1.5",
     "angular-ui-utils": "~0.1.1",
     "angular-loading-bar": "0.6.0",
-    "angular-pines-notify": "~1.0.0",
     "lodash": "3.4.0",
     "jquery-cookie": "~1.4.1",
     "angular-block-ui": "~0.1.1",
@@ -37,7 +36,8 @@
     "perfect-scrollbar": "~0.4.11",
     "jquery-mousewheel": "~3.1.12",
     "angular-perfect-scrollbar": "~0.1.4",
-    "ng-context-menu": "~1.0.1"
+    "ng-context-menu": "~1.0.1",
+    "angular-pnotify": "~0.0.6"
   },
   "resolutions": {
     "angular": "~1.2.21",

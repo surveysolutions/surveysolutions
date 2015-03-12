@@ -23,6 +23,11 @@
                     return $http.get(url);
                 };
 
+                questionnaireService.getAllBrokenGroupDependencies = function (questionnaireId, groupId) {
+                    var url = string.format('{0}/getAllBrokenGroupDependencies/{1}?groupId={2}', urlBase, questionnaireId, groupId);
+                    return $http.get(url);
+                };
+
                 questionnaireService.getRosterDetailsById = function(questionnaireId, rosterId) {
                     var url = string.format('{0}/editRoster/{1}?rosterId={2}', urlBase, questionnaireId, rosterId);
                     return $http.get(url);

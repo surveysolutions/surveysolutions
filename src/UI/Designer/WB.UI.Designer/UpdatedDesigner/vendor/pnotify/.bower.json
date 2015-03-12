@@ -35,6 +35,6 @@
     "commit": "30d5ba591a20982d701ea28ad740e8f67823c137"
   },
   "_source": "git://github.com/sciactive/pnotify.git",
-  "_target": "~2",
-  "_originalSource": "pines-notify"
+  "_target": "~2.0.1",
+  "_originalSource": "pnotify"
 }

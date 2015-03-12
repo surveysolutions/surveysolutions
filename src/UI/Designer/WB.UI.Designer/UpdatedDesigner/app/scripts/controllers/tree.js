@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('TreeCtrl',
-        function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, confirmService, hotkeys) {
+        function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, confirmService, hotkeys, notificationService, $compile) {
             'use strict';
             var me = this;
 
@@ -324,27 +324,57 @@
                 });
             };
 
-            $scope.deleteGroup = function (item) {
+            var deleteGroupPermanently = function (itemIdToDelete) {
+                commandService.deleteGroup($state.params.questionnaireId, itemIdToDelete)
+                    .success(function() {
+                        var publishDelete = function(deleted) {
+                            var children = deleted.items || [];
+                            $rootScope.$emit(getItemType(deleted) + 'Deleted');
+                            _.each(children, function(child) {
+                                publishDelete(child);
+                            });
+                        };
+
+                        publishDelete(questionnaireService.findItem($scope.items, itemIdToDelete));
+
+                        questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
+                        $scope.resetSelection();
+                    });
+            }
+
+            $scope.deleteGroup = function(item) {
                 var itemIdToDelete = item.itemId || $state.params.itemId;
 
                 var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(item.title));
 
-                modalInstance.result.then(function (confirmResult) {
+                modalInstance.result.then(function(confirmResult) {
                     if (confirmResult === 'ok') {
-                        commandService.deleteGroup($state.params.questionnaireId, itemIdToDelete)
-                            .success(function () {
-                                var publishDelete = function (deleted) {
-                                    var children = deleted.items || [];
-                                    $rootScope.$emit(getItemType(deleted) + 'Deleted');
-                                    _.each(children, function (child) {
-                                        publishDelete(child);
+
+                        questionnaireService.getAllBrokenGroupDependencies($state.params.questionnaireId, itemIdToDelete)
+                            .success(function(result) {
+                                if (result.length === 0) {
+                                    deleteGroupPermanently(itemIdToDelete);
+                                } else {
+
+                                    var links = _.reduce(result, function(result, item) {
+                                        return result + '<a href=#' + $state.params.questionnaireId +
+                                            '/chapter/' + item.chapterId + '/question/' + item.id + '>' + item.title + '</a>';
+                                    }, "");
+
+                                    notificationService.notify({
+                                        title: 'Confirmation Needed',
+                                        text: '<div class="broken-links">' + links + '</div>',
+                                        hide: false,
+                                        confirm: { confirm: true },
+                                        history: { history: false },
+                                        buttons: {
+                                            closer: false,
+                                            sticker: false
+                                        }
+                                    }).get().on('pnotify.confirm', function() {
+                                        deleteGroupPermanently(itemIdToDelete);
                                     });
-                                };
-
-                                publishDelete(questionnaireService.findItem($scope.items, itemIdToDelete));
-
-                                questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
-                                $scope.resetSelection();
+                                }
                             });
                     }
                 });

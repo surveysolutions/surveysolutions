@@ -11,7 +11,7 @@
         'ui.bootstrap.transition',
         'ui.tree',
         'ui.utils',
-        'ui.notify',
+        'jlareau.pnotify',
         'ui.router',
         'angular-loading-bar',
         'cfp.hotkeys',

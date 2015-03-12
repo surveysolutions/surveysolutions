@@ -1,0 +1,39 @@
+{
+  "name": "angular-pnotify",
+  "version": "0.0.6",
+  "homepage": "https://github.com/jacqueslareau/angular-pnotify",
+  "authors": [
+    "Jacques Lareau <jack.lareau@gmail.com>"
+  ],
+  "description": "AngularJS wrapper for PNotify",
+  "main": "./src/angular-pnotify.js",
+  "keywords": [
+    "angular",
+    "notification",
+    "pines",
+    "pnotify"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.2.23",
+    "pnotify": "~2.0.1",
+    "jquery": ">=1.9"
+  },
+  "_release": "0.0.6",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.0.6",
+    "commit": "e55c29bc7b30bb48a3cdcf4fdf68f770803a048c"
+  },
+  "_source": "git://github.com/jacqueslareau/angular-pnotify.git",
+  "_target": "~0.0.6",
+  "_originalSource": "angular-pnotify",
+  "_direct": true
+}
