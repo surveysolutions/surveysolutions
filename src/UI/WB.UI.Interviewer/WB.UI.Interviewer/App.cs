@@ -1,19 +1,18 @@
-﻿using WB.UI.Interviewer.View;
-using Xamarin.Forms;
+﻿using Cirrious.CrossCore.IoC;
+using WB.Core.BoundedContexts.Capi.ViewModel;
 
 namespace WB.UI.Interviewer
 {
-    public class App : Application
+    public class App : Cirrious.MvvmCross.ViewModels.MvxApplication
     {
-        private static ViewModelLocator _locator;
-        public static ViewModelLocator Locator
+        public override void Initialize()
         {
-            get { return _locator ?? (_locator = new ViewModelLocator()); }
-        }
+            CreatableTypes()
+                .EndingWith("Service")
+                .AsInterfaces()
+                .RegisterAsLazySingleton();
 
-        public static Page GetInverviewDetails()
-        {
-            return new InterviewDetails();
+            RegisterAppStart<InterviewViewModel>();
         }
     }
 }

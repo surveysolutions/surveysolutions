@@ -1,6 +1,4 @@
-﻿using WB.UI.Interviewer.ViewModel;
-
-namespace WB.Core.BoundedContexts.Capi.ViewModel
+﻿namespace WB.Core.BoundedContexts.Capi.ViewModel
 {
     public class InterviewTextQuestion : InterviewQuestion
     {

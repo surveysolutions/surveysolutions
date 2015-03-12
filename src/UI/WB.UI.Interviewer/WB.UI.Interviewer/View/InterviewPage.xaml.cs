@@ -8,9 +8,9 @@ using Xamarin.Forms;
 
 namespace WB.UI.Interviewer.View
 {
-    public partial class InterviewDetails : ContentPage
+    public partial class InterviewPage : ContentPage
     {
-        public InterviewDetails()
+        public InterviewPage()
         {
             InitializeComponent();
         }
