@@ -14,9 +14,11 @@ using NHibernate.Mapping.ByCode.Conformist;
 using NHibernate.Tool.hbm2ddl;
 using Ninject;
 using Ninject.Activation;
+using Ninject.Web.Common;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage.Memory.Implementation;
 using WB.Core.Infrastructure.Storage.Postgre.Implementation;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Postgre
@@ -38,11 +40,19 @@ namespace WB.Core.Infrastructure.Storage.Postgre
             this.Kernel.Bind<PostgreConnectionSettings>().ToConstant(new PostgreConnectionSettings{ConnectionString = connectionString });
 
             this.Kernel.Bind(typeof(MemoryCachedKeyValueStorageProvider<>)).ToSelf();
-            this.Kernel.Bind(typeof(PostgreKeyValueStorage<>)).ToSelf().InSingletonScope();
-            this.Kernel.Bind(typeof (IRepository<>)).ToSelf().InTransientScope();
+            this.Kernel.Bind(typeof(PostgreKeyValueStorage<>)).ToSelf();
+
             this.Kernel.Bind<ISessionFactory>()
                        .ToMethod(kernel => this.BuildSessionFactory())
                        .InSingletonScope();
+
+            this.Kernel.Bind<PostgreTransactionManager>().To<PostgreTransactionManager>().InRequestScope();
+            this.Kernel.Bind<Func<PostgreTransactionManager>>().ToMethod(kernel => () => kernel.Kernel.Get<PostgreTransactionManager>());
+
+            this.Kernel.Bind<ISessionProvider>().To<TransactionManagerProvider>();
+            this.Kernel.Bind<ITransactionManager>().To<PostgreTransactionManager>();
+
+            this.Kernel.Bind<ITransactionManagerProvider>().To<TransactionManagerProvider>().InSingletonScope();
 
             this.Kernel.Bind(typeof(IReadSideKeyValueStorage<>))
                 .ToMethod(GetReadSideKeyValueStorage)

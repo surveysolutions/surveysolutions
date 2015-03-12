@@ -8,6 +8,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
@@ -177,7 +178,13 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
 
             this.Bind<IReadSideRepositoryWriter<UserDocument>>().To<PostgreReadSideRepository<UserDocument>>();
-            this.Bind<IReadSideRepositoryReader<UserDocument>>().To<PostgreReadSideRepository<UserDocument>>();
+            this.Bind<IQueryableReadSideRepositoryReader<UserDocument>>().To<PostgreReadSideRepository<UserDocument>>();
+
+            this.Bind<IReadSideRepositoryWriter<QuestionnaireBrowseItem>>()
+              .To<PostgreReadSideRepository<QuestionnaireBrowseItem>>();
+            this.Bind<IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem>>()
+                .To<PostgreReadSideRepository<QuestionnaireBrowseItem>>();
+
         }
     }
 }

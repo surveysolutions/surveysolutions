@@ -231,9 +231,6 @@
     <Compile Include="Implementation\Aggregates\Interview.cs" />
     <Compile Include="Implementation\Aggregates\Snapshots\InterviewState.cs" />
     <Compile Include="Implementation\Entities\PlainQuestionnaire.cs" />
-    <Compile Include="Implementation\EnumerableExtensions.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Implementation\Factories\QuestionnaireFactory.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireRosterStructureFactory.cs" />
     <Compile Include="Implementation\Providers\IInterviewExpressionStatePrototypeProvider.cs" />
@@ -253,7 +250,6 @@
     <Compile Include="Repositories\IQuestionnaireRepository.cs" />
     <Compile Include="Utils\AnswerUtils.cs" />
     <Compile Include="Utils\LinkedQuestionUtils.cs" />
-    <Compile Include="Utils\LinqUtils.cs" />
     <Compile Include="Utils\QuestionnaireHelper.cs" />
     <Compile Include="Utils\RepositoryKeysHelper.cs" />
     <Compile Include="ValueObjects\Interview\InterviewStatus.cs" />

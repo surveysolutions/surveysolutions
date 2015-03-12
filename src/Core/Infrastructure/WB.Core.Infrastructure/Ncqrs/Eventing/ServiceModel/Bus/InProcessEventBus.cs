@@ -13,7 +13,6 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
     {
         private readonly Dictionary<Type, List<Action<PublishedEvent>>> handlerRegistry = new Dictionary<Type, List<Action<PublishedEvent>>>();
         private readonly IEventStore eventStore;
-        private static readonly object Locker = new object();
 
         public InProcessEventBus(IEventStore eventStore)
         {

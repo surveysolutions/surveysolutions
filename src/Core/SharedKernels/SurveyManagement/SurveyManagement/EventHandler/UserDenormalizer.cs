@@ -9,6 +9,7 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.SharedKernels.DataCollection.Events.User;
+using WB.Core.SharedKernels.DataCollection.Implementation;
 using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
@@ -48,7 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     IsLockedBySupervisor = evnt.Payload.IsLockedBySupervisor,
                     IsLockedByHQ = evnt.Payload.IsLocked,
                     Supervisor = evnt.Payload.Supervisor,
-                    Roles = new List<UserRoles>(evnt.Payload.Roles)
+                    Roles = evnt.Payload.Roles.ToHashSet()
                 };
             this.users.Store(doc, doc.UserId);
         }
@@ -58,7 +59,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             UserDocument item = this.users.GetById(evnt.EventSourceId);
 
             item.Email = evnt.Payload.Email;
-            item.Roles = evnt.Payload.Roles.ToList();
+            item.Roles = evnt.Payload.Roles.ToHashSet();
             item.Password = evnt.Payload.PasswordHash;
             this.users.Store(item, item.PublicKey);
         }
