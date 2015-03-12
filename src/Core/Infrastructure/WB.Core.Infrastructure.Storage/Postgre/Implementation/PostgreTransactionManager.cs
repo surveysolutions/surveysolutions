@@ -83,27 +83,10 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             return result;
         }
 
-        //private bool NoSessionIsOpened()
-        //{
-        //    return this.session == null;
-        //}
-
-        //private bool AreAllTransactionsClosed()
-        //{
-        //    return this.queryTransaction == null && this.commandTransaction == null;
-        //}
-
-        //private void OpenSession()
-        //{
-        //    this.session = this.sessionFactory.OpenSession();
-        //}
-
-        //private void CloseSession()
-        //{
-        //    this.session.Close();
-        //    this.session = null;
-        //}
-
+        public bool IsQueryTransactionStarted
+        {
+            get { return this.queryTransaction != null; }
+        }
 
         public void Dispose()
         {
