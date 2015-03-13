@@ -66,7 +66,10 @@ namespace AxmlTester.Droid
 			public const int Icon = 2130837504;
 			
 			// aapt resource value: 0x7f020001
-			public const int splash = 2130837505;
+			public const int my_border = 2130837505;
+			
+			// aapt resource value: 0x7f020002
+			public const int splash = 2130837506;
 			
 			static Drawable()
 			{
@@ -84,14 +87,14 @@ namespace AxmlTester.Droid
 			// aapt resource value: 0x7f040000
 			public const int MvxBindingTagUnique = 2130968576;
 			
+			// aapt resource value: 0x7f040002
+			public const int MyButton = 2130968578;
+			
 			// aapt resource value: 0x7f040001
-			public const int MyButton = 2130968577;
+			public const int TheEditText = 2130968577;
 			
 			// aapt resource value: 0x7f040003
-			public const int TheEditText = 2130968579;
-			
-			// aapt resource value: 0x7f040002
-			public const int TheListView = 2130968578;
+			public const int TheListView = 2130968579;
 			
 			static Id()
 			{
@@ -113,31 +116,40 @@ namespace AxmlTester.Droid
 			public const int InterviewDecimalQuestion = 2130903041;
 			
 			// aapt resource value: 0x7f030002
-			public const int InterviewImageQuestion = 2130903042;
+			public const int InterviewGroup = 2130903042;
 			
 			// aapt resource value: 0x7f030003
-			public const int InterviewIntegerQuestion = 2130903043;
+			public const int InterviewImageQuestion = 2130903043;
 			
 			// aapt resource value: 0x7f030004
-			public const int InterviewListQuestion = 2130903044;
+			public const int InterviewIntegerQuestion = 2130903044;
 			
 			// aapt resource value: 0x7f030005
-			public const int InterviewQrBarcodeQuestion = 2130903045;
+			public const int InterviewMultiChoiceQuestion = 2130903045;
 			
 			// aapt resource value: 0x7f030006
-			public const int Main = 2130903046;
+			public const int InterviewMultiChoiceQuestionItemTemplate = 2130903046;
 			
 			// aapt resource value: 0x7f030007
-			public const int Questions = 2130903047;
+			public const int InterviewSingleChoiceQuestion = 2130903047;
 			
 			// aapt resource value: 0x7f030008
-			public const int SplashScreen = 2130903048;
+			public const int InterviewSingleChoiceQuestionItemTemplate = 2130903048;
 			
 			// aapt resource value: 0x7f030009
-			public const int StaticText = 2130903049;
+			public const int InterviewStaticText = 2130903049;
 			
 			// aapt resource value: 0x7f03000a
-			public const int TextQuestion = 2130903050;
+			public const int InterviewTextQuestion = 2130903050;
+			
+			// aapt resource value: 0x7f03000b
+			public const int Main = 2130903051;
+			
+			// aapt resource value: 0x7f03000c
+			public const int Questions = 2130903052;
+			
+			// aapt resource value: 0x7f03000d
+			public const int SplashScreen = 2130903053;
 			
 			static Layout()
 			{

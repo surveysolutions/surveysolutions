@@ -75,34 +75,34 @@ namespace WB.Core.BoundedContexts.Capi.ViewModel
                 {
                     new InterviewStaticText(){Text = DefaultValueForStaticText}, 
                     new InterviewGroup() {Title = string.Format("Group {0}", i)},
-                    new InterviewRoster() {Title = string.Format("Roster {0}", i)},
+                    //new InterviewRoster() {Title = string.Format("Roster {0}", i)},
                     new InterviewDateQuestion(){ Answer = new DateTime(rnd.Next()) },
                     new InterviewDecimalQuestion(){ Answer = 12.2323m},
-                    new InterviewImageQuestion(),
+                    new InterviewImageQuestion() { },
                     new InterviewIntegerQuestion(){ Answer = rnd.Next() },
-                    new InterviewListQuestion() {MaxAnswers = 5, Answers = new ObservableCollection<string>(new []{ "list 1", "list 2", "list 3", "list 4", "list 5" })},
-                    new InterviewQrBarcodeQuestion(){ Answer = "some QR Barcode answer" }, 
+                    //new InterviewListQuestion() {MaxAnswers = 5, Answers = new ObservableCollection<string>(new []{ "list 1", "list 2", "list 3", "list 4", "list 5" })},
+                    //new InterviewQrBarcodeQuestion(){ Answer = "some QR Barcode answer" }, 
                     new InterviewTextQuestion(){ Answer = string.Format("answer on text") },
-                    new InterviewLinkedMultiChoiceQuestion<string>(){ Options = new ObservableCollection<InterviewDynamicOption<string>>(GenerateDynamicOptions<string>(rnd, false)) },
-                    new InterviewLinkedMultiChoiceQuestion<int>(){ Options = new ObservableCollection<InterviewDynamicOption<int>>(GenerateDynamicOptions<int>(rnd, false))},
-                    new InterviewLinkedMultiChoiceQuestion<decimal>(){Options = new ObservableCollection<InterviewDynamicOption<decimal>>(GenerateDynamicOptions<decimal>(rnd, false))},
-                    new InterviewLinkedMultiChoiceQuestion<InterviewGeoLocation>(){Options = new ObservableCollection<InterviewDynamicOption<InterviewGeoLocation>>(GenerateDynamicOptions<InterviewGeoLocation>(rnd, false))},
-                    new InterviewLinkedSingleChoiceQuestion<string>(){Options = new ObservableCollection<InterviewDynamicOption<string>>(GenerateDynamicOptions<string>(rnd, true))},
-                    new InterviewLinkedSingleChoiceQuestion<int>(){Options = new ObservableCollection<InterviewDynamicOption<int>>(GenerateDynamicOptions<int>(rnd, true))},
-                    new InterviewLinkedSingleChoiceQuestion<decimal>(){Options = new ObservableCollection<InterviewDynamicOption<decimal>>(GenerateDynamicOptions<decimal>(rnd, true))},
-                    new InterviewLinkedSingleChoiceQuestion<InterviewGeoLocation>(){Options = new ObservableCollection<InterviewDynamicOption<InterviewGeoLocation>>(GenerateDynamicOptions<InterviewGeoLocation>(rnd, true))},
-                    new InterviewAutocompleteSingleChoiceQuestion(){ Options = new ObservableCollection<InterviewStaticOption>(GenerateStaticOptions(rnd, true, 200)) },
-                    new InterviewCascadingSingleChoiceQuestion(){ Options = new ObservableCollection<InterviewStaticOption>(GenerateStaticOptions(rnd, true, 200)) },
-                    new InterviewMultiChoiceQuestion(){ Options = new ObservableCollection<InterviewStaticOption>(GenerateStaticOptions(rnd, false)) },
-                    new InterviewSingleChoiceQuestion(){ Options = new ObservableCollection<InterviewStaticOption>(GenerateStaticOptions(rnd, true)) }, 
-                    new InterviewGeolocationQuestion(){ Answer = new InterviewGeoLocation()
-                    {
-                        Accuracy = rnd.NextDouble(),
-                        Altitude = rnd.NextDouble(),
-                        Latitude = rnd.NextDouble(),
-                        Longitude = rnd.NextDouble(),
-                        Timestamp = new DateTime(rnd.Next())
-                    }}
+//                    new InterviewLinkedMultiChoiceQuestion<string>(){ Options = new ObservableCollection<InterviewDynamicOption<string>>(GenerateDynamicOptions<string>(rnd, false)) },
+//                    new InterviewLinkedMultiChoiceQuestion<int>(){ Options = new ObservableCollection<InterviewDynamicOption<int>>(GenerateDynamicOptions<int>(rnd, false))},
+//                    new InterviewLinkedMultiChoiceQuestion<decimal>(){Options = new ObservableCollection<InterviewDynamicOption<decimal>>(GenerateDynamicOptions<decimal>(rnd, false))},
+//                    new InterviewLinkedMultiChoiceQuestion<InterviewGeoLocation>(){Options = new ObservableCollection<InterviewDynamicOption<InterviewGeoLocation>>(GenerateDynamicOptions<InterviewGeoLocation>(rnd, false))},
+//                    new InterviewLinkedSingleChoiceQuestion<string>(){Options = new ObservableCollection<InterviewDynamicOption<string>>(GenerateDynamicOptions<string>(rnd, true))},
+//                    new InterviewLinkedSingleChoiceQuestion<int>(){Options = new ObservableCollection<InterviewDynamicOption<int>>(GenerateDynamicOptions<int>(rnd, true))},
+//                    new InterviewLinkedSingleChoiceQuestion<decimal>(){Options = new ObservableCollection<InterviewDynamicOption<decimal>>(GenerateDynamicOptions<decimal>(rnd, true))},
+//                    new InterviewLinkedSingleChoiceQuestion<InterviewGeoLocation>(){Options = new ObservableCollection<InterviewDynamicOption<InterviewGeoLocation>>(GenerateDynamicOptions<InterviewGeoLocation>(rnd, true))},
+//                    new InterviewAutocompleteSingleChoiceQuestion(){ Options = new ObservableCollection<InterviewStaticOption>(GenerateStaticOptions(rnd, true, 200)) },
+//                    new InterviewCascadingSingleChoiceQuestion(){ Options = new ObservableCollection<InterviewStaticOption>(GenerateStaticOptions(rnd, true, 200)) },
+                    new InterviewMultiChoiceQuestion(){ Options = new ObservableCollection<InterviewStaticOption>(GenerateStaticOptions(rnd, false, 5)) },
+                    new InterviewSingleChoiceQuestion(){ Options = new ObservableCollection<InterviewStaticOption>(GenerateStaticOptions(rnd, true, 5)) }, 
+//                    new InterviewGeolocationQuestion(){ Answer = new InterviewGeoLocation()
+//                    {
+//                        Accuracy = rnd.NextDouble(),
+//                        Altitude = rnd.NextDouble(),
+//                        Latitude = rnd.NextDouble(),
+//                        Longitude = rnd.NextDouble(),
+//                        Timestamp = new DateTime(rnd.Next())
+//                    }}
                 };
 
                 collection.OfType<InterviewQuestion>().ForEach(question =>
@@ -155,7 +155,7 @@ namespace WB.Core.BoundedContexts.Capi.ViewModel
         private IEnumerable<InterviewStaticOption> GenerateStaticOptions(Random rnd, bool oneAnswerSelectedOnly, int numberOfItems = 20)
         {
             var options = new List<InterviewStaticOption>();
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < numberOfItems; i++)
             {
                 options.Add(new InterviewStaticOption()
                 {

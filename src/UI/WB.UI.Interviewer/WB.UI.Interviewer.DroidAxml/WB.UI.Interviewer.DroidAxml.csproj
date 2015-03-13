@@ -90,14 +90,17 @@
     <None Include="Assets\AboutAssets.txt" />
     <AndroidResource Include="Resources\layout\SplashScreen.axml" />
     <AndroidResource Include="Resources\layout\Questions.axml" />
-    <AndroidResource Include="Resources\layout\StaticText.axml" />
-    <AndroidResource Include="Resources\layout\TextQuestion.axml" />
+    <AndroidResource Include="Resources\layout\InterviewStaticText.axml" />
+    <AndroidResource Include="Resources\layout\InterviewTextQuestion.axml" />
     <AndroidResource Include="Resources\layout\InterviewDateQuestion.axml" />
     <AndroidResource Include="Resources\layout\InterviewDecimalQuestion.axml" />
     <AndroidResource Include="Resources\layout\InterviewImageQuestion.axml" />
     <AndroidResource Include="Resources\layout\InterviewIntegerQuestion.axml" />
-    <AndroidResource Include="Resources\layout\InterviewListQuestion.axml" />
-    <AndroidResource Include="Resources\layout\InterviewQrBarcodeQuestion.axml" />
+    <AndroidResource Include="Resources\layout\InterviewSingleChoiceQuestion.axml" />
+    <AndroidResource Include="Resources\layout\InterviewMultiChoiceQuestion.axml" />
+    <AndroidResource Include="Resources\layout\InterviewGroup.axml" />
+    <AndroidResource Include="Resources\layout\InterviewMultiChoiceQuestionItemTemplate.axml" />
+    <AndroidResource Include="Resources\layout\InterviewSingleChoiceQuestionItemTemplate.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Main.axml" />
@@ -113,6 +116,7 @@
     <AndroidResource Include="Resources\values\SplashStyle.xml" />
     <AndroidResource Include="Resources\values\MvxBindingAttributes.xml" />
     <AndroidResource Include="Resources\drawable\splash.png" />
+    <AndroidResource Include="Resources\drawable\my_border.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.Capi.csproj">
