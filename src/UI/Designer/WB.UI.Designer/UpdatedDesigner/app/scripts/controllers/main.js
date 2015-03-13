@@ -146,6 +146,24 @@ angular.module('designerApp')
                 });
             };
 
+            $scope.aceLoaded = function(_editor){
+                // Editor part
+                var _session = _editor.getSession();
+                var _renderer = _editor.renderer;
+
+                // Options
+                _editor.setOptions({
+                    maxLines: Infinity,
+                    mode: "ace/mode/csharp",
+                    fontSize: 16,
+                    highlightActiveLine: false,
+                    theme: "ace/theme/github"
+                });
+                _session.setUndoManager(new ace.UndoManager());
+                _renderer.setShowGutter(false);
+                _renderer.setPadding(12);
+            };
+
             var getQuestionnaire = function () {
                 questionnaireService.getQuestionnaireById($state.params.questionnaireId).success(function (result) {
                     $scope.questionnaire = result;

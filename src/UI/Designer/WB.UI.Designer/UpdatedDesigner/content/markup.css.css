@@ -7220,6 +7220,15 @@ textarea#edit-group-description {
   z-index: 900;
   background: url(i/d-loading.gif) left top no-repeat;
 }
+.ace_editor {
+  height: 30px;
+}
+.pseudo-form-control {
+  border: 2px solid #cccccc;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-radius: 4px;
+}
 .ui-match {
   background-color: #FFCC00;
   border-top: solid 1px #FAD540;
