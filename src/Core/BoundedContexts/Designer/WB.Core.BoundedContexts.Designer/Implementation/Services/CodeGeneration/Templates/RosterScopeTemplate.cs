@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+    #line 1 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
     public partial class RosterScopeTemplate : RosterScopeTemplateBase
     {
@@ -31,28 +31,28 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             this.Write("    internal partial class ");
             
-            #line 7 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 7 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.GeneratedTypeName));
             
             #line default
             #line hidden
             this.Write(" : AbstractConditionalLevel<");
             
-            #line 7 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 7 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.Model.GeneratedTypeName));
             
             #line default
             #line hidden
             this.Write(">, IExpressionExecutable\r\n    {    \r\n        public ");
             
-            #line 9 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 9 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.GeneratedTypeName));
             
             #line default
             #line hidden
             this.Write("(decimal[] rosterVector, Identity[] rosterKey, ");
             
-            #line 9 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 9 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.Model.ParentTypeName));
             
             #line default
@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private ");
             
-            #line 16 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 16 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.GeneratedTypeName));
             
             #line default
@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {           
         ");
             
-            #line 20 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 20 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 foreach (var @group in Model.Groups) 
         {
             
@@ -85,28 +85,28 @@ foreach (var @group in Model.Groups)
             #line hidden
             this.Write("            EnablementStates.Add(");
             
-            #line 22 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 22 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@group.GeneratedStateName));
             
             #line default
             #line hidden
             this.Write(".ItemId, ");
             
-            #line 22 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 22 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@group.GeneratedStateName));
             
             #line default
             #line hidden
             this.Write(");\r\n        ");
             
-            #line 23 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 23 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("\r\n        ");
             
-            #line 25 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 25 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 foreach (var @roster in Model.RostersInScope) 
         {
             
@@ -114,28 +114,28 @@ foreach (var @roster in Model.RostersInScope)
             #line hidden
             this.Write("            EnablementStates.Add(");
             
-            #line 27 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 27 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedStateName));
             
             #line default
             #line hidden
             this.Write(".ItemId, ");
             
-            #line 27 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 27 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedStateName));
             
             #line default
             #line hidden
             this.Write(");\r\n        ");
             
-            #line 28 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 28 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("\r\n        ");
             
-            #line 30 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 30 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 foreach (var question in Model.Questions) 
         {
             
@@ -143,21 +143,21 @@ foreach (var question in Model.Questions)
             #line hidden
             this.Write("            \r\n            EnablementStates.Add(");
             
-            #line 32 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 32 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedStateName));
             
             #line default
             #line hidden
             this.Write(".ItemId, ");
             
-            #line 32 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 32 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedStateName));
             
             #line default
             #line hidden
             this.Write(");\r\n            ");
             
-            #line 33 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 33 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 
             bool hasAnyValidation = !string.IsNullOrWhiteSpace(question.Validations) || question.IsMandatory;                       
 
@@ -168,7 +168,7 @@ foreach (var question in Model.Questions)
             #line hidden
             this.Write("    \r\n            ValidationExpressions.Add(new Identity(IdOf.");
             
-            #line 38 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 38 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedIdName));
             
             #line default
@@ -176,91 +176,91 @@ foreach (var question in Model.Questions)
             this.Write(", rosterVector), new Func<bool>[] {                             \r\n               " +
                     " ");
             
-            #line 39 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 39 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 if(question.IsMandatory) {
             
             #line default
             #line hidden
             this.Write("  \r\n                ");
             
-            #line 40 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 40 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedMandatoryMethodName));
             
             #line default
             #line hidden
             this.Write(" ,                                               \r\n                ");
             
-            #line 41 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 41 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("                ");
             
-            #line 42 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 42 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 if(!string.IsNullOrWhiteSpace(question.Validations)) {
             
             #line default
             #line hidden
             this.Write("  \r\n                    () => this.IsAnswerEmpty(");
             
-            #line 43 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 43 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
             
             #line default
             #line hidden
             this.Write(") || ");
             
-            #line 43 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 43 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedValidationsMethodName));
             
             #line default
             #line hidden
             this.Write("() , \r\n                ");
             
-            #line 44 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 44 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("            });             \r\n            ");
             
-            #line 46 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 46 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("            AddUpdaterToMap(IdOf.");
             
-            #line 47 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 47 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedIdName));
             
             #line default
             #line hidden
             this.Write(", (");
             
-            #line 47 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 47 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedTypeName));
             
             #line default
             #line hidden
             this.Write(" val) => {");
             
-            #line 47 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 47 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedMemberName));
             
             #line default
             #line hidden
             this.Write("  = val; });\r\n        ");
             
-            #line 48 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 48 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("        ");
             
-            #line 49 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 49 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 foreach (var @roster in Model.Rosters) 
         {
             
@@ -268,14 +268,14 @@ foreach (var @roster in Model.Rosters)
             #line hidden
             this.Write("    \r\n            RosterGenerators.Add(IdOf.");
             
-            #line 51 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 51 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedIdName));
             
             #line default
             #line hidden
             this.Write(", (decimals, identities) => new ");
             
-            #line 51 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 51 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedTypeName));
             
             #line default
@@ -283,14 +283,14 @@ foreach (var @roster in Model.Rosters)
             this.Write("(decimals, identities, this, this.GetInstances, this.ConditionalDependencies, thi" +
                     "s.StructuralDependencies));\r\n        ");
             
-            #line 52 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 52 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write(" \r\n\r\n        ");
             
-            #line 54 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 54 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 foreach (var tuple in Model.ExecutorModel.GetOrderedListByConditionDependency(Model.Questions, Model.Groups, Model.RostersInScope)) 
         {
             
@@ -298,42 +298,42 @@ foreach (var tuple in Model.ExecutorModel.GetOrderedListByConditionDependency(Mo
             #line hidden
             this.Write(" \r\n            _conditionExpressions.Add(Verifier(");
             
-            #line 56 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 56 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(tuple.Item1));
             
             #line default
             #line hidden
             this.Write(", ");
             
-            #line 56 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 56 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(tuple.Item2));
             
             #line default
             #line hidden
             this.Write(".ItemId, ");
             
-            #line 56 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 56 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(tuple.Item2));
             
             #line default
             #line hidden
             this.Write("));                        \r\n        ");
             
-            #line 57 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 57 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 }
             
             #line default
             #line hidden
             this.Write("        }\r\n    \r\n        private ");
             
-            #line 60 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 60 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ParentTypeName));
             
             #line default
             #line hidden
             this.Write(" @_parent;\r\n\r\n        ");
             
-            #line 62 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 62 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 foreach (var parentQuestion in Model.ParentScope.GetAllQuestionsToTop()) 
         {
             
@@ -341,35 +341,35 @@ foreach (var parentQuestion in Model.ParentScope.GetAllQuestionsToTop())
             #line hidden
             this.Write("        public ");
             
-            #line 64 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 64 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(parentQuestion.GeneratedTypeName));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 64 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 64 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(parentQuestion.VariableName));
             
             #line default
             #line hidden
             this.Write(" { get { return this.@_parent.");
             
-            #line 64 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 64 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(parentQuestion.VariableName));
             
             #line default
             #line hidden
             this.Write("; } }                                        \r\n        ");
             
-            #line 65 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 65 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 }
             
             #line default
             #line hidden
             this.Write("\r\n        ");
             
-            #line 67 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 67 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 foreach (var parentRoster in Model.ParentScope.GetAllRostersToTop()) 
         {
             
@@ -377,28 +377,28 @@ foreach (var parentRoster in Model.ParentScope.GetAllRostersToTop())
             #line hidden
             this.Write("        public IEnumerable<");
             
-            #line 69 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 69 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(parentRoster.GeneratedTypeName));
             
             #line default
             #line hidden
             this.Write("> ");
             
-            #line 69 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 69 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(parentRoster.VariableName));
             
             #line default
             #line hidden
             this.Write(" { get { return this.@_parent.");
             
-            #line 69 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 69 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(parentRoster.VariableName));
             
             #line default
             #line hidden
             this.Write("; } }                                        \r\n        ");
             
-            #line 70 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 70 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 }
             
             #line default
@@ -407,7 +407,7 @@ foreach (var parentRoster in Model.ParentScope.GetAllRostersToTop())
                     "], Guid, IEnumerable<IExpressionExecutable>> getInstances)\r\n        {\r\n         " +
                     "   var level = new ");
             
-            #line 74 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 74 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.GeneratedTypeName));
             
             #line default
@@ -419,7 +419,7 @@ foreach (var parentRoster in Model.ParentScope.GetAllRostersToTop())
 
              ");
             
-            #line 79 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 79 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 foreach (var q in Model.Questions) 
              {
             
@@ -427,21 +427,21 @@ foreach (var q in Model.Questions)
             #line hidden
             this.Write("        \r\n                ");
             
-            #line 81 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 81 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedMemberName));
             
             #line default
             #line hidden
             this.Write(" = this.");
             
-            #line 81 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 81 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedMemberName));
             
             #line default
             #line hidden
             this.Write(",        \r\n             ");
             
-            #line 82 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 82 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 }
             
             #line default
@@ -464,7 +464,7 @@ foreach (var q in Model.Questions)
         
         ");
             
-            #line 99 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 99 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 foreach (var question in Model.Questions) 
         {
             
@@ -472,63 +472,63 @@ foreach (var question in Model.Questions)
             #line hidden
             this.Write("            \r\n        private ");
             
-            #line 101 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 101 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedTypeName));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 101 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 101 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedMemberName));
             
             #line default
             #line hidden
             this.Write(" = null;\r\n        private ConditionalState ");
             
-            #line 102 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 102 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedStateName));
             
             #line default
             #line hidden
             this.Write(" = new ConditionalState(IdOf.");
             
-            #line 102 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 102 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedIdName));
             
             #line default
             #line hidden
             this.Write(");\r\n        public ");
             
-            #line 103 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 103 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedTypeName));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 103 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 103 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
             
             #line default
             #line hidden
             this.Write("\r\n        {\r\n            get { return ");
             
-            #line 105 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 105 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedStateName));
             
             #line default
             #line hidden
             this.Write(".State != State.Disabled ? this.");
             
-            #line 105 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 105 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedMemberName));
             
             #line default
             #line hidden
             this.Write(" : null; }\r\n            \r\n        }\r\n        ");
             
-            #line 108 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 108 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 if(!string.IsNullOrWhiteSpace(question.Conditions) && Model.GenerateEmbeddedExpressionMethods)
         {
             
@@ -536,28 +536,28 @@ if(!string.IsNullOrWhiteSpace(question.Conditions) && Model.GenerateEmbeddedExpr
             #line hidden
             this.Write("      \r\n        private bool ");
             
-            #line 110 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 110 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedConditionsMethodName));
             
             #line default
             #line hidden
             this.Write("()\r\n        {\r\n            return ");
             
-            #line 112 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 112 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.Conditions));
             
             #line default
             #line hidden
             this.Write(";\r\n        }      \r\n        ");
             
-            #line 114 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 114 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("\r\n        ");
             
-            #line 116 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 116 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 if(!string.IsNullOrWhiteSpace(question.Validations) && Model.GenerateEmbeddedExpressionMethods)
         {
             
@@ -565,28 +565,28 @@ if(!string.IsNullOrWhiteSpace(question.Validations) && Model.GenerateEmbeddedExp
             #line hidden
             this.Write("        \r\n        private bool ");
             
-            #line 118 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 118 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedValidationsMethodName));
             
             #line default
             #line hidden
             this.Write("()\r\n        {\r\n            return ");
             
-            #line 120 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 120 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.Validations));
             
             #line default
             #line hidden
             this.Write(";\r\n        }  \r\n        ");
             
-            #line 122 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 122 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("        ");
             
-            #line 123 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 123 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 if(question.IsMandatory)
         {
             
@@ -594,35 +594,35 @@ if(question.IsMandatory)
             #line hidden
             this.Write("        \r\n        private bool ");
             
-            #line 125 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 125 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedMandatoryMethodName));
             
             #line default
             #line hidden
             this.Write("()\r\n        {\r\n            return !this.IsAnswerEmpty(");
             
-            #line 127 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 127 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
             
             #line default
             #line hidden
             this.Write(");\r\n        }\r\n        ");
             
-            #line 129 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 129 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("        ");
             
-            #line 130 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 130 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("        //groups\r\n        ");
             
-            #line 132 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 132 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 foreach (var @group in Model.Groups) 
         {
             
@@ -630,21 +630,21 @@ foreach (var @group in Model.Groups)
             #line hidden
             this.Write("        private ConditionalState ");
             
-            #line 134 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 134 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@group.GeneratedStateName));
             
             #line default
             #line hidden
             this.Write(" = new ConditionalState(IdOf.");
             
-            #line 134 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 134 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@group.GeneratedIdName));
             
             #line default
             #line hidden
             this.Write(", ItemType.Group);\r\n        ");
             
-            #line 135 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 135 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 if(!string.IsNullOrWhiteSpace(@group.Conditions) && Model.GenerateEmbeddedExpressionMethods)
         {
             
@@ -652,35 +652,35 @@ if(!string.IsNullOrWhiteSpace(@group.Conditions) && Model.GenerateEmbeddedExpres
             #line hidden
             this.Write("      \r\n        private bool ");
             
-            #line 137 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 137 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@group.GeneratedConditionsMethodName));
             
             #line default
             #line hidden
             this.Write("()\r\n        {\r\n            return ");
             
-            #line 139 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 139 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@group.Conditions));
             
             #line default
             #line hidden
             this.Write(";\r\n        }      \r\n        ");
             
-            #line 141 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 141 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("        ");
             
-            #line 142 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 142 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("        //rosters\r\n        ");
             
-            #line 144 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 144 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 foreach (var @roster in Model.Rosters) 
         {
             
@@ -688,14 +688,14 @@ foreach (var @roster in Model.Rosters)
             #line hidden
             this.Write("        public IEnumerable<");
             
-            #line 146 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 146 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedTypeName));
             
             #line default
             #line hidden
             this.Write("> ");
             
-            #line 146 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 146 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.VariableName));
             
             #line default
@@ -703,35 +703,35 @@ foreach (var @roster in Model.Rosters)
             this.Write("\r\n        {\r\n            get\r\n            {\r\n                var rosters = this.G" +
                     "etInstances(this.RosterKey, IdOf.");
             
-            #line 150 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 150 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedRosterScopeName));
             
             #line default
             #line hidden
             this.Write(".Last());\r\n                return rosters == null ? new List<");
             
-            #line 151 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 151 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedTypeName));
             
             #line default
             #line hidden
             this.Write(">() : rosters.Select(x => x as ");
             
-            #line 151 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 151 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedTypeName));
             
             #line default
             #line hidden
             this.Write(").ToList();\r\n            }\r\n        }\r\n        ");
             
-            #line 154 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 154 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("\r\n        ");
             
-            #line 156 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 156 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 foreach (var @roster in Model.RostersInScope) 
         {
             
@@ -739,21 +739,21 @@ foreach (var @roster in Model.RostersInScope)
             #line hidden
             this.Write("        \r\n\r\n        private ConditionalState ");
             
-            #line 159 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 159 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedStateName));
             
             #line default
             #line hidden
             this.Write(" = new ConditionalState(IdOf.");
             
-            #line 159 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 159 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedIdName));
             
             #line default
             #line hidden
             this.Write(", ItemType.Group);\r\n\r\n        ");
             
-            #line 161 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 161 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 if(!string.IsNullOrWhiteSpace(@roster.Conditions) && Model.GenerateEmbeddedExpressionMethods)
         {
             
@@ -761,28 +761,28 @@ if(!string.IsNullOrWhiteSpace(@roster.Conditions) && Model.GenerateEmbeddedExpre
             #line hidden
             this.Write("      \r\n        private bool ");
             
-            #line 163 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 163 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedConditionsMethodName));
             
             #line default
             #line hidden
             this.Write("()\r\n        {\r\n            return ");
             
-            #line 165 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 165 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.Conditions));
             
             #line default
             #line hidden
             this.Write(";\r\n        }      \r\n        ");
             
-            #line 167 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 167 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("\r\n        ");
             
-            #line 169 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 169 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
@@ -808,7 +808,7 @@ if(!string.IsNullOrWhiteSpace(@roster.Conditions) && Model.GenerateEmbeddedExpre
         {
         ");
             
-            #line 189 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 189 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 if(Model.ParentScope != null)
         {
             
@@ -816,14 +816,14 @@ if(Model.ParentScope != null)
             #line hidden
             this.Write("            this.@_parent = parentLevel as ");
             
-            #line 191 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 191 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ParentTypeName));
             
             #line default
             #line hidden
             this.Write(";\r\n        ");
             
-            #line 192 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 192 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
