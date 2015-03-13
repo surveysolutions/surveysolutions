@@ -179,8 +179,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IComposite>(ConditionExpresssionHasLengthMoreThan10000Characters, "WB0094", VerificationMessages.WB0094_ConditionExpresssionHasLengthMoreThan10000Characters),
                     Verifier<IQuestion>(ValidationExpresssionHasLengthMoreThan10000Characters, "WB0095", VerificationMessages.WB0095_ValidationExpresssionHasLengthMoreThan10000Characters),
                     Verifier(QuestionnaireTitleHasInvalidCharacters, "WB0097", VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
-                    Verifier(QuestionnaireHasSizeMoreThan10MB, "WB0098", VerificationMessages.WB0098_QuestionnaireSizeLimit),
 
+                    QuestionnaireHasSizeMoreThan5MB,
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByEpressionsThatUsesTextListQuestions,
@@ -246,10 +246,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
         }
 
-        private static bool QuestionnaireHasSizeMoreThan10MB(QuestionnaireDocument questionnaire)
+        private IEnumerable<QuestionnaireVerificationError> QuestionnaireHasSizeMoreThan5MB(
+            QuestionnaireDocument questionnaire, VerificationState state)
         {
             var jsonQuestionnaire = JsonConvert.SerializeObject(questionnaire, Formatting.None);
-            return Encoding.UTF8.GetByteCount(jsonQuestionnaire) > 10 * 1024 * 1024; // 10MB
+            var questionnaireByteCount = Encoding.UTF8.GetByteCount(jsonQuestionnaire);
+            var isOversized = questionnaireByteCount > 5 * 1024 * 1024; // 5MB
+
+            if (isOversized)
+            {
+                var questionnaireMegaByteCount = (decimal)questionnaireByteCount / 1024 / 1024;
+                yield return new QuestionnaireVerificationError("WB0098", VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(questionnaireMegaByteCount));
+            }
         }
         
         private GenerationResult GetCompilationResult(QuestionnaireDocument questionnaire)
