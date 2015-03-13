@@ -2,6 +2,7 @@
 using System.Transactions;
 using NHibernate;
 using WB.Core.Infrastructure.Transactions;
+using IsolationLevel = System.Data.IsolationLevel;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
@@ -10,8 +11,8 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         private readonly ISessionFactory sessionFactory;
 
         //private ISession session;
-        private TransactionScope commandTransaction;
-        private TransactionScope queryTransaction;
+        private ITransaction commandTransaction;
+        private ITransaction queryTransaction;
         private ISession commandSession;
         private ISession querySession;
 
@@ -24,19 +25,17 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         {
             if (this.commandTransaction != null) throw new InvalidOperationException();
 
-            this.commandTransaction = new TransactionScope(TransactionScopeOption.RequiresNew, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }, TransactionScopeAsyncFlowOption.Enabled);
-            //if (this.NoSessionIsOpened())
-            //    this.OpenSession();
-
             this.commandSession = this.sessionFactory.OpenSession();
+
+
+            this.commandTransaction = commandSession.BeginTransaction(IsolationLevel.ReadCommitted);
         }
 
         public void CommitCommandTransaction()
         {
             if (this.commandTransaction == null) throw new InvalidOperationException();
 
-            this.commandSession.Flush();
-            this.commandTransaction.Complete();
+            this.commandTransaction.Commit();
 
             this.commandTransaction.Dispose();
             this.commandSession.Close();
@@ -48,7 +47,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         {
             if (this.commandTransaction == null) throw new InvalidOperationException();
 
-            this.commandTransaction.Dispose();
+            this.commandTransaction.Rollback();
             this.commandSession.Close();
 
             this.commandTransaction = null;
@@ -60,15 +59,16 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             if (this.queryTransaction != null) throw new InvalidOperationException();
             if (this.commandTransaction != null) throw new InvalidOperationException("Query transaction is expected to be always open before CommandTransaction, or not openned at all for this request. Please make sure that this controller has action filter for transactions management applied. But some controllers like RebuildReadSide should not ever open query transaction. Check that you are not inside such controller before fixing any code.");
 
-            this.queryTransaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }, TransactionScopeAsyncFlowOption.Enabled);
             this.querySession = this.sessionFactory.OpenSession();
+
+            this.queryTransaction = this.querySession.BeginTransaction(IsolationLevel.ReadCommitted);
         }
 
         public void RollbackQueryTransaction()
         {
             if (this.queryTransaction == null) throw new InvalidOperationException();
 
-            this.queryTransaction.Dispose();
+            this.queryTransaction.Rollback();
             this.queryTransaction = null;
 
             this.querySession.Close();
