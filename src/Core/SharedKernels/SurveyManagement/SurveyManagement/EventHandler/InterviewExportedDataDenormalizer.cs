@@ -42,12 +42,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly InterviewExportedAction[] listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded = new[] { InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restarted };
         private readonly IReadSideKeyValueStorage<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewWriter;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
-        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryStorage;
+        private readonly IReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
         private readonly IDataExportRepositoryWriter dataExportWriter;
 
         public InterviewExportedDataDenormalizer(IDataExportRepositoryWriter dataExportWriter,
             IReadSideKeyValueStorage<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewWriter, 
-            IReadSideRepositoryWriter<UserDocument> userDocumentWriter, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryStorage)
+            IReadSideRepositoryWriter<UserDocument> userDocumentWriter, IReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage)
         {
             this.dataExportWriter = dataExportWriter;
             this.recordFirstAnswerMarkerViewWriter = recordFirstAnswerMarkerViewWriter;

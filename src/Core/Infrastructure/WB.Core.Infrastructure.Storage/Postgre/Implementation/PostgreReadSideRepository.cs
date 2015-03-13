@@ -41,7 +41,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         public void Store(TEntity view, string id)
         {
-            this.sessionProvider.GetSession().SaveOrUpdate(view);
+            this.sessionProvider.GetSession().SaveOrUpdate(null, view, id);
         }
 
         public void BulkStore(List<Tuple<TEntity, string>> bulk)

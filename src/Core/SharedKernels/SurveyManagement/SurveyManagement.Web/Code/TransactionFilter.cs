@@ -1,6 +1,4 @@
 ﻿using System.Web.Mvc;
-using Ninject;
-using WB.Core.Infrastructure.Storage.Postgre;
 using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
@@ -19,7 +17,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             transactionManager.GetTransactionManager().BeginQueryTransaction();
         }
 
-        public override void OnActionExecuted(ActionExecutedContext filterContext)
+        public override void OnResultExecuted(ResultExecutedContext filterContext)
         {
             transactionManager.GetTransactionManager().RollbackQueryTransaction();
         }
