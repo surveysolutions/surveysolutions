@@ -1,4 +1,6 @@
-﻿using Ninject.Modules;
+﻿using System;
+using Ninject;
+using Ninject.Modules;
 using WB.Core.BoundedContexts.Designer.Commands.Account;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
@@ -22,6 +24,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using AccountAR = WB.Core.BoundedContexts.Designer.Aggregates.AccountAR;
@@ -73,6 +76,8 @@ namespace WB.Core.BoundedContexts.Designer
             this.Kernel.RegisterFactory<AccountListViewFactory>();
             this.Kernel.RegisterFactory<AccountViewFactory>();
             this.Kernel.RegisterFactory<PdfQuestionnaireFactory>();
+            this.Kernel.Bind<ITransactionManager>().To<NoTransactionTransactionManager>();
+            this.Kernel.Bind<ITransactionManagerProvider>().To<NoTransactionTransactionManagerProvider>();// TODO: Fix it when migrating designer to postgres
 
             CommandRegistry
                 .Setup<AccountAR>()

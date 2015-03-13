@@ -26,6 +26,7 @@ using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.Storage.Esent;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
+using WB.Core.Infrastructure.Transactions;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.CommandDeserialization;
@@ -150,6 +151,7 @@ namespace WB.UI.Designer.App_Start
             Type[] handlersToIgnore = ignoredDenormalizersConfigSection == null ? new Type[0] : ignoredDenormalizersConfigSection.GetIgnoredTypes();
 
             var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(), handlersToIgnore);
+            bus.TransactionManager = kernel.Get<ITransactionManagerProvider>();
 
             foreach (var handler in kernel.GetAll(typeof (IEventHandler)))
             {

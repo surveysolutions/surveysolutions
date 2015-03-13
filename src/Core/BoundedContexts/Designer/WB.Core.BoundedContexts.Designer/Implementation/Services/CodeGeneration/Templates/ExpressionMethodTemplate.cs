@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
+    #line 1 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
     public partial class ExpressionMethodTemplate : ExpressionMethodTemplateBase
     {
@@ -34,21 +34,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     "m.Text.RegularExpressions;\r\n\r\nnamespace WB.Core.SharedKernels.DataCollection.Gen" +
                     "erated\r\n{\r\n   internal partial class ");
             
-            #line 15 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
+            #line 15 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.GeneratedClassName));
             
             #line default
             #line hidden
             this.Write("\r\n   {   \r\n      private bool ");
             
-            #line 17 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
+            #line 17 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.GeneratedMethodName));
             
             #line default
             #line hidden
             this.Write("()\r\n      {\r\n          return ");
             
-            #line 19 "C:\Work\mis\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
+            #line 19 "F:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ExpressionString));
             
             #line default
