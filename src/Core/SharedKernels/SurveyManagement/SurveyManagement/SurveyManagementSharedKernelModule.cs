@@ -35,6 +35,7 @@ using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.Synchronization;
 using WB.Core.Synchronization.EventHandler;
@@ -184,6 +185,11 @@ namespace WB.Core.SharedKernels.SurveyManagement
               .To<PostgreReadSideRepository<QuestionnaireBrowseItem>>();
             this.Bind<IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem>>()
                 .To<PostgreReadSideRepository<QuestionnaireBrowseItem>>();
+
+            this.Bind<IReadSideRepositoryWriter<InterviewSummary>>()
+            .To<PostgreReadSideRepository<InterviewSummary>>();
+            this.Bind<IQueryableReadSideRepositoryReader<InterviewSummary>>()
+                .To<PostgreReadSideRepository<InterviewSummary>>();
 
         }
     }

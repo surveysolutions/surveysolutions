@@ -51,15 +51,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             };
         }
 
-        public string QuestionnaireTitle { get; set; }
-        public string ResponsibleName { get; set; }
-        public Guid TeamLeadId { get; set; }
-        public string TeamLeadName { get; set; }
-        public UserRoles ResponsibleRole { get; set; }
-        public DateTime UpdateDate { get; set; }
-        public Dictionary<Guid, QuestionAnswer> AnswersToFeaturedQuestions { get; set; }
-        public List<InterviewCommentedStatus> CommentedStatusesHistory { get; set; }
-        public bool WasCreatedOnClient { get; set; }
+        public virtual string SummaryId { get; set; }
+        public virtual string QuestionnaireTitle { get; set; }
+        public virtual string ResponsibleName { get; set; }
+        public virtual Guid TeamLeadId { get; set; }
+        public virtual string TeamLeadName { get; set; }
+        public virtual UserRoles ResponsibleRole { get; set; }
+        public virtual DateTime UpdateDate { get; set; }
+        public virtual IDictionary<Guid, QuestionAnswer> AnswersToFeaturedQuestions { get; set; }
+        public virtual IList<InterviewCommentedStatus> CommentedStatusesHistory { get; set; }
+        public virtual bool WasCreatedOnClient { get; set; }
     }
 
     public class InterviewCommentedStatus

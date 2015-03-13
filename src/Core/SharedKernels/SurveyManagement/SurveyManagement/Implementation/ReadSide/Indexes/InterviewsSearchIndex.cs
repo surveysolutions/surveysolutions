@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes
                                 {
                                     IsDeleted = interview.IsDeleted,
                                     FeaturedQuestionsWithAnswers = string.Join(" ", interview.AnswersToFeaturedQuestions.Select(x => x.Value).Select(x => x.Answer + " " + x.Title)),
-                                    AnswersToFeaturedQuestions = interview.AnswersToFeaturedQuestions,
+                                    //AnswersToFeaturedQuestions = interview.AnswersToFeaturedQuestions,
                                     TeamLeadId = interview.TeamLeadId,
                                     ResponsibleId = interview.ResponsibleId,
                                     ResponsibleName = interview.ResponsibleName,
