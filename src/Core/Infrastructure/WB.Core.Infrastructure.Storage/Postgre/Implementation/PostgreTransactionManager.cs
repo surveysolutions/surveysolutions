@@ -60,7 +60,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             if (this.queryTransaction != null) throw new InvalidOperationException();
             if (this.commandTransaction != null) throw new InvalidOperationException("Query transaction is expected to be always open before CommandTransaction, or not openned at all for this request. Please make sure that this controller has action filter for transactions management applied. But some controllers like RebuildReadSide should not ever open query transaction. Check that you are not inside such controller before fixing any code.");
 
-            this.queryTransaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Snapshot }, TransactionScopeAsyncFlowOption.Enabled);
+            this.queryTransaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }, TransactionScopeAsyncFlowOption.Enabled);
             this.querySession = this.sessionFactory.OpenSession();
         }
 
