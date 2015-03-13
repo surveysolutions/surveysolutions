@@ -874,11 +874,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Size of questionnaire is bigger than 10MB..
+        ///   Looks up a localized string similar to Size of questionnaire is approximately {0:0.##}MB and is too big to work correctly with Survey Solutions. Try to reduce amount of data until it will be at least less than 5MB..
         /// </summary>
-        internal static string WB0098_QuestionnaireSizeLimit {
+        internal static string WB0098_QuestionnaireHasSizeMoreThan5MB {
             get {
-                return ResourceManager.GetString("WB0098_QuestionnaireSizeLimit", resourceCulture);
+                return ResourceManager.GetString("WB0098_QuestionnaireHasSizeMoreThan5MB", resourceCulture);
             }
         }
     }

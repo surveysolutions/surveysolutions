@@ -10,13 +10,13 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
-    internal class when_verifying_questionnaire_that_has_size_more_then_10MB : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_that_has_size_more_then_5MB : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaireDocument();
             questionnaire.Children.Add(
-                new TextQuestion(new string('q', 10 * 1024 * 1024))
+                new TextQuestion(new string('q', 5 * 1024 * 1024))
                 {
                     StataExportCaption = "var0"
                 }); 
