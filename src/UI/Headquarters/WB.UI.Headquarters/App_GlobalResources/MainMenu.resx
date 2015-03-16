@@ -153,4 +153,7 @@
   <data name="TeamsAndStatuses" xml:space="preserve">
     <value>Teams and Statuses</value>
   </data>
+  <data name="Users" xml:space="preserve">
+    <value>Users</value>
+  </data>
 </root>
