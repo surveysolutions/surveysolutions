@@ -372,6 +372,7 @@
     <Content Include="Scripts\viewmodels\pages\controlpanel\readside.js" />
     <Content Include="Scripts\viewmodels\viewmodelbase.js" />
     <Content Include="Scripts\viewmodels\designer.framework.js" />
+    <Content Include="UpdatedDesigner\app\scripts\directives\isOnScreenHelper.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\matchOptionsPattern.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\optionsService.js" />
     <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.css" />
