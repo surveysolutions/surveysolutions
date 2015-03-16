@@ -39,7 +39,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         protected static InterviewSummary CreateInterviewSummary(InterviewStatus[] statuses)
         {
             var interviewSummary = new InterviewSummary();
-            interviewSummary.CommentedStatusesHistory=new List<InterviewCommentedStatus>();
             foreach (var interviewStatus in statuses)
             {
                 interviewSummary.CommentedStatusesHistory.Add(CreateInterviewCommentedStatus(interviewStatus));

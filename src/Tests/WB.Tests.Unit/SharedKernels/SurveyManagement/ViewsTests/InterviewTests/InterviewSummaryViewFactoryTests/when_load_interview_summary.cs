@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Moq;
 using WB.Core.GenericSubdomains.Utils;
@@ -15,16 +16,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests
         Establish context = () =>
         {
             var interviewSummaryReaderMock = new Mock<IReadSideRepositoryReader<InterviewSummary>>();
-            interviewSummaryReaderMock.Setup(_ => _.GetById(interviewId.FormatGuid())).Returns(new InterviewSummary()
+            var interviewSummary = new InterviewSummary()
             {
                 ResponsibleName = interviewerName,
-                TeamLeadName = supervisorName,
-                CommentedStatusesHistory =
-                    new List<InterviewCommentedStatus>()
-                    {
-                        new InterviewCommentedStatus() {Status = lastStatus, Date = lastStatusDateTime}
-                    }
+                TeamLeadName = supervisorName
+            };
+            interviewSummary.CommentedStatusesHistory.Add(new InterviewCommentedStatus {
+                Status = lastStatus,
+                Date = lastStatusDateTime
             });
+
+            interviewSummaryReaderMock.Setup(_ => _.GetById(interviewId.FormatGuid()))
+                .Returns(interviewSummary);
+
             factory = CreateFactory(interviewSummaryReader: interviewSummaryReaderMock.Object);
         };
 
@@ -46,10 +50,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests
             viewModel.CommentedStatusesHistory.ShouldNotBeEmpty();
 
         It should_status_from_first_element_of_CommentedStatusesHistory_be_equal_to_lastStatus = () =>
-            viewModel.CommentedStatusesHistory[0].Status.ShouldEqual(lastStatus);
+            viewModel.CommentedStatusesHistory.First().Status.ShouldEqual(lastStatus);
 
         It should_date_from_first_element_of_CommentedStatusesHistory_be_equal_to_lastStatusDateTime = () =>
-            viewModel.CommentedStatusesHistory[0].Date.ShouldEqual(lastStatusDateTime);
+            viewModel.CommentedStatusesHistory.First().Date.ShouldEqual(lastStatusDateTime);
 
 
         private static InterviewSummaryViewFactory factory;

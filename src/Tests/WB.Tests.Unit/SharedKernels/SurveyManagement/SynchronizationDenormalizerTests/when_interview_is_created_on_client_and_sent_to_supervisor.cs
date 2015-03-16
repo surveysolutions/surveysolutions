@@ -24,15 +24,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             interviewId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
             var interviewSummaryWriterMock = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
-            interviewSummaryWriterMock.SetReturnsDefault(new InterviewSummary
+            var interviewSummary = new InterviewSummary
             {
-                WasCreatedOnClient = true,
-                CommentedStatusesHistory =
-                    new List<InterviewCommentedStatus>
-                                    {
-                                        new InterviewCommentedStatus() { Status = InterviewStatus.Completed }
-                                    }
-            });
+                WasCreatedOnClient = true
+            };
+            interviewSummary.CommentedStatusesHistory.Add(new InterviewCommentedStatus() { Status = InterviewStatus.Completed });
+
+            interviewSummaryWriterMock.SetReturnsDefault(interviewSummary);
 
             denormalizer = CreateDenormalizer(
                 interviewPackageStorageWriter: interviewPackageStorageWriterMock.Object,

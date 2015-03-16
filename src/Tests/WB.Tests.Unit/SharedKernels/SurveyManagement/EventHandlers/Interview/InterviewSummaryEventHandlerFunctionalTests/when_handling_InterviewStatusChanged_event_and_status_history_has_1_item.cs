@@ -13,22 +13,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         private Establish context = () =>
         {
 
-            viewModel = new InterviewSummary
-            {
-                CommentedStatusesHistory = new List<InterviewCommentedStatus>
-                {
-                    new InterviewCommentedStatus
-                    {
-                        Status = InterviewStatus.Completed,
-                        Comment = thisCommentShouldNotBeChanged
-                    },
-                    new InterviewCommentedStatus
-                    {
-                        Status = InterviewStatus.Completed,
-                        Comment = null
-                    }
-                }
-            };
+            viewModel = new InterviewSummary();
+            viewModel.CommentedStatusesHistory.Add(new InterviewCommentedStatus {
+                    Status = InterviewStatus.Completed,
+                    Comment = thisCommentShouldNotBeChanged
+            });
+            viewModel.CommentedStatusesHistory.Add(new InterviewCommentedStatus {
+                Status = InterviewStatus.Completed,
+                Comment = null
+            });
 
             denormalizer = CreateDenormalizer();
         };

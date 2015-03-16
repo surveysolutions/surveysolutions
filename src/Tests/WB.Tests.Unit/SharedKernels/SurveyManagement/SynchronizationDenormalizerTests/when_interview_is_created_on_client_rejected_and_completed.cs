@@ -32,15 +32,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
                     x => x.BuildFrom(data, Moq.It.IsAny<Guid>(), InterviewStatus.RejectedBySupervisor, Moq.It.IsAny<string>()) == synchronizationDto);
             
             var interviewSummaryWriterMock = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
-            interviewSummaryWriterMock.SetReturnsDefault(new InterviewSummary
+            var interviewSummary = new InterviewSummary
             {
-                WasCreatedOnClient = true,
-                CommentedStatusesHistory =
-                    new List<InterviewCommentedStatus>
-                                    {
-                                        new InterviewCommentedStatus { Status = InterviewStatus.RejectedBySupervisor }
-                                    }
-            });
+                WasCreatedOnClient = true
+            };
+            interviewSummary.CommentedStatusesHistory.Add(
+                new InterviewCommentedStatus { Status = InterviewStatus.RejectedBySupervisor }
+                );
+
+            interviewSummaryWriterMock.SetReturnsDefault(interviewSummary);
 
             synchronizationDenormalizer = CreateDenormalizer(
                 interviews: interviews.Object,

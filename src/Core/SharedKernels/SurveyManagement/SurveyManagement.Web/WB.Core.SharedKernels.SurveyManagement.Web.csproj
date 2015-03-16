@@ -145,6 +145,7 @@
     <Compile Include="Api\UsersController.cs" />
     <Compile Include="Code\ApiBasicAuthAttribute.cs" />
     <Compile Include="Code\ApiTransactionFilter.cs" />
+    <Compile Include="Code\NoTransactionAttribute.cs" />
     <Compile Include="Code\TransactionFilter.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
