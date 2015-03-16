@@ -128,6 +128,7 @@
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\DeleteQuestionnaireService.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\InterviewsToDeleteFactory.cs" />
     <Compile Include="Mappings\InterviewSummaryMap.cs" />
+    <Compile Include="Mappings\InterviewSyncPackageMetaMap.cs" />
     <Compile Include="QuartzIntegration\QuartzNinjectModule.cs" />
     <Compile Include="QuartzIntegration\NinjectSchedulerFactory.cs" />
     <Compile Include="Mappings\QuestionnaireBrowseItemMap.cs" />
