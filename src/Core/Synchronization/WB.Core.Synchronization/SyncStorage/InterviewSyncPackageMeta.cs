@@ -27,22 +27,14 @@ namespace WB.Core.Synchronization.SyncStorage
             this.MetaInfoSize = metaInfoSize;
         }
 
-        public string PackageId { get; set; }
-
-        public long SortIndex { get; set; }
-
-        public Guid InterviewId { get; private set; }
-
-        public string VersionedQuestionnaireId { get; private set; }
-
-        public DateTime Timestamp { get; private set; }
-
-        public Guid UserId { get; private set; }
-
-        public string ItemType { get; private set; }
-
-        public int ContentSize { get; private set; }
-
-        public int MetaInfoSize { get; private set; }
+        public virtual string PackageId { get; set; }
+        public virtual long SortIndex { get; set; }
+        public virtual Guid InterviewId { get; private set; }
+        public virtual string VersionedQuestionnaireId { get; private set; }
+        public virtual DateTime Timestamp { get; private set; }
+        public virtual Guid UserId { get; private set; }
+        public virtual string ItemType { get; private set; }
+        public virtual int ContentSize { get; private set; }
+        public virtual int MetaInfoSize { get; private set; }
     }
 }
