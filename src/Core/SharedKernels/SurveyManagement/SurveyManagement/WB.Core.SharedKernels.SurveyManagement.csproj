@@ -114,7 +114,6 @@
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="EventHandler\AnswersByVariableDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemEventHandler.cs" />
-    <Compile Include="Implementation\ReadSide\Indexes\InterviewsSearchIndex.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\SeachIndexContent.cs" />
     <Compile Include="Implementation\ReadSide\RepositoryAccessors\OrderableSyncPackageWriter.cs" />
     <Compile Include="EventHandler\ClientDeviceDenormalizer.cs" />
