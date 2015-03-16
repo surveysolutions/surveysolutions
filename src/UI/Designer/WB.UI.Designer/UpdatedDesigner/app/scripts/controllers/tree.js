@@ -358,12 +358,12 @@
 
                                     var links = _.reduce(result, function(result, item) {
                                         return result + '<a href=#' + $state.params.questionnaireId +
-                                            '/chapter/' + item.chapterId + '/question/' + item.id + '>' + item.title + '</a>';
+                                            "/chapter/" + item.chapterId + "/question/" + item.id + '>' + _.trunc(item.title, 30) + '</a>';
                                     }, "");
 
                                     notificationService.notify({
-                                        title: 'Confirmation Needed',
-                                        text: '<div class="broken-links">' + links + '</div>',
+                                        title: 'Depended items might be broken',
+                                        text: '<div class="broken-links"><p>One or more questions/groups depend on<p>' + links + '</div>',
                                         hide: false,
                                         confirm: { confirm: true },
                                         history: { history: false },

@@ -6807,6 +6807,23 @@ textarea {
 /*
   string @color: 'blue' or 'gray'
 */
+.broken-links {
+  max-height: 500px;
+  overflow-y: auto;
+}
+.broken-links a {
+  display: block;
+  padding: 5px 0 5px 8px;
+  border-top: 2px solid #eee;
+  text-decoration: none;
+  border-radius: 4px;
+}
+.broken-links a:last-child {
+  border-bottom: 2px solid #eee;
+}
+.broken-links a:hover {
+  background: #eee;
+}
 .icon {
   width: 20px;
   height: 20px;
