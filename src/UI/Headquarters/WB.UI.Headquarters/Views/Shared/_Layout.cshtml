@@ -26,7 +26,7 @@
                 </button>
                 @if (User.IsInRole("Administrator"))
                 {
-                    <a class="navbar-brand" href="@Url.Action("Index", "Headquarters", new { area = "" })">Admin</a>
+                    <a class="navbar-brand" href="@Url.Action("Index", "Headquarter", new { area = "" })">Admin</a>
                 }
                 else if (User.IsInRole("Headquarter"))
                 {
