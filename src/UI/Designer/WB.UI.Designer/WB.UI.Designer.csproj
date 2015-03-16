@@ -239,6 +239,7 @@
     <Compile Include="Api\TesterController.cs" />
     <Compile Include="Api\ImportController.cs" />
     <Compile Include="Api\QuestionnaireController.cs" />
+    <Compile Include="Filters\ShowNotesToUserFilter.cs" />
     <Compile Include="Resources\ErrorMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -364,6 +365,7 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
+    <Content Include="Scripts\bootstrap3-unobtrusive-hack.js" />
     <Content Include="Scripts\components\bindings.js" />
     <Content Include="Scripts\components\moment-duration-format.js" />
     <Content Include="Scripts\viewmodels\pagebase.js" />
@@ -372,6 +374,22 @@
     <Content Include="Scripts\viewmodels\designer.framework.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\matchOptionsPattern.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\optionsService.js" />
+    <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.css" />
+    <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.min.css">
+      <DependentUpon>bootstrap-custom.css</DependentUpon>
+    </Content>
+    <Content Include="UpdatedDesigner\content\designer-start\designer-list.css" />
+    <Content Include="UpdatedDesigner\content\designer-start\designer-start.css" />
+    <Content Include="UpdatedDesigner\content\designer-start\inputs.css">
+      <DependentUpon>inputs.less</DependentUpon>
+    </Content>
+    <Content Include="UpdatedDesigner\content\designer-start\inputs.min.css">
+      <DependentUpon>inputs.css</DependentUpon>
+    </Content>
+    <Content Include="UpdatedDesigner\content\i\logo-designer-sm.png" />
+    <Content Include="UpdatedDesigner\content\i\logo-questionnaire-designer.png" />
+    <Content Include="UpdatedDesigner\content\i\loupe.png" />
+    <Content Include="UpdatedDesigner\content\i\wb-logo.png" />
     <Content Include="UpdatedDesigner\content\wb-options-window.css" />
     <Content Include="Content\themes\base\images\animated-overlay.gif" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -1237,6 +1255,22 @@
     <Content Include="UpdatedDesigner\content\designer-editor\wb-question-list.css.css.map">
       <DependentUpon>wb-question-list.css.css</DependentUpon>
     </Content>
+    <Content Include="Views\Shared\Layout.Account.cshtml" />
+    <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.less" />
+    <Content Include="UpdatedDesigner\content\designer-start\bootstrap-override.less" />
+    <Content Include="UpdatedDesigner\content\designer-start\custom-fonts.less" />
+    <Content Include="UpdatedDesigner\content\designer-start\designer-list.less" />
+    <Content Include="UpdatedDesigner\content\designer-start\designer-start.less" />
+    <Content Include="UpdatedDesigner\content\designer-start\font-styles.less" />
+    <Content Include="UpdatedDesigner\content\designer-start\inputs.less" />
+    <Content Include="UpdatedDesigner\content\designer-start\wb-variables.less" />
+    <Content Include="UpdatedDesigner\content\designer-start\inputs.css.map">
+      <DependentUpon>inputs.css</DependentUpon>
+    </Content>
+    <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.css.map">
+      <DependentUpon>bootstrap-custom.css</DependentUpon>
+    </Content>
+    <Content Include="Views\Account\RegisterStepTwo.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
