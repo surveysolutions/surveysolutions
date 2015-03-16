@@ -1,5 +1,6 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
+using Raven.Client.Linq;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Mappings
@@ -24,22 +25,63 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.Status);
             Property(x => x.IsDeleted);
             Property(x => x.HasErrors);
-            Map(x => x.AnswersToFeaturedQuestions,
+
+
+            Set(x => x.AnswersToFeaturedQuestions,
+                collection => {
+                    collection.Key(c => c.Column("InterviewSummaryId"));
+                    collection.Table("AnswersToFeaturedQuestions");
+                    collection.Cascade(Cascade.All);
+                    collection.Inverse(true);
+                },
+                rel => rel.OneToMany());
+
+            Set(x => x.CommentedStatusesHistory,
                 collection =>
                 {
-                    collection.Table("AnswersToFeaturedQuestions");
-                    collection.Key(c => c.Column("InterviewSummaryId"));
-                }, 
-                rel => rel.Element(el => el.Column("QuestionId")), 
-                map => map.Component(cmp => {
-                    cmp.Property(x => x.Id, col => col.Column("AnswerId"));
-                    cmp.Property(x => x.Title, col => col.Column("AnswerTitle"));
-                    cmp.Property(x => x.Answer, col => col.Column("AnswerValue"));
+                    collection.Table("CommentedStatusesHistoryItems");
+                    collection.Key(key => key.Column("InterviewSummaryId"));
+                    collection.Cascade(Cascade.All);
+                },
+                relation => relation.Component(element =>
+                {
+                    element.Property(x => x.Comment);
+                    element.Property(x => x.Date);
+                    element.Property(x => x.Status);
+                    element.Property(x => x.Responsible);
+                    element.Property(x => x.ResponsibleId);
                 }));
 
+            Set(x => x.QuestionOptions,
+               collection =>
+               {
+                   collection.Table("QuestionOptions");
+                   collection.Key(key => key.Column("InterviewSummaryId"));
+                   collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
+               },
+               relation => relation.Component(element =>
+               {
+                   element.Property(x => x.QuestionId);
+                   element.Property(x => x.Text);
+                   element.Property(x => x.Value);
+               }));
+        }
+    }
 
-            //public virtual IDictionary<Guid, QuestionAnswer> AnswersToFeaturedQuestions { get; set; }
-            //public virtual IList<InterviewCommentedStatus> CommentedStatusesHistory { get; set; }
+    public class QuestionAnswerMap : ClassMapping<QuestionAnswer>
+    {
+        public QuestionAnswerMap()
+        {
+            this.Table("AnswersToFeaturedQuestions");
+
+            this.ComposedId(cmp =>
+            {
+                cmp.ManyToOne(x => x.InterviewSummary, clm => clm.Column("InterviewSummaryId"));
+                cmp.Property(x => x.Id, clm => clm.Column("id"));
+            });
+
+            Property(x => x.Title, col => col.Column("AnswerTitle"));
+            Property(x => x.Answer, col => col.Column("AnswerValue"));
         }
     }
 }

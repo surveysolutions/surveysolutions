@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
@@ -11,8 +10,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
-using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
@@ -74,9 +71,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
            return this.UpdateInterviewSummary(interviewSummary, updateDate, interview =>
             {
-                if (interview.AnswersToFeaturedQuestions.ContainsKey(questionId))
+                if (interview.AnswersToFeaturedQuestions.Any(x => x.Id == questionId))
                 {
-                    interview.AnswersToFeaturedQuestions[questionId].Answer = answer;
+                    interview.AnswerFeaturedQuestion(questionId, answer);
                 }
             });
         }
@@ -86,13 +83,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             return this.UpdateInterviewSummary(interviewSummary, updateDate, interview =>
             {
-                if (interview.AnswersToFeaturedQuestions.ContainsKey(questionId))
+                if (interview.AnswersToFeaturedQuestions.Any(x => x.Id == questionId))
                 {
-                    var featuredQuestion = interview.AnswersToFeaturedQuestions[questionId] as QuestionAnswerWithOptions;
+                    var featuredQuestion = interview.AnswersToFeaturedQuestions.First(x => x.Id == questionId);
                     if (featuredQuestion == null)
                         return;
 
-                    featuredQuestion.SetAnswerAsAnswerValues(answers);
+                    interview.AnswerFeaturedQuestion(questionId, answers);
                 }
             });
         }
@@ -218,9 +215,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             {
                 foreach (var question in evnt.Payload.Questions)
                 {
-                    if (interview.AnswersToFeaturedQuestions.ContainsKey(question.Id))
+                    if (interview.AnswersToFeaturedQuestions.Any(x => x.Id == question.Id))
                     {
-                        interview.AnswersToFeaturedQuestions[question.Id].Answer = string.Empty;
+                        interview.AnswerFeaturedQuestion(question.Id, string.Empty);
                     }
                 }
             });
@@ -359,10 +356,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     {
                         foreach (var answeredQuestionSynchronizationDto in evnt.Payload.FeaturedQuestionsMeta)
                         {
-                            if (interview.AnswersToFeaturedQuestions.ContainsKey(answeredQuestionSynchronizationDto.Id))
+                            if (interview.AnswersToFeaturedQuestions.Any(x => x.Id == answeredQuestionSynchronizationDto.Id))
                             {
-                                interview.AnswersToFeaturedQuestions[answeredQuestionSynchronizationDto.Id].Answer =
-                                    answeredQuestionSynchronizationDto.Answer.ToString();
+                                interview.AnswerFeaturedQuestion(answeredQuestionSynchronizationDto.Id, answeredQuestionSynchronizationDto.Answer.ToString());
                             }
                         }
                     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Raven.Client.Linq;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
@@ -13,42 +14,40 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
         public InterviewSummary()
         {
-            this.AnswersToFeaturedQuestions = new Dictionary<Guid, QuestionAnswer>();
-            this.CommentedStatusesHistory = new List<InterviewCommentedStatus>();
+            this.AnswersToFeaturedQuestions = new HashSet<QuestionAnswer>();
+            this.CommentedStatusesHistory = new HashSet<InterviewCommentedStatus>();
+            this.QuestionOptions = new HashSet<QuestionOptions>();
         }
 
-        public InterviewSummary(QuestionnaireDocument questionnaire)
+        public InterviewSummary(QuestionnaireDocument questionnaire) : this()
         {
-            this.CommentedStatusesHistory = new List<InterviewCommentedStatus>();
-            this.AnswersToFeaturedQuestions = new Dictionary<Guid, QuestionAnswer>();
-
             foreach (var featuredQuestion in questionnaire.Find<IQuestion>(q => q.Featured))
             {
-                this.AnswersToFeaturedQuestions[featuredQuestion.PublicKey] = this.questionTypesWithOptions.Contains(featuredQuestion.QuestionType)
-                    ? this.CreateFeaturedQuestionWithOptions(featuredQuestion)
-                    : this.CreateFeaturedQuestion(featuredQuestion);
+                var result = new QuestionAnswer
+                {
+                    Id = featuredQuestion.PublicKey,
+                    Title = featuredQuestion.QuestionText,
+                    Answer = string.Empty,
+                    InterviewSummary = this
+                };
+
+                this.AnswersToFeaturedQuestions.Add(result);
+
+                if (featuredQuestion.QuestionType.In(this.questionTypesWithOptions) && featuredQuestion.Answers != null)
+                {
+                    var options = featuredQuestion.Answers.Select(option => 
+                        new QuestionOptions
+                        {
+                            QuestionId = featuredQuestion.PublicKey,
+                            Text = option.AnswerText,
+                            Value = decimal.Parse(option.AnswerValue)
+                        });
+                    foreach (var option in options)
+                    {
+                        this.QuestionOptions.Add(option);
+                    }
+                }
             }
-        }
-
-        private QuestionAnswer CreateFeaturedQuestion(IQuestion featuredQuestion)
-        {
-            return new QuestionAnswer
-            {
-                Id = featuredQuestion.PublicKey,
-                Title = featuredQuestion.QuestionText,
-                Answer = string.Empty
-            };
-        }
-
-        private QuestionAnswerWithOptions CreateFeaturedQuestionWithOptions(IQuestion featuredQuestion)
-        {
-            return new QuestionAnswerWithOptions()
-            {
-                Id = featuredQuestion.PublicKey,
-                Title = featuredQuestion.QuestionText,
-                Options = featuredQuestion.Answers.Select(option=> new QuestionOptions(){Text = option.AnswerText,Value = decimal.Parse(option.AnswerValue)}).ToList(),
-                Answer = string.Empty
-            };
         }
 
         public virtual string SummaryId { get; set; }
@@ -58,9 +57,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public virtual string TeamLeadName { get; set; }
         public virtual UserRoles ResponsibleRole { get; set; }
         public virtual DateTime UpdateDate { get; set; }
-        public virtual IDictionary<Guid, QuestionAnswer> AnswersToFeaturedQuestions { get; set; }
-        public virtual IList<InterviewCommentedStatus> CommentedStatusesHistory { get; set; }
+        public virtual ISet<QuestionAnswer> AnswersToFeaturedQuestions { get; protected set; }
+        public virtual ISet<InterviewCommentedStatus> CommentedStatusesHistory { get; protected set; }
+        public virtual ISet<QuestionOptions> QuestionOptions { get; protected set; }
+
         public virtual bool WasCreatedOnClient { get; set; }
+
+        public virtual void AnswerFeaturedQuestion(Guid questionId, string answer)
+        {
+            this.AnswersToFeaturedQuestions.First(x => x.Id == questionId).Answer = answer;
+        }
+
+        public virtual void AnswerFeaturedQuestion(Guid questionId, decimal[] answers)
+        {
+            var options = this.QuestionOptions.Where(o => o.QuestionId == questionId && answers.Contains(o.Value))
+                                              .Select(o => o.Text);
+            this.AnswerFeaturedQuestion(questionId, string.Join(",", options));
+        }
     }
 
     public class InterviewCommentedStatus
@@ -74,26 +87,38 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
     public class QuestionAnswer
     {
-        public Guid Id { get; set; }
-        public string Title { get; set; }
-        public string Answer { get; set; }
-    }
+        public virtual Guid Id { get; set; }
+        public virtual string Title { get; set; }
+        public virtual string Answer { get; set; }
 
-    public class QuestionAnswerWithOptions : QuestionAnswer
-    {
-        public List<QuestionOptions> Options { get; set; }
+        public virtual InterviewSummary InterviewSummary { get; set; }
 
-        public void SetAnswerAsAnswerValues(decimal[] answerValues)
+        protected bool Equals(QuestionAnswer other)
         {
-            var options = this.Options.Where(o => answerValues.Contains(o.Value)).Select(o=>o.Text);
+            return Equals(this.InterviewSummary, other.InterviewSummary) && this.Id.Equals(other.Id);
+        }
 
-            this.Answer = string.Join(",", options);
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((QuestionAnswer)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((this.InterviewSummary != null ? this.InterviewSummary.GetHashCode() : 0) * 397) ^ this.Id.GetHashCode();
+            }
         }
     }
 
     public class QuestionOptions
     {
-        public decimal Value { get; set; }
-        public string Text { get; set; }
+        public virtual Guid QuestionId { get; set; }
+        public virtual decimal Value { get; set; }
+        public virtual string Text { get; set; }
     }
 }

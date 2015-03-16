@@ -12,6 +12,8 @@ namespace WB.UI.Headquarters.Filters
 {
     public class InstallationAttribute : ActionFilterAttribute
     {
+        private static bool Installed = false;
+
         private IIdentityManager identityManager
         {
             get { return ServiceLocator.Current.GetInstance<IIdentityManager>(); }
@@ -19,20 +21,26 @@ namespace WB.UI.Headquarters.Filters
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (filterContext.Controller is WB.UI.Headquarters.Controllers.ControlPanelController) return;
-            if (filterContext.Controller is MaintenanceController) return;
-
-            var isInstallController = filterContext.Controller is InstallController;
-            var isHQUserExists = identityManager.GetUsersInRole(UserRoles.Headquarter.ToString()).Any();
-
-            if (isInstallController && isHQUserExists)
-                throw new HttpException(404, string.Empty);
-
-            if (!isInstallController && !isHQUserExists)
+            if (!Installed)
             {
-                filterContext.Result =
-                    new RedirectToRouteResult(
-                        new RouteValueDictionary(new {controller = "Install", action = "Finish"}));
+
+                if (filterContext.Controller is WB.UI.Headquarters.Controllers.ControlPanelController) return;
+                if (filterContext.Controller is MaintenanceController) return;
+
+                var isInstallController = filterContext.Controller is InstallController;
+                var isHQUserExists = identityManager.GetUsersInRole(UserRoles.Headquarter.ToString()).Any();
+
+                if (isInstallController && isHQUserExists)
+                    throw new HttpException(404, string.Empty);
+
+                if (!isInstallController && !isHQUserExists)
+                {
+                    filterContext.Result =
+                        new RedirectToRouteResult(
+                            new RouteValueDictionary(new { controller = "Install", action = "Finish" }));
+                }
+
+                Installed = true;
             }
         }
     }

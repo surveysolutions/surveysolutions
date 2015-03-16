@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
 
             var teamInterviewsViewItems = seachIndexContents
                 .Select(x => new TeamInterviewsViewItem {
-                    FeaturedQuestions = x.AnswersToFeaturedQuestions.Values.Select(a => new InterviewFeaturedQuestion()
+                    FeaturedQuestions = x.AnswersToFeaturedQuestions.Select(a => new InterviewFeaturedQuestion()
                     {
                         Id = a.Id,
                         Answer = a.Answer,
