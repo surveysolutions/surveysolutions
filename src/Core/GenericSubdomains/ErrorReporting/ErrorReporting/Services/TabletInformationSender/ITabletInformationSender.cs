@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 
 namespace WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender
 {
@@ -6,7 +7,7 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSen
         event EventHandler<InformationPackageEventArgs> InformationPackageCreated;
         event EventHandler<InformationPackageCancellationEventArgs> ProcessCanceled;
         event EventHandler ProcessFinished;
-        void Run();
+        Task Run();
         void Cancel();
     }
 }

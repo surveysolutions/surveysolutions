@@ -117,6 +117,7 @@ namespace WB.UI.Capi
                 this.btnSendTabletInfo.Click += this.btnSendTabletInfo_Click;
                 this.btnSendTabletInfo.ProcessFinished += this.btnSendTabletInfo_ProcessFinished;
                 this.btnSendTabletInfo.ProcessCanceled += this.btnSendTabletInfo_ProcessCanceled;
+                this.btnSendTabletInfo.SenderCanceled += this.btnSendTabletInfo_SenderCanceled;
                 this.ActionBar.SetDisplayShowHomeEnabled(true);
                 this.Title = Resources.GetText(Resource.String.InterviewLoadingError);
 
@@ -236,6 +237,11 @@ namespace WB.UI.Capi
         {
             this.tvSyncResult.Visibility = ViewStates.Visible;
             this.tvSyncResult.Text = string.Format(Resources.GetText(Resource.String.SendingOfInformationPackageIsCanceled), e.Reason);
+        }
+
+        private void btnSendTabletInfo_SenderCanceled(object sender, EventArgs e)
+        {
+            this.tvSyncResult.Text = Resources.GetText(Resource.String.SendingOfInformationPackageIsCanceling);
         }
     }
 }
