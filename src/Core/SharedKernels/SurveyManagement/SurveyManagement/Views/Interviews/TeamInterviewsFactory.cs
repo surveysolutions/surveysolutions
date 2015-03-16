@@ -1,60 +1,44 @@
 using System.Linq;
+using NHibernate.Linq;
 using Raven.Client;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
 {
     public class TeamInterviewsFactory : IViewFactory<TeamInterviewsInputModel, TeamInterviewsView>
     {
-        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> reader;
 
-        public TeamInterviewsFactory(IReadSideRepositoryIndexAccessor indexAccessor)
+        public TeamInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> reader)
         {
-            this.indexAccessor = indexAccessor;
+            this.reader = reader;
         }
 
         public TeamInterviewsView Load(TeamInterviewsInputModel input)
         {
-             string indexName = typeof(InterviewsSearchIndex).Name;
-
-            var items = indexAccessor.Query<SeachIndexContent>(indexName);
-
-            if (!string.IsNullOrWhiteSpace(input.SearchBy))
+            var interviewsPage = reader.Query(_ => 
             {
-                items = items.Search(x => x.FeaturedQuestionsWithAnswers, input.SearchBy, escapeQueryOptions: EscapeQueryOptions.AllowAllWildcards, options: SearchOptions.And);
-            }
+                var items = ApplyDynamicFilter(input, _);
+                items.Fetch(x => x.AnswersToFeaturedQuestions);
+                var seachIndexContents = this.DefineOrderBy(items.ProjectFromIndexFieldsInto<InterviewSummary>(), input)
+                    .Skip((input.Page - 1) * input.PageSize)
+                    .Take(input.PageSize)
+                    .ToList();
+                return seachIndexContents;
+            });
 
-            if (input.Status.HasValue)
+
+            var totalCount = reader.Query(_ =>
             {
-                items = items.Where(x => (x.Status == input.Status));
-            }
+                var counter = ApplyDynamicFilter(input, _);
+                return counter.Count();
+            }); 
 
-            if (input.QuestionnaireId.HasValue)
-            {
-                items = items.Where(x => (x.QuestionnaireId == input.QuestionnaireId));
-            }
-
-            if (input.QuestionnaireVersion.HasValue)
-            {
-                items = items.Where(x => (x.QuestionnaireVersion == input.QuestionnaireVersion));
-            }
-
-            items = input.ResponsibleId.HasValue
-                ? items.Where(x => x.ResponsibleId == input.ResponsibleId)
-                : items.Where(x => x.TeamLeadId == input.ViewerId);
-
-            var totalCount = items.Count();
-            var seachIndexContents = this.DefineOrderBy(items.ProjectFromIndexFieldsInto<InterviewSummary>(), input)
-                                         .Skip((input.Page - 1) * input.PageSize)
-                                         .Take(input.PageSize)
-                                         .ToList();
-
-            var teamInterviewsViewItems = seachIndexContents
+            var teamInterviewsViewItems = interviewsPage
                 .Select(x => new TeamInterviewsViewItem {
                     FeaturedQuestions = x.AnswersToFeaturedQuestions.Select(a => new InterviewFeaturedQuestion()
                     {
@@ -75,12 +59,41 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
                     CanApproveOrReject = x.Status == InterviewStatus.Completed
                         || x.Status == InterviewStatus.RejectedByHeadquarters,
                     CreatedOnClient = x.WasCreatedOnClient
-                });
+                }).ToList();
             return new TeamInterviewsView
             {
                 TotalCount = totalCount,
                 Items = teamInterviewsViewItems
             };   
+        }
+
+        private static IQueryable<InterviewSummary> ApplyDynamicFilter(TeamInterviewsInputModel input, IQueryable<InterviewSummary> _)
+        {
+            var items = _;
+            if (!string.IsNullOrWhiteSpace(input.SearchBy))
+            {
+                items = items.Where(x => x.AnswersToFeaturedQuestions.Any(a => a.Answer.Contains(input.SearchBy)));
+            }
+
+            if (input.Status.HasValue)
+            {
+                items = items.Where(x => (x.Status == input.Status));
+            }
+
+            if (input.QuestionnaireId.HasValue)
+            {
+                items = items.Where(x => (x.QuestionnaireId == input.QuestionnaireId));
+            }
+
+            if (input.QuestionnaireVersion.HasValue)
+            {
+                items = items.Where(x => (x.QuestionnaireVersion == input.QuestionnaireVersion));
+            }
+
+            items = input.ResponsibleId.HasValue
+                ? items.Where(x => x.ResponsibleId == input.ResponsibleId)
+                : items.Where(x => x.TeamLeadId == input.ViewerId);
+            return items;
         }
 
         private IQueryable<InterviewSummary> DefineOrderBy(IQueryable<InterviewSummary> query, TeamInterviewsInputModel model)

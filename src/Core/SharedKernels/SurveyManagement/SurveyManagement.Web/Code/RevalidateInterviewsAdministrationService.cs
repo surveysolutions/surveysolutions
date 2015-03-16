@@ -23,9 +23,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
         private static string statusMessage;
 
         private readonly ICommandService commandService;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader;
         private readonly ILogger logger;
 
-        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
 
         static RevalidateInterviewsAdministrationService()
         {
@@ -34,11 +34,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
         public RevalidateInterviewsAdministrationService(
             ILogger logger,
-            ICommandService commandService, IReadSideRepositoryIndexAccessor indexAccessor)
+            ICommandService commandService, 
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader)
         {
             this.logger = logger;
             this.commandService = commandService;
-            this.indexAccessor = indexAccessor;
+            this.interviewsReader = interviewsReader;
         }
 
         public void RevalidateAllInterviewsWithErrorsAsync()
@@ -94,22 +95,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
                 areInterviewsBeingRevalidatingNow = true;
 
-                string indexName = typeof(InterviewsSearchIndex).Name;
-
-                var items = this.indexAccessor.Query<InterviewSummary>(indexName)
-                    .Where(interview =>
-                        interview.HasErrors == true && interview.IsDeleted == false &&
+                var interviews = this.interviewsReader.Query(_ => _.Where(interview =>
+                    interview.HasErrors == true && interview.IsDeleted == false &&
                         (interview.Status == InterviewStatus.Completed ||
-                         interview.Status == InterviewStatus.RejectedBySupervisor ||
-                         interview.Status == InterviewStatus.ApprovedBySupervisor ||
-                         interview.Status == InterviewStatus.ApprovedByHeadquarters ||
-                         interview.Status == InterviewStatus.RejectedByHeadquarters));
+                            interview.Status == InterviewStatus.RejectedBySupervisor ||
+                            interview.Status == InterviewStatus.ApprovedBySupervisor ||
+                            interview.Status == InterviewStatus.ApprovedByHeadquarters ||
+                            interview.Status == InterviewStatus.RejectedByHeadquarters)).ToList());
 
                 UpdateStatusMessage("Determining count of interview to be revalidated.");
 
                 ThrowIfShouldStopViewsRebuilding();
 
-                int allInterviewsCount = items.Count();
+                int allInterviewsCount = interviews.Count();
 
                 int processedInterviewsCount = 0;
 
@@ -127,7 +125,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
                     {
                         UpdateStatusMessage("Acquiring portion of interviews to be revalidated. " + GetReadableRevalidationgDetails(revalidationStarted, processedInterviewsCount, allInterviewsCount, 0));
 
-                        var interviewItemIds = items.Skip(i * pageSize).Take(pageSize).ToList();
+                        var interviewItemIds = interviews.Skip(i * pageSize).Take(pageSize).ToList();
 
                         foreach (var interviewItemId in interviewItemIds)
                         {
