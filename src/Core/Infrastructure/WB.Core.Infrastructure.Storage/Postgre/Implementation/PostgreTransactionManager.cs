@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Transactions;
+using System.Data;
 using NHibernate;
 using WB.Core.Infrastructure.Transactions;
-using IsolationLevel = System.Data.IsolationLevel;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {

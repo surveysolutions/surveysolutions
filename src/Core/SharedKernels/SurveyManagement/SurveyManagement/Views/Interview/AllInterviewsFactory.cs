@@ -1,11 +1,9 @@
-using System.Collections.Generic;
 using System.Linq;
-using Raven.Client;
+using NHibernate.Linq;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {
@@ -24,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             var interviews = this.reader.Query(_ =>
             {
                 var items = ApplyFilter(input, _);
-
+                items = items.Fetch(x => x.AnswersToFeaturedQuestions);
                 items = this.DefineOrderBy(items, input);
 
                 return items.Skip((input.Page - 1)*input.PageSize)
