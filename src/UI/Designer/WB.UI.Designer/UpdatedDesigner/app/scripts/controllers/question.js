@@ -248,7 +248,7 @@
                 if ($scope.activeQuestion.useListAsOptionsEditor) {
                     return;
                 }
-                if (!$scope.questionForm.stringifiedOptions.$valid) {
+                if (_.isUndefined($scope.questionForm.stringifiedOptions) || !$scope.questionForm.stringifiedOptions.$valid) {
                     return;
                 }
                 $scope.activeQuestion.options = optionsService.parseOptions($scope.activeQuestion.stringifiedOptions);
