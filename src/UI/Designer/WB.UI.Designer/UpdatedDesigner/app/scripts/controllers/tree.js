@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('TreeCtrl',
-        function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, confirmService, hotkeys, notificationService, $compile) {
+        function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, confirmService, hotkeys, notificationService, $timeout) {
             'use strict';
             var me = this;
 
@@ -546,6 +546,33 @@
                     });
             };
             $scope.refreshTree();
+
+            var scrollToElement = function (itemId) {
+                if ($(itemId).length === 0) {
+                    return;
+                }
+
+                if ($(itemId).isOnScreen()) {
+                    return;
+                }
+                //$(".question-list").scrollTo(itemId);
+                var scrollTop = Math.max($(itemId).offset().top - $(".question-list").offset().top - 10, 0);
+                $scope.$broadcast("scrollToPosition", {
+                    target: ".question-list",
+                    scrollTop: scrollTop,
+                    itemId: itemId
+                });
+            }
+
+            $scope.$on('scrollToElement', function (event, itemId) {
+                    if ($(itemId).length === 0) {
+                        $timeout(function() {
+                            scrollToElement(itemId);
+                        }, 1000);
+                    } else {
+                        scrollToElement(itemId);
+                    }
+            });
 
             $rootScope.$on('questionUpdated', function (event, data) {
                 var question = questionnaireService.findItem($scope.items, data.itemId);

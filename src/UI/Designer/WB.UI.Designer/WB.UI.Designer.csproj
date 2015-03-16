@@ -885,6 +885,8 @@
     <Content Include="UpdatedDesigner\vendor\jquery-mousewheel\jquery.mousewheel.min.js" />
     <Content Include="UpdatedDesigner\vendor\jquery-mousewheel\LICENSE.txt" />
     <Content Include="UpdatedDesigner\vendor\jquery-mousewheel\README.md" />
+    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\jquery.scrollTo.js" />
+    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\jquery.scrollTo.min.js" />
     <Content Include="UpdatedDesigner\vendor\jquery\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\jquery\bower.json" />
     <Content Include="UpdatedDesigner\vendor\jquery\dist\jquery.js" />
@@ -1261,6 +1263,12 @@
     <Content Include="UpdatedDesigner\content\designer-start\custom-fonts.less" />
     <Content Include="UpdatedDesigner\content\designer-start\designer-list.less" />
     <Content Include="UpdatedDesigner\content\designer-start\designer-start.less" />
+    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\LICENSE" />
+    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\package.json" />
+    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\README.md" />
+    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\scrollTo.jquery.json" />
     <Content Include="UpdatedDesigner\content\designer-start\font-styles.less" />
     <Content Include="UpdatedDesigner\content\designer-start\inputs.less" />
     <Content Include="UpdatedDesigner\content\designer-start\wb-variables.less" />

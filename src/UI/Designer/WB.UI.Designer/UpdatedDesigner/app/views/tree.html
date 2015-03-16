@@ -10,7 +10,7 @@
         </div>
 
         <div ng-switch-when="default">
-            <a class="chapter-title-text" ui-sref="questionnaire.chapter.group({ chapterId: currentChapter.itemId, itemId: currentChapter.itemId})">
+            <a id="group-{{currentChapter.itemId}}" class="chapter-title-text" ui-sref="questionnaire.chapter.group({ chapterId: currentChapter.itemId, itemId: currentChapter.itemId})">
                 <span ng-bind-html="currentChapter.title "></span>
             </a>
             <ul class="controls-right">

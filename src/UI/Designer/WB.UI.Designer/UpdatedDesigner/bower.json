@@ -38,7 +38,8 @@
     "angular-perfect-scrollbar": "~0.1.4",
     "ng-context-menu": "~1.0.1",
     "angular-pnotify": "~0.0.6",
-    "angular-ui-ace": "~0.2.3"
+    "angular-ui-ace": "~0.2.3",
+    "jquery.scrollTo": "~1.4.14"
   },
   "resolutions": {
     "angular": "~1.2.21",

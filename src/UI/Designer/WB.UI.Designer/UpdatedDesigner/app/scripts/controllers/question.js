@@ -61,7 +61,9 @@
 
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = false;
 
-                $scope.questionForm.$setPristine();
+                if (!_.isNull($scope.questionForm) && !_.isUndefined($scope.questionForm)) {
+                    $scope.questionForm.$setPristine();
+                }
             };
 
             var dataBind = function (result) {
