@@ -1,6 +1,9 @@
 ﻿using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
+using WB.UI.Designer.Code;
+using WB.UI.Designer.Filters;
+using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -20,6 +23,7 @@ namespace WB.UI.Designer.Controllers
     [CustomAuthorize]
     [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
     [RequireHttps]
+    [ShowNotesToUserFilter]
     public class AccountController : BaseController
     {
         private readonly ISystemMailer mailer;
@@ -70,8 +74,7 @@ namespace WB.UI.Designer.Controllers
                 return this.RedirectToLocal(returnUrl);
             }
 
-            // If we got this far, something failed, redisplay form
-            this.Error("The user name or password provided is incorrect.");
+            this.ModelState.AddModelError("LoginError", ErrorMessages.The_user_name_or_password_provided_is_incorrect);
             return View(model);
         }
 
@@ -191,13 +194,12 @@ namespace WB.UI.Designer.Controllers
             var isUserRegisterSuccessfully = false;
             if (AppSettings.Instance.IsReCaptchaEnabled && !captchaValid)
             {
-                this.Error("You did not type the verification word correctly. Please try again.");
+                this.ModelState.AddModelError("RegisterError", ErrorMessages.You_did_not_type_the_verification_word_correctly);
             }
             else
             {
                 if (this.ModelState.IsValid)
                 {
-
                     // Attempt to register the user
                     try
                     {
@@ -224,7 +226,7 @@ namespace WB.UI.Designer.Controllers
                     }
                     catch (MembershipCreateUserException e)
                     {
-                        this.Error(e.StatusCode.ToErrorCode());
+                        this.ModelState.AddModelError("RegisterError", e.StatusCode.ToErrorCode());
                     }
                     catch (Exception e)
                     {
@@ -337,9 +339,7 @@ namespace WB.UI.Designer.Controllers
 
         private ActionResult RegisterStepTwo()
         {
-            this.Attention(
-                "To complete the registration process look for an email in your inbox that provides further instructions.");
-            return this.RedirectToAction("Login");
+            return this.View("RegisterStepTwo");
         }
 
         [HttpPost]

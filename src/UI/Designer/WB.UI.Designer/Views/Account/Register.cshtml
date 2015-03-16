@@ -5,41 +5,48 @@
 
 @{
     ViewBag.Title = "Register";
-    Layout = "~/Views/Shared/Layout.empty.cshtml";
+    Layout = "~/Views/Shared/Layout.Account.cshtml";
 }
 
-@using (Html.BeginForm("register", "account", null, FormMethod.Post, new { @class = "form-signin", autocomplete = "off" }))
+@using (Html.BeginForm("register", "account", null, FormMethod.Post, new { @id = "start-register", autocomplete = "off" }))
 {
     @Html.AntiForgeryToken()
-    <legend>@Model.GetLabel()</legend>
-    <fieldset class="form-horizontal">
-        @{
-    this.Html.RenderPartial("EditForm");
-        }
+    <h1>Register</h1>
+    if (!ViewContext.ViewData.ModelState.IsValid)
+    {
+        <p class="note has-error">@Html.ValidationMessage("RegisterError")</p>
+    }
+    <div class="form-group">
+        @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", placeholder = "Login" })
+        @Html.ValidationMessageFor(x => x.UserName, null, new { @class = "help-inline" })
+    </div>
+    <div class="form-group">
+        @Html.TextBoxFor(x => x.Email, new { @class = "form-control", @type = "email", placeholder = "E-mail" })
+        @Html.ValidationMessageFor(x => x.Email, null, new { @class = "help-inline" })
+    </div>
+    <div class="form-group">
+        @Html.PasswordFor(x => x.Password, new { @class = "form-control", placeholder = "Password (min 8 symbols, numbers AND letters)" })
+        @Html.ValidationMessageFor(x => x.Password, null, new { @class = "help-inline" })
+    </div>
+    <div class="form-group">
+        @Html.PasswordFor(x => x.ConfirmPassword, new { @class = "form-control", placeholder = "Repeat password" })
+        @Html.ValidationMessageFor(x => x.ConfirmPassword, null, new { @class = "help-inline" })
+    </div>
 
-        @if (AppSettings.Instance.IsReCaptchaEnabled)
-        {
-            <div style="line-height: 0">
-                @Html.Raw(Html.GenerateCaptcha())
-            </div>
-        }
-
-        <div class="form-actions">
-            <button class="btn btn-large btn-primary pull-right" type="submit">Register</button>
+    if (AppSettings.Instance.IsReCaptchaEnabled)
+    {
+        <div style="line-height: 0">
+            @Html.Raw(Html.GenerateCaptcha())
         </div>
-    </fieldset>
+    }
+
+    <div class="form-actions">
+        <input type="submit" class="btn btn-success btn-lg" value="Register" />
+        <a class="btn btn-link" href="@Url.Action("Login")">log in</a>
+        <a class="btn btn-link" href="@Url.Action("PasswordReset")">forgot password</a>
+    </div>
 }
 
 @section Scripts {
     @Scripts.Render("~/editform")
-}
-
-@section Styles
-{
-    <style>
-        #recaptcha_area {
-            margin-left: 175px;
-        }
-    </style>
-
 }

@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddStaticTextHandlerTests
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                questionnaire.AddStaticText(entityId: entityId, parentId: notExistingParentId, text: "title", responsibleId: responsibleId));
+                questionnaire.AddStaticTextAndMoveIfNeeded(entityId: entityId, parentId: notExistingParentId, text: "title", responsibleId: responsibleId));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
