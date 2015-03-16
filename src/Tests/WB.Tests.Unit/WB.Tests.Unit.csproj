@@ -240,6 +240,7 @@
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\QuestionnaireApiControllerTestContext.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_absent_chapter.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_absent_questionnaire.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_all_broken_dependencies_after_group_deleting.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_chapter_and_chapter_exists.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_singleoption_filtered_combobox_question_info_with_18_options.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_singleoption_filtered_combobox_question_info_with_more_than_200_options.cs" />
@@ -288,6 +289,7 @@
     <Compile Include="BoundedContexts\Capi\InterviewViewModelTests\when_setting_validity_to_answered_prefilled_question_in_interview.cs" />
     <Compile Include="BoundedContexts\Capi\SynchronozationProcessorTests\SynchronozationProcessorTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_QuestionnaireItemMoved_event_received_and_question_moved_from_the_first_position_to_the_last_one.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_all_broken_dependencies_after_group_deleting.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_and_providing_existing_targetId.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_and_source_not_present.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_without_permissions_to_edit_questionnaire.cs" />
@@ -295,7 +297,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_cloned_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_title_has_invalid_characters.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_validation_contains_2_id_references_and_1_of_them_invalid.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_size_more_then_10MB.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_size_more_then_5MB.cs" />
     <Compile Include="Core\Synchronization\SyncManagerTestContext.cs" />
     <Compile Include="Core\Synchronization\when_getting_interview_ids_and_device_is_not_registered.cs" />
     <Compile Include="Core\Synchronization\when_getting_interview_ids_and_device_is_registered_and_last_package_id_is_empty.cs" />
@@ -1762,17 +1764,11 @@
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_PushSyncItem_called_and_item_has_empty_content.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_PushSyncItem_called_and_item_content_is_not_empty.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\InterviewApiControllerTestsContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_interview_details_under_headquarter_user.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_interview_details_which_belong_to_another_supervisor.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_interview_details_with_specified_interview_status.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_interview_details_with_specified_responsible_name.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_interview_summary_for_map_point.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_interview_summary_for_map_point_and_input_view_model_is_null.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_interview_summary_for_map_point_and_interview_summary_does_not_contains_history_of_statuses.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_interview_summary_for_map_point_and_interview_summary_does_not_exists_for_current_interview.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\InterviewControllerTestsContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\when_getting_interview_details_under_headquarter_user.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\when_getting_interview_details_which_belong_to_another_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewQuestionViewTests\when_creating_InterviewQuestionView_for_TextList_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewQuestionViewTests\when_creating_view_for_question_which_is_invalid_and_disabled.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewQuestionViewTests\when_creating_view_for_question_which_not_answered_and_parent_group_is_enabled.cs" />
@@ -1887,7 +1883,6 @@
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireUpgradeServiceTests\when_CreateRostersVariableName_called_for_QuestionnaireDocument_with_invalid_roster_variable_name.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ResourceControllerTests\when_getting_interview_file_which_is_absent.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ResourceControllerTests\when_getting_interview_file_which_is_present.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\when_getting_not_existing_interview_details.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ResourceControllerTests\ResourceControllerTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\FileBasedDataExportServiceTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_answer_on_multimedia_question_is_disabled.cs" />

@@ -1,9 +1,12 @@
 ﻿@using WB.UI.Designer.BootstrapSupport
 @model WB.UI.Designer.Models.LoginModel
 
+@helper HasError()
+{ @(ViewContext.ViewData.ModelState.IsValid ? "" : "has-error") }
+
 @{
     ViewBag.Title = "Login";
-    Layout = "~/Views/Shared/Layout.empty.cshtml";
+    Layout = "~/Views/Shared/Layout.Account.cshtml";
 }
 
 
@@ -17,27 +20,39 @@
 <![endif]-->
 
 
-@using (Html.BeginForm("login", "account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-signin", autocomplete = "off" }))
+@using (Html.BeginForm("login", "account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @id="start-log-in", autocomplete = "off" }))
 {
     @Html.AntiForgeryToken()
-    <legend>@Model.GetLabel()</legend>
-    <fieldset class="form-horizontal">
-
-        @{
-    this.Html.RenderPartial("EditForm");
-        }
-        <div class="form-actions">
-            <button class="btn btn-large btn-primary pull-right" type="submit">Log in</button>
-            <p>
-                @Html.ActionLink("Register", "register") if you don't have an account.
-            </p>
-            <p>
-                Forgot your password? Click @Html.ActionLink("here", "PasswordReset") to reset your password.
-            </p>
-        </div>
-    </fieldset>
+    <h1>
+        Welcome to Survey Solutions<br />
+        Questionnaire designer
+    </h1>
+    <p class="note">Please log in or @Html.ActionLink("Register", "register")</p>
+    if (!ViewContext.ViewData.ModelState.IsValid)
+    {
+        <p class="note has-error">@Html.ValidationMessage("LoginError")</p>
+    }
+    <div class="form-group @HasError()">
+        @Html.TextBoxFor(x => x.UserName, new { @class = "form-control " + HasError(), placeholder = "Login" })
+        @Html.ValidationMessageFor(x => x.UserName, null, new { @class = "help-inline" })
+    </div>
+    <div class="form-group @HasError()">
+        @Html.PasswordFor(x => x.Password, new { @class = "form-control " + HasError(), placeholder = "Password" })
+        @Html.ValidationMessageFor(x => x.Password, null, new { @class = "help-inline" })
+    </div>
+    <div class="form-group">
+        @Html.CheckBoxFor(x => x.RememberMe, new {@id="cb-stay-logged-in", @class = "checkbox" })
+        <label for="cb-stay-logged-in">
+            <span></span>Stay logged in for a day
+        </label><br />
+    </div>
+    <div class="form-actions">
+        <input class="btn btn-success btn-lg" type="submit" value="Log in" />
+        <a class="btn btn-link" href="@Url.Action("PasswordReset")">Forgot Password?</a>
+    </div>
 }
 
 @section Scripts {
     @Scripts.Render("~/editform")
 }
+

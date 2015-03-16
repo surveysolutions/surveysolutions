@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -155,6 +156,13 @@ namespace WB.UI.Designer.Api
             };
         }
 
+        [HttpGet]
+        [CamelCase]
+        public List<QuestionnaireItemLink> GetAllBrokenGroupDependencies(string id, Guid groupId)
+        {
+            return questionnaireInfoFactory.GetAllBrokenGroupDependencies(id, groupId);
+        }
+
         private QuestionnaireView GetQuestionnaire(Guid id)
         {
             var questionnaire = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
@@ -166,5 +174,6 @@ namespace WB.UI.Designer.Api
 
             return questionnaire;
         }
+
     }
 }
