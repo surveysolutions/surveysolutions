@@ -161,6 +161,8 @@
                 if (type !== "SingleOption" && type !== "MultyOption") {
                     $scope.setLinkSource(null);
                 }
+
+                $scope.questionForm.$setDirty();
             };
 
             $scope.cancelQuestion = function () {
@@ -258,6 +260,7 @@
                 if ($scope.activeQuestion.questionScope === 'Prefilled') {
                     $scope.activeQuestion.enablementCondition = '';
                 }
+                $scope.questionForm.$setDirty();
             };
 
             $scope.$watch('activeQuestion.isLinked', function (newValue) {
@@ -284,6 +287,7 @@
                 if (itemId) {
                     $scope.activeQuestion.linkedToQuestionId = itemId;
                     $scope.activeQuestion.linkedToQuestion = _.find($scope.sourceOfLinkedQuestions, { id: $scope.activeQuestion.linkedToQuestionId });
+                    $scope.questionForm.$setDirty();
                 } 
             };
 

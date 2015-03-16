@@ -39,6 +39,9 @@
                         return _.find($scope.activeRoster.rosterTypeOptions, { 'value': $scope.activeRoster.type }).text;
                     };
 
+                    if (!_.isNull($scope.editRosterForm) && !_.isUndefined($scope.editRosterForm)) {
+                        $scope.editRosterForm.$setPristine();
+                    }
                 };
 
                 var getSelected = function (collection, id) {
@@ -54,26 +57,31 @@
                 $scope.selectNumericQuestion = function(numericId) {
                     $scope.activeRoster.rosterSizeNumericQuestionId = numericId;
                     $scope.selectedNumericQuestion = getSelected($scope.activeRoster.numerics, $scope.activeRoster.rosterSizeNumericQuestionId);
+                    $scope.editRosterForm.$setDirty();
                 };
 
                 $scope.selectListQuestion = function(listId) {
                     $scope.activeRoster.rosterSizeListQuestionId = listId;
                     $scope.selectedListQuestion = getSelected($scope.activeRoster.lists, $scope.activeRoster.rosterSizeListQuestionId);
+                    $scope.editRosterForm.$setDirty();
                 };
 
                 $scope.selectMultiQuestion = function(multiId) {
                     $scope.activeRoster.rosterSizeMultiQuestionId = multiId;
                     $scope.selectedMultiQuestion = getSelected($scope.activeRoster.multiOption, $scope.activeRoster.rosterSizeMultiQuestionId);
+                    $scope.editRosterForm.$setDirty();
                 };
 
                 $scope.selectTitleQuestion = function(titleQuestionId) {
                     $scope.activeRoster.rosterTitleQuestionId = titleQuestionId;
                     $scope.selectedTitleQuestion = getSelected($scope.activeRoster.titles, $scope.activeRoster.rosterTitleQuestionId);
+                    $scope.editRosterForm.$setDirty();
                 };
 
 
                 $scope.updateRosterType = function (type) {
                     $scope.activeRoster.type = type;
+                    $scope.editRosterForm.$setDirty();
                 };
 
                 $scope.loadRoster = function() {
