@@ -60,6 +60,10 @@
                 $scope.setCascadeSource(question.cascadeFromQuestionId);
 
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = false;
+
+                if (!_.isNull($scope.questionForm) && !_.isUndefined($scope.questionForm)) {
+                    $scope.questionForm.$setPristine();
+                }
             };
 
             var dataBind = function (result) {

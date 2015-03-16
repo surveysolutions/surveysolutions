@@ -1,7 +1,7 @@
 <div class="question item statictext" context-menu data-target="context-menu-{{ item.itemId }}"
      ui-sref-active="selected" context-menu-hide-on-mouse-leave="true">
     <a class="handler" ui-tree-handle></a>
-    <a class="item-body" ui-sref="questionnaire.chapter.statictext({itemId: item.itemId})">
+    <a class="item-body" id="statictext-{{item.itemId}}" ui-sref="questionnaire.chapter.statictext({itemId: item.itemId})">
         <div class="item-text">
             <div class="icon icon-statictext"></div>
             <span ng-bind-html="item.text | escape | highlight:search.searchText"></span>
@@ -14,6 +14,18 @@
             </li>
             <li>
                 <a ng-click="cloneStaticText(item.itemId)">Clone</a>
+            </li>
+            <li>
+                <a ng-click="addQuestionAfter(item)">Add question after</a>
+            </li>
+            <li>
+                <a ng-click="addRosterAfter(item)">Add roster after</a>
+            </li>
+            <li>
+                <a ng-click="addGroupAfter(item)">Add group after</a>
+            </li>
+            <li>
+                <a ng-click="addStaticTextAfter(item)">Add static text after</a>
             </li>
         </ul>
     </div>

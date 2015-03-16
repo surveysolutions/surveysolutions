@@ -22,9 +22,10 @@ namespace WB.Tests.Unit
             string validationMessage,
             string instructions,
             string mask,
-            Guid responsibleId)
+            Guid responsibleId,
+            int? index = null)
         {
-            questionnaire.AddDefaultTypeQuestion(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
+            questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId, index));
             questionnaire.UpdateTextQuestion(questionId, title, variableName, variableLabel, isMandatory, isPreFilled, scope, enablementCondition, validationExpression, validationMessage, instructions, mask, responsibleId);
         }
 
@@ -41,7 +42,7 @@ namespace WB.Tests.Unit
             string instructions,
             Guid responsibleId)
         {
-            questionnaire.AddDefaultTypeQuestion(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
+            questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
             questionnaire.UpdateGpsCoordinatesQuestion(questionId, title, variableName, variableLabel, isMandatory, scope, enablementCondition, string.Empty, string.Empty, instructions, responsibleId);
         }
 
@@ -60,7 +61,7 @@ namespace WB.Tests.Unit
             string instructions,
             Guid responsibleId)
         {
-            questionnaire.AddDefaultTypeQuestion(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
+            questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
             questionnaire.UpdateDateTimeQuestion(questionId, title, variableName, variableLabel, isMandatory, isPreFilled, scope, enablementCondition, validationExpression, validationMessage, instructions, responsibleId);
         }
 
@@ -82,7 +83,7 @@ namespace WB.Tests.Unit
             bool areAnswersOrdered,
             int? maxAllowedAnswers)
         {
-            questionnaire.AddDefaultTypeQuestion(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
+            questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
             questionnaire.UpdateMultiOptionQuestion(questionId, title, variableName, variableLabel, isMandatory, scope, enablementCondition, validationExpression, validationMessage, instructions, responsibleId, options, linkedToQuestionId, areAnswersOrdered, maxAllowedAnswers);
         }
 
@@ -105,7 +106,7 @@ namespace WB.Tests.Unit
             bool isFilteredCombobox,
             Guid? cascadeFromQuestionId)
         {
-            questionnaire.AddDefaultTypeQuestion(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
+            questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
             questionnaire.UpdateSingleOptionQuestion(questionId, title, variableName, variableLabel, isMandatory, isPreFilled, scope, enablementCondition, validationExpression, validationMessage, instructions, responsibleId, options, linkedToQuestionId, isFilteredCombobox, cascadeFromQuestionId);
         }
 
@@ -127,7 +128,7 @@ namespace WB.Tests.Unit
             bool isInteger,
             int? countOfDecimalPlaces)
         {
-            questionnaire.AddDefaultTypeQuestion(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
+            questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
             questionnaire.UpdateDateTimeQuestion(questionId, title, variableName, variableLabel, isMandatory, isPreFilled, scope, enablementCondition, validationExpression, validationMessage, instructions, responsibleId);
         }
 
@@ -144,7 +145,7 @@ namespace WB.Tests.Unit
             Guid responsibleId,
             int? maxAnswerCount)
         {
-            questionnaire.AddDefaultTypeQuestion(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
+            questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
             questionnaire.UpdateTextListQuestion(questionId, title, variableName, variableLabel, isMandatory, enablementCondition, instructions, responsibleId, maxAnswerCount);
         }
 
@@ -160,7 +161,7 @@ namespace WB.Tests.Unit
             string instructions,
             Guid responsibleId)
         {
-            questionnaire.AddDefaultTypeQuestion(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
+            questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
             questionnaire.UpdateQRBarcodeQuestion(questionId, title, variableName, variableLabel, isMandatory, enablementCondition, instructions,responsibleId);
         }
     }

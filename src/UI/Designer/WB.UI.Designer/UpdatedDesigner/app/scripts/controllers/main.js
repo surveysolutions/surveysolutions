@@ -89,74 +89,6 @@ angular.module('designerApp')
 
             $scope.currentChapter = null;
 
-            $scope.addQuestion = function (parent) {
-                var newId = utilityService.guid();
-                var emptyQuestion = {
-                    "itemId": newId,
-                    "title": 'New Question',
-                    "type": 'Text',
-                    itemType: 'Question',
-                    getParentItem: function () { return parent; }
-                };
-
-                commandService.addQuestion($state.params.questionnaireId, parent.itemId, newId).success(function (result) {
-                    if (result.IsSuccess) {
-                        parent.items.push(emptyQuestion);
-                        $state.go('questionnaire.chapter.question', { chapterId: $state.params.chapterId, itemId: newId });
-                        $rootScope.$emit('questionAdded');
-                    }
-                });
-            };
-
-            $scope.addGroup = function (parent) {
-                var newId = utilityService.guid();
-                var emptyGroup = {
-                    "itemId": newId,
-                    "title": "New group",
-                    "items": [],
-                    itemType: 'Group',
-                    getParentItem: function () { return parent; }
-                };
-                commandService.addGroup($state.params.questionnaireId, emptyGroup, parent.itemId).success(function () {
-                    parent.items.push(emptyGroup);
-                    $rootScope.$emit('groupAdded');
-                    $state.go('questionnaire.chapter.group', { chapterId: $state.params.chapterId, itemId: newId });
-                });
-            };
-
-            $scope.addRoster = function (parent) {
-                var newId = utilityService.guid();
-                var emptyRoster = {
-                    "itemId": newId,
-                    "title": "New roster",
-                    "items": [],
-                    itemType: 'Group',
-                    isRoster: true,
-                    getParentItem: function () { return parent; }
-                };
-
-                commandService.addRoster($state.params.questionnaireId, emptyRoster, parent.itemId).success(function () {
-                    parent.items.push(emptyRoster);
-                    $rootScope.$emit('rosterAdded');
-                    $state.go('questionnaire.chapter.roster', { chapterId: $state.params.chapterId, itemId: newId });
-                });
-            };
-
-            $scope.addStaticText = function (parent) {
-                var newId = utilityService.guid();
-                var emptyStaticText = {
-                    "itemId": newId,
-                    "text": "New static text",
-                    itemType: 'StaticText',
-                    getParentItem: function () { return parent; }
-                };
-
-                commandService.addStaticText($state.params.questionnaireId, emptyStaticText, parent.itemId).success(function () {
-                    parent.items.push(emptyStaticText);
-                    $state.go('questionnaire.chapter.statictext', { chapterId: $state.params.chapterId, itemId: newId });
-                });
-            };
-
             $rootScope.$on('groupDeleted', function () {
                 $scope.questionnaire.groupsCount--;
             });
@@ -188,6 +120,10 @@ angular.module('designerApp')
             $rootScope.$on('chapterDeleted', function () {
                 getQuestionnaire();
             });
+
+            $rootScope.$on('statictextAdded', function () {
+            });
+
             $scope.getPersonsSharedWith = function(questionnaire) {
                 if (!questionnaire)
                     return [];
@@ -208,6 +144,33 @@ angular.module('designerApp')
                     }
                 });
             };
+
+            $scope.aceLoaded = function(_editor){
+                // Editor part
+                var _session = _editor.getSession();
+                var _renderer = _editor.renderer;
+
+                // Options
+                _editor.setOptions({
+                    maxLines: Infinity,
+                    mode: "ace/mode/csharp",
+                    fontSize: 16,
+                    highlightActiveLine: false,
+                    theme: "ace/theme/github"
+                });
+                _session.setUndoManager(new ace.UndoManager());
+                _renderer.setShowGutter(false);
+                _renderer.setPadding(12);
+            };
+
+            $rootScope.$on('$stateChangeSuccess',
+                function (event, toState, toParams) {
+                    var target = toState.name.replace('questionnaire.chapter.', '');
+                    if (target === "question" || target === "group" || target === "roster" || target === "statictext") {
+                        var itemId = "#" + target + "-" + toParams.itemId;
+                        $scope.$broadcast("scrollToElement", itemId);
+                    }
+                });
 
             var getQuestionnaire = function () {
                 questionnaireService.getQuestionnaireById($state.params.questionnaireId).success(function (result) {

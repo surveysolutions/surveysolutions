@@ -68,23 +68,18 @@
             </div>
         </div>
 
-        <div class="form-group" ng-hide="!doesQuestionSupportEnablementConditions()" ng-class="{'has-error': !questionForm.enablementCondition.$valid}">
-            <label for="edit-question-enablement-condition">Condition expression <help key="conditionExpression" /></label>
-            <textarea id="edit-question-enablement-condition"
-                      name="enablementCondition"
-                      msd-elastic
-                      ng-model="activeQuestion.enablementCondition"
-                      spellcheck="false"
-                      class="form-control"></textarea>
-            <p class="help-block ng-cloak" ng-show="questionForm.enablementCondition.$error.denyThisKeyword">
-                You cannot use self-reference in conditions
-            </p>
+        <div class="form-group" ng-hide="!doesQuestionSupportEnablementConditions()">
+            <label for="edit-question-enablement-condition">Condition expression <help key="conditionExpression"/></label>
+            <div class="pseudo-form-control">
+                <div id="edit-question-enablement-condition" ui-ace="{ onLoad : aceLoaded }" ng-model="activeQuestion.enablementCondition"></div>
+            </div>
         </div>
 
         <div class="form-group" ng-show="doesQuestionSupportValidations()">
-            <label for="edit-question-validation-expression">Validation expression <help key="validationExpression" /></label>
-            <textarea id="edit-question-validation-expression" ng-model="activeQuestion.validationExpression" spellcheck="false"
-                      class="form-control" msd-elastic></textarea>
+            <label for="edit-question-validation-expression">Validation expression <help key="validationExpression"/></label>
+            <div class="pseudo-form-control">
+                <div id="edit-question-validation-expression" ui-ace="{ onLoad : aceLoaded }" ng-model="activeQuestion.validationExpression"></div>
+            </div>
         </div>
 
         <div class="form-group" ng-show="doesQuestionSupportValidations()">
@@ -147,7 +142,7 @@
                         </div>
                         <p>
                             <button class="btn btn-link pull-right" ng-click="showOptionsInTextarea()">Show strings</button>
-                            <button class="btn btn-link" ng-hide="activeQuestion.optionsCount >=200" ng-click=" addoption()">Add Option</button>
+                            <button class="btn btn-link" ng-hide="activeQuestion.optionsCount >=200" ng-click="addOption()">Add Option</button>
                         </p>
                     </div>
                     <div ng-if="!activeQuestion.useListAsOptionsEditor">
@@ -422,7 +417,7 @@
     </div>
     <div class="form-buttons-holder">
         <div class="pull-left">
-            <button type="submit" id="edit-chapter-save-button" class="btn btn-lg btn-primary" unsaved-warning-clear ng-click="saveQuestion()" ng-disabled="!questionForm.$valid">Save</button>
+            <button type="submit" id="edit-chapter-save-button" class="btn btn-lg " ng-class="{ 'btn-primary': questionForm.$dirty }" unsaved-warning-clear ng-click="saveQuestion()" ng-disabled="!questionForm.$valid">Save</button>
             <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear ng-click="cancelQuestion()">Cancel</button>
         </div>
         <div class="pull-right">

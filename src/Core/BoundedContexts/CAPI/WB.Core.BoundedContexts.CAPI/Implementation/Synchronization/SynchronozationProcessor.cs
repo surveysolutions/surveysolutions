@@ -208,10 +208,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Synchronization
 
             foreach (SynchronizationChunkMeta chunk in syncItemsMetaContainer.SyncPackagesMeta)
             {
-                if (this.cancellationToken.IsCancellationRequested)
-                {
-                    return;
-                }
+                ExitIfCanceled();
 
                 try
                 {

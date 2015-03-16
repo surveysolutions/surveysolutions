@@ -5,7 +5,7 @@
                                          'questionnaire.chapter.group({itemId: item.itemId})' }}"
      context-menu-hide-on-mouse-leave="true">
     <a class="handler" ui-tree-handle></a>
-    <a class="item-body" ui-sref="{{!item.isRoster ? 'questionnaire.chapter.group({itemId: item.itemId})' : 'questionnaire.chapter.roster({itemId: item.itemId})'}}">
+    <a class="item-body" id="{{!item.isRoster ? 'group' : 'roster'}}-{{item.itemId}}" ui-sref="{{!item.isRoster ? 'questionnaire.chapter.group({itemId: item.itemId})' : 'questionnaire.chapter.roster({itemId: item.itemId})'}}">
         <div class="item-text">
             <button type="button" ng-class="{'btn-expand': collapsed, 'btn-collapse': !collapsed}" data-nodrag ng-click="toggle(this)"
                     ng-mouseenter="is_highlighted = true" ng-mouseleave="is_highlighted = false"></button>

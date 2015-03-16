@@ -8,12 +8,11 @@
                 <textarea id="edit-group-title" class="form-control" ng-model="activeGroup.title" focus-on="focusGroup" msd-elastic></textarea>
             </div>
 
-            <div class="form-group" ng-if="!activeGroup.isFirstChapter" ng-class="{'has-error': !groupForm.groupCondition.$valid}">
+            <div class="form-group" ng-if="!activeGroup.isFirstChapter">
                 <label for="edit-group-condition" class="wb-label">Condition expression <help key="conditionExpression" /></label><br>
-                <textarea name="groupCondition" id="edit-group-condition" class="form-control" ng-model="activeGroup.enablementCondition" deny-this-keyword msd-elastic></textarea>
-                <p class="help-block ng-cloak" ng-show="groupForm.groupCondition.$error.denyThisKeyword">
-                    You cannot use self-reference in conditions
-                </p>
+                <div class="pseudo-form-control">
+                    <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded }" ng-model="activeGroup.enablementCondition"></div>
+                </div>
             </div>
         </div>
 <div class="form-buttons-holder">

@@ -34,16 +34,11 @@
 
         </div>
 
-        <div class="form-group" ng-class="{'has-error': !editRosterForm.enablementCondition.$valid}">
-            <label for="edit-group-condition" class="wb-label">Condition expression <help key="conditionExpression" /></label><br>
-            <textarea name="enablementCondition"
-                      id="edit-group-condition"
-                      class="form-control"
-                      ng-model="activeRoster.enablementCondition"
-                      deny-this-keyword msd-elastic></textarea>
-            <p class="help-block ng-cloak" ng-show="editRosterForm.enablementCondition.$error.denyThisKeyword">
-                You cannot use self-reference in conditions
-            </p>
+        <div class="form-group">
+            <label for="edit-group-condition" class="wb-label">Condition expression <help key="conditionExpression"/></label><br>
+            <div class="pseudo-form-control">
+                <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded }" ng-model="activeRoster.enablementCondition"></div>
+            </div>
         </div>
     </div>
 

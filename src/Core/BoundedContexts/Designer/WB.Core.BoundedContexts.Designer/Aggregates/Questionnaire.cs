@@ -932,10 +932,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Group command handlers
 
-        public void AddGroup(Guid groupId, Guid responsibleId,
-            string title, string variableName, Guid? rosterSizeQuestionId, string description, string condition,
-            Guid? parentGroupId, bool isRoster, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles,
-            Guid? rosterTitleQuestionId)
+        public void AddGroupAndMoveIfNeeded(Guid groupId, Guid responsibleId, string title, string variableName, Guid? rosterSizeQuestionId, string description, string condition, Guid? parentGroupId, bool isRoster, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles, Guid? rosterTitleQuestionId, int? index = null)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -978,6 +975,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             else
             {
                 this.ApplyEvent(new GroupStoppedBeingARoster(responsibleId, groupId));
+            }
+
+            if (index.HasValue)
+            {
+                this.ApplyEvent(new QuestionnaireItemMoved
+                {
+                    PublicKey = groupId,
+                    GroupKey = parentGroupId,
+                    TargetIndex = index.Value,
+                    ResponsibleId = responsibleId
+                });
             }
         }
 
@@ -1314,7 +1322,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
-            this.ThrowDomainExceptionIfGroupQuestionsUsedInConditionOrValidationOfOtherQuestionsAndGroups(groupId);
+            //this.ThrowDomainExceptionIfGroupQuestionsUsedInConditionOrValidationOfOtherQuestionsAndGroups(groupId);
             this.ThrowDomainExceptionIfGroupQuestionsUsedAsRosterTitleQuestionOfOtherGroups(groupId);
 
             var group = this.GetGroupById(groupId);
@@ -1474,14 +1482,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void AddDefaultTypeQuestion(AddDefaultTypeQuestionCommand command)
+        public void AddDefaultTypeQuestionAdnMoveIfNeeded(AddDefaultTypeQuestionCommand command)
         {
             this.ThrowDomainExceptionIfQuestionAlreadyExists(command.QuestionId);
             var parentGroup = this.GetGroupById(command.ParentGroupId);
             this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentGroupId);
 
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-            this.ThrowDomainExceptionIfTitleIsEmptyOrTooLong(command.Title);
 
             this.innerDocument.ConnectChildrenWithParent();
             if (parentGroup != null)
@@ -1512,6 +1519,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 IsFilteredCombobox = false,
                 CascadeFromQuestionId = null
             });
+
+            if (command.Index.HasValue)
+            {
+                this.ApplyEvent(new QuestionnaireItemMoved
+                {
+                    PublicKey = command.QuestionId,
+                    GroupKey = command.ParentGroupId,
+                    TargetIndex = command.Index.Value,
+                    ResponsibleId = command.ResponsibleId
+                });
+            }
         }
 
         public void DeleteQuestion(Guid questionId, Guid responsibleId)
@@ -2004,7 +2022,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         #region Static text command handlers
-        public void AddStaticText(Guid entityId, Guid parentId, string text, Guid responsibleId)
+        public void AddStaticTextAndMoveIfNeeded(Guid entityId, Guid parentId, string text, Guid responsibleId, int? index = null)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
@@ -2014,13 +2032,24 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ConnectChildrenWithParent();
             this.ThrowIfChapterHasMoreThanAllowedLimit(parentId);
 
-            this.ApplyEvent(new StaticTextAdded()
+            this.ApplyEvent(new StaticTextAdded
             {
                 EntityId = entityId,
                 ParentId = parentId,
                 ResponsibleId = responsibleId,
                 Text = text
             });
+
+            if (index.HasValue)
+            {
+                this.ApplyEvent(new QuestionnaireItemMoved
+                {
+                    PublicKey = entityId,
+                    GroupKey = parentId,
+                    TargetIndex = index.Value,
+                    ResponsibleId = responsibleId
+                });
+            }
         }
 
         public void UpdateStaticText(Guid entityId, string text, Guid responsibleId)
@@ -2905,30 +2934,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         string.Join(Environment.NewLine, GetTitleList(groupsAndQuestions))));
         }
 
-        private void ThrowDomainExceptionIfGroupQuestionsUsedInConditionOrValidationOfOtherQuestionsAndGroups(Guid groupId)
-        {
-            var groupQuestions = this.innerDocument.Find<IQuestion>(x => IsQuestionParent(groupId, x));
-
-            var referencedQuestions = groupQuestions.ToDictionary(question => question.PublicKey,
-                question =>
-                    this.innerDocument.Find<IComposite>(
-                        x =>
-                            IsGroupAndHaveQuestionIdInCondition(x, question) ||
-                                IsQuestionAndHaveQuestionIdInConditionOrValidation(x, question)).Select(GetTitle));
-
-
-            if (referencedQuestions.Values.Count(x => x.Any()) > 0)
-            {
-                throw new QuestionnaireException(DomainExceptionType.QuestionOrGroupDependOnAnotherQuestion,
-                    string.Join(Environment.NewLine,
-                        referencedQuestions.Select(x => string.Format("One or more questions/groups depend on {0}:{1}{2}",
-                            FormatQuestionForException(x.Key, this.innerDocument),
-                            Environment.NewLine,
-                            string.Join(Environment.NewLine, x.Value)))));
-
-            }
-        }
-
         private void ThrowDomainExceptionIfGroupQuestionsUsedAsRosterTitleQuestionOfOtherGroups(Guid groupId)
         {
             var groupQuestions = this.innerDocument.Find<IQuestion>(x => IsQuestionParent(groupId, x));
@@ -3598,7 +3603,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             var question = document.Find<IQuestion>(questionId);
 
-            return string.Format("'{0}', [{1}]", question.QuestionText, question.StataExportCaption);
+            return string.Format("'{0}', {1}", question.QuestionText, question.StataExportCaption);
         }
 
         private IEnumerable<IGroup> GetAllParentGroups(IComposite entity)
@@ -3675,17 +3680,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private static bool IsGroupAndHaveQuestionIdInCondition(IComposite composite, IQuestion question)
         {
             var group = composite as IGroup;
-            if (group != null)
+            if (group != null && IsExpressionDefined(group.ConditionExpression))
             {
-                string questionId = question.PublicKey.ToString();
                 string alias = question.StataExportCaption;
 
-                IEnumerable<string> conditionIds = new List<string>();
-                if (IsExpressionDefined(group.ConditionExpression))
-                {
-                    conditionIds = ExpressionProcessor.GetIdentifiersUsedInExpression(group.ConditionExpression);
-                }
-                return conditionIds.Contains(questionId) || conditionIds.Contains(alias);
+                IEnumerable<string> conditionIds = ExpressionProcessor.GetIdentifiersUsedInExpression(group.ConditionExpression).ToList();
+               
+                return conditionIds.Contains(alias);
             }
             return false;
         }

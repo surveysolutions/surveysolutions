@@ -17,8 +17,8 @@
     <link href="../vendor/angular-ui-tree/dist/angular-ui-tree.min.css" rel="stylesheet" />
     <link href="../vendor/angular-loading-bar/build/loading-bar.css" rel="stylesheet" />
     <link href="../vendor/angular-hotkeys/build/hotkeys.css" rel="stylesheet" />
-    <link href="../vendor/pines-notify/pnotify.core.css" rel="stylesheet" />
-    <link href="../vendor/pines-notify/pnotify.buttons.css" rel="stylesheet" />
+    <link href="../vendor/pnotify/pnotify.core.css" rel="stylesheet" />
+    <link href="../vendor/pnotify/pnotify.buttons.css" rel="stylesheet" />
     <link href="../vendor/angular-block-ui/dist/angular-block-ui.css" rel="stylesheet" />
     <link href="../vendor/perfect-scrollbar/src/perfect-scrollbar.css" rel="stylesheet" />
     <!-- endbower -->
@@ -31,89 +31,88 @@
     <!-- endbuild -->
     
 </head>
-    <body ng-app="designerApp">
-        <!--[if lt IE 9]>
-            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-            
-            <script src="../vendor/es5-shim/es5-shim.js"></script>
-            <script src="../vendor/json3/lib/json3.min.js"></script>
-        <![endif]-->
-        
-        <!--[if lt IE 10]>
-            <script src="../vendor/console-shim/console-shim.js"></script>
-        <![endif]-->
+<body ng-app="designerApp">
+    <!--[if lt IE 9]>
+        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 
-        <div id="designer-editor" class="container" ui-view>
-        </div>
+        <script src="../vendor/es5-shim/es5-shim.js"></script>
+        <script src="../vendor/json3/lib/json3.min.js"></script>
+    <![endif]-->
+    <!--[if lt IE 10]>
+        <script src="../vendor/console-shim/console-shim.js"></script>
+    <![endif]-->
 
-        <!-- build:js(.) scripts/oldieshim.js -->
-        <!-- endbuild -->
+    <div id="designer-editor" class="container" ui-view>
+    </div>
 
-
-        <!-- inject:js -->
-  
-
-        <!-- build:js(.) scripts/vendor.js -->
-        <!-- bower:js -->
-        <script src="../vendor/jquery/dist/jquery.js"></script>
-        <script src="../vendor/jquery-cookie/jquery.cookie.js"></script>
-        <script src="../vendor/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="../vendor/lodash/lodash.js"></script>
-        <script src="../vendor/angular/angular.js"></script>
-        <script src="../vendor/angular-cookies/angular-cookies.js"></script>
-        <script src="../vendor/angular-animate/angular-animate.js"></script>
-        <script src="../vendor/angular-sanitize/angular-sanitize.js"></script>
-        <script src="../vendor/angular-bootstrap/ui-bootstrap.js"></script>
-        <script src="../vendor/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-        <script src="../vendor/angular-ui-router/release/angular-ui-router.js"></script>
-        <script src="../vendor/angular-ui-utils/ui-utils.js"></script>
-        <script src="../vendor/angular-ui-tree/dist/angular-ui-tree.js"></script>
-        <script src="../vendor/angular-hotkeys/build/hotkeys.js"></script>
-        <script src="../vendor/angular-resource/angular-resource.js"></script>
-        <script src="../vendor/angular-loading-bar/build/loading-bar.js"></script>
-        <script src="../vendor/angular-block-ui/dist/angular-block-ui.js"></script>
-        <script src="../vendor/angular-pines-notify/src/pnotify.js"></script>
-        <script src="../vendor/jquery-mousewheel/jquery.mousewheel.js"></script>
-        <script src="../vendor/pines-notify/pnotify.core.js"></script>
-        <script src="../vendor/angular-unsavedChanges/dist/unsavedChanges.js"></script>
-        <script src="../vendor/pines-notify/pnotify.buttons.js"></script>
-        <script src="../vendor/angular-elastic/elastic.js"></script>
-        <script src="../vendor/perfect-scrollbar/src/perfect-scrollbar.js"></script>
-        <script src="../vendor/jquery-mousewheel/jquery.mousewheel.js"></script>
-        <script src="../vendor/angular-perfect-scrollbar/src/angular-perfect-scrollbar.js"></script>
-        <script src="../vendor/ng-context-menu/dist/ng-context-menu.js"></script>
-        <!-- endbower -->
-        <!-- endbuild -->
-
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="scripts/app.js"></script>
-        <script src="scripts/controllers/main.js"></script>
-        <script src="scripts/controllers/chapters.js"></script>
-        <script src="scripts/controllers/group.js"></script>
-        <script src="scripts/controllers/question.js"></script>
-        <script src="scripts/controllers/roster.js"></script>
-        <script src="scripts/controllers/share.js"></script>
-        <script src="scripts/controllers/tree.js"></script>
-        <script src="scripts/controllers/confirm.js"></script>
-        <script src="scripts/controllers/staticText.js"></script>
-        <script src="scripts/services/commandService.js"></script>
-        <script src="scripts/services/questionnaireService.js"></script>
-        <script src="scripts/services/verificationService.js"></script>
-        <script src="scripts/services/optionsService.js"></script>
-        <script src="scripts/services/utilityService.js"></script>
-        <script src="scripts/services/shareService.js"></script>
-        <script src="scripts/services/confirmService.js"></script>
-        <script src="scripts/services/errorReportingService.js"></script>
-        <script src="scripts/services/helpMessages.js"></script>
-        <script src="scripts/directives/directives.js"></script>
-        <script src="scripts/directives/animations.js"></script>
-        <script src="scripts/directives/itemBreadcrumbs.js"></script>
-        <script src="scripts/directives/help.js"></script>
-        <script src="scripts/services/authorizationinterceptor.js"></script>
-        <script src="scripts/decorators/exceptionhandlerdecorator.js"></script>
-        <script src="scripts/filters/escapeFilter.js"></script>
-        <script src="scripts/directives/matchOptionsPattern.js"></script>
-        <!-- endbuild -->
-        <!-- endinject -->
-    </body>
+    <!-- build:js(.) scripts/oldieshim.js -->
+    <!-- endbuild -->
+    <!-- inject:js -->
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="../vendor/jquery/dist/jquery.js"></script>
+    <script src="../vendor/jquery-cookie/jquery.cookie.js"></script>
+    <script src="../vendor/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="../vendor/lodash/lodash.js"></script>
+    <script src="../vendor/ace-builds/src-min-noconflict/ace.js"></script>
+    <script src="../vendor/angular/angular.js"></script>
+    <script src="../vendor/angular-cookies/angular-cookies.js"></script>
+    <script src="../vendor/angular-animate/angular-animate.js"></script>
+    <script src="../vendor/angular-sanitize/angular-sanitize.js"></script>
+    <script src="../vendor/angular-bootstrap/ui-bootstrap.js"></script>
+    <script src="../vendor/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="../vendor/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="../vendor/angular-ui-utils/ui-utils.js"></script>
+    <script src="../vendor/angular-ui-tree/dist/angular-ui-tree.js"></script>
+    <script src="../vendor/angular-hotkeys/build/hotkeys.js"></script>
+    <script src="../vendor/angular-resource/angular-resource.js"></script>
+    <script src="../vendor/angular-loading-bar/build/loading-bar.js"></script>
+    <script src="../vendor/angular-block-ui/dist/angular-block-ui.js"></script>
+    <script src="../vendor/jquery-mousewheel/jquery.mousewheel.js"></script>
+    <script src="../vendor/angular-unsavedChanges/dist/unsavedChanges.js"></script>
+    <script src="../vendor/pnotify/pnotify.core.js"></script>
+    <script src="../vendor/pnotify/pnotify.confirm.js"></script>
+    <script src="../vendor/pnotify/pnotify.buttons.js"></script>
+    <script src="../vendor/angular-pnotify/src/angular-pnotify.js"></script>
+    <script src="../vendor/angular-elastic/elastic.js"></script>
+    <script src="../vendor/perfect-scrollbar/src/perfect-scrollbar.js"></script>
+    <script src="../vendor/jquery-mousewheel/jquery.mousewheel.js"></script>
+    <script src="../vendor/angular-perfect-scrollbar/src/angular-perfect-scrollbar.js"></script>
+    <script src="../vendor/ng-context-menu/dist/ng-context-menu.js"></script>
+    <script src="../vendor/angular-ui-ace/ui-ace.js"></script>
+    <script src="../vendor/jquery.scrollTo/jquery.scrollTo.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/directives/isOnScreenHelper.js"></script>
+    <script src="scripts/app.js"></script>
+    <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/controllers/chapters.js"></script>
+    <script src="scripts/controllers/group.js"></script>
+    <script src="scripts/controllers/question.js"></script>
+    <script src="scripts/controllers/roster.js"></script>
+    <script src="scripts/controllers/share.js"></script>
+    <script src="scripts/controllers/tree.js"></script>
+    <script src="scripts/controllers/confirm.js"></script>
+    <script src="scripts/controllers/staticText.js"></script>
+    <script src="scripts/services/commandService.js"></script>
+    <script src="scripts/services/questionnaireService.js"></script>
+    <script src="scripts/services/verificationService.js"></script>
+    <script src="scripts/services/optionsService.js"></script>
+    <script src="scripts/services/utilityService.js"></script>
+    <script src="scripts/services/shareService.js"></script>
+    <script src="scripts/services/confirmService.js"></script>
+    <script src="scripts/services/errorReportingService.js"></script>
+    <script src="scripts/services/helpMessages.js"></script>
+    <script src="scripts/directives/directives.js"></script>
+    <script src="scripts/directives/animations.js"></script>
+    <script src="scripts/directives/itemBreadcrumbs.js"></script>
+    <script src="scripts/directives/help.js"></script>
+    <script src="scripts/services/authorizationinterceptor.js"></script>
+    <script src="scripts/decorators/exceptionhandlerdecorator.js"></script>
+    <script src="scripts/filters/escapeFilter.js"></script>
+    <script src="scripts/directives/matchOptionsPattern.js"></script>
+    <!-- endbuild -->
+    <!-- endinject -->
+</body>
 </html>
