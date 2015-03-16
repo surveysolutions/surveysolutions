@@ -26,8 +26,6 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             if (this.commandTransaction != null) throw new InvalidOperationException();
 
             this.commandSession = this.sessionFactory.OpenSession();
-
-
             this.commandTransaction = commandSession.BeginTransaction(IsolationLevel.ReadCommitted);
         }
 
@@ -37,7 +35,6 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
             this.commandTransaction.Commit();
 
-            this.commandTransaction.Dispose();
             this.commandSession.Close();
             this.commandTransaction = null;
             this.commandSession = null;

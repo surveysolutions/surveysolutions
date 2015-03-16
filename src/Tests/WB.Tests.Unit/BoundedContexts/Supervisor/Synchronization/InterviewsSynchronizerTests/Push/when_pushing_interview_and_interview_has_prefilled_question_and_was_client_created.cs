@@ -57,10 +57,9 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
 
             InterviewSummary interviewSummary = Create.InterviewSummary();
             interviewSummary.WasCreatedOnClient = true;
-            var answersToFeaturedQuestions = new Dictionary<Guid,QuestionAnswer>();
-            answersToFeaturedQuestions.Add(questionId,
-                new QuestionAnswer() { Answer = questionAnswer, Id = answerId, Title = questionTitle });
-            interviewSummary.AnswersToFeaturedQuestions = answersToFeaturedQuestions; 
+            interviewSummary.AnswersToFeaturedQuestions.Add(
+                new QuestionAnswer { Answer = questionAnswer, Id = answerId, Title = questionTitle }
+            );
 
             var interviewSummaryRepositoryWriter = Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(writer
                 => writer.GetById(interviewId.FormatGuid()) == interviewSummary);
@@ -71,17 +70,17 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             Mock.Get(jsonUtils)
                 .Setup(utils => utils.Serialize(Moq.It.IsAny<AggregateRootEvent[]>()))
                 .Returns(eventsJson)
-                .Callback<object>(entity => events = (AggregateRootEvent[]) entity);
+                .Callback<object>(entity => events = (AggregateRootEvent[])entity);
 
             Mock.Get(jsonUtils)
                 .Setup(utils => utils.Serialize(Moq.It.IsAny<InterviewMetaInfo>()))
                 .Returns(metadataJson)
-                .Callback<object>(entity => metadata = (InterviewMetaInfo) entity);
+                .Callback<object>(entity => metadata = (InterviewMetaInfo)entity);
 
             Mock.Get(jsonUtils)
                 .Setup(utils => utils.Serialize(Moq.It.IsAny<SyncItem>()))
                 .Returns(syncItemJson)
-                .Callback<object>(entity => syncItem = (SyncItem) entity);
+                .Callback<object>(entity => syncItem = (SyncItem)entity);
 
             interviewsSynchronizer = Create.InterviewsSynchronizer(
                 readyToSendInterviewsRepositoryWriter: readyToSendInterviewsRepositoryWriter,

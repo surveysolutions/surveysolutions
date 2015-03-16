@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
+using NHibernate.Mapping;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using NHibernate.Tool.hbm2ddl;
@@ -105,6 +106,15 @@ namespace WB.Core.Infrastructure.Storage.Postgre
             var mappingTypes = this.mappingAssemblies.SelectMany(x => x.GetExportedTypes())
                                                      .Where(x => IsSubclassOfRawGeneric(typeof(ClassMapping<>), x));
             mapper.AddMappings(mappingTypes);
+            mapper.BeforeMapProperty += (inspector, member, customizer) =>
+            {
+                var propertyInfo = (PropertyInfo) member.LocalMember;
+                if (propertyInfo.PropertyType == typeof (string))
+                {
+                    customizer.Type(NHibernateUtil.StringClob);
+                }
+            };
+
             return mapper.CompileMappingForAllExplicitlyAddedEntities();
         }
 
