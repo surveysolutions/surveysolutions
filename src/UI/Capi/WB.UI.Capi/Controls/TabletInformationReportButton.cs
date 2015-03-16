@@ -48,8 +48,8 @@ namespace WB.UI.Capi.Controls
         public EventHandler<InformationPackageCancellationEventArgs> ProcessCanceled;
         public EventHandler InformationPackageCreated;
         public EventHandler SenderCanceled;
-        
-        private void BtnSendTabletInfoClick(object sender, EventArgs e)
+
+        private async void BtnSendTabletInfoClick(object sender, EventArgs e)
         {
             this.ThrowExceptionIfDialogIsOpened();
 
@@ -68,9 +68,9 @@ namespace WB.UI.Capi.Controls
             this.ProgressDialog.SetButton(Resources.GetText(Resource.String.Cancel), this.TabletInformationSenderCanceled);
 
             this.ProgressDialog.Show();
-            tabletInformationSender.Run();
-        }
 
+            await tabletInformationSender.Run();
+        }
 
         private void ThrowExceptionIfDialogIsOpened()
         {
@@ -105,10 +105,13 @@ namespace WB.UI.Capi.Controls
             activity.RunOnUiThread(() =>
             {
                 this.DestroyDialog();
+
                 if (ProcessCanceled != null)
                 {
                     ProcessCanceled(this, e);
                 }
+
+                this.Enabled = true;
             });
             this.DestroyReportSending();
         }
@@ -151,6 +154,7 @@ namespace WB.UI.Capi.Controls
             {
                 SenderCanceled(this, e);
             }
+            this.Enabled = false;
         }
 
         private void DestroyReportSending()
