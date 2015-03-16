@@ -179,7 +179,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IComposite>(ConditionExpresssionHasLengthMoreThan10000Characters, "WB0094", VerificationMessages.WB0094_ConditionExpresssionHasLengthMoreThan10000Characters),
                     Verifier<IQuestion>(ValidationExpresssionHasLengthMoreThan10000Characters, "WB0095", VerificationMessages.WB0095_ValidationExpresssionHasLengthMoreThan10000Characters),
                     Verifier(QuestionnaireTitleHasInvalidCharacters, "WB0097", VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
-                    Verifier(QuestionnaireHasSizeMoreThan5MB, "WB0098", qSize => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(qSize)),
+                    Verifier(QuestionnaireHasSizeMoreThan5MB, "WB0098", size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size)),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
@@ -463,14 +463,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     : Enumerable.Empty<QuestionnaireVerificationError>();
         }
 
-        private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> Verifier<T>(
-            Func<QuestionnaireDocument, Tuple<bool, T>> hasError, string code, Func<T, string> message)
+        private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> Verifier<TArg>(
+            Func<QuestionnaireDocument, Tuple<bool, TArg>> hasError, string code, Func<TArg, string> messageBuilder)
         {
             return (questionnaire, state) =>
             {
                 var errorCheckResult = hasError(questionnaire);
                 return errorCheckResult.Item1
-                    ? new[] { new QuestionnaireVerificationError(code, message.Invoke(errorCheckResult.Item2)) }
+                    ? new[] { new QuestionnaireVerificationError(code, messageBuilder.Invoke(errorCheckResult.Item2)) }
                     : Enumerable.Empty<QuestionnaireVerificationError>();
             };
         }
