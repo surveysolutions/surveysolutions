@@ -75,6 +75,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="BaseMvxActivity.cs" />
+    <Compile Include="CustomAdapter.cs" />
     <Compile Include="DebugTrace.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="MainActivity.cs" />

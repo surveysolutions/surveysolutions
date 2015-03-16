@@ -137,6 +137,7 @@ namespace WB.Core.BoundedContexts.Capi.ViewModel
             this.GroupsAndQuestions = new ObservableCollection<InterviewEntity>(interviewEntities);
         }
 
+
         private IEnumerable<InterviewDynamicOption<T>> GenerateDynamicOptions<T>(Random rnd, bool oneAnswerSelectedOnly)
         {
             var options = new List<InterviewDynamicOption<T>>();
@@ -158,8 +159,10 @@ namespace WB.Core.BoundedContexts.Capi.ViewModel
             for (int i = 0; i < numberOfItems; i++)
             {
                 options.Add(new InterviewStaticOption()
-                {
-                    Label = string.Format("option label {0}", rnd.Next()),
+                { 
+                    Label = oneAnswerSelectedOnly
+                     ? string.Format("radio option label {0}-{1}", i, rnd.Next())
+                     : string.Format("check option label {0}-{1}", i, rnd.Next()),
                     Value = rnd.Next().ToString(),
                     IsSelected = (!oneAnswerSelectedOnly || !options.Any(opt=>opt.IsSelected)) && RandBool(rnd)
                 });
