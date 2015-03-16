@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformation;
 using WB.Core.GenericSubdomains.ErrorReporting.Services;
@@ -16,8 +17,11 @@ namespace WB.Tests.Unit.GenericSubdomains.ErrorReporting.TabletInformationSender
             string pathToInfoArchive = "",
             bool isSentSuccessfully = false, IErrorReportingSettings errorReportingSettings = null)
         {
+            Task<string> returnPathTask = Task.Factory.StartNew(
+                () => pathToInfoArchive);
+
             return new TabletInformationSender(
-                Mock.Of<ICapiInformationService>(_ => _.CreateInformationPackage() == pathToInfoArchive),
+                Mock.Of<ICapiInformationService>(_ => _.CreateInformationPackage(Moq.It.IsAny<CancellationToken>()) == returnPathTask),
                 Mock.Of<IFileSystemAccessor>(_ =>
                     _.IsFileExists(It.IsAny<string>()) == true
                     && _.ReadAllBytes(It.IsAny<string>()) == new byte[0]),
@@ -27,7 +31,7 @@ namespace WB.Tests.Unit.GenericSubdomains.ErrorReporting.TabletInformationSender
         }
 
         protected static bool WaitUntilOperationEndsReturnFalseIfCanceled(TabletInformationSender tabletInformationSender,
-            Action<TabletInformationSender> action)
+            Func<TabletInformationSender, Task> action)
         {
             var result = false;
             var remoteCommandDoneEvent = new AutoResetEvent(false);
@@ -41,7 +45,9 @@ namespace WB.Tests.Unit.GenericSubdomains.ErrorReporting.TabletInformationSender
                 result = true;
                 remoteCommandDoneEvent.Set();
             };
-            action(tabletInformationSender);
+
+            action(tabletInformationSender).Wait();
+            
             remoteCommandDoneEvent.WaitOne();
             return result;
         }
