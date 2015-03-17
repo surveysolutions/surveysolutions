@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
@@ -5,6 +6,7 @@ using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.Implementation.ReadSide.Indexes
 {
+    [Obsolete("Removed")]
     public class QuestionnaireSyncPackagesByBriefFields : AbstractIndexCreationTask<QuestionnaireSyncPackageMeta, QuestionnaireSyncPackagesByBriefFields.SyncPackageBrief>
     {
         public class SyncPackageBrief

@@ -29,12 +29,12 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public virtual string PackageId { get; set; }
         public virtual long SortIndex { get; set; }
-        public virtual Guid InterviewId { get; private set; }
-        public virtual string VersionedQuestionnaireId { get; private set; }
-        public virtual DateTime Timestamp { get; private set; }
-        public virtual Guid UserId { get; private set; }
-        public virtual string ItemType { get; private set; }
-        public virtual int ContentSize { get; private set; }
-        public virtual int MetaInfoSize { get; private set; }
+        public virtual Guid InterviewId { get; protected set; }
+        public virtual string VersionedQuestionnaireId { get; protected set; }
+        public virtual DateTime Timestamp { get; protected set; }
+        public virtual Guid UserId { get; protected set; }
+        public virtual string ItemType { get; protected set; }
+        public virtual int ContentSize { get; protected set; }
+        public virtual int MetaInfoSize { get; protected set; }
     }
 }

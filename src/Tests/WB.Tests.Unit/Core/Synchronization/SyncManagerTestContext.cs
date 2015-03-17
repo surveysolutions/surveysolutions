@@ -25,6 +25,7 @@ namespace WB.Tests.Unit.Core.Synchronization
             IReadSideKeyValueStorage<UserSyncPackageContent> userPackageStorage = null,
             IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore = null,
             IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnaireSyncPackageContentStore = null,
+            IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> interviewSyncPackageReader  = null,
             ISyncLogger syncLogger = null)
         {
             return new SyncManager(
@@ -35,6 +36,9 @@ namespace WB.Tests.Unit.Core.Synchronization
                 userPackageStorage ?? Mock.Of<IReadSideKeyValueStorage<UserSyncPackageContent>>(),
                 interviewPackageContentStore ?? Mock.Of<IReadSideKeyValueStorage<InterviewSyncPackageContent>>(),
                 questionnaireSyncPackageContentStore ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireSyncPackageContent>>(),
+                interviewSyncPackageReader ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta>>(),
+                Mock.Of<IQueryableReadSideRepositoryReader<UserSyncPackageMeta>>(),
+                Mock.Of<IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMeta>>(),
                 syncLogger ?? Mock.Of<ISyncLogger>());
         }
 

@@ -6,6 +6,7 @@ using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.Implementation.ReadSide.Indexes
 {
+    [Obsolete("Removed")]
     public class UserSyncPackagesByBriefFields : AbstractIndexCreationTask<UserSyncPackageMeta, UserSyncPackagesByBriefFields.SyncPackageBrief>
     {
         public class SyncPackageBrief

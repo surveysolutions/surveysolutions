@@ -180,7 +180,7 @@ namespace WB.UI.Headquarters
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
 
             kernel.BindFilter<TransactionFilter>(FilterScope.First, 0);
-            kernel.BindHttpFilter<ApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Global);
+            kernel.BindHttpFilter<ApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Controller);
 
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
