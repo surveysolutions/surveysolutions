@@ -14,10 +14,10 @@ using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [Authorize(Roles = "Administrator, Headquarter")]
-    public class SupervisorController : TeamController
+    [Authorize(Roles = "Administrator")]
+    public class HeadquarterController : TeamController
     {
-        public SupervisorController(ICommandService commandService, 
+        public HeadquarterController(ICommandService commandService, 
                               IGlobalInfoProvider globalInfo, 
                               ILogger logger,
                               IUserViewFactory userViewFactory,
@@ -29,6 +29,8 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult Create()
         {
+            this.ViewBag.ActivePage = MenuItem.Headquarters;
+
             return this.View(new UserModel());
         }
 
@@ -37,13 +39,15 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(UserModel model)
         {
+            this.ViewBag.ActivePage = MenuItem.Headquarters;
+
             if (this.ModelState.IsValid)
             {
                 UserView user = GetUserByName(model.UserName);
                 if (user == null)
                 {
-                    this.CreateSupervisor(model);
-                    this.Success("Supervisor was successfully created");
+                    this.CreateHeadquarters(model);
+                    this.Success("Headquarters user was successfully created");
                     return this.RedirectToAction("Index");
                 }
                 else
@@ -58,11 +62,15 @@ namespace WB.UI.Headquarters.Controllers
         
         public ActionResult Index()
         {
+            this.ViewBag.ActivePage = MenuItem.Headquarters;
+
             return this.View();
         }
 
         public ActionResult Edit(Guid id)
         {
+            this.ViewBag.ActivePage = MenuItem.Headquarters;
+
             var user = this.GetUserById(id);
 
             if(user == null) throw new HttpException(404, string.Empty);
@@ -80,15 +88,16 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(UserEditModel model)
         {
+            this.ViewBag.ActivePage = MenuItem.Headquarters;
+
             if (this.ModelState.IsValid)
             {
                 var user = this.GetUserById(model.Id);
                 if (user != null)
                 {
                     bool isAdmin = Roles.IsUserInRole(user.UserName, UserRoles.Administrator.ToString());
-                    bool isHQ = Roles.IsUserInRole(user.UserName, UserRoles.Headquarter.ToString());
 
-                    if (!isAdmin && !isHQ)
+                    if (!isAdmin)
                     {
                         this.UpdateAccount(user: user, editModel: model);
                         this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
@@ -96,7 +105,6 @@ namespace WB.UI.Headquarters.Controllers
                     }
 
                     this.Error("Could not update user information because you don't have permission to perform this operation");
-
                 }
                 else
                 {
@@ -105,15 +113,6 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             return this.View(model);
-        }
-
-        public ActionResult Interviewers(Guid id)
-        {
-            var supervisor = this.GetUserById(id);
-            if (supervisor == null)
-                throw new HttpException(404, string.Empty);
-
-            return this.View(supervisor);
         }
     }
 }

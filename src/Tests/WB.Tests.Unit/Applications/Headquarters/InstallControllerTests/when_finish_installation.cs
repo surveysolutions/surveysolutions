@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewControllerTests
             GetSpecifiedCommand().IsLockedBySupervisor.ShouldBeFalse();
 
         It should_execute_command_Roles_contains_only_hq_role = () =>
-            GetSpecifiedCommand().Roles.ShouldContainOnly(UserRoles.Headquarter);
+            GetSpecifiedCommand().Roles.ShouldContainOnly(UserRoles.Administrator);
 
         It should_execute_command_Supervisor_be_null = () =>
             GetSpecifiedCommand().Supervisor.ShouldBeNull();

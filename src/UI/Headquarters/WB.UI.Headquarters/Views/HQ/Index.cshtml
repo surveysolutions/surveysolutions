@@ -53,8 +53,7 @@
             <th data-bind='sortby : "Version"'>@Dashboard.Version</th>
             <th data-bind='sortby : "CreationDate"'>@Dashboard.CreationDate</th>
             <th data-bind='sortby : "LastEntryDate"'>@Dashboard.LastEntryDate</th>
-            <th></th>
-            <th></th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -94,8 +93,7 @@
                     </div>
                     <!-- /ko -->
                     <!-- /ko -->
-                </td>
-                <td>
+
                     <!-- ko ifnot:Disabled -->
                     <div class="btn-group">
                         <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
@@ -132,12 +130,15 @@
                         </ul>
                     </div>
                     <!-- /ko -->
-                    <div class="btn-group pull-right">
-                        <a class="btn btn-danger" data-bind="click : $parent.deleteQuestionnaire">
-                            <i class="glyphicon glyphicon-remove"></i>
-                        </a>
-                    </div>
-                </td>
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <div class="btn-group pull-right">
+                            <a class="btn btn-danger" data-bind="click : $parent.deleteQuestionnaire">
+                                <i class="glyphicon glyphicon-remove"></i>
+                            </a>
+                        </div>
+                    }
+                    </td>
             </tr>
         <!-- /ko -->
         </tbody>
