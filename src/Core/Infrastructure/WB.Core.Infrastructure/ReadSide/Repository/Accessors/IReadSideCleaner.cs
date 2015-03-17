@@ -1,6 +1,6 @@
 ﻿namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
 {
-    public interface IRavenReadSideRepositoryCleaner
+    public interface IReadSideCleaner
     {
         void ReCreateViewDatabase();
         void CreateIndexesAfterRebuildReadSide();

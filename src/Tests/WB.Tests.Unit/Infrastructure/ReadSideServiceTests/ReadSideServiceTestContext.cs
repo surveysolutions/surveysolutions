@@ -20,14 +20,14 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
     {
         protected static ReadSideService CreateRavenReadSideService(IStreamableEventStore streamableEventStore = null,
             IEventDispatcher eventDispatcher = null,
-            IRavenReadSideRepositoryCleaner ravenReadSideRepositoryCleaner = null)
+            IReadSideCleaner readSideCleaner = null)
         {
             ReadSideService.InstanceCount = 0;
 
             return new ReadSideService(
                 streamableEventStore ?? Mock.Of<IStreamableEventStore>(),
                 eventDispatcher ?? Mock.Of<IEventDispatcher>(), Mock.Of<ILogger>(),
-                ravenReadSideRepositoryCleaner ?? Mock.Of<IRavenReadSideRepositoryCleaner>(),
+                readSideCleaner ?? Mock.Of<IReadSideCleaner>(),
                 Mock.Of<ITransactionManagerProviderManager>());
         }
     }

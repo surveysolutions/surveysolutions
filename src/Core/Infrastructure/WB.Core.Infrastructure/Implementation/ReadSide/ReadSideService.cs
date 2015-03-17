@@ -46,7 +46,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         private readonly IStreamableEventStore eventStore;
         private readonly IEventDispatcher eventBus;
         private readonly ILogger logger;
-        private readonly IRavenReadSideRepositoryCleaner ravenReadSideRepositoryCleaner;
+        private readonly IReadSideCleaner readSideCleaner;
         private Dictionary<IEventHandler, Stopwatch> handlersWithStopwatches;
         private readonly ITransactionManagerProviderManager transactionManagerProviderManager;
 
@@ -56,7 +56,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         }
 
         public ReadSideService(IStreamableEventStore eventStore, IEventDispatcher eventBus, ILogger logger,
-            IRavenReadSideRepositoryCleaner ravenReadSideRepositoryCleaner, ITransactionManagerProviderManager transactionManagerProviderManager)
+            IReadSideCleaner readSideCleaner, ITransactionManagerProviderManager transactionManagerProviderManager)
         {
             if (InstanceCount > 0)
                 throw new Exception(string.Format("Trying to create a new instance of RavenReadSideService when following count of instances exists: {0}.", InstanceCount));
@@ -66,7 +66,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             this.eventStore = eventStore;
             this.eventBus = eventBus;
             this.logger = logger;
-            this.ravenReadSideRepositoryCleaner = ravenReadSideRepositoryCleaner;
+            this.readSideCleaner = readSideCleaner;
             this.transactionManagerProviderManager = transactionManagerProviderManager;
         }
 
@@ -338,8 +338,8 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     this.transactionManagerProviderManager.UnpinTransactionManager();
                     this.DisableWritersCacheForHandlers(handlers);
 
-                    if(!isPartiallyRebuild && this.ravenReadSideRepositoryCleaner != null) 
-                        this.ravenReadSideRepositoryCleaner.CreateIndexesAfterRebuildReadSide();
+                    if(!isPartiallyRebuild && this.readSideCleaner != null) 
+                        this.readSideCleaner.CreateIndexesAfterRebuildReadSide();
                 }
 
                 UpdateStatusMessage("Rebuild specific views succeeded.");
@@ -406,7 +406,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                   .Distinct()
                   .ToArray();
 
-            if(!isPartiallyRebuild && this.ravenReadSideRepositoryCleaner != null) this.ravenReadSideRepositoryCleaner.ReCreateViewDatabase();
+            if(!isPartiallyRebuild && this.readSideCleaner != null) this.readSideCleaner.ReCreateViewDatabase();
 
             foreach (var readSideRepositoryCleaner in cleaners)
             {

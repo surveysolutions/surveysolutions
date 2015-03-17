@@ -11,12 +11,12 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors
 {
-    internal class RavenReadSideRepositoryCleaner : IRavenReadSideRepositoryCleaner
+    internal class ReadSideCleaner : IReadSideCleaner
     {
         private readonly DocumentStoreProvider documentStoreProvider;
         private readonly Assembly[] assembliesWithIndexes;
 
-        public RavenReadSideRepositoryCleaner(DocumentStoreProvider documentStoreProvider, Assembly[] assembliesWithIndexes)
+        public ReadSideCleaner(DocumentStoreProvider documentStoreProvider, Assembly[] assembliesWithIndexes)
         {
             this.documentStoreProvider = documentStoreProvider;
             this.assembliesWithIndexes = assembliesWithIndexes;

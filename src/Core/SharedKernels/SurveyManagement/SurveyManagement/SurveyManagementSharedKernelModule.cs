@@ -4,6 +4,8 @@ using Ninject.Modules;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Implementation.ReadSide;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.SharedKernels.DataCollection;
@@ -158,6 +160,10 @@ namespace WB.Core.SharedKernels.SurveyManagement
               .To<IncomingSyncPackagesQueue>()
               .InSingletonScope();
 
+            this.Bind<ReadSideService>().ToSelf().InSingletonScope();
+            this.Bind<IReadSideStatusService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
+            this.Bind<IReadSideAdministrationService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
+
             this.Bind<IInterviewsToDeleteFactory>().To<InterviewsToDeleteFactory>();
             this.Bind<IDeleteQuestionnaireService>().To<DeleteQuestionnaireService>().InSingletonScope();
 
@@ -180,43 +186,43 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IHealthCheckService>().To<HealthCheckService>();
 
 
-            this.Bind<IReadSideRepositoryWriter<UserDocument>>().To<PostgreReadSideRepository<UserDocument>>();
-            this.Bind<IQueryableReadSideRepositoryReader<UserDocument>>().To<PostgreReadSideRepository<UserDocument>>();
+            //this.Bind<IReadSideRepositoryWriter<UserDocument>>().To<PostgreReadSideRepository<UserDocument>>();
+            //this.Bind<IQueryableReadSideRepositoryReader<UserDocument>>().To<PostgreReadSideRepository<UserDocument>>();
 
-            this.Bind<IReadSideRepositoryWriter<QuestionnaireBrowseItem>>()
-                .To<PostgreReadSideRepository<QuestionnaireBrowseItem>>();
-            this.Bind<IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem>>()
-                .To<PostgreReadSideRepository<QuestionnaireBrowseItem>>();
+            //this.Bind<IReadSideRepositoryWriter<QuestionnaireBrowseItem>>()
+            //    .To<PostgreReadSideRepository<QuestionnaireBrowseItem>>();
+            //this.Bind<IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem>>()
+            //    .To<PostgreReadSideRepository<QuestionnaireBrowseItem>>();
 
-            this.Bind<IReadSideRepositoryWriter<InterviewSummary>>()
-                .To<PostgreReadSideRepository<InterviewSummary>>();
-            this.Bind<IQueryableReadSideRepositoryReader<InterviewSummary>>()
-                .To<PostgreReadSideRepository<InterviewSummary>>();
+            //this.Bind<IReadSideRepositoryWriter<InterviewSummary>>()
+            //    .To<PostgreReadSideRepository<InterviewSummary>>();
+            //this.Bind<IQueryableReadSideRepositoryReader<InterviewSummary>>()
+            //    .To<PostgreReadSideRepository<InterviewSummary>>();
 
-            this.Bind<IReadSideRepositoryWriter<InterviewSyncPackageMeta>>()
-                .To<PostgreReadSideRepository<InterviewSyncPackageMeta>>();
-            this.Bind<IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta>>()
-                .To<PostgreReadSideRepository<InterviewSyncPackageMeta>>();
+            //this.Bind<IReadSideRepositoryWriter<InterviewSyncPackageMeta>>()
+            //    .To<PostgreReadSideRepository<InterviewSyncPackageMeta>>();
+            //this.Bind<IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta>>()
+            //    .To<PostgreReadSideRepository<InterviewSyncPackageMeta>>();
 
-            this.Bind<IReadSideRepositoryWriter<UserSyncPackageMeta>>()
-                .To<PostgreReadSideRepository<UserSyncPackageMeta>>();
-            this.Bind<IQueryableReadSideRepositoryReader<UserSyncPackageMeta>>()
-                .To<PostgreReadSideRepository<UserSyncPackageMeta>>();
+            //this.Bind<IReadSideRepositoryWriter<UserSyncPackageMeta>>()
+            //    .To<PostgreReadSideRepository<UserSyncPackageMeta>>();
+            //this.Bind<IQueryableReadSideRepositoryReader<UserSyncPackageMeta>>()
+            //    .To<PostgreReadSideRepository<UserSyncPackageMeta>>();
 
 
-            this.Bind<IReadSideRepositoryWriter<QuestionnaireSyncPackageMeta>>()
-               .To<PostgreReadSideRepository<QuestionnaireSyncPackageMeta>>();
-            this.Bind<IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMeta>>()
-                .To<PostgreReadSideRepository<QuestionnaireSyncPackageMeta>>();
-            this.Bind<IReadSideRepositoryReader<QuestionnaireSyncPackageMeta>>()
-               .To<PostgreReadSideRepository<QuestionnaireSyncPackageMeta>>();
+            //this.Bind<IReadSideRepositoryWriter<QuestionnaireSyncPackageMeta>>()
+            //   .To<PostgreReadSideRepository<QuestionnaireSyncPackageMeta>>();
+            //this.Bind<IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMeta>>()
+            //    .To<PostgreReadSideRepository<QuestionnaireSyncPackageMeta>>();
+            //this.Bind<IReadSideRepositoryReader<QuestionnaireSyncPackageMeta>>()
+            //   .To<PostgreReadSideRepository<QuestionnaireSyncPackageMeta>>();
 
-            this.Bind<IReadSideRepositoryWriter<TabletDocument>>()
-                .To<PostgreReadSideRepository<TabletDocument>>();
-            this.Bind<IQueryableReadSideRepositoryReader<TabletDocument>>()
-                .To<PostgreReadSideRepository<TabletDocument>>();
-            this.Bind<IReadSideRepositoryReader<TabletDocument>>()
-               .To<PostgreReadSideRepository<TabletDocument>>();
+            //this.Bind<IReadSideRepositoryWriter<TabletDocument>>()
+            //    .To<PostgreReadSideRepository<TabletDocument>>();
+            //this.Bind<IQueryableReadSideRepositoryReader<TabletDocument>>()
+            //    .To<PostgreReadSideRepository<TabletDocument>>();
+            //this.Bind<IReadSideRepositoryReader<TabletDocument>>()
+            //   .To<PostgreReadSideRepository<TabletDocument>>();
         }
     }
 }

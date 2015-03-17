@@ -33,12 +33,9 @@ namespace WB.Core.Infrastructure.Storage.Raven
             this.Bind<IReadSideRepositoryIndexAccessor>().To<RavenReadSideRepositoryIndexAccessor>().InSingletonScope()
                 .WithConstructorArgument("assembliesWithIndexes", this.assembliesWithIndexes);
 
-            this.Bind<ReadSideService>().ToSelf().InSingletonScope();
-            this.Bind<IReadSideStatusService>().ToMethod(context => this.Kernel.Get<ReadSideService>());
-            this.Bind<IReadSideAdministrationService>().ToMethod(context => this.Kernel.Get<ReadSideService>());
-           
+            
             this.Bind<RavenReadSideRepositoryWriterSettings>().ToConstant(ravenReadSideRepositoryWriterSettings);
-            this.Bind<IRavenReadSideRepositoryCleaner>().To<RavenReadSideRepositoryCleaner>().InSingletonScope()
+            this.Bind<IReadSideCleaner>().To<ReadSideCleaner>().InSingletonScope()
                 .WithConstructorArgument("assembliesWithIndexes", this.assembliesWithIndexes);
 
           
