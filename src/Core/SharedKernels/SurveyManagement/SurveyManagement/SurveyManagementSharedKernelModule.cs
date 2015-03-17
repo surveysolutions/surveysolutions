@@ -204,6 +204,13 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .To<PostgreReadSideRepository<UserSyncPackageMeta>>();
 
 
+            this.Bind<IReadSideRepositoryWriter<QuestionnaireSyncPackageMeta>>()
+               .To<PostgreReadSideRepository<QuestionnaireSyncPackageMeta>>();
+            this.Bind<IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMeta>>()
+                .To<PostgreReadSideRepository<QuestionnaireSyncPackageMeta>>();
+            this.Bind<IReadSideRepositoryReader<QuestionnaireSyncPackageMeta>>()
+               .To<PostgreReadSideRepository<QuestionnaireSyncPackageMeta>>();
+
             this.Bind<IReadSideRepositoryWriter<TabletDocument>>()
                 .To<PostgreReadSideRepository<TabletDocument>>();
             this.Bind<IQueryableReadSideRepositoryReader<TabletDocument>>()

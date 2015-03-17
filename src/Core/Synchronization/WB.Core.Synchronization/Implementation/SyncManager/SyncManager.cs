@@ -11,7 +11,6 @@ using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.Synchronization.Commands;
 using WB.Core.Synchronization.Documents;
-using WB.Core.Synchronization.Implementation.ReadSide.Indexes;
 using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.Implementation.SyncManager
@@ -21,7 +20,6 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         private readonly IReadSideRepositoryReader<TabletDocument> devices;
         private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
         private readonly ICommandService commandService;
-        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
 
         private readonly IReadSideKeyValueStorage<UserSyncPackageContent> userPackageStorage;
         private readonly IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore;
@@ -32,12 +30,9 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
         private readonly ISyncLogger syncLogger;
 
-        private readonly string interviewGroupQueryIndexName = typeof(InterviewSyncPackagesGroupedByRoot).Name;
-
         public SyncManager(IReadSideRepositoryReader<TabletDocument> devices, 
             IIncomingSyncPackagesQueue incomingSyncPackagesQueue, 
             ICommandService commandService,
-            IReadSideRepositoryIndexAccessor indexAccessor,
             IReadSideKeyValueStorage<UserSyncPackageContent> userPackageStorage,
             IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore, 
             IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnaireSyncPackageContentStore,
@@ -49,7 +44,6 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             this.devices = devices;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.commandService = commandService;
-            this.indexAccessor = indexAccessor;
             this.userPackageStorage = userPackageStorage;
             this.interviewPackageContentStore = interviewPackageContentStore;
             this.questionnaireSyncPackageContentStore = questionnaireSyncPackageContentStore;
