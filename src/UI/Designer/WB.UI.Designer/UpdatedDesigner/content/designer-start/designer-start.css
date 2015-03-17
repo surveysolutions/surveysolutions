@@ -139,6 +139,19 @@ input.form-control {
   color: #444655;
   border-color: #e2e3e4;
 }
+.dropdown-menu {
+  box-shadow: none;
+}
+.dropdown-menu li a {
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: default;
+}
+.dropdown-menu li:hover {
+  color: ;
+}
 @font-face {
   font-family: 'Roboto-Light';
   font-style: normal;
@@ -152,36 +165,36 @@ input.wb-checkbox,
 input.wb-radio {
   display: none;
 }
-input.wb-checkbox + label span,
-input.wb-radio + label span {
+input.wb-checkbox ~ label span,
+input.wb-radio ~ label span {
   display: inline-block;
   width: 30px;
   height: 30px;
   background: transparent url(../i/pretty-checkable-sprites.png) no-repeat;
   vertical-align: middle;
 }
-input.wb-checkbox + label span {
+input.wb-checkbox ~ label span {
   background-position: 0 0;
 }
-input.wb-checkbox:checked + label span {
+input.wb-checkbox:checked ~ label span {
   background-position: -60px 0;
 }
-input.wb-checkbox:disabled + label span {
+input.wb-checkbox:disabled ~ label span {
   background-position: -30px 0;
 }
-input.wb-checkbox:checked:disabled + label span {
+input.wb-checkbox:checked:disabled ~ label span {
   background-position: -90px 0;
 }
-input.wb-radio + label span {
+input.wb-radio ~ label span {
   background-position: -180 0;
 }
-input.wb-radio:checked + label span {
+input.wb-radio:checked ~ label span {
   background-position: -240px 0;
 }
-input.wb-radio:disabled + label span {
+input.wb-radio:disabled ~ label span {
   background-position: -210px 0;
 }
-input.wb-radio:checked:disabled + label span {
+input.wb-radio:checked:disabled ~ label span {
   background-position: -270px 0;
 }
 #_markup-switcher {
@@ -360,7 +373,7 @@ header nav {
   color: #bfd8ed;
 }
 #start-page .content-holder-outer .content-holder-inner .content-block .form-holder .form-right .has-error {
-  color: #d32828;
+  color: #555555;
 }
 #start-page .content-holder-outer .content-holder-inner .content-block .form-holder .form-right .has-error ::-webkit-input-placeholder {
   color: #d32828;
@@ -381,6 +394,18 @@ header nav {
 }
 #start-page .content-holder-outer .content-holder-inner .content-block .form-holder .form-right .form-actions button {
   letter-spacing: 1px;
+}
+#start-page .content-holder-outer .content-holder-inner .content-block .form-holder .form-right .form-actions button:nth-child(2),
+#start-page .content-holder-outer .content-holder-inner .content-block .form-holder .form-right .form-actions button:nth-child(3) {
+  padding-left: 23px;
+  padding-right: 0;
+}
+#start-page .content-holder-outer .content-holder-inner .content-block .form-holder .form-right #start-register-step2 p.note {
+  margin-bottom: 60px;
+}
+#start-page .content-holder-outer .content-holder-inner .content-block .form-holder .form-right #start-reset p.note,
+#start-page .content-holder-outer .content-holder-inner .content-block .form-holder .form-right #start-reset .form-group {
+  margin-bottom: 60px;
 }
 footer {
   position: relative;

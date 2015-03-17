@@ -5,13 +5,13 @@
 input.wb-checkbox, input.wb-radio {
   display: none;
 
-  & + label {
+  & ~ label {
     //font-size: 14px;
     //margin: 4px 6px 4px 0;
    // .wb-checkbox-fontstyle();
   }
 
-  & + label span {
+  & ~ label span {
     display: inline-block;
     width: 30px;
     height: 30px;
@@ -21,15 +21,15 @@ input.wb-checkbox, input.wb-radio {
 }
 
 input.wb-checkbox {
-  & + label span { background-position: 0 0;  }
-  &:checked + label span { background-position: -60px 0; }
-  &:disabled + label span { background-position: -30px 0; }
-  &:checked:disabled + label span { background-position: -90px 0; }
+  & ~ label span { background-position: 0 0;  }
+  &:checked ~ label span { background-position: -60px 0; }
+  &:disabled ~ label span { background-position: -30px 0; }
+  &:checked:disabled ~ label span { background-position: -90px 0; }
 }
 
 input.wb-radio {
-  & + label span { background-position: -180 0;  }
-  &:checked + label span { background-position: -240px 0; }
-  &:disabled + label span { background-position: -210px 0; }
-  &:checked:disabled + label span { background-position: -270px 0; }
+  & ~ label span { background-position: -180 0;  }
+  &:checked ~ label span { background-position: -240px 0; }
+  &:disabled ~ label span { background-position: -210px 0; }
+  &:checked:disabled ~ label span { background-position: -270px 0; }
 }

@@ -139,6 +139,19 @@ input.form-control {
   color: #444655;
   border-color: #e2e3e4;
 }
+.dropdown-menu {
+  box-shadow: none;
+}
+.dropdown-menu li a {
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: default;
+}
+.dropdown-menu li:hover {
+  color: ;
+}
 @font-face {
   font-family: 'Roboto-Light';
   font-style: normal;
@@ -152,36 +165,36 @@ input.wb-checkbox,
 input.wb-radio {
   display: none;
 }
-.wb-checkbox-container label span,
-.wb-radio-container label span {
+input.wb-checkbox ~ label span,
+input.wb-radio ~ label span {
   display: inline-block;
   width: 30px;
   height: 30px;
   background: transparent url(../i/pretty-checkable-sprites.png) no-repeat;
   vertical-align: middle;
 }
-.wb-checkbox-container label span {
+input.wb-checkbox ~ label span {
   background-position: 0 0;
 }
-input.wb-checkbox:checked + label span {
+input.wb-checkbox:checked ~ label span {
   background-position: -60px 0;
 }
-input.wb-checkbox:disabled + label span {
+input.wb-checkbox:disabled ~ label span {
   background-position: -30px 0;
 }
-input.wb-checkbox:checked:disabled + label span {
+input.wb-checkbox:checked:disabled ~ label span {
   background-position: -90px 0;
 }
-input.wb-radio + label span {
+input.wb-radio ~ label span {
   background-position: -180 0;
 }
-input.wb-radio:checked + label span {
+input.wb-radio:checked ~ label span {
   background-position: -240px 0;
 }
-input.wb-radio:disabled + label span {
+input.wb-radio:disabled ~ label span {
   background-position: -210px 0;
 }
-input.wb-radio:checked:disabled + label span {
+input.wb-radio:checked:disabled ~ label span {
   background-position: -270px 0;
 }
 #_markup-switcher {
@@ -196,9 +209,17 @@ body {
   height: 100%;
   min-width: 1280px;
   position: relative;
+  width: 100%;
 }
 .underline {
   text-decoration: underline;
+}
+header {
+  /* width: 100%;
+  height: 76px;
+  position: fixed;
+  top: 0;
+  left: 0;*/
 }
 header .questionnaire-logo {
   background: url("../i/logo-questionnaire-designer.png") no-repeat;
@@ -282,6 +303,9 @@ div#table-message a.cross {
 }
 div#table-message a.cross:hover {
   background-position: 0 -40px;
+}
+table#table-content {
+  cursor: default;
 }
 table#table-content tr td:first-child {
   font-family: Arial, Helvetica, sans-serif;

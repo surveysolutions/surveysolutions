@@ -138,7 +138,7 @@ header {
               }
 
               .has-error {
-                color: @brand-danger;
+                color: @navbar-default-link-active-color;
 
                 ::-webkit-input-placeholder {color: @brand-danger;}
                 :-moz-placeholder { /* Firefox 18- */color: @brand-danger;}
@@ -153,7 +153,26 @@ header {
               .form-actions {
                 button {
                   letter-spacing: 1px;
+
+                  &:nth-child(2), &:nth-child(3) {
+                    padding-left: 23px;
+                    padding-right: 0;
+                  }
                 }
+
+              }
+
+              #start-register-step2 {
+                p.note {
+                  margin-bottom: 60px;
+                }
+              }
+
+              #start-reset {
+                p.note, .form-group {
+                  margin-bottom: 60px;
+                }
+
               }
             }
           }
