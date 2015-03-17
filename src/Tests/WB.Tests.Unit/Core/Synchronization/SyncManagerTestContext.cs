@@ -32,7 +32,6 @@ namespace WB.Tests.Unit.Core.Synchronization
                 devices ?? Mock.Of<IReadSideRepositoryReader<TabletDocument>>(),
                 incomingSyncPackagesQueue ?? Mock.Of<IIncomingSyncPackagesQueue>(),
                 commandService ?? Mock.Of<ICommandService>(),
-                indexAccessor ?? Mock.Of<IReadSideRepositoryIndexAccessor>(),
                 userPackageStorage ?? Mock.Of<IReadSideKeyValueStorage<UserSyncPackageContent>>(),
                 interviewPackageContentStore ?? Mock.Of<IReadSideKeyValueStorage<InterviewSyncPackageContent>>(),
                 questionnaireSyncPackageContentStore ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireSyncPackageContent>>(),
