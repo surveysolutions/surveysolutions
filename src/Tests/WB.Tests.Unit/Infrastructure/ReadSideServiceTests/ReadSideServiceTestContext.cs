@@ -11,6 +11,7 @@ using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide;
+using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
 {
@@ -23,9 +24,11 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
         {
             ReadSideService.InstanceCount = 0;
 
-            return new ReadSideService(streamableEventStore ?? Mock.Of<IStreamableEventStore>(),
+            return new ReadSideService(
+                streamableEventStore ?? Mock.Of<IStreamableEventStore>(),
                 eventDispatcher ?? Mock.Of<IEventDispatcher>(), Mock.Of<ILogger>(),
-                ravenReadSideRepositoryCleaner: ravenReadSideRepositoryCleaner ?? Mock.Of<IRavenReadSideRepositoryCleaner>());
+                ravenReadSideRepositoryCleaner ?? Mock.Of<IRavenReadSideRepositoryCleaner>(),
+                Mock.Of<ITransactionManagerProviderManager>());
         }
     }
 }
