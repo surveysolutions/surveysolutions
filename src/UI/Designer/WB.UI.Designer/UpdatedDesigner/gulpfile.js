@@ -4,6 +4,7 @@ var path = require('path');
 var mainBowerFiles = require('main-bower-files');
 var runSequence = require('run-sequence');
 var concat = require('gulp-concat');
+var debug = require('gulp-debug');
 
 var paths = {
   scripts: ['app/scripts/**/*.js'],
@@ -29,7 +30,8 @@ gulp.task("styles", function(){
 
 gulp.task("bowerJs", function(){
     return gulp.src(mainBowerFiles())
-    	.pipe(plugins.filter(['*.js']))
+        .pipe(plugins.filter(['*.js']))
+        .pipe(debug({ title: 'unicorn:' }))
     	.pipe(plugins.ngAnnotate())
     	.pipe(plugins.uglify())
       	.pipe(concat('libs.js'))
@@ -38,7 +40,8 @@ gulp.task("bowerJs", function(){
 });
 
 gulp.task('devJs', function () {
-   return gulp.src(paths.scripts)
+    return gulp.src(paths.scripts)
+      .pipe(debug({ title: 'unicorn:' }))
       .pipe(plugins.jshint())
       .pipe(plugins.jshint.reporter('default'))
       .pipe(plugins.ngAnnotate())
