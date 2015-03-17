@@ -13,6 +13,7 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Services;
+using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Core.Infrastructure.Implementation.ReadSide
 {
@@ -47,13 +48,15 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         private readonly ILogger logger;
         private readonly IRavenReadSideRepositoryCleaner ravenReadSideRepositoryCleaner;
         private Dictionary<IEventHandler, Stopwatch> handlersWithStopwatches;
+        private readonly ITransactionManagerProviderManager transactionManagerProviderManager;
 
         static ReadSideService()
         {
             UpdateStatusMessage("No administration operations were performed so far.");
         }
 
-        public ReadSideService(IStreamableEventStore eventStore, IEventDispatcher eventBus, ILogger logger, IRavenReadSideRepositoryCleaner ravenReadSideRepositoryCleaner)
+        public ReadSideService(IStreamableEventStore eventStore, IEventDispatcher eventBus, ILogger logger,
+            IRavenReadSideRepositoryCleaner ravenReadSideRepositoryCleaner, ITransactionManagerProviderManager transactionManagerProviderManager)
         {
             if (InstanceCount > 0)
                 throw new Exception(string.Format("Trying to create a new instance of RavenReadSideService when following count of instances exists: {0}.", InstanceCount));
@@ -64,6 +67,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             this.eventBus = eventBus;
             this.logger = logger;
             this.ravenReadSideRepositoryCleaner = ravenReadSideRepositoryCleaner;
+            this.transactionManagerProviderManager = transactionManagerProviderManager;
         }
 
         #region IReadLayerStatusService implementation
@@ -281,6 +285,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 try
                 {
                     this.EnableWritersCacheForHandlers(handlers);
+                    this.transactionManagerProviderManager.PinTransactionManager();
 
                     foreach (var eventSourceId in eventSourceIds)
                     {
@@ -290,6 +295,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 }
                 finally
                 {
+                    this.transactionManagerProviderManager.UnpinTransactionManager();
                     this.DisableWritersCacheForHandlers(handlers);
                 }
 
@@ -323,10 +329,13 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 try
                 {
                     this.EnableWritersCacheForHandlers(handlers);
+                    this.transactionManagerProviderManager.PinTransactionManager();
+
                     this.RepublishAllEvents(this.GetEventStream(skipEvents), this.eventStore.CountOfAllEvents(), skipEventsCount: skipEvents, handlers: handlers);
                 }
                 finally
                 {
+                    this.transactionManagerProviderManager.UnpinTransactionManager();
                     this.DisableWritersCacheForHandlers(handlers);
 
                     if(!isPartiallyRebuild && this.ravenReadSideRepositoryCleaner != null) 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using Ninject;
@@ -19,7 +20,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
-            if (HasTransaction(actionContext))
+            if (!ShouldDisableTransaction(actionContext))
             {
                 this.transactionManager.GetTransactionManager().BeginQueryTransaction();
             }
@@ -27,18 +28,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
         public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
         {
-            if (HasTransaction(actionExecutedContext.ActionContext))
+            if (!ShouldDisableTransaction(actionExecutedContext.ActionContext))
             {
                 this.transactionManager.GetTransactionManager().RollbackQueryTransaction();
             }
         }
 
-        private static bool HasTransaction(HttpActionContext actionContext)
+        private static bool ShouldDisableTransaction(HttpActionContext actionContext)
         {
-            Collection<NoTransactionAttribute> noTransactionAttributes =
+            Collection<NoTransactionAttribute> noTransactionActionAttributes =
                 actionContext.ActionDescriptor.GetCustomAttributes<NoTransactionAttribute>();
-            bool hasTransaction = noTransactionAttributes.Count == 0;
-            return hasTransaction;
+            Collection<NoTransactionAttribute> noTransactionControllerAttributes =
+                actionContext.ControllerContext.ControllerDescriptor.GetCustomAttributes<NoTransactionAttribute>();
+
+            bool shouldDisableTransactionForAction = noTransactionActionAttributes.Any();
+            bool shouldDisableTransactionForController = noTransactionControllerAttributes.Any();
+
+            return shouldDisableTransactionForAction || shouldDisableTransactionForController;
         }
     }
 }

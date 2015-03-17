@@ -9,11 +9,13 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
     {
         private readonly ISessionFactory sessionFactory;
 
-        //private ISession session;
         private ITransaction commandTransaction;
         private ITransaction queryTransaction;
         private ISession commandSession;
         private ISession querySession;
+
+        private bool triedToBeginCommandTransaction;
+        private bool triedToBeginQueryTransaction;
 
         public PostgreTransactionManager(ISessionFactory sessionFactory)
         {
@@ -22,7 +24,10 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         public void BeginCommandTransaction()
         {
-            if (this.commandTransaction != null) throw new InvalidOperationException();
+            this.triedToBeginCommandTransaction = true;
+
+            if (this.commandTransaction != null && this.commandSession != null)
+                throw new InvalidOperationException();
 
             this.commandSession = this.sessionFactory.OpenSession();
             this.commandTransaction = commandSession.BeginTransaction(IsolationLevel.ReadCommitted);
@@ -30,52 +35,79 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         public void CommitCommandTransaction()
         {
-            if (this.commandTransaction == null) throw new InvalidOperationException();
+            if (this.commandTransaction == null || this.commandSession == null)
+                throw new InvalidOperationException();
 
             this.commandTransaction.Commit();
+            this.commandTransaction = null;
 
             this.commandSession.Close();
-            this.commandTransaction = null;
             this.commandSession = null;
+
+            this.triedToBeginCommandTransaction = false;
         }
 
         public void RollbackCommandTransaction()
         {
-            if (this.commandTransaction == null) throw new InvalidOperationException();
+            if (!this.triedToBeginCommandTransaction)
+                throw new InvalidOperationException();
 
-            this.commandTransaction.Rollback();
-            this.commandSession.Close();
+            if (this.commandTransaction != null)
+            {
+                this.commandTransaction.Rollback();
+                this.commandTransaction = null;
+            }
 
-            this.commandTransaction = null;
-            this.commandSession = null;
+            if (this.commandSession != null)
+            {
+                this.commandSession.Close();
+                this.commandSession = null;
+            }
+
+            this.triedToBeginCommandTransaction = false;
         }
 
         public void BeginQueryTransaction()
         {
-            if (this.queryTransaction != null) throw new InvalidOperationException();
-            if (this.commandTransaction != null) throw new InvalidOperationException("Query transaction is expected to be always open before CommandTransaction, or not openned at all for this request. Please make sure that this controller has action filter for transactions management applied. But some controllers like RebuildReadSide should not ever open query transaction. Check that you are not inside such controller before fixing any code.");
+            this.triedToBeginQueryTransaction = true;
+
+            if (this.queryTransaction != null && this.querySession != null)
+                throw new InvalidOperationException();
+
+            if (this.commandTransaction != null)
+                throw new InvalidOperationException("Query transaction is expected to be always open before CommandTransaction, or not openned at all for this request. Please make sure that this controller has action filter for transactions management applied. But some controllers like RebuildReadSide should not ever open query transaction. Check that you are not inside such controller before fixing any code.");
 
             this.querySession = this.sessionFactory.OpenSession();
-
             this.queryTransaction = this.querySession.BeginTransaction(IsolationLevel.ReadCommitted);
         }
 
         public void RollbackQueryTransaction()
         {
-            if (this.queryTransaction == null) throw new InvalidOperationException();
+            if (!this.triedToBeginQueryTransaction)
+                throw new InvalidOperationException();
 
-            this.queryTransaction.Rollback();
-            this.queryTransaction = null;
+            if (this.queryTransaction != null)
+            {
+                this.queryTransaction.Rollback();
+                this.queryTransaction = null;
+            }
 
-            this.querySession.Close();
-            this.querySession = null;
+            if (this.querySession != null)
+            {
+                this.querySession.Close();
+                this.querySession = null;
+            }
+
+            this.triedToBeginQueryTransaction = false;
         }
 
         public ISession GetSession()
         {
             var result = this.commandSession ?? this.querySession;
 
-            if (result == null) throw new InvalidOperationException("Trying to get session without beginning a transaction first. Make sure to call BeginTransaction before getting session instance");
+            if (result == null)
+                throw new InvalidOperationException("Trying to get session without beginning a transaction first. Make sure to call BeginTransaction before getting session instance");
+
             return result;
         }
 

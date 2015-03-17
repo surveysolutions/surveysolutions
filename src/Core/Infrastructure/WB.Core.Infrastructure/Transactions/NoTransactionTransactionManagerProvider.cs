@@ -2,7 +2,7 @@
 
 namespace WB.Core.Infrastructure.Transactions
 {
-    public class NoTransactionTransactionManagerProvider :  ITransactionManagerProvider
+    public class NoTransactionTransactionManagerProvider : ITransactionManagerProvider, ITransactionManagerProviderManager
     {
         private readonly ITransactionManager transactionManager;
 
@@ -15,5 +15,9 @@ namespace WB.Core.Infrastructure.Transactions
         {
             return transactionManager;
         }
+
+        public void PinTransactionManager() {}
+
+        public void UnpinTransactionManager() {}
     }
 }

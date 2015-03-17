@@ -169,6 +169,7 @@
     <Compile Include="Services\IAdditionalDataService.cs" />
     <Compile Include="Transactions\ITransactionManager.cs" />
     <Compile Include="Transactions\ITransactionManagerProvider.cs" />
+    <Compile Include="Transactions\ITransactionManagerProviderManager.cs" />
     <Compile Include="Transactions\NoTransactionTransactionManager.cs" />
     <Compile Include="Transactions\NoTransactionTransactionManagerProvider.cs" />
   </ItemGroup>
