@@ -372,7 +372,7 @@
     <Content Include="Scripts\viewmodels\pages\controlpanel\readside.js" />
     <Content Include="Scripts\viewmodels\viewmodelbase.js" />
     <Content Include="Scripts\viewmodels\designer.framework.js" />
-    <Content Include="UpdatedDesigner\app\scripts\directives\isOnScreenHelper.js" />
+    <Content Include="UpdatedDesigner\vendor\jquery.isOnScreen\isOnScreen.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\matchOptionsPattern.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\optionsService.js" />
     <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.css" />
@@ -1250,6 +1250,7 @@
     </Content>
     <Content Include="Views\Account\RegisterStepTwo.cshtml" />
     <Content Include="UpdatedDesigner\vendor\ace-builds\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\jquery.isOnScreen\bower.json" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
