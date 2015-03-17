@@ -108,6 +108,24 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateHeadquarters(UserModel model)
         {
+            if (CreateUser(model, UserRoles.Headquarter))
+                return this.RedirectToAction("LogOn", "Account");
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateAdmin(UserModel model)
+        {
+            if (CreateUser(model, UserRoles.Administrator))
+                return this.RedirectToAction("LogOn", "Account");
+
+            return View(model);
+        }
+
+        private bool CreateUser(UserModel model, UserRoles role)
+        {
             if (ModelState.IsValid)
             {
                 UserView userToCheck =
@@ -121,11 +139,11 @@ namespace WB.UI.Headquarters.Controllers
                             password: passwordHasher.Hash(model.Password), email: model.Email,
                             isLockedBySupervisor: false,
                             isLockedByHQ: false, roles: new[] {UserRoles.Headquarter}, supervsor: null));
-                        return this.RedirectToAction("LogOn", "Account");
+                        return true;
                     }
                     catch (Exception ex)
                     {
-                        var userErrorMessage = "Error when creating headquarters user";
+                        var userErrorMessage = "Error when creating user " + model.UserName;
                         this.Error(userErrorMessage);
                         this.Logger.Fatal(userErrorMessage, ex);
                     }
@@ -135,47 +153,10 @@ namespace WB.UI.Headquarters.Controllers
                     this.Error("User name already exists. Please enter a different user name.");
                 }
             }
-
-            return View(model);
+            return false;
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult CreateAdmin(UserModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                UserView userToCheck = this.userViewFactory.Load(new UserViewInputModel(UserName: model.UserName, UserEmail: null));
-                if (userToCheck == null)
-                {
-                    try
-                    {
-                        this.CommandService.Execute(new CreateUserCommand(publicKey: Guid.NewGuid(),
-                            userName: model.UserName,
-                            password: passwordHasher.Hash(model.Password), email: model.Email,
-                            isLockedBySupervisor: false,
-                            isLockedByHQ: false, 
-                            roles: new[] { UserRoles.Administrator }, 
-                            supervsor: null));
-
-                        return this.RedirectToAction("LogOn", "Account");
-                    }
-                    catch (Exception ex)
-                    {
-                        var userErrorMessage = "Error when creating admin user";
-                        this.Error(userErrorMessage);
-                        this.Logger.Fatal(userErrorMessage, ex);
-                    }
-                }
-                else
-                {
-                    this.Error("User name already exists. Please enter a different user name.");
-                }
-            }
-
-            return View(model);
-        }
-
+        
         public ActionResult ResetPrivilegedUserPassword()
         {
             return this.View(new UserModel());
