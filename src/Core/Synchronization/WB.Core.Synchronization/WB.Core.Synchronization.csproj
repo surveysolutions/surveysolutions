@@ -77,7 +77,6 @@
     <Compile Include="Events\Sync\UpdateRegisteredDevice.cs" />
     <Compile Include="IBackupManager.cs" />
     <Compile Include="IIncomingSyncPackagesQueue.cs" />
-    <Compile Include="Implementation\ReadSide\Indexes\InterviewSyncPackagesByBriefFields.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\InterviewSyncPackagesGroupedByRoot.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\QuestionnaireSyncPackagesByBriefFields.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\SynchronizationDeltasByRecordSize.cs" />
