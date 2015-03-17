@@ -119,6 +119,7 @@
     <Compile Include="DataAnnotations\DataAnnotationsConfig.cs" />
     <Compile Include="Elmah\ElmahDataFilter.cs" />
     <Compile Include="Exceptions\HttpStatusException.cs" />
+    <Compile Include="Extensions\LinkExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
     <Compile Include="Filters\ApiValidationAntiForgeryTokenVerifier.cs" />
