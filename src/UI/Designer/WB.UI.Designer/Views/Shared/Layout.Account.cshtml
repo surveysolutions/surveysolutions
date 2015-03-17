@@ -1,4 +1,4 @@
-﻿@using WB.UI.Designer.BootstrapSupport
+@using WB.UI.Designer.BootstrapSupport
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Designer</title>
+    @this.GenerateFavicon(Url.Content("~/favicon.ico"))
     <script src="~/UpdatedDesigner/vendor/jquery/dist/jquery.min.js" type="text/javascript"></script>
     <!-- Bootstrap library -->
     <link href="~/UpdatedDesigner/content/designer-start/bootstrap-custom.css" rel="stylesheet" />
@@ -23,7 +24,6 @@
     @RenderSection("Scripts", required: false)
     @Html.Partial("_html5shiv")
     @*@Html.Partial("_trackers")*@
-
 </head>
 <body onload="FrameCheck();">
     <header>

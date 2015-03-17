@@ -1,6 +1,7 @@
 ﻿@using WB.UI.Designer
 @using WB.UI.Shared.Web.Membership
 @using WB.UI.Designer.Code
+@using WB.UI.Shared.Web.Extensions
 @{
     IMembershipUserService userHelper = ViewBag.UserHelper;
 }
@@ -11,7 +12,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="@Styles.Url("~/content/css")" rel="stylesheet" />
+    <link href="@Styles.Url("~/content/css")" rel="stylesheet"/>
+    @this.GenerateFavicon(Url.Content("~/favicon.ico"))
     @this.RenderSection("Styles", required: false)
     @this.RenderSection("Scripts", required: false)
     @this.Html.Partial("_html5shiv")
