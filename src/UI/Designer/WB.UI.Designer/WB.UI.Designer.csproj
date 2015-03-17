@@ -1280,6 +1280,7 @@
       <DependentUpon>bootstrap-custom.css</DependentUpon>
     </Content>
     <Content Include="Views\Account\RegisterStepTwo.cshtml" />
+    <Content Include="UpdatedDesigner\vendor\ace-builds\bower.json" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
