@@ -1,47 +1,54 @@
 ﻿using System;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
+using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Shared.Web.Filters;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
+namespace WB.UI.Headquarters.Controllers
 {
-    public class InterviewerController : TeamController
+    [Authorize(Roles = "Administrator")]
+    public class HeadquarterController : TeamController
     {
-        public InterviewerController(ICommandService commandService, 
+        public HeadquarterController(ICommandService commandService, 
                               IGlobalInfoProvider globalInfo, 
                               ILogger logger,
                               IUserViewFactory userViewFactory,
                               IPasswordHasher passwordHasher)
             : base(commandService, globalInfo, logger, userViewFactory, passwordHasher)
         {
+            
         }
 
-        [Authorize(Roles = "Administrator, Headquarter")]
-        public ActionResult Create(Guid supervisorId)
+        public ActionResult Create()
         {
-            return this.View(new InterviewerModel() {SupervisorId = supervisorId});
+            this.ViewBag.ActivePage = MenuItem.Headquarters;
+
+            return this.View(new UserModel());
         }
 
         [HttpPost]
-        [Authorize(Roles = "Administrator, Headquarter")]
         [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(InterviewerModel model)
+        public ActionResult Create(UserModel model)
         {
+            this.ViewBag.ActivePage = MenuItem.Headquarters;
+
             if (this.ModelState.IsValid)
             {
-                UserView user = this.GetUserByName(model.UserName);
+                UserView user = GetUserByName(model.UserName);
                 if (user == null)
                 {
-                    this.CreateInterviewer(model, model.SupervisorId);
-                    this.Success("Interviewer was successfully created");
-                    return this.Back(model.SupervisorId);
+                    this.CreateHeadquarters(model);
+                    this.Success("Headquarters user was successfully created");
+                    return this.RedirectToAction("Index");
                 }
                 else
                 {
@@ -52,42 +59,52 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.View(model);
         }
 
-        [Authorize(Roles = "Administrator, Supervisor")]
+        
         public ActionResult Index()
         {
-            return this.View(this.GlobalInfo.GetCurrentUser().Id);
+            this.ViewBag.ActivePage = MenuItem.Headquarters;
+
+            return this.View();
         }
 
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public ActionResult Edit(Guid id)
         {
+            this.ViewBag.ActivePage = MenuItem.Headquarters;
+
             var user = this.GetUserById(id);
 
             if(user == null) throw new HttpException(404, string.Empty);
 
-            return this.View(new UserEditModel
+            return this.View(new UserEditModel()
                 {
                     Id = user.PublicKey,
                     Email = user.Email,
-                    IsLocked = this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator ? user.IsLockedByHQ : user.IsLockedBySupervisor,
-                    UserName = user.UserName,
-                    DevicesHistory = user.DeviceChangingHistory
+                    IsLocked = user.IsLockedByHQ,
+                    UserName = user.UserName
                 });
         }
 
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(UserEditModel model)
         {
+            this.ViewBag.ActivePage = MenuItem.Headquarters;
+
             if (this.ModelState.IsValid)
             {
                 var user = this.GetUserById(model.Id);
                 if (user != null)
                 {
-                    this.UpdateAccount(user: user, editModel: model);
-                    this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
-                    return this.Back(user.Supervisor.Id);
+                    bool isAdmin = Roles.IsUserInRole(user.UserName, UserRoles.Administrator.ToString());
+
+                    if (!isAdmin)
+                    {
+                        this.UpdateAccount(user: user, editModel: model);
+                        this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
+                        return this.RedirectToAction("Index");
+                    }
+
+                    this.Error("Could not update user information because you don't have permission to perform this operation");
                 }
                 else
                 {
@@ -96,18 +113,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             }
 
             return this.View(model);
-        }
-
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public ActionResult Back(Guid id)
-        {
-            if (!(this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator))
-                return this.RedirectToAction("Index");
-
-            var user = this.GetUserById(id);
-
-            return this.RedirectToAction("Interviewers", "Supervisor",
-                new {id = user.Supervisor == null ? user.PublicKey : user.Supervisor.Id});
         }
     }
 }
