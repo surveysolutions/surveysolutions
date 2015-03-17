@@ -23,6 +23,10 @@
 @using (Html.BeginForm("login", "account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @id="start-log-in", autocomplete = "off" }))
 {
     @Html.AntiForgeryToken()
+    if (TempData.ContainsKey(Alerts.SUCCESS))
+    {
+        <div class="alert alert-success header">@Html.Raw(@TempData[Alerts.SUCCESS])</div>
+    }
     <h1>
         Welcome to Survey Solutions<br />
         Questionnaire designer
@@ -31,6 +35,10 @@
     if (!ViewContext.ViewData.ModelState.IsValid)
     {
         <p class="note has-error">@Html.ValidationMessage("LoginError")</p>
+    }
+    else if (TempData.ContainsKey(Alerts.ATTENTION))
+    {
+        <p class="note has-error">@Html.Raw(@TempData[Alerts.ATTENTION])</p>
     }
     <div class="form-group @HasError()">
         @Html.TextBoxFor(x => x.UserName, new { @class = "form-control " + HasError(), placeholder = "Login" })
