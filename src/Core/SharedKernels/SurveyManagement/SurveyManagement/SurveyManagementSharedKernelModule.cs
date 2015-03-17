@@ -39,6 +39,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.Synchronization;
 using WB.Core.Synchronization.EventHandler;
+using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement
 {
@@ -96,7 +97,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IPreloadedDataService>().To<PreloadedDataService>();
             this.Bind<IInterviewSynchronizationDtoFactory>().To<InterviewSynchronizationDtoFactory>();
             this.Bind<IPreloadedDataServiceFactory>().To<PreloadedDataServiceFactory>();
-            
+
             var applicationVersionSettings = new ApplicationVersionSettings
             {
                 SupportedQuestionnaireVersionMajor = this.supportedQuestionnaireVersionMajor,
@@ -160,7 +161,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IDeleteQuestionnaireService>().To<DeleteQuestionnaireService>().InSingletonScope();
 
             this.Bind<InterviewHistorySettings>().ToConstant(interviewHistorySettings);
-            
+
             this.Bind<IInterviewHistoryFactory>().To<InterviewHistoryFactory>();
 
             if (interviewHistorySettings.EnableInterviewHistory)
@@ -172,7 +173,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<IAtomicHealthCheck<RavenHealthCheckResult>>().To<RavenHealthCheck>();
             this.Bind<IAtomicHealthCheck<EventStoreHealthCheckResult>>().To<EventStoreHealthCheck>();
-            this.Bind<IAtomicHealthCheck<FolderPermissionCheckResult>>().To<FolderPermissionChecker>().WithConstructorArgument("folderPath", this.currentFolderPath); 
+            this.Bind<IAtomicHealthCheck<FolderPermissionCheckResult>>().To<FolderPermissionChecker>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>>().To<NumberOfSyncPackagesWithBigSizeChecker>();
             this.Bind<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>().To<NumberOfUnhandledPackagesChecker>();
             this.Bind<IHealthCheckService>().To<HealthCheckService>();
@@ -182,14 +183,24 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IQueryableReadSideRepositoryReader<UserDocument>>().To<PostgreReadSideRepository<UserDocument>>();
 
             this.Bind<IReadSideRepositoryWriter<QuestionnaireBrowseItem>>()
-              .To<PostgreReadSideRepository<QuestionnaireBrowseItem>>();
+                .To<PostgreReadSideRepository<QuestionnaireBrowseItem>>();
             this.Bind<IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem>>()
                 .To<PostgreReadSideRepository<QuestionnaireBrowseItem>>();
 
             this.Bind<IReadSideRepositoryWriter<InterviewSummary>>()
-            .To<PostgreReadSideRepository<InterviewSummary>>();
+                .To<PostgreReadSideRepository<InterviewSummary>>();
             this.Bind<IQueryableReadSideRepositoryReader<InterviewSummary>>()
                 .To<PostgreReadSideRepository<InterviewSummary>>();
+
+            this.Bind<IReadSideRepositoryWriter<InterviewSyncPackageMeta>>()
+                .To<PostgreReadSideRepository<InterviewSyncPackageMeta>>();
+            this.Bind<IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta>>()
+                .To<PostgreReadSideRepository<InterviewSyncPackageMeta>>();
+
+            this.Bind<IReadSideRepositoryWriter<UserSyncPackageMeta>>()
+                .To<PostgreReadSideRepository<UserSyncPackageMeta>>();
+            this.Bind<IQueryableReadSideRepositoryReader<UserSyncPackageMeta>>()
+                .To<PostgreReadSideRepository<UserSyncPackageMeta>>();
 
         }
     }
