@@ -99,6 +99,11 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(new UserModel());
         }
 
+        public ActionResult CreateAdmin()
+        {
+            return this.View(new UserModel());
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateHeadquarters(UserModel model)
