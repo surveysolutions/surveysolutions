@@ -1,6 +1,7 @@
 ﻿using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
+using WB.UI.Designer.BootstrapSupport;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Resources;
@@ -74,7 +75,7 @@ namespace WB.UI.Designer.Controllers
                 return this.RedirectToLocal(returnUrl);
             }
 
-            this.ModelState.AddModelError("LoginError", ErrorMessages.The_user_name_or_password_provided_is_incorrect);
+            this.Error(ErrorMessages.The_user_name_or_password_provided_is_incorrect);
             return View(model);
         }
 
@@ -168,7 +169,7 @@ namespace WB.UI.Designer.Controllers
                                 ConfirmationToken = confirmationToken
                             }).SendAsync();
 
-                    this.Attention("To complete the reset password process look for an email in your inbox that provides further instructions.");
+                    this.Error("To complete the reset password process look for an email in your inbox that provides further instructions.");
                     return this.RedirectToAction("Login");
                 }
             }
@@ -194,7 +195,7 @@ namespace WB.UI.Designer.Controllers
             var isUserRegisterSuccessfully = false;
             if (AppSettings.Instance.IsReCaptchaEnabled && !captchaValid)
             {
-                this.ModelState.AddModelError("RegisterError", ErrorMessages.You_did_not_type_the_verification_word_correctly);
+                this.Error(ErrorMessages.You_did_not_type_the_verification_word_correctly);
             }
             else
             {
