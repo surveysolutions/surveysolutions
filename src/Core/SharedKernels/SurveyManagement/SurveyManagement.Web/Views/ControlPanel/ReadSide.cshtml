@@ -109,6 +109,12 @@
             <div class="col-md-8">
                 <!-- ko if: readSideRepositoryWriters().length > 0 -->
                 <table class="table table-striped table-bordered table-condensed table-hover">
+                    <thead>
+                        <tr>
+                            <th>Writer name</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
                     <tbody data-bind="foreach: readSideRepositoryWriters()">
                         <tr>
                             <td data-bind="text: WriterName"></td>
@@ -121,6 +127,13 @@
                 <!-- ko if: rebuildDenormalizerStatistic().length > 0 -->
 
                 <table class="table table-striped table-bordered table-condensed table-hover">
+                    <thead>
+                        <tr>
+                            <th>Denormalizer</th>
+                            <th>Time spent</th>
+                            <th>Time spent %</th>
+                        </tr>
+                    </thead>
                     <tbody data-bind="foreach: rebuildDenormalizerStatistic()">
                         <tr>
                             <td data-bind="text: DenormalizerName"></td>
