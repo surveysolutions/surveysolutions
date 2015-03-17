@@ -1,15 +1,17 @@
 using Android.App;
 using Android.OS;
+using Android.Views;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
+using XLabs.Forms;
 
 namespace WB.UI.Interviewer.Droid.MvxDroidAdaptation
 {
-    [Activity(Label = "View for anyViewModel")]
+    [Activity(Label = "View for anyViewModel", WindowSoftInputMode = SoftInput.AdjustPan)]
     public class MvxNavigationActivity
-        : AndroidActivity
+        : XFormsApplicationDroid
         , IMvxPageNavigationProvider
     {
         private NavigationPage _navPage;
