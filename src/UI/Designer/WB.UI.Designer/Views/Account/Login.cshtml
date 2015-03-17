@@ -23,22 +23,15 @@
 @using (Html.BeginForm("login", "account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @id="start-log-in", autocomplete = "off" }))
 {
     @Html.AntiForgeryToken()
-    if (TempData.ContainsKey(Alerts.SUCCESS))
-    {
-        <div class="alert alert-success header">@Html.Raw(@TempData[Alerts.SUCCESS])</div>
-    }
+    
     <h1>
         Welcome to Survey Solutions<br />
         Questionnaire designer
     </h1>
     <p class="note">Please log in or @Html.ActionLink("Register", "register")</p>
-    if (!ViewContext.ViewData.ModelState.IsValid)
+    if (TempData.ContainsKey(Alerts.ERROR))
     {
-        <p class="note has-error">@Html.ValidationMessage("LoginError")</p>
-    }
-    else if (TempData.ContainsKey(Alerts.ATTENTION))
-    {
-        <p class="note has-error">@Html.Raw(@TempData[Alerts.ATTENTION])</p>
+        <p class="note has-error">@Html.Raw(@TempData[Alerts.ERROR])</p>
     }
     <div class="form-group @HasError()">
         @Html.TextBoxFor(x => x.UserName, new { @class = "form-control " + HasError(), placeholder = "Login" })
@@ -49,7 +42,7 @@
         @Html.ValidationMessageFor(x => x.Password, null, new { @class = "help-inline" })
     </div>
     <div class="form-group">
-        @Html.CheckBoxFor(x => x.RememberMe, new {@id="cb-stay-logged-in", @class = "checkbox" })
+        @Html.CheckBoxFor(x => x.RememberMe, new {@id="cb-stay-logged-in", @class = "wb-checkbox" })
         <label for="cb-stay-logged-in">
             <span></span>Stay logged in for a day
         </label><br />
