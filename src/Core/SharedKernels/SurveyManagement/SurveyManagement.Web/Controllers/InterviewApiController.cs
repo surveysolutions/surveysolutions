@@ -87,7 +87,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Supervisor, Headquarter")]
+        [Authorize(Roles = "Administrator, Supervisor, Headquarter")]
         public InverviewChangeStateHistoryView ChangeStateHistory(ChangeStateHistoryViewModel data)
         {
             var interviewSummary =
@@ -108,7 +108,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             };
         }
 
-        [Authorize(Roles = "Headquarter")]
+        [Authorize(Roles = "Administrator, Headquarter")]
         public InterviewSummaryForMapPointView InterviewSummaryForMapPoint(InterviewSummaryForMapPointViewModel data)
         {
             if (data == null)

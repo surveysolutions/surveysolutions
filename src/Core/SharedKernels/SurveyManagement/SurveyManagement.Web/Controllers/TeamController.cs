@@ -3,7 +3,6 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -48,12 +47,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             CreateUser(user: supervisor, role: UserRoles.Supervisor);
         }
 
+        protected void CreateHeadquarters(UserModel supervisor)
+        {
+            CreateUser(user: supervisor, role: UserRoles.Headquarter);
+        }
+
         protected void UpdateAccount(UserView user, UserEditModel editModel)
         {
             this.CommandService.Execute(new ChangeUserCommand(publicKey: user.PublicKey, email: editModel.Email,
                 roles: user.Roles.ToArray(),
                 isLockedBySupervisor: this.GlobalInfo.IsSurepvisor ? editModel.IsLocked : user.IsLockedBySupervisor,
-                isLockedByHQ: this.GlobalInfo.IsHeadquarter ? editModel.IsLocked : user.IsLockedByHQ,
+                isLockedByHQ: this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator ? editModel.IsLocked : user.IsLockedByHQ,
                 passwordHash:
                     string.IsNullOrEmpty(editModel.Password)
                         ? user.Password
