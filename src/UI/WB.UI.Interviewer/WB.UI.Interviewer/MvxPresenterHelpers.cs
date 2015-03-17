@@ -21,7 +21,7 @@ namespace WB.UI.Interviewer
         {
             var viewModelName = request.ViewModelType.Name;
             var pageName = viewModelName.Replace("ViewModel", "Page");
-            var pageType = request.ViewModelType.GetTypeInfo().Assembly.CreatableTypes()
+            var pageType = typeof(MvxPresenterHelpers).GetTypeInfo().Assembly.CreatableTypes()
                                   .FirstOrDefault(t => t.Name == pageName);
             if (pageType == null)
             {
