@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:WB.UI.Interviewer;assembly=WB.UI.Interviewer"
+             xmlns:vm="clr-namespace:WB.Core.BoundedContexts.Capi.ViewModel;assembly=WB.Core.BoundedContexts.Capi"
              xmlns:controls="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms"
              x:Class="WB.UI.Interviewer.View.InterviewPage">
   <ContentPage.Resources>
@@ -85,15 +86,15 @@
         <StackLayout Orientation="Vertical" Padding="10,5,10,5">
           <Label Text="{Binding Title}" />
           <ListView ItemsSource="{Binding Answers}">
-            
-          <DataTemplate>
+
+            <DataTemplate>
               <ViewCell>
                 <ViewCell.View>
                   <Entry Text="{Binding Mode=TwoWay}"/>
                 </ViewCell.View>
               </ViewCell>
             </DataTemplate>
-          
+
           </ListView>
         </StackLayout>
       </DataTemplate>
@@ -101,35 +102,27 @@
       <DataTemplate x:Key="MultiChoiceQuestionTemplate">
         <StackLayout Orientation="Vertical" Padding="10,5,10,5">
           <Label Text="{Binding Title}" />
-          <ListView ItemsSource="{Binding Options, Mode=TwoWay}" HasUnevenRows="true">
-            <ListView.ItemTemplate>
+          <local:RepeaterView x:TypeArguments="vm:InterviewStaticOption" Spacing="5" ItemsSource="{Binding Options}" >
+            <local:RepeaterView.ItemTemplate>
               <DataTemplate>
-                <controls:ExtendedViewCell>
-                  <controls:ExtendedViewCell.View>
-                    <controls:CheckBox DefaultText="{Binding Label, StringFormat=' {0}'}" CheckedText="{Binding Label, StringFormat=' {0}'}"
-                                       UncheckedText="{Binding Label, StringFormat=' {0}'}" TextColor="White" Checked="{Binding IsSelected, Mode=TwoWay}" />
-                  </controls:ExtendedViewCell.View>
-                </controls:ExtendedViewCell>
+                <controls:CheckBox DefaultText="{Binding Label, StringFormat=' {0}'}" CheckedText="{Binding Label, StringFormat=' {0}'}"
+                                     UncheckedText="{Binding Label, StringFormat=' {0}'}" TextColor="White" Checked="{Binding IsSelected, Mode=TwoWay}" />
               </DataTemplate>
-            </ListView.ItemTemplate>
-          </ListView>
+            </local:RepeaterView.ItemTemplate>
+          </local:RepeaterView>
         </StackLayout>
       </DataTemplate>
 
       <DataTemplate x:Key="SingleChoiceQuestionTemplate">
         <StackLayout Orientation="Vertical" Padding="10,5,10,5">
           <Label Text="{Binding Title}" />
-          <ListView ItemsSource="{Binding Options, Mode=TwoWay}" HasUnevenRows="true">
-            <ListView.ItemTemplate>
+          <local:RepeaterView x:TypeArguments="vm:InterviewStaticOption" Spacing="5" ItemsSource="{Binding Options}" >
+            <local:RepeaterView.ItemTemplate>
               <DataTemplate>
-                <controls:ExtendedViewCell>
-                  <controls:ExtendedViewCell.View>
-                    <controls:CustomRadioButton Text="{Binding Label, StringFormat=' {0}'}"  TextColor="White" Checked="{Binding IsSelected, Mode=TwoWay}" />
-                  </controls:ExtendedViewCell.View>
-                </controls:ExtendedViewCell>
+                <controls:CustomRadioButton Text="{Binding Label, StringFormat=' {0}'}"  TextColor="White" Checked="{Binding IsSelected, Mode=TwoWay}" />
               </DataTemplate>
-            </ListView.ItemTemplate>
-          </ListView>
+            </local:RepeaterView.ItemTemplate>
+          </local:RepeaterView>
         </StackLayout>
       </DataTemplate>
 
