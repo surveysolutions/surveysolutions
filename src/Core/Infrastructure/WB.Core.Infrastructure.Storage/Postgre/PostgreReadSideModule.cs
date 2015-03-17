@@ -40,9 +40,12 @@ namespace WB.Core.Infrastructure.Storage.Postgre
         {
             this.Kernel.Bind<PostgreConnectionSettings>().ToConstant(new PostgreConnectionSettings{ConnectionString = connectionString });
 
-            this.Kernel.Bind(typeof(MemoryCachedKeyValueStorageProvider<>)).ToSelf();
-            this.Kernel.Bind(typeof(PostgreKeyValueStorage<>)).ToSelf();
+            this.Kernel.Bind<IReadSideCleaner>().To<PostgresReadSideCleaner>();
 
+            this.Kernel.Bind(typeof(PostgreReadSideRepository<>)).ToSelf().InSingletonScope();
+            this.Kernel.Bind(typeof(MemoryCachedReadSideRepositoryWriterProvider<>)).ToSelf();
+            this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(GetReadSideRepositoryWriter).InSingletonScope(); 
+            
             this.Kernel.Bind<ISessionFactory>()
                        .ToMethod(kernel => this.BuildSessionFactory())
                        .InSingletonScope();
@@ -57,6 +60,9 @@ namespace WB.Core.Infrastructure.Storage.Postgre
 
             this.Kernel.Bind<ITransactionManagerProvider>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
             this.Kernel.Bind<ITransactionManagerProviderManager>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
+
+            this.Kernel.Bind(typeof (IQueryableReadSideRepositoryReader<>)).To(typeof (PostgreReadSideRepository<>));
+            this.Kernel.Bind(typeof (IReadSideRepositoryReader<>)).To(typeof (PostgreReadSideRepository<>));
 
             this.Kernel.Bind(typeof(IReadSideKeyValueStorage<>))
                 .ToMethod(GetReadSideKeyValueStorage)
@@ -153,6 +159,26 @@ namespace WB.Core.Infrastructure.Storage.Postgre
             {
                 return new MemoryCachedKeyValueStorage<TEntity>(context.Kernel.Get<PostgreKeyValueStorage<TEntity>>());
             }
+        }
+
+        private class MemoryCachedReadSideRepositoryWriterProvider<TEntity> : Provider<IReadSideRepositoryWriter<TEntity>>
+       where TEntity : class, IReadSideRepositoryEntity
+        {
+            protected override IReadSideRepositoryWriter<TEntity> CreateInstance(IContext context)
+            {
+                return new MemoryCachedReadSideRepositoryWriter<TEntity>(context.Kernel.Get<PostgreReadSideRepository<TEntity>>());
+            }
+        }
+
+        protected object GetReadSideRepositoryWriter(IContext context)
+        {
+            var genericProvider = this.Kernel.Get(
+                  typeof(MemoryCachedReadSideRepositoryWriterProvider<>).MakeGenericType(context.GenericArguments[0])) as
+                  IProvider;
+
+            if (genericProvider == null)
+                return null;
+            return genericProvider.Create(context);
         }
     }
 }
