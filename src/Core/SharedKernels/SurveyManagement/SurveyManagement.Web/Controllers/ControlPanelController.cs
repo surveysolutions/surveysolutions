@@ -13,6 +13,7 @@ using WB.UI.Shared.Web.Settings;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
+    [NoTransaction]
     [LocalOrDevelopmentAccessOnly]
     public abstract class ControlPanelController : BaseController
     {

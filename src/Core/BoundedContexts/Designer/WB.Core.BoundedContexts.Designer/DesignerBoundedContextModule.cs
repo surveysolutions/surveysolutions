@@ -78,6 +78,7 @@ namespace WB.Core.BoundedContexts.Designer
             this.Kernel.RegisterFactory<PdfQuestionnaireFactory>();
             this.Kernel.Bind<ITransactionManager>().To<NoTransactionTransactionManager>();
             this.Kernel.Bind<ITransactionManagerProvider>().To<NoTransactionTransactionManagerProvider>();// TODO: Fix it when migrating designer to postgres
+            this.Kernel.Bind<ITransactionManagerProviderManager>().To<NoTransactionTransactionManagerProvider>();// TODO: Fix it when migrating designer to postgres
 
             CommandRegistry
                 .Setup<AccountAR>()

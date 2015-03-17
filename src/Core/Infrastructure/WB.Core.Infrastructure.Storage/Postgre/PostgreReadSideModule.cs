@@ -50,10 +50,13 @@ namespace WB.Core.Infrastructure.Storage.Postgre
             this.Kernel.Bind<PostgreTransactionManager>().To<PostgreTransactionManager>().InRequestScope();
             this.Kernel.Bind<Func<PostgreTransactionManager>>().ToMethod(kernel => () => kernel.Kernel.Get<PostgreTransactionManager>());
 
-            this.Kernel.Bind<ISessionProvider>().To<TransactionManagerProvider>();
+            this.Kernel.Bind<TransactionManagerProvider>().ToSelf().InSingletonScope();
+
+            this.Kernel.Bind<ISessionProvider>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
             this.Kernel.Bind<ITransactionManager>().To<PostgreTransactionManager>();
 
-            this.Kernel.Bind<ITransactionManagerProvider>().To<TransactionManagerProvider>().InSingletonScope();
+            this.Kernel.Bind<ITransactionManagerProvider>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
+            this.Kernel.Bind<ITransactionManagerProviderManager>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
 
             this.Kernel.Bind(typeof(IReadSideKeyValueStorage<>))
                 .ToMethod(GetReadSideKeyValueStorage)
@@ -62,7 +65,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
 
         private ISessionFactory BuildSessionFactory()
         {
-            File.WriteAllText(@"D:\Temp\Mapping.xml" ,Serialize(this.GetMappings()));
+            //File.WriteAllText(@"D:\Temp\Mapping.xml" ,Serialize(this.GetMappings()));
             var cfg = new Configuration();
             cfg.DataBaseIntegration(db =>
             {

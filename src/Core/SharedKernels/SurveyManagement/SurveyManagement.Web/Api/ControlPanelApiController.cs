@@ -14,6 +14,7 @@ using WB.UI.Shared.Web.Filters;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
+    [NoTransaction]
     [LocalOrDevelopmentAccessOnly]
     public class ControlPanelApiController : ApiController
     {
