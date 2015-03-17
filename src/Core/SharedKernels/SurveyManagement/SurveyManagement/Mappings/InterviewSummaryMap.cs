@@ -25,13 +25,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.IsDeleted);
             Property(x => x.HasErrors);
 
-
             Set(x => x.AnswersToFeaturedQuestions,
                 collection => {
                     collection.Key(c => c.Column("InterviewSummaryId"));
                     collection.Table("AnswersToFeaturedQuestions");
                     collection.Cascade(Cascade.All);
                     collection.Inverse(true);
+                    collection.BatchSize(12);
                 },
                 rel => rel.OneToMany());
 

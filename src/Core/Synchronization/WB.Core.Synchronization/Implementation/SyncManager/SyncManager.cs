@@ -254,51 +254,17 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
         private IQueryable<InterviewSyncPackageMeta> GetGroupedInterviewSyncPackage(Guid userId, long? lastSyncedSortIndex)
         {
-            var packages = this.syncPackagesMetaReader.Query(queryable =>
+            var packages = this.syncPackagesMetaReader.Query(_ =>
             {
+                var filteredItems = _.Where(x => x.UserId == userId);
+
                 if (lastSyncedSortIndex.HasValue)
                 {
-                    var groupedPackages = (from packageMeta in queryable
-                        where packageMeta.UserId == userId
-                        group packageMeta by packageMeta.InterviewId into g
-                        let lastPackageIndex = g.Max(x => x.SortIndex)
-                        where lastPackageIndex > lastSyncedSortIndex
-                        let lastPackage = g.Single(x => x.SortIndex == lastPackageIndex)
-                        orderby lastPackage.SortIndex
-                        select lastPackage);
-
-                    return groupedPackages.ToList();
+                    filteredItems = filteredItems.Where(x => x.SortIndex > lastSyncedSortIndex.Value);
                 }
-                else
-                {
-                    var result =
-                        from t in (from meta in queryable
-                            group meta by meta.InterviewId into metasByInterviewId
-                            select new { 
-                                InterviewId = metasByInterviewId.Key, 
-                                MaxSortIndex = metasByInterviewId.Max(m => m.SortIndex) 
-                            })
-                        join meta in queryable
-                            on new { SortIndex = t.MaxSortIndex, t.InterviewId } equals new { meta.SortIndex, meta.InterviewId }
-                        select meta;
-                       
-                   
-                    var result1 = result.ToList();
 
-
-
-                    //const string deleteInterviewItemType = SyncItemType.DeleteInterview;
-                    //var groupedPackages = (from packageMeta in queryable
-                    //    where packageMeta.UserId == userId && packageMeta.ItemType != deleteInterviewItemType
-                    //    let maxIndex = (from pm in queryable
-                    //        group pm by packageMeta.InterviewId into g
-                    //        select g.Select(x => x.SortIndex).Max())
-                    //    where maxIndex.Contains(packageMeta.SortIndex)
-                    //    orderby packageMeta.SortIndex
-                    //    select packageMeta);
-
-                    return null;//.ToList();
-                }
+                filteredItems.OrderBy(x => x.SortIndex);
+                return filteredItems.ToList();
             });
 
             return packages.AsQueryable();

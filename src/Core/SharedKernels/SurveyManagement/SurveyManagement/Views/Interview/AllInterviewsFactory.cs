@@ -22,7 +22,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             var interviews = this.reader.Query(_ =>
             {
                 var items = ApplyFilter(input, _);
-                items = items.Fetch(x => x.AnswersToFeaturedQuestions);
                 items = this.DefineOrderBy(items, input);
 
                 return items.Skip((input.Page - 1)*input.PageSize)
