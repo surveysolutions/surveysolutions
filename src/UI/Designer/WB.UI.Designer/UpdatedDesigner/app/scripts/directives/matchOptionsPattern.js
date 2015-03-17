@@ -23,4 +23,24 @@ angular.module('designerApp')
                 ctrl.$formatters.unshift(validateOptionsString);
             }
         };
+    }]).directive('maxOptionsCount', [function () {
+        'use strict';
+        return {
+            require: 'ngModel',
+            restrict: 'A',
+            link: function (scope, elm, attrs, ctrl) {
+                var validateOptionsString = function (viewValue) {
+                    if (!_.isEmpty(viewValue)) {
+                        var options = (viewValue || "").split("\n");
+                        ctrl.$setValidity('maxOptionsCount', options.length <= 200);
+                    } else {
+                        ctrl.$setValidity('maxOptionsCount', true);
+                    }
+                    return viewValue;
+                };
+
+                ctrl.$parsers.unshift(validateOptionsString);
+                ctrl.$formatters.unshift(validateOptionsString);
+            }
+        };
     }]);

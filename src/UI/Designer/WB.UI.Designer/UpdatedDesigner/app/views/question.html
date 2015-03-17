@@ -122,7 +122,7 @@
             </div>
         </div>
 
-        <script type="text/ng-template" id="SingleOption-template.html">
+    <script type="text/ng-template" id="SingleOption-template.html">
             <div class="singleOption">
                 <div class="well well-sm" ng-if="!(activeQuestion.isCascade || activeQuestion.isFilteredCombobox) && !activeQuestion.isLinked && activeQuestion.wereOptionsTruncated">As the question was marked as "Is filtered combobox" or "Is cascading" while uploading question's details and contained many options, its value is reduced up to 200</div>
                 <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isCascade">
@@ -151,12 +151,16 @@
                                       class="form-control mono"
                                       ng-model="activeQuestion.stringifiedOptions"
                                       match-options-pattern
+                                      max-options-count
                                       msd-elastic></textarea>
                             <p class="help-block">
                                 <input class="btn btn-link" type="button" value="Show list" ng-click="showOptionsInList()" ng-disabled="!questionForm.stringifiedOptions.$valid" />
                             </p>
                             <p class="help-block ng-cloak" ng-show="questionForm.stringifiedOptions.$error.matchOptionsPattern">
                                 Each line should match pattern "Title...Value", where 'Value' must be decimal number
+                            </p>
+                            <p class="help-block ng-cloak" ng-show="questionForm.stringifiedOptions.$error.maxOptionsCount">
+                                Maximum number of options is 200. You exceeded this value
                             </p>
                         </div>
                     </div>
@@ -289,7 +293,7 @@
             </div>
         </script>
 
-        <script type="text/ng-template" id="MultyOption-template.html">
+    <script type="text/ng-template" id="MultyOption-template.html">
             <div class="multyOption">
                 <div ng-if="!activeQuestion.isLinked">
 
@@ -318,12 +322,16 @@
                                       class="form-control mono"
                                       ng-model="activeQuestion.stringifiedOptions"
                                       match-options-pattern
+                                      maxoptionscount
                                       msd-elastic></textarea>
                             <p class="help-block">
                                 <input class="btn btn-link" type="button" value="Show list" ng-click="showOptionsInList()" ng-disabled="!questionForm.stringifiedOptions.$valid" />
                             </p>
                             <p class="help-block ng-cloak" ng-show="questionForm.stringifiedOptions.$error.matchOptionsPattern">
                                 Each line should match pattern "Value...Title", where 'Value' must be decimal number
+                            </p>
+                            <p class="help-block ng-cloak" ng-show="questionForm.stringifiedOptions.$error.maxOptionsCount">
+                                Maximum number of options is 200. You exceeded this value
                             </p>
                         </div>
                     </div>
