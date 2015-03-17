@@ -38,10 +38,12 @@
   <ItemGroup>
     <Compile Include="ArrayOfBytesToImageConverter.cs" />
     <Compile Include="App.cs" />
+    <Compile Include="DataTemplateWrapper.cs" />
     <Compile Include="IDataTemplateSelector.cs" />
     <Compile Include="InterviewEntityTemplateSelector.cs" />
     <Compile Include="MvxPresenterHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepeaterView.cs" />
     <Compile Include="TemplatedListView.cs" />
     <Compile Include="View\InterviewPage.xaml.cs">
       <DependentUpon>InterviewPage.xaml</DependentUpon>
