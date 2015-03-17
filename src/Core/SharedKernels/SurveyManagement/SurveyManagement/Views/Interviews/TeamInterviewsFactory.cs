@@ -23,8 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
             var interviewsPage = reader.Query(_ => 
             {
                 var items = ApplyDynamicFilter(input, _);
-                items.Fetch(x => x.AnswersToFeaturedQuestions);
-                var seachIndexContents = this.DefineOrderBy(items.ProjectFromIndexFieldsInto<InterviewSummary>(), input)
+                var seachIndexContents = this.DefineOrderBy(items, input)
                     .Skip((input.Page - 1) * input.PageSize)
                     .Take(input.PageSize)
                     .ToList();
@@ -40,12 +39,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
 
             var teamInterviewsViewItems = interviewsPage
                 .Select(x => new TeamInterviewsViewItem {
-                    FeaturedQuestions = x.AnswersToFeaturedQuestions.Select(a => new InterviewFeaturedQuestion()
+                    FeaturedQuestions = x.AnswersToFeaturedQuestions.Select(a => new InterviewFeaturedQuestion
                     {
                         Id = a.Id,
                         Answer = a.Answer,
                         Question = a.Title
-                    }),
+                    }).ToList(),
                     InterviewId = x.InterviewId,
                     LastEntryDate = x.UpdateDate.ToShortDateString(),
                     ResponsibleId = x.ResponsibleId,
