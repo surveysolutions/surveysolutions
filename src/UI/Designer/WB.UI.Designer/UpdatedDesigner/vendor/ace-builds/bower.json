@@ -1,0 +1,11 @@
+{
+  "name": "ace-builds",
+  "homepage": "https://github.com/ajaxorg/ace-builds",
+  "version": "1.1.8",
+  "description": "Tiny but perfect jQuery scrollbar plugin",
+  "main": [
+    "src-min-noconflict/ace.js",
+    "src-min-noconflict/mode-csharp.js",
+    "src-min-noconflict/theme-github.js"
+  ]
+}
