@@ -324,7 +324,7 @@
                 });
             };
 
-            var deleteGroupPermanently = function (itemIdToDelete) {
+            var deleteGroupPermanently = function(itemIdToDelete) {
                 commandService.deleteGroup($state.params.questionnaireId, itemIdToDelete)
                     .success(function() {
                         var publishDelete = function(deleted) {
@@ -340,7 +340,7 @@
                         questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
                         $scope.resetSelection();
                     });
-            }
+            };
 
             $scope.deleteGroup = function(item) {
                 var itemIdToDelete = item.itemId || $state.params.itemId;
@@ -438,10 +438,10 @@
                 return index;
             };
 
-            var emitAddedItemState = function (type, id) {
+            var emitAddedItemState = function(type, id) {
                 $rootScope.$emit(type + "Added");
                 $state.go("questionnaire.chapter." + type, { chapterId: $state.params.chapterId, itemId: id });
-            }
+            };
 
             $scope.addQuestion = function (parent) {
                 var emptyQuestion = utilityService.createEmptyQuestion(parent);
@@ -547,7 +547,7 @@
             };
             $scope.refreshTree();
 
-            var scrollToElement = function (itemId) {
+            var scrollToElement = function(itemId) {
                 if ($(itemId).length === 0) {
                     return;
                 }
@@ -562,7 +562,7 @@
                     scrollTop: scrollTop,
                     itemId: itemId
                 });
-            }
+            };
 
             $scope.$on('scrollToElement', function (event, itemId) {
                     if ($(itemId).length === 0) {

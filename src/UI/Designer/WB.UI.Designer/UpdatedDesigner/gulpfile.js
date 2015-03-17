@@ -3,6 +3,7 @@ var plugins = require('gulp-load-plugins')();
 var path = require('path');
 var mainBowerFiles = require('main-bower-files');
 var runSequence = require('run-sequence');
+var concat = require('gulp-concat');
 
 var paths = {
   scripts: ['app/scripts/**/*.js'],
@@ -31,7 +32,7 @@ gulp.task("bowerJs", function(){
     	.pipe(plugins.filter(['*.js']))
     	.pipe(plugins.ngAnnotate())
     	.pipe(plugins.uglify())
-      	.pipe(plugins.concat('libs.js'))
+      	.pipe(concat('libs.js'))
       	.pipe(plugins.rev())
       	.pipe(gulp.dest('build'));
 });
@@ -42,7 +43,7 @@ gulp.task('devJs', function () {
       .pipe(plugins.jshint.reporter('default'))
       .pipe(plugins.ngAnnotate())
       .pipe(plugins.uglify())
-      .pipe(plugins.concat('app.js'))
+      .pipe(concat('app.js'))
       .pipe(plugins.rev())
       .pipe(gulp.dest('build'));
 });

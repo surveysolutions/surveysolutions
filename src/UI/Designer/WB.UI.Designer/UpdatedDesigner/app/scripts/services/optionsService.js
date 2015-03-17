@@ -13,7 +13,7 @@
 
                     optionsService.stringifyOptions = function (options) {
                         var stringifiedOptions = "";
-                        var maxLength = _.max(_.map(options, function (o) { return o.title.length })) + 3;
+                        var maxLength = _.max(_.map(options, function (o) { return o.title.length; })) + 3;
                         _.each(options, function (option) {
                             if (!_.isEmpty(option)) {
                                 stringifiedOptions += _.padRight(option.title || "", maxLength, '.') + (option.value || "");
@@ -23,11 +23,11 @@
                         return stringifiedOptions.trim("\n");
                     };
 
-                    optionsService.parseOptions = function (stringifiedOptions) {
+                    optionsService.parseOptions = function(stringifiedOptions) {
                         var optionsStringList = (stringifiedOptions || "").split("\n");
                         _.remove(optionsStringList, _.isEmpty);
 
-                        var options = _.map(optionsStringList, function (item) {
+                        var options = _.map(optionsStringList, function(item) {
                             var matches = item.match(regex);
                             return {
                                 id: utilityService.guid(),
@@ -37,7 +37,7 @@
                         });
 
                         return options;
-                    }
+                    };
 
                     return optionsService;
                 });

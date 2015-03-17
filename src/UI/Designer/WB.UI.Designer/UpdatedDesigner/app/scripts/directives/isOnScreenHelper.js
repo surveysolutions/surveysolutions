@@ -1,8 +1,8 @@
 ﻿(function ($) {
     $.fn.isOnScreen = function (x, y) {
 
-        if (x == null || typeof x == 'undefined') x = 1;
-        if (y == null || typeof y == 'undefined') y = 1;
+        if (x === null || typeof x === 'undefined') x = 1;
+        if (y === null || typeof y === 'undefined') y = 1;
 
         var win = $(window);
 
