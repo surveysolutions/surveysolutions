@@ -5,8 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
     <ImageView
-        android:src="@drawable/icon"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        local:MvxBind="Src Answer" />
+        local:MvxBind="Bitmap Answer,Converter=ByteArrayToImage" />
 </LinearLayout>
