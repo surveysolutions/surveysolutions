@@ -21,10 +21,10 @@ namespace WB.Core.Synchronization.EventHandler
         {
             return new TabletDocument
                    {
+                       Id = evnt.EventSourceId.ToString(),
                        AndroidId = evnt.Payload.AndroidId,
                        DeviceId = evnt.EventSourceId,
-                       RegistrationDate = evnt.EventTimeStamp,
-                       Users = new List<Guid>()
+                       RegistrationDate = evnt.EventTimeStamp
                    };
         }
     }
