@@ -38,6 +38,7 @@ using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.Synchronization;
+using WB.Core.Synchronization.Documents;
 using WB.Core.Synchronization.EventHandler;
 using WB.Core.Synchronization.SyncStorage;
 
@@ -202,6 +203,13 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IQueryableReadSideRepositoryReader<UserSyncPackageMeta>>()
                 .To<PostgreReadSideRepository<UserSyncPackageMeta>>();
 
+
+            this.Bind<IReadSideRepositoryWriter<TabletDocument>>()
+                .To<PostgreReadSideRepository<TabletDocument>>();
+            this.Bind<IQueryableReadSideRepositoryReader<TabletDocument>>()
+                .To<PostgreReadSideRepository<TabletDocument>>();
+            this.Bind<IReadSideRepositoryReader<TabletDocument>>()
+               .To<PostgreReadSideRepository<TabletDocument>>();
         }
     }
 }
