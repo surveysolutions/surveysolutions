@@ -529,9 +529,6 @@
     <EmbeddedResource Include="Scripts\viewmodels\pages\healthcheck.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\viewmodels\healthcheckheader.js" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Scripts\knockout-3.2.0.debug.js" />
     <EmbeddedResource Include="Scripts\knockout-3.2.0.js" />
   </ItemGroup>
