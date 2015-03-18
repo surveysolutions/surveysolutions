@@ -4,9 +4,12 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-    <EditText
-        android:inputType="date"
+    <MvxDatePicker
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        local:MvxBind="Text Answer" />
+        local:MvxBind="Value Answer" />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        local:MvxBind="Text Format('{0:dd MMM yyyy}',Answer)" />
 </LinearLayout>
