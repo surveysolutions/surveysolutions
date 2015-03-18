@@ -29,6 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.supervisorsFactory = supervisorsFactory;
         }
 
+        [HttpPost]
         public InterviewersView Interviewers(UsersListViewModel data)
         {
             // Headquarter and Admin can view interviewers by any supervisor
@@ -55,6 +56,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return null;
         }
 
+        [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter")]
         public UserListView Supervisors(UsersListViewModel data)
         {
@@ -75,8 +77,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return result;
         }
 
+        [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public UserListView Hqs(UsersListViewModel data)
+        public UserListView Headquarters(UsersListViewModel data)
         {
             var input = new UserListViewInputModel
             {

@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Controllers
 
                         if (isAdmin)
                         {
-                            return this.RedirectToAction("Index", "Headquarter");
+                            return this.RedirectToAction("Index", "Headquarters");
                         }
                     }
 
