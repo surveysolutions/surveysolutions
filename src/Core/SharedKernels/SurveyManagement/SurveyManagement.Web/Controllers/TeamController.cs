@@ -47,9 +47,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             CreateUser(user: supervisorUser, role: UserRoles.Supervisor);
         }
 
-        protected void CreateHeadquarter(UserModel headquarterUser)
+        protected void CreateHeadquarters(UserModel headquartersUser)
         {
-            CreateUser(user: headquarterUser, role: UserRoles.Headquarter);
+            CreateUser(user: headquartersUser, role: UserRoles.Headquarter);
         }
 
         protected void UpdateAccount(UserView user, UserEditModel editModel)

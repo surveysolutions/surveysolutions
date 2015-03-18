@@ -15,9 +15,9 @@ using WB.UI.Shared.Web.Filters;
 namespace WB.UI.Headquarters.Controllers
 {
     [Authorize(Roles = "Administrator")]
-    public class HeadquarterController : TeamController
+    public class HeadquartersController : TeamController
     {
-        public HeadquarterController(ICommandService commandService, 
+        public HeadquartersController(ICommandService commandService, 
                               IGlobalInfoProvider globalInfo, 
                               ILogger logger,
                               IUserViewFactory userViewFactory,
