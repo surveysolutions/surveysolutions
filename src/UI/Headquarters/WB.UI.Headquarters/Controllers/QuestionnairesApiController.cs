@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Security;
+using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -57,12 +59,14 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         public JsonCommandResponse DeleteQuestionnaire(DeleteQuestionnaireRequestModel request)
         {
-            var response = new JsonCommandResponse() { IsSuccess = true };
+            bool isAdmin = Roles.IsUserInRole(UserRoles.Administrator.ToString());
 
-            deleteQuestionnaireService.DeleteQuestionnaire(request.QuestionnaireId, request.Version,
-                this.GlobalInfo.GetCurrentUser().Id);
-
-            return response;
+            if (!isAdmin) 
+                return new JsonCommandResponse() {IsSuccess = false};
+            
+            deleteQuestionnaireService.DeleteQuestionnaire(request.QuestionnaireId, request.Version, this.GlobalInfo.GetCurrentUser().Id);
+            
+            return new JsonCommandResponse() { IsSuccess = true };
         }
     }
 }
