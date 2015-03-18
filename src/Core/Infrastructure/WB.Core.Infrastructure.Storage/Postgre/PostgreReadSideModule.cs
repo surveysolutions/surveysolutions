@@ -64,9 +64,9 @@ namespace WB.Core.Infrastructure.Storage.Postgre
             this.Kernel.Bind(typeof (IQueryableReadSideRepositoryReader<>)).To(typeof (PostgreReadSideRepository<>));
             this.Kernel.Bind(typeof (IReadSideRepositoryReader<>)).To(typeof (PostgreReadSideRepository<>));
 
-            this.Kernel.Bind(typeof(IReadSideKeyValueStorage<>))
-                .ToMethod(GetReadSideKeyValueStorage)
-                .InSingletonScope();
+            //this.Kernel.Bind(typeof(IReadSideKeyValueStorage<>))
+            //    .ToMethod(GetReadSideKeyValueStorage)
+            //    .InSingletonScope();
         }
 
         private ISessionFactory BuildSessionFactory()

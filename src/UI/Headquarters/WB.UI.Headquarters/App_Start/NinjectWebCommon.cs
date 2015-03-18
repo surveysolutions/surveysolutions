@@ -137,6 +137,8 @@ namespace WB.UI.Headquarters
 
             var ravenReadSideRepositoryWriterSettings = new RavenReadSideRepositoryWriterSettings(int.Parse(WebConfigurationManager.AppSettings["Raven.Readside.BulkInsertBatchSize"]));
 
+            string esentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.DbFolder"]);
+
             var mappingAssemblies = new List<Assembly> { typeof (QuestionnaireBrowseItemMap).Assembly }; // TODO : make list by modules here
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
@@ -153,7 +155,7 @@ namespace WB.UI.Headquarters
                 new HeadquartersRegistry(),
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
-                //new EsentReadSideModule(esentDataFolder),
+                new EsentReadSideModule(esentDataFolder),
                 new PostgreModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, mappingAssemblies),
                 new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled));
 
