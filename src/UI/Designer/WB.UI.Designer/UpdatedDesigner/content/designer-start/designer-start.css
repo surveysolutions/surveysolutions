@@ -1,4 +1,4 @@
-.thumbnail > img,
+﻿.thumbnail > img,
 .thumbnail a > img,
 .carousel-inner > .item > img,
 .carousel-inner > .item > a > img {
@@ -9,7 +9,7 @@
 .btn-group-lg > .btn {
   padding: 10px 16px;
   font-size: 18px;
-  line-height: 1.3333333;
+  line-height: 1.33;
   border-radius: 6px;
 }
 .btn-group-sm > .btn {
@@ -197,13 +197,6 @@ input.wb-radio:disabled ~ label span {
 input.wb-radio:checked:disabled ~ label span {
   background-position: -270px 0;
 }
-#_markup-switcher {
-  display: inline-block;
-  position: absolute;
-  bottom: 50px;
-  right: 25px;
-  font-size: 12px;
-}
 html,
 body {
   height: 100%;
@@ -373,7 +366,7 @@ header nav {
   color: #bfd8ed;
 }
 #start-page .content-holder-outer .content-holder-inner .content-block .form-holder .form-right .has-error {
-  color: #555555;
+  color: #d32828;
 }
 #start-page .content-holder-outer .content-holder-inner .content-block .form-holder .form-right .has-error ::-webkit-input-placeholder {
   color: #d32828;
@@ -392,11 +385,14 @@ header nav {
 #start-page .content-holder-outer .content-holder-inner .content-block .form-holder .form-right .has-error input {
   border-color: #f0d8d8;
 }
-#start-page .content-holder-outer .content-holder-inner .content-block .form-holder .form-right .form-actions button {
+#start-page .content-holder-outer .content-holder-inner .content-block .form-holder .form-right .form-actions button,
+#start-page .content-holder-outer .content-holder-inner .content-block .form-holder .form-right .form-actions a {
   letter-spacing: 1px;
 }
 #start-page .content-holder-outer .content-holder-inner .content-block .form-holder .form-right .form-actions button:nth-child(2),
-#start-page .content-holder-outer .content-holder-inner .content-block .form-holder .form-right .form-actions button:nth-child(3) {
+#start-page .content-holder-outer .content-holder-inner .content-block .form-holder .form-right .form-actions a:nth-child(2),
+#start-page .content-holder-outer .content-holder-inner .content-block .form-holder .form-right .form-actions button:nth-child(3),
+#start-page .content-holder-outer .content-holder-inner .content-block .form-holder .form-right .form-actions a:nth-child(3) {
   padding-left: 23px;
   padding-right: 0;
 }
@@ -422,3 +418,4 @@ footer {
     bottom: 0;
   }
 }
+/*# sourceMappingURL=designer-start.css.map */
