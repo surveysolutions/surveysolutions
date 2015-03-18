@@ -8,9 +8,9 @@
     @Scripts.Render("~/Scripts/viewmodels/pages/users.js")
     <script type="text/javascript">
         var $interviewersUrl = '@Url.Action("Interviewers", "Supervisor", new { area = string.Empty })';
-        var $editUrl = '@Url.Action("Edit", "Headquarter", new { area = string.Empty })';
+        var $editUrl = '@Url.Action("Edit", "Headquarters", new { area = string.Empty })';
         $(function () {
-            var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "Hqs" })');
+            var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "Headquarters" })');
             ko.applyBindings(model);
             model.load();
         });
@@ -28,7 +28,7 @@
 {
      <div class="btn-group">
         <div class="form-inline">
-            <a class="btn btn-default" href="@Url.Action("Create", "Headquarter", new { area = string.Empty })">
+            <a class="btn btn-default" href="@Url.Action("Create", "Headquarters", new { area = string.Empty })">
                 <i class="glyphicon glyphicon-user"></i> Add headquarters
             </a>
 
