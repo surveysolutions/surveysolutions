@@ -45,6 +45,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepeaterView.cs" />
     <Compile Include="TemplatedListView.cs" />
+    <Compile Include="AutoCompleteTextViewEntry.cs" />
     <Compile Include="View\InterviewPage.xaml.cs">
       <DependentUpon>InterviewPage.xaml</DependentUpon>
     </Compile>
