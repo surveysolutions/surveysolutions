@@ -164,11 +164,11 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ResetPrivilegedUserPassword(UserModel model)
+        public ActionResult ResetUserPassword(UserModel model)
         {
             UserView userToCheck = 
                 this.userViewFactory.Load(new UserViewInputModel(UserName: model.UserName, UserEmail: null));
-            if (userToCheck != null && (userToCheck.Roles.Contains(UserRoles.Headquarter) || userToCheck.Roles.Contains(UserRoles.Administrator)))
+            if (userToCheck != null)
             {
                 try
                 {
