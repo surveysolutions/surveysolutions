@@ -58,11 +58,6 @@
                     <span class="sync-queue-size">-</span>
                 </a>
             </li>
-            <li>
-                <a href="@Url.Action("Index", "HealthCheck", new { area = string.Empty }, null)" title="@MainMenu.HealthCheck">
-                    <i class="fa fa-circle" id="HealthCheckIndicator"></i>
-                </a>
-            </li>
             <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
                 <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Hi, <strong>@User.Identity.Name</strong> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
