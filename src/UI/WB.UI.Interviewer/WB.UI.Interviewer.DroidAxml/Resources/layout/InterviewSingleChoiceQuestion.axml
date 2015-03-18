@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<MvxRadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-    <MvxRadioGroup
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        local:MvxItemTemplate="@layout/interviewsinglechoicequestionitemtemplate"
-        local:MvxBind="ItemsSource Options;SelectedItem SelectedItem" />
-</LinearLayout>
+    android:layout_height="wrap_content"
+    local:MvxItemTemplate="@layout/interviewsinglechoicequestionitemtemplate"
+    local:MvxBind="ItemsSource Options" />

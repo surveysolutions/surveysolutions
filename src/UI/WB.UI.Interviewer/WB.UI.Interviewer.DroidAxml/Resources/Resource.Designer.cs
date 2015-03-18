@@ -84,20 +84,17 @@ namespace AxmlTester.Droid
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f040001
-			public const int InnerListView = 2130968577;
-			
 			// aapt resource value: 0x7f040000
 			public const int MvxBindingTagUnique = 2130968576;
 			
-			// aapt resource value: 0x7f040003
-			public const int MyButton = 2130968579;
-			
 			// aapt resource value: 0x7f040002
-			public const int TheEditText = 2130968578;
+			public const int MyButton = 2130968578;
 			
-			// aapt resource value: 0x7f040004
-			public const int TheListView = 2130968580;
+			// aapt resource value: 0x7f040001
+			public const int TheEditText = 2130968577;
+			
+			// aapt resource value: 0x7f040003
+			public const int TheListView = 2130968579;
 			
 			static Id()
 			{

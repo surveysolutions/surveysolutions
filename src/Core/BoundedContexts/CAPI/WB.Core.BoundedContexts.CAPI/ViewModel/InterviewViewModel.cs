@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Capi.ViewModel
         {
             var interviewEntities = new List<InterviewEntity>();
 
-            var rnd = new Random();
+            var rnd = new Random(Environment.TickCount);
 
             for (int i = 0; i < 50; i++)
             {
@@ -93,8 +93,8 @@ namespace WB.Core.BoundedContexts.Capi.ViewModel
 //                    new InterviewLinkedSingleChoiceQuestion<InterviewGeoLocation>(){Options = new ObservableCollection<InterviewDynamicOption<InterviewGeoLocation>>(GenerateDynamicOptions<InterviewGeoLocation>(rnd, true))},
 //                    new InterviewAutocompleteSingleChoiceQuestion(){ Options = new ObservableCollection<InterviewStaticOption>(GenerateStaticOptions(rnd, true, 200)) },
 //                    new InterviewCascadingSingleChoiceQuestion(){ Options = new ObservableCollection<InterviewStaticOption>(GenerateStaticOptions(rnd, true, 200)) },
-                    new InterviewMultiChoiceQuestion(){ Options = new ObservableCollection<InterviewStaticOption>(GenerateStaticOptions(rnd, false, 10)) },
-                    new InterviewSingleChoiceQuestion(){ Options = new ObservableCollection<InterviewStaticOption>(GenerateStaticOptions(rnd, true, 10)) }, 
+                    new InterviewMultiChoiceQuestion(){ Options = new ObservableCollection<InterviewStaticOption>(GenerateStaticOptions(false, 10)) },
+                    new InterviewSingleChoiceQuestion(){ Options = new ObservableCollection<InterviewStaticOption>(GenerateStaticOptions(true, 10)) }, 
 //                    new InterviewGeolocationQuestion(){ Answer = new InterviewGeoLocation()
 //                    {
 //                        Accuracy = rnd.NextDouble(),
@@ -162,18 +162,22 @@ namespace WB.Core.BoundedContexts.Capi.ViewModel
             return options;
         }
 
-        private IEnumerable<InterviewStaticOption> GenerateStaticOptions(Random rnd, bool oneAnswerSelectedOnly, int numberOfItems = 20)
+        private IEnumerable<InterviewStaticOption> GenerateStaticOptions(bool oneAnswerSelectedOnly, int numberOfItems = 20)
         {
             var options = new List<InterviewStaticOption>();
             for (int i = 0; i < numberOfItems; i++)
             {
+                var rnd = new Random(Environment.TickCount + i);
+                
                 options.Add(new InterviewStaticOption()
                 { 
                     Label = oneAnswerSelectedOnly
-                     ? string.Format("radio option label {0}-{1}", i, rnd.Next())
-                     : string.Format("check option label {0}-{1}", i, rnd.Next()),
+                        ? string.Format("radio option label {0}-{1}", i, rnd.Next())
+                        : string.Format("check option label {0}-{1}", i, rnd.Next()),
                     Value = rnd.Next().ToString(),
-                    IsSelected = (!oneAnswerSelectedOnly || !options.Any(opt=>opt.IsSelected)) && RandBool(rnd)
+                    IsSelected = oneAnswerSelectedOnly
+                        ? !options.Any(opt=>opt.IsSelected) && rnd.Next(0, numberOfItems-i) == 1
+                        : rnd.Next(0, 2) == 1
                 });
             }
             return options;
