@@ -1367,7 +1367,7 @@ namespace WB.Tests.Unit
                 questionsToBeEnabled ?? new List<WB.Core.SharedKernels.DataCollection.Identity>());
         }
 
-        public static InterviewState InterviewState(InterviewStatus? status = null, List<AnswerComment> answerComments = null)
+        public static InterviewState InterviewState(InterviewStatus? status = null, List<AnswerComment> answerComments = null, Guid? interviewerId=null)
         {
             return new InterviewState(Guid.NewGuid(), 1, status ?? InterviewStatus.SupervisorAssigned, new Dictionary<string, object>(),
                 new Dictionary<string, Tuple<Guid, decimal[], decimal[]>>(), new Dictionary<string, Tuple<Guid, decimal[], decimal[][]>>(),
@@ -1375,7 +1375,7 @@ namespace WB.Tests.Unit
                 answerComments ?? new List<AnswerComment>(),
                 new HashSet<string>(),
                 new HashSet<string>(), new Dictionary<string, DistinctDecimalList>(),
-                new HashSet<string>(), new HashSet<string>(), true, Mock.Of<IInterviewExpressionState>());
+                new HashSet<string>(), new HashSet<string>(), true, Mock.Of<IInterviewExpressionState>(), interviewerId?? Guid.NewGuid());
         }
 
         public static WB.Core.SharedKernels.DataCollection.Identity Identity(Guid id, decimal[] rosterVector)
