@@ -138,7 +138,7 @@ namespace WB.UI.Headquarters.Controllers
                             userName: model.UserName,
                             password: passwordHasher.Hash(model.Password), email: model.Email,
                             isLockedBySupervisor: false,
-                            isLockedByHQ: false, roles: new[] {UserRoles.Headquarter}, supervsor: null));
+                            isLockedByHQ: false, roles: new[] { role }, supervsor: null));
                         return true;
                     }
                     catch (Exception ex)
