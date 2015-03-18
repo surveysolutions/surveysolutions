@@ -5,7 +5,6 @@ using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
@@ -18,20 +17,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     [Authorize(Roles = "Supervisor")]
     public class SurveyController : BaseController
     {
-        private readonly IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory;
-        private readonly IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory;
+        private readonly IInterviewersViewFactory interviewersFactory;
 
-        private readonly IViewFactory<TeamUsersAndQuestionnairesInputModel, TeamUsersAndQuestionnairesView>
+        private readonly ITeamUsersAndQuestionnairesFactory
             teamUsersAndQuestionnairesFactory;
 
         public SurveyController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
-                                IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory,
-                                IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory,
-                                IViewFactory<TeamUsersAndQuestionnairesInputModel, TeamUsersAndQuestionnairesView>
+                                IInterviewersViewFactory interviewersFactory,
+                                ITeamUsersAndQuestionnairesFactory
                                     teamUsersAndQuestionnairesFactory)
             : base(commandService, provider, logger)
         {
-            this.surveyUsersViewFactory = surveyUsersViewFactory;
             this.interviewersFactory = interviewersFactory;
             this.teamUsersAndQuestionnairesFactory = teamUsersAndQuestionnairesFactory;
         }

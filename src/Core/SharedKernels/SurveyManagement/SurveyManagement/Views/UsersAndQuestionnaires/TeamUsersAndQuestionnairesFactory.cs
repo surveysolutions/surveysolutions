@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -9,8 +8,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires
 {
-    public class TeamUsersAndQuestionnairesFactory :
-        IViewFactory<TeamUsersAndQuestionnairesInputModel, TeamUsersAndQuestionnairesView>
+    public class TeamUsersAndQuestionnairesFactory : ITeamUsersAndQuestionnairesFactory
     {
         private readonly IQueryableReadSideRepositoryReader<UserDocument> usersReader;
         private readonly IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> questionnairesReader;
@@ -24,16 +22,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires
 
         public TeamUsersAndQuestionnairesView Load(TeamUsersAndQuestionnairesInputModel input)
         {
-
-            var allUsers = this.usersReader.Query(_ => _.Where(u =>
-                       (u.Roles.Contains(UserRoles.Operator) && !u.IsLockedByHQ && !u.IsLockedBySupervisor && !u.IsDeleted && u.Supervisor.Id == input.ViewerId) 
-                    || (u.PublicKey == input.ViewerId))
-                .ToList())
-                .Select(x => new UsersViewItem
-                {
-                    UserId = x.PublicKey,
-                    UserName = x.UserName
-                });
+            var allUsers = this.usersReader.Query(_ =>
+            {
+                var users = (from u in _
+                    where
+                        (u.Roles.Contains(UserRoles.Operator) && !u.IsLockedByHQ && !u.IsLockedBySupervisor && !u.IsDeleted && u.Supervisor.Id == input.ViewerId)
+                     || (u.PublicKey == input.ViewerId)
+                    select new UsersViewItem
+                    {
+                        UserId = u.PublicKey,
+                        UserName = u.UserName
+                    }).ToList();
+                return users;
+            });
 
 
             List<QuestionnaireBrowseItem> allQuestionnaires = this.questionnairesReader.Query(_ => _.ToList());

@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
 {
-    public class InterviewersViewFactory : IViewFactory<InterviewersInputModel, InterviewersView>
+    public class InterviewersViewFactory : IInterviewersViewFactory
     {
         private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
 

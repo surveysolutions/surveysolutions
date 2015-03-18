@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 {
-    public class HeadquarterSurveysAndStatusesReport : IViewFactory<HeadquarterSurveysAndStatusesReportInputModel, HeadquarterSurveysAndStatusesReportView>
+    public class HeadquarterSurveysAndStatusesReport : IHeadquarterSurveysAndStatusesReport
     {
         private readonly IReadSideRepositoryIndexAccessor indexAccessor;
 

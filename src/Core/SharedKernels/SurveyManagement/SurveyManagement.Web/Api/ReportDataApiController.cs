@@ -6,6 +6,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -20,7 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IViewFactory<HeadquarterSupervisorsAndStatusesReportInputModel, HeadquarterSupervisorsAndStatusesReportView>
             headquarterSupervisorsAndStatusesReport;
 
-        private readonly IViewFactory<HeadquarterSurveysAndStatusesReportInputModel, HeadquarterSurveysAndStatusesReportView>
+        private readonly IHeadquarterSurveysAndStatusesReport
             headquarterSurveysAndStatusesReport;
 
         private readonly IChartStatisticsViewFactory chartStatisticsViewFactory;
@@ -41,7 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             ICommandService commandService,
             IGlobalInfoProvider provider,
             ILogger logger,
-            IViewFactory<HeadquarterSurveysAndStatusesReportInputModel, HeadquarterSurveysAndStatusesReportView>
+            IHeadquarterSurveysAndStatusesReport
                 headquarterSurveysAndStatusesReport,
             IViewFactory<HeadquarterSupervisorsAndStatusesReportInputModel, HeadquarterSupervisorsAndStatusesReportView>
                 headquarterSupervisorsAndStatusesReport,
