@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -85,10 +86,10 @@ namespace WB.UI.Headquarters.Controllers
                 var user = this.GetUserById(model.Id);
                 if (user != null)
                 {
-                    bool isAdmin = Roles.IsUserInRole(user.UserName, UserRoles.Administrator.ToString());
-                    bool isHQ = Roles.IsUserInRole(user.UserName, UserRoles.Headquarter.ToString());
+                    var forbiddenRoles = new string[]{ UserRoles.Administrator.ToString(), UserRoles.Headquarter.ToString()};
+                    var doesUserInForbiddenRole = Roles.GetRolesForUser().Any(r => forbiddenRoles.Contains(r));
 
-                    if (!isAdmin && !isHQ)
+                    if (!doesUserInForbiddenRole)
                     {
                         this.UpdateAccount(user: user, editModel: model);
                         this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
