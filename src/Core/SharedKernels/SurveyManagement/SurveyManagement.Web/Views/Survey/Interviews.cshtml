@@ -120,7 +120,6 @@
     <script type="text/html" id="confirm-assign-template">
         @Html.Raw(WB.Core.SharedKernels.SurveyManagement.Web.Resources.Interviews.AssignConfirmMessage.FormatString(
             "<span class='text-normal' data-bind='text: length'></span>",
-            InterviewStatus.Created.ToLocalizeString(),
             InterviewStatus.SupervisorAssigned.ToLocalizeString(),
             InterviewStatus.InterviewerAssigned.ToLocalizeString(),
             InterviewStatus.RejectedBySupervisor.ToLocalizeString()))

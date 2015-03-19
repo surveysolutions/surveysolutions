@@ -118,18 +118,18 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApproveConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interviews will be approved.&lt;/h3&gt;
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be approved.&lt;/h3&gt;
 &lt;b&gt;Note!&lt;/b&gt; You can approve interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;.</value>
   </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interviews will be assigned.&lt;/h3&gt;
-&lt;b&gt;Note!&lt;/b&gt; You can assign interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2}&lt;/i&gt;, &lt;i&gt;{3}&lt;/i&gt; and &lt;i&gt;{4}&lt;/i&gt;.</value>
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be assigned.&lt;/h3&gt;
+&lt;b&gt;Note!&lt;/b&gt; You can assign interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2}&lt;/i&gt; and &lt;i&gt;{3}&lt;/i&gt;.</value>
   </data>
   <data name="ContinueConfirmMessage" xml:space="preserve">
     <value>Do you want to continue?</value>
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interviews will be rejected.&lt;/h3&gt;
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be rejected.&lt;/h3&gt;
 &lt;b&gt;Note!&lt;/b&gt; You can reject interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;.</value>
   </data>
 </root>
