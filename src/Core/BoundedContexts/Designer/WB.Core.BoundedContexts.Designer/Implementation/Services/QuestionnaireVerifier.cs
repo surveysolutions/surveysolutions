@@ -128,7 +128,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IGroup>(RosterFixedTitlesHaveMoreThanAllowedItems, "WB0038", VerificationMessages.WB0038_RosterFixedTitlesHaveMoreThan40Items),
                     Verifier<ITextListQuestion>(TextListQuestionCannotBePrefilled, "WB0039", VerificationMessages.WB0039_TextListQuestionCannotBePrefilled),
                     Verifier<ITextListQuestion>(TextListQuestionCannotBeFilledBySupervisor, "WB0040", VerificationMessages.WB0040_TextListQuestionCannotBeFilledBySupervisor),
-                    Verifier<ITextListQuestion>(TextListQuestionCannotHaveCustomValidation, "WB0041", VerificationMessages.WB0041_TextListQuestionCannotCustomValidation),
                     Verifier<ITextListQuestion>(TextListQuestionMaxAnswerNotInRange1And40, "WB0042", VerificationMessages.WB0042_TextListQuestionMaxAnswerInRange1And40),
                     Verifier<IQuestion>(QuestionHasOptionsWithEmptyValue, "WB0045", VerificationMessages.WB0045_QuestionHasOptionsWithEmptyValue),
                     Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionIsSupervisorQuestion, "WB0049", VerificationMessages.WB0049_QRBarcodeQuestionIsSupervisorQuestion),
@@ -178,7 +177,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
-                    this.ErrorsByEpressionsThatUsesTextListQuestions,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
                     ErrorsByQuestionsWithDuplicateVariableName,
@@ -802,11 +800,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return new EntityVerificationResult<IComposite> { HasErrors = false };
         }
 
-        private static bool TextListQuestionCannotHaveCustomValidation(ITextListQuestion question)
-        {
-            return !string.IsNullOrWhiteSpace(question.ValidationExpression);
-        }
-
         private static bool TextListQuestionCannotBeFilledBySupervisor(ITextListQuestion question)
         {
             return IsSupervisorQuestion(question);
@@ -1132,16 +1125,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return errorByAllItemsWithCustomCondition;
         }
 
-        private IEnumerable<QuestionnaireVerificationError> ErrorsByEpressionsThatUsesTextListQuestions(
-            QuestionnaireDocument questionnaire, VerificationState state)
-        {
-            var errors = new List<QuestionnaireVerificationError>();
-            errors.AddRange(this.ErrorsByGroupsOrQuestionsWithCustomExpression<IQuestion>(questionnaire, q => q.ValidationExpression, CustomValidationExpressionUsesTextListQuestion));
-            errors.AddRange(this.ErrorsByGroupsOrQuestionsWithCustomExpression<IQuestion>(questionnaire, q => q.ConditionExpression, CustomConditionExpressionUsesTextListQuestion));
-            errors.AddRange(this.ErrorsByGroupsOrQuestionsWithCustomExpression<IGroup>(questionnaire, g => g.ConditionExpression, CustomConditionExpressionUsesTextListQuestion));
-            return errors;
-        }
-
         private IEnumerable<QuestionnaireVerificationError> ErrorsByGroupsOrQuestionsWithCustomExpression<T>(QuestionnaireDocument questionnaire, Func<T, string> getExpression, Func<T, QuestionnaireVerificationError> getCustomError) where T : class
         {
             var itemsWithValidationExpression = questionnaire.Find<T>(q => !string.IsNullOrEmpty(getExpression(q)));
@@ -1336,27 +1319,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return null;
         }
 
-        private static QuestionnaireVerificationError CustomValidationExpressionUsesTextListQuestion(IQuestion questionWithValidationExpression)
-        {
-            return new QuestionnaireVerificationError("WB0043",
-                VerificationMessages.WB0043_TextListQuestionCannotBeUsedInValidationExpressions,
-                CreateReference(questionWithValidationExpression));
-        }
-
-        private static QuestionnaireVerificationError CustomConditionExpressionUsesTextListQuestion(IQuestion questionWithConditionExpression)
-        {
-            return new QuestionnaireVerificationError("WB0044",
-                VerificationMessages.WB0044_TextListQuestionCannotBeUsedInEnablementConditions,
-                CreateReference(questionWithConditionExpression));
-        }
-
-        private static QuestionnaireVerificationError CustomConditionExpressionUsesTextListQuestion(IGroup groupWithConditionExpression)
-        {
-            return new QuestionnaireVerificationError("WB0044",
-                VerificationMessages.WB0044_TextListQuestionCannotBeUsedInEnablementConditions,
-                CreateReference(groupWithConditionExpression));
-        }
-
         private static QuestionnaireVerificationError CustomConditionExpressionUsesNotRecognizedParameter(IComposite questionWithConditionExpression)
         {
             return new QuestionnaireVerificationError("WB0005",
@@ -1370,8 +1332,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 VerificationMessages.WB0004_CustomValidationExpressionReferencesNotExistingQuestion,
                 CreateReference(questionWithValidationExpression));
         }
-
-        
 
         private static QuestionnaireVerificationError QuestionWithTitleSubstitutionCantBePrefilled(IQuestion questionsWithSubstitution)
         {
