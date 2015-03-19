@@ -1,8 +1,8 @@
-/*@import "../../vendor/bootstrap/less/bootstrap.less";
-@import "../lib/wb-vars.css.less";
-@import "../lib/wb-fontstyles.css.less";
-@import "../lib/controls/wb-buttons.css.less";
-@import "../lib/controls/wb-breadcrumbs.css.less";*/
+@import (reference) "../../vendor/bootstrap/less/bootstrap.less";
+@import (reference) "../lib/wb-vars.css.less";
+@import (reference) "../lib/wb-fontstyles.css.less";
+@import (reference) "../lib/controls/wb-buttons.css.less";
+@import (reference) "../lib/controls/wb-breadcrumbs.css.less";
 
 #loading-logo {
     width: @chapter-menu-panel-width;
@@ -855,6 +855,7 @@ li.chapter-panel-item {
         }
     }
 
+    &.highlight,
     &:hover {
         position: relative;
         padding-top: 2px;
@@ -950,4 +951,8 @@ li.chapter-panel-item {
             text-decoration: underline;
         }
     }
+}
+
+#main .ace-github .ace_marker-layer .ace_bracket{
+    margin-top: 0;
 }
