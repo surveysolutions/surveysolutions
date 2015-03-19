@@ -234,23 +234,11 @@
   <data name="WB0051_GroupsCustomConditionExpressionReferencesChildQuestion" xml:space="preserve">
     <value>Groups cannot have condition expression referencing child question.</value>
   </data>
-  <data name="WB0047_QRBarcodeQuestionShouldNotHaveValidationExpression" xml:space="preserve">
-    <value>QR Barcode question cannot have a validation expression.</value>
-  </data>
-  <data name="WB0048_QRBarcodeQuestionShouldNotHaveValidationMessage" xml:space="preserve">
-    <value>QR Barcode question cannot have a validation message.</value>
-  </data>
   <data name="WB0049_QRBarcodeQuestionIsSupervisorQuestion" xml:space="preserve">
     <value>QR Barcode question cannot be filled by supervisor.</value>
   </data>
   <data name="WB0050_QRBarcodeQuestionIsPreFilledQuestion" xml:space="preserve">
     <value>QR Barcode question cannot be prefilled.</value>
-  </data>
-  <data name="WB0052_QRBarcodeQuestionsCannotBeUsedInValidationExpression" xml:space="preserve">
-    <value>QR Barcode questions cannot be used in validation expression.</value>
-  </data>
-  <data name="WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition" xml:space="preserve">
-    <value>QR Barcode questions cannot be used in condition expression.</value>
   </data>
   <data name="WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster" xml:space="preserve">
     <value>Roster should have deeper or the same roster level as it's roster size question.</value>

@@ -499,6 +499,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
                 existingQuestion.VariableName = @event.VariableName;
                 existingQuestion.ConditionExpression = @event.EnablementCondition;
+                existingQuestion.ValidationExpression = @event.ValidationExpression;
                 existingQuestion.Title = @event.Title;
                 existingQuestion.QuestionType = QuestionType.QRBarcode;
                 existingQuestion.Answers = new List<PdfAnswerView>(0);
