@@ -143,7 +143,7 @@ namespace WB.UI.Headquarters.Controllers
                     }
                     catch (Exception ex)
                     {
-                        var userErrorMessage = "Error when creating user " + model.UserName;
+                        var userErrorMessage = string.Format("Error when creating user {0} in role {1}", model.UserName, role);
                         this.Error(userErrorMessage);
                         this.Logger.Fatal(userErrorMessage, ex);
                     }
