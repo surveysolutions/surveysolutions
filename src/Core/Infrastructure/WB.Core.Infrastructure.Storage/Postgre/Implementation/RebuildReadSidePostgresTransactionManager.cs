@@ -55,12 +55,12 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         public void BeginQueryTransaction()
         {
-            throw new InvalidOperationException("Queries are not allowed during read side rebuild.");
+            throw new NotSupportedException("Queries are not allowed during read side rebuild.");
         }
 
         public void RollbackQueryTransaction()
         {
-            throw new InvalidOperationException("Queries are not allowed during read side rebuild.");
+            throw new NotSupportedException("Queries are not allowed during read side rebuild.");
         }
 
         public ISession GetSession()
