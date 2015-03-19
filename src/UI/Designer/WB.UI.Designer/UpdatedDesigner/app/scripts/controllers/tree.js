@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('TreeCtrl',
-        function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, confirmService, hotkeys) {
+        function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, confirmService, hotkeys, notificationService, $timeout) {
             'use strict';
             var me = this;
 
@@ -324,27 +324,57 @@
                 });
             };
 
-            $scope.deleteGroup = function (item) {
+            var deleteGroupPermanently = function(itemIdToDelete) {
+                commandService.deleteGroup($state.params.questionnaireId, itemIdToDelete)
+                    .success(function() {
+                        var publishDelete = function(deleted) {
+                            var children = deleted.items || [];
+                            $rootScope.$emit(getItemType(deleted) + 'Deleted');
+                            _.each(children, function(child) {
+                                publishDelete(child);
+                            });
+                        };
+
+                        publishDelete(questionnaireService.findItem($scope.items, itemIdToDelete));
+
+                        questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
+                        $scope.resetSelection();
+                    });
+            };
+
+            $scope.deleteGroup = function(item) {
                 var itemIdToDelete = item.itemId || $state.params.itemId;
 
                 var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(item.title));
 
-                modalInstance.result.then(function (confirmResult) {
+                modalInstance.result.then(function(confirmResult) {
                     if (confirmResult === 'ok') {
-                        commandService.deleteGroup($state.params.questionnaireId, itemIdToDelete)
-                            .success(function () {
-                                var publishDelete = function (deleted) {
-                                    var children = deleted.items || [];
-                                    $rootScope.$emit(getItemType(deleted) + 'Deleted');
-                                    _.each(children, function (child) {
-                                        publishDelete(child);
+
+                        questionnaireService.getAllBrokenGroupDependencies($state.params.questionnaireId, itemIdToDelete)
+                            .success(function(result) {
+                                if (result.length === 0) {
+                                    deleteGroupPermanently(itemIdToDelete);
+                                } else {
+
+                                    var links = _.reduce(result, function(result, item) {
+                                        return result + '<a href=#' + $state.params.questionnaireId +
+                                            "/chapter/" + item.chapterId + "/question/" + item.id + '>' + _.trunc(item.title, 30) + '</a>';
+                                    }, "");
+
+                                    notificationService.notify({
+                                        title: 'Depended items might be broken',
+                                        text: '<div class="broken-links"><p>One or more questions/groups depend on<p>' + links + '</div>',
+                                        hide: false,
+                                        confirm: { confirm: true },
+                                        history: { history: false },
+                                        buttons: {
+                                            closer: false,
+                                            sticker: false
+                                        }
+                                    }).get().on('pnotify.confirm', function() {
+                                        deleteGroupPermanently(itemIdToDelete);
                                     });
-                                };
-
-                                publishDelete(questionnaireService.findItem($scope.items, itemIdToDelete));
-
-                                questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
-                                $scope.resetSelection();
+                                }
                             });
                     }
                 });
@@ -408,10 +438,10 @@
                 return index;
             };
 
-            var emitAddedItemState = function (type, id) {
+            var emitAddedItemState = function(type, id) {
                 $rootScope.$emit(type + "Added");
                 $state.go("questionnaire.chapter." + type, { chapterId: $state.params.chapterId, itemId: id });
-            }
+            };
 
             $scope.addQuestion = function (parent) {
                 var emptyQuestion = utilityService.createEmptyQuestion(parent);
@@ -516,6 +546,33 @@
                     });
             };
             $scope.refreshTree();
+
+            var scrollToElement = function(itemId) {
+                if ($(itemId).length === 0) {
+                    return;
+                }
+
+                if ($(itemId).isOnScreen()) {
+                    return;
+                }
+                //$(".question-list").scrollTo(itemId);
+                var scrollTop = Math.max($(itemId).offset().top - $(".question-list").offset().top - 10, 0);
+                $scope.$broadcast("scrollToPosition", {
+                    target: ".question-list",
+                    scrollTop: scrollTop,
+                    itemId: itemId
+                });
+            };
+
+            $scope.$on('scrollToElement', function (event, itemId) {
+                    if ($(itemId).length === 0) {
+                        $timeout(function() {
+                            scrollToElement(itemId);
+                        }, 1000);
+                    } else {
+                        scrollToElement(itemId);
+                    }
+            });
 
             $rootScope.$on('questionUpdated', function (event, data) {
                 var question = questionnaireService.findItem($scope.items, data.itemId);

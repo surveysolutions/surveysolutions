@@ -1,0 +1,198 @@
+@import (reference) "bootstrap-custom";
+@import "bootstrap-override";
+@import "custom-fonts";
+@import (reference) "font-styles";
+@import "inputs";
+
+@viewport-min-height: 801px;
+
+html, body {
+  height: 100%;
+  min-width: 1280px;
+  position: relative;
+}
+
+.underline { text-decoration: underline; }
+
+header {
+  position: relative;
+  @media screen and (min-height: @viewport-min-height) {
+    position: absolute;
+    top: 0;
+  }
+  width: 100%;
+  .clearfix();
+ // padding: 40px;
+
+  .logo {
+    background: url("../i/wb-logo.png") no-repeat;
+    float: left;
+    width: 268px;
+    height: 66px;
+    margin: 40px 0 0 40px;
+  }
+
+  nav {
+    float: right;
+    margin: 18px;
+  }
+}
+
+#start-page {
+  @media screen and (min-height: @viewport-min-height) {
+    height: 100%;
+  }
+
+    .content-holder-outer {
+      @media screen and (min-height: @viewport-min-height) {
+        height: 100%;
+      }
+      text-align: center;
+      display:table;
+      width: 100%;
+
+      .content-holder-inner {
+        display:table-cell;
+        vertical-align:middle;
+        text-align:center;
+
+        .content-block {
+          display: inline-block;
+
+          .form-holder {
+            .clearfix();
+            display: table;
+
+            #notification-message {
+              display: table-caption;
+              font-style: italic;
+              text-align: left;
+            }
+
+            .form-row {
+              display: table-row;
+            }
+
+            .form-left, .form-splitter, .form-right {
+              display:table-cell;
+            }
+
+            .form-left, .form-right {
+              width: 490px;
+            }
+
+            .form-left {
+              padding: 90px 60px;
+              text-align: center;
+
+              p {
+                .arial18();
+                margin-top: 60px;
+                color: @gray-lighter;
+              }
+            }
+
+            .form-splitter {
+              background-color: @input-border;
+              .vline {
+                width: 2px;
+              }
+            }
+
+            .form-right {
+              vertical-align: middle;
+              text-align: left;
+              padding: 45px;
+
+              .header.alert.alert-success {
+                .robotoL30();
+                color: @brand-success;
+                background-color: inherit;
+                border: none;
+                padding: 0;
+                margin: 0;
+              }
+
+              h1 {
+                .robotoL30();
+                margin-bottom: 60px;
+                margin-top: 7px;
+              }
+
+              p {
+                font-weight: bold;
+              }
+
+              ::-webkit-input-placeholder {font-style: italic;}
+              :-moz-placeholder { /* Firefox 18- */font-style: italic;}
+              ::-moz-placeholder {  /* Firefox 19+ */font-style: italic;}
+              :-ms-input-placeholder {font-style: italic;}
+
+              label {
+                font-weight: normal;
+                margin-bottom: 35px;
+
+                small {
+                  color: #bfd8ed;
+                }
+              }
+
+              .has-error {
+                color: @brand-danger;
+
+                ::-webkit-input-placeholder {color: @brand-danger;}
+                :-moz-placeholder { /* Firefox 18- */color: @brand-danger;}
+                ::-moz-placeholder {  /* Firefox 19+ */color: @brand-danger;}
+                :-ms-input-placeholder {color: @brand-danger;}
+
+                input {
+                  border-color: #f0d8d8;
+                }
+              }
+
+              .form-actions {
+                button, a {
+                  letter-spacing: 1px;
+
+                  &:nth-child(2), &:nth-child(3) {
+                    padding-left: 23px;
+                    padding-right: 0;
+                  }
+                }
+
+              }
+
+              #start-register-step2 {
+                p.note {
+                  margin-bottom: 60px;
+                }
+              }
+
+              #start-reset {
+                p.note, .form-group {
+                  margin-bottom: 60px;
+                }
+
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+footer {
+  position: relative;
+  @media screen and (min-height: @viewport-min-height) {
+    position: absolute;
+    bottom: 0;
+  }
+  width: 100%;
+  padding: 0 0 55px 40px;
+  .arial10();
+  color: @gray-lighter;
+}
+
+
+
+

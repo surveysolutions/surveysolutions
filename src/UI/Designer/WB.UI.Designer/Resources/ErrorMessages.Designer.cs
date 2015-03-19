@@ -124,6 +124,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The user name or password provided is incorrect..
+        /// </summary>
+        internal static string The_user_name_or_password_provided_is_incorrect {
+            get {
+                return ResourceManager.GetString("The_user_name_or_password_provided_is_incorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User is not authorized. Check your login and password..
         /// </summary>
         internal static string User_Not_authorized {
@@ -147,6 +156,15 @@ namespace WB.UI.Designer.Resources {
         internal static string VersionParameterIsIncorrect {
             get {
                 return ResourceManager.GetString("VersionParameterIsIncorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You did not type the verification word correctly. Please try again..
+        /// </summary>
+        internal static string You_did_not_type_the_verification_word_correctly {
+            get {
+                return ResourceManager.GetString("You_did_not_type_the_verification_word_correctly", resourceCulture);
             }
         }
     }

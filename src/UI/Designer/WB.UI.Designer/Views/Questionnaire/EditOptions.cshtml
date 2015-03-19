@@ -1,5 +1,6 @@
 ﻿@using System.Linq
 @using WB.UI.Designer.BootstrapSupport
+@using WB.UI.Shared.Web.Extensions
 @model IEnumerable<Main.Core.Entities.SubEntities.Option>
 @{
     ViewBag.Title = "Edit options";
@@ -23,34 +24,36 @@
                 close();
             }
         }
+
         function apply() {
-            $.post("@Url.Action("ApplyOptions", "Questionnaire")", function (response) {
+            $.post("@Url.Action("ApplyOptions", "Questionnaire")", function(response) {
                 if (response.IsSuccess) {
                     close();
                 } else {
                     $(document).scrollTop(0);
                     $("#applyOptionsErrorContent").html(response.Error);
                     $('#applyOptionsError').fadeIn();
-                    setTimeout(function () { $('#applyOptionsError').fadeOut(); }, 10000);
+                    setTimeout(function() { $('#applyOptionsError').fadeOut(); }, 10000);
                 }
             });
         }
 
-        var ajustNavPanels = function () {
+        var ajustNavPanels = function() {
             $("body").css("paddingTop", $("#topNav").outerHeight() + 3);
             $("body").css("paddingBottom", $("#bottomNav").outerHeight() + 3);
         }
 
-        $(window).resize(function () {
+        $(window).resize(function() {
             ajustNavPanels();
         });
 
-        $(document).ready(function () {
+        $(document).ready(function() {
             ajustNavPanels();
 
-            setTimeout(function () { $('.alert.alert-danger').fadeOut(); }, 10000);
+            setTimeout(function() { $('.alert.alert-danger').fadeOut(); }, 10000);
         });
     </script>
+    @this.GenerateFavicon(Url.Content("~/favicon.ico"))
 </head>
 <body>
     @using (Html.BeginForm("EditOptions", "Questionnaire", FormMethod.Post, new { enctype = "multipart/form-data" }))

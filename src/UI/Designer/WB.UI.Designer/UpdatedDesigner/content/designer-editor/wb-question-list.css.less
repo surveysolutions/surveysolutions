@@ -1,6 +1,27 @@
 .wb-question-item(@purpose) {
 }
 
+.broken-links{
+    max-height: 500px;
+    overflow-y: auto;
+
+    a{
+        display: block;
+        padding: 5px 0 5px 8px;
+        border-top: 2px solid #eee;
+        text-decoration: none;
+        border-radius: 4px;
+     
+        &:last-child{
+            border-bottom: 2px solid #eee;
+        }  
+
+        &:hover{
+            background: #eee;
+        }
+    }
+}
+
 .icon {
     width: 20px;
     height: 20px;

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Web;
 using System.Web.Mvc;
-using WB.Core.GenericSubdomains.Logging;
+using System.Web.Security;
+using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -14,7 +14,7 @@ using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [Authorize(Roles = "Headquarter")]
+    [Authorize(Roles = "Administrator, Headquarter")]
     public class SupervisorController : TeamController
     {
         public SupervisorController(ICommandService commandService, 
@@ -85,9 +85,18 @@ namespace WB.UI.Headquarters.Controllers
                 var user = this.GetUserById(model.Id);
                 if (user != null)
                 {
-                    this.UpdateAccount(user: user, editModel: model);
-                    this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
-                    return this.RedirectToAction("Index");
+                    bool isAdmin = Roles.IsUserInRole(user.UserName, UserRoles.Administrator.ToString());
+                    bool isHQ = Roles.IsUserInRole(user.UserName, UserRoles.Headquarter.ToString());
+
+                    if (!isAdmin && !isHQ)
+                    {
+                        this.UpdateAccount(user: user, editModel: model);
+                        this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
+                        return this.RedirectToAction("Index");
+                    }
+
+                    this.Error("Could not update user information because you don't have permission to perform this operation");
+
                 }
                 else
                 {

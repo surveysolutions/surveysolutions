@@ -89,7 +89,6 @@ angular.module('designerApp')
 
             $scope.currentChapter = null;
 
-
             $rootScope.$on('groupDeleted', function () {
                 $scope.questionnaire.groupsCount--;
             });
@@ -145,6 +144,31 @@ angular.module('designerApp')
                     }
                 });
             };
+
+            $scope.aceLoaded = function(editor){
+                // Editor part
+                var renderer = editor.renderer;
+
+                // Options
+                editor.setOptions({
+                    maxLines: Infinity,
+                    mode: "ace/mode/csharp",
+                    fontSize: 16,
+                    highlightActiveLine: false,
+                    theme: "ace/theme/github"
+                });
+                renderer.setShowGutter(false);
+                renderer.setPadding(12);
+            };
+
+            $rootScope.$on('$stateChangeSuccess',
+                function (event, toState, toParams) {
+                    var target = toState.name.replace('questionnaire.chapter.', '');
+                    if (target === "question" || target === "group" || target === "roster" || target === "statictext") {
+                        var itemId = "#" + target + "-" + toParams.itemId;
+                        $scope.$broadcast("scrollToElement", itemId);
+                    }
+                });
 
             var getQuestionnaire = function () {
                 questionnaireService.getQuestionnaireById($state.params.questionnaireId).success(function (result) {

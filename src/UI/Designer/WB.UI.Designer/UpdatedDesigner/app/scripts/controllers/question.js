@@ -60,6 +60,10 @@
                 $scope.setCascadeSource(question.cascadeFromQuestionId);
 
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = false;
+
+                if (!_.isNull($scope.questionForm) && !_.isUndefined($scope.questionForm)) {
+                    $scope.questionForm.$setPristine();
+                }
             };
 
             var dataBind = function (result) {
@@ -157,6 +161,8 @@
                 if (type !== "SingleOption" && type !== "MultyOption") {
                     $scope.setLinkSource(null);
                 }
+
+                $scope.questionForm.$setDirty();
             };
 
             $scope.cancelQuestion = function () {
@@ -242,7 +248,7 @@
                 if ($scope.activeQuestion.useListAsOptionsEditor) {
                     return;
                 }
-                if (!$scope.questionForm.stringifiedOptions.$valid) {
+                if (_.isUndefined($scope.questionForm.stringifiedOptions) || !$scope.questionForm.stringifiedOptions.$valid) {
                     return;
                 }
                 $scope.activeQuestion.options = optionsService.parseOptions($scope.activeQuestion.stringifiedOptions);
@@ -254,6 +260,7 @@
                 if ($scope.activeQuestion.questionScope === 'Prefilled') {
                     $scope.activeQuestion.enablementCondition = '';
                 }
+                $scope.questionForm.$setDirty();
             };
 
             $scope.$watch('activeQuestion.isLinked', function (newValue) {
@@ -280,6 +287,7 @@
                 if (itemId) {
                     $scope.activeQuestion.linkedToQuestionId = itemId;
                     $scope.activeQuestion.linkedToQuestion = _.find($scope.sourceOfLinkedQuestions, { id: $scope.activeQuestion.linkedToQuestionId });
+                    $scope.questionForm.$setDirty();
                 } 
             };
 

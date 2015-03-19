@@ -6,15 +6,15 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
+using WB.Core.SharedKernels.SurveyManagement.Services.DeleteQuestionnaireTemplate;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
-using WB.Core.SharedKernels.SurveyManagement.Services.DeleteQuestionnaireTemplate;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [Authorize(Roles = "Headquarter")]
+    [Authorize(Roles = "Administrator, Headquarter")]
     [ApiValidationAntiForgeryToken]
     public class QuestionnairesApiController : BaseApiController
     {
@@ -52,6 +52,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.questionnaireBrowseViewFactory.Load(input);
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public JsonCommandResponse DeleteQuestionnaire(DeleteQuestionnaireRequestModel request)
         {

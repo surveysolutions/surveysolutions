@@ -11,7 +11,7 @@
         'ui.bootstrap.transition',
         'ui.tree',
         'ui.utils',
-        'ui.notify',
+        'jlareau.pnotify',
         'ui.router',
         'angular-loading-bar',
         'cfp.hotkeys',
@@ -19,7 +19,8 @@
         'unsavedChanges',
         'monospaced.elastic',
         'perfect_scrollbar',
-        'ng-context-menu'
+        'ng-context-menu',
+        'ui.ace'
     ]);
 
     angular.module('designerApp').config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {

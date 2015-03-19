@@ -179,7 +179,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IComposite>(ConditionExpresssionHasLengthMoreThan10000Characters, "WB0094", VerificationMessages.WB0094_ConditionExpresssionHasLengthMoreThan10000Characters),
                     Verifier<IQuestion>(ValidationExpresssionHasLengthMoreThan10000Characters, "WB0095", VerificationMessages.WB0095_ValidationExpresssionHasLengthMoreThan10000Characters),
                     Verifier(QuestionnaireTitleHasInvalidCharacters, "WB0097", VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
-                    Verifier(QuestionnaireHasSizeMoreThan10MB, "WB0098", VerificationMessages.WB0098_QuestionnaireSizeLimit),
+                    Verifier(QuestionnaireHasSizeMoreThan5MB, "WB0098", size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size)),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
@@ -246,10 +246,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
         }
 
-        private static bool QuestionnaireHasSizeMoreThan10MB(QuestionnaireDocument questionnaire)
+        private static Tuple<bool, decimal> QuestionnaireHasSizeMoreThan5MB(QuestionnaireDocument questionnaire)
         {
             var jsonQuestionnaire = JsonConvert.SerializeObject(questionnaire, Formatting.None);
-            return Encoding.UTF8.GetByteCount(jsonQuestionnaire) > 10 * 1024 * 1024; // 10MB
+            var questionnaireByteCount = Encoding.UTF8.GetByteCount(jsonQuestionnaire);
+            var isOversized = questionnaireByteCount > 5 * 1024 * 1024; // 5MB
+            var questionnaireMegaByteCount = (decimal)questionnaireByteCount / 1024 / 1024;
+            return new Tuple<bool, decimal>(isOversized, questionnaireMegaByteCount) ;
         }
         
         private GenerationResult GetCompilationResult(QuestionnaireDocument questionnaire)
@@ -458,6 +461,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 hasError(questionnaire)
                     ? new[] { new QuestionnaireVerificationError(code, message) }
                     : Enumerable.Empty<QuestionnaireVerificationError>();
+        }
+
+        private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> Verifier<TArg>(
+            Func<QuestionnaireDocument, Tuple<bool, TArg>> hasError, string code, Func<TArg, string> messageBuilder)
+        {
+            return (questionnaire, state) =>
+            {
+                var errorCheckResult = hasError(questionnaire);
+                return errorCheckResult.Item1
+                    ? new[] { new QuestionnaireVerificationError(code, messageBuilder.Invoke(errorCheckResult.Item2)) }
+                    : Enumerable.Empty<QuestionnaireVerificationError>();
+            };
         }
 
         private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> Verifier<TEntity>(
