@@ -131,12 +131,14 @@
     <Compile Include="Memory\Implementation\MemoryCachedReadSideRepositoryWriter.cs" />
     <Compile Include="Memory\Implementation\MemoryCachedReadSideStore.cs" />
     <Compile Include="Memory\Implementation\MemoryCachedKeyValueStorage.cs" />
+    <Compile Include="Postgre\Implementation\IPostgresTransactionManager.cs" />
+    <Compile Include="Postgre\Implementation\ISessionProvider.cs" />
+    <Compile Include="Postgre\Implementation\RebuildReadSidePostgresTransactionManager.cs" />
     <Compile Include="Postgre\Implementation\PostgresReadSideCleaner.cs" />
-    <Compile Include="Postgre\Implementation\PostgreTransactionManager.cs" />
+    <Compile Include="Postgre\Implementation\PostgresTransactionManager.cs" />
     <Compile Include="Postgre\Implementation\PostgreKeyValueStorage.cs" />
     <Compile Include="Postgre\Implementation\PostgreReadSideRepository.cs" />
     <Compile Include="Postgre\Implementation\TransactionManagerProvider.cs" />
-    <Compile Include="Postgre\ISessionProvider.cs" />
     <Compile Include="Postgre\PostgreConnectionSettings.cs" />
     <Compile Include="Postgre\PostgreReadSideModule.cs" />
     <Compile Include="Raven\Implementation\PropertiesOnlyContractResolver.cs" />
