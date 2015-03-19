@@ -1242,6 +1242,9 @@
     <Content Include="UpdatedDesigner\content\designer-start\designer-start.css.map">
       <DependentUpon>designer-start.css</DependentUpon>
     </Content>
+    <Content Include="UpdatedDesigner\content\designer-editor\wb-designer-editor.css.css.map">
+      <DependentUpon>wb-designer-editor.css.css</DependentUpon>
+    </Content>
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
