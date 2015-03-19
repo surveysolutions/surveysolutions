@@ -302,6 +302,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                 UpdateStatusMessage("Rebuild specific views succeeded.");
             }
+            catch (OperationCanceledException exception)
+            {
+                UpdateStatusMessage(exception.Message);
+                throw;
+            }
             catch (Exception exception)
             {
                 UpdateStatusMessage("Unexpected error occurred");
@@ -352,6 +357,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                 UpdateStatusMessage("Rebuild specific views succeeded.");
                 logger.Info("Rebuild views succeeded");
+            }
+            catch (OperationCanceledException exception)
+            {
+                UpdateStatusMessage(exception.Message);
+                throw;
             }
             catch (Exception exception)
             {
@@ -535,7 +545,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     var message = string.Format("Failed to rebuild read layer. Too many events failed: {0}. Last processed event count: {1}", this.FailedEventsCount, this.processedEventsCount);
                     UpdateStatusMessage(message);
                     this.logger.Error(message);
-                    throw new Exception(message);
+                    throw new OperationCanceledException(message);
                 }
 
                 UpdateStatusMessage(string.Format("Done publishing event {0}, {1}. EventSourceId: {2:N}. Waiting for next event or stream end...", 
@@ -581,7 +591,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 const string stopRequestMessage = "Views rebuilding stopped by request.";
 
                 UpdateStatusMessage(stopRequestMessage);
-                throw new Exception(stopRequestMessage);
+                throw new OperationCanceledException(stopRequestMessage);
             }
         }
 
