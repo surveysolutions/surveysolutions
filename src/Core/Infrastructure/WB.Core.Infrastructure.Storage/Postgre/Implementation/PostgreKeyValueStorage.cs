@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
-    public class PostgreKeyValueStorage<TEntity> : IReadSideKeyValueStorage<TEntity>, IReadSideRepositoryCleaner, IDisposable
+    internal class PostgreKeyValueStorage<TEntity> : IReadSideKeyValueStorage<TEntity>, IReadSideRepositoryCleaner, IDisposable
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly PostgreConnectionSettings settings;
@@ -65,7 +65,22 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         public void Store(TEntity view, string id)
         {
-            bool existing = GetById(id) != null;
+            bool existing;
+            string existsSql = string.Format("SELECT 1 FROM {0} WHERE id = :id LIMIT 1", this.tableName);
+
+            using (var connection = new NpgsqlConnection(this.settings.ConnectionString))
+            {
+                var command = new NpgsqlCommand(existsSql, connection);
+
+                var idParameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) { Value = id };
+
+                command.Parameters.Add(idParameter);
+
+                connection.Open();
+                object queryResult = command.ExecuteScalar();
+
+                existing = queryResult != null;
+            }
 
             string commandText;
             if (existing)
