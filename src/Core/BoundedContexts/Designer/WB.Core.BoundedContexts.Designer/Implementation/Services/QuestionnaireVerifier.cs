@@ -131,13 +131,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<ITextListQuestion>(TextListQuestionCannotHaveCustomValidation, "WB0041", VerificationMessages.WB0041_TextListQuestionCannotCustomValidation),
                     Verifier<ITextListQuestion>(TextListQuestionMaxAnswerNotInRange1And40, "WB0042", VerificationMessages.WB0042_TextListQuestionMaxAnswerInRange1And40),
                     Verifier<IQuestion>(QuestionHasOptionsWithEmptyValue, "WB0045", VerificationMessages.WB0045_QuestionHasOptionsWithEmptyValue),
-                    Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionShouldNotHaveValidationExpression, "WB0047", VerificationMessages.WB0047_QRBarcodeQuestionShouldNotHaveValidationExpression),
-                    Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionShouldNotHaveValidationMessage, "WB0048", VerificationMessages.WB0048_QRBarcodeQuestionShouldNotHaveValidationMessage),
                     Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionIsSupervisorQuestion, "WB0049", VerificationMessages.WB0049_QRBarcodeQuestionIsSupervisorQuestion),
                     Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionIsPreFilledQuestion, "WB0050", VerificationMessages.WB0050_QRBarcodeQuestionIsPreFilledQuestion),
-                    Verifier<IQuestion, IComposite>(this.QRBarcodeQuestionsCannotBeUsedInValidationExpression, "WB0052", VerificationMessages.WB0052_QRBarcodeQuestionsCannotBeUsedInValidationExpression),
-                    Verifier<IQuestion, IComposite>(this.QRBarcodeQuestionsCannotBeUsedInQuestionEnablementCondition, "WB0053", VerificationMessages.WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition),
-                    Verifier<IGroup, IComposite>(this.QRBarcodeQuestionsCannotBeUsedInGroupEnablementCondition, "WB0053", VerificationMessages.WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition),
                     Verifier<IGroup, IComposite>(RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster, "WB0054", VerificationMessages.WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster),
                     Verifier<IGroup>(RosterHasRosterLevelMoreThan4, "WB0055", VerificationMessages.WB0055_RosterHasRosterLevelMoreThan4),
                     Verifier<IQuestion, IComposite>(this.QuestionShouldNotHaveCircularReferences, "WB0056", VerificationMessages.WB0056_QuestionShouldNotHaveCircularReferences),
@@ -840,26 +835,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return IsSupervisorQuestion(question);
         }
 
-        private static bool QRBarcodeQuestionShouldNotHaveValidationMessage(IQRBarcodeQuestion question)
-        {
-            return !string.IsNullOrEmpty(question.ValidationMessage);
-        }
-
-        private static bool QRBarcodeQuestionShouldNotHaveValidationExpression(IQRBarcodeQuestion question)
-        {
-            return !string.IsNullOrEmpty(question.ValidationExpression);
-        }
-
         private static bool MultimediaShouldNotHaveValidationExpression(IMultimediaQuestion question)
         {
             return !string.IsNullOrEmpty(question.ValidationExpression);
-        }
-
-        private EntityVerificationResult<IComposite> QRBarcodeQuestionsCannotBeUsedInValidationExpression(IQuestion question, QuestionnaireDocument questionnaire)
-        {
-            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
-                question, question.ValidationExpression, questionnaire,
-                isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.QRBarcode);
         }
 
         private EntityVerificationResult<IComposite> MultimediaQuestionsCannotBeUsedInValidationExpression(IQuestion question, QuestionnaireDocument questionnaire)
@@ -867,13 +845,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
                 question, question.ValidationExpression, questionnaire,
                 isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.Multimedia);
-        }
-
-        private EntityVerificationResult<IComposite> QRBarcodeQuestionsCannotBeUsedInQuestionEnablementCondition(IQuestion question, QuestionnaireDocument questionnaire)
-        {
-            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
-                question, question.ConditionExpression, questionnaire,
-                isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.QRBarcode);
         }
 
         private EntityVerificationResult<IComposite> MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition(IQuestion question, QuestionnaireDocument questionnaire)
@@ -902,13 +873,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 HasErrors = true,
                 ReferencedEntities = new IComposite[] { group, rosterTitleQuestion }
             };
-        }
-
-        private EntityVerificationResult<IComposite> QRBarcodeQuestionsCannotBeUsedInGroupEnablementCondition(IGroup group, QuestionnaireDocument questionnaire)
-        {
-            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
-                group, group.ConditionExpression, questionnaire,
-                isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.QRBarcode);
         }
 
         private EntityVerificationResult<IComposite> MultimediaQuestionsCannotBeUsedInGroupEnablementCondition(IGroup group, QuestionnaireDocument questionnaire)
@@ -1208,7 +1172,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool QuestionHasValidationExpressionWithoutValidationMessage(IQuestion question)
         {
-            if (string.IsNullOrWhiteSpace(question.ValidationExpression) || question.QuestionType == QuestionType.QRBarcode)
+            if (string.IsNullOrWhiteSpace(question.ValidationExpression))
                 return false;
 
             return string.IsNullOrWhiteSpace(question.ValidationMessage);

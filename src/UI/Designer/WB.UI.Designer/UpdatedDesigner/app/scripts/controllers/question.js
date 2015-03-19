@@ -302,7 +302,6 @@
 
             var questionTypesDoesNotSupportValidations = [
                 "TextList",
-                "QRBarcode",
                 "Multimedia"];
             
             $scope.doesQuestionSupportValidations = function () {

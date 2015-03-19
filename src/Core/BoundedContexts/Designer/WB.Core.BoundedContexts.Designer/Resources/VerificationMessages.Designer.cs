@@ -406,24 +406,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to QR Barcode question cannot have a validation expression..
-        /// </summary>
-        internal static string WB0047_QRBarcodeQuestionShouldNotHaveValidationExpression {
-            get {
-                return ResourceManager.GetString("WB0047_QRBarcodeQuestionShouldNotHaveValidationExpression", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to QR Barcode question cannot have a validation message..
-        /// </summary>
-        internal static string WB0048_QRBarcodeQuestionShouldNotHaveValidationMessage {
-            get {
-                return ResourceManager.GetString("WB0048_QRBarcodeQuestionShouldNotHaveValidationMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to QR Barcode question cannot be filled by supervisor..
         /// </summary>
         internal static string WB0049_QRBarcodeQuestionIsSupervisorQuestion {
@@ -447,24 +429,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0051_GroupsCustomConditionExpressionReferencesChildQuestion {
             get {
                 return ResourceManager.GetString("WB0051_GroupsCustomConditionExpressionReferencesChildQuestion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to QR Barcode questions cannot be used in validation expression..
-        /// </summary>
-        internal static string WB0052_QRBarcodeQuestionsCannotBeUsedInValidationExpression {
-            get {
-                return ResourceManager.GetString("WB0052_QRBarcodeQuestionsCannotBeUsedInValidationExpression", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to QR Barcode questions cannot be used in condition expression..
-        /// </summary>
-        internal static string WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition {
-            get {
-                return ResourceManager.GetString("WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition", resourceCulture);
             }
         }
         
