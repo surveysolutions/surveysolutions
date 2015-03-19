@@ -1973,10 +1973,6 @@
     <Compile Include="SharedKernels\SurveyManagement\Web\QuestionaireRoleProviderTests\when_check_that_user_is_in_role_and_http_context_exist_and_user_does_not_exist_in_cache.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\QuestionnaireMembershipProviderTests\QuestionnaireMembershipProviderTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\QuestionnaireMembershipProviderTests\when_initialize_and_all_provider_params_specified.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ReportDataApiControllerTests\ReportDataApiControllerTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ReportDataApiControllerTests\when_map_report_data_is_being_queried.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ReportDataApiControllerTests\when_questionnaires_data_is_being_queried.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ReportDataApiControllerTests\when_question_info_data_is_being_queried.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\TabletReportControllerTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\when_info_package_requested.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\TabletReportControllerTests\when_list_of_info_packages_is_requested.cs" />
