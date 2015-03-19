@@ -171,7 +171,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                         writer =>
                             new ReadSideRepositoryWriterStatus()
                             {
-                                WriterName = this.GetRepositoryEntityName(writer),
+                                WriterName = GetStorageEntityName(writer),
                                 Status = writer.GetReadableStatus()
                             }),
                 RebuildErrors = ReverseList(errors)
@@ -187,9 +187,10 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
         private string CreateViewName(object storage)
         {
-            var readSideRepositoryWriter = storage as IChacheableRepositoryWriter;
-            if (readSideRepositoryWriter != null)
-                return this.GetRepositoryEntityName(readSideRepositoryWriter);
+            var readSideStorage = storage as IReadSideStorage;
+
+            if (readSideStorage != null)
+                return GetStorageEntityName(readSideStorage);
 
             return storage.GetType().Name;
         }
@@ -321,25 +322,32 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                 errors.Clear();
 
-                if (skipEvents == 0)
-                {
-                    this.CleanUpWritersForHandlers(handlers, isPartiallyRebuild);
-                }
-
                 try
                 {
-                    this.EnableWritersCacheForHandlers(handlers);
                     this.transactionManagerProviderManager.PinRebuildReadSideTransactionManager();
 
-                    this.RepublishAllEvents(this.GetEventStream(skipEvents), this.eventStore.CountOfAllEvents(), skipEventsCount: skipEvents, handlers: handlers);
+                    if (skipEvents == 0)
+                    {
+                        this.CleanUpWritersForHandlers(handlers, isPartiallyRebuild);
+                    }
+
+                    try
+                    {
+                        this.EnableWritersCacheForHandlers(handlers);
+
+                        this.RepublishAllEvents(this.GetEventStream(skipEvents), this.eventStore.CountOfAllEvents(), skipEventsCount: skipEvents, handlers: handlers);
+                    }
+                    finally
+                    {
+                        this.DisableWritersCacheForHandlers(handlers);
+
+                        if(!isPartiallyRebuild && this.readSideCleaner != null) 
+                            this.readSideCleaner.CreateIndexesAfterRebuildReadSide();
+                    }
                 }
                 finally
                 {
                     this.transactionManagerProviderManager.UnpinTransactionManager();
-                    this.DisableWritersCacheForHandlers(handlers);
-
-                    if(!isPartiallyRebuild && this.readSideCleaner != null) 
-                        this.readSideCleaner.CreateIndexesAfterRebuildReadSide();
                 }
 
                 UpdateStatusMessage("Rebuild specific views succeeded.");
@@ -413,8 +421,21 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 ThrowIfShouldStopViewsRebuilding();
 
                 var cleanerName = this.CreateViewName(readSideRepositoryCleaner);
+
                 UpdateStatusMessage(string.Format("Deleting views for {0}", cleanerName));
-                readSideRepositoryCleaner.Clear();
+
+                try
+                {
+                    this.transactionManagerProviderManager.GetTransactionManager().BeginCommandTransaction();
+                    readSideRepositoryCleaner.Clear();
+                    this.transactionManagerProviderManager.GetTransactionManager().CommitCommandTransaction();
+                }
+                catch
+                {
+                    this.transactionManagerProviderManager.GetTransactionManager().RollbackCommandTransaction();
+                    throw;
+                }
+
                 UpdateStatusMessage(string.Format("Views for {0} was deleted.", cleanerName));
             }
         }
@@ -447,7 +468,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             {
                 UpdateStatusMessage(string.Format(
                     "Disabling cache in repository writer for entity {0}.",
-                    this.GetRepositoryEntityName(writer)));
+                    GetStorageEntityName(writer)));
 
                 try
                 {
@@ -455,7 +476,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 }
                 catch (Exception exception)
                 {
-                    string message = string.Format("Failed to disable cache and store data to repository for writer {0}.", this.GetRepositoryEntityName(writer));
+                    string message = string.Format("Failed to disable cache and store data to repository for writer {0}.", GetStorageEntityName(writer));
                     this.SaveErrorForStatusReport(message, exception);
                     UpdateStatusMessage(message);
                 }
@@ -569,12 +590,9 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             statusMessage = string.Format("{0}: {1}", DateTime.Now, newMessage);
         }
 
-        private string GetRepositoryEntityName(IReadSideStorage writer)
+        private static string GetStorageEntityName(IReadSideStorage writer)
         {
-           /* var arguments = writer.ViewType.GetGenericArguments();
-            if (!arguments.Any())*/
-                return writer.ViewType.Name;
-           // return arguments.Single().Name;
+            return writer.ViewType.Name;
         }
 
         #region Error reporting methods

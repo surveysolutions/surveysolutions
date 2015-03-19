@@ -5,7 +5,7 @@ using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
-    internal class TransactionManagerProvider : ITransactionManagerProvider, ISessionProvider, ITransactionManagerProviderManager
+    internal class TransactionManagerProvider : ISessionProvider, ITransactionManagerProviderManager
     {
         private readonly Func<PostgresTransactionManager> transactionManagerFactory;
         private readonly RebuildReadSidePostgresTransactionManager rebuildReadSideTransactionManager;

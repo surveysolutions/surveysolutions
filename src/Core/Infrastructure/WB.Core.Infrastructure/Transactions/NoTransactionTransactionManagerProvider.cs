@@ -2,7 +2,7 @@
 
 namespace WB.Core.Infrastructure.Transactions
 {
-    public class NoTransactionTransactionManagerProvider : ITransactionManagerProvider, ITransactionManagerProviderManager
+    public class NoTransactionTransactionManagerProvider : ITransactionManagerProviderManager
     {
         private readonly ITransactionManager transactionManager;
 
