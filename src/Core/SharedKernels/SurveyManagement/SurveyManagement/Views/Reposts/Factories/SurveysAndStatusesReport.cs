@@ -11,16 +11,16 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 {
-    public class HeadquarterSurveysAndStatusesReport : IHeadquarterSurveysAndStatusesReport
+    public class SurveysAndStatusesReport : ISurveysAndStatusesReport
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
 
-        public HeadquarterSurveysAndStatusesReport(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader)
+        public SurveysAndStatusesReport(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader)
         {
             this.interviewSummaryReader = interviewSummaryReader;
         }
 
-        public HeadquarterSurveysAndStatusesReportView Load(HeadquarterSurveysAndStatusesReportInputModel input)
+        public SurveysAndStatusesReportView Load(SurveysAndStatusesReportInputModel input)
         {
             var lines = this.interviewSummaryReader.Query(_ =>
             {
@@ -28,7 +28,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 
                 var supervisorAssignedStatusCount = CountInStatus(input, filetredInterviews, InterviewStatus.SupervisorAssigned);
                 var interviewerAssignedCount = CountInStatus(input, filetredInterviews, InterviewStatus.InterviewerAssigned);
-                var sentToCapiCount = CountInStatus(input, filetredInterviews, InterviewStatus.SentToCapi);
                 var completedCount = CountInStatus(input, filetredInterviews, InterviewStatus.Completed);
                 var approvedBySupervisorCount = CountInStatus(input, filetredInterviews, InterviewStatus.ApprovedBySupervisor);
                 var rejectedBySupervisorCount = CountInStatus(input, filetredInterviews, InterviewStatus.RejectedBySupervisor);
@@ -47,7 +46,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                         QuestionnaireTitle = countResult.QuestionnaireTitle,
                         SupervisorAssignedCount =       Monads.Maybe(() => supervisorAssignedStatusCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
                         InterviewerAssignedCount =      Monads.Maybe(() => interviewerAssignedCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
-                        SentToCapiCount =               Monads.Maybe(() => sentToCapiCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
                         CompletedCount =                Monads.Maybe(() => completedCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
                         ApprovedBySupervisorCount =     Monads.Maybe(() => approvedBySupervisorCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
                         RejectedBySupervisorCount =     Monads.Maybe(() => rejectedBySupervisorCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
@@ -76,7 +74,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                                {
                                    SupervisorAssignedCount = doc.SupervisorAssignedCount,
                                    InterviewerAssignedCount = doc.InterviewerAssignedCount,
-                                   SentToCapiCount = doc.SentToCapiCount,
                                    CompletedCount = doc.CompletedCount,
                                    ApprovedBySupervisorCount = doc.ApprovedBySupervisorCount,
                                    RejectedBySupervisorCount = doc.RejectedBySupervisorCount,
@@ -93,25 +90,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                                    ResponsibleId = doc.ResponsibleId
                                }).ToList();
 
-            return new HeadquarterSurveysAndStatusesReportView
+            return new SurveysAndStatusesReportView
                 {
                     TotalCount = overallCount,
                     Items = currentPage
                 };
         }
 
-        private static IQueryable<InterviewSummary> ApplyFilter(HeadquarterSurveysAndStatusesReportInputModel input, IQueryable<InterviewSummary> _)
+        private static IQueryable<InterviewSummary> ApplyFilter(SurveysAndStatusesReportInputModel input, IQueryable<InterviewSummary> _)
         {
             var filetredInterviews = _.Where(x => !x.IsDeleted);
 
             if (input.UserId.HasValue)
             {
-                filetredInterviews = _.Where(x => x.ResponsibleId == input.UserId);
+                filetredInterviews = filetredInterviews.Where(x => x.ResponsibleId == input.UserId);
             }
+            if (input.ViewerId.HasValue)
+            {
+                filetredInterviews = filetredInterviews.Where(x => x.TeamLeadId == input.ViewerId);
+            }
+
             return filetredInterviews;
         }
 
-        private static IEnumerable<CounterObject> CountInStatus(HeadquarterSurveysAndStatusesReportInputModel input, 
+        private static IEnumerable<CounterObject> CountInStatus(SurveysAndStatusesReportInputModel input, 
             IQueryable<InterviewSummary> filetredInterviews, 
             InterviewStatus? requestedStatus)
         {

@@ -6,7 +6,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views
         
         public int SupervisorAssignedCount { get; set; }
         public int InterviewerAssignedCount { get; set; }
-        public int SentToCapiCount { get; set; }
         public int CompletedCount { get; set; }
         public int ApprovedBySupervisorCount { get; set; }
         public int RejectedBySupervisorCount { get; set; }
