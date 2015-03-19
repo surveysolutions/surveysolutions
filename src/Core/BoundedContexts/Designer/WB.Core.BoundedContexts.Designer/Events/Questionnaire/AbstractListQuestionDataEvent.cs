@@ -14,5 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         public string StataExportCaption { get; set; }
         public string VariableLabel { get; set; }
         public int? MaxAnswerCount { get; set; }
+        public string ValidationExpression { get; set; }
+        public string ValidationMessage { get; set; }
     }
 }

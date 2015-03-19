@@ -300,9 +300,7 @@
                 }
             };
 
-            var questionTypesDoesNotSupportValidations = [
-                "TextList",
-                "Multimedia"];
+            var questionTypesDoesNotSupportValidations = ["Multimedia"];
             
             $scope.doesQuestionSupportValidations = function () {
                 return $scope.activeQuestion && !_.contains(questionTypesDoesNotSupportValidations, $scope.activeQuestion.type)

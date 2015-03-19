@@ -213,17 +213,8 @@
   <data name="WB0040_TextListQuestionCannotBeFilledBySupervisor" xml:space="preserve">
     <value>List  question cannot be filled by supervisor.</value>
   </data>
-  <data name="WB0041_TextListQuestionCannotCustomValidation" xml:space="preserve">
-    <value>List question cannot have validation expression.</value>
-  </data>
   <data name="WB0042_TextListQuestionMaxAnswerInRange1And40" xml:space="preserve">
     <value>Max answer count must be in range [1, 40].</value>
-  </data>
-  <data name="WB0043_TextListQuestionCannotBeUsedInValidationExpressions" xml:space="preserve">
-    <value>List question cannot be used in validation expression.</value>
-  </data>
-  <data name="WB0044_TextListQuestionCannotBeUsedInEnablementConditions" xml:space="preserve">
-    <value>List question cannot be used in condition expression.</value>
   </data>
   <data name="WB0045_QuestionHasOptionsWithEmptyValue" xml:space="preserve">
     <value>Question has option(s) with empty value.</value>

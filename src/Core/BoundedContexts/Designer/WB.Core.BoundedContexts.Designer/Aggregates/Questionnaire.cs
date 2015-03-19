@@ -511,8 +511,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.StataExportCaption,
                         e.VariableLabel,
                         e.ConditionExpression,
-                        null,
-                        null,
+                        e.ValidationMessage,
+                        e.ValidationExpression,
                         Order.AZ,
                         false,
                         e.Mandatory,
@@ -615,8 +615,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.VariableName,
                         e.VariableLabel,
                         e.EnablementCondition,
-                        null,
-                        null,
+                        e.ValidationExpression,
+                        e.ValidationExpression,
                         Order.AZ,
                         false,
                         e.IsMandatory,
@@ -1125,6 +1125,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId,
                             title: title,
                             isMandatory: isMandatory, enablementCondition: enablementCondition,
+                            validationExpression: textListQuestion.ValidationExpression,
+                            validationMessage: textListQuestion.ValidationMessage, 
                             instructions: instructions,
                             sourceQuestionId: sourceItemId, responsibleId: responsibleId,
                             maxAnswerCount: textListQuestion.MaxAnswerCount));
@@ -1138,6 +1140,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId,
                             title: title,
                             isMandatory: isMandatory, enablementCondition: enablementCondition,
+                            validationExpression: qrBarcodeQuestion.ValidationExpression,
+                            validationMessage: qrBarcodeQuestion.ValidationMessage, 
                             instructions: instructions,
                             sourceQuestionId: sourceItemId, responsibleId: responsibleId));
                         continue;
@@ -1165,7 +1169,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             isMandatory: isMandatory,
                             enablementCondition: enablementCondition, instructions: instructions,
                             parentGroupId: groupId, sourceQuestionId: sourceItemId,
-                            responsibleId: responsibleId));
+                            responsibleId: responsibleId, validationExpression: geoLocationQuestion.ValidationExpression,
+                            validationMessage: geoLocationQuestion.ValidationMessage));
                         continue;
                     }
 
@@ -1937,7 +1942,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         public void UpdateTextListQuestion(Guid questionId, string title, string variableName, string variableLabel,
-            bool isMandatory, string enablementCondition, string instructions, Guid responsibleId, int? maxAnswerCount)
+            bool isMandatory, string enablementCondition,
+            string validationExpression,
+            string validationMessage, string instructions, Guid responsibleId, int? maxAnswerCount)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1945,8 +1952,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
 
             var isPrefilled = false;
-            var validationExpression = string.Empty;
-            var validationMessage = string.Empty;
 
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
@@ -1965,6 +1970,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 VariableLabel = variableLabel,
                 Mandatory = isMandatory,
                 ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
                 Instructions = instructions,
                 ResponsibleId = responsibleId,
 
@@ -3768,7 +3775,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             };
         }
 
-        private IEnumerable<object> CreateGeoLocationQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel, bool isMandatory, string enablementCondition, string instructions, Guid parentGroupId, Guid sourceQuestionId, int targetIndex, Guid responsibleId)
+        private IEnumerable<object> CreateGeoLocationQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel, bool isMandatory, string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid parentGroupId, Guid sourceQuestionId, int targetIndex, Guid responsibleId)
         {
             yield return new QuestionCloned
             {
@@ -3781,6 +3788,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Mandatory = isMandatory,
                 QuestionScope = QuestionScope.Interviewer,
                 ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
                 Instructions = instructions,
                 SourceQuestionId = sourceQuestionId,
                 TargetIndex = targetIndex,
@@ -3890,7 +3899,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             };
         }
 
-        private IEnumerable<object> CreateTextListQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, bool isMandatory, string enablementCondition, string instructions, Guid sourceQuestionId, int targetIndex, Guid responsibleId, int? maxAnswerCount)
+        private IEnumerable<object> CreateTextListQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, bool isMandatory, string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid sourceQuestionId, int targetIndex, Guid responsibleId, int? maxAnswerCount)
         {
             yield return new TextListQuestionCloned
             {
@@ -3901,6 +3910,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 VariableLabel = variableLabel,
                 Mandatory = isMandatory,
                 ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
                 Instructions = instructions,
                 SourceQuestionId = sourceQuestionId,
                 TargetIndex = targetIndex,
@@ -3909,7 +3920,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             };
         }
 
-        private IEnumerable<object> CreateQrBarcodeQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, bool isMandatory, string enablementCondition, string instructions, Guid sourceQuestionId, int targetIndex, Guid responsibleId)
+        private IEnumerable<object> CreateQrBarcodeQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, bool isMandatory, string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid sourceQuestionId, int targetIndex, Guid responsibleId)
         {
             yield return new QRBarcodeQuestionCloned
             {
@@ -3920,6 +3931,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 VariableLabel = variableLabel,
                 IsMandatory = isMandatory,
                 EnablementCondition = enablementCondition,
+                ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
                 Instructions = instructions,
                 SourceQuestionId = sourceQuestionId,
                 TargetIndex = targetIndex,
