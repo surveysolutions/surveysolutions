@@ -1997,7 +1997,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         public void UpdateQRBarcodeQuestion(Guid questionId, string title, string variableName, string variableLabel,
-            bool isMandatory, string enablementCondition, string instructions, Guid responsibleId)
+            bool isMandatory, string enablementCondition,
+            string validationExpression, 
+            string validationMessage, string instructions, Guid responsibleId)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -2007,6 +2009,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfGeneralQuestionSettingsAreInvalid(questionId: questionId, parentGroupId: null, title: title,
                 variableName: variableName, condition: enablementCondition, responsibleId: responsibleId);
 
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
             this.ApplyEvent(new QRBarcodeQuestionUpdated()
             {
                 QuestionId = questionId,
@@ -2015,6 +2018,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 VariableLabel = variableLabel,
                 IsMandatory = isMandatory,
                 EnablementCondition = enablementCondition,
+                ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
                 Instructions = instructions,
                 ResponsibleId = responsibleId
             });

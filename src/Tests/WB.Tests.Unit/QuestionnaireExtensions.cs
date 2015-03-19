@@ -159,10 +159,12 @@ namespace WB.Tests.Unit
             bool isMandatory,
             string enablementCondition,
             string instructions,
-            Guid responsibleId)
+            Guid responsibleId,
+            string validation,
+            string validationMessage)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
-            questionnaire.UpdateQRBarcodeQuestion(questionId, title, variableName, variableLabel, isMandatory, enablementCondition, instructions,responsibleId);
+            questionnaire.UpdateQRBarcodeQuestion(questionId, title, variableName, variableLabel, isMandatory, enablementCondition, validation, validationMessage, instructions, responsibleId);
         }
     }
 }
