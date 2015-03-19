@@ -14,7 +14,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views
         public int ApprovedByHeadquartersCount { get; set; }
         public int RejectedByHeadquartersCount { get; set; }
 
-        public int RestoredCount { get; set; }
         public int TotalCount { get; set; }
 
         public Guid QuestionnaireId { get; set; }

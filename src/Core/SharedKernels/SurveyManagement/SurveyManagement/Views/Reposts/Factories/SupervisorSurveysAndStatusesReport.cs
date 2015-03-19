@@ -51,7 +51,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                              ApprovedByHeadquartersCount = doc.ApprovedByHeadquartersCount,
                              RejectedByHeadquartersCount = doc.RejectedByHeadquartersCount,
 
-                             RestoredCount = doc.RestoredCount,
                              TotalCount = doc.TotalCount,
                              QuestionnaireId = doc.QuestionnaireId,
                              QuestionnaireVersion = doc.QuestionnaireVersion,

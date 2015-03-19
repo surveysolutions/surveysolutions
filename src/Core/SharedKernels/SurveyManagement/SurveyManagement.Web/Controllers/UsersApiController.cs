@@ -14,14 +14,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     [Authorize(Roles = "Headquarter, Supervisor")]
     public class UsersApiController : BaseApiController
     {
-        private readonly IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory;
+        private readonly IInterviewersViewFactory interviewersFactory;
         private readonly IUserListViewFactory supervisorsFactory;
 
         public UsersApiController(
             ICommandService commandService,
             IGlobalInfoProvider provider,
             ILogger logger,
-            IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory,
+            IInterviewersViewFactory interviewersFactory,
             IUserListViewFactory supervisorsFactory)
             : base(commandService, provider, logger)
         {
