@@ -165,13 +165,8 @@
     </ResourceDictionary>
   </ContentPage.Resources>
 
-  <StackLayout Orientation="Vertical" Padding="10,5,10,5">
-    <local:AutoCompleteTextViewEntry Text="Hello, I' am Droid AutoCompleteTextView "/>
-
+ 
     <local:TemplatedListView ItemsSource="{Binding GroupsAndQuestions}" TemplateSelector="{StaticResource InterviewEntityTemplateSelector}" VerticalOptions="Fill"
                              HorizontalOptions="Fill" HasUnevenRows="true"/>
-
-  </StackLayout>
-  
   
 </ContentPage>
