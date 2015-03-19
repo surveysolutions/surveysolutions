@@ -15,7 +15,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api  
 {
-    [Authorize(Roles = "Headquarter, Supervisor")]
+    [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public class ReportDataApiController : BaseApiController
     {
         private readonly IViewFactory<HeadquarterSupervisorsAndStatusesReportInputModel, HeadquarterSupervisorsAndStatusesReportView>

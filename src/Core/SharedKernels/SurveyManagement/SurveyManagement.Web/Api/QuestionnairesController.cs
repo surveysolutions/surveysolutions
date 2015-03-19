@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
     [RoutePrefix("apis/v1/questionnaires")]
-    [Authorize(Roles = "Headquarter, Supervisor")]
+    [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public class QuestionnairesController : BaseApiServiceController
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;

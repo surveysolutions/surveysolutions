@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.CapiInformationService;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -26,24 +28,34 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.CapiInformatio
             this.infoPackagesPath = this.GetOrCreateInfoPackageFolderName();
         }
 
-        public string CreateInformationPackage()
+        public Task<string> CreateInformationPackage(CancellationToken ct)
         {
-            var infoPackageFolderName = this.CreateNewInfoPackageFolderName();
-            var infoPackageFolderPath = this.fileSystemAccessor.CombinePath(this.infoPackagesPath, infoPackageFolderName);
-            this.fileSystemAccessor.CreateDirectory(infoPackageFolderPath);
-
-            foreach (var infoFilePath in this.infoFileSupplierRegistry.GetAll())
+            return Task.Factory.StartNew(() =>
             {
-                if (fileSystemAccessor.IsFileExists(infoFilePath))
-                    this.fileSystemAccessor.CopyFileOrDirectory(infoFilePath, infoPackageFolderPath);
-            }
+                var infoPackageFolderName = this.CreateNewInfoPackageFolderName();
+                var infoPackageFolderPath = this.fileSystemAccessor.CombinePath(this.infoPackagesPath,
+                    infoPackageFolderName);
 
-            var infoPackageFilePath = this.fileSystemAccessor.CombinePath(this.infoPackagesPath, infoPackageFolderName + ".zip");
+                ExitIfCanceled(ct);
+                this.fileSystemAccessor.CreateDirectory(infoPackageFolderPath);
 
-            this.archiveUtils.ZipDirectory(infoPackageFolderPath, infoPackageFilePath);
+                foreach (var infoFilePath in this.infoFileSupplierRegistry.GetAll())
+                {
+                    ExitIfCanceled(ct);
+                    if (fileSystemAccessor.IsFileExists(infoFilePath))
+                        this.fileSystemAccessor.CopyFileOrDirectory(infoFilePath, infoPackageFolderPath);
+                }
 
-            this.fileSystemAccessor.DeleteDirectory(infoPackageFolderPath);
-            return infoPackageFilePath;
+                ExitIfCanceled(ct);
+
+                var infoPackageFilePath = this.fileSystemAccessor.CombinePath(this.infoPackagesPath,
+                    infoPackageFolderName + ".zip");
+
+                this.archiveUtils.ZipDirectory(infoPackageFolderPath, infoPackageFilePath);
+                this.fileSystemAccessor.DeleteDirectory(infoPackageFolderPath);
+
+                return infoPackageFilePath;
+            }, ct);
         }
 
         private string CreateNewInfoPackageFolderName()
@@ -59,6 +71,12 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.CapiInformatio
                 this.fileSystemAccessor.IsDirectoryExists(result);
             }
             return result;
+        }
+
+        private void ExitIfCanceled(CancellationToken ct)
+        {
+            if (ct.IsCancellationRequested)
+                ct.ThrowIfCancellationRequested();
         }
     }
 }
