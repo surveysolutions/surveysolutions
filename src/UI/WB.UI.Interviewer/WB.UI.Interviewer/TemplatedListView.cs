@@ -1,10 +1,9 @@
 using System;
 using Xamarin.Forms;
-using XLabs.Forms.Controls;
 
 namespace WB.UI.Interviewer
 {
-    public class TemplatedListView : ListView
+    public class TemplatedListView<T> : ListView
     {
         public TemplatedListView()
         {
@@ -18,28 +17,48 @@ namespace WB.UI.Interviewer
             return content;
         }
 
-        public static readonly BindableProperty TemplateSelectorProperty = BindableProperty.Create<TemplatedListView, IDataTemplateSelector>(p => p.TemplateSelector, null);
+        public static readonly BindableProperty TemplateSelectorProperty = BindableProperty.Create<TemplatedListView<T>, TemplateSelector>(x => x.TemplateSelector, default(TemplateSelector));
 
-        public IDataTemplateSelector TemplateSelector
+        public TemplateSelector TemplateSelector
         {
-            get { return (IDataTemplateSelector)GetValue(TemplateSelectorProperty); }
+            get { return (TemplateSelector)GetValue(TemplateSelectorProperty); }
             set { SetValue(TemplateSelectorProperty, value); }
+        }
+
+        /// <summary>
+        /// Select a datatemplate dynamically
+        /// Prefer the TemplateSelector then the DataTemplate
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private DataTemplate GetTemplateFor(Type type)
+        {
+            DataTemplate retTemplate = null;
+            if (TemplateSelector != null)
+                retTemplate = TemplateSelector.TemplateFor(type);
+            return retTemplate ?? ItemTemplate;
         }
 
 
         private void OnBindingContextChanged(object sender, EventArgs e)
         {
+            if (TemplateSelector == null) return;
+
             var cell = (ViewCell)sender;
-            if (TemplateSelector != null)
+
+            var template =  this.CreateViewByDataTemplate(cell.BindingContext);
+            if (template != null)
             {
-                var template = TemplateSelector.SelectTemplate(cell, cell.BindingContext);
-
-
-                var viewCell = new ExtendedViewCell { View = new Label(), ShowSeparator = false, ShowDisclousure = false, SeparatorColor = Color.Black};
-                if (template != null)
-                    viewCell.View = (Xamarin.Forms.View)template.CreateContent();
-                cell.View = viewCell.View;
+                cell.View = template;
             }
+        }
+
+        private View CreateViewByDataTemplate(object bindingContext)
+        {
+            var templatedControl = (View)this.GetTemplateFor(bindingContext.GetType()).CreateContent();
+            templatedControl.BindingContext = bindingContext;
+
+            return templatedControl;
         }
 
     }

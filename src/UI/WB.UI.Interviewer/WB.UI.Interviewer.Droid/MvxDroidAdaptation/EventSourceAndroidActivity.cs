@@ -5,12 +5,11 @@ using Android.OS;
 using Cirrious.CrossCore.Core;
 using Cirrious.CrossCore.Droid.Views;
 using Xamarin.Forms.Platform.Android;
+using XLabs.Forms;
 
 namespace WB.UI.Interviewer.Droid.MvxDroidAdaptation
 {
-    public class EventSourceAndroidActivity
-        : AndroidActivity
-        , IMvxEventSourceActivity
+    public class EventSourceAndroidActivity : XFormsApplicationDroid, IMvxEventSourceActivity
     {
         protected override void OnCreate(Bundle bundle)
         {
