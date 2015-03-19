@@ -165,7 +165,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                 },
                 StatusByRepositoryWriters = this.eventBus.GetAllRegistredEventHandlers()
-                    .SelectMany(x => x.Writers.OfType<IChacheableRepositoryWriter>())
+                    .SelectMany(x => x.Writers.OfType<IReadSideStorage>())
                     .Distinct()
                     .Select(
                         writer =>
@@ -569,7 +569,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             statusMessage = string.Format("{0}: {1}", DateTime.Now, newMessage);
         }
 
-        private string GetRepositoryEntityName(IChacheableRepositoryWriter writer)
+        private string GetRepositoryEntityName(IReadSideStorage writer)
         {
            /* var arguments = writer.ViewType.GetGenericArguments();
             if (!arguments.Any())*/

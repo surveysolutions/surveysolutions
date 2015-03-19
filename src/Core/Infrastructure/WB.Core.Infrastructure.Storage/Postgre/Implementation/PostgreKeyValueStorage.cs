@@ -113,6 +113,16 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         {
         }
 
+        public Type ViewType
+        {
+            get { return typeof(TEntity); }
+        }
+
+        public string GetReadableStatus()
+        {
+            return "Postgres Key/Value :/";
+        }
+
         private void EnshureTableExists()
         {
             using (var connection = new NpgsqlConnection(this.settings.ConnectionString))

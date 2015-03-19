@@ -50,5 +50,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement
             }
         }
 
+        public Type ViewType
+        {
+            get { return typeof(T); }
+        }
+
+        public string GetReadableStatus()
+        {
+            return "Test";
+        }
     }
 }
