@@ -9,8 +9,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
-    // TODO: Think about session management
-    public class PostgreReadSideRepository<TEntity> : IReadSideRepositoryWriter<TEntity>,
+    internal class PostgreReadSideRepository<TEntity> : IReadSideRepositoryWriter<TEntity>,
         IReadSideRepositoryCleaner,
         IQueryableReadSideRepositoryReader<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
@@ -35,13 +34,27 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         public void Remove(string id)
         {
             var session = this.sessionProvider.GetSession();
-            var entity = session.Load<TEntity>(id);
+
+            var entity = session.Get<TEntity>(id);
+
+            if (entity == null)
+                return;
+
             session.Delete(entity);
         }
 
-        public void Store(TEntity view, string id)
+        public void Store(TEntity entity, string id)
         {
-            this.sessionProvider.GetSession().SaveOrUpdate(null, view, id);
+            ISession session = this.sessionProvider.GetSession();
+
+            var storedEntity = session.Get<TEntity>(id);
+
+            if (!object.ReferenceEquals(storedEntity, entity) && storedEntity != null)
+            {
+                session.Evict(storedEntity);
+            }
+
+            session.SaveOrUpdate(null, entity, id);
         }
 
         public void BulkStore(List<Tuple<TEntity, string>> bulk)
