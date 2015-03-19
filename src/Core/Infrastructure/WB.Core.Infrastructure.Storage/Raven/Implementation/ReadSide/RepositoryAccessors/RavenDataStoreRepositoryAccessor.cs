@@ -50,5 +50,15 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         {
             readSideRepositoryWriter.Clear();
         }
+
+        public Type ViewType
+        {
+            get { return typeof(TEntity); }
+        }
+
+        public string GetReadableStatus()
+        {
+            return "Raven Key/Value O_o";
+        }
     }
 }

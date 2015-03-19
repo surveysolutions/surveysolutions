@@ -116,7 +116,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Reposit
 
         public string GetReadableStatus()
         {
-            return this.packageMetaCacheableWriter != null ? this.packageMetaCacheableWriter.GetReadableStatus() : string.Empty;
+            return this.packageMetaCacheableWriter != null ? this.packageMetaCacheableWriter.GetReadableStatus() : "WAAAT???";
         }
 
         public Type ViewType {
