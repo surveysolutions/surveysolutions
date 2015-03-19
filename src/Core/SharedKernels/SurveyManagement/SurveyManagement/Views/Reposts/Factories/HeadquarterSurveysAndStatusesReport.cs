@@ -24,9 +24,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
         {
             var lines = this.interviewSummaryReader.Query(_ =>
             {
-                var filetredInterviews = _.Where(x => !x.IsDeleted);
+                var filetredInterviews = ApplyFilter(input, _);
 
-                var createdCount = CountInStatus(input, filetredInterviews, InterviewStatus.Created);
                 var supervisorAssignedStatusCount = CountInStatus(input, filetredInterviews, InterviewStatus.SupervisorAssigned);
                 var interviewerAssignedCount = CountInStatus(input, filetredInterviews, InterviewStatus.InterviewerAssigned);
                 var sentToCapiCount = CountInStatus(input, filetredInterviews, InterviewStatus.SentToCapi);
@@ -46,7 +45,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                         QuestionnaireId = countResult.QuestionnaireId,
                         QuestionnaireVersion = countResult.QuestionnaireVersion,
                         QuestionnaireTitle = countResult.QuestionnaireTitle,
-                        CreatedCount =                  Monads.Maybe(() => createdCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
                         SupervisorAssignedCount =       Monads.Maybe(() => supervisorAssignedStatusCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
                         InterviewerAssignedCount =      Monads.Maybe(() => interviewerAssignedCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
                         SentToCapiCount =               Monads.Maybe(() => sentToCapiCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
@@ -65,14 +63,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 
             var overallCount = this.interviewSummaryReader.Query(_ =>
             {
-                var result = _.GroupBy(interview => new { interview.QuestionnaireId, interview.QuestionnaireVersion });
-                return result.Count();
+                var result = ApplyFilter(input, _)
+                    .Select(x => x.QuestionnaireId)
+                    .Distinct()
+                    .Count();
+                    
+                return result;
             }); 
 
             var currentPage = lines
                            .Select(doc => new HeadquarterSurveysAndStatusesReportLine
                                {
-                                   CreatedCount = doc.CreatedCount,
                                    SupervisorAssignedCount = doc.SupervisorAssignedCount,
                                    InterviewerAssignedCount = doc.InterviewerAssignedCount,
                                    SentToCapiCount = doc.SentToCapiCount,
@@ -97,6 +98,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                     TotalCount = overallCount,
                     Items = currentPage
                 };
+        }
+
+        private static IQueryable<InterviewSummary> ApplyFilter(HeadquarterSurveysAndStatusesReportInputModel input, IQueryable<InterviewSummary> _)
+        {
+            var filetredInterviews = _.Where(x => !x.IsDeleted);
+
+            if (input.UserId.HasValue)
+            {
+                filetredInterviews = _.Where(x => x.ResponsibleId == input.UserId);
+            }
+            return filetredInterviews;
         }
 
         private static IEnumerable<CounterObject> CountInStatus(HeadquarterSurveysAndStatusesReportInputModel input, 

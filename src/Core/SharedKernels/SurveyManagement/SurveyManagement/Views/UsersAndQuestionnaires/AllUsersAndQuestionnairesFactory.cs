@@ -23,16 +23,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires
 
         public AllUsersAndQuestionnairesView Load(AllUsersAndQuestionnairesInputModel input)
         {
+            var allUsers = usersReader.Query(_ => 
+                _.Where(u => !u.IsLockedByHQ && !u.IsDeleted && u.Roles.Contains(UserRoles.Supervisor))
+                 .Select(x => new UsersViewItem { UserId = x.PublicKey, UserName = x.UserName })
+                 .ToList());
 
-            var allUsers = usersReader.Query(_ => _.Where(u => !u.IsLockedByHQ && !u.IsDeleted && u.Roles.Contains(UserRoles.Supervisor)).ToList())
-                .Select(x => new UsersViewItem { UserId = x.PublicKey, UserName = x.UserName });
-
-            var questionnaires = this.questionnairesReader.Query(_ => _.ToList()).Select(questionnaire => new TemplateViewItem
+            var questionnaires = this.questionnairesReader.Query(_ => _.Select(questionnaire => new TemplateViewItem
             {
                 TemplateId = questionnaire.QuestionnaireId,
                 TemplateName = questionnaire.Title,
                 TemplateVersion = questionnaire.Version
-            }).ToList();
+            }).ToList());
 
             return new AllUsersAndQuestionnairesView
              {
