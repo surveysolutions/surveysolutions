@@ -51,6 +51,16 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
             this.storage = new PersistentDictionary<string, string>(collectionFolder);
         }
 
+        public Type ViewType
+        {
+            get { return typeof(TEntity); }
+        }
+
+        public string GetReadableStatus()
+        {
+            return "ESENT :)";
+        }
+
         public void Dispose()
         {
             Dispose(true);

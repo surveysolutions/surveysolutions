@@ -65,5 +65,15 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         {
             return this.sessionProvider.GetSession().Query<TEntity>().Where(condition).ToList();
         }
+
+        public Type ViewType
+        {
+            get { return typeof(TEntity); }
+        }
+
+        public string GetReadableStatus()
+        {
+            return "PostgreSQL :'(";
+        }
     }
 }
