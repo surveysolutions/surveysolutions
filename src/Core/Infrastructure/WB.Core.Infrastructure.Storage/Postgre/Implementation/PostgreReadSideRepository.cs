@@ -67,6 +67,11 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         public void Clear()
         {
+            ISession session = this.sessionProvider.GetSession();
+
+            string entityName = typeof(TEntity).Name;
+
+            session.Delete(string.Format("from {0} e", entityName));
         }
 
         public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
