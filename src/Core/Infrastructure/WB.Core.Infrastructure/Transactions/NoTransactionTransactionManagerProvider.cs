@@ -16,7 +16,7 @@ namespace WB.Core.Infrastructure.Transactions
             return transactionManager;
         }
 
-        public void PinTransactionManager() {}
+        public void PinRebuildReadSideTransactionManager() {}
 
         public void UnpinTransactionManager() {}
     }

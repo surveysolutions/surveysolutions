@@ -5,7 +5,7 @@ using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
-    internal class PostgreTransactionManager : ITransactionManager, ISessionProvider, IDisposable
+    internal class PostgresTransactionManager : IPostgresTransactionManager, IDisposable
     {
         private readonly ISessionFactory sessionFactory;
 
@@ -17,7 +17,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         private bool triedToBeginCommandTransaction;
         private bool triedToBeginQueryTransaction;
 
-        public PostgreTransactionManager(ISessionFactory sessionFactory)
+        public PostgresTransactionManager(ISessionFactory sessionFactory)
         {
             this.sessionFactory = sessionFactory;
         }
@@ -75,10 +75,10 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                 throw new InvalidOperationException();
 
             if (this.commandTransaction != null)
-                throw new InvalidOperationException("Query transaction is expected to be always open before CommandTransaction, or not openned at all for this request. Please make sure that this controller has action filter for transactions management applied. But some controllers like RebuildReadSide should not ever open query transaction. Check that you are not inside such controller before fixing any code.");
+                throw new InvalidOperationException("Query transaction is expected to be always open before CommandTransaction, or not opened at all for this request. Please make sure that this controller has action filter for transactions management applied. But some controllers like RebuildReadSide should not ever open query transaction. Check that you are not inside such controller before fixing any code.");
 
             this.querySession = this.sessionFactory.OpenSession();
-            this.queryTransaction = this.querySession.BeginTransaction(IsolationLevel.ReadCommitted);
+            this.queryTransaction = this.querySession.BeginTransaction(IsolationLevel.Unspecified);
         }
 
         public void RollbackQueryTransaction()
@@ -103,12 +103,12 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         public ISession GetSession()
         {
-            var result = this.commandSession ?? this.querySession;
+            var session = this.commandSession ?? this.querySession;
 
-            if (result == null)
-                throw new InvalidOperationException("Trying to get session without beginning a transaction first. Make sure to call BeginTransaction before getting session instance");
+            if (session == null)
+                throw new InvalidOperationException("Trying to get session without beginning a transaction first. Make sure to call BeginTransaction before getting session instance.");
 
-            return result;
+            return session;
         }
 
         public bool IsQueryTransactionStarted
@@ -145,7 +145,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             GC.SuppressFinalize(this);
         }
 
-        ~PostgreTransactionManager()
+        ~PostgresTransactionManager()
         {
             Dispose();
         }
