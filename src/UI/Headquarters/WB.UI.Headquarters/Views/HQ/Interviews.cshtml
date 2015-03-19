@@ -119,7 +119,6 @@
     <script type="text/html" id="confirm-delete-template">
         @Html.Raw(Resources.Interviews.DeleteConfirmMessage.FormatString(
             "<span class='text-normal' data-bind='text: length'></span>",
-            InterviewStatus.Created.ToLocalizeString(),
             InterviewStatus.SupervisorAssigned.ToLocalizeString(),
             InterviewStatus.InterviewerAssigned.ToLocalizeString()))
     </script>
