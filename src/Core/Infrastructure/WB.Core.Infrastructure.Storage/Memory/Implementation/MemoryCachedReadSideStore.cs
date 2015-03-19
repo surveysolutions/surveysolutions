@@ -42,10 +42,10 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
         public string GetReadableStatus()
         {
             int cachedEntities = this.cache.Count;
-            var storageName = readSideStorage.GetType().Name;
-            return string.Format("{2} cache is {0};    cached {1};",
+            return string.Format("{0}  |  cache {1}  |  cached {2}",
+                this.readSideStorage.GetReadableStatus(),
                 this.isCacheEnabled ? "enabled" : "disabled",
-                cachedEntities, storageName.Remove(storageName.IndexOf('`')));
+                cachedEntities);
         }
 
         public Type ViewType
