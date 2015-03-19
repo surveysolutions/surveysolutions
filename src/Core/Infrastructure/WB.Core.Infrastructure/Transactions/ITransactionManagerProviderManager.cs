@@ -2,7 +2,7 @@
 {
     public interface ITransactionManagerProviderManager
     {
-        void PinTransactionManager();
+        void PinRebuildReadSideTransactionManager();
         void UnpinTransactionManager();
     }
 }

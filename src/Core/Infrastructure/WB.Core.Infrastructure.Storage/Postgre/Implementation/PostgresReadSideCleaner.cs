@@ -2,7 +2,7 @@
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
-    public class PostgresReadSideCleaner : IReadSideCleaner
+    internal class PostgresReadSideCleaner : IReadSideCleaner
     {
         public void ReCreateViewDatabase()
         {

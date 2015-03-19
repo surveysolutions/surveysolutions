@@ -285,7 +285,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 try
                 {
                     this.EnableWritersCacheForHandlers(handlers);
-                    this.transactionManagerProviderManager.PinTransactionManager();
+                    this.transactionManagerProviderManager.PinRebuildReadSideTransactionManager();
 
                     foreach (var eventSourceId in eventSourceIds)
                     {
@@ -329,7 +329,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 try
                 {
                     this.EnableWritersCacheForHandlers(handlers);
-                    this.transactionManagerProviderManager.PinTransactionManager();
+                    this.transactionManagerProviderManager.PinRebuildReadSideTransactionManager();
 
                     this.RepublishAllEvents(this.GetEventStream(skipEvents), this.eventStore.CountOfAllEvents(), skipEventsCount: skipEvents, handlers: handlers);
                 }
