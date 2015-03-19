@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace WB.UI.Interviewer
@@ -15,6 +12,35 @@ namespace WB.UI.Interviewer
             this.Spacing = 0;
         }
 
+        public static readonly BindableProperty TemplateSelectorProperty = BindableProperty.Create<RepeaterView<T>, TemplateSelector>(x => x.TemplateSelector, default(TemplateSelector));
+
+        public TemplateSelector TemplateSelector
+        {
+            get { return (TemplateSelector)GetValue(TemplateSelectorProperty); }
+            set { SetValue(TemplateSelectorProperty, value); }
+        }
+
+        /// <summary>
+        /// Select a datatemplate dynamically
+        /// Prefer the TemplateSelector then the DataTemplate
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private DataTemplate GetTemplateFor(Type type)
+        {
+            DataTemplate retTemplate = null;
+            if (TemplateSelector != null)
+                retTemplate = TemplateSelector.TemplateFor(type);
+            return retTemplate ?? ItemTemplate;
+        }
+
+        private View CreateViewByDataTemplate(T bindingContext)
+        {
+            var templatedControl = (View)this.GetTemplateFor(bindingContext.GetType()).CreateContent();
+            templatedControl.BindingContext = bindingContext;
+
+            return templatedControl;
+        }
 
         public ObservableCollection<T> ItemsSource
         {
@@ -27,25 +53,26 @@ namespace WB.UI.Interviewer
 
         private static void ItemsChanged(BindableObject bindable, ObservableCollection<T> oldValue, ObservableCollection<T> newValue)
         {
-            var control = bindable as RepeaterView<T>;
-            control.ItemsSource.CollectionChanged += control.ItemsSource_CollectionChanged;
-            control.Children.Clear();
+            var repeater = bindable as RepeaterView<T>;
 
-            foreach (var item in newValue)
+            if (repeater == null) return;
+
+            repeater.ItemsSource.CollectionChanged += repeater.ItemsSource_CollectionChanged;
+            repeater.Children.Clear();
+
+            foreach (var repeaterRow in newValue.Select(repeater.CreateViewByDataTemplate))
             {
-                var cell = (Xamarin.Forms.View)control.ItemTemplate.CreateContent();
-                cell.BindingContext = item;
-                control.Children.Add(cell);
+                repeater.Children.Add(repeaterRow);
             }
 
-            control.UpdateChildrenLayout();
-            control.InvalidateLayout();
+            repeater.UpdateChildrenLayout();
+            repeater.InvalidateLayout();
         }
 
         public delegate void RepeaterViewItemAddedEventHandler(object sender, RepeaterViewItemAddedEventArgs args);
         public event RepeaterViewItemAddedEventHandler ItemCreated;
 
-        protected virtual void NotifyItemAdded(Xamarin.Forms.View view, object model)
+        protected virtual void NotifyItemAdded(View view, object model)
         {
             if (ItemCreated != null)
             {
@@ -66,17 +93,10 @@ namespace WB.UI.Interviewer
             {
                 foreach (T item in e.NewItems)
                 {
-                    var cell = this.ItemTemplate.CreateContent();
+                    View repeaterRow = this.CreateViewByDataTemplate(item);
 
-                    Xamarin.Forms.View view;
-                    if (cell is ViewCell)
-                        view = ((ViewCell)cell).View;
-                    else
-                        view = (Xamarin.Forms.View)cell;
-
-                    view.BindingContext = item;
-                    this.Children.Insert(ItemsSource.IndexOf(item), view);
-                    NotifyItemAdded(view, item);
+                    this.Children.Insert(this.ItemsSource.IndexOf(item), repeaterRow);
+                    NotifyItemAdded(repeaterRow, item);
                 }
 
                 this.UpdateChildrenLayout();
@@ -96,13 +116,13 @@ namespace WB.UI.Interviewer
 
     public class RepeaterViewItemAddedEventArgs : EventArgs
     {
-        public RepeaterViewItemAddedEventArgs(Xamarin.Forms.View view, object model)
+        public RepeaterViewItemAddedEventArgs(View view, object model)
         {
             View = view;
             Model = model;
         }
 
-        public Xamarin.Forms.View View { get; set; }
+        public View View { get; set; }
         public object Model { get; set; }
     }
 }
