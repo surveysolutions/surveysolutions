@@ -1,5 +1,6 @@
 ﻿@using System.Diagnostics
 @using System.Web.Optimization
+@using Main.Core.Entities.SubEntities
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @using WB.UI.Headquarters.Code
@@ -25,11 +26,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @if (User.IsInRole("Administrator"))
+                @if (User.IsInRole(UserRoles.Administrator.ToString()))
                 {
-                    <a class="navbar-brand" href="@Url.Action("Index", "Headquarter", new { area = "" })">Admin</a>
+                    <a class="navbar-brand" href="@Url.Action("Index", "Headquarters", new { area = "" })">Admin</a>
                 }
-                else if (User.IsInRole("Headquarter"))
+                else if (User.IsInRole(UserRoles.Headquarter.ToString()))
                 {
                     <a class="navbar-brand" href="@Url.Action("Index", "HQ", new { area = "" })">Headquarters</a>
                 }
@@ -39,11 +40,11 @@
                 }
             </div>
             <div class="collapse navbar-collapse">
-                @if (User.IsInRole("Administrator"))
+                @if (User.IsInRole(UserRoles.Administrator.ToString()))
                 {
                     @Html.Partial("AdminMainMenu")
                 }
-                else if (User.IsInRole("Headquarter"))
+                else if (User.IsInRole(UserRoles.Headquarter.ToString()))
                 {
                     @Html.Partial("HeadquartersMainMenu")
                 }
