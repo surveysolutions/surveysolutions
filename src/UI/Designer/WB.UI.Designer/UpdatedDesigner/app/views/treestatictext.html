@@ -1,7 +1,8 @@
-<div class="question item statictext" context-menu data-target="context-menu-{{ item.itemId }}"
+<div class="question item statictext" ng-class="{highlight : item.itemId === highlightedId}" context-menu data-target="context-menu-{{ item.itemId }}"
      ui-sref-active="selected" context-menu-hide-on-mouse-leave="true">
+    <span class="cursor"></span>
     <a class="handler" ui-tree-handle></a>
-    <a class="item-body" id="statictext-{{item.itemId}}" ui-sref="questionnaire.chapter.statictext({itemId: item.itemId})">
+    <a class="item-body" id="{{item.itemId}}" ui-sref="questionnaire.chapter.statictext({itemId: item.itemId})">
         <div class="item-text">
             <div class="icon icon-statictext"></div>
             <span ng-bind-html="item.text | escape | highlight:search.searchText"></span>

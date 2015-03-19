@@ -1,9 +1,15 @@
 ﻿(function() {
-    angular.module('designerApp').directive('focusOn', function() {
+    angular.module('designerApp').directive('focusOnOut', function () {
         return function(scope, elem, attr) {
             scope.$on('focusOn', function(e, name) {
-                if (name === attr.focusOn) {
+                if (name === attr.focusOnOut) {
                     elem[0].focus();
+                }
+            });
+            
+            scope.$on('focusOut', function (e, name) {
+                if (name === attr.focusOnOut) {
+                    elem[0].blur();
                 }
             });
         };

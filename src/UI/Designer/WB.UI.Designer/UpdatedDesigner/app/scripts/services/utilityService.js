@@ -30,7 +30,13 @@
                         $rootScope.$broadcast('focusOn', name);
                     });
                 };
-
+                
+                utilityService.focusout = function (name) {
+                    $timeout(function () {
+                        $rootScope.$broadcast('focusOut', name);
+                    });
+                };
+                
                 utilityService.createQuestionForDeleteConfirmationPopup = function(title) {
                     var trimmedTitle = title.substring(0, 25) + (title.length > 25 ? "..." : "");
                     var message = 'Are you sure you want to delete "' + trimmedTitle + '"?';

@@ -855,7 +855,7 @@ li.chapter-panel-item {
         }
     }
 
-    &.highlight,
+    
     &:hover {
         position: relative;
         padding-top: 2px;
@@ -885,6 +885,27 @@ li.chapter-panel-item {
             &:before {
                 #gradient > .horizontal(rgba(237, 239, 241, 0.0), rgba(237, 239, 241, 1.0));
             }
+        }
+
+          &.highlight{
+            .cursor{
+                top: 0;
+                bottom: 0;
+            }
+    }
+    }
+
+    &.highlight{
+        border-radius: 0;
+        .cursor{
+            position: absolute;
+            top: 2px;
+            left: 0;
+            width: 5px;
+            bottom: 2px;
+            z-index: 6;
+            border-left: 3px solid @common-blue-color;
+            
         }
     }
 }

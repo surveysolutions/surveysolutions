@@ -957,7 +957,6 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffffff', GradientType=1);
 }
-.item.highlight,
 .item:hover {
   position: relative;
   padding-top: 2px;
@@ -966,32 +965,43 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   z-index: 499;
   background-color: #edeff1;
 }
-.item.highlight .handler,
 .item:hover .handler {
   background-image: url(../i/question-item-dots.png);
   background-repeat: no-repeat;
   background-position: 5px center;
   background-color: #edeff1;
 }
-.item.highlight .item-body,
 .item:hover .item-body {
   border-bottom: none;
 }
-.item.highlight .dropdown,
 .item:hover .dropdown {
   z-index: 500;
 }
-.item.highlight .qname-block,
 .item:hover .qname-block {
   background-color: #edeff1;
 }
-.item.highlight .qname-block:before,
 .item:hover .qname-block:before {
   background-image: -webkit-linear-gradient(left, rgba(237, 239, 241, 0) 0%, #edeff1 100%);
   background-image: -o-linear-gradient(left, rgba(237, 239, 241, 0) 0%, #edeff1 100%);
   background-image: linear-gradient(to right, rgba(237, 239, 241, 0) 0%, #edeff1 100%);
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00edeff1', endColorstr='#ffedeff1', GradientType=1);
+}
+.item:hover.highlight .cursor {
+  top: 0;
+  bottom: 0;
+}
+.item.highlight {
+  border-radius: 0;
+}
+.item.highlight .cursor {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  width: 5px;
+  bottom: 2px;
+  z-index: 6;
+  border-left: 3px solid #2a81cb;
 }
 .angular-ui-tree-nodes .angular-ui-tree-nodes {
   padding-left: 30px;
