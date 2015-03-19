@@ -46,7 +46,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                                                                                          CreatedCount = doc.CreatedCount,
                                                                                          SupervisorAssignedCount = doc.SupervisorAssignedCount,
                                                                                          InterviewerAssignedCount = doc.InterviewerAssignedCount,
-                                                                                         SentToCapiCount = doc.SentToCapiCount,
                                                                                          CompletedCount = doc.CompletedCount,
                                                                                          ApprovedBySupervisorCount = doc.ApprovedBySupervisorCount,
                                                                                          RejectedBySupervisorCount = doc.RejectedBySupervisorCount,

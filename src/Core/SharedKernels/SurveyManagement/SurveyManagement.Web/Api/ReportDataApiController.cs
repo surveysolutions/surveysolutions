@@ -21,13 +21,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IViewFactory<HeadquarterSupervisorsAndStatusesReportInputModel, HeadquarterSupervisorsAndStatusesReportView>
             headquarterSupervisorsAndStatusesReport;
 
-        private readonly IHeadquarterSurveysAndStatusesReport
-            headquarterSurveysAndStatusesReport;
+        private readonly ISurveysAndStatusesReport
+            surveysAndStatusesReport;
 
         private readonly IChartStatisticsViewFactory chartStatisticsViewFactory;
-
-        private readonly IViewFactory<SupervisorSurveysAndStatusesReportInputModel, SupervisorSurveysAndStatusesReportView>
-            supervisorSurveysAndStatusesReport;
 
         private readonly IViewFactory<SupervisorTeamMembersAndStatusesReportInputModel, SupervisorTeamMembersAndStatusesReportView>
             supervisorTeamMembersAndStatusesReport;
@@ -42,25 +39,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             ICommandService commandService,
             IGlobalInfoProvider provider,
             ILogger logger,
-            IHeadquarterSurveysAndStatusesReport
-                headquarterSurveysAndStatusesReport,
+            ISurveysAndStatusesReport
+                surveysAndStatusesReport,
             IViewFactory<HeadquarterSupervisorsAndStatusesReportInputModel, HeadquarterSupervisorsAndStatusesReportView>
                 headquarterSupervisorsAndStatusesReport,
             IViewFactory<SupervisorTeamMembersAndStatusesReportInputModel, SupervisorTeamMembersAndStatusesReportView>
                 supervisorTeamMembersAndStatusesReport,
-            IViewFactory<SupervisorSurveysAndStatusesReportInputModel,
-            SupervisorSurveysAndStatusesReportView>
-                supervisorSurveysAndStatusesReport,
             IViewFactory<MapReportInputModel, MapReportView> mapReport,
             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView> questionnaireBrowseViewFactory, 
             IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory,
             IChartStatisticsViewFactory chartStatisticsViewFactory)
             : base(commandService, provider, logger)
         {
-            this.headquarterSurveysAndStatusesReport = headquarterSurveysAndStatusesReport;
+            this.surveysAndStatusesReport = surveysAndStatusesReport;
             this.headquarterSupervisorsAndStatusesReport = headquarterSupervisorsAndStatusesReport;
             this.supervisorTeamMembersAndStatusesReport = supervisorTeamMembersAndStatusesReport;
-            this.supervisorSurveysAndStatusesReport = supervisorSurveysAndStatusesReport;
             this.mapReport = mapReport;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.questionInforFactory = questionInforFactory;
@@ -110,9 +103,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpPost]
-        public SupervisorSurveysAndStatusesReportView SupervisorSurveysAndStatusesReport(SurveyListViewModel data)
+        public SurveysAndStatusesReportView SupervisorSurveysAndStatusesReport(SurveyListViewModel data)
         {
-            var input = new SupervisorSurveysAndStatusesReportInputModel(this.GlobalInfo.GetCurrentUser().Id);
+            var input = new SurveysAndStatusesReportInputModel { ViewerId = this.GlobalInfo.GetCurrentUser().Id };
 
             if (data != null)
             {
@@ -129,7 +122,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 }
             }
 
-            return this.supervisorSurveysAndStatusesReport.Load(input);
+            return this.surveysAndStatusesReport.Load(input);
         }
 
         [HttpPost]
@@ -157,9 +150,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpPost]
-        public HeadquarterSurveysAndStatusesReportView HeadquarterSurveysAndStatusesReport(SurveyListViewModel data)
+        public SurveysAndStatusesReportView HeadquarterSurveysAndStatusesReport(SurveyListViewModel data)
         {
-            var input = new HeadquarterSurveysAndStatusesReportInputModel();
+            var input = new SurveysAndStatusesReportInputModel();
 
             if (data != null)
             {
@@ -176,7 +169,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 }
             }
 
-            return this.headquarterSurveysAndStatusesReport.Load(input);
+            return this.surveysAndStatusesReport.Load(input);
         }
 
         [HttpPost]
