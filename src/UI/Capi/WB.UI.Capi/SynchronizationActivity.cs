@@ -266,6 +266,14 @@ namespace WB.UI.Capi
         {
             if (this.progressDialog != null) return;
 
+            var interviewerSettings = CapiApplication.Kernel.Get<IInterviewerSettings>();
+
+            if (!interviewerSettings.GetSyncAddressPoint().IsValidHttpAddress())
+            {
+                this.tvSyncResult.Text = Properties.Resources.InvalidSyncPointAddressUrl;
+                return;
+            }
+
             this.PrepareUI();
             try
             {
@@ -273,6 +281,7 @@ namespace WB.UI.Capi
                 var changeLogManipulator = CapiApplication.Kernel.Get<IChangeLogManipulator>();
                 var plainFileRepository = CapiApplication.Kernel.Get<IPlainInterviewFileStorage>();
                 var cleaner = new CapiCleanUpService(changeLogManipulator, plainFileRepository, CapiApplication.Kernel.Get<ISyncPackageIdsStorage>());
+
                 this.synchronizer = new SynchronozationProcessor(
                     deviceChangeVerifier,
                     authenticator,
@@ -291,7 +300,7 @@ namespace WB.UI.Capi
                     CapiApplication.Kernel.Get<ISyncPackageIdsStorage>(),
                     CapiApplication.Kernel.Get<ILogger>(),
                     CapiApplication.Kernel.Get<ISynchronizationService>(),
-                    CapiApplication.Kernel.Get<IInterviewerSettings>());
+                    interviewerSettings);
             }
             catch (Exception ex)
             {
