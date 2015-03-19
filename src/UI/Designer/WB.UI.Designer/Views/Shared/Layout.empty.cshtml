@@ -1,10 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@using WB.UI.Shared.Web.Extensions
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>@ViewBag.Title</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @this.GenerateFavicon(Url.Content("~/favicon.ico"))
     <link href="@Styles.Url("~/content/css")" rel="stylesheet"/>
     <style type="text/css">
         body {
@@ -23,7 +25,6 @@
     @RenderSection("Scripts", required: false)
     @Html.Partial("_html5shiv")
     @Html.Partial("_trackers")
-
     @* favicons and touch icons go here *@
 </head>
 <body onload="FrameCheck();">

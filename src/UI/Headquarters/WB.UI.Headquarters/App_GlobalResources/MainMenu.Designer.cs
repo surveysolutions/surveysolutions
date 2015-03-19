@@ -70,6 +70,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Headquarters.
+        /// </summary>
+        internal static string Headquarters {
+            get {
+                return ResourceManager.GetString("Headquarters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Health Check.
         /// </summary>
         internal static string HealthCheck {
@@ -156,6 +165,15 @@ namespace Resources {
         internal static string TeamsAndStatuses {
             get {
                 return ResourceManager.GetString("TeamsAndStatuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Users.
+        /// </summary>
+        internal static string Users {
+            get {
+                return ResourceManager.GetString("Users", resourceCulture);
             }
         }
     }
