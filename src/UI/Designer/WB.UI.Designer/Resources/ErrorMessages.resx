@@ -118,63 +118,63 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ClientVersionLessThenDocument" xml:space="preserve">
-    <value>Failed to open questionnaire. Requested questionnaire "{0}" has {2} version. Application supports version up to {1}. Please update application.</value>
+    <value>Failed to open the questionnaire. Your questionnaire "{0}" has {2} version. Designer supports only up to version {1}. Please contact support@mysurvey.solutions</value>
   </data>
   <data name="TemplateNotFound" xml:space="preserve">
-    <value>Questionnaire with id={0} cannot be found. Please check the list of available questionnaires.</value>
+    <value>Questionnaire with id={0} cannot be found. Please check the list of available questionnaires, or contact the colleague who shared the questionnaire link with you.</value>
   </data>
   <data name="Questionnaire_verification_failed" xml:space="preserve">
-    <value>Requested questionnaire "{0}" has errors. Please verify the questionnaire on Designer.</value>
+    <value>Your questionnaire "{0}" has errors. Please verify the questionnaire on Designer.</value>
   </data>
   <data name="User_Not_authorized" xml:space="preserve">
-    <value>User is not authorized. Check your login and password.</value>
+    <value>User is not authorized. Please check your login and password.</value>
   </data>
   <data name="OldClientPleaseUpdate" xml:space="preserve">
-    <value>You have an obsolete version of application. Please update application to continue.</value>
+    <value>You have an obsolete version of the Headquarters application. Please contact support@mysurvey.solutions to request an update.</value>
   </data>
   <data name="VersionParameterIsIncorrect" xml:space="preserve">
-    <value>Max supported version of questionnaire was not correctly provided. Please contact developers.</value>
+    <value>There is a problem with the version of your questionnaire. Please contact support@mysurvey.solutions.</value>
   </data>
   <data name="NotSupportedQuestionnaireVersion" xml:space="preserve">
-    <value>Failed to import questionnaire. Requested questionnaire "{0}" has {1} version. Headquarters application supports version up to {2}</value>
+    <value>Failed to import questionnaire. Your questionnaire "{0}" has {1} version. Headquarters application supports only up to version {2}.</value>
   </data>
   <data name="UserLockedOut" xml:space="preserve">
-    <value>Your account is locked out. Please, contact to the administrator of Designer to unlock it.</value>
+    <value>Your account is locked. Please contact support@mysurvey.solutions to unlock it.</value>
   </data>
   <data name="ApplicationUpdateRequired" xml:space="preserve">
     <value>Application update required</value>
   </data>
   <data name="ServerError" xml:space="preserve">
-    <value>Internal server error occurred. Please contact developers.</value>
+    <value>A server error occurred. Please contact support@mysurvey.solutions.</value>
   </data>
   <data name="The_user_name_or_password_provided_is_incorrect" xml:space="preserve">
-    <value>The user name or password provided is incorrect.</value>
+    <value>The user name or password provided is incorrect. Please try entering your user name and password again.</value>
   </data>
   <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
     <value>You did not type the verification word correctly. Please try again.</value>
   </data>
   <data name="Your_email_is_verified" xml:space="preserve">
-    <value>Your email is verified</value>
+    <value>Designer successfully verified your email</value>
   </data>
   <data name="Unexpected_error_occurred_Please_try_again_later" xml:space="preserve">
-    <value>Unexpected error occurred. Please, try again later</value>
+    <value>An unexpected error occurred. Please try acessing Designer again later</value>
   </data>
   <data name="Look_for_an_email_in_your_inbox" xml:space="preserve">
-    <value>To complete the reset password process look for an email in your inbox that provides further instructions.</value>
+    <value>You will receive a message shortly with instructions on how to complete registration. Please check the email account that you provided in the previous step.</value>
   </data>
   <data name="User_does_not_exist" xml:space="preserve">
     <value>User {0} does not exist. Please enter a valid user name</value>
   </data>
   <data name="The_current_password_is_incorrect_or_the_new_password_is_invalid" xml:space="preserve">
-    <value>The current password is incorrect or the new password is invalid.</value>
+    <value>Either your current or new password is incorrect. Please reenter your current and new passwords.</value>
   </data>
   <data name="User_already_confirmed_in_system" xml:space="preserve">
-    <value>User {0} already confirmed in system.</value>
+    <value>User {0} already confirmed in system. Please enter your login and password to start using Designer.</value>
   </data>
   <data name="User_does_not_exist_Please_enter_a_valid_user_name" xml:space="preserve">
     <value>User {0} does not exist. Please enter a valid user name.</value>
   </data>
   <data name="Your_password_successfully_changed" xml:space="preserve">
-    <value>Your password successfully changed</value>
+    <value>You have successfully changed your password</value>
   </data>
 </root>
