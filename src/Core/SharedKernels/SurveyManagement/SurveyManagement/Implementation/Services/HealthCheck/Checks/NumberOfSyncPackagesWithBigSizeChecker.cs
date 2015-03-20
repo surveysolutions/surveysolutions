@@ -1,34 +1,38 @@
 ﻿using System;
 using System.Linq;
+using Raven.Client.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 using WB.Core.Synchronization.Implementation.ReadSide.Indexes;
+using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks
 {
     internal class NumberOfSyncPackagesWithBigSizeChecker : IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>
     {
-        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
+        private const int WarningLength = 2097152;
 
-        private readonly string interviewQueryIndexName = typeof(SynchronizationDeltasByRecordSize).Name;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> interviewSyncPackes;
+        private readonly IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMeta> questionnaireSyncPackages;
 
-        public NumberOfSyncPackagesWithBigSizeChecker(IReadSideRepositoryIndexAccessor indexAccessor)
+        public NumberOfSyncPackagesWithBigSizeChecker(IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> interviewSyncPackes,
+            IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMeta> questionnaireSyncPackages)
         {
-            this.indexAccessor = indexAccessor;
+            this.interviewSyncPackes = interviewSyncPackes;
+            this.questionnaireSyncPackages = questionnaireSyncPackages;
         }
 
         public NumberOfSyncPackagesWithBigSizeCheckResult Check()
         {
             try
             {
-                var groupedCount = indexAccessor.Query<SynchronizationDeltasByRecordSize.Result>(interviewQueryIndexName).FirstOrDefault();
+                var bigInterviewsPackages = this.interviewSyncPackes.Query(_ => _.Count(x => (x.ContentSize + x.MetaInfoSize) > WarningLength));
+                var bigQuestionnaire = this.questionnaireSyncPackages.Query(_ => _.Count(x => (x.ContentSize + x.MetaInfoSize) > WarningLength));
 
-                int count = groupedCount == null ? 0 : groupedCount.Count;
+                if (bigInterviewsPackages + bigQuestionnaire == 0) 
+                    return NumberOfSyncPackagesWithBigSizeCheckResult.Happy(0);
 
-                if (count == 0) 
-                    return NumberOfSyncPackagesWithBigSizeCheckResult.Happy(count);
-
-                return NumberOfSyncPackagesWithBigSizeCheckResult.Warning(count, "Some interviews are oversized.<br />Please, contact Survey Solutions Team <a href='mailto:support@mysurvey.solutions'>support@mysurvey.solutions</a> to inform about the issue.");
+                return NumberOfSyncPackagesWithBigSizeCheckResult.Warning(bigInterviewsPackages + bigQuestionnaire, "Some interviews are oversized.<br />Please, contact Survey Solutions Team <a href='mailto:support@mysurvey.solutions'>support@mysurvey.solutions</a> to inform about the issue.");
             }
             catch (Exception e)
             {
