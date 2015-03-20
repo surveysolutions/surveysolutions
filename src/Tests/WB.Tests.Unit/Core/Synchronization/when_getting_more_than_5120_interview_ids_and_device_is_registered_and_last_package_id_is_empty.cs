@@ -9,11 +9,12 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization.Documents;
 using WB.Core.Synchronization.Implementation.SyncManager;
 using WB.Core.Synchronization.SyncStorage;
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Core.Synchronization
 {
-    [Ignore("Postgres")]
+    [Ignore("KP-5123")]
     internal class when_getting_more_than_5120_interview_ids_and_device_is_registered_and_last_package_id_is_empty : SyncManagerTestContext
     {
         Establish context = () =>
@@ -34,22 +35,17 @@ namespace WB.Tests.Unit.Core.Synchronization
                        sortIndex: i * chunckSize + (chunckSize + 1), itemType: SyncItemType.DeleteInterview, userId: userId));
             }
 
-            indexAccessorMock = new Mock<IReadSideRepositoryIndexAccessor>();
-            //indexAccessorMock.Setup(x => x.Query<InterviewSyncPackageMeta>(interviewQueryIndexName))
-            //    .Returns(QuerySyncPackage);
-            syncManager = CreateSyncManager(devices: devices, indexAccessor: indexAccessorMock.Object);
-        };
+            var writer = new TestInMemoryWriter<InterviewSyncPackageMeta>();
+            foreach (var package in interviewSyncPackageMetas)
+            {
+                writer.Store(package, package.PackageId);
+            }
 
-        private static IQueryable<InterviewSyncPackageMeta> QuerySyncPackage()
-        {
-            var result = interviewSyncPackageMetas.Take(chunckSize * (queryCount+1)).AsQueryable();
-            queryCount++;
-            return result;
-        }
+            syncManager = CreateSyncManager(devices: devices, interviewSyncPackageReader: writer);
+        };
 
         Because of = () =>
          result = syncManager.GetInterviewPackageIdsWithOrder(userId, deviceId, null);
-
 
         It should_return_not_null_result = () =>
             result.ShouldNotBeNull();
@@ -73,9 +69,7 @@ namespace WB.Tests.Unit.Core.Synchronization
 
         private static readonly Guid userId = Guid.Parse("11111111111111111111111111111111");
 
-        private static Mock<IReadSideRepositoryIndexAccessor> indexAccessorMock;
         private static readonly int chunckSize=128;
         private static List<InterviewSyncPackageMeta> interviewSyncPackageMetas = new List<InterviewSyncPackageMeta>();
-        private static int queryCount = 0;
     }
 }

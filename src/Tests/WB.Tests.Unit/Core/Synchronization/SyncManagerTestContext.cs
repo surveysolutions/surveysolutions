@@ -1,5 +1,6 @@
 ﻿using System;
 using Machine.Specifications;
+using Main.DenormalizerStorage;
 using Moq;
 
 using WB.Core.GenericSubdomains.Utils;
@@ -11,6 +12,7 @@ using WB.Core.Synchronization;
 using WB.Core.Synchronization.Documents;
 using WB.Core.Synchronization.Implementation.SyncManager;
 using WB.Core.Synchronization.SyncStorage;
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 
 namespace WB.Tests.Unit.Core.Synchronization
 {
@@ -27,6 +29,7 @@ namespace WB.Tests.Unit.Core.Synchronization
             IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnaireSyncPackageContentStore = null,
             IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> interviewSyncPackageReader  = null,
             IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMeta> questionnairesReader = null,
+            IQueryableReadSideRepositoryReader<UserSyncPackageMeta> usersReader = null,
             ISyncLogger syncLogger = null)
         {
             return new SyncManager(
@@ -37,8 +40,8 @@ namespace WB.Tests.Unit.Core.Synchronization
                 interviewPackageContentStore ?? Mock.Of<IReadSideKeyValueStorage<InterviewSyncPackageContent>>(),
                 questionnaireSyncPackageContentStore ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireSyncPackageContent>>(),
                 interviewSyncPackageReader ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta>>(),
-                Mock.Of<IQueryableReadSideRepositoryReader<UserSyncPackageMeta>>(),
-                questionnairesReader ?? Mock.Of<IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMeta>>(),
+                usersReader ?? new TestInMemoryWriter<UserSyncPackageMeta>(),
+                questionnairesReader ?? new TestInMemoryWriter<QuestionnaireSyncPackageMeta>(),
                 syncLogger ?? Mock.Of<ISyncLogger>());
         }
 
