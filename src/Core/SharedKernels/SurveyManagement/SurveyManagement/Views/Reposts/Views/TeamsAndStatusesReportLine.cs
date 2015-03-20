@@ -1,6 +1,6 @@
 ﻿namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views
 {
-    public class SupervisorTeamMembersAndStatusesReportLine : ReportLineCounters
+    public class TeamsAndStatusesReportLine : ReportLineCounters
     {
         public string ResponsibleName { get; set; }
     }
