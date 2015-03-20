@@ -70,9 +70,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
         public virtual void AnswerFeaturedQuestion(Guid questionId, decimal[] answers)
         {
-            var options = this.QuestionOptions.Where(o => o.QuestionId == questionId && answers.Contains(o.Value))
-                                              .Select(o => o.Text);
-            this.AnswerFeaturedQuestion(questionId, string.Join(",", options));
+            var questionOptions = this.QuestionOptions.Where(x => x.QuestionId == questionId);
+
+            var optionStrings =  answers.Select(answerValue => questionOptions.First(x => x.Value == answerValue).Text)
+                                       .ToList();
+
+            this.AnswerFeaturedQuestion(questionId, string.Join(",", optionStrings));
         }
     }
 

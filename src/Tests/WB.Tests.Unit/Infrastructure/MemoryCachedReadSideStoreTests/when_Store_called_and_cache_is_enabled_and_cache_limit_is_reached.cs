@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests
             readSideStorageMock.Verify(x => x.Store(Moq.It.IsAny<ReadSideRepositoryEntity>(), Moq.It.IsAny<string>()), Times.Exactly(MaxCountOfEntitiesInOneStoreOperation));
 
         It should_return_readable_status = () =>
-            memoryCachedReadSideStore.GetReadableStatus().ShouldEqual("IReadSideStorage cache is enabled;    cached 128;");
+            memoryCachedReadSideStore.GetReadableStatus().ShouldEqual("  |  cache enabled  |  cached 128");
 
         It should_return_view_type_ReadSideRepositoryEntity = () =>
             memoryCachedReadSideStore.ViewType.ShouldEqual(typeof(ReadSideRepositoryEntity));

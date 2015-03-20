@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             var options = new HashSet<QuestionOptions>();
             for (int i = 0; i < 10; i++)
             {
-                options.Add(new QuestionOptions() { Value = i, Text = i.ToString() });
+                options.Add(new QuestionOptions() { QuestionId =  questionId, Value = i, Text = i.ToString() });
             }
 
             var savedInterviewSummary =
