@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
-    public abstract class AbstractConditionalLevel<T> where T : IExpressionExecutable
+    public abstract partial class AbstractConditionalLevel<T> where T : IExpressionExecutable
     {
         public decimal[] RosterVector { get; private set; }
         public Identity[] RosterKey { get; private set; }
