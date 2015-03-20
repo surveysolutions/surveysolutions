@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Security;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
@@ -11,6 +10,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.UI.Headquarters.Code;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
@@ -22,11 +22,14 @@ namespace WB.UI.Headquarters.Controllers
                               IGlobalInfoProvider globalInfo, 
                               ILogger logger,
                               IUserViewFactory userViewFactory,
-                              IPasswordHasher passwordHasher)
+                              IPasswordHasher passwordHasher,
+                              IIdentityManager identityManager)
             : base(commandService, globalInfo, logger, userViewFactory, passwordHasher)
         {
-            
+            this.IdentityManager = identityManager;
         }
+
+        protected readonly IIdentityManager IdentityManager;
 
         public ActionResult Create()
         {
@@ -87,7 +90,7 @@ namespace WB.UI.Headquarters.Controllers
                 if (user != null)
                 {
                     var forbiddenRoles = new string[]{ UserRoles.Administrator.ToString(), UserRoles.Headquarter.ToString()};
-                    var doesUserInForbiddenRole = Roles.GetRolesForUser().Any(r => forbiddenRoles.Contains(r));
+                    var doesUserInForbiddenRole = IdentityManager.GetRolesForUser(user.UserName).Any(r => forbiddenRoles.Contains(r));
 
                     if (!doesUserInForbiddenRole)
                     {
