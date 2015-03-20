@@ -1,5 +1,6 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
+using Raven.Client.Linq;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Mappings
@@ -38,18 +39,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Set(x => x.CommentedStatusesHistory,
                 collection =>
                 {
-                    collection.Table("CommentedStatusesHistoryItems");
                     collection.Key(key => key.Column("InterviewSummaryId"));
-                    collection.Cascade(Cascade.All);
+                    collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
+                    collection.Inverse(true);
                 },
-                relation => relation.Component(element =>
-                {
-                    element.Property(x => x.Comment);
-                    element.Property(x => x.Date);
-                    element.Property(x => x.Status);
-                    element.Property(x => x.Responsible);
-                    element.Property(x => x.ResponsibleId);
-                }));
+                relation => relation.OneToMany());
 
             Set(x => x.QuestionOptions,
                collection =>
@@ -64,6 +58,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
                    element.Property(x => x.Text);
                    element.Property(x => x.Value);
                }));
+        }
+    }
+
+    public class InterviewCommentedStatusMap : ClassMapping<InterviewCommentedStatus>
+    {
+        public InterviewCommentedStatusMap()
+        {
+            Table("CommentedStatusesHistoryItems");   
+            Id(x => x.Id, idMap => idMap.Generator(Generators.HighLow));
+            Property(x => x.Comment);
+            Property(x => x.Date);
+            Property(x => x.Status);
+            Property(x => x.Responsible);
+            Property(x => x.ResponsibleId);
         }
     }
 

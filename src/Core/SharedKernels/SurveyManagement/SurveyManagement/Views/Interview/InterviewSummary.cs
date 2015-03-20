@@ -78,11 +78,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
     public class InterviewCommentedStatus
     {
-        public string Comment { get; set; }
-        public DateTime Date { get; set; }
-        public InterviewStatus Status { get; set; }
-        public string Responsible { get; set; }
-        public Guid ResponsibleId { get; set; }
+        public virtual int Id { get; set; }
+        public virtual string Comment { get; set; }
+        public virtual DateTime Date { get; set; }
+        public virtual InterviewStatus Status { get; set; }
+        public virtual string Responsible { get; set; }
+        public virtual Guid ResponsibleId { get; set; }
     }
 
     public class QuestionAnswer
