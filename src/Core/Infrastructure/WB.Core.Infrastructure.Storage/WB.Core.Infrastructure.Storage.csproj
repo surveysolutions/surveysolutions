@@ -38,6 +38,9 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core">
+      <HintPath>..\..\..\..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Esent.Collections">
       <HintPath>..\..\..\..\packages\Microsoft.Database.Collections.Generic.1.9.2.0\lib\net40\Esent.Collections.dll</HintPath>
     </Reference>
@@ -64,6 +67,9 @@
     </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\..\..\..\packages\NHibernate.4.0.3.4000\lib\net40\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate.ByteCode.Castle">
+      <HintPath>..\..\..\..\Externals\NHibernate.ByteCode.Castle.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
