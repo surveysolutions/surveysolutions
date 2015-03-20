@@ -106,6 +106,25 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The {0} must be at least {2} characters long..
+        /// </summary>
+        internal static string Password_must_be_at_least_characters_long {
+            get {
+                return ResourceManager.GetString("Password_must_be_at_least_characters_long", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must contain at least one number, one upper case character and one lower case character.
+        /// </summary>
+        internal static string Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_case_character {
+            get {
+                return ResourceManager.GetString("Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_" +
+                        "case_character", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your questionnaire &quot;{0}&quot; has errors. Please verify the questionnaire on Designer..
         /// </summary>
         internal static string Questionnaire_verification_failed {
@@ -138,6 +157,15 @@ namespace WB.UI.Designer.Resources {
         internal static string The_current_password_is_incorrect_or_the_new_password_is_invalid {
             get {
                 return ResourceManager.GetString("The_current_password_is_incorrect_or_the_new_password_is_invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The password and confirmation password do not match..
+        /// </summary>
+        internal static string The_password_and_confirmation_password_do_not_match {
+            get {
+                return ResourceManager.GetString("The_password_and_confirmation_password_do_not_match", resourceCulture);
             }
         }
         
