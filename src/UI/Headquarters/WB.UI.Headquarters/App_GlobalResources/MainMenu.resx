@@ -123,9 +123,6 @@
   <data name="Headquarters" xml:space="preserve">
     <value>Headquarters</value>
   </data>
-  <data name="HealthCheck" xml:space="preserve">
-    <value>Health Check</value>
-  </data>
   <data name="Help" xml:space="preserve">
     <value>Help</value>
   </data>

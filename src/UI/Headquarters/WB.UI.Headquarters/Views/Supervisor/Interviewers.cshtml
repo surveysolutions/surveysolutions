@@ -1,4 +1,5 @@
 ﻿@using System.Web.Optimization
+@using Main.Core.Entities.SubEntities
 @using WB.UI.Headquarters.Code
 @model WB.Core.SharedKernels.SurveyManagement.Views.User.UserView
 @{
@@ -34,7 +35,7 @@
 {
     <div class="btn-group">
         <div class="form-inline">
-            @if (User.IsInRole("Headquarter"))
+            @if (User.IsInRole(UserRoles.Headquarter.ToString()) || User.IsInRole(UserRoles.Administrator.ToString()))
             {
                 <a class="btn btn-default" href="@Url.Action("Create", "Interviewer", new { supervisorId = Model.PublicKey, area = string.Empty })">
                     <i class="glyphicon glyphicon-user"></i> Create

@@ -73,8 +73,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/supervisor.framework.js",
                     "~/Scripts/viewmodels/viewmodelbase.js",
                     "~/Scripts/viewmodels/pagebase.js",
-                    "~/Scripts/viewmodels/surveymanagmentheader.js",
-                    "~/Scripts/viewmodels/healthcheckheader.js"
+                    "~/Scripts/viewmodels/surveymanagmentheader.js"
                 }
             },
             {

@@ -1,8 +1,8 @@
-/*@import "../../vendor/bootstrap/less/bootstrap.less";
-@import "../lib/wb-vars.css.less";
-@import "../lib/wb-fontstyles.css.less";
-@import "../lib/controls/wb-buttons.css.less";
-@import "../lib/controls/wb-breadcrumbs.css.less";*/
+@import (reference) "../../vendor/bootstrap/less/bootstrap.less";
+@import (reference) "../lib/wb-vars.css.less";
+@import (reference) "../lib/wb-fontstyles.css.less";
+@import (reference) "../lib/controls/wb-buttons.css.less";
+@import (reference) "../lib/controls/wb-breadcrumbs.css.less";
 
 #loading-logo {
     width: @chapter-menu-panel-width;
@@ -855,6 +855,7 @@ li.chapter-panel-item {
         }
     }
 
+    
     &:hover {
         position: relative;
         padding-top: 2px;
@@ -884,6 +885,27 @@ li.chapter-panel-item {
             &:before {
                 #gradient > .horizontal(rgba(237, 239, 241, 0.0), rgba(237, 239, 241, 1.0));
             }
+        }
+
+          &.highlight{
+            .cursor{
+                top: 0;
+                bottom: 0;
+            }
+    }
+    }
+
+    &.highlight{
+        border-radius: 0;
+        .cursor{
+            position: absolute;
+            top: 2px;
+            left: 0;
+            width: 5px;
+            bottom: 2px;
+            z-index: 6;
+            border-left: 3px solid @common-blue-color;
+            
         }
     }
 }
@@ -950,4 +972,8 @@ li.chapter-panel-item {
             text-decoration: underline;
         }
     }
+}
+
+#main .ace-github .ace_marker-layer .ace_bracket{
+    margin-top: 0;
 }

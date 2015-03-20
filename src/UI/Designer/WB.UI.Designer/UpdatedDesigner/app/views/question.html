@@ -49,7 +49,8 @@
                  ng-if="activeQuestion.type != undefined
                  && ( activeQuestion.type!='DateTime'
                  && activeQuestion.type!='GpsCoordinates'
-                 && activeQuestion.type!='QRBarcode')
+                 && activeQuestion.type!='QRBarcode'
+                 && activeQuestion.type!='Multimedia')
                  ">
             </div>
         </div>
@@ -64,7 +65,7 @@
             </div>
 
             <div class="form-group col-xs-1 pull-right">
-                <button type="button" class="btn cross instructions-cross" ng-click="showInstruction=false;activeQuestion.instructions='';"></button>
+                <button type="button" class="btn cross instructions-cross" ng-click="showInstruction=false;activeQuestion.instructions='';questionForm.$setDirty();"></button>
             </div>
         </div>
 

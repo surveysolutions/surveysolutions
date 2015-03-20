@@ -1,6 +1,6 @@
 angular.module('designerApp')
     .controller('MainCtrl',
-        function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal) {
+        function($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal) {
 
             $scope.verificationStatus = {
                 errorsCount: null,
@@ -18,10 +18,41 @@ angular.module('designerApp')
             hotkeys.add({
                 combo: 'esc',
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                callback: function () {
+                callback: function() {
                     $scope.verificationStatus.visible = false;
                 }
             });
+
+            if (hotkeys.get('alt+x') === false) {
+                hotkeys.add({
+                    combo: 'alt+x',
+                    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                    description: 'Focus questionnaire tree',
+                    callback: function(event) {
+                        event.preventDefault();
+                        document.activeElement.blur();
+                    }
+                });
+            }
+
+            if (hotkeys.get('alt+e') === false) {
+                hotkeys.add({
+                    combo: 'alt+e',
+                    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                    description: 'Focus questionnaire tree',
+                    callback: function (event) {
+                        event.preventDefault();
+                        $($(".question-editor textarea").get(0)).focus();
+                    }
+                });
+            }
+
+            if (hotkeys.get('left') === false) {
+                hotkeys.add('left', 'Open chapters', function (event) {
+                    event.preventDefault();
+                    $scope.$broadcast("openChaptersList", "");
+                });
+            }
 
             $scope.questionnaireId = $state.params.questionnaireId;
 
@@ -165,7 +196,7 @@ angular.module('designerApp')
                 function (event, toState, toParams) {
                     var target = toState.name.replace('questionnaire.chapter.', '');
                     if (target === "question" || target === "group" || target === "roster" || target === "statictext") {
-                        var itemId = "#" + target + "-" + toParams.itemId;
+                        var itemId = "#" + toParams.itemId;
                         $scope.$broadcast("scrollToElement", itemId);
                     }
                 });

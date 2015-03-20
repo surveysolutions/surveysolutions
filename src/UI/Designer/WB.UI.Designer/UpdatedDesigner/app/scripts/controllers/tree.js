@@ -4,6 +4,11 @@
             'use strict';
             var me = this;
 
+            var scrollMode = {
+                makeVisible: "makeVisible",
+                toTop: "toTop"
+            };
+
             var filtersBlockModes = {
                 default: 'default',
                 search: 'search'
@@ -20,38 +25,53 @@
                 return 'views/tree' + itemType + '.html';
             };
 
+            $scope.highlightedId = null;
+
             $scope.search = { searchText: '' };
             $scope.filtersBoxMode = filtersBlockModes.default;
             $scope.items = [];
 
-            hotkeys.add({
-                combo: 'ctrl+f',
-                description: 'Search for groups and questions in chapter',
-                callback: function (event) {
-                    $scope.showSearch();
+            if (hotkeys.get('down') === false) {
+                hotkeys.add('down', 'Navigate to next sibling', function (event) {
                     event.preventDefault();
-                }
-            });
+                    $scope.goToNextItem();
+                });
+            }
 
-            hotkeys.add('down', 'Navigate to next sibling', function (event) {
-                event.preventDefault();
-                $scope.goToNextItem();
-            });
+            if (hotkeys.get('up') === false) {
+                hotkeys.add('up', 'Navigate to previous sibling', function (event) {
+                    event.preventDefault();
+                    $scope.goToPrevItem();
+                });
+            }
 
-            hotkeys.add('up', 'Navigate to previous sibling', function (event) {
-                event.preventDefault();
-                $scope.goToPrevItem();
-            });
+            if (hotkeys.get('ctrl+f') === false) {
+                hotkeys.add({
+                    combo: 'ctrl+f',
+                    description: 'Search for groups and questions in chapter',
+                    callback: function(event) {
+                        $scope.showSearch();
+                        event.preventDefault();
+                    }
+                });
+            }
 
-            hotkeys.add('left', 'Navigate to parent', function (event) {
-                event.preventDefault();
-                $scope.goToParent();
-            });
-
-            hotkeys.add('right', 'Navigate to child', function (event) {
-                event.preventDefault();
-                $scope.goToChild();
-            });
+            if (hotkeys.get('enter') === false) {
+                hotkeys.add({
+                    combo: 'enter',
+                    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                    description: 'Open item in editor',
+                    callback: function(event) {
+                        event.preventDefault();
+                        if ($scope.filtersBoxMode == filtersBlockModes.default) {
+                            if (_.isNull($scope.highlightedId)) return;
+                            $state.go('questionnaire.chapter.' + getItemType(getCurrentItem()), { chapterId: $state.params.chapterId, itemId: $scope.highlightedId });
+                        } else {
+                            utilityService.focusout('focusSearch');
+                        }
+                    }
+                });
+            }
 
             $scope.showSearch = function () {
                 $scope.filtersBoxMode = filtersBlockModes.search;
@@ -79,36 +99,30 @@
                         }
                     });
                 }
-
                 return found;
             };
 
             var upDownMove = function (updownStepValue) {
-                if ($scope.items && $state.params.itemId) {
-                    var currentItem = getCurrentItem();
-                    if (currentItem) {
-                        var parent = currentItem.getParentItem();
-                        var target = null;
+                var currentItem = getCurrentItem();
+                
+                if (_.isNull($scope.highlightedId)) {
+                    highlightAndScroll(currentItem);
+                    return;
+                }
 
-                        if (_.isNull(parent)) {
-                            var siblingIndex = _.indexOf($scope.items, currentItem) + updownStepValue;
-                            if (siblingIndex < $scope.items.length && siblingIndex >= 0) {
-                                target = $scope.items[siblingIndex];
-                            }
-                        } else {
-                            var nextItemIndex = _.indexOf(parent.items, currentItem) + updownStepValue;
+                var ids = _.map($(".question-list .item-body"), function(item) {
+                    return ($(item).attr('id') || "");
+                });
 
-                            if (nextItemIndex < parent.items.length && nextItemIndex >= 0) {
-                                target = parent.items[nextItemIndex];
-                            }
-                        }
+                var nextIndex = _.indexOf(ids, $scope.highlightedId) + updownStepValue;
+                nextIndex = Math.min(Math.max(nextIndex, 0), ids.length);
 
-                        if (!_.isNull(target)) {
-                            $state.go('questionnaire.chapter.' + getItemType(target), {
-                                itemId: target.itemId
-                            });
-                        }
-                    }
+                var nextId = ids[nextIndex];
+
+                var target = questionnaireService.findItem($scope.items, nextId);
+
+                if (!_.isNull(target)) {
+                    highlightAndScroll(target);
                 }
             };
 
@@ -121,28 +135,20 @@
             };
 
             $scope.goToParent = function () {
-                if ($scope.items && $state.params.itemId) {
-                    var itemToFind = getCurrentItem();
-                    if (itemToFind) {
-                        var parent = itemToFind.getParentItem();
-                        if (parent !== null) {
-                            $state.go('questionnaire.chapter.' + getItemType(parent), {
-                                itemId: parent.itemId
-                            });
-                        }
+                var itemToFind = getCurrentItem();
+                if (itemToFind) {
+                    var parent = itemToFind.getParentItem();
+                    if (parent !== null) {
+                        highlightAndScroll(target);
                     }
                 }
             };
 
             $scope.goToChild = function () {
-                if ($scope.items && $state.params.itemId) {
-                    var currentItem = getCurrentItem();
-                    if (currentItem && !_.isEmpty(currentItem.items)) {
-                        var target = currentItem.items[0];
-                        $state.go('questionnaire.chapter.' + getItemType(target), {
-                            itemId: target.itemId
-                        });
-                    }
+                var currentItem = getCurrentItem();
+                if (currentItem && !_.isEmpty(currentItem.items)) {
+                    var target = currentItem.items[0];
+                    highlightAndScroll(target);
                 }
             };
 
@@ -150,8 +156,84 @@
                 scope.toggle();
             };
 
+            var isElementVisible = function (item) {
+                var viewport = {
+                    top: $(".questionnaire-tree-holder > .scroller").offset().top,
+                    bottom: $(window).height()
+                };
+                var top = item.offset().top;
+                var bottom = top + item.outerHeight();
+
+                var isTopBorderVisible = top > viewport.top && top < viewport.bottom;
+                var isBottomBorderVisible = bottom > viewport.top && bottom < viewport.bottom;
+                var distanceToTopBorder = Math.abs(top - viewport.top);
+                var distanceToBottomBorder = Math.abs(bottom - viewport.bottom);
+
+                return {
+                    isVisible: isTopBorderVisible && isBottomBorderVisible,
+                    shouldScrollDown: distanceToTopBorder < distanceToBottomBorder,
+                    scrollPositionWhenScrollUp : viewport.top - $(".question-list").offset().top + distanceToBottomBorder
+                }
+            };
+
+            var scrollToElement = function (itemId, mode) {
+                mode = mode || scrollMode.makeVisible;
+                if ($(itemId).length === 0) {
+                    return;
+                }
+                var elementVisibility = isElementVisible($(itemId));
+                if (elementVisibility.isVisible) {
+                    return;
+                }
+
+                if (mode === scrollMode.makeVisible) {
+                    if (elementVisibility.shouldScrollDown) {
+                        mode = scrollMode.toTop;
+                    } else {
+                        $scope.$broadcast("scrollToPosition", {
+                            target: ".question-list",
+                            scrollTop: elementVisibility.scrollPositionWhenScrollUp
+                        });
+                        return;
+                    }
+                }
+                if (mode === scrollMode.toTop) {
+                    var scrollTop = Math.max($(itemId).offset().top - $(".question-list").offset().top - 10, 0);
+                    $scope.$broadcast("scrollToPosition", {
+                        target: ".question-list",
+                        scrollTop: scrollTop
+                    });
+                } 
+            };
+
+            var getItemType = function (item) {
+                switch (item.itemType) {
+                    case 'Question': return itemTypes.question;
+                    case 'Group': return (item.isRoster ? itemTypes.roster : itemTypes.group);
+                    case 'StaticText': return itemTypes.staticText;
+                }
+                throw 'unknown item type: ' + item;
+            };
+
+            var highlightAndScroll = function (target) {
+                $scope.highlightedId = target.itemId;
+                scrollToElement("#" + target.itemId, scrollMode.makeVisible);
+            }
+
             var getCurrentItem = function () {
-                return questionnaireService.findItem($scope.items, $state.params.itemId);
+                if (_.isNull($scope.items) || _.isUndefined($scope.items)) {
+                    return null;
+                }
+                if (_.isNull($scope.highlightedId)) {
+                    var firstItem = _.first($scope.items);
+                    if (!_.isUndefined(firstItem)) {
+                        $scope.highlightedId = firstItem.itemId;
+                    } else {
+                        return null;
+                    }
+                }
+                return questionnaireService.findItem($scope.items, $scope.highlightedId);
+                
             };
 
             var connectTree = function () {
@@ -169,14 +251,7 @@
                 });
             };
 
-            var getItemType = function (item) {
-                switch (item.itemType) {
-                    case 'Question': return itemTypes.question;
-                    case 'Group': return (item.isRoster ? itemTypes.roster : itemTypes.group);
-                    case 'StaticText': return itemTypes.staticText;
-                }
-                throw 'unknown item type: ' + item;
-            };
+          
 
             $scope.isQuestion = function (item) {
                 return item.hasOwnProperty('type');
@@ -546,23 +621,6 @@
                     });
             };
             $scope.refreshTree();
-
-            var scrollToElement = function(itemId) {
-                if ($(itemId).length === 0) {
-                    return;
-                }
-
-                if ($(itemId).isOnScreen()) {
-                    return;
-                }
-                //$(".question-list").scrollTo(itemId);
-                var scrollTop = Math.max($(itemId).offset().top - $(".question-list").offset().top - 10, 0);
-                $scope.$broadcast("scrollToPosition", {
-                    target: ".question-list",
-                    scrollTop: scrollTop,
-                    itemId: itemId
-                });
-            };
 
             $scope.$on('scrollToElement', function (event, itemId) {
                     if ($(itemId).length === 0) {
