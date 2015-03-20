@@ -23,6 +23,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
@@ -3474,10 +3475,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             IGroup roster = this.GetRosterByrVariableName(identifier);
 
-            if (question == null && roster == null)
+            if (question == null && roster == null && !IsVariableNameNameSpace(identifier))
                 throw new QuestionnaireException(
                     DomainExceptionType.ExpressionContainsNotExistingQuestionOrRosterReference, 
                     string.Format(ExceptionMessages.QuestionOrRosterIdentifierIsMissing, identifier, expression));
+        }
+
+        private bool IsVariableNameNameSpace(string identifier)
+        {
+            var namespaces = typeof(IExpressionExecutable).Assembly.GetTypes().Select(t=>t.Name)
+                .Distinct();
+            return namespaces.Contains(identifier);
         }
 
         private IQuestion GetQuestionByStringIdOrVariableName(string identifier)
