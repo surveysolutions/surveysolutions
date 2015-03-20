@@ -9,12 +9,11 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization.Documents;
 using WB.Core.Synchronization.Implementation.SyncManager;
 using WB.Core.Synchronization.SyncStorage;
-
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Core.Synchronization
 {
-    [Ignore("Postgres")]
     internal class when_getting_user_ids_and_device_is_registered_and_last_package_id_is_empty : SyncManagerTestContext
     {
         Establish context = () =>
@@ -29,10 +28,13 @@ namespace WB.Tests.Unit.Core.Synchronization
                                    CreateUserSyncPackage(userId, sortIndex:3)
                                };
 
-            indexAccessorMock = new Mock<IReadSideRepositoryIndexAccessor>();
-            //indexAccessorMock.Setup(x => x.Query<UserSyncPackageMeta>(userQueryIndexName))
-            //    .Returns(userSyncPackages.AsQueryable());
-            syncManager = CreateSyncManager(devices: devices, indexAccessor: indexAccessorMock.Object);
+            var writer = new TestInMemoryWriter<UserSyncPackageMeta>();
+            foreach (var package in userSyncPackages)
+            {
+                writer.Store(package, package.PackageId);
+            }
+
+            syncManager = CreateSyncManager(devices: devices, usersReader: writer);
         };
 
         Because of = () =>
@@ -61,8 +63,6 @@ namespace WB.Tests.Unit.Core.Synchronization
         private static Guid userId = Guid.Parse("11111111111111111111111111111111");
         private static string lastSyncedPackageId = null;
 
-        private static Mock<IReadSideRepositoryIndexAccessor> indexAccessorMock;
-        //private static readonly string userQueryIndexName = typeof(UserSyncPackagesByBriefFields).Name;
         private static List<UserSyncPackageMeta> userSyncPackages;
     }
 }
