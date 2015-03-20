@@ -70,7 +70,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to open questionnaire. Requested questionnaire &quot;{0}&quot; has {2} version. Application supports version up to {1}. Please update application..
+        ///   Looks up a localized string similar to Failed to open the questionnaire. Your questionnaire &quot;{0}&quot; has {2} version. Designer supports only up to version {1}. Please contact support@mysurvey.solutions.
         /// </summary>
         internal static string ClientVersionLessThenDocument {
             get {
@@ -79,7 +79,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To complete the reset password process look for an email in your inbox that provides further instructions..
+        ///   Looks up a localized string similar to You will receive a message shortly with instructions on how to complete registration. Please check the email account that you provided in the previous step..
         /// </summary>
         internal static string Look_for_an_email_in_your_inbox {
             get {
@@ -88,7 +88,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to import questionnaire. Requested questionnaire &quot;{0}&quot; has {1} version. Headquarters application supports version up to {2}.
+        ///   Looks up a localized string similar to Failed to import questionnaire. Your questionnaire &quot;{0}&quot; has {1} version. Headquarters application supports only up to version {2}..
         /// </summary>
         internal static string NotSupportedQuestionnaireVersion {
             get {
@@ -97,7 +97,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have an obsolete version of application. Please update application to continue..
+        ///   Looks up a localized string similar to You have an obsolete version of the Headquarters application. Please contact support@mysurvey.solutions to request an update..
         /// </summary>
         internal static string OldClientPleaseUpdate {
             get {
@@ -106,7 +106,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Requested questionnaire &quot;{0}&quot; has errors. Please verify the questionnaire on Designer..
+        ///   Looks up a localized string similar to Your questionnaire &quot;{0}&quot; has errors. Please verify the questionnaire on Designer..
         /// </summary>
         internal static string Questionnaire_verification_failed {
             get {
@@ -115,7 +115,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Internal server error occurred. Please contact developers..
+        ///   Looks up a localized string similar to A server error occurred. Please contact support@mysurvey.solutions..
         /// </summary>
         internal static string ServerError {
             get {
@@ -124,7 +124,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire with id={0} cannot be found. Please check the list of available questionnaires..
+        ///   Looks up a localized string similar to Questionnaire with id={0} cannot be found. Please check the list of available questionnaires, or contact the colleague who shared the questionnaire link with you..
         /// </summary>
         internal static string TemplateNotFound {
             get {
@@ -133,7 +133,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The current password is incorrect or the new password is invalid..
+        ///   Looks up a localized string similar to Either your current or new password is incorrect. Please reenter your current and new passwords..
         /// </summary>
         internal static string The_current_password_is_incorrect_or_the_new_password_is_invalid {
             get {
@@ -142,7 +142,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The user name or password provided is incorrect..
+        ///   Looks up a localized string similar to The user name or password provided is incorrect. Please try entering your user name and password again..
         /// </summary>
         internal static string The_user_name_or_password_provided_is_incorrect {
             get {
@@ -151,7 +151,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unexpected error occurred. Please, try again later.
+        ///   Looks up a localized string similar to An unexpected error occurred. Please try acessing Designer again later.
         /// </summary>
         internal static string Unexpected_error_occurred_Please_try_again_later {
             get {
@@ -160,7 +160,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User {0} already confirmed in system..
+        ///   Looks up a localized string similar to User {0} already confirmed in system. Please enter your login and password to start using Designer..
         /// </summary>
         internal static string User_already_confirmed_in_system {
             get {
@@ -187,7 +187,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User is not authorized. Check your login and password..
+        ///   Looks up a localized string similar to User is not authorized. Please check your login and password..
         /// </summary>
         internal static string User_Not_authorized {
             get {
@@ -196,7 +196,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your account is locked out. Please, contact to the administrator of Designer to unlock it..
+        ///   Looks up a localized string similar to Your account is locked. Please contact support@mysurvey.solutions to unlock it..
         /// </summary>
         internal static string UserLockedOut {
             get {
@@ -205,7 +205,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max supported version of questionnaire was not correctly provided. Please contact developers..
+        ///   Looks up a localized string similar to There is a problem with the version of your questionnaire. Please contact support@mysurvey.solutions..
         /// </summary>
         internal static string VersionParameterIsIncorrect {
             get {
@@ -223,7 +223,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your email is verified.
+        ///   Looks up a localized string similar to Designer successfully verified your email.
         /// </summary>
         internal static string Your_email_is_verified {
             get {
@@ -232,7 +232,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your password successfully changed.
+        ///   Looks up a localized string similar to You have successfully changed your password.
         /// </summary>
         internal static string Your_password_successfully_changed {
             get {

@@ -158,10 +158,10 @@
                                 <input class="btn btn-link" type="button" value="Show list" ng-click="showOptionsInList()" ng-disabled="!questionForm.stringifiedOptions.$valid" />
                             </p>
                             <p class="help-block ng-cloak" ng-show="questionForm.stringifiedOptions.$error.matchOptionsPattern">
-                                Each line should match pattern "Title...Value", where 'Value' must be decimal number
+                                You entered an invalid input. Each line should follow the following format: "Title...Value". 'Value' must be an integer or decimal number. Title must be an alpha-numeric string. However, Title may not dots (i.e. ".") or ellipses (i.e., "…"). In addition, no empty lines are allowed.
                             </p>
                             <p class="help-block ng-cloak" ng-show="questionForm.stringifiedOptions.$error.maxOptionsCount">
-                                Maximum number of options is 200. You exceeded this value
+                                You entered more than the maximum number of allowed options. This input method only allows 200 lines.
                             </p>
                         </div>
                     </div>
@@ -329,10 +329,9 @@
                                 <input class="btn btn-link" type="button" value="Show list" ng-click="showOptionsInList()" ng-disabled="!questionForm.stringifiedOptions.$valid" />
                             </p>
                             <p class="help-block ng-cloak" ng-show="questionForm.stringifiedOptions.$error.matchOptionsPattern">
-                                Each line should match pattern "Value...Title", where 'Value' must be decimal number
-                            </p>
+                                You entered an invalid input. Each line should follow the following format: "Title...Value". 'Value' must be an integer or decimal number. Title must be an alpha-numeric string. However, Title may not dots (i.e. ".") or ellipses (i.e., "…"). In addition, no empty lines are allowed.
                             <p class="help-block ng-cloak" ng-show="questionForm.stringifiedOptions.$error.maxOptionsCount">
-                                Maximum number of options is 200. You exceeded this value
+                                You entered more than the maximum number of allowed options. This input method only allows 200 lines.
                             </p>
                         </div>
                     </div>
