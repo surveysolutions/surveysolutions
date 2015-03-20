@@ -15,6 +15,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using Newtonsoft.Json;
 using System.Text;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
@@ -1211,7 +1212,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             IQuestion questionsReferencedInExpression = GetQuestionByIdentifier(identifier, questionnaire);
             IGroup rosterReferencedInExpression = GetRosterByIdentifier(identifier, questionnaire);
 
-            if (questionsReferencedInExpression == null && rosterReferencedInExpression == null)
+            if (questionsReferencedInExpression == null && rosterReferencedInExpression == null && !IsVariableNameNameSpace(identifier))
             {
                 return notRecognizedParameterError(itemWithExpression);
             }
@@ -1222,6 +1223,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
 
             return null;
+        }
+
+        private static bool IsVariableNameNameSpace(string identifier)
+        {
+            var namespaces = typeof(IExpressionExecutable).Assembly.GetTypes().Select(t => t.Name)
+                .Distinct();
+            return namespaces.Contains(identifier);
         }
 
         private static QuestionnaireVerificationError GetVerificationErrorByConditionsInGroupsReferencedChildQuestionsOrNull(
