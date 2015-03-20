@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerT
                 questionnaire.UpdateQRBarcodeQuestion(questionId: questionId, title: "title",
                     variableName: "qr_barcode_question",
                 variableLabel: null, isMandatory: isMandatory, enablementCondition: condition, instructions: instructions,
-                    responsibleId: responsibleId);
+                    responsibleId: responsibleId, validationExpression:validation, validationMessage:validationMessage);
 
         Cleanup stuff = () =>
         {
@@ -67,6 +67,14 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerT
             eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
                 .Instructions.ShouldEqual(instructions);
 
+        It should_raise_QRBarcodeQuestionAdded_event_with_validation_specified = () =>
+           eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
+               .ValidationExpression.ShouldEqual(validation);
+
+        It should_raise_QRBarcodeQuestionAdded_event_with_validation_message_specified = () =>
+         eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
+             .ValidationMessage.ShouldEqual(validationMessage);
+
         private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
@@ -77,5 +85,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerT
         private static string title = "title";
         private static string instructions = "intructions";
         private static string condition = "condition";
+        private static string validation = "validation";
+        private static string validationMessage = "validationMessage";
     }
 }

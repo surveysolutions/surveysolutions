@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
-using System.Web.Routing;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils
 {
@@ -17,14 +14,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils
     /// </summary>
     public static class ViewHelpers
     {
-        public static SelectList ToSelectList<TEnum>(this TEnum enumObj)
-        {
-            var values = from TEnum e in Enum.GetValues(typeof(TEnum))
-                         select new { Id = e, Name = e.ToString() };
-
-            return new SelectList(values, "Id", "Name", enumObj);
-        }
-
+        
         /// <summary>
         /// Creation actionLink with image
         /// </summary>

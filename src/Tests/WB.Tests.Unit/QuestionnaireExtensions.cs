@@ -141,12 +141,14 @@ namespace WB.Tests.Unit
             string variableLabel,
             bool isMandatory,
             string enablementCondition,
+            string validationExpression,
+            string validationMessage,
             string instructions,
             Guid responsibleId,
             int? maxAnswerCount)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
-            questionnaire.UpdateTextListQuestion(questionId, title, variableName, variableLabel, isMandatory, enablementCondition, instructions, responsibleId, maxAnswerCount);
+            questionnaire.UpdateTextListQuestion(questionId, title, variableName, variableLabel, isMandatory, enablementCondition,validationExpression, validationMessage, instructions, responsibleId, maxAnswerCount);
         }
 
         public static void AddQRBarcodeQuestion(
@@ -159,10 +161,12 @@ namespace WB.Tests.Unit
             bool isMandatory,
             string enablementCondition,
             string instructions,
-            Guid responsibleId)
+            Guid responsibleId,
+            string validation,
+            string validationMessage)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
-            questionnaire.UpdateQRBarcodeQuestion(questionId, title, variableName, variableLabel, isMandatory, enablementCondition, instructions,responsibleId);
+            questionnaire.UpdateQRBarcodeQuestion(questionId, title, variableName, variableLabel, isMandatory, enablementCondition, validation, validationMessage, instructions, responsibleId);
         }
     }
 }
