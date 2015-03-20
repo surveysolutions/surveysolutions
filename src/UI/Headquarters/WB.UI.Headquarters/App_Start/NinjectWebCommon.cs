@@ -26,15 +26,11 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage.Esent;
 using WB.Core.Infrastructure.Storage.Postgre;
-using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Mappings;
@@ -57,7 +53,6 @@ using WB.UI.Shared.Web.MembershipProvider.Settings;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
 using WebActivatorEx;
-using WB.Core.Synchronization.Implementation.ReadSide.Indexes;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: ApplicationShutdownMethod(typeof(NinjectWebCommon), "Stop")]

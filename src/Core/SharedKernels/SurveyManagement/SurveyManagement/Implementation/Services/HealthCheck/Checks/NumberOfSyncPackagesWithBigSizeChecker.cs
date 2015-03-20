@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
-using Raven.Client.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
-using WB.Core.Synchronization.Implementation.ReadSide.Indexes;
 using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks

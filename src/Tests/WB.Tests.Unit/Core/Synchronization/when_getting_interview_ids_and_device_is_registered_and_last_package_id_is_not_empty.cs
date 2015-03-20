@@ -10,7 +10,6 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization.Documents;
-using WB.Core.Synchronization.Implementation.ReadSide.Indexes;
 using WB.Core.Synchronization.Implementation.SyncManager;
 using WB.Core.Synchronization.SyncStorage;
 
@@ -18,6 +17,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Core.Synchronization
 {
+    [Ignore("Postgres")]
     internal class when_getting_interview_ids_and_device_is_registered_and_last_package_id_is_not_empty : SyncManagerTestContext
     {
         Establish context = () =>
@@ -89,7 +89,6 @@ namespace WB.Tests.Unit.Core.Synchronization
         private static readonly Guid interviewId = Guid.Parse("33333333333333333333333333333333");
         private static readonly Guid interview1Id = Guid.Parse("44444444444444444444444444444444");
         private static Mock<IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta>> indexAccessorMock;
-        private static readonly string interviewGroupedQueryIndexName = typeof(InterviewSyncPackagesGroupedByRoot).Name;
         private static List<InterviewSyncPackageMeta> interviewSyncPackageMetas;
     }
 }
