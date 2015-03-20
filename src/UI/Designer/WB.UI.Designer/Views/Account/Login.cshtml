@@ -23,7 +23,6 @@
 @using (Html.BeginForm("login", "account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @id="start-log-in", autocomplete = "off" }))
 {
     @Html.AntiForgeryToken()
-    
     <h1>
         Welcome to Survey Solutions<br />
         Questionnaire designer
