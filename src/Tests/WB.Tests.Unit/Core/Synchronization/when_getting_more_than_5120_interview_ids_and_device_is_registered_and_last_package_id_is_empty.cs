@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization.Documents;
-using WB.Core.Synchronization.Implementation.ReadSide.Indexes;
 using WB.Core.Synchronization.Implementation.SyncManager;
 using WB.Core.Synchronization.SyncStorage;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Core.Synchronization
 {
+    [Ignore("Postgres")]
     internal class when_getting_more_than_5120_interview_ids_and_device_is_registered_and_last_package_id_is_empty : SyncManagerTestContext
     {
         Establish context = () =>
@@ -37,8 +35,8 @@ namespace WB.Tests.Unit.Core.Synchronization
             }
 
             indexAccessorMock = new Mock<IReadSideRepositoryIndexAccessor>();
-            indexAccessorMock.Setup(x => x.Query<InterviewSyncPackageMeta>(interviewQueryIndexName))
-                .Returns(QuerySyncPackage);
+            //indexAccessorMock.Setup(x => x.Query<InterviewSyncPackageMeta>(interviewQueryIndexName))
+            //    .Returns(QuerySyncPackage);
             syncManager = CreateSyncManager(devices: devices, indexAccessor: indexAccessorMock.Object);
         };
 
@@ -76,7 +74,6 @@ namespace WB.Tests.Unit.Core.Synchronization
         private static readonly Guid userId = Guid.Parse("11111111111111111111111111111111");
 
         private static Mock<IReadSideRepositoryIndexAccessor> indexAccessorMock;
-        private static readonly string interviewQueryIndexName = typeof(InterviewSyncPackagesGroupedByRoot).Name;
         private static readonly int chunckSize=128;
         private static List<InterviewSyncPackageMeta> interviewSyncPackageMetas = new List<InterviewSyncPackageMeta>();
         private static int queryCount = 0;

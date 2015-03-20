@@ -77,15 +77,11 @@
     <Compile Include="Events\Sync\UpdateRegisteredDevice.cs" />
     <Compile Include="IBackupManager.cs" />
     <Compile Include="IIncomingSyncPackagesQueue.cs" />
-    <Compile Include="Implementation\ReadSide\Indexes\InterviewSyncPackagesGroupedByRoot.cs" />
-    <Compile Include="Implementation\ReadSide\Indexes\QuestionnaireSyncPackagesByBriefFields.cs" />
-    <Compile Include="Implementation\ReadSide\Indexes\SynchronizationDeltasByRecordSize.cs" />
     <Compile Include="Implementation\SyncLogger\SyncLogger.cs" />
     <Compile Include="IncomingSyncPackage.cs" />
     <Compile Include="IncomingSyncPackageException.cs" />
     <Compile Include="ISyncPackagesProcessor.cs" />
     <Compile Include="Implementation\ImportManager\DefaultBackupManager.cs" />
-    <Compile Include="Implementation\ReadSide\Indexes\UserSyncPackagesByBriefFields.cs" />
     <Compile Include="Implementation\SyncManager\SyncManager.cs" />
     <Compile Include="ISyncManager.cs" />
     <Compile Include="MetaInfo\IMetaInfoBuilder.cs" />
