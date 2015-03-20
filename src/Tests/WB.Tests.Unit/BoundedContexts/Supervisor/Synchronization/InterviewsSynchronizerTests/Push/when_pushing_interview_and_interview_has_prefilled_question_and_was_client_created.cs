@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             InterviewSummary interviewSummary = Create.InterviewSummary();
             interviewSummary.WasCreatedOnClient = true;
             interviewSummary.AnswersToFeaturedQuestions.Add(
-                new QuestionAnswer { Answer = questionAnswer, Id = answerId, Title = questionTitle }
+                new QuestionAnswer { Answer = questionAnswer, Id = questionId, Title = questionTitle }
             );
 
             var interviewSummaryRepositoryWriter = Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(writer
