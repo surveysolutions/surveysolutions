@@ -177,4 +177,13 @@
   <data name="Your_password_successfully_changed" xml:space="preserve">
     <value>You have successfully changed your password</value>
   </data>
+  <data name="The_password_and_confirmation_password_do_not_match" xml:space="preserve">
+    <value>The password and confirmation password do not match.</value>
+  </data>
+  <data name="Password_must_be_at_least_characters_long" xml:space="preserve">
+    <value>The {0} must be at least {2} characters long.</value>
+  </data>
+  <data name="Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_case_character" xml:space="preserve">
+    <value>Password must contain at least one number, one upper case character and one lower case character</value>
+  </data>
 </root>
