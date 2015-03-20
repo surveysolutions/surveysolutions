@@ -59,9 +59,25 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         public void BulkStore(List<Tuple<TEntity, string>> bulk)
         {
+            ISession session = this.sessionProvider.GetSession();
+
             foreach (var tuple in bulk)
             {
-                Store(tuple.Item1, tuple.Item2);
+                TEntity entity = tuple.Item1;
+                string id = tuple.Item2;
+
+                var storedEntity = session.Get<TEntity>(id);
+
+                if (storedEntity != null)
+                {
+                    TEntity attachedEntity = session.Merge(entity);
+
+                    session.SaveOrUpdate(attachedEntity);
+                }
+                else
+                {
+                    session.Save(entity, id);
+                }
             }
         }
 

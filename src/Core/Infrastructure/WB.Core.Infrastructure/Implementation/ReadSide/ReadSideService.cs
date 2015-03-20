@@ -482,10 +482,13 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                 try
                 {
+                    this.transactionManagerProviderManager.GetTransactionManager().BeginCommandTransaction();
                     writer.DisableCache();
+                    this.transactionManagerProviderManager.GetTransactionManager().CommitCommandTransaction();
                 }
                 catch (Exception exception)
                 {
+                    this.transactionManagerProviderManager.GetTransactionManager().RollbackCommandTransaction();
                     string message = string.Format("Failed to disable cache and store data to repository for writer {0}.", GetStorageEntityName(writer));
                     this.SaveErrorForStatusReport(message, exception);
                     UpdateStatusMessage(message);
@@ -504,7 +507,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
             ThrowIfShouldStopViewsRebuilding();
 
-            this.logger.Info("Starting rebuild Read Layer");
+            this.logger.Info("Starting rebuild Read Side");
 
             UpdateStatusMessage("Determining count of events to be republished.");
 
@@ -542,7 +545,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                 if (this.FailedEventsCount >= MaxAllowedFailedEvents)
                 {
-                    var message = string.Format("Failed to rebuild read layer. Too many events failed: {0}. Last processed event count: {1}", this.FailedEventsCount, this.processedEventsCount);
+                    var message = string.Format("Failed to rebuild read side. Too many events failed: {0}. Last processed event count: {1}", this.FailedEventsCount, this.processedEventsCount);
                     UpdateStatusMessage(message);
                     this.logger.Error(message);
                     throw new OperationCanceledException(message);
