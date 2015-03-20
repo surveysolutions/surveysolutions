@@ -2,10 +2,15 @@
     .controller('GroupCtrl',
         function ($rootScope, $scope, $stateParams, questionnaireService, commandService, hotkeys) {
             $scope.currentChapterId = $stateParams.chapterId;
+
+            if (hotkeys.get('ctrl+s') !== false) {
+                hotkeys.del('ctrl+s');
+            }
+
             hotkeys.bindTo($scope)
              .add({
                  combo: 'ctrl+s',
-                 description: 'Save current group',
+                 description: 'Save changes',
                  allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                  callback: function (event) {
                      $scope.saveGroup();

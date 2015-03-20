@@ -15,6 +15,16 @@ angular.module('designerApp')
                 rostersCount: 0
             };
 
+            if (hotkeys.get('alt+x') === false) {
+                hotkeys.del('alt+x');
+            }
+            if (hotkeys.get('alt+e') === false) {
+                hotkeys.del('alt+e');
+            }
+            if (hotkeys.get('left') === false) {
+                hotkeys.del('left');
+            }
+
             hotkeys.add({
                 combo: 'esc',
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
@@ -22,9 +32,8 @@ angular.module('designerApp')
                     $scope.verificationStatus.visible = false;
                 }
             });
-
-            if (hotkeys.get('alt+x') === false) {
-                hotkeys.add({
+           
+            hotkeys.add({
                     combo: 'alt+x',
                     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                     description: 'Focus questionnaire tree',
@@ -33,26 +42,21 @@ angular.module('designerApp')
                         document.activeElement.blur();
                     }
                 });
-            }
-
-            if (hotkeys.get('alt+e') === false) {
-                hotkeys.add({
+           
+            hotkeys.add({
                     combo: 'alt+e',
                     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                    description: 'Focus questionnaire tree',
+                    description: 'Focus title field in editor',
                     callback: function (event) {
                         event.preventDefault();
                         $($(".question-editor textarea").get(0)).focus();
                     }
                 });
-            }
-
-            if (hotkeys.get('left') === false) {
-                hotkeys.add('left', 'Open chapters', function (event) {
+          
+            hotkeys.add('left', 'Open chapters', function (event) {
                     event.preventDefault();
                     $scope.$broadcast("openChaptersList", "");
                 });
-            }
 
             $scope.questionnaireId = $state.params.questionnaireId;
 
@@ -64,6 +68,10 @@ angular.module('designerApp')
                     $scope.verificationStatus.time = new Date();
                     $scope.verificationStatus.visible = result.errorsCount > 0;
                 });
+            };
+
+            $scope.toggleCheatSheet = function() {
+                hotkeys.toggleCheatSheet();
             };
 
             $scope.answerTypeClass = {

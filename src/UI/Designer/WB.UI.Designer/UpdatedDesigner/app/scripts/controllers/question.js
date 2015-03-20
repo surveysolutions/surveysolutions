@@ -6,7 +6,7 @@
             hotkeys.bindTo($scope)
               .add({
                   combo: 'ctrl+s',
-                  description: 'Save current question',
+                  description: 'Save changes',
                   allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                   callback: function (event) {
                       $scope.saveQuestion();
