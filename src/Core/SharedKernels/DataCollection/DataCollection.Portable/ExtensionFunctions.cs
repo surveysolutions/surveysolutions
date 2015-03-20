@@ -140,21 +140,6 @@ namespace WB.Core.SharedKernels.DataCollection
             return !candidates.ContainsAny(singlechoice.Value);
         }
 
-        /// <summary>
-        /// Counts the occurrancies of a certain value in a group of single choice questions
-        /// </summary>
-        /// <param name="x">Specific value to be searched for.</param>
-        /// <param name="singleChoiceQuestions">One or more single choice questions.</param>
-        /// <returns>Number of occurrancies of the specified value or zero if it is never encountered.</returns>
-        public static long CountValue(decimal x, params decimal?[] singleChoiceQuestions)
-        {
-            var c = 0;
-            foreach (var variable in singleChoiceQuestions)
-                if (variable.HasValue) if (variable.Value == x) c++;
-
-            return c;
-        }
-
         public static long CountValues(this decimal[] multichoice, params decimal[] candidates)
         {
             if (multichoice == null) return 0;
@@ -168,18 +153,6 @@ namespace WB.Core.SharedKernels.DataCollection
                 if (ContainsAny(multichoice, c)) n++;
 
             return n;
-        }
-
-        public static long CmCode(long? mo, long? year)
-        {
-            const long baseYear = 1900; // not sure how other calendars will be handled?? e.g. Afghanistan, Thailand, etc.
-            if (year == null) return -1;
-            if (mo == null) return -1;
-
-            if (mo.Value < 1 || mo.Value > 12) return -1;
-            if (year.Value < baseYear) return -1;
-
-            return (year.Value - baseYear) * 12 + mo.Value;
         }
 
         public static bool IsMilTime(this string s)
@@ -204,6 +177,5 @@ namespace WB.Core.SharedKernels.DataCollection
             if (milZones.IndexOf(s.Substring(4, 1)) < 0) return false;
             return true;
         }
-
     }
 }
