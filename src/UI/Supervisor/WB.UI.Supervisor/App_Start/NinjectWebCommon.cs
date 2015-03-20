@@ -26,7 +26,6 @@ using WB.Core.Infrastructure.Storage.Esent;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernels.SurveyManagement;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
@@ -126,7 +125,7 @@ namespace WB.UI.Supervisor.App_Start
                 new NLogLoggingModule(),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath),
                 new QuestionnaireUpgraderModule(),
-                new RavenReadSideInfrastructureModule(ravenSettings, ravenReadSideRepositoryWriterSettings, typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly, typeof(UserSyncPackagesByBriefFields).Assembly),
+                //new RavenReadSideInfrastructureModule(ravenSettings, ravenReadSideRepositoryWriterSettings, typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly, typeof(UserSyncPackagesByBriefFields).Assembly),
                 new RavenPlainStorageInfrastructureModule(ravenSettings),
                 new FileInfrastructureModule(),
                 new SupervisorCoreRegistry(),

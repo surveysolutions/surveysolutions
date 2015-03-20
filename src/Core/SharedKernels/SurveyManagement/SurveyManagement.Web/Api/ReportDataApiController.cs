@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Http;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
@@ -18,18 +21,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public class ReportDataApiController : BaseApiController
     {
-        private readonly IViewFactory<HeadquarterSupervisorsAndStatusesReportInputModel, HeadquarterSupervisorsAndStatusesReportView>
-            headquarterSupervisorsAndStatusesReport;
+        private readonly ITeamsAndStatusesReport teamsAndStatusesReport;
 
-        private readonly ISurveysAndStatusesReport
-            surveysAndStatusesReport;
+        private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+
+        private readonly ISurveysAndStatusesReport surveysAndStatusesReport;
 
         private readonly IChartStatisticsViewFactory chartStatisticsViewFactory;
-
-        private readonly IViewFactory<SupervisorTeamMembersAndStatusesReportInputModel, SupervisorTeamMembersAndStatusesReportView>
-            supervisorTeamMembersAndStatusesReport;
-
-        private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView> questionnaireBrowseViewFactory;
 
         private readonly IViewFactory<MapReportInputModel, MapReportView> mapReport;
 
@@ -39,31 +37,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             ICommandService commandService,
             IGlobalInfoProvider provider,
             ILogger logger,
-            ISurveysAndStatusesReport
-                surveysAndStatusesReport,
-            IViewFactory<HeadquarterSupervisorsAndStatusesReportInputModel, HeadquarterSupervisorsAndStatusesReportView>
-                headquarterSupervisorsAndStatusesReport,
-            IViewFactory<SupervisorTeamMembersAndStatusesReportInputModel, SupervisorTeamMembersAndStatusesReportView>
-                supervisorTeamMembersAndStatusesReport,
-            IViewFactory<MapReportInputModel, MapReportView> mapReport,
-            IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView> questionnaireBrowseViewFactory, 
+            ISurveysAndStatusesReport surveysAndStatusesReport,
+            ITeamsAndStatusesReport teamsAndStatusesReport,
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+            IViewFactory<MapReportInputModel, MapReportView> mapReport, 
             IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory,
             IChartStatisticsViewFactory chartStatisticsViewFactory)
             : base(commandService, provider, logger)
         {
             this.surveysAndStatusesReport = surveysAndStatusesReport;
-            this.headquarterSupervisorsAndStatusesReport = headquarterSupervisorsAndStatusesReport;
-            this.supervisorTeamMembersAndStatusesReport = supervisorTeamMembersAndStatusesReport;
-            this.mapReport = mapReport;
+            this.teamsAndStatusesReport = teamsAndStatusesReport;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.mapReport = mapReport;
             this.questionInforFactory = questionInforFactory;
             this.chartStatisticsViewFactory = chartStatisticsViewFactory;
         }
 
         [HttpPost]
-        public SupervisorTeamMembersAndStatusesReportView SupervisorTeamMembersAndStatusesReport(SummaryListViewModel data)
+        public TeamsAndStatusesReportView SupervisorTeamMembersAndStatusesReport(SummaryListViewModel data)
         {
-            var input = new SupervisorTeamMembersAndStatusesReportInputModel(this.GlobalInfo.GetCurrentUser().Id);
+            var input = new TeamsAndStatusesInputModel
+            {
+                ViewerId = this.GlobalInfo.GetCurrentUser().Id
+            };
+
 
             if (data != null)
             {
@@ -81,7 +78,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 }
             }
 
-            return this.supervisorTeamMembersAndStatusesReport.Load(input);
+            var result = this.teamsAndStatusesReport.Load(input);
+            return result;
         }
 
         [HttpPost]
@@ -93,10 +91,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpPost]
         public QuestionnaireAndVersionsView Questionnaires(QuestionnaireBrowseInputModel input)
         {
-            return this.questionnaireBrowseViewFactory.Load(input);
+            QuestionnaireBrowseView questionnaireBrowseView = this.questionnaireBrowseViewFactory.Load(input);
+            var result = new QuestionnaireAndVersionsView();
+            result.Items = questionnaireBrowseView.Items.Select(x => new QuestionnaireAndVersionsItem
+            {
+                   QuestionnaireId = x.QuestionnaireId,
+                   Title = x.Title,
+                   Versions = questionnaireBrowseView.Items.Where(q => q.QuestionnaireId == x.QuestionnaireId)
+                                                           .Select(y => y.Version).ToArray()
+            }).ToArray();
+            result.TotalCount = questionnaireBrowseView.TotalCount;
+            return result;
         }
 
-        [HttpPost]
         public QuestionnaireQuestionInfoView QuestionInfo(QuestionnaireQuestionInfoInputModel input)
         {
             return this.questionInforFactory.Load(input);
@@ -126,9 +133,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpPost]
-        public HeadquarterSupervisorsAndStatusesReportView HeadquarterSupervisorsAndStatusesReport(SummaryListViewModel data)
+        public TeamsAndStatusesReportView HeadquarterSupervisorsAndStatusesReport(SummaryListViewModel data)
         {
-            var input = new HeadquarterSupervisorsAndStatusesReportInputModel();
+            var input = new TeamsAndStatusesInputModel();
 
             if (data != null)
             {
@@ -146,7 +153,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 }
             }
 
-            return this.headquarterSupervisorsAndStatusesReport.Load(input);
+            return this.teamsAndStatusesReport.Load(input);
         }
 
         [HttpPost]

@@ -36,14 +36,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 var totalCount = CountInStatus(input, filetredInterviews, null);
 
                 var statistics = new List<StatisticsLineGroupedByUserAndTemplate>();
-                foreach (var countResult in supervisorAssignedStatusCount)
+                foreach (var questionnaireWithVersion in totalCount.Select(x => new {x.QuestionnaireId, x.QuestionnaireVersion}).Distinct())
                 {
-                    Func<CounterObject, bool> findQuestionnaire = x => x.QuestionnaireId == countResult.QuestionnaireId && x.QuestionnaireVersion == countResult.QuestionnaireVersion;
+                    Func<CounterObject, bool> findQuestionnaire = x => x.QuestionnaireId == questionnaireWithVersion.QuestionnaireId && x.QuestionnaireVersion == questionnaireWithVersion.QuestionnaireVersion;
                     statistics.Add(new StatisticsLineGroupedByUserAndTemplate
                     {
-                        QuestionnaireId = countResult.QuestionnaireId,
-                        QuestionnaireVersion = countResult.QuestionnaireVersion,
-                        QuestionnaireTitle = countResult.QuestionnaireTitle,
+                        QuestionnaireId = questionnaireWithVersion.QuestionnaireId,
+                        QuestionnaireVersion = questionnaireWithVersion.QuestionnaireVersion,
+                        QuestionnaireTitle =            Monads.Maybe(() => totalCount.SingleOrDefault(findQuestionnaire).QuestionnaireTitle),
                         SupervisorAssignedCount =       Monads.Maybe(() => supervisorAssignedStatusCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
                         InterviewerAssignedCount =      Monads.Maybe(() => interviewerAssignedCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
                         CompletedCount =                Monads.Maybe(() => completedCount.SingleOrDefault(findQuestionnaire).InterviewsCount),

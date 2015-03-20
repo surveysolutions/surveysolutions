@@ -114,7 +114,6 @@
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="EventHandler\AnswersByVariableDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemEventHandler.cs" />
-    <Compile Include="Implementation\ReadSide\Indexes\SeachIndexContent.cs" />
     <Compile Include="Implementation\ReadSide\RepositoryAccessors\OrderableSyncPackageWriter.cs" />
     <Compile Include="EventHandler\ClientDeviceDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewHistoryDenormalizer.cs" />
@@ -182,11 +181,6 @@
     <Compile Include="Implementation\Services\Sql\SqliteServiceFactory.cs" />
     <Compile Include="Implementation\Synchronization\Constants.cs" />
     <Compile Include="Implementation\Synchronization\IncomingSyncPackagesQueue.cs" />
-    <Compile Include="Implementation\ReadSide\Indexes\HeadquarterReportsSurveysAndStatusesGroupByTeam.cs" />
-    <Compile Include="Implementation\ReadSide\Indexes\HeadquarterReportsTeamsAndStatusesGroupByTeam.cs" />
-    <Compile Include="Implementation\ReadSide\Indexes\QuestionnaireBrowseItemsGroupByQuestionnaireIdIndex.cs" />
-    <Compile Include="Implementation\ReadSide\Indexes\SupervisorReportsSurveysAndStatusesGroupByTeamMember.cs" />
-    <Compile Include="Implementation\ReadSide\Indexes\SupervisorReportsTeamMembersAndStatusesGroupByTeamMember.cs" />
     <Compile Include="Implementation\Repositories\FilebasedPreloadedDataRepository.cs" />
     <Compile Include="Implementation\SampleRecordsAccessors\CsvRecordsAccessor.cs" />
     <Compile Include="Implementation\Services\ApplicationVersionSettings.cs" />
@@ -350,21 +344,20 @@
     <Compile Include="Views\Questionnaire\QuestionnaireQuestionsInfo.cs" />
     <Compile Include="Views\Questionnaire\ReferenceInfoByQuestion.cs" />
     <Compile Include="Views\Questionnaire\ReferenceInfoForLinkedQuestions.cs" />
-    <Compile Include="Views\Reposts\Factories\HeadquarterSupervisorsAndStatusesReport.cs" />
+    <Compile Include="Views\Reposts\Factories\TeamsAndStatusesReport.cs" />
+    <Compile Include="Views\Reposts\ITeamsAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\SurveysAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\ISurveysAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\MapReport.cs" />
     <Compile Include="Views\Reposts\Factories\QuestionnaireQuestionInfoFactory.cs" />
-    <Compile Include="Views\Reposts\Factories\QuestionnairesAndVersionsFactory.cs" />
-    <Compile Include="Views\Reposts\Factories\SupervisorTeamMembersAndStatusesReport.cs" />
-    <Compile Include="Views\Reposts\InputModels\HeadquarterSupervisorsAndStatusesReportInputModel.cs" />
+    <Compile Include="Views\Reposts\InputModels\TeamsAndStatusesInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\SurveysAndStatusesReportInputModel.cs" />
     <Compile Include="Views\Interviews\ChartStatisticsInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\MapReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\QuestionnaireQuestionInfoInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\SupervisorTeamMembersAndStatusesReportInputModel.cs" />
-    <Compile Include="Views\Reposts\Views\HeadquarterSupervisorsAndStatusesReportLine.cs" />
-    <Compile Include="Views\Reposts\Views\HeadquarterSupervisorsAndStatusesReportView.cs" />
+    <Compile Include="Views\Reposts\Views\TeamsAndStatusesReportLine.cs" />
+    <Compile Include="Views\Reposts\Views\TeamsAndStatusesReportView.cs" />
     <Compile Include="Views\Reposts\Views\HeadquarterSurveysAndStatusesReportLine.cs" />
     <Compile Include="Views\Reposts\Views\SurveysAndStatusesReportView.cs" />
     <Compile Include="Views\Reposts\Views\MapPointView.cs" />
@@ -372,9 +365,6 @@
     <Compile Include="Views\Reposts\Views\QuestionnaireAndVersionsView.cs" />
     <Compile Include="Views\Reposts\Views\QuestionnaireQuestionInfoView.cs" />
     <Compile Include="Views\Reposts\Views\ReportLineCounters.cs" />
-    <Compile Include="Views\Reposts\Views\SupervisorSurveysAndStatusesReportLine.cs" />
-    <Compile Include="Views\Reposts\Views\SupervisorTeamMembersAndStatusesReportLine.cs" />
-    <Compile Include="Views\Reposts\Views\SupervisorTeamMembersAndStatusesReportView.cs" />
     <Compile Include="Views\Reposts\Views\TemplateViewItem.cs" />
     <Compile Include="Views\Reposts\Views\UsersViewItem.cs" />
     <Compile Include="Views\Revalidate\InterviewInfoForRevalidationFactory.cs" />
@@ -470,7 +460,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Implementation\ReadSide\Indexes\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

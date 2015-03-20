@@ -36,7 +36,6 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Mappings;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
@@ -162,11 +161,6 @@ namespace WB.UI.Headquarters
             NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
             NcqrsEnvironment.InitDefaults();
 
-
-            var assembliesWithIndexes = new[]
-            { typeof (SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly, typeof (UserSyncPackagesByBriefFields).Assembly };
-            kernel.Bind<IReadSideRepositoryIndexAccessor>().To<RavenReadSideRepositoryIndexAccessor>().InSingletonScope()
-             .WithConstructorArgument("assembliesWithIndexes", assembliesWithIndexes); 
 
             var eventStoreModule = ModulesFactory.GetEventStoreModule();
 

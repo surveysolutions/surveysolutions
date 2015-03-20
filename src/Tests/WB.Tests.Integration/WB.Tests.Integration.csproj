@@ -214,15 +214,6 @@
     <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_remove_called_and_cache_is_disabled.cs" />
     <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_store_called_and_cache_is_disabled.cs" />
     <Compile Include="StringExtensions.cs" />
-    <Compile Include="SurveyManagement\RavenIndexes\RavenIndexesTestContext.cs" />
-    <Compile Include="SurveyManagement\RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_4_misc_questionnaire_browse_items.cs" />
-    <Compile Include="SurveyManagement\RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_approve_statuses.cs" />
-    <Compile Include="SurveyManagement\RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_complete_statuses.cs" />
-    <Compile Include="SurveyManagement\RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_error_statuses.cs" />
-    <Compile Include="SurveyManagement\RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_initial_statuses.cs" />
-    <Compile Include="SurveyManagement\RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_redo_statuses.cs" />
-    <Compile Include="SurveyManagement\RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_unassigned_statuses.cs" />
-    <Compile Include="Synchronization\RavenIndexes\InterviewSyncPackagesGroupedByRootTests\when_applying_index_to_3_misc_InterviewSyncPackageMeta.cs" />
     <Compile Include="ZipUtilsTests\ZipUtilsTestsFixture.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -291,6 +282,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="QuestionnaireTests\" />
+    <Folder Include="SurveyManagement\" />
+    <Folder Include="Synchronization\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
