@@ -144,15 +144,15 @@ namespace WB.Core.Infrastructure.Storage.Postgre
 
         private static object GetReadSideKeyValueStorage(IContext context)
         {
-            return context.Kernel.GetService(typeof (PostgreKeyValueStorage<>).MakeGenericType(context.GenericArguments[0]));
+            //return context.Kernel.GetService(typeof (PostgreKeyValueStorage<>).MakeGenericType(context.GenericArguments[0]));
 
-//            var genericProvider = this.Kernel.Get(
-//                typeof(MemoryCachedKeyValueStorageProvider<>).MakeGenericType(context.GenericArguments[0])) as
-//                IProvider;
-//
-//            if (genericProvider == null)
-//                return null;
-//            return genericProvider.Create(context);
+            var genericProvider = context.Kernel.Get(
+                typeof(MemoryCachedKeyValueStorageProvider<>).MakeGenericType(context.GenericArguments[0])) as
+                IProvider;
+
+            if (genericProvider == null)
+                return null;
+            return genericProvider.Create(context);
         }
 
         private class MemoryCachedKeyValueStorageProvider<TEntity> : Provider<IReadSideKeyValueStorage<TEntity>>
@@ -175,15 +175,15 @@ namespace WB.Core.Infrastructure.Storage.Postgre
 
         private static object GetReadSideRepositoryWriter(IContext context)
         {
-            return context.Kernel.GetService(typeof(PostgreReadSideRepository<>).MakeGenericType(context.GenericArguments[0]));
+//            return context.Kernel.GetService(typeof(PostgreReadSideRepository<>).MakeGenericType(context.GenericArguments[0]));
 
-//            var genericProvider = this.Kernel.Get(
-//                  typeof(MemoryCachedReadSideRepositoryWriterProvider<>).MakeGenericType(context.GenericArguments[0])) as
-//                  IProvider;
-//
-//            if (genericProvider == null)
-//                return null;
-//            return genericProvider.Create(context);
+            var genericProvider = context.Kernel.Get(
+                  typeof(MemoryCachedReadSideRepositoryWriterProvider<>).MakeGenericType(context.GenericArguments[0])) as
+                  IProvider;
+
+            if (genericProvider == null)
+                return null;
+            return genericProvider.Create(context);
         }
     }
 }
