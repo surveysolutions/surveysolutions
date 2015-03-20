@@ -9,7 +9,6 @@ using System.Xml.Serialization;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
-using NHibernate.Mapping;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using NHibernate.Tool.hbm2ddl;
@@ -80,6 +79,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
                 db.Dialect<NHibernate.Dialect.PostgreSQL82Dialect>();
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
             });
+            cfg.Proxy(proxy => proxy.ProxyFactoryFactory<NHibernate.ByteCode.Castle.ProxyFactoryFactory>());
 
             cfg.AddDeserializedMapping(GetMappings(), "Main");
             var update = new SchemaUpdate(cfg);
