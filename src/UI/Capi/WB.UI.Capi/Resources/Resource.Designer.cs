@@ -54,6 +54,7 @@ namespace WB.UI.Capi
 			global::WB.UI.Shared.Android.Resource.Drawable.flashbuttonon = global::WB.UI.Capi.Resource.Drawable.flashbuttonon;
 			global::WB.UI.Shared.Android.Resource.Drawable.grid_headerItem = global::WB.UI.Capi.Resource.Drawable.grid_headerItem;
 			global::WB.UI.Shared.Android.Resource.Drawable.ic_drawer_dark = global::WB.UI.Capi.Resource.Drawable.ic_drawer_dark;
+			global::WB.UI.Shared.Android.Resource.Drawable.infowarningstyle = global::WB.UI.Capi.Resource.Drawable.infowarningstyle;
 			global::WB.UI.Shared.Android.Resource.Drawable.no_image_found = global::WB.UI.Capi.Resource.Drawable.no_image_found;
 			global::WB.UI.Shared.Android.Resource.Drawable.overlay = global::WB.UI.Capi.Resource.Drawable.overlay;
 			global::WB.UI.Shared.Android.Resource.Drawable.questionAnsweredShape = global::WB.UI.Capi.Resource.Drawable.questionAnsweredShape;

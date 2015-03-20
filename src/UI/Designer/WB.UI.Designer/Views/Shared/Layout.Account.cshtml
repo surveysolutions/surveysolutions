@@ -30,9 +30,9 @@
     <header>
         <a href="http://www.worldbank.org" class="logo"></a>
         <nav>
-            <button class="btn btn-default">Help</button>
-            <button class="btn btn-default">Register</button>
-            <button class="btn btn-default">Log in</button>
+            <a class="btn btn-default">Help</a>
+            <a class="btn btn-default" href="@Url.Action("Register","Account")">Register</a>
+            <a class="btn btn-default" href="@Url.Action("Login", "Account")">Log in</a>
         </nav>
     </header>
 
@@ -51,7 +51,7 @@
                             <div class="form-left">
                                 <img src="~/UpdatedDesigner/content/i/designer-logo.png" />
                                 <p>
-                                    This is free tool for creating surveys for The World Bank’s CAPI platform with
+                                    This is a free tool for creating surveys for The World Bank’s CAPI platform with
                                     collaboration
                                     capabilities, export to PDF
                                 </p>
