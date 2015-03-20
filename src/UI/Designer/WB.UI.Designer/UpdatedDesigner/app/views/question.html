@@ -405,9 +405,17 @@
         </script>
 
         <script type="text/ng-template" id="TextList-template.html">
-            <div class="form-group">
+            <div class="form-group" ng-class="{'has-error': !questionForm.maxAnswerCount.$valid}">
                 <label for="edit-question-max-answers-number">Maximum number of answers</label>
-                <input id="edit-question-max-answers-number" type="text" ng-model="activeQuestion.maxAnswerCount" class="form-control">
+                <input id="edit-question-max-answers-number" 
+                       name="maxAnswerCount" 
+                       type="text" 
+                       ng-pattern="/^\d+$/" 
+                       ng-model="activeQuestion.maxAnswerCount" 
+                       class="form-control" />
+                <p class="help-block ng-cloak" ng-show="questionForm.maxAnswerCount.$error.pattern">
+                    Only integers are allowed
+                </p>
             </div>
         </script>
 
