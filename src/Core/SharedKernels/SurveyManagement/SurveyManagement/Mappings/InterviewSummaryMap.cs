@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
                 collection => {
                     collection.Key(c => c.Column("InterviewSummaryId"));
                     collection.Table("AnswersToFeaturedQuestions");
-                    collection.Cascade(Cascade.All);
+                    collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
                     collection.Inverse(true);
                     collection.BatchSize(12);
                 },
@@ -48,16 +48,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Set(x => x.QuestionOptions,
                collection =>
                {
-                   collection.Table("QuestionOptions");
                    collection.Key(key => key.Column("InterviewSummaryId"));
                    collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
+                   collection.Inverse(true);
                },
-               relation => relation.Component(element =>
-               {
-                   element.Property(x => x.QuestionId);
-                   element.Property(x => x.Text);
-                   element.Property(x => x.Value);
-               }));
+               relation => relation.OneToMany());
+        }
+    }
+
+    public class QuestionOptionsMap : ClassMapping<QuestionOptions>
+    {
+        public QuestionOptionsMap()
+        {
+            Table("QuestionOptions");
+            Id(x => x.Id, id => id.Generator(Generators.HighLow));
+            Property(x => x.QuestionId);
+            Property(x => x.Text);
+            Property(x => x.Value);
         }
     }
 
