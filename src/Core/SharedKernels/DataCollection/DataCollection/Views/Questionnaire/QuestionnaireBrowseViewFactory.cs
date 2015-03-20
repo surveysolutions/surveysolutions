@@ -1,12 +1,11 @@
 ﻿using System.Linq;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 
 namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 {
-    public class QuestionnaireBrowseViewFactory : IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>, IQuestionnaireBrowseViewFactory
+    public class QuestionnaireBrowseViewFactory : IQuestionnaireBrowseViewFactory
     {
         private readonly IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> reader;
 

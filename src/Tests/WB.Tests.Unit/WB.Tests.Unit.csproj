@@ -359,8 +359,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_deleted_by_synchronization.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_restored_by_synchronization.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Factories\AllUsersAndQuestionnairesFactoryTests\when_unlocked_supervisors_and_active_templates_should_be_returned.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Factories\TeamUsersAndQuestionnairesFactoryTests\when_unlocked_interviewers_and_active_templates_should_be_returned.cs" />
     <Compile Include="SharedKernels\SurveyManagement\HealthCheckTests\FolderPermissionCheckerTests\when_check_folders_permissions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\IncomingPackagesQueueTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_method_called.cs" />
@@ -1878,8 +1876,6 @@
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionInfoFactoryTests\when_loading_list_of_all_questions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionInfoFactoryTests\when_loading_list_of_all_questions_and_questionnaire_is_absent.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionInfoFactoryTests\when_loading_list_of_geo_questions.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionnairesAndVersionsFactoryTests\QuestionnairesAndVersionsFactoryTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionnairesAndVersionsFactoryTests\when_loading_second_page_with_data.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireUpgradeServiceTests\QuestionnaireUpgradeServiceTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireUpgradeServiceTests\when_CreateRostersVariableName_called_for_QuestionnaireDocument_with_invalid_roster_variable_name.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ResourceControllerTests\when_getting_interview_file_which_is_absent.cs" />
