@@ -45,7 +45,6 @@ using WB.UI.Supervisor.App_Start;
 using WB.UI.Supervisor.Controllers;
 using WebActivatorEx;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.Synchronization.Implementation.ReadSide.Indexes;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: ApplicationShutdownMethod(typeof(NinjectWebCommon), "Stop")]
