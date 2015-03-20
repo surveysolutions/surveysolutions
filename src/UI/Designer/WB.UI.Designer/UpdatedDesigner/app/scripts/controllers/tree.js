@@ -59,7 +59,7 @@
             if (hotkeys.get('enter') === false) {
                 hotkeys.add({
                     combo: 'enter',
-                    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                    allowIn: ['INPUT', 'SELECT'],
                     description: 'Open item in editor',
                     callback: function(event) {
                         event.preventDefault();

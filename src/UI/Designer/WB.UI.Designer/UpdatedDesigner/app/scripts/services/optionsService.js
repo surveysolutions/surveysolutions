@@ -5,7 +5,7 @@
                 $provide.factory('optionsService', function (utilityService) {
                     var optionsService = {};
 
-                    var regex = new RegExp(/^([^\.]+)[\.\s]+([-+]?\d+(?:\.\d+)?)$/);
+                    var regex = new RegExp(/^([^\.\…]+)[\…\.\s]+([-+]?\d+(?:\.\d+)?)$/);
 
                     optionsService.validateOptionAsText = function (option) {
                         return regex.test((option || "").trim());
