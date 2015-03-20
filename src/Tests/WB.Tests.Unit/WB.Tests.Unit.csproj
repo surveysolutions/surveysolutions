@@ -417,9 +417,9 @@
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorizing_not_an_interviewer.cs" />
     <Compile Include="Applications\Headquarters\FilterTests\InstallationAttributeTests\InstallationAttributeTestsContext.cs" />
     <Compile Include="Applications\Headquarters\FilterTests\InstallationAttributeTests\when_action_executing_and_control_panel_controller.cs" />
-    <Compile Include="Applications\Headquarters\FilterTests\InstallationAttributeTests\when_action_executing_and_hq_user_does_not_exists_and_install_controller.cs" />
-    <Compile Include="Applications\Headquarters\FilterTests\InstallationAttributeTests\when_action_executing_and_hq_user_does_not_exists_and_not_install_controller.cs" />
-    <Compile Include="Applications\Headquarters\FilterTests\InstallationAttributeTests\when_action_executing_and_hq_user_exists_and_install_controller.cs" />
+    <Compile Include="Applications\Headquarters\FilterTests\InstallationAttributeTests\when_action_executing_and_admin_user_does_not_exists_and_install_controller.cs" />
+    <Compile Include="Applications\Headquarters\FilterTests\InstallationAttributeTests\when_action_executing_and_admin_user_does_not_exists_and_not_install_controller.cs" />
+    <Compile Include="Applications\Headquarters\FilterTests\InstallationAttributeTests\when_action_executing_and_admin_user_exists_and_install_controller.cs" />
     <Compile Include="Applications\Headquarters\FilterTests\MaintenanceFilterTests\MaintenanceFilterTestsContext.cs" />
     <Compile Include="Applications\Headquarters\FilterTests\MaintenanceFilterTests\when_action_executing_and_views_are_being_rebuilt_now.cs" />
     <Compile Include="Applications\Headquarters\HQControllerTests\HQControllerTestContext.cs" />
@@ -954,20 +954,15 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_2_rosters_inside_roster_and_question_from_first_child_roster_has_custom_condition___.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_group_inside_roster_that_has_condition_referencing_question_with_deeper_roster_level_.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_group_inside_roster_that_has_condition_referencing_question_with_deeper_roster_level__.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_group_that_has_custom_condition_referencing_MultiAnswer_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_group_that_has_custom_condition_referencing_question_with_deeper_roster_level.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_question_inside_roster_that_has_custom_condition_referencing_question_with_deeper_level.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_question_inside_roster_that_has_custom_condition_referencing_question_with_deeper_lev__.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_question_that_has_custom_condition_referencing_MultiAnswer_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_question_that_has_custom_condition_referencing_question_with_deeper_roster_level.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_roster_inside_roster_and_parent_roster_has_custom_condition___.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_roster_inside_roster_and_second_one_has_custom_condition___.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_roster_inside_roster_that_has_custom_condition_referencing_question_with_same_roster_level.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_roster_that_has_custom_condition_referencing_question_inside_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_roster_that_has_custom_condition_referencing_question_with_same_roster_level.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\QRBarcode\when_verifying_questionnaire_with_group_that_has_enablement_condition_referencing_qr_barcode_question.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\QRBarcode\when_verifying_questionnaire_with_question_that_has_enablement_condition_referencing_qr_barcode_question.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\QRBarcode\when_verifying_questionnaire_with_question_that_has_validation_expression_referencing_qr_barcode_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\QuestionnaireVerifierTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_validating_questionnaire_with_empty_variable_names.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_empty_questionnaire.cs" />
@@ -1017,7 +1012,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_multianswer_and_negative_max_allowed_answers.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_MultiAnswer_question_that_marked_as_filled_by_supervisor.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_MultiAnswer_question_that_marked_as_prefilled.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_MultiAnswer_question_with_custom_validation.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_multimedia_question_that_have_validation_expression.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_multimedia_question_which_used_as_link_source.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_multimedia_question_which_used_in_condition_expression.cs" />
@@ -1027,8 +1021,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_multi_question_without_options.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_multi_question_with_not_unique_titles_and_values.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_one_chapter_and_one_question.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_qr_barcode_question_that_have_validation_expression.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_qr_barcode_question_that_have_validation_message.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_qr_barcode_question_that_marked_as_filled_by_supervisor.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_qr_barcode_question_that_marked_as_prefilled.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_qr_barcode_question_that_used_in_title_substitutions.cs" />
@@ -1039,7 +1031,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_inside_roster_that_has_substitutions_references_with_deeper_roster_level_and__.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_of_type_not_included_in_white_list_of_question_types.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_contains_self_references_in_substitution.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_custom_validation_referencing_MultiAnswer_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_custom_validation_referencing_question_with_deeper_roster_level.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_custom_validation_with_unrecognized_variable_name.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_has_empty_variable_name.cs" />
@@ -1593,7 +1584,6 @@
     <Compile Include="SharedKernels\DataCollection\QuestionnaireAssemblyFileAccessorTests\when_storing_assembly.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\ImportQuestionnaireTests.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\QuestionnaireTestsContext.cs" />
-    <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_disabling_questionnaire_for_delete_and_user_is_not_the_creator_of_this_questionaire.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_questionnaire_has_cascading_options.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_questionnaire_has_multi_question_and_its_type_does_not_support_GetMaxSelectedAnswerOptions_method.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_questionnaire_has_multi_question_and_we_can_get_max_answers_number_for_it.cs" />
