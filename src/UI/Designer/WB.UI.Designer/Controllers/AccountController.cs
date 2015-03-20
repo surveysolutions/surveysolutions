@@ -1,7 +1,5 @@
-﻿using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Utils;
+﻿using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
-using WB.UI.Designer.BootstrapSupport;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Resources;
@@ -119,7 +117,7 @@ namespace WB.UI.Designer.Controllers
                 }
                 else
                 {
-                    this.Error("The current password is incorrect or the new password is invalid.");
+                    this.Error(ErrorMessages.The_current_password_is_incorrect_or_the_new_password_is_invalid);
                 }
             }
 
@@ -127,6 +125,7 @@ namespace WB.UI.Designer.Controllers
             return View(model);
         }
 
+        [HttpGet]
         [AllowAnonymous]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
         public ActionResult PasswordReset()
@@ -155,7 +154,7 @@ namespace WB.UI.Designer.Controllers
                 MembershipUser user = Membership.GetUser(model.UserName, false);
                 if (user == null)
                 {
-                    this.Error(string.Format("User {0} does not exist. Please enter a valid user name", model.UserName));
+                    this.Error(string.Format(ErrorMessages.User_does_not_exist, model.UserName));
                 }
                 else
                 {
@@ -169,7 +168,7 @@ namespace WB.UI.Designer.Controllers
                                 ConfirmationToken = confirmationToken
                             }).SendAsync();
 
-                    this.Error("To complete the reset password process look for an email in your inbox that provides further instructions.");
+                    this.Error(ErrorMessages.Look_for_an_email_in_your_inbox);
                     return this.RedirectToAction("Login");
                 }
             }
@@ -227,12 +226,12 @@ namespace WB.UI.Designer.Controllers
                     }
                     catch (MembershipCreateUserException e)
                     {
-                        this.ModelState.AddModelError("RegisterError", e.StatusCode.ToErrorCode());
+                        this.Error(e.StatusCode.ToErrorCode());
                     }
                     catch (Exception e)
                     {
                         logger.Error("Register user error", e);
-                        this.Error("Unexpected error occurred. Please, try again later");
+                        this.Error(ErrorMessages.Unexpected_error_occurred_Please_try_again_later);
                     }
                 }
             }
@@ -245,7 +244,7 @@ namespace WB.UI.Designer.Controllers
         {
             if (WebSecurity.ConfirmAccount(token))
             {
-                this.Success("You have completed the registration process. You can now logon to the system");
+                this.Success(ErrorMessages.Your_email_is_verified);
                 return this.RedirectToAction("Login");
             }
 
@@ -276,17 +275,17 @@ namespace WB.UI.Designer.Controllers
                     }
                     else
                     {
-                        this.Error("Unexpected problem. Contact with administrator to solve this problem.");
+                        this.Error(ErrorMessages.Unexpected_error_occurred_Please_try_again_later);
                     }
                 }
                 else
                 {
-                    this.Error(string.Format("User {0} already confirmed in system.", model.UserName));
+                    this.Error(string.Format(ErrorMessages.User_already_confirmed_in_system, model.UserName));
                 }
             }
             else
             {
-                this.Error(string.Format("User {0} does not exist. Please enter a valid user name.", id));
+                this.Error(string.Format(ErrorMessages.User_does_not_exist_Please_enter_a_valid_user_name, id));
             }
 
             return this.RedirectToAction("Login");
@@ -308,7 +307,7 @@ namespace WB.UI.Designer.Controllers
             {
                 if (WebSecurity.ResetPassword(model.Token, model.Password))
                 {
-                    this.Success("Your password successfully changed. Now you can login with your new password");
+                    this.Success(ErrorMessages.Your_password_successfully_changed);
                     return this.RedirectToAction("Login");
                 }
                 else
