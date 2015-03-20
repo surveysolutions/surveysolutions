@@ -55,15 +55,10 @@ namespace WB.UI.Headquarters.Controllers
             return this.questionnaireBrowseViewFactory.Load(input);
         }
 
-        [Authorize(Roles = "Administrator")]
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public JsonCommandResponse DeleteQuestionnaire(DeleteQuestionnaireRequestModel request)
         {
-            bool isAdmin = Roles.IsUserInRole(UserRoles.Administrator.ToString());
-
-            if (!isAdmin) 
-                return new JsonCommandResponse() {IsSuccess = false};
-            
             deleteQuestionnaireService.DeleteQuestionnaire(request.QuestionnaireId, request.Version, this.GlobalInfo.GetCurrentUser().Id);
             
             return new JsonCommandResponse() { IsSuccess = true };
