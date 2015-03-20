@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Raven.Client.Linq;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
@@ -47,6 +48,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                         this.QuestionOptions.Add(option);
                     }
                 }
+            }
+        }
+
+        public override Guid InterviewId
+        {
+            get { return base.InterviewId; }
+            set
+            {
+                this.SummaryId = value.FormatGuid();
+                base.InterviewId = value;
             }
         }
 
