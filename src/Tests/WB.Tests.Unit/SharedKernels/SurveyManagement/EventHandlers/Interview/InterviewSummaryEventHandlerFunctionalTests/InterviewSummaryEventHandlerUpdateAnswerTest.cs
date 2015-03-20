@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                         Id = questionId,
                     });
 
-            savedInterviewSummary.QuestionOptions.Add(new QuestionOptions() { Value = 1, Text = answerText });
+            savedInterviewSummary.QuestionOptions.Add(new QuestionOptions() {  QuestionId = questionId, Value = 1, Text = answerText });
 
             var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional();
             var updatedInterviewSummary =
