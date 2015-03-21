@@ -1,4 +1,6 @@
-﻿using System.Web;
+﻿using System;
+using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
@@ -42,11 +44,14 @@ namespace WB.UI.Headquarters.Controllers
             {
                 if (Membership.ValidateUser(model.UserName, passwordHasher.Hash(model.Password)))
                 {
-                    bool isAdmin = Roles.IsUserInRole(model.UserName, UserRoles.Administrator.ToString());
-                    bool isHeadquarter = Roles.IsUserInRole(model.UserName, UserRoles.Headquarter.ToString());
-                    bool isSupervisor = Roles.IsUserInRole(model.UserName, UserRoles.Supervisor.ToString());
+                    var userRoles = Roles.GetRolesForUser(model.UserName);
 
-                    if (isHeadquarter || (isSupervisor && LegacyOptions.SupervisorFunctionsEnabled) || isAdmin)
+                    bool isAdmin = userRoles.Contains(UserRoles.Administrator.ToString(), StringComparer.OrdinalIgnoreCase);
+                    bool isHeadquarter = userRoles.Contains(UserRoles.Headquarter.ToString(), StringComparer.OrdinalIgnoreCase);
+                    bool isSupervisor = userRoles.Contains(UserRoles.Supervisor.ToString(), StringComparer.OrdinalIgnoreCase);
+                    bool isObserver = userRoles.Contains(UserRoles.Observer.ToString(), StringComparer.OrdinalIgnoreCase);
+
+                    if (isHeadquarter || (isSupervisor && LegacyOptions.SupervisorFunctionsEnabled) || isAdmin || isObserver)
                     {
                         this.authentication.SignIn(model.UserName, false);
                         
@@ -58,7 +63,10 @@ namespace WB.UI.Headquarters.Controllers
                         {
                             return this.RedirectToAction("SurveysAndStatuses", "HQ");
                         }
-
+                        if (isObserver)
+                        {
+                            return this.RedirectToAction("Index", "Supervisor");
+                        }
                         if (isAdmin)
                         {
                             return this.RedirectToAction("Index", "Headquarters");
@@ -104,6 +112,39 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             return this.View(model);
+        }
+
+        
+        [Authorize(Roles = "Administrator, Observer")]
+        public ActionResult ObservePerson(string personName)
+        {
+            if (!string.IsNullOrEmpty(personName))
+            {
+                var user = Membership.GetUser(personName);
+                if (user != null)
+                {
+                    var currentUser = GlobalInfo.GetCurrentUser().Name;
+                    var forbiddenRoles = new string[] { UserRoles.Administrator.ToString(), UserRoles.Observer.ToString(), UserRoles.Operator.ToString() };
+
+                    var userRoles = Roles.GetRolesForUser(user.UserName);
+                    bool invalidTargetUser = userRoles.Any(r => forbiddenRoles.Contains(r));
+
+                    //do not forget pass currentuser to display you are observing
+                    if (!invalidTargetUser && !user.IsLockedOut)
+                    {
+                        bool isHeadquarter = userRoles.Contains(UserRoles.Headquarter.ToString(), StringComparer.OrdinalIgnoreCase);
+                        this.authentication.SignIn(user.UserName, false, currentUser);
+                        if (isHeadquarter)
+                            return this.RedirectToAction("SurveysAndStatuses", "HQ");
+                        else
+                        {
+                            return this.RedirectToAction("Index", "Survey");
+                        }
+                    }
+                }
+            }
+
+            return this.RedirectToAction("Index", "Headquarters");
         }
     }
 }

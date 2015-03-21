@@ -14,7 +14,7 @@ using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "Administrator, Observer")]
     public class HeadquartersController : TeamController
     {
         public HeadquartersController(ICommandService commandService, 
@@ -37,6 +37,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public ActionResult Create(UserModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Headquarters;
@@ -59,7 +60,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(model);
         }
 
-        
+        [Authorize(Roles = "Administrator, Observer")]
         public ActionResult Index()
         {
             this.ViewBag.ActivePage = MenuItem.Headquarters;
@@ -67,6 +68,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.View();
         }
 
+        [Authorize(Roles = "Administrator")]
         public ActionResult Edit(Guid id)
         {
             this.ViewBag.ActivePage = MenuItem.Headquarters;
@@ -86,6 +88,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public ActionResult Edit(UserEditModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Headquarters;

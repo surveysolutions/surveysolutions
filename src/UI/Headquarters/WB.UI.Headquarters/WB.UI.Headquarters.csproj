@@ -424,6 +424,10 @@
     <Content Include="Views\Headquarters\Create.cshtml" />
     <Content Include="Views\Headquarters\Edit.cshtml" />
     <Content Include="Views\Headquarters\Index.cshtml" />
+    <Content Include="Views\Observer\Create.cshtml" />
+    <Content Include="Views\Observer\Edit.cshtml" />
+    <Content Include="Views\Observer\Index.cshtml" />
+    <Content Include="Views\Shared\ObserverMainMenu.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -490,11 +494,16 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
+    <Compile Include="Controllers\ObserverController.cs" />
     <Compile Include="Controllers\QuestionnairesApiController.cs" />
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
     <Compile Include="Controllers\HQController.cs" />
     <Compile Include="Controllers\InstallController.cs" />
     <Compile Include="Controllers\HeadquartersController.cs" />
+    <Compile Include="Code\Security\CustomPrincipal.cs" />
+    <Compile Include="Code\Security\CustomIdentity.cs" />
+    <Compile Include="Filters\UpdatePrincipalWebApi.cs" />
+    <Compile Include="Filters\UpdatePrincipal.cs" />
     <Compile Include="Filters\MaintenanceFilter.cs" />
     <Compile Include="Filters\InstallationAttribute.cs" />
     <Compile Include="Filters\SupervisorFunctionsEnabledAttribute.cs" />
