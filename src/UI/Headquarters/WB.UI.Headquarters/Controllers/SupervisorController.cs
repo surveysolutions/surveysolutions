@@ -15,7 +15,7 @@ using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [Authorize(Roles = "Administrator, Headquarter")]
+    [Authorize(Roles = "Administrator, Headquarter, Observer")]
     public class SupervisorController : TeamController
     {
         public SupervisorController(ICommandService commandService, 
@@ -39,6 +39,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator, Headquarter")]
         public ActionResult Create(UserModel model)
         {
             if (this.ModelState.IsValid)
@@ -59,12 +60,13 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(model);
         }
 
-        
+        [Authorize(Roles = "Administrator, Headquarter, Observer")]
         public ActionResult Index()
         {
             return this.View();
         }
 
+        [Authorize(Roles = "Administrator, Headquarter")]
         public ActionResult Edit(Guid id)
         {
             var user = this.GetUserById(id);
@@ -82,6 +84,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator, Headquarter")]
         public ActionResult Edit(UserEditModel model)
         {
             if (this.ModelState.IsValid)
@@ -111,6 +114,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(model);
         }
 
+        [Authorize(Roles = "Administrator, Headquarter")]
         public ActionResult Interviewers(Guid id)
         {
             var supervisor = this.GetUserById(id);
