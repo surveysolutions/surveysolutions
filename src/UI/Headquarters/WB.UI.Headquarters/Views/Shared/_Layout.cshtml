@@ -68,7 +68,7 @@
     @if ((User.Identity as CustomIdentity).IsObserver)
     {
         <div style=" background-color: #f5e488; height: 20px;width: 100%; text-align: center;">
-            Observing mode! Want to return to your account <b> @((User.Identity as CustomIdentity).ObserverName) </b>?
+            Observing mode! Want to return to your account <a href="@Url.Action("ReturnToObserver", "Account", new { area = string.Empty })">@((User.Identity as CustomIdentity).ObserverName)</a>?
         </div>
     }
 <div class="container-fluid">
