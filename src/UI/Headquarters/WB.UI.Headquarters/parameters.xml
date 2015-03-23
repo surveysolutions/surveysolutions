@@ -5,7 +5,7 @@
       defaultValue="Server=127.0.0.1;Port=5432;User Id=postgres;Password=Qwerty1234;Database=SuperHQ-RC-Views;Pooling=true;MinPoolSize=1;MaxPoolSize=100;">
    <parameterEntry kind="XmlFile" 
       scope="\\web.config$" 
-      match="/configuration/connectionStrings/add[@name='ReadSide']/@connectionString" />
+      match="//connectionStrings/add[@name='ReadSide']/@connectionString" />
    </parameter>
 
 
