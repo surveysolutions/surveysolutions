@@ -118,39 +118,54 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="InterviewerApplicationHasHigherVersion_thanSupervisor_Format" xml:space="preserve">
-    <value>Synchronization failed. Interviewer and Supervisor versions are different. Interviewer application has higher version '{0}' than Supervisor '{1}'. Please contact your supervisor.</value>
+    <value>Synchronization failed. Interviewer application has higher version '{0}' than Supervisor '{1}'.</value>
   </data>
   <data name="InvalidDeviceIdentifier" xml:space="preserve">
-    <value>Invalid device identifier. Something has happened with the client app installation, press "Send tablet information" button.</value>
+    <value>Invalid device identifier. Something has happened with the client app installation, please send tablet information.</value>
   </data>
   <data name="InvalidUserFormat" xml:space="preserve">
     <value>Synchronization failed. User is not authorized. Please check your login/password for {0}.</value>
   </data>
   <data name="NoClientIdentifier" xml:space="preserve">
-    <value>System error. Please reinstall application. Installation identifier is missing.</value>
+    <value>Synchronization failed. Please reinstall application. Installation identifier is missing. Please contact developers.</value>
   </data>
   <data name="InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication" xml:space="preserve">
-    <value>Synchronization failed. Interviewer and Supervisor versions are different. Interviewer application has version '{0}' but Supervisor has '{1}'. Update Interviewer application</value>
+    <value>Synchronization failed. Interviewer application has version '{0}' but Supervisor has '{1}'. Please update Interviewer application.</value>
+  </data>
+  <data name="InterviewerIsNotCompatibleWithThisVersion" xml:space="preserve">
+    <value>Synchronization failed. Your application is not compatible with server one. Uninstall your application and download new version of Interviewer app</value>
+  </data>
+  <data name="AndroidDeviceIdWasNotProvided" xml:space="preserve">
+    <value>Synchronization failed. Android device id was not provided. Please contact developers.</value>
+  </data>
+  <data name="WrongAndroidDeviceIdWasProvided" xml:space="preserve">
+    <value>Synchronization failed. Wrong android device id was provided. Please contact developers.</value>
   </data>
   <data name="ServerError" xml:space="preserve">
-    <value>Internal server error occurred. Please contact developers.</value>
+    <value>Synchronization failed. Internal server error occurred. Please contact developers.</value>
   </data>
   <data name="FileWasNotFound" xml:space="preserve">
-    <value>System error. Please contact supervisor. File with latest version was not found</value>
+    <value>Synchronization failed. File with latest version was not found. Please contact developers.</value>
   </data>
   <data name="IncorrectFilesCount" xml:space="preserve">
-    <value>System error. Please contact developers. Incorrect files count</value>
+    <value>Synchronization failed. Incorrect files count. Please contact developers.</value>
   </data>
   <data name="IncorrectMediaType" xml:space="preserve">
-    <value>System error. Please contact developers. Incorrect media type</value>
+    <value>Synchronization failed. Incorrect media type. Please contact developers.</value>
   </data>
   <data name="InvalidSequenceIdentifier" xml:space="preserve">
-    <value>Invalid sequence identifier. Something has happened with the client app installation, press "Send tablet information" button.</value>
+    <value>Synchronization failed. Invalid sequence identifier. Something has happened with the client app installation, press "Send tablet information" button.</value>
   </data>
   <data name="Sync_package_with_id__0__was_not_found_on_serverFormat" xml:space="preserve">
-    <value>System error. Please contact developers. Sync package with id '{0}' was not found on server</value>
+    <value>Synchronization failed.  Sync package with id '{0}' was not found on server. Please contact developers.</value>
   </data>
   <data name="InvalidUserRole" xml:space="preserve">
-    <value>Your account does not have an interviewer role</value>
+    <value>Synchronization failed. Your account does not have an interviewer role. Please contact your supervisor.</value>
+  </data>
+  <data name="InterviewerApplicationHasVersion_butSupervisorHas_PleaseReinstallInterviewerApplication" xml:space="preserve">
+    <value>Synchronization failed. Please uninstall Interviewer application and install it.</value>
+  </data>
+  <data name="Maintenance" xml:space="preserve">
+    <value>Server is on the maintenance mode now. Sorry for the inconvenience. Please, try again later.</value>
   </data>
 </root>

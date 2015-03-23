@@ -26,6 +26,7 @@ namespace WB.UI.Capi
 		
 		public static void UpdateIdValues()
 		{
+			global::Chance.MvvmCross.Plugins.UserInteraction.Droid.Resource.String.library_name = global::WB.UI.Capi.Resource.String.library_name;
 			global::MWBarcodeScanner.Resource.Drawable.flashbuttonoff = global::WB.UI.Capi.Resource.Drawable.flashbuttonoff;
 			global::MWBarcodeScanner.Resource.Drawable.flashbuttonon = global::WB.UI.Capi.Resource.Drawable.flashbuttonon;
 			global::MWBarcodeScanner.Resource.Drawable.overlay = global::WB.UI.Capi.Resource.Drawable.overlay;
@@ -53,6 +54,7 @@ namespace WB.UI.Capi
 			global::WB.UI.Shared.Android.Resource.Drawable.flashbuttonon = global::WB.UI.Capi.Resource.Drawable.flashbuttonon;
 			global::WB.UI.Shared.Android.Resource.Drawable.grid_headerItem = global::WB.UI.Capi.Resource.Drawable.grid_headerItem;
 			global::WB.UI.Shared.Android.Resource.Drawable.ic_drawer_dark = global::WB.UI.Capi.Resource.Drawable.ic_drawer_dark;
+			global::WB.UI.Shared.Android.Resource.Drawable.infowarningstyle = global::WB.UI.Capi.Resource.Drawable.infowarningstyle;
 			global::WB.UI.Shared.Android.Resource.Drawable.no_image_found = global::WB.UI.Capi.Resource.Drawable.no_image_found;
 			global::WB.UI.Shared.Android.Resource.Drawable.overlay = global::WB.UI.Capi.Resource.Drawable.overlay;
 			global::WB.UI.Shared.Android.Resource.Drawable.questionAnsweredShape = global::WB.UI.Capi.Resource.Drawable.questionAnsweredShape;
@@ -112,6 +114,7 @@ namespace WB.UI.Capi
 			global::WB.UI.Shared.Android.Resource.String.ApplicationName = global::WB.UI.Capi.Resource.String.ApplicationName;
 			global::WB.UI.Shared.Android.Resource.String.AreYouSureYouWantToRemoveRowFromRosterFormat = global::WB.UI.Capi.Resource.String.AreYouSureYouWantToRemoveRowFromRosterFormat;
 			global::WB.UI.Shared.Android.Resource.String.No = global::WB.UI.Capi.Resource.String.No;
+			global::WB.UI.Shared.Android.Resource.String.SendingOfInformationPackageIsCanceling = global::WB.UI.Capi.Resource.String.SendingOfInformationPackageIsCanceling;
 			global::WB.UI.Shared.Android.Resource.String.Warning = global::WB.UI.Capi.Resource.String.Warning;
 			global::WB.UI.Shared.Android.Resource.String.Yes = global::WB.UI.Capi.Resource.String.Yes;
 			global::WB.UI.Shared.Android.Resource.String.drawer_close = global::WB.UI.Capi.Resource.String.drawer_close;
@@ -306,8 +309,8 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f050007
 			public const int QuestionnaireVersion = 2131034119;
 			
-			// aapt resource value: 0x7f050035
-			public const int RelativeLayout1 = 2131034165;
+			// aapt resource value: 0x7f050038
+			public const int RelativeLayout1 = 2131034168;
 			
 			// aapt resource value: 0x7f050002
 			public const int ScreenId = 2131034114;
@@ -315,32 +318,32 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f050029
 			public const int btGroup = 2131034153;
 			
+			// aapt resource value: 0x7f05004b
+			public const int btnAnswered = 2131034187;
+			
+			// aapt resource value: 0x7f050051
+			public const int btnBackup = 2131034193;
+			
+			// aapt resource value: 0x7f050053
+			public const int btnCancel = 2131034195;
+			
+			// aapt resource value: 0x7f050047
+			public const int btnCollect = 2131034183;
+			
 			// aapt resource value: 0x7f050048
-			public const int btnAnswered = 2131034184;
+			public const int btnCollectMajor = 2131034184;
 			
-			// aapt resource value: 0x7f05004e
-			public const int btnBackup = 2131034190;
-			
-			// aapt resource value: 0x7f050050
-			public const int btnCancel = 2131034192;
-			
-			// aapt resource value: 0x7f050044
-			public const int btnCollect = 2131034180;
-			
-			// aapt resource value: 0x7f050045
-			public const int btnCollectMajor = 2131034181;
-			
-			// aapt resource value: 0x7f05004c
-			public const int btnComplete = 2131034188;
+			// aapt resource value: 0x7f05004f
+			public const int btnComplete = 2131034191;
 			
 			// aapt resource value: 0x7f05000a
 			public const int btnInstructions = 2131034122;
 			
-			// aapt resource value: 0x7f05004b
-			public const int btnInvalid = 2131034187;
+			// aapt resource value: 0x7f05004e
+			public const int btnInvalid = 2131034190;
 			
-			// aapt resource value: 0x7f050033
-			public const int btnLogin = 2131034163;
+			// aapt resource value: 0x7f050054
+			public const int btnLogin = 2131034196;
 			
 			// aapt resource value: 0x7f05001d
 			public const int btnNewInterview = 2131034141;
@@ -348,29 +351,29 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f050015
 			public const int btnNext = 2131034133;
 			
-			// aapt resource value: 0x7f05004f
-			public const int btnRestore = 2131034191;
+			// aapt resource value: 0x7f050052
+			public const int btnRestore = 2131034194;
 			
 			// aapt resource value: 0x7f050023
 			public const int btnSendTabletInfo = 2131034147;
 			
-			// aapt resource value: 0x7f05004d
-			public const int btnSync = 2131034189;
+			// aapt resource value: 0x7f050050
+			public const int btnSync = 2131034192;
 			
-			// aapt resource value: 0x7f050040
-			public const int btnSyncPoint = 2131034176;
+			// aapt resource value: 0x7f050043
+			public const int btnSyncPoint = 2131034179;
 			
-			// aapt resource value: 0x7f050049
-			public const int btnUnanswered = 2131034185;
+			// aapt resource value: 0x7f05004c
+			public const int btnUnanswered = 2131034188;
 			
-			// aapt resource value: 0x7f050041
-			public const int btnVersion = 2131034177;
+			// aapt resource value: 0x7f050044
+			public const int btnVersion = 2131034180;
+			
+			// aapt resource value: 0x7f050045
+			public const int btnWhereAmI = 2131034181;
 			
 			// aapt resource value: 0x7f050042
-			public const int btnWhereAmI = 2131034178;
-			
-			// aapt resource value: 0x7f05003f
-			public const int editSettingsSyncPoint = 2131034175;
+			public const int editSettingsSyncPoint = 2131034178;
 			
 			// aapt resource value: 0x7f050011
 			public const int etComments = 2131034129;
@@ -378,8 +381,8 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f050014
 			public const int flFragmentHolder = 2131034132;
 			
-			// aapt resource value: 0x7f050038
-			public const int flashButton = 2131034168;
+			// aapt resource value: 0x7f05003b
+			public const int flashButton = 2131034171;
 			
 			// aapt resource value: 0x7f050030
 			public const int footer = 2131034160;
@@ -393,14 +396,20 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f05002b
 			public const int imgAnswerProgress = 2131034155;
 			
-			// aapt resource value: 0x7f05003b
-			public const int llButtom = 2131034171;
+			// aapt resource value: 0x7f050034
+			public const int invalidUserNameOrPassword = 2131034164;
+			
+			// aapt resource value: 0x7f050031
+			public const int knownUsers = 2131034161;
+			
+			// aapt resource value: 0x7f05003e
+			public const int llButtom = 2131034174;
 			
 			// aapt resource value: 0x7f05001f
 			public const int llContainer = 2131034143;
 			
-			// aapt resource value: 0x7f05003a
-			public const int llContent = 2131034170;
+			// aapt resource value: 0x7f05003d
+			public const int llContent = 2131034173;
 			
 			// aapt resource value: 0x7f050021
 			public const int llNavigationHolder = 2131034145;
@@ -414,14 +423,14 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f050009
 			public const int llRoot = 2131034121;
 			
-			// aapt resource value: 0x7f05003d
-			public const int llScreen = 2131034173;
+			// aapt resource value: 0x7f050040
+			public const int llScreen = 2131034176;
 			
-			// aapt resource value: 0x7f050034
-			public const int llSurveyHolder = 2131034164;
+			// aapt resource value: 0x7f050037
+			public const int llSurveyHolder = 2131034167;
 			
-			// aapt resource value: 0x7f050039
-			public const int llTop = 2131034169;
+			// aapt resource value: 0x7f05003c
+			public const int llTop = 2131034172;
 			
 			// aapt resource value: 0x7f05000b
 			public const int llWrapper = 2131034123;
@@ -429,8 +438,8 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f050026
 			public const int login = 2131034150;
 			
-			// aapt resource value: 0x7f050037
-			public const int overlayImage = 2131034167;
+			// aapt resource value: 0x7f05003a
+			public const int overlayImage = 2131034170;
 			
 			// aapt resource value: 0x7f050012
 			public const int pagesSpinner = 2131034130;
@@ -438,14 +447,20 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f050027
 			public const int password = 2131034151;
 			
-			// aapt resource value: 0x7f050036
-			public const int preview_view = 2131034166;
+			// aapt resource value: 0x7f050039
+			public const int preview_view = 2131034169;
 			
-			// aapt resource value: 0x7f05003c
-			public const int qGuid = 2131034172;
+			// aapt resource value: 0x7f05003f
+			public const int qGuid = 2131034175;
 			
 			// aapt resource value: 0x7f05001c
 			public const int rlSurveyHeader = 2131034140;
+			
+			// aapt resource value: 0x7f050036
+			public const int startActivation = 2131034166;
+			
+			// aapt resource value: 0x7f050035
+			public const int startLogin = 2131034165;
 			
 			// aapt resource value: 0x7f050028
 			public const int startSynchronization = 2131034152;
@@ -453,20 +468,20 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f050025
 			public const int syncEndpoint = 2131034149;
 			
-			// aapt resource value: 0x7f050031
-			public const int teLogin = 2131034161;
-			
 			// aapt resource value: 0x7f050032
-			public const int tePassword = 2131034162;
+			public const int teLogin = 2131034162;
+			
+			// aapt resource value: 0x7f050033
+			public const int tePassword = 2131034163;
+			
+			// aapt resource value: 0x7f050049
+			public const int textMem = 2131034185;
+			
+			// aapt resource value: 0x7f050041
+			public const int textSyncPoint = 2131034177;
 			
 			// aapt resource value: 0x7f050046
-			public const int textMem = 2131034182;
-			
-			// aapt resource value: 0x7f05003e
-			public const int textSyncPoint = 2131034174;
-			
-			// aapt resource value: 0x7f050043
-			public const int textWhereAmI = 2131034179;
+			public const int textWhereAmI = 2131034182;
 			
 			// aapt resource value: 0x7f05001a
 			public const int tvComment = 2131034138;
@@ -486,8 +501,8 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f05000d
 			public const int tvError = 2131034125;
 			
-			// aapt resource value: 0x7f05004a
-			public const int tvErrorWarning = 2131034186;
+			// aapt resource value: 0x7f05004d
+			public const int tvErrorWarning = 2131034189;
 			
 			// aapt resource value: 0x7f05002d
 			public const int tvITem = 2131034157;
@@ -501,8 +516,8 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f050024
 			public const int tvSyncResult = 2131034148;
 			
-			// aapt resource value: 0x7f050047
-			public const int tvText = 2131034183;
+			// aapt resource value: 0x7f05004a
+			public const int tvText = 2131034186;
 			
 			// aapt resource value: 0x7f05000e
 			public const int tvTitle = 2131034126;
@@ -632,6 +647,12 @@ namespace WB.UI.Capi
 		public partial class String
 		{
 			
+			// aapt resource value: 0x7f06000b
+			public const int ActiveUsers = 2131099659;
+			
+			// aapt resource value: 0x7f06000f
+			public const int AllYourDataWillBeDeleted = 2131099663;
+			
 			// aapt resource value: 0x7f060005
 			public const int AnswerIsNotPresentInFilteredComboboxOptionsList = 2131099653;
 			
@@ -641,89 +662,107 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f060004
 			public const int AreYouSureYouWantToRemoveRowFromRosterFormat = 2131099652;
 			
-			// aapt resource value: 0x7f06000b
-			public const int Cancel = 2131099659;
+			// aapt resource value: 0x7f06000d
+			public const int AreYouSureYouWantToRestore = 2131099661;
 			
-			// aapt resource value: 0x7f060014
-			public const int CreatingInformationPackage = 2131099668;
+			// aapt resource value: 0x7f060012
+			public const int Cancel = 2131099666;
 			
 			// aapt resource value: 0x7f06000c
-			public const int DetailsFormat = 2131099660;
+			public const int ConfirmDeviceChanging = 2131099660;
 			
-			// aapt resource value: 0x7f060008
-			public const int Hello = 2131099656;
+			// aapt resource value: 0x7f06001c
+			public const int CreatingInformationPackage = 2131099676;
+			
+			// aapt resource value: 0x7f060014
+			public const int DetailsFormat = 2131099668;
+			
+			// aapt resource value: 0x7f060009
+			public const int Hello = 2131099657;
+			
+			// aapt resource value: 0x7f06001b
+			public const int InformationPackage = 2131099675;
+			
+			// aapt resource value: 0x7f060018
+			public const int InformationPackageIsSuccessfullySent = 2131099672;
+			
+			// aapt resource value: 0x7f06001d
+			public const int InformationPackageSizeWarningFormat = 2131099677;
 			
 			// aapt resource value: 0x7f060013
-			public const int InformationPackage = 2131099667;
+			public const int Initializing = 2131099667;
 			
-			// aapt resource value: 0x7f060010
-			public const int InformationPackageIsSuccessfullySent = 2131099664;
+			// aapt resource value: 0x7f060016
+			public const int InterviewLoadingError = 2131099670;
 			
-			// aapt resource value: 0x7f060015
-			public const int InformationPackageSizeWarningFormat = 2131099669;
+			// aapt resource value: 0x7f060017
+			public const int InterviewWithIdIsAbsentFormat = 2131099671;
 			
 			// aapt resource value: 0x7f06000e
-			public const int InterviewLoadingError = 2131099662;
+			public const int MakeThisTabletWorkingDevice = 2131099662;
 			
-			// aapt resource value: 0x7f06000f
-			public const int InterviewWithIdIsAbsentFormat = 2131099663;
+			// aapt resource value: 0x7f060022
+			public const int NetworkStatus = 2131099682;
 			
-			// aapt resource value: 0x7f06001a
-			public const int NetworkStatus = 2131099674;
-			
-			// aapt resource value: 0x7f06001e
-			public const int NewHtmlLine = 2131099678;
+			// aapt resource value: 0x7f060026
+			public const int NewHtmlLine = 2131099686;
 			
 			// aapt resource value: 0x7f060003
 			public const int No = 2131099651;
 			
-			// aapt resource value: 0x7f060017
-			public const int NoAssignments = 2131099671;
+			// aapt resource value: 0x7f06001f
+			public const int NoAssignments = 2131099679;
 			
-			// aapt resource value: 0x7f06001b
-			public const int NowYouareConnectedToMobileNetwork = 2131099675;
+			// aapt resource value: 0x7f060023
+			public const int NowYouareConnectedToMobileNetwork = 2131099683;
 			
-			// aapt resource value: 0x7f06001d
-			public const int NowYouareConnectedToWifiNetwork = 2131099677;
+			// aapt resource value: 0x7f060025
+			public const int NowYouareConnectedToWifiNetwork = 2131099685;
 			
-			// aapt resource value: 0x7f06000d
-			public const int Oops = 2131099661;
+			// aapt resource value: 0x7f060015
+			public const int Oops = 2131099669;
 			
-			// aapt resource value: 0x7f060018
-			public const int PleaseCheckURLInSettingsFormat = 2131099672;
-			
-			// aapt resource value: 0x7f06000a
-			public const int Send = 2131099658;
-			
-			// aapt resource value: 0x7f060016
-			public const int SendingInformationPackage = 2131099670;
-			
-			// aapt resource value: 0x7f060012
-			public const int SendingOfInformationPackageIsCanceled = 2131099666;
+			// aapt resource value: 0x7f060020
+			public const int PleaseCheckURLInSettingsFormat = 2131099680;
 			
 			// aapt resource value: 0x7f060011
-			public const int ThankYouForPackage = 2131099665;
+			public const int Send = 2131099665;
+			
+			// aapt resource value: 0x7f06001e
+			public const int SendingInformationPackage = 2131099678;
+			
+			// aapt resource value: 0x7f06001a
+			public const int SendingOfInformationPackageIsCanceled = 2131099674;
+			
+			// aapt resource value: 0x7f060006
+			public const int SendingOfInformationPackageIsCanceling = 2131099654;
+			
+			// aapt resource value: 0x7f060010
+			public const int SyncIsFinished = 2131099664;
+			
+			// aapt resource value: 0x7f060019
+			public const int ThankYouForPackage = 2131099673;
 			
 			// aapt resource value: 0x7f060001
 			public const int Warning = 2131099649;
 			
-			// aapt resource value: 0x7f060019
-			public const int WebErrorWithStatus = 2131099673;
+			// aapt resource value: 0x7f060021
+			public const int WebErrorWithStatus = 2131099681;
 			
 			// aapt resource value: 0x7f060002
 			public const int Yes = 2131099650;
 			
-			// aapt resource value: 0x7f06001c
-			public const int YouAreNotConnectedToAnyNetwork = 2131099676;
+			// aapt resource value: 0x7f060024
+			public const int YouAreNotConnectedToAnyNetwork = 2131099684;
+			
+			// aapt resource value: 0x7f060008
+			public const int drawer_close = 2131099656;
 			
 			// aapt resource value: 0x7f060007
-			public const int drawer_close = 2131099655;
+			public const int drawer_open = 2131099655;
 			
-			// aapt resource value: 0x7f060006
-			public const int drawer_open = 2131099654;
-			
-			// aapt resource value: 0x7f060009
-			public const int library_name = 2131099657;
+			// aapt resource value: 0x7f06000a
+			public const int library_name = 2131099658;
 			
 			static String()
 			{

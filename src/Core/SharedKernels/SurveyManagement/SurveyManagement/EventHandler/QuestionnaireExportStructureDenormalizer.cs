@@ -2,10 +2,10 @@
 using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -15,14 +15,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     internal class QuestionnaireExportStructureDenormalizer : BaseDenormalizer, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>
     {
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> readsideRepositoryWriter;
+        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> readsideRepositoryWriter;
         private readonly IDataExportRepositoryWriter dataExportWriter;
 
         private readonly IExportViewFactory exportViewFactory;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
         public QuestionnaireExportStructureDenormalizer(
-            IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> readsideRepositoryWriter, IDataExportRepositoryWriter dataExportWriter,
+            IReadSideKeyValueStorage<QuestionnaireExportStructure> readsideRepositoryWriter, IDataExportRepositoryWriter dataExportWriter,
             IExportViewFactory exportViewFactory, IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.readsideRepositoryWriter = readsideRepositoryWriter;
@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
         {
-            this.readsideRepositoryWriter.Remove(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
+            this.readsideRepositoryWriter.AsVersioned().Remove(evnt.EventSourceId.FormatGuid(), evnt.Payload.QuestionnaireVersion);
             this.dataExportWriter.DeleteExportedDataForQuestionnaireVersion(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
         }
 
@@ -64,7 +64,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             var questionnaireExportStructure = this.exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument, version);
             this.dataExportWriter.CreateExportStructureByTemplate(questionnaireExportStructure);
-            this.readsideRepositoryWriter.Store(questionnaireExportStructure, id);
+            this.readsideRepositoryWriter.AsVersioned().Store(questionnaireExportStructure, id.FormatGuid(), version);
         }
     }
 }

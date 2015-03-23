@@ -13,6 +13,8 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.Synchronization.MetaInfo;
+
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.EventHandler
@@ -30,8 +32,7 @@ namespace WB.Tests.Integration.EventHandler
             {
                 try
                 {
-                    types.AddRange(
-                        assembly.GetTypes().Where(eh => type.IsAssignableFrom(eh) && !eh.IsAbstract && !eh.IsInterface));
+                    types.AddRange(assembly.GetTypes().Where(eh => type.IsAssignableFrom(eh) && !eh.IsAbstract && !eh.IsInterface));
                 }
                 catch (ReflectionTypeLoadException)
                 {
@@ -87,7 +88,8 @@ namespace WB.Tests.Integration.EventHandler
             typeof (ILogger), typeof (IQuestionnaireEntityFactory), typeof (IQuestionnaireCacheInitializer),
             typeof (IPlainQuestionnaireRepository), typeof (IQuestionnaireAssemblyFileAccessor), typeof (IExportViewFactory),
             typeof (IQuestionnaireRosterStructureFactory), typeof (IReferenceInfoForLinkedQuestionsFactory),
-            typeof (IQuestionDetailsViewMapper)
+            typeof (IQuestionDetailsViewMapper), typeof(IJsonUtils), typeof(IMetaInfoBuilder),
+            typeof(IInterviewSynchronizationDtoFactory)
         };
       
         private static IEnumerable<ParameterInfo> ExcludeExpectedParameters(ParameterInfo[] allParameters)

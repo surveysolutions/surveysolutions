@@ -1,0 +1,45 @@
+﻿#umbrella {
+    display: none;
+}
+
+.question-answer .radio span {
+    margin-left: 15px;    
+}
+
+.question-answer .radio input[type="radio"] {
+    margin-left: 0px;
+}
+
+.comments .form-horizontal .has-feedback .form-control-feedback {
+    right: 0px;
+}
+
+.visible {
+display: block !important;
+visibility: visible !important;
+}
+
+.hidden {
+    display:none !important;
+}
+
+.text-normal {
+    font-weight: normal;
+}
+
+.comment-date {
+    color: #9197a3;
+}
+
+.answer-status {
+    width: 1px;
+    white-space: nowrap;
+}
+
+.filtered-combobox-button {
+    margin-top: -5px;
+}
+
+#groups-menu>li.active>a {
+    color: white;
+}

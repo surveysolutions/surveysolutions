@@ -10,17 +10,17 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
-    [Authorize(Roles = "Headquarter, Supervisor")]
+    [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public class UsersController : BaseApiServiceController
     {
         private readonly IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory;
-        private readonly IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory;
-        private readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
+        private readonly IUserListViewFactory supervisorsFactory;
+        private readonly IUserViewFactory userViewFactory;
 
         public UsersController(ILogger logger, 
             IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory,
-            IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory,
-            IViewFactory<UserViewInputModel, UserView> userViewFactory)
+            IUserListViewFactory supervisorsFactory,
+            IUserViewFactory userViewFactory)
             :base(logger)
         {
             this.interviewersFactory = interviewersFactory;

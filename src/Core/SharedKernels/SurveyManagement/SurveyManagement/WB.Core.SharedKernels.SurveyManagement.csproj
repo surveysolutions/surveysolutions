@@ -37,8 +37,12 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Logging">
-      <HintPath>..\..\..\..\..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
+    <Reference Include="Common.Logging, Version=3.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\Common.Logging.3.0.0\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Core">
+      <HintPath>..\..\..\..\..\packages\Common.Logging.Core.3.0.0\lib\net40\Common.Logging.Core.dll</HintPath>
     </Reference>
     <Reference Include="CsvHelper">
       <HintPath>..\..\..\..\..\packages\CsvHelper.2.2.2\lib\net40-client\CsvHelper.dll</HintPath>
@@ -71,8 +75,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="Quartz">
-      <HintPath>..\..\..\..\..\packages\Quartz.2.2.3\lib\net40\Quartz.dll</HintPath>
+    <Reference Include="Quartz, Version=2.3.1.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\Quartz.2.3.1\lib\net40\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="Raven.Abstractions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -101,6 +106,7 @@
     <Compile Include="DataCollectionSharedKernelModule.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="EventHandler\AnswersByVariableDenormalizer.cs" />
+    <Compile Include="Implementation\ReadSide\RepositoryAccessors\OrderableSyncPackageWriter.cs" />
     <Compile Include="EventHandler\ClientDeviceDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewHistoryDenormalizer.cs" />
     <Compile Include="EventHandler\DummyEventHandler.cs" />
@@ -110,8 +116,20 @@
     <Compile Include="EventHandler\InterviewExportedDataDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewsChartDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewSummaryEventHandlerFunctional.cs" />
+    <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\DeleteQuestionnaireService.cs" />
+    <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\InterviewsToDeleteFactory.cs" />
+    <Compile Include="QuartzIntegration\QuartzNinjectModule.cs" />
+    <Compile Include="QuartzIntegration\NinjectSchedulerFactory.cs" />
+    <Compile Include="QuartzIntegration\NinjectJobFactory.cs" />
+    <Compile Include="Services\DeleteQuestionnaireTemplate\IDeleteQuestionnaireService.cs" />
+    <Compile Include="Services\DeleteQuestionnaireTemplate\IInterviewsToDeleteFactory.cs" />
+    <Compile Include="Services\IOrderableSyncPackageWriter.cs" />
     <Compile Include="EventHandler\QuestionnaireDetailsForChart.cs" />
-    <Compile Include="EventHandler\SynchronizationDenormalizer.cs" />
+    <Compile Include="EventHandler\QuestionnaireStatisticsForChart.cs" />
+    <Compile Include="EventHandler\QuestionnaireSynchronizationDenormalizer.cs" />
+    <Compile Include="EventHandler\StatisticsGroupedByDateAndTemplate.cs" />
+    <Compile Include="EventHandler\InterviewSynchronizationDenormalizer.cs" />
+    <Compile Include="EventHandler\UserSynchronizationDenormalizer.cs" />
     <Compile Include="Factories\ICsvWriterFactory.cs" />
     <Compile Include="Factories\IChartStatisticsViewFactory.cs" />
     <Compile Include="Factories\IPreloadedDataServiceFactory.cs" />
@@ -132,14 +150,16 @@
     <Compile Include="Implementation\Factories\ExportViewFactory.cs" />
     <Compile Include="Implementation\Factories\ReferenceInfoForLinkedQuestionsFactory.cs" />
     <Compile Include="Implementation\Factories\PreloadedDataServiceFactory.cs" />
+    <Compile Include="Implementation\Services\HealthCheck\Checks\RavenHealthCheck.cs" />
+    <Compile Include="Implementation\Services\HealthCheck\Checks\FolderPermissionChecker.cs" />
     <Compile Include="Implementation\IRecordsAccessor.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\InterviewsSearchIndex.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\SeachIndexContent.cs" />
-    <Compile Include="Implementation\ReadSide\Indexes\SynchronizationDeltasByBriefFields.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\UserDocumentsByBriefFields.cs" />
     <Compile Include="Implementation\Services\DataExport\CsvWriterService.cs" />
     <Compile Include="Implementation\Services\DataExport\FileBasedDataExportRepositorySettings.cs" />
     <Compile Include="Implementation\Services\DataExport\FilebasedExportedDataAccessor.cs" />
+    <Compile Include="Implementation\Services\HealthCheck\Checks\IAtomicHealthCheck.cs" />
     <Compile Include="Implementation\Services\QuestionnaireUpgradeService.cs" />
     <Compile Include="Implementation\Services\DataExport\SqlDataExportWriter.cs" />
     <Compile Include="Implementation\Services\DataExport\SqlToTabDataExportService.cs" />
@@ -148,9 +168,7 @@
     <Compile Include="Implementation\Services\Sql\SqliteService.cs" />
     <Compile Include="Implementation\Services\Sql\SqliteServiceFactory.cs" />
     <Compile Include="Implementation\Synchronization\Constants.cs" />
-    <Compile Include="Implementation\Synchronization\IncomePackagesRepository\IncomePackagesRepository.cs" />
-    <Compile Include="Implementation\Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsDataLoader.cs" />
-    <Compile Include="Implementation\Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsDataProcessor.cs" />
+    <Compile Include="Implementation\Synchronization\IncomingSyncPackagesQueue.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\HeadquarterReportsSurveysAndStatusesGroupByTeam.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\HeadquarterReportsTeamsAndStatusesGroupByTeam.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\QuestionnaireBrowseItemsGroupByQuestionnaireIdIndex.cs" />
@@ -172,6 +190,8 @@
     <Compile Include="Implementation\Services\SampleImportService.cs" />
     <Compile Include="Implementation\Services\SupportedVersionProvider.cs" />
     <Compile Include="Implementation\Services\TabletInformation\FileBasedTabletInformationService.cs" />
+    <Compile Include="Implementation\Synchronization\SyncPackagesProcessor.cs" />
+    <Compile Include="Implementation\Synchronization\BrokenSyncPackagesStorage.cs" />
     <Compile Include="Implementation\TemporaryDataStorage\FileTemporaryDataStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PreloadingVerificationMessages.Designer.cs">
@@ -188,6 +208,17 @@
     </Compile>
     <Compile Include="Services\Export\IDataExportService.cs" />
     <Compile Include="Services\Export\IFilebasedExportedDataAccessor.cs" />
+    <Compile Include="Implementation\Services\HealthCheck\Checks\EventStoreHealthCheck.cs" />
+    <Compile Include="Implementation\Services\HealthCheck\Checks\NumberOfUnhandledPackagesChecker.cs" />
+    <Compile Include="Implementation\Services\HealthCheck\Checks\NumberOfSyncPackagesWithBigSizeChecker.cs" />
+    <Compile Include="ValueObjects\HealthCheck\NumberOfSyncPackagesWithBigSizeCheckResult.cs" />
+    <Compile Include="ValueObjects\HealthCheck\RavenHealthCheckResult.cs" />
+    <Compile Include="ValueObjects\HealthCheck\HealthCheckResults.cs" />
+    <Compile Include="ValueObjects\HealthCheck\EventStoreHealthCheckResult.cs" />
+    <Compile Include="ValueObjects\HealthCheck\FolderPermissionCheckResult.cs" />
+    <Compile Include="ValueObjects\HealthCheck\HealthCheckStatus.cs" />
+    <Compile Include="Implementation\Services\HealthCheck\HealthCheckService.cs" />
+    <Compile Include="Services\HealthCheck\IHealthCheckService.cs" />
     <Compile Include="Services\ICsvWriterService.cs" />
     <Compile Include="Services\IDataExportRepositoryWriter.cs" />
     <Compile Include="Services\IDataExportWriter.cs" />
@@ -206,13 +237,11 @@
     <Compile Include="Services\Sql\ISqlServiceFactory.cs" />
     <Compile Include="SurveyManagementSharedKernelModule.cs" />
     <Compile Include="Synchronization\Interview\EntryType.cs" />
+    <Compile Include="Synchronization\IBrokenSyncPackagesStorage.cs" />
     <Compile Include="Synchronization\Questionnaire\QuestionnaireEntryType.cs" />
     <Compile Include="Synchronization\Questionnaire\QuestionnaireFeedEntry.cs" />
-    <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\IInterviewDetailsDataLoader.cs" />
-    <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\IInterviewDetailsDataProcessor.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundSchedulerTask.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsDataLoaderSettings.cs" />
-    <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsDataProcessorContext.cs" />
     <Compile Include="Synchronization\Schedulers\SynchorizationContext.cs" />
     <Compile Include="Synchronization\Schedulers\SynchronizationStatus.cs" />
     <Compile Include="Synchronization\Users\SupervisorValidationResult.cs" />
@@ -224,7 +253,6 @@
     <Compile Include="ValueObjects\PreloadedData\PreloadedDataVerificationReferenceType.cs" />
     <Compile Include="ValueObjects\ValueParsingResult.cs" />
     <Compile Include="Views\BaseInterviewGridItem.cs" />
-    <Compile Include="Views\BaseUserViewFactory.cs" />
     <Compile Include="Views\ChangeStatus\ChangeStatusFactory.cs" />
     <Compile Include="Views\ChangeStatus\ChangeStatusInputModel.cs" />
     <Compile Include="Views\ChangeStatus\ChangeStatusView.cs" />
@@ -237,14 +265,17 @@
     <Compile Include="Views\DataExport\InterviewDataExportView.cs" />
     <Compile Include="Views\DataExport\InterviewExportedLevel.cs" />
     <Compile Include="Views\DataExport\RecordFirstAnswerMarkerView.cs" />
+    <Compile Include="Views\DetailsStatisticView.cs" />
+    <Compile Include="Views\DetailsViewModel.cs" />
     <Compile Include="Views\Device\RegisterData.cs" />
+    <Compile Include="ValueObjects\HealthCheck\NumberOfUnhandledPackagesHealthCheckResult.cs" />
+    <Compile Include="Views\InterviewDetailsFilter.cs" />
     <Compile Include="Views\InterviewHistory\IInterviewHistoryFactory.cs" />
     <Compile Include="Views\InterviewHistory\InterviewHistoricalAction.cs" />
     <Compile Include="Views\InterviewHistory\InterviewHistoricalRecordView.cs" />
     <Compile Include="Views\InterviewHistory\InterviewHistoryFactory.cs" />
     <Compile Include="Views\DataExport\QuestionnaireExportStructure.cs" />
     <Compile Include="Views\Device\DeviceView.cs" />
-    <Compile Include="Views\Device\DeviceViewFactory.cs" />
     <Compile Include="Views\Device\DeviceViewInputModel.cs" />
     <Compile Include="Views\IInterviewDataAndQuestionnaireMerger.cs" />
     <Compile Include="Views\IListView.cs" />
@@ -275,12 +306,12 @@
     <Compile Include="Views\Interview\InterviewData.cs" />
     <Compile Include="Views\Interview\InterviewDetailsForChart.cs" />
     <Compile Include="Views\Interview\InterviewDetailsInputModel.cs" />
+    <Compile Include="Views\Interview\InterviewDetailsViewFactory.cs" />
     <Compile Include="Views\Interview\InterviewEntityView.cs" />
     <Compile Include="Views\Interview\InterviewStaticTextView.cs" />
     <Compile Include="Views\Interview\InterviewSummaryViewFactory.cs" />
     <Compile Include="Views\Interview\InterviewSummaryForMapPointView.cs" />
     <Compile Include="Views\Interview\InterviewDetailsView.cs" />
-    <Compile Include="Views\Interview\InterviewDetailsViewFactory.cs" />
     <Compile Include="Views\Interview\InterviewFeaturedQuestion.cs" />
     <Compile Include="Synchronization\Interview\InterviewFeedEntry.cs" />
     <Compile Include="Views\Interview\InterviewGroupView.cs" />
@@ -349,6 +380,7 @@
     <Compile Include="Views\Survey\SurveyUsersViewFactory.cs" />
     <Compile Include="Views\Survey\SurveyUsersViewInputModel.cs" />
     <Compile Include="Views\TabletInformation\TabletInformationView.cs" />
+    <Compile Include="Views\TabletInformation\TabletLogView.cs" />
     <Compile Include="Views\TakeNew\FeaturedAnswerView.cs" />
     <Compile Include="Views\TakeNew\FeaturedQuestionView.cs" />
     <Compile Include="Views\TakeNew\TakeNewInterviewInputModel.cs" />
@@ -364,6 +396,7 @@
     <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesFactory.cs" />
     <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesInputModel.cs" />
     <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesView.cs" />
+    <Compile Include="Views\User\IUserListViewFactory.cs" />
     <Compile Include="Views\User\UserListItem.cs" />
     <Compile Include="Views\User\UserListView.cs" />
     <Compile Include="Views\User\UserListViewFactory.cs" />
@@ -425,9 +458,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Denormalizer\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

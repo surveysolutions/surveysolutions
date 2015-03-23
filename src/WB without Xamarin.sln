@@ -61,8 +61,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExpressionProcessor", "Expr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.ExpressionProcessor", "Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj", "{D55B9582-70FD-4340-A3BC-55A33D49B2E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure.FunctionalDenormalization", "Core\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj", "{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure.Files", "Core\Infrastructure\WB.Core.Infrastructure.Files\WB.Core.Infrastructure.Files.csproj", "{6AC3A080-CECA-4974-9CA1-C239695ED8F8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Headquarters", "Headquarters", "{58C84264-2FA1-48B8-A8F2-282DCC250DF4}"
@@ -118,6 +116,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{4D7FA4
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Tests.CleanIntegration", "Tests\WB.Tests.CleanIntegration\WB.Tests.CleanIntegration.csproj", "{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -198,12 +198,6 @@ Global
 		{D55B9582-70FD-4340-A3BC-55A33D49B2E6}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
 		{D55B9582-70FD-4340-A3BC-55A33D49B2E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D55B9582-70FD-4340-A3BC-55A33D49B2E6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
-		{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
-		{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6AC3A080-CECA-4974-9CA1-C239695ED8F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6AC3A080-CECA-4974-9CA1-C239695ED8F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AC3A080-CECA-4974-9CA1-C239695ED8F8}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
@@ -288,6 +282,12 @@ Global
 		{F3BE22B5-C075-4B9C-A99D-E89B70A0DFCD}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
 		{F3BE22B5-C075-4B9C-A99D-E89B70A0DFCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3BE22B5-C075-4B9C-A99D-E89B70A0DFCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -319,7 +319,6 @@ Global
 		{755CA607-6B50-487F-98A0-34A98973593D} = {0B4D4014-BC76-4852-900B-EA0F88A7B1F5}
 		{34140B4A-F145-4019-A068-22EC1F6A91EF} = {14B7074A-492F-485E-8DEE-F1997AB95D95}
 		{D55B9582-70FD-4340-A3BC-55A33D49B2E6} = {34140B4A-F145-4019-A068-22EC1F6A91EF}
-		{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A} = {CA9E537B-E2ED-4A63-B936-834C9A8C194B}
 		{6AC3A080-CECA-4974-9CA1-C239695ED8F8} = {CA9E537B-E2ED-4A63-B936-834C9A8C194B}
 		{58C84264-2FA1-48B8-A8F2-282DCC250DF4} = {E3404571-E3D0-47E8-94FC-001982D11D59}
 		{3017EC6D-AE4A-4C19-A653-352999592A7E} = {58C84264-2FA1-48B8-A8F2-282DCC250DF4}
@@ -341,5 +340,6 @@ Global
 		{4BFD5CA2-964D-4914-A1E8-28BEDB557796} = {6B7FFF83-E2B8-43F7-8469-D2D69537F00B}
 		{64FF78F2-775B-4728-9D8A-D3A7B9A7344C} = {4BFD5CA2-964D-4914-A1E8-28BEDB557796}
 		{F3BE22B5-C075-4B9C-A99D-E89B70A0DFCD} = {018E5D8E-35B1-414D-BF7B-17F2FA911834}
+		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
 	EndGlobalSection
 EndGlobal

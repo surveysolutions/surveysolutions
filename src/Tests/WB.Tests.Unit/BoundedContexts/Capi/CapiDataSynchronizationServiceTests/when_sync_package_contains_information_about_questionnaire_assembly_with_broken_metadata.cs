@@ -6,8 +6,8 @@ using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
@@ -18,11 +18,8 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
         {
             var meta = new QuestionnaireAssemblyMetadata(questionnaireId, version);
 
-            syncItem = new SyncItem
+            syncItem = new QuestionnaireSyncPackageDto
             {
-                RootId = questionnaireId.Combine(version),
-                ItemType = SyncItemType.QuestionnaireAssembly,
-                IsCompressed = false,
                 Content = "some_content",
                 MetaInfo = "dummy meta"
             };
@@ -38,7 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 jsonUtils : jsonUtilsMock.Object, questionnareAssemblyFileAccessor: questionnareAssemblyFileAccessor.Object);
         };
 
-        Because of = () => exception = Catch.Exception(() => capiDataSynchronizationService.SavePulledItem(syncItem));
+        Because of = () => exception = Catch.Exception(() => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem, SyncItemType.QuestionnaireAssembly));
 
         It should_call_StoreAssembly_zero_time =
             () =>
@@ -52,7 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static long version = 3;
         private static CapiDataSynchronizationService capiDataSynchronizationService;
-        private static SyncItem syncItem;
+        private static QuestionnaireSyncPackageDto syncItem;
         private static Mock<IChangeLogManipulator> changeLogManipulator;
         private static Exception exception;
         private static string assemblyAsBase64 = "some_content";

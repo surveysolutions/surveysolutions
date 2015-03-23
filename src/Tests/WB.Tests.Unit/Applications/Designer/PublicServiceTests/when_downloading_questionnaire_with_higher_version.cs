@@ -45,6 +45,6 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
         private static IQuestionnaireExportService exportService;
         private static IPublicService service;
         private static Exception exception;
-        private static string errorMessage = "Failed to import questionnaire. Requested questionnaire \"aaaa.tmpl\" has 1.0.0 version. Headquarters application supports version up to 0.0.1";
+        private static string errorMessage = "Failed to import questionnaire. Your questionnaire \"aaaa.tmpl\" has 1.0.0 version. Headquarters application supports only up to version 0.0.1.";
     }
 }

@@ -1,60 +1,22 @@
-﻿namespace WB.UI.Shared.Web.Membership
-{
-    using WebMatrix.WebData;
+﻿using WebMatrix.WebData;
 
-    /// <summary>
-    ///     The user helper.
-    /// </summary>
+namespace WB.UI.Shared.Web.Membership
+{
     public class MembershipUserService : IMembershipUserService
     {
-        #region Fields
-
-        /// <summary>
-        /// The helper.
-        /// </summary>
         private readonly IMembershipHelper helper;
-
-        /// <summary>
-        /// The web service user.
-        /// </summary>
         private readonly IMembershipWebServiceUser webServiceUser;
-
-        /// <summary>
-        /// The web user.
-        /// </summary>
         private readonly IMembershipWebUser user;
 
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MembershipUserService"/> class.
-        /// </summary>
-        /// <param name="helper">
-        /// The helper.
-        /// </param>
-        /// <param name="user">
-        /// The web User.
-        /// </param>
-        /// <param name="webServiceUser">
-        /// The web Service User.
-        /// </param>
-        public MembershipUserService(
-            IMembershipHelper helper, IMembershipWebUser user, IMembershipWebServiceUser webServiceUser)
+        public MembershipUserService(IMembershipHelper helper, 
+            IMembershipWebUser user, 
+            IMembershipWebServiceUser webServiceUser)
         {
             this.helper = helper;
             this.user = user;
             this.webServiceUser = webServiceUser;
         }
 
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        ///     Gets the adminrolename.
-        /// </summary>
         public string ADMINROLENAME
         {
             get
@@ -63,9 +25,6 @@
             }
         }
 
-        /// <summary>
-        /// Gets the current web service user.
-        /// </summary>
         public IMembershipWebServiceUser WebServiceUser
         {
             get
@@ -74,9 +33,6 @@
             }
         }
 
-        /// <summary>
-        /// Gets the current web user.
-        /// </summary>
         public IMembershipWebUser WebUser
         {
             get
@@ -85,9 +41,6 @@
             }
         }
 
-        /// <summary>
-        ///     The userrolename.
-        /// </summary>
         public string USERROLENAME
         {
             get
@@ -96,18 +49,9 @@
             }
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        ///     The logout.
-        /// </summary>
         public void Logout()
         {
             WebSecurity.Logout();
         }
-
-        #endregion
     }
 }

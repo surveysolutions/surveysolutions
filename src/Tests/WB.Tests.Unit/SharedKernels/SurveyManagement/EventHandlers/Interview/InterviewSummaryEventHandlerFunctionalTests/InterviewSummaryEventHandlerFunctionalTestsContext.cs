@@ -3,7 +3,6 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
@@ -44,10 +43,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             return Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>();
         }
 
-        private static IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> CreateQuestionnaire()
+        private static IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> CreateQuestionnaire()
         {
-            var questionnaireMock = new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>();
-            questionnaireMock.Setup(_ => _.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()))
+            var questionnaireMock = new Mock<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>();
+            questionnaireMock.Setup(_ => _.GetById(Moq.It.IsAny<string>()))
                 .Returns(new QuestionnaireDocumentVersioned() { Questionnaire = new QuestionnaireDocument() });
             return questionnaireMock.Object;
         }

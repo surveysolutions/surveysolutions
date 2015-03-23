@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+
 namespace WB.Core.GenericSubdomains.Utils
 {
     public static class StringExtensions
@@ -151,6 +152,17 @@ namespace WB.Core.GenericSubdomains.Utils
                 throw new ArgumentException("invalid url string");
 
             return uri.ToString().Replace(uri.PathAndQuery, "");
+        }
+
+        public static string FormatString(this string source, params object[] args)
+        {
+            return string.Format(source, args);
+        }
+
+        public static bool IsValidHttpAddress(this string source)
+        {
+            Uri parsedUrl;
+            return Uri.TryCreate(source, UriKind.Absolute, out parsedUrl) && (parsedUrl.Scheme == "http" || parsedUrl.Scheme == "https");
         }
     }
 }

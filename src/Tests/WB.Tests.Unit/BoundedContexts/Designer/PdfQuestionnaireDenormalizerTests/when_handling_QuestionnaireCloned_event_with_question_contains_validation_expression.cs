@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTes
                 QuestionnaireDocument = questionnaireDocument
             });
 
-            var documentStorageMock = new Mock<IReadSideRepositoryWriter<PdfQuestionnaireView>>();
+            var documentStorageMock = new Mock<IReadSideKeyValueStorage<PdfQuestionnaireView>>();
             
             documentStorageMock
                 .Setup(x => x.Store(Moq.It.IsAny<PdfQuestionnaireView>(), Moq.It.IsAny<string>()))

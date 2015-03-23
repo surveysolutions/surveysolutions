@@ -33,9 +33,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             eventContext = null;
         };
 
-        Because of = () => questionnaire.AddGroup(groupId: groupId, responsibleId: responsibleId, title: title, variableName: null, condition: null,
-                    description: description, parentGroupId: parentRosterId, isRoster: true, rosterSizeSource: RosterSizeSourceType.Question, 
-                    rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null, rosterTitleQuestionId: null);
+        Because of = () => questionnaire.AddGroupAndMoveIfNeeded(groupId: groupId, responsibleId: responsibleId, title: title, variableName: null, 
+                    rosterSizeQuestionId: rosterSizeQuestionId, description: description, condition: null, parentGroupId: parentRosterId, isRoster: true, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
         It should_raise_NewGroupAdded_event = () =>
             eventContext.ShouldContainEvent<NewGroupAdded>();

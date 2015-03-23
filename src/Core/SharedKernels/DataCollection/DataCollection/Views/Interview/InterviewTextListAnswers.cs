@@ -13,6 +13,6 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Interview
             this.Answers = answers.Select(a => new InterviewTextListAnswer(a.Item1, a.Item2)).ToArray();
         }
 
-        public InterviewTextListAnswer[] Answers { get; private set; }
+        public InterviewTextListAnswer[] Answers { get; set; }
     }
 }

@@ -37,7 +37,6 @@ namespace WB.UI.Capi.Extensions
         {
             if (!CapiApplication.Membership.IsLoggedIn)
             {
-                //  throw new AuthenticationException("invalid credentials");
                 activity.Finish();
                 return true;
             }

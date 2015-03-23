@@ -15,7 +15,7 @@
     var sortOrder = (int?)ViewBag.SortOrder;
 }
 
-<table class="table table-hover">
+<table id="table-content" class="table">
     <caption></caption>
     <thead>
         <tr>
@@ -38,7 +38,7 @@
                         }
                     }
                     else
-                    { 
+                    {
                         <i class="icon-chevron-up icon-white"></i>
                     }
                 </th>
@@ -67,51 +67,52 @@
                 {
                     if (actionModel.CanCopy || actionModel.CanDelete || actionModel.CanEdit || actionModel.CanExport || actionModel.CanPreview || actionModel.CanPrint || actionModel.CanSynchronize || actionModel.CanOpen)
                     {
-                                <div class="btn-group pull-right">
-                                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Action
-                                        <span class="caret"></span>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        @{
-                                            var routevalues = model.GetIdValue();
-                                            var itemId = model.GetId();
-                                            var itemType = model.GetLabel();
-                                            var itemName = Uri.EscapeDataString(model.GetName());
+                        <div class="btn-group pull-right">
+                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                Action
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                @{
+                        var routevalues = model.GetIdValue();
+                        var itemId = model.GetId();
+                        var itemType = model.GetLabel();
+                        var itemName = Uri.EscapeDataString(model.GetName());
 
-                                            if (actionModel.CanEdit)
-                                            {
-                                                <li>@Html.ActionLink("Edit", "Edit", controller, routevalues, null)</li>
-                                            }
-                                            if (actionModel.CanOpen)
-                                            {
-                                                <li>@Html.ActionLink("Edit", "Open", "App", routevalues, null)</li>
-                                            }
-                                            if (actionModel.CanSynchronize)
-                                            {
-                                                    <li>@Html.ActionLink("Export to HQ", "Export", "Synchronization", routevalues, null)</li>
-                                            }
-                                            if (actionModel.CanPreview)
-                                            {
-                                                    <li>@Html.ActionLink("Details", "Details", controller, routevalues, null)</li>
-                                            }
-                                            if (actionModel.CanCopy)
-                                            {
-                                                    <li>@Html.ActionLink("Clone", "Clone", controller, routevalues, null)</li>
-                                            }
-                                            if (actionModel.CanExportToPdf)
-                                            {
-                                                    <li class="divider"></li>
-                                                                <li>@Html.ActionLink("Export as PDF", "exportquestionnaire", "Pdf", routevalues, null)</li>
-                                            }
-                                            if (actionModel.CanDelete)
-                                            {
-                                <li class="divider"></li>
-                                            <li><a href="#mDelete" data-bind='click: deleteItem.bind($data,"@itemId    ", "@itemType    ", "@itemName    ")' data-toggle="modal">Delete</a></li>
+                        if (actionModel.CanEdit)
+                        {
+                            <li>@Html.ActionLink("Edit", "Edit", controller, routevalues, null)</li>
                         }
-                                        }
-                                    </ul>
+                        if (actionModel.CanOpen)
+                        {
+                            <li>@Html.ActionLink("Edit", "Open", "App", routevalues, null)</li>
+                        }
+                        if (actionModel.CanSynchronize)
+                        {
+                            <li>@Html.ActionLink("Export to HQ", "Export", "Synchronization", routevalues, null)</li>
+                        }
+                        if (actionModel.CanPreview)
+                        {
+                            <li>@Html.ActionLink("Details", "Details", controller, routevalues, null)</li>
+                        }
+                        if (actionModel.CanCopy)
+                        {
+                            <li>@Html.ActionLink("Clone", "Clone", controller, routevalues, null)</li>
+                        }
+                        if (actionModel.CanExportToPdf)
+                        {
+                            <li class="divider"></li>
+                                    <li>@Html.ActionLink("Export as PDF", "exportquestionnaire", "Pdf", routevalues, null)</li>
+                        }
+                        if (actionModel.CanDelete)
+                        {
+                            <li class="divider"></li>
+                                    <li><a href="#mDelete" data-bind='click: deleteItem.bind($data,"@itemId    ", "@itemType    ", "@itemName    ")' data-toggle="modal">Delete</a></li>
+                        }
+                                }
+                            </ul>
 
-                                </div>
+                        </div>
                     }
                 }
                     }
@@ -121,3 +122,4 @@
         }
     </tbody>
 </table>
+

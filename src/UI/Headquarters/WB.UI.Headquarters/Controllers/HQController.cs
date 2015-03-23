@@ -26,12 +26,12 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [Authorize(Roles = "Headquarter")]
+    [Authorize(Roles = "Administrator, Headquarter")]
     public class HQController : BaseController
     {
         private readonly IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory;
         private readonly ISampleImportService sampleImportService;
-        private readonly IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory;
+        private readonly IUserListViewFactory supervisorsFactory;
         private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
         private readonly IPreloadingTemplateService preloadingTemplateService;
         private readonly IPreloadedDataRepository preloadedDataRepository;
@@ -41,7 +41,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory,
-            IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory,
+            IUserListViewFactory supervisorsFactory,
             ISampleImportService sampleImportService,
             IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>
                 allUsersAndQuestionnairesFactory,
@@ -155,7 +155,7 @@ namespace WB.UI.Headquarters.Controllers
             //null is handled inside 
             var errors = this.preloadedDataVerifier.VerifySample(questionnaireId, version, preloadedSample).ToList();
 
-            this.ViewBag.SupervisorList = this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue }).Items;
+            this.ViewBag.SupervisorList = this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue, Order = "UserName"}).Items;
 
             //clean up for security reasons
             if (errors.Any())
@@ -171,7 +171,7 @@ namespace WB.UI.Headquarters.Controllers
             var preloadedPanelData = this.preloadedDataRepository.GetPreloadedDataOfPanel(id);
             var errors = this.preloadedDataVerifier.VerifyPanel(questionnaireId, version, preloadedPanelData).ToList();
             this.ViewBag.SupervisorList =
-              this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue }).Items;
+              this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue, Order = "UserName" }).Items;
 
             //clean up for security reasons
             if (errors.Any())

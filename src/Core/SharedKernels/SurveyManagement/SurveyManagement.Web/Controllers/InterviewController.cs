@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
@@ -15,7 +15,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
-    [Authorize(Roles = "Headquarter, Supervisor")]
+    [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public class InterviewController : BaseController
     {
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
@@ -42,79 +42,45 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.interviewDetailsViewFactory = interviewDetailsViewFactory;
         }
 
-        public ActionResult Details(Guid id, InterviewDetailsSortBy? sortBy,  InterviewDetailsFilter? filter)
+        private decimal[] ParseRosterVector(string rosterVectorAsString)
         {
-            this.ViewBag.ActivePage = MenuItem.Docs;
+            if (string.IsNullOrEmpty(rosterVectorAsString))
+                return new decimal[0];
 
-            sortBy = sortBy.HasValue ? sortBy : InterviewDetailsSortBy.All;
-            filter = filter.HasValue ? filter : InterviewDetailsFilter.None;
-
-            ChangeStatusView interviewInfo = this.changeStatusFactory.Load(new ChangeStatusInputModel() { InterviewId = id });
-            InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
-            ChangeStatusView interviewHistoryOfStatuses = this.changeStatusFactory.Load(new ChangeStatusInputModel { InterviewId = id });
-
-            if (interviewInfo == null || interviewSummary == null)
-                return HttpNotFound();
-
-            bool isAccessAllowed =
-                this.GlobalInfo.IsHeadquarter ||
-                (this.GlobalInfo.IsSurepvisor && this.GlobalInfo.GetCurrentUser().Id == interviewSummary.TeamLeadId);
-
-            if (!isAccessAllowed)
-                return HttpNotFound();
-
-            InterviewDetailsView interviewDetailsView = interviewDetailsViewFactory.GetInterviewDetails(id);
-
-            var allGroups = interviewDetailsView.Groups.ToArray();
-
-            foreach (var interviewGroupView in interviewDetailsView.Groups)
-            {
-                if (sortBy.Value == InterviewDetailsSortBy.Answered)
-                {
-                    interviewGroupView.Entities =
-                        interviewGroupView.Entities.Where(
-                            x =>
-                                x is InterviewStaticTextView ||
-                                ((x is InterviewQuestionView) && ((InterviewQuestionView) x).IsAnswered)).ToList();
-                }
-            }
-
-            return
-                View(new DetailsViewModel()
-                {
-                    SortBy = sortBy.Value,
-                    Filter = filter.Value,
-                    FilteredInterviewDetails = interviewDetailsView,
-                    Groups = allGroups,
-                    History = interviewHistoryOfStatuses
-                });
+            return rosterVectorAsString.Split('_').Select(vector => decimal.Parse(vector.Replace('-', '.'))).ToArray();
         }
 
-        public ActionResult InterviewDetails(Guid id, string template, Guid? group, Guid? question, Guid? propagationKey)
+        public ActionResult Details(Guid id, InterviewDetailsFilter? filter, Guid? currentGroupId, string rosterVector)
         {
+            if (!filter.HasValue)
+                return this.RedirectToAction("Details",
+                    new
+                    {
+                        id = id,
+                        filter = InterviewDetailsFilter.All,
+                        currentGroupId = this.interviewDetailsViewFactory.GetFirstChapterId(id)
+                    });
+
             this.ViewBag.ActivePage = MenuItem.Docs;
 
-            ChangeStatusView interviewInfo = this.changeStatusFactory.Load(new ChangeStatusInputModel() {InterviewId = id});
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
-            
-            if (interviewInfo == null || interviewSummary == null)
-                return HttpNotFound();
 
             bool isAccessAllowed =
-                this.GlobalInfo.IsHeadquarter ||
+                this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator ||
                 (this.GlobalInfo.IsSurepvisor && this.GlobalInfo.GetCurrentUser().Id == interviewSummary.TeamLeadId);
 
             if (!isAccessAllowed)
                 return HttpNotFound();
 
+            ChangeStatusView interviewInfo =
+                this.changeStatusFactory.Load(new ChangeStatusInputModel() {InterviewId = id});
+
+            if (interviewInfo == null || interviewSummary == null)
+                return HttpNotFound();
+
             return
-                this.View(new InterviewModel()
-                {
-                    InterviewId = id,
-                    CurrentGroupId = group,
-                    CurrentPropagationKeyId = propagationKey,
-                    InterviewStatus = interviewInfo.Status
-                });
+                View(interviewDetailsViewFactory.GetInterviewDetails(interviewId: id, currentGroupId: currentGroupId,
+                    filter: filter, currentGroupRosterVector: this.ParseRosterVector(rosterVector)));
         }
 
         public ActionResult InterviewHistory(Guid id)
@@ -122,27 +88,27 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.View(interviewHistoryViewFactory.Load(id));
         }
 
-        [Authorize(Roles = "Headquarter, Supervisor")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public ActionResult Revalidate()
         {
             return this.View(new RevalidateModel());
         }
 
-        [Authorize(Roles = "Headquarter, Supervisor")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         [HttpPost]
         public ActionResult Revalidate(RevalidateModel input)
         {
             return this.RedirectToAction("ConfirmRevalidation", new { id = input.InterviewId });
         }
 
-        [Authorize(Roles = "Headquarter, Supervisor")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public ActionResult ConfirmRevalidation(Guid id)
         {
             var model = this.revalidateInterviewViewFactory.Load(new InterviewInfoForRevalidationInputModel { InterviewId = id });
             return this.View(model);
         }
 
-        [Authorize(Roles = "Headquarter, Supervisor")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         [HttpPost]
         public ActionResult ConfirmRevalidation(RevalidateModel input)
         {

@@ -14,5 +14,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
         bool IsHeadquarter { get; }
 
         bool IsSurepvisor { get; }
+
+        bool IsAdministrator { get; }
     }
 }

@@ -2,7 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-    <LinearLayout         android:id="@+id/llContainer"
+    <LinearLayout
+        android:id="@+id/llContainer"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical">
@@ -23,27 +24,27 @@
             android:layout_height="wrap_content"
             android:layout_margin="15px"
             android:text="Backup" />
-      
-      <wb.ui.capi.controls.TabletInformationReportButton
-           android:id="@+id/btnSendTabletInfo"
-           android:layout_width="fill_parent"
-           android:layout_height="wrap_content"
-           android:layout_margin="15px"
-           android:text="Send tablet's information" />
-      <Button
-          android:id="@+id/btnRestore"
-          android:layout_width="fill_parent"
-          android:layout_height="wrap_content"
-          android:layout_margin="15px" android:visibility="gone"
-          android:text="Restore" />
+        <wb.ui.capi.controls.TabletInformationReportButton
+            android:id="@+id/btnSendTabletInfo"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15px"
+            android:text="Send tablet's information" />
+        <Button
+            android:id="@+id/btnRestore"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15px"
+            android:visibility="gone"
+            android:text="Restore" />
         <TextView
             android:id="@+id/tvSyncResult"
-            android:padding="10px"
             android:background="@drawable/errorwarningstyle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textColor="#000"
             android:textSize="20dip"
+            android:padding="10px"
             android:layout_marginTop="10px"
             android:layout_marginLeft="15px"
             android:layout_marginRight="15px"

@@ -46,7 +46,7 @@ namespace WB.UI.Capi.Views
         {
             this.SyncEndpoint = "";
 #if DEBUG
-            this.SyncEndpoint = "http://192.168.88.184/headquarters";
+            this.SyncEndpoint = "http://192.168.88.226/headquarters";
             this.Login = "int";
             this.Password = "1";
 #endif
@@ -76,7 +76,7 @@ namespace WB.UI.Capi.Views
                     {"PasswordHash", passwordHasher.Hash(Password)}
                 });
             }
-            catch(ArgumentException ex)
+            catch(ArgumentException)
             {
                 this.CanSetSyncEndpoint = false;
             }

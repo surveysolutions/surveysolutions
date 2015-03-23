@@ -32,9 +32,11 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
                 throw new RestException(Resources.NoNetwork);
             }
 
-            var restClient = this.restServiceSettings.Endpoint
+            var fullUrl = this.restServiceSettings.Endpoint
                 .AppendPathSegment(url)
-                .SetQueryParams(queryString)
+                .SetQueryParams(queryString);
+
+            var restClient = fullUrl
                 .ConfigureHttpClient(http => new HttpClient(new RestMessageHandler(token)))
                 .WithTimeout(this.restServiceSettings.Timeout)
                 .WithHeader("Accept-Encoding", "gzip,deflate");
@@ -52,11 +54,17 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
             }
             catch (FlurlHttpException ex)
             {
-                this.logger.Error(ex.Message, ex);
+                this.logger.Error(string.Format("Request to '{0}'. QueryParams: {1} failed. ", fullUrl, fullUrl.QueryParams), ex);
 
                 if (ex.Call.Response != null)
-                    throw new RestException(ex.Call.Response.ReasonPhrase, statusCode: ex.Call.Response.StatusCode, innerException: ex);
+                    throw new RestException(ex.Call.Response.ReasonPhrase, statusCode: ex.Call.Response.StatusCode,
+                        innerException: ex);
 
+                throw new RestException(message: Resources.NoConnection, innerException: ex);
+            }
+            catch (WebException ex)
+            {
+                this.logger.Error(string.Format("Request to '{0}'. QueryParams: {1} failed. ", fullUrl, fullUrl.QueryParams), ex);
                 throw new RestException(message: Resources.NoConnection, innerException: ex);
             }
         }

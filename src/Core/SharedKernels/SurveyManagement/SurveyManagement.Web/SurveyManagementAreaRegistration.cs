@@ -66,13 +66,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/modernizr-2.7.2.js",
                     "~/Scripts/bootstrap.js",
                     "~/Scripts/director.js",
-                    "~/Scripts/knockout-3.1.0.js",
+                    "~/Scripts/knockout-3.2.0.js",
                     "~/Scripts/knockout.mapping-latest.js",
                     "~/Scripts/lodash.underscore.js",
                     "~/Scripts/query-string.js",
                     "~/Scripts/supervisor.framework.js",
                     "~/Scripts/viewmodels/viewmodelbase.js",
-                    "~/Scripts/viewmodels/pagebase.js"
+                    "~/Scripts/viewmodels/pagebase.js",
+                    "~/Scripts/viewmodels/surveymanagmentheader.js"
                 }
             },
             {
@@ -87,7 +88,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                 {
                     "~/Scripts/ko.pager.js",
                     "~/Scripts/viewmodels/listview.js",
-                    "~/Scripts/components/bindings.js"
+                    "~/Scripts/components/bindings.js",
+                    "~/Scripts/bootbox.min.js"
                 }
             },
             {
@@ -112,13 +114,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                 }
             },
             {
-                "~/js/interview-details", new[]
+                "~/js/details", new[]
                 {
+                    "~/Scripts/components/bindings.js",
                     "~/Scripts/director.js",
                     "~/Scripts/viewmodels/pages/interview/details/config.js",
                     "~/Scripts/viewmodels/pages/interview/details/datacontext.js",
                     "~/Scripts/viewmodels/pages/interview/details/interviewdetailssettings.js",
-                    "~/Scripts/viewmodels/pages/interview/details/interviewdetails.js",
+                    "~/Scripts/viewmodels/pages/interview/details/details.js",
                 }
             },
             {

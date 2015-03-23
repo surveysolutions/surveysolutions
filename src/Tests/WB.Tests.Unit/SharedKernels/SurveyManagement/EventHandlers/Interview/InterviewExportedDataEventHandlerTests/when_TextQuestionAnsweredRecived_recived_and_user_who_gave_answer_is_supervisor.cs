@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
     {
         Establish context = () =>
         {
-            recordFirstAnswerMarkerViewStorage = new Mock<IReadSideRepositoryWriter<RecordFirstAnswerMarkerView>>();
+            recordFirstAnswerMarkerViewStorage = new Mock<IReadSideKeyValueStorage<RecordFirstAnswerMarkerView>>();
             dataExportService = new Mock<IDataExportRepositoryWriter>();
             foreach (var questionAnswered in ListOfQuestionAnsweredEventsHandledByDenormalizer)
             {
@@ -51,6 +51,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         private static Mock<IDataExportRepositoryWriter> dataExportService;
 
         private static Dictionary<Guid, QuestionAnswered> eventsAndInterviewActionLog = new Dictionary<Guid, QuestionAnswered>();
-        private static Mock<IReadSideRepositoryWriter<RecordFirstAnswerMarkerView>> recordFirstAnswerMarkerViewStorage;
+        private static Mock<IReadSideKeyValueStorage<RecordFirstAnswerMarkerView>> recordFirstAnswerMarkerViewStorage;
     }
 }

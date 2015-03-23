@@ -15,9 +15,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
     {
         private string applicationName = "Questionnaire";
 
-        private IViewFactory<UserViewInputModel, UserView> UserViewFactory
+        private IUserWebViewFactory UserViewFactory
         {
-            get { return ServiceLocator.Current.GetInstance<IViewFactory<UserViewInputModel, UserView>>(); }
+            get { return ServiceLocator.Current.GetInstance<IUserWebViewFactory>(); }
         }
 
         private IViewFactory<UserBrowseInputModel, UserBrowseView> UserBrowseViewFactory
@@ -147,9 +147,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
         /// </returns>
         public override string[] GetRolesForUser(string username)
         {
-            UserView user =
+            UserWebView user =
                 this.UserViewFactory.Load(
-                    new UserViewInputModel(
+                    new UserWebViewInputModel(
                         username.ToLower() // bad approach
                         , 
                         null));
@@ -203,7 +203,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
             if (cachedValue.HasValue)
                 return cachedValue.Value;
 
-            UserView user = this.UserViewFactory.Load(new UserViewInputModel(username.ToLower(), null));
+            UserWebView user = this.UserViewFactory.Load(new UserWebViewInputModel(username.ToLower(), null));
 
             bool hasRole = user.Roles.Any(role => role.ToString().Equals(roleName));
 

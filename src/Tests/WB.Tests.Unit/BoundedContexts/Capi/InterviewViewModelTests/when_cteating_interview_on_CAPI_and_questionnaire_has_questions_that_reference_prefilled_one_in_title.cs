@@ -5,7 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
         };
 
         private Because of = () =>
-            interviewViewModel.SetAnswer(new InterviewItemId(prefilledNumeric, new decimal[0]), 2);
+            interviewViewModel.SetAnswer(ConversionHelper.ConvertIdAndRosterVectorToString(prefilledNumeric, new decimal[0]), 2);
 
         It should_substituted_title_of_question_with_substitution_with_answer_on_prefilled_question = () =>
             GetQuestion(questionReferencePrefilledNumericId, new decimal[0]).Text.ShouldEqual("Hello, 2");

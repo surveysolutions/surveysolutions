@@ -9,7 +9,6 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
@@ -30,9 +29,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 interviewHistoryViewWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewHistoryView>>(),
                 interviewSummaryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(_=>_.GetById(It.IsAny<string>())==new InterviewSummary()),
                 userDocumentWriter ?? Mock.Of<IReadSideRepositoryWriter<UserDocument>>(),
-                Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>(
+                Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(
                         _ =>
-                            _.GetById(It.IsAny<string>(), It.IsAny<long>()) ==
+                            _.GetById(It.IsAny<string>()) ==
                                 new QuestionnaireDocumentVersioned() { Questionnaire = questionnaireDocument ?? new QuestionnaireDocument() }));
         }
 

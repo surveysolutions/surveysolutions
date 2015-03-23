@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         };
 
         Because of = () =>
-            interviewHistoryView = interviewExportedDataDenormalizer.Delete(interviewHistoryView, CreatePublishableEvent(() => new InterviewHardDeleted(Guid.NewGuid()),
+            interviewHistoryView = interviewExportedDataDenormalizer.Update(interviewHistoryView, CreatePublishableEvent(() => new InterviewHardDeleted(Guid.NewGuid()),
                 interviewId));
 
         It should_history_should_be_null = () =>

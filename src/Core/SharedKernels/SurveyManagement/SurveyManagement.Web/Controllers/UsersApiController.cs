@@ -11,36 +11,38 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
-    [Authorize(Roles = "Headquarter, Supervisor")]
+    [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public class UsersApiController : BaseApiController
     {
         private readonly IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory;
-        private readonly IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory;
+        private readonly IUserListViewFactory supervisorsFactory;
 
         public UsersApiController(
             ICommandService commandService,
             IGlobalInfoProvider provider,
             ILogger logger,
             IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory,
-            IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory)
+            IUserListViewFactory supervisorsFactory)
             : base(commandService, provider, logger)
         {
             this.interviewersFactory = interviewersFactory;
             this.supervisorsFactory = supervisorsFactory;
         }
 
+        [HttpPost]
         public InterviewersView Interviewers(UsersListViewModel data)
         {
-            // Headquarter can view interviewers by any supervisor
+            // Headquarter and Admin can view interviewers by any supervisor
             // Supervisor can view only their interviewers
-            Guid? viewerId = this.GlobalInfo.IsHeadquarter
+            Guid? viewerId = this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator
                                  ? data.Request.SupervisorId
                                  : this.GlobalInfo.GetCurrentUser().Id;
             if (viewerId != null)
             {
                 var input = new InterviewersInputModel(viewerId.Value)
                     {
-                        Orders = data.SortOrder
+                        Orders = data.SortOrder,
+                        SearchBy = data.SearchBy
                     };
                 if (data.Pager != null)
                 {
@@ -54,12 +56,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return null;
         }
 
+        [HttpPost]
+        [Authorize(Roles = "Administrator, Headquarter")]
         public UserListView Supervisors(UsersListViewModel data)
         {
             var input = new UserListViewInputModel
                 {
                     Role = UserRoles.Supervisor,
-                    Orders = data.SortOrder
+                    Orders = data.SortOrder,
+                    SearchBy = data.SearchBy
                 };
 
             if (data.Pager != null)
@@ -68,7 +73,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 input.PageSize = data.Pager.PageSize;
             }
 
-            return this.supervisorsFactory.Load(input);
+            UserListView result = this.supervisorsFactory.Load(input);
+            return result;
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Administrator")]
+        public UserListView Headquarters(UsersListViewModel data)
+        {
+            var input = new UserListViewInputModel
+            {
+                Role = UserRoles.Headquarter,
+                Orders = data.SortOrder,
+                SearchBy = data.SearchBy
+            };
+
+            if (data.Pager != null)
+            {
+                input.Page = data.Pager.Page;
+                input.PageSize = data.Pager.PageSize;
+            }
+
+            UserListView result = this.supervisorsFactory.Load(input);
+            return result;
         }
     }
 }

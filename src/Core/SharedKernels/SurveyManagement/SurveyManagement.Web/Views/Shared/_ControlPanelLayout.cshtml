@@ -1,10 +1,11 @@
 ﻿@using System.Web.Optimization
+@using WB.UI.Shared.Web.Extensions
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>@ViewBag.Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="@Url.Content("~/Content/favicon.png")">
+    @this.GenerateFavicon(Url.Content("~/Content/favicon.png"))
     @Styles.Render("~/css/controlpanel")
 </head>
 <body>

@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.ChapterInfoViewDenormalizerTest
         };
 
         Because of = () =>
-            viewState = denormalizer.Create(Create.NewQuestionnaireCreatedEvent(questionnaireId));
+            viewState = denormalizer.Update(null, Create.NewQuestionnaireCreatedEvent(questionnaireId));
 
         It should_groupInfoView_Id_be_equal_to_questionnaireId = () =>
             viewState.ItemId.ShouldEqual(questionnaireId);

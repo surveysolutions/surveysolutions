@@ -10,6 +10,7 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
@@ -23,14 +24,19 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
 {
     public class CapiDataSynchronizationService : ICapiDataSynchronizationService
     {
-        public CapiDataSynchronizationService(IChangeLogManipulator changelog, ICommandService commandService,
-            IViewFactory<LoginViewInput, LoginView> loginViewFactory, IPlainQuestionnaireRepository questionnaireRepository,
-            ICapiCleanUpService capiCleanUpService, ILogger logger, ICapiSynchronizationCacheService capiSynchronizationCacheService,
-            IStringCompressor stringCompressor, IJsonUtils jsonUtils, IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor)
+        public CapiDataSynchronizationService(
+            IChangeLogManipulator changelog, 
+            ICommandService commandService,
+            IViewFactory<LoginViewInput, LoginView> loginViewFactory, 
+            IPlainQuestionnaireRepository questionnaireRepository,
+            ICapiCleanUpService capiCleanUpService,
+            ILogger logger,
+            ICapiSynchronizationCacheService capiSynchronizationCacheService, 
+            IJsonUtils jsonUtils, 
+            IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor)
         {
             this.logger = logger;
             this.capiSynchronizationCacheService = capiSynchronizationCacheService;
-            this.stringCompressor = stringCompressor;
             this.jsonUtils = jsonUtils;
             this.changelog = changelog;
             this.commandService = commandService;
@@ -47,83 +53,82 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
         private readonly ICommandService commandService;
         private readonly IViewFactory<LoginViewInput, LoginView> loginViewFactory;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
-        private readonly IStringCompressor stringCompressor;
         private readonly IJsonUtils jsonUtils;
+
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
 
-        public void SavePulledItem(SyncItem item)
+        public void ProcessDownloadedPackage(UserSyncPackageDto item)
         {
-            switch (item.ItemType)
-            {
-                case SyncItemType.Questionnare:
-                    this.UpdateInterview(item);
-                    break;
-                case SyncItemType.DeleteQuestionnare:
-                    this.DeleteInterview(item);
-                    break;
-                case SyncItemType.User:
-                    this.ChangeOrCreateUser(item);
-                    break;
-                case SyncItemType.Template:
-                    this.UpdateQuestionnaire(item);
-                    break;
-                case SyncItemType.DeleteTemplate:
-                    this.DeleteQuestionnaire(item);
-                    break;
-                case SyncItemType.QuestionnaireAssembly:
-                    this.UpdateAssembly(item);
-                    break;
-                default: break;
-            }
-
-            this.changelog.CreatePublicRecord(item.RootId);
-        }
-
-        public IList<ChangeLogRecordWithContent> GetItemsForPush()
-        {
-            var records = this.changelog.GetClosedDraftChunksIds();
-            return records.Select(chunk => new ChangeLogRecordWithContent(chunk.RecordId, chunk.EventSourceId, this.changelog.GetDraftRecordContent(chunk.RecordId))).ToList();
-        }
-
-        private void DeleteInterview(SyncItem item)
-        {
-            var questionnarieId = this.ExtractGuid(item.Content, item.IsCompressed);
-
-            try
-            {
-                this.capiCleanUpService.DeleteInterview(questionnarieId);
-            }
-
-            #warning replace catch with propper handler of absent questionnaries
-            catch (Exception ex)
-            {
-                this.logger.Error("Error on item deletion " + questionnarieId, ex);
-                throw;
-            }
-        }
-
-        private void ChangeOrCreateUser(SyncItem item)
-        {
-            var user = this.ExtractObject<UserDocument>(item.Content, item.IsCompressed);
+            var user = this.jsonUtils.Deserialize<UserDocument>(item.Content);
 
             ICommand userCommand = null;
 
             if (this.loginViewFactory.Load(new LoginViewInput(user.PublicKey)) == null)
                 userCommand = new CreateUserCommand(user.PublicKey, user.UserName, user.Password, user.Email,
-                                                    user.Roles.ToArray(), user.IsLockedBySupervisor, user.IsLockedByHQ,  user.Supervisor);
+                    user.Roles.ToArray(), user.IsLockedBySupervisor, user.IsLockedByHQ,  user.Supervisor);
             else
                 userCommand = new ChangeUserCommand(user.PublicKey, user.Email,
-                                                    user.Roles.ToArray(), user.IsLockedBySupervisor, user.IsLockedByHQ, user.Password, Guid.Empty);
+                    user.Roles.ToArray(), user.IsLockedBySupervisor, user.IsLockedByHQ, user.Password, Guid.Empty);
 
             this.commandService.Execute(userCommand);
         }
 
-        private void UpdateInterview(SyncItem item)
+        public void ProcessDownloadedPackage(QuestionnaireSyncPackageDto item, string itemType)
         {
-            var metaInfo = this.ExtractObject<WB.Core.SharedKernel.Structures.Synchronization.InterviewMetaInfo>(item.MetaInfo, item.IsCompressed);
+            switch (itemType)
+            {
+                case SyncItemType.Questionnaire:
+                    this.UpdateQuestionnaire(item);
+                    break;
+                case SyncItemType.DeleteQuestionnaire:
+                    this.DeleteQuestionnaire(item);
+                    break;
+                case SyncItemType.QuestionnaireAssembly:
+                    this.UpdateAssembly(item);
+                    break;
+            }
+        }
+
+        public void ProcessDownloadedPackage(InterviewSyncPackageDto item, string itemType)
+        {
+            switch (itemType)
+            {
+                case SyncItemType.Interview:
+                    this.UpdateInterview(item);
+                    break;
+                case SyncItemType.DeleteInterview:
+                    this.DeleteInterview(item);
+                    break;
+            }
+        }
+
+        public IList<ChangeLogRecordWithContent> GetItemsToPush(Guid userId)
+        {
+            var records = this.changelog.GetClosedDraftChunksIds(userId);
+            return records.Select(chunk => new ChangeLogRecordWithContent(chunk.RecordId, chunk.EventSourceId, this.changelog.GetDraftRecordContent(chunk.RecordId))).ToList();
+        }
+
+        private void DeleteInterview(InterviewSyncPackageDto item)
+        {
+            var interviewId = Guid.Parse(item.Content);
+
             try
             {
-                bool createdOnClient = metaInfo.CreatedOnClient.HasValue && metaInfo.CreatedOnClient.Value;
+                this.capiCleanUpService.DeleteInterview(interviewId);
+            }
+            catch (Exception ex)
+            {
+                #warning replace catch with propper handler of absent questionnaries
+                this.logger.Error("Error on item deletion " + interviewId, ex);
+            }
+        }
+
+        private void UpdateInterview(InterviewSyncPackageDto item)
+        {
+            var metaInfo = this.jsonUtils.Deserialize<WB.Core.SharedKernel.Structures.Synchronization.InterviewMetaInfo>(item.MetaInfo);
+            try
+            {
+                bool createdOnClient = metaInfo.CreatedOnClient.GetValueOrDefault();
 
                 var featuredQuestionsMeta = metaInfo
                     .FeaturedQuestionsMeta
@@ -147,19 +152,19 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             }
             catch (Exception ex)
             {
-                this.logger.Error("Error meta applying " + metaInfo.PublicKey, ex);
+                this.logger.Error(string.Format("Error while meta applying. Sync package: {0}, interview id: {1}", item.PackageId, metaInfo.PublicKey), ex);
                 throw;
             }
         }
 
-        private void UpdateQuestionnaire(SyncItem item)
+        private void UpdateQuestionnaire(QuestionnaireSyncPackageDto item)
         {
-            var template = this.ExtractObject<QuestionnaireDocument>(item.Content, item.IsCompressed);
+            var template = this.jsonUtils.Deserialize<QuestionnaireDocument>(item.Content);
 
             QuestionnaireMetadata metadata;
             try
             {
-                metadata = this.ExtractObject<QuestionnaireMetadata>(item.MetaInfo, item.IsCompressed);
+                metadata =  this.jsonUtils.Deserialize<QuestionnaireMetadata>(item.MetaInfo);
             }
             catch (Exception exception)
             {
@@ -171,23 +176,24 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             this.commandService.Execute(new RegisterPlainQuestionnaire(template.PublicKey, metadata.Version, metadata.AllowCensusMode, string.Empty));
         }
 
-        private void DeleteQuestionnaire(SyncItem item)
+        private void DeleteQuestionnaire(QuestionnaireSyncPackageDto item)
         {
             QuestionnaireMetadata metadata;
             try
             {
-                metadata = this.ExtractObject<QuestionnaireMetadata>(item.MetaInfo, item.IsCompressed);
+                metadata = this.jsonUtils.Deserialize<QuestionnaireMetadata>(item.MetaInfo);
             }
             catch (Exception exception)
             {
                 throw new ArgumentException("Failed to extract questionnaire version. Please upgrade supervisor to the latest version.", exception);
             }
-
-            this.questionnaireRepository.DeleteQuestionnaireDocument(metadata.QuestionnaireId, metadata.Version);
-            this.questionnareAssemblyFileAccessor.RemoveAssembly(metadata.QuestionnaireId, metadata.Version);
             
             try
             {
+                this.commandService.Execute(new DisableQuestionnaire(metadata.QuestionnaireId, metadata.Version, null));
+
+                this.questionnaireRepository.DeleteQuestionnaireDocument(metadata.QuestionnaireId, metadata.Version);
+                this.questionnareAssemblyFileAccessor.RemoveAssembly(metadata.QuestionnaireId, metadata.Version);
 
                 this.commandService.Execute(new DeleteQuestionnaire(metadata.QuestionnaireId, metadata.Version, null));
             }
@@ -199,39 +205,21 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             }
         }
 
-        private void UpdateAssembly(SyncItem item)
+        private void UpdateAssembly(QuestionnaireSyncPackageDto item)
         {
             QuestionnaireAssemblyMetadata metadata;
             try
             {
-                metadata = this.ExtractObject<QuestionnaireAssemblyMetadata>(item.MetaInfo, item.IsCompressed);
+                metadata = this.jsonUtils.Deserialize<QuestionnaireAssemblyMetadata>(item.MetaInfo);
             }
             catch (Exception exception)
             {
                 throw new ArgumentException("Failed to extract questionnaire version. Please upgrade supervisor to the latest version.", exception);
             }
 
-            var assemblyBody = this.ExtractObject<string>(item.Content, item.IsCompressed);
+            var assemblyBody = item.Content;
+
             questionnareAssemblyFileAccessor.StoreAssembly(metadata.QuestionnaireId, metadata.Version, assemblyBody);
         }        
-
-        private TResult ExtractObject<TResult>(string initialString, bool isCompressed)
-        {
-            string stringData = this.ExtractStringData(initialString, isCompressed);
-
-            return this.jsonUtils.Deserialize<TResult>(stringData);
-        }
-
-        private Guid ExtractGuid(string initialString, bool isCompressed)
-        {
-            string stringData = this.ExtractStringData(initialString, isCompressed);
-
-            return Guid.Parse(stringData);
-        }
-
-        private string ExtractStringData(string initialString, bool isCompressed)
-        {
-            return isCompressed ? this.stringCompressor.DecompressString(initialString) : initialString;
-        }
     }
 }

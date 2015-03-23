@@ -10,6 +10,7 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -81,24 +82,28 @@ namespace WB.UI.Capi
                         (ct) => this.CreateNewInterviewOnClient(ct, questionnaireId, questionnaireVersion));
             }
         }
-
+        
         public override void OnBackPressed()
         {
-            if (this.cancellationToken != null)
+            this.RunOnUiThread(this.Finish);
+            base.OnBackPressed();
+        }
+
+        public override void Finish()
+        {
+            if (this.cancellationToken != null && cancellationToken.Token.CanBeCanceled)
             {
                 this.cancellationToken.Cancel();
-                this.cancellationToken = null;
-                return;
             }
-            base.OnBackPressed();
+
+            base.Finish();
         }
 
         protected override void OnStop()
         {
-            if (this.cancellationToken != null)
+            if (this.cancellationToken != null && cancellationToken.Token.CanBeCanceled)
             {
                 this.cancellationToken.Cancel();
-                this.cancellationToken = null;
             }
             base.OnStop();
         }
@@ -112,6 +117,7 @@ namespace WB.UI.Capi
                 this.btnSendTabletInfo.Click += this.btnSendTabletInfo_Click;
                 this.btnSendTabletInfo.ProcessFinished += this.btnSendTabletInfo_ProcessFinished;
                 this.btnSendTabletInfo.ProcessCanceled += this.btnSendTabletInfo_ProcessCanceled;
+                this.btnSendTabletInfo.SenderCanceled += this.btnSendTabletInfo_SenderCanceled;
                 this.ActionBar.SetDisplayShowHomeEnabled(true);
                 this.Title = Resources.GetText(Resource.String.InterviewLoadingError);
 
@@ -138,6 +144,11 @@ namespace WB.UI.Capi
 
                 LogManipulator.CreatePublicRecord(interviewId);
 
+                if (ct.IsCancellationRequested)
+                {
+                    return;
+                }
+
                 var intent = new Intent(this, typeof(CreateInterviewActivity));
                 intent.PutExtra("publicKey", interviewId.ToString());
                 intent.AddFlags(ActivityFlags.NoHistory);
@@ -146,12 +157,15 @@ namespace WB.UI.Capi
             catch (Exception e)
             {
                 Logger.Error(e.Message, e);
-                #if DEBUG
-                ShowErrorMassageToUser(e.Message);
-                #endif
+
+                if (!ct.IsCancellationRequested)
+                {
+                    ShowErrorMassageToUser(e.Message);
+                }
             }
 
         }
+
         protected void Restore(CancellationToken ct, Guid interviewId, bool createdOnClient)
         {
             try
@@ -160,7 +174,6 @@ namespace WB.UI.Capi
 
                 if (ct.IsCancellationRequested)
                 {
-                    ShowErrorMassageToUser(string.Empty);
                     return;
                 }
 
@@ -169,7 +182,6 @@ namespace WB.UI.Capi
 
                 if (ct.IsCancellationRequested)
                 {
-                    ShowErrorMassageToUser(string.Empty);
                     return;
                 }
 
@@ -181,7 +193,17 @@ namespace WB.UI.Capi
             }
             catch (Exception e)
             {
-                ShowErrorMassageToUser(e.Message);
+                Logger.Error(e.Message, e);
+
+                if (!ct.IsCancellationRequested)
+                {
+                    ShowErrorMassageToUser(e.Message);
+                }
+                return;
+            }
+
+            if (ct.IsCancellationRequested)
+            {
                 return;
             }
 
@@ -211,10 +233,15 @@ namespace WB.UI.Capi
             this.tvSyncResult.Text = Resources.GetText(Resource.String.InformationPackageIsSuccessfullySent) + " " + Resources.GetText(Resource.String.ThankYouForPackage);
         }
 
-        private void btnSendTabletInfo_ProcessCanceled(object sender, EventArgs e)
+        private void btnSendTabletInfo_ProcessCanceled(object sender, InformationPackageCancellationEventArgs e)
         {
             this.tvSyncResult.Visibility = ViewStates.Visible;
-            this.tvSyncResult.Text = Resources.GetText(Resource.String.SendingOfInformationPackageIsCanceled);
+            this.tvSyncResult.Text = string.Format(Resources.GetText(Resource.String.SendingOfInformationPackageIsCanceled), e.Reason);
+        }
+
+        private void btnSendTabletInfo_SenderCanceled(object sender, EventArgs e)
+        {
+            this.tvSyncResult.Text = Resources.GetText(Resource.String.SendingOfInformationPackageIsCanceling);
         }
     }
 }

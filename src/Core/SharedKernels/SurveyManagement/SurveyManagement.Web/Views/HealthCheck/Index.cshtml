@@ -1,0 +1,69 @@
+﻿@using System.Web.Optimization
+@{
+    this.ViewBag.Title = "Health Check Page";
+}
+
+<div class="row health-check">
+    <div class="col-md-8 col-md-offset-2">
+
+        <h1 class="page-header">Health check page</h1>
+
+        <div>
+            <div class="panel-body">
+                <div class="well well-sm">Current health check state: &nbsp;<b class="is-good" data-bind="text: status, css: {'has-error': hasErrors, 'has-warning': hasWarnings}"></b></div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="list-group">
+                            <li class="list-group-item" data-bind="css: {'has-error': databaseConnectionError }">
+                                <span class="badge" data-bind="text:databaseConnectionStatus"></span>
+                                Database connection status
+                                <p data-bind="text:databaseConnectionError"></p>
+                            </li>
+                            <li class="list-group-item" data-bind="css: {'has-error': eventstoreConnectionError }">
+                                <span class="badge" data-bind="text:eventstoreConnectionStatus"></span>
+                                Eventstore connection status
+                                <p data-bind="text:eventstoreConnectionError"></p>
+                            </li>
+                            <li class="list-group-item" data-bind="css: {'has-warning': numberOfUnhandledPackages() > 0, 'has-error': numberOfUnhandledPackages() == 'Error' }">
+                                <span class="badge" data-bind="text:numberOfUnhandledPackages"></span>
+                                Number of unhandled packages
+                                <p data-bind="html:numberOfUnhandledPackagesError"></p>
+                            </li>
+                            <li class="list-group-item" data-bind="css: {'has-warning': numberOfSyncPackagesWithBigSize() > 0, 'has-error': numberOfSyncPackagesWithBigSize() == 'Error' }">
+                                <span class="badge" data-bind="text:numberOfSyncPackagesWithBigSize"></span>
+                                Number of sync packages with size more then 2Mb
+                                <p data-bind="html:numberOfSyncPackagesWithBigSizeError"></p>
+                            </li>
+                            <li class="list-group-item" data-bind="css: {'has-error': deniedFolders().length > 0 }">
+                                <span class="badge" data-bind="text:deniedFoldersStatus"></span>
+                                Permissions on write in App_Data folder
+                                <table class="table table-condensed margin-0" data-bind="foreach: deniedFolders">
+                                    <tr>
+                                        <td data-bind="text: $data"></td>
+                                    </tr>
+                                </table>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section scripts {
+
+    @Scripts.Render("~/Scripts/viewmodels/pages/healthcheck.js")
+    <script type="text/javascript">
+        var viewModel = new Supervisor.VM.HealthCheck(
+            '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "HealthCheckApi", action = "GetVerboseStatus"})');
+        viewModel.load();
+
+        setInterval(viewModel.load, 5000);
+
+        ko.applyBindings(viewModel);
+    </script>
+}

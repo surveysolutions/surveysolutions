@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.IO;
-using System.Threading;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataStorage
 {
@@ -19,18 +17,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataSto
             this.rootPath = rootPath;
             this.jsonSerrializer = jsonSerrializer;
         }
-        public FileTemporaryDataStorage(IJsonUtils jsonSerrializer)
-            : this(jsonSerrializer, AppDomain.CurrentDomain.GetData("DataDirectory").ToString())
-        {
-        }
-
+       
         public void Store(T payload, string name)
         {
             var path = this.GetOrCreateObjectStoreFolder();
 
-            lock (GetLockObject(path))
+            string fullFilePath = this.GetItemFileName(path, name);
+            lock (GetLockObject(fullFilePath))
             {
-                File.WriteAllText(this.GetItemFileName(path, name), this.jsonSerrializer.Serialize(payload));
+                File.WriteAllText(fullFilePath, this.jsonSerrializer.Serialize(payload));
             }
         }
 
@@ -44,9 +39,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataSto
             string fileContent;
             lock (GetLockObject(fullFilePath))
             {
-                fileContent = File.ReadAllText(fullFilePath);
-                
+                fileContent = File.ReadAllText(fullFilePath);    
             }
+
             return this.jsonSerrializer.Deserialize<T>(fileContent);
         }
 

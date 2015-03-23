@@ -1,35 +1,52 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Caching;
 using System.Web.Http;
-using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Core.Synchronization;
 using WB.UI.Headquarters.Models;
 using WB.UI.Shared.Web.Filters;
+
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
     [LocalOrDevelopmentAccessOnly]
     public class ControlPanelApiController : ApiController
     {
-        private readonly InterviewDetailsDataProcessorContext interviewDetailsDataProcessorContext;
         private readonly IReadSideAdministrationService readSideAdministrationService;
+        private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
+        private readonly MemoryCache cache = MemoryCache.Default;
 
-        public ControlPanelApiController(InterviewDetailsDataProcessorContext interviewDetailsDataProcessorContext,
-            IReadSideAdministrationService readSideAdministrationService)
+
+        public ControlPanelApiController(IReadSideAdministrationService readSideAdministrationService,
+            IIncomingSyncPackagesQueue incomingSyncPackagesQueue)
         {
-            this.interviewDetailsDataProcessorContext = interviewDetailsDataProcessorContext;
             this.readSideAdministrationService = readSideAdministrationService;
+            this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
         }
 
         public InterviewDetailsSchedulerViewModel InterviewDetails()
         {
-            return new InterviewDetailsSchedulerViewModel()
+            return new InterviewDetailsSchedulerViewModel
             {
-                Messages = this.interviewDetailsDataProcessorContext.GetMessages().ToArray()
+                Messages = new string[0]
             };
+        }
+
+        public int GetIncomingPackagesQueueLength()
+        {
+            if (this.cache.Contains("incomingPackagesQueueLength"))
+            {
+                return (int)this.cache.Get("incomingPackagesQueueLength");
+            }
+
+            int incomingPackagesQueueLength = this.incomingSyncPackagesQueue.QueueLength;
+            this.cache.Add("incomingPackagesQueueLength", incomingPackagesQueueLength, DateTime.UtcNow.AddSeconds(3));
+
+            return incomingPackagesQueueLength;
         }
 
         public IEnumerable<ReadSideEventHandlerDescription> GetAllAvailableHandlers()

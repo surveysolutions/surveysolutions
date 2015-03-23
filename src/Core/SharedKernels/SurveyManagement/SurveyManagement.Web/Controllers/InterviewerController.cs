@@ -4,10 +4,10 @@ using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
@@ -16,20 +16,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public InterviewerController(ICommandService commandService, 
                               IGlobalInfoProvider globalInfo, 
                               ILogger logger,
-                              IViewFactory<UserViewInputModel, UserView> userViewFactory,
+                              IUserViewFactory userViewFactory,
                               IPasswordHasher passwordHasher)
             : base(commandService, globalInfo, logger, userViewFactory, passwordHasher)
         {
         }
 
-        [Authorize(Roles = "Headquarter")]
+        [Authorize(Roles = "Administrator, Headquarter")]
         public ActionResult Create(Guid supervisorId)
         {
             return this.View(new InterviewerModel() {SupervisorId = supervisorId});
         }
 
         [HttpPost]
-        [Authorize(Roles = "Headquarter")]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
         public ActionResult Create(InterviewerModel model)
         {
@@ -51,29 +52,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.View(model);
         }
 
-        [Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "Administrator, Supervisor")]
         public ActionResult Index()
         {
             return this.View(this.GlobalInfo.GetCurrentUser().Id);
         }
 
-        [Authorize(Roles = "Headquarter, Supervisor")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public ActionResult Edit(Guid id)
         {
             var user = this.GetUserById(id);
 
             if(user == null) throw new HttpException(404, string.Empty);
 
-            return this.View(new UserEditModel()
+            return this.View(new UserEditModel
                 {
                     Id = user.PublicKey,
                     Email = user.Email,
-                    IsLocked = this.GlobalInfo.IsHeadquarter ? user.IsLockedByHQ : user.IsLockedBySupervisor,
-                    UserName = user.UserName
+                    IsLocked = this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator ? user.IsLockedByHQ : user.IsLockedBySupervisor,
+                    UserName = user.UserName,
+                    DevicesHistory = user.DeviceChangingHistory
                 });
         }
 
-        [Authorize(Roles = "Headquarter, Supervisor")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(UserEditModel model)
@@ -96,10 +98,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.View(model);
         }
 
-        [Authorize(Roles = "Headquarter, Supervisor")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public ActionResult Back(Guid id)
         {
-            if(!this.GlobalInfo.IsHeadquarter)
+            if (!(this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator))
                 return this.RedirectToAction("Index");
 
             var user = this.GetUserById(id);

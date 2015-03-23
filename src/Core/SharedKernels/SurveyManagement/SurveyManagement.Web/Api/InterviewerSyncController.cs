@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -8,7 +8,6 @@ using System.Web.Http;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection;
@@ -18,7 +17,6 @@ using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 using WB.Core.SharedKernels.SurveyManagement.Web.Resources;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
@@ -29,34 +27,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     public class InterviewerSyncController : BaseApiController
     {
         private readonly ISyncManager syncManager;
-        private readonly IViewFactory<UserViewInputModel, UserView> userInfoViewFactory;
+        private readonly IUserWebViewFactory userInfoViewFactory;
         private readonly ISupportedVersionProvider versionProvider;
         private readonly ISyncProtocolVersionProvider syncVersionProvider;
         private readonly IPlainInterviewFileStorage plainFileRepository;
-        private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IFileSystemAccessor fileSystemAccessor; 
         private readonly ITabletInformationService tabletInformationService;
-        private readonly IJsonUtils jsonUtils;
-
 
         private string ResponseInterviewerFileName = "interviewer.apk";
         private string CapiFileName = "wbcapi.apk";
         private string pathToSearchVersions = ("~/Client/");
 
 
-        public InterviewerSyncController(ICommandService commandService, 
+        public InterviewerSyncController(ICommandService commandService,
             IGlobalInfoProvider globalInfo,
             ISyncManager syncManager,
             ILogger logger,
-            IViewFactory<UserViewInputModel, UserView> userInfoViewFactory, 
+            IUserWebViewFactory userInfoViewFactory,
             ISupportedVersionProvider versionProvider,
             IPlainInterviewFileStorage plainFileRepository,
             IFileSystemAccessor fileSystemAccessor,
             ISyncProtocolVersionProvider syncVersionProvider,
-            ITabletInformationService tabletInformationService,
-            IJsonUtils jsonUtils)
+            ITabletInformationService tabletInformationService)
             : base(commandService, globalInfo, logger)
         {
-            
+
             this.plainFileRepository = plainFileRepository;
             this.versionProvider = versionProvider;
             this.syncManager = syncManager;
@@ -64,8 +59,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.fileSystemAccessor = fileSystemAccessor;
             this.tabletInformationService = tabletInformationService;
             this.syncVersionProvider = syncVersionProvider;
-            this.jsonUtils = jsonUtils;
         }
+
+        [HttpGet]
+        [ApiBasicAuth]
+        [Obsolete]
+        public HttpResponseMessage GetHandshakePackage(string clientId, string androidId, Guid? clientRegistrationId, int version = 0)
+        {
+            int supervisorRevisionNumber = syncVersionProvider.GetProtocolVersion();
+
+            Logger.Info(string.Format("Old version client. Client has protocol version {0} but current app protocol is {1} ", version, supervisorRevisionNumber));
+
+            return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, InterviewerSyncStrings.InterviewerIsNotCompatibleWithThisVersion);
+        }
+
+        private HttpResponseException CreateRestException(HttpStatusCode httpStatusCode, string message)
+        {
+            return new HttpResponseException(new HttpResponseMessage(httpStatusCode) {ReasonPhrase = message});
+        }
+
 
         [HttpPost]
         [ApiBasicAuth]
@@ -73,131 +85,155 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             int supervisorRevisionNumber = syncVersionProvider.GetProtocolVersion();
 
+            int supervisorShiftVersionNumber = syncVersionProvider.GetLastNonUpdatableVersion();
+            
             if (request.Version > supervisorRevisionNumber)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable)
-                {
-                    ReasonPhrase = string.Format(InterviewerSyncStrings.InterviewerApplicationHasHigherVersion_thanSupervisor_Format, request.Version, supervisorRevisionNumber)
-                });
+                Logger.Info(string.Format("Version mismatch. Client from the future. Client has protocol version {0} but current app protocol is {1} ", request.Version, supervisorRevisionNumber));
+
+                throw this.CreateRestException(HttpStatusCode.NotAcceptable, string.Format(InterviewerSyncStrings.InterviewerApplicationHasHigherVersion_thanSupervisor_Format, request.Version, supervisorRevisionNumber));
+            }
+
+            if (request.Version < supervisorShiftVersionNumber)
+            {
+                Logger.Info(string.Format(" Client has protocol version {0} but current app protocol is {1}. Major change.", request.Version, supervisorRevisionNumber));
+
+                throw this.CreateRestException(HttpStatusCode.NotAcceptable, InterviewerSyncStrings.InterviewerApplicationHasVersion_butSupervisorHas_PleaseReinstallInterviewerApplication);
             }
 
             if (request.Version < supervisorRevisionNumber)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable)
-                {
-                    ReasonPhrase = string.Format(InterviewerSyncStrings.InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication, request.Version, supervisorRevisionNumber)
-                });
+                Logger.Info(string.Format(" Client has protocol version {0} but current app protocol is {1} ", request.Version, supervisorRevisionNumber));
+
+                throw this.CreateRestException(HttpStatusCode.NotAcceptable,
+                    string.Format(InterviewerSyncStrings.InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication, request.Version, supervisorRevisionNumber));
             }
 
-            var interviewerInfo = userInfoViewFactory.Load(new UserViewInputModel(this.GlobalInfo.GetCurrentUser().Name, null));
+            if (string.IsNullOrEmpty(request.AndroidId))
+            {
+                Logger.Info(string.Format("Android device id was not provided"));
+
+                throw this.CreateRestException(HttpStatusCode.NotAcceptable, InterviewerSyncStrings.AndroidDeviceIdWasNotProvided);
+            }
+
+            var interviewerInfo = userInfoViewFactory.Load(new UserWebViewInputModel(this.GlobalInfo.GetCurrentUser().Name, null));
+
+            if (!string.IsNullOrEmpty(interviewerInfo.DeviceId) && interviewerInfo.DeviceId != request.AndroidId && !request.ShouldDeviceBeLinkedToUser)
+            {
+                Logger.Info(string.Format("User {0}[{1}] is linked to device {2}, but handshake was requested from device {3}",
+                        interviewerInfo.UserName, interviewerInfo.PublicKey, interviewerInfo.DeviceId, request.AndroidId));
+
+                throw this.CreateRestException(HttpStatusCode.NotAcceptable, InterviewerSyncStrings.WrongAndroidDeviceIdWasProvided);
+            }
 
             var identifier = new ClientIdentifier
             {
-                ClientDeviceKey = request.AndroidId,
+                AndroidId = request.AndroidId,
                 ClientInstanceKey = request.ClientId,
-                ClientVersionIdentifier = "unknown",
+                AppVersion = request.Version.ToString(CultureInfo.InvariantCulture),
                 ClientRegistrationKey = request.ClientRegistrationId,
-                SupervisorPublicKey = interviewerInfo.Supervisor.Id
+                UserId = interviewerInfo.PublicKey
             };
-            try
-            {
-                return syncManager.ItitSync(identifier);
-            }
-            catch (Exception exc)
-            {
-                Logger.Fatal(
-                    string.Format("Sync Handshake Error. ClientId:{0}, AndroidId : {1}, ClientRegistrationId:{2}, version: {3}",
-                        request.ClientId, request.AndroidId, request.ClientRegistrationId, request.Version), exc);
 
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
-                {
-                    ReasonPhrase = exc.Message
-                });
+            if (string.IsNullOrEmpty(interviewerInfo.DeviceId) || request.ShouldDeviceBeLinkedToUser)
+            {
+                this.syncManager.LinkUserToDevice(interviewerInfo.PublicKey, request.AndroidId, identifier.AppVersion, interviewerInfo.DeviceId);
             }
-        }
 
-        [HttpPost]
-        [ApiBasicAuth]
-        public SyncPackage GetSyncPackage(SyncPackageRequest request)
-        {
-            try
-            {
-                return syncManager.ReceiveSyncPackage(request.ClientRegistrationId, request.PackageId);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex.Message, ex);
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
-                {
-                    ReasonPhrase = InterviewerSyncStrings.ServerError
-                });
-            }
-        }
-
-        [HttpPost]
-        [ApiBasicAuth]
-        public SyncItemsMetaContainer GetARKeys(SyncItemsMetaContainerRequest request)
-        {
-            try
-            {
-                IEnumerable<SynchronizationChunkMeta> package = syncManager.GetAllARIdsWithOrder(this.GlobalInfo.GetCurrentUser().Id,
-                    request.ClientRegistrationId, request.LastSyncedPackageId);
-
-                return new SyncItemsMetaContainer {ChunksMeta = package};
-            }
-            catch (SyncPackageNotFoundException ex)
-            {
-                Logger.Error(ex.Message, ex);
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
-                {
-                    ReasonPhrase = InterviewerSyncStrings.ServerError
-                });
-            }
+            return syncManager.InitSync(identifier);
         }
 
         [HttpGet]
         [ApiBasicAuth]
-        public string GetPacakgeIdByTimeStamp(long timestamp)
+        public bool CheckExpectedDevice(string deviceId)
         {
-            return this.syncManager.GetPackageIdByTimestamp(new DateTime(timestamp));
+            var interviewerInfo = userInfoViewFactory.Load(new UserWebViewInputModel(this.GlobalInfo.GetCurrentUser().Name, null));
+            return string.IsNullOrEmpty(interviewerInfo.DeviceId) || interviewerInfo.DeviceId == deviceId;
         }
 
         [HttpPost]
         [ApiBasicAuth]
-        public void PostFile(PostFileRequest request)
+        public UserSyncPackageDto GetUserSyncPackage(SyncPackageRequest request)
+        {
+            return this.syncManager.ReceiveUserSyncPackage(request.ClientRegistrationId, request.PackageId, this.GlobalInfo.GetCurrentUser().Id);
+        }
+
+        [HttpPost]
+        [ApiBasicAuth]
+        public QuestionnaireSyncPackageDto GetQuestionnaireSyncPackage(SyncPackageRequest request)
+        {
+            return this.syncManager.ReceiveQuestionnaireSyncPackage(request.ClientRegistrationId, request.PackageId,
+                this.GlobalInfo.GetCurrentUser().Id);
+        }
+
+        [HttpPost]
+        [ApiBasicAuth]
+        public InterviewSyncPackageDto GetInterviewSyncPackage(SyncPackageRequest request)
+        {
+            return this.syncManager.ReceiveInterviewSyncPackage(request.ClientRegistrationId, request.PackageId,
+                this.GlobalInfo.GetCurrentUser().Id);
+        }
+
+        [HttpPost]
+        [ApiBasicAuth]
+        public SyncItemsMetaContainer GetUserPackageIds(SyncItemsMetaContainerRequest request)
         {
             try
             {
-                plainFileRepository.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data));
+                return this.syncManager.GetUserPackageIdsWithOrder(this.GlobalInfo.GetCurrentUser().Id, request.ClientRegistrationId, request.LastSyncedPackageId);
             }
-            catch (Exception ex)
+            catch (SyncPackageNotFoundException ex)
             {
-                Logger.Error(ex.Message, ex);
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
-                {
-                    ReasonPhrase = InterviewerSyncStrings.ServerError
-                });
+                this.Logger.Error(ex.Message, ex);
+                throw this.CreateRestException(HttpStatusCode.NotFound, InterviewerSyncStrings.ServerError);
             }
         }
 
         [HttpPost]
         [ApiBasicAuth]
-        public void PostPackage(PostPackageRequest request)
+        public SyncItemsMetaContainer GetQuestionnairePackageIds(SyncItemsMetaContainerRequest request)
         {
             try
             {
-                var syncItem = this.jsonUtils.Deserialize<SyncItem>(request.SynchronizationPackage);
-
-                syncManager.SendSyncItem(syncItem);
+                return this.syncManager.GetQuestionnairePackageIdsWithOrder(this.GlobalInfo.GetCurrentUser().Id, request.ClientRegistrationId, request.LastSyncedPackageId);
             }
-            catch (Exception ex)
+            catch (SyncPackageNotFoundException ex)
             {
-                Logger.Error(ex.Message, ex);
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
-                {
-                    ReasonPhrase = InterviewerSyncStrings.ServerError
-                });
+                this.Logger.Error(ex.Message, ex);
+                throw this.CreateRestException(HttpStatusCode.NotFound, InterviewerSyncStrings.ServerError);
             }
+        }
+
+        [HttpPost]
+        [ApiBasicAuth]
+        public SyncItemsMetaContainer GetInterviewPackageIds(SyncItemsMetaContainerRequest request)
+        {
+            try
+            {
+                return this.syncManager.GetInterviewPackageIdsWithOrder(this.GlobalInfo.GetCurrentUser().Id, request.ClientRegistrationId, request.LastSyncedPackageId);
+            }
+            catch (SyncPackageNotFoundException ex)
+            {
+                this.Logger.Error(ex.Message, ex);
+                throw this.CreateRestException(HttpStatusCode.NotFound, InterviewerSyncStrings.ServerError);
+            }
+        }
+
+        [HttpPost]
+        [ApiBasicAuth]
+        public HttpResponseMessage PostFile(PostFileRequest request)
+        {
+            plainFileRepository.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data));
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
+        [HttpPost]
+        [ApiBasicAuth]
+        public HttpResponseMessage PostPackage(PostPackageRequest request)
+        {
+            syncManager.SendSyncItem(interviewId: request.InterviewId, package: request.SynchronizationPackage);
+
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
 
         [HttpGet]
@@ -223,7 +259,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
             return Request.CreateErrorResponse(HttpStatusCode.NotFound, InterviewerSyncStrings.FileWasNotFound);
         }
-        
+
         [HttpGet]
         public bool CheckNewVersion(int versionCode)
         {

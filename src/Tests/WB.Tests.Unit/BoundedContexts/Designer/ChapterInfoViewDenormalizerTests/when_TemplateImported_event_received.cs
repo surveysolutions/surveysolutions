@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.ChapterInfoViewDenormalizerTest
 
         Because of = () =>
             viewState =
-                denormalizer.Create(Create.TemplateImportedEvent(questionnaireId: questionnaireId,
+                denormalizer.Update(null, Create.TemplateImportedEvent(questionnaireId: questionnaireId,
                     chapter1Id: chapter1Id, chapter1Title: chapter1Title, chapter1GroupId: chapter1GroupId,
                     chapter1GroupTitle: chapter1GroupTitle, chapter2Id: chapter2Id, chapter2Title: chapter2Title,
                     chapter2QuestionId: chapter2QuestionId, chapter2QuestionTitle: chapter2QuestionTitle,

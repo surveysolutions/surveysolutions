@@ -23,7 +23,6 @@ namespace Ncqrs.Eventing.Storage
         /// <summary>
         /// Persists the <paramref name="eventStream"/> in the store as a single and atomic commit.
         /// </summary>
-        /// <exception cref="ConcurrencyException">Occurs when there is already a newer version of the event provider stored in the event store.</exception>
         /// <param name="eventStream">The <see cref="UncommittedEventStream"/> to commit.</param>
         void Store(UncommittedEventStream eventStream);
     }

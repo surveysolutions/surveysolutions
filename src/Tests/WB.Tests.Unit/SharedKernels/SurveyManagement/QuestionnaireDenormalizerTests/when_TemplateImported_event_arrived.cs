@@ -10,8 +10,8 @@ using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Moq;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.EventHandler;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireDenormalizer
         {
             questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId };
 
-            questionnaireDocumentVersionedStorageMock = new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>();
+            questionnaireDocumentVersionedStorageMock = new Mock<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>();
             plainQuestionnaireRepositoryMock = new Mock<IPlainQuestionnaireRepository>();
 
             questionnaireBrowseItemDenormalizer = CreateDenormalizer(
@@ -38,12 +38,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireDenormalizer
             questionnaireBrowseItemDenormalizer.Handle(CreatePublishedEvent(questionnaireId, new TemplateImported() { AllowCensusMode = true, Source = questionnaireDocument }));
 
         It should_questionnaireBrowseItem_be_stored_at_versionedReadSideRepositoryWriter_once = () =>
-           questionnaireDocumentVersionedStorageMock.Verify(x => x.Store(Moq.It.Is<QuestionnaireDocumentVersioned>(b => b.Version == 1 && b.Questionnaire.PublicKey == questionnaireDocument.PublicKey), questionnaireId.FormatGuid()), Times.Once);
+           questionnaireDocumentVersionedStorageMock.Verify(x => x.Store(Moq.It.Is<QuestionnaireDocumentVersioned>(b => b.Version == 1 && b.Questionnaire.PublicKey == questionnaireDocument.PublicKey), questionnaireId.FormatGuid() + "$1"), Times.Once);
 
         private static QuestionnaireDenormalizer questionnaireBrowseItemDenormalizer;
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static QuestionnaireDocument questionnaireDocument;
-        private static Mock<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>> questionnaireDocumentVersionedStorageMock;
+        private static Mock<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>> questionnaireDocumentVersionedStorageMock;
         private static Mock<IPlainQuestionnaireRepository> plainQuestionnaireRepositoryMock;
 
     }

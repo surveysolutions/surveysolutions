@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
@@ -63,7 +61,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             Assert.That(evnt.ValidationMessage, Is.EqualTo(question.ValidationMessage));
         }
 
-        private static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(Mock<IReadSideRepositoryWriter<QuestionnaireDocument>> storageStub)
+        private static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(Mock<IReadSideKeyValueStorage<QuestionnaireDocument>> storageStub)
         {
             #warning: we shouldn't use CompleteQuestionFactory here?
             var denormalizer = new QuestionnaireDenormalizer(storageStub.Object, new QuestionnaireEntityFactory(), Mock.Of<ILogger>());
@@ -71,9 +69,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             return denormalizer;
         }
 
-        private static Mock<IReadSideRepositoryWriter<QuestionnaireDocument>> CreateQuestionnaireDenormalizerStorageStub(QuestionnaireDocument document)
+        private static Mock<IReadSideKeyValueStorage<QuestionnaireDocument>> CreateQuestionnaireDenormalizerStorageStub(QuestionnaireDocument document)
         {
-            var storageStub = new Mock<IReadSideRepositoryWriter<QuestionnaireDocument>>();
+            var storageStub = new Mock<IReadSideKeyValueStorage<QuestionnaireDocument>>();
 
             storageStub.Setup(d => d.GetById(document.PublicKey.FormatGuid())).Returns(document);
 

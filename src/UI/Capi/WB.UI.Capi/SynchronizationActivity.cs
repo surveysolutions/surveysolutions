@@ -12,31 +12,30 @@ using Android.Widget;
 using System;
 using System.Text;
 using System.Threading;
-using CAPI.Android.Core.Model;
-using CAPI.Android.Core.Model.Authorization;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
+using WB.Core.BoundedContexts.Capi.Implementation.Authorization;
 using WB.Core.BoundedContexts.Capi.Implementation.Services;
+using WB.Core.BoundedContexts.Capi.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.Login;
-using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Controls;
 using WB.UI.Capi.Extensions;
-using WB.UI.Capi.Services;
-using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization;
 using WB.UI.Shared.Android.Extensions;
+using OperationCanceledException = System.OperationCanceledException;
+using SynchronizationEventArgs = WB.Core.BoundedContexts.Capi.Implementation.Synchronization.SynchronizationEventArgs;
+using SynchronizationEventArgsWithPercent = WB.Core.BoundedContexts.Capi.Implementation.Synchronization.SynchronizationEventArgsWithPercent;
 
 namespace WB.UI.Capi
 {
@@ -109,6 +108,7 @@ namespace WB.UI.Capi
             this.btnSendTabletInfo.Click += this.btnSendTabletInfo_Click;
             this.btnSendTabletInfo.ProcessFinished += this.btnSendTabletInfo_ProcessFinished;
             this.btnSendTabletInfo.ProcessCanceled += this.btnSendTabletInfo_ProcessCanceled;
+            this.btnSendTabletInfo.SenderCanceled += this.btnSendTabletInfo_SenderCanceled;
             this.tvSyncResult.Click += this.tvSyncResult_Click;
             this.llContainer.Click += this.llContainer_Click;
 
@@ -135,7 +135,7 @@ namespace WB.UI.Capi
                     this.RunOnUiThread(() =>
                     {
                         this.DestroyDialog();
-                        this.tvSyncResult.Text = "Sync is finished.";
+                        this.tvSyncResult.Text = Resources.GetString(Resource.String.SyncIsFinished);
                         bool result = CapiApplication.Membership.LogOnAsync(login, passwordHash, wasPasswordHashed: true).Result;
                         if (result)
                         {
@@ -194,14 +194,10 @@ namespace WB.UI.Capi
 
         private void btnRestore_Click(object sender, EventArgs e)
         {
-            AlertDialog.Builder alertWarningAboutRestore = new AlertDialog.Builder(this);
-            alertWarningAboutRestore.SetTitle("Warning");
-            alertWarningAboutRestore.SetMessage(
-                string.Format(
-                    "All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}",
-                    this.backupManager.RestorePath));
-            alertWarningAboutRestore.SetPositiveButton("Yes", this.btnRestoreConfirmed_Click);
-            alertWarningAboutRestore.SetNegativeButton("No", this.btnRestoreDeclined_Click);
+            var alertWarningAboutRestore =  this.CreateYesNoDialog(this, 
+               this.btnRestoreConfirmed_Click, this.btnRestoreDeclined_Click, 
+               this.Resources.GetString(Resource.String.Warning), message: string.Format(this.Resources.GetString(Resource.String.AreYouSureYouWantToRestore), this.backupManager.RestorePath));
+
             alertWarningAboutRestore.Show();
         }
 
@@ -220,7 +216,7 @@ namespace WB.UI.Capi
             {
                 Logger.Fatal("Error occured during Backup. ", exception);
             }
-            
+
             var alert = new AlertDialog.Builder(this);
             if (string.IsNullOrWhiteSpace(path))
             {
@@ -230,11 +226,11 @@ namespace WB.UI.Capi
             else
             {
                 alert.SetTitle("Success");
-                alert.SetMessage(string.Format("Backup was saved to {0}", path));    
+                alert.SetMessage(string.Format("Backup was saved to {0}", path));
             }
-            
-            
-            
+
+
+
             alert.Show();
         }
 
@@ -248,9 +244,15 @@ namespace WB.UI.Capi
             this.tvSyncResult.Text = Resources.GetText(Resource.String.InformationPackageIsSuccessfullySent);
         }
 
-        private void btnSendTabletInfo_ProcessCanceled(object sender, EventArgs e)
+        private void btnSendTabletInfo_ProcessCanceled(object sender, InformationPackageCancellationEventArgs e)
         {
-            this.tvSyncResult.Text = Resources.GetText(Resource.String.SendingOfInformationPackageIsCanceled);
+            this.tvSyncResult.Text = string.Format(Resources.GetText(Resource.String.SendingOfInformationPackageIsCanceled), e.Reason);
+        }
+
+
+        private void btnSendTabletInfo_SenderCanceled(object sender, EventArgs e)
+        {
+            this.tvSyncResult.Text = Resources.GetText(Resource.String.SendingOfInformationPackageIsCanceling);
         }
 
         protected override void OnStart()
@@ -264,13 +266,24 @@ namespace WB.UI.Capi
         {
             if (this.progressDialog != null) return;
 
+            var interviewerSettings = CapiApplication.Kernel.Get<IInterviewerSettings>();
+
+            if (!interviewerSettings.GetSyncAddressPoint().IsValidHttpAddress())
+            {
+                this.tvSyncResult.Text = Properties.Resources.InvalidSyncPointAddressUrl;
+                return;
+            }
+
             this.PrepareUI();
             try
             {
+                var deviceChangeVerifier = this.CreateDeviceChangeVerifier();
                 var changeLogManipulator = CapiApplication.Kernel.Get<IChangeLogManipulator>();
                 var plainFileRepository = CapiApplication.Kernel.Get<IPlainInterviewFileStorage>();
-                var cleaner = new CapiCleanUpService(changeLogManipulator, plainFileRepository);
+                var cleaner = new CapiCleanUpService(changeLogManipulator, plainFileRepository, CapiApplication.Kernel.Get<ISyncPackageIdsStorage>());
+
                 this.synchronizer = new SynchronozationProcessor(
+                    deviceChangeVerifier,
                     authenticator,
                     new CapiDataSynchronizationService(
                         changeLogManipulator,
@@ -280,7 +293,6 @@ namespace WB.UI.Capi
                         cleaner,
                         ServiceLocator.Current.GetInstance<ILogger>(),
                         CapiApplication.Kernel.Get<ICapiSynchronizationCacheService>(),
-                        CapiApplication.Kernel.Get<IStringCompressor>(),
                         CapiApplication.Kernel.Get<IJsonUtils>(),
                         CapiApplication.Kernel.Get<IQuestionnaireAssemblyFileAccessor>()),
                     cleaner,
@@ -288,7 +300,7 @@ namespace WB.UI.Capi
                     CapiApplication.Kernel.Get<ISyncPackageIdsStorage>(),
                     CapiApplication.Kernel.Get<ILogger>(),
                     CapiApplication.Kernel.Get<ISynchronizationService>(),
-                    CapiApplication.Kernel.Get<IInterviewerSettings>());
+                    interviewerSettings);
             }
             catch (Exception ex)
             {
@@ -302,17 +314,74 @@ namespace WB.UI.Capi
             this.synchronizer.ProcessCanceling += this.synchronizer_ProcessCanceling;
             this.synchronizer.ProcessCanceled += this.synchronizer_ProcessCanceled;
 
-            this.CreateDialog(ProgressDialogStyle.Spinner, "Initializing", false, this.progressDialog_Cancel);
+            this.CreateDialog(ProgressDialogStyle.Spinner, Resources.GetString(Resource.String.Initializing), false, this.progressDialog_Cancel);
 
             await this.synchronizer.Run();
         }
 
+        protected IDeviceChangingVerifier CreateDeviceChangeVerifier()
+        {
+            var deviceChangeVerifier = new DeviceChangingVerifier();
+            deviceChangeVerifier.ConfirmDeviceChangeCallback += this.ConfirmDeviceChangeCallback;
+            return deviceChangeVerifier;
+        }
 
         protected ISyncAuthenticator CreateAuthenticator()
         {
             var authentificator = new RestAuthenticator();
             authentificator.RequestCredentialsCallback += this.RequestCredentialsCallBack;
             return authentificator;
+        }
+
+        protected bool ConfirmDeviceChangeCallback(object sender)
+        {
+            bool shouldThisDeviceBeLinkedToUser = false;
+            bool actionCompleted = false;
+            this.RunOnUiThread(
+                () =>
+                {
+                    if (this.progressDialog != null) this.progressDialog.Dismiss();
+
+                    EventHandler<DialogClickEventArgs> noHandler = (s, ev) => { actionCompleted = true; this.synchronizer.Cancel(); };
+
+                    var firstConfirmationDialog = this.CreateYesNoDialog(this, 
+                        yesHandler: (s, ev) =>
+                        {
+                            var secondConfirmationDialog = this.CreateYesNoDialog(this, 
+                                yesHandler: (s1, evnt) =>
+                                {
+                                    if (this.progressDialog != null) 
+                                        this.progressDialog.Show();
+                                    shouldThisDeviceBeLinkedToUser = true;
+                                    actionCompleted = true;
+                                }, noHandler: noHandler, title: this.Resources.GetString(Resource.String.ConfirmDeviceChanging), message: this.Resources.GetString(Resource.String.AllYourDataWillBeDeleted));
+                            secondConfirmationDialog.Show();
+
+                        }, noHandler: noHandler, title: this.Resources.GetString(Resource.String.ConfirmDeviceChanging), message: this.Resources.GetString(Resource.String.MakeThisTabletWorkingDevice));
+                        firstConfirmationDialog.Show();
+                });
+            while (!actionCompleted)
+            {
+                Thread.Sleep(200);
+            }
+            return shouldThisDeviceBeLinkedToUser;
+        }
+
+        public AlertDialog CreateYesNoDialog(Activity activity, EventHandler<DialogClickEventArgs> yesHandler, EventHandler<DialogClickEventArgs> noHandler, string title = null, string message = null)
+        {
+            var builder = new AlertDialog.Builder(activity);
+            builder.SetNegativeButton(Resources.GetString(Resource.String.No), noHandler);
+            builder.SetPositiveButton(Resources.GetString(Resource.String.Yes), yesHandler);
+            builder.SetCancelable(false);
+            if (!string.IsNullOrWhiteSpace(title))
+            {
+                builder.SetTitle(title);
+            }
+            if (!string.IsNullOrWhiteSpace(message))
+            {
+                builder.SetMessage(message);
+            }
+            return builder.Create();
         }
 
         protected SyncCredentials? RequestCredentialsCallBack(object sender)
@@ -373,7 +442,7 @@ namespace WB.UI.Capi
             this.RunOnUiThread(() =>
                 {
                     this.DestroyDialog();
-                    this.tvSyncResult.Text = "Sync is finished.";
+                    this.tvSyncResult.Text =  Resources.GetString(Resource.String.SyncIsFinished);
                 });
             this.DestroySynchronizer();
         }
@@ -395,36 +464,48 @@ namespace WB.UI.Capi
             this.RunOnUiThread(() =>
                 {
                     this.DestroyDialog();
-                    if (evt.Exceptions != null && evt.Exceptions.Count > 0)
+                    if (evt.Exception != null)
                     {
-                        var settingsManager = ServiceLocator.Current.GetInstance<IInterviewerSettings>();
-                        var sb = new StringBuilder();
-                        foreach (var exception in evt.Exceptions)
-                        {
-                            var restException = exception as RestException;
-                            if (restException != null)
-                            {
-                                if (string.IsNullOrEmpty(restException.Message))
-                                {
-                                    sb.AppendLine(
-                                        string.Format(
-                                            Resources.GetString(Resource.String.PleaseCheckURLInSettingsFormat),
-                                            settingsManager.GetSyncAddressPoint(), GetNetworkDescription(),
-                                            GetNetworkStatus((int)restException.StatusCode)));
-                                }
-                                else
-                                {
-                                    sb.AppendLine(restException.Message);
-                                }
-                                sb.AppendLine(Resources.GetString(Resource.String.NewHtmlLine));
-                                continue;
-                            }
-                            sb.AppendLine(exception.Message);
+                        var errorMessage = Properties.Resources.SynchronizationUnhandledExceptionMessage;
 
-                            sb.AppendLine(Resources.GetString(Resource.String.NewHtmlLine));
+                        var taskCancellationException = evt.Exception as OperationCanceledException;
+                        if (taskCancellationException != null)
+                        {
+                            errorMessage = Properties.Resources.SynchronizationCanceledExceptionMessage;
                         }
+
+                        var restException = evt.Exception as RestException;
+                        if (restException != null)
+                        {
+                            switch (restException.StatusCode)
+                            {
+                                case HttpStatusCode.UpgradeRequired:
+                                case HttpStatusCode.Unauthorized:
+                                case HttpStatusCode.NotAcceptable:
+                                    errorMessage = restException.Message;
+                                    break;
+                                case HttpStatusCode.NotFound:
+                                case HttpStatusCode.InternalServerError:
+                                    errorMessage = Properties.Resources.SynchronizationInternalServerError;
+                                    break;
+                                case HttpStatusCode.RequestTimeout:
+                                    errorMessage = Properties.Resources.SynchronizationRequestTimeout;
+                                    break;
+                                case HttpStatusCode.ServiceUnavailable:
+                                    errorMessage = restException.Message.Contains("maintenance") ? Properties.Resources.SynchronizationMaintenance : restException.Message;
+                                    break;
+                                default:
+                                    var settingsManager = ServiceLocator.Current.GetInstance<IInterviewerSettings>();
+
+                                    errorMessage = string.Format(Properties.Resources.PleaseCheckURLInSettingsFormat,
+                                        settingsManager.GetSyncAddressPoint(), GetNetworkDescription(),
+                                        GetNetworkStatus((int) restException.StatusCode));
+                                    break;
+                            }
+                        }
+
                         tvSyncResult.MovementMethod = LinkMovementMethod.Instance;
-                        this.tvSyncResult.SetText(Html.FromHtml(sb.ToString()), TextView.BufferType.Spannable);
+                        this.tvSyncResult.SetText(Html.FromHtml(errorMessage), TextView.BufferType.Spannable);
                     }
                     remoteCommandDoneEvent.Set();
                 });
@@ -441,20 +522,24 @@ namespace WB.UI.Capi
         {
             var connectivityManager = (ConnectivityManager)this.GetSystemService(ConnectivityService);
 
-            var networkInfo = connectivityManager.GetNetworkInfo(ConnectivityType.Wifi);
-            if (networkInfo.IsConnected)
+            if (connectivityManager != null)
             {
-                var wifiManager = (WifiManager)this.GetSystemService(WifiService);
-                var connectionInfo = wifiManager.ConnectionInfo;
-                if (connectionInfo != null && !string.IsNullOrEmpty(connectionInfo.SSID))
+                var networkInfoWiFi = connectivityManager.GetNetworkInfo(ConnectivityType.Wifi);
+                if (networkInfoWiFi != null && networkInfoWiFi.IsConnected)
                 {
-                    return string.Format(Resources.GetString(Resource.String.NowYouareConnectedToWifiNetwork), connectionInfo.SSID);
+                    var wifiManager = (WifiManager) this.GetSystemService(WifiService);
+                    if (wifiManager != null && wifiManager.ConnectionInfo != null && !string.IsNullOrEmpty(wifiManager.ConnectionInfo.SSID))
+                    {
+                        return string.Format(Resources.GetString(Resource.String.NowYouareConnectedToWifiNetwork),
+                            wifiManager.ConnectionInfo.SSID);
+                    }
                 }
-            }
-            var mobileState = connectivityManager.GetNetworkInfo(ConnectivityType.Mobile).GetState();
-            if (mobileState == NetworkInfo.State.Connected)
-            {
-                return Resources.GetString(Resource.String.NowYouareConnectedToMobileNetwork);
+
+                var mobileInfoMobile = connectivityManager.GetNetworkInfo(ConnectivityType.Mobile);
+                if (mobileInfoMobile != null && mobileInfoMobile.GetState() == NetworkInfo.State.Connected)
+                {
+                    return Resources.GetString(Resource.String.NowYouareConnectedToMobileNetwork);
+                }
             }
             return Resources.GetString(Resource.String.YouAreNotConnectedToAnyNetwork);
         }

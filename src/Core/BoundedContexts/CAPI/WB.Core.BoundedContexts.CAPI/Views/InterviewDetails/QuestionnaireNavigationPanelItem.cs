@@ -1,4 +1,5 @@
 using System;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
@@ -6,13 +7,13 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
     public class QuestionnaireNavigationPanelItem : Cirrious.MvvmCross.ViewModels.MvxViewModel,
                                                     IQuestionnaireItemViewModel
     {
-        public QuestionnaireNavigationPanelItem(InterviewItemId publicKey, Func<InterviewItemId, IQuestionnaireViewModel> getFullScreen)
+        public QuestionnaireNavigationPanelItem(InterviewItemId publicKey, Func<string, IQuestionnaireViewModel> getFullScreen)
         {
             this.PublicKey = publicKey;
             this.getFullScreen = getFullScreen;
         }
 
-        private Func<InterviewItemId, IQuestionnaireViewModel> getFullScreen;
+        private Func<string, IQuestionnaireViewModel> getFullScreen;
 
         public InterviewItemId PublicKey { get; private set; }
 
@@ -58,7 +59,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             {
                 if (screen == null)
                 {
-                    screen = getFullScreen(PublicKey);
+                    screen = getFullScreen(ConversionHelper.ConvertIdAndRosterVectorToString(PublicKey.Id, PublicKey.InterviewItemPropagationVector));
                     screen.PropertyChanged += screen_PropertyChanged;
                 }
                 return this.screen;

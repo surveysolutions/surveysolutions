@@ -2,12 +2,13 @@
 using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -20,9 +21,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 {
     internal class SampleImportService : ISampleImportService
     {
-        private readonly IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage;
-        private readonly IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireExportStructureStorage;
-        private readonly IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
+        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage;
+        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+        private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage;
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
         private static ILogger Logger
@@ -30,11 +31,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
         }
 
-        public SampleImportService(IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage,
+        public SampleImportService(IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage,
             ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage,
             IPreloadedDataServiceFactory preloadedDataServiceFactory,
-            IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireExportStructureStorage,
-            IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireRosterStructureStorage)
+            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage,
+            IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage)
         {
             this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
             this.tempSampleCreationStorage = tempSampleCreationStorage;
@@ -79,14 +80,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
         {
             var result = this.GetSampleCreationStatus(id);
 
-            var bigTemplateObject = this.questionnaireDocumentVersionedStorage.GetById(questionnaireId, version);
-            var questionnaireExportStructure = this.questionnaireExportStructureStorage.GetById(questionnaireId, version);
-            var questionnaireRosterStructure = this.questionnaireRosterStructureStorage.GetById(questionnaireId, version);
+            var bigTemplateObject = this.questionnaireDocumentVersionedStorage.AsVersioned().Get(questionnaireId.FormatGuid(), version);
+            var questionnaireExportStructure = this.questionnaireExportStructureStorage.AsVersioned().Get(questionnaireId.FormatGuid(), version);
+            var questionnaireRosterStructure = this.questionnaireRosterStructureStorage.AsVersioned().Get(questionnaireId.FormatGuid(), version);
             var bigTemplate = bigTemplateObject == null ? null : bigTemplateObject.Questionnaire;
 
             if (bigTemplate == null || questionnaireExportStructure == null || questionnaireRosterStructure==null)
             {
-                result.SetErrorMessage("Template is absent");
+                result.SetErrorMessage("Questionnaire is absent");
                 this.tempSampleCreationStorage.Store(result, id);
                 return;
             }

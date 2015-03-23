@@ -12,7 +12,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <NuGetPackageImportStamp>f48d0bad</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>724be30e</NuGetPackageImportStamp>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
@@ -24,7 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsNotAsErrors>612,618,1030,649</WarningsNotAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -42,13 +42,8 @@
       <HintPath>..\..\..\packages\AppDomainToolkit.1.0.4.1\lib\net\AppDomainToolkit.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EventStore.ClientAPI, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\EventStore.Client.3.0.1\lib\net40\EventStore.ClientAPI.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EventStore.ClientAPI.Embedded">
-      <HintPath>..\..\..\packages\EventStore.Client.Embedded.3.0.1\lib\net40\EventStore.ClientAPI.Embedded.dll</HintPath>
+    <Reference Include="Esent.Interop, Version=1.7.0.0, Culture=neutral, PublicKeyToken=8dd49bbdae3f61af, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Externals\Esent.Interop.dll</HintPath>
     </Reference>
     <Reference Include="FluentAssertions">
       <HintPath>..\..\..\packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.dll</HintPath>
@@ -82,15 +77,9 @@
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="protobuf-net">
-      <HintPath>..\..\..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Abstractions">
-      <HintPath>..\..\..\packages\RavenDB.Database.3.0.3528\lib\net45\Raven.Abstractions.dll</HintPath>
-    </Reference>
     <Reference Include="Raven.Abstractions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\RavenDB.Tests.Helpers.3.0.3528\lib\net45\Raven.Abstractions.dll</HintPath>
+      <HintPath>..\..\..\packages\RavenDB.Client.3.0.3528\lib\net45\Raven.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Raven.Client.Lightweight">
       <HintPath>..\..\..\packages\RavenDB.Client.3.0.3528\lib\net45\Raven.Client.Lightweight.dll</HintPath>
@@ -100,12 +89,6 @@
       <HintPath>..\..\..\packages\RavenDB.Database.3.0.3528\lib\net45\Raven.Database.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Raven.Server">
-      <HintPath>..\..\..\packages\RavenDB.Tests.Helpers.3.0.3528\lib\net45\Raven.Server.exe</HintPath>
-    </Reference>
-    <Reference Include="Raven.Tests.Helpers">
-      <HintPath>..\..\..\packages\RavenDB.Tests.Helpers.3.0.3528\lib\net45\Raven.Tests.Helpers.dll</HintPath>
-    </Reference>
     <Reference Include="Rhino.Mocks">
       <HintPath>..\..\..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
       <Private>True</Private>
@@ -113,6 +96,10 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite, Version=1.0.94.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\System.Data.SQLite.Core.1.0.94.0\lib\net45\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -142,8 +129,6 @@
     <Compile Include="EventContext.cs" />
     <Compile Include="EventContextExtensions.cs" />
     <Compile Include="EventHandler\when_event_handlers_are_created.cs" />
-    <Compile Include="EventStore\when_storing_event_stream.cs" />
-    <Compile Include="EventStore\with_in_memory_event_store.cs" />
     <Compile Include="Execute.cs" />
     <Compile Include="InterviewStatistics\Create.cs" />
     <Compile Include="InterviewStatistics\InterviewChartDenormalizerTestContext.cs" />
@@ -218,34 +203,15 @@
     <Compile Include="SqlToTabDataExportServiceTests\when_export_all_data_from_sqlite_data_base.cs" />
     <Compile Include="SqlToTabDataExportServiceTests\when_export_approved_data_from_sqlite_data_base.cs" />
     <Compile Include="StorageTests\DocumentStoreFailedTests.cs" />
-    <Compile Include="StorageTests\RavenDBEventStoreTests.cs" />
-    <Compile Include="StorageTests\RavenDBTestBase.cs" />
-    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\RavenFilesStoreRepositoryAccessorTestContext.cs" />
-    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_clear_method_called.cs" />
-    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_count_of_stored_view_called_and_one_view_is_actually_stored.cs" />
-    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_disable_cache_method_called.cs" />
-    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_get_by_id_called_and_cache_is_disabled_and_view_was_stored_avoiding_cache.cs" />
-    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_get_by_id_called_and_cache_is_enabled_and_view_was_stored_avoiding_cache.cs" />
-    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_get_by_id_called_and_cache_is_enabled_and_view_was_stored_in_cache.cs" />
-    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_get_by_id_called_but_view_is_missing.cs" />
-    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_remove_by_id_called_but_view_is_missing.cs" />
-    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_remove_by_id_called_view_is_present_and_cache_is_disabled.cs" />
-    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_remove_by_id_called_view_is_present_and_cache_is_enabled.cs" />
-    <Compile Include="StorageTests\RavenFilesStoreRepositoryAccessorTests\when_store_view_cache_is_enabled_and_limit_of_cached_size_is_reached.cs" />
     <Compile Include="StorageTests\RavenReadSideRepositoryReaderTests\RavenReadSideRepositoryReaderTestsContext.cs" />
     <Compile Include="StorageTests\RavenReadSideRepositoryReaderTests\when_counting_repository_entities_and_views_are_being_rebuilt.cs" />
     <Compile Include="StorageTests\RavenReadSideRepositoryReaderTests\when_getting_repository_entity_by_id_and_views_are_being_rebuilt.cs" />
     <Compile Include="StorageTests\RavenReadSideRepositoryReaderTests\when_querying_repository_entities_and_views_are_being_rebuilt.cs" />
     <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\RavenReadSideRepositoryWriterTestsContext.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_disabling_cache.cs" />
+    <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_bulk_store_used.cs" />
     <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_get_by_id_called_and_cache_is_disabled.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_get_by_id_called_and_cache_is_enabled.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_get_by_id_called_cache_is_enabled_and_view_stored_at_file_system.cs" />
     <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_remove_called_and_cache_is_disabled.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_remove_called_and_cache_is_enabled.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_remove_called_cache_is_enabled_and_view_stored_at_file_system.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_store_called_cache_is_enabled_and_cache_limit_is_reached.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_store_called_cache_is_enabled_and_view_stored_at_file_system.cs" />
+    <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_store_called_and_cache_is_disabled.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="SurveyManagement\RavenIndexes\RavenIndexesTestContext.cs" />
     <Compile Include="SurveyManagement\RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_4_misc_questionnaire_browse_items.cs" />
@@ -255,11 +221,14 @@
     <Compile Include="SurveyManagement\RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_initial_statuses.cs" />
     <Compile Include="SurveyManagement\RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_redo_statuses.cs" />
     <Compile Include="SurveyManagement\RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_unassigned_statuses.cs" />
+    <Compile Include="Synchronization\RavenIndexes\InterviewSyncPackagesGroupedByRootTests\when_applying_index_to_3_misc_InterviewSyncPackageMeta.cs" />
     <Compile Include="ZipUtilsTests\ZipUtilsTestsFixture.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.Capi.csproj">
@@ -314,6 +283,10 @@
       <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
       <Name>WB.Core.SharedKernels.SurveySolutions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\Synchronization\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
+      <Project>{75D70EB8-1E56-4BFE-816C-5231112F64C0}</Project>
+      <Name>WB.Core.Synchronization</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="QuestionnaireTests\" />
@@ -331,9 +304,11 @@ xcopy /s /y "$(SolutionDir)\..\packages\System.Data.SQLite.Core.1.0.94.0\build\n
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-    <Error Condition="!Exists('..\..\..\packages\EventStore.Client.Embedded.3.0.1\build\EventStore.Client.Embedded.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\EventStore.Client.Embedded.3.0.1\build\EventStore.Client.Embedded.targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\System.Data.SQLite.Core.1.0.94.0\build\net45\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\System.Data.SQLite.Core.1.0.94.0\build\net45\System.Data.SQLite.Core.targets'))" />
   </Target>
-  <Import Project="..\..\..\packages\EventStore.Client.Embedded.3.0.1\build\EventStore.Client.Embedded.targets" Condition="Exists('..\..\..\packages\EventStore.Client.Embedded.3.0.1\build\EventStore.Client.Embedded.targets')" />
+  <Import Project="..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Import Project="..\..\..\packages\System.Data.SQLite.Core.1.0.94.0\build\net45\System.Data.SQLite.Core.targets" Condition="Exists('..\..\..\packages\System.Data.SQLite.Core.1.0.94.0\build\net45\System.Data.SQLite.Core.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
