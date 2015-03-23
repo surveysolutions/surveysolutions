@@ -39,13 +39,13 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
             streamableEventStoreMock.Setup(x => x.ReadFrom(eventSourceId, 0, long.MaxValue))
                 .Returns(new CommittedEventStream(eventSourceId, new[] { committedEvent }));
 
-            ravenReadSideService = CreateRavenReadSideService(eventDispatcher: eventDispatcherMock.Object, streamableEventStore: streamableEventStoreMock.Object);
+            readSideService = CreateReadSideService(eventDispatcher: eventDispatcherMock.Object, streamableEventStore: streamableEventStoreMock.Object);
         };
 
         Because of = () => WaitRebuildReadsideFinish();
 
         It should_rebuild_all_view = () =>
-            ravenReadSideService.AreViewsBeingRebuiltNow().ShouldEqual(false);
+            readSideService.AreViewsBeingRebuiltNow().ShouldEqual(false);
 
         It should_call_CleanWritersByEventSource_method_for_registered_writers_and_by_passed_event_source_once = () =>
             eventHandlerMock.Verify(x => x.CleanWritersByEventSource(eventSourceId), Times.Once);
@@ -60,9 +60,9 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
             eventDispatcherMock.Verify(x => x.PublishEventToHandlers(committedEvent, Moq.It.Is<Dictionary<IEventHandler, Stopwatch>>(handlers => handlers.Count() == 1 && handlers.First().Key == eventHandlerMock.Object)), Times.Once);
 
         It should_return_readble_status = () =>
-            ravenReadSideService.GetRebuildStatus().CurrentRebuildStatus.ShouldContain("Rebuild specific views succeeded.");
+            readSideService.GetRebuildStatus().CurrentRebuildStatus.ShouldContain("Rebuild specific views succeeded.");
 
-        private static ReadSideService ravenReadSideService;
+        private static ReadSideService readSideService;
         private static Mock<IEventDispatcher> eventDispatcherMock;
         private static Mock<IStreamableEventStore> streamableEventStoreMock;
         private static Mock<IAtomicEventHandler> eventHandlerMock;
@@ -74,11 +74,11 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
 
         protected static void WaitRebuildReadsideFinish()
         {
-            ravenReadSideService.RebuildViewForEventSourcesAsync(new[] { HandlerToRebuild }, new[] { eventSourceId });
+            readSideService.RebuildViewForEventSourcesAsync(new[] { HandlerToRebuild }, new[] { eventSourceId });
 
             Thread.Sleep(1000);
 
-            while (ravenReadSideService.AreViewsBeingRebuiltNow())
+            while (readSideService.AreViewsBeingRebuiltNow())
             {
                 Thread.Sleep(1000);
             }
