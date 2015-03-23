@@ -31,10 +31,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             exception =
                 Catch.Exception(
                     () =>
-                        questionnaire.AddGroup(groupId: groupId, responsibleId: responsibleId, title: "title", variableName: null,
-                            rosterSizeQuestionId: rosterSizeQuestionId, condition: null, description: null, parentGroupId: chapterId,
-                            isRoster: true, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: rosterFixedTitles,
-                            rosterTitleQuestionId: null));
+                        questionnaire.AddGroupAndMoveIfNeeded(groupId: groupId, responsibleId: responsibleId, title: "title", variableName: null,
+                            rosterSizeQuestionId: rosterSizeQuestionId, description: null, condition: null,
+                            parentGroupId: chapterId, isRoster: true, rosterSizeSource: RosterSizeSourceType.Question,
+                            rosterFixedTitles: rosterFixedTitles, rosterTitleQuestionId: null));
         
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

@@ -132,6 +132,9 @@
   <data name="NoNetwork" xml:space="preserve">
     <value>Network is unavailable</value>
   </data>
+  <data name="Timeout" xml:space="preserve">
+    <value>Timeout</value>
+  </data>
   <data name="UpdateRequired" xml:space="preserve">
     <value>Need to update the application</value>
   </data>

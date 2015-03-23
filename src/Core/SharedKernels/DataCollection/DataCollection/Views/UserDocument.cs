@@ -37,6 +37,11 @@ namespace WB.Core.SharedKernels.DataCollection.Views
             return Roles.Any(role => role == UserRoles.Headquarter);
         }
 
+        public bool IsAdmin()
+        {
+            return Roles.Any(role => role == UserRoles.Administrator);
+        }
+
         public DateTime LastChangeDate { get; set; }
 
         public string DeviceId { get; set; }

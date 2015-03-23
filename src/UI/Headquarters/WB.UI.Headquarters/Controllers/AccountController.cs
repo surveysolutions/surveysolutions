@@ -42,18 +42,26 @@ namespace WB.UI.Headquarters.Controllers
             {
                 if (Membership.ValidateUser(model.UserName, passwordHasher.Hash(model.Password)))
                 {
+                    bool isAdmin = Roles.IsUserInRole(model.UserName, UserRoles.Administrator.ToString());
                     bool isHeadquarter = Roles.IsUserInRole(model.UserName, UserRoles.Headquarter.ToString());
                     bool isSupervisor = Roles.IsUserInRole(model.UserName, UserRoles.Supervisor.ToString());
-                    if (isHeadquarter || (isSupervisor && LegacyOptions.SupervisorFunctionsEnabled))
+
+                    if (isHeadquarter || (isSupervisor && LegacyOptions.SupervisorFunctionsEnabled) || isAdmin)
                     {
                         this.authentication.SignIn(model.UserName, false);
+                        
                         if (isSupervisor)
                         {
                             return this.RedirectToAction("Index", "Survey");
                         }
-                        else
+                        if (isHeadquarter)
                         {
                             return this.RedirectToAction("SurveysAndStatuses", "HQ");
+                        }
+
+                        if (isAdmin)
+                        {
+                            return this.RedirectToAction("Index", "Headquarters");
                         }
                     }
 
@@ -78,7 +86,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var currentUser = GetUserById(GlobalInfo.GetCurrentUser().Id);
 
-            if (currentUser == null || !GlobalInfo.IsHeadquarter)
+            if (currentUser == null || !(GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator))
                 throw new HttpException(404, string.Empty);
 
             return View(new UserEditModel() {Id = currentUser.PublicKey, Email = currentUser.Email});

@@ -9,6 +9,7 @@ namespace WB.Core.Infrastructure.PlainStorage
         TEntity GetById(string id);
 
         void Remove(string id);
+        void Remove(IEnumerable<TEntity> entities);
 
         void Store(TEntity entity, string id);
 

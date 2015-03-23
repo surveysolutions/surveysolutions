@@ -33,7 +33,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
                 validationMessage: validationMessage,
                 instructions: instructions,
                 mask:null,
-                responsibleId: responsibleId);
+                responsibleId: responsibleId,
+                index: index);
 
         Cleanup stuff = () =>
         {
@@ -76,6 +77,25 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
             eventContext.GetSingleEvent<QuestionChanged>()
                 .Instructions.ShouldEqual(instructions);
 
+        It should_raise_QuestionnaireItemMoved_event = () =>
+            eventContext.ShouldContainEvent<QuestionnaireItemMoved>();
+
+        It should_raise_QuestionnaireItemMoved_event_with_index_specified = () =>
+           eventContext.GetSingleEvent<QuestionnaireItemMoved>()
+               .TargetIndex.ShouldEqual(index);
+
+        It should_raise_QuestionnaireItemMoved_event_with_GroupKey_specified = () =>
+           eventContext.GetSingleEvent<QuestionnaireItemMoved>()
+               .GroupKey.ShouldEqual(chapterId);
+
+        It should_raise_QuestionnaireItemMoved_event_with_PublicKey_specified = () =>
+          eventContext.GetSingleEvent<QuestionnaireItemMoved>()
+              .PublicKey.ShouldEqual(questionId);
+
+        It should_raise_QuestionnaireItemMoved_event_with_ResponsibleId_specified = () =>
+          eventContext.GetSingleEvent<QuestionnaireItemMoved>()
+              .ResponsibleId.ShouldEqual(responsibleId);
+
         private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
@@ -89,5 +109,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
         private static string enablementCondition = "enablementCondition";
         private static string validationExpression = "validationExpression";
         private static string validationMessage = "validationMessage";
+        private static int index = 5;
     }
 }

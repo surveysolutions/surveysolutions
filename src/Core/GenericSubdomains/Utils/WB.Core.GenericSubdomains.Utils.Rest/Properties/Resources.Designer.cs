@@ -106,6 +106,15 @@ namespace WB.Core.GenericSubdomains.Utils.Rest.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Timeout.
+        /// </summary>
+        internal static string Timeout {
+            get {
+                return ResourceManager.GetString("Timeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Need to update the application.
         /// </summary>
         internal static string UpdateRequired {

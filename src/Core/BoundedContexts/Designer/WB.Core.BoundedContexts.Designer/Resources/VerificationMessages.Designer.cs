@@ -352,38 +352,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to List question cannot have validation expression..
-        /// </summary>
-        internal static string WB0041_TextListQuestionCannotCustomValidation {
-            get {
-                return ResourceManager.GetString("WB0041_TextListQuestionCannotCustomValidation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Max answer count must be in range [1, 40]..
         /// </summary>
         internal static string WB0042_TextListQuestionMaxAnswerInRange1And40 {
             get {
                 return ResourceManager.GetString("WB0042_TextListQuestionMaxAnswerInRange1And40", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to List question cannot be used in validation expression..
-        /// </summary>
-        internal static string WB0043_TextListQuestionCannotBeUsedInValidationExpressions {
-            get {
-                return ResourceManager.GetString("WB0043_TextListQuestionCannotBeUsedInValidationExpressions", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to List question cannot be used in condition expression..
-        /// </summary>
-        internal static string WB0044_TextListQuestionCannotBeUsedInEnablementConditions {
-            get {
-                return ResourceManager.GetString("WB0044_TextListQuestionCannotBeUsedInEnablementConditions", resourceCulture);
             }
         }
         
@@ -402,24 +375,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel {
             get {
                 return ResourceManager.GetString("WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to QR Barcode question cannot have a validation expression..
-        /// </summary>
-        internal static string WB0047_QRBarcodeQuestionShouldNotHaveValidationExpression {
-            get {
-                return ResourceManager.GetString("WB0047_QRBarcodeQuestionShouldNotHaveValidationExpression", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to QR Barcode question cannot have a validation message..
-        /// </summary>
-        internal static string WB0048_QRBarcodeQuestionShouldNotHaveValidationMessage {
-            get {
-                return ResourceManager.GetString("WB0048_QRBarcodeQuestionShouldNotHaveValidationMessage", resourceCulture);
             }
         }
         
@@ -447,24 +402,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0051_GroupsCustomConditionExpressionReferencesChildQuestion {
             get {
                 return ResourceManager.GetString("WB0051_GroupsCustomConditionExpressionReferencesChildQuestion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to QR Barcode questions cannot be used in validation expression..
-        /// </summary>
-        internal static string WB0052_QRBarcodeQuestionsCannotBeUsedInValidationExpression {
-            get {
-                return ResourceManager.GetString("WB0052_QRBarcodeQuestionsCannotBeUsedInValidationExpression", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to QR Barcode questions cannot be used in condition expression..
-        /// </summary>
-        internal static string WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition {
-            get {
-                return ResourceManager.GetString("WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition", resourceCulture);
             }
         }
         
@@ -874,11 +811,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire is too big..
+        ///   Looks up a localized string similar to Size of questionnaire is approximately {0:0.##}MB and is too big to work correctly with Survey Solutions. Try to reduce amount of data until it will be at least less than 5MB..
         /// </summary>
-        internal static string WB0098_QuestionnaireSizeLimit {
+        internal static string WB0098_QuestionnaireHasSizeMoreThan5MB {
             get {
-                return ResourceManager.GetString("WB0098_QuestionnaireSizeLimit", resourceCulture);
+                return ResourceManager.GetString("WB0098_QuestionnaireHasSizeMoreThan5MB", resourceCulture);
             }
         }
     }

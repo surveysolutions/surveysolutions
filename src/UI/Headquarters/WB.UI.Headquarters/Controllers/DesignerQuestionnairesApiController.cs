@@ -23,7 +23,7 @@ using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [Authorize(Roles = "Headquarter")]
+    [Authorize(Roles = "Administrator, Headquarter")]
     [ApiValidationAntiForgeryToken]
     public class DesignerQuestionnairesApiController : BaseApiController
     {
@@ -100,7 +100,7 @@ namespace WB.UI.Headquarters.Controllers
                     request: new DownloadQuestionnaireRequest()
                     {
                         QuestionnaireId = request.Questionnaire.Id,
-                        SupportedVersion = new QuestionnnaireVersion()
+                        SupportedVersion = new QuestionnaireVersion()
                         {
                             Major = supportedVersion.SupportedQuestionnaireVersionMajor,
                             Minor = supportedVersion.SupportedQuestionnaireVersionMinor,

@@ -61,7 +61,7 @@ namespace WB.UI.Designer
                     {
                         if (!user.IsApproved)
                         {
-                            baseController.Attention(
+                            baseController.Error(
                                 string.Format(
                                     "Please, confirm your account first. We've sent a confirmation link to {0}. Didn't get it? <a href='{1}'>Request another one.</a>", 
                                     user.Email, 
@@ -70,7 +70,7 @@ namespace WB.UI.Designer
                         }
                         else if (user.IsLockedOut)
                         {
-                            baseController.Attention(
+                            baseController.Error(
                                 "Your account is blocked. Contact the administrator to unblock your account");
                         }
                     }

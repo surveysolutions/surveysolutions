@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Tests.Unit
@@ -22,6 +23,11 @@ namespace WB.Tests.Unit
         public void Remove(string id)
         {
             this.entites.Remove(id);
+        }
+
+        public void Remove(IEnumerable<T> entities)
+        {
+            throw new NotImplementedException();
         }
 
         public void Store(T entity, string id)
@@ -47,6 +53,16 @@ namespace WB.Tests.Unit
         public TResult Query<TResult>(Func<IQueryable<T>, TResult> query)
         {
             return query.Invoke(this.entites.Values.AsQueryable());
+        }
+
+        public IEnumerable<T> Query(Func<T, bool> query)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<T> Query(Expression<T> query)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
 
 
         Because of = () =>
-            result = controller.GetQuestionnairePackageIds(request).Content.ReadAsAsync<SyncItemsMetaContainer>().Result;
+            result = controller.GetQuestionnairePackageIds(request);
 
         It should_return_not_null_package = () =>
             result.ShouldNotBeNull();

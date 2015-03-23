@@ -1,8 +1,10 @@
 ﻿@using System.Diagnostics
 @using System.Web.Optimization
+@using Main.Core.Entities.SubEntities
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @using WB.UI.Headquarters.Code
+@using WB.UI.Shared.Web.Extensions
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,7 +12,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="@Url.Content("~/Content/favicon.png")" />
+    @this.GenerateFavicon(Url.Content("~/Content/favicon.png"))
     @Styles.Render("~/Content/main")
     @RenderSection("styles", false)
 </head>
@@ -24,7 +26,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @if (User.IsInRole("Headquarter"))
+                @if (User.IsInRole(UserRoles.Administrator.ToString()))
+                {
+                    <a class="navbar-brand" href="@Url.Action("Index", "Headquarters", new { area = "" })">Admin</a>
+                }
+                else if (User.IsInRole(UserRoles.Headquarter.ToString()))
                 {
                     <a class="navbar-brand" href="@Url.Action("Index", "HQ", new { area = "" })">Headquarters</a>
                 }
@@ -34,7 +40,11 @@
                 }
             </div>
             <div class="collapse navbar-collapse">
-                @if (User.IsInRole("Headquarter"))
+                @if (User.IsInRole(UserRoles.Administrator.ToString()))
+                {
+                    @Html.Partial("AdminMainMenu")
+                }
+                else if (User.IsInRole(UserRoles.Headquarter.ToString()))
                 {
                     @Html.Partial("HeadquartersMainMenu")
                 }
@@ -122,14 +132,12 @@
             $('#umbrella').css('top', navigationHeight + 'px');
         };
         var $updateIncomingPackagesQueueApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "GetIncomingPackagesQueueLength" })';
-        var $healthCheckStatusApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "HealthCheckApi", action = "GetStatus" })';
         $(document).ready(function () {
             setMinHeight();
             $(window).resize(function () {
                 setMinHeight();
             });
             new Supervisor.VM.SurveyManagmentHeader($updateIncomingPackagesQueueApiUrl, "#IncomingPackagesQueueIndicator").load();
-            new Supervisor.VM.HealthCheckHeader($healthCheckStatusApiUrl, "#HealthCheckIndicator").load();
         });
 </script>
     @RenderSection("scripts", false)

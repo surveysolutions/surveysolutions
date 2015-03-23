@@ -28,15 +28,15 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
         
         };
 
-        Because of = () => httpResponseMessage = controller.PostFile(new PostFileRequest() { InterviewId = interviewId, FileName = fileName, Data = Convert.ToBase64String(new byte[0]) });
+        Because of = () => exception = Catch.Exception(()=> controller.PostFile(new PostFileRequest() { InterviewId = interviewId, FileName = fileName, Data = Convert.ToBase64String(new byte[0]) }));
 
-        It should_httpResponseMessage_has_status_ServiceUnavailable = () =>
-            httpResponseMessage.StatusCode.ShouldEqual(HttpStatusCode.ServiceUnavailable);
+        It should_return_exception = () =>
+            exception.ShouldNotBeNull();
 
         private static InterviewerSyncController controller;
         private static Mock<IPlainInterviewFileStorage> plainFileRepository;
         private static string fileName = "file name";
-        private static HttpResponseMessage httpResponseMessage;
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
+        private static Exception exception;
     }
 }

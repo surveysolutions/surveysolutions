@@ -94,6 +94,11 @@ namespace WB.Core.GenericSubdomains.Utils.Implementation
             }
         }
 
+        public Stream CompressGZip(object s)
+        {
+            return this.Compress(jsonSerrializer.Serialize(s));
+        }
+
         public T DecompressString<T>(string s) where T:class 
         {
             var bytes = Convert.FromBase64String(s);

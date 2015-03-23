@@ -1,0 +1,80 @@
+﻿@using WB.UI.Designer.BootstrapSupport
+@using WB.UI.Shared.Web.Extensions
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Designer</title>
+    @this.GenerateFavicon(Url.Content("~/favicon.ico"))
+    <script src="~/UpdatedDesigner/vendor/jquery/dist/jquery.min.js" type="text/javascript"></script>
+    <!-- Bootstrap library -->
+    <link href="~/UpdatedDesigner/content/designer-start/bootstrap-custom.css" rel="stylesheet" />
+    <script src="~/UpdatedDesigner/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+    <link href="~/UpdatedDesigner/content/designer-start/designer-start.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+        function FrameCheck() {
+            if (top != self)
+                top.location.replace(self.location.href);
+        }
+    </script>
+
+    @RenderSection("Styles", required: false)
+    @RenderSection("Scripts", required: false)
+    @Html.Partial("_html5shiv")
+    @*@Html.Partial("_trackers")*@
+</head>
+<body onload="FrameCheck();">
+    <header>
+        <a href="http://www.worldbank.org" class="logo"></a>
+        <nav>
+            <a class="btn btn-default">Help</a>
+            <a class="btn btn-default" href="@Url.Action("Register","Account")">Register</a>
+            <a class="btn btn-default" href="@Url.Action("Login", "Account")">Log in</a>
+        </nav>
+    </header>
+
+    <section id="start-page">
+        <div class="content-holder-outer">
+            <div class="content-holder-inner">
+                <div class="content-block">
+                    <div class="form-holder">
+                        @if (!string.IsNullOrWhiteSpace(ViewData["UserNotification"] as string))
+                        {
+                            <div id="notification-message" class="alert alert-info">
+                                @Html.Raw(ViewData["UserNotification"])
+                            </div>
+                        }
+                        <div class="form-row">
+                            <div class="form-left">
+                                <img src="~/UpdatedDesigner/content/i/designer-logo.png" />
+                                <p>
+                                    This is a free tool for creating surveys for The World Bank’s CAPI platform with
+                                    collaboration
+                                    capabilities, export to PDF
+                                </p>
+                            </div>
+                            <div class="form-splitter">
+                                <div class="vline"></div>
+                            </div>
+                            <div class="form-right">
+                                @if (TempData.ContainsKey(Alerts.SUCCESS))
+                                {
+                                    <div class="alert alert-success header">@Html.Raw(@TempData[Alerts.SUCCESS])</div>
+                                }
+                                @RenderBody()
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        @Html.Partial("_commonFooter")
+    </footer>
+</body>
+</html>

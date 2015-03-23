@@ -1,12 +1,13 @@
 using System;
+using System.Threading.Tasks;
 
 namespace WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender
 {
     public interface ITabletInformationSender {
         event EventHandler<InformationPackageEventArgs> InformationPackageCreated;
-        event EventHandler ProcessCanceled;
+        event EventHandler<InformationPackageCancellationEventArgs> ProcessCanceled;
         event EventHandler ProcessFinished;
-        void Run();
+        Task Run();
         void Cancel();
     }
 }

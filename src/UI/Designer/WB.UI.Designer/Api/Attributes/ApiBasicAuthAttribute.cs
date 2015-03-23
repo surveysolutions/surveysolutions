@@ -9,6 +9,7 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using System.Web.Security;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Membership;
 
@@ -21,6 +22,12 @@ namespace WB.UI.Designer.Api.Attributes
         {
             get { return ServiceLocator.Current.GetInstance<IMembershipUserService>(); }
         }
+
+        private IReadSideStatusService readSideStatusService
+        {
+            get { return ServiceLocator.Current.GetInstance<IReadSideStatusService>(); }
+        }
+
         private readonly Func<string, string, bool> validateUserCredentials;
 
         public ApiBasicAuthAttribute()
@@ -33,6 +40,12 @@ namespace WB.UI.Designer.Api.Attributes
 
         public override void OnAuthorization(HttpActionContext actionContext)
         {
+            if (this.readSideStatusService.AreViewsBeingRebuiltNow())
+            {
+                this.ResponseMaintenanceMessage(actionContext);
+                return;
+            }
+
             var credentials = ParseCredentials(actionContext);
             if (credentials == null)
             {
@@ -103,6 +116,11 @@ namespace WB.UI.Designer.Api.Attributes
         private void ThrowLockedOutException(HttpActionContext actionContext)
         {
             actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = ErrorMessages.UserLockedOut };
+        }
+
+        private void ResponseMaintenanceMessage(HttpActionContext actionContext)
+        {
+            actionContext.Response = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable) { ReasonPhrase = ErrorMessages.Maintenance };
         }
 
         private bool Authorize(string username, string password)
