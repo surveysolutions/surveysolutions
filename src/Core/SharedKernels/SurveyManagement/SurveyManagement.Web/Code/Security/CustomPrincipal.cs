@@ -2,7 +2,7 @@ using System;
 using System.Security.Principal;
 using System.Web.Security;
 
-namespace WB.UI.Headquarters.Code.Security
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
 {
     public class CustomPrincipal : IPrincipal
     {

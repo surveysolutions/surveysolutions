@@ -7,6 +7,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -89,25 +90,36 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                var user = this.GetUserById(model.Id);
-                if (user != null)
+                if ((User.Identity as CustomIdentity).IsObserver)
                 {
-                    var forbiddenRoles = new string[]{ UserRoles.Administrator.ToString(), UserRoles.Headquarter.ToString()};
-                    var doesUserInForbiddenRole = IdentityManager.GetRolesForUser(user.UserName).Any(r => forbiddenRoles.Contains(r));
-
-                    if (!doesUserInForbiddenRole)
-                    {
-                        this.UpdateAccount(user: user, editModel: model);
-                        this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
-                        return this.RedirectToAction("Index");
-                    }
-
-                    this.Error("Could not update user information because you don't have permission to perform this operation");
-
+                    this.Error("You cannot perform any operation in observer mode.");
                 }
                 else
                 {
-                    this.Error("Could not update user information because current user does not exist");
+                    var user = this.GetUserById(model.Id);
+                    if (user != null)
+                    {
+                        var forbiddenRoles = new string[]
+                        {UserRoles.Administrator.ToString(), UserRoles.Headquarter.ToString()};
+                        var doesUserInForbiddenRole =
+                            IdentityManager.GetRolesForUser(user.UserName).Any(r => forbiddenRoles.Contains(r));
+
+                        if (!doesUserInForbiddenRole)
+                        {
+                            this.UpdateAccount(user: user, editModel: model);
+                            this.Success(string.Format("Information about <b>{0}</b> successfully updated",
+                                user.UserName));
+                            return this.RedirectToAction("Index");
+                        }
+
+                        this.Error(
+                            "Could not update user information because you don't have permission to perform this operation");
+
+                    }
+                    else
+                    {
+                        this.Error("Could not update user information because current user does not exist");
+                    }
                 }
             }
 
