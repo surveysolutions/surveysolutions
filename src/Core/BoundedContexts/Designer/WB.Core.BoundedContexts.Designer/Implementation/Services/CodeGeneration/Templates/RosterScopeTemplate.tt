@@ -57,7 +57,7 @@
         <#}#>
         }
     
-        private <#= Model.ParentTypeName#> @_parent;
+        private <#= Model.ParentTypeName#> @_parent;		
 
         <#foreach (var parentQuestion in Model.ParentScope.GetAllQuestionsToTop()) 
         {#>
@@ -66,10 +66,14 @@
 
         <#foreach (var parentRoster in Model.ParentScope.GetAllRostersToTop()) 
         {#>
-        public IEnumerable<<#=parentRoster.GeneratedTypeName#>> <#=parentRoster.VariableName#> { get { return this.@_parent.<#=parentRoster.VariableName#>; } }                                        
+        public IList<<#=parentRoster.GeneratedTypeName#>> <#=parentRoster.VariableName#> { get { return this.@_parent.<#=parentRoster.VariableName#>; } }                                        
         <#}#>
-                
-        public IExpressionExecutable CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances)
+          
+		public decimal @rosterValue { get { return RosterVector.Last(); } }
+        public int @index { get { return @_parent.<#=this.Model.RostersInScope[0].VariableName#>.Select((s, i) => new { Index = i, Value = s }).Where(t => t.Value.@rosterValue == this.@rosterValue).Select(t => t.Index).First(); } }
+   
+
+		public IExpressionExecutable CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances)
         {
             var level = new <#=Model.GeneratedTypeName#>(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies)
             {
@@ -81,7 +85,7 @@
                 <#=q.GeneratedMemberName#> = this.<#=q.GeneratedMemberName#>,        
              <#}#>
             };
-
+			level.SetTitle(this.@title);
             ConditionalDependencies = new Dictionary<Guid, Guid[]>(this.ConditionalDependencies);
             StructuralDependencies = new Dictionary<Guid, Guid[]>(this.StructuralDependencies);
 
@@ -143,7 +147,7 @@
         //rosters
         <#foreach (var @roster in Model.Rosters) 
         {#>
-        public IEnumerable<<#=@roster.GeneratedTypeName#>> <#=@roster.VariableName#>
+        public IList<<#=@roster.GeneratedTypeName#>> <#=@roster.VariableName#>
         {
             get
             {
