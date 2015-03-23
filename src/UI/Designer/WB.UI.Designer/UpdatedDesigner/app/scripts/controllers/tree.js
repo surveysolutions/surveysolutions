@@ -31,47 +31,52 @@
             $scope.filtersBoxMode = filtersBlockModes.default;
             $scope.items = [];
 
-            if (hotkeys.get('down') === false) {
-                hotkeys.add('down', 'Navigate to next sibling', function (event) {
+            if (hotkeys.get('down') !== false) {
+                hotkeys.del('down');
+            }
+            if (hotkeys.get('up') !== false) {
+                hotkeys.del('up');
+            }
+            if (hotkeys.get('ctrl+f') !== false) {
+                hotkeys.del('ctrl+f');
+            }
+            if (hotkeys.get('enter') !== false) {
+                hotkeys.del('enter');
+            }
+
+            hotkeys.add('down', 'Navigate to next sibling', function (event) {
+                event.preventDefault();
+                $scope.goToNextItem();
+            });
+
+            hotkeys.add('up', 'Navigate to previous sibling', function (event) {
+                event.preventDefault();
+                $scope.goToPrevItem();
+            });
+
+            hotkeys.add({
+                combo: 'ctrl+f',
+                description: 'Search for groups and questions in chapter',
+                callback: function (event) {
+                    $scope.showSearch();
                     event.preventDefault();
-                    $scope.goToNextItem();
-                });
-            }
+                }
+            });
 
-            if (hotkeys.get('up') === false) {
-                hotkeys.add('up', 'Navigate to previous sibling', function (event) {
+            hotkeys.add({
+                combo: 'enter',
+                allowIn: ['INPUT', 'SELECT'],
+                description: 'Open item in editor',
+                callback: function (event) {
                     event.preventDefault();
-                    $scope.goToPrevItem();
-                });
-            }
-
-            if (hotkeys.get('ctrl+f') === false) {
-                hotkeys.add({
-                    combo: 'ctrl+f',
-                    description: 'Search for groups and questions in chapter',
-                    callback: function(event) {
-                        $scope.showSearch();
-                        event.preventDefault();
+                    if ($scope.filtersBoxMode == filtersBlockModes.default) {
+                        if (_.isNull($scope.highlightedId)) return;
+                        $state.go('questionnaire.chapter.' + getItemType(getCurrentItem()), { chapterId: $state.params.chapterId, itemId: $scope.highlightedId });
+                    } else {
+                        utilityService.focusout('focusSearch');
                     }
-                });
-            }
-
-            if (hotkeys.get('enter') === false) {
-                hotkeys.add({
-                    combo: 'enter',
-                    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                    description: 'Open item in editor',
-                    callback: function(event) {
-                        event.preventDefault();
-                        if ($scope.filtersBoxMode == filtersBlockModes.default) {
-                            if (_.isNull($scope.highlightedId)) return;
-                            $state.go('questionnaire.chapter.' + getItemType(getCurrentItem()), { chapterId: $state.params.chapterId, itemId: $scope.highlightedId });
-                        } else {
-                            utilityService.focusout('focusSearch');
-                        }
-                    }
-                });
-            }
+                }
+            });
 
             $scope.showSearch = function () {
                 $scope.filtersBoxMode = filtersBlockModes.search;
@@ -104,13 +109,13 @@
 
             var upDownMove = function (updownStepValue) {
                 var currentItem = getCurrentItem();
-                
+
                 if (_.isNull($scope.highlightedId)) {
                     highlightAndScroll(currentItem);
                     return;
                 }
 
-                var ids = _.map($(".question-list .item-body"), function(item) {
+                var ids = _.map($(".question-list .item-body"), function (item) {
                     return ($(item).attr('id') || "");
                 });
 
@@ -172,7 +177,7 @@
                 return {
                     isVisible: isTopBorderVisible && isBottomBorderVisible,
                     shouldScrollDown: distanceToTopBorder < distanceToBottomBorder,
-                    scrollPositionWhenScrollUp : viewport.top - $(".question-list").offset().top + distanceToBottomBorder
+                    scrollPositionWhenScrollUp: viewport.top - $(".question-list").offset().top + distanceToBottomBorder
                 }
             };
 
@@ -203,7 +208,7 @@
                         target: ".question-list",
                         scrollTop: scrollTop
                     });
-                } 
+                }
             };
 
             var getItemType = function (item) {
@@ -233,7 +238,7 @@
                     }
                 }
                 return questionnaireService.findItem($scope.items, $scope.highlightedId);
-                
+
             };
 
             var connectTree = function () {
@@ -251,7 +256,7 @@
                 });
             };
 
-          
+
 
             $scope.isQuestion = function (item) {
                 return item.hasOwnProperty('type');
@@ -399,13 +404,13 @@
                 });
             };
 
-            var deleteGroupPermanently = function(itemIdToDelete) {
+            var deleteGroupPermanently = function (itemIdToDelete) {
                 commandService.deleteGroup($state.params.questionnaireId, itemIdToDelete)
-                    .success(function() {
-                        var publishDelete = function(deleted) {
+                    .success(function () {
+                        var publishDelete = function (deleted) {
                             var children = deleted.items || [];
                             $rootScope.$emit(getItemType(deleted) + 'Deleted');
-                            _.each(children, function(child) {
+                            _.each(children, function (child) {
                                 publishDelete(child);
                             });
                         };
@@ -417,21 +422,21 @@
                     });
             };
 
-            $scope.deleteGroup = function(item) {
+            $scope.deleteGroup = function (item) {
                 var itemIdToDelete = item.itemId || $state.params.itemId;
 
                 var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(item.title));
 
-                modalInstance.result.then(function(confirmResult) {
+                modalInstance.result.then(function (confirmResult) {
                     if (confirmResult === 'ok') {
 
                         questionnaireService.getAllBrokenGroupDependencies($state.params.questionnaireId, itemIdToDelete)
-                            .success(function(result) {
+                            .success(function (result) {
                                 if (result.length === 0) {
                                     deleteGroupPermanently(itemIdToDelete);
                                 } else {
 
-                                    var links = _.reduce(result, function(result, item) {
+                                    var links = _.reduce(result, function (result, item) {
                                         return result + '<a href=#' + $state.params.questionnaireId +
                                             "/chapter/" + item.chapterId + "/question/" + item.id + '>' + _.trunc(item.title, 30) + '</a>';
                                     }, "");
@@ -446,7 +451,7 @@
                                             closer: false,
                                             sticker: false
                                         }
-                                    }).get().on('pnotify.confirm', function() {
+                                    }).get().on('pnotify.confirm', function () {
                                         deleteGroupPermanently(itemIdToDelete);
                                     });
                                 }
@@ -513,7 +518,7 @@
                 return index;
             };
 
-            var emitAddedItemState = function(type, id) {
+            var emitAddedItemState = function (type, id) {
                 $rootScope.$emit(type + "Added");
                 $state.go("questionnaire.chapter." + type, { chapterId: $state.params.chapterId, itemId: id });
             };
@@ -623,13 +628,13 @@
             $scope.refreshTree();
 
             $scope.$on('scrollToElement', function (event, itemId) {
-                    if ($(itemId).length === 0) {
-                        $timeout(function() {
-                            scrollToElement(itemId);
-                        }, 1000);
-                    } else {
+                if ($(itemId).length === 0) {
+                    $timeout(function () {
                         scrollToElement(itemId);
-                    }
+                    }, 1000);
+                } else {
+                    scrollToElement(itemId);
+                }
             });
 
             $rootScope.$on('questionUpdated', function (event, data) {

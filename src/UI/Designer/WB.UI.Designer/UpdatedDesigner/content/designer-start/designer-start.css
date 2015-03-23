@@ -399,9 +399,12 @@ header nav {
 #start-page .content-holder-outer .content-holder-inner .content-block .form-holder .form-right #start-register-step2 p.note {
   margin-bottom: 60px;
 }
-#start-page .content-holder-outer .content-holder-inner .content-block .form-holder .form-right #start-reset p.note,
-#start-page .content-holder-outer .content-holder-inner .content-block .form-holder .form-right #start-reset .form-group {
+#start-reset p.note,
+#start-reset .form-group {
   margin-bottom: 60px;
+}
+#start-reset p.note.has-error {
+  margin-bottom: 10px;
 }
 footer {
   position: relative;

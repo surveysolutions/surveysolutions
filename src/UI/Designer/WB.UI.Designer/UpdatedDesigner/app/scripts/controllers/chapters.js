@@ -4,6 +4,10 @@
         function ($rootScope, $scope, $state, commandService, utilityService, $log, confirmService, questionnaireService, hotkeys) {
             'use strict';
 
+            if (hotkeys.get('right') !== false) {
+                hotkeys.del('right');
+            }
+
             if (hotkeys.get('right') === false) {
                 hotkeys.add('right', 'Close chapters', function (event) {
                     event.preventDefault();

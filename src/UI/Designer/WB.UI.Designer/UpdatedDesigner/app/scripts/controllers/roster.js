@@ -13,7 +13,7 @@
                 hotkeys.bindTo($scope)
                       .add({
                           combo: 'ctrl+s',
-                          description: 'Save current roster',
+                          description: 'Save changes',
                           allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                           callback: function (event) {
                               $scope.saveRoster();
