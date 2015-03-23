@@ -2,6 +2,7 @@ using System;
 using Android.OS;
 using Android.Support.V4.App;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Capi.Implementations.Fragments;
 using WB.UI.Shared.Android.Adapters;
@@ -19,7 +20,7 @@ namespace WB.UI.Capi.Implementations.Adapters
             GridContentFragment myFragment = new DataCollectionGridContentFragment();
 
             Bundle args = new Bundle();
-            args.PutString(GridContentFragment.ScreenId, screenId.ToString());
+            args.PutString(GridContentFragment.ScreenId, ConversionHelper.ConvertIdAndRosterVectorToString(screenId.Id, screenId.InterviewItemPropagationVector));
             args.PutString(GridContentFragment.QuestionnaireId, questionnaireId.ToString());
             myFragment.Arguments = args;
 

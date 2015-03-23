@@ -45,6 +45,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
             }
         }
 
+        public bool IsAdministrator
+        {
+            get
+            {
+                return GlobalInfo.IsAdministrator;
+            }
+        }
+
         #endregion
     }
 }

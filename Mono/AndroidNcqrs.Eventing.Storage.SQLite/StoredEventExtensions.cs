@@ -20,8 +20,16 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 
         private static object GetObject(string json)
         {
-            return JsonConvert.DeserializeObject(
-                json, new JsonSerializerSettings
+            var replaceOldAssemblyNames = json.Replace("Main.Core.Events.AggregateRootEvent, Main.Core", "Main.Core.Events.AggregateRootEvent, WB.Core.Infrastructure");
+            foreach (var type in new[] { "NewUserCreated", "UserChanged", "UserLocked", "UserLockedBySupervisor", "UserUnlocked", "UserUnlockedBySupervisor" })
+            {
+                replaceOldAssemblyNames = replaceOldAssemblyNames.Replace(
+                    string.Format("Main.Core.Events.User.{0}, Main.Core", type),
+                    string.Format("Main.Core.Events.User.{0}, WB.Core.SharedKernels.DataCollection", type));
+            }
+
+            return JsonConvert.DeserializeObject(replaceOldAssemblyNames, 
+                new JsonSerializerSettings
                 {
                     TypeNameHandling = TypeNameHandling.All,
                     NullValueHandling = NullValueHandling.Ignore,

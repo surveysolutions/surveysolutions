@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.IO;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Services;
 
 namespace WB.Core.Infrastructure.Implementation.ReadSide
 {
@@ -19,7 +21,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         internal static int InstanceCount = 0;
 
         private int totalEventsToRebuildCount = 0;
-        private int failedEventsCount = 0;
+
+        private int FailedEventsCount
+        {
+            get { return errors.Count; }
+        }
 
         private int processedEventsCount = 0;
         private int skippedEventsCount = 0;
@@ -39,13 +45,15 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         private readonly IStreamableEventStore eventStore;
         private readonly IEventDispatcher eventBus;
         private readonly ILogger logger;
+        private readonly IRavenReadSideRepositoryCleaner ravenReadSideRepositoryCleaner;
+        private Dictionary<IEventHandler, Stopwatch> handlersWithStopwatches;
 
         static ReadSideService()
         {
             UpdateStatusMessage("No administration operations were performed so far.");
         }
 
-        public ReadSideService(IStreamableEventStore eventStore, IEventDispatcher eventBus, ILogger logger)
+        public ReadSideService(IStreamableEventStore eventStore, IEventDispatcher eventBus, ILogger logger, IRavenReadSideRepositoryCleaner ravenReadSideRepositoryCleaner)
         {
             if (InstanceCount > 0)
                 throw new Exception(string.Format("Trying to create a new instance of RavenReadSideService when following count of instances exists: {0}.", InstanceCount));
@@ -55,6 +63,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             this.eventStore = eventStore;
             this.eventBus = eventBus;
             this.logger = logger;
+            this.ravenReadSideRepositoryCleaner = ravenReadSideRepositoryCleaner;
         }
 
         #region IReadLayerStatusService implementation
@@ -104,6 +113,20 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     .ToList();
         }
 
+        private List<ReadSideDenormalizerStatistic> GetRebuildDenormalizerStatistics()
+        {
+            if(handlersWithStopwatches==null)
+                return new List<ReadSideDenormalizerStatistic>();
+            var currentStateOfDenormalizers =
+                handlersWithStopwatches.OrderByDescending(h => h.Value.Elapsed.Ticks)
+                    .Select(h => new {Name = h.Key.Name, Ticks = h.Value.Elapsed.Ticks});
+
+            var timeSpentForAllDenormalizers = currentStateOfDenormalizers.Sum(x => x.Ticks);
+            return
+                currentStateOfDenormalizers.Select(h => new ReadSideDenormalizerStatistic(h.Name, new TimeSpan(h.Ticks), (int)Math.Round((double)(100 * h.Ticks) / timeSpentForAllDenormalizers)))
+                    .ToList();
+        }
+
         public ReadSideStatus GetRebuildStatus()
         {
             int republishedEventsCount = this.processedEventsCount - this.skippedEventsCount;
@@ -130,7 +153,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 {
                     ProcessedEvents = republishedEventsCount,
                     EstimatedTime = estimatedTotalRepublishTime,
-                    FailedEvents = this.failedEventsCount,
+                    FailedEvents = this.FailedEventsCount,
                     SkippedEvents = this.skippedEventsCount,
                     Speed = speedInEventsPerMinute,
                     TimeSpent = republishTimeSpent,
@@ -138,7 +161,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                 },
                 StatusByRepositoryWriters = this.eventBus.GetAllRegistredEventHandlers()
-                    .SelectMany(x => x.Writers.OfType<IReadSideRepositoryWriter>())
+                    .SelectMany(x => x.Writers.OfType<IChacheableRepositoryWriter>())
                     .Distinct()
                     .Select(
                         writer =>
@@ -153,13 +176,14 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                         ErrorTime = error.Item1,
                         ErrorMessage = error.Item2,
                         InnerException = GetFullUnwrappedExceptionText(error.Item3)
-                    })
+                    }),
+                ReadSideDenormalizerStatistics=GetRebuildDenormalizerStatistics()
             };
         }
 
         private string CreateViewName(object storage)
         {
-            var readSideRepositoryWriter = storage as IReadSideRepositoryWriter;
+            var readSideRepositoryWriter = storage as IChacheableRepositoryWriter;
             if (readSideRepositoryWriter != null)
                 return this.GetRepositoryEntityName(readSideRepositoryWriter);
 
@@ -191,7 +215,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     if (!areViewsBeingRebuiltNow)
                     {
                         var handlers = this.GetListOfEventHandlersForRebuild(handlerNames);
-                        this.RebuildViewsImpl(skipEvents, handlers);
+                        this.RebuildViewsImpl(skipEvents, handlers, true);
                     }
                 }
             }
@@ -205,7 +229,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 {
                     if (!areViewsBeingRebuiltNow)
                     {
-                        this.RebuildViewsImpl(skipEvents, this.eventBus.GetAllRegistredEventHandlers());
+                        this.RebuildViewsImpl(skipEvents, this.eventBus.GetAllRegistredEventHandlers(), false);
                     }
                 }
             }
@@ -256,7 +280,6 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                 try
                 {
-
                     this.EnableWritersCacheForHandlers(handlers);
 
                     foreach (var eventSourceId in eventSourceIds)
@@ -268,13 +291,13 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 finally
                 {
                     this.DisableWritersCacheForHandlers(handlers);
-
-                    UpdateStatusMessage("Rebuild specific views succeeded.");
-
                 }
+
+                UpdateStatusMessage("Rebuild specific views succeeded.");
             }
             catch (Exception exception)
             {
+                UpdateStatusMessage("Unexpected error occurred");
                 this.SaveErrorForStatusReport("Unexpected error occurred", exception);
                 throw;
             }
@@ -284,7 +307,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             }
         }
 
-        private void RebuildViewsImpl(int skipEvents, IEnumerable<IEventHandler> handlers)
+        private void RebuildViewsImpl(int skipEvents, IEventHandler[] handlers, bool isPartiallyRebuild)
         {
             try
             {
@@ -294,23 +317,28 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                 if (skipEvents == 0)
                 {
-                    this.CleanUpWritersForHandlers(handlers);
+                    this.CleanUpWritersForHandlers(handlers, isPartiallyRebuild);
                 }
 
                 try
                 {
                     this.EnableWritersCacheForHandlers(handlers);
-                    this.RepublishAllEvents(this.GetEventStream(skipEvents), this.eventStore.CountOfAllEvents(),skipEventsCount: skipEvents, handlers: handlers);
+                    this.RepublishAllEvents(this.GetEventStream(skipEvents), this.eventStore.CountOfAllEvents(), skipEventsCount: skipEvents, handlers: handlers);
                 }
                 finally
                 {
                     this.DisableWritersCacheForHandlers(handlers);
 
-                    UpdateStatusMessage("Rebuild specific views succeeded.");
+                    if(!isPartiallyRebuild && this.ravenReadSideRepositoryCleaner != null) 
+                        this.ravenReadSideRepositoryCleaner.CreateIndexesAfterRebuildReadSide();
                 }
+
+                UpdateStatusMessage("Rebuild specific views succeeded.");
+                logger.Info("Rebuild views succeeded");
             }
             catch (Exception exception)
             {
+                UpdateStatusMessage("Unexpected error occurred");
                 this.SaveErrorForStatusReport("Unexpected error occurred", exception);
                 throw;
             }
@@ -322,21 +350,54 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
         private IEnumerable<CommittedEvent> GetEventStream(int skipEventsCount)
         {
-            foreach (CommittedEvent[] eventBulk in this.eventStore.GetAllEvents(skipEvents: skipEventsCount))
+            if (skipEventsCount > 0)
             {
-                foreach (var committedEvent in eventBulk)
+                UpdateStatusMessage(string.Format("Skipping {0} events.", skipEventsCount));
+            }
+
+            return this.GetEventStream().Skip(skipEventsCount);
+        }
+
+        private IEnumerable<CommittedEvent> GetEventStream()
+        {
+            var eventSourcesAndSequences = new Dictionary<Guid, long>();
+
+            foreach (CommittedEvent committedEvent in this.eventStore.GetAllEvents())
+            {
+                EnsureEventSequenceIsCorrect(committedEvent, eventSourcesAndSequences);
+
+                yield return committedEvent;
+            }
+        }
+
+        private static void EnsureEventSequenceIsCorrect(CommittedEvent committedEvent, Dictionary<Guid, long> eventSourcesAndSequences)
+        {
+            if (eventSourcesAndSequences.ContainsKey(committedEvent.EventSourceId))
+            {
+                long lastEventSequence = eventSourcesAndSequences[committedEvent.EventSourceId];
+                long expectedEventSequence = lastEventSequence + 1;
+
+                if (committedEvent.EventSequence != expectedEventSequence)
                 {
-                    yield return committedEvent;
+                    throw new InvalidDataException(string.Format(
+                        "Event {0} {1} (event source {2}) appears in all events stream not when expected. Event sequence: {3}. Expected sequence: {4}.",
+                        committedEvent.EventIdentifier.FormatGuid(), committedEvent.Payload.GetType().Name,
+                        committedEvent.EventSourceId.FormatGuid(),
+                        committedEvent.EventSequence, expectedEventSequence));
                 }
             }
-        } 
+
+            eventSourcesAndSequences[committedEvent.EventSourceId] = committedEvent.EventSequence;
+        }
 
 
-        private void CleanUpWritersForHandlers(IEnumerable<IEventHandler> handlers)
+        private void CleanUpWritersForHandlers(IEnumerable<IEventHandler> handlers, bool isPartiallyRebuild)
         {
             var cleaners = handlers.SelectMany(x=>x.Writers.OfType<IReadSideRepositoryCleaner>())
                   .Distinct()
                   .ToArray();
+
+            if(!isPartiallyRebuild && this.ravenReadSideRepositoryCleaner != null) this.ravenReadSideRepositoryCleaner.ReCreateViewDatabase();
 
             foreach (var readSideRepositoryCleaner in cleaners)
             {
@@ -353,11 +414,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         {
             UpdateStatusMessage("Enabling cache in repository writers.");
 
-            var writers = handlers.SelectMany(x => x.Writers.OfType<IReadSideRepositoryWriter>())
+            var writers = handlers.SelectMany(x => x.Writers.OfType<IChacheableRepositoryWriter>())
                .Distinct()
                .ToArray();
 
-            foreach (IReadSideRepositoryWriter writer in writers)
+            foreach (IChacheableRepositoryWriter writer in writers)
             {
                 writer.EnableCache();
             }
@@ -369,11 +430,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         {
             UpdateStatusMessage("Disabling cache in repository writers.");
 
-            var writers = handlers.SelectMany(x => x.Writers.OfType<IReadSideRepositoryWriter>())
+            var writers = handlers.SelectMany(x => x.Writers.OfType<IChacheableRepositoryWriter>())
              .Distinct()
              .ToArray();
 
-            foreach (IReadSideRepositoryWriter writer in writers)
+            foreach (IChacheableRepositoryWriter writer in writers)
             {
                 UpdateStatusMessage(string.Format(
                     "Disabling cache in repository writer for entity {0}.",
@@ -385,10 +446,9 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 }
                 catch (Exception exception)
                 {
-                    this.SaveErrorForStatusReport(
-                        string.Format("Failed to disable cache and store data to repository for writer {0}.",
-                            this.GetRepositoryEntityName(writer)),
-                        exception);
+                    string message = string.Format("Failed to disable cache and store data to repository for writer {0}.", this.GetRepositoryEntityName(writer));
+                    this.SaveErrorForStatusReport(message, exception);
+                    UpdateStatusMessage(message);
                 }
             }
 
@@ -396,7 +456,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         }
 
         private void RepublishAllEvents(IEnumerable<CommittedEvent> eventStream, int allEventsCount, int skipEventsCount = 0,
-            IEnumerable<IEventHandler> handlers = null)
+            IEventHandler[] handlers = null)
         {
             this.totalEventsToRebuildCount = allEventsCount;
             this.skippedEventsCount = skipEventsCount;
@@ -415,46 +475,46 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             UpdateStatusMessage(
                 "Acquiring first portion of events."
                 + Environment.NewLine
-                + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
+                + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, this.FailedEventsCount, skipEventsCount));
+
+            handlersWithStopwatches = handlers.ToDictionary(x => x, x => new Stopwatch());
 
             foreach (CommittedEvent @event in eventStream)
             {
                 ThrowIfShouldStopViewsRebuilding();
 
-                UpdateStatusMessage(string.Format("Publishing event {0}. ", this.processedEventsCount + 1));
-
+                string eventTypeName = @event.Payload.GetType().Name;
+                UpdateStatusMessage(string.Format("Publishing event {0} {1}. ", this.processedEventsCount + 1, eventTypeName));
 
                 try
                 {
-                    this.eventBus.PublishEventToHandlers(@event, handlers);
+                    this.eventBus.PublishEventToHandlers(@event, handlersWithStopwatches);
                 }
                 catch (Exception exception)
                 {
-                    this.SaveErrorForStatusReport(
-                        string.Format("Failed to publish event {0} of {1} ({2})",
-                            this.processedEventsCount + 1, this.totalEventsToRebuildCount, @event.EventIdentifier),
-                        exception);
+                    string message = string.Format("Failed to publish event {0} of {1} ({2})", this.processedEventsCount + 1, this.totalEventsToRebuildCount, @event.EventIdentifier);
+                    this.SaveErrorForStatusReport(message, exception);
+                    this.logger.Error(message, exception);
 
-                    this.failedEventsCount++;
                 }
 
                 this.processedEventsCount++;
 
-                if (this.failedEventsCount >= MaxAllowedFailedEvents)
+                if (this.FailedEventsCount >= MaxAllowedFailedEvents)
                 {
-                    var message = string.Format("Failed to rebuild read layer. Too many events failed: {0}.",
-                        this.failedEventsCount);
+                    var message = string.Format("Failed to rebuild read layer. Too many events failed: {0}. Last processed event count: {1}", this.FailedEventsCount, this.processedEventsCount);
                     UpdateStatusMessage(message);
+                    this.logger.Error(message);
                     throw new Exception(message);
                 }
+
+                UpdateStatusMessage(string.Format("Done publishing event {0}, {1}. EventSourceId: {2:N}. Waiting for next event or stream end...", 
+                    this.processedEventsCount, 
+                    eventTypeName, 
+                    @event.EventSourceId));
             }
 
-            UpdateStatusMessage("Acquiring next portion of events.");
-
-            this.logger.Info(String.Format("Processed {0} events, failed {1}", this.processedEventsCount, this.failedEventsCount));
-
-            UpdateStatusMessage("All events were republished.");
-
+            this.logger.Info(String.Format("Rebuild of read side finished sucessfuly. Processed {0} events, failed {1}", this.processedEventsCount, this.FailedEventsCount));
         }
 
         private static string GetReadablePublishingDetails(DateTime republishStarted,
@@ -500,7 +560,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             statusMessage = string.Format("{0}: {1}", DateTime.Now, newMessage);
         }
 
-        private string GetRepositoryEntityName(IReadSideRepositoryWriter writer)
+        private string GetRepositoryEntityName(IChacheableRepositoryWriter writer)
         {
            /* var arguments = writer.ViewType.GetGenericArguments();
             if (!arguments.Any())*/

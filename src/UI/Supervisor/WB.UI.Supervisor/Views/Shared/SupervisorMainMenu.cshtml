@@ -1,4 +1,5 @@
-﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Models
+﻿@using Resources
+@using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @{
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
 }
@@ -32,10 +33,21 @@
     </li>
 </ul>
 <ul class="nav navbar-nav navbar-right" role="menu">
+    <li class="active glow-animate" style="display: none" id="IncomingPackagesQueueIndicator">
+        <a href="javascript:void(0);" title="@MainMenu.QueueSizeTitle">
+            <i class="glyphicon glyphicon-cloud-upload"></i>
+            <span class="sync-queue-size">-</span>
+        </a>
+    </li>
     <li class="dropdown">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Hi, <strong>@User.Identity.Name</strong> <b class="caret"></b></a>
         <ul class="dropdown-menu">
             <li>@Html.ActionLink("Logoff", "LogOff", "Account", new { area = string.Empty }, null)</li>
         </ul>
+    </li>
+    <li>
+        <a href="http://siteresources.worldbank.org/INTCOMPTOOLS/Resources/8213623-1380598436379/Supervisor_manual.pdf" title="@MainMenu.Help" target="_blank">
+            <i class="glyphicon glyphicon-question-sign"></i>
+        </a>
     </li>
 </ul>

@@ -18,18 +18,18 @@ namespace WB.UI.Headquarters.API.Resources
     [HeadquarterFeatureOnly]
     public class UsersResourceController : ApiController
     {
-        private readonly IViewFactory<UserViewInputModel, UserView> viewFactory;
+        private readonly IUserWebViewFactory viewFactory;
 
-        public UsersResourceController(IViewFactory<UserViewInputModel, UserView> viewFactory)
+        public UsersResourceController(IUserWebViewFactory viewFactory)
         {
             this.viewFactory = viewFactory;
         }
 
         [Route("{id}", Name = "api.userDetails")]
         [HttpGet]
-        public UserView Details(string id)
+        public UserWebView Details(string id)
         {
-            UserView userView = viewFactory.Load(new UserViewInputModel(Guid.Parse(id)));
+            UserWebView userView = viewFactory.Load(new UserWebViewInputModel(Guid.Parse(id)));
             return userView;
         }
 
@@ -47,7 +47,7 @@ namespace WB.UI.Headquarters.API.Resources
                 });
             }
 
-            UserView userDocument = this.viewFactory.Load(new UserViewInputModel(login, passwordHash));
+            UserWebView userDocument = this.viewFactory.Load(new UserWebViewInputModel(login, passwordHash));
             string detailsUrl = this.Url.Route("api.userDetails", new { id = userDocument.PublicKey.FormatGuid()});
             var result = new SupervisorValidationResult
             {

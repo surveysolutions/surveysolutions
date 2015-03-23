@@ -10,9 +10,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
 {
     internal class ApiBasicAuthAttributeTestsContext
     {
-        protected static ApiBasicAuthAttribute Create(Func<string, string, bool> isUserValid = null, IViewFactory<UserViewInputModel, UserView> userViewFactory = null)
+        protected static ApiBasicAuthAttribute Create(Func<string, string, bool> isUserValid = null, IUserViewFactory userViewFactory = null, IReadSideStatusService readSideStatusService = null)
         {
-            Setup.InstanceToMockedServiceLocator(userViewFactory ?? Mock.Of<IViewFactory<UserViewInputModel, UserView>>());
+            Setup.InstanceToMockedServiceLocator(userViewFactory ?? Mock.Of<IUserViewFactory>());
+            Setup.InstanceToMockedServiceLocator(readSideStatusService ?? Mock.Of<IReadSideStatusService>());
 
             return new ApiBasicAuthAttribute(isUserValid);
         }

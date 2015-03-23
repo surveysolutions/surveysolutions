@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Web;
 using System.Web.Configuration;
 using Microsoft.Practices.ServiceLocation;
@@ -22,6 +23,7 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
+using WB.Core.Infrastructure.Storage.Esent;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.UI.Designer.App_Start;
@@ -74,21 +76,31 @@ namespace WB.UI.Designer.App_Start
                 viewsDatabase: AppSettings.Instance.RavenViewsDatabase,
                 plainDatabase: AppSettings.Instance.RavenPlainDatabase,
                 failoverBehavior: AppSettings.Instance.FailoverBehavior,
-                activeBundles: AppSettings.Instance.ActiveBundles);
+                activeBundles: AppSettings.Instance.ActiveBundles,
+                ravenFileSystemName: AppSettings.Instance.RavenFileSystemName);
 
             var dynamicCompilerSettings = (DynamicCompilerSettings)WebConfigurationManager.GetSection("dynamicCompilerSettings");
 
-            var ravenReadSideRepositoryWriterSettings = new RavenReadSideRepositoryWriterSettings(AppDomain.CurrentDomain.GetData("DataDirectory").ToString(), int.Parse(WebConfigurationManager.AppSettings["Raven.Readside.BulkInsertBatchSize"]));
+            var ravenReadSideRepositoryWriterSettings = new RavenReadSideRepositoryWriterSettings(int.Parse(WebConfigurationManager.AppSettings["Raven.Readside.BulkInsertBatchSize"]));
+
+            string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
+            if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
+            {
+                appDataDirectory = System.Web.Hosting.HostingEnvironment.MapPath(appDataDirectory);
+            }
+
+            string esentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.DbFolder"]);
 
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
                 new InfrastructureModule().AsNinject(),
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
-                new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
+                new NLogLoggingModule(),
                 new RavenReadSideInfrastructureModule(ravenSettings, ravenReadSideRepositoryWriterSettings, typeof(DesignerReportQuestionnaireListViewItem).Assembly),
                 new DesignerRegistry(),
                 new DesignerCommandDeserializationModule(),
+                new EsentReadSideModule(esentDataFolder),
                 new DesignerBoundedContextModule(dynamicCompilerSettings),
                 new QuestionnaireVerificationModule(),
                 new MembershipModule(),

@@ -9,6 +9,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -71,10 +72,10 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
             PropagateScreen(interviewViewModel, nestedRosterId, 0, new decimal[] { 1 });
 
         It should_row_count_at_first_nested_roster_be_equal_to_1 = () =>
-            ((QuestionnaireGridViewModel)interviewViewModel.Screens[new InterviewItemId(nestedRosterId, new decimal[] { 0 })]).Rows.Count().ShouldEqual(1);
+            ((QuestionnaireGridViewModel)interviewViewModel.Screens[ConversionHelper.ConvertIdAndRosterVectorToString(nestedRosterId, new decimal[] { 0 })]).Rows.Count().ShouldEqual(1);
 
         It should_row_count_at_second_nested_roster_be_equal_to_1 = () =>
-            ((QuestionnaireGridViewModel)interviewViewModel.Screens[new InterviewItemId(nestedRosterId, new decimal[] { 1 })]).Rows.Count().ShouldEqual(1);
+            ((QuestionnaireGridViewModel)interviewViewModel.Screens[ConversionHelper.ConvertIdAndRosterVectorToString(nestedRosterId, new decimal[] { 1 })]).Rows.Count().ShouldEqual(1);
 
 
         private static InterviewViewModel interviewViewModel;

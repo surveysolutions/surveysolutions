@@ -14,6 +14,7 @@
         Questionnaires,
         MapReport,
         InterviewsChart,
-        ManageAccount
+        ManageAccount,
+        Headquarters
     }
 }

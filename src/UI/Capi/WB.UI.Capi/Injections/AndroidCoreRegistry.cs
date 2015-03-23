@@ -15,7 +15,7 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.UI.Capi.Settings;
-using WB.UI.Capi.Views.Login;
+
 using System;
 using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -23,6 +23,7 @@ using Ninject;
 using Ninject.Activation;
 using Ninject.Modules;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.UI.Capi.Views.Login;
 
 namespace WB.UI.Capi.Injections
 {

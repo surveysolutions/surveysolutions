@@ -3,14 +3,14 @@
          ui-sref="questionnaire.chapter.group({ chapterId: currentChapter.itemId, itemId: currentChapter.itemId})">
         <div ng-click="$event.stopPropagation()" class="search-box" ng-switch-when="search">
             <div class="input-group">
-                <input type="text" ng-model="search.searchText" ng-model-options="{debounce: 300}" focus-on="focusSearch" hotkey="{esc: hideSearch}" hotkey-allow-in="INPUT" />
+                <input type="text" ng-model="search.searchText" ng-model-options="{debounce: 300}" focus-on-out="focusSearch" hotkey="{esc: hideSearch}" hotkey-allow-in="INPUT" />
                 <span class="input-group-addon glyphicon glyphicon-search" title="Search"></span>
             </div>
             <button ng-click="hideSearch();$event.stopPropagation()" title="Cancel search" type="button"></button>
         </div>
 
         <div ng-switch-when="default">
-            <a class="chapter-title-text" ui-sref="questionnaire.chapter.group({ chapterId: currentChapter.itemId, itemId: currentChapter.itemId})">
+            <a id="group-{{currentChapter.itemId}}" class="chapter-title-text" ui-sref="questionnaire.chapter.group({ chapterId: currentChapter.itemId, itemId: currentChapter.itemId})">
                 <span ng-bind-html="currentChapter.title "></span>
             </a>
             <ul class="controls-right">

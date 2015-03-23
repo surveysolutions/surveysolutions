@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
                 };
 
             chartStatisticsViewFactory = CreateChartStatisticsViewFactory(
-                Mock.Of<IReadSideRepositoryReader<StatisticsGroupedByDateAndTemplate>>(_
+                Mock.Of<IReadSideKeyValueStorage<StatisticsGroupedByDateAndTemplate>>(_
                     => _.GetById(Moq.It.IsAny<string>()) == data));
 
             input = new ChartStatisticsInputModel

@@ -32,6 +32,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         protected Guid QuestionnairePublicKey { get; private set; }
         protected ICommandService CommandService { get; private set; }
         protected IAnswerOnQuestionCommandService AnswerCommandService { get; private set; }
+        protected Context CurrentContext { get; private set; }
         private readonly IMvxAndroidBindingContext _bindingContext;
 
         private readonly int templateId;
@@ -85,6 +86,8 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             this.CommandService = commandService;
             this.AnswerCommandService = answerCommandService;
             this.Membership = membership;
+
+            this.CurrentContext = context;
             this.Initialize();
 
             this.PostInit();
@@ -173,7 +176,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             if (this.isDisposed)
                 return;
 
-            ((Activity) this.Context).RunOnUiThread(() =>
+            ((Activity)this.CurrentContext).RunOnUiThread(() =>
             {
                 if (this.isDisposed)
                     return;
@@ -187,7 +190,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             if (this.isDisposed)
                 return;
 
-            ((Activity)this.Context).RunOnUiThread(() =>
+            ((Activity)this.CurrentContext).RunOnUiThread(() =>
             {
                 if (this.isDisposed)
                     return;
@@ -245,13 +248,13 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected void HideKeyboard(EditText editor)
         {
-            InputMethodManager imm = (InputMethodManager) this.Context.GetSystemService(Context.InputMethodService);
+            InputMethodManager imm = (InputMethodManager)this.CurrentContext.GetSystemService(Context.InputMethodService);
             imm.HideSoftInputFromWindow(editor.WindowToken, 0);
         }
 
         protected void ShowKeyboard(EditText editor)
         {
-            InputMethodManager imm = (InputMethodManager) this.Context.GetSystemService(Context.InputMethodService);
+            InputMethodManager imm = (InputMethodManager)this.CurrentContext.GetSystemService(Context.InputMethodService);
             imm.ShowSoftInput(editor, 0);
         }
 
@@ -280,7 +283,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         {
             if (this.instructionDialog == null)
             {
-                this.instructionDialog = new AlertDialog.Builder(this.Context);
+                this.instructionDialog = new AlertDialog.Builder(this.CurrentContext);
                 this.instructionDialog.SetMessage(this.Model.Instructions);
             }
             this.instructionDialog.Show();
@@ -329,14 +332,14 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected void InitializeViewAndButtonView(View textView, string buttonText, EventHandler buttonClickHandler)
         {
-            var wrapper = new RelativeLayout(this.Context)
+            var wrapper = new RelativeLayout(this.CurrentContext)
             {
                 LayoutParameters = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent)
             };
 
             var buttonLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);
             buttonLayoutParams.AddRule(LayoutRules.AlignParentRight);
-            var button = new Button(this.Context) { Text = buttonText, LayoutParameters = buttonLayoutParams };
+            var button = new Button(this.CurrentContext) { Text = buttonText, LayoutParameters = buttonLayoutParams };
             button.Click += buttonClickHandler;
 
             wrapper.AddView(button);
@@ -352,12 +355,12 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
             var result = false;
 
-            var alert = new AlertDialog.Builder(this.Context);
-           
-            alert.SetTitle(Resources.GetText(Resource.String.Warning));
-            alert.SetMessage(string.Format(Resources.GetText(Resource.String.AreYouSureYouWantToRemoveRowFromRosterFormat), countOfRemovedRows));
-            alert.SetPositiveButton(Resources.GetText(Resource.String.Yes), (e, s) =>{result = true;});
-            alert.SetNegativeButton(Resources.GetText(Resource.String.No), (EventHandler<DialogClickEventArgs>)null);
+            var alert = new AlertDialog.Builder(this.CurrentContext);
+
+            alert.SetTitle(this.CurrentContext.Resources.GetText(Resource.String.Warning));
+            alert.SetMessage(string.Format(this.CurrentContext.Resources.GetText(Resource.String.AreYouSureYouWantToRemoveRowFromRosterFormat), countOfRemovedRows));
+            alert.SetPositiveButton(this.CurrentContext.Resources.GetText(Resource.String.Yes), (e, s) => { result = true; });
+            alert.SetNegativeButton(this.CurrentContext.Resources.GetText(Resource.String.No), (EventHandler<DialogClickEventArgs>) null);
 
             var dialog = alert.Create();
 

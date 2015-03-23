@@ -12,6 +12,11 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
             return Encoding.UTF8.GetString(this.SerializeToByteArray(item));
         }
 
+        public string Serialize(object item, TypeSerializationSettings typeSerializationSettings)
+        {
+            throw new NotImplementedException();
+        }
+
         public byte[] SerializeToByteArray(object item)
         {
             using (var ms = new MemoryStream())

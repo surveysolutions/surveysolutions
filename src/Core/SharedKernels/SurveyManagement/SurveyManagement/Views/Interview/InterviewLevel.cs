@@ -14,8 +14,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             this.Questions = new List<InterviewQuestion>();
             this.DisabledGroups = new HashSet<Guid>();
             this.RosterRowTitles = new Dictionary<Guid, string>();
-            this.RosterTitleQuestionIdToRosterIdMap = new Dictionary<Guid, List<Guid>>();
-            this.RosterTitleQuestionDescriptions = new Dictionary<Guid, RosterTitleQuestionDescription>();
         }
         public InterviewLevel(ValueVector<Guid> scopeVector, int? sortIndex, decimal[] vector)
             : this()
@@ -25,12 +23,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         }
 
         public decimal[] RosterVector { get; set; }
-        public Dictionary<ValueVector<Guid>, int?> ScopeVectors { get; private set; }
-        private List<InterviewQuestion> Questions { get; set; }
-        public HashSet<Guid> DisabledGroups { get; private set; }
+        public Dictionary<ValueVector<Guid>, int?> ScopeVectors { get; set; }
+        public List<InterviewQuestion> Questions { get; set; }
+        public HashSet<Guid> DisabledGroups { get; set; }
         public Dictionary<Guid, string> RosterRowTitles { set; get; }
-        public Dictionary<Guid, List<Guid>> RosterTitleQuestionIdToRosterIdMap { get; private set; }
-        public Dictionary<Guid, RosterTitleQuestionDescription> RosterTitleQuestionDescriptions { get; private set; }
 
         public IEnumerable<InterviewQuestion> GetAllQuestions()
         {

@@ -3,7 +3,6 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -13,13 +12,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
     public class TeamController : BaseController
     {
-        protected readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
+        protected readonly IUserViewFactory userViewFactory;
         protected readonly IPasswordHasher passwordHasher;
 
         public TeamController(ICommandService commandService, 
                               IGlobalInfoProvider globalInfo, 
                               ILogger logger,
-                              IViewFactory<UserViewInputModel, UserView> userViewFactory,
+                              IUserViewFactory userViewFactory,
                               IPasswordHasher passwordHasher)
             : base(commandService, globalInfo, logger)
         {
@@ -43,9 +42,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             CreateUser(user: interviewer, role: UserRoles.Operator, supervisorId: supervisorId);
         }
 
-        protected void CreateSupervisor(UserModel supervisor)
+        protected void CreateSupervisor(UserModel supervisorUser)
         {
-            CreateUser(user: supervisor, role: UserRoles.Supervisor);
+            CreateUser(user: supervisorUser, role: UserRoles.Supervisor);
+        }
+
+        protected void CreateHeadquarters(UserModel headquartersUser)
+        {
+            CreateUser(user: headquartersUser, role: UserRoles.Headquarter);
         }
 
         protected void UpdateAccount(UserView user, UserEditModel editModel)
@@ -53,7 +57,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.CommandService.Execute(new ChangeUserCommand(publicKey: user.PublicKey, email: editModel.Email,
                 roles: user.Roles.ToArray(),
                 isLockedBySupervisor: this.GlobalInfo.IsSurepvisor ? editModel.IsLocked : user.IsLockedBySupervisor,
-                isLockedByHQ: this.GlobalInfo.IsHeadquarter ? editModel.IsLocked : user.IsLockedByHQ,
+                isLockedByHQ: this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator ? editModel.IsLocked : user.IsLockedByHQ,
                 passwordHash:
                     string.IsNullOrEmpty(editModel.Password)
                         ? user.Password

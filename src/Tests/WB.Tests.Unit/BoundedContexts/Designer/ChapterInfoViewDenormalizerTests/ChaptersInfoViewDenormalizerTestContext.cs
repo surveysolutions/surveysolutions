@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.ChapterInfoViewDenormalizerTest
     {
         protected static ChaptersInfoViewDenormalizer CreateDenormalizer(GroupInfoView view = null, IExpressionProcessor expressionProcessor = null)
         {
-            var readSideRepositoryWriter = new Mock<IReadSideRepositoryWriter<GroupInfoView>>();
+            var readSideRepositoryWriter = new Mock<IReadSideKeyValueStorage<GroupInfoView>>();
             readSideRepositoryWriter.Setup(x => x.GetById(It.IsAny<string>())).Returns(view);
 
             return new ChaptersInfoViewDenormalizer(readSideRepositoryWriter.Object);
@@ -58,6 +58,17 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.ChapterInfoViewDenormalizerTest
             ((GroupInfoView) questionnaireInfoView.Items[0]).Items.Add(new QuestionInfoView() {ItemId = questionId});
 
             return questionnaireInfoView;
+        }
+
+
+        protected static GroupInfoView CreateGroupInfoViewWith1ChapterAnd3QuestionInsideChapter(string chapterId, string questionId1, string questionId2, string questionId3)
+        {
+            var questionnaireInfoView = CreateGroupInfoViewWith1ChapterAnd1QuestionInsideChapter(chapterId, questionId1);
+            ((GroupInfoView)questionnaireInfoView.Items[0]).Items.Add(new QuestionInfoView() { ItemId = questionId2 });
+            ((GroupInfoView)questionnaireInfoView.Items[0]).Items.Add(new QuestionInfoView() { ItemId = questionId3 });
+
+            return questionnaireInfoView;
+
         }
 
         protected static GroupInfoView CreateGroupInfoViewWith1ChapterAnd1StaticTextInsideChapter(string chapterId, string entityId)

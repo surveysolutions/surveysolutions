@@ -13,10 +13,10 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo
 {
     internal class QuestionnaireInfoViewDenormalizer :
-        AbstractFunctionalEventHandler<QuestionnaireInfoView, IReadSideRepositoryWriter<QuestionnaireInfoView>>,
-        ICreateHandler<QuestionnaireInfoView, NewQuestionnaireCreated>,
-        ICreateHandler<QuestionnaireInfoView, QuestionnaireCloned>,
-        ICreateHandler<QuestionnaireInfoView, TemplateImported>,
+        AbstractFunctionalEventHandler<QuestionnaireInfoView, IReadSideKeyValueStorage<QuestionnaireInfoView>>,
+        IUpdateHandler<QuestionnaireInfoView, NewQuestionnaireCreated>,
+        IUpdateHandler<QuestionnaireInfoView, QuestionnaireCloned>,
+        IUpdateHandler<QuestionnaireInfoView, TemplateImported>,
         IUpdateHandler<QuestionnaireInfoView, QuestionnaireUpdated>,
         IUpdateHandler<QuestionnaireInfoView, NewGroupAdded>,
         IUpdateHandler<QuestionnaireInfoView, GroupCloned>,
@@ -28,31 +28,32 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
         private readonly Dictionary<string, string> groupTitles = new Dictionary<string, string>();
 
-        public QuestionnaireInfoViewDenormalizer(IReadSideRepositoryWriter<QuestionnaireInfoView> writer) : base(writer)
+        public QuestionnaireInfoViewDenormalizer(IReadSideKeyValueStorage<QuestionnaireInfoView> writer)
+            : base(writer)
         {
         }
 
-        public QuestionnaireInfoView Create(IPublishedEvent<NewQuestionnaireCreated> evnt)
+        public QuestionnaireInfoView Update(QuestionnaireInfoView currentState, IPublishedEvent<NewQuestionnaireCreated> evnt)
         {
             return CreateQuestionnaire(evnt.EventSourceId, evnt.Payload.Title, evnt.Payload.IsPublic);
         }
 
-        public QuestionnaireInfoView Create(IPublishedEvent<QuestionnaireCloned> evnt)
+        public QuestionnaireInfoView Update(QuestionnaireInfoView currentState, IPublishedEvent<QuestionnaireCloned> evnt)
         {
-            var currentState = CreateQuestionnaire(evnt.EventSourceId, evnt.Payload.QuestionnaireDocument.Title, evnt.Payload.QuestionnaireDocument.IsPublic);
+            var newState = CreateQuestionnaire(evnt.EventSourceId, evnt.Payload.QuestionnaireDocument.Title, evnt.Payload.QuestionnaireDocument.IsPublic);
 
-            AddQuestionnaireItems(currentState, evnt.Payload.QuestionnaireDocument);
+            AddQuestionnaireItems(newState, evnt.Payload.QuestionnaireDocument);
 
-            return currentState;
+            return newState;
         }
 
-        public QuestionnaireInfoView Create(IPublishedEvent<TemplateImported> evnt)
+        public QuestionnaireInfoView Update(QuestionnaireInfoView currentState, IPublishedEvent<TemplateImported> evnt)
         {
-            var currentState = CreateQuestionnaire(evnt.EventSourceId, evnt.Payload.Source.Title, evnt.Payload.Source.IsPublic);
+            var newState = CreateQuestionnaire(evnt.EventSourceId, evnt.Payload.Source.Title, evnt.Payload.Source.IsPublic);
 
-            AddQuestionnaireItems(currentState, evnt.Payload.Source);
+            AddQuestionnaireItems(newState, evnt.Payload.Source);
 
-            return currentState;
+            return newState;
         }
 
         public QuestionnaireInfoView Update(QuestionnaireInfoView currentState, IPublishedEvent<QuestionnaireUpdated> evnt)

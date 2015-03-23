@@ -25,12 +25,10 @@ using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement;
@@ -46,8 +44,8 @@ namespace WB.UI.QuestionnaireTester.Ninject
         {
             var eventHandler =
                 new InterviewViewModelDenormalizer(
-                    kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>(), kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>(),
-                    kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>(), kernel.Get<IQuestionnaireRosterStructureFactory>());
+                    kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>(), kernel.Get<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
+                    kernel.Get<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(), kernel.Get<IQuestionnaireRosterStructureFactory>());
 
             bus.RegisterHandler(eventHandler, typeof (InterviewSynchronized));
             bus.RegisterHandler(eventHandler, typeof (MultipleOptionsQuestionAnswered));
@@ -100,7 +98,7 @@ namespace WB.UI.QuestionnaireTester.Ninject
         private static void InitTemplateStorage(IKernel kernel, InProcessEventBus bus)
         {
             var templateDenoramalizer = new QuestionnaireDenormalizer(
-                kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>(),
+                kernel.Get<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
                 kernel.Get<IPlainQuestionnaireRepository>());
 
             bus.RegisterHandler(templateDenoramalizer, typeof(TemplateImported));
@@ -108,7 +106,7 @@ namespace WB.UI.QuestionnaireTester.Ninject
             bus.RegisterHandler(templateDenoramalizer, typeof(PlainQuestionnaireRegistered));
             
             var propagationStructureDenormalizer = new QuestionnaireRosterStructureDenormalizer(
-                kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>(),
+                kernel.Get<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(),
                 kernel.Get<IQuestionnaireRosterStructureFactory>(),
                 kernel.Get<IPlainQuestionnaireRepository>());
 
@@ -149,7 +147,7 @@ namespace WB.UI.QuestionnaireTester.Ninject
             kernel.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
             kernel.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
 
-            var bus = new InProcessEventBus(true, kernel.Get<IEventStore>());
+            var bus = new InProcessEventBus(kernel.Get<IEventStore>());
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
             //kernel.Bind<IEventBus>().ToConstant(bus);
             kernel.Bind<IEventBus>().ToConstant(bus).Named("interviewViewBus");

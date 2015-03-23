@@ -3,5 +3,6 @@
     public class TeamInterviewsViewItem : BaseInterviewGridItem
     {
         public bool CanBeReassigned { get; set; }
+        public bool CanApproveOrReject { get; set; }
     }
 }

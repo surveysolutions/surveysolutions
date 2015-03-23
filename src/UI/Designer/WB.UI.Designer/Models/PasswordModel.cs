@@ -1,34 +1,22 @@
-﻿using WB.UI.Shared.Web.DataAnnotations;
+﻿using WB.UI.Designer.Resources;
+using WB.UI.Shared.Web.DataAnnotations;
 
 namespace WB.UI.Designer.Models
 {
     using System.ComponentModel.DataAnnotations;
 
-    /// <summary>
-    /// The password model.
-    /// </summary>
     public class PasswordModel
     {
-        #region Public Properties
-
-        /// <summary>
-        /// Gets or sets the confirm password.
-        /// </summary>
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password", Order = 3)]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Compare("Password", ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "The_password_and_confirmation_password_do_not_match")]
         public string ConfirmPassword { get; set; }
 
-        /// <summary>
-        /// Gets or sets the new password.
-        /// </summary>
         [Required]
-        [PasswordStringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.")]
-        [PasswordRegularExpression(ErrorMessage = "Password must contain at least one number, one upper case character and one lower case character")]
+        [PasswordStringLength(100, ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "Password_must_be_at_least_characters_long")]
+        [PasswordRegularExpression(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_case_character")]
         [DataType(DataType.Password)]
         [Display(Name = "Password", Order = 2)]
         public string Password { get; set; }
-
-        #endregion
     }
 }

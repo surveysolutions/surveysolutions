@@ -9,10 +9,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
 {
     internal class ChartStatisticsViewFactoryTestsContext
     {
-        protected static ChartStatisticsViewFactory CreateChartStatisticsViewFactory(IReadSideRepositoryReader<StatisticsGroupedByDateAndTemplate> statisticsReader = null)
+        protected static ChartStatisticsViewFactory CreateChartStatisticsViewFactory(IReadSideKeyValueStorage<StatisticsGroupedByDateAndTemplate> statisticsReader = null)
         {
             return new ChartStatisticsViewFactory(
-                statisticsReader ?? Stub<IReadSideRepositoryReader<StatisticsGroupedByDateAndTemplate>>.WithNotEmptyValues);
+                statisticsReader ?? Stub<IReadSideKeyValueStorage<StatisticsGroupedByDateAndTemplate>>.WithNotEmptyValues);
         }
 
         protected static QuestionnaireStatisticsForChart CreateQuestionnaireStatisticsForChartWithSameCountForAllStatuses(int count)

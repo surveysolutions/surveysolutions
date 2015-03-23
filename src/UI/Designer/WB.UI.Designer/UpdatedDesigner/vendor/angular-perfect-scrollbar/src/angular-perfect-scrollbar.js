@@ -35,6 +35,14 @@ angular.module('perfect_scrollbar', []).directive('perfectScrollbar', ['$parse',
       $elem.bind('$destroy', function() {
         $elem.perfectScrollbar('destroy');
       });
+
+      $scope.$on("scrollToPosition", function (event, args) {
+          var parent = $($elem).find(args.target);
+          if (parent.length > 0) {
+              $elem.get(0).scrollTop = args.scrollTop;
+              $elem.perfectScrollbar('update');
+          }
+      });
     }
   };
 }]);

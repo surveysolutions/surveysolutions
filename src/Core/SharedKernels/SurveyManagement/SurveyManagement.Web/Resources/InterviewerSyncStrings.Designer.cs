@@ -61,7 +61,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to System error. Please contact supervisor. File with latest version was not found.
+        ///   Looks up a localized string similar to Synchronization failed. Android device id was not provided. Please contact developers..
+        /// </summary>
+        internal static string AndroidDeviceIdWasNotProvided {
+            get {
+                return ResourceManager.GetString("AndroidDeviceIdWasNotProvided", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronization failed. File with latest version was not found. Please contact developers..
         /// </summary>
         internal static string FileWasNotFound {
             get {
@@ -70,7 +79,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to System error. Please contact developers. Incorrect files count.
+        ///   Looks up a localized string similar to Synchronization failed. Incorrect files count. Please contact developers..
         /// </summary>
         internal static string IncorrectFilesCount {
             get {
@@ -79,7 +88,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to System error. Please contact developers. Incorrect media type.
+        ///   Looks up a localized string similar to Synchronization failed. Incorrect media type. Please contact developers..
         /// </summary>
         internal static string IncorrectMediaType {
             get {
@@ -88,7 +97,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synchronization failed. Interviewer and Supervisor versions are different. Interviewer application has higher version &apos;{0}&apos; than Supervisor &apos;{1}&apos;. Please contact your supervisor..
+        ///   Looks up a localized string similar to Synchronization failed. Interviewer application has higher version &apos;{0}&apos; than Supervisor &apos;{1}&apos;..
         /// </summary>
         internal static string InterviewerApplicationHasHigherVersion_thanSupervisor_Format {
             get {
@@ -97,7 +106,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synchronization failed. Interviewer and Supervisor versions are different. Interviewer application has version &apos;{0}&apos; but Supervisor has &apos;{1}&apos;. Update Interviewer application.
+        ///   Looks up a localized string similar to Synchronization failed. Please uninstall Interviewer application and install it..
+        /// </summary>
+        internal static string InterviewerApplicationHasVersion_butSupervisorHas_PleaseReinstallInterviewerApplication {
+            get {
+                return ResourceManager.GetString("InterviewerApplicationHasVersion_butSupervisorHas_PleaseReinstallInterviewerAppli" +
+                        "cation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronization failed. Interviewer application has version &apos;{0}&apos; but Supervisor has &apos;{1}&apos;. Please update Interviewer application..
         /// </summary>
         internal static string InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication {
             get {
@@ -107,7 +126,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid device identifier. Something has happened with the client app installation, press &quot;Send tablet information&quot; button..
+        ///   Looks up a localized string similar to Synchronization failed. Your application is not compatible with server one. Uninstall your application and download new version of Interviewer app.
+        /// </summary>
+        internal static string InterviewerIsNotCompatibleWithThisVersion {
+            get {
+                return ResourceManager.GetString("InterviewerIsNotCompatibleWithThisVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid device identifier. Something has happened with the client app installation, please send tablet information..
         /// </summary>
         internal static string InvalidDeviceIdentifier {
             get {
@@ -116,7 +144,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid sequence identifier. Something has happened with the client app installation, press &quot;Send tablet information&quot; button..
+        ///   Looks up a localized string similar to Synchronization failed. Invalid sequence identifier. Something has happened with the client app installation, press &quot;Send tablet information&quot; button..
         /// </summary>
         internal static string InvalidSequenceIdentifier {
             get {
@@ -134,7 +162,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your account does not have an interviewer role.
+        ///   Looks up a localized string similar to Synchronization failed. Your account does not have an interviewer role. Please contact your supervisor..
         /// </summary>
         internal static string InvalidUserRole {
             get {
@@ -143,7 +171,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to System error. Please reinstall application. Installation identifier is missing..
+        ///   Looks up a localized string similar to Server is on the maintenance mode now. Sorry for the inconvenience. Please, try again later..
+        /// </summary>
+        internal static string Maintenance {
+            get {
+                return ResourceManager.GetString("Maintenance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronization failed. Please reinstall application. Installation identifier is missing. Please contact developers..
         /// </summary>
         internal static string NoClientIdentifier {
             get {
@@ -152,7 +189,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Internal server error occurred. Please contact developers..
+        ///   Looks up a localized string similar to Synchronization failed. Internal server error occurred. Please contact developers..
         /// </summary>
         internal static string ServerError {
             get {
@@ -161,11 +198,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to System error. Please contact developers. Sync package with id &apos;{0}&apos; was not found on server.
+        ///   Looks up a localized string similar to Synchronization failed.  Sync package with id &apos;{0}&apos; was not found on server. Please contact developers..
         /// </summary>
         internal static string Sync_package_with_id__0__was_not_found_on_serverFormat {
             get {
                 return ResourceManager.GetString("Sync_package_with_id__0__was_not_found_on_serverFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronization failed. Wrong android device id was provided. Please contact developers..
+        /// </summary>
+        internal static string WrongAndroidDeviceIdWasProvided {
+            get {
+                return ResourceManager.GetString("WrongAndroidDeviceIdWasProvided", resourceCulture);
             }
         }
     }

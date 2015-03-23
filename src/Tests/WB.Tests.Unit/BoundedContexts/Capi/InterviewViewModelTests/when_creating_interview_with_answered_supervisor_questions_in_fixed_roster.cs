@@ -7,6 +7,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -87,17 +88,17 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
         It should_find_3_supervisor_answers = () =>
             interviewViewModel.SuperviorQuestions.Count.ShouldEqual(3);
 
-        It should_collect_supervisor_answers_with_answeredQuestionId_in_keys = () =>
-            interviewViewModel.SuperviorQuestions.Keys.Select(x => x.Id).Distinct().ShouldContainOnly(answeredQuestionId);
+    /*    It should_collect_supervisor_answers_with_answeredQuestionId_in_keys = () =>
+            interviewViewModel.SuperviorQuestions.Keys.Select(x => x.Id).Distinct().ShouldContainOnly(answeredQuestionId);*/
 
         It should_set_propagation_vector_for_the_first_item_equals_0 = () =>
-            interviewViewModel.SuperviorQuestions.Keys.Select(x => x.InterviewItemPropagationVector).ElementAt(0).ShouldContainOnly(0);
+            interviewViewModel.SuperviorQuestions.Keys.ElementAt(0).ShouldEqual(answeredQuestionId.FormatGuid()+"[0]");
 
         It should_set_propagation_vector_for_the_second_item_equals_1 = () =>
-            interviewViewModel.SuperviorQuestions.Keys.Select(x => x.InterviewItemPropagationVector).ElementAt(1).ShouldContainOnly(1);
+            interviewViewModel.SuperviorQuestions.Keys.ElementAt(1).ShouldEqual(answeredQuestionId.FormatGuid()+"[1]");
 
         It should_set_propagation_vector_for_the_third_item_equals_2 = () =>
-           interviewViewModel.SuperviorQuestions.Keys.Select(x => x.InterviewItemPropagationVector).ElementAt(2).ShouldContainOnly(2);
+           interviewViewModel.SuperviorQuestions.Keys.ElementAt(2).ShouldEqual(answeredQuestionId.FormatGuid() + "[2]");
 
         It should_set_answe1_for_the_1st_item_in_supervisor_answers_collection = () =>
           interviewViewModel.SuperviorQuestions.Values.ElementAt(0).ShouldEqual(answer1);

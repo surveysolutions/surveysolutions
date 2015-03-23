@@ -64,6 +64,8 @@ namespace WB.UI.QuestionnaireTester.Implementation.Services
             var pathToSaveAssembly = Path.Combine(pathToFolder, fileName);
 
             File.WriteAllBytes(pathToSaveAssembly, Convert.FromBase64String(assemblyAsBase64String));
+
+            File.SetAttributes(pathToSaveAssembly, FileAttributes.ReadOnly);  
         }
 
         public void RemoveAssembly(Guid questionnaireId, long questionnaireVersion)
@@ -75,11 +77,18 @@ namespace WB.UI.QuestionnaireTester.Implementation.Services
         {
             byte[] assemblyAsByteArray = this.GetAssemblyAsByteArray(questionnaireId, questionnaireVersion);
 
+            if (assemblyAsByteArray == null)
+                return null;
+
             return Convert.ToBase64String(assemblyAsByteArray);
         }
 
         public byte[] GetAssemblyAsByteArray(Guid questionnaireId, long questionnaireVersion)
         {
+            var assemblyPath = GetFullPathToAssembly(questionnaireId);
+            if (!File.Exists(assemblyPath))
+                return null;
+            
             return File.ReadAllBytes(GetFullPathToAssembly(questionnaireId));
         }
 

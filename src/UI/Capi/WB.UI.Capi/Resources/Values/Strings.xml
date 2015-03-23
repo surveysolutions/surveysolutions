@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="ApplicationName">CAPI</string>  
-  
+  <string name="ApplicationName">CAPI</string>
+  <string name="ActiveUsers">Active users</string>
+  <string name="ConfirmDeviceChanging">Tablet changing confirmation</string>
+  <string name="AreYouSureYouWantToRestore">All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}</string>
+  <string name="MakeThisTabletWorkingDevice">Your account is associated with a different tablet. Do you want to sign off that tablet and make the current tablet your working device?</string>
+  <string name="AllYourDataWillBeDeleted">All data collected by you on the other tablet will be deleted. You can save these data by canceling this registration and synchronizing that tablet. Do you want to proceed with deleting data on the other tablet?</string>
+  <string name="SyncIsFinished">Sync is finished</string>
+  <string name="Yes">Yes</string>
+  <string name="No">No</string>
   <string name="Send">Send</string>
   <string name="Cancel">Cancel</string>
-   <string name="DetailsFormat">Details: {0}</string>
+  <string name="Warning">Warning</string>
+  <string name="Initializing">Initializing</string>
+  <string name="DetailsFormat">Details: {0}</string>
   <string name="Oops">Oops, something went wrong! You can help up to solve this issue faster if you send an information about your tablet.</string>
   <string name="InterviewLoadingError">Interview loading error</string>
   <string name="InterviewWithIdIsAbsentFormat">Interview with id is absent \'{0}\'</string>
- <string name="InformationPackageIsSuccessfullySent">Information package is successfully sent.</string>
- <string name="ThankYouForPackage">Thank you! We\'ll try to fix your issue as soon as we can. We are sorry for inconvenience.</string>
- <string name="SendingOfInformationPackageIsCanceled">Sending of information package is cancelled.</string> 
- 
+  <string name="InformationPackageIsSuccessfullySent">Information package is successfully sent.</string>
+  <string name="ThankYouForPackage">Thank you! We\'ll try to fix your issue as soon as we can. We are sorry for inconvenience.</string>
+  <string name="SendingOfInformationPackageIsCanceled">Sending of information package is cancelled. Reason: {0}</string>
   <string name="InformationPackage">Information package</string>
   <string name="CreatingInformationPackage">Creating information package</string>
   <string name="InformationPackageSizeWarningFormat">Information package of size {0} will be sent via network. Are you sure you want to send it?</string>
   <string name="SendingInformationPackage">Sending information package</string>
-  
+
   <string name="NoAssignments">You have no new assignments</string>
- 
+
   <item  type="id"  name="QuestionnaireId" />
   <item  type="id"  name="QuestionnaireVersion" />
   <item  type="id"  name="IsInterviewLocal" />
@@ -34,4 +42,4 @@
   <string name="YouAreNotConnectedToAnyNetwork">You are not connected to any network.</string>
   <string name="NowYouareConnectedToWifiNetwork">Now you are connected to wi-fi network: {0}.</string>
   <string name="NewHtmlLine"> <![CDATA[<br/>]]></string>
- </resources>
+</resources>

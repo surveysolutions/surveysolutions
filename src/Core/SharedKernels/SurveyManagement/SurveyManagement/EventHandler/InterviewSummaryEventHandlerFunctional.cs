@@ -4,22 +4,23 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class InterviewSummaryEventHandlerFunctional : AbstractFunctionalEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>, 
-        ICreateHandler<InterviewSummary, InterviewCreated>,
-        ICreateHandler<InterviewSummary, InterviewFromPreloadedDataCreated>,
-        ICreateHandler<InterviewSummary, InterviewOnClientCreated>,
+    public class InterviewSummaryEventHandlerFunctional : AbstractFunctionalEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>,
+        IUpdateHandler<InterviewSummary, InterviewCreated>,
+        IUpdateHandler<InterviewSummary, InterviewFromPreloadedDataCreated>,
+        IUpdateHandler<InterviewSummary, InterviewOnClientCreated>,
         IUpdateHandler<InterviewSummary, InterviewStatusChanged>,
         IUpdateHandler<InterviewSummary, SupervisorAssigned>,
         IUpdateHandler<InterviewSummary, TextQuestionAnswered>,
@@ -46,11 +47,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewSummary, InterviewHardDeleted>
 
     {
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaires;
+        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaires;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
 
         public InterviewSummaryEventHandlerFunctional(IReadSideRepositoryWriter<InterviewSummary> interviewSummary,
-            IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaires, IReadSideRepositoryWriter<UserDocument> users)
+            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaires, IReadSideRepositoryWriter<UserDocument> users)
             : base(interviewSummary)
         {
             this.questionnaires = questionnaires;
@@ -100,8 +101,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             Guid eventSourceId, DateTime eventTimeStamp, bool wasCreatedOnClient)
         {
             UserDocument responsible = this.users.GetById(userId);
-            var questionnarie = this.questionnaires.GetById(questionnaireId,
-                questionnaireVersion);
+            var questionnarie = this.questionnaires.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
 
             var interviewSummary = new InterviewSummary(questionnarie.Questionnaire)
             {
@@ -121,19 +121,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return interviewSummary;
         }
 
-        public InterviewSummary Create(IPublishedEvent<InterviewCreated> evnt)
+        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewCreated> evnt)
         {
             return this.CreateInterviewSummary(evnt.Payload.UserId, evnt.Payload.QuestionnaireId,
                 evnt.Payload.QuestionnaireVersion, evnt.EventSourceId, evnt.EventTimeStamp, wasCreatedOnClient: false);
         }
 
-        public InterviewSummary Create(IPublishedEvent<InterviewFromPreloadedDataCreated> evnt)
+        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewFromPreloadedDataCreated> evnt)
         {
             return this.CreateInterviewSummary(evnt.Payload.UserId, evnt.Payload.QuestionnaireId,
                 evnt.Payload.QuestionnaireVersion, evnt.EventSourceId, evnt.EventTimeStamp, wasCreatedOnClient: false);
         }
 
-        public InterviewSummary Create(IPublishedEvent<InterviewOnClientCreated> evnt)
+        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewOnClientCreated> evnt)
         {
             return this.CreateInterviewSummary(evnt.Payload.UserId, evnt.Payload.QuestionnaireId,
              evnt.Payload.QuestionnaireVersion, evnt.EventSourceId, evnt.EventTimeStamp, wasCreatedOnClient: true);
@@ -246,9 +246,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
             {
                 interview.IsDeleted = true;
-
-                AddInterviewStatus(summary: interview, status: InterviewStatus.Deleted,
-                    date: evnt.EventTimeStamp, comment: null, responsibleId: evnt.Payload.UserId);
+                if (string.IsNullOrEmpty(evnt.Origin))
+                {
+                    AddInterviewStatus(summary: interview, status: InterviewStatus.Deleted,
+                        date: evnt.EventTimeStamp, comment: null, responsibleId: evnt.Payload.UserId);
+                }
             });
         }
 
@@ -269,8 +271,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             {
                 interview.IsDeleted = false;
 
-                AddInterviewStatus(summary: interview, status: InterviewStatus.Restored,
-                    date: evnt.EventTimeStamp, comment: null, responsibleId: evnt.Payload.UserId);
+                if (string.IsNullOrEmpty(evnt.Origin))
+                {
+                    AddInterviewStatus(summary: interview, status: InterviewStatus.Restored,
+                        date: evnt.EventTimeStamp, comment: null, responsibleId: evnt.Payload.UserId);
+                }
             });
         }
 

@@ -62,7 +62,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected LinearLayout CreateAnswersContainer()
         {
-            var optionsWrapper = new LinearLayout(this.Context);
+            var optionsWrapper = new LinearLayout(this.CurrentContext);
             optionsWrapper.Orientation = Orientation.Vertical;
             optionsWrapper.LayoutParameters = new LayoutParams(LayoutParams.FillParent,
                                                                LayoutParams.FillParent);
@@ -98,7 +98,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private RelativeLayout CreateAnswerBlock(T answer)
         {
-            var container = new RelativeLayout(this.Context);
+            var container = new RelativeLayout(this.CurrentContext);
             container.LayoutParameters = new LayoutParams(LayoutParams.FillParent,
                                                           LayoutParams.FillParent);
             
@@ -125,7 +125,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private TextView CreateOrderText(int answerOrder)
         {
-            TextView answerOrderText = new TextView(this.Context);
+            TextView answerOrderText = new TextView(this.CurrentContext);
             answerOrderText.SetTypeface(null, TypefaceStyle.Bold);
 
             var layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WrapContent, 
@@ -143,7 +143,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private CheckBox CreateCheckBox(T answer, string answerTag)
         {
-            CheckBox cb = new CheckBox(this.Context);
+            CheckBox cb = new CheckBox(this.CurrentContext);
             
             var cbLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.WrapContent, 
                                                                  LayoutParams.WrapContent);

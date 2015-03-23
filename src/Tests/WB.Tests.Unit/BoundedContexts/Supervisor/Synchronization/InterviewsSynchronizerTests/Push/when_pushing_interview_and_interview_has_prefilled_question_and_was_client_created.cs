@@ -21,14 +21,13 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSynchronizerTests.Push
 {
     internal class when_pushing_interview_and_interview_has_prefilled_question_and_was_client_created : InterviewsSynchronizerTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             string positiveResponse = ":)";
 
@@ -94,20 +93,20 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 commandService: commandServiceMock.Object);
         };
 
-        private Because of = () =>
+        Because of = () =>
             interviewsSynchronizer.Push(userId);
 
 
-        private It should_set_metadata_featuredquestions_meta_not_empty = () =>
+        It should_set_metadata_featuredquestions_meta_not_empty = () =>
             metadata.FeaturedQuestionsMeta.Count().ShouldEqual(1);
 
-        private It should_set_metadata_featuredquestion_public_key_to_questionId = () =>
+        It should_set_metadata_featuredquestion_public_key_to_questionId = () =>
             metadata.FeaturedQuestionsMeta.Single().PublicKey.ShouldEqual(questionId);
 
-        private It should_set_metadata_featuredquestion_title_to_question_title = () =>
+        It should_set_metadata_featuredquestion_title_to_question_title = () =>
             metadata.FeaturedQuestionsMeta.Single().Title.ShouldEqual(questionTitle);
 
-        private It should_set_metadata_featuredquestion_value_to_question_answer = () =>
+        It should_set_metadata_featuredquestion_value_to_question_answer = () =>
             metadata.FeaturedQuestionsMeta.Single().Value.ShouldEqual(questionAnswer);
 
 

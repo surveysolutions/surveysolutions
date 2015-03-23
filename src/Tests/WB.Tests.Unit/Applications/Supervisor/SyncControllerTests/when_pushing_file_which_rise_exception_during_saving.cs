@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Net;
+using System.Net.Http;
 using System.Web;
 using Machine.Specifications;
 using Moq;
@@ -16,8 +18,8 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
     {
         Establish context = () =>
         {
-            var user = new UserView();
-            var userFactory = Mock.Of<IViewFactory<UserViewInputModel, UserView>>(x => x.Load(Moq.It.IsAny<UserViewInputModel>()) == user);
+            var user = new UserWebView();
+            var userFactory = Mock.Of<IUserWebViewFactory>(x => x.Load(Moq.It.IsAny<UserWebViewInputModel>()) == user);
             plainFileRepository = new Mock<IPlainInterviewFileStorage>();
             plainFileRepository.Setup(x => x.StoreInterviewBinaryData(interviewId, Moq.It.IsAny<string>(), Moq.It.IsAny<byte[]>()))
                 .Throws<ArgumentException>();
@@ -26,18 +28,15 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
         
         };
 
-        Because of = () =>
-            exception = Catch.Exception(() =>  controller.PostFile(new PostFileRequest() { InterviewId = interviewId, FileName = fileName, Data = Convert.ToBase64String(new byte[0])}));
+        Because of = () => exception = Catch.Exception(()=> controller.PostFile(new PostFileRequest() { InterviewId = interviewId, FileName = fileName, Data = Convert.ToBase64String(new byte[0]) }));
 
-        It should_exception_not_be_null = () =>
+        It should_return_exception = () =>
             exception.ShouldNotBeNull();
 
-
-        private static Exception exception;
         private static InterviewerSyncController controller;
         private static Mock<IPlainInterviewFileStorage> plainFileRepository;
         private static string fileName = "file name";
-
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
+        private static Exception exception;
     }
 }

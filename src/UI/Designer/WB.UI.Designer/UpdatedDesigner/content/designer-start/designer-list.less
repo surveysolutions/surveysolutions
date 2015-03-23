@@ -1,0 +1,308 @@
+@import (reference) "bootstrap-custom";
+@import "bootstrap-override";
+@import "custom-fonts";
+@import (reference) "font-styles";
+@import "inputs";
+
+@header-height: 76px;
+
+html, body {
+    height: 100%;
+    min-width: 1280px;
+    position: relative;
+    width: 100%;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.container-wb-list {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 100%;
+    overflow: hidden;
+
+    .header-wb-list {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: @header-height;
+        z-index: 2;
+
+        header {
+            .questionnaire-logo {
+                background: url("../i/logo-questionnaire-designer.png") no-repeat;
+                width: 366px;
+                height: 36px;
+                margin: 20px;
+                position: absolute;
+                top: 0;
+                left: 0;
+                text-indent: -9999999px;
+                //  float: left;
+            }
+
+            .nav-tabs {
+                // float: left;
+                width: 100%;
+                border: none;
+                border-left: 13px solid #bcc3c8;
+            }
+
+            nav {
+                float: right;
+                margin: 18px;
+                position: absolute;
+                top: 0;
+                right: 0;
+            }
+        }
+    }
+
+    section#designer-list {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: @header-height;
+        z-index: 1;
+
+        table#table-header {
+            height: 60px;
+            border-left: 13px solid #bcc3c8;
+            border-bottom: 2px solid #b1b5b8;
+            margin: 0;
+            .trebuchet12b();
+            text-transform: uppercase;
+            color: @pagination-active-color;
+
+            tr {
+                th {
+                    padding-top: 20px;
+
+                    &:first-child {
+                        background: url("../i/loupe.png") 25px 18px no-repeat;
+                        padding-left: 53px;
+                    }
+
+                    &:nth-child(2) {
+                        width: 12%;
+                    }
+
+                    &:nth-child(3) {
+                        width: 10%;
+                    }
+
+                    &:nth-child(4) {
+                        width: 17%;
+                    }
+
+                    &:nth-child(5) {
+                        width: 8%;
+                    }
+
+                    a#title-search {
+                        color: #bcc3c8;
+                    }
+
+                    a:hover {
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+
+        #table-content-holder {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            top: 60px;
+            overflow: auto;
+            border-top-width: 0;
+            border-top-style: none;
+            /*margin: 0;
+      padding: 0;
+      height: 100%;*/
+            div#table-message {
+                height: 115px;
+                background: #edeff0 url("../i/logo-designer-sm.png") 45px 23px no-repeat;
+                //border-top: 2px solid #b1b5b8;
+                position: relative;
+
+                p {
+                    .arial16I();
+                    padding: 20px 0 0 110px;
+                }
+
+                button {
+                    font-weight: bold;
+                    margin: 0 100px;
+                    text-decoration: none;
+                }
+
+                a.cross {
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                    background: url("../i/cross.png");
+                    height: 40px;
+                    width: 40px;
+
+                    &:hover {
+                        background-position: 0 -40px;
+                    }
+                }
+            }
+
+            table#table-content {
+                cursor: default;
+
+                tr {
+
+                    td {
+                        &:first-child {
+                            .arial18();
+                            color: @gray-dark;
+                            border-left: 13px solid @input-border;
+
+                            span.summary {
+                                .lucidaC14();
+                                color: #b9c3ca;
+                            }
+                        }
+
+                        &:nth-child(2) {
+                            .georgia14I();
+                            color: @tooltip-color;
+                            width: 12%;
+                        }
+
+                        &:nth-child(3) {
+                            .trebuchet12b();
+                            color: @pagination-active-color;
+                            text-transform: uppercase;
+                            width: 10%;
+                        }
+
+                        &:nth-child(4) {
+                            .georgia14I();
+                            color: #cbcbcb;
+                            width: 17%;
+
+                            strong {
+                                color: @tooltip-color;
+                                font-weight: normal;
+                            }
+                        }
+
+                        &:nth-child(5) {
+                            .georgia14I();
+                            color: #e5e5e5;
+                            width: 8%;
+
+                            a {
+                                color: #2a81cb;
+                            }
+                        }
+                    }
+
+                    &:hover {
+                        background-color: @table-bg-hover;
+
+                        td {
+                            &:first-child {
+                                color: #1c76c3;
+
+                                span.summary {
+                                    color: #788792;
+                                }
+                            }
+
+                            &:nth-child(3) {
+                                color: #444655;
+                            }
+
+                            &:nth-child(4) {
+                                color: @tooltip-color;
+                            }
+
+                            &:nth-child(5) {
+                                color: #aebac5;
+
+                                a {
+                                    text-decoration: none;
+                                }
+                            }
+                        }
+                    }
+
+                    &.active {
+                        background-color: @table-bg-hover;
+
+                        td {
+                            &:first-child {
+
+                                span.summary {
+                                    color: #b9c3ca;
+                                }
+
+                                &:hover {
+                                    color: @gray-dark;
+                                }
+                            }
+
+                            &:nth-child(3) {
+                                color: #444655;
+                            }
+
+                            &:nth-child(4) {
+                                color: @tooltip-color;
+                            }
+                        }
+                    }
+
+                    &:last-child {
+                        border-bottom: 1px solid #e2e3e4;
+                    }
+                }
+            }
+
+            ul.pagination {
+                .trebuchet14b();
+                margin: 0 15px;
+
+                li {
+                    a {
+                        &:hover {
+                            text-decoration: underline;
+                        }
+                    }
+
+                    &.active, &.disabled {
+                        a {
+                            &:hover {
+                                text-decoration: none;
+                            }
+                        }
+                    }
+                }
+            }
+
+            ul.pager {
+                .trebuchet12b();
+                text-transform: uppercase;
+                text-align: left;
+                margin: 0 15px;
+
+                a {
+                    color: @brand-success;
+                }
+            }
+        }
+    }
+}

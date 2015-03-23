@@ -8,7 +8,7 @@ using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Capi.EventHandler;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
@@ -18,12 +18,12 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.QuestionnaireBrowseItemDenormalizer
     internal class QuestionnaireBrowseItemDenormalizerTestContext
     {
         protected static QuestionnaireBrowseItemDenormalizer CreateQuestionnaireBrowseItemDenormalizer(
-            IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> questionnaireBrowseItemStorage=null,
+            IReadSideRepositoryWriter<QuestionnaireBrowseItem> questionnaireBrowseItemStorage=null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository=null)
         {
             return
                 new QuestionnaireBrowseItemDenormalizer(
-                    questionnaireBrowseItemStorage ?? Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem>>(),
+                    questionnaireBrowseItemStorage ?? Mock.Of<IReadSideRepositoryWriter<QuestionnaireBrowseItem>>(),
                     plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>());
         }
         protected static IPublishedEvent<T> CreatePublishedEvent<T>(Guid questionnaireId, T evnt)

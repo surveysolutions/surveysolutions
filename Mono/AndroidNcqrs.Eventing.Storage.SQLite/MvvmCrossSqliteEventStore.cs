@@ -7,6 +7,7 @@ using Cirrious.MvvmCross.Plugins.Sqlite;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.Infrastructure.FileSystem;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite
 {
@@ -72,7 +73,8 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 
         public void CleanStream(Guid id)
         {
-            File.Delete(Path.Combine(FullPathToFolder, id.ToString()));
+            var file = Path.Combine(FullPathToFolder, id.ToString());
+            if (File.Exists(file)) File.Delete(file);
         }
 
         public string GetPathToBackupFile()

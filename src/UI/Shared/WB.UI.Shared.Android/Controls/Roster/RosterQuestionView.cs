@@ -17,7 +17,7 @@ namespace WB.UI.Shared.Android.Controls.Roster
     public class RosterQuestionView : LinearLayout, IMvxBindingContextOwner
     {
         private readonly IMvxAndroidBindingContext bindingContext;
-        private readonly Context context;
+        private readonly Context CurrentContext;
         private readonly Guid questionnaireId;
         private readonly IQuestionViewFactory questionViewFactory;
         protected AlertDialog dialog;
@@ -45,7 +45,7 @@ namespace WB.UI.Shared.Android.Controls.Roster
         public RosterQuestionView(Context context, QuestionViewModel source, Guid questionnarieId, IQuestionViewFactory questionViewFactory)
             : base(context)
         {
-            this.context = context;
+            this.CurrentContext = context;
             this.bindingContext = new MvxAndroidBindingContext(context, context.ToBindingContext().LayoutInflater, source);
             this.Model = source;
             this.questionnaireId = questionnarieId;
@@ -63,26 +63,30 @@ namespace WB.UI.Shared.Android.Controls.Roster
         void rowViewItem_Click(object sender, EventArgs e)
         {
             this.CheckIsDialogWasCreatedBeforeAndCreateIfDialogIsAbsent();
-            this.dialog.Show();
         }
 
         private void CheckIsDialogWasCreatedBeforeAndCreateIfDialogIsAbsent()
         {
-            if (this.dialog != null)
-                return;
+            if (this.dialog == null)
+            {
+                var setAnswerPopup = new AlertDialog.Builder(this.CurrentContext);
+                this.questionView = this.questionViewFactory.CreateQuestionView(this.CurrentContext, this.Model,
+                    this.questionnaireId);
 
-            var setAnswerPopup = new AlertDialog.Builder(this.context);
-            this.questionView = this.questionViewFactory.CreateQuestionView(this.context, this.Model, this.questionnaireId);
-            this.questionView.AnswerSet += this.questionView_AnswerSet;
-            this.questionView.AnswerSaved += this.questionView_AnswerSaved;
-            
-            ScrollView scrollPane = new ScrollView(this.context);
-            scrollPane.AddView(questionView);
+                this.questionView.AnswerSet += this.questionView_AnswerSet;
+                this.questionView.AnswerSaved += this.questionView_AnswerSaved;
 
-            setAnswerPopup.SetView(scrollPane);
-            this.dialog = setAnswerPopup.Create();
-            
-            dialog.Window.SetSoftInputMode(SoftInput.AdjustResize);
+                ScrollView scrollPane = new ScrollView(this.CurrentContext);
+                scrollPane.AddView(questionView);
+
+                setAnswerPopup.SetView(scrollPane);
+                this.dialog = setAnswerPopup.Create();
+
+                dialog.Window.SetSoftInputMode(SoftInput.AdjustResize);
+            }
+
+            if (!this.dialog.IsShowing)
+                this.dialog.Show();
         }
 
         private void questionView_AnswerSet(object sender, AnswerSetEventArgs e)
@@ -102,9 +106,6 @@ namespace WB.UI.Shared.Android.Controls.Roster
         {
             if (disposing)
             {
-#if DEBUG
-                Console.WriteLine(string.Format("disposing roster question '{0}'", this.Model.Text));
-#endif
                 this.ClearAllBindings();
 
                 if (this.dialog != null)
@@ -119,9 +120,11 @@ namespace WB.UI.Shared.Android.Controls.Roster
                     this.questionView.Dispose();
                     this.questionView = null;
                 }
+                if (this.llWrapper != null)
+                    this.llWrapper.Click -= this.rowViewItem_Click;
+
             }
             base.Dispose(disposing);
-            
         }
     }
 }

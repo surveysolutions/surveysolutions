@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -14,6 +15,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views
             this.CreationDate = DateTime.Now;
             this.PublicKey = Guid.NewGuid();
             this.Roles = new List<UserRoles>();
+            this.DeviceChangingHistory = new List<DeviceInfo>();
         }
 
         public DateTime CreationDate { get; set; }
@@ -30,7 +32,21 @@ namespace WB.Core.SharedKernels.DataCollection.Views
         public UserLight Supervisor { get; set; }
         public string UserName { get; set; }
 
+        public bool IsHq()
+        {
+            return Roles.Any(role => role == UserRoles.Headquarter);
+        }
+
+        public bool IsAdmin()
+        {
+            return Roles.Any(role => role == UserRoles.Administrator);
+        }
+
         public DateTime LastChangeDate { get; set; }
+
+        public string DeviceId { get; set; }
+
+        public List<DeviceInfo> DeviceChangingHistory { get; set; }
 
         public UserLight GetUseLight()
         {

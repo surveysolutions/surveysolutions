@@ -1,19 +1,27 @@
 using System;
-using System.Collections.Generic;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.Synchronization.SyncStorage;
+using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 
 namespace WB.Core.Synchronization
 {
     public interface ISyncManager
     {
-        HandshakePackage ItitSync(ClientIdentifier identifier);
+        HandshakePackage InitSync(ClientIdentifier identifier);
 
-        bool SendSyncItem(SyncItem package);
+        void SendSyncItem(Guid interviewId, string package);
 
-        IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, string lastSyncedPackageId);
+        SyncItemsMetaContainer GetQuestionnairePackageIdsWithOrder(Guid userId, Guid clientRegistrationId, string lastSyncedPackageId);
 
-        SyncPackage ReceiveSyncPackage(Guid clientRegistrationId, string id);
-        string GetPackageIdByTimestamp(DateTime timestamp);
+        SyncItemsMetaContainer GetUserPackageIdsWithOrder(Guid userId, Guid deviceId, string lastSyncedPackageId);
+
+        SyncItemsMetaContainer GetInterviewPackageIdsWithOrder(Guid userId, Guid deviceId, string lastSyncedPackageId);
+
+        UserSyncPackageDto ReceiveUserSyncPackage(Guid deviceId, string packageId, Guid userId);
+
+        QuestionnaireSyncPackageDto ReceiveQuestionnaireSyncPackage(Guid deviceId, string packageId, Guid userId);
+
+        InterviewSyncPackageDto ReceiveInterviewSyncPackage(Guid deviceId, string packageId, Guid userId);
+
+        void LinkUserToDevice(Guid interviewerId, string androidId, string appVersion, string oldDeviceId);
     }
 }

@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoViewDenormaliz
         };
 
         Because of = () =>
-            viewState = denormalizer.Create(Create.NewQuestionnaireCreatedEvent(questionnaireId: questionnaireId, questionnaireTitle: questionnaireTitle, isPublic: true));
+            viewState = denormalizer.Update(null, Create.NewQuestionnaireCreatedEvent(questionnaireId: questionnaireId, questionnaireTitle: questionnaireTitle, isPublic: true));
 
         It should_questionnnaireInfoView_QuestionnaireId_be_equal_to_questionnaireId = () =>
             viewState.QuestionnaireId.ShouldEqual(questionnaireId);

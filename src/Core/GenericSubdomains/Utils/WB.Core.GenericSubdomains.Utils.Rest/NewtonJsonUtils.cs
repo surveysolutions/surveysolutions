@@ -8,11 +8,12 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
     public class NewtonJsonUtils : IJsonUtils
     {
         private readonly JsonSerializer jsonSerializer;
-        private readonly JsonSerializerSettings jsonSerializerSetings;
+        private readonly JsonSerializerSettings objectsOnlySerializeSettings;
+        private readonly JsonSerializerSettings allTypesSerializeSettings;
 
         public NewtonJsonUtils()
         {
-            this.jsonSerializerSetings = new JsonSerializerSettings
+            this.objectsOnlySerializeSettings = new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.Objects,
                 NullValueHandling = NullValueHandling.Ignore,
@@ -20,12 +21,28 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
                 Formatting = Formatting.None
             };
 
-            this.jsonSerializer = JsonSerializer.Create(this.jsonSerializerSetings);
+            this.allTypesSerializeSettings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All,
+                NullValueHandling = NullValueHandling.Ignore,
+                FloatParseHandling = FloatParseHandling.Decimal
+            };
+
+            this.jsonSerializer = JsonSerializer.Create(this.objectsOnlySerializeSettings);
         }
 
         public string Serialize(object item)
         {
-            return JsonConvert.SerializeObject(item, this.jsonSerializerSetings);
+            return Serialize(item, TypeSerializationSettings.ObjectsOnly);
+        }
+
+        public string Serialize(object item, TypeSerializationSettings typeSerializationSettings)
+        {
+            var settings = typeSerializationSettings == TypeSerializationSettings.ObjectsOnly
+                ? this.objectsOnlySerializeSettings
+                : this.allTypesSerializeSettings;
+
+            return JsonConvert.SerializeObject(item, Formatting.None, settings);
         }
 
         public byte[] SerializeToByteArray(object payload)
@@ -38,7 +55,24 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
 
         public T Deserialize<T>(string payload)
         {
-            return JsonConvert.DeserializeObject<T>(payload, this.jsonSerializerSetings);
+            var replaceOldAssemblyNames = ReplaceOldAssemblyNames(payload);
+            return JsonConvert.DeserializeObject<T>(replaceOldAssemblyNames, this.objectsOnlySerializeSettings);
+        }
+
+        [Obsolete]
+        private static string ReplaceOldAssemblyNames(string payload)
+        {
+            var replaceOldAssemblyNames = payload;
+            replaceOldAssemblyNames = replaceOldAssemblyNames.Replace("Main.Core.Events.AggregateRootEvent, Main.Core", "Main.Core.Events.AggregateRootEvent, WB.Core.Infrastructure");
+
+            foreach (var type in new[] { "NewUserCreated", "UserChanged", "UserLocked", "UserLockedBySupervisor", "UserUnlocked", "UserUnlockedBySupervisor" })
+            {
+               replaceOldAssemblyNames = replaceOldAssemblyNames.Replace(
+                   string.Format("Main.Core.Events.User.{0}, Main.Core", type),
+                   string.Format("Main.Core.Events.User.{0}, WB.Core.SharedKernels.DataCollection", type));
+            }
+            
+            return replaceOldAssemblyNames;
         }
 
         public T Deserialize<T>(byte[] payload)

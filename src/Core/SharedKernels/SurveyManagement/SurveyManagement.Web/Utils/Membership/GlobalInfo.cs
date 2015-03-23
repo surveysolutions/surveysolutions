@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
         {
             get
             {
-                return Roles.IsUserInRole("Headquarter");
+                return Roles.IsUserInRole(UserRoles.Headquarter.ToString());
             }
         }
 
@@ -40,7 +40,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
         {
             get
             {
-                return Roles.IsUserInRole("Supervisor");
+                return Roles.IsUserInRole(UserRoles.Supervisor.ToString());
+            }
+        }
+
+        public static bool IsAdministrator
+        {
+            get
+            {
+                return Roles.IsUserInRole(UserRoles.Administrator.ToString());
             }
         }
 

@@ -1,4 +1,6 @@
 ﻿@using System.Web.Optimization
+@using Main.Core.Entities.SubEntities
+@using WB.UI.Headquarters.Code
 @model WB.Core.SharedKernels.SurveyManagement.Views.User.UserView
 @{
     Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
@@ -10,6 +12,7 @@
     @Scripts.Render("~/Scripts/viewmodels/pages/users.js")
     <script type="text/javascript">
         var $editUrl = '@Url.Action("Edit", "Interviewer", new { area = string.Empty })';
+        var $deviceUrl = '@Url.Action("Device", "TabletReport", new { area = string.Empty })';
         $(function () {
             var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "Interviewers"})');
             model.GetFilterMethod = function () {
@@ -30,14 +33,25 @@
 
 @section gridnavigation
 {
-    @if (User.IsInRole("Headquarter"))
-    {
-        <div class="menubar">
-            <a class="btn btn-default" href="@Url.Action("Create", "Interviewer", new { supervisorId = Model.PublicKey, area = string.Empty })">
-                <i class="glyphicon glyphicon-user"></i> Create
-            </a>
+    <div class="btn-group">
+        <div class="form-inline">
+            @if (User.IsInRole(UserRoles.Headquarter.ToString()) || User.IsInRole(UserRoles.Administrator.ToString()))
+            {
+                <a class="btn btn-default" href="@Url.Action("Create", "Interviewer", new { supervisorId = Model.PublicKey, area = string.Empty })">
+                    <i class="glyphicon glyphicon-user"></i> Create
+                </a>
+            }
+
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: search">
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="button" data-bind="click: search">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </div>
+            </div>
         </div>
-    }
+    </div>
 }
 
 @section grid
@@ -48,6 +62,10 @@
                 <th data-bind='sortby : "UserName"'>Name</th>
                 <th data-bind='sortby : "CreationDate"'>Creation date</th>
                 <th data-bind='sortby : "Email"'>Email</th>
+                @if (LegacyOptions.SupervisorFunctionsEnabled)
+                {
+                    <th>Connected to device</th>
+                }
                 <th></th>
             </tr>
         </thead>
@@ -57,10 +75,20 @@
                 <td data-bind="text: UserName"></td>
                 <td data-bind="text: CreationDate"></td>
                 <td data-bind="text: Email"></td>
+                @if (LegacyOptions.SupervisorFunctionsEnabled)
+                {
+                    <td data-bind="text: DeviceId() == null ? 'No': 'Yes'"></td>
+                }
                 <td>
-                    <a class="btn btn-info" data-bind="attr: { href: $editUrl + '/' + UserId() }">
+                    <a class="btn btn-success" data-bind="attr: { href: $editUrl + '/' + UserId() }">
                         <i class="icon icon-edit icon-white"></i> Edit
                     </a>
+                    @if (LegacyOptions.SupervisorFunctionsEnabled)
+                    {
+                        <!-- ko if:DeviceId()!=null -->
+                        <a class="btn btn-info" data-bind="attr: { href: $deviceUrl + '/' + DeviceId() }"><span class="glyphicon glyphicon-list"></span> Show sync log</a>
+                        <!-- /ko -->
+                    }
                 </td>
             </tr>
             <!-- /ko -->

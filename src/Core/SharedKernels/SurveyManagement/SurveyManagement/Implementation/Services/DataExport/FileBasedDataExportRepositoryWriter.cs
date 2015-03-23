@@ -10,19 +10,14 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.Implementation.ReadSide;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Resources;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
-using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
-using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -42,7 +37,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly IPlainInterviewFileStorage plainFileRepository;
 
         private readonly IReadSideKeyValueStorage<InterviewData> interviewDataWriter;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter;
+        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
 
@@ -54,7 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             IDataExportWriter dataExportWriter,
             IEnvironmentContentService environmentContentService,
             IFileSystemAccessor fileSystemAccessor, ILogger logger, IPlainInterviewFileStorage plainFileRepository, IReadSideKeyValueStorage<InterviewData> interviewDataWriter,
-            IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter,
+            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter,
             IReadSideRepositoryWriter<UserDocument> users, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter,
             IExportViewFactory exportViewFactory, IFilebasedExportedDataAccessor filebasedExportedDataAccessor, FileBasedDataExportRepositorySettings settings)
         {
@@ -125,7 +120,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             if (isCacheEnabled)
             {
-                var cacheByInterview = this.GetOrCreateQuestionnaireExportEntityByInterviewId(interviewId);
+                QuestionnaireExportEntity cacheByInterview = this.GetOrCreateQuestionnaireExportEntityByInterviewId(interviewId);
                 cacheByInterview.InterviewIds.Remove(interviewId);
                 cacheByInterview.InterviewForDeleteIds.Add(interviewId);
                 return;
@@ -160,6 +155,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             this.isCacheEnabled = true;
         }
+
+        public bool IsCacheEnabled { get { return this.isCacheEnabled; } }
 
         public void DisableCache()
         {
@@ -200,7 +197,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         private void ReduceCache(QuestionnaireExportEntity entity)
         {
-            var exportStructure = questionnaireExportStructureWriter.GetById(entity.QuestionnaireId, entity.QuestionnaireVersion);
+            var exportStructure = questionnaireExportStructureWriter.AsVersioned().Get(entity.QuestionnaireId.FormatGuid(), entity.QuestionnaireVersion);
             if (exportStructure == null)
             {
                 return;
@@ -318,7 +315,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             var dataFolderForTemplatePath = this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
 
             if (!cache.ContainsKey(dataFolderForTemplatePath))
-                cache.Add(dataFolderForTemplatePath, new QuestionnaireExportEntity(dataFolderForTemplatePath, interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion));
+            {
+                cache.Add(dataFolderForTemplatePath, 
+                    new QuestionnaireExportEntity(dataFolderForTemplatePath, interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion));
+            }
+
             return cache[dataFolderForTemplatePath];
         }
 
@@ -340,7 +341,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             if (questionnaireExportStructure == null)
             {
-                questionnaireExportStructure = questionnaireExportStructureWriter.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
+                questionnaireExportStructure = questionnaireExportStructureWriter.AsVersioned().Get(interview.QuestionnaireId.FormatGuid(), interview.QuestionnaireVersion);
                 if (questionnaireExportStructure == null)
                     return null;
             }

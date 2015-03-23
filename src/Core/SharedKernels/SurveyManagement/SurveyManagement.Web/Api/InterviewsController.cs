@@ -10,16 +10,16 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
-    [Authorize(Roles = "Headquarter, Supervisor")]
+    [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public class InterviewsController : BaseApiServiceController
     {
         private readonly IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory;
-        private readonly IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsViewFactory;
+        private readonly IInterviewDetailsViewFactory interviewDetailsViewFactory;
         private readonly IInterviewHistoryFactory interviewHistoryViewFactory;
 
         public InterviewsController(ILogger logger,
             IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory,
-            IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsViewFactory, IInterviewHistoryFactory interviewHistoryViewFactory)
+            IInterviewDetailsViewFactory interviewDetailsViewFactory, IInterviewHistoryFactory interviewHistoryViewFactory)
             : base(logger)
         {
             this.allInterviewsViewFactory = allInterviewsViewFactory;
@@ -68,19 +68,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [Route("apis/v1/interviews/{id:guid}/details")]
         public InterviewApiDetails InterviewDetails(Guid id)
         {
-            var inputModel = new InterviewDetailsInputModel()
-            {
-                CompleteQuestionnaireId = id
-            };
-
-            var interview = this.interviewDetailsViewFactory.Load(inputModel);
+            var interview = this.interviewDetailsViewFactory.GetInterviewDetails(interviewId: id);
 
             if (interview == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
 
-            var interviewDetails = new InterviewApiDetails(interview);
+            var interviewDetails = new InterviewApiDetails(interview.InterviewDetails);
 
             return interviewDetails;
         }

@@ -1,33 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-
-using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.Graphics;
-using Android.Net;
 using Android.Provider;
-using Android.Runtime;
-using Android.Text;
 using Android.Views;
-using Android.Views.InputMethods;
 using Android.Widget;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Cirrious.MvvmCross.Plugins.PictureChooser;
-
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.UI.Shared.Android.Controls.MaskedEditTextControl;
-using WB.UI.Shared.Android.Helpers;
-using File = Java.IO.File;
-using Uri = Android.Net.Uri;
 
 namespace WB.UI.Shared.Android.Controls.ScreenItems
 {
@@ -43,24 +30,24 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             if (this.IsThereAnAppToTakePictures())
             {
                 this.pictureChooserTask = Mvx.Resolve<IMvxPictureChooserTask>();
-                var wrapper = new LinearLayout(this.Context)
+                var wrapper = new LinearLayout(this.CurrentContext)
                 {
-                    LayoutParameters = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent)
+                    LayoutParameters = new LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent)
                 };
                 wrapper.Orientation = Orientation.Horizontal;
 
                 this.llWrapper.AddView(wrapper);
 
-                var imageLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent, 9);
+                var imageLayoutParams = new LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent, 9);
                 
-                this.ivImage = new ImageView(this.Context) { LayoutParameters = imageLayoutParams };
+                this.ivImage = new ImageView(this.CurrentContext) { LayoutParameters = imageLayoutParams };
                 ivImage.SetAdjustViewBounds(true);
                 wrapper.AddView(this.ivImage);
 
-                var buttonLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
+                var buttonLayoutParams = new LayoutParams(ViewGroup.LayoutParams.WrapContent,
                     ViewGroup.LayoutParams.WrapContent, 1);
 
-                var button = new Button(this.Context) { LayoutParameters = buttonLayoutParams };
+                var button = new Button(this.CurrentContext) { LayoutParameters = buttonLayoutParams };
 
                 SetIcon(button, this.IsPicturePresent() ? Remove : TakePicture);
                 button.Click += this.BtnTakePictureClick;
@@ -71,7 +58,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             }
             else
             {
-                var tvWarning = new TextView(this.Context);
+                var tvWarning = new TextView(this.CurrentContext);
                 tvWarning.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent,
                     ViewGroup.LayoutParams.WrapContent);
                 tvWarning.Text = "Camera is absent";
@@ -94,7 +81,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         protected bool IsThereAnAppToTakePictures()
         {
             Intent intent = new Intent(MediaStore.ActionImageCapture);
-            IList<ResolveInfo> availableActivities = Context.PackageManager.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly);
+            IList<ResolveInfo> availableActivities = this.CurrentContext.PackageManager.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly);
             return availableActivities != null && availableActivities.Count > 0;
         }
 
@@ -137,7 +124,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private void SetIcon(Button button, int iconId)
         {
-            var img = this.Context.Resources.GetDrawable(iconId);
+            var img = this.CurrentContext.Resources.GetDrawable(iconId);
             
             button.SetCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
         }

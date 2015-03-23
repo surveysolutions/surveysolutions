@@ -39,42 +39,43 @@
   <ItemGroup>
     <Reference Include="Cirrious.CrossCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e16445fd9b451819, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\MonoAndroid\Cirrious.CrossCore.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.0\lib\MonoAndroid\Cirrious.CrossCore.dll</HintPath>
     </Reference>
     <Reference Include="Cirrious.CrossCore.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\MonoAndroid\Cirrious.CrossCore.Droid.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.0\lib\MonoAndroid\Cirrious.CrossCore.Droid.dll</HintPath>
     </Reference>
     <Reference Include="Cirrious.MvvmCross, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e16445fd9b451819, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.dll</HintPath>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Binding, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Binding.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Binding.dll</HintPath>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Binding.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Binding.Droid.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Binding.Droid.dll</HintPath>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Droid.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Droid.dll</HintPath>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Droid.Fragging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Droid.Fragging.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Droid.Fragging.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Droid.Fragging.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Droid.Fragging.dll</HintPath>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Localization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Localization.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Localization.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Plugins.PictureChooser">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.PictureChooser.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.PictureChooser.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Cirrious.MvvmCross.Plugins.PictureChooser, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.PictureChooser.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.PictureChooser.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Plugins.PictureChooser.Droid">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.PictureChooser.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.PictureChooser.Droid.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross.Plugins.PictureChooser.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.PictureChooser.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.PictureChooser.Droid.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -84,36 +85,22 @@
     <Reference Include="MWBarcodeScanner">
       <HintPath>..\..\..\..\ExternalsMonodroid\MWBarcodeScanner.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject">
-      <HintPath>..\..\..\..\packages\Portable.Ninject.3.3\lib\monoandroid\Ninject.dll</HintPath>
-    </Reference>
-    <Reference Include="RestSharp.MonoDroid">
-      <HintPath>..\..\..\..\ExternalsMonodroid\RestSharp.MonoDroid.dll</HintPath>
+    <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Portable.Ninject.3.3.1\lib\monoandroid\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Net">
-      <Private>True</Private>
-      <HintPath>..\..\..\..\packages\MvvmCross.PortableSupport.3.1.1\lib\MonoAndroid\System.Net.dll</HintPath>
-    </Reference>
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Windows">
-      <Private>True</Private>
-      <HintPath>..\..\..\..\packages\MvvmCross.PortableSupport.3.1.1\lib\MonoAndroid\System.Windows.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Serialization">
-      <Private>True</Private>
-      <HintPath>..\..\..\..\packages\MvvmCross.PortableSupport.3.1.1\lib\MonoAndroid\System.Xml.Serialization.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.Android.Support.v13">
-      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v13.20.0.0.4\lib\MonoAndroid32\Xamarin.Android.Support.v13.dll</HintPath>
+    <Reference Include="Xamarin.Android.Support.v13, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v13.21.0.3.0\lib\MonoAndroid32\Xamarin.Android.Support.v13.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Android.Support.v4, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v4.20.0.0.4\lib\MonoAndroid32\Xamarin.Android.Support.v4.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v4.21.0.3.0\lib\MonoAndroid10\Xamarin.Android.Support.v4.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Mobile">
       <HintPath>..\..\..\..\ExternalsMonodroid\Xamarin.Mobile.dll</HintPath>
@@ -133,8 +120,8 @@
     <Compile Include="Bindings\MandatoryValidationMessageBinding.cs" />
     <Compile Include="Bindings\ValidationMessageBinding.cs" />
     <Compile Include="Bindings\VisibilityBinding.cs" />
-    <Compile Include="Bootstrap\PictureChooserPluginBootstrap.cs" />
     <Compile Include="AndroidSharedModule.cs" />
+    <Compile Include="Bootstrap\PictureChooserPluginBootstrap.cs" />
     <Compile Include="CapiBoundedContextModule.cs" />
     <Compile Include="Controls\AlertDialogAsyncExtension.cs" />
     <Compile Include="Controls\Breadcrumbs.cs" />
@@ -310,7 +297,9 @@
   <ItemGroup>
     <AndroidResource Include="Resources\Values\MvxBindingAttributes.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\infowarningstyle.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

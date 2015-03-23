@@ -80,7 +80,7 @@
         var $questionnaireQuestionstUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "QuestionInfo" })';
         var $mapReportUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "MapReport" })';
         var $interiewSummaryUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "InterviewSummaryForMapPoint" })';
-        var $interviewDetailsUrl = '@Url.Action("InterviewDetails", "Interview")';
+        var $interviewDetailsUrl = '@Url.Action("Details", "Interview")';
 
         $(function () {
             window.model = new Supervisor.VM.MapReport(commandExecutionUrl, $questionnairesListUrl, $questionnaireQuestionstUrl, $mapReportUrl, $interiewSummaryUrl);

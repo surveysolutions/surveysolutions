@@ -43,11 +43,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         IEventHandler<StaticTextCloned>,
         IEventHandler<StaticTextDeleted>
     {
-        private readonly IReadSideRepositoryWriter<PdfQuestionnaireView> repositoryWriter;
+        private readonly IReadSideKeyValueStorage<PdfQuestionnaireView> repositoryWriter;
         private readonly IReadSideRepositoryWriter<AccountDocument> accounts;
         private readonly ILogger logger;
 
-        public PdfQuestionnaireDenormalizer(IReadSideRepositoryWriter<PdfQuestionnaireView> repositoryWriter,
+        public PdfQuestionnaireDenormalizer(IReadSideKeyValueStorage<PdfQuestionnaireView> repositoryWriter,
             ILogger logger,
             IReadSideRepositoryWriter<AccountDocument> accounts)
         {
@@ -322,6 +322,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 };
 
                 newQuestion.ConditionExpression = @event.ConditionExpression;
+                newQuestion.ValidationExpression = @event.ValidationExpression;
                 questionnaire.AddEntity(newQuestion, @event.GroupId);
                 return questionnaire;
             });
@@ -337,7 +338,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     return questionnaire;
                 }
                 existingQuestion.ConditionExpression = @event.ConditionExpression;
-                
+                existingQuestion.ValidationExpression = @event.ValidationExpression;
                 existingQuestion.Title = @event.QuestionText;
                 existingQuestion.QuestionType = QuestionType.TextList;
                 existingQuestion.Answers = new List<PdfAnswerView>(0);
@@ -499,6 +500,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
                 existingQuestion.VariableName = @event.VariableName;
                 existingQuestion.ConditionExpression = @event.EnablementCondition;
+                existingQuestion.ValidationExpression = @event.ValidationExpression;
                 existingQuestion.Title = @event.Title;
                 existingQuestion.QuestionType = QuestionType.QRBarcode;
                 existingQuestion.Answers = new List<PdfAnswerView>(0);

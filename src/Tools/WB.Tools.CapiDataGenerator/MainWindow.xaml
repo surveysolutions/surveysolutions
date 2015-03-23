@@ -1,6 +1,0 @@
-﻿<Window x:Class="CapiDataGenerator.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-        Height="550" Width="700"  Title = "CAPI data generator" ResizeMode = "CanResize">
-   
-</Window>

@@ -78,6 +78,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                         || x.Status == InterviewStatus.SupervisorAssigned
                         || x.Status == InterviewStatus.InterviewerAssigned
                         || x.Status == InterviewStatus.SentToCapi,
+                    CanApproveOrReject = x.Status == InterviewStatus.ApprovedBySupervisor,
                     QuestionnaireId = x.QuestionnaireId,
                     QuestionnaireVersion = x.QuestionnaireVersion,
                     CreatedOnClient = x.WasCreatedOnClient

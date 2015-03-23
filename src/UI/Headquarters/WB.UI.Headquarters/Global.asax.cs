@@ -106,6 +106,34 @@ namespace WB.UI.Headquarters
             //AntiForgeryConfig.SuppressIdentityHeuristicChecks = true;
         }
 
+        protected void Application_End()
+        {
+            this.logger.Info("Ending application.");
+
+            var httpRuntimeType = typeof(HttpRuntime);
+            var httpRuntime = httpRuntimeType.InvokeMember(
+                "_theRuntime",
+                BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.GetField,
+                null, null, null) as HttpRuntime;
+
+            var shutDownMessage = httpRuntimeType.InvokeMember(
+                "_shutDownMessage",
+                BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField,
+                null, httpRuntime, null) as string;
+
+            string shutDownStack = httpRuntimeType.InvokeMember("_shutDownStack",
+                                                                   BindingFlags.NonPublic
+                                                                   | BindingFlags.Instance
+                                                                   | BindingFlags.GetField,
+                                                                   null,
+                                                                   httpRuntime,
+                                                                   null) as string;
+
+            this.logger.Info("ShutdownReason: " + System.Web.Hosting.HostingEnvironment.ShutdownReason.ToString());
+            this.logger.Info("ShutDownMessage: " + shutDownMessage);
+            this.logger.Info("ShutDownStack: " + shutDownStack);
+        }
+
         private static void RegisterVirtualPathProvider()
         {
             Assembly[] assemblies = BuildManager
