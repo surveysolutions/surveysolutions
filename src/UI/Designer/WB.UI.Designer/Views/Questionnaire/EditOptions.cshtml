@@ -75,7 +75,7 @@
         <div id="applyOptionsError" class="alert alert-danger">
             <div id="applyOptionsErrorContent"></div>
         </div>
-        @foreach (string key in Alerts.ALL.Except(new[] { Alerts.ATTENTION }))
+        @foreach (string key in Alerts.ALL)
         {
             if (TempData.ContainsKey(key))
             {
