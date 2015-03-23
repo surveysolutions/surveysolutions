@@ -245,13 +245,10 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  top: 60px;
+  top: 66px;
   overflow: auto;
   border-top-width: 0;
   border-top-style: none;
-  /*margin: 0;
-      padding: 0;
-      height: 100%;*/
 }
 .container-wb-list section#designer-list #table-content-holder div#table-message {
   height: 115px;
@@ -304,27 +301,8 @@ body {
 .container-wb-list section#designer-list #table-content-holder ul.pager a {
   color: #2fc507;
 }
-table {
-  cursor: default;
-}
-table tr td.date {
-  font-family: Georgia, serif;
-  font-size: 14px;
-  font-style: italic;
-  color: #5d6468;
-}
-table tr td.email {
-  font-family: Georgia, serif;
-  font-size: 14px;
-  font-style: italic;
-  color: #cbcbcb;
-}
-table tr td.email strong {
-  color: #5d6468;
-  font-weight: normal;
-}
 table.table-header {
-  height: 60px;
+  cursor: default;
   border-left: 13px solid #bcc3c8;
   border-bottom: 2px solid #b1b5b8;
   margin: 0;
@@ -335,11 +313,7 @@ table.table-header {
   color: #b2b2b2;
 }
 table.table-header tr th {
-  padding-top: 20px;
-}
-table.table-header tr th:first-child {
-  background: url("../i/loupe.png") 25px 18px no-repeat;
-  padding-left: 53px;
+  padding-top: 5px;
 }
 table.table-header tr th a#title-search {
   color: #bcc3c8;
@@ -347,59 +321,54 @@ table.table-header tr th a#title-search {
 table.table-header tr th a:hover {
   text-decoration: none;
 }
-table#questionnaire-table-content tr td:first-child {
+table.table-content {
+  cursor: default;
+}
+table.table-content tr td:first-child {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 18px;
   line-height: 24px;
   color: #3f3f3f;
   border-left: 13px solid #dbdfe2;
 }
-table#questionnaire-table-content tr td:first-child span.summary {
-  font-family: "Lucida Console", Monaco, monospace;
-  font-size: 14px;
-  color: #b9c3ca;
-}
-table#questionnaire-table-content tr td:nth-child(5) {
+table.table-content tr td.date {
   font-family: Georgia, serif;
   font-size: 14px;
   font-style: italic;
-  color: #e5e5e5;
-}
-table#questionnaire-table-content tr td:nth-child(5) a {
-  color: #2a81cb;
-}
-table#questionnaire-table-content tr:hover {
-  background-color: #eff4f8;
-}
-table#questionnaire-table-content tr:hover td:first-child {
-  color: #1c76c3;
-}
-table#questionnaire-table-content tr:hover td:first-child span.summary {
-  color: #788792;
-}
-table#questionnaire-table-content tr:hover td:nth-child(4) {
   color: #5d6468;
 }
-table#questionnaire-table-content tr:hover td:nth-child(5) {
-  color: #aebac5;
+table.table-content tr td.email {
+  font-family: Georgia, serif;
+  font-size: 14px;
+  font-style: italic;
+  color: #cbcbcb;
 }
-table#questionnaire-table-content tr:hover td:nth-child(5) a {
-  text-decoration: none;
+table.table-content tr td.email strong {
+  color: #5d6468;
+  font-weight: normal;
 }
-table#questionnaire-table-content tr.active {
-  background-color: #eff4f8;
-}
-table#questionnaire-table-content tr.active td:first-child span.summary {
-  color: #b9c3ca;
-}
-table#questionnaire-table-content tr.active td:first-child:hover {
+table.table-content tr td.search-value {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  line-height: 24px;
   color: #3f3f3f;
+  border-left: 13px solid #dbdfe2;
 }
-table#questionnaire-table-content tr.active td:nth-child(4) {
+table.table-content tr:first-child th,
+table.table-content tr:first-child td {
+  border-top: none;
+}
+table.table-content tr:last-child {
+  border-bottom: 1px solid #e2e3e4;
+}
+table.table-content tr:hover {
+  background-color: #eff4f8;
+}
+table.table-content tr:hover td.email {
   color: #5d6468;
 }
-table#questionnaire-table-content tr:last-child {
-  border-bottom: 1px solid #e2e3e4;
+table.table-content tr.active {
+  background-color: #eff4f8;
 }
 table#questionnaire-table-header tr td:nth-child(2),
 table#questionnaire-table-content tr td:nth-child(2),
@@ -424,16 +393,6 @@ table#questionnaire-table-content tr td:nth-child(5),
 table#questionnaire-table-header tr th:nth-child(5),
 table#questionnaire-table-content tr th:nth-child(5) {
   width: 8%;
-}
-table#user-table-header tr td:first-child,
-table#user-table-content tr td:first-child,
-table#user-table-header tr th:first-child,
-table#user-table-content tr th:first-child {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 18px;
-  line-height: 24px;
-  color: #3f3f3f;
-  border-left: 13px solid #dbdfe2;
 }
 table#user-table-header tr td:nth-child(2),
 table#user-table-content tr td:nth-child(2),
@@ -465,19 +424,60 @@ table#user-table-header tr th:last-child,
 table#user-table-content tr th:last-child {
   width: 8%;
 }
-#frmSearch {
-  top: -5px;
+table#questionnaire-table-content tr td:first-child {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  line-height: 24px;
+  color: #3f3f3f;
+  border-left: 13px solid #dbdfe2;
+}
+table#questionnaire-table-content tr td:first-child span.summary {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  color: #b9c3ca;
+}
+table#questionnaire-table-content tr:hover td:first-child {
+  color: #1c76c3;
+}
+table#questionnaire-table-content tr:hover td:first-child span.summary {
+  color: #788792;
+}
+table#questionnaire-table-content tr:hover td:nth-child(4) {
+  color: #5d6468;
+}
+table#questionnaire-table-content tr.active {
+  background-color: #eff4f8;
+}
+table#questionnaire-table-content tr.active td:first-child span.summary {
+  color: #b9c3ca;
+}
+table#questionnaire-table-content tr.active td:first-child:hover {
+  color: #3f3f3f;
+}
+table#questionnaire-table-content tr.active td:nth-child(4) {
+  color: #5d6468;
+}
+#search-form {
+  border-left: 13px solid #bcc3c8;
+  padding: 3px;
+  padding-bottom: 0;
+  border-top: 1px solid #bcc3c8;
+  margin: 0;
+  background: url("../i/loupe.png") 10px 7px no-repeat;
+  padding-left: 35px;
+}
+#search-form #frmSearch {
   position: relative;
 }
-#frmSearch .input-wrapper {
+#search-form #frmSearch .input-wrapper {
   position: relative;
 }
-#frmSearch .input-wrapper button {
+#search-form #frmSearch .input-wrapper button {
   position: absolute;
   right: 1px;
   top: 1px;
 }
-#frmSearch #txtFilter {
+#search-form #frmSearch #txtFilter {
   padding: 6px;
 }
 .nav.nav-tabs > li > a {

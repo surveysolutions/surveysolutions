@@ -9,7 +9,7 @@
 
 @{
     ViewBag.Title = "My Questionnaires";
-    
+
     string controller = ViewBag.Controller ?? WB.UI.Designer.GlobalHelper.CurrentController;
 
     IMembershipUserService userHelper = ViewBag.UserHelper;
@@ -25,55 +25,34 @@
 }
 else
 {
-
-    @*
-    var property = propertyList[i];
-                var sortPropertyName = property.Name == "Owner" ? "CreatorName" : property.Name;
-    @Html.ActionLink(property.GetLabel().ToSeparatedWords(), WB.UI.Designer.GlobalHelper.CurrentAction, new { p = ViewBag.PageIndex, sb = sortPropertyName, so = CustomExtensions.InvertBooleableInt(sortOrder, ViewBag.SortBy == sortPropertyName), f = ViewBag.Filter })
-    @if (ViewBag.SortBy == sortPropertyName)
-    {
-        if (!sortOrder.ToBool())
-        {
-            <span class="glyphicon glyphicon-chevron-up"></span>
-        }
-        else
-        {
-            <span class="glyphicon glyphicon-chevron-down"></span>
-        }
-    }
-    else
-    {
-        <span class="glyphicon icon-chevron-up icon-white"></span>
-    }*@
-
-
+    @Html.Partial("_list_search_form")
     <table id="questionnaire-table-header" class="table  table-header">
-        <tbody>
+        <thead>
             <tr>
                 <th>
-                    @Html.Partial("_list_search_form")
+                    <a href="@ActionWithOrderField("Title")">Title</a>
                 </th>
                 <th>
-                    Last modified
+                    <a href="@ActionWithOrderField("LastEntryDate")">Last modified</a>
                 </th>
                 <th>
-                    Created date
+                    <a href="@ActionWithOrderField("CreationDate")">Created date</a>
                 </th>
                 <th>
-                    Created By
+                    <a href="@ActionWithOrderField("CreatorName")">Created By</a>
                 </th>
                 <th>
                 </th>
             </tr>
-        </tbody>
+        </thead>
     </table>
     <div id="table-content-holder">
-        <table id="questionnaire-table-content" class="table">
+        <table id="questionnaire-table-content" class="table table-content ">
             <tbody>
                 @foreach (var listViewModel in Model)
                 {
                     <tr>
-                        <td>
+                        <td class="search-value">
                             @listViewModel.Title
                         </td>
                         <td class="date">
@@ -151,4 +130,22 @@ else
 }
 @{
     this.Html.RenderPartial("DeleteModalDialog");
+}
+
+@functions
+{
+    private string ActionWithOrderField(string sortField)
+    {
+        var sortOrder = (int?)ViewBag.SortOrder;
+        return Url.Action(
+            WB.UI.Designer.GlobalHelper.CurrentAction,
+            new
+            {
+                p = ViewBag.PageIndex,
+                sb = sortField,
+                so = CustomExtensions.InvertBooleableInt(sortOrder, ViewBag.SortBy == sortField),
+                f = ViewBag.Filter
+            });
+    }
+
 }
