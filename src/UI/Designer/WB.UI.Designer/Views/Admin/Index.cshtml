@@ -1,11 +1,89 @@
-﻿ @{
+﻿@using WB.UI.Designer.BootstrapSupport
+@using WB.UI.Designer.BootstrapSupport.HtmlHelpers
+@using WB.UI.Designer.Models
+@using WB.UI.Designer.Utils
+@using WB.UI.Shared.Web.Membership
+
+@model IPagedList<AccountListViewItemModel>
+@{
     ViewBag.Title = "Registered users";
+
+    string controller = ViewBag.Controller ?? WB.UI.Designer.GlobalHelper.CurrentController;
+
+    IMembershipUserService userHelper = ViewBag.UserHelper;
 }
 
-@section Scripts
+@if (Model.TotalCount == 0)
 {
-    @Scripts.Render("~/list")
-    
+    <p class="text-center" style="line-height: 10em">This list does not contain any records</p>
 }
+else
+{
+    <table id="user-table-header" class="table table-header">
+        <tbody>
+            <tr>
+                <th>
+                    @Html.Partial("_list_search_form")
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    CREATED DATE
+                </th>
+                <th>
+                    APPROVED?
+                </th>
+                <th>
+                    LOCKED?
+                </th>
+                <th>
+                </th>
+            </tr>
+        </tbody>
+    </table>
+    <div id="table-content-holder">
+        <table id="user-table-content" class="table">
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>
+                            @user.UserName
+                        </td>
+                        <td class="email">
+                            @user.Email
+                        </td>
+                        <td class="date">
+                            @user.CreationDate.FormatDate()
+                        </td>
+                        <td>
+                            @user.IsApproved
+                        </td>
+                        <td>
+                            @user.IsLockedOut
+                        </td>
+                        <td>
+                            <div class="btn-group pull-right">
+                                <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+                                    Action
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    @{
+                    var routevalues = user.GetIdValue();
 
-@Html.Partial("~/Views/Shared/Index.cshtml")
+                    <li>@Html.ActionLink("Edit", "Edit", controller, routevalues, null)</li>
+                                        <li>@Html.ActionLink("Details", "Details", controller, routevalues, null)</li>
+                                    }
+                                </ul>
+                            </div>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @Html.Pager(Model.PageIndex + 1, Model.TotalPages, x => Url.Action(WB.UI.Designer.GlobalHelper.CurrentAction, WB.UI.Designer.GlobalHelper.CurrentController, new { p = x, sb = ViewBag.SortBy, so = ViewBag.SortOrder, f = ViewBag.Filter }), 2)
+    </div>
+}

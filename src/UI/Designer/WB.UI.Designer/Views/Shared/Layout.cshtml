@@ -1,7 +1,6 @@
 ﻿@using System.Web.Configuration
 @using WB.UI.Designer
 @using WB.UI.Shared.Web.Membership
-@using WB.UI.Designer.Code
 @using WB.UI.Shared.Web.Extensions
 @{
     IMembershipUserService userHelper = ViewBag.UserHelper;
@@ -39,7 +38,7 @@
                     <li role="presentation">@Html.MenuActionLink("Public Questionnaires", "Public", "Questionnaire")</li>
                     @if (userHelper.WebUser.IsAdmin)
                     {
-                        <li role="presentation">@Html.ActionLink("Manage users", "Index", "Admin")</li>
+                        <li role="presentation">@Html.MenuActionLink("Manage users", "Index", "Admin")</li>
                     }
                     <li role="presentation" class="create">@Html.ActionLink("Create New", "Create", "Questionnaire", null, new { @class = "btn" })</li>
                 </ul>
