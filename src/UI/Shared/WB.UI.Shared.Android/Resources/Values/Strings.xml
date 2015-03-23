@@ -6,6 +6,7 @@
   <string name="No">No</string>
   <string name="AreYouSureYouWantToRemoveRowFromRosterFormat">Are you sure you want to remove {0} row(s) from dependent roster?</string>
   <string name="AnswerIsNotPresentInFilteredComboboxOptionsList">Answer "{0}" cannot be saved, because it does not match any option</string>
+  <string name="SendingOfInformationPackageIsCanceling">Cancelling.</string>
   <string name="drawer_open">Open</string>
   <string name="drawer_close">Close</string>
   <item  type="id"  name="QuestionnaireId" />

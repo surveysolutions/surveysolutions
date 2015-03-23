@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 

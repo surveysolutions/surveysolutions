@@ -49,13 +49,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Synchronization\Designer\QuestionnairesResponse.cs" />
+    <Compile Include="Synchronization\Designer\QuestionnaireResponse.cs" />
+    <Compile Include="Synchronization\Designer\QuestionnaireMetaInfo.cs" />
     <Compile Include="Synchronization\Designer\DownloadQuestionnaireRequest.cs" />
     <Compile Include="Synchronization\Designer\QuestionnaireListItem.cs" />
     <Compile Include="Synchronization\Designer\QuestionnaireListCommunicationPackage.cs" />
     <Compile Include="Synchronization\Designer\QuestionnaireCommunicationPackage.cs" />
     <Compile Include="Synchronization\Designer\QuestionnaireListRequest.cs" />
     <Compile Include="Synchronization\Designer\PagedQuestionnaireCommunicationPackage.cs" />
-    <Compile Include="Synchronization\Designer\QuestionnnaireVersion.cs" />
+    <Compile Include="Synchronization\Designer\QuestionnaireVersion.cs" />
     <Compile Include="Synchronization\FileSyncDescription.cs" />
     <Compile Include="Synchronization\HandshakePackage.cs" />
     <Compile Include="Synchronization\InterviewMetaInfo.cs" />

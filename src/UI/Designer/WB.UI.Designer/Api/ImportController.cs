@@ -153,7 +153,7 @@ namespace WB.UI.Designer.Api
         [HttpPost]
         public PagedQuestionnaireCommunicationPackage PagedQuestionnaireList(QuestionnaireListRequest request)
         {
-            if(request == null) throw new ArgumentNullException("request");
+            if (request == null) throw new ArgumentNullException("request");
 
             var questionnaireListView = this.viewFactory.Load(
                 new QuestionnaireListInputModel
@@ -194,14 +194,14 @@ namespace WB.UI.Designer.Api
                         pageIndex: pageIndex);
 
                 questionnaireItemList.AddRange(
-                    questionnaireList.Select(q => new QuestionnaireListItem() {Id = q.Id, Title = q.Title}).ToList());
+                    questionnaireList.Select(q => new QuestionnaireListItem() { Id = q.Id, Title = q.Title }).ToList());
 
                 pageIndex++;
                 if (pageIndex > questionnaireList.TotalPages)
                     break;
             }
 
-            return new QuestionnaireListCommunicationPackage {Items = questionnaireItemList};
+            return new QuestionnaireListCommunicationPackage { Items = questionnaireItemList };
         }
 
         private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)

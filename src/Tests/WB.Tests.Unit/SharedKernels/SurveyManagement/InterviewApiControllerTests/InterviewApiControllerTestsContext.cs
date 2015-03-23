@@ -19,7 +19,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
             IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory = null,
             IViewFactory<TeamInterviewsInputModel, TeamInterviewsView> teamInterviewViewFactory = null,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory = null,
-            IInterviewDetailsViewFactory interviewDetailsFactory = null,
             IInterviewSummaryViewFactory interviewSummaryViewFactory = null)
         {
             return new InterviewApiController(
@@ -29,7 +28,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
                 allInterviewsViewFactory ?? Stub<IViewFactory<AllInterviewsInputModel, AllInterviewsView>>.WithNotEmptyValues,
                 teamInterviewViewFactory ?? Stub<IViewFactory<TeamInterviewsInputModel, TeamInterviewsView>>.WithNotEmptyValues,
                 changeStatusFactory ?? Stub<IViewFactory<ChangeStatusInputModel, ChangeStatusView>>.WithNotEmptyValues,
-                interviewDetailsFactory ?? Stub<IInterviewDetailsViewFactory>.WithNotEmptyValues,
                 interviewSummaryViewFactory ?? Stub<IInterviewSummaryViewFactory>.WithNotEmptyValues);
         }
     }

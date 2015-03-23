@@ -42,6 +42,11 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage
             this.documentStore.Remove(sqliteId);
         }
 
+        public void Remove(IEnumerable<TEntity> entities)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Store(TEntity entity, string id)
         {
             string sqliteId = ToSqliteId(id);

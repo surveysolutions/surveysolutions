@@ -27,6 +27,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             get { return ServiceLocator.Current.GetInstance<IUserViewFactory>(); }
         }
 
+        private IReadSideStatusService readSideStatusService
+        {
+            get { return ServiceLocator.Current.GetInstance<IReadSideStatusService>(); }
+        }
+
         internal static string[] SplitString(string original)
         {
             return string.IsNullOrEmpty(original) ? new string[0] : original.Split(',');
@@ -43,6 +48,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
         public override void OnAuthorization(HttpActionContext actionContext)
         {
+            if (this.readSideStatusService.AreViewsBeingRebuiltNow())
+            {
+                this.ResponseMaintenanceMessage(actionContext);
+                return;
+            }
+
             BasicCredentials basicCredentials = ParseCredentials(actionContext);
             if (basicCredentials == null || !this.isUserValid(basicCredentials.Username, basicCredentials.Password))
             {
@@ -106,6 +117,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
         {
             actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = string.Format(InterviewerSyncStrings.InvalidUserFormat, actionContext.Request.RequestUri.GetLeftPart(UriPartial.Authority)) };
             actionContext.Response.Headers.Add("WWW-Authenticate", string.Format("Basic realm=\"{0}\"", actionContext.Request.RequestUri.DnsSafeHost));
+        }
+
+        private void ResponseMaintenanceMessage(HttpActionContext actionContext)
+        {
+            actionContext.Response = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable) { ReasonPhrase = InterviewerSyncStrings.Maintenance };
         }
 
         private void RespondWithMessageThatUserIsNotAnInterviewer(HttpActionContext actionContext)

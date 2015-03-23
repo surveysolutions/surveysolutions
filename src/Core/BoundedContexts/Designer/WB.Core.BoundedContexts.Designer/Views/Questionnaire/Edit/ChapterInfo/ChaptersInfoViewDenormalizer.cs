@@ -340,14 +340,25 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 : currentState.ItemId;
 
             var targetGroup = this.FindGroup(currentState, targetGroupKey);
-
             var entityView = this.FindEntity<IQuestionnaireItem>(currentState, groupOrQuestionKey);
-            if (entityView != null)
-            {
-                var parentOfEntity = this.FindParentOfEntity(currentState, entityView.ItemId);
+            var parentOfEntity = this.FindParentOfEntity(currentState, groupOrQuestionKey);
 
+            if (targetGroup != null && entityView != null && parentOfEntity != null)
+            {
                 parentOfEntity.Items.Remove(entityView);
-                targetGroup.Items.Insert(Math.Min(Math.Max(evnt.Payload.TargetIndex,0), targetGroup.Items.Count), entityView);
+
+                if (evnt.Payload.TargetIndex < 0)
+                {
+                    targetGroup.Items.Insert(0, entityView);
+                }
+                else if (evnt.Payload.TargetIndex >= targetGroup.Items.Count)
+                {
+                    targetGroup.Items.Add(entityView);
+                }
+                else
+                {
+                    targetGroup.Items.Insert(evnt.Payload.TargetIndex, entityView);
+                }
             }
 
             return currentState;

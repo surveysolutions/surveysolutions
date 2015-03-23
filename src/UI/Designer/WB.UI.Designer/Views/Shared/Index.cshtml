@@ -1,20 +1,20 @@
-﻿@using WB.UI.Designer.BootstrapSupport.HtmlHelpers
+﻿@using WB.UI.Designer.BootstrapSupport
+@using WB.UI.Designer.BootstrapSupport.HtmlHelpers
+@using WB.UI.Designer.Extensions
+@using WB.UI.Designer.Models
+@using WB.UI.Shared.Web.Membership
 
 @model IPagedList
 
-<blockquote class="pull-right">
-    <p>
-        <b>@ViewBag.Title</b><small>Listing</small>
-    </p>
-</blockquote>
+@{
+    string controller = ViewBag.Controller ?? WB.UI.Designer.GlobalHelper.CurrentController;
 
-<form id="frmSearch" class="form-search">
-    <div class="input-prepend input-append">
-        <a class="btn add-on" onclick="$('#frmSearch').submit()">Search</a>
-        <input id="txtFilter" type="text" class="span2" name="f" value="@ViewBag.Filter" />
-        <a class="btn add-on" onclick="$('#txtFilter').val(''); $('#frmSearch').submit();">x</a>
-    </div>
-</form>
+    IMembershipUserService userHelper = ViewBag.UserHelper;
+
+    var propertyList = Model.VisibleProperties(userHelper);
+
+    var sortOrder = (int?)ViewBag.SortOrder;
+}
 
 @if (Model.TotalCount == 0)
 {
@@ -22,12 +22,124 @@
 }
 else
 {
-    @Html.Partial("ListView")
-    @Html.Pager(Model.PageIndex+1, Model.TotalPages, x => Url.Action(WB.UI.Designer.GlobalHelper.CurrentAction, WB.UI.Designer.GlobalHelper.CurrentController, new { p = x, sb = ViewBag.SortBy, so = ViewBag.SortOrder, f = ViewBag.Filter }), 2, " pagination-right")
+    <table id="table-header" class="table">
+        <tbody>
+            <tr>
+                <th>
+                    <form id="frmSearch" class="form-search">
+                        <div class="input-prepend input-append">
+                            <a class="btn add-on" onclick="$('#frmSearch').submit()">Search</a>
+                            <input id="txtFilter" type="text" class="span2" name="f" value="@ViewBag.Filter" />
+                            <a class="btn add-on" onclick="$('#txtFilter').val(''); $('#frmSearch').submit();">x</a>
+                        </div>
+                    </form>
+                </th>
+                @for (int i = 1; i < propertyList.Count(); i++)
+                {
+                    var property = propertyList[i];
+                    var sortPropertyName = property.Name == "Owner" ? "CreatorName" : property.Name;
+                    <th>
+                        @Html.ActionLink(property.GetLabel().ToSeparatedWords(), WB.UI.Designer.GlobalHelper.CurrentAction, new { p = ViewBag.PageIndex, sb = sortPropertyName, so = CustomExtensions.InvertBooleableInt(sortOrder, ViewBag.SortBy == sortPropertyName), f = ViewBag.Filter })
+                        @if (ViewBag.SortBy == sortPropertyName)
+                        {
+                            if (!sortOrder.ToBool())
+                            {
+                                <i class="icon-chevron-up"></i>
+                            }
+                            else
+                            {
+                                <i class="icon-chevron-down"></i>
+                            }
+                        }
+                        else
+                        {
+                            <i class="icon-chevron-up icon-white"></i>
+                        }
+                    </th>
+                }
+                <th>
+                </th>
+            </tr>
+        </tbody>
+    </table>
+    <div id="table-content-holder">
+        <table id="table-content" class="table">
+            <tbody>
+                @{ int index = 0; }
+                @foreach (var model in Model)
+                {
+                    ViewData[index.ToString()] = model;
+                    <tr>
+                        @foreach (var property in propertyList)
+                        {
+                            <td>
+                                @Html.Display(index + "." + property.Name)
+                            </td>
+                        }
+                        <td>
+                            @{
+                        var actionModel = model as IActionItem;
+                        if (actionModel != null)
+                        {
+                            if (actionModel.CanCopy || actionModel.CanDelete || actionModel.CanEdit || actionModel.CanExport || actionModel.CanPreview || actionModel.CanPrint || actionModel.CanSynchronize || actionModel.CanOpen)
+                            {
+                                <div class="btn-group pull-right">
+                                    <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+                                        Action
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        @{
+                                var routevalues = model.GetIdValue();
+                                var itemId = model.GetId();
+                                var itemType = model.GetLabel();
+                                var itemName = Uri.EscapeDataString(model.GetName());
+
+                                if (actionModel.CanEdit)
+                                {
+                                    <li>@Html.ActionLink("Edit", "Edit", controller, routevalues, null)</li>
+                                }
+                                if (actionModel.CanOpen)
+                                {
+                                    <li>@Html.ActionLink("Edit", "Open", "App", routevalues, null)</li>
+                                }
+                                if (actionModel.CanSynchronize)
+                                {
+                                    <li>@Html.ActionLink("Export to HQ", "Export", "Synchronization", routevalues, null)</li>
+                                }
+                                if (actionModel.CanPreview)
+                                {
+                                    <li>@Html.ActionLink("Details", "Details", controller, routevalues, null)</li>
+                                }
+                                if (actionModel.CanCopy)
+                                {
+                                    <li>@Html.ActionLink("Clone", "Clone", controller, routevalues, null)</li>
+                                }
+                                if (actionModel.CanExportToPdf)
+                                {
+                                    <li class="divider"></li>
+                                            <li>@Html.ActionLink("Export as PDF", "exportquestionnaire", "Pdf", routevalues, null)</li>
+                                }
+                                if (actionModel.CanDelete)
+                                {
+                                    <li class="divider"></li>
+                                            <li><a href="#mDelete" data-bind='click: deleteItem.bind($data,"@itemId    ", "@itemType    ", "@itemName    ")' data-toggle="modal">Delete</a></li>
+                                }
+                                        }
+                                    </ul>
+                                </div>
+                            }
+                        }
+                            }
+                        </td>
+                    </tr>
+                        index++;
+                }
+            </tbody>
+        </table>
+        @Html.Pager(Model.PageIndex + 1, Model.TotalPages, x => Url.Action(WB.UI.Designer.GlobalHelper.CurrentAction, WB.UI.Designer.GlobalHelper.CurrentController, new { p = x, sb = ViewBag.SortBy, so = ViewBag.SortOrder, f = ViewBag.Filter }), 2, " pagination-right")
+    </div>
 }
-<p>
-    @Html.ActionLink("Create New", "Create", null, new { @class = "btn" })
-</p>
 @{
     this.Html.RenderPartial("DeleteModalDialog");
 }

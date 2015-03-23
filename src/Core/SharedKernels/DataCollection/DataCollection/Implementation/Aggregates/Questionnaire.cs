@@ -166,23 +166,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     "Questionnaire {0} ver {1} cannot be deleted because it is absent in repository.",
                     this.EventSourceId.FormatGuid(), command.QuestionnaireVersion));
 
-            var questionnaireTemplateVersion = availableVersions.ContainsKey(command.QuestionnaireVersion) ? availableVersions[command.QuestionnaireVersion] : null;
-
             if(disabledQuestionnaires.Contains(command.QuestionnaireVersion))
                 throw new QuestionnaireException(string.Format(
                  "Questionnaire {0} ver {1} is already in delete process.",
                  this.EventSourceId.FormatGuid(), command.QuestionnaireVersion));
-
-            var createdById = questionnaireTemplateVersion != null
-                ? questionnaireTemplateVersion.ResponsibleId
-                : null;
-
-            if (createdById.HasValue && createdById != command.ResponsibleId)
-            {
-                throw new QuestionnaireException(
-                    string.Format("You don't have permissions to delete this questionnaire. QuestionnaireId: {0}", this.EventSourceId));
-            }
-
+           
             this.ApplyEvent(new QuestionnaireDisabled()
             {
                 QuestionnaireVersion = command.QuestionnaireVersion,
@@ -201,18 +189,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new QuestionnaireException(string.Format(
                  "Questionnaire {0} ver {1} is not disabled.",
                  this.EventSourceId.FormatGuid(), command.QuestionnaireVersion));
-
-            var questionnaireTemplateVersion = availableVersions.ContainsKey(command.QuestionnaireVersion) ? availableVersions[command.QuestionnaireVersion] : null;
-
-            var createdById = questionnaireTemplateVersion != null
-                ? questionnaireTemplateVersion.ResponsibleId
-                : null;
-
-            if (createdById.HasValue && createdById != command.ResponsibleId)
-            {
-                throw new QuestionnaireException(
-                    string.Format("You don't have permissions to delete this questionnaire. QuestionnaireId: {0}", this.EventSourceId));
-            }
 
             this.ApplyEvent(new QuestionnaireDeleted()
             {

@@ -73,8 +73,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/supervisor.framework.js",
                     "~/Scripts/viewmodels/viewmodelbase.js",
                     "~/Scripts/viewmodels/pagebase.js",
-                    "~/Scripts/viewmodels/surveymanagmentheader.js",
-                    "~/Scripts/viewmodels/healthcheckheader.js"
+                    "~/Scripts/viewmodels/surveymanagmentheader.js"
                 }
             },
             {
@@ -112,16 +111,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/viewmodels/pages/interview/new/mapper.js",
                     "~/Scripts/viewmodels/pages/interview/new/model.js",
                     "~/Scripts/viewmodels/pages/interview/new/newinterview.js"
-                }
-            },
-            {
-                "~/js/interview-details", new[]
-                {
-                    "~/Scripts/director.js",
-                    "~/Scripts/viewmodels/pages/interview/details/config.js",
-                    "~/Scripts/viewmodels/pages/interview/details/datacontext.js",
-                    "~/Scripts/viewmodels/pages/interview/details/interviewdetailssettings.js",
-                    "~/Scripts/viewmodels/pages/interview/details/interviewdetails.js",
                 }
             },
             {

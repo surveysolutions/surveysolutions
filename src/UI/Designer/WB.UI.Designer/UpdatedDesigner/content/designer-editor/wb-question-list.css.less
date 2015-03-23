@@ -1,233 +1,25 @@
 .wb-question-item(@purpose) {
-    /*.buttons-item {
-      padding-left: 0;
-  }
+}
 
-  .item {
-    &:first-child {
-      
-    }
+.broken-links{
+    max-height: 500px;
+    overflow-y: auto;
 
-    & when (@purpose = 'verify') {
-      background-color: #edeff1;
-      color: @verify-popup-color;
-    }
-
-    &.section {
-      font-weight: bold;
-      text-transform: uppercase;
-      padding-left: 20px;
-      margin-left: 0;
-      //padding-left: 25px;
-    }
-
-    &.section + .slide {
-      padding-left: 20px;
-      margin: -5px 0px 0 0;
-     // border-radius: 0 0 4px 4px;
-    }
-
-    &.section ~ .buttons-item {
-      margin: -5px 0px 0 20px;
-      border-radius: 0 0 4px 4px;
-    }
-
-    &.question {
-      & when (@purpose='questionnarie') {
-        //margin-left: 20px;
-      }
-    }
-
-    > span.var {
-      & when (@purpose='questionnarie') {
-        color: #4177a0;
-      }
-      font-style: italic;
-    }
-
-    > span.parenthesis {
-      & when (@purpose='questionnarie') {
-        color: #9ca4aa;
-      }
-      font-weight: normal;
-    }
-
-     button.btn-collapse, button.btn-expand {
-      @side: 16px;
-      display: inline-block;
-      position: relative;
-      top: -10px;
-      margin-right: 5px;
-      width: @side;
-      height: @side;
-      background: url(../i/section-collapse-glyph.png) no-repeat;
-      //outline: 1px red dotted;
-      border: none;
-      vertical-align: bottom;
-      outline: none;
-    }
-
-    button.btn-collapse {
-      background-position: center -8px;
-    }
-    button.btn-expand {
-      background-position: center -40px;
-    }
-
-    
-
-    > .qname-block {
-      position: absolute;
-      right: 0px;
-      top: 2px;
-      height: ~"calc(100% - 3px)";
-      padding-right: 10px;
-      & when (@purpose='questionnarie') {
-        background-color: @questionnarie-question-list-item-bg-color;
-      }
-      .questionnarie-question-list-item-qname-fontstyle();
-
-      > a.linked {
-        display: inline-block;
-        height: 100%;
-        width: 20px;
-        background: url(../i/icon-qname-block-link.png) center center no-repeat;
-        vertical-align: middle;
-        margin-right: 3px;
-      }
-
-      &:before {
-        @w: 75px;
+    a{
         display: block;
-        position: absolute;
-        //height: ~"calc(100% - 2px)";
-        height: 100%;
-        content: '';
-        width: @w;
-        top: 0px;
-        left: -@w;
+        padding: 5px 0 5px 8px;
+        border-top: 2px solid #eee;
+        text-decoration: none;
+        border-radius: 4px;
+     
+        &:last-child{
+            border-bottom: 2px solid #eee;
+        }  
 
-        & when (@purpose='questionnarie') {
-          #gradient > .horizontal(rgba(219, 223, 226, 0.0), rgba(219, 223, 226, 1.0));
+        &:hover{
+            background: #eee;
         }
-      }
-
-
-      // *************
-
-      > .btn-group {
-        //position: absolute;
-        //top: 11px;
-        //right: 8px;
-        position: relative;
-        left: 10px;
-
-        &.open > .dropdown-toggle {
-          display: inline-block;
-          box-shadow: none;
-        }
-
-        > .dropdown-toggle {
-          display: inline-block;
-          //  display: none;
-          //position: absolute;
-          //top: 11px;
-          //right: 8px;
-          .wb-dropdown-button();
-          width: 0;
-          transition: width 0.4s ease 0s;
-        }
-
-        > ul.dropdown-menu {
-          list-style: none;
-          margin: 6px 0;
-          padding: 0;
-          left: auto;
-          right: 0;
-
-          .context-menu-fontstyle();
-
-          li {
-            a {
-              letter-spacing: inherit;
-              color: inherit;
-              display: block;
-              padding: 0 12px;
-              width: 100%;
-              height: 100%;
-              text-decoration: none;
-              line-height: inherit;
-              &:hover {
-                color: #fff;
-                background-color: @common-blue-color;
-              }
-            }
-          }
-        }
-      }
-      // *************
     }
-
-    & when (@purpose='questionnarie') {
-      //&:hover > .qname-block > .dropdown-btn {
-      &:hover > .qname-block > .btn-group > .dropdown-toggle {
-        //display: inline-block;
-        width: 37px;
-      }
-
-      &.selected > .qname-block {
-        //padding-right: 37px;
-        background-color: @questionnarie-question-list-item-selected-color;
-        &:before {
-          #gradient > .horizontal(rgba(255, 255, 255, 0.0), rgba(255, 255, 255, 1.0));
-        }
-
-      }
-
-      &:hover > .qname-block {
-        background-color: @questionnarie-question-list-item-hover-color;
-        &:before {
-          #gradient > .horizontal(rgba(237, 239, 241, 0.0), rgba(237, 239, 241, 1.0));
-        }
-      }
-
-      &.selected:hover > .qname-block {
-        background-color: @questionnarie-question-list-item-selected-color;
-        &:before {
-          #gradient > .horizontal(rgba(255, 255, 255, 0.0), rgba(255, 255, 255, 1.0));
-        }
-      }
-
-      &.section.highlighted { border-radius: 4px 4px 0 0; }
-
-      &.section.highlighted + .slide {
-        background-color: @questionnarie-question-list-item-hover-color;
-
-        .qname-block{
-          background-color: @questionnarie-question-list-item-hover-color;
-          &:before { #gradient > .horizontal(rgba(237, 239, 241, 0.0), rgba(237, 239, 241, 1.0)); }
-        }
-      }
-
-      &.section.highlighted ~ .buttons-item {
-        background-color: @questionnarie-question-list-item-hover-color;
-      }
-    }
-
-    & when (@purpose='verify') {
-      & > .qname-block, &:hover > .qname-block {
-        background-color: transparent;
-        background-image: none;
-        line-height: 25px;
-      }
-      &, &:hover {
-        > .qname-block:before {
-          background-color: transparent;
-          background-image: none;
-        }
-      }
-    }
-  }*/
 }
 
 .icon {

@@ -53,36 +53,94 @@
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cirrious.CrossCore">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\MonoAndroid\Cirrious.CrossCore.dll</HintPath>
+    <Reference Include="Chance.MvvmCross.Plugins.UserInteraction, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Chance.MvvmCross.Plugins.UserInteraction.1.1.3\lib\MonoAndroid\Chance.MvvmCross.Plugins.UserInteraction.dll</HintPath>
+    </Reference>
+    <Reference Include="Chance.MvvmCross.Plugins.UserInteraction.Droid, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Chance.MvvmCross.Plugins.UserInteraction.1.1.3\lib\MonoAndroid\Chance.MvvmCross.Plugins.UserInteraction.Droid.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Cheesebaron.MvxPlugins.Settings">
+      <HintPath>..\..\..\..\packages\Cheesebaron.MvxPlugins.Settings.1.1.0\lib\MonoAndroid10\Cheesebaron.MvxPlugins.Settings.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Cheesebaron.MvxPlugins.Settings.Droid">
+      <HintPath>..\..\..\..\packages\Cheesebaron.MvxPlugins.Settings.1.1.0\lib\MonoAndroid10\Cheesebaron.MvxPlugins.Settings.Droid.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Cirrious.CrossCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e16445fd9b451819, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.0\lib\MonoAndroid\Cirrious.CrossCore.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.CrossCore.Droid">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\MonoAndroid\Cirrious.CrossCore.Droid.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.0\lib\MonoAndroid\Cirrious.CrossCore.Droid.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Binding">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Binding.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Binding.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Binding.Droid">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Binding.Droid.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross.Binding.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Binding.Droid.dll</HintPath>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Droid">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Droid.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Droid.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Droid.Fragging">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Droid.Fragging.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Droid.Fragging.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Droid.Fragging.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Droid.Fragging.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Localization">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Localization.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross.Localization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Localization.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Color">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Color.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Color.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Color.Droid">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Color.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Color.Droid.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.PictureChooser">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.PictureChooser.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.PictureChooser.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.PictureChooser.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.PictureChooser.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.PictureChooser.Droid">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.PictureChooser.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.PictureChooser.Droid.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.PictureChooser.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.PictureChooser.Droid.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Visibility">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Visibility.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Visibility.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Visibility.Droid">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Visibility.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Visibility.Droid.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.WebBrowser">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.WebBrowser.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.WebBrowser.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.WebBrowser.Droid">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.WebBrowser.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.WebBrowser.Droid.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="IHS.MvvmCross.Plugins.Keychain">
+      <HintPath>..\..\..\..\packages\IHS.MvvmCross.Plugins.Keychain.0.0.12\lib\monoandroid\IHS.MvvmCross.Plugins.Keychain.dll</HintPath>
+    </Reference>
+    <Reference Include="IHS.MvvmCross.Plugins.Keychain.Droid">
+      <HintPath>..\..\..\..\packages\IHS.MvvmCross.Plugins.Keychain.0.0.12\lib\monoandroid\IHS.MvvmCross.Plugins.Keychain.Droid.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -96,59 +154,104 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Newtonsoft.Json.6.0.7\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ninject">
       <HintPath>..\..\..\..\packages\Portable.Ninject.3.3.1\lib\monoandroid\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PCLStorage">
+      <HintPath>..\..\..\..\packages\PCLStorage.1.0.2\lib\monoandroid\PCLStorage.dll</HintPath>
+    </Reference>
+    <Reference Include="PCLStorage.Abstractions">
+      <HintPath>..\..\..\..\packages\PCLStorage.1.0.2\lib\monoandroid\PCLStorage.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\..\..\..\packages\protobuf-net.2.0.0.668\lib\portable-sl4+net40+wp7+windows8\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="Siaqodb">
+      <HintPath>..\..\..\..\packages\Siaqodb.4.0.2.29\lib\MonoAndroid\Siaqodb.dll</HintPath>
+    </Reference>
+    <Reference Include="SiaqodbPortable">
+      <HintPath>..\..\..\..\packages\Siaqodb.4.0.2.29\lib\MonoAndroid\SiaqodbPortable.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net">
+      <HintPath>..\..\..\..\packages\MvvmCross.PortableSupport.3.1.1\lib\MonoAndroid\System.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows">
+      <HintPath>..\..\..\..\packages\MvvmCross.PortableSupport.3.1.1\lib\MonoAndroid\System.Windows.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
-    <Reference Include="Xamarin.Android.Support.v13, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v13.21.0.3.0\lib\MonoAndroid32\Xamarin.Android.Support.v13.dll</HintPath>
+    <Reference Include="System.Xml.Serialization">
+      <HintPath>..\..\..\..\packages\MvvmCross.PortableSupport.3.1.1\lib\MonoAndroid\System.Xml.Serialization.dll</HintPath>
     </Reference>
-    <Reference Include="Xamarin.Android.Support.v4, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Xamarin.Android.Support.v13">
+      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v13.20.0.0.4\lib\MonoAndroid32\Xamarin.Android.Support.v13.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Android.Support.v4, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v4.21.0.3.0\lib\MonoAndroid10\Xamarin.Android.Support.v4.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v4.20.0.0.4\lib\MonoAndroid32\Xamarin.Android.Support.v4.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Insights, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Xamarin.Insights.1.9.0.106\lib\MonoAndroid10\Xamarin.Insights.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Adapters\QuestionnaireListAdapter.cs" />
-    <Compile Include="ErrorMessages.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ErrorMessages.resx</DependentUpon>
-    </Compile>
-    <Compile Include="QuestionnareAssemblyTesterFileAccessor.cs" />
+    <Compile Include="Bootstrap\ColorPluginBootstrap.cs" />
+    <Compile Include="Bootstrap\KeychainPluginBootstrap.cs" />
     <Compile Include="Bootstrap\PictureChooserPluginBootstrap.cs" />
-    <Compile Include="RestServiceSettings.cs" />
-    <Compile Include="TesterLoggingModule.cs" />
-    <Compile Include="AndroidTesterModelModule.cs" />
-    <Compile Include="App.cs" />
-    <Compile Include="Authentication\DesignerAuthentication.cs" />
-    <Compile Include="Authentication\UserInfo.cs" />
-    <Compile Include="CapiTesterApplication.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CreateInterviewActivity.cs" />
+    <Compile Include="Bootstrap\SettingsPluginBootstrap.cs" />
+    <Compile Include="Bootstrap\UserInteractionPluginBootstrap.cs" />
+    <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
+    <Compile Include="Bootstrap\WebBrowserPluginBootstrap.cs" />
+    <Compile Include="Controls\Adapters\TesterContentFrameAdapter.cs" />
+    <Compile Include="Controls\Fragments\PrefilledScreenContentFragment.cs" />
+    <Compile Include="Controls\Fragments\TesterGridContentFragment.cs" />
+    <Compile Include="Controls\Fragments\TesterScreenContentFragment.cs" />
+    <Compile Include="Controls\Fragments\TesterStatisticsContentFragment.cs" />
+    <Compile Include="Controls\MvxSwipeRefreshLayout.cs" />
     <Compile Include="Extensions\ActivityExtensions.cs" />
-    <Compile Include="HomeActivity.cs" />
-    <Compile Include="Implementations\Activities\TesterDetailsActivity.cs" />
-    <Compile Include="Implementations\Adapters\TesterContentFrameAdapter.cs" />
-    <Compile Include="Implementations\Fragments\PrefilledScreenContentFragment.cs" />
-    <Compile Include="Implementations\Fragments\TesterGridContentFragment.cs" />
-    <Compile Include="Implementations\Fragments\TesterScreenContentFragment.cs" />
-    <Compile Include="Implementations\Fragments\TesterStatisticsContentFragment.cs" />
-    <Compile Include="LoadingActivity.cs" />
-    <Compile Include="LoginActivity.cs" />
-    <Compile Include="NinjectServiceLocator.cs" />
+    <Compile Include="Implementation\Services\ApplicationInitializer.cs" />
+    <Compile Include="Implementation\Services\ApplicationSettings.cs" />
+    <Compile Include="Implementation\Services\DesignerAuthentication.cs" />
+    <Compile Include="Implementation\Services\Principal.cs" />
+    <Compile Include="Implementation\Services\QuestionnareAssemblyTesterFileAccessor.cs" />
+    <Compile Include="Implementation\Services\RestServiceSettings.cs" />
+    <Compile Include="Mvvm\CustomBindings\TextViewHintBinding.cs" />
+    <Compile Include="Mvvm\CustomBindings\SearchViewQueryTextChangeBinding.cs" />
+    <Compile Include="Mvvm\CustomBindings\SearchViewQueryTextSubmitBinding.cs" />
+    <Compile Include="Mvvm\CustomBindings\SwipeRefreshLayoutRefreshBinding.cs" />
+    <Compile Include="Mvvm\CustomBindings\SearchViewQueryHintBinding.cs" />
+    <Compile Include="Mvvm\CustomBindings\SwipeRefreshLayoutRefreshingBinding.cs" />
+    <Compile Include="Mvvm\MvxInitializer.cs" />
+    <Compile Include="Mvvm\ValueContervers\LocalizationValueConverter.cs" />
+    <Compile Include="Mvvm\ValueContervers\NullToVisibleValueConverter.cs" />
+    <Compile Include="Mvvm\ValueContervers\QuestionnaireVersionToColorValueConverter.cs" />
+    <Compile Include="Mvvm\ValueContervers\VisibleIfListHasItemsValueConverter.cs" />
+    <Compile Include="Mvvm\ValueContervers\VisibleIfListIsEmptyValueConverter.cs" />
+    <Compile Include="Mvvm\Views\BaseActivityView.cs" />
+    <Compile Include="Mvvm\Views\BaseFragmentActivityView.cs" />
+    <Compile Include="Mvvm\Views\DashboardView.cs" />
+    <Compile Include="Mvvm\Views\AboutView.cs" />
+    <Compile Include="Mvvm\Views\InterviewView.cs" />
+    <Compile Include="Mvvm\Views\LoginView.cs" />
+    <Compile Include="Mvvm\Views\QuestionnairePrefilledQuestionsView.cs" />
+    <Compile Include="Mvvm\Views\SettingsView.cs" />
+    <Compile Include="Mvvm\Views\SplashView.cs" />
+    <Compile Include="Ninject\AndroidTesterModelModule.cs" />
+    <Compile Include="Ninject\CapiTesterCoreRegistry.cs" />
+    <Compile Include="Ninject\CoreRegistry.cs" />
+    <Compile Include="Ninject\NinjectInitializer.cs" />
+    <Compile Include="Ninject\NinjectServiceLocator.cs" />
+    <Compile Include="Ninject\ServiceLocationModule.cs" />
+    <Compile Include="Ninject\TesterLoggingModule.cs" />
+    <Compile Include="App.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QuestionnaireListActivity.cs" />
-    <Compile Include="Services\DesignerService.cs" />
     <Compile Include="Setup.cs" />
-    <Compile Include="SplashScreenActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -157,20 +260,21 @@
     <AndroidResource Include="Resources\Layout\Login.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\SplashScreen.axml">
+    <AndroidResource Include="Resources\Layout\Splash.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\template_list_item.axml" />
-    <AndroidResource Include="Resources\Layout\Home.axml">
-      <SubType>AndroidResource</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Layout\CreateInterview.axml">
+    <AndroidResource Include="Resources\Layout\QuestionnairePrefilledQuestionsView.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\ActionBar.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\ActionBarSearchable.axml">
+    <AndroidResource Include="Resources\Layout\Dashboard.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\Settings.axml" />
+    <AndroidResource Include="Resources\Layout\About.axml" />
+    <AndroidResource Include="Resources\Layout\questionnairelistitem.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>
@@ -180,27 +284,183 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </Content>
-    <AndroidResource Include="Resources\Drawable\capi.png" />
     <AndroidResource Include="Resources\Drawable\splash.png" />
-    <AndroidResource Include="Resources\Drawable\tester_icon.png" />
-    <AndroidResource Include="Resources\Drawable\tester_splash.png" />
-    <AndroidResource Include="Resources\Drawable-xhdpi\tester_icon.png" />
-    <AndroidResource Include="Resources\Values\Themes.xml" />
+    <AndroidResource Include="Resources\Values\styles.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Drawable\unknownUser.png" />
+    <AndroidResource Include="Resources\Drawable\drawer_shadow_dark.9.png" />
+    <AndroidResource Include="Resources\Drawable\drawer_shadow_light.9.png" />
+    <AndroidResource Include="Resources\Drawable\ic_drawer_dark.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_drawer_light.png" />
+    <AndroidResource Include="Resources\Drawable\menu_logo.png" />
+    <AndroidResource Include="Resources\Drawable\ab_background_textured_tester.xml" />
+    <AndroidResource Include="Resources\Drawable\btn_cab_done_tester.xml" />
+    <AndroidResource Include="Resources\Drawable\progress_horizontal_tester.xml" />
+    <AndroidResource Include="Resources\Drawable\selectable_background_tester.xml" />
+    <AndroidResource Include="Resources\Drawable\spinner_background_ab_tester.xml" />
+    <AndroidResource Include="Resources\Drawable\tab_indicator_ab_tester.xml" />
+    <AndroidResource Include="Resources\drawable-hdpi\ab_bottom_solid_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ab_solid_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ab_stacked_solid_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ab_texture_tile_tester.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ab_transparent_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\btn_cab_done_default_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\btn_cab_done_focused_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\btn_cab_done_pressed_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\cab_background_bottom_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\cab_background_top_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\list_focused_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\list_pressed_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\menu_dropdown_panel_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\progress_bg_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\progress_primary_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\progress_secondary_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\spinner_ab_default_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\spinner_ab_disabled_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\spinner_ab_focused_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\spinner_ab_pressed_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\tab_selected_focused_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\tab_selected_pressed_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\tab_selected_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\tab_unselected_focused_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\tab_unselected_pressed_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\tab_unselected_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ab_bottom_solid_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ab_solid_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ab_stacked_solid_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ab_texture_tile_tester.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ab_transparent_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\btn_cab_done_default_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\btn_cab_done_focused_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\btn_cab_done_pressed_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\cab_background_bottom_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\cab_background_top_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\list_focused_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\list_pressed_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\menu_dropdown_panel_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\progress_bg_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\progress_primary_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\progress_secondary_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\spinner_ab_default_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\spinner_ab_disabled_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\spinner_ab_focused_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\spinner_ab_pressed_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\tab_selected_focused_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\tab_selected_pressed_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\tab_selected_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\tab_unselected_focused_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\tab_unselected_pressed_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\tab_unselected_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ab_bottom_solid_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ab_solid_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ab_stacked_solid_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ab_texture_tile_tester.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ab_transparent_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\btn_cab_done_default_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\btn_cab_done_focused_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\btn_cab_done_pressed_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\cab_background_bottom_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\cab_background_top_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\list_focused_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\list_pressed_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\menu_dropdown_panel_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\progress_bg_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\progress_primary_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\progress_secondary_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\spinner_ab_default_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\spinner_ab_disabled_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\spinner_ab_focused_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\spinner_ab_pressed_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\tab_selected_focused_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\tab_selected_pressed_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\tab_selected_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\tab_unselected_focused_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\tab_unselected_pressed_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\tab_unselected_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ab_bottom_solid_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ab_solid_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ab_stacked_solid_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ab_texture_tile_tester.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ab_transparent_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\btn_cab_done_default_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\btn_cab_done_focused_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\btn_cab_done_pressed_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\cab_background_bottom_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\cab_background_top_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\list_focused_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\list_pressed_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\menu_dropdown_panel_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\progress_bg_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\progress_primary_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\progress_secondary_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\spinner_ab_default_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\spinner_ab_disabled_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\spinner_ab_focused_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\spinner_ab_pressed_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\tab_selected_focused_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\tab_selected_pressed_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\tab_selected_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\tab_unselected_focused_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\tab_unselected_pressed_tester.9.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\tab_unselected_tester.9.png" />
+    <AndroidResource Include="Resources\Drawable\back.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Drawable\ic_action_settings.png" />
+    <AndroidResource Include="Resources\Drawable\ic_action_help.png" />
+    <AndroidResource Include="Resources\Drawable\ic_lock_power_off.png" />
+    <AndroidResource Include="Resources\Drawable\ic_questionnaire_list_refresh.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_action_back.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_action_back.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_action_back.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_action_back.png" />
+    <AndroidResource Include="Resources\Drawable\back_button_tester.xml" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_drawer_light.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_drawer_light.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_drawer_light.png" />
+    <AndroidResource Include="Resources\Drawable\hamburger_button_tester.xml" />
+    <AndroidResource Include="Resources\Drawable\questionnaire_item_border.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Values\default_theme.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Drawable\rounded_button.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Drawable\rounded_button_unfocused.xml" />
+    <AndroidResource Include="Resources\Drawable\rounded_button_focus.xml" />
+    <AndroidResource Include="Resources\Drawable\rounded_button_press.xml" />
+    <AndroidResource Include="Resources\Drawable\btn_shadow_img.png" />
+    <AndroidResource Include="Resources\Drawable\ic_action_new.png" />
+    <AndroidResource Include="Resources\Drawable\ic_action_web_site.png" />
+    <AndroidResource Include="Resources\Drawable\world_background.png" />
+    <AndroidResource Include="Resources\Drawable\world_background_1.png" />
+    <AndroidResource Include="Resources\Drawable\world_background_11.png" />
+    <AndroidResource Include="Resources\Drawable\world_background_13.png" />
+    <AndroidResource Include="Resources\Drawable\world_background_15.png" />
+    <AndroidResource Include="Resources\Drawable\world_background_3.png" />
+    <AndroidResource Include="Resources\Drawable\world_background_5.png" />
+    <AndroidResource Include="Resources\Drawable\world_background_7.png" />
+    <AndroidResource Include="Resources\Drawable\world_background_9.png" />
+    <AndroidResource Include="Resources\Drawable\icon.png" />
+    <AndroidResource Include="Resources\Drawable\wb_logo.png" />
+    <AndroidResource Include="Resources\Drawable\bgsplash.xml" />
+    <AndroidResource Include="Resources\Drawable\about_logo.png" />
+    <AndroidResource Include="Resources\Drawable\color_cursor.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Mono\Mono.Android.Crasher\Mono.Android.Crasher.csproj">
-      <Project>{4ECE2C97-13A0-46D6-95D1-7BB50A48267B}</Project>
-      <Name>Mono.Android.Crasher</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.Capi.csproj">
       <Project>{c6ed30a9-4d14-48d1-8311-c2267dfd424f}</Project>
       <Name>WB.Core.BoundedContexts.Capi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\BoundedContexts\WB.Core.BoundedContexts.QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester.csproj">
+      <Project>{1d9951b0-c351-432c-bcad-e3dcaaf71e06}</Project>
+      <Name>WB.Core.BoundedContexts.QuestionnaireTester</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\Utils\WB.Core.GenericSubdomains.Utils.Rest\WB.Core.GenericSubdomains.Utils.Rest.csproj">
       <Project>{f3be22b5-c075-4b9c-a99d-e89b70a0dfcd}</Project>
@@ -226,10 +486,6 @@
       <Project>{596bdadc-eff5-474d-b028-2f5c60b59050}</Project>
       <Name>WB.UI.Shared.Android</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.AndroidLogger\WB.Core.GenericSubdomains.Logging.AndroidLogger.csproj">
-      <Project>{a3369307-fdfa-4cd2-9ff4-6a7e23c47dd6}</Project>
-      <Name>WB.Core.GenericSubdomains.Logging.AndroidLogger</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
@@ -243,12 +499,7 @@
       <Name>WB.Core.GenericSubdomains.Utils</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="ErrorMessages.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

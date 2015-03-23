@@ -31,9 +31,15 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation
             return this.CreateInstanceForReadSideStore();
         }
 
-        private IDocumentStore CreateInstanceForReadSideStore()
+        public IDocumentStore CreateInstanceForReadSideStore()
         {
             return this.GetOrCreateServerStorage(this.settings.ViewsDatabase);
+        }
+
+        public void RemoveInstanceForReadSideStore()
+        {
+            serverStorage.DatabaseCommands.GlobalAdmin.DeleteDatabase(this.settings.ViewsDatabase, hardDelete: true);
+            serverStorage = null;
         }
 
         private IDocumentStore GetOrCreateServerStorage(string databaseName)
@@ -64,6 +70,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation
             {
                 store.Credentials = new NetworkCredential(this.settings.Username, this.settings.Password);
             }
+
             store.Initialize(true);
 
             if (!string.IsNullOrWhiteSpace(databaseName))

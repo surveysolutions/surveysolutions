@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="ApplicationName">Capi.Tester</string>
-  <string name="DesignerPath">https://solutions.worldbank.org/api/import</string>
-  <string name="QuestionnaireLoadingError">Questionnaire loading error</string>
-  <string name="Oops">Oops! Questionnaire can\'t be loaded.</string>
-  <string name="ReasonFormat">Reason: {0}</string>
-  <string name="TemplateIsNotValidForCurrentVersionOfTester">Template is not valid for current version of Tester.</string>
-  <string name="TemplateIsMissing">Template is missing.</string>
-  <item  type="id"  name="QuestionnaireTitle" />
+  <string name="ApplicationName">Questionnaire Tester</string>
+  <string name="DesignerEndpoint">http://192.168.1.135/designer/api/v1</string>
+  <string name="HttpResponseTimeout">30</string>
+  <string name="BufferSize">512</string>
 </resources>

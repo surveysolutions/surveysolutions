@@ -39,14 +39,14 @@
             </ul>
         </div>
 
-        <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.ApproveInterview">Approve interview</button>
-        <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.RejectInterview">Reject interview</button>
+        <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.ApproveInterview">Approve</button>
+        <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.RejectInterview">Reject</button>
 
         <div class="input-group">
             <input type="text" id="searchBox" class="form-control" placeholder="Search" data-bind="value: SearchBy, valueUpdate:'afterkeydown', enterKey: search">
             <div class="input-group-btn">
-                <button class="btn btn-default" type="button" data-bind="click: search">
-                    <i class="glyphicon glyphicon-search"></i>
+                <button class="btn btn-default" type="button" data-bind="click: clear">
+                    <i class="glyphicon glyphicon-remove"></i>
                 </button>
             </div>
         </div>
@@ -99,7 +99,9 @@
                 </td>
                 <td data-bind="text: LastEntryDate"></td>
                 <td>
-                    <input type="checkbox" data-bind="checked: HasErrors, enable: false" />
+                    <!-- ko if:HasErrors -->
+                    <span class="glyphicon glyphicon-ok pull-right margin-right-5" style="color:red"></span>
+                    <!-- /ko -->
                 </td>
                 <td data-bind="text: Status"></td>
                 <td>
@@ -118,7 +120,6 @@
     <script type="text/html" id="confirm-assign-template">
         @Html.Raw(WB.Core.SharedKernels.SurveyManagement.Web.Resources.Interviews.AssignConfirmMessage.FormatString(
             "<span class='text-normal' data-bind='text: length'></span>",
-            InterviewStatus.Created.ToLocalizeString(),
             InterviewStatus.SupervisorAssigned.ToLocalizeString(),
             InterviewStatus.InterviewerAssigned.ToLocalizeString(),
             InterviewStatus.RejectedBySupervisor.ToLocalizeString()))

@@ -1,12 +1,12 @@
 ﻿angular.module('designerApp')
     .controller('QuestionCtrl',
-        function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, $log, confirmService, hotkeys) {
+        function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, $log, confirmService, hotkeys, optionsService) {
             $scope.currentChapterId = $state.params.chapterId;
             var dictionnaires = {};
             hotkeys.bindTo($scope)
               .add({
                   combo: 'ctrl+s',
-                  description: 'Save current question',
+                  description: 'Save changes',
                   allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                   callback: function (event) {
                       $scope.saveQuestion();
@@ -14,6 +14,7 @@
                       event.preventDefault();
                   }
               });
+
             var bindQuestion = function(question) {
                 $scope.activeQuestion = $scope.activeQuestion || {};
                 $scope.activeQuestion.breadcrumbs = question.breadcrumbs;
@@ -41,7 +42,8 @@
                 _.each(options, function(option) {
                     option.id = utilityService.guid();
                 });
-
+                
+                $scope.activeQuestion.useListAsOptionsEditor = true;
                 $scope.activeQuestion.options = options;
                 $scope.activeQuestion.optionsCount = question.optionsCount || 0;
 
@@ -58,6 +60,10 @@
                 $scope.setCascadeSource(question.cascadeFromQuestionId);
 
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = false;
+
+                if (!_.isNull($scope.questionForm) && !_.isUndefined($scope.questionForm)) {
+                    $scope.questionForm.$setPristine();
+                }
             };
 
             var dataBind = function (result) {
@@ -79,6 +85,7 @@
 
             $scope.saveQuestion = function (callback) {
                 if ($scope.questionForm.$valid) {
+                    $scope.showOptionsInList();
                     var shouldGetOptionsOnServer = wasThereOptionsLooseWhileChanginQuestionProperties($scope.initialQuestion, $scope.activeQuestion) && $scope.activeQuestion.isCascade;
                     commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion, shouldGetOptionsOnServer).success(function () {
                         $scope.initialQuestion = angular.copy($scope.activeQuestion);
@@ -154,6 +161,8 @@
                 if (type !== "SingleOption" && type !== "MultyOption") {
                     $scope.setLinkSource(null);
                 }
+
+                $scope.questionForm.$setDirty();
             };
 
             $scope.cancelQuestion = function () {
@@ -230,11 +239,28 @@
                 $scope.activeQuestion.optionsCount -= 1;
             };
 
+            $scope.showOptionsInTextarea = function () {
+                $scope.activeQuestion.stringifiedOptions = optionsService.stringifyOptions($scope.activeQuestion.options);
+                $scope.activeQuestion.useListAsOptionsEditor = false;
+            };
+
+            $scope.showOptionsInList = function () {
+                if ($scope.activeQuestion.useListAsOptionsEditor) {
+                    return;
+                }
+                if (_.isUndefined($scope.questionForm.stringifiedOptions) || !$scope.questionForm.stringifiedOptions.$valid) {
+                    return;
+                }
+                $scope.activeQuestion.options = optionsService.parseOptions($scope.activeQuestion.stringifiedOptions);
+                $scope.activeQuestion.useListAsOptionsEditor = true;
+            };
+
             $scope.changeQuestionScope = function (scope) {
                 $scope.activeQuestion.questionScope = scope.text;
                 if ($scope.activeQuestion.questionScope === 'Prefilled') {
                     $scope.activeQuestion.enablementCondition = '';
                 }
+                $scope.questionForm.$setDirty();
             };
 
             $scope.$watch('activeQuestion.isLinked', function (newValue) {
@@ -261,6 +287,7 @@
                 if (itemId) {
                     $scope.activeQuestion.linkedToQuestionId = itemId;
                     $scope.activeQuestion.linkedToQuestion = _.find($scope.sourceOfLinkedQuestions, { id: $scope.activeQuestion.linkedToQuestionId });
+                    $scope.questionForm.$setDirty();
                 } 
             };
 
@@ -273,10 +300,7 @@
                 }
             };
 
-            var questionTypesDoesNotSupportValidations = [
-                "TextList",
-                "QRBarcode",
-                "Multimedia"];
+            var questionTypesDoesNotSupportValidations = ["Multimedia"];
             
             $scope.doesQuestionSupportValidations = function () {
                 return $scope.activeQuestion && !_.contains(questionTypesDoesNotSupportValidations, $scope.activeQuestion.type)

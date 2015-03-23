@@ -70,16 +70,33 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to open questionnaire. Requested questionnaire &quot;{0}&quot; has {2} version. Application supports version up to {1}. Please update application..
+        ///   Looks up a localized string similar to Failed to open the questionnaire. Your questionnaire &quot;{0}&quot; has {2} version. Designer supports only up to version {1}. Please contact support@mysurvey.solutions.
         /// </summary>
         internal static string ClientVersionLessThenDocument {
             get {
                 return ResourceManager.GetString("ClientVersionLessThenDocument", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Server is on the maintenance mode now. Sorry for the inconvenience. Please, try again later..
+        /// </summary>
+        internal static string Maintenance
+        {
+            get { return ResourceManager.GetString("Maintenance", resourceCulture); }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to You will receive a message shortly with instructions on how to complete registration. Please check the email account that you provided in the previous step..
+        /// </summary>
+        internal static string Look_for_an_email_in_your_inbox {
+            get {
+                return ResourceManager.GetString("Look_for_an_email_in_your_inbox", resourceCulture);
+            }
+        }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to import questionnaire. Requested questionnaire &quot;{0}&quot; has {1} version. Headquarters application supports version up to {2}.
+        ///   Looks up a localized string similar to Failed to import questionnaire. Your questionnaire &quot;{0}&quot; has {1} version. Headquarters application supports only up to version {2}..
         /// </summary>
         internal static string NotSupportedQuestionnaireVersion {
             get {
@@ -88,7 +105,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have an obsolete version of application. Please update application to continue..
+        ///   Looks up a localized string similar to You have an obsolete version of the Headquarters application. Please contact support@mysurvey.solutions to request an update..
         /// </summary>
         internal static string OldClientPleaseUpdate {
             get {
@@ -97,7 +114,26 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Requested questionnaire &quot;{0}&quot; has errors. Please verify the questionnaire on Designer..
+        ///   Looks up a localized string similar to The {0} must be at least {2} characters long..
+        /// </summary>
+        internal static string Password_must_be_at_least_characters_long {
+            get {
+                return ResourceManager.GetString("Password_must_be_at_least_characters_long", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must contain at least one number, one upper case character and one lower case character.
+        /// </summary>
+        internal static string Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_case_character {
+            get {
+                return ResourceManager.GetString("Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_" +
+                        "case_character", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your questionnaire &quot;{0}&quot; has errors. Please verify the questionnaire on Designer..
         /// </summary>
         internal static string Questionnaire_verification_failed {
             get {
@@ -106,7 +142,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Internal server error occurred. Please contact developers..
+        ///   Looks up a localized string similar to A server error occurred. Please contact support@mysurvey.solutions..
         /// </summary>
         internal static string ServerError {
             get {
@@ -115,7 +151,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire with id={0} cannot be found. Please check the list of available questionnaires..
+        ///   Looks up a localized string similar to Questionnaire with id={0} cannot be found. Please check the list of available questionnaires, or contact the colleague who shared the questionnaire link with you..
         /// </summary>
         internal static string TemplateNotFound {
             get {
@@ -124,7 +160,70 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User is not authorized. Check your login and password..
+        ///   Looks up a localized string similar to Either your current or new password is incorrect. Please reenter your current and new passwords..
+        /// </summary>
+        internal static string The_current_password_is_incorrect_or_the_new_password_is_invalid {
+            get {
+                return ResourceManager.GetString("The_current_password_is_incorrect_or_the_new_password_is_invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The password and confirmation password do not match..
+        /// </summary>
+        internal static string The_password_and_confirmation_password_do_not_match {
+            get {
+                return ResourceManager.GetString("The_password_and_confirmation_password_do_not_match", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The user name or password provided is incorrect. Please try entering your user name and password again..
+        /// </summary>
+        internal static string The_user_name_or_password_provided_is_incorrect {
+            get {
+                return ResourceManager.GetString("The_user_name_or_password_provided_is_incorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An unexpected error occurred. Please try acessing Designer again later.
+        /// </summary>
+        internal static string Unexpected_error_occurred_Please_try_again_later {
+            get {
+                return ResourceManager.GetString("Unexpected_error_occurred_Please_try_again_later", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User {0} already confirmed in system. Please enter your login and password to start using Designer..
+        /// </summary>
+        internal static string User_already_confirmed_in_system {
+            get {
+                return ResourceManager.GetString("User_already_confirmed_in_system", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User {0} does not exist. Please enter a valid user name.
+        /// </summary>
+        internal static string User_does_not_exist {
+            get {
+                return ResourceManager.GetString("User_does_not_exist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User {0} does not exist. Please enter a valid user name..
+        /// </summary>
+        internal static string User_does_not_exist_Please_enter_a_valid_user_name {
+            get {
+                return ResourceManager.GetString("User_does_not_exist_Please_enter_a_valid_user_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User is not authorized. Please check your login and password..
         /// </summary>
         internal static string User_Not_authorized {
             get {
@@ -133,7 +232,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your account is locked out. Please, contact to the administrator of Designer to unlock it..
+        ///   Looks up a localized string similar to Your account is locked. Please contact support@mysurvey.solutions to unlock it..
         /// </summary>
         internal static string UserLockedOut {
             get {
@@ -142,11 +241,38 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max supported version of questionnaire was not correctly provided. Please contact developers..
+        ///   Looks up a localized string similar to There is a problem with the version of your questionnaire. Please contact support@mysurvey.solutions..
         /// </summary>
         internal static string VersionParameterIsIncorrect {
             get {
                 return ResourceManager.GetString("VersionParameterIsIncorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You did not type the verification word correctly. Please try again..
+        /// </summary>
+        internal static string You_did_not_type_the_verification_word_correctly {
+            get {
+                return ResourceManager.GetString("You_did_not_type_the_verification_word_correctly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Designer successfully verified your email.
+        /// </summary>
+        internal static string Your_email_is_verified {
+            get {
+                return ResourceManager.GetString("Your_email_is_verified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have successfully changed your password.
+        /// </summary>
+        internal static string Your_password_successfully_changed {
+            get {
+                return ResourceManager.GetString("Your_password_successfully_changed", resourceCulture);
             }
         }
     }

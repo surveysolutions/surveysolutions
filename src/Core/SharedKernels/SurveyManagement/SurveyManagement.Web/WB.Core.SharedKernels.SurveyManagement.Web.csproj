@@ -367,7 +367,6 @@
     <None Include="app.config" />
     <None Include="packages.config" />
     <EmbeddedResource Include="Views\Interview\ConfirmRevalidation.cshtml" />
-    <EmbeddedResource Include="Views\Interview\InterviewDetails.cshtml" />
     <EmbeddedResource Include="Views\Interview\Revalidate.cshtml" />
     <EmbeddedResource Include="fonts\fontawesome-webfont.svg" />
     <EmbeddedResource Include="fonts\glyphicons-halflings-regular.svg" />
@@ -487,7 +486,6 @@
     <EmbeddedResource Include="Scripts\director.js" />
     <EmbeddedResource Include="Scripts\viewmodels\pages\interview\details\config.js" />
     <EmbeddedResource Include="Scripts\viewmodels\pages\interview\details\datacontext.js" />
-    <EmbeddedResource Include="Scripts\viewmodels\pages\interview\details\interviewdetails.js" />
     <EmbeddedResource Include="Scripts\viewmodels\pages\interview\details\interviewdetailssettings.js" />
   </ItemGroup>
   <ItemGroup>
@@ -529,9 +527,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\viewmodels\pages\healthcheck.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scripts\viewmodels\healthcheckheader.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\knockout-3.2.0.debug.js" />

@@ -2,32 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-
-  <ImageView android:id="@+id/imgAnswerProgress"
-      android:src="@drawable/answer_progress_indicator"
-      android:layout_marginLeft="10dp"
-      android:layout_width="30dp"
-      android:layout_height="fill_parent"
-      android:scaleType="centerInside"
-      android:visibility="invisible"
-  />
-
-  <TextView
-      android:id="@+id/tvTitlte"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-	  android:textColor="?android:attr/actionMenuTextColor"
-      android:textSize="18sp"
-      android:gravity="center_vertical|left"
-      android:layout_marginLeft="50dp"
-  />
-
-  <Button
-        android:id="@+id/btnLogout"
-        android:text="Log out"
-        android:layout_alignParentRight="true"
-        android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/imgAnswerProgress"
+        android:src="@drawable/answer_progress_indicator"
+        android:layout_marginLeft="10dp"
+        android:layout_width="30dp"
         android:layout_height="fill_parent"
-        android:layout_marginRight="10dp" />
-
+        android:scaleType="centerInside"
+        android:visibility="invisible" />
+    <TextView
+        android:id="@+id/tvTitlte"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:textColor="?android:attr/actionMenuTextColor"
+        android:textSize="18sp"
+        android:gravity="center_vertical|left"
+        android:layout_marginLeft="50dp" />
 </RelativeLayout>

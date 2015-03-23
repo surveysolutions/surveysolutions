@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+  <item>
+    <shape android:shape="oval">
+      <solid android:color="@color/background" />
+    </shape>
+  </item>
+  <item  android:drawable="@drawable/btn_shadow_img"/>
+  <item android:left="20dp" android:top="20dp" android:right="20dp" android:bottom="20dp" android:drawable="@drawable/ic_action_new"/>
+</layer-list>

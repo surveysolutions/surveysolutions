@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.MessageHandlers;
 
 namespace WB.UI.Designer
@@ -13,6 +14,8 @@ namespace WB.UI.Designer
             if (AppSettings.Instance.IsApiSslVerificationEnabled)
                 config.MessageHandlers.Add(new HttpsVerifier());
 
+            config.MapHttpAttributeRoutes();
+
             config.Routes.MapHttpRoute(
                 name: "DefaultApiWithAction",
                 routeTemplate: "api/{controller}/{action}/{id}",
@@ -23,6 +26,8 @@ namespace WB.UI.Designer
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            config.Formatters.Insert(0, new JsonFormatter());
         }
     }
 }

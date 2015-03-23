@@ -1,0 +1,156 @@
+﻿using System;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
+using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Core.SharedKernels.DataCollection;
+using WB.UI.Designer.Api.Attributes;
+using WB.UI.Shared.Web.Membership;
+
+namespace WB.UI.Designer.Api
+{
+    [ApiBasicAuth]
+    [RoutePrefix("api/v1/questionnaires")]
+    public class QuestionnairesController : BaseApiController
+    {
+        private readonly IMembershipUserService userHelper;
+        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
+        private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
+        private readonly IQuestionnaireVerifier questionnaireVerifier;
+        private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
+        private readonly IQuestionnaireListViewFactory viewFactory;
+        private readonly Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion engineVersion;
+
+        public QuestionnairesController(IMembershipUserService userHelper,
+            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
+            IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
+            IQuestionnaireVerifier questionnaireVerifier,
+            IExpressionProcessorGenerator expressionProcessorGenerator,
+            IQuestionnaireListViewFactory viewFactory)
+        {
+            this.userHelper = userHelper;
+            this.questionnaireViewFactory = questionnaireViewFactory;
+            this.sharedPersonsViewFactory = sharedPersonsViewFactory;
+            this.questionnaireVerifier = questionnaireVerifier;
+            this.expressionProcessorGenerator = expressionProcessorGenerator;
+            this.viewFactory = viewFactory;
+
+            var engineVersion = QuestionnaireVersionProvider.GetCurrentEngineVersion();
+            this.engineVersion = new Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion()
+            {
+                Major = engineVersion.Major,
+                Minor = engineVersion.Minor,
+                Patch = engineVersion.Patch
+            };
+        }
+
+        [Route("{id:Guid}/meta")]
+        public QuestionnaireMetaInfo GetMetaInformation(Guid id)
+        {
+            var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            if (questionnaireView == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            }
+
+            if (!this.ValidateAccessPermissions(questionnaireView))
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+
+            return new QuestionnaireMetaInfo()
+                {
+                    LastEntryDate = questionnaireView.LastEntryDate,
+                    Version = this.engineVersion
+                };
+        }
+
+        [Route("{id:Guid}")]
+        public QuestionnaireResponse Get(Guid id)
+        {
+            var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            if (questionnaireView == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            }
+
+            if (!this.ValidateAccessPermissions(questionnaireView))
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            }
+
+            var questoinnaireErrors = questionnaireVerifier.Verify(questionnaireView.Source).ToArray();
+            if (questoinnaireErrors.Any())
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
+            }
+
+            string resultAssembly;
+            try
+            {
+                GenerationResult generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireView.Source, out resultAssembly);
+                if(!generationResult.Success)
+                    throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
+            }
+
+            return new QuestionnaireResponse()
+            {
+                Questionnaire = questionnaireView.Source,
+                QuestionnaireAssembly = resultAssembly
+            };
+        }
+
+        [Route("")]
+        public QuestionnairesResponse Get([FromUri]int pageIndex = 1, [FromUri]int pageSize = 128, [FromUri]string sortBy = "", [FromUri]string filter = "")
+        {
+            var questionnaireListView = this.viewFactory.Load(
+                new QuestionnaireListInputModel
+                {
+
+                    ViewerId = this.userHelper.WebUser.UserId,
+                    IsAdminMode = this.userHelper.WebUser.IsAdmin,
+                    Page = pageIndex,
+                    PageSize = pageSize,
+                    Order = sortBy,
+                    Filter = filter
+                });
+
+            return new QuestionnairesResponse()
+            {
+                TotalCount = questionnaireListView.TotalCount,
+                Items = questionnaireListView.Items.Select(q => new QuestionnaireMetaInfo()
+                {
+                    Id = q.PublicId.FormatGuid(),
+                    Title = q.Title,
+                    LastEntryDate = q.LastEntryDate,
+                    OwnerName = q.Owner,
+                    Email = string.Empty,
+                    Version = this.engineVersion
+                })
+            };
+        }
+
+
+        private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)
+        {
+            if (questionnaireView.CreatedBy == this.userHelper.WebUser.UserId)
+                return true;
+
+            QuestionnaireSharedPersons questionnaireSharedPersons =
+                this.sharedPersonsViewFactory.Load(new QuestionnaireSharedPersonsInputModel() { QuestionnaireId = questionnaireView.PublicKey });
+
+            return (questionnaireSharedPersons != null) && questionnaireSharedPersons.SharedPersons.Any(x => x.Id == this.userHelper.WebUser.UserId);
+        }
+    }
+}

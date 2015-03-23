@@ -1,0 +1,21 @@
+﻿@using WB.UI.Designer.BootstrapSupport
+@model WB.UI.Designer.Models.ResetPasswordConfirmationModel
+
+@{
+    ViewBag.Title = "Password reset";
+    Layout = "~/Views/Shared/Layout.Account.cshtml";
+}
+
+<form id="start-register-step2">
+    <h1>Thank you</h1>
+    <p class="note">
+        To complete the registration process look for an email in your inbox that provides further instructions
+    </p>
+    <div class="form-actions">
+        <a class="btn btn-success btn-lg" href="@Url.Action("Login")">Back to Log in</a>
+    </div>
+</form>
+
+@section Scripts {
+    @Scripts.Render("~/editform")
+}

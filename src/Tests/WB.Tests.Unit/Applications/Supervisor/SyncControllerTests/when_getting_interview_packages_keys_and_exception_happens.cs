@@ -1,7 +1,7 @@
 using System;
 using System.Net;
 using System.Net.Http;
-
+using System.Web.Http;
 using Machine.Specifications;
 
 using Main.Core.Entities.SubEntities;
@@ -38,16 +38,13 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             controller = CreateSyncController(syncManager: syncManagerMock.Object, globalInfo: globalInfo);
         };
 
-        Because of = () =>
-            result = controller.GetInterviewPackageIds(request);
+        Because of = () => exception = Catch.Exception(()=>controller.GetInterviewPackageIds(request));
+
+        It should_return_http_response_exception = () =>
+            exception.ShouldBeOfExactType<HttpResponseException>();
 
         It should_return_response_with_status_NotFound = () =>
-            result.StatusCode.ShouldEqual(HttpStatusCode.NotFound);
-
-        It should_return_response_with_ = () =>
-            result.Content.ReadAsStringAsync().Result.ShouldContain(errorMessage);
-
-        private static HttpResponseMessage result;
+            ((HttpResponseException)exception).Response.StatusCode.ShouldEqual(HttpStatusCode.NotFound);
 
         private static InterviewerSyncController controller;
         private static string androidId = "Android";
@@ -55,6 +52,6 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
         private static Guid deviceId = androidId.ToGuid();
         private static string lastSyncedPackageId = "some package";
         private static SyncItemsMetaContainerRequest request;
-        private static string errorMessage = "error";
+        private static Exception exception;
     }
 }

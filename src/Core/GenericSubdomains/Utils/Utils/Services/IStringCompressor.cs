@@ -10,6 +10,7 @@ namespace WB.Core.GenericSubdomains.Utils.Services
         Stream Compress(string data);
         string CompressString(string s);
         string CompressObject(object s);
+        Stream CompressGZip(object data);
         T DecompressGZip<T>(Stream stream);
         T DecompressDeflate<T>(Stream stream);
         byte[] DecompressGZip(byte[] payload);

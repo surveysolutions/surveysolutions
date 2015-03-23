@@ -1,6 +1,8 @@
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Capi.Views.Login;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
+using WB.Core.GenericSubdomains.Utils.Services;
+using WB.UI.QuestionnaireTester.Implementation.Services;
 
 namespace WB.UI.QuestionnaireTester
 {
@@ -8,7 +10,8 @@ namespace WB.UI.QuestionnaireTester
     {
         public App()
         {
-            Mvx.RegisterSingleton<IMvxAppStart>(new MvxAppStart<LoginViewModel>());
+            Mvx.RegisterSingleton<IApplicationInitializer>(new ApplicationInitializer());
+            Mvx.RegisterSingleton<IMvxAppStart>(new MvxAppStart<SplashViewModel>());
         }
     }
 }
