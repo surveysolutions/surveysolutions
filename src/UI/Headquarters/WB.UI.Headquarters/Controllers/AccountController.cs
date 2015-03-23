@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Code.Security;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -124,8 +125,8 @@ namespace WB.UI.Headquarters.Controllers
                 if (user != null)
                 {
                     var currentUser = GlobalInfo.GetCurrentUser().Name;
-                    var forbiddenRoles = new string[] { UserRoles.Administrator.ToString(), UserRoles.Observer.ToString(), UserRoles.Operator.ToString() };
 
+                    var forbiddenRoles = new string[] { UserRoles.Administrator.ToString(), UserRoles.Observer.ToString(), UserRoles.Operator.ToString() };
                     var userRoles = Roles.GetRolesForUser(user.UserName);
                     bool invalidTargetUser = userRoles.Any(r => forbiddenRoles.Contains(r));
 
@@ -145,6 +146,26 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             return this.RedirectToAction("Index", "Headquarters");
+        }
+
+        [Authorize(Roles = "Headquarter, Supervisor")]
+        public ActionResult ReturnToObserver()
+        {
+            var currentUserName = (User.Identity as CustomIdentity);
+
+            if (currentUserName != null && !string.IsNullOrEmpty(currentUserName.ObserverName))
+            {
+                var alowedRoles = new string[] { UserRoles.Administrator.ToString(), UserRoles.Observer.ToString(), UserRoles.Operator.ToString() };
+                var userRoles = Roles.GetRolesForUser(currentUserName.ObserverName);
+
+                bool invalidTargetUser = userRoles.Any(r => alowedRoles.Contains(r));
+                if (invalidTargetUser)
+                    this.authentication.SignIn(currentUserName.ObserverName, false);
+                
+                return this.RedirectToAction("Index", "Headquarters");
+            }
+
+            return null;
         }
     }
 }
