@@ -1,5 +1,6 @@
 ﻿@using WB.UI.Designer.BootstrapSupport
 @using WB.UI.Designer.BootstrapSupport.HtmlHelpers
+@using WB.UI.Designer.Extensions
 @using WB.UI.Designer.Models
 @using WB.UI.Designer.Utils
 @using WB.UI.Shared.Web.Membership
@@ -19,49 +20,50 @@
 }
 else
 {
+    @Html.Partial("_list_search_form")
     <table id="user-table-header" class="table table-header">
-        <tbody>
+        <thead>
             <tr>
                 <th>
-                    @Html.Partial("_list_search_form")
+                    <a href="@ActionWithOrderField("UserName")">Login</a>
                 </th>
                 <th>
-                    Email
+                    <a href="@ActionWithOrderField("Email")">Email</a>
                 </th>
                 <th>
-                    CREATED DATE
+                    <a href="@ActionWithOrderField("CreationDate")">CREATED DATE</a>
                 </th>
                 <th>
-                    APPROVED?
+                    <a href="@ActionWithOrderField("IsApproved")">APPROVED?</a>
                 </th>
                 <th>
-                    LOCKED?
+                    <a href="@ActionWithOrderField("IsLockedOut")">LOCKED?</a>
                 </th>
                 <th>
                 </th>
             </tr>
-        </tbody>
+        </thead>
     </table>
     <div id="table-content-holder">
-        <table id="user-table-content" class="table">
+        <table id="user-table-content" class="table table-content ">
             <tbody>
                 @foreach (var user in Model)
                 {
                     <tr>
-                        <td>
+                        <td class="search-value">
                             @user.UserName
                         </td>
                         <td class="email">
-                            @user.Email
+                            @FormatEmail(user.Email)
                         </td>
                         <td class="date">
                             @user.CreationDate.FormatDate()
                         </td>
                         <td>
-                            @user.IsApproved
+                            @(user.IsApproved? "Yes": "No")
                         </td>
                         <td>
-                            @user.IsLockedOut
+                            @(user.IsLockedOut ? "Yes" : "No")
                         </td>
                         <td>
                             <div class="btn-group pull-right">
@@ -86,4 +88,27 @@ else
         </table>
         @Html.Pager(Model.PageIndex + 1, Model.TotalPages, x => Url.Action(WB.UI.Designer.GlobalHelper.CurrentAction, WB.UI.Designer.GlobalHelper.CurrentController, new { p = x, sb = ViewBag.SortBy, so = ViewBag.SortOrder, f = ViewBag.Filter }), 2)
     </div>
+}
+
+@functions
+{
+    private string ActionWithOrderField(string sortField)
+    {
+        var sortOrder = (int?)ViewBag.SortOrder;
+        return Url.Action(
+            WB.UI.Designer.GlobalHelper.CurrentAction,
+            new
+            {
+                p = ViewBag.PageIndex,
+                sb = sortField,
+                so = CustomExtensions.InvertBooleableInt(sortOrder, ViewBag.SortBy == sortField),
+                f = ViewBag.Filter
+            });
+    }
+}
+
+@helper  FormatEmail(string email)
+{
+    var emailParts = email.Split(new char[]{'@'}, 2);
+    <strong>@emailParts[0]</strong>@("@" + emailParts[1]);
 }
