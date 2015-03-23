@@ -345,6 +345,7 @@
       <DependentUpon>QuestionnaireController.resx</DependentUpon>
     </Compile>
     <Compile Include="ServiceLocationModule.cs" />
+    <Compile Include="Utils\FormatHelper.cs" />
     <Compile Include="WebServices\IPublicService.cs" />
     <Compile Include="WebServices\PublicService.cs" />
     <Compile Include="WebServices\Questionnaire\DownloadQuestionnaireRequest.cs" />
@@ -372,6 +373,12 @@
     <Content Include="Scripts\viewmodels\pages\controlpanel\readside.js" />
     <Content Include="Scripts\viewmodels\viewmodelbase.js" />
     <Content Include="Scripts\viewmodels\designer.framework.js" />
+    <Content Include="UpdatedDesigner\content\designer-start\bootstrap-override.css">
+      <DependentUpon>bootstrap-override.less</DependentUpon>
+    </Content>
+    <Content Include="UpdatedDesigner\content\designer-start\bootstrap-override.min.css">
+      <DependentUpon>bootstrap-override.css</DependentUpon>
+    </Content>
     <Content Include="UpdatedDesigner\content\designer-start\designer-list.min.css">
       <DependentUpon>designer-list.css</DependentUpon>
     </Content>
@@ -1251,8 +1258,10 @@
     <Content Include="UpdatedDesigner\content\designer-start\designer-list.css.map">
       <DependentUpon>designer-list.css</DependentUpon>
     </Content>
-    <Content Include="Views\Shared\DateTime.cshtml" />
     <Content Include="Views\Shared\_list_search_form.cshtml" />
+    <Content Include="UpdatedDesigner\content\designer-start\bootstrap-override.css.map">
+      <DependentUpon>bootstrap-override.css</DependentUpon>
+    </Content>
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -1270,7 +1279,6 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Account\ConfirmationFailure.cshtml" />
-    <Content Include="Views\Shared\Index.cshtml" />
     <Content Include="Views\Shared\Delete.cshtml" />
     <Content Include="Views\Questionnaire\Public.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />
@@ -1295,7 +1303,6 @@
     <Content Include="Views\Account\ResetPasswordConfirmationFailure.cshtml" />
     <Content Include="Views\Shared\DeleteModalDialog.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Admin_QiestionnaireListView.cshtml" />
-    <Content Include="Views\Shared\ListView.cshtml" />
     <Content Include="Views\Error\Forbidden.cshtml" />
     <Content Include="Views\Synchronization\ViewTestUploadFile.cshtml" />
     <Content Include="Views\SystemMailer\_Layout.cshtml" />

@@ -115,7 +115,7 @@ input.form-control {
   /* IE6-9 */
 }
 .nav-tabs li {
-  margin-top: 38px;
+  margin-top: 42px;
 }
 .nav-tabs li:first-child {
   margin-left: 400px;
@@ -227,7 +227,7 @@ body {
 }
 .container-wb-list .header-wb-list header nav {
   float: right;
-  margin: 18px;
+  margin: 10px 18px 0 0;
   position: absolute;
   top: 0;
   right: 0;
@@ -239,42 +239,6 @@ body {
   right: 0;
   top: 76px;
   z-index: 1;
-}
-.container-wb-list section#designer-list table#table-header {
-  height: 60px;
-  border-left: 13px solid #bcc3c8;
-  border-bottom: 2px solid #b1b5b8;
-  margin: 0;
-  font-family: "Trebuchet MS", Helvetica, sans-serif;
-  font-size: 12px;
-  font-weight: bold;
-  text-transform: uppercase;
-  color: #b2b2b2;
-}
-.container-wb-list section#designer-list table#table-header tr th {
-  padding-top: 20px;
-}
-.container-wb-list section#designer-list table#table-header tr th:first-child {
-  background: url("../i/loupe.png") 25px 18px no-repeat;
-  padding-left: 53px;
-}
-.container-wb-list section#designer-list table#table-header tr th:nth-child(2) {
-  width: 12%;
-}
-.container-wb-list section#designer-list table#table-header tr th:nth-child(3) {
-  width: 10%;
-}
-.container-wb-list section#designer-list table#table-header tr th:nth-child(4) {
-  width: 17%;
-}
-.container-wb-list section#designer-list table#table-header tr th:nth-child(5) {
-  width: 8%;
-}
-.container-wb-list section#designer-list table#table-header tr th a#title-search {
-  color: #bcc3c8;
-}
-.container-wb-list section#designer-list table#table-header tr th a:hover {
-  text-decoration: none;
 }
 .container-wb-list section#designer-list #table-content-holder {
   position: absolute;
@@ -316,96 +280,6 @@ body {
 .container-wb-list section#designer-list #table-content-holder div#table-message a.cross:hover {
   background-position: 0 -40px;
 }
-.container-wb-list section#designer-list #table-content-holder table#table-content {
-  cursor: default;
-}
-.container-wb-list section#designer-list #table-content-holder table#table-content tr td:first-child {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 18px;
-  line-height: 24px;
-  color: #3f3f3f;
-  border-left: 13px solid #dbdfe2;
-}
-.container-wb-list section#designer-list #table-content-holder table#table-content tr td:first-child span.summary {
-  font-family: "Lucida Console", Monaco, monospace;
-  font-size: 14px;
-  color: #b9c3ca;
-}
-.container-wb-list section#designer-list #table-content-holder table#table-content tr td:nth-child(2) {
-  font-family: Georgia, serif;
-  font-size: 14px;
-  font-style: italic;
-  color: #5d6468;
-  width: 12%;
-}
-.container-wb-list section#designer-list #table-content-holder table#table-content tr td:nth-child(3) {
-  font-family: "Trebuchet MS", Helvetica, sans-serif;
-  font-size: 12px;
-  font-weight: bold;
-  color: #b2b2b2;
-  text-transform: uppercase;
-  width: 10%;
-}
-.container-wb-list section#designer-list #table-content-holder table#table-content tr td:nth-child(4) {
-  font-family: Georgia, serif;
-  font-size: 14px;
-  font-style: italic;
-  color: #cbcbcb;
-  width: 17%;
-}
-.container-wb-list section#designer-list #table-content-holder table#table-content tr td:nth-child(4) strong {
-  color: #5d6468;
-  font-weight: normal;
-}
-.container-wb-list section#designer-list #table-content-holder table#table-content tr td:nth-child(5) {
-  font-family: Georgia, serif;
-  font-size: 14px;
-  font-style: italic;
-  color: #e5e5e5;
-  width: 8%;
-}
-.container-wb-list section#designer-list #table-content-holder table#table-content tr td:nth-child(5) a {
-  color: #2a81cb;
-}
-.container-wb-list section#designer-list #table-content-holder table#table-content tr:hover {
-  background-color: #eff4f8;
-}
-.container-wb-list section#designer-list #table-content-holder table#table-content tr:hover td:first-child {
-  color: #1c76c3;
-}
-.container-wb-list section#designer-list #table-content-holder table#table-content tr:hover td:first-child span.summary {
-  color: #788792;
-}
-.container-wb-list section#designer-list #table-content-holder table#table-content tr:hover td:nth-child(3) {
-  color: #444655;
-}
-.container-wb-list section#designer-list #table-content-holder table#table-content tr:hover td:nth-child(4) {
-  color: #5d6468;
-}
-.container-wb-list section#designer-list #table-content-holder table#table-content tr:hover td:nth-child(5) {
-  color: #aebac5;
-}
-.container-wb-list section#designer-list #table-content-holder table#table-content tr:hover td:nth-child(5) a {
-  text-decoration: none;
-}
-.container-wb-list section#designer-list #table-content-holder table#table-content tr.active {
-  background-color: #eff4f8;
-}
-.container-wb-list section#designer-list #table-content-holder table#table-content tr.active td:first-child span.summary {
-  color: #b9c3ca;
-}
-.container-wb-list section#designer-list #table-content-holder table#table-content tr.active td:first-child:hover {
-  color: #3f3f3f;
-}
-.container-wb-list section#designer-list #table-content-holder table#table-content tr.active td:nth-child(3) {
-  color: #444655;
-}
-.container-wb-list section#designer-list #table-content-holder table#table-content tr.active td:nth-child(4) {
-  color: #5d6468;
-}
-.container-wb-list section#designer-list #table-content-holder table#table-content tr:last-child {
-  border-bottom: 1px solid #e2e3e4;
-}
 .container-wb-list section#designer-list #table-content-holder ul.pagination {
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   font-size: 14px;
@@ -430,6 +304,167 @@ body {
 .container-wb-list section#designer-list #table-content-holder ul.pager a {
   color: #2fc507;
 }
+table {
+  cursor: default;
+}
+table tr td.date {
+  font-family: Georgia, serif;
+  font-size: 14px;
+  font-style: italic;
+  color: #5d6468;
+}
+table tr td.email {
+  font-family: Georgia, serif;
+  font-size: 14px;
+  font-style: italic;
+  color: #cbcbcb;
+}
+table tr td.email strong {
+  color: #5d6468;
+  font-weight: normal;
+}
+table.table-header {
+  height: 60px;
+  border-left: 13px solid #bcc3c8;
+  border-bottom: 2px solid #b1b5b8;
+  margin: 0;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #b2b2b2;
+}
+table.table-header tr th {
+  padding-top: 20px;
+}
+table.table-header tr th:first-child {
+  background: url("../i/loupe.png") 25px 18px no-repeat;
+  padding-left: 53px;
+}
+table.table-header tr th a#title-search {
+  color: #bcc3c8;
+}
+table.table-header tr th a:hover {
+  text-decoration: none;
+}
+table#questionnaire-table-content tr td:first-child {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  line-height: 24px;
+  color: #3f3f3f;
+  border-left: 13px solid #dbdfe2;
+}
+table#questionnaire-table-content tr td:first-child span.summary {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  color: #b9c3ca;
+}
+table#questionnaire-table-content tr td:nth-child(5) {
+  font-family: Georgia, serif;
+  font-size: 14px;
+  font-style: italic;
+  color: #e5e5e5;
+}
+table#questionnaire-table-content tr td:nth-child(5) a {
+  color: #2a81cb;
+}
+table#questionnaire-table-content tr:hover {
+  background-color: #eff4f8;
+}
+table#questionnaire-table-content tr:hover td:first-child {
+  color: #1c76c3;
+}
+table#questionnaire-table-content tr:hover td:first-child span.summary {
+  color: #788792;
+}
+table#questionnaire-table-content tr:hover td:nth-child(4) {
+  color: #5d6468;
+}
+table#questionnaire-table-content tr:hover td:nth-child(5) {
+  color: #aebac5;
+}
+table#questionnaire-table-content tr:hover td:nth-child(5) a {
+  text-decoration: none;
+}
+table#questionnaire-table-content tr.active {
+  background-color: #eff4f8;
+}
+table#questionnaire-table-content tr.active td:first-child span.summary {
+  color: #b9c3ca;
+}
+table#questionnaire-table-content tr.active td:first-child:hover {
+  color: #3f3f3f;
+}
+table#questionnaire-table-content tr.active td:nth-child(4) {
+  color: #5d6468;
+}
+table#questionnaire-table-content tr:last-child {
+  border-bottom: 1px solid #e2e3e4;
+}
+table#questionnaire-table-header tr td:nth-child(2),
+table#questionnaire-table-content tr td:nth-child(2),
+table#questionnaire-table-header tr th:nth-child(2),
+table#questionnaire-table-content tr th:nth-child(2) {
+  width: 11%;
+}
+table#questionnaire-table-header tr td:nth-child(3),
+table#questionnaire-table-content tr td:nth-child(3),
+table#questionnaire-table-header tr th:nth-child(3),
+table#questionnaire-table-content tr th:nth-child(3) {
+  width: 11%;
+}
+table#questionnaire-table-header tr td:nth-child(4),
+table#questionnaire-table-content tr td:nth-child(4),
+table#questionnaire-table-header tr th:nth-child(4),
+table#questionnaire-table-content tr th:nth-child(4) {
+  width: 17%;
+}
+table#questionnaire-table-header tr td:nth-child(5),
+table#questionnaire-table-content tr td:nth-child(5),
+table#questionnaire-table-header tr th:nth-child(5),
+table#questionnaire-table-content tr th:nth-child(5) {
+  width: 8%;
+}
+table#user-table-header tr td:first-child,
+table#user-table-content tr td:first-child,
+table#user-table-header tr th:first-child,
+table#user-table-content tr th:first-child {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  line-height: 24px;
+  color: #3f3f3f;
+  border-left: 13px solid #dbdfe2;
+}
+table#user-table-header tr td:nth-child(2),
+table#user-table-content tr td:nth-child(2),
+table#user-table-header tr th:nth-child(2),
+table#user-table-content tr th:nth-child(2) {
+  width: 30%;
+}
+table#user-table-header tr td:nth-child(3),
+table#user-table-content tr td:nth-child(3),
+table#user-table-header tr th:nth-child(3),
+table#user-table-content tr th:nth-child(3) {
+  width: 11%;
+}
+table#user-table-header tr td:nth-child(4),
+table#user-table-content tr td:nth-child(4),
+table#user-table-header tr th:nth-child(4),
+table#user-table-content tr th:nth-child(4) {
+  width: 8%;
+}
+table#user-table-header tr td:nth-child(5),
+table#user-table-content tr td:nth-child(5),
+table#user-table-header tr th:nth-child(5),
+table#user-table-content tr th:nth-child(5) {
+  width: 8%;
+}
+table#user-table-header tr td:last-child,
+table#user-table-content tr td:last-child,
+table#user-table-header tr th:last-child,
+table#user-table-content tr th:last-child {
+  width: 8%;
+}
 #frmSearch {
   top: -5px;
   position: relative;
@@ -444,5 +479,9 @@ body {
 }
 #frmSearch #txtFilter {
   padding: 6px;
+}
+.nav.nav-tabs > li > a {
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 /*# sourceMappingURL=designer-list.css.map */
