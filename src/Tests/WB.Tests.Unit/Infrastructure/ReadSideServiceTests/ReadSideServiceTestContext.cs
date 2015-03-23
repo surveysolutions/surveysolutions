@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
     [Subject(typeof(ReadSideService))]
     internal class ReadSideServiceTestContext
     {
-        protected static ReadSideService CreateRavenReadSideService(IStreamableEventStore streamableEventStore = null,
+        protected static ReadSideService CreateReadSideService(IStreamableEventStore streamableEventStore = null,
             IEventDispatcher eventDispatcher = null,
             IReadSideCleaner readSideCleaner = null)
         {
@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
                 streamableEventStore ?? Mock.Of<IStreamableEventStore>(),
                 eventDispatcher ?? Mock.Of<IEventDispatcher>(), Mock.Of<ILogger>(),
                 readSideCleaner ?? Mock.Of<IReadSideCleaner>(),
-                Mock.Of<ITransactionManagerProviderManager>());
+                Mock.Of<ITransactionManagerProviderManager>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>()));
         }
     }
 }

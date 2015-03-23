@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
             streamableEventStoreMock=new Mock<IStreamableEventStore>();
             streamableEventStoreMock.Setup(x => x.GetAllEvents())
                 .Returns(new[] { committedEvent });
-            ravenReadSideService = CreateRavenReadSideService(eventDispatcher: eventDispatcherMock.Object, streamableEventStore: streamableEventStoreMock.Object);
+            ravenReadSideService = CreateReadSideService(eventDispatcher: eventDispatcherMock.Object, streamableEventStore: streamableEventStoreMock.Object);
         };
 
         Because of = () => WaitRebuildReadsideFinish();
