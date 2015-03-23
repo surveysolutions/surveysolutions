@@ -22,7 +22,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes
                                     UserName = doc.UserName,
                                     IsDeleted = doc.IsDeleted,
                                     CreationDate = doc.CreationDate,
-                                    Email = doc.Email
+                                    Email = doc.Email,
+                                    IsLockedByHQ = doc.IsLockedByHQ,
+                                    IsLockedBySupervisor = doc.IsLockedBySupervisor
                                 };
 
             Sort(x => x.UserName, SortOptions.StringVal);
@@ -46,5 +48,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes
         public bool IsDeleted { get; set; }
         public DateTime CreationDate { get; set; }
         public string Email { get; set; }
+
+        public bool IsLockedBySupervisor { get; set; }
+        public bool IsLockedByHQ { get; set; }
     }
 }

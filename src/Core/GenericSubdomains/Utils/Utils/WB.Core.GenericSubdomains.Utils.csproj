@@ -46,7 +46,6 @@
     <Compile Include="Implementation\RestAttachment.cs" />
     <Compile Include="Implementation\RestCredentials.cs" />
     <Compile Include="ObjectExtensions.cs" />
-    <Compile Include="RestErrorDescription.cs" />
     <Compile Include="Implementation\RestException.cs" />
     <Compile Include="SyncStatusCode.cs" />
     <Compile Include="Implementation\TopologicalSorter\StronglyConnectedComponent.cs" />
@@ -74,10 +73,13 @@
     <Compile Include="OrderDirection.cs" />
     <Compile Include="OrderRequestItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IApplicationInitializer.cs" />
+    <Compile Include="Services\IIdentity.cs" />
     <Compile Include="Services\IInfoFileSupplierRegistry.cs" />
     <Compile Include="Services\IJsonUtils.cs" />
     <Compile Include="Services\ILogger.cs" />
     <Compile Include="Services\INetworkService.cs" />
+    <Compile Include="Services\IPrincipal.cs" />
     <Compile Include="Services\IRestService.cs" />
     <Compile Include="Services\IRestServiceSettings.cs" />
     <Compile Include="Services\IStringCompressor.cs" />

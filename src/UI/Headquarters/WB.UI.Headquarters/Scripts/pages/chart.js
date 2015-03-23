@@ -48,15 +48,24 @@
     };
 
     self.drawChart = function () {
-        if (self.Stats.Lines.length === 0 ||self.Stats.Lines[0].length === 0)
-            return;
+        var interviewChart = $('#interviewChart');
+        var NoResultsFound = $('#NoResultsFound');
 
-        $('#interviewChart').empty();
+        interviewChart.empty();
+
 
         if (self.Plot != null) {
             self.Plot.destroy();
         }
 
+        if (self.Stats.Lines.length === 0 || self.Stats.Lines[0].length === 0) {
+            interviewChart.hide();
+            NoResultsFound.show();
+            return;
+        }
+
+        interviewChart.show();
+        NoResultsFound.hide();
         self.Plot = $.jqplot('interviewChart',
             self.Stats.Lines,
             {
@@ -135,7 +144,7 @@
         
         var legendLabels = $('.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle');
         var countItemsInLegend = legendLabels.length;
-        legendLabels.width(($('#interviewChart').outerWidth() - countItemsInLegend * 20) / countItemsInLegend - 1);
+        legendLabels.width((interviewChart.outerWidth() - countItemsInLegend * 20) / countItemsInLegend - 1);
     };
 
     self.getCustomInterval = function(maxValue) {

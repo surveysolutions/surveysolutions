@@ -1,7 +1,11 @@
+using System;
+
 namespace WB.Core.GenericSubdomains.Utils.Services
 {
     public interface IRestServiceSettings
     {
-        string BaseAddress();
+        string Endpoint { get; set; }
+        TimeSpan Timeout { get; set; }
+        int BufferSize { get; set; }
     }
 }

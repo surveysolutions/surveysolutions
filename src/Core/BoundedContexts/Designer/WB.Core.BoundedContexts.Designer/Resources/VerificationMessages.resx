@@ -213,17 +213,8 @@
   <data name="WB0040_TextListQuestionCannotBeFilledBySupervisor" xml:space="preserve">
     <value>List  question cannot be filled by supervisor.</value>
   </data>
-  <data name="WB0041_TextListQuestionCannotCustomValidation" xml:space="preserve">
-    <value>List question cannot have validation expression.</value>
-  </data>
   <data name="WB0042_TextListQuestionMaxAnswerInRange1And40" xml:space="preserve">
     <value>Max answer count must be in range [1, 40].</value>
-  </data>
-  <data name="WB0043_TextListQuestionCannotBeUsedInValidationExpressions" xml:space="preserve">
-    <value>List question cannot be used in validation expression.</value>
-  </data>
-  <data name="WB0044_TextListQuestionCannotBeUsedInEnablementConditions" xml:space="preserve">
-    <value>List question cannot be used in condition expression.</value>
   </data>
   <data name="WB0045_QuestionHasOptionsWithEmptyValue" xml:space="preserve">
     <value>Question has option(s) with empty value.</value>
@@ -234,23 +225,11 @@
   <data name="WB0051_GroupsCustomConditionExpressionReferencesChildQuestion" xml:space="preserve">
     <value>Groups cannot have condition expression referencing child question.</value>
   </data>
-  <data name="WB0047_QRBarcodeQuestionShouldNotHaveValidationExpression" xml:space="preserve">
-    <value>QR Barcode question cannot have a validation expression.</value>
-  </data>
-  <data name="WB0048_QRBarcodeQuestionShouldNotHaveValidationMessage" xml:space="preserve">
-    <value>QR Barcode question cannot have a validation message.</value>
-  </data>
   <data name="WB0049_QRBarcodeQuestionIsSupervisorQuestion" xml:space="preserve">
     <value>QR Barcode question cannot be filled by supervisor.</value>
   </data>
   <data name="WB0050_QRBarcodeQuestionIsPreFilledQuestion" xml:space="preserve">
     <value>QR Barcode question cannot be prefilled.</value>
-  </data>
-  <data name="WB0052_QRBarcodeQuestionsCannotBeUsedInValidationExpression" xml:space="preserve">
-    <value>QR Barcode questions cannot be used in validation expression.</value>
-  </data>
-  <data name="WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition" xml:space="preserve">
-    <value>QR Barcode questions cannot be used in condition expression.</value>
   </data>
   <data name="WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster" xml:space="preserve">
     <value>Roster should have deeper or the same roster level as it's roster size question.</value>
@@ -387,7 +366,7 @@
   <data name="WB0097_QuestionnaireTitleHasInvalidCharacters" xml:space="preserve">
     <value>Questionnaire title contains characters that are not allowed. Only letters, numbers, space and _ are allowed.</value>
   </data>
-  <data name="WB0098_QuestionnaireSizeLimit" xml:space="preserve">
-    <value>Questionnaire is too big.</value>
+  <data name="WB0098_QuestionnaireHasSizeMoreThan5MB" xml:space="preserve">
+    <value>Size of questionnaire is approximately {0:0.##}MB and is too big to work correctly with Survey Solutions. Try to reduce amount of data until it will be at least less than 5MB.</value>
   </data>
 </root>

@@ -1,0 +1,44 @@
+﻿@using System.Web.Optimization
+@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserEditModel
+
+@{
+    ViewBag.Title = string.Format("Edit: {0}", Model.UserName);
+}
+
+@section scripts
+{
+    @Scripts.Render("~/validate")
+    <script type="text/javascript">
+        $('#umbrella').hide();
+    </script>
+}
+@Html.Partial("_alerts")
+
+<div class="page-header">
+    <h2>
+        Edit: &nbsp;
+        <small>
+            @Model.UserName
+        </small>
+    </h2>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <fieldset class="form-horizontal">
+                @{
+            this.Html.RenderPartial("UserEditForm");
+                }
+                <div class="form-group">
+                    <div class="col-sm-offset-2">
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
+                    </div>
+                </div>
+            </fieldset>
+        }
+    </div>
+</div>

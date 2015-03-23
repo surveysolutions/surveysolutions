@@ -15,7 +15,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
-    [Authorize(Roles = "Headquarter, Supervisor")]
+    [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public class InterviewController : BaseController
     {
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
@@ -66,7 +66,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
 
             bool isAccessAllowed =
-                this.GlobalInfo.IsHeadquarter ||
+                this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator ||
                 (this.GlobalInfo.IsSurepvisor && this.GlobalInfo.GetCurrentUser().Id == interviewSummary.TeamLeadId);
 
             if (!isAccessAllowed)
@@ -83,57 +83,32 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     filter: filter, currentGroupRosterVector: this.ParseRosterVector(rosterVector)));
         }
 
-        public ActionResult InterviewDetails(Guid id, string template, Guid? group, Guid? question, Guid? propagationKey)
-        {
-            this.ViewBag.ActivePage = MenuItem.Docs;
-
-            ChangeStatusView interviewInfo = this.changeStatusFactory.Load(new ChangeStatusInputModel() {InterviewId = id});
-            InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
-            
-            if (interviewInfo == null || interviewSummary == null)
-                return HttpNotFound();
-
-            bool isAccessAllowed = this.GlobalInfo.IsHeadquarter ||
-                                   (this.GlobalInfo.IsSurepvisor && this.GlobalInfo.GetCurrentUser().Id == interviewSummary.TeamLeadId);
-
-            if (!isAccessAllowed)
-                return HttpNotFound();
-
-            return this.View(new InterviewModel()
-            {
-                InterviewId = id,
-                CurrentGroupId = group,
-                CurrentPropagationKeyId = propagationKey,
-                InterviewStatus = interviewInfo.Status
-            });
-        }
-
         public ActionResult InterviewHistory(Guid id)
         {
             return this.View(interviewHistoryViewFactory.Load(id));
         }
 
-        [Authorize(Roles = "Headquarter, Supervisor")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public ActionResult Revalidate()
         {
             return this.View(new RevalidateModel());
         }
 
-        [Authorize(Roles = "Headquarter, Supervisor")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         [HttpPost]
         public ActionResult Revalidate(RevalidateModel input)
         {
             return this.RedirectToAction("ConfirmRevalidation", new { id = input.InterviewId });
         }
 
-        [Authorize(Roles = "Headquarter, Supervisor")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public ActionResult ConfirmRevalidation(Guid id)
         {
             var model = this.revalidateInterviewViewFactory.Load(new InterviewInfoForRevalidationInputModel { InterviewId = id });
             return this.View(model);
         }
 
-        [Authorize(Roles = "Headquarter, Supervisor")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         [HttpPost]
         public ActionResult ConfirmRevalidation(RevalidateModel input)
         {

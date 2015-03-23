@@ -198,6 +198,7 @@
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplateExt.cs" />
     <Compile Include="Implementation\Services\KeywordsProvider.cs" />
+    <Compile Include="Implementation\Services\QuestionnaireExportService .cs" />
     <Compile Include="Implementation\Services\QuestionnaireVerifier.cs" />
     <Compile Include="Implementation\Services\WbHtmlSanitizer.cs" />
     <Compile Include="DesignerBoundedContextModule.cs" />
@@ -294,8 +295,8 @@
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplateExt.cs" />
     <Compile Include="Services\IKeywordsProvider .cs" />
+    <Compile Include="Services\IQuestionnaireExportService.cs" />
     <Compile Include="Services\IQuestionnaireVerifier.cs" />
-    <Compile Include="Implementation\Services\QuestionnaireExportService .cs" />
     <Compile Include="Implementation\Services\QuestionnaireDocumentUpgrader.cs" />
     <Compile Include="Implementation\Services\QuestionnaireVersioner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -310,7 +311,6 @@
       <DependentUpon>ExceptionMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\IExpressionReplacer.cs" />
-    <Compile Include="Services\IQuestionnaireExportService .cs" />
     <Compile Include="Services\IQuestionnaireDocumentUpgrader.cs" />
     <Compile Include="Services\IQuestionnaireVersioner.cs" />
     <Compile Include="Services\ExpressionLocationItemType.cs" />
@@ -380,6 +380,7 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireEntityType.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\ChapterInfoViewFactory.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoViewDenormalizer.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionnaireItemLink.cs" />
     <Compile Include="Views\Questionnaire\Edit\RosterType.cs" />
     <Compile Include="Views\Questionnaire\Indexes\DesignerReportQuestionnaireListViewItem.cs">
       <SubType>Code</SubType>

@@ -17,7 +17,8 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
             {
                 TypeNameHandling = TypeNameHandling.Objects,
                 NullValueHandling = NullValueHandling.Ignore,
-                FloatParseHandling = FloatParseHandling.Decimal
+                FloatParseHandling = FloatParseHandling.Decimal,
+                Formatting = Formatting.None
             };
 
             this.allTypesSerializeSettings = new JsonSerializerSettings
@@ -80,6 +81,24 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
             using (var reader = new StreamReader(input))
             {
                 return jsonSerializer.Deserialize<T>(new JsonTextReader(reader));
+            }
+        }
+
+        public object DeserializeFromStream(Stream stream, Type type)
+        {
+            using (var sr = new StreamReader(stream))
+            using (var jsonTextReader = new JsonTextReader(sr))
+            {
+                return jsonSerializer.Deserialize(jsonTextReader, type);
+            }
+        }
+
+        public void SerializeToStream(object value, Type type, Stream stream)
+        {
+            using (var writer = new StreamWriter(stream))
+            using (var jsonWriter = new JsonTextWriter(writer))
+            {
+                jsonSerializer.Serialize(jsonWriter, value, type);
             }
         }
     }

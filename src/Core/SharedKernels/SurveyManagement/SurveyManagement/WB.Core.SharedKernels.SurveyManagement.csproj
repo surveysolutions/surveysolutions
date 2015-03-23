@@ -118,6 +118,9 @@
     <Compile Include="EventHandler\InterviewSummaryEventHandlerFunctional.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\DeleteQuestionnaireService.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\InterviewsToDeleteFactory.cs" />
+    <Compile Include="QuartzIntegration\QuartzNinjectModule.cs" />
+    <Compile Include="QuartzIntegration\NinjectSchedulerFactory.cs" />
+    <Compile Include="QuartzIntegration\NinjectJobFactory.cs" />
     <Compile Include="Services\DeleteQuestionnaireTemplate\IDeleteQuestionnaireService.cs" />
     <Compile Include="Services\DeleteQuestionnaireTemplate\IInterviewsToDeleteFactory.cs" />
     <Compile Include="Services\IOrderableSyncPackageWriter.cs" />
@@ -439,9 +442,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="job_scheduling_data_2_0.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

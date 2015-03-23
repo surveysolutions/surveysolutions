@@ -140,7 +140,6 @@
     <Compile Include="Controls\ScreenItems\AnswerOnQuestionCommandService.cs" />
     <Compile Include="Controls\ScreenItems\AutoPropagateQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\CascadingComboboxQuestionView.cs" />
-    <Compile Include="Controls\ScreenItems\IAnswerProgressIndicator.cs" />
     <Compile Include="Controls\ScreenItems\AnswerProgressIndicator.cs" />
     <Compile Include="Controls\ScreenItems\FilteredComboboxQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\PictureQuestionView.cs" />

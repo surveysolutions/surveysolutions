@@ -20,10 +20,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             eventContext = new EventContext();
         };
 
-        Because of = () => questionnaire.AddGroup(groupId: groupId, responsibleId: responsibleId, variableName: null, title: title, condition: condition,
-                    description: description, parentGroupId: parentRosterId, isRoster: false,
-                    rosterSizeSource: RosterSizeSourceType.Question, rosterSizeQuestionId: null, rosterFixedTitles: null,
-                    rosterTitleQuestionId: null);
+        Because of = () => questionnaire.AddGroupAndMoveIfNeeded(groupId: groupId, responsibleId: responsibleId, title: title, variableName: null, rosterSizeQuestionId: null, description: description,
+                    condition: condition, parentGroupId: parentRosterId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, index: index);
 
         Cleanup stuff = () =>
         {
@@ -58,6 +56,21 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             eventContext.GetSingleEvent<NewGroupAdded>()
                 .ResponsibleId.ShouldEqual(responsibleId);
 
+        It should_raise_QuestionnaireItemMoved_event = () =>
+            eventContext.ShouldContainEvent<QuestionnaireItemMoved>();
+
+        It should_raise_QuestionnaireItemMoved_event_with_GroupKey_specified = () =>
+           eventContext.GetSingleEvent<QuestionnaireItemMoved>().GroupKey.ShouldEqual(parentRosterId);
+
+        It should_raise_QuestionnaireItemMoved_event_with_PublicKey_specified = () =>
+            eventContext.GetSingleEvent<QuestionnaireItemMoved>().PublicKey.ShouldEqual(groupId);
+
+        It should_raise_QuestionnaireItemMoved_event_with_TargetIndex_specified = () =>
+            eventContext.GetSingleEvent<QuestionnaireItemMoved>().TargetIndex.ShouldEqual(index);
+
+        It should_raise_QuestionnaireItemMoved_event_with_ResponsibleId_specified = () =>
+           eventContext.GetSingleEvent<QuestionnaireItemMoved>().ResponsibleId.ShouldEqual(responsibleId);
+
         private static Questionnaire questionnaire;
         private static Guid groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");
@@ -67,5 +80,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static string title = "title";
         private static string description = "description";
         private static EventContext eventContext;
+        private static int index = 5;
     }
 }

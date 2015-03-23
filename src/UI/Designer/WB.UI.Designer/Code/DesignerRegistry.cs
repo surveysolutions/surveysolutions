@@ -21,7 +21,6 @@ namespace WB.UI.Designer.Code
             this.Bind<IQuestionnaireHelper>().To<QuestionnaireHelper>();
             this.Bind<IVerificationErrorsMapper>().To<VerificationErrorsMapper>();
             this.Bind<ISystemMailer>().To<SystemMailer>();
-            this.Bind<IPublicService>().To<PublicService>();
             this.Bind<IDynamicCompiler>().To<RoslynCompiler>();
             this.Bind<ICodeGenerator>().To<CodeGenerator>();
             this.Bind<IExpressionReplacer>().To<ExpressionReplacer>();
@@ -29,6 +28,7 @@ namespace WB.UI.Designer.Code
             this.Bind<IChapterInfoViewFactory>().To<ChapterInfoViewFactory>();
             this.Bind<IQuestionnaireInfoFactory>().To<QuestionnaireInfoFactory>();
             this.Bind<IQuestionnaireInfoViewFactory>().To<QuestionnaireInfoViewFactory>();
+            this.Bind<IPublicService>().To<PublicService>();
         }
     }
 }

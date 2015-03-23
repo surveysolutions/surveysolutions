@@ -1,19 +1,11 @@
 @using WB.UI.Designer.BootstrapSupport
-@if (TempData.ContainsKey(Alerts.ATTENTION))
+@foreach(string key in Alerts.ALL)
 {
-    <div class="alert alert-block">
-        <a class="close" data-dismiss="alert" href="#">x</a>
-        <h4 class="alert-heading">Attention!</h4>
-        @Html.Raw(@TempData[Alerts.ATTENTION])
-    </div>
+    if (TempData.ContainsKey(key))
+        {
+            <div class="alert alert-@key">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                @Html.Raw(@TempData[key])
+            </div>
+        }
 }
-@foreach(string key in Alerts.ALL.Except(new[] {Alerts.ATTENTION}))
-    {
-        if (TempData.ContainsKey(key))
-         {
-             <div class="alert alert-@key">
-                 <button type="button" class="close" data-dismiss="alert">x</button>
-                 @Html.Raw(@TempData[key])
-             </div>
-         }
-    }
