@@ -1,0 +1,9 @@
+﻿<form id="frmSearch" class="form-inline">
+    <div class="form-group">
+        <div class="input-wrapper">
+            <input id="txtFilter" type="text" class="form-control" name="f" value="@ViewBag.Filter" />
+            <button type="button" class="btn btn-default" onclick=" $('#txtFilter').val(''); $('#frmSearch').submit(); ">&times;</button>
+        </div>
+    </div>
+    <a class="btn btn-default" onclick=" $('#frmSearch').submit() ">Search</a>
+</form>
