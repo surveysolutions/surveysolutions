@@ -26,6 +26,7 @@
             };
 
             $scope.highlightedId = null;
+            $scope.isSearchInFocus = false;
 
             $scope.search = { searchText: '' };
             $scope.filtersBoxMode = filtersBlockModes.default;
@@ -58,8 +59,8 @@
                 combo: 'ctrl+f',
                 description: 'Search for groups and questions in chapter',
                 callback: function (event) {
-                    $scope.showSearch();
                     event.preventDefault();
+                    $scope.showSearch();
                 }
             });
 
@@ -69,11 +70,13 @@
                 description: 'Open item in editor',
                 callback: function (event) {
                     event.preventDefault();
-                    if ($scope.filtersBoxMode == filtersBlockModes.default) {
+                    if ($scope.isSearchInFocus) {
+                        utilityService.focusout('focusSearch');
+                        $scope.isSearchInFocus = false;
+                    } else {
                         if (_.isNull($scope.highlightedId)) return;
                         $state.go('questionnaire.chapter.' + getItemType(getCurrentItem()), { chapterId: $state.params.chapterId, itemId: $scope.highlightedId });
-                    } else {
-                        utilityService.focusout('focusSearch');
+                        
                     }
                 }
             });
@@ -81,11 +84,13 @@
             $scope.showSearch = function () {
                 $scope.filtersBoxMode = filtersBlockModes.search;
                 utilityService.focus('focusSearch');
+                $scope.isSearchInFocus = true;
             };
 
             $scope.hideSearch = function () {
                 $scope.filtersBoxMode = filtersBlockModes.default;
                 $scope.search.searchText = '';
+                $scope.isSearchInFocus = false;
             };
 
             $scope.searchItem = function (item) {
