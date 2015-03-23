@@ -1,4 +1,4 @@
-.thumbnail > img,
+﻿.thumbnail > img,
 .thumbnail a > img,
 .carousel-inner > .item > img,
 .carousel-inner > .item > a > img {
@@ -9,7 +9,7 @@
 .btn-group-lg > .btn {
   padding: 10px 16px;
   font-size: 18px;
-  line-height: 1.3333333;
+  line-height: 1.33;
   border-radius: 6px;
 }
 .btn-group-sm > .btn {
@@ -139,19 +139,6 @@ input.form-control {
   color: #444655;
   border-color: #e2e3e4;
 }
-.dropdown-menu {
-  box-shadow: none;
-}
-.dropdown-menu li a {
-  font-family: "Trebuchet MS", Helvetica, sans-serif;
-  font-size: 12px;
-  font-weight: bold;
-  text-transform: uppercase;
-  cursor: default;
-}
-.dropdown-menu li:hover {
-  color: ;
-}
 @font-face {
   font-family: 'Roboto-Light';
   font-style: normal;
@@ -197,13 +184,6 @@ input.wb-radio:disabled ~ label span {
 input.wb-radio:checked:disabled ~ label span {
   background-position: -270px 0;
 }
-#_markup-switcher {
-  display: inline-block;
-  position: absolute;
-  bottom: 50px;
-  right: 25px;
-  font-size: 12px;
-}
 html,
 body {
   height: 100%;
@@ -214,14 +194,23 @@ body {
 .underline {
   text-decoration: underline;
 }
-header {
-  /* width: 100%;
-  height: 76px;
-  position: fixed;
+.container-wb-list {
+  position: absolute;
+  left: 0;
+  right: 0;
   top: 0;
-  left: 0;*/
+  height: 100%;
+  overflow: hidden;
 }
-header .questionnaire-logo {
+.container-wb-list .header-wb-list {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 76px;
+  z-index: 2;
+}
+.container-wb-list .header-wb-list header .questionnaire-logo {
   background: url("../i/logo-questionnaire-designer.png") no-repeat;
   width: 366px;
   height: 36px;
@@ -229,21 +218,32 @@ header .questionnaire-logo {
   position: absolute;
   top: 0;
   left: 0;
+  text-indent: -9999999px;
 }
-header .nav-tabs {
+.container-wb-list .header-wb-list header .nav-tabs {
   width: 100%;
   border: none;
   border-left: 13px solid #bcc3c8;
 }
-header nav {
+.container-wb-list .header-wb-list header nav {
   float: right;
   margin: 18px;
   position: absolute;
   top: 0;
   right: 0;
 }
-table#table-header {
+.container-wb-list section#designer-list {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 76px;
+  z-index: 1;
+}
+.container-wb-list section#designer-list table#table-header {
+  height: 60px;
   border-left: 13px solid #bcc3c8;
+  border-bottom: 2px solid #b1b5b8;
   margin: 0;
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   font-size: 12px;
@@ -251,49 +251,61 @@ table#table-header {
   text-transform: uppercase;
   color: #b2b2b2;
 }
-table#table-header tr th {
+.container-wb-list section#designer-list table#table-header tr th {
   padding-top: 20px;
 }
-table#table-header tr th:first-child {
+.container-wb-list section#designer-list table#table-header tr th:first-child {
   background: url("../i/loupe.png") 25px 18px no-repeat;
   padding-left: 53px;
 }
-table#table-header tr th:nth-child(2) {
+.container-wb-list section#designer-list table#table-header tr th:nth-child(2) {
   width: 12%;
 }
-table#table-header tr th:nth-child(3) {
+.container-wb-list section#designer-list table#table-header tr th:nth-child(3) {
   width: 10%;
 }
-table#table-header tr th:nth-child(4) {
+.container-wb-list section#designer-list table#table-header tr th:nth-child(4) {
   width: 17%;
 }
-table#table-header tr th:nth-child(5) {
+.container-wb-list section#designer-list table#table-header tr th:nth-child(5) {
   width: 8%;
 }
-table#table-header tr th a#title-search {
+.container-wb-list section#designer-list table#table-header tr th a#title-search {
   color: #bcc3c8;
 }
-table#table-header tr th a:hover {
+.container-wb-list section#designer-list table#table-header tr th a:hover {
   text-decoration: none;
 }
-div#table-message {
+.container-wb-list section#designer-list #table-content-holder {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 60px;
+  overflow: auto;
+  border-top-width: 0;
+  border-top-style: none;
+  /*margin: 0;
+      padding: 0;
+      height: 100%;*/
+}
+.container-wb-list section#designer-list #table-content-holder div#table-message {
   height: 115px;
   background: #edeff0 url("../i/logo-designer-sm.png") 45px 23px no-repeat;
-  border-top: 2px solid #b1b5b8;
   position: relative;
 }
-div#table-message p {
+.container-wb-list section#designer-list #table-content-holder div#table-message p {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
   font-style: italic;
-  margin: 20px 110px;
+  padding: 20px 0 0 110px;
 }
-div#table-message button {
+.container-wb-list section#designer-list #table-content-holder div#table-message button {
   font-weight: bold;
   margin: 0 100px;
   text-decoration: none;
 }
-div#table-message a.cross {
+.container-wb-list section#designer-list #table-content-holder div#table-message a.cross {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -301,32 +313,32 @@ div#table-message a.cross {
   height: 40px;
   width: 40px;
 }
-div#table-message a.cross:hover {
+.container-wb-list section#designer-list #table-content-holder div#table-message a.cross:hover {
   background-position: 0 -40px;
 }
-table#table-content {
+.container-wb-list section#designer-list #table-content-holder table#table-content {
   cursor: default;
 }
-table#table-content tr td:first-child {
+.container-wb-list section#designer-list #table-content-holder table#table-content tr td:first-child {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 18px;
   line-height: 24px;
   color: #3f3f3f;
   border-left: 13px solid #dbdfe2;
 }
-table#table-content tr td:first-child span.summary {
+.container-wb-list section#designer-list #table-content-holder table#table-content tr td:first-child span.summary {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 14px;
   color: #b9c3ca;
 }
-table#table-content tr td:nth-child(2) {
+.container-wb-list section#designer-list #table-content-holder table#table-content tr td:nth-child(2) {
   font-family: Georgia, serif;
   font-size: 14px;
   font-style: italic;
   color: #5d6468;
   width: 12%;
 }
-table#table-content tr td:nth-child(3) {
+.container-wb-list section#designer-list #table-content-holder table#table-content tr td:nth-child(3) {
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   font-size: 12px;
   font-weight: bold;
@@ -334,80 +346,80 @@ table#table-content tr td:nth-child(3) {
   text-transform: uppercase;
   width: 10%;
 }
-table#table-content tr td:nth-child(4) {
+.container-wb-list section#designer-list #table-content-holder table#table-content tr td:nth-child(4) {
   font-family: Georgia, serif;
   font-size: 14px;
   font-style: italic;
   color: #cbcbcb;
   width: 17%;
 }
-table#table-content tr td:nth-child(4) strong {
+.container-wb-list section#designer-list #table-content-holder table#table-content tr td:nth-child(4) strong {
   color: #5d6468;
   font-weight: normal;
 }
-table#table-content tr td:nth-child(5) {
+.container-wb-list section#designer-list #table-content-holder table#table-content tr td:nth-child(5) {
   font-family: Georgia, serif;
   font-size: 14px;
   font-style: italic;
   color: #e5e5e5;
   width: 8%;
 }
-table#table-content tr td:nth-child(5) a {
+.container-wb-list section#designer-list #table-content-holder table#table-content tr td:nth-child(5) a {
   color: #2a81cb;
 }
-table#table-content tr:hover {
+.container-wb-list section#designer-list #table-content-holder table#table-content tr:hover {
   background-color: #eff4f8;
 }
-table#table-content tr:hover td:first-child {
+.container-wb-list section#designer-list #table-content-holder table#table-content tr:hover td:first-child {
   color: #1c76c3;
 }
-table#table-content tr:hover td:first-child span.summary {
+.container-wb-list section#designer-list #table-content-holder table#table-content tr:hover td:first-child span.summary {
   color: #788792;
 }
-table#table-content tr:hover td:nth-child(3) {
+.container-wb-list section#designer-list #table-content-holder table#table-content tr:hover td:nth-child(3) {
   color: #444655;
 }
-table#table-content tr:hover td:nth-child(4) {
+.container-wb-list section#designer-list #table-content-holder table#table-content tr:hover td:nth-child(4) {
   color: #5d6468;
 }
-table#table-content tr:hover td:nth-child(5) {
+.container-wb-list section#designer-list #table-content-holder table#table-content tr:hover td:nth-child(5) {
   color: #aebac5;
 }
-table#table-content tr:hover td:nth-child(5) a {
+.container-wb-list section#designer-list #table-content-holder table#table-content tr:hover td:nth-child(5) a {
   text-decoration: none;
 }
-table#table-content tr.active {
+.container-wb-list section#designer-list #table-content-holder table#table-content tr.active {
   background-color: #eff4f8;
 }
-table#table-content tr.active td:first-child span.summary {
+.container-wb-list section#designer-list #table-content-holder table#table-content tr.active td:first-child span.summary {
   color: #b9c3ca;
 }
-table#table-content tr.active td:first-child:hover {
+.container-wb-list section#designer-list #table-content-holder table#table-content tr.active td:first-child:hover {
   color: #3f3f3f;
 }
-table#table-content tr.active td:nth-child(3) {
+.container-wb-list section#designer-list #table-content-holder table#table-content tr.active td:nth-child(3) {
   color: #444655;
 }
-table#table-content tr.active td:nth-child(4) {
+.container-wb-list section#designer-list #table-content-holder table#table-content tr.active td:nth-child(4) {
   color: #5d6468;
 }
-table#table-content tr:last-child {
+.container-wb-list section#designer-list #table-content-holder table#table-content tr:last-child {
   border-bottom: 1px solid #e2e3e4;
 }
-ul.pagination {
+.container-wb-list section#designer-list #table-content-holder ul.pagination {
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   font-size: 14px;
   font-weight: bold;
   margin: 0 15px;
 }
-ul.pagination li a:hover {
+.container-wb-list section#designer-list #table-content-holder ul.pagination li a:hover {
   text-decoration: underline;
 }
-ul.pagination li.active a:hover,
-ul.pagination li.disabled a:hover {
+.container-wb-list section#designer-list #table-content-holder ul.pagination li.active a:hover,
+.container-wb-list section#designer-list #table-content-holder ul.pagination li.disabled a:hover {
   text-decoration: none;
 }
-ul.pager {
+.container-wb-list section#designer-list #table-content-holder ul.pager {
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   font-size: 12px;
   font-weight: bold;
@@ -415,6 +427,7 @@ ul.pager {
   text-align: left;
   margin: 0 15px;
 }
-ul.pager a {
+.container-wb-list section#designer-list #table-content-holder ul.pager a {
   color: #2fc507;
 }
+/*# sourceMappingURL=designer-list.css.map */

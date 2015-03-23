@@ -372,6 +372,9 @@
     <Content Include="Scripts\viewmodels\pages\controlpanel\readside.js" />
     <Content Include="Scripts\viewmodels\viewmodelbase.js" />
     <Content Include="Scripts\viewmodels\designer.framework.js" />
+    <Content Include="UpdatedDesigner\content\designer-start\designer-list.min.css">
+      <DependentUpon>designer-list.css</DependentUpon>
+    </Content>
     <Content Include="UpdatedDesigner\content\designer-start\designer-start.min.css">
       <DependentUpon>designer-start.css</DependentUpon>
     </Content>
@@ -1244,6 +1247,9 @@
     </Content>
     <Content Include="UpdatedDesigner\content\designer-editor\wb-designer-editor.css.css.map">
       <DependentUpon>wb-designer-editor.css.css</DependentUpon>
+    </Content>
+    <Content Include="UpdatedDesigner\content\designer-start\designer-list.css.map">
+      <DependentUpon>designer-list.css</DependentUpon>
     </Content>
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
