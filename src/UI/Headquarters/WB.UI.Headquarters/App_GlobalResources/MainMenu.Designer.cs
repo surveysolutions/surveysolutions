@@ -70,11 +70,20 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Health Check.
+        ///   Looks up a localized string similar to Headquarters.
         /// </summary>
-        internal static string HealthCheck {
+        internal static string Headquarters {
             get {
-                return ResourceManager.GetString("HealthCheck", resourceCulture);
+                return ResourceManager.GetString("Headquarters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Help.
+        /// </summary>
+        internal static string Help {
+            get {
+                return ResourceManager.GetString("Help", resourceCulture);
             }
         }
         
@@ -147,6 +156,15 @@ namespace Resources {
         internal static string TeamsAndStatuses {
             get {
                 return ResourceManager.GetString("TeamsAndStatuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Users.
+        /// </summary>
+        internal static string Users {
+            get {
+                return ResourceManager.GetString("Users", resourceCulture);
             }
         }
     }

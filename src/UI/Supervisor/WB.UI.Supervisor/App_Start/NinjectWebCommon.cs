@@ -150,7 +150,8 @@ namespace WB.UI.Supervisor.App_Start
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]), isDebug,
                     applicationBuildVersion, interviewDetailsDataLoaderSettings, false,
                     int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"]),
-                    new InterviewHistorySettings(basePath, false)));
+                    new InterviewHistorySettings(basePath, false),
+                    isSupervisorFunctionsEnabled: true));
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);

@@ -1,15 +1,14 @@
 using System;
-using System.Collections.Generic;
 
 namespace WB.Core.BoundedContexts.Capi.Implementation.Synchronization
 {
     public class SynchronizationCanceledEventArgs:EventArgs
     {
-        public SynchronizationCanceledEventArgs(IList<Exception> exceptions)
+        public SynchronizationCanceledEventArgs(Exception exception)
         {
-            this.Exceptions = exceptions;
+            this.Exception = exception;
         }
 
-        public IList<Exception> Exceptions { get; private set; }
+        public Exception Exception { get; private set; }
     }
 }

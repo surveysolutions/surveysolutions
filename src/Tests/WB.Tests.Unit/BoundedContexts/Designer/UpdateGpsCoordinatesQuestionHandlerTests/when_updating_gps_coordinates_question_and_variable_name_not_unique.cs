@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
 {
     internal class when_updating_gps_coordinates_question_and_variable_name_not_unique : QuestionnaireTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
@@ -34,25 +34,27 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
             });
         };
 
-        private Because of = () =>
+        Because of = () =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateGpsCoordinatesQuestion(
                     questionId: questionId,
                     title: title,
                     variableName: notUniqueVariableName,
-                variableLabel: null,
+                    variableLabel: null,
                     isMandatory: isMandatory,
                     scope: scope,
                     enablementCondition: enablementCondition,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
                     instructions: instructions,
                     responsibleId: responsibleId
 
                     ));
 
-        private It should_throw_QuestionnaireException = () =>
+        It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        private It should_throw_exception_with_message_containting__variable__should__unique__ = () =>
+        It should_throw_exception_with_message_containting__variable__should__unique__ = () =>
             new[] { "variable", "should", "unique" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
