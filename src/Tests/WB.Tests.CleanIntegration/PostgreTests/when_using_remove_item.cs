@@ -4,6 +4,7 @@ using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 
 namespace WB.Tests.CleanIntegration.PostgreTests
 {
+    [Ignore("no setup")]
     [Subject(typeof(PostgreKeyValueStorage<>))]
     public class when_using_remove_item
     {
