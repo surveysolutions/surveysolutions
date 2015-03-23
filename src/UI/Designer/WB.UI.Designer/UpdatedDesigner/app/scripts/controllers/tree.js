@@ -166,32 +166,13 @@
                 scope.toggle();
             };
 
-            var isElementVisible = function (item) {
-                var viewport = {
-                    top: $(".questionnaire-tree-holder > .scroller").offset().top,
-                    bottom: $(window).height()
-                };
-                var top = item.offset().top;
-                var bottom = top + item.outerHeight();
 
-                var isTopBorderVisible = top > viewport.top && top < viewport.bottom;
-                var isBottomBorderVisible = bottom > viewport.top && bottom < viewport.bottom;
-                var distanceToTopBorder = Math.abs(top - viewport.top);
-                var distanceToBottomBorder = Math.abs(bottom - viewport.bottom);
-
-                return {
-                    isVisible: isTopBorderVisible && isBottomBorderVisible,
-                    shouldScrollDown: distanceToTopBorder < distanceToBottomBorder,
-                    scrollPositionWhenScrollUp: viewport.top - $(".question-list").offset().top + distanceToBottomBorder
-                }
-            };
-
-            var scrollToElement = function (itemId, mode) {
-                mode = mode || scrollMode.makeVisible;
+            var scrollToElement = function (itemId, howToScroll) {
+                var mode = howToScroll || scrollMode.makeVisible;
                 if ($(itemId).length === 0) {
                     return;
                 }
-                var elementVisibility = isElementVisible($(itemId));
+                var elementVisibility = utilityService.isTreeItemVisible($(itemId));
                 if (elementVisibility.isVisible) {
                     return;
                 }
@@ -208,14 +189,19 @@
                     }
                 }
                 if (mode === scrollMode.toTop) {
-                    var scrollTop = Math.max($(itemId).offset().top - $(".question-list").offset().top - 10, 0);
+                    var scrollPositionInDivFromTop = getScrollPositionInDivFromTop(itemId);
                     $scope.$broadcast("scrollToPosition", {
                         target: ".question-list",
-                        scrollTop: scrollTop
+                        scrollTop: scrollPositionInDivFromTop
                     });
                 }
             };
-
+            var getScrollPositionInDivFromTop = function (itemId) {
+                var positionOfItemFromPageTop = $(itemId).offset().top;
+                var positionOfContainerFromPageTop = $(".question-list").offset().top;
+                var scrollOffset = 10;
+                return Math.max(positionOfItemFromPageTop - positionOfContainerFromPageTop - scrollOffset, 0);
+            }
             var getItemType = function (item) {
                 switch (item.itemType) {
                     case 'Question': return itemTypes.question;
