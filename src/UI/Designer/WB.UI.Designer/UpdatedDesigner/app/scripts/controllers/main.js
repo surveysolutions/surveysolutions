@@ -14,15 +14,20 @@ angular.module('designerApp')
                 groupsCount: 0,
                 rostersCount: 0
             };
+            var focusTreePane = 'shift+alt+x';
+            var focusEditorPane = 'shift+alt+e';
+            var openChaptersPane = 'left';
 
-            if (hotkeys.get('alt+x') === false) {
-                hotkeys.del('alt+x');
+            if (hotkeys.get(focusTreePane) === false) {
+                hotkeys.del(focusTreePane);
             }
-            if (hotkeys.get('alt+e') === false) {
-                hotkeys.del('alt+e');
+            
+            if (hotkeys.get(focusEditorPane) === false) {
+                hotkeys.del(focusEditorPane);
             }
-            if (hotkeys.get('left') === false) {
-                hotkeys.del('left');
+            
+            if (hotkeys.get(openChaptersPane) === false) {
+                hotkeys.del(openChaptersPane);
             }
 
             hotkeys.add({
@@ -34,7 +39,7 @@ angular.module('designerApp')
             });
            
             hotkeys.add({
-                    combo: 'alt+x',
+                combo: focusTreePane,
                     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                     description: 'Focus questionnaire tree',
                     callback: function(event) {
@@ -44,7 +49,7 @@ angular.module('designerApp')
                 });
            
             hotkeys.add({
-                    combo: 'alt+e',
+                combo: focusEditorPane,
                     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                     description: 'Focus title field in editor',
                     callback: function (event) {
@@ -53,7 +58,7 @@ angular.module('designerApp')
                     }
                 });
           
-            hotkeys.add('left', 'Open chapters', function (event) {
+            hotkeys.add(openChaptersPane, 'Open chapters', function (event) {
                     event.preventDefault();
                     $scope.$broadcast("openChaptersList", "");
                 });
