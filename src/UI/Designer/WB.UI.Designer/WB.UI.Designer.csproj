@@ -1251,6 +1251,8 @@
     <Content Include="UpdatedDesigner\content\designer-start\designer-list.css.map">
       <DependentUpon>designer-list.css</DependentUpon>
     </Content>
+    <Content Include="Views\Shared\DateTime.cshtml" />
+    <Content Include="Views\Shared\_list_search_form.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

@@ -26,13 +26,7 @@ else
         <tbody>
             <tr>
                 <th>
-                    <form id="frmSearch" class="form-search">
-                        <div class="input-prepend input-append">
-                            <a class="btn add-on" onclick="$('#frmSearch').submit()">Search</a>
-                            <input id="txtFilter" type="text" class="span2" name="f" value="@ViewBag.Filter" />
-                            <a class="btn add-on" onclick="$('#txtFilter').val(''); $('#frmSearch').submit();">x</a>
-                        </div>
-                    </form>
+                    @Html.Partial("_list_search_form")
                 </th>
                 @for (int i = 1; i < propertyList.Count(); i++)
                 {
