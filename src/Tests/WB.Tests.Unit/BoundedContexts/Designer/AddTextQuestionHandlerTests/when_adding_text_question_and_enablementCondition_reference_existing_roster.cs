@@ -48,10 +48,14 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
                 validationMessage: "",
                 instructions: "intructions",
                 mask: null,
-                responsibleId: responsibleId);
+                responsibleId: responsibleId,
+                index: nullIndex);
 
         It should_rise_NewQuestionAdded_event_with_questionId = () =>
             eventContext.ShouldContainEvent<NewQuestionAdded>(x => x.PublicKey == questionId);
+
+        It should_not_rise_QuestionnaireItemMoved_event_with_questionId = () =>
+           eventContext.ShouldNotContainEvent<QuestionnaireItemMoved>(x => x.PublicKey == questionId);
 
         private static EventContext eventContext;
         private static Questionnaire questionnaire;
@@ -62,5 +66,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid rosterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+        private static int? nullIndex = null;
     }
 }

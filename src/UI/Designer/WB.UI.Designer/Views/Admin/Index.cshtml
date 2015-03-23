@@ -1,11 +1,114 @@
-﻿ @{
+﻿@using WB.UI.Designer.BootstrapSupport
+@using WB.UI.Designer.BootstrapSupport.HtmlHelpers
+@using WB.UI.Designer.Extensions
+@using WB.UI.Designer.Models
+@using WB.UI.Designer.Utils
+@using WB.UI.Shared.Web.Membership
+
+@model IPagedList<AccountListViewItemModel>
+@{
     ViewBag.Title = "Registered users";
+
+    string controller = ViewBag.Controller ?? WB.UI.Designer.GlobalHelper.CurrentController;
+
+    IMembershipUserService userHelper = ViewBag.UserHelper;
 }
 
-@section Scripts
+@if (Model.TotalCount == 0)
 {
-    @Scripts.Render("~/list")
-    
+    <p class="text-center" style="line-height: 10em">This list does not contain any records</p>
+}
+else
+{
+    @Html.Partial("_list_search_form")
+    <table id="user-table-header" class="table table-header">
+        <thead>
+            <tr>
+                <th>
+                    <a href="@ActionWithOrderField("UserName")">Login</a>
+                </th>
+                <th>
+                    <a href="@ActionWithOrderField("Email")">Email</a>
+                </th>
+                <th>
+                    <a href="@ActionWithOrderField("CreationDate")">CREATED DATE</a>
+                </th>
+                <th>
+                    <a href="@ActionWithOrderField("IsApproved")">APPROVED?</a>
+                </th>
+                <th>
+                    <a href="@ActionWithOrderField("IsLockedOut")">LOCKED?</a>
+                </th>
+                <th>
+                </th>
+            </tr>
+        </thead>
+    </table>
+    <div id="table-content-holder">
+        <table id="user-table-content" class="table table-content ">
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td class="search-value">
+                            @user.UserName
+                        </td>
+                        <td class="email">
+                            @FormatEmail(user.Email)
+                        </td>
+                        <td class="date">
+                            @user.CreationDate.FormatDate()
+                        </td>
+                        <td>
+                            @(user.IsApproved? "Yes": "No")
+                        </td>
+                        <td>
+                            @(user.IsLockedOut ? "Yes" : "No")
+                        </td>
+                        <td>
+                            <div class="btn-group pull-right">
+                                <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+                                    Action
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    @{
+                    var routevalues = user.GetIdValue();
+
+                    <li>@Html.ActionLink("Edit", "Edit", controller, routevalues, null)</li>
+                                        <li>@Html.ActionLink("Details", "Details", controller, routevalues, null)</li>
+                                    }
+                                </ul>
+                            </div>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @Html.Pager(Model.PageIndex + 1, Model.TotalPages, x => Url.Action(WB.UI.Designer.GlobalHelper.CurrentAction, WB.UI.Designer.GlobalHelper.CurrentController, new { p = x, sb = ViewBag.SortBy, so = ViewBag.SortOrder, f = ViewBag.Filter }), 2)
+    </div>
 }
 
-@Html.Partial("~/Views/Shared/Index.cshtml")
+@functions
+{
+    private string ActionWithOrderField(string sortField)
+    {
+        var sortOrder = (int?)ViewBag.SortOrder;
+        return Url.Action(
+            WB.UI.Designer.GlobalHelper.CurrentAction,
+            new
+            {
+                p = ViewBag.PageIndex,
+                sb = sortField,
+                so = CustomExtensions.InvertBooleableInt(sortOrder, ViewBag.SortBy == sortField),
+                f = ViewBag.Filter
+            });
+    }
+}
+
+@helper  FormatEmail(string email)
+{
+    var emailParts = email.Split(new char[]{'@'}, 2);
+    <strong>@emailParts[0]</strong>@("@" + emailParts[1]);
+}

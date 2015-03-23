@@ -1,0 +1,11 @@
+{
+  "name": "jquery.isOnScreen",
+  "version": "1.0.0",
+  "homepage": "https://github.com/moagrius/isOnScreen",
+  "main": [
+    "./isOnScreen.js"
+  ],
+  "dependencies": {
+    "jquery": ">=1.4"
+  }
+}

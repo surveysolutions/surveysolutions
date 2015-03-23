@@ -6,7 +6,7 @@
             hotkeys.bindTo($scope)
              .add({
                  combo: 'ctrl+s',
-                 description: 'Save current static text',
+                 description: 'Save changes',
                  allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                  callback: function (event) {
                      $scope.saveStaticText();

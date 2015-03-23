@@ -140,7 +140,7 @@
                     return commandCall("AddGroup", command);
                 };
 
-                commandService.addGroup = function(questionnaireId, group, parentGroupId) {
+                commandService.addGroup = function (questionnaireId, group, parentGroupId, index) {
                     var command = {
                         "questionnaireId": questionnaireId,
                         "groupId": group.itemId,
@@ -152,12 +152,13 @@
                         "rosterFixedTitles": null,
                         "rosterTitleQuestionId": null,
                         "parentGroupId": parentGroupId,
-                        "variableName":null
+                        "variableName": null,
+                        "index": index
                     };
                     return commandCall("AddGroup", command);
                 };
 
-                commandService.addRoster = function(questionnaireId, group, parentGroupId) {
+                commandService.addRoster = function (questionnaireId, group, parentGroupId, index) {
                     var command = {
                         "questionnaireId": questionnaireId,
                         "groupId": group.itemId,
@@ -169,18 +170,20 @@
                         "rosterFixedTitles": ["Title"],
                         "rosterTitleQuestionId": null,
                         "parentGroupId": parentGroupId,
-                        "variableName": group.variableName
+                        "variableName": group.variableName,
+                        "index": index
                     };
 
                     return commandCall("AddGroup", command);
                 };
 
-                commandService.addStaticText = function (questionnaireId, staticText, parentId) {
+                commandService.addStaticText = function (questionnaireId, staticText, parentId, index) {
                     var command = {
                         "questionnaireId": questionnaireId,
                         "entityId": staticText.itemId,
                         "text": staticText.text,
-                        "parentId": parentId
+                        "parentId": parentId,
+                        "index": index
                     };
                     return commandCall("AddStaticText", command);
                 };
@@ -244,12 +247,12 @@
                     return commandCall("UpdateStaticText", command);
                 };
 
-                commandService.addQuestion = function(questionnaireId, parentGroupId, newId) {                    
+                commandService.addQuestion = function (questionnaireId, parentGroupId, newId, index) {
                     var command = {
                         "questionnaireId": questionnaireId,
                         "parentGroupId": parentGroupId,
                         "questionId": newId,
-                        "title": "New Question"
+                        "index": index
                     };
 
                     return commandCall("AddDefaultTypeQuestion", command);

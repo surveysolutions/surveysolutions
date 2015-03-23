@@ -34,6 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 .Returns(questionnaireRepository);
             interview = new Interview();
             interview.Apply(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, ""));
+            interview.Apply(new InterviewerAssigned(userId, userId));
         };
 
         Cleanup stuff = () =>

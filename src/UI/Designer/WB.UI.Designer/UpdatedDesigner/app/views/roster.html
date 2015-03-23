@@ -21,7 +21,7 @@
 
             <div class="form-group input-variable-name col-xs-4 pull-right">
                 <label for="edit-group-variableName" class="wb-label">Variable name <help key="variableName" placement="left" /></label><br>
-                <input id="edit-group-variableName" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.variableName">
+                <input id="edit-group-variableName" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.variableName" maxlength="32" spellcheck="false">
             </div>
         </div>
 
@@ -34,22 +34,17 @@
 
         </div>
 
-        <div class="form-group" ng-class="{'has-error': !editRosterForm.enablementCondition.$valid}">
-            <label for="edit-group-condition" class="wb-label">Condition expression <help key="conditionExpression" /></label><br>
-            <textarea name="enablementCondition"
-                      id="edit-group-condition"
-                      class="form-control"
-                      ng-model="activeRoster.enablementCondition"
-                      deny-this-keyword msd-elastic></textarea>
-            <p class="help-block ng-cloak" ng-show="editRosterForm.enablementCondition.$error.denyThisKeyword">
-                You cannot use self-reference in conditions
-            </p>
+        <div class="form-group">
+            <label for="edit-group-condition" class="wb-label">Condition expression <help key="conditionExpression"/></label><br>
+            <div class="pseudo-form-control">
+                <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded }" ng-model="activeRoster.enablementCondition"></div>
+            </div>
         </div>
     </div>
 
     <div class="form-buttons-holder">
         <div class="pull-left">
-            <button type="submit" id="edit-roster-save-button" class="btn btn-lg btn-primary" ng-click="saveRoster()" unsaved-warning-clear ng-disabled="!editRosterForm.$valid">Save</button>
+            <button type="submit" id="edit-roster-save-button" class="btn btn-lg" ng-class="{ 'btn-primary': editRosterForm.$dirty }" ng-click="saveRoster()" unsaved-warning-clear ng-disabled="!editRosterForm.$valid">Save</button>
             <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear ng-click="cancelRoster()">Cancel</button>
         </div>
         <div class="pull-right">

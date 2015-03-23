@@ -86,13 +86,23 @@
             self.ItemsSummary(data.ItemsSummary);
         }, true);
     };
-    
+    self.clear = function() {
+        self.SearchBy("");
+        self.search();
+    };
+
     self.SelectedItems = ko.computed(function () {
         return ko.utils.arrayFilter(self.Items(), function (item) {
             var value = item.IsSelected();
             return !isNaN(value) && value;
         });
     });
+
+    self.GetSelectedItemsAfterFilter = function (filterFunc) {
+        var allItems = self.SelectedItems();
+        var filteredItems = ko.utils.arrayFilter(allItems, filterFunc);
+        return filteredItems;
+    }
 
     self.IsNothingSelected = ko.computed(function () {
         return $(self.SelectedItems()).length == 0;
@@ -114,6 +124,13 @@
                 return new myChildModel(item.data);
             }
         }
+    };
+
+    self.selectAll = function (checkbox) {
+        var isCheckboxSelected = $(checkbox).is(":checked");
+        ko.utils.arrayForEach(self.Items(), function (item) {
+            item.IsSelected(isCheckboxSelected);
+        });
     };
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.ListView, Supervisor.VM.BasePage);

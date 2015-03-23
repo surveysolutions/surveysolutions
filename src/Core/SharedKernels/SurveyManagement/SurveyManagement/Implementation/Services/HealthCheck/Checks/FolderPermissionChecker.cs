@@ -30,15 +30,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthC
 
             foreach (var directory in directories)
             {
-                var writeAccess = CheckWriteAccess(windowsIdentity, directory);
-
+                var writeAccess = CheckWriteAccess(directory);
+                var directoryName = fileSystemAccessor.GetFileName(directory);
                 if (writeAccess)
                 {
-                    allowedFolders.Add(directory);
+                    allowedFolders.Add(directoryName);
                 }
                 else
                 {
-                    deniedFolders.Add(directory);
+                    deniedFolders.Add(directoryName);
                 }
             }
 
@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthC
                 status: status,
                 processRunedUnder: windowsIdentity.Name,
                 allowedFolders: allowedFolders.ToArray(),
-                denidedFolders: deniedFolders.ToArray());
+                deniedFolders: deniedFolders.ToArray());
 
             return result;
         }
@@ -73,7 +73,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthC
             return folders;
         }
 
-        public bool CheckWriteAccess(WindowsIdentity currentUserReference, string path)
+        public bool CheckWriteAccess(string path)
         {
             if (string.IsNullOrEmpty(path) || !fileSystemAccessor.IsDirectoryExists(path)) 
                 return false;

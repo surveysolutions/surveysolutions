@@ -3,31 +3,34 @@
 
     var self = this;
 
-    self.deleteInterview = function() {
-        var commands = ko.utils.arrayMap(self.SelectedItems(), function (rawItem) {
-            var item = ko.mapping.toJS(rawItem);
-            return ko.toJSON({
-                InterviewId: item.InterviewId
-            });
-        });
-
-        var command = {
-            type: "DeleteInterviewCommand",
-            commands: commands
-        };
-
-        self.SendCommands(command, function () {
-            self.load();
-        });
+    self.DeleteInterview = function () {
+        self.sendCommandAfterFilterAndConfirm(
+            "DeleteInterviewCommand",
+            function (item) { return { InterviewId: item.InterviewId } },
+            function(item) { return item.CanDelete(); },
+            "#confirm-delete-template",
+            "#confirm-continue-message-template"
+        );
     };
 
-    self.selectAll = function (checkbox) {
-        var isCheckboxSelected = $(checkbox).is(":checked");
-        ko.utils.arrayForEach(self.Items(), function (item) {
-            if (item.CanDelete()) {
-                item.IsSelected(isCheckboxSelected);
-            }
-        });
+    self.ApproveInterview = function () {
+        self.sendCommandAfterFilterAndConfirm(
+            "HqApproveInterviewCommand",
+            function (item) { return { InterviewId: item.InterviewId } },
+            function (item) { return item.CanApproveOrReject(); },
+            "#confirm-approve-template",
+            "#confirm-continue-message-template"
+        );
+    };
+
+    self.RejectInterview = function () {
+        self.sendCommandAfterFilterAndConfirm(
+            "HqRejectInterviewCommand",
+            function (item) { return { InterviewId: item.InterviewId } },
+            function (item) { return item.CanApproveOrReject(); },
+            "#confirm-reject-template",
+            "#confirm-continue-message-template"
+        );
     };
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.HQInterviews, Supervisor.VM.InterviewsBase);

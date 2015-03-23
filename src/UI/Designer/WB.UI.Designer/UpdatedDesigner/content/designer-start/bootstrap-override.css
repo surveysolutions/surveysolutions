@@ -1,0 +1,68 @@
+﻿.btn {
+  text-transform: uppercase;
+  padding: 7px 10px;
+  border-radius: 3px;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 12px;
+  line-height: 1;
+}
+input.form-control {
+  padding: 12px;
+  line-height: 1.1;
+  height: 100%;
+}
+.btn-lg {
+  padding: 15px;
+}
+.btn-link {
+  font-weight: bold;
+}
+.form-group {
+  margin-bottom: 8px;
+}
+.nav-tabs {
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  background: -moz-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.38) 16%, #fcfdfd 42%, #f6f7f8 100%);
+  /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(16%, rgba(255, 255, 255, 0.38)), color-stop(42%, #fcfdfd), color-stop(100%, #f6f7f8));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.38) 16%, #fcfdfd 42%, #f6f7f8 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.38) 16%, #fcfdfd 42%, #f6f7f8 100%);
+  /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.38) 16%, #fcfdfd 42%, #f6f7f8 100%);
+  /* IE10+ */
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.38) 16%, #fcfdfd 42%, #f6f7f8 100%);
+  /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#f6f7f8', GradientType=0);
+  /* IE6-9 */
+}
+.nav-tabs li {
+  margin-top: 42px;
+}
+.nav-tabs li:first-child {
+  margin-left: 400px;
+}
+.nav-tabs li.active a {
+  color: #2a81cb;
+}
+.nav-tabs li.active a:hover {
+  color: #2a81cb;
+}
+.nav-tabs li.create a {
+  color: #2fc507;
+}
+.nav-tabs li a {
+  color: #b2b2b2;
+  border-radius: 0;
+}
+.nav-tabs li a:hover,
+.nav-tabs li a:focus {
+  background-color: #fff;
+  color: #444655;
+  border-color: #e2e3e4;
+}
+/*# sourceMappingURL=bootstrap-override.css.map */

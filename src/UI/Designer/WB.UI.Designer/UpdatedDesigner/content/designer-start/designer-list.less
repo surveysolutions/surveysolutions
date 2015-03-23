@@ -1,0 +1,377 @@
+@import (reference) "bootstrap-custom";
+@import "bootstrap-override";
+@import "custom-fonts";
+@import (reference) "font-styles";
+@import "inputs";
+
+@header-height: 76px;
+
+html, body {
+    height: 100%;
+    min-width: 1280px;
+    position: relative;
+    width: 100%;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.container-wb-list {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 100%;
+    overflow: hidden;
+
+    .header-wb-list {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: @header-height;
+        z-index: 2;
+
+        header {
+            .questionnaire-logo {
+                background: url("../i/logo-questionnaire-designer.png") no-repeat;
+                width: 366px;
+                height: 36px;
+                margin: 20px;
+                position: absolute;
+                top: 0;
+                left: 0;
+                text-indent: -9999999px;
+                //  float: left;
+            }
+
+            .nav-tabs {
+                // float: left;
+                width: 100%;
+                border: none;
+                border-left: 13px solid #bcc3c8;
+            }
+
+            nav {
+                float: right;
+                margin: 10px 18px 0 0;
+                position: absolute;
+                top: 0;
+                right: 0;
+            }
+        }
+    }
+
+    section#designer-list {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: @header-height;
+        z-index: 1;
+
+
+
+        #table-content-holder {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            top: 66px;
+            overflow: auto;
+            border-top-width: 0;
+            border-top-style: none;
+
+            div#table-message {
+                height: 115px;
+                background: #edeff0 url("../i/logo-designer-sm.png") 45px 23px no-repeat;
+                position: relative;
+
+                p {
+                    .arial16I();
+                    padding: 20px 0 0 110px;
+                }
+
+                button {
+                    font-weight: bold;
+                    margin: 0 100px;
+                    text-decoration: none;
+                }
+
+                a.cross {
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                    background: url("../i/cross.png");
+                    height: 40px;
+                    width: 40px;
+
+                    &:hover {
+                        background-position: 0 -40px;
+                    }
+                }
+            }
+
+
+
+            ul.pagination {
+                .trebuchet14b();
+                margin: 0 15px;
+
+                li {
+                    a {
+                        &:hover {
+                            text-decoration: underline;
+                        }
+                    }
+
+                    &.active, &.disabled {
+                        a {
+                            &:hover {
+                                text-decoration: none;
+                            }
+                        }
+                    }
+                }
+            }
+
+            ul.pager {
+                .trebuchet12b();
+                text-transform: uppercase;
+                text-align: left;
+                margin: 0 15px;
+
+                a {
+                    color: @brand-success;
+                }
+            }
+        }
+    }
+}
+
+table.table-header {
+    cursor: default;
+    border-left: 13px solid #bcc3c8;
+    border-bottom: 2px solid #b1b5b8;
+    margin: 0;
+    .trebuchet12b();
+    text-transform: uppercase;
+    color: @pagination-active-color;
+
+    tr {
+        th {
+            padding-top: 5px;
+
+            a#title-search {
+                color: #bcc3c8;
+            }
+
+            a:hover {
+                text-decoration: none;
+            }
+        }
+    }
+}
+
+table.table-content {
+    cursor: default;
+   tr {
+        td {
+            &:first-child {
+                .arial18();
+                color: @gray-dark;
+                border-left: 13px solid @input-border;
+            }
+
+            &.date {
+                .georgia14I();
+                color: @tooltip-color;
+            }
+
+            &.email {
+                .georgia14I();
+                color: #cbcbcb;
+
+                strong {
+                    color: @tooltip-color;
+                    font-weight: normal;
+                }
+            }
+
+            &.search-value {
+                .arial18();
+                color: @gray-dark;
+                border-left: 13px solid @input-border;
+            }
+        }
+
+        &:first-child th,
+        &:first-child td {
+            border-top: none;
+        }
+
+        &:last-child {
+            border-bottom: 1px solid #e2e3e4;
+        }
+
+         &:hover {
+            background-color: @table-bg-hover;
+
+            td {
+                &.email {
+                    color: @tooltip-color;
+                }
+            }
+        }
+
+        &.active {
+            background-color: @table-bg-hover;
+        }
+   }
+}
+
+table#questionnaire-table-header,
+table#questionnaire-table-content {
+    tr {
+        td, th {
+            &:first-child {
+            }
+
+            &:nth-child(2) {
+                width: 11%;
+            }
+
+            &:nth-child(3) {
+                width: 11%;
+            }
+
+            &:nth-child(4) {
+                width: 17%;
+            }
+
+            &:nth-child(5) {
+                width: 8%;
+            }
+        }
+    }
+}
+
+table#user-table-header,
+table#user-table-content {
+    tr {
+        td, th {
+            &:first-child {
+            }
+
+            &:nth-child(2) {
+                width: 30%;
+            }
+
+            &:nth-child(3) {
+                width: 11%;
+            }
+
+            &:nth-child(4) {
+                width: 8%;
+            }
+
+            &:nth-child(5) {
+                width: 8%;
+            }
+
+            &:last-child {
+                width: 8%;
+            }
+        }
+    }
+}
+
+table#questionnaire-table-content {
+    tr {
+        td {
+            &:first-child {
+                .arial18();
+                color: @gray-dark;
+                border-left: 13px solid @input-border;
+
+                span.summary {
+                    .lucidaC14();
+                    color: #b9c3ca;
+                }
+            }
+        }
+
+        &:hover {
+            td {
+                &:first-child {
+                    color: #1c76c3;
+
+                    span.summary {
+                        color: #788792;
+                    }
+                }
+
+                &:nth-child(4) {
+                    color: @tooltip-color;
+                }
+            }
+        }
+
+        &.active {
+            background-color: @table-bg-hover;
+
+            td {
+                &:first-child {
+
+                    span.summary {
+                        color: #b9c3ca;
+                    }
+
+                    &:hover {
+                        color: @gray-dark;
+                    }
+                }
+
+                &:nth-child(4) {
+                    color: @tooltip-color;
+                }
+            }
+        }
+
+        
+    }
+}
+
+#search-form {
+    border-left: 13px solid #bcc3c8;
+    padding: 3px;
+    padding-bottom: 0;
+    border-top: 1px solid #bcc3c8;
+    margin: 0;
+    background: url("../i/loupe.png") 10px 7px no-repeat;
+    padding-left: 35px;
+
+    #frmSearch {
+        position: relative;
+
+        .input-wrapper {
+            position: relative;
+
+            button {
+                position: absolute;
+                right: 1px;
+                top: 1px;
+            }
+        }
+
+        #txtFilter {
+            padding: 6px;
+        }
+    }
+}
+
+.nav.nav-tabs > li > a {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}

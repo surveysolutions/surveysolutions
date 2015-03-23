@@ -72,6 +72,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
                         || x.Status == InterviewStatus.SupervisorAssigned
                         || x.Status == InterviewStatus.InterviewerAssigned
                         || x.Status == InterviewStatus.RejectedBySupervisor,
+                    CanApproveOrReject = x.Status == InterviewStatus.Completed
+                        || x.Status == InterviewStatus.RejectedByHeadquarters,
                     CreatedOnClient = x.WasCreatedOnClient
                 });
             return new TeamInterviewsView

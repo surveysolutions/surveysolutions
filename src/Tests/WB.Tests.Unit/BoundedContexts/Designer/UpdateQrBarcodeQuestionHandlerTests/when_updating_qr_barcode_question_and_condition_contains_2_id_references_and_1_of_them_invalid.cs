@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerT
                 questionnaire.UpdateQRBarcodeQuestion(questionId: questionId, title: "title",
                     variableName: "var",
                 variableLabel: null, isMandatory: false, enablementCondition: conditionExpression, instructions: null,
-                    responsibleId: responsibleId));
+                    responsibleId: responsibleId, validationExpression:null, validationMessage:null));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

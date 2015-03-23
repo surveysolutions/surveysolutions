@@ -1,5 +1,8 @@
 ﻿@using System.Web.Optimization
 @using Newtonsoft.Json
+@using WB.Core.GenericSubdomains.Utils
+@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
+@using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.DocumentFilter
 @{
     Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
@@ -33,13 +36,15 @@
 @section  actionbar{
     <div class="btn-group">
         <div class="form-inline" >
-            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.deleteInterview">Delete interview</button>
+            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.ApproveInterview">Approve</button>
+            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.RejectInterview">Reject</button>
+            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.DeleteInterview">Delete</button>
 
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: search">
+                <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, valueUpdate:'afterkeydown', enterKey: search">
                 <div class="input-group-btn">
-                    <button class="btn btn-default" type="button" data-bind="click: search">
-                        <i class="glyphicon glyphicon-search"></i>
+                    <button class="btn btn-default" type="button" data-bind="click: clear">
+                        <i class="glyphicon glyphicon-remove"></i>
                     </button>
                 </div>
             </div>
@@ -77,7 +82,7 @@
             <!-- ko foreach:Items -->
             <tr>
                 <td>
-                    <input type="checkbox" data-bind="checked: IsSelected, enable: CanDelete" />
+                    <input type="checkbox" data-bind="checked: IsSelected" />
                 </td>
                 <!-- ko if:$root.SelectedTemplate() == '' -->
                 <td data-bind="text: FeaturedQuestions().joinArrayOfObjects('Question', 'Answer')"></td>
@@ -92,7 +97,9 @@
                 </td>
                 <td data-bind="text: LastEntryDate"></td>
                 <td>
-                    <input type="checkbox" data-bind="checked: HasErrors, enable: false" />
+                    <!-- ko if:HasErrors -->
+                    <span class="glyphicon glyphicon-ok pull-right margin-right-5" style="color:red"></span>
+                    <!-- /ko -->
                 </td>
                 <td data-bind="text: Status"></td>
                 <td>
@@ -107,6 +114,27 @@
             <!-- /ko -->
         </tbody>
     </table>
+
+
+    <script type="text/html" id="confirm-delete-template">
+        @Html.Raw(Resources.Interviews.DeleteConfirmMessage.FormatString(
+            "<span class='text-normal' data-bind='text: length'></span>",
+            InterviewStatus.SupervisorAssigned.ToLocalizeString(),
+            InterviewStatus.InterviewerAssigned.ToLocalizeString()))
+    </script>
+    <script type="text/html" id="confirm-approve-template">
+        @Html.Raw(Resources.Interviews.ApproveConfirmMessage.FormatString(
+            "<span class='text-normal' data-bind='text: length'></span>",
+            InterviewStatus.ApprovedBySupervisor.ToLocalizeString()))
+    </script>
+    <script type="text/html" id="confirm-reject-template">
+        @Html.Raw(Resources.Interviews.RejectConfirmMessage.FormatString(
+            "<span class='text-normal' data-bind='text: length'></span>",
+            InterviewStatus.ApprovedBySupervisor.ToLocalizeString()))
+    </script>
+    <script type="text/html" id="confirm-continue-message-template">
+        <br />@Resources.Interviews.ContinueConfirmMessage
+    </script>
 }
 
 @section filters

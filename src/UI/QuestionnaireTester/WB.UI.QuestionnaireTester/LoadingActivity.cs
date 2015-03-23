@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
@@ -7,17 +8,12 @@ using Android.Content;
 using Android.Content.PM;
 using Android.Graphics;
 using Android.OS;
-using Android.Text;
+using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
-using Ncqrs;
-
-using System;
-using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
-using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -26,7 +22,6 @@ using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
-using WB.UI.Shared.Android.Extensions;
 using WB.UI.Shared.Android.Helpers;
 using Environment = System.Environment;
 
@@ -64,7 +59,7 @@ namespace WB.UI.QuestionnaireTester
 
         public override void Finish()
         {
-            if (longOperationTokenSource != null)
+            if (longOperationTokenSource != null && longOperationTokenSource.Token.CanBeCanceled)
             {
                 this.longOperationTokenSource.Cancel();
             }
@@ -88,7 +83,7 @@ namespace WB.UI.QuestionnaireTester
             layoutParams.RightMargin = layoutParams.LeftMargin = 15;
             messageView.LayoutParameters = layoutParams;
             messageView.SetTextColor(Color.Black);
-            messageView.SetTextSize(Android.Util.ComplexUnitType.Dip, 20);
+            messageView.SetTextSize(ComplexUnitType.Dip, 20);
             messageView.Text = Resources.GetText(Resource.String.Oops) + 
                 (string.IsNullOrEmpty(additionalMassage)
                 ? string.Empty
@@ -105,6 +100,9 @@ namespace WB.UI.QuestionnaireTester
             Guid interviewId = Guid.NewGuid();
 
             var loaded = await LoadTemplateAndCreateInterview(publicKey, questionnaireTitle, interviewId, ct);
+            if (ct.IsCancellationRequested)
+                return;
+            
             if (!loaded)
                 this.RunOnUiThread(ShowErrorMassageToUser);
             else
