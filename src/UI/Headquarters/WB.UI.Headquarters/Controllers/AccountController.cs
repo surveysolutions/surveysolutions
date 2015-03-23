@@ -9,12 +9,13 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.UI.Headquarters.Code;
-using WB.UI.Headquarters.Code.Security;
+
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -108,8 +109,17 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
             if (this.ModelState.IsValid)
             {
-                this.UpdateAccount(user: GetUserById(GlobalInfo.GetCurrentUser().Id), editModel: model);
-                this.Success(Core.SharedKernels.SurveyManagement.Web.Properties.Strings.HQ_AccountController_AccountUpdatedSuccessfully);
+                if ((User.Identity as CustomIdentity).IsObserver)
+                {
+                    this.Error("You cannot perform any operation in observer mode.");
+                }
+                else
+                {
+                    this.UpdateAccount(user: GetUserById(GlobalInfo.GetCurrentUser().Id), editModel: model);
+                    this.Success(
+                        Core.SharedKernels.SurveyManagement.Web.Properties.Strings
+                            .HQ_AccountController_AccountUpdatedSuccessfully);
+                }
             }
 
             return this.View(model);

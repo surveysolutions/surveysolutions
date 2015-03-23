@@ -500,10 +500,6 @@
     <Compile Include="Controllers\HQController.cs" />
     <Compile Include="Controllers\InstallController.cs" />
     <Compile Include="Controllers\HeadquartersController.cs" />
-    <Compile Include="Code\Security\CustomPrincipal.cs" />
-    <Compile Include="Code\Security\CustomIdentity.cs" />
-    <Compile Include="Filters\UpdatePrincipalWebApi.cs" />
-    <Compile Include="Filters\UpdatePrincipal.cs" />
     <Compile Include="Filters\MaintenanceFilter.cs" />
     <Compile Include="Filters\InstallationAttribute.cs" />
     <Compile Include="Filters\SupervisorFunctionsEnabledAttribute.cs" />
