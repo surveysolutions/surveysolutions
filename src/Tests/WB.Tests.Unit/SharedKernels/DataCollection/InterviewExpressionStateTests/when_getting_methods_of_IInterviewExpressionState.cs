@@ -222,7 +222,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStateTes
                 ReturnType = typeof (void),
                 ParamsType =  new Type[0] 
             },
-            new MetodInfo { Name = "Clone", ReturnType = typeof (IInterviewExpressionState), ParamsType = new Type[0] }
+            new MetodInfo { Name = "Clone", ReturnType = typeof (IInterviewExpressionState), ParamsType = new Type[0] },
+            new MetodInfo
+            {
+                Name = "UpdateRosterTitle",
+                ReturnType = typeof (void),
+                ParamsType =  new Type[] { typeof (Guid), typeof (decimal[]), typeof (string) } 
+            }
         };
     }
 }

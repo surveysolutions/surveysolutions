@@ -1204,12 +1204,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             QuestionnaireDocument questionnaire,
             Func<IComposite, QuestionnaireVerificationError> notRecognizedParameterError)
         {
-            if (IsSpecialThisIdentifier(identifier))
-            {
-                return null;
+            /*if (IsSpecialThisIdentifier(identifier))
+            {*/
+                return null;/*
             }
 
-            IQuestion questionsReferencedInExpression = GetQuestionByIdentifier(identifier, questionnaire);
+         /*   IQuestion questionsReferencedInExpression = GetQuestionByIdentifier(identifier, questionnaire);
             IGroup rosterReferencedInExpression = GetRosterByIdentifier(identifier, questionnaire);
 
             if (questionsReferencedInExpression == null && rosterReferencedInExpression == null && !IsVariableNameNameSpace(identifier))
@@ -1222,7 +1222,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return null;
             }
 
-            return null;
+            return null;*/
         }
 
         private static bool IsVariableNameNameSpace(string identifier)

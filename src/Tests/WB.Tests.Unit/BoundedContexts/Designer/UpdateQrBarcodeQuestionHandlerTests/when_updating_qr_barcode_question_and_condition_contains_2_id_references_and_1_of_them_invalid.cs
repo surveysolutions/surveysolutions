@@ -8,6 +8,7 @@ using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerTests
 {
+    [Ignore("reference validation is turned off")]
     internal class when_updating_qr_barcode_question_and_condition_contains_2_id_references_and_1_of_them_invalid : QuestionnaireTestsContext
     {
         Establish context = () =>

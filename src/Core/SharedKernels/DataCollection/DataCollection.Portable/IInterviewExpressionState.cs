@@ -27,6 +27,7 @@ namespace WB.Core.SharedKernels.DataCollection
         void EnableQuestions(IEnumerable<Identity> questionsToEnable);
         
         void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex);
+        void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, string rosterTitle);
         void RemoveRoster(Guid rosterId, decimal[] rosterVector, decimal rosterInstanceId);
 
         ValidityChanges ProcessValidationExpressions();

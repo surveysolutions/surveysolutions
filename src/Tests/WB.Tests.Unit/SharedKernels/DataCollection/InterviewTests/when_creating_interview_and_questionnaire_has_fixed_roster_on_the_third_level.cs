@@ -52,6 +52,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         It should_raise_RosterInstancesAdded_event_with_3_instances = () =>
             eventContext.GetEvent<RosterInstancesAdded>().Instances.Count().ShouldEqual(3);
 
+        It should_raise_RosterInstancesTitleChanged_event_with_3_instances = () =>
+          eventContext.GetEvent<RosterInstancesAdded>().Instances.Count().ShouldEqual(3);
+
         Cleanup stuff = () =>
         {
             eventContext.Dispose();

@@ -3471,14 +3471,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void ParseExpressionIdentifierToExistingQuestionIdIgnoringThisIdentifierOrThrow(string identifier,
             string expression)
         {
-            IQuestion question = GetQuestionByStringIdOrVariableName(identifier);
+           /* IQuestion question = GetQuestionByStringIdOrVariableName(identifier);
 
             IGroup roster = this.GetRosterByrVariableName(identifier);
 
             if (question == null && roster == null && !IsVariableNameNameSpace(identifier))
                 throw new QuestionnaireException(
                     DomainExceptionType.ExpressionContainsNotExistingQuestionOrRosterReference, 
-                    string.Format(ExceptionMessages.QuestionOrRosterIdentifierIsMissing, identifier, expression));
+                    string.Format(ExceptionMessages.QuestionOrRosterIdentifierIsMissing, identifier, expression));*/
         }
 
         private bool IsVariableNameNameSpace(string identifier)
