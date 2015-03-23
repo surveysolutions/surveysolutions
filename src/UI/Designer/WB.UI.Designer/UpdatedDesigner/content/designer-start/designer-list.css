@@ -430,4 +430,19 @@ body {
 .container-wb-list section#designer-list #table-content-holder ul.pager a {
   color: #2fc507;
 }
+#frmSearch {
+  top: -5px;
+  position: relative;
+}
+#frmSearch .input-wrapper {
+  position: relative;
+}
+#frmSearch .input-wrapper button {
+  position: absolute;
+  right: 1px;
+  top: 1px;
+}
+#frmSearch #txtFilter {
+  padding: 6px;
+}
 /*# sourceMappingURL=designer-list.css.map */

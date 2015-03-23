@@ -1,4 +1,5 @@
-﻿@using WB.UI.Designer
+﻿@using System.Web.Configuration
+@using WB.UI.Designer
 @using WB.UI.Shared.Web.Membership
 @using WB.UI.Designer.Code
 @using WB.UI.Shared.Web.Extensions
@@ -43,7 +44,7 @@
                     <li role="presentation" class="create">@Html.ActionLink("Create New", "Create", "Questionnaire", null, new { @class = "btn" })</li>
                 </ul>
                 <nav>
-                    <button class="btn btn-default">Help</button>
+                    <a class="btn btn-default" href="@WebConfigurationManager.AppSettings["DesignerHelpUrl"]">Help</a>
                     @Html.ActionLink("Change password", "Manage", "Account", null, new { @class = "btn btn-default" })
                     @if (userHelper.WebUser.IsAdmin)
                     {
