@@ -113,7 +113,7 @@
                     <tbody data-bind="foreach: readSideRepositoryWriters()">
                         <tr>
                             <td data-bind="text: WriterName"></td>
-                            <td data-bind="text: Status"></td>
+                            <td data-bind="text: Status" style="white-space: pre"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -201,8 +201,7 @@
                                 </a>
                             </div>
                             <div class="accordion-body collapse" data-bind="attr:{ id: ErrorKey}">
-                                <pre class="accordion-inner margin-left10" data-bind="text: InnerException">
-                                </pre>
+                                <pre class="accordion-inner margin-left10" data-bind="text: InnerException"></pre>
                             </div>
                         </div>
                     </td>
