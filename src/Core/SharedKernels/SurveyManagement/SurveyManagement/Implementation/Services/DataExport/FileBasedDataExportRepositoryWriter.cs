@@ -171,8 +171,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public string GetReadableStatus()
         {
-            return string.Format(FileBasedDataExportRepositoryWriterMessages.CacheDescriptionFormat,
-                this.isCacheEnabled ? FileBasedDataExportRepositoryWriterMessages.Enabled : FileBasedDataExportRepositoryWriterMessages.Disabled,
+            return string.Format(
+                "File Export ._. | cache {1}{0}updates db: {2}{0}insert interviews: {3}, delete interviews: {4}{0}insert actions: {5}",
+                Environment.NewLine,
+                this.isCacheEnabled ? "enabled" : "disabled",
                 cache.Count,
                 cache.Values.Sum(c=>c.InterviewIds.Count),
                 cache.Values.Sum(c => c.InterviewForDeleteIds.Count),

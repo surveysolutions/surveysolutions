@@ -140,48 +140,17 @@ namespace WB.Core.Infrastructure.Storage.Postgre
 
   
 
-        private static object GetReadSideKeyValueStorage(IContext context)
-        {
-            //return context.Kernel.GetService(typeof (PostgreKeyValueStorage<>).MakeGenericType(context.GenericArguments[0]));
-
-            var genericProvider = context.Kernel.Get(
-                typeof(MemoryCachedKeyValueStorageProvider<>).MakeGenericType(context.GenericArguments[0])) as
-                IProvider;
-
-            if (genericProvider == null)
-                return null;
-            return genericProvider.Create(context);
-        }
-
-        private class MemoryCachedKeyValueStorageProvider<TEntity> : Provider<IReadSideKeyValueStorage<TEntity>>
-            where TEntity : class, IReadSideRepositoryEntity
-        {
-            protected override IReadSideKeyValueStorage<TEntity> CreateInstance(IContext context)
-            {
-                return new MemoryCachedKeyValueStorage<TEntity>(context.Kernel.Get<PostgreKeyValueStorage<TEntity>>());
-            }
-        }
-
-        private class MemoryCachedReadSideRepositoryWriterProvider<TEntity> : Provider<IReadSideRepositoryWriter<TEntity>>
-       where TEntity : class, IReadSideRepositoryEntity
-        {
-            protected override IReadSideRepositoryWriter<TEntity> CreateInstance(IContext context)
-            {
-                return new MemoryCachedReadSideRepositoryWriter<TEntity>(context.Kernel.Get<PostgreReadSideRepository<TEntity>>());
-            }
-        }
-
         private static object GetReadSideRepositoryWriter(IContext context)
         {
-//            return context.Kernel.GetService(typeof(PostgreReadSideRepository<>).MakeGenericType(context.GenericArguments[0]));
+            object postgresWriter = context.Kernel.GetService(typeof(PostgreReadSideRepository<>).MakeGenericType(context.GenericArguments[0]));
 
-            var genericProvider = context.Kernel.Get(
-                  typeof(MemoryCachedReadSideRepositoryWriterProvider<>).MakeGenericType(context.GenericArguments[0])) as
-                  IProvider;
+            //return postgresWriter;
 
-            if (genericProvider == null)
-                return null;
-            return genericProvider.Create(context);
+            Type cachedWriterType = typeof(MemoryCachedReadSideRepositoryWriter<>).MakeGenericType(context.GenericArguments[0]);
+
+            object cachingWriter = Activator.CreateInstance(cachedWriterType, postgresWriter);
+
+            return cachingWriter;
         }
     }
 }
