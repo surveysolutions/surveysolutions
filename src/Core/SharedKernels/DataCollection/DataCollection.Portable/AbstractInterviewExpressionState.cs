@@ -10,6 +10,10 @@ namespace WB.Core.SharedKernels.DataCollection
         public Dictionary<string, List<string>> SiblingRosters = new Dictionary<string, List<string>>();
 
         public abstract void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex);
+
+        public abstract void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
+            string rosterTitle);
+
         public abstract void RemoveRoster(Guid rosterId, decimal[] rosterVector, decimal rosterInstanceId);
 
         public abstract void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long? answer);
