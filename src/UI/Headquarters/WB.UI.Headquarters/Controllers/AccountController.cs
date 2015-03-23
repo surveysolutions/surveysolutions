@@ -158,8 +158,8 @@ namespace WB.UI.Headquarters.Controllers
                 var alowedRoles = new string[] { UserRoles.Administrator.ToString(), UserRoles.Observer.ToString(), UserRoles.Operator.ToString() };
                 var userRoles = Roles.GetRolesForUser(currentUserName.ObserverName);
 
-                bool invalidTargetUser = userRoles.Any(r => alowedRoles.Contains(r));
-                if (invalidTargetUser)
+                bool targetUserInValidRole = userRoles.Any(r => alowedRoles.Contains(r));
+                if (targetUserInValidRole)
                     this.authentication.SignIn(currentUserName.ObserverName, false);
                 
                 return this.RedirectToAction("Index", "Headquarters");
