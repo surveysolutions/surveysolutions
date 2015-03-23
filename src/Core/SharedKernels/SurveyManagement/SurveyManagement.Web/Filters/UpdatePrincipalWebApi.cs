@@ -1,15 +1,16 @@
 ﻿using System.Security.Principal;
 using System.Threading;
 using System.Web;
-using System.Web.Mvc;
+using System.Web.Http.Controllers;
+using System.Web.Http.Filters;
 using System.Web.Security;
-using WB.UI.Headquarters.Code.Security;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 
-namespace WB.UI.Headquarters.Filters
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
 {
-    public class UpdatePrincipal : ActionFilterAttribute
+    public class UpdatePrincipalWebApi : ActionFilterAttribute
     {
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        public override void OnActionExecuting(HttpActionContext filterContext)
         {
             IPrincipal usr = HttpContext.Current.User;
             if (usr.Identity.IsAuthenticated && usr.Identity.AuthenticationType == "Forms")

@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using System.Web;
 using System.Web.Compilation;
 using System.Web.Hosting;
+using System.Web.Http;
 using System.Web.Http.Filters;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.SessionState;
-using System.Web.Http;
 using Elmah;
+using EmbeddedResourceVirtualPathProvider;
 using Microsoft.Practices.ServiceLocation;
 using NConfig;
-using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils.Services;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Elmah;
@@ -133,7 +132,7 @@ namespace WB.UI.Headquarters
                                                                    httpRuntime,
                                                                    null) as string;
 
-            this.logger.Info("ShutdownReason: " + System.Web.Hosting.HostingEnvironment.ShutdownReason.ToString());
+            this.logger.Info("ShutdownReason: " + HostingEnvironment.ShutdownReason.ToString());
             this.logger.Info("ShutDownMessage: " + shutDownMessage);
             this.logger.Info("ShutDownStack: " + shutDownStack);
         }
@@ -146,7 +145,7 @@ namespace WB.UI.Headquarters
                 .Where(assembly => assembly.GetName().Name.Contains("SharedKernels") && assembly.GetName().Name.Contains("Web"))
                 .ToArray();
 
-            HostingEnvironment.RegisterVirtualPathProvider(new EmbeddedResourceVirtualPathProvider.Vpp(assemblies)
+            HostingEnvironment.RegisterVirtualPathProvider(new Vpp(assemblies)
             {
                 //you can do a specific assembly registration too. If you provide the assemly source path, it can read
                 //from the source file so you can change the content while the app is running without needing to rebuild

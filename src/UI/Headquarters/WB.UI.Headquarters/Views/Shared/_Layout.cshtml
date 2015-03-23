@@ -2,9 +2,9 @@
 @using System.Web.Optimization
 @using Main.Core.Entities.SubEntities
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
+@using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
 @using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @using WB.UI.Headquarters.Code
-@using WB.UI.Headquarters.Code.Security
 @using WB.UI.Shared.Web.Extensions
 <!DOCTYPE html>
 <html>
@@ -35,7 +35,7 @@
             {
                 <a class="navbar-brand" href="@Url.Action("Index", "HQ", new {area = ""})">Headquarters</a>
             }
-            @if (User.IsInRole(UserRoles.Observer.ToString()))
+            else if (User.IsInRole(UserRoles.Observer.ToString()))
             {
                 <a class="navbar-brand" href="@Url.Action("Index", "Supervisor", new {area = ""})">Observer</a>
             }
@@ -68,7 +68,7 @@
     @if ((User.Identity as CustomIdentity).IsObserver)
     {
         <div style=" background-color: #f5e488; height: 20px;width: 100%; text-align: center;">
-            Observing mode! Want to return to your account <a href="@Url.Action("ReturnToObserver", "Account", new { area = string.Empty })">@((User.Identity as CustomIdentity).ObserverName)</a>?
+            Observing mode! Do you want to return to your account <a href="@Url.Action("ReturnToObserver", "Account", new { area = string.Empty })">@((User.Identity as CustomIdentity).ObserverName)</a>?
         </div>
     }
 <div class="container-fluid">

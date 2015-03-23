@@ -1,6 +1,6 @@
 using System.Web.Security;
 
-namespace WB.UI.Headquarters.Code.Security
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
 {
     public class CustomIdentity : System.Security.Principal.IIdentity
     {
