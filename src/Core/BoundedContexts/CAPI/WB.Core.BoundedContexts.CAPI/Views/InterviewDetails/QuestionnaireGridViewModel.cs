@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails.GridItems;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
@@ -18,12 +19,12 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
     /// </summary>
     public class QuestionnaireGridViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel, IQuestionnaireViewModel
     {
-        private readonly Func<InterviewItemId, IEnumerable<QuestionnairePropagatedScreenViewModel>> rowsValue;
+        private readonly Func<string, IEnumerable<QuestionnairePropagatedScreenViewModel>> rowsValue;
         private readonly Func<InterviewItemId, IEnumerable<InterviewItemId>> sibligsValue;
 
         public QuestionnaireGridViewModel(Guid questionnaireId, string screenName, string title, InterviewItemId screenId, bool enabled, Func<InterviewItemId, IEnumerable<InterviewItemId>> getSiblings,
             IEnumerable<InterviewItemId> breadcrumbs, IList<HeaderItem> header
-            , Func<InterviewItemId, IEnumerable<QuestionnairePropagatedScreenViewModel>> rows, int total, int answered)
+            , Func<string, IEnumerable<QuestionnairePropagatedScreenViewModel>> rows, int total, int answered)
         {
             this.QuestionnaireId = questionnaireId;
             this.ScreenName = screenName;
@@ -40,7 +41,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         [JsonConstructor]
         public QuestionnaireGridViewModel(Guid questionnaireId, string screenName, string title, InterviewItemId screenId, bool enabled, Func<InterviewItemId, IEnumerable<InterviewItemId>> getSiblings,
            IEnumerable<InterviewItemId> breadcrumbs, IList<HeaderItem> header
-           , Func<InterviewItemId, IEnumerable<QuestionnairePropagatedScreenViewModel>> rows)
+           , Func<string, IEnumerable<QuestionnairePropagatedScreenViewModel>> rows)
             : this(questionnaireId, screenName, title, screenId, enabled, getSiblings, breadcrumbs, header, rows, 0, 0)
         {
         }
@@ -63,7 +64,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         [JsonIgnore]
         public IEnumerable<QuestionnairePropagatedScreenViewModel> Rows
         {
-            get { return this.rowsValue(ScreenId); }
+            get { return this.rowsValue(ConversionHelper.ConvertIdAndRosterVectorToString(ScreenId.Id, ScreenId.InterviewItemPropagationVector)); }
         }
 
         public IEnumerable<InterviewItemId> Siblings

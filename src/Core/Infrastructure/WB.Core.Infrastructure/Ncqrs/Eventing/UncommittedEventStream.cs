@@ -23,7 +23,6 @@ namespace Ncqrs.Eventing
         /// <summary>
         /// Creates new uncommitted event stream.
         /// </summary>
-        /// <param name="commitId"></param>
         public UncommittedEventStream(Guid commitId, string origin)
         {
             _commitId = commitId;

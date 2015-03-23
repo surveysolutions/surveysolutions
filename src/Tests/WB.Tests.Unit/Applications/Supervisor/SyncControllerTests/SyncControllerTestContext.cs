@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Web.Http;
@@ -6,8 +8,8 @@ using Moq;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -24,7 +26,8 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             ICommandService commandService = null,
             IGlobalInfoProvider globalInfo = null,
             ISyncManager syncManager = null,
-            ILogger logger = null, IViewFactory<UserViewInputModel, UserView> viewFactory = null,
+            ILogger logger = null, 
+            IUserWebViewFactory viewFactory = null,
             ISupportedVersionProvider versionProvider = null,
             ISyncProtocolVersionProvider syncVersionProvider = null)
         {
@@ -39,7 +42,7 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             IGlobalInfoProvider globalInfo = null,
             ISyncManager syncManager = null,
             ILogger logger = null,
-            IViewFactory<UserViewInputModel, UserView> viewFactory = null,
+            IUserWebViewFactory viewFactory = null,
             ISupportedVersionProvider versionProvider = null,
             ISyncProtocolVersionProvider syncVersionProvider = null,
             IPlainInterviewFileStorage plainFileRepository = null, 
@@ -57,26 +60,24 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             IGlobalInfoProvider globalInfo = null,
             ISyncManager syncManager = null,
             ILogger logger = null,
-            IViewFactory<UserViewInputModel, UserView> viewFactory = null,
+            IUserWebViewFactory viewFactory = null,
             ISupportedVersionProvider versionProvider = null,
             ISyncProtocolVersionProvider syncVersionProvider = null,
             IPlainInterviewFileStorage plainFileRepository = null,
             IFileSystemAccessor fileSystemAccessor = null,
-            ITabletInformationService tabletInformationService = null,
-            IJsonUtils jsonUtils = null)
+            ITabletInformationService tabletInformationService = null)
         {
             var controller = new InterviewerSyncController(
                 commandService ?? Mock.Of<ICommandService>(), 
                 globalInfo ?? Mock.Of<IGlobalInfoProvider>(),
                 syncManager ?? Mock.Of<ISyncManager>(),
                 logger ?? Mock.Of<ILogger>(),
-                viewFactory ?? Mock.Of<IViewFactory<UserViewInputModel, UserView>>(),
+                viewFactory ?? Mock.Of<IUserWebViewFactory>(),
                 versionProvider ?? Mock.Of<ISupportedVersionProvider>(),
                 plainFileRepository ?? Mock.Of<IPlainInterviewFileStorage>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 syncVersionProvider ?? Mock.Of<ISyncProtocolVersionProvider>(),
-                tabletInformationService ?? Mock.Of<ITabletInformationService>(),
-                jsonUtils ?? Mock.Of<IJsonUtils>());
+                tabletInformationService ?? Mock.Of<ITabletInformationService>());
 
             return controller;
         }
@@ -84,7 +85,7 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
         protected static void SetControllerContextWithStream(ApiController controller, Stream stream)
         {
             controller.Request = new HttpRequestMessage(HttpMethod.Post, "http://localhost");
-            controller.Configuration = new System.Web.Http.HttpConfiguration(new System.Web.Http.HttpRouteCollection());
+            controller.Configuration = new HttpConfiguration(new HttpRouteCollection());
         }
 
         protected static void SetControllerContextWithFiles(ApiController controller, Stream stream, string fileName = null)
@@ -97,7 +98,57 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             
             requestMessage.Content = content;
             controller.Request = requestMessage; 
-            controller.Configuration = new System.Web.Http.HttpConfiguration(new System.Web.Http.HttpRouteCollection());
+            controller.Configuration = new HttpConfiguration(new HttpRouteCollection());
+        }
+
+        protected static SyncPackageRequest CreateSyncPackageRequest(string packageId, Guid deviceId)
+        {
+            return new SyncPackageRequest
+            {
+                ClientRegistrationId = deviceId,
+                PackageId = packageId
+            };
+        }
+
+        protected static UserSyncPackageDto CreateUserSyncPackageDto(Guid userId, string packageId)
+        {
+            return new UserSyncPackageDto
+            {
+                PackageId = packageId
+            };
+        }
+
+        protected static QuestionnaireSyncPackageDto CreateQuestionnaireSyncPackageDto(string packageId)
+        {
+            return new QuestionnaireSyncPackageDto
+            {
+                PackageId = packageId
+            };
+        }
+
+        protected static InterviewSyncPackageDto CreateInterviewSyncPackageDto(string packageId)
+        {
+            return new InterviewSyncPackageDto
+            {
+                PackageId = packageId
+            };
+        }
+
+        protected static SyncItemsMetaContainer CreateSyncItemsMetaContainer()
+        {
+            return new SyncItemsMetaContainer
+                   {
+                       SyncPackagesMeta = new List<SynchronizationChunkMeta>()
+                   };
+        }
+
+        protected static SyncItemsMetaContainerRequest CreateSyncItemsMetaContainerRequest(string lastPackageId, Guid deviceId)
+        {
+            return new SyncItemsMetaContainerRequest
+                   {
+                       ClientRegistrationId = deviceId,
+                       LastSyncedPackageId = lastPackageId
+                   };
         }
     }
 }

@@ -40,7 +40,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private void InitializeFilteredCombobox()
         {
-            this.filteredCombobox = new AutoCompleteTextView(this.Context) { Threshold = 1, ImeOptions = ImeAction.Done };
+            this.filteredCombobox = new AutoCompleteTextView(this.CurrentContext) { Threshold = 1, ImeOptions = ImeAction.Done };
 
             this.filteredCombobox.SetSelectAllOnFocus(true);
             this.filteredCombobox.SetSingleLine(true);
@@ -50,7 +50,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             this.filteredCombobox.EditorAction += FilteredComboboxOnEditorAction;
             
 
-            var adapter = new ArrayAdapter<String>(this.Context, Resource.Layout.FilteredComboboxRowLayout,
+            var adapter = new ArrayAdapter<String>(this.CurrentContext, Resource.Layout.FilteredComboboxRowLayout,
                 this.Answers.Select(option => option.Title).ToList());
             this.filteredCombobox.Adapter = adapter;
             

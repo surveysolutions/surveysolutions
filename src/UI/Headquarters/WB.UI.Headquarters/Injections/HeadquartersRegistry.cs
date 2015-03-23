@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
 using Main.DenormalizerStorage;
-using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ninject;
 using Ninject.Activation;
@@ -16,12 +15,9 @@ using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.GenericSubdomains.Utils.Services;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.Implementation.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
@@ -209,8 +205,6 @@ namespace WB.UI.Headquarters.Injections
 
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
             this.Bind<IStringCompressor>().To<JsonCompressor>();
-            this.Bind<IWaitService>().To<WaitService>().InSingletonScope();
-
             this.Bind<IRestServiceSettings>().To<DesignerQuestionnaireApiRestServiceSettings>().InSingletonScope();
             this.Bind<IRestService>().To<RestService>().WithConstructorArgument("networkService", _ => null);
         }

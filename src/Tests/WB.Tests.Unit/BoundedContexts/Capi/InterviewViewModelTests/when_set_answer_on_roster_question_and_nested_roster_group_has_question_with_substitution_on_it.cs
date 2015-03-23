@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -71,7 +70,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
         };
 
         Because of = () =>
-            interviewViewModel.SetAnswer(new InterviewItemId(questionSourceOfSubstitutionId, new decimal[] { 0 }), "answer");
+            interviewViewModel.SetAnswer(ConversionHelper.ConvertIdAndRosterVectorToString(questionSourceOfSubstitutionId, new decimal[] { 0 }), "answer");
 
         It should_title_of_question_with_substitution_be_substituted_with_answer_on_set_question = () =>
             interviewViewModel.FindQuestion(q => q.PublicKey == new InterviewItemId(questionInNesedGroupWithSubstitutionId, new decimal[] { 0 })).FirstOrDefault().Text.ShouldEqual("answer example");

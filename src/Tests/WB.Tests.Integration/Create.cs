@@ -315,7 +315,7 @@ namespace WB.Tests.Integration
 
         public static Questionnaire Questionnaire(QuestionnaireDocument questionnaireDocument)
         {
-            return new Questionnaire(Guid.NewGuid(), questionnaireDocument, false, string.Empty);
+            return new Questionnaire(Guid.NewGuid(), questionnaireDocument, false, "base64 string of assembly");
         }
 
         public static Interview Interview(Guid? interviewId = null, Guid? userId = null, Guid? questionnaireId = null,

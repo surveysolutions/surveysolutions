@@ -6,6 +6,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -69,13 +70,13 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.InterviewViewModelTests
         };
 
         Because of = () =>
-            interviewViewModel.SetAnswer(new InterviewItemId(rosterTitleQuestionId, new decimal[] { 0 }), rosterTitle);
+            interviewViewModel.SetAnswer(ConversionHelper.ConvertIdAndRosterVectorToString(rosterTitleQuestionId, new decimal[] { 0 }), rosterTitle);
 
         It should_title_of_first_roster_be_equal_set_title = () =>
-            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(rosterGroupId1, new decimal[] { 0 })]).ScreenName.ShouldEqual(rosterTitle);
+            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[ConversionHelper.ConvertIdAndRosterVectorToString(rosterGroupId1, new decimal[] { 0 })]).ScreenName.ShouldEqual(rosterTitle);
 
         It should_title_of_second_roster_be_equal_set_title = () =>
-            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[new InterviewItemId(rosterGroupId2, new decimal[] { 0 })]).ScreenName.ShouldEqual(rosterTitle);
+            ((QuestionnairePropagatedScreenViewModel)interviewViewModel.Screens[ConversionHelper.ConvertIdAndRosterVectorToString(rosterGroupId2, new decimal[] { 0 })]).ScreenName.ShouldEqual(rosterTitle);
 
         private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;

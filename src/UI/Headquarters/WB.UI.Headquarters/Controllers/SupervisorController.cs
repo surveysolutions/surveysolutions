@@ -1,30 +1,35 @@
 ﻿using System;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using WB.Core.GenericSubdomains.Logging;
+using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.UI.Headquarters.Code;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [Authorize(Roles = "Headquarter")]
+    [Authorize(Roles = "Administrator, Headquarter")]
     public class SupervisorController : TeamController
     {
         public SupervisorController(ICommandService commandService, 
                               IGlobalInfoProvider globalInfo, 
                               ILogger logger,
-                              IViewFactory<UserViewInputModel, UserView> userViewFactory,
-                              IPasswordHasher passwordHasher)
+                              IUserViewFactory userViewFactory,
+                              IPasswordHasher passwordHasher,
+                              IIdentityManager identityManager)
             : base(commandService, globalInfo, logger, userViewFactory, passwordHasher)
         {
-            
+            this.IdentityManager = identityManager;
         }
+
+        protected readonly IIdentityManager IdentityManager;
 
         public ActionResult Create()
         {
@@ -32,6 +37,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
+        [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
         public ActionResult Create(UserModel model)
         {
@@ -83,9 +89,18 @@ namespace WB.UI.Headquarters.Controllers
                 var user = this.GetUserById(model.Id);
                 if (user != null)
                 {
-                    this.UpdateAccount(user: user, editModel: model);
-                    this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
-                    return this.RedirectToAction("Index");
+                    var forbiddenRoles = new string[]{ UserRoles.Administrator.ToString(), UserRoles.Headquarter.ToString()};
+                    var doesUserInForbiddenRole = IdentityManager.GetRolesForUser(user.UserName).Any(r => forbiddenRoles.Contains(r));
+
+                    if (!doesUserInForbiddenRole)
+                    {
+                        this.UpdateAccount(user: user, editModel: model);
+                        this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
+                        return this.RedirectToAction("Index");
+                    }
+
+                    this.Error("Could not update user information because you don't have permission to perform this operation");
+
                 }
                 else
                 {

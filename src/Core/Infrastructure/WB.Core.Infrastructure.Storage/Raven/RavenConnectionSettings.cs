@@ -8,13 +8,13 @@ namespace WB.Core.Infrastructure.Storage.Raven
     {
         private readonly string eventsDatabase;
 
-        public RavenConnectionSettings(string storagePath,
-            string username = null, string password = null, string eventsDatabase = null, string viewsDatabase = "Views",
-            string plainDatabase = "PlainStorage", string failoverBehavior = null, string activeBundles = null)
+        public RavenConnectionSettings(string storagePath, string username = null, string password = null, string eventsDatabase = null, string viewsDatabase = "Views",
+            string plainDatabase = "PlainStorage", string failoverBehavior = null, string activeBundles = null, string ravenFileSystemName = "FileSystem")
         {
             this.Username = username;
             this.Password = password;
             this.StoragePath = storagePath;
+            this.RavenFileSystemName = ravenFileSystemName;
             this.eventsDatabase = eventsDatabase;
             this.ViewsDatabase = viewsDatabase;
             this.PlainDatabase = plainDatabase;
@@ -44,6 +44,7 @@ namespace WB.Core.Infrastructure.Storage.Raven
 
         public string ViewsDatabase { get; private set; }
         public string PlainDatabase { get; private set; }
+        public string RavenFileSystemName { get; private set; }
         public FailoverBehavior FailoverBehavior { get; private set; }
         public string ActiveBundles { get; private set; }
     }

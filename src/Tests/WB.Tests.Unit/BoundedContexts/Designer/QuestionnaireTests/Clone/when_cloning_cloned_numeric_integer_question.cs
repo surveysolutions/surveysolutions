@@ -24,7 +24,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.Clone
                 QuestionType = QuestionType.Numeric,
                 StataExportCaption = "varrr",
                 VariableLabel = "varlabel",
-                IsInteger = true
+                IsInteger = true,
+                CountOfDecimalPlaces = 100
             };
             questionnaire.Apply(questionCloned);
 
@@ -34,6 +35,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.Clone
         Because of = () => questionnaire.CloneQuestionById(sourceQuestionId, responsibleId, targetId);
 
         It should_clone_Reset_MaxValue_property = () => eventContext.ShouldContainEvent<QuestionCloned>(x => x.PublicKey == targetId && x.MaxValue == null);
+
+        It should_clone_CountOfDecimalPlaces_property = () =>  eventContext.ShouldContainEvent<QuestionCloned>(x => x.PublicKey == targetId && x.CountOfDecimalPlaces == 100);
 
         static Questionnaire questionnaire;
         static Guid sourceQuestionId;

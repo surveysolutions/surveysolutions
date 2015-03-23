@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using It = Machine.Specifications.It;
 
@@ -17,7 +18,11 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
         {
             interviewId = Guid.NewGuid();
 
-            syncItem = new SyncItem() { ItemType = SyncItemType.DeleteQuestionnare, IsCompressed = false, Content = interviewId.ToString(), MetaInfo = "some metadata", RootId = Guid.NewGuid() };
+            syncItem = new InterviewSyncPackageDto
+                       {
+                           Content = interviewId.ToString(), 
+                           MetaInfo = "some metadata", 
+                       };
 
             commandService = new Mock<ICommandService>();
 
@@ -32,34 +37,19 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 plainQuestionnaireRepositoryMock.Object, null, cleanUpExecutorMock.Object);
         };
 
-        Because of = () => exception = Catch.Exception(() =>capiDataSynchronizationService.SavePulledItem(syncItem));
+        Because of = () => exception = Catch.Exception(() => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem, SyncItemType.DeleteInterview));
 
         It should_never_call_any_command =
-            () =>
-                commandService.Verify(
-                    x =>
-                        x.Execute(
-                            Moq.It.IsAny<ICommand>(), null),
-                    Times.Never);
+            () => commandService.Verify(x => x.Execute(Moq.It.IsAny<ICommand>(), null), Times.Never);
 
         It should_cleanup_data_for_interview =
-            () =>
-                cleanUpExecutorMock.Verify(
-                    x => x.DeleteInterview(interviewId),
-                    Times.Once);
+            () => cleanUpExecutorMock.Verify(x => x.DeleteInterview(interviewId), Times.Once);
 
-        It should_not_create_public_record_in_change_log_for_sync_item =
-        () =>
-            changeLogManipulator.Verify(
-                x =>
-                    x.CreatePublicRecord(syncItem.RootId),
-                Times.Never);
-
-        It should_throw_NullReferenceException = () =>
-            exception.ShouldBeOfType<NullReferenceException>();
+        It should_not_throw_Exception = () => 
+            exception.ShouldBeNull();
 
         private static CapiDataSynchronizationService capiDataSynchronizationService;
-        private static SyncItem syncItem;
+        private static InterviewSyncPackageDto syncItem;
         private static Mock<ICommandService> commandService;
         private static Mock<IPlainQuestionnaireRepository> plainQuestionnaireRepositoryMock;
         private static Mock<IChangeLogManipulator> changeLogManipulator;

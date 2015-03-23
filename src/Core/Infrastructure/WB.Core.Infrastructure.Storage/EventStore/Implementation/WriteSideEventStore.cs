@@ -5,7 +5,9 @@ using System.Net;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using EventStore.ClientAPI;
+using EventStore.ClientAPI.Exceptions;
 using EventStore.ClientAPI.SystemData;
 using Ncqrs;
 using Ncqrs.Eventing;
@@ -16,13 +18,25 @@ using Nito.AsyncEx;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.GenericSubdomains.Utils;
 using Newtonsoft.Json.Converters;
+using ILogger = WB.Core.GenericSubdomains.Utils.Services.ILogger;
 
 namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 {
     internal class WriteSideEventStore : IStreamableEventStore, IDisposable
     {
-        private readonly IEventStoreConnectionProvider connectionProvider;
-        private static readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings
+        private const string CountProjectionName = "AllEventsCount";
+        private readonly ILogger logger;
+        private readonly EventStoreSettings settings;
+        private static readonly Encoding Encoding = Encoding.UTF8;
+        private const string EventsPrefix = EventsCategory + "-";
+        private const string EventsCategory = "WB";
+        private readonly IEventStoreConnection connection;
+        private bool disposed;
+        private readonly TimeSpan defaultTimeout = TimeSpan.FromSeconds(30);
+
+        internal static readonly string AllEventsStream = "$ce-" + EventsCategory;
+
+        private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
         {
             NullValueHandling = NullValueHandling.Ignore,
             DefaultValueHandling = DefaultValueHandling.Ignore,
@@ -32,19 +46,14 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             Converters = new JsonConverter[] { new StringEnumConverter() }
         };
 
-        private static readonly Encoding Encoding = Encoding.UTF8;
-        internal static readonly string EventsCategory = "WB";
-        internal static readonly string EventsPrefix = EventsCategory + "-";
-        private readonly IEventStoreConnection connection;
-        bool disposed;
-        private readonly TimeSpan defaultTimeout = TimeSpan.FromSeconds(30);
-
-        internal const string AllEventsStream = "all_wb";
-
-        public WriteSideEventStore(IEventStoreConnectionProvider connectionProvider)
+        public WriteSideEventStore(IEventStoreConnectionProvider connectionProvider, 
+            ILogger logger,
+            EventStoreSettings settings)
         {
-            this.connectionProvider = connectionProvider;
-            this.connection =  this.connectionProvider.Open();
+            this.logger = logger;
+            this.settings = settings;
+            ConfigureEventStore();
+            this.connection = connectionProvider.Open();
 
             using (var cancellationTokenSource = new CancellationTokenSource()) {
                 cancellationTokenSource.CancelAfter(this.defaultTimeout);
@@ -70,7 +79,8 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
             do
             {
-                currentSlice = AsyncContext.Run(() => connection.ReadStreamEventsForwardAsync(EventsPrefix + id.FormatGuid(), nextSliceStart, batchSize, false));
+                currentSlice = this.RunWithDefaultTimeout(this.connection.ReadStreamEventsForwardAsync(EventsPrefix + id.FormatGuid(), nextSliceStart, batchSize, false));
+
                 nextSliceStart = currentSlice.NextEventNumber;
 
                 streamEvents.AddRange(currentSlice.Events);
@@ -81,38 +91,35 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             return new CommittedEventStream(id, storedEvents);
         }
 
-        public IEnumerable<CommittedEvent[]> GetAllEvents(int bulkSize = 200, int skipEvents = 0)
+        public IEnumerable<CommittedEvent> GetAllEvents()
         {
-            var nextPosition = skipEvents;
-            StreamEventsSlice currentSlice;
+            var position = Position.Start;
+            AllEventsSlice slice;
+
             do
             {
-                currentSlice = AsyncContext.Run(() => connection.ReadStreamEventsForwardAsync(AllEventsStream, nextPosition, bulkSize, true));
-                nextPosition = currentSlice.NextEventNumber;
+                slice = this.RunWithDefaultTimeout(this.connection.ReadAllEventsForwardAsync(position, settings.MaxCountToRead, resolveLinkTos: false));
 
-                yield return currentSlice.Events.Select(this.ToCommittedEvent).ToArray();
-            } while (!currentSlice.IsEndOfStream);
+                position = slice.NextPosition;
+
+                foreach (var @event in slice.Events)
+                {
+                    if (!IsSystemEvent(@event))
+                        yield return this.ToCommittedEvent(@event);
+                }
+
+            } while (!slice.IsEndOfStream);
         }
 
-        public IEnumerable<CommittedEvent> GetEventStream()
+        private static bool IsSystemEvent(ResolvedEvent @event)
         {
-            var nextPosition = 0;
-            StreamEventsSlice currentSlice;
-            do
-            {
-                currentSlice = AsyncContext.Run(() => connection.ReadStreamEventsForwardAsync(AllEventsStream, nextPosition, 200, false));
-                nextPosition = currentSlice.NextEventNumber;
-                foreach (var resolvedEvent in currentSlice.Events)
-                {
-                    yield return this.ToCommittedEvent(resolvedEvent);
-                }
-            } while (!currentSlice.IsEndOfStream);
+            return !@event.Event.EventStreamId.StartsWith(EventsPrefix);
         }
 
         public void Store(UncommittedEventStream eventStream)
         {
             int expectedStreamVersion = (int) (eventStream.InitialVersion - 1);
-            using (EventStoreTransaction transaction = AsyncContext.Run(() => this.connection.StartTransactionAsync(EventsPrefix + eventStream.SourceId.FormatGuid(), expectedStreamVersion)))
+            using (EventStoreTransaction transaction = this.RunWithDefaultTimeout(this.connection.StartTransactionAsync(EventsPrefix + eventStream.SourceId.FormatGuid(), expectedStreamVersion)))
             {
                 using (var transactionTimeout = new CancellationTokenSource()) 
                 {
@@ -130,13 +137,21 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public int CountOfAllEvents()
         {
-            StreamEventsSlice slice = AsyncContext.Run(() => this.connection.ReadStreamEventsForwardAsync(AllEventsStream, 0, 1, false));
-            return slice.LastEventNumber + 1;
+            var httpEndPoint = new IPEndPoint(IPAddress.Parse(settings.ServerIP), settings.ServerHttpPort);
+            var manager = new ProjectionsManager(new EventStoreLogger(this.logger), httpEndPoint, defaultTimeout);
+
+            string projectionresult = AsyncContext.Run(() => manager.GetStateAsync(CountProjectionName, new UserCredentials(this.settings.Login, this.settings.Password)));
+            var value = JsonConvert.DeserializeAnonymousType(projectionresult, new
+            {
+                count = 0
+            });
+
+            return value != null ? value.count : 0;
         }
 
         public long GetLastEventSequence(Guid id)
         {
-            StreamEventsSlice slice = AsyncContext.Run(() => this.connection.ReadStreamEventsForwardAsync(EventsPrefix + id.FormatGuid(), 0, 1, false));
+            StreamEventsSlice slice = this.RunWithDefaultTimeout(this.connection.ReadStreamEventsForwardAsync(EventsPrefix + id.FormatGuid(), 0, 1, false));
             return slice.LastEventNumber + 1;
         }
 
@@ -146,10 +161,10 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             var meta = Encoding.GetString(resolvedEvent.Event.Metadata);
             try
             {
-                var metadata = JsonConvert.DeserializeObject<EventMetada>(meta, jsonSerializerSettings);
+                var metadata = JsonConvert.DeserializeObject<EventMetada>(meta, JsonSerializerSettings);
                 var eventData = JsonConvert.DeserializeObject(value,
                                     NcqrsEnvironment.GetEventDataTypeByName(resolvedEvent.Event.EventType.ToPascalCase()),
-                                    jsonSerializerSettings);
+                                    JsonSerializerSettings);
 
                 var committedEvent = new CommittedEvent(Guid.NewGuid(),
                     metadata.Origin,
@@ -158,6 +173,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                     resolvedEvent.Event.EventNumber + 1,
                     metadata.Timestamp,
                     eventData);
+                
                 return committedEvent;
             }
             catch (JsonException exception)
@@ -169,7 +185,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         internal static EventData BuildEventData(UncommittedEvent @event)
         {
-            string eventString = JsonConvert.SerializeObject(@event.Payload, Formatting.Indented, jsonSerializerSettings);
+            string eventString = JsonConvert.SerializeObject(@event.Payload, Formatting.Indented, JsonSerializerSettings);
             string metaData = JsonConvert.SerializeObject(new EventMetada
             {
                 Timestamp = @event.EventTimeStamp,
@@ -183,6 +199,22 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                 Encoding.GetBytes(eventString),
                 Encoding.GetBytes(metaData));
             return eventData;
+        }
+
+        private TResult RunWithDefaultTimeout<TResult>(Task<TResult> readTask)
+        {
+            using (var timeoutTokenSource = new CancellationTokenSource())
+            {
+                timeoutTokenSource.CancelAfter(this.defaultTimeout);
+                Task timeoutTask = timeoutTokenSource.Token.AsTask();
+
+                Task firstFinishedTask = AsyncContext.Run(() => Task.WhenAny(timeoutTask, readTask));
+
+                if (firstFinishedTask == timeoutTask)
+                    throw new TimeoutException(string.Format("Failed to perform eventstore operation using timeout {0}", this.defaultTimeout));
+
+                return ((Task<TResult>)firstFinishedTask).Result; // this .Result will not invoke task. it is already complete on this stage
+            }
         }
 
         public void Dispose()
@@ -207,6 +239,43 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             }
 
             this.disposed = true;
+        }
+
+        private void ConfigureEventStore()
+        {
+            if (settings.InitializeProjections)
+            {
+                var httpEndPoint = new IPEndPoint(IPAddress.Parse(this.settings.ServerIP), this.settings.ServerHttpPort);
+                var manager = new ProjectionsManager(new EventStoreLogger(this.logger), httpEndPoint, defaultTimeout);
+
+                var userCredentials = new UserCredentials(settings.Login, settings.Password);
+                string projectionStatus = AsyncContext.Run(() => manager.GetStatusAsync("$by_category"));
+                var status = JsonConvert.DeserializeAnonymousType(projectionStatus, new { status = "" });
+                if (status.status != "Running")
+                {
+                    manager.EnableAsync("$by_category", userCredentials).WaitAndUnwrapException();
+                }
+
+                try
+                {
+                    AsyncContext.Run(() => manager.GetStateAsync(CountProjectionName));
+                }
+                catch (ProjectionCommandFailedException)
+                {
+                    const string ProjectionQuery = @"fromCategory('" + EventsCategory + @"') 
+                                                .when({        
+                                                    $init: function () {
+                                                            return { count: 0 }; // initial state
+                                                        },
+                                                        $any: function (s, e) {
+                                                            s.count += 1;
+                                                            return s;
+                                                        } 
+                                                })";
+
+                    manager.CreateContinuousAsync(CountProjectionName, ProjectionQuery, userCredentials).WaitAndUnwrapException();
+                }
+            }
         }
     }
 }

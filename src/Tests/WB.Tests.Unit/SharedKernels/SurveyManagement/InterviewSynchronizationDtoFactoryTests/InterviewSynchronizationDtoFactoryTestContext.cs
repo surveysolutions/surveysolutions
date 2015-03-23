@@ -7,8 +7,8 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
@@ -21,14 +21,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
         protected static InterviewSynchronizationDtoFactory CreateInterviewSynchronizationDtoFactory(QuestionnaireDocument document)
         {
             document.ConnectChildrenWithParent();
-            return new InterviewSynchronizationDtoFactory(Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>(
-                _ => _.GetById(It.IsAny<string>(), It.IsAny<long>()) == new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(document, 1)));
+            return new InterviewSynchronizationDtoFactory(Mock.Of<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(
+                _ => _.GetById(It.IsAny<string>()) == new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(document, 1)));
         }
 
         protected static InterviewSynchronizationDtoFactory CreateInterviewSynchronizationDtoFactory(QuestionnaireRosterStructure questionnaireRosterStructure)
         {
-            return new InterviewSynchronizationDtoFactory(Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure>>(
-                _ => _.GetById(It.IsAny<string>(), It.IsAny<long>()) == questionnaireRosterStructure));
+            return new InterviewSynchronizationDtoFactory(Mock.Of<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(
+                _ => _.GetById(It.IsAny<string>()) == questionnaireRosterStructure));
         }
 
         internal static InterviewData CreateInterviewData(Guid? interviewId=null)

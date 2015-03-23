@@ -3,11 +3,11 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 {
-    public class QuestionnaireBrowseItem : IVersionedView
+    public class QuestionnaireBrowseItem : IReadSideRepositoryEntity
     {
         public QuestionnaireBrowseItem()
         {
@@ -53,5 +53,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
         public FeaturedQuestionItem[] FeaturedQuestions { get;  set; }
 
         public bool AllowCensusMode { get; set; }
+
+        public bool Disabled { get; set; }
     }
 }

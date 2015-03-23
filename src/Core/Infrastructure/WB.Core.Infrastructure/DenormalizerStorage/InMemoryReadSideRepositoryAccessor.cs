@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Core.SharedKernels.SurveySolutions;
 
 namespace Main.DenormalizerStorage
 {
-    public class InMemoryReadSideRepositoryAccessor<TView> : IReadSideRepositoryCleaner, IQueryableReadSideRepositoryReader<TView>, IReadSideRepositoryWriter<TView>
-        where TView : class, IView
+    public class InMemoryReadSideRepositoryAccessor<TView> : IReadSideRepositoryCleaner, 
+        IQueryableReadSideRepositoryReader<TView>, 
+        IReadSideRepositoryWriter<TView>, 
+        IReadSideKeyValueStorage<TView> 
+        where TView : class, IReadSideRepositoryEntity
     {
         private readonly Dictionary<string, TView> repository;
         private object locker = new object();
@@ -51,7 +54,7 @@ namespace Main.DenormalizerStorage
                 this.repository.Remove(id);
             }
         }
-        
+
         public void Store(TView view, string id)
         {
             lock (locker)
@@ -64,6 +67,14 @@ namespace Main.DenormalizerStorage
                 {
                     this.repository[id] = view;
                 }
+            }
+        }
+
+        public void BulkStore(List<Tuple<TView, string>> bulk)
+        {
+            foreach (var tuple in bulk)
+            {
+                Store(tuple.Item1, tuple.Item2);                
             }
         }
 

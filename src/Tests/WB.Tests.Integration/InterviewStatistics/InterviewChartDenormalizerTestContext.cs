@@ -9,8 +9,8 @@ namespace WB.Tests.Integration.InterviewStatistics
     internal class InterviewChartDenormalizerTestContext
     {
         internal static InterviewsChartDenormalizer CreateInterviewsChartDenormalizer(
-            IReadSideRepositoryWriter<InterviewDetailsForChart> interviewDetailsStorage = null,
-            IReadSideRepositoryWriter<StatisticsGroupedByDateAndTemplate> statisticsStorag = null)
+            IReadSideKeyValueStorage<InterviewDetailsForChart> interviewDetailsStorage = null,
+            IReadSideKeyValueStorage<StatisticsGroupedByDateAndTemplate> statisticsStorag = null)
         {
             return new InterviewsChartDenormalizer(
                 interviewDetailsStorage ?? new InMemoryReadSideRepositoryAccessor<InterviewDetailsForChart>(),

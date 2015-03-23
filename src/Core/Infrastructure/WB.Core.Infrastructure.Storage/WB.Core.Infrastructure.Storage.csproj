@@ -37,9 +37,18 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Esent.Collections">
+      <HintPath>..\..\..\..\packages\Microsoft.Database.Collections.Generic.1.9.2.0\lib\net40\Esent.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Esent.Interop">
+      <HintPath>..\..\..\..\packages\ManagedEsent.1.9.2.0\lib\net40\Esent.Interop.dll</HintPath>
+    </Reference>
     <Reference Include="EventStore.ClientAPI">
       <HintPath>..\..\..\..\packages\EventStore.Client.3.0.1\lib\net40\EventStore.ClientAPI.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Humanizer">
+      <HintPath>..\..\..\..\packages\Humanizer.1.32.0\lib\portable-win+net40+sl50+wp8+wpa81\Humanizer.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -73,6 +82,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Services.Client" />
     <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Threading.Tasks" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -80,39 +92,39 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EventStore\EventStoreConnectionSettings.cs" />
+    <Compile Include="Esent\EsentReadSideModule.cs" />
+    <Compile Include="Esent\Implementation\EsentKeyValueStorage.cs" />
+    <Compile Include="Esent\Implementation\EsentSettings.cs" />
+    <Compile Include="EventStore\EventStoreSettings.cs" />
     <Compile Include="EventStore\EventStoreWriteSideModule.cs" />
     <Compile Include="EventStore\Implementation\EventMetada.cs" />
     <Compile Include="EventStore\Implementation\EventStoreConnectionProvider.cs" />
     <Compile Include="EventStore\Implementation\EventStoreLogger.cs" />
     <Compile Include="EventStore\IEventStoreConnectionProvider.cs" />
     <Compile Include="EventStore\Implementation\WriteSideEventStore.cs" />
+    <Compile Include="Memory\Implementation\MemoryCachedReadSideRepositoryWriter.cs" />
+    <Compile Include="Memory\Implementation\MemoryCachedReadSideStore.cs" />
+    <Compile Include="Memory\Implementation\MemoryCachedKeyValueStorage.cs" />
+    <Compile Include="Raven\Implementation\PropertiesOnlyContractResolver.cs" />
     <Compile Include="Raven\Implementation\DocumentStoreProvider.cs" />
+    <Compile Include="Raven\Implementation\FileStoreProvider.cs" />
     <Compile Include="Raven\Implementation\PlainStorage\RavenPlainStorageAccessor.cs" />
     <Compile Include="Raven\Implementation\PlainStorage\RavenPlainStorageProvider.cs" />
     <Compile Include="Raven\Implementation\PlainStorage\RavenQueryablePlainStorageAccessor.cs" />
-    <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenFilesStoreRepositoryAccessor.cs" />
-    <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenFilesStoreRepositoryAccessorSettings.cs" />
+    <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenDataStoreRepositoryAccessor.cs" />
+    <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryCleaner.cs" />
     <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryWriterSettings.cs" />
-    <Compile Include="Raven\Implementation\WriteSide\Indexes\EventsByTimeStampAndSequenceIndex.cs" />
-    <Compile Include="Raven\Implementation\WriteSide\RavenConventionsExtensions.cs" />
     <Compile Include="Raven\PlainStorage\IRavenPlainStorageProvider.cs" />
     <Compile Include="Raven\RavenConnectionSettings.cs" />
     <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryAccessor.cs" />
     <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryIndexAccessor.cs" />
     <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryWriter.cs" />
     <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryReader.cs" />
-    <Compile Include="Raven\Implementation\WriteSide\IgnoreAssemblyNameForEventsSerializationBinder.cs" />
-    <Compile Include="Raven\Implementation\WriteSide\PropertiesOnlyContractResolver.cs" />
-    <Compile Include="Raven\Implementation\WriteSide\RavenDBEventStore.cs" />
-    <Compile Include="Raven\Implementation\WriteSide\Indexes\Event_ByEventSource.cs" />
-    <Compile Include="Raven\Implementation\WriteSide\Indexes\UniqueEventsIndex.cs" />
     <Compile Include="Raven\RavenExtensions.cs" />
     <Compile Include="Raven\RavenInfrastructureModule.cs" />
     <Compile Include="Raven\RavenPlainStorageInfrastructureModule.cs" />
     <Compile Include="Raven\RavenReadSideInfrastructureModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Raven\RavenWriteSideInfrastructureModule.cs" />
     <Compile Include="Raven\StoredEvent.cs" />
   </ItemGroup>
   <ItemGroup>

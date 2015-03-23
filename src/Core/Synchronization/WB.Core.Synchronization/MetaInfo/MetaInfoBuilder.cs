@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
@@ -11,9 +12,9 @@ namespace WB.Core.Synchronization.MetaInfo
 {
     public class MetaInfoBuilder : IMetaInfoBuilder
     {
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
+        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnarieStorage;
 
-        public MetaInfoBuilder(IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage)
+        public MetaInfoBuilder(IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnarieStorage)
         {
             this.questionnarieStorage = questionnarieStorage;
         }
@@ -23,7 +24,7 @@ namespace WB.Core.Synchronization.MetaInfo
             if (doc == null)
                 return null;
 
-            var storedQuestionnarie = this.questionnarieStorage.GetById(doc.QuestionnaireId, doc.QuestionnaireVersion);
+            var storedQuestionnarie = this.questionnarieStorage.AsVersioned().Get(doc.QuestionnaireId.FormatGuid(), doc.QuestionnaireVersion);
             if (storedQuestionnarie == null)
                 return null;
             var questionnarie = storedQuestionnarie.Questionnaire;

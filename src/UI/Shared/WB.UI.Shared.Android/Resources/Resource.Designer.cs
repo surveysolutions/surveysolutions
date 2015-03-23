@@ -102,25 +102,28 @@ namespace WB.UI.Shared.Android
 			public static int ic_drawer_dark = 2130837512;
 			
 			// aapt resource value: 0x7f020009
-			public static int no_image_found = 2130837513;
+			public static int infowarningstyle = 2130837513;
 			
 			// aapt resource value: 0x7f02000a
-			public static int overlay = 2130837514;
+			public static int no_image_found = 2130837514;
 			
 			// aapt resource value: 0x7f02000b
-			public static int questionAnsweredShape = 2130837515;
+			public static int overlay = 2130837515;
 			
 			// aapt resource value: 0x7f02000c
-			public static int questionDisabledShape = 2130837516;
+			public static int questionAnsweredShape = 2130837516;
 			
 			// aapt resource value: 0x7f02000d
-			public static int questionInvalidShape = 2130837517;
+			public static int questionDisabledShape = 2130837517;
 			
 			// aapt resource value: 0x7f02000e
-			public static int questionShape = 2130837518;
+			public static int questionInvalidShape = 2130837518;
 			
 			// aapt resource value: 0x7f02000f
-			public static int statistics_row_style = 2130837519;
+			public static int questionShape = 2130837519;
+			
+			// aapt resource value: 0x7f020010
+			public static int statistics_row_style = 2130837520;
 			
 			static Drawable()
 			{
@@ -317,17 +320,20 @@ namespace WB.UI.Shared.Android
 			// aapt resource value: 0x7f040004
 			public static int No = 2130968580;
 			
+			// aapt resource value: 0x7f040007
+			public static int SendingOfInformationPackageIsCanceling = 2130968583;
+			
 			// aapt resource value: 0x7f040002
 			public static int Warning = 2130968578;
 			
 			// aapt resource value: 0x7f040003
 			public static int Yes = 2130968579;
 			
-			// aapt resource value: 0x7f040008
-			public static int drawer_close = 2130968584;
+			// aapt resource value: 0x7f040009
+			public static int drawer_close = 2130968585;
 			
-			// aapt resource value: 0x7f040007
-			public static int drawer_open = 2130968583;
+			// aapt resource value: 0x7f040008
+			public static int drawer_open = 2130968584;
 			
 			// aapt resource value: 0x7f040000
 			public static int library_name = 2130968576;

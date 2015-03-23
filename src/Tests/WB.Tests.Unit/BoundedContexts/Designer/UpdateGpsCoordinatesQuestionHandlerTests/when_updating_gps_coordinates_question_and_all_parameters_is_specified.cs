@@ -38,6 +38,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
                 isMandatory: isMandatory,
                 scope: scope,
                 enablementCondition: enablementCondition,
+                validationExpression: validationExpression,
+                validationMessage: validationMessage,
                 instructions: instructions,
                 responsibleId: responsibleId
 
@@ -96,5 +98,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
         private static string instructions = "intructions";
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static string enablementCondition = "some condition";
+        private static string validationExpression = "some expression";
+        private static string validationMessage = "some message";
     }
 }

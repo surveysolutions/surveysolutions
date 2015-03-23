@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         };
 
         Because of = () =>
-            viewState = interviewEventHandlerFunctional.Create(
+            viewState = interviewEventHandlerFunctional.Update(null,
                 CreatePublishableEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion)));
 
         private It should_interview_responsible_be_equal_to_creator_id = () =>

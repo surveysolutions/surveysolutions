@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 
             @event = Create.Event.ExpressionsMigratedToCSharpEvent().ToPublishedEvent();
 
-            var documentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(writer
+            var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(writer
                 => writer.GetById(it.IsAny<string>()) == questionnaireDocument);
 
             denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage);

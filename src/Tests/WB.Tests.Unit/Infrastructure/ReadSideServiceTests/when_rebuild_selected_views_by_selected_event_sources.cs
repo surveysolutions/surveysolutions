@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -22,7 +23,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
     {
         Establish context = () =>
         {
-            readSideRepositoryWriterMock = new Mock<IReadSideRepositoryWriter>();
+            readSideRepositoryWriterMock = new Mock<IChacheableRepositoryWriter>();
             readSideRepositoryWriterMock.Setup(x => x.ViewType).Returns(typeof(object));
 
             eventHandlerMock = new Mock<IAtomicEventHandler>();
@@ -56,7 +57,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
            readSideRepositoryWriterMock.Verify(x => x.DisableCache(), Times.Once);
 
         It should_publish_one_event_on_event_dispatcher = () =>
-            eventDispatcherMock.Verify(x => x.PublishEventToHandlers(committedEvent, Moq.It.Is<IEnumerable<IEventHandler>>(handlers => handlers.Count() == 1 && handlers.First() == eventHandlerMock.Object)), Times.Once);
+            eventDispatcherMock.Verify(x => x.PublishEventToHandlers(committedEvent, Moq.It.Is<Dictionary<IEventHandler, Stopwatch>>(handlers => handlers.Count() == 1 && handlers.First().Key == eventHandlerMock.Object)), Times.Once);
 
         It should_return_readble_status = () =>
             ravenReadSideService.GetRebuildStatus().CurrentRebuildStatus.ShouldContain("Rebuild specific views succeeded.");
@@ -65,7 +66,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
         private static Mock<IEventDispatcher> eventDispatcherMock;
         private static Mock<IStreamableEventStore> streamableEventStoreMock;
         private static Mock<IAtomicEventHandler> eventHandlerMock;
-        private static Mock<IReadSideRepositoryWriter> readSideRepositoryWriterMock;
+        private static Mock<IChacheableRepositoryWriter> readSideRepositoryWriterMock;
 
         private static Guid eventSourceId = Guid.Parse("11111111111111111111111111111111");
         private static CommittedEvent committedEvent;

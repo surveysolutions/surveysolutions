@@ -38,6 +38,10 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <ProjectReference Include="..\..\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
+      <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
+      <Name>WB.Core.GenericSubdomains.Utils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
       <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
       <Name>WB.Core.SharedKernels.SurveySolutions</Name>
@@ -59,10 +63,13 @@
     <Compile Include="Synchronization\HandshakePackage.cs" />
     <Compile Include="Synchronization\InterviewMetaInfo.cs" />
     <Compile Include="Synchronization\SurveyManagement\HandshakePackageRequest.cs" />
+    <Compile Include="Synchronization\SurveyManagement\InterviewSyncPackageDto.cs" />
     <Compile Include="Synchronization\SurveyManagement\PostPackageRequest.cs" />
     <Compile Include="Synchronization\SurveyManagement\PostFileRequest.cs" />
+    <Compile Include="Synchronization\SurveyManagement\QuestionnaireSyncPackageDto.cs" />
     <Compile Include="Synchronization\SurveyManagement\SyncItemsMetaContainerRequest.cs" />
     <Compile Include="Synchronization\SurveyManagement\SyncPackageRequest.cs" />
+    <Compile Include="Synchronization\SurveyManagement\UserSyncPackageDto.cs" />
     <Compile Include="Synchronization\SynchronizationChunkMeta.cs" />
     <Compile Include="Synchronization\SyncItem.cs" />
     <Compile Include="Synchronization\SyncItemsMetaContainer.cs" />

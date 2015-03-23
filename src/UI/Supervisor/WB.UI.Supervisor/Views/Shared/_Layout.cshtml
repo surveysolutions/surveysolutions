@@ -2,6 +2,7 @@
 @using System.Web.Optimization
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @using WB.Core.SharedKernels.SurveyManagement.Web.Models
+@using WB.UI.Shared.Web.Extensions
 @using WB.UI.Supervisor.Code
 <!DOCTYPE html>
 <html>
@@ -10,7 +11,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="@Url.Content("~/Content/favicon.png")" />
+    @this.GenerateFavicon(Url.Content("~/Content/favicon.png"))
+    
     @Styles.Render("~/Content/main")
     @RenderSection("styles", false)
 </head>
@@ -103,12 +105,13 @@
             $('#wrapper').css('margin-top', navigationHeight + 'px');
             $('#umbrella').css('top', navigationHeight + 'px');
         };
-
+        var $updateIncomingPackagesQueueApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "GetIncomingPackagesQueueLength" })';
         $(document).ready(function () {
             setMinHeight();
             $(window).resize(function () {
                 setMinHeight();
             });
+            new Supervisor.VM.SurveyManagmentHeader($updateIncomingPackagesQueueApiUrl, "#IncomingPackagesQueueIndicator").load();
         });
     </script>
     <script>

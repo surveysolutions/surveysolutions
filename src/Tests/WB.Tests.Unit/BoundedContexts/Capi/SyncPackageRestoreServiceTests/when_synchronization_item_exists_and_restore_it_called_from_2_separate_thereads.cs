@@ -11,7 +11,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Capi.SyncPackageRestoreServiceTests
@@ -31,33 +30,19 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.SyncPackageRestoreServiceTests
             jsonUtilsMock.Setup(x => x.Deserialize<InterviewSynchronizationDto>("some string")).Returns(interviewSynchronizationDto);
 
             commandServiceMock = new Mock<ICommandService>();
-            commandServiceMock.Setup(x => x.Execute(Moq.It.IsAny<SynchronizeInterviewCommand>(), null))
-                .Callback(() => Thread.Sleep(2000));
 
             syncPackageRestoreService = CreateSyncPackageRestoreService(capiSynchronizationCacheServiceMock, jsonUtilsMock.Object, commandServiceMock.Object);
         };
 
         Because of = () =>
         {
-            Task task1 = Task.Factory.StartNew(() =>
+            List<Task> tasks = new List<Task>();
+            for (int i = 0; i < 30; i++)
             {
-                exception1 =
-                    Catch.Exception(
-                        () =>
-                            syncPackageRestoreService.CheckAndApplySyncPackage(
-                                interviewSynchronizationDto.Id));
-            });
+                tasks.Add(Task.Run(() => syncPackageRestoreService.CheckAndApplySyncPackage(interviewSynchronizationDto.Id)));
+            }
 
-            Task task2 = Task.Factory.StartNew(() => {
-                exception2 =
-                  Catch.Exception(
-                      () =>
-                          syncPackageRestoreService.CheckAndApplySyncPackage(
-                              interviewSynchronizationDto.Id));
-            });
-
-            task1.Wait();
-            task2.Wait();
+            Task.WaitAll(tasks.ToArray());
         };
 
         It should_call_SynchronizeInterviewCommand =
@@ -71,13 +56,9 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.SyncPackageRestoreServiceTests
                                         param.SynchronizedInterview == interviewSynchronizationDto &&
                                         param.UserId == interviewSynchronizationDto.UserId), null), Times.Once);
 
-        It should_rise_exception_for_first_or_second_thread = () => (exception1!=null ^ exception2!=null).ShouldBeTrue();
-
         It should_delete_synchronization_item = () => capiSynchronizationCacheServiceMock.DeleteCallCount.ShouldEqual(1);
 
         static SyncPackageRestoreService syncPackageRestoreService;
-        static Exception exception1;
-        static Exception exception2;
         static InterviewSynchronizationDto interviewSynchronizationDto;
         static CapiSynchronizationCacheServiceMock capiSynchronizationCacheServiceMock;
         static Mock<IJsonUtils> jsonUtilsMock;

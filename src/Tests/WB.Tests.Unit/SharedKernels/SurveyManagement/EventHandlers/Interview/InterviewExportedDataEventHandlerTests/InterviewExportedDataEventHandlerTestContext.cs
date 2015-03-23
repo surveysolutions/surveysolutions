@@ -28,10 +28,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
         protected static InterviewExportedDataDenormalizer CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
           IDataExportRepositoryWriter dataExportRepositoryWriter = null,
-          IReadSideRepositoryWriter<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewStorage = null, UserDocument user = null, InterviewSummary interviewSummary=null)
+          IReadSideKeyValueStorage<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewStorage = null, UserDocument user = null, InterviewSummary interviewSummary = null)
         {
             return new InterviewExportedDataDenormalizer(dataExportRepositoryWriter ?? Mock.Of<IDataExportRepositoryWriter>(),
-                recordFirstAnswerMarkerViewStorage ?? Mock.Of<IReadSideRepositoryWriter<RecordFirstAnswerMarkerView>>(),
+                recordFirstAnswerMarkerViewStorage ?? Mock.Of<IReadSideKeyValueStorage<RecordFirstAnswerMarkerView>>(),
                 Mock.Of<IReadSideRepositoryWriter<UserDocument>>(_ => _.GetById(It.IsAny<string>()) == user),
                 Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(_ => _.GetById(It.IsAny<string>()) == interviewSummary));
         }

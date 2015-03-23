@@ -9,9 +9,9 @@ using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
@@ -51,11 +51,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.ReferenceIn
         }
 
         protected static ReferenceInfoForLinkedQuestionsDenormalizer CreateReferenceInfoForLinkedQuestionsDenormalizer(
-            IVersionedReadSideRepositoryWriter<ReferenceInfoForLinkedQuestions> questionnaires = null)
+            IReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions> questionnaires = null)
         {
             return
                 new ReferenceInfoForLinkedQuestionsDenormalizer(questionnaires ??
-                    Mock.Of<IVersionedReadSideRepositoryWriter<ReferenceInfoForLinkedQuestions>>(),
+                    Mock.Of<IReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions>>(),
                     new ReferenceInfoForLinkedQuestionsFactory(),
                     Mock.Of<IPlainQuestionnaireRepository>());
         }

@@ -8,8 +8,8 @@
             this.Answer = answer;
         }
 
-        public decimal Value { get; private set; }
+        public decimal Value { get; set; }
 
-        public string Answer { get; private set; }
+        public string Answer { get; set; }
     }
 }

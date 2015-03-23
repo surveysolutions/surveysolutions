@@ -28,7 +28,8 @@ namespace WB.UI.Designer
                     "~/Scripts/jquery-{version}.js", 
                     "~/Scripts/jquery.validate.js", 
                     "~/Scripts/jquery.validate.unobtrusive-custom-for-bootstrap.js", 
-                    "~/Scripts/bootstrap.js"));
+                    "~/Scripts/bootstrap.js",
+                    "~/Scripts/bootstrap3-unobtrusive-hack.js"));
 
             bundles.Add(
                 new ScriptBundle("~/list").Include(

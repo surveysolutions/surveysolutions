@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.ChangeLog
                 {
                     Content = this.archiver.CompressString(this.jsonUtils.Serialize(recordData)),
                     IsCompressed = true,
-                    ItemType = SyncItemType.Questionnare,
+                    ItemType = SyncItemType.Interview,
                     MetaInfo = this.archiver.CompressString(this.jsonUtils.Serialize(metaData)),
                     RootId = eventSourceId
                 };
@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.ChangeLog
                 return;
 
             foreach (var file in fileSystemAccessor.GetFilesInDirectory(dirWithCahngelog))
-                fileSystemAccessor.CopyFileOrDirectory(file, fileSystemAccessor.CombinePath(this.changelogPath, fileSystemAccessor.GetFileName(file)));
+                fileSystemAccessor.CopyFileOrDirectory(file, this.changelogPath);
         }
     }
 }

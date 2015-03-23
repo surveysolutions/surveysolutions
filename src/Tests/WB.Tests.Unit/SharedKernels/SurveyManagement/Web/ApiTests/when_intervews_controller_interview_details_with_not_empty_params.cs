@@ -2,6 +2,7 @@
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
@@ -14,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         private Establish context = () =>
         {
             var allInterviewsViewFactory =
-                Mock.Of<IViewFactory<InterviewDetailsInputModel, InterviewDetailsView>>(x => x.Load(Moq.It.IsAny<InterviewDetailsInputModel>()) == CreateInterviewDetailsView(interviewId)); ;
+                Mock.Of<IInterviewDetailsViewFactory>(x => x.GetInterviewDetails(Moq.It.IsAny<Guid>(), Moq.It.IsAny<Guid?>(), Moq.It.IsAny<decimal[]>(), Moq.It.IsAny<InterviewDetailsFilter?>()) == CreateInterviewDetailsView(interviewId));
 
             controller = CreateInterviewsController(interviewDetailsView :allInterviewsViewFactory);
         };

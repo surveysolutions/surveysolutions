@@ -19,20 +19,18 @@ namespace WB.UI.Shared.Web.CommandDeserialization
 
         public ICommand Deserialize(string commandType, string serializedCommand)
         {
-            Type resultCommandType = GetTypeOfResultCommandOrThrowArgumentException(commandType);
-
-            ICommand command = null;
             try
             {
-                command = (ICommand)JsonConvert.DeserializeObject(serializedCommand, resultCommandType);
+                Type resultCommandType = GetTypeOfResultCommandOrThrowArgumentException(commandType);
+                ICommand command = (ICommand)JsonConvert.DeserializeObject(serializedCommand, resultCommandType);
+                
+                return command;
             }
             catch(Exception e)
             {
                 logger.Error("Error on command deserialization.", e);
                 throw new CommandDeserializationException(string.Format("Failed to deserialize command of type '{0}':\r\n{1}", commandType, serializedCommand));
             }
-            
-            return command;
         }
 
         private Type GetTypeOfResultCommandOrThrowArgumentException(string commandType)

@@ -21,6 +21,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireAssemblyFileAc
         It should_file_be_stored_on_file_system_once = () =>
             FileSystemAccessorMock.Verify(x => x.WriteAllBytes(Moq.It.Is<string>(name => name.Contains(questionnaireId.ToString())), expected), Times.Once);
 
+        It should_file_be_marked_as_readonly_once = () =>
+            FileSystemAccessorMock.Verify(x => x.MarkFileAsReadonly(Moq.It.Is<string>(name => name.Contains(questionnaireId.ToString()))), Times.Once);
+
 
         private static QuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
         private static readonly Mock<IFileSystemAccessor> FileSystemAccessorMock = CreateIFileSystemAccessorMock();

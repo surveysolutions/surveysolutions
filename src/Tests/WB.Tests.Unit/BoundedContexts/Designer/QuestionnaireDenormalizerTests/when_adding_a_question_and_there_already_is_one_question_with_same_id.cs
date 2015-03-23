@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                 }),
             });
 
-            var documentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(storage
+            var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(storage
                 => storage.GetById(it.IsAny<string>()) == questionnaire);
 
             var textQuestion = CreateTextQuestion(questionId: questionId, title: addedQuestionTitle);

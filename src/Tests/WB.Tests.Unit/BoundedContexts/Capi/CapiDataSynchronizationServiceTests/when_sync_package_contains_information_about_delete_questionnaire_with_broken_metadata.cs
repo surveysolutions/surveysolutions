@@ -6,9 +6,9 @@ using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
@@ -17,7 +17,11 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
     {
         Establish context = () =>
         {
-            syncItem = new SyncItem() { ItemType = SyncItemType.DeleteTemplate, IsCompressed = true, Content = "some content", MetaInfo = "some metadata", RootId = Guid.NewGuid() };
+            syncItem = new QuestionnaireSyncPackageDto
+                       {
+                           Content = "some content", 
+                           MetaInfo = "some metadata"
+                       };
 
             var jsonUtilsMock = new Mock<IJsonUtils>();
             jsonUtilsMock.Setup(x => x.Deserialize<QuestionnaireMetadata>(syncItem.MetaInfo)).Throws<NullReferenceException>();
@@ -30,36 +34,21 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 plainQuestionnaireRepositoryMock.Object);
         };
 
-        Because of = () => exception = Catch.Exception(() => capiDataSynchronizationService.SavePulledItem(syncItem));
+        Because of = () => exception = Catch.Exception(() => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem, SyncItemType.DeleteQuestionnaire));
 
         It should_not_call_RegisterPlainQuestionnaire =
-            () =>
-                commandService.Verify(
-                    x =>
-                        x.Execute(
-                            Moq.It.Is<DeleteQuestionnaire>(
-                                param =>
+            () => commandService.Verify(x => x.Execute(Moq.It.Is<DeleteQuestionnaire>(param =>
                                     param.QuestionnaireId == Moq.It.IsAny<Guid>() && param.QuestionnaireVersion == Moq.It.IsAny<long>()), null),
                     Times.Never);
 
         It should_not_store_questionnaire_in_pline_storage =
-            () =>
-                plainQuestionnaireRepositoryMock.Verify(
-                    x => x.DeleteQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()),
-                    Times.Never);
+            () => plainQuestionnaireRepositoryMock.Verify(x => x.DeleteQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()), Times.Never);
 
         It should_throw_ArgumentException = () =>
             exception.ShouldBeOfType<ArgumentException>();
 
-        It should_not_create_public_record_in_change_log_for_sync_item =
-        () =>
-            changeLogManipulator.Verify(
-                x =>
-                    x.CreatePublicRecord(syncItem.RootId),
-                Times.Never);
-
         private static CapiDataSynchronizationService capiDataSynchronizationService;
-        private static SyncItem syncItem;
+        private static QuestionnaireSyncPackageDto syncItem;
         private static Mock<ICommandService> commandService;
         private static Mock<IPlainQuestionnaireRepository> plainQuestionnaireRepositoryMock;
         private static Exception exception;

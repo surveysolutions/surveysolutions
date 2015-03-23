@@ -36,7 +36,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         {
             base.Initialize();
 
-            this.etAnswer = new EditText(this.Context);
+            this.etAnswer = new EditText(this.CurrentContext);
 
             isInputMasked = !string.IsNullOrWhiteSpace(TypedMode.Mask);
             

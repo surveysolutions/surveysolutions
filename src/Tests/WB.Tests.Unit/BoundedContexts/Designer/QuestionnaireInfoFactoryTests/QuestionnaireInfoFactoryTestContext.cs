@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using Moq;
+
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -10,10 +12,87 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
 {
     internal class QuestionnaireInfoFactoryTestContext
     {
-        protected static QuestionnaireInfoFactory CreateQuestionnaireInfoFactory(IReadSideRepositoryReader<QuestionsAndGroupsCollectionView> questionDetailsReader = null)
+        protected static QuestionnaireInfoFactory CreateQuestionnaireInfoFactory(
+            IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView> questionDetailsReader = null,
+            IExpressionProcessor expressionProcessor = null)
         {
-            return new QuestionnaireInfoFactory(questionDetailsReader ?? Mock.Of<IReadSideRepositoryReader<QuestionsAndGroupsCollectionView>>());
+            return new QuestionnaireInfoFactory(
+                    questionDetailsReader ?? Mock.Of<IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView>>(),
+                    expressionProcessor ?? Mock.Of<IExpressionProcessor>());
         }
+
+        protected static QuestionsAndGroupsCollectionView CreateQuestionsAndGroupsCollectionViewWithBrokenLinks()
+        {
+            return new QuestionsAndGroupsCollectionView
+            {
+                Groups = new List<GroupAndRosterDetailsView>
+                {
+                    new GroupAndRosterDetailsView
+                    {
+                        Id = g1Id,
+                        Title = "Chapter 1",
+                        ParentGroupId = Guid.Empty,
+                        ParentGroupsIds = new Guid[0],
+                        RosterScopeIds = new Guid[0]
+                    },
+                    new GroupAndRosterDetailsView
+                    {
+                        Id = g2Id,
+                        Title = "Chapter 1 / Group 1",
+                        ParentGroupId = g1Id,
+                        ParentGroupsIds = new[] { g1Id }
+                    },
+                    new GroupAndRosterDetailsView
+                    {
+                        Id = g3Id,
+                        Title = "Chapter 1/ Group 2",
+                        ParentGroupId = g1Id,
+                        ParentGroupsIds =  new[] { g1Id }
+                    }
+                },
+                Questions = new List<QuestionDetailsView>
+                {
+                    new NumericDetailsView
+                    {
+                        Id = q1Id,
+                        IsInteger = true,
+                        Title = "Integer 1",
+                        MaxValue = 20,
+                        ParentGroupId = g2Id,
+                        VariableName = "q1",
+                        ParentGroupsIds = new [] { g2Id, g1Id },
+                        RosterScopeIds = new Guid[] {  },
+                        EnablementCondition = "q2 == \"aaaa\""
+                    },
+                    new TextDetailsView
+                    {
+                        Id = q2Id,
+                        ParentGroupId = g3Id,
+                        Title = "text title",
+                        ParentGroupsIds = new [] { g3Id, g1Id },
+                        RosterScopeIds = new Guid[] {  },
+                        ValidationExpression = "q1 > 10"
+                    },
+                     new MultiOptionDetailsView
+                    {
+                        Id = q3Id,
+                        Options = new CategoricalOption[]
+                        {
+                            new CategoricalOption {Title = "1", Value = 1},
+                            new CategoricalOption {Title = "2", Value = 2}
+                        },
+                        Title = "MultiOption",
+                        ParentGroupId = g2Id,
+                        ParentGroupsIds = new [] { g2Id, g1Id },
+                        RosterScopeIds = new Guid[] {  },
+                        EnablementCondition = "q2 == \"aaaa\""
+                    },
+                },
+                StaticTexts = new List<StaticTextDetailsView>()
+            };
+        }
+
+      
 
         protected static QuestionsAndGroupsCollectionView CreateQuestionsAndGroupsCollectionView()
         {

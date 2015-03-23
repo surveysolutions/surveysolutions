@@ -6,7 +6,6 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Shared.Android.Adapters;
 using WB.UI.Shared.Android.Controls;
 using WB.UI.Shared.Android.Controls.ScreenItems;
@@ -46,7 +45,7 @@ namespace WB.UI.Shared.Android.Frames
             this.Top.AddView(breadcrumbs);
             
             this.BuildEmptyLabelDescription(inflater.Context);
-            this.BuildTabels(inflater.Context);
+            this.BuildTables(inflater.Context);
 
             this.AjustControlVisibility();
 
@@ -104,7 +103,7 @@ namespace WB.UI.Shared.Android.Frames
             this.Top.AddView(this.TvEmptyLabelDescription);
         }
 
-        protected void BuildTabels(Context context)
+        protected void BuildTables(Context context)
         {
             this.LlTablesContainer = new ListView(context);
             this.LlTablesContainer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
@@ -132,13 +131,9 @@ namespace WB.UI.Shared.Android.Frames
 
         public QuestionnaireGridViewModel Model
         {
-            get
+            get 
             {
-                if (this.model == null)
-                {
-                    this.model = this.Questionnaire.Screens[InterviewItemId.Parse(this.Arguments.GetString(ScreenId))] as QuestionnaireGridViewModel;
-                }
-                return this.model;
+                return this.model ?? (this.model = this.Questionnaire.Screens[this.Arguments.GetString(ScreenId)] as QuestionnaireGridViewModel);
             }
         }
 
@@ -146,13 +141,9 @@ namespace WB.UI.Shared.Android.Frames
 
         protected InterviewViewModel Questionnaire
         {
-            get
+            get 
             {
-                if (this.questionnaire == null)
-                {
-                    this.questionnaire = this.GetInterviewViewModel(Guid.Parse(this.Arguments.GetString(QuestionnaireId)));
-                }
-                return this.questionnaire;
+                return this.questionnaire ?? (this.questionnaire = this.GetInterviewViewModel(Guid.Parse(this.Arguments.GetString(QuestionnaireId))));
             }
         }
 

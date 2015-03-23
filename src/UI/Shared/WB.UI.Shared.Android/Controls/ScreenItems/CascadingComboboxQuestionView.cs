@@ -44,7 +44,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private void InitializeFilteredCombobox()
         {
-            this.cascadingCombobox = new AutoCompleteTextView(this.Context)
+            this.cascadingCombobox = new AutoCompleteTextView(this.CurrentContext)
             {
                 Threshold = 0, 
                 ImeOptions = ImeAction.Done
@@ -58,7 +58,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             this.cascadingCombobox.EditorAction += CascadingComboboxOnEditorAction;
 
             this.adapter = new ArrayAdapter<String>(
-                this.Context, 
+                this.CurrentContext, 
                 Resource.Layout.CascadingComboboxRowLayout,
                 this.Answers.Select(option => option.Title).ToList());
 

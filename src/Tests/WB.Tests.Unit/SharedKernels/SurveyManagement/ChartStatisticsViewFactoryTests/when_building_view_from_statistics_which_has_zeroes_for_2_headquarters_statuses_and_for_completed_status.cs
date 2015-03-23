@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
                 },
             });
 
-            var statsStorage = Mock.Of<IReadSideRepositoryReader<StatisticsGroupedByDateAndTemplate>>(_
+            var statsStorage = Mock.Of<IReadSideKeyValueStorage<StatisticsGroupedByDateAndTemplate>>(_
                 => _.GetById(Moq.It.IsAny<string>()) == statistics);
 
             input = new ChartStatisticsInputModel

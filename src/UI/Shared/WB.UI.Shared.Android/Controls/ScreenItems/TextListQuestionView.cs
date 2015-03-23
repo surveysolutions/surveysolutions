@@ -205,7 +205,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private Button CreateRemoveListItemButton(string answerTag)
         {
-            var removeTextListItemButton = new Button(Context);
+            var removeTextListItemButton = new Button(CurrentContext);
 
             var layoutParams = new LayoutParams(ViewGroup.LayoutParams.WrapContent,
                 ViewGroup.LayoutParams.WrapContent);
@@ -221,7 +221,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private Button CreateAddListItemButton()
         {
-            var createNewTextListItemButton = new Button(Context);
+            var createNewTextListItemButton = new Button(CurrentContext);
 
             var cbLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
                 ViewGroup.LayoutParams.WrapContent);
@@ -237,7 +237,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private LinearLayout CreateContainer()
         {
-            var optionsWrapper = new LinearLayout(Context);
+            var optionsWrapper = new LinearLayout(CurrentContext);
             optionsWrapper.Orientation = Orientation.Vertical;
             optionsWrapper.LayoutParameters = new LayoutParams(ViewGroup.LayoutParams.FillParent,
                 ViewGroup.LayoutParams.FillParent);
@@ -248,7 +248,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         private LinearLayout CreateActionContainer(Button addButton)
         {
             LinearLayout optionsWrapper = CreateContainer();
-            var container = new RelativeLayout(Context);
+            var container = new RelativeLayout(CurrentContext);
             container.LayoutParameters = new LayoutParams(ViewGroup.LayoutParams.FillParent,
                 ViewGroup.LayoutParams.FillParent);
 
@@ -259,7 +259,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private LinearLayout CreateAnswerBlock(string answerValueTag, string answerTitle)
         {
-            var container = new LinearLayout(Context);
+            var container = new LinearLayout(CurrentContext);
             container.LayoutParameters = new LayoutParams(ViewGroup.LayoutParams.FillParent,
                 ViewGroup.LayoutParams.FillParent);
 
@@ -277,7 +277,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private EditText CreateValueEditor(string answerValueTag, string answerTitle)
         {
-            var textListItemEditor = new EditText(Context);
+            var textListItemEditor = new EditText(CurrentContext);
             textListItemEditor.SetSelectAllOnFocus(true);
             textListItemEditor.ImeOptions = ImeAction.Done;
             textListItemEditor.SetSingleLine(true);

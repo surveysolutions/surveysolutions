@@ -8,5 +8,10 @@ namespace WB.UI.Headquarters.Code
         {
             return Roles.GetUsersInRole(roleName);
         }
+
+        public string[] GetRolesForUser(string userName)
+        {
+            return Roles.GetRolesForUser(userName);
+        }
     }
 }

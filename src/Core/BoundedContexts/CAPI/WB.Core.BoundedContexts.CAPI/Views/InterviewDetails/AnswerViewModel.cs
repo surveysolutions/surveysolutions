@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 
 namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 {
@@ -10,7 +11,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.Title = title;
             this.Selected = selected;
             if (!string.IsNullOrEmpty(value))
-                this.Value = decimal.Parse(value);
+                this.Value = decimal.Parse(value, CultureInfo.InvariantCulture);
             this.ImagePublicKey = imagePublicKey;
             this.AnswerOrder = 0;
         }
@@ -24,7 +25,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public object Clone()
         {
-            return new AnswerViewModel(this.PublicKey, this.Title, this.Value.ToString(), this.Selected, this.ImagePublicKey);
+            return new AnswerViewModel(this.PublicKey, this.Title, this.Value.ToString(CultureInfo.InvariantCulture), this.Selected, this.ImagePublicKey);
         }
     }
 

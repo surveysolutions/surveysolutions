@@ -9,6 +9,8 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
+using Main.Core.Events.User;
+
 using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -43,9 +45,13 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -68,12 +74,25 @@ namespace WB.Tests.Unit
 {
     internal static class Create
     {
-        public static IPublishedEvent<T> ToPublishedEvent<T>(this T @event, Guid? eventSourceId = null)
+        public static IPublishedEvent<T> ToPublishedEvent<T>(this T @event, 
+            Guid? eventSourceId = null,
+            string origin = null,
+            DateTime? eventTimeStamp = null)
             where T : class
         {
             return Mock.Of<IPublishedEvent<T>>(publishedEvent
                 => publishedEvent.Payload == @event
-                && publishedEvent.EventSourceId == (eventSourceId ?? Guid.NewGuid()));
+                && publishedEvent.EventSourceId == (eventSourceId ?? Guid.NewGuid()) 
+                && publishedEvent.Origin == origin
+                && publishedEvent.EventTimeStamp == (eventTimeStamp ?? DateTime.Now));
+        }
+
+        public static class Command
+        {
+            public static LinkUserToDevice LinkUserToDeviceCommand(Guid userId, string deviceId)
+            {
+                return new LinkUserToDevice(userId, deviceId);
+            }
         }
 
         public static class Event
@@ -206,6 +225,83 @@ namespace WB.Tests.Unit
                     ParentId =  parentId ?? Guid.NewGuid(),
                     Text = text
                 };
+            }
+
+            public static IPublishedEvent<UserLinkedToDevice> UserLinkedToDevice(Guid userId, string deviceId, DateTime eventTimeStamp)
+            {
+                return new UserLinkedToDevice
+                {
+                    DeviceId = deviceId
+                }.ToPublishedEvent(eventSourceId: userId, eventTimeStamp: eventTimeStamp);
+            }
+
+            public static IPublishedEvent<UserUnlockedBySupervisor> UserUnlockedBySupervisor(Guid userId)
+            {
+                return new UserUnlockedBySupervisor
+                {
+                }.ToPublishedEvent(eventSourceId: userId);
+            }
+
+            public static IPublishedEvent<UserLockedBySupervisor> UserLockedBySupervisor(Guid userId)
+            {
+                return new UserLockedBySupervisor
+                {
+                }.ToPublishedEvent(eventSourceId: userId);
+            }
+
+            public static IPublishedEvent<UserUnlocked> UserUnlocked(Guid userId)
+            {
+                return new UserUnlocked
+                {
+                }.ToPublishedEvent(eventSourceId: userId);
+            }
+
+            public static IPublishedEvent<UserLocked> UserLocked(Guid userId)
+            {
+                return new UserLocked
+                {
+                }.ToPublishedEvent(eventSourceId: userId);
+            }
+
+            public static IPublishedEvent<UserChanged> UserChanged(Guid userId, string password, string email)
+            {
+                return new UserChanged
+                {
+                    PasswordHash = password,
+                    Email = email,
+                    Roles = new [] { UserRoles.Operator }
+                }.ToPublishedEvent(eventSourceId: userId);
+            }
+
+            public static IPublishedEvent<NewUserCreated> NewUserCreated(Guid userId, string name, string password, string email, bool islockedBySupervisor, bool isLocked)
+            {
+                return new NewUserCreated
+                {
+                    Name = name,
+                    Password = password,
+                    Email = email,
+                    IsLockedBySupervisor = islockedBySupervisor,
+                    IsLocked = isLocked,
+                    Roles = new[] { UserRoles.Operator }
+                }.ToPublishedEvent(eventSourceId: userId);
+            }
+
+            public static IPublishedEvent<InterviewStatusChanged> InterviewStatusChanged(Guid interviewId, InterviewStatus status, string comment = "hello")
+            {
+                return new InterviewStatusChanged(status, comment)
+                        .ToPublishedEvent(eventSourceId: interviewId);
+            }
+
+            public static IPublishedEvent<InterviewerAssigned> InterviewerAssigned(Guid interviewId, Guid userId, Guid interviewerId)
+            {
+                return new InterviewerAssigned(userId, interviewerId)
+                        .ToPublishedEvent(eventSourceId: interviewId);
+            }
+
+            public static IPublishedEvent<InterviewHardDeleted> InterviewHardDeleted(Guid interviewId, Guid userId)
+            {
+                return new InterviewHardDeleted(userId)
+                        .ToPublishedEvent(eventSourceId: interviewId);
             }
         }
 
@@ -379,11 +475,6 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static NCalcToCSharpConverter NCalcToCSharpConverter()
-        {
-            return new NCalcToCSharpConverter();
-        }
-
         public static IAsyncExecutor SyncAsyncExecutor()
         {
             return new SyncAsyncExecutorStub();
@@ -500,13 +591,13 @@ namespace WB.Tests.Unit
         }
 
         public static IPublishedEvent<QuestionnaireItemMoved> QuestionnaireItemMovedEvent(string itemId,
-            string targetGroupId = null)
+            string targetGroupId = null, int? targetIndex = null)
         {
             return ToPublishedEvent(new QuestionnaireItemMoved()
             {
                 PublicKey = Guid.Parse(itemId),
                 GroupKey = GetQuestionnaireItemParentId(targetGroupId),
-                TargetIndex = 0
+                TargetIndex = targetIndex ?? 0
             });
         }
 
@@ -1172,19 +1263,20 @@ namespace WB.Tests.Unit
                     interviewerId: GetGuidIdByStringId(interviewerId)));
         }
 
-        public static IPublishedEvent<InterviewDeleted> InterviewDeletedEvent(string userId = null)
+        public static IPublishedEvent<InterviewDeleted> InterviewDeletedEvent(string userId = null, string origin = null, Guid? interviewId = null)
         {
-            return ToPublishedEvent(new InterviewDeleted(userId: GetGuidIdByStringId(userId)));
+            return ToPublishedEvent(new InterviewDeleted(userId: GetGuidIdByStringId(userId)), origin: origin, eventSourceId: interviewId);
         }
 
-        public static IPublishedEvent<InterviewHardDeleted> InterviewHardDeletedEvent(string userId = null)
+        public static IPublishedEvent<InterviewHardDeleted> InterviewHardDeletedEvent(string userId = null, Guid? interviewId = null)
         {
-            return ToPublishedEvent(new InterviewHardDeleted(userId: GetGuidIdByStringId(userId)));
+            return ToPublishedEvent(new InterviewHardDeleted(userId: GetGuidIdByStringId(userId)), eventSourceId: interviewId);
         }
 
-        public static IPublishedEvent<InterviewRestored> InterviewRestoredEvent(string userId = null)
+        public static IPublishedEvent<InterviewRestored> InterviewRestoredEvent(string userId = null,
+            string origin = null)
         {
-            return ToPublishedEvent(new InterviewRestored(userId: GetGuidIdByStringId(userId)));
+            return ToPublishedEvent(new InterviewRestored(userId: GetGuidIdByStringId(userId)), origin: origin);
         }
 
         public static IPublishedEvent<InterviewRestarted> InterviewRestartedEvent(string userId = null)
@@ -1217,7 +1309,17 @@ namespace WB.Tests.Unit
             return ToPublishedEvent(new InterviewApprovedByHQ(userId: GetGuidIdByStringId(userId), comment: comment));
         }
 
-        public static IPublishedEvent<SynchronizationMetadataApplied> SynchronizationMetadataAppliedEvent(string userId = null,
+        public static IPublishedEvent<QuestionnaireDeleted> QuestionaireDeleted(Guid questionnaireId, long version)
+        {
+            return ToPublishedEvent(new QuestionnaireDeleted{QuestionnaireVersion = version}, eventSourceId: questionnaireId);
+        }
+
+        public static IPublishedEvent<QuestionnaireAssemblyImported> QuestionnaireAssemblyImported(Guid questionnaireId, long version)
+        {
+            return ToPublishedEvent(new QuestionnaireAssemblyImported { Version = version }, eventSourceId: questionnaireId);
+        }
+
+      public static IPublishedEvent<SynchronizationMetadataApplied> SynchronizationMetadataAppliedEvent(string userId = null,
             InterviewStatus status = InterviewStatus.Created, string questionnaireId = null,
             AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta = null, bool createdOnClient = false)
         {
@@ -1234,31 +1336,38 @@ namespace WB.Tests.Unit
 
         public static InterviewData InterviewData(bool createdOnClient = false,
             InterviewStatus status = InterviewStatus.Created,
-            Guid? interviewId = null)
+            Guid? interviewId = null, 
+            Guid? responsibleId = null)
         {
-            var result = new InterviewData();
-            result.CreatedOnClient = createdOnClient;
-            result.Status = status;
-            result.InterviewId = interviewId.GetValueOrDefault();
+            var result = new InterviewData
+                         {
+                             CreatedOnClient = createdOnClient,
+                             Status = status,
+                             InterviewId = interviewId.GetValueOrDefault(),
+                             ResponsibleId = responsibleId.GetValueOrDefault()
+                         };
             return result;
         }
 
         public static WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire Questionnaire(Guid creatorId, QuestionnaireDocument document)
         {
-            return new WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire(new Guid(), document, false, string.Empty);
+            return new WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire(new Guid(), document, false, "base65 string of assembly");
         }
 
-        public static EnablementChanges EnablementChanges(List<Core.SharedKernels.DataCollection.Identity> groupsToBeDisabled = null, List<Core.SharedKernels.DataCollection.Identity> groupsToBeEnabled = null,
-            List<Core.SharedKernels.DataCollection.Identity> questionsToBeDisabled = null, List<Core.SharedKernels.DataCollection.Identity> questionsToBeEnabled = null)
+        public static EnablementChanges EnablementChanges(
+            List<WB.Core.SharedKernels.DataCollection.Identity> groupsToBeDisabled = null, 
+            List<WB.Core.SharedKernels.DataCollection.Identity> groupsToBeEnabled = null,
+            List<WB.Core.SharedKernels.DataCollection.Identity> questionsToBeDisabled = null, 
+            List<WB.Core.SharedKernels.DataCollection.Identity> questionsToBeEnabled = null)
         {
             return new EnablementChanges(
-                groupsToBeDisabled ?? new List<Core.SharedKernels.DataCollection.Identity>(),
-                groupsToBeEnabled ?? new List<Core.SharedKernels.DataCollection.Identity>(),
-                questionsToBeDisabled ?? new List<Core.SharedKernels.DataCollection.Identity>(),
-                questionsToBeEnabled ?? new List<Core.SharedKernels.DataCollection.Identity>());
+                groupsToBeDisabled ?? new List<WB.Core.SharedKernels.DataCollection.Identity>(),
+                groupsToBeEnabled ?? new List<WB.Core.SharedKernels.DataCollection.Identity>(),
+                questionsToBeDisabled ?? new List<WB.Core.SharedKernels.DataCollection.Identity>(),
+                questionsToBeEnabled ?? new List<WB.Core.SharedKernels.DataCollection.Identity>());
         }
 
-        public static InterviewState InterviewState(InterviewStatus? status = null, List<AnswerComment> answerComments = null)
+        public static InterviewState InterviewState(InterviewStatus? status = null, List<AnswerComment> answerComments = null, Guid? interviewerId=null)
         {
             return new InterviewState(Guid.NewGuid(), 1, status ?? InterviewStatus.SupervisorAssigned, new Dictionary<string, object>(),
                 new Dictionary<string, Tuple<Guid, decimal[], decimal[]>>(), new Dictionary<string, Tuple<Guid, decimal[], decimal[][]>>(),
@@ -1266,12 +1375,12 @@ namespace WB.Tests.Unit
                 answerComments ?? new List<AnswerComment>(),
                 new HashSet<string>(),
                 new HashSet<string>(), new Dictionary<string, DistinctDecimalList>(),
-                new HashSet<string>(), new HashSet<string>(), true, Mock.Of<IInterviewExpressionState>());
+                new HashSet<string>(), new HashSet<string>(), true, Mock.Of<IInterviewExpressionState>(), interviewerId?? Guid.NewGuid());
         }
 
-        public static Core.SharedKernels.DataCollection.Identity Identity(Guid id, decimal[] rosterVector)
+        public static WB.Core.SharedKernels.DataCollection.Identity Identity(Guid id, decimal[] rosterVector)
         {
-            return new Core.SharedKernels.DataCollection.Identity(id, rosterVector);
+            return new WB.Core.SharedKernels.DataCollection.Identity(id, rosterVector);
         }
 
         public static IQuestionnaireRepository QuestionnaireRepositoryStubWithOneQuestionnaire(
@@ -1294,5 +1403,12 @@ namespace WB.Tests.Unit
         {
             return new NcqrCompatibleEventDispatcher(Mock.Of<IEventStore>(), handlersToIgnore ?? new Type[]{});
         }
+
+        public static ImportFromDesigner ImportFromDesignerCommand(Guid responsibleId, string base64StringOfAssembly)
+        {
+            return new ImportFromDesigner(responsibleId, new QuestionnaireDocument(), false, base64StringOfAssembly);
+        }
+
+
     }
 }
