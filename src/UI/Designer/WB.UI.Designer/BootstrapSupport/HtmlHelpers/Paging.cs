@@ -39,7 +39,9 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             var nav = new TagBuilder("nav");
 
             var pagination = new TagBuilder("ul");
+            pagination.AddCssClass("pagination");
             var pager = new TagBuilder("ul");
+            pager.AddCssClass("pager");
 
             var pageFrom = Math.Max(1, currentPage - pageSlides);
             var pageTo = Math.Min(totalPages, currentPage + pageSlides);
