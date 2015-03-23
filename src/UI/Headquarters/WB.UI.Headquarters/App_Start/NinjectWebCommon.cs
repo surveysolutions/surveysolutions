@@ -160,7 +160,8 @@ namespace WB.UI.Headquarters
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]), isDebug,
                     applicationBuildVersion, interviewDetailsDataLoaderSettings, true,
                     int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"]),
-                    new InterviewHistorySettings(basePath, bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"]))));
+                    new InterviewHistorySettings(basePath, bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"])),
+                    LegacyOptions.SupervisorFunctionsEnabled));
 
 
             kernel.Bind<ISettingsProvider>().To<SettingsProvider>();

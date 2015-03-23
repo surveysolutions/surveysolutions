@@ -137,7 +137,7 @@
         });
     };
 
-    self.SendCommands = function(commands, onSuccess) {
+    self.SendCommands = function (commands, onSuccess, skipInProgressCheck) {
         self.SendRequest(commandExecutionUrl, commands, function(data) {
             var failedCommands = ko.utils.arrayFilter(data.CommandStatuses, function(cmd) {
                 return !cmd.IsSuccess;
@@ -153,7 +153,7 @@
                     onSuccess();
                 }
             }
-        });
+        }, skipInProgressCheck);
     };
 
     self.load = function() {

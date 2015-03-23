@@ -18,7 +18,7 @@
         <div class="panel-heading with-btn">
             Filter
             <div class="btn-group btn-group-sm pull-right">
-                <button data-bind="click: ToggleFilter" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span> Hide filter</button>
+                <button data-bind="click: ToggleFilter" class="btn btn-default" type="button"><span class="glyphicon glyphicon-arrow-left"></span> Hide filter</button>
             </div>
         </div>
         @RenderSection("filters", false)
@@ -31,7 +31,7 @@
         <div class="panel-body">
 
             <span data-bind="visible: !IsFilterOpen()">
-                <button data-bind="click: ToggleFilter" class="btn btn-default"><span class="glyphicon glyphicon-arrow-right"></span> Show filter</button>
+                <button data-bind="click: ToggleFilter" class="btn btn-default" type="button"><span class="glyphicon glyphicon-arrow-right"></span> Show filter</button>
             </span>
             @RenderSection("actionbar", false)
         </div>

@@ -120,8 +120,11 @@
   <data name="CumulativeChart" xml:space="preserve">
     <value>Cumulative Interview Chart</value>
   </data>
-  <data name="HealthCheck" xml:space="preserve">
-    <value>Health Check</value>
+  <data name="Headquarters" xml:space="preserve">
+    <value>Headquarters</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Help</value>
   </data>
   <data name="Interviews" xml:space="preserve">
     <value>Interviews</value>
@@ -146,5 +149,8 @@
   </data>
   <data name="TeamsAndStatuses" xml:space="preserve">
     <value>Teams and Statuses</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Users</value>
   </data>
 </root>

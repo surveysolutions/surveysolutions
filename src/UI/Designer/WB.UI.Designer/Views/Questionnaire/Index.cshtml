@@ -1,9 +1,151 @@
-﻿@{
+﻿@using WB.UI.Designer.BootstrapSupport
+@using WB.UI.Designer.BootstrapSupport.HtmlHelpers
+@using WB.UI.Designer.Extensions
+@using WB.UI.Designer.Models
+@using WB.UI.Designer.Utils
+@using WB.UI.Shared.Web.Membership
+
+@model IPagedList<QuestionnaireListViewModel>
+
+@{
     ViewBag.Title = "My Questionnaires";
+
+    string controller = ViewBag.Controller ?? WB.UI.Designer.GlobalHelper.CurrentController;
+
+    IMembershipUserService userHelper = ViewBag.UserHelper;
+
+    var propertyList = Model.VisibleProperties(userHelper);
+
+    var sortOrder = (int?)ViewBag.SortOrder;
 }
 
-@section Scripts {
-    @Scripts.Render("~/list")
+@if (Model.TotalCount == 0)
+{
+    <p class="text-center" style="line-height: 10em">This list does not contain any records</p>
+}
+else
+{
+    @Html.Partial("_list_search_form")
+    <table id="questionnaire-table-header" class="table  table-header">
+        <thead>
+            <tr>
+                <th>
+                    <a href="@ActionWithOrderField("Title")">Title</a>
+                </th>
+                <th>
+                    <a href="@ActionWithOrderField("LastEntryDate")">Last modified</a>
+                </th>
+                <th>
+                    <a href="@ActionWithOrderField("CreationDate")">Created date</a>
+                </th>
+                <th>
+                    <a href="@ActionWithOrderField("CreatorName")">Created By</a>
+                </th>
+                <th>
+                </th>
+            </tr>
+        </thead>
+    </table>
+    <div id="table-content-holder">
+        <table id="questionnaire-table-content" class="table table-content ">
+            <tbody>
+                @foreach (var listViewModel in Model)
+                {
+                    <tr>
+                        <td class="search-value">
+                            @listViewModel.Title
+                        </td>
+                        <td class="date">
+                            @listViewModel.LastEntryDate.FormatDate()
+                        </td>
+                        <td class="date">
+                            @listViewModel.CreationDate.FormatDate()
+                        </td>
+                        <td>
+                            @listViewModel.Owner
+                        </td>
+                        <td>
+                            @{
+                    var actionModel = listViewModel as IActionItem;
+                    if (actionModel != null)
+                    {
+                        if (actionModel.CanCopy || actionModel.CanDelete || actionModel.CanEdit || actionModel.CanExport || actionModel.CanPreview || actionModel.CanPrint || actionModel.CanSynchronize || actionModel.CanOpen)
+                        {
+                            <div class="btn-group pull-right">
+                                <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+                                    Action
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    @{
+                            var routevalues = listViewModel.GetIdValue();
+                            var itemId = listViewModel.GetId();
+                            var itemType = listViewModel.GetLabel();
+                            var itemName = Uri.EscapeDataString(listViewModel.GetName());
+
+                            if (actionModel.CanEdit)
+                            {
+                                <li>@Html.ActionLink("Edit", "Edit", controller, routevalues, null)</li>
+                            }
+                            if (actionModel.CanOpen)
+                            {
+                                <li>@Html.ActionLink("Edit", "Open", "App", routevalues, null)</li>
+                            }
+                            if (actionModel.CanSynchronize)
+                            {
+                                <li>@Html.ActionLink("Export to HQ", "Export", "Synchronization", routevalues, null)</li>
+                            }
+                            if (actionModel.CanPreview)
+                            {
+                                <li>@Html.ActionLink("Details", "Details", controller, routevalues, null)</li>
+                            }
+                            if (actionModel.CanCopy)
+                            {
+                                <li>@Html.ActionLink("Clone", "Clone", controller, routevalues, null)</li>
+                            }
+                            if (actionModel.CanExportToPdf)
+                            {
+                                <li class="divider"></li>
+                                        <li>@Html.ActionLink("Export as PDF", "exportquestionnaire", "Pdf", routevalues, null)</li>
+                            }
+                            if (actionModel.CanDelete)
+                            {
+                                <li class="divider"></li>
+                                        <li><a href="#mDelete" data-bind='click: deleteItem.bind($data,"@itemId    ", "@itemType    ", "@itemName    ")' data-toggle="modal">Delete</a></li>
+                            }
+                                    }
+                                </ul>
+                            </div>
+                        }
+                    }
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        @Html.Pager(Model.PageIndex + 1, Model.TotalPages, x => Url.Action(WB.UI.Designer.GlobalHelper.CurrentAction, WB.UI.Designer.GlobalHelper.CurrentController, new { p = x, sb = ViewBag.SortBy, so = ViewBag.SortOrder, f = ViewBag.Filter }), 2)
+    </div>
+}
+@{
+    this.Html.RenderPartial("DeleteModalDialog");
 }
 
-@Html.Partial("~/Views/Shared/Index.cshtml")
+@functions
+{
+    private string ActionWithOrderField(string sortField)
+    {
+        var sortOrder = (int?)ViewBag.SortOrder;
+        return Url.Action(
+            WB.UI.Designer.GlobalHelper.CurrentAction,
+            new
+            {
+                p = ViewBag.PageIndex,
+                sb = sortField,
+                so = CustomExtensions.InvertBooleableInt(sortOrder, ViewBag.SortBy == sortField),
+                f = ViewBag.Filter
+            });
+    }
+
+}

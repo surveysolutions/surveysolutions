@@ -1,7 +1,10 @@
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace WB.Core.GenericSubdomains.ErrorReporting.Services.CapiInformationService
 {
     public interface ICapiInformationService
     {
-        string CreateInformationPackage();
+        Task<string> CreateInformationPackage(CancellationToken ct);
     }
 }

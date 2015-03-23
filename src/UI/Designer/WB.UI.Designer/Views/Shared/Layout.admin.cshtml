@@ -1,9 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using WB.UI.Shared.Web.Extensions
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>@ViewBag.Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="shortcut icon" href="@Url.Content("~/favicon.ico")"/>
+    @this.GenerateFavicon(Url.Content("~/favicon.ico"))
    
     <link rel="stylesheet" href="@Url.Content("~/UpdatedDesigner/vendor/bootstrap/dist/css/bootstrap.min.css")" />
     <link rel="stylesheet" href="@Url.Content("~/UpdatedDesigner/vendor/bootstrap/dist/css/bootstrap-theme.min.css")" />

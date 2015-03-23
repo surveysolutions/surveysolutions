@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
-    [Authorize(Roles = "Headquarter, Supervisor")]
+    [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public class UsersApiController : BaseApiController
     {
         private readonly IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory;
@@ -29,11 +29,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.supervisorsFactory = supervisorsFactory;
         }
 
+        [HttpPost]
         public InterviewersView Interviewers(UsersListViewModel data)
         {
-            // Headquarter can view interviewers by any supervisor
+            // Headquarter and Admin can view interviewers by any supervisor
             // Supervisor can view only their interviewers
-            Guid? viewerId = this.GlobalInfo.IsHeadquarter
+            Guid? viewerId = this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator
                                  ? data.Request.SupervisorId
                                  : this.GlobalInfo.GetCurrentUser().Id;
             if (viewerId != null)
@@ -55,6 +56,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return null;
         }
 
+        [HttpPost]
+        [Authorize(Roles = "Administrator, Headquarter")]
         public UserListView Supervisors(UsersListViewModel data)
         {
             var input = new UserListViewInputModel
@@ -63,6 +66,27 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     Orders = data.SortOrder,
                     SearchBy = data.SearchBy
                 };
+
+            if (data.Pager != null)
+            {
+                input.Page = data.Pager.Page;
+                input.PageSize = data.Pager.PageSize;
+            }
+
+            UserListView result = this.supervisorsFactory.Load(input);
+            return result;
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Administrator")]
+        public UserListView Headquarters(UsersListViewModel data)
+        {
+            var input = new UserListViewInputModel
+            {
+                Role = UserRoles.Headquarter,
+                Orders = data.SortOrder,
+                SearchBy = data.SearchBy
+            };
 
             if (data.Pager != null)
             {

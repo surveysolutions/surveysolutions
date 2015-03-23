@@ -28,25 +28,27 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
             });
         };
 
-        private Because of = () =>
+        Because of = () =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateGpsCoordinatesQuestion(
                     questionId: notExistingQuestionId,
                     title: title,
                     variableName: variableName,
-                variableLabel: null,
+                    variableLabel: null,
                     isMandatory: isMandatory,
                     scope: scope,
                     enablementCondition: enablementCondition,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
                     instructions: instructions,
                     responsibleId: responsibleId
 
                     ));
 
-        private It should_throw_QuestionnaireException = () =>
+        It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        private It should_throw_exception_with_message_containting__question__cant__found__ = () =>
+        It should_throw_exception_with_message_containting__question__cant__found__ = () =>
             new[] { "question", "can't", "found" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 

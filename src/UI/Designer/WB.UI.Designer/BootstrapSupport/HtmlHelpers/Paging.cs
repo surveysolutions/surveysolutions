@@ -36,22 +36,12 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             if (totalPages <= 1)
                 return MvcHtmlString.Empty;
 
-            var div = new TagBuilder("div");
-            div.AddCssClass("pagination");
-            div.AddCssClass(additionalPagerCssClass);
+            var nav = new TagBuilder("nav");
 
-            var ul = new TagBuilder("ul");
-
-            if (currentPage > 1)
-            {
-                MakePagingItem(isActive: false, text: pageUrl(1), title: "<<", root: ul);
-                MakePagingItem(isActive: false, text: pageUrl(currentPage - 1), title: "<", root: ul);
-            }
-            else
-            {
-                MakeDisabledPagingItem(text: "<<", root: ul);
-                MakeDisabledPagingItem(text: "<", root: ul);
-            }
+            var pagination = new TagBuilder("ul");
+            pagination.AddCssClass("pagination");
+            var pager = new TagBuilder("ul");
+            pager.AddCssClass("pager");
 
             var pageFrom = Math.Max(1, currentPage - pageSlides);
             var pageTo = Math.Min(totalPages, currentPage + pageSlides);
@@ -61,23 +51,34 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             for (var i = pageFrom; i <= pageTo; i++)
             {
                 MakePagingItem(isActive: i == currentPage, text: pageUrl(i), 
-                               title: i.ToString(), root: ul);
+                               title: i.ToString(), root: pagination);
+            }
+
+            if (currentPage > 1)
+            {
+                MakePagingItem(isActive: false, text: pageUrl(1), title: "FIRST", root: pager);
+                MakePagingItem(isActive: false, text: pageUrl(currentPage - 1), title: "PREVIOUS", root: pager);
+            }
+            else
+            {
+                MakeDisabledPagingItem(text: "FIRST", root: pager);
+                MakeDisabledPagingItem(text: "PREVIOUS", root: pager); 
             }
 
             if (currentPage < totalPages)
             {
-                MakePagingItem(isActive: false, text: pageUrl(currentPage + 1), title: ">", root: ul);
-                MakePagingItem(isActive: false, text: pageUrl(totalPages), title: ">>", root: ul);
+                MakePagingItem(isActive: false, text: pageUrl(currentPage + 1), title: "NEXT", root: pager);
+                MakePagingItem(isActive: false, text: pageUrl(totalPages), title: "LAST", root: pager);
             }
             else
             {
-                MakeDisabledPagingItem(text: ">", root: ul);
-                MakeDisabledPagingItem(text: ">>", root: ul);
+                MakeDisabledPagingItem(text: "NEXT", root: pager);
+                MakeDisabledPagingItem(text: "LAST", root: pager);
             }
 
-            div.InnerHtml = ul.ToString();
+            nav.InnerHtml = pagination.ToString() + pager.ToString();
 
-            return MvcHtmlString.Create(div.ToString());
+            return MvcHtmlString.Create(nav.ToString());
         }
 
         private static void MakeDisabledPagingItem(string text, TagBuilder root)

@@ -3,31 +3,33 @@
     var self = this;
 
     self.Assign = function (user) {
-        var commands = ko.utils.arrayMap(self.SelectedItems(), function (rawItem) {
-            var item = ko.mapping.toJS(rawItem);
-            return ko.toJSON({
-                InterviewerId: user.UserId,
-                InterviewId: item.InterviewId
-            });
-        });
-
-        var command = {
-            type: "AssignInterviewerCommand",
-            commands: commands
-        };
-
-        self.SendCommands(command, function () {
-            self.load();
-        });
+        self.sendCommandAfterFilterAndConfirm(
+            "AssignInterviewerCommand",
+            function (item) { return { InterviewerId: user.UserId, InterviewId: item.InterviewId }},
+            function (item) { return item.CanBeReassigned(); },
+            "#confirm-assign-template",
+            "#confirm-continue-message-template"
+        );
     };
 
-    self.selectAll = function (checkbox) {
-        var isCheckboxSelected = $(checkbox).is(":checked");
-        ko.utils.arrayForEach(self.Items(), function (item) {
-            if (item.CanBeReassigned()) {
-                item.IsSelected(isCheckboxSelected);
-            }
-        });
+    self.ApproveInterview = function () {
+        self.sendCommandAfterFilterAndConfirm(
+            "ApproveInterviewCommand",
+            function (item) { return { InterviewId: item.InterviewId } },
+            function (item) { return item.CanApproveOrReject(); },
+            "#confirm-approve-template",
+            "#confirm-continue-message-template"
+        );
+    };
+
+    self.RejectInterview = function () {
+        self.sendCommandAfterFilterAndConfirm(
+            "RejectInterviewCommand",
+            function (item) { return { InterviewId: item.InterviewId } },
+            function (item) { return item.CanApproveOrReject(); },
+            "#confirm-reject-template",
+            "#confirm-continue-message-template"
+        );
     };
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.SVInterviews, Supervisor.VM.InterviewsBase);

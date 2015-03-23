@@ -21,15 +21,8 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
     {
         Establish context = () =>
         {
-            var userLight = new UserLight { Name = "test" };
+            var userLight = new UserLight { Name = "test", Id = userId };
             var globalInfo = Mock.Of<IGlobalInfoProvider>(x => x.GetCurrentUser() == userLight);
-
-            var user = new UserWebView
-                       {
-                           PublicKey = userId,
-                           DeviceId = null
-                       };
-            var userFactory = Mock.Of<IUserWebViewFactory>(x => x.Load(Moq.It.IsAny<UserWebViewInputModel>()) == user);
 
             userSyncPackageDto = CreateUserSyncPackageDto(userId, packageId);
 
@@ -37,11 +30,11 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             syncManagerMock.Setup(x => x.ReceiveUserSyncPackage(deviceId, packageId, userId)).Returns(userSyncPackageDto);
             
             request = CreateSyncPackageRequest(packageId, deviceId);
-            controller = CreateSyncController(syncManager: syncManagerMock.Object, viewFactory: userFactory, globalInfo: globalInfo);
+            controller = CreateSyncController(syncManager: syncManagerMock.Object, globalInfo: globalInfo);
         };
 
         Because of = () =>
-            result = controller.GetUserSyncPackage(request).Content.ReadAsAsync<UserSyncPackageDto>().Result;
+            result = controller.GetUserSyncPackage(request);
 
         It should_return_not_null_package = () =>
             result.ShouldNotBeNull();
