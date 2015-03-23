@@ -12,7 +12,7 @@ namespace WB.UI.Headquarters.Filters
 {
     public class InstallationAttribute : ActionFilterAttribute
     {
-        private static bool Installed = false;
+        internal static bool Installed = false;
 
         private IIdentityManager identityManager
         {
