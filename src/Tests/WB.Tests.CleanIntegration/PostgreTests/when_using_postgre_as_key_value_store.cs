@@ -5,7 +5,8 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Tests.CleanIntegration.PostgreTests
 {
-    [Subject(typeof (PostgreKeyValueStorage<>))]
+    [Ignore("no setup")]
+    [Subject(typeof(PostgreKeyValueStorage<>))]
     public class when_using_postgre_as_key_value_store
     {
         Establish context = () =>
@@ -16,7 +17,7 @@ namespace WB.Tests.CleanIntegration.PostgreTests
             });
 
             viewId = "cfa9d80f-91ef-4267-9b6b-bb2782041994";
-            store.Store(new PostgreView{IntField = 4, Text = "это текст на русском языке Ъё"}, viewId);
+            store.Store(new PostgreView { IntField = 4, Text = "это текст на русском языке Ъё" }, viewId);
         };
 
         Because of = () => { storedEntity = store.GetById(viewId); };
