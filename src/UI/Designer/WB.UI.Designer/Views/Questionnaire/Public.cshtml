@@ -28,16 +28,16 @@ else
         <thead>
             <tr>
                 <th>
-                    <a href="@ActionWithOrderField("Title")">Title</a>
+                    <a href="@ActionWithOrderField("Title")">Title @ShowSortIcon("Title")</a>
                 </th>
                 <th>
-                    <a href="@ActionWithOrderField("LastEntryDate")">Last modified</a>
+                    <a href="@ActionWithOrderField("LastEntryDate")">Last modified @ShowSortIcon("LastEntryDate")</a>
                 </th>
                 <th>
-                    <a href="@ActionWithOrderField("CreationDate")">Created date</a>
+                    <a href="@ActionWithOrderField("CreationDate")">Created date @ShowSortIcon("CreationDate")</a>
                 </th>
                 <th>
-                    <a href="@ActionWithOrderField("CreatorName")">Created By</a>
+                    <a href="@ActionWithOrderField("CreatorName")">Created By @ShowSortIcon("CreatorName")</a>
                 </th>
                 <th>
                 </th>
@@ -145,4 +145,23 @@ else
             });
     }
 
+}
+@helper ShowSortIcon(string field)
+{
+    var sortOrder = (int?)ViewBag.SortOrder;
+    if (ViewBag.SortBy == field)
+    {
+        if (!sortOrder.ToBool())
+        {
+            <span class="glyphicon glyphicon-sort-by-alphabet"></span>
+        }
+        else
+        {
+            <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
+        }
+    }
+    else
+    {
+        <span class="glyphicon glyphicon-sort"></span>
+    }
 }
