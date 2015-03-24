@@ -3,7 +3,6 @@
 @using WB.UI.Designer.Extensions
 @using WB.UI.Designer.Models
 @using WB.UI.Designer.Utils
-@using WB.UI.Shared.Web.Membership
 
 @model IPagedList<QuestionnaireListViewModel>
 
@@ -11,12 +10,6 @@
     ViewBag.Title = "My Questionnaires";
 
     string controller = ViewBag.Controller ?? WB.UI.Designer.GlobalHelper.CurrentController;
-
-    IMembershipUserService userHelper = ViewBag.UserHelper;
-
-    var propertyList = Model.VisibleProperties(userHelper);
-
-    var sortOrder = (int?)ViewBag.SortOrder;
 }
 
 @if (Model.TotalCount == 0)
