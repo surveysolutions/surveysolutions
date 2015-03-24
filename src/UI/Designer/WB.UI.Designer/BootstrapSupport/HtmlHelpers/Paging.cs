@@ -49,22 +49,33 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             pageTo = Math.Min(totalPages, Math.Max(pageFrom + 2 * pageSlides, pageTo));
 
 
-            if (pageFrom > 1 )
+            if (pageFrom > 1)
             {
-                MakePagingItem(isActive: false, text: pageUrl(1), title: "1", root: pager);
-                MakeDisabledPagingItem(text: "&hellip;", root: pager, additionalClass: "ellipses");
-            }
-            for (var i = pageFrom; i <= pageTo; i++)
-            {
-                MakePagingItem(isActive: i == currentPage, text: pageUrl(i), 
-                               title: i.ToString(), root: pagination);
+                MakePagingItem(isActive: false, text: pageUrl(1), title: "1", root: pagination);
             }
 
-            if (pageTo + 2 <= totalPages)
+            if (pageFrom > 2 )
             {
-                MakeDisabledPagingItem(text: "&hellip;", root: pager, additionalClass: "ellipses");
-                MakePagingItem(isActive: false, text: pageUrl(totalPages), title: totalPages.ToString(), root: pager);
+                MakeDisabledPagingItem(text: "&hellip;", root: pagination, additionalClass: "ellipses");
             }
+
+            for (var i = pageFrom; i <= pageTo; i++)
+            {
+                MakePagingItem(isActive: i == currentPage, text: pageUrl(i), title: i.ToString(), root: pagination);
+            }
+
+            if (pageTo + 1 < totalPages)
+            {
+                MakeDisabledPagingItem(text: "&hellip;", root: pagination, additionalClass: "ellipses");
+            }
+
+            if (pageTo < totalPages)
+            {
+                MakeDisabledPagingItem(text: "&hellip;", root: pagination, additionalClass: "ellipses");
+            }
+
+            MakePagingItem(isActive: false, text: pageUrl(totalPages), title: totalPages.ToString(), root: pagination);
+
 
             if (currentPage > 1)
             {

@@ -1,5 +1,4 @@
 using System.Configuration.Provider;
-using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.UI.Designer.Code;
@@ -103,10 +102,8 @@ namespace WB.UI.Designer.Controllers
                             Email = account.Email,
                             IsApproved = account.IsApproved,
                             IsLockedOut = account.IsLockedOut,
-                            //IsOnline = account.IsOnline,
                             LastLoginDate = account.LastLoginDate.ToUIString(),
                             UserName = account.UserName,
-                            //LastActivityDate = account.LastActivityDate.ToUIString(),
                             LastLockoutDate = account.LastLockoutDate.ToUIString(),
                             LastPasswordChangedDate = account.LastPasswordChangedDate.ToUIString(),
                             Comment = account.Comment ?? GlobalHelper.EmptyString,
@@ -121,7 +118,6 @@ namespace WB.UI.Designer.Controllers
                 this.View(
                     new UpdateAccountModel
                         {
-                            Comment = intUser.Comment, 
                             Email = intUser.Email, 
                             IsApproved = intUser.IsApproved, 
                             IsLockedOut = intUser.IsLockedOut, 
@@ -148,7 +144,7 @@ namespace WB.UI.Designer.Controllers
                                 providerUserKey: intUser.ProviderUserKey,
                                 email: user.Email,
                                 passwordQuestion: intUser.PasswordQuestion,
-                                comment: user.Comment,
+                                comment: "",
                                 isApproved: user.IsApproved,
                                 isLockedOut: user.IsLockedOut,
                                 creationDate: intUser.CreationDate,

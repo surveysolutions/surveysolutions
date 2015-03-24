@@ -1,0 +1,39 @@
+@using WB.UI.Designer.BootstrapSupport
+@model WB.UI.Designer.Models.UpdateAccountModel
+
+<div id="edit-form">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <h1>Update Account: @Model.UserName</h1>
+        if (TempData.ContainsKey(Alerts.ERROR))
+        {
+            <p class="note has-error">@Html.Raw(@TempData[Alerts.ERROR])</p>
+        }
+        @Html.HiddenFor(x => x.Id)
+        <div class="form-group">
+            @Html.TextBoxFor(x => x.Email, new { @class = "form-control", @type = "email", placeholder = "E-mail" })
+            @Html.ValidationMessageFor(x => x.Email, null, new { @class = "help-inline" })
+        </div>
+        <div class="form-group">
+            @Html.CheckBoxFor(x => x.IsApproved, new { @id = "is-approved", @class = "wb-checkbox" })
+            <label for="is-approved">
+                <span></span>Is Approved
+            </label><br/>
+        </div>
+        <div class="form-group">
+            @Html.CheckBoxFor(x => x.IsLockedOut, new { @id = "is-locked", @class = "wb-checkbox" })
+            <label for="is-locked">
+                <span></span>Is Locked Out
+            </label><br />
+        </div>
+        <div class="form-actions">
+            <input type="submit" class="btn btn-success btn-lg" value="Update" />
+            @Html.ActionLink("Cancel", "Index", "Admin", null, new { @class = "btn " })
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/editform")
+}
