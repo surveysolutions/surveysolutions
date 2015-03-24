@@ -29,8 +29,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             });
             questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, GroupText = rosterTitle });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, rosterId));
-            questionnaire.Apply(new RosterChanged(responsibleId, rosterId, rosterSizeQuestionId, RosterSizeSourceType.Question,
-                rosterFixedTitles: null, rosterTitleQuestionId: rosterTitleQuestionId));
+            questionnaire.Apply(new RosterChanged(responsibleId, rosterId){
+                    RosterSizeQuestionId = rosterSizeQuestionId,
+                    RosterSizeSource = RosterSizeSourceType.Question,
+                    FixedRosterTitles =  null,
+                    RosterTitleQuestionId =rosterTitleQuestionId 
+                });
             questionnaire.Apply(new NewQuestionAdded
             {
                 PublicKey = rosterTitleQuestionId,

@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
                 ""title"": ""{2}"",
                 ""propagationKind"": ""{3}"",
                 ""rosterSizeSource"":""FixedTitles"",
-                ""rosterFixedTitles"": {4}
+                ""fixedRosterTitles"": {4}
             }}", questionnaireId, groupId, title, propagationKind, rosterFixedTitles);
 
             deserializer = CreateCommandDeserializer();
@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
             ((UpdateGroupCommand)result).GroupId.ShouldEqual(Guid.Parse(groupId));
 
         It should_return_0_fixed_roster_titles = () =>
-            ((UpdateGroupCommand)result).RosterFixedTitles.Count().ShouldEqual(0);
+            ((UpdateGroupCommand)result).FixedRosterTitles.Count().ShouldEqual(0);
 
         private static ICommand result;
         private static CommandDeserializer deserializer;

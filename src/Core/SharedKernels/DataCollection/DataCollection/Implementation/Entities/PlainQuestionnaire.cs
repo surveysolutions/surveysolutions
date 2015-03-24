@@ -406,14 +406,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return numericQuestion.CountOfDecimalPlaces;
         }
 
-        public IEnumerable<string> GetFixedRosterTitles(Guid groupId)
+        public IEnumerable<Tuple<decimal,string>> GetFixedRosterTitles(Guid groupId)
         {
             var group = this.GetGroup(groupId);
             if (group == null || !group.IsRoster || group.RosterSizeSource != RosterSizeSourceType.FixedTitles)
             {
-                return Enumerable.Empty<string>();
+                return Enumerable.Empty<Tuple<decimal, string>>();
             }
-            return group.RosterFixedTitles;
+            return group.FixedRosterTitles;
         }
 
         public bool DoesQuestionSpecifyRosterTitle(Guid questionId)

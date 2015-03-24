@@ -220,7 +220,7 @@
                     switch (incomingRoster.type) {
                     case "Fixed":
                         command.rosterSizeSource = "FixedTitles";
-                        command.rosterFixedTitles = incomingRoster.rosterFixedTitles;
+                        command.fixedRosterTitles = incomingRoster.fixedRosterTitles;
                         break;
                     case "Numeric":
                         command.rosterSizeQuestionId = incomingRoster.rosterSizeNumericQuestionId;
