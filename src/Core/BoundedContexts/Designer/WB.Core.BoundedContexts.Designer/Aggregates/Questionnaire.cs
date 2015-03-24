@@ -3049,6 +3049,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException("Fixed roster titles could not have empty titles");
             }
 
+            if (rosterFixedTitles.Select(x => x.Item1).Distinct().Count() != rosterFixedTitles.Length)
+            {
+                throw new QuestionnaireException("Fixed roster values must be unique");
+            }
+
             if (rosterSizeQuestionId.HasValue)
             {
                 throw new QuestionnaireException("Roster by fixed titles could not have roster source question");
