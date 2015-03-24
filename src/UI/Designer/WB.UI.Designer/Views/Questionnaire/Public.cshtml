@@ -3,17 +3,12 @@
 @using WB.UI.Designer.Extensions
 @using WB.UI.Designer.Models
 @using WB.UI.Designer.Utils
-@using WB.UI.Shared.Web.Membership
 @model IPagedList<QuestionnairePublicListViewModel>
 
 @{
     ViewBag.Title = "Public Questionnaires";
 
     string controller = ViewBag.Controller ?? WB.UI.Designer.GlobalHelper.CurrentController;
-
-    IMembershipUserService userHelper = ViewBag.UserHelper;
-
-    var sortOrder = (int?)ViewBag.SortOrder;
 }
 
 @if (Model.TotalCount == 0)
@@ -51,7 +46,7 @@ else
                 {
                     <tr class="@(listViewModel.IsDeleted? "deleted": "")">
                         <td class="search-value">
-                            @listViewModel.Title
+                            @listViewModel.Title 
                         </td>
                         <td class="date">
                             @listViewModel.LastEntryDate.FormatDate()

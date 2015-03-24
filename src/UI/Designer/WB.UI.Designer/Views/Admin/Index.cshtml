@@ -3,15 +3,12 @@
 @using WB.UI.Designer.Extensions
 @using WB.UI.Designer.Models
 @using WB.UI.Designer.Utils
-@using WB.UI.Shared.Web.Membership
 
 @model IPagedList<AccountListViewItemModel>
 @{
     ViewBag.Title = "Registered users";
 
     string controller = ViewBag.Controller ?? WB.UI.Designer.GlobalHelper.CurrentController;
-
-    IMembershipUserService userHelper = ViewBag.UserHelper;
 }
 
 @if (Model.TotalCount == 0)
