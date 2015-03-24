@@ -146,7 +146,7 @@ html, body {
                     color: @brand-success;
                 }
 
-                .disabled a{
+                .disabled a {
                     color: @gray-lighter;
                 }
             }
@@ -175,12 +175,12 @@ table.table-header {
                 text-decoration: none;
             }
 
-            span.glyphicon{
+            span.glyphicon {
                 font-size: 13px;
                 color: #b9b9b9;
 
                 &.glyphicon-sort-by-alphabet,
-                &.glyphicon-sort-by-alphabet-alt{
+                &.glyphicon-sort-by-alphabet-alt {
                     color: @brand-success;
                 }
             }
@@ -191,7 +191,8 @@ table.table-header {
 
 table.table-content {
     cursor: default;
-   tr {
+
+    tr {
         td {
             &:first-child {
                 .arial18();
@@ -230,7 +231,7 @@ table.table-content {
             border-bottom: 1px solid #e2e3e4;
         }
 
-         &:hover {
+        &:hover {
             background-color: @table-bg-hover;
 
             td {
@@ -243,7 +244,7 @@ table.table-content {
         &.active {
             background-color: @table-bg-hover;
         }
-   }
+    }
 }
 
 
@@ -356,7 +357,7 @@ table#questionnaire-table-content {
         }
 
         &.deleted {
-            td{
+            td {
                 text-decoration: line-through;
             }
         }
@@ -396,7 +397,7 @@ table#questionnaire-table-content {
     padding-bottom: 8px;
 }
 
-#edit-form{
+#edit-form {
     padding: 3px;
     padding-bottom: 0;
     border-top: 1px solid #bcc3c8;
@@ -409,4 +410,76 @@ table#questionnaire-table-content {
     bottom: 0;
     overflow: auto;
     padding: 8px;
+
+    h1 {
+        .robotoL30();
+        margin-bottom: 20px;
+        margin-top: 7px;
+    }
+
+    p {
+        font-weight: bold;
+    }
+
+    input{
+        max-width: 400px;
+    }
+    ::-webkit-input-placeholder {
+        font-style: italic;
+    }
+
+    :-moz-placeholder { /* Firefox 18- */
+        font-style: italic;
+    }
+
+    ::-moz-placeholder { /* Firefox 19+ */
+        font-style: italic;
+    }
+
+    :-ms-input-placeholder {
+        font-style: italic;
+    }
+
+    label {
+        font-weight: normal;
+
+        small {
+            color: #bfd8ed;
+        }
+    }
+
+    .has-error {
+        color: @brand-danger;
+
+        ::-webkit-input-placeholder {
+            color: @brand-danger;
+        }
+
+        :-moz-placeholder { /* Firefox 18- */
+            color: @brand-danger;
+        }
+
+        ::-moz-placeholder { /* Firefox 19+ */
+            color: @brand-danger;
+        }
+
+        :-ms-input-placeholder {
+            color: @brand-danger;
+        }
+
+        input {
+            border-color: #f0d8d8;
+        }
+    }
+
+    .form-actions {
+        button, a {
+            letter-spacing: 1px;
+
+            &:nth-child(2), &:nth-child(3) {
+                padding-left: 23px;
+                padding-right: 0;
+            }
+        }
+    }
 }

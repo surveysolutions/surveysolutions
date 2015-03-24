@@ -512,4 +512,68 @@ table#questionnaire-table-content tr.deleted td {
   overflow: auto;
   padding: 8px;
 }
+#edit-form h1 {
+  font-family: 'Roboto-Light', sans-serif;
+  font-size: 30px;
+  line-height: 40px;
+  margin-bottom: 20px;
+  margin-top: 7px;
+}
+#edit-form p {
+  font-weight: bold;
+}
+#edit-form input {
+  max-width: 400px;
+}
+#edit-form ::-webkit-input-placeholder {
+  font-style: italic;
+}
+#edit-form :-moz-placeholder {
+  /* Firefox 18- */
+  font-style: italic;
+}
+#edit-form ::-moz-placeholder {
+  /* Firefox 19+ */
+  font-style: italic;
+}
+#edit-form :-ms-input-placeholder {
+  font-style: italic;
+}
+#edit-form label {
+  font-weight: normal;
+}
+#edit-form label small {
+  color: #bfd8ed;
+}
+#edit-form .has-error {
+  color: #d32828;
+}
+#edit-form .has-error ::-webkit-input-placeholder {
+  color: #d32828;
+}
+#edit-form .has-error :-moz-placeholder {
+  /* Firefox 18- */
+  color: #d32828;
+}
+#edit-form .has-error ::-moz-placeholder {
+  /* Firefox 19+ */
+  color: #d32828;
+}
+#edit-form .has-error :-ms-input-placeholder {
+  color: #d32828;
+}
+#edit-form .has-error input {
+  border-color: #f0d8d8;
+}
+#edit-form .form-actions button,
+#edit-form .form-actions a {
+  letter-spacing: 1px;
+}
+#edit-form .form-actions button:nth-child(2),
+#edit-form .form-actions a:nth-child(2),
+#edit-form .form-actions button:nth-child(3),
+#edit-form .form-actions a:nth-child(3) {
+  padding-left: 23px;
+  padding-right: 0;
+}
 /*# sourceMappingURL=designer-list.css.map */

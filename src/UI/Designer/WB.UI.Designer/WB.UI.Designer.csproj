@@ -269,7 +269,6 @@
     <Compile Include="Controllers\AppController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\MaintenanceController.cs" />
-    <Compile Include="Controllers\SynchronizationController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="BootstrapSupport\ControlGroupExtensions.cs" />
@@ -1313,7 +1312,7 @@
     <Content Include="Views\Shared\DeleteModalDialog.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Admin_QiestionnaireListView.cshtml" />
     <Content Include="Views\Error\Forbidden.cshtml" />
-    <Content Include="Views\Synchronization\ViewTestUploadFile.cshtml" />
+    <Content Include="Views\Admin\Import.cshtml" />
     <Content Include="Views\SystemMailer\_Layout.cshtml" />
     <Content Include="Views\SystemMailer\ConfirmationEmail.cshtml" />
     <Content Include="Views\SystemMailer\ResetPasswordEmail.cshtml" />
