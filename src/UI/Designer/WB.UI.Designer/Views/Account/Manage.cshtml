@@ -5,21 +5,33 @@
     ViewBag.Title = "Change Password";
     Layout = "~/Views/Shared/Layout.cshtml";
 }
-
-@using (Html.BeginForm("Manage", "Account", null, FormMethod.Post, new { @class = "form-signin", autocomplete = "off"}))
-{
-    @Html.AntiForgeryToken()
-    <legend>@Model.GetLabel()</legend>
-    <fieldset class="form-horizontal">
-
-        @{
-    this.Html.RenderPartial("EditForm");
+<div id="edit-form">
+    @using (Html.BeginForm("Manage", "Account", null, FormMethod.Post, new { @class = "form-signin", autocomplete = "off" }))
+    {
+        @Html.AntiForgeryToken()
+        <h1>Change password</h1>
+        if (TempData.ContainsKey(Alerts.ERROR))
+        {
+            <p class="note has-error">@Html.Raw(@TempData[Alerts.ERROR])</p>
         }
-        <div class="form-actions">
-            <button class="btn btn-large btn-primary pull-right" type="submit">Change Password</button>
+        <div class="form-group">
+            @Html.PasswordFor(x => x.OldPassword, new { @class = "form-control", placeholder = "Current password" })
+            @Html.ValidationMessageFor(x => x.OldPassword, null, new { @class = "help-inline" })
         </div>
-    </fieldset>
-}
+        <div class="form-group">
+            @Html.PasswordFor(x => x.Password, new { @class = "form-control", placeholder = "New password (min 10 symbols, numbers AND letters)" })
+            @Html.ValidationMessageFor(x => x.Password, null, new { @class = "help-inline" })
+        </div>
+        <div class="form-group">
+            @Html.PasswordFor(x => x.ConfirmPassword, new { @class = "form-control", placeholder = "Repeat password" })
+            @Html.ValidationMessageFor(x => x.ConfirmPassword, null, new { @class = "help-inline" })
+        </div>
+        <div class="form-actions">
+            <input type="submit" class="btn btn-success btn-lg" value="Change"/>
+            @Html.ActionLink("Cancel", "Index", "Questionnaire", null, new { @class = "btn " })
+        </div>
+    }
+</div>
 
 @section Scripts {
     @Scripts.Render("~/editform")
