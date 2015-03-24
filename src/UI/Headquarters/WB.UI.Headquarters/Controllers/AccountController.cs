@@ -7,15 +7,14 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.UI.Headquarters.Code;
-
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -117,7 +116,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     this.UpdateAccount(user: GetUserById(GlobalInfo.GetCurrentUser().Id), editModel: model);
                     this.Success(
-                        Core.SharedKernels.SurveyManagement.Web.Properties.Strings
+                        Strings
                             .HQ_AccountController_AccountUpdatedSuccessfully);
                 }
             }
@@ -129,33 +128,29 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Observer")]
         public ActionResult ObservePerson(string personName)
         {
-            if (!string.IsNullOrEmpty(personName))
-            {
-                var user = Membership.GetUser(personName);
-                if (user != null)
-                {
-                    var currentUser = GlobalInfo.GetCurrentUser().Name;
+            if (string.IsNullOrEmpty(personName)) 
+                throw new HttpException(404, string.Empty);
+            
+            var user = Membership.GetUser(personName);
+            if (user == null) 
+                throw new HttpException(404, string.Empty);
+            
+            var currentUser = GlobalInfo.GetCurrentUser().Name;
 
-                    var forbiddenRoles = new string[] { UserRoles.Administrator.ToString(), UserRoles.Observer.ToString(), UserRoles.Operator.ToString() };
-                    var userRoles = Roles.GetRolesForUser(user.UserName);
-                    bool invalidTargetUser = userRoles.Any(r => forbiddenRoles.Contains(r));
-
-                    //do not forget pass currentuser to display you are observing
-                    if (!invalidTargetUser)
-                    {
-                        bool isHeadquarter = userRoles.Contains(UserRoles.Headquarter.ToString(), StringComparer.OrdinalIgnoreCase);
-                        this.authentication.SignIn(user.UserName, false, currentUser);
-                        if (isHeadquarter)
-                            return this.RedirectToAction("SurveysAndStatuses", "HQ");
-                        else
-                        {
-                            return this.RedirectToAction("Index", "Survey");
-                        }
-                    }
-                }
-            }
-
-            return this.RedirectToAction("Index", "Headquarters");
+            var forbiddenRoles = new string[] { UserRoles.Administrator.ToString(), UserRoles.Observer.ToString(), UserRoles.Operator.ToString() };
+            var userRoles = Roles.GetRolesForUser(user.UserName);
+            bool invalidTargetUser = userRoles.Any(r => forbiddenRoles.Contains(r));
+            
+            if (invalidTargetUser) 
+                throw new HttpException(404, string.Empty);
+            bool isHeadquarter = userRoles.Contains(UserRoles.Headquarter.ToString(), StringComparer.OrdinalIgnoreCase);
+            
+            //do not forget pass currentuser to display you are observing
+            this.authentication.SignIn(user.UserName, false, currentUser);
+            
+            return isHeadquarter ? 
+                this.RedirectToAction("SurveysAndStatuses", "HQ") : 
+                this.RedirectToAction("Index", "Survey");
         }
 
         [Authorize(Roles = "Headquarter, Supervisor")]
@@ -163,19 +158,19 @@ namespace WB.UI.Headquarters.Controllers
         {
             var currentUserName = (User.Identity as CustomIdentity);
 
-            if (currentUserName != null && !string.IsNullOrEmpty(currentUserName.ObserverName))
-            {
-                var alowedRoles = new string[] { UserRoles.Administrator.ToString(), UserRoles.Observer.ToString(), UserRoles.Operator.ToString() };
-                var userRoles = Roles.GetRolesForUser(currentUserName.ObserverName);
+            if (currentUserName == null || string.IsNullOrEmpty(currentUserName.ObserverName))
+                throw new HttpException(404, string.Empty);
+            
+            var alowedRoles = new string[] { UserRoles.Administrator.ToString(), UserRoles.Observer.ToString(), UserRoles.Operator.ToString() };
+            var userRoles = Roles.GetRolesForUser(currentUserName.ObserverName);
 
-                bool targetUserInValidRole = userRoles.Any(r => alowedRoles.Contains(r));
-                if (targetUserInValidRole)
-                    this.authentication.SignIn(currentUserName.ObserverName, false);
-                
-                return this.RedirectToAction("Index", "Headquarters");
-            }
+            bool targetUserInValidRole = userRoles.Any(r => alowedRoles.Contains(r));
 
-            return null;
+            if (!targetUserInValidRole) 
+                throw new HttpException(404, string.Empty);
+            
+            this.authentication.SignIn(currentUserName.ObserverName, false);
+            return this.RedirectToAction("Index", "Headquarters");
         }
     }
 }
