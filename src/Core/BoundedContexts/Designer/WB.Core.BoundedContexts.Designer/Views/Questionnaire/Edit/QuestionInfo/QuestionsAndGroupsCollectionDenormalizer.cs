@@ -296,7 +296,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             group.IsRoster = true;
             group.RosterSizeQuestionId = evnt.Payload.RosterSizeQuestionId;
             group.RosterSizeSourceType = evnt.Payload.RosterSizeSource;
-            group.RosterFixedTitles = evnt.Payload.RosterFixedTitles;
+            group.FixedRosterTitles = evnt.Payload.FixedRosterTitles;
             group.RosterTitleQuestionId = evnt.Payload.RosterTitleQuestionId;
 
             var groups = this.GetAllDescendantGroups(currentState, evnt.Payload.GroupId);
@@ -323,7 +323,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
             group.IsRoster = false;
             group.RosterSizeQuestionId = null;
-            group.RosterFixedTitles = null;
+            group.FixedRosterTitles = null;
             group.RosterTitleQuestionId = null;
 
             var groups = this.GetAllDescendantGroups(currentState, evnt.Payload.GroupId);
@@ -442,7 +442,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                     Id = g.PublicKey,
                     Title = g.Title,
                     IsRoster = g.IsRoster,
-                    RosterFixedTitles = g.RosterFixedTitles,
+                    FixedRosterTitles = g.FixedRosterTitles,
                     RosterSizeQuestionId = g.RosterSizeQuestionId,
                     RosterSizeSourceType = g.RosterSizeSource,
                     RosterTitleQuestionId = g.RosterTitleQuestionId,

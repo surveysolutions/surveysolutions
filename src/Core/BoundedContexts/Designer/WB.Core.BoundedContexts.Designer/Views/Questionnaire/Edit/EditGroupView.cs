@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             this.IsRoster = group.IsRoster;
             this.RosterSizeQuestionId = group.RosterSizeQuestionId;
             this.RosterSizeSource = group.RosterSizeSource;
-            this.RosterFixedTitles = group.RosterFixedTitles;
+            this.FixedRosterTitles = group.FixedRosterTitles;
             this.RosterTitleQuestionId = group.RosterTitleQuestionId;
             this.ConditionExpression = group.ConditionExpression;
             this.Description = group.Description;
@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         [JsonConverter(typeof(StringEnumConverter))]
         public RosterSizeSourceType RosterSizeSource { get; set; }
 
-        public string[] RosterFixedTitles { get; set; }
+        public Tuple<decimal, string>[] FixedRosterTitles { get; set; }
         public Guid? RosterTitleQuestionId { get; set; }
 
         public string Description { get; set; }

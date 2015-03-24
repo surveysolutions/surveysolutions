@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
             result.ItemId.ShouldEqual(rosterId.FormatGuid());
         
         It should_return_roster_with_RosterFixedTitles_equals_to_null = () =>
-            result.RosterFixedTitles.ShouldBeNull();
+            result.FixedRosterTitles.ShouldBeNull();
 
         It should_return_roster_with_RosterSizeMultiQuestionId_equals_g3_RosterSizeQuestionId = () =>
             result.RosterSizeMultiQuestionId.ShouldEqual(q2Id.FormatGuid());
