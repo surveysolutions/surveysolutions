@@ -371,7 +371,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 newEvents.Add(feedEntry);
             }
 
-            this.plainStorage.Store(newEvents.Select(x => Tuple.Create(x, x.EntryId)));
+            this.plainStorage.Store(newEvents.Select(x => Tuple.Create(x, (object)x.EntryId)));
         }
 
 

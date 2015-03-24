@@ -146,7 +146,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 newEvents.Add(remoteEvent.Content);
             }
 
-            this.plainStorage.Store(newEvents.Select(x => Tuple.Create(x, x.EntryId)));
+            this.plainStorage.Store(newEvents.Select(x => Tuple.Create(x, (object)x.EntryId)));
         }
 
         private void DeleteQuestionnaire(Guid id, long version)

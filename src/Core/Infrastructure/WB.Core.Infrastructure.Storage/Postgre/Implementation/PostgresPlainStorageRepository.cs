@@ -1,35 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
+using NHibernate.Linq;
+using Ninject;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
     public class PostgresPlainStorageRepository<TEntity> : IQueryablePlainStorageAccessor<TEntity> where TEntity : class
     {
-        public TEntity GetById(string id)
+        private readonly ISession session;
+
+        public PostgresPlainStorageRepository([Named(PostgresPlainStorageModule.SessionName)]ISession session)
         {
-            throw new NotImplementedException();
+            if (session == null) throw new ArgumentNullException("session");
+            this.session = session;
         }
 
-        public void Remove(string id)
+        public TEntity GetById(object id)
         {
-            throw new NotImplementedException();
+            return this.session.Get<TEntity>(id);
         }
 
-        public void Store(TEntity entity, string id)
+        public void Remove(object id)
         {
-            throw new NotImplementedException();
+            this.session.Delete(id);
         }
 
-        public void Store(IEnumerable<Tuple<TEntity, string>> entities)
+        public void Store(TEntity entity, object id)
         {
-            throw new NotImplementedException();
+            this.session.SaveOrUpdate(entity);
+        }
+
+        public void Store(IEnumerable<Tuple<TEntity, object>> entities)
+        {
+            foreach (var entity in entities)
+            {
+                this.Store(entity.Item1, entity.Item2);
+            }
         }
 
         public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
         {
-            throw new NotImplementedException();
+            return query.Invoke(this.session.Query<TEntity>());
         }
     }
 }
