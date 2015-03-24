@@ -15,6 +15,7 @@ using NHibernate.Tool.hbm2ddl;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Web.Common;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage.Memory.Implementation;
 using WB.Core.Infrastructure.Storage.Postgre.Implementation;
@@ -114,7 +115,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
         {
             var mapper = new ModelMapper();
             var mappingTypes = this.mappingAssemblies.SelectMany(x => x.GetExportedTypes())
-                                                     .Where(x => IsSubclassOfRawGeneric(typeof(ClassMapping<>), x));
+                                                     .Where(x => x.IsSubclassOfRawGeneric(typeof(ClassMapping<>)));
             mapper.AddMappings(mappingTypes);
             mapper.BeforeMapProperty += (inspector, member, customizer) =>
             {
@@ -128,19 +129,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
             return mapper.CompileMappingForAllExplicitlyAddedEntities();
         }
 
-        static bool IsSubclassOfRawGeneric(Type generic, Type toCheck)
-        {
-            while (toCheck != null && toCheck != typeof(object))
-            {
-                var cur = toCheck.IsGenericType ? toCheck.GetGenericTypeDefinition() : toCheck;
-                if (generic == cur)
-                {
-                    return true;
-                }
-                toCheck = toCheck.BaseType;
-            }
-            return false;
-        }
+  
 
         private static object GetReadSideKeyValueStorage(IContext context)
         {

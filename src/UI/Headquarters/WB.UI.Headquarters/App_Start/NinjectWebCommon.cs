@@ -134,6 +134,8 @@ namespace WB.UI.Headquarters
             string esentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.DbFolder"]);
 
             var mappingAssemblies = new List<Assembly> { typeof (QuestionnaireBrowseItemMap).Assembly }; // TODO : make list by modules here
+            var postgresPlainStorageSettings = new PostgresPlainStorageSettings();
+
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
@@ -144,7 +146,7 @@ namespace WB.UI.Headquarters
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false, basePath: basePath),
                 new QuestionnaireUpgraderModule(),
                // new RavenReadSideInfrastructureModule(ravenSettings, ravenReadSideRepositoryWriterSettings, typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly, typeof(UserSyncPackagesByBriefFields).Assembly),
-                new RavenPlainStorageInfrastructureModule(ravenSettings),
+                new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 new FileInfrastructureModule(),
                 new HeadquartersRegistry(),
                 new SynchronizationModule(synchronizationSettings),

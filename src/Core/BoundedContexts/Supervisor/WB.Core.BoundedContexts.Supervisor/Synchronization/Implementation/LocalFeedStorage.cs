@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         public void Store(IEnumerable<LocalUserChangedFeedEntry> userChangedEvent)
         {
-            this.plainStorage.Store(userChangedEvent.Select(@event => Tuple.Create(@event, @event.EntryId)));
+            this.plainStorage.Store(userChangedEvent.Select(@event => Tuple.Create(@event, (object) @event.EntryId)));
         }
 
         public IEnumerable<LocalUserChangedFeedEntry> GetNotProcessedSupervisorEvents(string supervisorId)

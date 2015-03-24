@@ -7,24 +7,24 @@ namespace WB.Tests.Unit
 {
     public class TestPlainStorage<T> : IQueryablePlainStorageAccessor<T> where T : class
     {
-        private readonly Dictionary<string, T> entites;
+        private readonly Dictionary<object, T> entites;
 
         public TestPlainStorage()
         {
-            this.entites = new Dictionary<string, T>();
+            this.entites = new Dictionary<object, T>();
         }
 
-        public T GetById(string id)
+        public T GetById(object id)
         {
             return this.entites[id];
         }
 
-        public void Remove(string id)
+        public void Remove(object id)
         {
             this.entites.Remove(id);
         }
 
-        public void Store(T entity, string id)
+        public void Store(T entity, object id)
         {
             if (this.entites.ContainsKey(id))
             {
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit
             }
         }
 
-        public void Store(IEnumerable<Tuple<T, string>> entitiesToStore)
+        public void Store(IEnumerable<Tuple<T, object>> entitiesToStore)
         {
             foreach (var keyValuePair in entitiesToStore)
             {
