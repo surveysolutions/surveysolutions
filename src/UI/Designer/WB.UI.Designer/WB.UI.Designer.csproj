@@ -1268,6 +1268,7 @@
     <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.css.map">
       <DependentUpon>bootstrap-custom.css</DependentUpon>
     </Content>
+    <Content Include="Views\Questionnaire\Create.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
