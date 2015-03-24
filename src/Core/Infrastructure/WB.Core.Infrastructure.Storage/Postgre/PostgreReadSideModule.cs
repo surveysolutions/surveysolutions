@@ -49,14 +49,14 @@ namespace WB.Core.Infrastructure.Storage.Postgre
                        .ToMethod(kernel => this.BuildSessionFactory())
                        .InSingletonScope();
 
-            this.Kernel.Bind<PostgresTransactionManager>().ToSelf().InRequestScope();
-            this.Kernel.Bind<Func<PostgresTransactionManager>>().ToMethod(context => () => context.Kernel.Get<PostgresTransactionManager>());
-            this.Kernel.Bind<RebuildReadSidePostgresTransactionManager>().ToSelf();
+            this.Kernel.Bind<CqrsPostgresCqrsTransactionManager>().ToSelf().InRequestScope();
+            this.Kernel.Bind<Func<CqrsPostgresCqrsTransactionManager>>().ToMethod(context => () => context.Kernel.Get<CqrsPostgresCqrsTransactionManager>());
+            this.Kernel.Bind<RebuildReadSideCqrsPostgresTransactionManager>().ToSelf();
 
             this.Kernel.Bind<TransactionManagerProvider>().ToSelf().InSingletonScope();
 
             this.Kernel.Bind<ISessionProvider>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
-            this.Kernel.Bind<ITransactionManager>().To<PostgresTransactionManager>();
+            this.Kernel.Bind<ITransactionManager>().To<CqrsPostgresCqrsTransactionManager>();
 
             this.Kernel.Bind<ITransactionManagerProvider>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
             this.Kernel.Bind<ITransactionManagerProviderManager>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());

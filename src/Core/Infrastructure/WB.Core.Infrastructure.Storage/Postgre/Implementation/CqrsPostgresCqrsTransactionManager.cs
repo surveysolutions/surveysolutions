@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Data;
 using NHibernate;
-using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
-    internal class PostgresTransactionManager : IPostgresTransactionManager, IDisposable
+    internal class CqrsPostgresCqrsTransactionManager : ICqrsPostgresTransactionManager, IDisposable
     {
         private readonly ISessionFactory sessionFactory;
 
@@ -17,7 +16,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         private bool triedToBeginCommandTransaction;
         private bool triedToBeginQueryTransaction;
 
-        public PostgresTransactionManager(ISessionFactory sessionFactory)
+        public CqrsPostgresCqrsTransactionManager(ISessionFactory sessionFactory)
         {
             this.sessionFactory = sessionFactory;
         }
@@ -145,7 +144,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             GC.SuppressFinalize(this);
         }
 
-        ~PostgresTransactionManager()
+        ~CqrsPostgresCqrsTransactionManager()
         {
             Dispose();
         }
