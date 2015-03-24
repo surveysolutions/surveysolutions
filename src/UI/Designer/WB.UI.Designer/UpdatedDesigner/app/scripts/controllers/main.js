@@ -18,18 +18,6 @@ angular.module('designerApp')
             var focusEditorPane = 'shift+alt+e';
             var openChaptersPane = 'left';
 
-            if (hotkeys.get(focusTreePane) === false) {
-                hotkeys.del(focusTreePane);
-            }
-            
-            if (hotkeys.get(focusEditorPane) === false) {
-                hotkeys.del(focusEditorPane);
-            }
-            
-            if (hotkeys.get(openChaptersPane) === false) {
-                hotkeys.del(openChaptersPane);
-            }
-
             hotkeys.add({
                 combo: 'esc',
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
@@ -38,6 +26,9 @@ angular.module('designerApp')
                 }
             });
            
+            if (hotkeys.get(focusTreePane) === false) {
+                hotkeys.del(focusTreePane);
+            }
             hotkeys.add({
                 combo: focusTreePane,
                     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
@@ -48,6 +39,9 @@ angular.module('designerApp')
                     }
                 });
            
+            if (hotkeys.get(focusEditorPane) === false) {
+                hotkeys.del(focusEditorPane);
+            }
             hotkeys.add({
                 combo: focusEditorPane,
                     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
@@ -58,6 +52,9 @@ angular.module('designerApp')
                     }
                 });
           
+            if (hotkeys.get(openChaptersPane) === false) {
+                hotkeys.del(openChaptersPane);
+            }
             hotkeys.add(openChaptersPane, 'Open chapters', function (event) {
                     event.preventDefault();
                     $scope.$broadcast("openChaptersList", "");
