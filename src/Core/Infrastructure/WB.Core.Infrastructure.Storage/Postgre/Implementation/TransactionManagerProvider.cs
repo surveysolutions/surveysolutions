@@ -7,15 +7,15 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
     internal class TransactionManagerProvider : ISessionProvider, ITransactionManagerProviderManager
     {
-        private readonly Func<PostgresTransactionManager> transactionManagerFactory;
-        private readonly RebuildReadSidePostgresTransactionManager rebuildReadSideTransactionManager;
-        private IPostgresTransactionManager pinnedTransactionManager;
+        private readonly Func<CqrsPostgresCqrsTransactionManager> transactionManagerFactory;
+        private readonly RebuildReadSideCqrsPostgresTransactionManager rebuildReadSideCqrsTransactionManager;
+        private ICqrsPostgresTransactionManager pinnedTransactionManager;
 
-        public TransactionManagerProvider(Func<PostgresTransactionManager> transactionManagerFactory,
-            RebuildReadSidePostgresTransactionManager rebuildReadSideTransactionManager)
+        public TransactionManagerProvider(Func<CqrsPostgresCqrsTransactionManager> transactionManagerFactory,
+            RebuildReadSideCqrsPostgresTransactionManager rebuildReadSideCqrsTransactionManager)
         {
             this.transactionManagerFactory = transactionManagerFactory;
-            this.rebuildReadSideTransactionManager = rebuildReadSideTransactionManager;
+            this.rebuildReadSideCqrsTransactionManager = rebuildReadSideCqrsTransactionManager;
         }
 
         public ITransactionManager GetTransactionManager()
@@ -30,7 +30,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         public void PinRebuildReadSideTransactionManager()
         {
-            this.pinnedTransactionManager = this.rebuildReadSideTransactionManager;
+            this.pinnedTransactionManager = this.rebuildReadSideCqrsTransactionManager;
         }
 
         public void UnpinTransactionManager()
@@ -38,7 +38,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             this.pinnedTransactionManager = null;
         }
 
-        private IPostgresTransactionManager GetPostgresTransactionManager()
+        private ICqrsPostgresTransactionManager GetPostgresTransactionManager()
         {
             return this.pinnedTransactionManager ?? this.transactionManagerFactory.Invoke();
         }
