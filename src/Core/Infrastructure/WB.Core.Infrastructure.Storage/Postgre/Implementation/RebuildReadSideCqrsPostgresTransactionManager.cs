@@ -4,7 +4,7 @@ using NHibernate;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
-    internal class RebuildReadSidePostgresTransactionManager : IPostgresTransactionManager, IDisposable
+    internal class RebuildReadSideCqrsPostgresTransactionManager : ICqrsPostgresTransactionManager, IDisposable
     {
         private readonly ISessionFactory sessionFactory;
 
@@ -12,7 +12,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         private bool triedToBeginCommandTransaction;
 
-        public RebuildReadSidePostgresTransactionManager(ISessionFactory sessionFactory)
+        public RebuildReadSideCqrsPostgresTransactionManager(ISessionFactory sessionFactory)
         {
             this.sessionFactory = sessionFactory;
         }
@@ -87,7 +87,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             GC.SuppressFinalize(this);
         }
 
-        ~RebuildReadSidePostgresTransactionManager()
+        ~RebuildReadSideCqrsPostgresTransactionManager()
         {
             this.Dispose();
         }
