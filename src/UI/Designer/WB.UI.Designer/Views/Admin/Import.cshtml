@@ -1,0 +1,13 @@
+﻿<div id="edit-form">
+    @using (Html.BeginForm("Import", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <h1>Import Questionnaire</h1>
+        <div class="form-group">
+            <input class="form-control" type="file" name="my file" placeholder=".tmpl file" />
+        </div>
+        <div class="form-actions">
+            <input type="submit" class="btn btn-success btn-lg" value="Upload" />
+            @Html.ActionLink("Cancel", "Index", "Questionnaire", null, new { @class = "btn " })
+        </div>
+    }
+</div>

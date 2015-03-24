@@ -13,7 +13,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @*<link href="@Styles.Url("~/content/css")" rel="stylesheet" />*@
 
     <link href="~/UpdatedDesigner/content/designer-start/bootstrap-custom.css" media="screen" rel="stylesheet" type="text/css" />
     <link href="~/UpdatedDesigner/content/designer-start/designer-list.css" media="screen" rel="stylesheet" type="text/css" />
@@ -27,8 +26,16 @@
     @this.Html.Partial("_html5shiv")
     @*@Html.Partial("_trackers")*@
     @* favicons and touch icons go here *@
+
+    <script type="text/javascript">
+    function FrameCheck() {
+        if (top != self)
+            top.location.replace(self.location.href);
+    }
+    </script>
+
 </head>
-<body>
+<body onload="FrameCheck();">
     <div class="container-wb-list">
         <div class="header-wb-list">
             <header>
@@ -44,11 +51,11 @@
                     <li role="presentation" class="create">@Html.ActionLink("Create New", "Create", "Questionnaire", null, new { @class = "btn" })</li>
                 </ul>
                 <nav>
-                    <a class="btn btn-default" href="@WebConfigurationManager.AppSettings["DesignerHelpUrl"]">Help</a>
+                    <a class="btn btn-default" target="_blank" href="@WebConfigurationManager.AppSettings["DesignerHelpUrl"]">Help</a>
                     @Html.ActionLink("Change password", "Manage", "Account", null, new { @class = "btn btn-default" })
                     @if (userHelper.WebUser.IsAdmin)
                     {
-                        <a class="btn btn-default" href="@Url.Action("Import", "Synchronization")">Import questionnaire</a>
+                        <a class="btn btn-default" href="@Url.Action("Import", "Admin")">Import questionnaire</a>
                     }
                     @Html.ActionLink("Logout", "LogOff", "Account", null, new { @class = "btn btn-default" })
                 </nav>
