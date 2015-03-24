@@ -53,7 +53,7 @@ namespace Main.Core.Documents
                 return Propagate.None;
             }
 
-            set
+            set 
             {
             }
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using Humanizer;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
@@ -74,6 +75,11 @@ namespace WB.Core.Infrastructure.Storage.Postgre
                 {
                     customizer.Type(NHibernateUtil.StringClob);
                 }
+            };
+            mapper.BeforeMapClass += (inspector, type, customizer) =>
+            {
+                var tableName = type.Name.Pluralize();
+                customizer.Table(tableName);
             };
 
             return mapper.CompileMappingForAllExplicitlyAddedEntities();
