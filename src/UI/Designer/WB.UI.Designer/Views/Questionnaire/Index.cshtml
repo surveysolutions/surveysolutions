@@ -21,6 +21,7 @@
 
 @if (Model.TotalCount == 0)
 {
+    @Html.Partial("_list_search_form")
     <p class="text-center" style="line-height: 10em">This list does not contain any records</p>
 }
 else
