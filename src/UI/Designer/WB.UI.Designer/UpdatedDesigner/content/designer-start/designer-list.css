@@ -301,6 +301,9 @@ body {
 .container-wb-list section#designer-list #table-content-holder ul.pager a {
   color: #2fc507;
 }
+.container-wb-list section#designer-list #table-content-holder ul.pager .disabled a {
+  color: #9f9f9f;
+}
 table.table-header {
   cursor: default;
   border-left: 13px solid #bcc3c8;
