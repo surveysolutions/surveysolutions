@@ -125,7 +125,6 @@ else
                 }
             </tbody>
         </table>
-
         @Html.Pager(Model.PageIndex + 1, Model.TotalPages, x => Url.Action(WB.UI.Designer.GlobalHelper.CurrentAction, WB.UI.Designer.GlobalHelper.CurrentController, new { p = x, sb = ViewBag.SortBy, so = ViewBag.SortOrder, f = ViewBag.Filter }), 2)
     </div>
 }
@@ -168,6 +167,4 @@ else
                 f = ViewBag.Filter
             });
     }
-
-
 }

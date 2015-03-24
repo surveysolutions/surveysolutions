@@ -71,11 +71,8 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
 
             if (pageTo < totalPages)
             {
-                MakeDisabledPagingItem(text: "&hellip;", root: pagination, additionalClass: "ellipses");
+                MakePagingItem(isActive: false, text: pageUrl(totalPages), title: totalPages.ToString(), root: pagination);
             }
-
-            MakePagingItem(isActive: false, text: pageUrl(totalPages), title: totalPages.ToString(), root: pagination);
-
 
             if (currentPage > 1)
             {
