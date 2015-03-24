@@ -141,7 +141,7 @@ namespace WB.UI.Headquarters.Controllers
                     bool invalidTargetUser = userRoles.Any(r => forbiddenRoles.Contains(r));
 
                     //do not forget pass currentuser to display you are observing
-                    if (!invalidTargetUser && !user.IsLockedOut)
+                    if (!invalidTargetUser)
                     {
                         bool isHeadquarter = userRoles.Contains(UserRoles.Headquarter.ToString(), StringComparer.OrdinalIgnoreCase);
                         this.authentication.SignIn(user.UserName, false, currentUser);
