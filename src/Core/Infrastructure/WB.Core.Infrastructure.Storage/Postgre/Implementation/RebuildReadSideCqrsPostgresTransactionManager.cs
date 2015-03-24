@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using NHibernate;
+using Ninject;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
@@ -12,7 +13,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         private bool triedToBeginCommandTransaction;
 
-        public RebuildReadSideCqrsPostgresTransactionManager(ISessionFactory sessionFactory)
+        public RebuildReadSideCqrsPostgresTransactionManager([Named(PostgresReadSideModule.ReadSideSessionFactoryName)]ISessionFactory sessionFactory)
         {
             this.sessionFactory = sessionFactory;
         }
