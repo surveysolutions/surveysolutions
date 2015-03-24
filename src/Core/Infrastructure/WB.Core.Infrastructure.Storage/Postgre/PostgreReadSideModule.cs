@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using Humanizer;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
@@ -24,12 +25,13 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Postgre
 {
-    public class PostgreModule : Ninject.Modules.NinjectModule
+    public class PostgresReadSideModule : Ninject.Modules.NinjectModule
     {
+        internal const string ReadSideSessionFactoryName = "ReadSideSessionFactory";
         private readonly string connectionString;
         private readonly IEnumerable<Assembly> mappingAssemblies;
 
-        public PostgreModule(string connectionString,
+        public PostgresReadSideModule(string connectionString,
             IEnumerable<Assembly> mappingAssemblies)
         {
             this.connectionString = connectionString;
@@ -48,7 +50,8 @@ namespace WB.Core.Infrastructure.Storage.Postgre
             
             this.Kernel.Bind<ISessionFactory>()
                        .ToMethod(kernel => this.BuildSessionFactory())
-                       .InSingletonScope();
+                       .InSingletonScope()
+                       .Named(ReadSideSessionFactoryName);
 
             this.Kernel.Bind<CqrsPostgresCqrsTransactionManager>().ToSelf().InRequestScope();
             this.Kernel.Bind<Func<CqrsPostgresCqrsTransactionManager>>().ToMethod(context => () => context.Kernel.Get<CqrsPostgresCqrsTransactionManager>());
@@ -124,6 +127,12 @@ namespace WB.Core.Infrastructure.Storage.Postgre
                 {
                     customizer.Type(NHibernateUtil.StringClob);
                 }
+            };
+
+            mapper.BeforeMapClass += (inspector, type, customizer) =>
+            {
+                var tableName = type.Name.Pluralize();
+                customizer.Table(tableName);
             };
 
             return mapper.CompileMappingForAllExplicitlyAddedEntities();

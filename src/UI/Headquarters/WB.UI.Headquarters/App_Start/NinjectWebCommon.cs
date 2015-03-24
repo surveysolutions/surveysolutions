@@ -129,12 +129,11 @@ namespace WB.UI.Headquarters
             var basePath = appDataDirectory;
             //const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
 
-            var ravenReadSideRepositoryWriterSettings = new RavenReadSideRepositoryWriterSettings(int.Parse(WebConfigurationManager.AppSettings["Raven.Readside.BulkInsertBatchSize"]));
-
             string esentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.DbFolder"]);
 
-            var mappingAssemblies = new List<Assembly> { typeof (QuestionnaireBrowseItemMap).Assembly }; // TODO : make list by modules here
+            var mappingAssemblies = new List<Assembly> { typeof (SurveyManagementSharedKernelModule).Assembly }; 
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings();
+            postgresPlainStorageSettings.ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString;
 
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
@@ -145,14 +144,13 @@ namespace WB.UI.Headquarters
                 new NLogLoggingModule(),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false, basePath: basePath),
                 new QuestionnaireUpgraderModule(),
-               // new RavenReadSideInfrastructureModule(ravenSettings, ravenReadSideRepositoryWriterSettings, typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly, typeof(UserSyncPackagesByBriefFields).Assembly),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 new FileInfrastructureModule(),
                 new HeadquartersRegistry(),
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
                 new EsentReadSideModule(esentDataFolder),
-                new PostgreModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, mappingAssemblies),
+                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, mappingAssemblies),
                 new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled));
 
             NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
