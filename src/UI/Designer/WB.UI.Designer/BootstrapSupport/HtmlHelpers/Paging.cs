@@ -48,10 +48,22 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             pageFrom = Math.Max(1, Math.Min(pageTo - 2 * pageSlides, pageFrom));
             pageTo = Math.Min(totalPages, Math.Max(pageFrom + 2 * pageSlides, pageTo));
 
+
+            if (pageFrom > 1 )
+            {
+                MakePagingItem(isActive: false, text: pageUrl(1), title: "1", root: pager);
+                MakeDisabledPagingItem(text: "&hellip;", root: pager, additionalClass: "ellipses");
+            }
             for (var i = pageFrom; i <= pageTo; i++)
             {
                 MakePagingItem(isActive: i == currentPage, text: pageUrl(i), 
                                title: i.ToString(), root: pagination);
+            }
+
+            if (pageTo + 2 <= totalPages)
+            {
+                MakeDisabledPagingItem(text: "&hellip;", root: pager, additionalClass: "ellipses");
+                MakePagingItem(isActive: false, text: pageUrl(totalPages), title: totalPages.ToString(), root: pager);
             }
 
             if (currentPage > 1)
@@ -81,13 +93,17 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             return MvcHtmlString.Create(nav.ToString());
         }
 
-        private static void MakeDisabledPagingItem(string text, TagBuilder root)
+        private static void MakeDisabledPagingItem(string text, TagBuilder root, string additionalClass = null)
         {
             var li = new TagBuilder("li");
             li.AddCssClass("disabled");
+            if (!string.IsNullOrWhiteSpace(additionalClass))
+            {
+                li.AddCssClass(additionalClass);
+            }
             var a = new TagBuilder("a");
             a.MergeAttribute("href", "#");
-            a.SetInnerText(text);
+            a.InnerHtml = text;
             a.AddCssClass("disabledPage");
 
             li.InnerHtml = a.ToString();
@@ -103,7 +119,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                 li.AddCssClass("active");
                 var span = new TagBuilder("span");
                 span.AddCssClass("currentPage");
-                span.SetInnerText(title);
+                span.InnerHtml = title;
 
                 li.InnerHtml += span;
             }
@@ -111,8 +127,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             {
                 var a = new TagBuilder("a");
                 a.MergeAttribute("href", text);
-                a.SetInnerText(title);
-
+                a.InnerHtml = title;
                 li.InnerHtml += a;    
             }
                 
