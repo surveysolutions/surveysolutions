@@ -2816,10 +2816,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     {
                         FixedRosterId = fixedRosterId,
                         TitlesWithIds = questionnaire.GetFixedRosterTitles(fixedRosterId)
-                            .Select((title, index) => new
+                            .Select(title => new
                             {
-                                Title = title,
-                                RosterInstanceId = (decimal)index
+                                Title = title.Item2,
+                                RosterInstanceId = title.Item1
                             })
                             .ToDictionary(x => x.RosterInstanceId, x => x.Title)
                     }).ToDictionary(x => x.FixedRosterId, x => x.TitlesWithIds);
@@ -3358,10 +3358,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (!rosterSizeQuestionId.HasValue)
                 return questionnaire.GetFixedRosterTitles(rosterId)
-                    .Select((title, index) => new
+                    .Select(title => new
                     {
-                        Title = title,
-                        RosterInstanceId = (decimal)index
+                        Title = title.Item2,
+                        RosterInstanceId = title.Item1
                     })
                     .ToDictionary(x => x.RosterInstanceId, x => new Tuple<string, int?>(x.Title, null));
 

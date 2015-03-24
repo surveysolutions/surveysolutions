@@ -37,8 +37,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormaliz
                 new GroupDeleted(),
                 new GroupUpdated(),
                 new GroupBecameARoster(Guid.NewGuid(), Guid.NewGuid()),
-                new RosterChanged(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), RosterSizeSourceType.FixedTitles,
-                    new string[0], null),
+                new RosterChanged(Guid.NewGuid(), Guid.NewGuid())
+                {
+                    RosterSizeQuestionId = null,
+                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
+                    FixedRosterTitles = new Tuple<decimal, string>[0],
+                    RosterTitleQuestionId = null
+                },
                 new GroupStoppedBeingARoster(Guid.NewGuid(), Guid.NewGuid()),
                 new TextListQuestionAdded(),
                 new TextListQuestionCloned(),

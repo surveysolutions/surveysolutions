@@ -30,15 +30,21 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             });
             questionnaire.Apply(new NewGroupAdded { PublicKey = targetGroupId, ParentGroupPublicKey = chapterId});
             questionnaire.Apply(new GroupBecameARoster(responsibleId, targetGroupId));
-            questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: targetGroupId,
-                rosterTitleQuestionId: null, rosterSizeSource: RosterSizeSourceType.Question,
-                rosterSizeQuestionId: rosterSizeQuestion2Id, rosterFixedTitles: null));
+            questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: targetGroupId){
+                    RosterSizeQuestionId = rosterSizeQuestion2Id,
+                    RosterSizeSource = RosterSizeSourceType.Question,
+                    FixedRosterTitles = null,
+                    RosterTitleQuestionId = null
+                });
 
             questionnaire.Apply(new NewGroupAdded { PublicKey = sourceRosterId, ParentGroupPublicKey = chapterId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, sourceRosterId));
-            questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: sourceRosterId,
-                rosterTitleQuestionId: rosterTitleQuestionId, rosterSizeSource: RosterSizeSourceType.Question,
-                rosterSizeQuestionId: rosterSizeQuestion1Id, rosterFixedTitles: null));
+            questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: sourceRosterId){
+                    RosterSizeQuestionId = rosterSizeQuestion1Id,
+                    RosterSizeSource = RosterSizeSourceType.Question,
+                    FixedRosterTitles = null,
+                    RosterTitleQuestionId = rosterTitleQuestionId
+                });
 
             questionnaire.Apply(new NewGroupAdded { PublicKey = groupFromRosterId, ParentGroupPublicKey = sourceRosterId });
             questionnaire.Apply(new NumericQuestionAdded()
