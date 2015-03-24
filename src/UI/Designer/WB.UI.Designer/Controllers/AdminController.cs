@@ -1,36 +1,103 @@
 using System.Configuration.Provider;
+using System.Web;
+using Main.Core.Documents;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Designer.Code;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using System.Web.Security;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.Infrastructure.ReadSide;
+using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
+using WB.UI.Designer.Extensions;
+using WB.UI.Designer.Models;
+using WB.UI.Shared.Web.Extensions;
+using WB.UI.Shared.Web.Membership;
+using WebMatrix.WebData;
 
 namespace WB.UI.Designer.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
-    using System.Web.Security;
-    using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
-    using WB.UI.Designer.Extensions;
-    using WB.UI.Designer.Models;
-    using WB.UI.Shared.Web.Membership;
-
-    using WebMatrix.WebData;
-
     [CustomAuthorize(Roles = "Administrator")]
     public class AdminController : BaseController
     {
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly ILogger logger;
+        private readonly IStringCompressor zipUtils;
+        private readonly ICommandService commandService;
+        private readonly IQuestionnaireExportService exportService;
+        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
 
         public AdminController(
             IMembershipUserService userHelper,
             IQuestionnaireHelper questionnaireHelper,
-            ILogger logger)
+            ILogger logger, 
+            IStringCompressor zipUtils, 
+            ICommandService commandService, 
+            IQuestionnaireExportService exportService, 
+            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory)
             : base(userHelper)
         {
             this.questionnaireHelper = questionnaireHelper;
             this.logger = logger;
+            this.zipUtils = zipUtils;
+            this.commandService = commandService;
+            this.exportService = exportService;
+            this.questionnaireViewFactory = questionnaireViewFactory;
+        }
+
+        [HttpGet]
+        public ActionResult Import()
+        {
+            return this.View();
+        }
+
+        [HttpPost]
+        public ActionResult Import(HttpPostedFileBase uploadFile)
+        {
+            uploadFile = uploadFile ?? this.Request.Files[0];
+
+            if (uploadFile != null && uploadFile.ContentLength > 0)
+            {
+                var document = this.zipUtils.DecompressGZip<IQuestionnaireDocument>(uploadFile.InputStream);
+                if (document != null)
+                {
+                    this.commandService.Execute(new ImportQuestionnaireCommand(this.UserHelper.WebUser.UserId, document));
+                    return this.RedirectToAction("Index", "Questionnaire");
+                }
+            }
+            else
+            {
+                this.Error("Uploaded file is empty");
+            }
+
+            return this.Import();
+        }
+
+
+        [HttpGet]
+        public FileStreamResult Export(Guid id)
+        {
+            var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            if (questionnaireView == null)
+                return null;
+
+            var templateInfo = this.exportService.GetQuestionnaireTemplateInfo(questionnaireView.Source);
+
+            if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
+            {
+                return null;
+            }
+
+            return new FileStreamResult(this.zipUtils.Compress(templateInfo.Source), "application/octet-stream")
+            {
+                FileDownloadName = string.Format("{0}.tmpl", templateInfo.Title.ToValidFileName())
+            };
         }
 
         public ActionResult Create()
@@ -45,7 +112,6 @@ namespace WB.UI.Designer.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                // Attempt to register the user
                 try
                 {
                     WebSecurity.CreateUserAndAccount(model.UserName, model.Password, new { model.Email }, false);
