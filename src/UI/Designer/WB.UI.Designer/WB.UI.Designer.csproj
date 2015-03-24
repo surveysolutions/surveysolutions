@@ -373,6 +373,9 @@
     <Content Include="Scripts\viewmodels\pages\controlpanel\readside.js" />
     <Content Include="Scripts\viewmodels\viewmodelbase.js" />
     <Content Include="Scripts\viewmodels\designer.framework.js" />
+    <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.min.css">
+      <DependentUpon>bootstrap-custom.css</DependentUpon>
+    </Content>
     <Content Include="UpdatedDesigner\content\designer-start\bootstrap-override.css">
       <DependentUpon>bootstrap-override.less</DependentUpon>
     </Content>
@@ -1261,6 +1264,9 @@
     <Content Include="Views\Shared\_list_search_form.cshtml" />
     <Content Include="UpdatedDesigner\content\designer-start\bootstrap-override.css.map">
       <DependentUpon>bootstrap-override.css</DependentUpon>
+    </Content>
+    <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.css.map">
+      <DependentUpon>bootstrap-custom.css</DependentUpon>
     </Content>
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">

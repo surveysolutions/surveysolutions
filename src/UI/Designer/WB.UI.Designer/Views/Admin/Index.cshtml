@@ -26,19 +26,19 @@ else
         <thead>
             <tr>
                 <th>
-                    <a href="@ActionWithOrderField("UserName")">Login</a>
+                    <a href="@ActionWithOrderField("UserName")">Login @ShowSortIcon("UserName")</a>
                 </th>
                 <th>
-                    <a href="@ActionWithOrderField("Email")">Email</a>
+                    <a href="@ActionWithOrderField("Email")">Email @ShowSortIcon("Email")</a>
                 </th>
                 <th>
-                    <a href="@ActionWithOrderField("CreationDate")">CREATED DATE</a>
+                    <a href="@ActionWithOrderField("CreationDate")">CREATED DATE @ShowSortIcon("CreationDate")</a>
                 </th>
                 <th>
-                    <a href="@ActionWithOrderField("IsApproved")">APPROVED?</a>
+                    <a href="@ActionWithOrderField("IsApproved")">APPROVED? @ShowSortIcon("IsApproved")</a>
                 </th>
                 <th>
-                    <a href="@ActionWithOrderField("IsLockedOut")">LOCKED?</a>
+                    <a href="@ActionWithOrderField("IsLockedOut")">LOCKED? @ShowSortIcon("IsLockedOut")</a>
                 </th>
                 <th>
                 </th>
@@ -112,4 +112,24 @@ else
 {
     var emailParts = email.Split(new char[]{'@'}, 2);
     <strong>@emailParts[0]</strong>@("@" + emailParts[1]);
+}
+
+@helper ShowSortIcon(string field)
+{
+    var sortOrder = (int?)ViewBag.SortOrder;
+    if (ViewBag.SortBy == field)
+    {
+        if (!sortOrder.ToBool())
+        {
+            <span class="glyphicon glyphicon-sort-by-alphabet"></span>
+        }
+        else
+        {
+            <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
+        }
+    }
+    else
+    {
+        <span class="glyphicon glyphicon-sort"></span>
+    }
 }
