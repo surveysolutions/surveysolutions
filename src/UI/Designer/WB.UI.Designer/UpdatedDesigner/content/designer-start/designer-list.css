@@ -324,6 +324,14 @@ table.table-header tr th a#title-search {
 table.table-header tr th a:hover {
   text-decoration: none;
 }
+table.table-header tr th span.glyphicon {
+  font-size: 13px;
+  color: #b9b9b9;
+}
+table.table-header tr th span.glyphicon.glyphicon-sort-by-alphabet,
+table.table-header tr th span.glyphicon.glyphicon-sort-by-alphabet-alt {
+  color: #2fc507;
+}
 table.table-content {
   cursor: default;
 }
@@ -459,6 +467,9 @@ table#questionnaire-table-content tr.active td:first-child:hover {
 }
 table#questionnaire-table-content tr.active td:nth-child(4) {
   color: #5d6468;
+}
+table#questionnaire-table-content tr.deleted td {
+  text-decoration: line-through;
 }
 #search-form {
   border-left: 13px solid #bcc3c8;
