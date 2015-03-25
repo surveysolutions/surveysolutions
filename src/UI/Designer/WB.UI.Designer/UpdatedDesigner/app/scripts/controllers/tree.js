@@ -119,6 +119,10 @@
             var upDownMove = function (updownStepValue) {
                 var currentItem = getCurrentItem();
 
+                if (_.isNull(currentItem)) {
+                    return;
+                }
+
                 if (_.isNull($scope.highlightedId)) {
                     highlightAndScroll(currentItem);
                     return;

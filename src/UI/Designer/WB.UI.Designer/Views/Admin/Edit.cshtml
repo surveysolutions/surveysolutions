@@ -2,6 +2,10 @@
 @model WB.UI.Designer.Models.UpdateAccountModel
 
 <div id="edit-form">
+    @if (TempData.ContainsKey(Alerts.SUCCESS))
+    {
+        <div class="alert alert-success header">@Html.Raw(@TempData[Alerts.SUCCESS])</div>
+    }
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
@@ -25,10 +29,10 @@
             @Html.CheckBoxFor(x => x.IsLockedOut, new { @id = "is-locked", @class = "wb-checkbox" })
             <label for="is-locked">
                 <span></span>Is Locked Out
-            </label><br />
+            </label><br/>
         </div>
         <div class="form-actions">
-            <input type="submit" class="btn btn-success btn-lg" value="Update" />
+            <input type="submit" class="btn btn-success btn-lg" value="Update"/>
             @Html.ActionLink("Cancel", "Index", "Admin", null, new { @class = "btn " })
         </div>
     }
