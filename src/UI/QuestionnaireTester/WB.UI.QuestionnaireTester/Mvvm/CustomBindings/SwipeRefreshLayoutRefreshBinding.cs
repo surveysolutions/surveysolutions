@@ -1,22 +1,21 @@
 ﻿using System;
 using Cirrious.MvvmCross.Binding;
-using Cirrious.MvvmCross.Binding.Droid.Target;
 using Cirrious.MvvmCross.ViewModels;
 using WB.UI.QuestionnaireTester.Controls;
 
 namespace WB.UI.QuestionnaireTester.Mvvm.CustomBindings
 {
 
-    public class SwipeRefreshLayoutRefreshBinding : MvxAndroidTargetBinding
+    public class SwipeRefreshLayoutRefreshBinding : MvvmBindingWrapper<MvxSwipeRefreshLayout>
     {
-        protected new MvxSwipeRefreshLayout Target
-        {
-            get { return (MvxSwipeRefreshLayout)base.Target; }
-        }
-
         public SwipeRefreshLayoutRefreshBinding(MvxSwipeRefreshLayout target)
             : base(target)
         {
+        }
+
+        protected override void SetValueToView(MvxSwipeRefreshLayout view, object value)
+        {
+            Command = (IMvxCommand)value;
         }
 
         public override void SubscribeToEvents()
@@ -26,7 +25,7 @@ namespace WB.UI.QuestionnaireTester.Mvvm.CustomBindings
 
         private void TargetRefreshChanged(object sender, EventArgs eventArgs)
         {
-            if (Target == null)
+            if (this.Target == null)
                 return;
 
             if (Command == null)
@@ -36,14 +35,6 @@ namespace WB.UI.QuestionnaireTester.Mvvm.CustomBindings
                 return;
 
             Command.Execute();
-        }
-
-        protected override void SetValueImpl(object target, object value)
-        {
-            if (Target == null)
-                return;
-
-            Command = (IMvxCommand)value;
         }
 
         private IMvxCommand Command;

@@ -1,27 +1,18 @@
 ﻿using System;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding;
-using Cirrious.MvvmCross.Binding.Droid.Target;
 
 namespace WB.UI.QuestionnaireTester.Mvvm.CustomBindings
 {
-    public class TextViewHintBinding : MvxAndroidTargetBinding
+    public class TextViewHintBinding : MvvmBindingWrapper<TextView>
     {
-        protected new TextView Target
-        {
-            get { return (TextView)base.Target; }
-        }
-
         public TextViewHintBinding(TextView target)
             : base(target)
         {
         }
 
-        protected override void SetValueImpl(object target, object value)
+        protected override void SetValueToView(TextView view, object value)
         {
-            if (Target == null)
-                return;
-
             Target.Hint = (string)value;
         }
 
@@ -32,7 +23,7 @@ namespace WB.UI.QuestionnaireTester.Mvvm.CustomBindings
 
         public override MvxBindingMode DefaultMode
         {
-            get { return MvxBindingMode.TwoWay; }
+            get { return MvxBindingMode.OneWay; }
         }
     }
 }

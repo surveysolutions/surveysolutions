@@ -54,55 +54,54 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-		<FrameLayout
-            android:id="@+id/flFragmentHolder"
+        <FrameLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_marginBottom="50dp" />
         <LinearLayout
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:orientation="vertical"
-			android:layout_centerHorizontal="true"
-			android:layout_centerVertical="true"
-			android:layout_centerInParent="true"
-			local:MvxBind="Visible IsInProgress">
-			<ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_centerInParent="true"
+            local:MvxBind="Visible IsInProgress">
+            <ProgressBar
                 android:layout_height="50dp"
                 android:layout_width="match_parent"
                 android:indeterminateOnly="true"
                 android:keepScreenOn="false" />
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="5dp"
-				android:maxWidth="300dp"
-				android:gravity="center" 
-				local:MvxBind="Text ProgressIndicator" />
-		</LinearLayout>
-		<LinearLayout
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:orientation="vertical"
-			android:layout_centerHorizontal="true"
-			android:layout_centerVertical="true"
-			android:layout_centerInParent="true"
-			local:MvxBind="Visible HasErrors">
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:maxWidth="300dp"
-				android:gravity="center"
-				android:textColor="#FFE32102"
-				local:MvxBind="Html ErrorMessage" />
-				<TextView
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="8dp"
-				android:gravity="center"
-				android:clickable="true"
-				local:MvxBind="Text Localization('TryAgainLink'); Visible IsServerUnavailable; Click TryAgainToLoadQuestionnaireCommand" />
-		</LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:maxWidth="300dp"
+                android:gravity="center"
+                local:MvxBind="Text ProgressIndicator" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_centerInParent="true"
+            local:MvxBind="Visible HasErrors">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="300dp"
+                android:gravity="center"
+                android:textColor="#FFE32102"
+                local:MvxBind="Html ErrorMessage" />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:clickable="true"
+                local:MvxBind="Text Localization('TryAgainLink'); Visible IsServerUnavailable; Click TryAgainToLoadQuestionnaireCommand" />
+        </LinearLayout>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"

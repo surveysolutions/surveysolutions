@@ -1,18 +1,12 @@
 ﻿using System;
 using Cirrious.MvvmCross.Binding;
-using Cirrious.MvvmCross.Binding.Droid.Target;
 using WB.UI.QuestionnaireTester.Controls;
 
 namespace WB.UI.QuestionnaireTester.Mvvm.CustomBindings
 {
 
-    public class SwipeRefreshLayoutRefreshingBinding : MvxAndroidTargetBinding
+    public class SwipeRefreshLayoutRefreshingBinding : MvvmBindingWrapper<MvxSwipeRefreshLayout>
     {
-        protected new MvxSwipeRefreshLayout Target
-        {
-            get { return (MvxSwipeRefreshLayout)base.Target; }
-        }
-
         public SwipeRefreshLayoutRefreshingBinding(MvxSwipeRefreshLayout target)
             : base(target)
         {
@@ -31,11 +25,8 @@ namespace WB.UI.QuestionnaireTester.Mvvm.CustomBindings
             FireValueChanged(Target.Refreshing);
         }
 
-        protected override void SetValueImpl(object target, object value)
+        protected override void SetValueToView(MvxSwipeRefreshLayout view, object value)
         {
-            if (Target == null)
-                return;
-
             Target.Refreshing = (bool)value;
         }
 

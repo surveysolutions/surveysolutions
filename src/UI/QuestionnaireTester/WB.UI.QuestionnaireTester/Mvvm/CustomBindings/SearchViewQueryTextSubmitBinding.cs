@@ -1,19 +1,13 @@
 ﻿using System;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding;
-using Cirrious.MvvmCross.Binding.Droid.Target;
 using Cirrious.MvvmCross.ViewModels;
 
 namespace WB.UI.QuestionnaireTester.Mvvm.CustomBindings
 {
 
-    public class SearchViewQueryTextSubmitBinding : MvxAndroidTargetBinding
+    public class SearchViewQueryTextSubmitBinding : MvvmBindingWrapper<SearchView>
     {
-        protected new SearchView Target
-        {
-            get { return (SearchView)base.Target; }
-        }
-
         public SearchViewQueryTextSubmitBinding(SearchView target)
             : base(target)
         {
@@ -39,11 +33,8 @@ namespace WB.UI.QuestionnaireTester.Mvvm.CustomBindings
             Command.Execute(e.Query);
         }
 
-        protected override void SetValueImpl(object target, object value)
+        protected override void SetValueToView(SearchView view, object value)
         {
-            if (Target == null)
-                return;
-
             Command = (IMvxCommand)value;
         }
 

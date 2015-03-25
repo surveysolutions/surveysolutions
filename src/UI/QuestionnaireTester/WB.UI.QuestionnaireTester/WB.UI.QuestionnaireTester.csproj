@@ -207,26 +207,21 @@
     <Compile Include="Bootstrap\UserInteractionPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="Bootstrap\WebBrowserPluginBootstrap.cs" />
-    <Compile Include="Controls\Adapters\TesterContentFrameAdapter.cs" />
-    <Compile Include="Controls\Fragments\PrefilledScreenContentFragment.cs" />
-    <Compile Include="Controls\Fragments\TesterGridContentFragment.cs" />
-    <Compile Include="Controls\Fragments\TesterScreenContentFragment.cs" />
-    <Compile Include="Controls\Fragments\TesterStatisticsContentFragment.cs" />
     <Compile Include="Controls\MvxSwipeRefreshLayout.cs" />
-    <Compile Include="Extensions\ActivityExtensions.cs" />
-    <Compile Include="Implementation\Services\ApplicationInitializer.cs" />
+    <Compile Include="Implementation\Services\AndroidNetworkService.cs" />
     <Compile Include="Implementation\Services\ApplicationSettings.cs" />
-    <Compile Include="Implementation\Services\DesignerAuthentication.cs" />
     <Compile Include="Implementation\Services\Principal.cs" />
     <Compile Include="Implementation\Services\QuestionnareAssemblyTesterFileAccessor.cs" />
     <Compile Include="Implementation\Services\RestServiceSettings.cs" />
+    <Compile Include="Mvvm\CustomBindings\HtmlBinding.cs" />
+    <Compile Include="Mvvm\CustomBindings\MvvmBindingWrapper.cs" />
     <Compile Include="Mvvm\CustomBindings\TextViewHintBinding.cs" />
     <Compile Include="Mvvm\CustomBindings\SearchViewQueryTextChangeBinding.cs" />
     <Compile Include="Mvvm\CustomBindings\SearchViewQueryTextSubmitBinding.cs" />
     <Compile Include="Mvvm\CustomBindings\SwipeRefreshLayoutRefreshBinding.cs" />
     <Compile Include="Mvvm\CustomBindings\SearchViewQueryHintBinding.cs" />
     <Compile Include="Mvvm\CustomBindings\SwipeRefreshLayoutRefreshingBinding.cs" />
-    <Compile Include="Mvvm\MvxInitializer.cs" />
+    <Compile Include="Mvvm\CustomBindings\VisibleBinding.cs" />
     <Compile Include="Mvvm\ValueContervers\LocalizationValueConverter.cs" />
     <Compile Include="Mvvm\ValueContervers\NullToVisibleValueConverter.cs" />
     <Compile Include="Mvvm\ValueContervers\QuestionnaireVersionToColorValueConverter.cs" />
@@ -244,7 +239,8 @@
     <Compile Include="Ninject\AndroidTesterModelModule.cs" />
     <Compile Include="Ninject\CapiTesterCoreRegistry.cs" />
     <Compile Include="Ninject\CoreRegistry.cs" />
-    <Compile Include="Ninject\NinjectInitializer.cs" />
+    <Compile Include="Ninject\MvxPluginsModule.cs" />
+    <Compile Include="Ninject\NinjectIoCAdapterSetup.cs" />
     <Compile Include="Ninject\NinjectServiceLocator.cs" />
     <Compile Include="Ninject\ServiceLocationModule.cs" />
     <Compile Include="Ninject\TesterLoggingModule.cs" />
@@ -266,9 +262,6 @@
     <AndroidResource Include="Resources\Layout\QuestionnairePrefilledQuestionsView.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\ActionBar.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\Layout\Dashboard.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
@@ -277,6 +270,7 @@
     <AndroidResource Include="Resources\Layout\questionnairelistitem.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\Layout\Interivew.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Values\Strings.xml">
@@ -452,12 +446,10 @@
     <AndroidResource Include="Resources\Drawable\bgsplash.xml" />
     <AndroidResource Include="Resources\Drawable\about_logo.png" />
     <AndroidResource Include="Resources\Drawable\color_cursor.xml" />
+    <AndroidResource Include="Resources\Drawable\answer_progress_indicator.png" />
+    <AndroidResource Include="Resources\Values\MvxBindingAttributes.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.Capi.csproj">
-      <Project>{c6ed30a9-4d14-48d1-8311-c2267dfd424f}</Project>
-      <Name>WB.Core.BoundedContexts.Capi</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\WB.Core.BoundedContexts.QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester.csproj">
       <Project>{1d9951b0-c351-432c-bcad-e3dcaaf71e06}</Project>
       <Name>WB.Core.BoundedContexts.QuestionnaireTester</Name>
@@ -481,10 +473,6 @@
     <ProjectReference Include="..\..\..\Core\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
       <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
       <Name>WB.Core.SharedKernels.SurveySolutions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Shared\WB.UI.Shared.Android\WB.UI.Shared.Android.csproj">
-      <Project>{596bdadc-eff5-474d-b028-2f5c60b59050}</Project>
-      <Name>WB.UI.Shared.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>

@@ -1,18 +1,13 @@
 ﻿using System;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding;
-using Cirrious.MvvmCross.Binding.Droid.Target;
 using Cirrious.MvvmCross.ViewModels;
 
 namespace WB.UI.QuestionnaireTester.Mvvm.CustomBindings
 {
 
-    public class SearchViewQueryTextChangeBinding : MvxAndroidTargetBinding
+    public class SearchViewQueryTextChangeBinding : MvvmBindingWrapper<SearchView>
     {
-        protected new SearchView Target
-        {
-            get { return (SearchView)base.Target; }
-        }
 
         public SearchViewQueryTextChangeBinding(SearchView target)
             : base(target)
@@ -26,7 +21,7 @@ namespace WB.UI.QuestionnaireTester.Mvvm.CustomBindings
 
         private void TargetChanged(object sender, SearchView.QueryTextChangeEventArgs e)
         {
-            if (Target == null)
+            if (this.Target == null)
                 return;
 
             if (Command == null)
@@ -38,12 +33,9 @@ namespace WB.UI.QuestionnaireTester.Mvvm.CustomBindings
             e.Handled = true;
             Command.Execute(e.NewText);
         }
-
-        protected override void SetValueImpl(object target, object value)
+        
+        protected override void SetValueToView(SearchView view, object value)
         {
-            if (Target == null)
-                return;
-
             Command = (IMvxCommand)value;
         }
 
@@ -63,7 +55,7 @@ namespace WB.UI.QuestionnaireTester.Mvvm.CustomBindings
         {
             if (isDisposing)
             {
-                if (Target != null)
+                if (this.Target != null)
                 {
                     Target.QueryTextChange -= TargetChanged;
                 }

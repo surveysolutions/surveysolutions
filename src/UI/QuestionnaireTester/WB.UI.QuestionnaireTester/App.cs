@@ -1,17 +1,15 @@
 using Cirrious.CrossCore;
+using Cirrious.CrossCore.IoC;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
-using WB.Core.GenericSubdomains.Utils.Services;
-using WB.UI.QuestionnaireTester.Implementation.Services;
 
 namespace WB.UI.QuestionnaireTester
 {
     public class App : MvxApplication
     {
-        public App()
+        public override void Initialize()
         {
-            Mvx.RegisterSingleton<IApplicationInitializer>(new ApplicationInitializer());
-            Mvx.RegisterSingleton<IMvxAppStart>(new MvxAppStart<SplashViewModel>());
+            RegisterAppStart<SplashViewModel>();
         }
     }
 }

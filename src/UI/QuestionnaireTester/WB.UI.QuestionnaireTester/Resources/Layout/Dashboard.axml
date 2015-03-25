@@ -8,20 +8,20 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/background">
-			<SearchView
-			android:id="@+id/search"
-			android:layout_toLeftOf="@id/logo"
+        <SearchView
+            android:id="@+id/search"
+            android:layout_toLeftOf="@id/logo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-			android:iconifiedByDefault="false"
+            android:iconifiedByDefault="false"
             local:MvxBind="QueryHint Localization('Dashboard_SearchText'); QueryTextChange FindQuestionnairesCommand; QueryTextSubmit FindQuestionnairesCommand" />
-			<ImageView
+        <ImageView
             android:id="@+id/logo"
             android:layout_width="35dp"
             android:layout_height="35dp"
-			android:layout_marginRight="8dp"
-			android:layout_alignParentRight="true"
+            android:layout_marginRight="8dp"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_drawer_light" />
     </RelativeLayout>
@@ -47,7 +47,7 @@
                         android:layout_centerVertical="true"
                         android:layout_width="250dp"
                         android:layout_height="wrap_content"
-						local:MvxBind="Hidden HasSearchText">
+                        local:MvxBind="Hidden HasSearchText">
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="150px"
@@ -57,20 +57,20 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginTop="10dp"
-							android:gravity="center"
+                            android:gravity="center"
                             local:MvxBind="Html Localization('EmptyQuestionnaireListText')" />
                     </LinearLayout>
-					<LinearLayout
+                    <LinearLayout
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
                         android:layout_width="250dp"
                         android:layout_height="wrap_content"
-						local:MvxBind="Visible HasSearchText">
+                        local:MvxBind="Visible HasSearchText">
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="10dp"
-							android:gravity="center"
+                            android:gravity="center"
                             local:MvxBind="Html Localization('EmptyQuestionnaireListBySearchText')" />
                     </LinearLayout>
                 </RelativeLayout>
@@ -80,17 +80,17 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 local:MvxBind="RefreshCommand RefreshQuestionnairesCommand; Refreshing IsInProgress; Visibility VisibleIfListHasItems(Questionnaires)">
-                <Mvx.MvxListView
+                <ListView
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:paddingTop="25dp"
-					android:paddingBottom="25dp"
+                    android:paddingBottom="25dp"
                     android:orientation="vertical"
                     android:divider="@null"
                     android:dividerHeight="0dp"
-					android:smoothScrollbar="true"
-					android:scrollingCache="false"
-					android:animationCache="false"
+                    android:smoothScrollbar="true"
+                    android:scrollingCache="false"
+                    android:animationCache="false"
                     local:MvxBind="ItemsSource Questionnaires; ItemClick LoadQuestionnaireCommand"
                     local:MvxItemTemplate="@layout/questionnairelistitem" />
             </WB.UI.QuestionnaireTester.Controls.MvxSwipeRefreshLayout>
@@ -100,8 +100,8 @@
                 android:indeterminateOnly="true"
                 android:keepScreenOn="false"
                 android:layout_centerHorizontal="true"
-				android:layout_centerVertical="true"
-				android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:layout_centerInParent="true"
                 local:MvxBind="Visibility NullToVisible(Questionnaires)" />
         </RelativeLayout>
     <!-- The navigation drawer -->
@@ -109,7 +109,7 @@
             android:id="@+id/sidebar"
             android:layout_width="320dp"
             android:layout_height="match_parent"
-            android:layout_gravity="right" 
+            android:layout_gravity="right"
             android:orientation="vertical"
             android:background="?android:attr/colorBackground">
             <LinearLayout
