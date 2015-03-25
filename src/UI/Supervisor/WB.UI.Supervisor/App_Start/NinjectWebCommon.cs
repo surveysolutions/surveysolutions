@@ -14,6 +14,7 @@ using Ncqrs.Eventing.Storage;
 using NHibernate.Mapping;
 using Ninject;
 using Ninject.Web.Common;
+using Ninject.Web.Mvc.FilterBindingSyntax;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
 using WB.Core.BoundedContexts.Supervisor;
@@ -29,6 +30,7 @@ using WB.Core.Infrastructure.Storage.Esent;
 using WB.Core.Infrastructure.Storage.Postgre;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Mappings;
@@ -76,7 +78,7 @@ namespace WB.UI.Supervisor.App_Start
         {
 #warning TLK: delete this when NCQRS initialization moved to Global.asax
             MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
-
+            HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
 
             string storePath = WebConfigurationManager.AppSettings["Raven.DocumentStore"];
 
@@ -183,6 +185,9 @@ namespace WB.UI.Supervisor.App_Start
             kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(System.Web.Http.Filters.FilterScope.Controller)
                 .WhenControllerHas<ApiValidationAntiForgeryTokenAttribute>();
 
+            kernel.BindFilter<TransactionFilter>(FilterScope.First, 0);
+            kernel.BindHttpFilter<ApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Controller);
+
             return kernel;
         }
 
@@ -206,6 +211,7 @@ namespace WB.UI.Supervisor.App_Start
             Type[] handlersToIgnore = ignoredDenormalizersConfigSection == null ? new Type[0] : ignoredDenormalizersConfigSection.GetIgnoredTypes();
             var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(), handlersToIgnore);
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
+            bus.TransactionManager = kernel.Get<ITransactionManagerProvider>();
             kernel.Bind<IEventBus>().ToConstant(bus);
             kernel.Bind<IEventDispatcher>().ToConstant(bus);
 

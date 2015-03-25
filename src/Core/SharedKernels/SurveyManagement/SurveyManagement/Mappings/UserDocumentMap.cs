@@ -35,6 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             {
                 m.Key(km => km.Column("UserId"));
                 m.Table("Roles");
+                m.Lazy(CollectionLazy.NoLazy);
             },
              r => r.Element(e => e.Column("RoleId")));
 
