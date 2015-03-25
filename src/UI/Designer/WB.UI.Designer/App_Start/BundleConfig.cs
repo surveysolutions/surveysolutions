@@ -28,7 +28,8 @@ namespace WB.UI.Designer
                     "~/Scripts/jquery.validate.js", 
                     "~/Scripts/jquery.validate.unobtrusive-custom-for-bootstrap.js", 
                     "~/Scripts/bootstrap3-unobtrusive-hack.js",
-                    "~/UpdatedDesigner/vendor/jquery-placeholder/jquery.placeholder.js"
+                    "~/UpdatedDesigner/vendor/jquery-placeholder/jquery.placeholder.js",
+                    "~/Scripts/editForm.js"
                     ));
 
             bundles.Add(
