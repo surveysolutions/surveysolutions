@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         };
 
         Because of = () =>
-            viewModel = denormalizer.Update(viewModel, Create.InterviewRestoredEvent(userId: responsibleId, origin: Constants.SupervisorSynchronizationOrigin));
+            viewModel = denormalizer.Update(viewModel, Create.InterviewRestoredEvent(userId: responsibleId, origin: Constants.HeadquartersSynchronizationOrigin));
 
         It should_not_add_sync_related_status_to_history = () => viewModel.CommentedStatusesHistory.ShouldBeEmpty();
 
