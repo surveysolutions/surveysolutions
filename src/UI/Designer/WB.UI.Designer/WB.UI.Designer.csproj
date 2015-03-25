@@ -387,6 +387,10 @@
     <Content Include="UpdatedDesigner\content\designer-start\designer-start.min.css">
       <DependentUpon>designer-start.css</DependentUpon>
     </Content>
+    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="UpdatedDesigner\vendor\jquery.isOnScreen\isOnScreen.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\matchOptionsPattern.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\optionsService.js" />
@@ -700,10 +704,6 @@
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\css\bootstrap.css" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\css\bootstrap.css.map" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\css\bootstrap.min.css" />
-    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\js\bootstrap.js" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\js\bootstrap.min.js" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\js\npm.js" />
@@ -861,8 +861,6 @@
     <Content Include="UpdatedDesigner\vendor\jquery-mousewheel\jquery.mousewheel.min.js" />
     <Content Include="UpdatedDesigner\vendor\jquery-mousewheel\LICENSE.txt" />
     <Content Include="UpdatedDesigner\vendor\jquery-mousewheel\README.md" />
-    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\jquery.scrollTo.js" />
-    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\jquery.scrollTo.min.js" />
     <Content Include="UpdatedDesigner\vendor\jquery\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\jquery\bower.json" />
     <Content Include="UpdatedDesigner\vendor\jquery\dist\jquery.js" />
@@ -1239,12 +1237,6 @@
     <Content Include="UpdatedDesigner\content\designer-start\custom-fonts.less" />
     <Content Include="UpdatedDesigner\content\designer-start\designer-list.less" />
     <Content Include="UpdatedDesigner\content\designer-start\designer-start.less" />
-    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\.bower.json" />
-    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\bower.json" />
-    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\LICENSE" />
-    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\package.json" />
-    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\README.md" />
-    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\scrollTo.jquery.json" />
     <Content Include="UpdatedDesigner\content\designer-start\font-styles.less" />
     <Content Include="UpdatedDesigner\content\designer-start\inputs.less" />
     <Content Include="UpdatedDesigner\content\designer-start\wb-variables.less" />

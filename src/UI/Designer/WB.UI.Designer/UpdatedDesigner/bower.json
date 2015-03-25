@@ -1,75 +1,74 @@
 {
-    "name": "Designer",
-    "version": "3.0.0",
-    "license": "MIT",
-    "ignore": [
-        "**/.*",
-        "node_modules",
-        "bower_components",
-        "vendor",
-        "test",
-        "tests"
-    ],
-    "dependencies": {
-        "angular": "1.3.6",
-        "angular-cookies": "1.3.6",
-        "angular-sanitize": "1.3.6",
-        "angular-resource": "1.3.6",
-        "angular-animate": "1.3.1",
-        "angular-ui-router": "0.2.13",
-        "jquery": "~2.1.1",
-        "es5-shim": "~2.1.0",
-        "bootstrap": "3.3.1",
-        "json3": "~3.3.2",
-        "prettycheckable": "~2.1.2",
-        "angular-ui-tree": "2.1.5",
-        "angular-ui-utils": "~0.1.1",
-        "angular-loading-bar": "0.6.0",
-        "lodash": "3.4.0",
-        "jquery-cookie": "~1.4.1",
-        "angular-block-ui": "~0.1.1",
-        "angular-hotkeys": "chieffancypants/angular-hotkeys#1.4.5",
-        "angular-unsavedChanges": "0.2.3-alpha.3",
-        "console-shim": "*",
-        "angular-elastic": "~2.3.5",
-        "angular-bootstrap": "0.12.0",
-        "perfect-scrollbar": "~0.4.11",
-        "jquery-mousewheel": "~3.1.12",
-        "angular-perfect-scrollbar": "~0.1.4",
-        "ng-context-menu": "~1.0.1",
-        "angular-pnotify": "~0.0.6",
-        "angular-ui-ace": "~0.2.3",
-        "jquery.scrollTo": "~1.4.14",
-        "ace-builds": "~1.1.8",
-        "jquery.isOnScreen": "1.0.0"
+  "name": "Designer",
+  "version": "3.0.0",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "1.3.6",
+    "angular-cookies": "1.3.6",
+    "angular-sanitize": "1.3.6",
+    "angular-resource": "1.3.6",
+    "angular-animate": "1.3.1",
+    "angular-ui-router": "0.2.13",
+    "jquery": "~2.1.1",
+    "es5-shim": "~2.1.0",
+    "json3": "~3.3.2",
+    "prettycheckable": "~2.1.2",
+    "angular-ui-tree": "2.1.5",
+    "angular-ui-utils": "~0.1.1",
+    "angular-loading-bar": "0.6.0",
+    "lodash": "3.4.0",
+    "jquery-cookie": "~1.4.1",
+    "angular-block-ui": "~0.1.1",
+    "angular-hotkeys": "chieffancypants/angular-hotkeys#1.4.5",
+    "angular-unsavedChanges": "0.2.3-alpha.3",
+    "console-shim": "*",
+    "angular-elastic": "~2.3.5",
+    "angular-bootstrap": "0.12.0",
+    "perfect-scrollbar": "~0.4.11",
+    "jquery-mousewheel": "~3.1.12",
+    "angular-perfect-scrollbar": "~0.1.4",
+    "ng-context-menu": "~1.0.1",
+    "angular-pnotify": "~0.0.6",
+    "angular-ui-ace": "~0.2.3",
+    "jquery.scrollTo": "~1.4.14",
+    "ace-builds": "~1.1.8",
+    "bootstrap": "~3.3.4"
+  },
+  "resolutions": {
+    "angular": "~1.2.21",
+    "angular-cookies": "1.3.6",
+    "angular-mocks": "1.3.1",
+    "angular-sanitize": "1.3.6",
+    "angular-resource": "1.3.6",
+    "angular-animate": "1.3.6",
+    "angular-hotkeys": "1.4.5",
+    "angular-loading-bar": "0.6.0",
+    "ng-context-menu": "1.0.0",
+    "angular-block-ui": "0.1.0-beta.5",
+    "angular-elastic": "2.4.2",
+    "angular-bootstrap": "0.12.0"
+  },
+  "overrides": {
+    "angular": {
+      "main": [
+        "angular.min.js",
+        "angular-csp.css"
+      ]
     },
-    "resolutions": {
-        "angular": "~1.2.21",
-        "angular-cookies": "1.3.6",
-        "angular-mocks": "1.3.1",
-        "angular-sanitize": "1.3.6",
-        "angular-resource": "1.3.6",
-        "angular-animate": "1.3.6",
-        "angular-hotkeys": "1.4.5",
-        "angular-loading-bar": "0.6.0",
-        "ng-context-menu": "1.0.0",
-        "angular-block-ui": "0.1.0-beta.5",
-        "angular-elastic": "2.4.2",
-        "angular-bootstrap": "0.12.0"
-    },
-    "overrides": {
-        "angular": {
-            "main": [
-                "angular.min.js",
-                "angular-csp.css"
-            ]
-        },
-        "ace-builds": { 
-            "main": [
-                "src-noconflict/ace.js",
-                "src-noconflict/mode-csharp.js",
-                "src-noconflict/theme-github.js"
-            ]
-        }
+    "ace-builds": {
+      "main": [
+        "src-noconflict/ace.js",
+        "src-noconflict/mode-csharp.js",
+        "src-noconflict/theme-github.js"
+      ]
     }
+  }
 }
