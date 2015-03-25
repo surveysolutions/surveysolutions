@@ -15,7 +15,3 @@
 $(function () {
     ko.applyBindings(new ItemViewModel());
 });
-
-$(function () {
-    $('input, textarea').placeholder();
-});
