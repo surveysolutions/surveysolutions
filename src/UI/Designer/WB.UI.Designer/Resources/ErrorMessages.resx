@@ -148,7 +148,7 @@
     <value>A server error occurred. Please contact support@mysurvey.solutions.</value>
   </data>
   <data name="The_user_name_or_password_provided_is_incorrect" xml:space="preserve">
-    <value>The user name or password provided is incorrect. Please try entering your user name and password again.</value>
+    <value>The user name or password provided is incorrect. Please, enter your user name and password again.</value>
   </data>
   <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
     <value>You did not type the verification word correctly. Please try again.</value>
