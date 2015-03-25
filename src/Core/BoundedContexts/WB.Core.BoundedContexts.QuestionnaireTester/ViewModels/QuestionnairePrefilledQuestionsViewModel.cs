@@ -34,9 +34,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public QuestionnaireMetaInfo SelectedQuestionnaire { get; private set; }
 
-        public Action<Guid> OnInterviewCreated { get; set; }
-        public Action<Guid> OnInterviewDetailsOpened { get; set; }
-
         private bool isAnswering = false;
         public bool IsAnswering
         {
@@ -167,7 +164,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private void OpenInterview()
         {
-            this.OnInterviewDetailsOpened(this.interviewId);
+            this.ShowViewModel<InterviewViewModel>(this.interviewId);
         }
 
         public Task LoadQuestionnaireAndCreateInterivew()
@@ -304,7 +301,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 this.ExecuteCreateInterviewCommand(this.interviewId, interviewUserId, questionnaireDocument.PublicKey);
 
                 if (tokenSource.IsCancellationRequested) return;
-                this.InvokeOnMainThread(() => this.OnInterviewCreated(this.interviewId));
+                this.InvokeOnMainThread(this.OpenInterview);
 
                 this.CanCreateInterview = true;
                 this.IsInProgress = false;
