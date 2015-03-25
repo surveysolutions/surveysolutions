@@ -134,6 +134,7 @@ namespace WB.UI.Headquarters
             var mappingAssemblies = new List<Assembly> { typeof (SurveyManagementSharedKernelModule).Assembly }; 
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings();
             postgresPlainStorageSettings.ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString;
+            string plainEsentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.Plain.DbFolder"]);
 
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
@@ -149,7 +150,7 @@ namespace WB.UI.Headquarters
                 new HeadquartersRegistry(),
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
-                new EsentReadSideModule(esentDataFolder),
+                new EsentReadSideModule(esentDataFolder, plainEsentDataFolder),
                 new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, mappingAssemblies),
                 new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled));
 

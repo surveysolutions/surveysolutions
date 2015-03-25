@@ -116,6 +116,7 @@
     <Compile Include="Interviews\Implementation\HeadquartersInterviewReader.cs" />
     <Compile Include="Interviews\Implementation\Views\ReadyToSendToHeadquartersInterview.cs" />
     <Compile Include="Mappings\LocalUserChangedFeedEntryMap.cs" />
+    <Compile Include="Mappings\ReadyToSendToHeadquartersInterviewMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Questionnaires\IHeadquartersQuestionnaireReader.cs" />
     <Compile Include="Questionnaires\Implementation\HeadquartersQuestionnaireReader.cs" />
