@@ -79,7 +79,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You will receive a message shortly with instructions on how to complete registration. Please check the email account that you provided in the previous step..
+        ///   Looks up a localized string similar to A message was sent to your email account. Please follow instructions in the email to complete the registration..
         /// </summary>
         internal static string Look_for_an_email_in_your_inbox {
             get {
@@ -152,7 +152,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New/old password combination is incorrect, please reenter..
+        ///   Looks up a localized string similar to Current/new password combination is invalid, please reenter..
         /// </summary>
         internal static string The_current_password_is_incorrect_or_the_new_password_is_invalid {
             get {
@@ -170,7 +170,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The user name or password provided is incorrect. Please enter your user name and password again..
+        ///   Looks up a localized string similar to The user name or password provided is incorrect. Please, reenter..
         /// </summary>
         internal static string The_user_name_or_password_provided_is_incorrect {
             get {
@@ -251,7 +251,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You did not type the verification word correctly. Please try again..
+        ///   Looks up a localized string similar to Verification word is incorrect. Please try again..
         /// </summary>
         internal static string You_did_not_type_the_verification_word_correctly {
             get {
