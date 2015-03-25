@@ -65,7 +65,7 @@ namespace WB.UI.Capi.Settings
 
         public void SetSyncAddressPoint(string syncAddressPoint)
         {
-            if (!syncAddressPoint.IsValidHttpAddress())
+            if (!syncAddressPoint.IsValidWebAddress())
             {
                 throw new ArgumentException(Resources.InvalidSyncPointAddressUrl, "syncAddressPoint");
             }

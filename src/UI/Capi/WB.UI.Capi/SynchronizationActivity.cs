@@ -268,7 +268,7 @@ namespace WB.UI.Capi
 
             var interviewerSettings = CapiApplication.Kernel.Get<IInterviewerSettings>();
 
-            if (!interviewerSettings.GetSyncAddressPoint().IsValidHttpAddress())
+            if (!interviewerSettings.GetSyncAddressPoint().IsValidWebAddress())
             {
                 this.tvSyncResult.Text = Properties.Resources.InvalidSyncPointAddressUrl;
                 return;
@@ -466,43 +466,7 @@ namespace WB.UI.Capi
                     this.DestroyDialog();
                     if (evt.Exception != null)
                     {
-                        var errorMessage = Properties.Resources.SynchronizationUnhandledExceptionMessage;
-
-                        var taskCancellationException = evt.Exception as OperationCanceledException;
-                        if (taskCancellationException != null)
-                        {
-                            errorMessage = Properties.Resources.SynchronizationCanceledExceptionMessage;
-                        }
-
-                        var restException = evt.Exception as RestException;
-                        if (restException != null)
-                        {
-                            switch (restException.StatusCode)
-                            {
-                                case HttpStatusCode.UpgradeRequired:
-                                case HttpStatusCode.Unauthorized:
-                                case HttpStatusCode.NotAcceptable:
-                                    errorMessage = restException.Message;
-                                    break;
-                                case HttpStatusCode.NotFound:
-                                case HttpStatusCode.InternalServerError:
-                                    errorMessage = Properties.Resources.SynchronizationInternalServerError;
-                                    break;
-                                case HttpStatusCode.RequestTimeout:
-                                    errorMessage = Properties.Resources.SynchronizationRequestTimeout;
-                                    break;
-                                case HttpStatusCode.ServiceUnavailable:
-                                    errorMessage = restException.Message.Contains("maintenance") ? Properties.Resources.SynchronizationMaintenance : restException.Message;
-                                    break;
-                                default:
-                                    var settingsManager = ServiceLocator.Current.GetInstance<IInterviewerSettings>();
-
-                                    errorMessage = string.Format(Properties.Resources.PleaseCheckURLInSettingsFormat,
-                                        settingsManager.GetSyncAddressPoint(), GetNetworkDescription(),
-                                        GetNetworkStatus((int) restException.StatusCode));
-                                    break;
-                            }
-                        }
+                        var errorMessage = GetUserFriendlyErrorMessage(evt.Exception);
 
                         tvSyncResult.MovementMethod = LinkMovementMethod.Instance;
                         this.tvSyncResult.SetText(Html.FromHtml(errorMessage), TextView.BufferType.Spannable);
@@ -511,6 +475,50 @@ namespace WB.UI.Capi
                 });
             remoteCommandDoneEvent.WaitOne();
             this.DestroySynchronizer();
+        }
+
+        private string GetUserFriendlyErrorMessage(Exception exception)
+        {
+            var errorMessage = Properties.Resources.SynchronizationUnhandledExceptionMessage;
+
+            var taskCancellationException = exception as OperationCanceledException;
+            if (taskCancellationException != null)
+            {
+                errorMessage = Properties.Resources.SynchronizationCanceledExceptionMessage;
+            }
+
+            var restException = exception as RestException;
+            if (restException != null)
+            {
+                switch (restException.StatusCode)
+                {
+                    case HttpStatusCode.UpgradeRequired:
+                    case HttpStatusCode.Unauthorized:
+                    case HttpStatusCode.NotAcceptable:
+                        errorMessage = restException.Message;
+                        break;
+                    case HttpStatusCode.NotFound:
+                    case HttpStatusCode.InternalServerError:
+                        errorMessage = Properties.Resources.SynchronizationInternalServerError;
+                        break;
+                    case HttpStatusCode.RequestTimeout:
+                        errorMessage = Properties.Resources.SynchronizationRequestTimeout;
+                        break;
+                    case HttpStatusCode.ServiceUnavailable:
+                        errorMessage = restException.Message.Contains("maintenance")
+                            ? Properties.Resources.SynchronizationMaintenance
+                            : restException.Message;
+                        break;
+                    default:
+                        var settingsManager = ServiceLocator.Current.GetInstance<IInterviewerSettings>();
+
+                        errorMessage = string.Format(Properties.Resources.PleaseCheckURLInSettingsFormat,
+                            settingsManager.GetSyncAddressPoint(), GetNetworkDescription(),
+                            GetNetworkStatus((int) restException.StatusCode));
+                        break;
+                }
+            }
+            return errorMessage;
         }
 
         private string GetNetworkStatus(int status)
