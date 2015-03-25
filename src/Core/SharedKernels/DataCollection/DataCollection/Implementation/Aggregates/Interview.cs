@@ -3301,7 +3301,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         InterviewStatus.Restored,
                         InterviewStatus.RejectedBySupervisor,
                         InterviewStatus.SupervisorAssigned,
-                        InterviewStatus.Restarted);
+                        InterviewStatus.Restarted,
+                        InterviewStatus.Completed);
                     return;
                 case InterviewStatus.ApprovedBySupervisor:
                     this.ThrowIfInterviewStatusIsNotOneOfExpected(
