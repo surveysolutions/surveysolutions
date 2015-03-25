@@ -6,6 +6,10 @@
     Layout = "~/Views/Shared/Layout.cshtml";
 }
 <div id="edit-form">
+    @if (TempData.ContainsKey(Alerts.SUCCESS))
+    {
+        <div class="alert alert-success header">@Html.Raw(@TempData[Alerts.SUCCESS])</div>
+    }
     @using (Html.BeginForm("Manage", "Account", null, FormMethod.Post, new { @class = "form-signin", autocomplete = "off" }))
     {
         @Html.AntiForgeryToken()
