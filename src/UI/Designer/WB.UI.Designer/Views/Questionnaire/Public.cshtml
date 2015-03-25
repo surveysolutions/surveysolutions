@@ -3,21 +3,17 @@
 @using WB.UI.Designer.Extensions
 @using WB.UI.Designer.Models
 @using WB.UI.Designer.Utils
-@using WB.UI.Shared.Web.Membership
 @model IPagedList<QuestionnairePublicListViewModel>
 
 @{
     ViewBag.Title = "Public Questionnaires";
 
     string controller = ViewBag.Controller ?? WB.UI.Designer.GlobalHelper.CurrentController;
-
-    IMembershipUserService userHelper = ViewBag.UserHelper;
-
-    var sortOrder = (int?)ViewBag.SortOrder;
 }
 
 @if (Model.TotalCount == 0)
 {
+    @Html.Partial("_list_search_form")
     <p class="text-center" style="line-height: 10em">This list does not contain any records</p>
 }
 else
@@ -27,16 +23,16 @@ else
         <thead>
             <tr>
                 <th>
-                    <a href="@ActionWithOrderField("Title")">Title</a>
+                    <a href="@ActionWithOrderField("Title")">Title @ShowSortIcon("Title")</a>
                 </th>
                 <th>
-                    <a href="@ActionWithOrderField("LastEntryDate")">Last modified</a>
+                    <a href="@ActionWithOrderField("LastEntryDate")">Last modified @ShowSortIcon("LastEntryDate")</a>
                 </th>
                 <th>
-                    <a href="@ActionWithOrderField("CreationDate")">Created date</a>
+                    <a href="@ActionWithOrderField("CreationDate")">Created date @ShowSortIcon("CreationDate")</a>
                 </th>
                 <th>
-                    <a href="@ActionWithOrderField("CreatorName")">Created By</a>
+                    <a href="@ActionWithOrderField("CreatorName")">Created By @ShowSortIcon("CreatorName")</a>
                 </th>
                 <th>
                 </th>
@@ -50,7 +46,7 @@ else
                 {
                     <tr class="@(listViewModel.IsDeleted? "deleted": "")">
                         <td class="search-value">
-                            @listViewModel.Title
+                            @listViewModel.Title 
                         </td>
                         <td class="date">
                             @listViewModel.LastEntryDate.FormatDate()
@@ -90,7 +86,7 @@ else
                             }
                             if (actionModel.CanSynchronize)
                             {
-                                <li>@Html.ActionLink("Export to HQ", "Export", "Synchronization", routevalues, null)</li>
+                                <li>@Html.ActionLink("Export to HQ", "Export", "Admin", routevalues, null)</li>
                             }
                             if (actionModel.CanPreview)
                             {
@@ -144,4 +140,23 @@ else
             });
     }
 
+}
+@helper ShowSortIcon(string field)
+{
+    var sortOrder = (int?)ViewBag.SortOrder;
+    if (ViewBag.SortBy == field)
+    {
+        if (!sortOrder.ToBool())
+        {
+            <span class="glyphicon glyphicon-sort-by-alphabet"></span>
+        }
+        else
+        {
+            <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
+        }
+    }
+    else
+    {
+        <span class="glyphicon glyphicon-sort"></span>
+    }
 }

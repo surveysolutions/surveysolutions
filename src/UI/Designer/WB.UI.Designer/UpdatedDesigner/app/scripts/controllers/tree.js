@@ -32,31 +32,32 @@
             $scope.filtersBoxMode = filtersBlockModes.default;
             $scope.items = [];
 
-            if (hotkeys.get('down') !== false) {
-                hotkeys.del('down');
+            var scrollDown = 'down';
+            var scrollUp = 'up';
+            var focusSearchField = 'ctrl+f';
+            var openTreeItemInEditor = 'enter';
+           
+            if (hotkeys.get(scrollDown) !== false) {
+                hotkeys.del(scrollDown);
             }
-            if (hotkeys.get('up') !== false) {
-                hotkeys.del('up');
-            }
-            if (hotkeys.get('ctrl+f') !== false) {
-                hotkeys.del('ctrl+f');
-            }
-            if (hotkeys.get('enter') !== false) {
-                hotkeys.del('enter');
-            }
-
-            hotkeys.add('down', 'Navigate to next sibling', function (event) {
+            hotkeys.add(scrollDown, 'Navigate to next sibling', function (event) {
                 event.preventDefault();
                 $scope.goToNextItem();
             });
 
-            hotkeys.add('up', 'Navigate to previous sibling', function (event) {
+            if (hotkeys.get(scrollUp) !== false) {
+                hotkeys.del(scrollUp);
+            }
+            hotkeys.add(scrollUp, 'Navigate to previous sibling', function (event) {
                 event.preventDefault();
                 $scope.goToPrevItem();
             });
 
+            if (hotkeys.get(focusSearchField) !== false) {
+                hotkeys.del(focusSearchField);
+            }
             hotkeys.add({
-                combo: 'ctrl+f',
+                combo: focusSearchField,
                 description: 'Search for groups and questions in chapter',
                 callback: function (event) {
                     event.preventDefault();
@@ -64,8 +65,11 @@
                 }
             });
 
+            if (hotkeys.get(openTreeItemInEditor) !== false) {
+                hotkeys.del(openTreeItemInEditor);
+            }
             hotkeys.add({
-                combo: 'enter',
+                combo: openTreeItemInEditor,
                 allowIn: ['INPUT', 'SELECT'],
                 description: 'Open item in editor',
                 callback: function (event) {

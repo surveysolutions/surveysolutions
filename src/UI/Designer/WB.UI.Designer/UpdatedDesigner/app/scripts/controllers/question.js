@@ -3,9 +3,15 @@
         function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, $log, confirmService, hotkeys, optionsService) {
             $scope.currentChapterId = $state.params.chapterId;
             var dictionnaires = {};
+
+            var saveQuestion = 'ctrl+s';
+            
+            if (hotkeys.get(saveQuestion) === false) {
+                hotkeys.del(saveQuestion);
+            }
             hotkeys.bindTo($scope)
               .add({
-                  combo: 'ctrl+s',
+                  combo: saveQuestion,
                   description: 'Save changes',
                   allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                   callback: function (event) {

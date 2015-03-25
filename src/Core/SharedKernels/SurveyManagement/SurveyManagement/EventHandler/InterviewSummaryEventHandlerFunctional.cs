@@ -246,7 +246,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
             {
                 interview.IsDeleted = true;
-                if (string.IsNullOrEmpty(evnt.Origin))
+                if (evnt.Origin != Constants.HeadquartersSynchronizationOrigin)
                 {
                     AddInterviewStatus(summary: interview, status: InterviewStatus.Deleted,
                         date: evnt.EventTimeStamp, comment: null, responsibleId: evnt.Payload.UserId);
@@ -271,7 +271,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             {
                 interview.IsDeleted = false;
 
-                if (string.IsNullOrEmpty(evnt.Origin))
+                if (evnt.Origin != Constants.HeadquartersSynchronizationOrigin)
                 {
                     AddInterviewStatus(summary: interview, status: InterviewStatus.Restored,
                         date: evnt.EventTimeStamp, comment: null, responsibleId: evnt.Payload.UserId);

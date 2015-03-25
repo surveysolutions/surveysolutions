@@ -3,9 +3,14 @@
         function ($rootScope, $scope, $state, questionnaireService, commandService, hotkeys) {
             "use strict";
 
+            var saveStaticText = 'ctrl+s';
+
+            if (hotkeys.get(saveStaticText) === false) {
+                hotkeys.del(saveStaticText);
+            }
             hotkeys.bindTo($scope)
              .add({
-                 combo: 'ctrl+s',
+                 combo: saveStaticText,
                  description: 'Save changes',
                  allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                  callback: function (event) {
