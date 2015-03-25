@@ -158,10 +158,10 @@
                                 <input class="btn btn-link" type="button" value="Show list" ng-click="showOptionsInList()" ng-disabled="!questionForm.stringifiedOptions.$valid" />
                             </p>
                             <p class="help-block ng-cloak" ng-show="questionForm.stringifiedOptions.$error.matchOptionsPattern">
-                                You entered an invalid input. Each line should follow the format: "Title...Value". 'Value' must be an integer or decimal number. Title must be an alpha-numeric string. However, Title cannot contains dots (i.e. ".") or ellipses (i.e., "…"). In addition, no empty lines are allowed.
+                                You entered an invalid input. Each line should follow the format: "Title...Value". 'Value' must be an integer or decimal number. Title must be an alpha-numeric string. Title cannot contain dots (i.e. ".") or ellipses (i.e., "&hellip;"); no empty lines are allowed.
                             </p>
                             <p class="help-block ng-cloak" ng-show="questionForm.stringifiedOptions.$error.maxOptionsCount">
-                                You entered more than the maximum number of allowed options. This input method only allows 200 lines.
+                                You entered more than maximum allowed 200
                             </p>
                         </div>
                     </div>
@@ -329,9 +329,9 @@
                                 <input class="btn btn-link" type="button" value="Show list" ng-click="showOptionsInList()" ng-disabled="!questionForm.stringifiedOptions.$valid" />
                             </p>
                             <p class="help-block ng-cloak" ng-show="questionForm.stringifiedOptions.$error.matchOptionsPattern">
-                                You entered an invalid input. Each line should follow the format: "Title...Value". 'Value' must be an integer or decimal number. Title must be an alpha-numeric string. However, Title cannot contains dots (i.e. ".") or ellipses (i.e., "…"). In addition, no empty lines are allowed.
+                                You entered an invalid input. Each line should follow the format: "Title...Value". 'Value' must be an integer or decimal number. Title must be an alpha-numeric string. Title cannot contain dots (i.e. ".") or ellipses (i.e., "&hellip;"); no empty lines are allowed.
                             <p class="help-block ng-cloak" ng-show="questionForm.stringifiedOptions.$error.maxOptionsCount">
-                                You entered more than the maximum number of allowed options. This input method only allows 200 lines.
+                                You entered more than maximum allowed 200 
                             </p>
                         </div>
                     </div>
