@@ -93,6 +93,7 @@ namespace WB.UI.Designer.App_Start
             }
 
             string esentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.DbFolder"]);
+            string plainEsentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.Plain.DbFolder"]);
 
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
@@ -103,7 +104,7 @@ namespace WB.UI.Designer.App_Start
                 new RavenReadSideInfrastructureModule(ravenSettings, ravenReadSideRepositoryWriterSettings, typeof(DesignerReportQuestionnaireListViewItem).Assembly),
                 new DesignerRegistry(),
                 new DesignerCommandDeserializationModule(),
-                new EsentReadSideModule(esentDataFolder),
+                new EsentReadSideModule(esentDataFolder, plainEsentDataFolder),
                 new DesignerBoundedContextModule(dynamicCompilerSettings),
                 new QuestionnaireVerificationModule(),
                 new MembershipModule(),

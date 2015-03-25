@@ -125,7 +125,8 @@ namespace WB.UI.Supervisor.App_Start
                 MappingAssemblies = new List<Assembly> { typeof (SupervisorBoundedContextModule).Assembly }
             };
 
-            var readSideMaps = new List<Assembly> { typeof(SurveyManagementSharedKernelModule).Assembly }; 
+            var readSideMaps = new List<Assembly> { typeof(SurveyManagementSharedKernelModule).Assembly, typeof(SupervisorBoundedContextModule).Assembly }; 
+            string plainEsentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.Plain.DbFolder"]);
 
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
@@ -142,7 +143,7 @@ namespace WB.UI.Supervisor.App_Start
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
-                new EsentReadSideModule(esentDataFolder),
+                new EsentReadSideModule(esentDataFolder, plainEsentDataFolder),
                 new SupervisorBoundedContextModule(headquartersSettings, schedulerSettings));
 
             NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
