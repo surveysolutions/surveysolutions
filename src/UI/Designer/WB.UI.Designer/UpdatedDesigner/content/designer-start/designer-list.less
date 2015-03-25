@@ -138,7 +138,6 @@ html, body {
 
             ul.pager {
                 .trebuchet12b();
-                text-transform: uppercase;
                 text-align: left;
                 margin: 0 15px;
 
@@ -160,15 +159,14 @@ table.table-header {
     border-bottom: 2px solid #b1b5b8;
     margin: 0;
     .trebuchet12b();
-    text-transform: uppercase;
     color: @pagination-active-color;
 
     tr {
         th {
             padding-top: 5px;
 
-            a#title-search {
-                color: #bcc3c8;
+            a{
+                color: @pagination-active-color;
             }
 
             a:hover {
@@ -176,12 +174,12 @@ table.table-header {
             }
 
             span.glyphicon {
-                font-size: 13px;
-                color: #b9b9b9;
+                color: @pagination-active-color;
+            }
 
-                &.glyphicon-sort-by-alphabet,
-                &.glyphicon-sort-by-alphabet-alt {
-                    color: @brand-success;
+            &.ordered{
+                a,span.glyphicon{
+                    color: @btn-default-color;
                 }
             }
         }
@@ -194,8 +192,9 @@ table.table-content {
 
     tr {
         td {
-            &:first-child {
-                .arial18();
+            &:first-child,
+            &.search-value {
+                .robotoL18();
                 color: @gray-dark;
                 border-left: 13px solid @input-border;
             }
@@ -213,12 +212,6 @@ table.table-content {
                     color: @tooltip-color;
                     font-weight: normal;
                 }
-            }
-
-            &.search-value {
-                .arial18();
-                color: @gray-dark;
-                border-left: 13px solid @input-border;
             }
         }
 
@@ -308,10 +301,6 @@ table#questionnaire-table-content {
     tr {
         td {
             &:first-child {
-                .arial18();
-                color: @gray-dark;
-                border-left: 13px solid @input-border;
-
                 span.summary {
                     .lucidaC14();
                     color: #b9c3ca;

@@ -1,5 +1,6 @@
 ﻿.btn {
   text-transform: uppercase;
+  letter-spacing: 1px;
   padding: 7px 10px;
   border-radius: 3px;
   font-family: "Trebuchet MS", Helvetica, sans-serif;
@@ -25,6 +26,7 @@ input.form-control {
   font-size: 12px;
   font-weight: bold;
   text-transform: uppercase;
+  letter-spacing: 1px;
   background: -moz-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.38) 16%, #fcfdfd 42%, #f6f7f8 100%);
   /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(16%, rgba(255, 255, 255, 0.38)), color-stop(42%, #fcfdfd), color-stop(100%, #f6f7f8));

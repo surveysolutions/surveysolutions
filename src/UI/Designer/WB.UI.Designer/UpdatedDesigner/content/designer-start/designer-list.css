@@ -73,6 +73,7 @@
 }
 .btn {
   text-transform: uppercase;
+  letter-spacing: 1px;
   padding: 7px 10px;
   border-radius: 3px;
   font-family: "Trebuchet MS", Helvetica, sans-serif;
@@ -99,6 +100,7 @@ input.form-control {
   font-size: 12px;
   font-weight: bold;
   text-transform: uppercase;
+  letter-spacing: 1px;
   background: -moz-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.38) 16%, #fcfdfd 42%, #f6f7f8 100%);
   /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(16%, rgba(255, 255, 255, 0.38)), color-stop(42%, #fcfdfd), color-stop(100%, #f6f7f8));
@@ -295,6 +297,7 @@ body {
   font-size: 12px;
   font-weight: bold;
   text-transform: uppercase;
+  letter-spacing: 1px;
   text-align: left;
   margin: 0 15px;
 }
@@ -313,30 +316,31 @@ table.table-header {
   font-size: 12px;
   font-weight: bold;
   text-transform: uppercase;
+  letter-spacing: 1px;
   color: #b2b2b2;
 }
 table.table-header tr th {
   padding-top: 5px;
 }
-table.table-header tr th a#title-search {
-  color: #bcc3c8;
+table.table-header tr th a {
+  color: #b2b2b2;
 }
 table.table-header tr th a:hover {
   text-decoration: none;
 }
 table.table-header tr th span.glyphicon {
-  font-size: 13px;
-  color: #b9b9b9;
+  color: #b2b2b2;
 }
-table.table-header tr th span.glyphicon.glyphicon-sort-by-alphabet,
-table.table-header tr th span.glyphicon.glyphicon-sort-by-alphabet-alt {
-  color: #2fc507;
+table.table-header tr th.ordered a,
+table.table-header tr th.ordered span.glyphicon {
+  color: #2a81cb;
 }
 table.table-content {
   cursor: default;
 }
-table.table-content tr td:first-child {
-  font-family: Arial, Helvetica, sans-serif;
+table.table-content tr td:first-child,
+table.table-content tr td.search-value {
+  font-family: 'Roboto-Light', sans-serif;
   font-size: 18px;
   line-height: 24px;
   color: #3f3f3f;
@@ -357,13 +361,6 @@ table.table-content tr td.email {
 table.table-content tr td.email strong {
   color: #5d6468;
   font-weight: normal;
-}
-table.table-content tr td.search-value {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 18px;
-  line-height: 24px;
-  color: #3f3f3f;
-  border-left: 13px solid #dbdfe2;
 }
 table.table-content tr:first-child th,
 table.table-content tr:first-child td {
@@ -434,13 +431,6 @@ table#user-table-content tr td:last-child,
 table#user-table-header tr th:last-child,
 table#user-table-content tr th:last-child {
   width: 8%;
-}
-table#questionnaire-table-content tr td:first-child {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 18px;
-  line-height: 24px;
-  color: #3f3f3f;
-  border-left: 13px solid #dbdfe2;
 }
 table#questionnaire-table-content tr td:first-child span.summary {
   font-family: "Lucida Console", Monaco, monospace;
