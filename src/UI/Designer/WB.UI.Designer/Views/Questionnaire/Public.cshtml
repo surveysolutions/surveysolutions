@@ -121,10 +121,12 @@ else
         <footer>@Html.Partial("_commonFooter")</footer>
     </div>
 }
-@{
-    this.Html.RenderPartial("DeleteModalDialog");
+@section Modal
+{
+    <div>
+        @Html.Partial("DeleteModalDialog")
+    </div>
 }
-
 @functions
 {
     private string ActionWithOrderField(string sortField)
