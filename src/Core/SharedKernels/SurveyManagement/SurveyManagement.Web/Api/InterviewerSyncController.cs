@@ -73,7 +73,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, InterviewerSyncStrings.InterviewerIsNotCompatibleWithThisVersion);
         }
 
-        private HttpResponseException CreateRestException(HttpStatusCode httpStatusCode, string message)
+        private static HttpResponseException CreateRestException(HttpStatusCode httpStatusCode, string message)
         {
             return new HttpResponseException(new HttpResponseMessage(httpStatusCode) {ReasonPhrase = message});
         }
@@ -91,21 +91,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             {
                 Logger.Info(string.Format("Version mismatch. Client from the future. Client has protocol version {0} but current app protocol is {1} ", request.Version, supervisorRevisionNumber));
 
-                throw this.CreateRestException(HttpStatusCode.NotAcceptable, string.Format(InterviewerSyncStrings.InterviewerApplicationHasHigherVersion_thanSupervisor_Format, request.Version, supervisorRevisionNumber));
+                throw CreateRestException(HttpStatusCode.NotAcceptable, string.Format(InterviewerSyncStrings.InterviewerApplicationHasHigherVersion_thanSupervisor_Format, request.Version, supervisorRevisionNumber));
             }
 
             if (request.Version < supervisorShiftVersionNumber)
             {
                 Logger.Info(string.Format(" Client has protocol version {0} but current app protocol is {1}. Major change.", request.Version, supervisorRevisionNumber));
 
-                throw this.CreateRestException(HttpStatusCode.NotAcceptable, InterviewerSyncStrings.InterviewerApplicationHasVersion_butSupervisorHas_PleaseReinstallInterviewerApplication);
+                throw CreateRestException(HttpStatusCode.NotAcceptable, InterviewerSyncStrings.InterviewerApplicationHasVersion_butSupervisorHas_PleaseReinstallInterviewerApplication);
             }
 
             if (request.Version < supervisorRevisionNumber)
             {
                 Logger.Info(string.Format(" Client has protocol version {0} but current app protocol is {1} ", request.Version, supervisorRevisionNumber));
 
-                throw this.CreateRestException(HttpStatusCode.NotAcceptable,
+                throw CreateRestException(HttpStatusCode.NotAcceptable,
                     string.Format(InterviewerSyncStrings.InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication, request.Version, supervisorRevisionNumber));
             }
 
@@ -113,7 +113,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             {
                 Logger.Info(string.Format("Android device id was not provided"));
 
-                throw this.CreateRestException(HttpStatusCode.NotAcceptable, InterviewerSyncStrings.AndroidDeviceIdWasNotProvided);
+                throw CreateRestException(HttpStatusCode.NotAcceptable, InterviewerSyncStrings.AndroidDeviceIdWasNotProvided);
             }
 
             var interviewerInfo = userInfoViewFactory.Load(new UserWebViewInputModel(this.GlobalInfo.GetCurrentUser().Name, null));
@@ -123,7 +123,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 Logger.Info(string.Format("User {0}[{1}] is linked to device {2}, but handshake was requested from device {3}",
                         interviewerInfo.UserName, interviewerInfo.PublicKey, interviewerInfo.DeviceId, request.AndroidId));
 
-                throw this.CreateRestException(HttpStatusCode.NotAcceptable, InterviewerSyncStrings.WrongAndroidDeviceIdWasProvided);
+                throw CreateRestException(HttpStatusCode.NotAcceptable, InterviewerSyncStrings.WrongAndroidDeviceIdWasProvided);
             }
 
             var identifier = new ClientIdentifier
@@ -185,7 +185,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             catch (SyncPackageNotFoundException ex)
             {
                 this.Logger.Error(ex.Message, ex);
-                throw this.CreateRestException(HttpStatusCode.NotFound, InterviewerSyncStrings.ServerError);
+                throw CreateRestException(HttpStatusCode.NotFound, InterviewerSyncStrings.ServerError);
             }
         }
 
@@ -200,7 +200,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             catch (SyncPackageNotFoundException ex)
             {
                 this.Logger.Error(ex.Message, ex);
-                throw this.CreateRestException(HttpStatusCode.NotFound, InterviewerSyncStrings.ServerError);
+                throw CreateRestException(HttpStatusCode.NotFound, InterviewerSyncStrings.ServerError);
             }
         }
 
@@ -215,7 +215,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             catch (SyncPackageNotFoundException ex)
             {
                 this.Logger.Error(ex.Message, ex);
-                throw this.CreateRestException(HttpStatusCode.NotFound, InterviewerSyncStrings.ServerError);
+                throw CreateRestException(HttpStatusCode.NotFound, InterviewerSyncStrings.ServerError);
             }
         }
 
