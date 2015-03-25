@@ -152,7 +152,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Either your current or new password is incorrect. Please reenter your current and new passwords..
+        ///   Looks up a localized string similar to New/old password combination is incorrect, please reenter..
         /// </summary>
         internal static string The_current_password_is_incorrect_or_the_new_password_is_invalid {
             get {
@@ -170,7 +170,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The user name or password provided is incorrect. Please, enter your user name and password again..
+        ///   Looks up a localized string similar to The user name or password provided is incorrect. Please enter your user name and password again..
         /// </summary>
         internal static string The_user_name_or_password_provided_is_incorrect {
             get {

@@ -21,22 +21,14 @@ else
     @Html.Partial("_list_search_form")
     <table id="questionnaire-table-header" class="table  table-header">
         <thead>
-            <tr>
-                <th>
-                    <a href="@ActionWithOrderField("Title")">Title @ShowSortIcon("Title")</a>
-                </th>
-                <th>
-                    <a href="@ActionWithOrderField("LastEntryDate")">Last modified @ShowSortIcon("LastEntryDate")</a>
-                </th>
-                <th>
-                    <a href="@ActionWithOrderField("CreationDate")">Created date @ShowSortIcon("CreationDate")</a>
-                </th>
-                <th>
-                    <a href="@ActionWithOrderField("CreatorName")">Created By @ShowSortIcon("CreatorName")</a>
-                </th>
-                <th>
-                </th>
-            </tr>
+        <tr>
+            @ShowTableHeaderCell("Title", "Title")
+            @ShowTableHeaderCell("LastEntryDate", "Last modified")
+            @ShowTableHeaderCell("CreationDate", "Created date")
+            @ShowTableHeaderCell("CreatorName", "Created By")
+            <th>
+            </th>
+        </tr>
         </thead>
     </table>
     <div id="table-content-holder">
@@ -54,7 +46,7 @@ else
                         <td class="date">
                             @listViewModel.CreationDate.FormatDate()
                         </td>
-                        <td>
+                        <td class="email">
                             @listViewModel.CreatorName
                         </td>
                         <td>
@@ -144,18 +136,18 @@ else
     }
 
 }
-@helper ShowSortIcon(string field)
+@helper ShowTableHeaderCell(string field, string title)
 {
-    var sortOrder = (int?)ViewBag.SortOrder;
-    if (ViewBag.SortBy == field)
-    {
-        if (!sortOrder.ToBool())
-        {
-            <span class="glyphicon glyphicon-triangle-bottom"></span>
+    var isTableSortedByThisField = ViewBag.SortBy == field;
+    <th class="@(isTableSortedByThisField ? "ordered" : "")">
+        <a href="@ActionWithOrderField(field)">
+            @title
+        @{
+            if (isTableSortedByThisField)
+            {
+                <span class="glyphicon glyphicon-triangle-@(((int?)ViewBag.SortOrder).ToBool() ? "top" : "bottom")"></span>
+            }
         }
-        else
-        {
-            <span class="glyphicon glyphicon-triangle-top"></span>
-        }
-    }
+    </a>
+</th>
 }
