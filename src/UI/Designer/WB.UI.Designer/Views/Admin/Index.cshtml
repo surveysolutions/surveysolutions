@@ -21,25 +21,15 @@ else
     @Html.Partial("_list_search_form")
     <table id="user-table-header" class="table table-header">
         <thead>
-            <tr>
-                <th>
-                    <a href="@ActionWithOrderField("UserName")">Login @ShowSortIcon("UserName")</a>
-                </th>
-                <th>
-                    <a href="@ActionWithOrderField("Email")">Email @ShowSortIcon("Email")</a>
-                </th>
-                <th>
-                    <a href="@ActionWithOrderField("CreationDate")">CREATED DATE @ShowSortIcon("CreationDate")</a>
-                </th>
-                <th>
-                    <a href="@ActionWithOrderField("IsApproved")">APPROVED? @ShowSortIcon("IsApproved")</a>
-                </th>
-                <th>
-                    <a href="@ActionWithOrderField("IsLockedOut")">LOCKED? @ShowSortIcon("IsLockedOut")</a>
-                </th>
-                <th>
-                </th>
-            </tr>
+        <tr>
+            @ShowTableHeaderCell("UserName", "Login")
+            @ShowTableHeaderCell("Email", "Email")
+            @ShowTableHeaderCell("CreationDate", "Created date")
+            @ShowTableHeaderCell("IsApproved", "APPROVED?")
+            @ShowTableHeaderCell("IsLockedOut", "LOCKED?")
+            <th>
+            </th>
+        </tr>
         </thead>
     </table>
     <div id="table-content-holder">
@@ -112,18 +102,18 @@ else
     <strong>@emailParts[0]</strong>@("@" + emailParts[1]);
 }
 
-@helper ShowSortIcon(string field)
+@helper ShowTableHeaderCell(string field, string title)
 {
-    var sortOrder = (int?)ViewBag.SortOrder;
-    if (ViewBag.SortBy == field)
-    {
-        if (!sortOrder.ToBool())
-        {
-            <span class="glyphicon glyphicon-triangle-bottom"></span>
+    var isTableSortedByThisField = ViewBag.SortBy == field;
+    <th class="@(isTableSortedByThisField ? " ordered" : "" )">
+        <a href="@ActionWithOrderField(field)">
+            @title
+        @{
+            if (isTableSortedByThisField)
+            {
+                <span class="glyphicon glyphicon-triangle-@(((int?)ViewBag.SortOrder).ToBool() ? " top":"bottom" )"></span>
+            }
         }
-        else
-        {
-            <span class="glyphicon glyphicon-triangle-top"></span>
-        }
-    }
+    </a>
+</th>
 }
