@@ -11,6 +11,9 @@
 
     string controller = ViewBag.Controller ?? WB.UI.Designer.GlobalHelper.CurrentController;
 }
+@section Scripts {
+    @Scripts.Render("~/list")
+}
 
 @if (Model.TotalCount == 0)
 {
@@ -100,12 +103,12 @@ else
                             if (actionModel.CanExportToPdf)
                             {
                                 <li class="divider"></li>
-                                        <li>@Html.ActionLink("Export as PDF", "exportquestionnaire", "Pdf", routevalues, null)</li>
+                                <li>@Html.ActionLink("Export as PDF", "exportquestionnaire", "Pdf", routevalues, null)</li>
                             }
                             if (actionModel.CanDelete)
                             {
                                 <li class="divider"></li>
-                                        <li><a href="#mDelete" data-bind='click: deleteItem.bind($data,"@itemId    ", "@itemType    ", "@itemName    ")' data-toggle="modal">Delete</a></li>
+                                <li><a href="#mDelete" data-bind='click: deleteItem.bind($data,"@itemId", "@itemType", "@itemName")' data-toggle="modal">Delete</a></li>
                             }
                                     }
                                 </ul>
@@ -122,8 +125,11 @@ else
         <footer>@Html.Partial("_commonFooter")</footer>
     </div>
 }
-@{
-    this.Html.RenderPartial("DeleteModalDialog");
+@section Modal
+{
+    <div>
+        @Html.Partial("DeleteModalDialog")
+    </div>
 }
 
 @helper ShowSortIcon(string field)
