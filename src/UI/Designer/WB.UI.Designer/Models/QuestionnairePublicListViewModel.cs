@@ -8,8 +8,6 @@ namespace WB.UI.Designer.Models
     [DisplayName("questionnaire")]
     public class QuestionnairePublicListViewModel : ActionItem
     {
-        #region Public Properties
-
         [Display(Name = "Title", Order = 1)]
         [Default]
         public string Title { get; set; }
@@ -29,7 +27,5 @@ namespace WB.UI.Designer.Models
         [Display(Name = "Deleted?", Order = 5)]
         [OnlyForAdmin]
         public bool IsDeleted { get; set; }
-        
-        #endregion
     }
 }
