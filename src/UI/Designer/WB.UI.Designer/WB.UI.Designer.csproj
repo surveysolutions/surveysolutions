@@ -391,7 +391,8 @@
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="UpdatedDesigner\vendor\jquery.isOnScreen\isOnScreen.js" />
+    <Content Include="UpdatedDesigner\vendor\jquery-placeholder\jquery.placeholder.js" />
+    <Content Include="UpdatedDesigner\vendor\jquery-placeholder\jquery.placeholder.min.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\matchOptionsPattern.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\optionsService.js" />
     <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.css" />
@@ -1242,7 +1243,6 @@
     <Content Include="UpdatedDesigner\content\designer-start\wb-variables.less" />
     <Content Include="Views\Account\RegisterStepTwo.cshtml" />
     <Content Include="UpdatedDesigner\vendor\ace-builds\bower.json" />
-    <Content Include="UpdatedDesigner\vendor\jquery.isOnScreen\bower.json" />
     <Content Include="UpdatedDesigner\content\designer-start\designer-start.css.map">
       <DependentUpon>designer-start.css</DependentUpon>
     </Content>
@@ -1262,6 +1262,9 @@
     <Content Include="Views\Questionnaire\Create.cshtml" />
     <Content Include="Views\Admin\Edit.cshtml" />
     <Content Include="Views\Admin\Details.cshtml" />
+    <Content Include="UpdatedDesigner\vendor\jquery-placeholder\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\jquery-placeholder\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\jquery-placeholder\jquery.placeholder.min.js.map" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

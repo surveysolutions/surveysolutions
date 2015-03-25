@@ -36,44 +36,45 @@
 
 </head>
 <body onload="FrameCheck();">
-    <div class="container-wb-list">
-        <div class="header-wb-list">
-            <header>
-                @Html.ActionLink("Designer", "Index", "Questionnaire", null, new { @class = "questionnaire-logo" })
-                <ul class="nav nav-tabs">
+<div class="container-wb-list">
+    <div class="header-wb-list">
+        <header>
+            @Html.ActionLink("Designer", "Index", "Questionnaire", null, new { @class = "questionnaire-logo" })
+            <ul class="nav nav-tabs">
 
-                    <li role="presentation">@Html.MenuActionLink("My Questionnaires", "Index", "Questionnaire")</li>
-                    <li role="presentation">@Html.MenuActionLink("Public Questionnaires", "Public", "Questionnaire")</li>
-                    @if (userHelper.WebUser.IsAdmin)
-                    {
-                        <li role="presentation">@Html.MenuActionLink("Manage users", "Index", "Admin")</li>
-                    }
-                    <li role="presentation" class="create">@Html.ActionLink("Create New", "Create", "Questionnaire", null, new { @class = "btn" })</li>
-                </ul>
-                <nav>
-                    <a class="btn btn-default" target="_blank" href="@WebConfigurationManager.AppSettings["DesignerHelpUrl"]">Help</a>
-                    @Html.ActionLink("Change password", "Manage", "Account", null, new { @class = "btn btn-default" })
-                    @if (userHelper.WebUser.IsAdmin)
-                    {
-                        <a class="btn btn-default" href="@Url.Action("Import", "Admin")">Import questionnaire</a>
-                    }
-                    @Html.ActionLink("Logout", "LogOff", "Account", null, new { @class = "btn btn-default" })
-                </nav>
-            </header>
-        </div>
-        <section id="designer-list">
-            @if (!string.IsNullOrWhiteSpace(ViewData["UserNotification"] as string))
-            {
-                <div id="table-message">
-                    <p>
-                        @Html.Raw(ViewData["UserNotification"])
-                    </p>
-                    <button class="btn btn-link">Close</button>
-                    <a href="#" class="cross" title="Close"></a>
-                </div>
-            }
-            @this.RenderBody()
-        </section>
+                <li role="presentation">@Html.MenuActionLink("My Questionnaires", "Index", "Questionnaire")</li>
+                <li role="presentation">@Html.MenuActionLink("Public Questionnaires", "Public", "Questionnaire")</li>
+                @if (userHelper.WebUser.IsAdmin)
+                {
+                    <li role="presentation">@Html.MenuActionLink("Manage users", "Index", "Admin")</li>
+                }
+                <li role="presentation" class="create">@Html.ActionLink("Create New", "Create", "Questionnaire", null, new { @class = "btn" })</li>
+            </ul>
+            <nav>
+                <a class="btn btn-default" target="_blank" href="@WebConfigurationManager.AppSettings["DesignerHelpUrl"]">Help</a>
+                @Html.ActionLink("Change password", "Manage", "Account", null, new { @class = "btn btn-default" })
+                @if (userHelper.WebUser.IsAdmin)
+                {
+                    <a class="btn btn-default" href="@Url.Action("Import", "Admin")">Import questionnaire</a>
+                }
+                @Html.ActionLink("Logout", "LogOff", "Account", null, new { @class = "btn btn-default" })
+            </nav>
+        </header>
     </div>
+    <section id="designer-list">
+        @if (!string.IsNullOrWhiteSpace(ViewData["UserNotification"] as string))
+        {
+            <div id="table-message">
+                <p>
+                    @Html.Raw(ViewData["UserNotification"])
+                </p>
+                <button class="btn btn-link">Close</button>
+                <a href="#" class="cross" title="Close"></a>
+            </div>
+        }
+        @this.RenderBody()
+    </section>
+</div>
+@this.RenderSection("Modal", required: false)
 </body>
 </html>
