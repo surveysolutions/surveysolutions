@@ -39,6 +39,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
 
             this.Bind(typeof(IPlainStorageAccessor<>)).To(typeof(PostgresPlainStorageRepository<>));
             this.Bind(typeof(IQueryablePlainStorageAccessor<>)).To(typeof(PostgresPlainStorageRepository<>));
+            this.Bind<IPlainTransactionManager>().To<PlainPostgresTransactionManager>();
         }
 
         private ISessionFactory BuildSessionFactory()

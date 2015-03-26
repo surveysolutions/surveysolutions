@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.Questionnaire
             IDeleteQuestionnaireService deleteQuestionnaireService = null, ICommandService commandService = null)
         {
             return new QuestionnaireSynchronizer(atomFeedReader ?? Mock.Of<IAtomFeedReader>(), Create.HeadquartersSettings(questionnaireDetailsEndpoint: "http://localhost", questionnaireAssemblyEndpoint: "http://localhost"),
-                headquartersPullContext ?? new HeadquartersPullContext(Mock.Of<IPlainStorageAccessor<SynchronizationStatus>>()),
+                headquartersPullContext ?? new HeadquartersPullContext(Mock.Of<IPlainKeyValueStorage<SynchronizationStatus>>()),
                 plainStorage ?? Mock.Of<IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry>>(), Mock.Of<ILogger>(),
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(), commandService ?? Mock.Of<ICommandService>(),
                 headquartersQuestionnaireReader ?? Mock.Of<IHeadquartersQuestionnaireReader>(),
