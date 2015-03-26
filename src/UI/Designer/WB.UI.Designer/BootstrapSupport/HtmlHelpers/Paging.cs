@@ -51,49 +51,49 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
 
             if (pageFrom > 1)
             {
-                MakePagingItem(isActive: false, text: pageUrl(1), title: "1", root: pagination);
+                MakePagingItem(isActive: false, text: pageUrl(1), htmlTitle: "1", root: pagination);
             }
 
             if (pageFrom > 2 )
             {
-                MakeDisabledPagingItem(text: "&hellip;", root: pagination, additionalClass: "ellipses");
+                MakeDisabledPagingItem(htmlTitle: "&hellip;", root: pagination, additionalClass: "ellipses");
             }
 
             for (var i = pageFrom; i <= pageTo; i++)
             {
-                MakePagingItem(isActive: i == currentPage, text: pageUrl(i), title: i.ToString(), root: pagination);
+                MakePagingItem(isActive: i == currentPage, text: pageUrl(i), htmlTitle: i.ToString(), root: pagination);
             }
 
             if (pageTo + 1 < totalPages)
             {
-                MakeDisabledPagingItem(text: "&hellip;", root: pagination, additionalClass: "ellipses");
+                MakeDisabledPagingItem(htmlTitle: "&hellip;", root: pagination, additionalClass: "ellipses");
             }
 
             if (pageTo < totalPages)
             {
-                MakePagingItem(isActive: false, text: pageUrl(totalPages), title: totalPages.ToString(), root: pagination);
+                MakePagingItem(isActive: false, text: pageUrl(totalPages), htmlTitle: totalPages.ToString(), root: pagination);
             }
 
             if (currentPage > 1)
             {
-                MakePagingItem(isActive: false, text: pageUrl(1), title: "FIRST", root: pager);
-                MakePagingItem(isActive: false, text: pageUrl(currentPage - 1), title: "PREVIOUS", root: pager);
+                MakePagingItem(isActive: false, text: pageUrl(1), htmlTitle: "FIRST", root: pager);
+                MakePagingItem(isActive: false, text: pageUrl(currentPage - 1), htmlTitle: "PREVIOUS", root: pager);
             }
             else
             {
-                MakeDisabledPagingItem(text: "FIRST", root: pager);
-                MakeDisabledPagingItem(text: "PREVIOUS", root: pager); 
+                MakeDisabledPagingItem(htmlTitle: "FIRST", root: pager);
+                MakeDisabledPagingItem(htmlTitle: "PREVIOUS", root: pager); 
             }
 
             if (currentPage < totalPages)
             {
-                MakePagingItem(isActive: false, text: pageUrl(currentPage + 1), title: "NEXT", root: pager);
-                MakePagingItem(isActive: false, text: pageUrl(totalPages), title: "LAST", root: pager);
+                MakePagingItem(isActive: false, text: pageUrl(currentPage + 1), htmlTitle: "NEXT", root: pager);
+                MakePagingItem(isActive: false, text: pageUrl(totalPages), htmlTitle: "LAST", root: pager);
             }
             else
             {
-                MakeDisabledPagingItem(text: "NEXT", root: pager);
-                MakeDisabledPagingItem(text: "LAST", root: pager);
+                MakeDisabledPagingItem(htmlTitle: "NEXT", root: pager);
+                MakeDisabledPagingItem(htmlTitle: "LAST", root: pager);
             }
 
             nav.InnerHtml = pagination.ToString() + pager.ToString();
@@ -101,7 +101,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             return MvcHtmlString.Create(nav.ToString());
         }
 
-        private static void MakeDisabledPagingItem(string text, TagBuilder root, string additionalClass = null)
+        private static void MakeDisabledPagingItem(string htmlTitle, TagBuilder root, string additionalClass = null)
         {
             var li = new TagBuilder("li");
             li.AddCssClass("disabled");
@@ -111,14 +111,14 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             }
             var a = new TagBuilder("a");
             a.MergeAttribute("href", "#");
-            a.InnerHtml = text;
+            a.InnerHtml = htmlTitle;
             a.AddCssClass("disabledPage");
 
             li.InnerHtml = a.ToString();
             root.InnerHtml += li;
         }
 
-        private static void MakePagingItem(bool isActive, string text, string title, TagBuilder root)
+        private static void MakePagingItem(bool isActive, string text, string htmlTitle, TagBuilder root)
         {
             var li = new TagBuilder("li");
 
@@ -127,7 +127,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                 li.AddCssClass("active");
                 var span = new TagBuilder("span");
                 span.AddCssClass("currentPage");
-                span.InnerHtml = title;
+                span.InnerHtml = htmlTitle;
 
                 li.InnerHtml += span;
             }
@@ -135,7 +135,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             {
                 var a = new TagBuilder("a");
                 a.MergeAttribute("href", text);
-                a.InnerHtml = title;
+                a.InnerHtml = htmlTitle;
                 li.InnerHtml += a;    
             }
                 
