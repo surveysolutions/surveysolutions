@@ -258,33 +258,6 @@ body {
   border-top-width: 0;
   border-top-style: none;
 }
-.container-wb-list section#designer-list #table-content-holder div#table-message {
-  height: 115px;
-  background: #edeff0 url("../i/logo-designer-sm.png") 45px 23px no-repeat;
-  position: relative;
-}
-.container-wb-list section#designer-list #table-content-holder div#table-message p {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 16px;
-  font-style: italic;
-  padding: 20px 0 0 110px;
-}
-.container-wb-list section#designer-list #table-content-holder div#table-message button {
-  font-weight: bold;
-  margin: 0 100px;
-  text-decoration: none;
-}
-.container-wb-list section#designer-list #table-content-holder div#table-message a.cross {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: url("../i/cross.png");
-  height: 40px;
-  width: 40px;
-}
-.container-wb-list section#designer-list #table-content-holder div#table-message a.cross:hover {
-  background-position: 0 -40px;
-}
 .container-wb-list section#designer-list #table-content-holder ul.pagination {
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   font-size: 14px;
@@ -312,6 +285,34 @@ body {
 }
 .container-wb-list section#designer-list #table-content-holder ul.pager .disabled a {
   color: #9f9f9f;
+}
+div#table-message {
+  height: 115px;
+  background: #edeff0 url("../i/logo-designer-sm.png") 45px 23px no-repeat;
+  position: relative;
+  border-bottom: 1px solid #dddddd;
+}
+div#table-message p {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-style: italic;
+  padding: 20px 0 0 110px;
+}
+div#table-message button {
+  font-weight: bold;
+  margin: 0 100px;
+  text-decoration: none;
+}
+div#table-message a.cross {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: url("../i/cross.png");
+  height: 40px;
+  width: 40px;
+}
+div#table-message a.cross:hover {
+  background-position: 0 -40px;
 }
 table.table-header {
   cursor: default;

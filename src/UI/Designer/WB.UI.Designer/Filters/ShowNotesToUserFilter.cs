@@ -8,7 +8,7 @@ namespace WB.UI.Designer.Filters
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var controller = filterContext.Controller as AccountController;
+            var controller = filterContext.Controller as Controller;
             if (controller ==null) return;
 
             var userNotification = WebConfigurationManager.AppSettings["UserNotification"];
