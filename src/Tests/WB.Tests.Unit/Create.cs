@@ -1077,12 +1077,12 @@ namespace WB.Tests.Unit
 
         public static HeadquartersPullContext HeadquartersPullContext()
         {
-            return new HeadquartersPullContext(Substitute.For<IPlainStorageAccessor<SynchronizationStatus>>());
+            return new HeadquartersPullContext(Substitute.For<IPlainKeyValueStorage<SynchronizationStatus>>());
         }
 
         public static HeadquartersPushContext HeadquartersPushContext()
         {
-            return new HeadquartersPushContext(Substitute.For<IPlainStorageAccessor<SynchronizationStatus>>());
+            return new HeadquartersPushContext(Substitute.For<IPlainKeyValueStorage<SynchronizationStatus>>());
         }
 
         public static InterviewsSynchronizer InterviewsSynchronizer(
