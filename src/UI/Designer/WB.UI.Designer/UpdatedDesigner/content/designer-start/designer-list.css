@@ -116,12 +116,6 @@ input.form-control {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#f6f7f8', GradientType=0);
   /* IE6-9 */
 }
-.nav-tabs li {
-  margin-top: 42px;
-}
-.nav-tabs li:first-child {
-  margin-left: 400px;
-}
 .nav-tabs li.active a {
   color: #2a81cb;
 }
@@ -209,14 +203,14 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  height: 76px;
+  height: 80px;
   z-index: 2;
 }
 .container-wb-list .header-wb-list header .questionnaire-logo {
   background: url("../i/logo-questionnaire-designer.png") no-repeat;
   width: 366px;
   height: 36px;
-  margin: 20px;
+  margin: 32px 38px;
   position: absolute;
   top: 0;
   left: 0;
@@ -226,6 +220,18 @@ body {
   width: 100%;
   border: none;
   border-left: 13px solid #bcc3c8;
+}
+.container-wb-list .header-wb-list header .nav-tabs > li {
+  margin-top: 44px;
+}
+.container-wb-list .header-wb-list header .nav-tabs > li:first-child {
+  margin-left: 450px;
+}
+.container-wb-list .header-wb-list header .nav-tabs > li > a {
+  padding-top: 0;
+  padding-bottom: 0;
+  line-height: 36px;
+  height: 36px;
 }
 .container-wb-list .header-wb-list header nav {
   float: right;
@@ -239,7 +245,7 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  top: 76px;
+  top: 79px;
   z-index: 1;
 }
 .container-wb-list section#designer-list #table-content-holder {
@@ -247,7 +253,7 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  top: 66px;
+  top: 45px;
   overflow: auto;
   border-top-width: 0;
   border-top-style: none;
@@ -309,6 +315,7 @@ body {
 }
 table.table-header {
   cursor: default;
+  border-top: 1px solid #dddddd;
   border-left: 13px solid #bcc3c8;
   border-bottom: 2px solid #b1b5b8;
   margin: 0;
@@ -338,13 +345,15 @@ table.table-header tr th.ordered span.glyphicon {
 table.table-content {
   cursor: default;
 }
-table.table-content tr td:first-child,
 table.table-content tr td.search-value {
   font-family: 'Roboto-Light', sans-serif;
   font-size: 18px;
   line-height: 24px;
-  color: #3f3f3f;
+  color: #4d4d4d;
   border-left: 13px solid #dbdfe2;
+}
+table.table-content tr td.search-value a {
+  color: #4d4d4d;
 }
 table.table-content tr td.date {
   font-family: Georgia, serif;
@@ -400,7 +409,7 @@ table#questionnaire-table-header tr td:nth-child(5),
 table#questionnaire-table-content tr td:nth-child(5),
 table#questionnaire-table-header tr th:nth-child(5),
 table#questionnaire-table-content tr th:nth-child(5) {
-  width: 8%;
+  width: 10%;
 }
 table#user-table-header tr td:nth-child(2),
 table#user-table-content tr td:nth-child(2),
@@ -424,13 +433,13 @@ table#user-table-header tr td:nth-child(5),
 table#user-table-content tr td:nth-child(5),
 table#user-table-header tr th:nth-child(5),
 table#user-table-content tr th:nth-child(5) {
-  width: 8%;
+  width: 10%;
 }
 table#user-table-header tr td:last-child,
 table#user-table-content tr td:last-child,
 table#user-table-header tr th:last-child,
 table#user-table-content tr th:last-child {
-  width: 8%;
+  width: 10%;
 }
 table#questionnaire-table-content tr td:first-child span.summary {
   font-family: "Lucida Console", Monaco, monospace;
@@ -461,28 +470,39 @@ table#questionnaire-table-content tr.active td:nth-child(4) {
 table#questionnaire-table-content tr.deleted td {
   text-decoration: line-through;
 }
-#search-form {
-  border-left: 13px solid #bcc3c8;
-  padding: 3px;
-  padding-bottom: 0;
-  border-top: 1px solid #bcc3c8;
-  margin: 0;
-  background: url("../i/loupe.png") 10px 7px no-repeat;
-  padding-left: 35px;
+table.table-header tr td:first-child,
+table.table-content tr td:first-child,
+table.table-header tr th:first-child,
+table.table-content tr th:first-child {
+  padding-left: 20px;
 }
-#search-form #frmSearch {
+table.table-header tr td:last-child,
+table.table-content tr td:last-child,
+table.table-header tr th:last-child,
+table.table-content tr th:last-child {
+  padding-right: 20px;
+}
+#frmSearch {
   position: relative;
+  display: inline-block;
+  margin-left: 30px;
 }
-#search-form #frmSearch .input-wrapper {
-  position: relative;
+#frmSearch .btn {
+  border: 1px solid #dbdfe2;
 }
-#search-form #frmSearch .input-wrapper button {
-  position: absolute;
-  right: 1px;
-  top: 1px;
-}
-#search-form #frmSearch #txtFilter {
+#frmSearch #txtFilter {
   padding: 6px;
+}
+#frmSearch .clear-search {
+  width: 30px;
+  height: 30px;
+  border: none;
+  padding: 0;
+  display: inline-block;
+  background: transparent url(../i/cross.png) -5px -5px;
+}
+#frmSearch .clear-search:hover {
+  background-position: -5px -45px;
 }
 .nav.nav-tabs > li > a {
   padding-top: 8px;
@@ -491,7 +511,7 @@ table#questionnaire-table-content tr.deleted td {
 #edit-form {
   padding: 3px;
   padding-bottom: 0;
-  border-top: 1px solid #bcc3c8;
+  border-top: 1px solid #ddd;
   margin: 0;
   border-left: 13px solid #dbdfe2;
   position: absolute;

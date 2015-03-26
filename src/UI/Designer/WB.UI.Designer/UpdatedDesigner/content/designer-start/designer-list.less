@@ -4,7 +4,8 @@
 @import (reference) "font-styles";
 @import "inputs";
 
-@header-height: 76px;
+@header-height: 80px;
+@nav-tab-height: 36px;
 
 html, body {
     height: 100%;
@@ -38,19 +39,32 @@ html, body {
                 background: url("../i/logo-questionnaire-designer.png") no-repeat;
                 width: 366px;
                 height: 36px;
-                margin: 20px;
+                margin: 32px 38px;
                 position: absolute;
                 top: 0;
                 left: 0;
                 text-indent: -9999999px;
-                //  float: left;
             }
 
             .nav-tabs {
-                // float: left;
                 width: 100%;
                 border: none;
                 border-left: 13px solid #bcc3c8;
+
+                & > li {
+                    margin-top: @header-height - @nav-tab-height;
+
+                    &:first-child {
+                        margin-left: 450px;
+                    }
+
+                    & > a {
+                        padding-top: 0;
+                        padding-bottom: 0;
+                        line-height: @nav-tab-height;
+                        height: @nav-tab-height;
+                    }
+                }
             }
 
             nav {
@@ -68,7 +82,7 @@ html, body {
         bottom: 0;
         left: 0;
         right: 0;
-        top: @header-height;
+        top: @header-height - 1px;
         z-index: 1;
 
 
@@ -78,7 +92,7 @@ html, body {
             bottom: 0;
             left: 0;
             right: 0;
-            top: 66px;
+            top: 45px;
             overflow: auto;
             border-top-width: 0;
             border-top-style: none;
@@ -112,8 +126,6 @@ html, body {
                     }
                 }
             }
-
-
 
             ul.pagination {
                 .trebuchet14b();
@@ -155,6 +167,7 @@ html, body {
 
 table.table-header {
     cursor: default;
+    border-top: 1px solid #dddddd;
     border-left: 13px solid #bcc3c8;
     border-bottom: 2px solid #b1b5b8;
     margin: 0;
@@ -165,7 +178,7 @@ table.table-header {
         th {
             padding-top: 5px;
 
-            a{
+            a {
                 color: @pagination-active-color;
             }
 
@@ -177,8 +190,8 @@ table.table-header {
                 color: @pagination-active-color;
             }
 
-            &.ordered{
-                a,span.glyphicon{
+            &.ordered {
+                a, span.glyphicon {
                     color: @btn-default-color;
                 }
             }
@@ -192,11 +205,14 @@ table.table-content {
 
     tr {
         td {
-            &:first-child,
             &.search-value {
                 .robotoL18();
-                color: @gray-dark;
+                color: @table-text-color;
                 border-left: 13px solid @input-border;
+
+                a {
+                    color: @table-text-color;
+                }
             }
 
             &.date {
@@ -245,9 +261,6 @@ table#questionnaire-table-header,
 table#questionnaire-table-content {
     tr {
         td, th {
-            &:first-child {
-            }
-
             &:nth-child(2) {
                 width: 11%;
             }
@@ -261,7 +274,7 @@ table#questionnaire-table-content {
             }
 
             &:nth-child(5) {
-                width: 8%;
+                width: 10%;
             }
         }
     }
@@ -287,11 +300,11 @@ table#user-table-content {
             }
 
             &:nth-child(5) {
-                width: 8%;
+                width: 10%;
             }
 
             &:last-child {
-                width: 8%;
+                width: 10%;
             }
         }
     }
@@ -353,30 +366,45 @@ table#questionnaire-table-content {
     }
 }
 
-#search-form {
-    border-left: 13px solid #bcc3c8;
-    padding: 3px;
-    padding-bottom: 0;
-    border-top: 1px solid #bcc3c8;
-    margin: 0;
-    background: url("../i/loupe.png") 10px 7px no-repeat;
-    padding-left: 35px;
+table.table-header,
+table.table-content {
+    tr {
+        td, th {
+            &:first-child {
+                padding-left: 20px;
+            }
 
-    #frmSearch {
-        position: relative;
-
-        .input-wrapper {
-            position: relative;
-
-            button {
-                position: absolute;
-                right: 1px;
-                top: 1px;
+            &:last-child {
+                padding-right: 20px;
             }
         }
+    }
+}
 
-        #txtFilter {
-            padding: 6px;
+#frmSearch {
+    position: relative;
+    display: inline-block;
+    margin-left: 30px;
+
+    .btn {
+        border: 1px solid #dbdfe2;
+    }
+
+    #txtFilter {
+        padding: 6px;
+    }
+
+    .clear-search {
+        @btn-size: 30px;
+        width: @btn-size;
+        height: @btn-size;
+        border: none;
+        padding: 0;
+        display: inline-block;
+        background: transparent url(../i/cross.png) -5px -5px;
+
+        &:hover {
+            background-position: -5px -45px;
         }
     }
 }
@@ -389,7 +417,7 @@ table#questionnaire-table-content {
 #edit-form {
     padding: 3px;
     padding-bottom: 0;
-    border-top: 1px solid #bcc3c8;
+    border-top: 1px solid #ddd;
     margin: 0;
     border-left: 13px solid #dbdfe2;
     position: absolute;
@@ -419,9 +447,10 @@ table#questionnaire-table-content {
         font-weight: bold;
     }
 
-    input{
+    input {
         max-width: 400px;
     }
+
     ::-webkit-input-placeholder {
         font-style: italic;
     }

@@ -1,11 +1,9 @@
-﻿<div id="search-form">
-    <form id="frmSearch" class="form-inline">
-        <div class="form-group">
-            <div class="input-wrapper">
-                <input id="txtFilter" type="text" class="form-control" name="f" value="@ViewBag.Filter" />
-                <button type="button" class="btn btn-default" onclick=" $('#txtFilter').val(''); $('#frmSearch').submit(); ">&times;</button>
-            </div>
-        </div>
-        <a class="btn btn-default" onclick=" $('#frmSearch').submit() ">Search</a>
-    </form>
-</div>
+﻿<form id="frmSearch" class="form-inline">
+    <div class="input-group">
+        <input id="txtFilter" type="text" class="form-control" name="f" value="@ViewBag.Filter" />
+        <span class="input-group-btn">
+            <button class="btn btn-default" onclick=" $('#frmSearch').submit() "><span class="glyphicon glyphicon-search"></span></button>
+        </span>
+    </div><!-- /input-group -->
+    <button type="button" title="Cancel search" class="btn clear-search" onclick=" $('#txtFilter').val(''); $('#frmSearch').submit(); "></button>
+</form>
