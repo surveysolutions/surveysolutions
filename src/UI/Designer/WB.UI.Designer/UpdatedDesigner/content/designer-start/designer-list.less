@@ -97,36 +97,7 @@ html, body {
             border-top-width: 0;
             border-top-style: none;
 
-            div#table-message {
-                height: 115px;
-                background: #edeff0 url("../i/logo-designer-sm.png") 45px 23px no-repeat;
-                position: relative;
-
-                p {
-                    .arial16I();
-                    padding: 20px 0 0 110px;
-                }
-
-                button {
-                    font-weight: bold;
-                    margin: 0 100px;
-                    text-decoration: none;
-                }
-
-                a.cross {
-                    position: absolute;
-                    top: 10px;
-                    right: 10px;
-                    background: url("../i/cross.png");
-                    height: 40px;
-                    width: 40px;
-
-                    &:hover {
-                        background-position: 0 -40px;
-                    }
-                }
-            }
-
+           
             ul.pagination {
                 .trebuchet14b();
                 margin: 0 15px;
@@ -164,6 +135,38 @@ html, body {
         }
     }
 }
+
+ div#table-message {
+    height: 115px;
+    background: #edeff0 url("../i/logo-designer-sm.png") 45px 23px no-repeat;
+    position: relative;
+    border-bottom: 1px solid #dddddd;
+
+    p {
+        .arial16I();
+        padding: 20px 0 0 110px;
+    }
+
+    button {
+        font-weight: bold;
+        margin: 0 100px;
+        text-decoration: none;
+    }
+
+    a.cross {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: url("../i/cross.png");
+        height: 40px;
+        width: 40px;
+
+        &:hover {
+            background-position: 0 -40px;
+        }
+    }
+}
+
 
 table.table-header {
     cursor: default;
