@@ -11,18 +11,11 @@
     string controller = ViewBag.Controller ?? WB.UI.Designer.GlobalHelper.CurrentController;
 }
 
-@if (Model.TotalCount == 0)
-{
-    @Html.Partial("_list_search_form")
-    <p class="text-center" style="line-height: 10em">This list does not contain any records</p>
-}
-else
-{
-    @Html.Partial("_list_search_form")
-    <table id="user-table-header" class="table table-header">
-        <thead>
+
+<table id="user-table-header" class="table table-header">
+    <thead>
         <tr>
-            @ShowTableHeaderCell("UserName", "Login")
+            @ShowTableHeaderCell("UserName", "Login", true)
             @ShowTableHeaderCell("Email", "Email")
             @ShowTableHeaderCell("CreationDate", "Created date")
             @ShowTableHeaderCell("IsApproved", "APPROVED?")
@@ -30,9 +23,15 @@ else
             <th>
             </th>
         </tr>
-        </thead>
-    </table>
-    <div id="table-content-holder">
+    </thead>
+</table>
+<div id="table-content-holder">
+    @if (Model.TotalCount == 0)
+    {
+        <p class="text-center" style="line-height: 10em">This list does not contain any records</p>
+    }
+    else
+    {
         <table id="user-table-content" class="table table-content ">
             <tbody>
                 @foreach (var user in Model)
@@ -48,7 +47,7 @@ else
                             @user.CreationDate.FormatDate()
                         </td>
                         <td>
-                            @(user.IsApproved? "Yes": "No")
+                            @(user.IsApproved ? "Yes" : "No")
                         </td>
                         <td>
                             @(user.IsLockedOut ? "Yes" : "No")
@@ -75,8 +74,9 @@ else
             </tbody>
         </table>
         @Html.Pager(Model.PageIndex + 1, Model.TotalPages, x => Url.Action(WB.UI.Designer.GlobalHelper.CurrentAction, WB.UI.Designer.GlobalHelper.CurrentController, new { p = x, sb = ViewBag.SortBy, so = ViewBag.SortOrder, f = ViewBag.Filter }), 2)
-    </div>
-}
+    }
+</div>
+
 
 @functions
 {
@@ -97,22 +97,26 @@ else
 
 @helper  FormatEmail(string email)
 {
-    var emailParts = email.Split(new char[]{'@'}, 2);
+    var emailParts = email.Split(new char[] { '@' }, 2);
     <strong>@emailParts[0]</strong>@("@" + emailParts[1]);
 }
 
-@helper ShowTableHeaderCell(string field, string title)
+@helper ShowTableHeaderCell(string field, string title, bool showSearch = false)
 {
     var isTableSortedByThisField = ViewBag.SortBy == field;
-    <th class="@(isTableSortedByThisField ? " ordered" : "" )">
+    <th class="@(isTableSortedByThisField ? "ordered" : "")">
         <a href="@ActionWithOrderField(field)">
             @title
-        @{
-            if (isTableSortedByThisField)
-            {
-                <span class="glyphicon glyphicon-triangle-@(((int?)ViewBag.SortOrder).ToBool() ? " top":"bottom" )"></span>
+            @{
+                if (isTableSortedByThisField)
+                {
+                    <span class="glyphicon glyphicon-triangle-@(((int?)ViewBag.SortOrder).ToBool() ? "top" : "bottom")"></span>
+                }
             }
+        </a>
+        @if (showSearch)
+        {
+            @Html.Partial("_list_search_form")
         }
-    </a>
-</th>
+    </th>
 }
