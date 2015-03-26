@@ -62,16 +62,6 @@
         </header>
     </div>
     <section id="designer-list">
-        @if (!string.IsNullOrWhiteSpace(ViewData["UserNotification"] as string))
-        {
-            <div id="table-message">
-                <p>
-                    @Html.Raw(ViewData["UserNotification"])
-                </p>
-                <button class="btn btn-link">Close</button>
-                <a href="#" class="cross" title="Close"></a>
-            </div>
-        }
         @this.RenderBody()
     </section>
 </div>
