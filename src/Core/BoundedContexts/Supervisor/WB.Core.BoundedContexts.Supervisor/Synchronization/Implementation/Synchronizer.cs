@@ -24,7 +24,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             ILocalFeedStorage localFeedStorage,
             IUserChangedFeedReader feedReader,
             ILocalUserFeedProcessor localUserFeedProcessor, 
-            IInterviewsSynchronizer interviewsSynchronizer, IQuestionnaireSynchronizer questionnaireSynchronizer,
+            IInterviewsSynchronizer interviewsSynchronizer, 
+            IQuestionnaireSynchronizer questionnaireSynchronizer,
             HeadquartersPullContext headquartersPullContext,
             HeadquartersPushContext headquartersPushContext)
         {

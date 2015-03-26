@@ -1,15 +1,15 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using Ninject.Infrastructure.Language;
-using WB.Core.Infrastructure.Transactions;
+using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 {
-    public class TransactionFilter : ActionFilterAttribute
+    public class PlainTransactionFilter : ActionFilterAttribute
     {
-        private readonly ITransactionManagerProvider transactionManager;
+        private readonly IPlainTransactionManager transactionManager;
 
-        public TransactionFilter(ITransactionManagerProvider transactionManager)
+        public PlainTransactionFilter(IPlainTransactionManager transactionManager)
         {
             this.transactionManager = transactionManager;
         }
@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
         {
             if (!ShouldDisableTransaction(filterContext))
             {
-                transactionManager.GetTransactionManager().BeginQueryTransaction();
+                transactionManager.BeginTransaction();
             }
         }
 
@@ -26,7 +26,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
         {
             if (!ShouldDisableTransaction(filterContext))
             {
-                transactionManager.GetTransactionManager().RollbackQueryTransaction();
+                if (filterContext.Exception != null)
+                {
+                    transactionManager.RollbackTransaction();
+                }
+                else
+                {
+                    transactionManager.CommitTransaction();
+                }
             }
         }
 

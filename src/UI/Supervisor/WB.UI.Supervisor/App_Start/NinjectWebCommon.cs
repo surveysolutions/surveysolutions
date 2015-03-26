@@ -78,7 +78,7 @@ namespace WB.UI.Supervisor.App_Start
         {
 #warning TLK: delete this when NCQRS initialization moved to Global.asax
             MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
-            //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
+            HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
 
             string storePath = WebConfigurationManager.AppSettings["Raven.DocumentStore"];
 
@@ -187,6 +187,8 @@ namespace WB.UI.Supervisor.App_Start
 
             kernel.BindFilter<TransactionFilter>(FilterScope.First, 0);
             kernel.BindHttpFilter<ApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Controller);
+            kernel.BindFilter<PlainTransactionFilter>(FilterScope.First, 0);
+            kernel.BindHttpFilter<PlainApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Controller);
 
             return kernel;
         }

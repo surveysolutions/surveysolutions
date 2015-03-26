@@ -8,13 +8,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 {
     public abstract class HeadquartersSynchronizationContext
     {
-        private readonly IPlainStorageAccessor<SynchronizationStatus> statusStorage;
+        private readonly IPlainKeyValueStorage<SynchronizationStatus> statusStorage;
         private readonly List<string> synchronizationMessages = new List<string>();
         private readonly List<string> synchronizationErrors = new List<string>();
 
         protected abstract string StorageDocumentId { get; }
 
-        protected HeadquartersSynchronizationContext(IPlainStorageAccessor<SynchronizationStatus> statusStorage)
+        protected HeadquartersSynchronizationContext(IPlainKeyValueStorage<SynchronizationStatus> statusStorage)
         {
             this.statusStorage = statusStorage;
         }
