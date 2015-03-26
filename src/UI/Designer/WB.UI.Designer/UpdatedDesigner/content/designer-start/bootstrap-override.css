@@ -42,12 +42,6 @@ input.form-control {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#f6f7f8', GradientType=0);
   /* IE6-9 */
 }
-.nav-tabs li {
-  margin-top: 42px;
-}
-.nav-tabs li:first-child {
-  margin-left: 400px;
-}
 .nav-tabs li.active a {
   color: #2a81cb;
 }
