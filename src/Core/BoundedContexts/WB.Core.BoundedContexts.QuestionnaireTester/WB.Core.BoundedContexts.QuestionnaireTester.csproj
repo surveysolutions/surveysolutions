@@ -77,6 +77,12 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Reactive.Core">
+      <HintPath>..\..\..\..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces">
+      <HintPath>..\..\..\..\packages\Rx-Interfaces.2.2.5\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -84,6 +90,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventBus\IEventRegistry.cs" />
+    <Compile Include="EventBus\Implementation\EventRegistry.cs" />
+    <Compile Include="EventBus\Implementation\LiteEventBus.cs" />
+    <Compile Include="EventBus\Implementation\ImmutableList.cs" />
     <Compile Include="Implementation\Services\SiaqDbRepository.cs" />
     <Compile Include="Implementation\Services\SiaqoDbAccessor.cs" />
     <Compile Include="Implementation\Services\SiaqodbFactory.cs" />
