@@ -21,7 +21,7 @@ using TemplateInfo = WB.Core.BoundedContexts.Designer.Services.TemplateInfo;
 namespace WB.Tests.Unit.Applications.Designer
 {
     [TestFixture]
-    public class SynchronizationControllerTests
+    public class AdminControllerTests
     {
         [SetUp]
         public void Setup()
@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.Applications.Designer
         public void Import_When_RequestContainsQuestionnirie_Then_ImportCommandExecutedAndRedirectToQuestionnairieController()
         {
             // arrange
-            AdminController controller = this.CreateSynchronizationController();
+            AdminController controller = this.CreateAdminController();
 
             Mock<HttpPostedFileBase> file = new Mock<HttpPostedFileBase>();
 
@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.Applications.Designer
         public void Import_When_RequestDoesntContainsQuestionnaire_Then_ImportCommandWasntExecutedAndRedirectToErrorController()
         {
             // arrange
-            AdminController controller = this.CreateSynchronizationController();
+            AdminController controller = this.CreateAdminController();
             Mock<HttpPostedFileBase> file = new Mock<HttpPostedFileBase>();
 
             // act
@@ -86,7 +86,7 @@ namespace WB.Tests.Unit.Applications.Designer
         public void Export_When_TemplateIsNotNull_Then_FileIsReturned()
         {
             // arrange
-            AdminController controller = this.CreateSynchronizationController();
+            AdminController controller = this.CreateAdminController();
             Guid templateId = Guid.NewGuid();
             TemplateInfo dataForZip = new TemplateInfo() { Source = "zipped data", Title = "template" };
 
@@ -120,7 +120,7 @@ namespace WB.Tests.Unit.Applications.Designer
 
             this.ExportServiceMock.Setup(x => x.GetQuestionnaireTemplateInfo(Moq.It.IsAny<QuestionnaireDocument>())).Returns(template);
 
-            AdminController target = this.CreateSynchronizationController();
+            AdminController target = this.CreateAdminController();
 
             // act
             var result = target.Export(templateId);
@@ -129,7 +129,7 @@ namespace WB.Tests.Unit.Applications.Designer
             Assert.That(result, Is.EqualTo(null));
         }
 
-        private AdminController CreateSynchronizationController(IMembershipUserService userHelper = null,
+        private AdminController CreateAdminController(IMembershipUserService userHelper = null,
             IQuestionnaireHelper questionnaireHelper = null,
             ILogger logger = null,
             IStringCompressor zipUtils = null,

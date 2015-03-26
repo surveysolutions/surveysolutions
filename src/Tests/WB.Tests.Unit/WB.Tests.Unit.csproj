@@ -260,7 +260,7 @@
     <Compile Include="Applications\Designer\QuestionnaireHelper\when_getting_questionnaire_data_deleted_questionnaires_should_not_be_editable_.cs" />
     <Compile Include="Applications\Designer\QuestionnaireHelper\QuestionnaireHelperTestContext.cs" />
     <Compile Include="Applications\Designer\QuestionnaireHelper\when_getting_public_questionnaire_data_deleted_questionnaires_should_not_be_editable_.cs" />
-    <Compile Include="Applications\Designer\SynchronizationControllerTests.cs" />
+    <Compile Include="Applications\Designer\AdminControllerTests.cs" />
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\VerificationErrorsMapperTestContext.cs" />
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\when_enriching_errors_with_empty_static_text.cs" />
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\when_enriching_errors_with_titles_from_questionnaire.cs" />
