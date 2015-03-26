@@ -9,27 +9,26 @@
     ViewBag.Title = "Public Questionnaires";
 }
 
-@if (Model.TotalCount == 0)
-{
-    @Html.Partial("_list_search_form")
-    <p class="text-center" style="line-height: 10em">This list does not contain any records</p>
-}
-else
-{
-    @Html.Partial("_list_search_form")
-    <table id="questionnaire-table-header" class="table  table-header">
-        <thead>
+<table id="questionnaire-table-header" class="table  table-header">
+    <thead>
         <tr>
-            @ShowTableHeaderCell("Title", "Title")
+            @ShowTableHeaderCell("Title", "Title", true)
             @ShowTableHeaderCell("LastEntryDate", "Last modified")
             @ShowTableHeaderCell("CreationDate", "Created date")
             @ShowTableHeaderCell("CreatorName", "Created By")
             <th>
             </th>
         </tr>
-        </thead>
-    </table>
-    <div id="table-content-holder">
+    </thead>
+</table>
+<div id="table-content-holder">
+    @if (Model.TotalCount == 0)
+    {
+        <p class="text-center" style="line-height: 10em">This list does not contain any records</p>
+    }
+    else
+    {
+
         <table id="questionnaire-table-content" class="table table-content">
             <tbody>
                 @foreach (var listViewModel in Model)
@@ -38,8 +37,8 @@ else
                     var itemId = listViewModel.GetId();
                     var itemType = listViewModel.GetLabel();
                     var itemName = Uri.EscapeDataString(listViewModel.GetName());
-                    
-                    <tr class="@(listViewModel.IsDeleted? "deleted": "")">
+
+                    <tr class="@(listViewModel.IsDeleted ? "deleted" : "")">
                         <td class="search-value">
                             @Html.ActionLink(listViewModel.Title, "Open", "App", routevalues, null)
                         </td>
@@ -65,6 +64,7 @@ else
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("Edit", "Open", "App", routevalues, null)</li>
                                     @{
                             if (actionModel.CanSynchronize)
                             {
@@ -96,8 +96,8 @@ else
             </tbody>
         </table>
         @Html.Pager(Model.PageIndex + 1, Model.TotalPages, x => Url.Action(WB.UI.Designer.GlobalHelper.CurrentAction, WB.UI.Designer.GlobalHelper.CurrentController, new { p = x, sb = ViewBag.SortBy, so = ViewBag.SortOrder, f = ViewBag.Filter }), 2)
-    </div>
-}
+    }
+</div>
 @section Modal
 {
     <div>
@@ -121,18 +121,22 @@ else
     }
 
 }
-@helper ShowTableHeaderCell(string field, string title)
+@helper ShowTableHeaderCell(string field, string title, bool showSearch = false)
 {
     var isTableSortedByThisField = ViewBag.SortBy == field;
     <th class="@(isTableSortedByThisField ? "ordered" : "")">
         <a href="@ActionWithOrderField(field)">
             @title
-        @{
-            if (isTableSortedByThisField)
-            {
-                <span class="glyphicon glyphicon-triangle-@(((int?)ViewBag.SortOrder).ToBool() ? "top" : "bottom")"></span>
+            @{
+                if (isTableSortedByThisField)
+                {
+                    <span class="glyphicon glyphicon-triangle-@(((int?)ViewBag.SortOrder).ToBool() ? "top" : "bottom")"></span>
+                }
             }
+        </a>
+        @if (showSearch)
+        {
+            @Html.Partial("_list_search_form")
         }
-    </a>
-</th>
+    </th>
 }
