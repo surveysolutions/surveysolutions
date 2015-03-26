@@ -210,7 +210,7 @@ namespace WB.UI.Designer.Controllers
                                 providerUserKey: intUser.ProviderUserKey,
                                 email: user.Email,
                                 passwordQuestion: intUser.PasswordQuestion,
-                                comment: "",
+                                comment: null,
                                 isApproved: user.IsApproved,
                                 isLockedOut: user.IsLockedOut,
                                 creationDate: intUser.CreationDate,
