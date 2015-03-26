@@ -12,6 +12,7 @@ namespace WB.UI.Designer.App_Start
             //filters.Add(new HandleErrorAttribute());
 
             filters.Add(new MaintenanceFilter());
+            filters.Add(new ShowNotesToUserFilter());
         }
     }
 }
