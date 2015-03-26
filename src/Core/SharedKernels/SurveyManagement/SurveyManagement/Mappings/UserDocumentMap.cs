@@ -44,6 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
              {
                  bagMap.Table("DeviceInfos");
                  bagMap.Key(key => key.Column("UserId"));
+                 bagMap.Lazy(CollectionLazy.NoLazy);
              },
              relation => relation.Component(element =>
              {
