@@ -7,8 +7,6 @@
 
 @{
     ViewBag.Title = "Public Questionnaires";
-
-    string controller = ViewBag.Controller ?? WB.UI.Designer.GlobalHelper.CurrentController;
 }
 
 @if (Model.TotalCount == 0)
@@ -36,9 +34,14 @@ else
             <tbody>
                 @foreach (var listViewModel in Model)
                 {
+                    var routevalues = listViewModel.GetIdValue();
+                    var itemId = listViewModel.GetId();
+                    var itemType = listViewModel.GetLabel();
+                    var itemName = Uri.EscapeDataString(listViewModel.GetName());
+                    
                     <tr class="@(listViewModel.IsDeleted? "deleted": "")">
                         <td class="search-value">
-                            @listViewModel.Title 
+                            @Html.ActionLink(listViewModel.Title, "Open", "App", routevalues, null)
                         </td>
                         <td class="date">
                             @listViewModel.LastEntryDate.FormatDate()
@@ -63,30 +66,13 @@ else
                                 </a>
                                 <ul class="dropdown-menu">
                                     @{
-                            var routevalues = listViewModel.GetIdValue();
-                            var itemId = listViewModel.GetId();
-                            var itemType = listViewModel.GetLabel();
-                            var itemName = Uri.EscapeDataString(listViewModel.GetName());
-
-                            if (actionModel.CanEdit)
-                            {
-                                <li>@Html.ActionLink("Edit", "Edit", controller, routevalues, null)</li>
-                            }
-                            if (actionModel.CanOpen)
-                            {
-                                <li>@Html.ActionLink("Edit", "Open", "App", routevalues, null)</li>
-                            }
                             if (actionModel.CanSynchronize)
                             {
                                 <li>@Html.ActionLink("Export to HQ", "Export", "Admin", routevalues, null)</li>
                             }
-                            if (actionModel.CanPreview)
-                            {
-                                <li>@Html.ActionLink("Details", "Details", controller, routevalues, null)</li>
-                            }
                             if (actionModel.CanCopy)
                             {
-                                <li>@Html.ActionLink("Clone", "Clone", controller, routevalues, null)</li>
+                                <li>@Html.ActionLink("Clone", "Clone", "Questionnaire", routevalues, null)</li>
                             }
                             if (actionModel.CanExportToPdf)
                             {
@@ -110,7 +96,6 @@ else
             </tbody>
         </table>
         @Html.Pager(Model.PageIndex + 1, Model.TotalPages, x => Url.Action(WB.UI.Designer.GlobalHelper.CurrentAction, WB.UI.Designer.GlobalHelper.CurrentController, new { p = x, sb = ViewBag.SortBy, so = ViewBag.SortOrder, f = ViewBag.Filter }), 2)
-        <footer>@Html.Partial("_commonFooter")</footer>
     </div>
 }
 @section Modal

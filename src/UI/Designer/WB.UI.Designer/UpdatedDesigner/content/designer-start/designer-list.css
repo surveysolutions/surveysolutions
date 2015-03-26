@@ -418,7 +418,7 @@ table#user-table-header tr td:nth-child(4),
 table#user-table-content tr td:nth-child(4),
 table#user-table-header tr th:nth-child(4),
 table#user-table-content tr th:nth-child(4) {
-  width: 8%;
+  width: 10%;
 }
 table#user-table-header tr td:nth-child(5),
 table#user-table-content tr td:nth-child(5),
