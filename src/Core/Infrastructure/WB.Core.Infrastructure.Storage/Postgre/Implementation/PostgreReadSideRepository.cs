@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Microsoft.Practices.ServiceLocation;
 using NHibernate;
 using NHibernate.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -59,25 +60,28 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         public void BulkStore(List<Tuple<TEntity, string>> bulk)
         {
-            ISession session = this.sessionProvider.GetSession();
-
-            foreach (var tuple in bulk)
+            var sessionFactory = ServiceLocator.Current.GetInstance<ISessionFactory>(PostgresReadSideModule.ReadSideSessionFactoryName);
+            IStatelessSession session = sessionFactory.OpenStatelessSession();
+            using(var transaction = session.BeginTransaction())
             {
-                TEntity entity = tuple.Item1;
-                string id = tuple.Item2;
-
-                var storedEntity = session.Get<TEntity>(id);
-
-                if (storedEntity != null)
+                foreach (var tuple in bulk)
                 {
-                    TEntity attachedEntity = session.Merge(entity);
+                    TEntity entity = tuple.Item1;
+                    string id = tuple.Item2;
 
-                    session.SaveOrUpdate(attachedEntity);
+                    var storedEntity = session.Get<TEntity>(id);
+
+                    if (storedEntity != null)
+                    {
+                        session.Update(entity);
+                    }
+                    else
+                    {
+                        session.Insert(entity);
+                    }
                 }
-                else
-                {
-                    session.Save(entity, id);
-                }
+
+                transaction.Commit();
             }
         }
 
