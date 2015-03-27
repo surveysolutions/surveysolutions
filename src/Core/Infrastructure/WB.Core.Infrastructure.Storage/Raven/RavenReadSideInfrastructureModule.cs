@@ -18,12 +18,15 @@ namespace WB.Core.Infrastructure.Storage.Raven
     {
         private readonly Assembly[] assembliesWithIndexes;
         private readonly RavenReadSideRepositoryWriterSettings ravenReadSideRepositoryWriterSettings;
+        private static int memoryCacheSizePerEntity;
 
-        public RavenReadSideInfrastructureModule(RavenConnectionSettings settings,RavenReadSideRepositoryWriterSettings ravenReadSideRepositoryWriterSettings, params Assembly[] assembliesWithIndexes)
+        public RavenReadSideInfrastructureModule(RavenConnectionSettings settings, RavenReadSideRepositoryWriterSettings ravenReadSideRepositoryWriterSettings,
+            int memoryCacheSizePerEntity, params Assembly[] assembliesWithIndexes)
             : base(settings)
         {
             this.assembliesWithIndexes = assembliesWithIndexes;
             this.ravenReadSideRepositoryWriterSettings = ravenReadSideRepositoryWriterSettings;
+            RavenReadSideInfrastructureModule.memoryCacheSizePerEntity = memoryCacheSizePerEntity;
         }
 
         public override void Load()
@@ -69,7 +72,9 @@ namespace WB.Core.Infrastructure.Storage.Raven
         {
             protected override IReadSideRepositoryWriter<TEntity> CreateInstance(IContext context)
             {
-                return new MemoryCachedReadSideRepositoryWriter<TEntity>(context.Kernel.Get<RavenReadSideRepositoryWriter<TEntity>>());
+                return new MemoryCachedReadSideRepositoryWriter<TEntity>(
+                    context.Kernel.Get<RavenReadSideRepositoryWriter<TEntity>>(),
+                    new ReadSideStoreMemoryCacheSettings(memoryCacheSizePerEntity, memoryCacheSizePerEntity / 2));
             }
         }
     }
