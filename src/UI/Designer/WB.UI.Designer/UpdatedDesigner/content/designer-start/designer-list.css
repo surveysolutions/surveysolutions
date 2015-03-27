@@ -296,7 +296,7 @@ div#table-message p {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
   font-style: italic;
-  padding: 20px 0 0 110px;
+  padding: 20px 50px 0 110px;
 }
 div#table-message button {
   font-weight: bold;
