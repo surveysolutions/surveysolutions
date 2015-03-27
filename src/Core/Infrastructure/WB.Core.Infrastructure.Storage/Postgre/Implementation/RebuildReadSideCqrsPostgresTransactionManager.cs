@@ -9,7 +9,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
     {
         private readonly ISessionFactory sessionFactory;
 
-        private ISession commandSession;
+        private Lazy<ISession> lazyCommandSession;
 
         private bool triedToBeginCommandTransaction;
 
@@ -22,20 +22,24 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         {
             this.triedToBeginCommandTransaction = true;
 
-            if (this.commandSession != null)
+            if (this.lazyCommandSession != null)
                 throw new InvalidOperationException();
 
-            this.commandSession = this.sessionFactory.OpenSession();
+            this.lazyCommandSession = new Lazy<ISession>(() => this.sessionFactory.OpenSession());
         }
 
         public void CommitCommandTransaction()
         {
-            if (this.commandSession == null)
+            if (this.lazyCommandSession == null)
                 throw new InvalidOperationException();
 
-            this.commandSession.Flush();
-            this.commandSession.Close();
-            this.commandSession = null;
+            if (this.lazyCommandSession.IsValueCreated)
+            {
+                this.lazyCommandSession.Value.Flush();
+                this.lazyCommandSession.Value.Close();
+            }
+
+            this.lazyCommandSession = null;
 
             this.triedToBeginCommandTransaction = false;
         }
@@ -45,10 +49,14 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             if (!this.triedToBeginCommandTransaction)
                 throw new InvalidOperationException();
 
-            if (this.commandSession != null)
+            if (this.lazyCommandSession != null)
             {
-                this.commandSession.Close();
-                this.commandSession = null;
+                if (this.lazyCommandSession.IsValueCreated)
+                {
+                    this.lazyCommandSession.Value.Close();
+                }
+
+                this.lazyCommandSession = null;
             }
 
             this.triedToBeginCommandTransaction = false;
@@ -66,10 +74,10 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         public ISession GetSession()
         {
-            if (this.commandSession == null)
+            if (this.lazyCommandSession == null)
                 throw new InvalidOperationException("Trying to get session without beginning a transaction first. Make sure to call BeginTransaction before getting session instance.");
 
-            return this.commandSession;
+            return this.lazyCommandSession.Value;
         }
 
         public bool IsQueryTransactionStarted
@@ -79,10 +87,14 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         public void Dispose()
         {
-            if (this.commandSession != null)
+            if (this.lazyCommandSession != null)
             {
-                this.commandSession.Dispose();
-                this.commandSession = null;
+                if (this.lazyCommandSession.IsValueCreated)
+                {
+                    this.lazyCommandSession.Value.Dispose();
+                }
+
+                this.lazyCommandSession = null;
             }
 
             GC.SuppressFinalize(this);
