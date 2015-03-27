@@ -76,6 +76,8 @@ namespace WB.Core.Infrastructure.Storage.Postgre
         private ISessionFactory BuildSessionFactory()
         {
             //File.WriteAllText(@"D:\Temp\Mapping.xml" ,Serialize(this.GetMappings()));
+
+
             var cfg = new Configuration();
             cfg.DataBaseIntegration(db =>
             {
@@ -88,7 +90,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
             cfg.AddDeserializedMapping(GetMappings(), "Main");
             var update = new SchemaUpdate(cfg);
             update.Execute(true, true);
-
+            this.Kernel.Bind<SchemaUpdate>().ToConstant(update).InSingletonScope();
 
             return cfg.BuildSessionFactory();
         }
