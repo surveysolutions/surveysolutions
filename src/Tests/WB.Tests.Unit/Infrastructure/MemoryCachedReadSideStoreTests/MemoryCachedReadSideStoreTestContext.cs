@@ -16,7 +16,9 @@ namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests
     {
         protected static MemoryCachedReadSideStore<ReadSideRepositoryEntity> CreateMemoryCachedReadSideStore(IReadSideStorage<ReadSideRepositoryEntity> readSideStorage =null)
         {
-            return new MemoryCachedReadSideStore<ReadSideRepositoryEntity>(readSideStorage ?? Mock.Of<IReadSideStorage<ReadSideRepositoryEntity>>());
+            return new MemoryCachedReadSideStore<ReadSideRepositoryEntity>(
+                readSideStorage ?? Mock.Of<IReadSideStorage<ReadSideRepositoryEntity>>(),
+                new ReadSideStoreMemoryCacheSettings(256, 128));
         }
     }
     public class ReadSideRepositoryEntity : IReadSideRepositoryEntity

@@ -11,13 +11,15 @@ namespace WB.Core.Infrastructure.Storage.Esent
 {
     public class EsentReadSideModule : NinjectModule
     {
-        static string dataFolder;
-        static string plainStoreFolder;
+        private static string dataFolder;
+        private static string plainStoreFolder;
+        private static int memoryCacheSizePerEntity;
 
-        public EsentReadSideModule(string dataFolder, string plainStoreFolder)
+        public EsentReadSideModule(string dataFolder, string plainStoreFolder, int memoryCacheSizePerEntity)
         {
             EsentReadSideModule.dataFolder = dataFolder;
             EsentReadSideModule.plainStoreFolder = plainStoreFolder;
+            EsentReadSideModule.memoryCacheSizePerEntity = memoryCacheSizePerEntity;
         }
 
         public override void Load()
@@ -52,7 +54,9 @@ namespace WB.Core.Infrastructure.Storage.Esent
             {
                 var esentKeyValueStorage = new EsentKeyValueStorage<TEntity>(new EsentSettings(dataFolder));
 
-                return new MemoryCachedKeyValueStorage<TEntity>(esentKeyValueStorage);
+                return new MemoryCachedKeyValueStorage<TEntity>(
+                    esentKeyValueStorage,
+                    new ReadSideStoreMemoryCacheSettings(memoryCacheSizePerEntity, memoryCacheSizePerEntity / 2));
             }
         }
     }
