@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 
@@ -30,6 +31,13 @@ namespace WB.Core.GenericSubdomains.Utils
 
             var result = input.Substring(0, 1).ToUpper() + input.Substring(1, input.Length - 1);
             return result;
+        }
+
+        public static int? ParseIntOrNull(this string value)
+        {
+            int result;
+
+            return int.TryParse(value, out result) ? result : null as int?;
         }
 
         public static IEnumerable<OrderRequestItem> ParseOrderRequestString(this string value)
