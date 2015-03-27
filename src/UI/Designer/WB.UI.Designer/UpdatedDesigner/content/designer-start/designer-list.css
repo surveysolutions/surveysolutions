@@ -254,9 +254,13 @@ body {
   left: 0;
   right: 0;
   top: 45px;
-  overflow: auto;
   border-top-width: 0;
   border-top-style: none;
+}
+.container-wb-list section#designer-list #table-content-holder > .scroller-container {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
 }
 .container-wb-list section#designer-list #table-content-holder ul.pagination {
   font-family: "Trebuchet MS", Helvetica, sans-serif;

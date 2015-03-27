@@ -85,19 +85,21 @@ html, body {
         top: @header-height - 1px;
         z-index: 1;
 
-
-
         #table-content-holder {
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
             top: 45px;
-            overflow: auto;
             border-top-width: 0;
             border-top-style: none;
 
-           
+            & > .scroller-container {
+                height: 100%;
+                position: relative;
+                overflow: hidden;
+            }
+
             ul.pagination {
                 .trebuchet14b();
                 margin: 0 15px;
@@ -136,7 +138,7 @@ html, body {
     }
 }
 
- div#table-message {
+div#table-message {
     height: 115px;
     background: #edeff0 url("../i/logo-designer-sm.png") 45px 23px no-repeat;
     position: relative;
