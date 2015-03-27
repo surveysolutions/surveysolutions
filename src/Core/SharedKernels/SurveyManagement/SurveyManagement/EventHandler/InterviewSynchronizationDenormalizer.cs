@@ -114,7 +114,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             }
 
             if (interviewResponsibleInfo == null)
-                interviewResponsibleInfo = new InterviewResponsible { InterviewId = evnt.EventSourceId };
+                interviewResponsibleInfo = new InterviewResponsible
+                {
+                    Id = evnt.EventSourceId.FormatGuid(),
+                    InterviewId = evnt.EventSourceId
+                };
 
             interviewResponsibleInfo.UserId = evnt.Payload.InterviewerId;
             interviewResponsibleStorageWriter.Store(interviewResponsibleInfo, evnt.EventSourceId);
