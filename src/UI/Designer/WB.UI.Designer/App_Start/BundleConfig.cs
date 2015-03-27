@@ -35,7 +35,9 @@ namespace WB.UI.Designer
             bundles.Add(
                 new ScriptBundle("~/list").Include(
                     "~/Scripts/jquery-{version}.js", 
-                    "~/Scripts/knockout-{version}.js", 
+                    "~/Scripts/knockout-{version}.js",
+                    "~/UpdatedDesigner/vendor/jquery-mousewheel/jquery.mousewheel.js",
+                    "~/UpdatedDesigner/vendor/perfect-scrollbar/src/perfect-scrollbar.js",
                     "~/Scripts/common.js"));
 
             bundles.Add(
