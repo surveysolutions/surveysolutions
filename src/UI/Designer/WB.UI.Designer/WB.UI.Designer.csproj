@@ -392,6 +392,7 @@
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap\grunt\bs-glyphicons-data-generator.js" />
     <Content Include="UpdatedDesigner\vendor\jquery-placeholder\jquery.placeholder.js" />
     <Content Include="UpdatedDesigner\vendor\jquery-placeholder\jquery.placeholder.min.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\matchOptionsPattern.js" />
@@ -1266,6 +1267,8 @@
     <Content Include="UpdatedDesigner\vendor\jquery-placeholder\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\jquery-placeholder\bower.json" />
     <Content Include="UpdatedDesigner\vendor\jquery-placeholder\jquery.placeholder.min.js.map" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
