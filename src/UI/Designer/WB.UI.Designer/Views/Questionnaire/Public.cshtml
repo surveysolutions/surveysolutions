@@ -8,6 +8,9 @@
 @{
     ViewBag.Title = "Public Questionnaires";
 }
+@section Scripts {
+    @Scripts.Render("~/list")
+}
 
 <table id="questionnaire-table-header" class="table  table-header">
     <thead>
@@ -82,7 +85,7 @@
                                                 if (actionModel.CanDelete)
                                                 {
                                                     <li class="divider"></li>
-                                                    <li><a href="#mDelete" data-bind='click: deleteItem.bind($data,"@itemId    ", "@itemType    ", "@itemName    ")' data-toggle="modal">Delete</a></li>
+                                                    <li><a href="#mDelete" data-bind='click: deleteItem.bind($data,"@itemId", "@itemType", "@itemName")' data-toggle="modal">Delete</a></li>
                                                 }
                                             }
                                         </ul>
