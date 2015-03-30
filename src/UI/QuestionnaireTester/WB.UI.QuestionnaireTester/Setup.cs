@@ -9,6 +9,7 @@ using Cirrious.MvvmCross.Droid.Platform;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.UI.QuestionnaireTester.Controls;
+using WB.UI.QuestionnaireTester.Mvvm;
 using WB.UI.QuestionnaireTester.Mvvm.CustomBindings;
 using WB.UI.QuestionnaireTester.Ninject;
 using Xamarin;
@@ -24,7 +25,16 @@ namespace WB.UI.QuestionnaireTester
 
         protected override IMvxIoCProvider CreateIocProvider()
         {
-            return NinjectIoCAdapterSetup.CreateIocProvider();
+            var iocProvider = base.CreateIocProvider();
+
+#warning Bad code. Should be changed to  NinjectIoCAdapterSetup.CreateIocProvider(). Created a separate task KP-5228 Tester: Switch MvvmCross IoC to Ninject IoC
+            NinjectIoCAdapterSetup.CreateIocProvider();
+            MvxInitializer.Initialize();
+
+            return iocProvider;
+
+
+            //return NinjectIoCAdapterSetup.CreateIocProvider();
         }
 
         protected override IMvxApplication CreateApp()

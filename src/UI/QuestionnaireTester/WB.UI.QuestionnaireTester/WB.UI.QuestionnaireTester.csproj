@@ -222,6 +222,7 @@
     <Compile Include="Mvvm\CustomBindings\SearchViewQueryHintBinding.cs" />
     <Compile Include="Mvvm\CustomBindings\SwipeRefreshLayoutRefreshingBinding.cs" />
     <Compile Include="Mvvm\CustomBindings\VisibleBinding.cs" />
+    <Compile Include="Mvvm\MvxInitializer.cs" />
     <Compile Include="Mvvm\ValueContervers\LocalizationValueConverter.cs" />
     <Compile Include="Mvvm\ValueContervers\NullToVisibleValueConverter.cs" />
     <Compile Include="Mvvm\ValueContervers\QuestionnaireVersionToColorValueConverter.cs" />

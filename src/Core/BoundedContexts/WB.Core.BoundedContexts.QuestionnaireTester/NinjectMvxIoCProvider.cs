@@ -6,7 +6,7 @@ using Ninject.Modules;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester
 {
-    public class NinjectMvxIocProvider : MvxSingleton<IMvxIoCProvider>, IMvxIoCProvider
+    public class NinjectMvxIocProvider : /*MvxSingleton<IMvxIoCProvider>,*/ IMvxIoCProvider
     {
         private readonly StandardKernel kernel = new StandardKernel();
 

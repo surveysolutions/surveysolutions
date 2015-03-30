@@ -2,6 +2,7 @@ using Chance.MvvmCross.Plugins.UserInteraction;
 using Chance.MvvmCross.Plugins.UserInteraction.Droid;
 using Cheesebaron.MvxPlugins.Settings.Droid;
 using Cheesebaron.MvxPlugins.Settings.Interfaces;
+using Cirrious.CrossCore;
 using Cirrious.CrossCore.Droid.Platform;
 using Cirrious.MvvmCross.Droid.Views;
 using Cirrious.MvvmCross.Plugins.WebBrowser;
@@ -17,7 +18,7 @@ namespace WB.UI.QuestionnaireTester.Ninject
     {
         public override void Load()
         {
-            //this.Bind<IMvxAndroidCurrentTopActivity>().To<MvxAndroidLifetimeMonitor>().InSingletonScope();
+            this.Bind<IMvxAndroidCurrentTopActivity>().ToMethod(context => Mvx.Resolve<IMvxAndroidCurrentTopActivity>());
             this.Bind<IMvxWebBrowserTask>().To<MvxWebBrowserTask>().InSingletonScope();
             this.Bind<IUserInteraction>().To<UserInteraction>().InSingletonScope();
             this.Bind<IKeychain>().To<DroidKeychain>().InSingletonScope();

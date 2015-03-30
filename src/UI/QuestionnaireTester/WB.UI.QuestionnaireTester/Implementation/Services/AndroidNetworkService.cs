@@ -1,17 +1,18 @@
 using System.Linq;
 using Android.Content;
 using Android.Net;
+using Cirrious.CrossCore;
 using Cirrious.CrossCore.Droid.Platform;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.UI.QuestionnaireTester.Implementation.Services
 {
     internal class AndroidNetworkService : INetworkService
     {
-        private IMvxAndroidCurrentTopActivity context
+        private readonly IMvxAndroidCurrentTopActivity context;
+        public AndroidNetworkService(IMvxAndroidCurrentTopActivity context)
         {
-            get {  return ServiceLocator.Current.GetInstance<IMvxAndroidCurrentTopActivity>(); }
+            this.context = context;
         }
 
         public bool IsNetworkEnabled()
