@@ -1,11 +1,12 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     public class SplashViewModel : BaseViewModel
     {
-        public SplashViewModel() : base(null, null)
+        public SplashViewModel(IPrincipal principal) : base(principal: principal, logger: null)
         {
         }
 
@@ -13,8 +14,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             Task.Run(() =>
             {
-                Thread.Sleep(6000);
-                this.ShowViewModel<DashboardViewModel>();
+                Thread.Sleep(3000);
+
+                if (this.Principal.CurrentIdentity.IsAuthenticated)
+                {
+                    this.ShowViewModel<DashboardViewModel>();
+                }
+                else
+                {
+                    this.ShowViewModel<LoginViewModel>();
+                }
             });
         }
     }
