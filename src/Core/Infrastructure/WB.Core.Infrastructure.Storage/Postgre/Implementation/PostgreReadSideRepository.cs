@@ -61,7 +61,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         public void BulkStore(List<Tuple<TEntity, string>> bulk)
         {
             var sessionFactory = ServiceLocator.Current.GetInstance<ISessionFactory>(PostgresReadSideModule.ReadSideSessionFactoryName);
-            IStatelessSession session = sessionFactory.OpenStatelessSession();
+            ISession session = sessionFactory.OpenSession();
             using(var transaction = session.BeginTransaction())
             {
                 foreach (var tuple in bulk)
@@ -77,7 +77,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                     }
                     else
                     {
-                        session.Insert(entity);
+                        session.Save(entity);
                     }
                 }
 
