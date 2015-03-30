@@ -46,14 +46,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public async void Init()
         {
-            if (this.Principal.CurrentIdentity.IsAuthenticated)
-            {
-                await this.LoadQuestionnairesMetaInfoFromStorage();   
-            }
-            else
-            {
-                this.ShowViewModel<LoginViewModel>();
-            }
+            await this.LoadQuestionnairesMetaInfoFromStorage();
         }
 
         private IList<QuestionnaireMetaInfo> allQuestionnaires;
