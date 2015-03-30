@@ -141,10 +141,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                     {
                         return AnswerUtils.AnswerToString(answer, x => Options.First(o => (decimal)o.Value == x).Label);
                     }
-
+                case QuestionType.DateTime:
+                    if (answer is DateTime)
+                    {
+                         var date = (DateTime) answer;
+                         return AnswerUtils.AnswerToString(date.ToLocalTime());
+                    }
+                   break;
                 case QuestionType.GpsCoordinates:
                 case QuestionType.TextList:
-                case QuestionType.DateTime:
                 case QuestionType.Numeric:
                 case QuestionType.Text:
                 case QuestionType.QRBarcode:

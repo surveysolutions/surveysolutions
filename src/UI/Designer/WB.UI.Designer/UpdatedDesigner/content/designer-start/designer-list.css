@@ -254,9 +254,13 @@ body {
   left: 0;
   right: 0;
   top: 45px;
-  overflow: auto;
   border-top-width: 0;
   border-top-style: none;
+}
+.container-wb-list section#designer-list #table-content-holder > .scroller-container {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
 }
 .container-wb-list section#designer-list #table-content-holder ul.pagination {
   font-family: "Trebuchet MS", Helvetica, sans-serif;
@@ -296,7 +300,7 @@ div#table-message p {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
   font-style: italic;
-  padding: 20px 0 0 110px;
+  padding: 20px 50px 0 110px;
 }
 div#table-message button {
   font-weight: bold;
