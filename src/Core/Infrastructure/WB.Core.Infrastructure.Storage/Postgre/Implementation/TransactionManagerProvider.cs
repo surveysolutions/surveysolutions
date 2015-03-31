@@ -7,11 +7,11 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
     internal class TransactionManagerProvider : ISessionProvider, ITransactionManagerProviderManager
     {
-        private readonly Func<CqrsPostgresCqrsTransactionManager> transactionManagerFactory;
+        private readonly Func<CqrsPostgresTransactionManager> transactionManagerFactory;
         private readonly RebuildReadSideCqrsPostgresTransactionManager rebuildReadSideCqrsTransactionManager;
         private ICqrsPostgresTransactionManager pinnedTransactionManager;
 
-        public TransactionManagerProvider(Func<CqrsPostgresCqrsTransactionManager> transactionManagerFactory,
+        public TransactionManagerProvider(Func<CqrsPostgresTransactionManager> transactionManagerFactory,
             RebuildReadSideCqrsPostgresTransactionManager rebuildReadSideCqrsTransactionManager)
         {
             this.transactionManagerFactory = transactionManagerFactory;

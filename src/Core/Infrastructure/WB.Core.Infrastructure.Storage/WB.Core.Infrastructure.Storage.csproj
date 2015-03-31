@@ -147,7 +147,7 @@
     <Compile Include="Postgre\Implementation\PostgresPlainStorageRepository.cs" />
     <Compile Include="Postgre\Implementation\RebuildReadSideCqrsPostgresTransactionManager.cs" />
     <Compile Include="Postgre\Implementation\PostgresReadSideCleaner.cs" />
-    <Compile Include="Postgre\Implementation\CqrsPostgresCqrsTransactionManager.cs" />
+    <Compile Include="Postgre\Implementation\CqrsPostgresTransactionManager.cs" />
     <Compile Include="Postgre\Implementation\PostgreKeyValueStorage.cs" />
     <Compile Include="Postgre\Implementation\PostgreReadSideRepository.cs" />
     <Compile Include="Postgre\Implementation\TransactionManagerProvider.cs" />
