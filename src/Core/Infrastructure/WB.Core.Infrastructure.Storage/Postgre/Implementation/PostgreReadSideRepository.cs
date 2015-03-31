@@ -67,8 +67,19 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                 foreach (var tuple in bulk)
                 {
                     TEntity entity = tuple.Item1;
-                    var merge = session.Merge(entity);
-                    session.SaveOrUpdate(merge);
+                    string id = tuple.Item2;
+
+                    var storedEntity = session.Get<TEntity>(id);
+
+                    if (storedEntity != null)
+                    {
+                        var merge = session.Merge(entity);
+                        session.SaveOrUpdate(merge);
+                    }
+                    else
+                    {
+                        session.Save(entity);
+                    }
                 }
 
                 transaction.Commit();

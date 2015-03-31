@@ -5,7 +5,7 @@ using Ninject;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
-    internal class CqrsPostgresCqrsTransactionManager : ICqrsPostgresTransactionManager, IDisposable
+    internal class CqrsPostgresTransactionManager : ICqrsPostgresTransactionManager, IDisposable
     {
         private readonly ISessionFactory sessionFactory;
 
@@ -17,7 +17,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         private bool triedToBeginCommandTransaction;
         private bool triedToBeginQueryTransaction;
 
-        public CqrsPostgresCqrsTransactionManager([Named(PostgresReadSideModule.ReadSideSessionFactoryName)]ISessionFactory sessionFactory)
+        public CqrsPostgresTransactionManager([Named(PostgresReadSideModule.ReadSideSessionFactoryName)]ISessionFactory sessionFactory)
         {
             this.sessionFactory = sessionFactory;
         }
@@ -30,7 +30,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                 throw new InvalidOperationException();
 
             this.commandSession = this.sessionFactory.OpenSession();
-            this.commandTransaction = commandSession.BeginTransaction(IsolationLevel.ReadCommitted);
+            this.commandTransaction = commandSession.BeginTransaction(IsolationLevel.RepeatableRead);
         }
 
         public void CommitCommandTransaction()
@@ -78,7 +78,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                 throw new InvalidOperationException("Query transaction is expected to be always open before CommandTransaction, or not opened at all for this request. Please make sure that this controller has action filter for transactions management applied. But some controllers like RebuildReadSide should not ever open query transaction. Check that you are not inside such controller before fixing any code.");
 
             this.querySession = this.sessionFactory.OpenSession();
-            this.queryTransaction = this.querySession.BeginTransaction(IsolationLevel.Unspecified);
+            this.queryTransaction = this.querySession.BeginTransaction(IsolationLevel.ReadCommitted);
         }
 
         public void RollbackQueryTransaction()
@@ -145,7 +145,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             GC.SuppressFinalize(this);
         }
 
-        ~CqrsPostgresCqrsTransactionManager()
+        ~CqrsPostgresTransactionManager()
         {
             Dispose();
         }
