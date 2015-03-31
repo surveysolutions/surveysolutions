@@ -6410,7 +6410,7 @@ body {
 }
 .dropdown > .wb-dropdown-button,
 .dropdown ul.dropdown-menu {
-  width: 100%;
+  /*width: 100%;*/
 }
 .dropdown > .wb-dropdown-button .arrow,
 .dropdown ul.dropdown-menu .arrow {
@@ -6807,6 +6807,23 @@ textarea {
 /*
   string @color: 'blue' or 'gray'
 */
+.broken-links {
+  max-height: 500px;
+  overflow-y: auto;
+}
+.broken-links a {
+  display: block;
+  padding: 5px 0 5px 8px;
+  border-top: 2px solid #eee;
+  text-decoration: none;
+  border-radius: 4px;
+}
+.broken-links a:last-child {
+  border-bottom: 2px solid #eee;
+}
+.broken-links a:hover {
+  background: #eee;
+}
 .icon {
   width: 20px;
   height: 20px;
@@ -6942,6 +6959,12 @@ input#edit-group-title {
   background-image: url(i/icons.png);
   background-position-x: 0;
   overflow: hidden;
+}
+.mono {
+  font-family: monospace !important;
+}
+#main .question-editor .ace_hidden-cursors {
+  opacity: 0;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons label,
 #sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons label {
@@ -7116,7 +7139,7 @@ input#edit-group-title {
   width: 100%;
 }
 .question-editor .checkbox-in-column {
-  margin-top: 0px;
+  margin-top: 5px;
 }
 .question-editor .checkbox-in-column input.wb-checkbox + label {
   font-family: "Lucida Console", Monaco, monospace;
@@ -7203,11 +7226,6 @@ textarea#edit-group-description {
   height: 37px;
   min-height: 37px;
 }
-/*@import "../../vendor/bootstrap/less/bootstrap.less";
-@import "../lib/wb-vars.css.less";
-@import "../lib/wb-fontstyles.css.less";
-@import "../lib/controls/wb-buttons.css.less";
-@import "../lib/controls/wb-breadcrumbs.css.less";*/
 #loading-logo {
   width: 52px;
   height: 75px;
@@ -7216,6 +7234,15 @@ textarea#edit-group-description {
   left: 0;
   z-index: 900;
   background: url(i/d-loading.gif) left top no-repeat;
+}
+.ace_editor {
+  height: 30px;
+}
+.pseudo-form-control {
+  border: 2px solid #cccccc;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-radius: 4px;
 }
 .ui-match {
   background-color: #FFCC00;
@@ -8110,6 +8137,22 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00edeff1', endColorstr='#ffedeff1', GradientType=1);
 }
+.item:hover.highlight .cursor {
+  top: 0;
+  bottom: 0;
+}
+.item.highlight {
+  border-radius: 0;
+}
+.item.highlight .cursor {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  width: 5px;
+  bottom: 2px;
+  z-index: 6;
+  border-left: 3px solid #2a81cb;
+}
 .angular-ui-tree-nodes .angular-ui-tree-nodes {
   padding-left: 30px;
 }
@@ -8168,6 +8211,9 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 }
 #show-reload-details-promt .inner a {
   text-decoration: underline;
+}
+#main .ace-github .ace_marker-layer .ace_bracket {
+  margin-top: 0;
 }
 #verify-popover {
   display: none;

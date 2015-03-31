@@ -29,7 +29,7 @@
             </div>
 
             <div class="form-group input-variable-name col-xs-4 pull-right">
-                <label for="edit-question-variable-name" class="wb-label">Variable name<help key="variableName" placement="left" /></label><br/>
+                <label for="edit-question-variable-name" class="wb-label">Variable name<help key="variableName" placement="left" /></label><br />
                 <input id="edit-question-variable-name" type="text" ng-model="activeQuestion.variable" spellcheck="false"
                        class="form-control" maxlength="32">
             </div>
@@ -49,7 +49,8 @@
                  ng-if="activeQuestion.type != undefined
                  && ( activeQuestion.type!='DateTime'
                  && activeQuestion.type!='GpsCoordinates'
-                 && activeQuestion.type!='QRBarcode')
+                 && activeQuestion.type!='QRBarcode'
+                 && activeQuestion.type!='Multimedia')
                  ">
             </div>
         </div>
@@ -64,27 +65,22 @@
             </div>
 
             <div class="form-group col-xs-1 pull-right">
-                <button type="button" class="btn cross instructions-cross" ng-click="showInstruction=false;activeQuestion.instructions='';"></button>
+                <button type="button" class="btn cross instructions-cross" ng-click="showInstruction=false;activeQuestion.instructions='';questionForm.$setDirty();"></button>
             </div>
         </div>
 
-        <div class="form-group" ng-hide="!doesQuestionSupportEnablementConditions()" ng-class="{'has-error': !questionForm.enablementCondition.$valid}">
-            <label for="edit-question-enablement-condition">Condition expression <help key="conditionExpression" /></label>
-            <textarea id="edit-question-enablement-condition"
-                      name="enablementCondition"
-                      deny-this-keyword msd-elastic
-                      ng-model="activeQuestion.enablementCondition"
-                      spellcheck="false"
-                      class="form-control"></textarea>
-            <p class="help-block ng-cloak" ng-show="questionForm.enablementCondition.$error.denyThisKeyword">
-                You cannot use self-reference in conditions
-            </p>
+        <div class="form-group" ng-hide="!doesQuestionSupportEnablementConditions()">
+            <label for="edit-question-enablement-condition">Condition expression <help key="conditionExpression"/></label>
+            <div class="pseudo-form-control">
+                <div id="edit-question-enablement-condition" ui-ace="{ onLoad : aceLoaded }" ng-model="activeQuestion.enablementCondition"></div>
+            </div>
         </div>
 
         <div class="form-group" ng-show="doesQuestionSupportValidations()">
-            <label for="edit-question-validation-expression">Validation expression <help key="validationExpression" /></label>
-            <textarea id="edit-question-validation-expression" ng-model="activeQuestion.validationExpression" spellcheck="false"
-                      class="form-control" msd-elastic></textarea>
+            <label for="edit-question-validation-expression">Validation expression <help key="validationExpression"/></label>
+            <div class="pseudo-form-control">
+                <div id="edit-question-validation-expression" ui-ace="{ onLoad : aceLoaded }" ng-model="activeQuestion.validationExpression"></div>
+            </div>
         </div>
 
         <div class="form-group" ng-show="doesQuestionSupportValidations()">
@@ -127,78 +123,105 @@
             </div>
         </div>
 
-        <script type="text/ng-template" id="SingleOption-template.html">
+    <script type="text/ng-template" id="SingleOption-template.html">
             <div class="singleOption">
                 <div class="well well-sm" ng-if="!(activeQuestion.isCascade || activeQuestion.isFilteredCombobox) && !activeQuestion.isLinked && activeQuestion.wereOptionsTruncated">As the question was marked as "Is filtered combobox" or "Is cascading" while uploading question's details and contained many options, its value is reduced up to 200</div>
-                <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isCascade" class="table-holder">
-                    <div class="table-row" ng-repeat="option in activeQuestion.options">
-                        <div class="column-2">
-                            <input type="text" ng-model="option.value" class="form-control">
+                <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isCascade">
+                    <div ng-if="activeQuestion.useListAsOptionsEditor">
+                        <div class="table-holder">
+                            <div class="table-row" ng-repeat="option in activeQuestion.options">
+                                <div class="column-2">
+                                    <input type="text" ng-model="option.value" class="form-control">
+                                </div>
+                                <div class="column-3">
+                                    <input type="text" ng-model="option.title" class="form-control">
+                                </div>
+                                <div class="column-4">
+                                    <a href ng:click="removeOption($index)" class="btn" tabindex="-1"></a>
+                                </div>
+                            </div>
                         </div>
-                        <div class="column-3">
-                            <input type="text" ng-model="option.title" class="form-control">
-                        </div>
-                        <div class="column-4">
-                            <a href ng:click="removeOption($index)" class="btn" tabindex="-1"></a>
+                        <p>
+                            <button class="btn btn-link pull-right" ng-click="showOptionsInTextarea()">Show strings</button>
+                            <button class="btn btn-link" ng-hide="activeQuestion.optionsCount >=200" ng-click="addOption()">Add Option</button>
+                        </p>
+                    </div>
+                    <div ng-if="!activeQuestion.useListAsOptionsEditor">
+                        <div class="form-group" ng-class="{'has-error': !questionForm.stringifiedOptions.$valid}">
+                            <textarea name="stringifiedOptions"
+                                      class="form-control mono"
+                                      ng-model="activeQuestion.stringifiedOptions"
+                                      match-options-pattern
+                                      max-options-count
+                                      msd-elastic></textarea>
+                            <p class="help-block">
+                                <input class="btn btn-link" type="button" value="Show list" ng-click="showOptionsInList()" ng-disabled="!questionForm.stringifiedOptions.$valid" />
+                            </p>
+                            <p class="help-block ng-cloak" ng-show="questionForm.stringifiedOptions.$error.matchOptionsPattern">
+                                You entered an invalid input. Each line should follow the format: "Title...Value". 'Value' must be an integer or decimal number. Title must be an alpha-numeric string. Title cannot contain dots (i.e. ".") or ellipses (i.e., "&hellip;"); no empty lines are allowed.
+                            </p>
+                            <p class="help-block ng-cloak" ng-show="questionForm.stringifiedOptions.$error.maxOptionsCount">
+                                You entered more than maximum allowed 200
+                            </p>
                         </div>
                     </div>
                 </div>
-                <p>
-                    <input ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isCascade" ng-hide="activeQuestion.optionsCount>=200" class="btn btn-link" type="button" value="Add Option" ng-click="addOption()">
-                    <a ng-if="activeQuestion.isFilteredCombobox"
-                       href="javascript:void(0);"
-                       class="btn btn-link"
-                       ng-click="editFilteredComboboxOptions()">
-                        <ng-pluralize count="activeQuestion.optionsCount"
-                                      when="{'0': 'Add options',
+            </div>
+            <p>
+                <a ng-if="activeQuestion.isFilteredCombobox"
+                   href="javascript:void(0);"
+                   class="btn btn-link"
+                   ng-click="editFilteredComboboxOptions()">
+                    <ng-pluralize count="activeQuestion.optionsCount"
+                                  when="{'0': 'Add options',
                                      'one': 'Edit 1 option',
                                      'other': 'Edit {} options'}">
-                        </ng-pluralize>
-                    </a>
-                    <a ng-if="activeQuestion.isCascade && (activeQuestion.cascadeFromQuestionId || '') !== ''"
-                       href="javascript:void(0);"
-                       class="btn btn-link"
-                       ng-click="editCascadingComboboxOptions()">
-                        <ng-pluralize count="activeQuestion.optionsCount"
-                                      when="{'0': 'Add options',
+                    </ng-pluralize>
+                </a>
+                <a ng-if="activeQuestion.isCascade && (activeQuestion.cascadeFromQuestionId || '') !== ''"
+                   href="javascript:void(0);"
+                   class="btn btn-link"
+                   ng-click="editCascadingComboboxOptions()">
+                    <ng-pluralize count="activeQuestion.optionsCount"
+                                  when="{'0': 'Add options',
                                      'one': 'Edit 1 option',
                                      'other': 'Edit {} options'}">
-                        </ng-pluralize>
-                    </a>
-                </p>
-                <div class="table-holder">
-                    <div class="row">
-                        <div class="col-xs-4">
-                            <div ng-if="!activeQuestion.isCascade && !activeQuestion.isLinked" class="checkbox checkbox-in-column">
-                                <input id="cb-is-filtered-combobox" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isFilteredCombobox" />
-                                <label for="cb-is-filtered-combobox"><span></span>Is filtered combobox</label>
-                            </div>
+                    </ng-pluralize>
+                </a>
+            </p>
+            <div class="table-holder">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div ng-if="!activeQuestion.isCascade && !activeQuestion.isLinked" class="checkbox checkbox-in-column">
+                            <input id="cb-is-filtered-combobox" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isFilteredCombobox" />
+                            <label for="cb-is-filtered-combobox"><span></span>Is filtered combobox</label>
                         </div>
-                        <div class="col-xs-4">
-                            <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isCascade" class="checkbox checkbox-in-column">
-                                <input id="cb-is-linked" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isLinked" />
-                                <label for="cb-is-linked"><span></span>Is linked</label>
-                            </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isCascade" class="checkbox checkbox-in-column">
+                            <input id="cb-is-linked" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isLinked" />
+                            <label for="cb-is-linked"><span></span>Is linked</label>
                         </div>
-                        <div class="col-xs-4">
-                            <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked" class="checkbox checkbox-in-column">
-                                <input id="cb-is-cascading" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isCascade" />
-                                <label for="cb-is-cascading"><span></span>Is cascading</label>
-                            </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked" class="checkbox checkbox-in-column">
+                            <input id="cb-is-cascading" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isCascade" />
+                            <label for="cb-is-cascading"><span></span>Is cascading</label>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div>
-                    <div ng-if="!activeQuestion.isFilteredCombobox || !activeQuestion.isCascadingCombobox" class="form-group"
-                         ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}" />
-                </div>
+            <div>
+                <div ng-if="!activeQuestion.isFilteredCombobox || !activeQuestion.isCascadingCombobox" class="form-group"
+                     ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}" />
+            </div>
 
-                <div>
-                    <div ng-if="activeQuestion.isCascade && !activeQuestion.isLinked"
-                         ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}"
-                         class="form-group" ng-include="'CascadingComboBox-Template.html'" />
-                </div>
+            <div>
+                <div ng-if="activeQuestion.isCascade && !activeQuestion.isLinked"
+                     ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}"
+                     class="form-group" ng-include="'CascadingComboBox-Template.html'" />
+            </div>
         </script>
 
         <script type="text/ng-template" id="linkTemplate.html">
@@ -271,25 +294,47 @@
             </div>
         </script>
 
-        <script type="text/ng-template" id="MultyOption-template.html">
+    <script type="text/ng-template" id="MultyOption-template.html">
             <div class="multyOption">
                 <div ng-if="!activeQuestion.isLinked">
-                    <div class="table-holder">
-                        <div class="table-row" ng-repeat="option in activeQuestion.options">
-                            <div class="column-2">
-                                <input type="text" ng-model="option.value" class="form-control">
-                            </div>
-                            <div class="column-3">
-                                <input type="text" ng-model="option.title" class="form-control">
-                            </div>
-                            <div class="column-4">
-                                <a href ng:click="removeOption($index)" class="btn"></a>
+
+                    <div ng-if="activeQuestion.useListAsOptionsEditor">
+                        <div class="table-holder">
+                            <div class="table-row" ng-repeat="option in activeQuestion.options">
+                                <div class="column-2">
+                                    <input type="text" ng-model="option.value" class="form-control">
+                                </div>
+                                <div class="column-3">
+                                    <input type="text" ng-model="option.title" class="form-control">
+                                </div>
+                                <div class="column-4">
+                                    <a href ng:click="removeOption($index)" class="btn"></a>
+                                </div>
                             </div>
                         </div>
+                        <p>
+                            <button class="btn btn-link pull-right" ng-click="showOptionsInTextarea()">Show strings</button>
+                            <button class="btn btn-link" ng-if="!activeQuestion.isLinked" id="edit-question-save-button" ng-click="addOption()">Add Option</button>
+                        </p>
                     </div>
-                    <p>
-                        <input type="button" ng-if="!activeQuestion.isLinked" class="btn btn-link" value="Add Option" id="edit-question-save-button" ng-click="addOption()">
-                    </p>
+                    <div ng-if="!activeQuestion.useListAsOptionsEditor">
+                        <div class="form-group" ng-class="{'has-error': !questionForm.stringifiedOptions.$valid}">
+                            <textarea name="stringifiedOptions"
+                                      class="form-control mono"
+                                      ng-model="activeQuestion.stringifiedOptions"
+                                      match-options-pattern
+                                      maxoptionscount
+                                      msd-elastic></textarea>
+                            <p class="help-block">
+                                <input class="btn btn-link" type="button" value="Show list" ng-click="showOptionsInList()" ng-disabled="!questionForm.stringifiedOptions.$valid" />
+                            </p>
+                            <p class="help-block ng-cloak" ng-show="questionForm.stringifiedOptions.$error.matchOptionsPattern">
+                                You entered an invalid input. Each line should follow the format: "Title...Value". 'Value' must be an integer or decimal number. Title must be an alpha-numeric string. Title cannot contain dots (i.e. ".") or ellipses (i.e., "&hellip;"); no empty lines are allowed.
+                            <p class="help-block ng-cloak" ng-show="questionForm.stringifiedOptions.$error.maxOptionsCount">
+                                You entered more than maximum allowed 200 
+                            </p>
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-3">
@@ -360,9 +405,17 @@
         </script>
 
         <script type="text/ng-template" id="TextList-template.html">
-            <div class="form-group">
+            <div class="form-group" ng-class="{'has-error': !questionForm.maxAnswerCount.$valid}">
                 <label for="edit-question-max-answers-number">Maximum number of answers</label>
-                <input id="edit-question-max-answers-number" type="text" ng-model="activeQuestion.maxAnswerCount" class="form-control">
+                <input id="edit-question-max-answers-number" 
+                       name="maxAnswerCount" 
+                       type="text" 
+                       ng-pattern="/^\d+$/" 
+                       ng-model="activeQuestion.maxAnswerCount" 
+                       class="form-control" />
+                <p class="help-block ng-cloak" ng-show="questionForm.maxAnswerCount.$error.pattern">
+                    Only integers are allowed
+                </p>
             </div>
         </script>
 
@@ -380,7 +433,7 @@
     </div>
     <div class="form-buttons-holder">
         <div class="pull-left">
-            <button type="submit" id="edit-chapter-save-button" class="btn btn-lg btn-primary" unsaved-warning-clear ng-click="saveQuestion()" ng-disabled="!questionForm.$valid">Save</button>
+            <button type="submit" id="edit-chapter-save-button" class="btn btn-lg " ng-class="{ 'btn-primary': questionForm.$dirty }" unsaved-warning-clear ng-click="saveQuestion()" ng-disabled="!questionForm.$valid">Save</button>
             <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear ng-click="cancelQuestion()">Cancel</button>
         </div>
         <div class="pull-right">

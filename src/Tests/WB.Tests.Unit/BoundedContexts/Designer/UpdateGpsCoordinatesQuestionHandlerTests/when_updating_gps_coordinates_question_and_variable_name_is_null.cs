@@ -37,6 +37,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
                     isMandatory: isMandatory,
                     scope: scope,
                     enablementCondition: enablementCondition,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
                     instructions: instructions,
                     responsibleId: responsibleId
 

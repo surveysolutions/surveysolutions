@@ -29,11 +29,9 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             ILogger logger = null, 
             IUserWebViewFactory viewFactory = null,
             ISupportedVersionProvider versionProvider = null,
-            ISyncProtocolVersionProvider syncVersionProvider = null,
-            IJsonUtils jsonUtils = null)
+            ISyncProtocolVersionProvider syncVersionProvider = null)
         {
-            var controller = CreateSyncControllerImpl(commandService, globalInfo, syncManager, logger, viewFactory, versionProvider, syncVersionProvider,
-                jsonUtils: jsonUtils);
+            var controller = CreateSyncControllerImpl(commandService, globalInfo, syncManager, logger, viewFactory, versionProvider, syncVersionProvider);
             SetControllerContextWithStream(controller, stream: null);
             
             return controller;
@@ -67,8 +65,7 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             ISyncProtocolVersionProvider syncVersionProvider = null,
             IPlainInterviewFileStorage plainFileRepository = null,
             IFileSystemAccessor fileSystemAccessor = null,
-            ITabletInformationService tabletInformationService = null,
-            IJsonUtils jsonUtils = null)
+            ITabletInformationService tabletInformationService = null)
         {
             var controller = new InterviewerSyncController(
                 commandService ?? Mock.Of<ICommandService>(), 
@@ -80,8 +77,7 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
                 plainFileRepository ?? Mock.Of<IPlainInterviewFileStorage>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 syncVersionProvider ?? Mock.Of<ISyncProtocolVersionProvider>(),
-                tabletInformationService ?? Mock.Of<ITabletInformationService>(),
-                jsonUtils ?? Mock.Of<IJsonUtils>());
+                tabletInformationService ?? Mock.Of<ITabletInformationService>());
 
             return controller;
         }

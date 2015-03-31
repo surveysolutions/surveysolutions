@@ -2,10 +2,16 @@
     .controller('GroupCtrl',
         function ($rootScope, $scope, $stateParams, questionnaireService, commandService, hotkeys) {
             $scope.currentChapterId = $stateParams.chapterId;
+
+            var saveGroup = 'ctrl+s';
+            if (hotkeys.get(saveGroup) !== false) {
+                hotkeys.del(saveGroup);
+            }
+
             hotkeys.bindTo($scope)
              .add({
-                 combo: 'ctrl+s',
-                 description: 'Save current group',
+                 combo: saveGroup,
+                 description: 'Save changes',
                  allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                  callback: function (event) {
                      $scope.saveGroup();
@@ -25,6 +31,10 @@
                 if ($scope.activeGroup.isChapter) {
                     if ($scope.questionnaire && $scope.questionnaire.chapters && $scope.questionnaire.chapters.length)
                         $scope.activeGroup.isFirstChapter = $stateParams.itemId == $scope.questionnaire.chapters[0].itemId;
+                }
+
+                if (!_.isNull($scope.groupForm) && !_.isUndefined($scope.groupForm)) {
+                    $scope.groupForm.$setPristine();
                 }
             };
 

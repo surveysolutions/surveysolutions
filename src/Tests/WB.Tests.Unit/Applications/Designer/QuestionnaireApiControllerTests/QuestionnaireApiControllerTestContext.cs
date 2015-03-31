@@ -40,6 +40,17 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
             return questionnaireController;
         }
 
+
+        public static QuestionnaireItemLink CreateQuestionnaireItemLink()
+        {
+            return new QuestionnaireItemLink
+                   {
+                       Id = "questionId",
+                       ChapterId = "chapterId",
+                       Title = "some title"
+                   };
+        }
+
         public static QuestionnaireView CreateQuestionnaireView(QuestionnaireDocument questionnaireDocument1)
         {
             return new QuestionnaireView(questionnaireDocument1);

@@ -67,7 +67,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.RedirectToAction("Index", "Survey");
         }
 
-        [Authorize(Roles = "Headquarter")]
+        [Authorize(Roles = "Administrator, Headquarter")]
         public void GetExportedDataAsync(Guid id, long version)
         {
             if (id == Guid.Empty)
@@ -96,7 +96,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.File(result, "application/zip", fileDownloadName: Path.GetFileName(result));
         }
 
-        [Authorize(Roles = "Headquarter")]
+        [Authorize(Roles = "Administrator, Headquarter")]
         public void GetExportedApprovedDataAsync(Guid id, long version)
         {
             if (id == Guid.Empty)
@@ -125,7 +125,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.File(result, "application/zip", fileDownloadName: Path.GetFileName(result));
         }
 
-        [Authorize(Roles = "Headquarter")]
+        [Authorize(Roles = "Administrator, Headquarter")]
         public void GetExportedFilesAsync(Guid id, long version)
         {
             AsyncQuestionnaireUpdater.Update(

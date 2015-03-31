@@ -1,25 +1,12 @@
-﻿namespace WB.UI.Designer.Models
-{
-    using System.ComponentModel;
-    using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-    /// <summary>
-    ///     The questionnaire view model.
-    /// </summary>
-    [DisplayName("Create Questionnaire")]
+namespace WB.UI.Designer.Models
+{
     public class QuestionnaireViewModel
     {
-        #region Public Properties
-        /// <summary>
-        ///     Gets or sets the title.
-        /// </summary>
         [Required]
-        [Display(Name = "Title")]
         public string Title { get; set; }
 
-        [Display(Name = "Is Public")]
         public bool IsPublic { get; set; }
-
-        #endregion
     }
 }

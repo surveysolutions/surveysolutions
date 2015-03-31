@@ -12,5 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         public string Title { get; set; }
         public string VariableName { get; set; }
         public string VariableLabel { get; set; }
+        public string ValidationExpression { get; set; }
+        public string ValidationMessage { get; set; }
     }
 }

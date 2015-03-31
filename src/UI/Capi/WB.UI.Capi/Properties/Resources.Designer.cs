@@ -88,6 +88,15 @@ namespace WB.UI.Capi.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connection failed. Synchronization point &lt;a href=&apos;{0}&apos;&gt;{0}&lt;/a&gt; appears to be wrong. Please check URL in Settings. If URL is correct then check Network Connection. {1} {2}.
+        /// </summary>
+        internal static string PleaseCheckURLInSettingsFormat {
+            get {
+                return ResourceManager.GetString("PleaseCheckURLInSettingsFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Push of binary data failed. Try again later..
         /// </summary>
         internal static string PushBinaryDataFailed {
@@ -102,6 +111,51 @@ namespace WB.UI.Capi.Properties {
         internal static string PushFailed {
             get {
                 return ResourceManager.GetString("PushFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronization was canceled.
+        /// </summary>
+        internal static string SynchronizationCanceledExceptionMessage {
+            get {
+                return ResourceManager.GetString("SynchronizationCanceledExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronization failed. Internal server error occurred. Please contact to Survey Solutions team..
+        /// </summary>
+        internal static string SynchronizationInternalServerError {
+            get {
+                return ResourceManager.GetString("SynchronizationInternalServerError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Server is on the maintenance mode now. Sorry for the inconvenience. Please, try again later..
+        /// </summary>
+        internal static string SynchronizationMaintenance {
+            get {
+                return ResourceManager.GetString("SynchronizationMaintenance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ran out of time waiting for a response from the server. Please, check your internet connection and try again..
+        /// </summary>
+        internal static string SynchronizationRequestTimeout {
+            get {
+                return ResourceManager.GetString("SynchronizationRequestTimeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronization failed. Send your tablet&apos;s information and contact your Supervisor..
+        /// </summary>
+        internal static string SynchronizationUnhandledExceptionMessage {
+            get {
+                return ResourceManager.GetString("SynchronizationUnhandledExceptionMessage", resourceCulture);
             }
         }
     }

@@ -1,35 +1,40 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
+using Raven.Abstractions.Data;
+using Raven.Abstractions.Linq;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Extensions;
 using Raven.Client.Indexes;
+using Raven.Json.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors
 {
     internal class RavenReadSideRepositoryCleaner : IRavenReadSideRepositoryCleaner
     {
-        private readonly IDocumentStore ravenStore;
+        private readonly DocumentStoreProvider documentStoreProvider;
         private readonly Assembly[] assembliesWithIndexes;
 
-        public RavenReadSideRepositoryCleaner(IDocumentStore ravenStore, Assembly[] assembliesWithIndexes)
+        public RavenReadSideRepositoryCleaner(DocumentStoreProvider documentStoreProvider, Assembly[] assembliesWithIndexes)
         {
-            this.ravenStore = ravenStore;
+            this.documentStoreProvider = documentStoreProvider;
             this.assembliesWithIndexes = assembliesWithIndexes;
         }
 
         public void ReCreateViewDatabase()
         {
-            string ravenDbName = ((DocumentStore)this.ravenStore).DefaultDatabase;
-            this.ravenStore.DatabaseCommands.GlobalAdmin.DeleteDatabase(ravenDbName, hardDelete: true);
-            this.ravenStore.DatabaseCommands.GlobalAdmin.EnsureDatabaseExists(ravenDbName, ignoreFailures: false);
+            documentStoreProvider.RemoveInstanceForReadSideStore();
+            documentStoreProvider.CreateInstanceForReadSideStore();
         }
 
         public void CreateIndexesAfterRebuildReadSide()
         {
+            var documentStore = documentStoreProvider.CreateInstanceForReadSideStore();
+
             foreach (Assembly assembly in this.assembliesWithIndexes)
             {
-                IndexCreation.CreateIndexes(assembly, this.ravenStore);
+                IndexCreation.CreateIndexes(assembly, documentStore);
             }
         }
     }
