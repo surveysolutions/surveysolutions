@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Shared.Web.CommandDeserialization;
@@ -48,8 +49,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public JsonCommandResponse Execute(JsonCommandRequest request)
         {
             var response = new JsonCommandResponse();
+
             if (request != null && !string.IsNullOrEmpty(request.Type) && !string.IsNullOrEmpty(request.Command))
             {
+                if ((User.Identity as CustomIdentity).IsObserver)
+                {
+                    response.IsSuccess = true;
+                    response.DomainException = "You cannot perform any operation in observer mode.";
+                }
+
                 try
                 {
                     ICommand concreteCommand = this.commandDeserializer.Deserialize(request.Type, request.Command);
