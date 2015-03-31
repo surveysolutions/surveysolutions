@@ -85,7 +85,7 @@
                                 if (actionModel.CanDelete)
                                 {
                                     <li class="divider"></li>
-                                            <li><a href="#mDelete" data-bind='click: deleteItem.bind($data,"@itemId", "@itemType", "@itemName")' data-toggle="modal">Delete</a></li>
+                                            <li><a href="#mDelete" onclick='deleteQuestionnaireModel.deleteItem("@itemId", "@itemType", "@itemName")' data-toggle="modal">Delete</a></li>
                                 }
                                         }
                                     </ul>
