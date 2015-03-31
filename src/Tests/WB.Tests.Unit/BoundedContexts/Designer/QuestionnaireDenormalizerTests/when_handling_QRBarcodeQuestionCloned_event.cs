@@ -42,7 +42,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                 VariableName = variableName,
                 ParentGroupId = parentGroupId,
                 SourceQuestionId = sourceQuestionId,
-                TargetIndex = targetIndex
+                TargetIndex = targetIndex,
+                ValidationExpression = validation,
+                ValidationMessage = validationMessage
             });
 
             var questionnaireDocument = CreateQuestionnaireDocument(new[]
@@ -121,11 +123,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
         It should_set_target_index_to_2 = () =>
            questionnaireView.Find<IGroup>(parentGroupId).Children.IndexOf(GetQRBarcodeQuestionById()).ShouldEqual(targetIndex);
 
-        It should_set_null_as_default_value_for__ValidationExpression__field = () =>
-           GetQRBarcodeQuestionById().ValidationExpression.ShouldBeNull();
+        It should_set_validation_value_for__ValidationExpression__field = () =>
+           questionData.ValidationExpression.ShouldEqual(validation);
 
-        It should_set_null_as_default_value_for__ValidationMessage__field = () =>
-            GetQRBarcodeQuestionById().ValidationMessage.ShouldBeNull();
+        It should_set_validationMessage_value_for__ValidationMessage__field = () =>
+            questionData.ValidationMessage.ShouldEqual(validationMessage);
 
         It should_set_Interviewer_as_default_value_for__QuestionScope__field = () =>
             GetQRBarcodeQuestionById().QuestionScope.ShouldEqual(QuestionScope.Interviewer);
@@ -169,6 +171,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
         private static string title = "title";
         private static string instructions = "intructions";
         private static string condition = "condition";
+
+        private static string validation = "validation";
+        private static string validationMessage = "validationMessage";
         private static int targetIndex = 2;
     }
 }
