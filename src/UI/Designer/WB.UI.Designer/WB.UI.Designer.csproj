@@ -1269,6 +1269,7 @@
     <Content Include="UpdatedDesigner\vendor\jquery-placeholder\jquery.placeholder.min.js.map" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="UpdatedDesigner\content\fonts\Roboto300.woff" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
