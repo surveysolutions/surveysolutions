@@ -67,19 +67,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 this.headquartersPullContext.Start();
                 var lastStoredFeedEntry = this.localUsersFeedStorage.GetLastEntry();
 
-                this.headquartersPullContext.PushMessage(lastStoredFeedEntry != null
-                    ? string.Format("Last synchronized userentry id {0}, date {1}", lastStoredFeedEntry.EntryId,
-                        lastStoredFeedEntry.Timestamp)
-                    : string.Format("Nothing synchronized yet, loading full users event stream"));
+                this.headquartersPullContext.PushMessage(lastStoredFeedEntry != null ? 
+                        string.Format("Last synchronized userentry id {0}, date {1}", lastStoredFeedEntry.EntryId, lastStoredFeedEntry.Timestamp) : 
+                        string.Format("Nothing synchronized yet, loading full users event stream"));
 
                 List<LocalUserChangedFeedEntry> newEvents = AsyncContext.Run(() => this.feedReader.ReadAfterAsync(lastStoredFeedEntry));
 
-                this.headquartersPullContext.PushMessage(string.Format("Saving {0} new events to local storage", newEvents.Count));
+                this.headquartersPullContext.PushMessageFormat("Saving {0} new events to local storage", newEvents.Count);
                 this.localUsersFeedStorage.Store(newEvents);
 
-                var supervisorIds = this.localUserFeedProcessor.PullUsersAndReturnListOfSynchronizedSupervisorsId();
-
                 this.questionnaireSynchronizer.Pull();
+
+                var supervisorIds = this.localUserFeedProcessor.PullUsersAndReturnListOfSynchronizedSupervisorsId();
                 this.interviewsSynchronizer.PullInterviewsForSupervisors(supervisorIds);
             }
             catch (ApplicationException e)
