@@ -213,6 +213,7 @@
     <Compile Include="Implementation\Services\Principal.cs" />
     <Compile Include="Implementation\Services\QuestionnareAssemblyTesterFileAccessor.cs" />
     <Compile Include="Implementation\Services\RestServiceSettings.cs" />
+    <Compile Include="Mvvm\Adapters\CustomAdapter.cs" />
     <Compile Include="Mvvm\CustomBindings\HtmlBinding.cs" />
     <Compile Include="Mvvm\CustomBindings\MvvmBindingWrapper.cs" />
     <Compile Include="Mvvm\CustomBindings\TextViewHintBinding.cs" />
@@ -223,6 +224,7 @@
     <Compile Include="Mvvm\CustomBindings\SwipeRefreshLayoutRefreshingBinding.cs" />
     <Compile Include="Mvvm\CustomBindings\VisibleBinding.cs" />
     <Compile Include="Mvvm\MvxInitializer.cs" />
+    <Compile Include="Mvvm\ValueContervers\ArrayOfBytesToImageConverter.cs" />
     <Compile Include="Mvvm\ValueContervers\LocalizationValueConverter.cs" />
     <Compile Include="Mvvm\ValueContervers\NullToVisibleValueConverter.cs" />
     <Compile Include="Mvvm\ValueContervers\QuestionnaireVersionToColorValueConverter.cs" />
@@ -272,6 +274,17 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\Interivew.axml" />
+    <AndroidResource Include="Resources\Layout\InterviewEntities\InterviewDateQuestion.axml" />
+    <AndroidResource Include="Resources\Layout\InterviewEntities\InterviewDecimalQuestion.axml" />
+    <AndroidResource Include="Resources\Layout\InterviewEntities\InterviewGroup.axml" />
+    <AndroidResource Include="Resources\Layout\InterviewEntities\InterviewImageQuestion.axml" />
+    <AndroidResource Include="Resources\Layout\InterviewEntities\InterviewIntegerQuestion.axml" />
+    <AndroidResource Include="Resources\Layout\InterviewEntities\InterviewMultiChoiceQuestion.axml" />
+    <AndroidResource Include="Resources\Layout\InterviewEntities\InterviewMultiChoiceQuestionItemTemplate.axml" />
+    <AndroidResource Include="Resources\Layout\InterviewEntities\InterviewSingleChoiceQuestion.axml" />
+    <AndroidResource Include="Resources\Layout\InterviewEntities\InterviewSingleChoiceQuestionItemTemplate.axml" />
+    <AndroidResource Include="Resources\Layout\InterviewEntities\InterviewStaticText.axml" />
+    <AndroidResource Include="Resources\Layout\InterviewEntities\InterviewTextQuestion.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Values\Strings.xml">

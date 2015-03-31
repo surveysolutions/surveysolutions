@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Globalization;
-using System.IO;
 using Android.Graphics;
 using Cirrious.CrossCore.Converters;
 
-namespace AxmlTester.Droid.Converters
+namespace WB.UI.QuestionnaireTester.Mvvm.ValueContervers
 {
     public class ByteArrayToImageConverter :
       MvxValueConverter<byte[], Bitmap>

@@ -4,10 +4,13 @@ using Android.Content;
 using Android.Views;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Cirrious.MvvmCross.Binding.Droid.Views;
-using WB.Core.BoundedContexts.Capi.ViewModel;
 
-namespace AxmlTester.Droid
+namespace WB.UI.QuestionnaireTester.Mvvm.Adapters
 {
+    /*How to use 
+     var list = FindViewById<MvxListView>(Resource.Id.TheListView);
+            list.Adapter = new CustomAdapter(this, (IMvxAndroidBindingContext)BindingContext);*/
+
     public class CustomAdapter : MvxAdapter
     {
         public CustomAdapter(Context context, IMvxAndroidBindingContext bindingContext)
@@ -17,15 +20,15 @@ namespace AxmlTester.Droid
 
         static Dictionary<Type, int> questionTemplates = new Dictionary<Type, int>()
         {
-            { typeof(InterviewStaticText), Resource.Layout.InterviewStaticText },
-            { typeof(InterviewTextQuestion), Resource.Layout.InterviewTextQuestion },
-            { typeof(InterviewDateQuestion), Resource.Layout.InterviewDateQuestion },
-            { typeof(InterviewDecimalQuestion), Resource.Layout.InterviewDecimalQuestion },
-            { typeof(InterviewImageQuestion), Resource.Layout.InterviewImageQuestion },
-            { typeof(InterviewIntegerQuestion), Resource.Layout.InterviewIntegerQuestion },
-            { typeof(InterviewMultiChoiceQuestion), Resource.Layout.InterviewMultiChoiceQuestion },
-            { typeof(InterviewSingleChoiceQuestion), Resource.Layout.InterviewSingleChoiceQuestion },
-            { typeof(InterviewGroup), Resource.Layout.InterviewGroup },
+            //{ typeof(InterviewStaticText), Resource.Layout.InterviewStaticText },
+            //{ typeof(InterviewTextQuestion), Resource.Layout.InterviewTextQuestion },
+            //{ typeof(InterviewDateQuestion), Resource.Layout.InterviewDateQuestion },
+            //{ typeof(InterviewDecimalQuestion), Resource.Layout.InterviewDecimalQuestion },
+            //{ typeof(InterviewImageQuestion), Resource.Layout.InterviewImageQuestion },
+            //{ typeof(InterviewIntegerQuestion), Resource.Layout.InterviewIntegerQuestion },
+            //{ typeof(InterviewMultiChoiceQuestion), Resource.Layout.InterviewMultiChoiceQuestion },
+            //{ typeof(InterviewSingleChoiceQuestion), Resource.Layout.InterviewSingleChoiceQuestion },
+            //{ typeof(InterviewGroup), Resource.Layout.InterviewGroup },
         }; 
 
         public override int GetItemViewType(int position)
