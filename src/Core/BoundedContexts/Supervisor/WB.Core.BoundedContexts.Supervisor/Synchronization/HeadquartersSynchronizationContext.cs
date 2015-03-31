@@ -58,6 +58,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             this.synchronizationMessages.Add(DateTime.Now + ": " + message);
         }
 
+        public virtual void PushMessageFormat(string message, params object[] args)
+        {
+            this.PushMessage(string.Format(message, args));
+        }
+
         public virtual void PushError(string message)
         {
             this.synchronizationErrors.Add(message);

@@ -61,25 +61,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Applying user changes for user {0} with id {1}.
-        /// </summary>
-        internal static string Applying_user_changes_for_user__0__with_id__1_Format {
-            get {
-                return ResourceManager.GetString("Applying_user_changes_for_user__0__with_id__1_Format", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error occured while processing users feed event. EventId {0}. Event marked as processed with error..
-        /// </summary>
-        internal static string Error_occured_while_processing_users_feed_event__EventId__0___Event_marked_as_processed_with_error_Format {
-            get {
-                return ResourceManager.GetString("Error_occured_while_processing_users_feed_event__EventId__0___Event_marked_as_pro" +
-                        "cessed_with_error_Format", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Error while processing event {0}. ErrorMessage: {1}. Exception messages: {2}.
         /// </summary>
         internal static string Error_while_processing_event__0___ErrorMessage___1___Exception_messages___2_Format {
@@ -95,15 +76,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Resources {
         internal static string Event01ismarkedasprocessedbecauseitisoverridenby23Format {
             get {
                 return ResourceManager.GetString("Event01ismarkedasprocessedbecauseitisoverridenby23Format", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Failed to process event {0}. Message: {1}. InnerMessage: {2}.
-        /// </summary>
-        internal static string Failed_to_process_event__0___Message___1___InnerMessage___2_Format {
-            get {
-                return ResourceManager.GetString("Failed_to_process_event__0___Message___1___InnerMessage___2_Format", resourceCulture);
             }
         }
         
@@ -287,24 +259,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Resources {
         internal static string Loadinginterviewusing0URLFormat {
             get {
                 return ResourceManager.GetString("Loadinginterviewusing0URLFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Marking local event {0} as processed.
-        /// </summary>
-        internal static string Marking_local_event__0__as_processed_Format {
-            get {
-                return ResourceManager.GetString("Marking_local_event__0__as_processed_Format", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Processing {0} non processed events for supervisor &apos;{1}&apos;.
-        /// </summary>
-        internal static string Processing__0__non_processed_events_for_supervisor___1__Format {
-            get {
-                return ResourceManager.GetString("Processing__0__non_processed_events_for_supervisor___1__Format", resourceCulture);
             }
         }
         
