@@ -198,19 +198,4 @@
   <data name="Error_while_processing_event__0___ErrorMessage___1___Exception_messages___2_Format" xml:space="preserve">
     <value>Error while processing event {0}. ErrorMessage: {1}. Exception messages: {2}</value>
   </data>
-  <data name="Processing__0__non_processed_events_for_supervisor___1__Format" xml:space="preserve">
-    <value>Processing {0} non processed events for supervisor '{1}'</value>
-  </data>
-  <data name="Applying_user_changes_for_user__0__with_id__1_Format" xml:space="preserve">
-    <value>Applying user changes for user {0} with id {1}</value>
-  </data>
-  <data name="Marking_local_event__0__as_processed_Format" xml:space="preserve">
-    <value>Marking local event {0} as processed</value>
-  </data>
-  <data name="Error_occured_while_processing_users_feed_event__EventId__0___Event_marked_as_processed_with_error_Format" xml:space="preserve">
-    <value>Error occured while processing users feed event. EventId {0}. Event marked as processed with error.</value>
-  </data>
-  <data name="Failed_to_process_event__0___Message___1___InnerMessage___2_Format" xml:space="preserve">
-    <value>Failed to process event {0}. Message: {1}. InnerMessage: {2}</value>
-  </data>
 </root>
