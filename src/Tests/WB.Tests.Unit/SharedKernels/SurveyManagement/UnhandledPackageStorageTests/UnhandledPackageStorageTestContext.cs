@@ -12,7 +12,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UnhandledPackageStorageTe
     {
         protected static BrokenSyncPackagesStorage CreateUnhandledPackageStorage(IFileSystemAccessor fileSystemAccessor=null)
         {
-            return new BrokenSyncPackagesStorage(fileSystemAccessor??Mock.Of<IFileSystemAccessor>(), new SyncSettings(AppDataDirectory, IncomingCapiPackagesWithErrorsDirectoryName, IncomingCapiPackageFileNameExtension, IncomingCapiPackagesDirectoryName, ""));
+            return new BrokenSyncPackagesStorage(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                new SyncSettings(AppDataDirectory, IncomingCapiPackagesWithErrorsDirectoryName,
+                    IncomingCapiPackageFileNameExtension, IncomingCapiPackagesDirectoryName, "", 3,1));
         }
         const string AppDataDirectory = "App_Data";
         const string IncomingCapiPackagesDirectoryName = "IncomingData";
