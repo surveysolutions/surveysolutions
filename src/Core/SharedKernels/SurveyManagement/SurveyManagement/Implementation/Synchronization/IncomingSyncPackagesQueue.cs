@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using Main.Core.Events;
+using Polly;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -18,6 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         private readonly ILogger logger;
         private readonly IJsonUtils jsonUtils;
         private readonly IArchiveUtils archiver;
+        private readonly ContextualPolicy policy;
 
         public IncomingSyncPackagesQueue(IFileSystemAccessor fileSystemAccessor, 
             SyncSettings syncSettings, 
@@ -30,7 +35,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             this.logger = logger;
             this.jsonUtils = jsonUtils;
             this.archiver = archiver;
-
+            this.policy = Policy
+                .Handle<Win32Exception>().WaitAndRetry(syncSettings.RetryCount, retryAttempt =>
+                    TimeSpan.FromSeconds(syncSettings.RetryInterval), (exception, retryCount, context) =>
+                    {
+                        logger.Error(exception.Message, exception);
+                    }
+                );
             this.incomingUnprocessedPackagesDirectory = fileSystemAccessor.CombinePath(syncSettings.AppDataDirectory,
                 syncSettings.IncomingUnprocessedPackagesDirectoryName);
 
@@ -69,7 +80,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             Guid? interviewId = null;
             try
             {
-                var syncItem = jsonUtils.Deserialize<SyncItem>(fileSystemAccessor.ReadAllText(pathToPackage));
+                var fileContent = policy.Execute(() => fileSystemAccessor.ReadAllText(pathToPackage));
+
+                var syncItem = jsonUtils.Deserialize<SyncItem>(fileContent);
 
                 interviewId = syncItem.RootId;
 
