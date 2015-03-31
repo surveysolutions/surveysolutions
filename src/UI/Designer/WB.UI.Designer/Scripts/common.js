@@ -14,4 +14,6 @@
 
 $(function () {
     ko.applyBindings(new ItemViewModel());
+
+    $('#table-content-holder > .scroller-container').perfectScrollbar();
 });

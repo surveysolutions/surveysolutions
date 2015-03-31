@@ -1,14 +1,13 @@
 ﻿using System;
+using Ninject;
 using Ninject.Modules;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Implementation;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories;
@@ -20,6 +19,7 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletInformation;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataStorage;
+using WB.Core.SharedKernels.SurveyManagement.QuartzIntegration;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
@@ -48,6 +48,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings;
         private readonly Version applicationBuildVersion;
         private readonly bool hqEnabled;
+        private readonly bool isSupervisorFunctionsEnabled;
         private readonly int maxCountOfCachedEntitiesForSqliteDb;
         private readonly InterviewHistorySettings interviewHistorySettings;
 
@@ -56,7 +57,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
             int supportedQuestionnaireVersionPatch,
             Func<bool> isDebug, Version applicationBuildVersion,
             InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool hqEnabled, int maxCountOfCachedEntitiesForSqliteDb,
-            InterviewHistorySettings interviewHistorySettings)
+            InterviewHistorySettings interviewHistorySettings,
+            bool isSupervisorFunctionsEnabled)
         {
             this.currentFolderPath = currentFolderPath;
             this.supportedQuestionnaireVersionMajor = supportedQuestionnaireVersionMajor;
@@ -68,6 +70,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.hqEnabled = hqEnabled;
             this.maxCountOfCachedEntitiesForSqliteDb = maxCountOfCachedEntitiesForSqliteDb;
             this.interviewHistorySettings = interviewHistorySettings;
+            this.isSupervisorFunctionsEnabled = isSupervisorFunctionsEnabled;
         }
 
         public override void Load()
@@ -122,10 +125,16 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind(typeof(IOrderableSyncPackageWriter<,>)).To(typeof(OrderableSyncPackageWriter<,>)).InSingletonScope();
 
             this.Kernel.RegisterDenormalizer<InterviewEventHandlerFunctional>();
-            this.Kernel.RegisterDenormalizer<InterviewSynchronizationDenormalizer>();
-            this.Kernel.RegisterDenormalizer<UserSynchronizationDenormalizer>();
-            this.Kernel.RegisterDenormalizer<QuestionnaireSynchronizationDenormalizer>();
-            this.Kernel.RegisterDenormalizer<TabletDenormalizer>();
+
+            this.Kernel.Load(new QuartzNinjectModule());
+
+            if (isSupervisorFunctionsEnabled)
+            {
+                this.Kernel.RegisterDenormalizer<InterviewSynchronizationDenormalizer>();
+                this.Kernel.RegisterDenormalizer<UserSynchronizationDenormalizer>();
+                this.Kernel.RegisterDenormalizer<QuestionnaireSynchronizationDenormalizer>();
+                this.Kernel.RegisterDenormalizer<TabletDenormalizer>();
+            }
 
             if (hqEnabled)
             {

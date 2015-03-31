@@ -4,6 +4,7 @@ using System.Linq;
 using EmitMapper;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -19,6 +20,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         }
 
         private readonly IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView> questionDetailsReader;
+
+        private readonly IExpressionProcessor expressionProcessor;
 
         private static readonly SelectOption InterviewerQuestionScope = new SelectOption { Value = "Interviewer", Text = "Interviewer" };
         private static readonly SelectOption SupervisorQuestionScope = new SelectOption { Value = "Supervisor", Text = "Supervisor" };
@@ -95,9 +98,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             new SelectOption() {Value = RosterType.Numeric.ToString(), Text = Properties.Roster.RosterType_Numeric}
         };
 
-        public QuestionnaireInfoFactory(IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView> questionDetailsReader)
+        public QuestionnaireInfoFactory(IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView> questionDetailsReader,
+            IExpressionProcessor expressionProcessor)
         {
             this.questionDetailsReader = questionDetailsReader;
+            this.expressionProcessor = expressionProcessor;
         }
 
         public NewEditGroupView GetGroupEditView(string questionnaireId, Guid groupId)
@@ -234,6 +239,31 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, staticTextDetailsView);
 
             return result;
+        }
+
+        public List<QuestionnaireItemLink> GetAllBrokenGroupDependencies(string questionnaireId, Guid id)
+        {
+            var questionnaire = this.questionDetailsReader.GetById(questionnaireId);
+            if (questionnaire == null)
+                return null;
+
+            var variablesToBeDeleted = questionnaire.Questions
+                .Where(x => x.ParentGroupsIds.Contains(id))
+                .Select(x => x.VariableName)
+                .ToList();
+
+            var allReferencedQuestions = questionnaire.Questions
+                .Where(x => !x.ParentGroupsIds.Contains(id))
+                .Where(x => !string.IsNullOrEmpty(x.EnablementCondition) || !string.IsNullOrEmpty(x.ValidationExpression))
+                .Where(x => this.expressionProcessor.GetIdentifiersUsedInExpression(x.EnablementCondition).Any(v => variablesToBeDeleted.Contains(v))
+                         || this.expressionProcessor.GetIdentifiersUsedInExpression(x.ValidationExpression).Any(v => variablesToBeDeleted.Contains(v)));
+
+            return allReferencedQuestions.Select(x => new QuestionnaireItemLink
+                                                      {
+                                                          Id = x.Id.FormatGuid(),
+                                                          ChapterId = x.ParentGroupsIds.Last().FormatGuid(),
+                                                          Title = x.Title
+                                                      }).ToList();
         }
 
         private void ReplaceGuidsInValidationAndConditionRules(NewEditQuestionView model, QuestionsAndGroupsCollectionView questionnaire, string questionnaireKey)

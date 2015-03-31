@@ -34,10 +34,10 @@
                                 Number of sync packages with size more then 2Mb
                                 <p data-bind="html:numberOfSyncPackagesWithBigSizeError"></p>
                             </li>
-                            <li class="list-group-item" data-bind="css: {'has-error': denidedFolders().length > 0 }">
-                                <span class="badge" data-bind="text:denidedFoldersStatus"></span>
+                            <li class="list-group-item" data-bind="css: {'has-error': deniedFolders().length > 0 }">
+                                <span class="badge" data-bind="text:deniedFoldersStatus"></span>
                                 Permissions on write in App_Data folder
-                                <table class="table table-condensed margin-0" data-bind="foreach: denidedFolders">
+                                <table class="table table-condensed margin-0" data-bind="foreach: deniedFolders">
                                     <tr>
                                         <td data-bind="text: $data"></td>
                                     </tr>

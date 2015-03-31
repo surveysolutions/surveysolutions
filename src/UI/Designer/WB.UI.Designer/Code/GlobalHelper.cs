@@ -2,29 +2,13 @@
 {
     using System.Web;
     using System.Web.Mvc;
-    using System.Web.Routing;
 
-    /// <summary>
-    /// The global helper.
-    /// </summary>
     public static class GlobalHelper
     {
-        #region Constants
-
         public const string EmptyString = "--//--";
 
-        /// <summary>
-        /// The grid page items count.
-        /// </summary>
-        public const int GridPageItemsCount = 10;
+        public const int GridPageItemsCount = 50;
 
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// Gets the current action.
-        /// </summary>
         public static string CurrentAction
         {
             get
@@ -33,9 +17,6 @@
             }
         }
 
-        /// <summary>
-        /// Gets the current controller.
-        /// </summary>
         public static string CurrentController
         {
             get
@@ -50,7 +31,5 @@
             
             return url.Action(action, controller, routes, HttpContext.Current.Request.Url.Scheme);
         }
-
-        #endregion
     }
 }

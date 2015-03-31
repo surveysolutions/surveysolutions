@@ -5,6 +5,7 @@ using Android.Content;
 using Java.Util;
 
 using WB.Core.BoundedContexts.Capi.Services;
+using WB.Core.GenericSubdomains.Utils;
 using WB.UI.Capi.Properties;
 using WB.UI.Capi.SharedPreferences;
 
@@ -64,10 +65,7 @@ namespace WB.UI.Capi.Settings
 
         public void SetSyncAddressPoint(string syncAddressPoint)
         {
-            Uri syncUrl;
-            if (
-                !(Uri.TryCreate(syncAddressPoint, UriKind.Absolute, out syncUrl) &&
-                  (syncUrl.Scheme == "http" || syncUrl.Scheme == "https")))
+            if (!syncAddressPoint.IsValidWebAddress())
             {
                 throw new ArgumentException(Resources.InvalidSyncPointAddressUrl, "syncAddressPoint");
             }

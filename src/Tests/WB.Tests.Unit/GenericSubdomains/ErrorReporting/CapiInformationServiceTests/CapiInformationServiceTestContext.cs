@@ -23,6 +23,8 @@ namespace WB.Tests.Unit.GenericSubdomains.ErrorReporting.CapiInformationServiceT
             fileSystemAccessorMock.Setup(x => x.CopyFileOrDirectory(It.IsAny<string>(), It.IsAny<string>()))
                 .Callback<string, string>((sourceDir, targetDir) => addToArchiveCallback(sourceDir));
 
+            fileSystemAccessorMock.Setup(x => x.IsFileExists(It.IsAny<string>())).Returns(true);
+
             return new CapiInformationService(
                 Mock.Of<IInfoFileSupplierRegistry>(_ => _.GetAll() == filesToArchive),
                 fileSystemAccessorMock.Object,

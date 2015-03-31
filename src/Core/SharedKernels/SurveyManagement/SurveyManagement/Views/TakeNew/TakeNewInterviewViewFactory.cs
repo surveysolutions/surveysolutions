@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TakeNew
         {
             var viewer = this.users.GetById(viewerId);
 
-            if (viewer == null || !viewer.IsHq())
+            if (viewer == null || !(viewer.IsHq() || viewer.IsAdmin()))
                 return Enumerable.Empty<UserDocument>();
 
             var indexName = typeof(UserDocumentsByBriefFields).Name;

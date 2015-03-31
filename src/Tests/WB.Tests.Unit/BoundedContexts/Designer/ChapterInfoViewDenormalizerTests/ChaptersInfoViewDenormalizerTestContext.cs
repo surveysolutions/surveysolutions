@@ -60,6 +60,17 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.ChapterInfoViewDenormalizerTest
             return questionnaireInfoView;
         }
 
+
+        protected static GroupInfoView CreateGroupInfoViewWith1ChapterAnd3QuestionInsideChapter(string chapterId, string questionId1, string questionId2, string questionId3)
+        {
+            var questionnaireInfoView = CreateGroupInfoViewWith1ChapterAnd1QuestionInsideChapter(chapterId, questionId1);
+            ((GroupInfoView)questionnaireInfoView.Items[0]).Items.Add(new QuestionInfoView() { ItemId = questionId2 });
+            ((GroupInfoView)questionnaireInfoView.Items[0]).Items.Add(new QuestionInfoView() { ItemId = questionId3 });
+
+            return questionnaireInfoView;
+
+        }
+
         protected static GroupInfoView CreateGroupInfoViewWith1ChapterAnd1StaticTextInsideChapter(string chapterId, string entityId)
         {
             var questionnaireInfoView = CreateGroupInfoViewWith1Chapter(chapterId);

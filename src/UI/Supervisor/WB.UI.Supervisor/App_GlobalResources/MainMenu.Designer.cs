@@ -61,11 +61,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Health Check.
+        ///   Looks up a localized string similar to Help.
         /// </summary>
-        internal static string HealthCheck {
+        internal static string Help {
             get {
-                return ResourceManager.GetString("HealthCheck", resourceCulture);
+                return ResourceManager.GetString("Help", resourceCulture);
             }
         }
         

@@ -159,6 +159,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InterviewerSyncStrings.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\Interviews.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Interviews.resx</DependentUpon>
+    </Compile>
     <Compile Include="Utils\Binding\GenericBinderResolver.cs" />
     <Compile Include="Utils\Binding\IModelBinder.cs" />
     <Compile Include="Utils\Binding\ModelBinder.cs" />
@@ -296,6 +301,10 @@
       <LastGenOutput>InterviewerSyncStrings.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Interviews.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Interviews.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -303,9 +312,6 @@
     <EmbeddedResource Include="Scripts\bootstrap.file-input.js" />
     <EmbeddedResource Include="Scripts\bootstrap.js" />
     <EmbeddedResource Include="Scripts\bootstrap.min.js" />
-    <EmbeddedResource Include="Scripts\jquery-2.1.0.js" />
-    <EmbeddedResource Include="Scripts\jquery-2.1.0.min.js" />
-    <EmbeddedResource Include="Scripts\jquery-2.1.0.intellisense.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Content\datepicker.css" />
@@ -361,7 +367,6 @@
     <None Include="app.config" />
     <None Include="packages.config" />
     <EmbeddedResource Include="Views\Interview\ConfirmRevalidation.cshtml" />
-    <EmbeddedResource Include="Views\Interview\InterviewDetails.cshtml" />
     <EmbeddedResource Include="Views\Interview\Revalidate.cshtml" />
     <EmbeddedResource Include="fonts\fontawesome-webfont.svg" />
     <EmbeddedResource Include="fonts\glyphicons-halflings-regular.svg" />
@@ -403,7 +408,6 @@
     <EmbeddedResource Include="Views\Shared\_LayoutWithoutSidebar.cshtml" />
     <EmbeddedResource Include="Views\Shared\_LayoutWithSidebar.cshtml" />
     <EmbeddedResource Include="Views\Shared\_NoFilterListViewLayout.cshtml" />
-    <EmbeddedResource Include="Scripts\jquery-2.1.0.min.map" />
     <EmbeddedResource Include="Views\Interviewer\Edit.cshtml" />
     <EmbeddedResource Include="Views\Interviewer\Index.cshtml" />
     <EmbeddedResource Include="Views\Interviewer\Create.cshtml" />
@@ -426,6 +430,7 @@
     <EmbeddedResource Include="Views\Shared\_LayoutForErrorPage.cshtml" />
     <EmbeddedResource Include="Views\Account\Manage.cshtml" />
     <EmbeddedResource Include="Views\Shared\UserEditFormWithoutLock.cshtml" />
+    <EmbeddedResource Include="Scripts\jquery-2.1.0.min.map" />
     <None Include="Scripts\moment.min.js.map">
       <DependentUpon>moment.min.js</DependentUpon>
     </None>
@@ -436,7 +441,7 @@
     <EmbeddedResource Include="Views\Interview\ApproveRejectPartialView.cshtml" />
     <EmbeddedResource Include="Views\Interview\StaticTextPartialView.cshtml" />
     <EmbeddedResource Include="Views\Interview\QuestionPartialView.cshtml" />
-  	<EmbeddedResource Include="Views\TabletReport\Device.cshtml" />
+    <EmbeddedResource Include="Views\TabletReport\Device.cshtml" />
     <EmbeddedResource Include="Views\Shared\Error.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -481,7 +486,6 @@
     <EmbeddedResource Include="Scripts\director.js" />
     <EmbeddedResource Include="Scripts\viewmodels\pages\interview\details\config.js" />
     <EmbeddedResource Include="Scripts\viewmodels\pages\interview\details\datacontext.js" />
-    <EmbeddedResource Include="Scripts\viewmodels\pages\interview\details\interviewdetails.js" />
     <EmbeddedResource Include="Scripts\viewmodels\pages\interview\details\interviewdetailssettings.js" />
   </ItemGroup>
   <ItemGroup>
@@ -525,11 +529,15 @@
     <EmbeddedResource Include="Scripts\viewmodels\pages\healthcheck.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\viewmodels\healthcheckheader.js" />
-  </ItemGroup>
-   <ItemGroup>
     <EmbeddedResource Include="Scripts\knockout-3.2.0.debug.js" />
     <EmbeddedResource Include="Scripts\knockout-3.2.0.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\bootbox.js" />
+    <EmbeddedResource Include="Scripts\bootbox.min.js" />
+    <EmbeddedResource Include="Scripts\jquery-2.1.0.intellisense.js" />
+    <EmbeddedResource Include="Scripts\jquery-2.1.0.js" />
+    <EmbeddedResource Include="Scripts\jquery-2.1.0.min.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
