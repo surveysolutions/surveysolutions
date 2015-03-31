@@ -25,7 +25,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.Clone
                 StataExportCaption = "varrr",
                 VariableLabel = "varlabel",
                 MaxAnswerCount = 5,
-                GroupId = groupId
+                GroupId = groupId,
+                ValidationExpression = validation,
+                ValidationMessage = validationMessage
             };
             questionnaire.Apply(newQuestionAdded);
 
@@ -36,11 +38,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.Clone
 
         It should_clone_MaxAnswerCount_value = () => eventContext.ShouldContainEvent<QuestionCloned>(x => x.PublicKey == targetId && x.MaxAnswerCount == 5);
 
+        It should_clone_Validation_expression_and_message_value = () => eventContext.ShouldContainEvent<QuestionCloned>(x => x.PublicKey == targetId && x.ValidationExpression==validation && x.ValidationMessage==validationMessage);
+
         static Questionnaire questionnaire;
         static Guid sourceQuestionId;
         static EventContext eventContext;
         static Guid responsibleId;
         static Guid targetId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+
+        private static string validation = "validation";
+        private static string validationMessage = "validationMessage";
     }
 }
 
