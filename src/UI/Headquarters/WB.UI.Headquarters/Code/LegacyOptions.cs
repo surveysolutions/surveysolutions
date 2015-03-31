@@ -47,5 +47,15 @@ namespace WB.UI.Headquarters.Code
                 return WebConfigurationManager.AppSettings["Synchronization.IncomingUnprocessedPackageFileNameExtension"];
             }
         }
+
+        public static int RetryCount
+        {
+            get
+            {
+                return
+                    int.Parse(
+                        WebConfigurationManager.AppSettings["InterviewDetailsDataScheduler.RetryCount"]);
+            }
+        }
     }
 }
