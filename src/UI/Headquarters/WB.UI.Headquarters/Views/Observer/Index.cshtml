@@ -1,5 +1,4 @@
 ﻿@using System.Web.Optimization
-@using Main.Core.Entities.SubEntities
 @{
     Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
 }
@@ -9,11 +8,9 @@
     @Scripts.Render("~/Scripts/viewmodels/pages/users.js")
     <script type="text/javascript">
     
-    var $editUrl = '@Url.Action("Edit", "Headquarters", new { area = string.Empty })';
-    var $putInShoesUrl = '@Url.Action("ObservePerson", "Account", new { area = string.Empty })';
-
+    var $editUrl = '@Url.Action("Edit", "Observer", new { area = string.Empty })';
         $(function () {
-            var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "Headquarters" })');
+            var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "Observers" })');
         ko.applyBindings(model);
         model.load();
     });
@@ -23,7 +20,7 @@
 @section header
 {
     <div class="page-header">
-        <h2 class="sinle-line-header">Headquarters</h2>
+        <h2 class="sinle-line-header">Observers</h2>
     </div>
 }
 
@@ -31,12 +28,10 @@
 {
     <div class="btn-group">
         <div class="form-inline">
-            @if (User.IsInRole(UserRoles.Administrator.ToString()))
-            {
-                <a class="btn btn-default" href="@Url.Action("Create", "Headquarters", new {area = string.Empty})">
-                    <i class="glyphicon glyphicon-user"></i> Add headquarters
-                </a>
-            }
+            <a class="btn btn-default" href="@Url.Action("Create", "Observer", new { area = string.Empty })">
+                <i class="glyphicon glyphicon-user"></i> Add observer
+            </a>
+
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: search">
                 <div class="input-group-btn">
@@ -71,18 +66,9 @@
                 <td data-bind="text: Email"></td>
 
                 <td>
-                    @if (User.IsInRole(UserRoles.Administrator.ToString()))
-                    {
-                        <a class="btn btn-info" data-bind="attr: { href: $editUrl + '/' + UserId() }">
-                            <i class="glyphicon glyphicon-edit"></i> Edit
-                        </a>
-                    }
-                    
-                    <div class="btn-group pull-right">
-                        <a class="btn btn-info" data-bind="attr: { href: $putInShoesUrl + '?personName=' + UserName() }">
-                            <i class="glyphicon glyphicon-user"></i>
-                        </a>
-                    </div>
+                    <a class="btn btn-info" data-bind="attr: { href: $editUrl + '/' + UserId() }">
+                        <i class="glyphicon glyphicon-edit"></i> Edit
+                    </a>
                 </td>
             </tr>
             <!-- /ko -->

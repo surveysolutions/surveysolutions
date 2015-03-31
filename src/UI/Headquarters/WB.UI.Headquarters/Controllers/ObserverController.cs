@@ -7,7 +7,6 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -15,10 +14,10 @@ using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [Authorize(Roles = "Administrator, Observer")]
-    public class HeadquartersController : TeamController
+    [Authorize(Roles = "Administrator")]
+    public class ObserverController : TeamController
     {
-        public HeadquartersController(ICommandService commandService, 
+        public ObserverController(ICommandService commandService, 
                               IGlobalInfoProvider globalInfo, 
                               ILogger logger,
                               IUserViewFactory userViewFactory,
@@ -30,7 +29,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult Create()
         {
-            this.ViewBag.ActivePage = MenuItem.Headquarters;
+            this.ViewBag.ActivePage = MenuItem.Observers;
 
             return this.View(new UserModel());
         }
@@ -38,18 +37,17 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
         public ActionResult Create(UserModel model)
         {
-            this.ViewBag.ActivePage = MenuItem.Headquarters;
+            this.ViewBag.ActivePage = MenuItem.Observers;
 
             if (this.ModelState.IsValid)
             {
                 UserView user = GetUserByName(model.UserName);
                 if (user == null)
                 {
-                    this.CreateHeadquarters(model);
-                    this.Success("Headquarters user was successfully created");
+                    this.CreateObserver(model);
+                    this.Success("Observer user was successfully created");
                     return this.RedirectToAction("Index");
                 }
                 else
@@ -61,18 +59,17 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(model);
         }
 
-        [Authorize(Roles = "Administrator, Observer")]
+        
         public ActionResult Index()
         {
-            this.ViewBag.ActivePage = MenuItem.Headquarters;
+            this.ViewBag.ActivePage = MenuItem.Observers;
 
             return this.View();
         }
 
-        [Authorize(Roles = "Administrator")]
         public ActionResult Edit(Guid id)
         {
-            this.ViewBag.ActivePage = MenuItem.Headquarters;
+            this.ViewBag.ActivePage = MenuItem.Observers;
 
             var user = this.GetUserById(id);
 
@@ -89,39 +86,29 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
         public ActionResult Edit(UserEditModel model)
         {
-            this.ViewBag.ActivePage = MenuItem.Headquarters;
+            this.ViewBag.ActivePage = MenuItem.Observers;
 
             if (this.ModelState.IsValid)
             {
-                if ((User.Identity as CustomIdentity).IsObserver)
+                var user = this.GetUserById(model.Id);
+                if (user != null)
                 {
-                    this.Error("You cannot perform any operation in observer mode.");
+                    bool isAdmin = Roles.IsUserInRole(user.UserName, UserRoles.Administrator.ToString());
+
+                    if (!isAdmin)
+                    {
+                        this.UpdateAccount(user: user, editModel: model);
+                        this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
+                        return this.RedirectToAction("Index");
+                    }
+
+                    this.Error("Could not update user information because you don't have permission to perform this operation");
                 }
                 else
                 {
-                    var user = this.GetUserById(model.Id);
-                    if (user != null)
-                    {
-                        bool isAdmin = Roles.IsUserInRole(user.UserName, UserRoles.Administrator.ToString());
-
-                        if (!isAdmin)
-                        {
-                            this.UpdateAccount(user: user, editModel: model);
-                            this.Success(string.Format("Information about <b>{0}</b> successfully updated",
-                                user.UserName));
-                            return this.RedirectToAction("Index");
-                        }
-
-                        this.Error(
-                            "Could not update user information because you don't have permission to perform this operation");
-                    }
-                    else
-                    {
-                        this.Error("Could not update user information because current user does not exist");
-                    }
+                    this.Error("Could not update user information because current user does not exist");
                 }
             }
 
