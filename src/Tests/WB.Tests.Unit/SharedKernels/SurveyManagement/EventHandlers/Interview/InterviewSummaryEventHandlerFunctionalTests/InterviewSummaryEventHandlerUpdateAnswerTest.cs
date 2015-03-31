@@ -137,7 +137,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             {
                 case QuestionType.DateTime:
                     return new DateTimeQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now,
-                        DateTime.Parse(answer.ToString()));
+                        DateTime.Parse(answer.ToString()).ToUniversalTime());
                 case QuestionType.Numeric:
                     if (answer is int)
                         return new NumericIntegerQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now, (int)answer);
