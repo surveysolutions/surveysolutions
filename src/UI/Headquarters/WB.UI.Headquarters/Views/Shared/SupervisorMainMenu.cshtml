@@ -32,15 +32,15 @@
             <span class="sync-queue-size">-</span>
         </a>
     </li>
-    <li>
-        <a href="@Url.Action("Index", "HealthCheck", new { area = string.Empty }, null)" title="@MainMenu.HealthCheck">
-            <i class="fa fa-circle" id="HealthCheckIndicator"></i>
-        </a>
-    </li> 
     <li class="dropdown">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Hi, <strong>@User.Identity.Name</strong> <b class="caret"></b></a>
         <ul class="dropdown-menu">
             <li>@Html.ActionLink("Logoff", "LogOff", "Account", new {area = string.Empty}, null)</li>
         </ul>
+    </li>
+    <li>
+        <a href="http://siteresources.worldbank.org/INTCOMPTOOLS/Resources/8213623-1380598436379/Supervisor_manual.pdf" title="@MainMenu.Help" target="_blank">
+            <i class="glyphicon glyphicon-question-sign"></i>
+        </a>
     </li>
 </ul>

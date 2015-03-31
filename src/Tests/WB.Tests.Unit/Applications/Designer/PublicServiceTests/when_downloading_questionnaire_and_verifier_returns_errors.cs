@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
             exception.ShouldBeOfExactType<FaultException>();
 
         It should_throw_exception_that_contains_such_words = () =>
-            (new[] { "requested questionnaire", "has errors" }).Each(x => (exception as FaultException).Message.ToLower().ShouldContain(x));
+            (new[] { "your questionnaire", "has errors", "verify the questionnaire on designer" }).Each(x => (exception as FaultException).Message.ToLower().ShouldContain(x));
 
         private static DownloadQuestionnaireRequest request;
         private static IPublicService service;

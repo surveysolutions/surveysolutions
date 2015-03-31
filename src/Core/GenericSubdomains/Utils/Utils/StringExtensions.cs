@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+
 namespace WB.Core.GenericSubdomains.Utils
 {
     public static class StringExtensions
@@ -140,6 +141,17 @@ namespace WB.Core.GenericSubdomains.Utils
         public static string NullIfEmptyOrWhiteSpace(this string src)
         {
             return string.IsNullOrWhiteSpace(src) ? null : src;
+        }
+
+        public static string FormatString(this string source, params object[] args)
+        {
+            return string.Format(source, args);
+        }
+
+        public static bool IsValidWebAddress(this string source)
+        {
+            Uri parsedUrl;
+            return Uri.TryCreate(source, UriKind.Absolute, out parsedUrl) && (parsedUrl.Scheme == "http" || parsedUrl.Scheme == "https");
         }
     }
 }

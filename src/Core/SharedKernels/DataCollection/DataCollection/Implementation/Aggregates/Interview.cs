@@ -29,6 +29,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static readonly decimal[] EmptyRosterVector = { };
 
         private Guid questionnaireId;
+        private Guid interviewerId;
         private long questionnaireVersion;
         private bool wasCompleted;
         private bool wasHardDeleted;
@@ -432,7 +433,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(SupervisorAssigned @event) { }
 
-        private void Apply(InterviewerAssigned @event) { }
+        internal void Apply(InterviewerAssigned @event)
+        {
+            this.interviewerId = @event.InterviewerId;
+        }
 
         private void Apply(InterviewDeleted @event) { }
 
@@ -493,7 +497,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.interviewState.ValidAnsweredQuestions,
                 this.interviewState.InvalidAnsweredQuestions,
                 this.wasCompleted,
-                this.ExpressionProcessorStatePrototype);
+                this.ExpressionProcessorStatePrototype, this.interviewerId);
         }
 
         public void RestoreFromSnapshot(InterviewState snapshot)
@@ -515,6 +519,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.InvalidAnsweredQuestions = snapshot.InvalidAnsweredQuestions;
             this.wasCompleted = snapshot.WasCompleted;
             this.wasHardDeleted = snapshot.WasHardDeleted;
+            this.interviewerId = snapshot.InterviewewerId;
         }
 
         #region Dependencies
@@ -1759,6 +1764,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void SynchronizeInterviewEvents(Guid userId, Guid questionnaireId, long questionnaireVersion,
             InterviewStatus interviewStatus, object[] synchronizedEvents, bool createdOnClient)
         {
+            ThrowIfOtherUserIsResponsible(userId);
+
             SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
 
             GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
@@ -1781,6 +1788,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.ApplyEvent(synchronizedEvent);
             }
+        }
+
+        private void ThrowIfOtherUserIsResponsible(Guid userId)
+        {
+            if (this.interviewerId != Guid.Empty && userId != this.interviewerId)
+                throw new InterviewException(
+                    string.Format(
+                        "interviewer with id {0} is not responsible for the interview anymore, interviewer with id {1} is.",
+                        userId, interviewerId));
         }
 
         public void ApplySynchronizationMetadata(Guid id, Guid userId, Guid questionnaireId, long questionnaireVersion,
@@ -3285,7 +3301,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         InterviewStatus.Restored,
                         InterviewStatus.RejectedBySupervisor,
                         InterviewStatus.SupervisorAssigned,
-                        InterviewStatus.Restarted);
+                        InterviewStatus.Restarted,
+                        InterviewStatus.Completed);
                     return;
                 case InterviewStatus.ApprovedBySupervisor:
                     this.ThrowIfInterviewStatusIsNotOneOfExpected(

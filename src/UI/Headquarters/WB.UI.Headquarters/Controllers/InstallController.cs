@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
-
-using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Implementation.Crypto;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
@@ -37,14 +34,18 @@ namespace WB.UI.Headquarters.Controllers
             {
                 try
                 {
-                    this.CommandService.Execute(new CreateUserCommand(publicKey: Guid.NewGuid(), userName: model.UserName,
-                    password: passwordHasher.Hash(model.Password), email: model.Email, isLockedBySupervisor: false,
-                    isLockedByHQ: false, roles: new[] { UserRoles.Headquarter }, supervsor: null));
+                    this.CommandService.Execute(
+                        new CreateUserCommand(publicKey: Guid.NewGuid(), userName: model.UserName,
+                                              password: passwordHasher.Hash(model.Password), 
+                                              email: model.Email, isLockedBySupervisor: false,
+                                              isLockedByHQ: false, roles: new[] { UserRoles.Administrator }, 
+                                              supervsor: null));
+
                     return this.RedirectToAction("LogOn", "Account");
                 }
                 catch (Exception ex)
                 {
-                    this.Logger.Fatal("Error when creating headquarters user", ex);
+                    this.Logger.Fatal("Error when creating admin user", ex);
                 }
             }
 

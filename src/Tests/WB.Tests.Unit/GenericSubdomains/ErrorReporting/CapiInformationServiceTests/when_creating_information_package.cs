@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
@@ -21,7 +22,7 @@ namespace WB.Tests.Unit.GenericSubdomains.ErrorReporting.CapiInformationServiceT
                 (fileToAdd) => filesAddedToArchive.Add(fileToAdd), archiveUtils.Object);
         };
 
-        Because of = () => pathToResultArchive = capiInformationService.CreateInformationPackage();
+        Because of = () => pathToResultArchive = capiInformationService.CreateInformationPackage(new CancellationTokenSource().Token).Result;
 
         It should_result_ends_with_zip_extension = () => pathToResultArchive.ShouldEndWith(".zip");
         

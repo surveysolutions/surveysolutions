@@ -10,8 +10,11 @@ using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveySolutions.Services;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
@@ -125,16 +128,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IGroup>(RosterFixedTitlesHaveMoreThanAllowedItems, "WB0038", VerificationMessages.WB0038_RosterFixedTitlesHaveMoreThan40Items),
                     Verifier<ITextListQuestion>(TextListQuestionCannotBePrefilled, "WB0039", VerificationMessages.WB0039_TextListQuestionCannotBePrefilled),
                     Verifier<ITextListQuestion>(TextListQuestionCannotBeFilledBySupervisor, "WB0040", VerificationMessages.WB0040_TextListQuestionCannotBeFilledBySupervisor),
-                    Verifier<ITextListQuestion>(TextListQuestionCannotHaveCustomValidation, "WB0041", VerificationMessages.WB0041_TextListQuestionCannotCustomValidation),
                     Verifier<ITextListQuestion>(TextListQuestionMaxAnswerNotInRange1And40, "WB0042", VerificationMessages.WB0042_TextListQuestionMaxAnswerInRange1And40),
                     Verifier<IQuestion>(QuestionHasOptionsWithEmptyValue, "WB0045", VerificationMessages.WB0045_QuestionHasOptionsWithEmptyValue),
-                    Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionShouldNotHaveValidationExpression, "WB0047", VerificationMessages.WB0047_QRBarcodeQuestionShouldNotHaveValidationExpression),
-                    Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionShouldNotHaveValidationMessage, "WB0048", VerificationMessages.WB0048_QRBarcodeQuestionShouldNotHaveValidationMessage),
                     Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionIsSupervisorQuestion, "WB0049", VerificationMessages.WB0049_QRBarcodeQuestionIsSupervisorQuestion),
                     Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionIsPreFilledQuestion, "WB0050", VerificationMessages.WB0050_QRBarcodeQuestionIsPreFilledQuestion),
-                    Verifier<IQuestion, IComposite>(this.QRBarcodeQuestionsCannotBeUsedInValidationExpression, "WB0052", VerificationMessages.WB0052_QRBarcodeQuestionsCannotBeUsedInValidationExpression),
-                    Verifier<IQuestion, IComposite>(this.QRBarcodeQuestionsCannotBeUsedInQuestionEnablementCondition, "WB0053", VerificationMessages.WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition),
-                    Verifier<IGroup, IComposite>(this.QRBarcodeQuestionsCannotBeUsedInGroupEnablementCondition, "WB0053", VerificationMessages.WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition),
                     Verifier<IGroup, IComposite>(RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster, "WB0054", VerificationMessages.WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster),
                     Verifier<IGroup>(RosterHasRosterLevelMoreThan4, "WB0055", VerificationMessages.WB0055_RosterHasRosterLevelMoreThan4),
                     Verifier<IQuestion, IComposite>(this.QuestionShouldNotHaveCircularReferences, "WB0056", VerificationMessages.WB0056_QuestionShouldNotHaveCircularReferences),
@@ -176,15 +173,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IComposite>(ConditionExpresssionHasLengthMoreThan10000Characters, "WB0094", VerificationMessages.WB0094_ConditionExpresssionHasLengthMoreThan10000Characters),
                     Verifier<IQuestion>(ValidationExpresssionHasLengthMoreThan10000Characters, "WB0095", VerificationMessages.WB0095_ValidationExpresssionHasLengthMoreThan10000Characters),
                     Verifier(QuestionnaireTitleHasInvalidCharacters, "WB0097", VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
+                    Verifier(QuestionnaireHasSizeMoreThan5MB, "WB0098", size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size)),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
-                    this.ErrorsByEpressionsThatUsesTextListQuestions,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
                     ErrorsByQuestionsWithDuplicateVariableName,
                     ErrorsByRostersWithDuplicateVariableName,
-                    ErrorsByConditionAndValidationExpressions
+                    ErrorsByConditionAndValidationExpressions,
                 };
             }
         }
@@ -240,6 +237,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             {
                 yield return CreateExpressionSyntaxError(new ExpressionLocation(locationOfExpressionError));
             }
+        }
+
+        private static Tuple<bool, decimal> QuestionnaireHasSizeMoreThan5MB(QuestionnaireDocument questionnaire)
+        {
+            var jsonQuestionnaire = JsonConvert.SerializeObject(questionnaire, Formatting.None);
+            var questionnaireByteCount = Encoding.UTF8.GetByteCount(jsonQuestionnaire);
+            var isOversized = questionnaireByteCount > 5 * 1024 * 1024; // 5MB
+            var questionnaireMegaByteCount = (decimal)questionnaireByteCount / 1024 / 1024;
+            return new Tuple<bool, decimal>(isOversized, questionnaireMegaByteCount) ;
         }
         
         private GenerationResult GetCompilationResult(QuestionnaireDocument questionnaire)
@@ -448,6 +454,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 hasError(questionnaire)
                     ? new[] { new QuestionnaireVerificationError(code, message) }
                     : Enumerable.Empty<QuestionnaireVerificationError>();
+        }
+
+        private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> Verifier<TArg>(
+            Func<QuestionnaireDocument, Tuple<bool, TArg>> hasError, string code, Func<TArg, string> messageBuilder)
+        {
+            return (questionnaire, state) =>
+            {
+                var errorCheckResult = hasError(questionnaire);
+                return errorCheckResult.Item1
+                    ? new[] { new QuestionnaireVerificationError(code, messageBuilder.Invoke(errorCheckResult.Item2)) }
+                    : Enumerable.Empty<QuestionnaireVerificationError>();
+            };
         }
 
         private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> Verifier<TEntity>(
@@ -782,11 +800,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return new EntityVerificationResult<IComposite> { HasErrors = false };
         }
 
-        private static bool TextListQuestionCannotHaveCustomValidation(ITextListQuestion question)
-        {
-            return !string.IsNullOrWhiteSpace(question.ValidationExpression);
-        }
-
         private static bool TextListQuestionCannotBeFilledBySupervisor(ITextListQuestion question)
         {
             return IsSupervisorQuestion(question);
@@ -815,26 +828,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return IsSupervisorQuestion(question);
         }
 
-        private static bool QRBarcodeQuestionShouldNotHaveValidationMessage(IQRBarcodeQuestion question)
-        {
-            return !string.IsNullOrEmpty(question.ValidationMessage);
-        }
-
-        private static bool QRBarcodeQuestionShouldNotHaveValidationExpression(IQRBarcodeQuestion question)
-        {
-            return !string.IsNullOrEmpty(question.ValidationExpression);
-        }
-
         private static bool MultimediaShouldNotHaveValidationExpression(IMultimediaQuestion question)
         {
             return !string.IsNullOrEmpty(question.ValidationExpression);
-        }
-
-        private EntityVerificationResult<IComposite> QRBarcodeQuestionsCannotBeUsedInValidationExpression(IQuestion question, QuestionnaireDocument questionnaire)
-        {
-            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
-                question, question.ValidationExpression, questionnaire,
-                isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.QRBarcode);
         }
 
         private EntityVerificationResult<IComposite> MultimediaQuestionsCannotBeUsedInValidationExpression(IQuestion question, QuestionnaireDocument questionnaire)
@@ -842,13 +838,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
                 question, question.ValidationExpression, questionnaire,
                 isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.Multimedia);
-        }
-
-        private EntityVerificationResult<IComposite> QRBarcodeQuestionsCannotBeUsedInQuestionEnablementCondition(IQuestion question, QuestionnaireDocument questionnaire)
-        {
-            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
-                question, question.ConditionExpression, questionnaire,
-                isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.QRBarcode);
         }
 
         private EntityVerificationResult<IComposite> MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition(IQuestion question, QuestionnaireDocument questionnaire)
@@ -877,13 +866,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 HasErrors = true,
                 ReferencedEntities = new IComposite[] { group, rosterTitleQuestion }
             };
-        }
-
-        private EntityVerificationResult<IComposite> QRBarcodeQuestionsCannotBeUsedInGroupEnablementCondition(IGroup group, QuestionnaireDocument questionnaire)
-        {
-            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
-                group, group.ConditionExpression, questionnaire,
-                isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.QRBarcode);
         }
 
         private EntityVerificationResult<IComposite> MultimediaQuestionsCannotBeUsedInGroupEnablementCondition(IGroup group, QuestionnaireDocument questionnaire)
@@ -1143,16 +1125,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return errorByAllItemsWithCustomCondition;
         }
 
-        private IEnumerable<QuestionnaireVerificationError> ErrorsByEpressionsThatUsesTextListQuestions(
-            QuestionnaireDocument questionnaire, VerificationState state)
-        {
-            var errors = new List<QuestionnaireVerificationError>();
-            errors.AddRange(this.ErrorsByGroupsOrQuestionsWithCustomExpression<IQuestion>(questionnaire, q => q.ValidationExpression, CustomValidationExpressionUsesTextListQuestion));
-            errors.AddRange(this.ErrorsByGroupsOrQuestionsWithCustomExpression<IQuestion>(questionnaire, q => q.ConditionExpression, CustomConditionExpressionUsesTextListQuestion));
-            errors.AddRange(this.ErrorsByGroupsOrQuestionsWithCustomExpression<IGroup>(questionnaire, g => g.ConditionExpression, CustomConditionExpressionUsesTextListQuestion));
-            return errors;
-        }
-
         private IEnumerable<QuestionnaireVerificationError> ErrorsByGroupsOrQuestionsWithCustomExpression<T>(QuestionnaireDocument questionnaire, Func<T, string> getExpression, Func<T, QuestionnaireVerificationError> getCustomError) where T : class
         {
             var itemsWithValidationExpression = questionnaire.Find<T>(q => !string.IsNullOrEmpty(getExpression(q)));
@@ -1183,7 +1155,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool QuestionHasValidationExpressionWithoutValidationMessage(IQuestion question)
         {
-            if (string.IsNullOrWhiteSpace(question.ValidationExpression) || question.QuestionType == QuestionType.QRBarcode)
+            if (string.IsNullOrWhiteSpace(question.ValidationExpression))
                 return false;
 
             return string.IsNullOrWhiteSpace(question.ValidationMessage);
@@ -1347,27 +1319,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return null;
         }
 
-        private static QuestionnaireVerificationError CustomValidationExpressionUsesTextListQuestion(IQuestion questionWithValidationExpression)
-        {
-            return new QuestionnaireVerificationError("WB0043",
-                VerificationMessages.WB0043_TextListQuestionCannotBeUsedInValidationExpressions,
-                CreateReference(questionWithValidationExpression));
-        }
-
-        private static QuestionnaireVerificationError CustomConditionExpressionUsesTextListQuestion(IQuestion questionWithConditionExpression)
-        {
-            return new QuestionnaireVerificationError("WB0044",
-                VerificationMessages.WB0044_TextListQuestionCannotBeUsedInEnablementConditions,
-                CreateReference(questionWithConditionExpression));
-        }
-
-        private static QuestionnaireVerificationError CustomConditionExpressionUsesTextListQuestion(IGroup groupWithConditionExpression)
-        {
-            return new QuestionnaireVerificationError("WB0044",
-                VerificationMessages.WB0044_TextListQuestionCannotBeUsedInEnablementConditions,
-                CreateReference(groupWithConditionExpression));
-        }
-
         private static QuestionnaireVerificationError CustomConditionExpressionUsesNotRecognizedParameter(IComposite questionWithConditionExpression)
         {
             return new QuestionnaireVerificationError("WB0005",
@@ -1381,8 +1332,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 VerificationMessages.WB0004_CustomValidationExpressionReferencesNotExistingQuestion,
                 CreateReference(questionWithValidationExpression));
         }
-
-        
 
         private static QuestionnaireVerificationError QuestionWithTitleSubstitutionCantBePrefilled(IQuestion questionsWithSubstitution)
         {
