@@ -78,7 +78,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         [TestCase(QuestionType.Numeric, 1)]
         [TestCase(QuestionType.Numeric, 1.3)]
         [TestCase(QuestionType.Text, "answer text")]
-        [TestCase(QuestionType.DateTime, "02/02/2012")]
+        [TestCase(QuestionType.DateTime, "2/2/2012")]
         [TestCase(QuestionType.QRBarcode, "some answer")]
         public void Update_When_event_with_answer_on_featured_question_published_Then_answer_value_be_equal_passed_answer(QuestionType type,
             object answer)
@@ -97,7 +97,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             var updatedInterviewSummary = this.CallUpdateMethod(interviewSummaryEventHandler, savedInterviewSummary,
                 this.CreateQuestionAnsweredEventByQuestionType(questionId, type, answer));
 
-            Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions[questionId].Answer, Is.EqualTo(AnswerUtils.AnswerToString(answer)));
+            Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions[questionId].Answer, Is.EqualTo(answer));
         }
 
         [Test]
