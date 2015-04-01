@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Raven.Client;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Storage.Raven.PlainStorage;
@@ -73,6 +74,15 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.PlainStorage
                 session.Store(entity: entity, id: ravenId);
                 session.SaveChanges();
             }
+        }
+
+        public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
+        {
+            using (IDocumentSession session = this.OpenSession())
+            {
+                return query.Invoke(session.Query<TEntity>().Customize(customization => customization.WaitForNonStaleResultsAsOfLastWrite()));
+            }
+
         }
 
         protected IDocumentSession OpenSession()

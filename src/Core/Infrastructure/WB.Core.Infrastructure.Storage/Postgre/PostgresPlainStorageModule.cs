@@ -37,8 +37,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
                 .InRequestScope()
                 .Named(SessionName);
 
-            this.Bind(typeof(IPlainStorageAccessor<>)).To(typeof(PostgresPlainStorageRepository<>));
-            this.Bind(typeof(IQueryablePlainStorageAccessor<>)).To(typeof(PostgresPlainStorageRepository<>));
+            this.Bind(typeof(IPlainStorageAccessor<>)).To(typeof(PostgresPlainStorageRepository<>)).InTransientScope();
             this.Bind<IPlainTransactionManager>().To<PlainPostgresTransactionManager>();
         }
 

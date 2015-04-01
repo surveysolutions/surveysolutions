@@ -8,7 +8,7 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
-    public class PostgresPlainStorageRepository<TEntity> : IQueryablePlainStorageAccessor<TEntity> where TEntity : class
+    public class PostgresPlainStorageRepository<TEntity> : IPlainStorageAccessor<TEntity> where TEntity : class
     {
         private readonly ISession session;
 
