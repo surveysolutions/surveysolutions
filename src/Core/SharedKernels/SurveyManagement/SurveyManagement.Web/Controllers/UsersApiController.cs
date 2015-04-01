@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
-    [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+    [Authorize(Roles = "Administrator, Headquarter, Supervisor, Observer")]
     public class UsersApiController : BaseApiController
     {
         private readonly IInterviewersViewFactory interviewersFactory;
@@ -30,6 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public InterviewersView Interviewers(UsersListViewModel data)
         {
             // Headquarter and Admin can view interviewers by any supervisor
@@ -57,7 +58,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [Authorize(Roles = "Administrator, Headquarter, Observer")]
         public UserListView Supervisors(UsersListViewModel data)
         {
             var input = new UserListViewInputModel
@@ -78,12 +79,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, Observer")]
         public UserListView Headquarters(UsersListViewModel data)
         {
             var input = new UserListViewInputModel
             {
                 Role = UserRoles.Headquarter,
+                Orders = data.SortOrder,
+                SearchBy = data.SearchBy
+            };
+
+            if (data.Pager != null)
+            {
+                input.Page = data.Pager.Page;
+                input.PageSize = data.Pager.PageSize;
+            }
+
+            UserListView result = this.supervisorsFactory.Load(input);
+            return result;
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Administrator")]
+        public UserListView Observers(UsersListViewModel data)
+        {
+            var input = new UserListViewInputModel
+            {
+                Role = UserRoles.Observer,
                 Orders = data.SortOrder,
                 SearchBy = data.SearchBy
             };

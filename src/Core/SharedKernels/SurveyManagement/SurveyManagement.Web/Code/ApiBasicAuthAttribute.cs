@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
         {
             if (this.readSideStatusService.AreViewsBeingRebuiltNow())
             {
-                this.ResponseMaintenanceMessage(actionContext);
+                this.RespondWithMaintenanceMessage(actionContext);
                 return;
             }
 
@@ -128,7 +128,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             actionContext.Response.Headers.Add("WWW-Authenticate", string.Format("Basic realm=\"{0}\"", actionContext.Request.RequestUri.DnsSafeHost));
         }
 
-        private void ResponseMaintenanceMessage(HttpActionContext actionContext)
+        private void RespondWithMaintenanceMessage(HttpActionContext actionContext)
         {
             actionContext.Response = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable) { ReasonPhrase = InterviewerSyncStrings.Maintenance };
         }

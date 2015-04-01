@@ -132,6 +132,9 @@
   <data name="MapReport" xml:space="preserve">
     <value>Map Report</value>
   </data>
+  <data name="Observers" xml:space="preserve">
+    <value>Observers</value>
+  </data>
   <data name="Questionnaires" xml:space="preserve">
     <value>Questionnaires</value>
   </data>

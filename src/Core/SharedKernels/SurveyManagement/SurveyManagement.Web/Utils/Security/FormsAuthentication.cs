@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
 
@@ -11,12 +12,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
     {
         #region Public Methods and Operators
 
-        /// <summary>
-        /// The get current user.
-        /// </summary>
-        /// <returns>
-        /// The ???.
-        /// </returns>
         public UserLight GetCurrentUser()
         {
             MembershipUser u;
@@ -50,18 +45,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
             return user != null ? user.Id.ToString() : null;
         }
 
-        /// <summary>
-        /// The sign in.
-        /// </summary>
-        /// <param name="userName">
-        /// The user name.
-        /// </param>
-        /// <param name="rememberMe">
-        /// The remember me.
-        /// </param>
+
         public void SignIn(string userName, bool rememberMe)
         {
-            System.Web.Security.FormsAuthentication.SetAuthCookie(userName, rememberMe);
+            this.SignIn(userName, rememberMe, string.Empty);
+        }
+        
+        public void SignIn(string userName, bool rememberMe, string userData)
+        {
+            //System.Web.Security.FormsAuthentication.SetAuthCookie(userName, rememberMe);
+ 
+            HttpCookie authCookie = System.Web.Security.FormsAuthentication.GetAuthCookie(userName, rememberMe);
+            FormsAuthenticationTicket ticket = System.Web.Security.FormsAuthentication.Decrypt(authCookie.Value);
+            FormsAuthenticationTicket newTicket = new FormsAuthenticationTicket(ticket.Version, ticket.Name, ticket.IssueDate, ticket.Expiration, ticket.IsPersistent, userData);
+            authCookie.Value = System.Web.Security.FormsAuthentication.Encrypt(newTicket);
+            HttpContext.Current.Response.Cookies.Add(authCookie);
+
         }
 
         /// <summary>
