@@ -5,7 +5,7 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Tests.Unit
 {
-    public class TestPlainStorage<T> : IQueryablePlainStorageAccessor<T> where T : class
+    public class TestPlainStorage<T> : IPlainStorageAccessor<T> where T : class
     {
         private readonly Dictionary<object, T> entites;
 

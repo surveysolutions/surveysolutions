@@ -146,7 +146,6 @@
     <Compile Include="Ncqrs\Utils.cs" />
     <Compile Include="PlainStorage\IPlainStorageAccessor.cs" />
     <Compile Include="PlainStorage\IPlainTransactionManager.cs" />
-    <Compile Include="PlainStorage\IQueryablePlainStorageAccessor.cs" />
     <Compile Include="PlainStorage\PlainStorageAttribute.cs" />
     <Compile Include="ReadSide\IChacheableRepositoryWriter.cs" />
     <Compile Include="ReadSide\IReadSideAdministrationService.cs" />

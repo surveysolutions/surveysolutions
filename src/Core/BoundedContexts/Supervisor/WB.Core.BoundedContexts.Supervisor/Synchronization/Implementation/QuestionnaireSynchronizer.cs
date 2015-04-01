@@ -29,14 +29,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly IHeadquartersSettings settings;
         private readonly HeadquartersPullContext headquartersPullContext;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
-        private readonly IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry> plainStorage;
+        private readonly IPlainStorageAccessor<LocalQuestionnaireFeedEntry> plainStorage;
         private readonly IDeleteQuestionnaireService deleteQuestionnaireService;
         private readonly IHeadquartersQuestionnaireReader headquartersQuestionnaireReader;
         private readonly Action<ICommand> executeCommand;
         private readonly ILogger logger;
 
-        public QuestionnaireSynchronizer(IAtomFeedReader feedReader, IHeadquartersSettings settings,
-            HeadquartersPullContext headquartersPullContext, IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry> plainStorage, ILogger logger, IPlainQuestionnaireRepository plainQuestionnaireRepository,
+        public QuestionnaireSynchronizer(IAtomFeedReader feedReader, 
+            IHeadquartersSettings settings,
+            HeadquartersPullContext headquartersPullContext, 
+            IPlainStorageAccessor<LocalQuestionnaireFeedEntry> plainStorage, 
+            ILogger logger, 
+            IPlainQuestionnaireRepository plainQuestionnaireRepository,
 
             ICommandService commandService, IHeadquartersQuestionnaireReader headquartersQuestionnaireReader, IDeleteQuestionnaireService deleteQuestionnaireService)
         {

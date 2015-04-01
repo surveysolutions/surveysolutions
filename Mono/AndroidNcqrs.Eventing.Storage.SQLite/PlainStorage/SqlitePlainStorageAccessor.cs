@@ -68,6 +68,11 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage
             this.documentStore.Store(rows);
         }
 
+        public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
+        {
+            throw new NotSupportedException("Query operations are not supported by android sqlite store");
+        }
+
         private static string SerializeEntity(TEntity entity)
         {
             return JsonConvert.SerializeObject(entity, Formatting.None, GetJsonSerializerSettings());
