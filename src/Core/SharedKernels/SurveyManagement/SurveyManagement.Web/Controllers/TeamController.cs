@@ -53,6 +53,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             CreateUser(user: headquartersUser, role: UserRoles.Headquarter);
         }
 
+        protected void CreateObserver(UserModel observerUser)
+        {
+            CreateUser(user: observerUser, role: UserRoles.Observer);
+        }
+
         protected void UpdateAccount(UserView user, UserEditModel editModel)
         {
             this.CommandService.Execute(new ChangeUserCommand(publicKey: user.PublicKey, email: editModel.Email,
