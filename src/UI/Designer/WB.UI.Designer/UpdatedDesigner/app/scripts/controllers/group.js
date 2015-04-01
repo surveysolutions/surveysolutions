@@ -3,13 +3,14 @@
         function ($rootScope, $scope, $stateParams, questionnaireService, commandService, hotkeys) {
             $scope.currentChapterId = $stateParams.chapterId;
 
-            if (hotkeys.get('ctrl+s') !== false) {
-                hotkeys.del('ctrl+s');
+            var saveGroup = 'ctrl+s';
+            if (hotkeys.get(saveGroup) !== false) {
+                hotkeys.del(saveGroup);
             }
 
             hotkeys.bindTo($scope)
              .add({
-                 combo: 'ctrl+s',
+                 combo: saveGroup,
                  description: 'Save changes',
                  allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                  callback: function (event) {

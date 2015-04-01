@@ -10,9 +10,14 @@
                 $scope.selectedListQuestion = null;
                 $scope.selectedTitleQuestion = null;
 
+                var saveRoster = 'ctrl+s';
+
+                if (hotkeys.get(saveRoster) === false) {
+                    hotkeys.del(saveRoster);
+                }
                 hotkeys.bindTo($scope)
                       .add({
-                          combo: 'ctrl+s',
+                          combo: saveRoster,
                           description: 'Save changes',
                           allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                           callback: function (event) {

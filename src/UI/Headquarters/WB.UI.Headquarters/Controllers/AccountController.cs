@@ -1,14 +1,17 @@
-﻿using System.Web;
+﻿using System;
+using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.UI.Headquarters.Code;
@@ -42,11 +45,14 @@ namespace WB.UI.Headquarters.Controllers
             {
                 if (Membership.ValidateUser(model.UserName, passwordHasher.Hash(model.Password)))
                 {
-                    bool isAdmin = Roles.IsUserInRole(model.UserName, UserRoles.Administrator.ToString());
-                    bool isHeadquarter = Roles.IsUserInRole(model.UserName, UserRoles.Headquarter.ToString());
-                    bool isSupervisor = Roles.IsUserInRole(model.UserName, UserRoles.Supervisor.ToString());
+                    var userRoles = Roles.GetRolesForUser(model.UserName);
 
-                    if (isHeadquarter || (isSupervisor && LegacyOptions.SupervisorFunctionsEnabled) || isAdmin)
+                    bool isAdmin = userRoles.Contains(UserRoles.Administrator.ToString(), StringComparer.OrdinalIgnoreCase);
+                    bool isHeadquarter = userRoles.Contains(UserRoles.Headquarter.ToString(), StringComparer.OrdinalIgnoreCase);
+                    bool isSupervisor = userRoles.Contains(UserRoles.Supervisor.ToString(), StringComparer.OrdinalIgnoreCase);
+                    bool isObserver = userRoles.Contains(UserRoles.Observer.ToString(), StringComparer.OrdinalIgnoreCase);
+
+                    if (isHeadquarter || (isSupervisor && LegacyOptions.SupervisorFunctionsEnabled) || isAdmin || isObserver)
                     {
                         this.authentication.SignIn(model.UserName, false);
                         
@@ -58,7 +64,10 @@ namespace WB.UI.Headquarters.Controllers
                         {
                             return this.RedirectToAction("SurveysAndStatuses", "HQ");
                         }
-
+                        if (isObserver)
+                        {
+                            return this.RedirectToAction("Index", "Supervisor");
+                        }
                         if (isAdmin)
                         {
                             return this.RedirectToAction("Index", "Headquarters");
@@ -99,11 +108,69 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
             if (this.ModelState.IsValid)
             {
-                this.UpdateAccount(user: GetUserById(GlobalInfo.GetCurrentUser().Id), editModel: model);
-                this.Success(Core.SharedKernels.SurveyManagement.Web.Properties.Strings.HQ_AccountController_AccountUpdatedSuccessfully);
+                if ((User.Identity as CustomIdentity).IsObserver)
+                {
+                    this.Error("You cannot perform any operation in observer mode.");
+                }
+                else
+                {
+                    this.UpdateAccount(user: GetUserById(GlobalInfo.GetCurrentUser().Id), editModel: model);
+                    this.Success(
+                        Strings
+                            .HQ_AccountController_AccountUpdatedSuccessfully);
+                }
             }
 
             return this.View(model);
+        }
+
+        
+        [Authorize(Roles = "Administrator, Observer")]
+        public ActionResult ObservePerson(string personName)
+        {
+            if (string.IsNullOrEmpty(personName)) 
+                throw new HttpException(404, string.Empty);
+            
+            var user = Membership.GetUser(personName);
+            if (user == null) 
+                throw new HttpException(404, string.Empty);
+            
+            var currentUser = GlobalInfo.GetCurrentUser().Name;
+
+            var forbiddenRoles = new string[] { UserRoles.Administrator.ToString(), UserRoles.Observer.ToString(), UserRoles.Operator.ToString() };
+            var userRoles = Roles.GetRolesForUser(user.UserName);
+            bool invalidTargetUser = userRoles.Any(r => forbiddenRoles.Contains(r));
+            
+            if (invalidTargetUser) 
+                throw new HttpException(404, string.Empty);
+            bool isHeadquarter = userRoles.Contains(UserRoles.Headquarter.ToString(), StringComparer.OrdinalIgnoreCase);
+            
+            //do not forget pass currentuser to display you are observing
+            this.authentication.SignIn(user.UserName, false, currentUser);
+            
+            return isHeadquarter ? 
+                this.RedirectToAction("SurveysAndStatuses", "HQ") : 
+                this.RedirectToAction("Index", "Survey");
+        }
+
+        [Authorize(Roles = "Headquarter, Supervisor")]
+        public ActionResult ReturnToObserver()
+        {
+            var currentUserName = (User.Identity as CustomIdentity);
+
+            if (currentUserName == null || string.IsNullOrEmpty(currentUserName.ObserverName))
+                throw new HttpException(404, string.Empty);
+            
+            var alowedRoles = new string[] { UserRoles.Administrator.ToString(), UserRoles.Observer.ToString(), UserRoles.Operator.ToString() };
+            var userRoles = Roles.GetRolesForUser(currentUserName.ObserverName);
+
+            bool targetUserInValidRole = userRoles.Any(r => alowedRoles.Contains(r));
+
+            if (!targetUserInValidRole) 
+                throw new HttpException(404, string.Empty);
+            
+            this.authentication.SignIn(currentUserName.ObserverName, false);
+            return this.RedirectToAction("Index", "Headquarters");
         }
     }
 }

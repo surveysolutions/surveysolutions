@@ -1,6 +1,7 @@
-﻿@using WB.UI.Designer
+﻿@using System.Web.Configuration
+@using WB.UI.Designer
+@using WB.UI.Designer.Extensions
 @using WB.UI.Shared.Web.Membership
-@using WB.UI.Designer.Code
 @using WB.UI.Shared.Web.Extensions
 @{
     IMembershipUserService userHelper = ViewBag.UserHelper;
@@ -12,9 +13,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @*<link href="@Styles.Url("~/content/css")" rel="stylesheet" />*@
 
     <link href="~/UpdatedDesigner/content/designer-start/bootstrap-custom.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="~/UpdatedDesigner/vendor/perfect-scrollbar/src/perfect-scrollbar.css" rel="stylesheet" />
     <link href="~/UpdatedDesigner/content/designer-start/designer-list.css" media="screen" rel="stylesheet" type="text/css" />
 
     <script src="~/UpdatedDesigner/vendor/jquery/dist/jquery.min.js" type="text/javascript"></script>
@@ -26,50 +27,45 @@
     @this.Html.Partial("_html5shiv")
     @*@Html.Partial("_trackers")*@
     @* favicons and touch icons go here *@
-</head>
-<body>
-    <div class="container-wb-list">
-        <div class="header-wb-list">
-            <header>
-                @Html.ActionLink("Designer", "Index", "Questionnaire", null, new { @class = "questionnaire-logo" })
-                <ul class="nav nav-tabs">
 
-                    <li role="presentation">@Html.MenuActionLink("My Questionnaires", "Index", "Questionnaire")</li>
-                    <li role="presentation">@Html.MenuActionLink("Public Questionnaires", "Public", "Questionnaire")</li>
-                    @if (userHelper.WebUser.IsAdmin)
-                    {
-                        <li role="presentation">@Html.ActionLink("Manage users", "Index", "Admin")</li>
-                    }
-                    <li role="presentation" class="create">@Html.ActionLink("Create New", "Create", "Questionnaire", null, new { @class = "btn" })</li>
-                </ul>
-                <nav>
-                    <button class="btn btn-default">Help</button>
-                    @Html.ActionLink("Change password", "Manage", "Account", null, new { @class = "btn btn-default" })
-                    @if (userHelper.WebUser.IsAdmin)
-                    {
-                        <a class="btn btn-default" href="@Url.Action("Import", "Synchronization")">Import questionnaire</a>
-                    }
-                    @Html.ActionLink("Logout", "LogOff", "Account", null, new { @class = "btn btn-default" })
-                </nav>
-            </header>
-        </div>
-        <section id="designer-list">
-            @if (!string.IsNullOrWhiteSpace(ViewData["UserNotification"] as string))
-            {
-                <div id="table-message">
-                    <p>
-                        @Html.Raw(ViewData["UserNotification"])
-                    </p>
-                    <button class="btn btn-link">Close</button>
-                    <a href="#" class="cross" title="Close"></a>
-                </div>
-            }
-            @this.RenderBody()
-        </section>
+    <script type="text/javascript">
+    function FrameCheck() {
+        if (top != self)
+            top.location.replace(self.location.href);
+    }
+    </script>
+
+</head>
+<body onload="FrameCheck();">
+<div class="container-wb-list">
+    <div class="header-wb-list">
+        <header>
+            @Html.ActionLink("Designer", "Index", "Questionnaire", null, new { @class = "questionnaire-logo" })
+            <ul class="nav nav-tabs">
+
+                <li role="presentation">@Html.MenuActionLink("My Questionnaires", "Index", "Questionnaire")</li>
+                <li role="presentation">@Html.MenuActionLink("Public Questionnaires", "Public", "Questionnaire")</li>
+                @if (userHelper.WebUser.IsAdmin)
+                {
+                    <li role="presentation">@Html.MenuActionLink("Manage users", "Index", "Admin")</li>
+                }
+                <li role="presentation" class="create">@Html.ActionLink("Create New", "Create", "Questionnaire", null, new { @class = "btn" })</li>
+            </ul>
+            <nav>
+                <a class="btn btn-default" target="_blank" href="@WebConfigurationManager.AppSettings["DesignerHelpUrl"]">Help</a>
+                @Html.ActionLink("Change password", "Manage", "Account", null, new { @class = "btn btn-default" })
+                @if (userHelper.WebUser.IsAdmin)
+                {
+                    <a class="btn btn-default" href="@Url.Action("Import", "Admin")">Import questionnaire</a>
+                }
+                @Html.ActionLink("Logout", "LogOff", "Account", null, new { @class = "btn btn-default" })
+            </nav>
+        </header>
     </div>
+    <section id="designer-list">
+        @this.RenderBody()
+    </section>
+</div>
+@this.RenderSection("Modal", required: false)
 </body>
 </html>
-
-<li></li>
-
-@this.Html.Partial("_alerts")

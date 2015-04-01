@@ -4,16 +4,16 @@
         function ($rootScope, $scope, $state, commandService, utilityService, $log, confirmService, questionnaireService, hotkeys) {
             'use strict';
 
-            if (hotkeys.get('right') !== false) {
-                hotkeys.del('right');
-            }
+            var hideChaptersPane = 'right';
 
-            if (hotkeys.get('right') === false) {
-                hotkeys.add('right', 'Close chapters', function (event) {
-                    event.preventDefault();
-                    $scope.foldback();
-                });
+            if (hotkeys.get(hideChaptersPane) !== false) {
+                hotkeys.del(hideChaptersPane);
             }
+            hotkeys.add(hideChaptersPane, 'Close chapters', function (event) {
+                event.preventDefault();
+                $scope.foldback();
+            });
+            
 
             $scope.chapters = [];
 

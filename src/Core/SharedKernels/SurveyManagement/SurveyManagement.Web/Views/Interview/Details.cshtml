@@ -84,7 +84,7 @@
             <div class="panel-body">
                 <span><button data-bind="visible: !IsFilterOpen(), click: ToggleFilter" class="btn btn-default  btn-xs"><span class="glyphicon glyphicon-arrow-right"></span> Show groups</button></span>
                 @if (((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor)
-                         || (Model.InterviewDetails.Status == InterviewStatus.ApprovedBySupervisor && GlobalInfo.IsHeadquarter))
+                         || (Model.InterviewDetails.Status == InterviewStatus.ApprovedBySupervisor && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator)))
                 {
                     <button class="btn btn-success " data-bind="click: showApproveModal">Approve</button>
                     <button class="btn btn-danger" data-bind="click: showRejectModal">Reject</button>
