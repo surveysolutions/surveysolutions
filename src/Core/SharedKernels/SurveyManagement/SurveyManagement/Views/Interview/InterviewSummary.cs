@@ -36,6 +36,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             {
                 Id = featuredQuestion.PublicKey,
                 Title = featuredQuestion.QuestionText,
+                Type = featuredQuestion.QuestionType,
                 Answer = string.Empty
             };
         }
@@ -76,6 +77,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Answer { get; set; }
+        public QuestionType Type { get; set; }
     }
 
     public class QuestionAnswerWithOptions : QuestionAnswer

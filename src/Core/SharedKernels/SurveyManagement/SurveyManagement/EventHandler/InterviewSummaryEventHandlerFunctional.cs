@@ -199,7 +199,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<DateTimeQuestionAnswered> evnt)
         {
-            return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, evnt.Payload.Answer.ToLocalTime(), evnt.EventTimeStamp);
+            return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString("u"), evnt.EventTimeStamp);
         }
 
         public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<GeoLocationQuestionAnswered> evnt)
