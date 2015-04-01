@@ -13,6 +13,7 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.BootstrapSupport;
+using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers;
 using WB.UI.Shared.Web.Membership;
 using TemplateInfo = WB.Core.BoundedContexts.Designer.Services.TemplateInfo;
@@ -20,14 +21,8 @@ using TemplateInfo = WB.Core.BoundedContexts.Designer.Services.TemplateInfo;
 namespace WB.Tests.Unit.Applications.Designer
 {
     [TestFixture]
-    public class SynchronizationControllerTests
+    public class AdminControllerTests
     {
-        protected Mock<ICommandService> CommandServiceMock;
-        protected Mock<IStringCompressor> ZipUtilsMock;
-        protected Mock<IQuestionnaireExportService> ExportServiceMock;
-        protected Mock<IMembershipUserService> UserHelperMock;
-        protected Mock<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>> questionnaireViewFactoryMock;
-
         [SetUp]
         public void Setup()
         {
@@ -44,7 +39,7 @@ namespace WB.Tests.Unit.Applications.Designer
         public void Import_When_RequestContainsQuestionnirie_Then_ImportCommandExecutedAndRedirectToQuestionnairieController()
         {
             // arrange
-            SynchronizationController controller = this.CreateSynchronizationController();
+            AdminController controller = this.CreateAdminController();
 
             Mock<HttpPostedFileBase> file = new Mock<HttpPostedFileBase>();
 
@@ -76,7 +71,7 @@ namespace WB.Tests.Unit.Applications.Designer
         public void Import_When_RequestDoesntContainsQuestionnaire_Then_ImportCommandWasntExecutedAndRedirectToErrorController()
         {
             // arrange
-            SynchronizationController controller = this.CreateSynchronizationController();
+            AdminController controller = this.CreateAdminController();
             Mock<HttpPostedFileBase> file = new Mock<HttpPostedFileBase>();
 
             // act
@@ -91,7 +86,7 @@ namespace WB.Tests.Unit.Applications.Designer
         public void Export_When_TemplateIsNotNull_Then_FileIsReturned()
         {
             // arrange
-            SynchronizationController controller = this.CreateSynchronizationController();
+            AdminController controller = this.CreateAdminController();
             Guid templateId = Guid.NewGuid();
             TemplateInfo dataForZip = new TemplateInfo() { Source = "zipped data", Title = "template" };
 
@@ -125,7 +120,7 @@ namespace WB.Tests.Unit.Applications.Designer
 
             this.ExportServiceMock.Setup(x => x.GetQuestionnaireTemplateInfo(Moq.It.IsAny<QuestionnaireDocument>())).Returns(template);
 
-            SynchronizationController target = this.CreateSynchronizationController();
+            AdminController target = this.CreateAdminController();
 
             // act
             var result = target.Export(templateId);
@@ -134,13 +129,27 @@ namespace WB.Tests.Unit.Applications.Designer
             Assert.That(result, Is.EqualTo(null));
         }
 
-        private SynchronizationController CreateSynchronizationController()
+        private AdminController CreateAdminController(IMembershipUserService userHelper = null,
+            IQuestionnaireHelper questionnaireHelper = null,
+            ILogger logger = null,
+            IStringCompressor zipUtils = null,
+            ICommandService commandService = null,
+            IQuestionnaireExportService exportService = null,
+            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory = null)
         {
-            return new SynchronizationController(this.CommandServiceMock.Object,
-                                                 this.UserHelperMock.Object,
-                                                 this.ZipUtilsMock.Object, 
-                                                 this.ExportServiceMock.Object,
-                                                 this.questionnaireViewFactoryMock.Object);
+            return new AdminController(userHelper ?? UserHelperMock.Object,
+            questionnaireHelper ?? Mock.Of<IQuestionnaireHelper>(),
+            logger ?? Mock.Of<ILogger>(),
+            zipUtils ?? ZipUtilsMock.Object,
+            commandService ?? CommandServiceMock.Object,
+            exportService ?? ExportServiceMock.Object,
+            questionnaireViewFactory ?? questionnaireViewFactoryMock.Object);
         }
+
+        protected Mock<ICommandService> CommandServiceMock;
+        protected Mock<IStringCompressor> ZipUtilsMock;
+        protected Mock<IQuestionnaireExportService> ExportServiceMock;
+        protected Mock<IMembershipUserService> UserHelperMock;
+        protected Mock<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>> questionnaireViewFactoryMock;
     }
 }

@@ -10,6 +10,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -77,7 +78,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         [TestCase(QuestionType.Numeric, 1)]
         [TestCase(QuestionType.Numeric, 1.3)]
         [TestCase(QuestionType.Text, "answer text")]
-        [TestCase(QuestionType.DateTime, "02/02/2012")]
+        [TestCase(QuestionType.DateTime, "2012-02-01 22:00:00Z")]
         [TestCase(QuestionType.QRBarcode, "some answer")]
         public void Update_When_event_with_answer_on_featured_question_published_Then_answer_value_be_equal_passed_answer(QuestionType type,
             object answer)
@@ -136,7 +137,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             {
                 case QuestionType.DateTime:
                     return new DateTimeQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now,
-                        DateTime.Parse(answer.ToString()));
+                        DateTime.Parse(answer.ToString()).ToUniversalTime());
                 case QuestionType.Numeric:
                     if (answer is int)
                         return new NumericIntegerQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now, (int)answer);
