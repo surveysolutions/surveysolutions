@@ -85,10 +85,10 @@
                     <input type="checkbox" data-bind="checked: IsSelected" />
                 </td>
                 <!-- ko if:$root.SelectedTemplate() == '' -->
-                <td data-bind="text: FeaturedQuestions().joinArrayOfObjects('Question', 'Answer')"></td>
+                <td data-bind="text: $root.getFormattedPrefilledQuestions(FeaturedQuestions()).joinArrayOfObjects('Question', 'Answer')"></td>
                 <!-- /ko -->
                 <!-- ko ifnot:$root.SelectedTemplate() == '' -->
-                <!-- ko foreach:FeaturedQuestions -->
+                <!-- ko foreach:$root.getFormattedPrefilledQuestions(FeaturedQuestions()) -->
                 <td data-bind="text: Answer"></td>
                 <!-- /ko -->
                 <!-- /ko -->
