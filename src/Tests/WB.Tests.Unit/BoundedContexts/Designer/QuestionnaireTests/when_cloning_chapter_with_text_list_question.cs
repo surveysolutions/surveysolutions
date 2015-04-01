@@ -23,7 +23,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 Instructions = instructions,
                 Mandatory =  isMandatory,
                 MaxAnswerCount = maxAnswerCount,
-                StataExportCaption = variableName
+                StataExportCaption = variableName,
+                ValidationExpression = validation,
+                ValidationMessage = validationMessage
             });
 
             eventContext = new EventContext();
@@ -82,6 +84,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_TextListQuestionCloned_event_MaxAnswerCount_be_equal_maxAnswerCount = () =>
             eventContext.GetSingleEvent<TextListQuestionCloned>().MaxAnswerCount.ShouldEqual(maxAnswerCount);
 
+        It should_TextListQuestionCloned_event_ValidationExpression_be_equal_validation = () =>
+            eventContext.GetSingleEvent<TextListQuestionCloned>().ValidationExpression.ShouldEqual(validation);
+
+        It should_TextListQuestionCloned_event_ValidationMessage_be_equal_validationMessage = () =>
+            eventContext.GetSingleEvent<TextListQuestionCloned>().ValidationMessage.ShouldEqual(validationMessage);
+
         private static Questionnaire questionnaire;
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static Guid targetGroupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -95,7 +103,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static string instructions = "instructions";
         private static bool isMandatory = true;
         private static int? maxAnswerCount = 5;
-            
+        private static string validation = "validation";
+        private static string validationMessage = "validationMessage";
             
         private static int targetIndex = 0;
         private static EventContext eventContext;

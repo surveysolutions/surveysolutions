@@ -108,8 +108,10 @@ namespace WB.UI.Supervisor.App_Start
 
             var synchronizationSettings = new SyncSettings(appDataDirectory: appDataDirectory,
                 incomingCapiPackagesWithErrorsDirectoryName:
-                LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
-                incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension, incomingUnprocessedPackagesDirectoryName: LegacyOptions.IncomingUnprocessedPackageFileNameExtension, origin: Constants.CapiSynchronizationOrigin);
+                    LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
+                incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension,
+                incomingUnprocessedPackagesDirectoryName: LegacyOptions.IncomingUnprocessedPackageFileNameExtension,
+                origin: Constants.CapiSynchronizationOrigin, retryCount: LegacyOptions.RetryCount, retryInterval: LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval);
 
             var basePath = appDataDirectory;
 

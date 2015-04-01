@@ -3,7 +3,8 @@
 @model InterviewStatus
 
 
-@if (((Model == InterviewStatus.Completed || Model == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor) || (Model == InterviewStatus.ApprovedBySupervisor && GlobalInfo.IsHeadquarter))
+@if (((Model == InterviewStatus.Completed || Model == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor) 
+    || (Model == InterviewStatus.ApprovedBySupervisor && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator)))
 {
     <div class="modal fade" id="approveModal" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel" aria-hidden="true">
         <div class="modal-dialog">

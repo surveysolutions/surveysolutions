@@ -25,17 +25,19 @@ namespace WB.UI.Designer
 
             bundles.Add(
                 new ScriptBundle("~/editform").Include(
-                    "~/Scripts/jquery-{version}.js", 
                     "~/Scripts/jquery.validate.js", 
                     "~/Scripts/jquery.validate.unobtrusive-custom-for-bootstrap.js", 
-                    "~/Scripts/bootstrap.js",
-                    "~/Scripts/bootstrap3-unobtrusive-hack.js"));
+                    "~/Scripts/bootstrap3-unobtrusive-hack.js",
+                    "~/UpdatedDesigner/vendor/jquery-placeholder/jquery.placeholder.js",
+                    "~/Scripts/editForm.js"
+                    ));
 
             bundles.Add(
                 new ScriptBundle("~/list").Include(
                     "~/Scripts/jquery-{version}.js", 
-                    "~/Scripts/bootstrap.js",
-                    "~/Scripts/knockout-{version}.js", 
+                    "~/Scripts/knockout-{version}.js",
+                    "~/UpdatedDesigner/vendor/jquery-mousewheel/jquery.mousewheel.js",
+                    "~/UpdatedDesigner/vendor/perfect-scrollbar/src/perfect-scrollbar.js",
                     "~/Scripts/common.js"));
 
             bundles.Add(

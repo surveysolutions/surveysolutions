@@ -269,7 +269,6 @@
     <Compile Include="Controllers\AppController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\MaintenanceController.cs" />
-    <Compile Include="Controllers\SynchronizationController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="BootstrapSupport\ControlGroupExtensions.cs" />
@@ -345,6 +344,7 @@
       <DependentUpon>QuestionnaireController.resx</DependentUpon>
     </Compile>
     <Compile Include="ServiceLocationModule.cs" />
+    <Compile Include="Utils\FormatHelper.cs" />
     <Compile Include="WebServices\IPublicService.cs" />
     <Compile Include="WebServices\PublicService.cs" />
     <Compile Include="WebServices\Questionnaire\DownloadQuestionnaireRequest.cs" />
@@ -368,17 +368,33 @@
     <Content Include="Scripts\bootstrap3-unobtrusive-hack.js" />
     <Content Include="Scripts\components\bindings.js" />
     <Content Include="Scripts\components\moment-duration-format.js" />
+    <Content Include="Scripts\editForm.js" />
     <Content Include="Scripts\viewmodels\pagebase.js" />
     <Content Include="Scripts\viewmodels\pages\controlpanel\readside.js" />
     <Content Include="Scripts\viewmodels\viewmodelbase.js" />
     <Content Include="Scripts\viewmodels\designer.framework.js" />
+    <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.min.css">
+      <DependentUpon>bootstrap-custom.css</DependentUpon>
+    </Content>
+    <Content Include="UpdatedDesigner\content\designer-start\bootstrap-override.css">
+      <DependentUpon>bootstrap-override.less</DependentUpon>
+    </Content>
+    <Content Include="UpdatedDesigner\content\designer-start\bootstrap-override.min.css">
+      <DependentUpon>bootstrap-override.css</DependentUpon>
+    </Content>
     <Content Include="UpdatedDesigner\content\designer-start\designer-list.min.css">
       <DependentUpon>designer-list.css</DependentUpon>
     </Content>
     <Content Include="UpdatedDesigner\content\designer-start\designer-start.min.css">
       <DependentUpon>designer-start.css</DependentUpon>
     </Content>
-    <Content Include="UpdatedDesigner\vendor\jquery.isOnScreen\isOnScreen.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap\grunt\bs-glyphicons-data-generator.js" />
+    <Content Include="UpdatedDesigner\vendor\jquery-placeholder\jquery.placeholder.js" />
+    <Content Include="UpdatedDesigner\vendor\jquery-placeholder\jquery.placeholder.min.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\matchOptionsPattern.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\optionsService.js" />
     <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.css" />
@@ -691,10 +707,6 @@
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\css\bootstrap.css" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\css\bootstrap.css.map" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\css\bootstrap.min.css" />
-    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\js\bootstrap.js" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\js\bootstrap.min.js" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\js\npm.js" />
@@ -852,8 +864,6 @@
     <Content Include="UpdatedDesigner\vendor\jquery-mousewheel\jquery.mousewheel.min.js" />
     <Content Include="UpdatedDesigner\vendor\jquery-mousewheel\LICENSE.txt" />
     <Content Include="UpdatedDesigner\vendor\jquery-mousewheel\README.md" />
-    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\jquery.scrollTo.js" />
-    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\jquery.scrollTo.min.js" />
     <Content Include="UpdatedDesigner\vendor\jquery\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\jquery\bower.json" />
     <Content Include="UpdatedDesigner\vendor\jquery\dist\jquery.js" />
@@ -1230,18 +1240,11 @@
     <Content Include="UpdatedDesigner\content\designer-start\custom-fonts.less" />
     <Content Include="UpdatedDesigner\content\designer-start\designer-list.less" />
     <Content Include="UpdatedDesigner\content\designer-start\designer-start.less" />
-    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\.bower.json" />
-    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\bower.json" />
-    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\LICENSE" />
-    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\package.json" />
-    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\README.md" />
-    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\scrollTo.jquery.json" />
     <Content Include="UpdatedDesigner\content\designer-start\font-styles.less" />
     <Content Include="UpdatedDesigner\content\designer-start\inputs.less" />
     <Content Include="UpdatedDesigner\content\designer-start\wb-variables.less" />
     <Content Include="Views\Account\RegisterStepTwo.cshtml" />
     <Content Include="UpdatedDesigner\vendor\ace-builds\bower.json" />
-    <Content Include="UpdatedDesigner\vendor\jquery.isOnScreen\bower.json" />
     <Content Include="UpdatedDesigner\content\designer-start\designer-start.css.map">
       <DependentUpon>designer-start.css</DependentUpon>
     </Content>
@@ -1251,6 +1254,22 @@
     <Content Include="UpdatedDesigner\content\designer-start\designer-list.css.map">
       <DependentUpon>designer-list.css</DependentUpon>
     </Content>
+    <Content Include="Views\Shared\_list_search_form.cshtml" />
+    <Content Include="UpdatedDesigner\content\designer-start\bootstrap-override.css.map">
+      <DependentUpon>bootstrap-override.css</DependentUpon>
+    </Content>
+    <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.css.map">
+      <DependentUpon>bootstrap-custom.css</DependentUpon>
+    </Content>
+    <Content Include="Views\Questionnaire\Create.cshtml" />
+    <Content Include="Views\Admin\Edit.cshtml" />
+    <Content Include="Views\Admin\Details.cshtml" />
+    <Content Include="UpdatedDesigner\vendor\jquery-placeholder\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\jquery-placeholder\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\jquery-placeholder\jquery.placeholder.min.js.map" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="UpdatedDesigner\content\fonts\Roboto300.woff" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -1268,7 +1287,6 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Account\ConfirmationFailure.cshtml" />
-    <Content Include="Views\Shared\Index.cshtml" />
     <Content Include="Views\Shared\Delete.cshtml" />
     <Content Include="Views\Questionnaire\Public.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />
@@ -1293,9 +1311,8 @@
     <Content Include="Views\Account\ResetPasswordConfirmationFailure.cshtml" />
     <Content Include="Views\Shared\DeleteModalDialog.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Admin_QiestionnaireListView.cshtml" />
-    <Content Include="Views\Shared\ListView.cshtml" />
     <Content Include="Views\Error\Forbidden.cshtml" />
-    <Content Include="Views\Synchronization\ViewTestUploadFile.cshtml" />
+    <Content Include="Views\Admin\Import.cshtml" />
     <Content Include="Views\SystemMailer\_Layout.cshtml" />
     <Content Include="Views\SystemMailer\ConfirmationEmail.cshtml" />
     <Content Include="Views\SystemMailer\ResetPasswordEmail.cshtml" />

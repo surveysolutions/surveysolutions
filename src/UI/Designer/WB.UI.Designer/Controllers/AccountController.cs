@@ -22,7 +22,6 @@ namespace WB.UI.Designer.Controllers
     [CustomAuthorize]
     [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
     [RequireHttps]
-    [ShowNotesToUserFilter]
     public class AccountController : BaseController
     {
         private readonly ISystemMailer mailer;
@@ -111,9 +110,7 @@ namespace WB.UI.Designer.Controllers
 
                 if (changePasswordSucceeded)
                 {
-                    // Success();
-                    return this.RedirectToAction(
-                        "manage", new { message = AccountManageMessageId.ChangePasswordSuccess });
+                    return this.RedirectToAction("manage", new { message = AccountManageMessageId.ChangePasswordSuccess });
                 }
                 else
                 {

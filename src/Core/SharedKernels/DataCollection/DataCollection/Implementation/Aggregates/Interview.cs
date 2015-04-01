@@ -1764,7 +1764,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void SynchronizeInterviewEvents(Guid userId, Guid questionnaireId, long questionnaireVersion,
             InterviewStatus interviewStatus, object[] synchronizedEvents, bool createdOnClient)
         {
-            ThrowIfUserIsNotResponsibleAnymore(userId);
+            ThrowIfOtherUserIsResponsible(userId);
 
             SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
 
@@ -1790,9 +1790,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void ThrowIfUserIsNotResponsibleAnymore(Guid userId)
+        private void ThrowIfOtherUserIsResponsible(Guid userId)
         {
-            if (userId != this.interviewerId)
+            if (this.interviewerId != Guid.Empty && userId != this.interviewerId)
                 throw new InterviewException(
                     string.Format(
                         "interviewer with id {0} is not responsible for the interview anymore, interviewer with id {1} is.",
@@ -3301,7 +3301,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         InterviewStatus.Restored,
                         InterviewStatus.RejectedBySupervisor,
                         InterviewStatus.SupervisorAssigned,
-                        InterviewStatus.Restarted);
+                        InterviewStatus.Restarted,
+                        InterviewStatus.Completed);
                     return;
                 case InterviewStatus.ApprovedBySupervisor:
                     this.ThrowIfInterviewStatusIsNotOneOfExpected(

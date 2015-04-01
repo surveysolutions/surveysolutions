@@ -16,5 +16,7 @@ namespace Main.Core.Entities.SubEntities
         User = 5,
 
         Headquarter = 6,
+
+        Observer = 7
     }
 }

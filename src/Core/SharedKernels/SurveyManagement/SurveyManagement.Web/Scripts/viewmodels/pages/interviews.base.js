@@ -14,6 +14,16 @@
     self.SelectedResponsible = ko.observable('');
     self.SelectedStatus = ko.observable('');
     self.SearchBy = ko.observable('');
+
+    self.getFormattedPrefilledQuestions = function(prefilledQuestions) {
+        prefilledQuestions.forEach(function(prefilledQuestion) {
+            if (prefilledQuestion.Type() == /*DateTime*/5) {
+                prefilledQuestion.Answer(moment(prefilledQuestion.Answer()).format('M/D/YYYY'));
+            }
+        });
+
+        return prefilledQuestions;
+    };
     
     self.GetFilterMethod = function () {
 
