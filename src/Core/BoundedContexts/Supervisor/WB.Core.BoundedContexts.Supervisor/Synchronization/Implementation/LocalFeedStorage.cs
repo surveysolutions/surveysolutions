@@ -7,9 +7,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 {
     internal class LocalFeedStorage : ILocalFeedStorage
     {
-        private readonly IQueryablePlainStorageAccessor<LocalUserChangedFeedEntry> plainStorage;
+        private readonly IPlainStorageAccessor<LocalUserChangedFeedEntry> plainStorage;
 
-        public LocalFeedStorage(IQueryablePlainStorageAccessor<LocalUserChangedFeedEntry> plainStorage)
+        public LocalFeedStorage(IPlainStorageAccessor<LocalUserChangedFeedEntry> plainStorage)
         {
             if (plainStorage == null) throw new ArgumentNullException("plainStorage");
 

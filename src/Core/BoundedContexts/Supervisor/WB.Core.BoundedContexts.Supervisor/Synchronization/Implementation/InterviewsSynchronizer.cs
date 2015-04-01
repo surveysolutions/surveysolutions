@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly IHeadquartersSettings settings;
         private readonly ILogger logger;
         private readonly Action<ICommand> executeCommand;
-        private readonly IQueryablePlainStorageAccessor<LocalInterviewFeedEntry> plainStorage;
+        private readonly IPlainStorageAccessor<LocalInterviewFeedEntry> plainStorage;
         private readonly IReadSideRepositoryReader<UserDocument> users;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IHeadquartersInterviewReader headquartersInterviewReader;
@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             IHeadquartersSettings settings, 
             ILogger logger,
             ICommandService commandService,
-            IQueryablePlainStorageAccessor<LocalInterviewFeedEntry> plainStorage, 
+            IPlainStorageAccessor<LocalInterviewFeedEntry> plainStorage, 
             IQueryableReadSideRepositoryReader<UserDocument> users,
             IPlainQuestionnaireRepository plainQuestionnaireRepository,
             IHeadquartersInterviewReader headquartersInterviewReader,

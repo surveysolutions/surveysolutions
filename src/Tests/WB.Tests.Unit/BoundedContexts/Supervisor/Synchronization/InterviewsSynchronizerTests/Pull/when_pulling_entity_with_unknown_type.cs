@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
         private static InterviewsSynchronizer interviewsSynchronizer;
         private static Guid eventId = Guid.Parse("dddddddddddddddddddddddddddddddd");
 
-        private static Mock<IQueryablePlainStorageAccessor<LocalInterviewFeedEntry>> plainStorageMock = new Mock<IQueryablePlainStorageAccessor<LocalInterviewFeedEntry>>();
+        private static Mock<IPlainStorageAccessor<LocalInterviewFeedEntry>> plainStorageMock = new Mock<IPlainStorageAccessor<LocalInterviewFeedEntry>>();
         private static Mock<ILogger> loggerMock = new Mock<ILogger>();
         private static Mock<ICommandService> commandServiceMock = new Mock<ICommandService>();
     }
