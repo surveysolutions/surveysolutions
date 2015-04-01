@@ -1,19 +1,23 @@
 ﻿@using WB.UI.Designer
-<div id="mDelete" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Delete <small>confirmation</small></h3>
-    </div>
-    <div class="modal-body">
-        Do you really want to delete "<strong data-bind="text: itemName"></strong>" <span data-bind="text: itemType"></span>?
-    </div>
-    <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-        @using (Html.BeginForm("delete", GlobalHelper.CurrentController, FormMethod.Post, new { style = "display: inline-block; height: 20px" }))
-        {
-            @Html.AntiForgeryToken()
-            <input name="id" data-bind="value: itemId" type="hidden"/>
-            <button type="submit" class="btn btn-primary" value="Delete">Delete</button>
-        }
+<div class="modal fade" id="mDelete">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Delete <small>confirmation</small></h4>
+            </div>
+            <div class="modal-body">
+                <p>Do you really want to delete "<strong data-bind="text: itemName"></strong>" questionnaire?</p>
+            </div>
+            <div class="modal-footer">
+                @using (Html.BeginForm("Delete", GlobalHelper.CurrentController, FormMethod.Post, new { }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input name="id" data-bind="value: itemId" type="hidden"/>
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                    <button type="submit" class="btn btn-primary" value="Delete">Delete</button>
+                }
+            </div>
+        </div>
     </div>
 </div>

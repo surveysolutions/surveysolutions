@@ -261,7 +261,7 @@
     <Compile Include="Applications\Designer\QuestionnaireHelper\when_getting_questionnaire_data_deleted_questionnaires_should_not_be_editable_.cs" />
     <Compile Include="Applications\Designer\QuestionnaireHelper\QuestionnaireHelperTestContext.cs" />
     <Compile Include="Applications\Designer\QuestionnaireHelper\when_getting_public_questionnaire_data_deleted_questionnaires_should_not_be_editable_.cs" />
-    <Compile Include="Applications\Designer\SynchronizationControllerTests.cs" />
+    <Compile Include="Applications\Designer\AdminControllerTests.cs" />
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\VerificationErrorsMapperTestContext.cs" />
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\when_enriching_errors_with_empty_static_text.cs" />
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\when_enriching_errors_with_titles_from_questionnaire.cs" />
@@ -361,6 +361,8 @@
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_restored_by_synchronization.cs" />
     <Compile Include="SharedKernels\SurveyManagement\HealthCheckTests\FolderPermissionCheckerTests\when_check_folders_permissions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\IncomingPackagesQueueTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_called_and_package_file_is_locked.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_called_and_package_file_was_locked_first_time_but_become_available_second_time.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_method_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_called_and_folder_with_packages_is_empty.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_HasPackagesByInterviewId_called.cs" />

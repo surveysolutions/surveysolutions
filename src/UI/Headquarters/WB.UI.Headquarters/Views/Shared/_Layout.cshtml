@@ -2,6 +2,7 @@
 @using System.Web.Optimization
 @using Main.Core.Entities.SubEntities
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
+@using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
 @using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @using WB.UI.Headquarters.Code
 @using WB.UI.Shared.Web.Extensions
@@ -17,129 +18,143 @@
     @RenderSection("styles", false)
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="container-fluid">
-            <div class="navbar-header hidden-print">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @if (User.IsInRole(UserRoles.Administrator.ToString()))
-                {
-                    <a class="navbar-brand" href="@Url.Action("Index", "Headquarters", new { area = "" })">Admin</a>
-                }
-                else if (User.IsInRole(UserRoles.Headquarter.ToString()))
-                {
-                    <a class="navbar-brand" href="@Url.Action("Index", "HQ", new { area = "" })">Headquarters</a>
-                }
-                else
-                {
-                    <a class="navbar-brand" href="@Url.Action("Index", "Survey", new { area = "" })">Supervisor</a>
-                }
-            </div>
-            <div class="collapse navbar-collapse">
-                @if (User.IsInRole(UserRoles.Administrator.ToString()))
-                {
-                    @Html.Partial("AdminMainMenu")
-                }
-                else if (User.IsInRole(UserRoles.Headquarter.ToString()))
-                {
-                    @Html.Partial("HeadquartersMainMenu")
-                }
-                else
-                {
-                    @Html.Partial("SupervisorMainMenu")
-                }
-            </div>
-
-        </div>
-    </div>
-
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation" >
     <div class="container-fluid">
-        <div class="row">
-            <div class="ui-pnotify notify" data-bind="visible: IsNotifyVisible()" style="display: none;">
-                <div class="alert ui-pnotify-container ui-pnotify-shadow">
-                    <div class="ui-pnotify-icon"><span class="icon-exclamation-sign"></span></div>
-                    <h4 class="ui-pnotify-title" data-bind="text: NotifyTitle()"></h4>
-                    <div class="ui-pnotify-text" data-bind="html: NotifyText()"></div>
-                </div>
+        <div class="navbar-header hidden-print">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @if (User.IsInRole(UserRoles.Administrator.ToString()))
+            {
+                <a class="navbar-brand" href="@Url.Action("Index", "Headquarters", new {area = ""})">Admin</a>
+            }
+            else if (User.IsInRole(UserRoles.Headquarter.ToString()))
+            {
+                <a class="navbar-brand" href="@Url.Action("Index", "HQ", new {area = ""})">Headquarters</a>
+            }
+            else if (User.IsInRole(UserRoles.Observer.ToString()))
+            {
+                <a class="navbar-brand" href="@Url.Action("Index", "Supervisor", new {area = ""})">Observer</a>
+            }
+            else
+            {
+                <a class="navbar-brand" href="@Url.Action("Index", "Survey", new {area = ""})">Supervisor</a>
+            }
+        </div>
+        <div class="collapse navbar-collapse">
+            @if (User.IsInRole(UserRoles.Administrator.ToString()))
+            {
+                @Html.Partial("AdminMainMenu")
+            }
+            else if (User.IsInRole(UserRoles.Headquarter.ToString()))
+            {
+                @Html.Partial("HeadquartersMainMenu")
+            }
+            else if (User.IsInRole(UserRoles.Observer.ToString()))
+            {
+                @Html.Partial("ObserverMainMenu")
+            }
+            else
+            {
+                @Html.Partial("SupervisorMainMenu")
+            }
+        </div>
+
+    </div>
+</div>
+    @if ((User.Identity as CustomIdentity).IsObserver)
+    {
+        <div style=" background-color: #f5e488; height: 20px;width: 100%; text-align: center;">
+            Observing mode! Do you want to return to your account <a href="@Url.Action("ReturnToObserver", "Account", new { area = string.Empty })">@((User.Identity as CustomIdentity).ObserverName)</a>?
+        </div>
+    }
+<div class="container-fluid">
+    <div class="row">
+        <div class="ui-pnotify notify" data-bind="visible: IsNotifyVisible()" style="display: none;">
+            <div class="alert ui-pnotify-container ui-pnotify-shadow">
+                <div class="ui-pnotify-icon"><span class="icon-exclamation-sign"></span></div>
+                <h4 class="ui-pnotify-title" data-bind="text: NotifyTitle()"></h4>
+                <div class="ui-pnotify-text" data-bind="html: NotifyText()"></div>
             </div>
-            <div id="umbrella">
-                <div id="umbrella-message">
-                    Loading, please wait
-                </div>
+        </div>
+        <div id="umbrella">
+            <div id="umbrella-message">
+                Loading, please wait
             </div>
-            @RenderBody()
-            <div id="output">
-                <div class="panel panel-danger">
-                    <div class="panel-heading">
-                        <button type="button" class="close" data-bind="click: HideOutput">&times;</button>
-                        <span>Errors log</span>
-                    </div>
-                    <div class="panel-body">
-                        <ul data-bind="foreach: Errors" class="list-group">
-                            <li class="list-group-item">
-                                <pre data-bind="html: error"></pre>
-                            </li>
-                        </ul>
-                        @RenderSection("output", false)
-                    </div>
+        </div>
+        @RenderBody()
+        <div id="output">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <button type="button" class="close" data-bind="click: HideOutput">&times;</button>
+                    <span>Errors log</span>
+                </div>
+                <div class="panel-body">
+                    <ul data-bind="foreach: Errors" class="list-group">
+                        <li class="list-group-item">
+                            <pre data-bind="html: error"></pre>
+                        </li>
+                    </ul>
+                    @RenderSection("output", false)
                 </div>
             </div>
         </div>
     </div>
-    <div class="row-fluid" id="footer-block">
-        <hr>
-        <footer>
-            <div class="text-center">
-                © @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">The World Bank Group</a>, All Rights Reserved. <a href="http://go.worldbank.org/OS6V7NIUD0">Legal</a>.
-            </div>
-            <div class="text-center">
-                @FileVersionInfo.GetVersionInfo(ViewContext.Controller.GetType().Assembly.Location).ProductVersion
-                @*@ViewContext.Controller.GetType().Assembly.GetName().Version*@ 
-                @if (AppSettings.IsDebugBuilded)
-                {
-                    <span id="build-config">[.NET Debug]</span>
-                }
-                
-                @if (HttpContext.Current.IsDebuggingEnabled)
-                {
-                    <span id="compile-config" style="color: red">Web Debug</span>
-                }
-                
-                @if (LegacyOptions.SupervisorFunctionsEnabled)
-                {
-                    <text>|</text> <a href="@Url.Action("GetLatestVersion", "api/InterviewerSync", new { area = string.Empty })">Get Interviewer App</a>
-                }
+</div>
+<div class="row-fluid" id="footer-block">
+    <hr>
+    <footer>
+        <div class="text-center">
+            © @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">The World Bank Group</a>, All Rights Reserved. <a href="http://go.worldbank.org/OS6V7NIUD0">Legal</a>.
+        </div>
+        <div class="text-center">
+            @FileVersionInfo.GetVersionInfo(ViewContext.Controller.GetType().Assembly.Location).ProductVersion
+            @*@ViewContext.Controller.GetType().Assembly.GetName().Version*@
+            @if (AppSettings.IsDebugBuilded)
+            {
+                <span id="build-config">[.NET Debug]</span>
+            }
 
-            </div>
-        </footer>
-    </div>
-    @Html.Partial("Clickjacking")
-    @Scripts.Render("~/js/main")
-    @Html.Partial("GlobalSettings")
-    <script type="text/javascript">
-        var setMinHeight = function () {
-            var windowHeight = $(window).height();
-            var navigationHeight = $('.navbar.navbar-fixed-top').height();
-            var bodyTopPadding = $('body').css('paddingTop').replace("px", "") * 1;
-            var footerHeight = $('#footer-block').outerHeight();
-            var minHeight = windowHeight - navigationHeight - footerHeight - bodyTopPadding;
-            $('#content').css('min-height', (minHeight > 1 ? minHeight : 1) + 'px');
-            $('#wrapper').css('margin-top', navigationHeight + 'px');
-            $('#umbrella').css('top', navigationHeight + 'px');
-        };
-        var $updateIncomingPackagesQueueApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "GetIncomingPackagesQueueLength" })';
-        $(document).ready(function () {
+            @if (HttpContext.Current.IsDebuggingEnabled)
+            {
+                <span id="compile-config" style="color: red">Web Debug</span>
+            }
+
+            @if (LegacyOptions.SupervisorFunctionsEnabled)
+            {
+                <text>|</text>
+                <a href="@Url.Action("GetLatestVersion", "api/InterviewerSync", new {area = string.Empty})">Get Interviewer App</a>
+            }
+
+        </div>
+    </footer>
+</div>
+@Html.Partial("Clickjacking")
+@Scripts.Render("~/js/main")
+@Html.Partial("GlobalSettings")
+<script type="text/javascript">
+    var setMinHeight = function() {
+        var windowHeight = $(window).height();
+        var navigationHeight = $('.navbar.navbar-fixed-top').height();
+        var bodyTopPadding = $('body').css('paddingTop').replace("px", "") * 1;
+        var footerHeight = $('#footer-block').outerHeight();
+        var minHeight = windowHeight - navigationHeight - footerHeight - bodyTopPadding;
+        $('#content').css('min-height', (minHeight > 1 ? minHeight : 1) + 'px');
+        $('#wrapper').css('margin-top', navigationHeight + 'px');
+        $('#umbrella').css('top', navigationHeight + 'px');
+    };
+    var $updateIncomingPackagesQueueApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ControlPanelApi", action = "GetIncomingPackagesQueueLength"})';
+    $(document).ready(function() {
+        setMinHeight();
+        $(window).resize(function() {
             setMinHeight();
-            $(window).resize(function () {
-                setMinHeight();
-            });
-            new Supervisor.VM.SurveyManagmentHeader($updateIncomingPackagesQueueApiUrl, "#IncomingPackagesQueueIndicator").load();
         });
+        new Supervisor.VM.SurveyManagmentHeader($updateIncomingPackagesQueueApiUrl, "#IncomingPackagesQueueIndicator").load();
+    });
 </script>
-    @RenderSection("scripts", false)
+@RenderSection("scripts", false)
 </body>
 </html>

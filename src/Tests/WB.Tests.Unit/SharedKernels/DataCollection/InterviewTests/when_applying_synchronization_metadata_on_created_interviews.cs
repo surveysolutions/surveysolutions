@@ -86,10 +86,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 InterviewStatus.InterviewerAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.ApprovedBySupervisor
             });
 
-        It should_interview_in_status_Completed_be_allowed_to_change_on_RejectedBySupervisor_recheck_this_one = () =>
+        It should_interview_in_status_Completed_be_allowed_to_change_on_InterviewerAssigned_RejectedBySupervisor_recheck_this_one = () =>
             interviewStatusesWhichWasChangedWithoutException[InterviewStatus.Completed].ShouldContainOnly(new[]
             {
-                InterviewStatus.RejectedBySupervisor
+                InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor
             });
 
         It should_interview_in_status_Restarted_be_allowed_to_change_on_Completed_RejectedBySupervisor_InterviewerAssigned_recheck_this_one = () =>
