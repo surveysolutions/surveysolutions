@@ -90,7 +90,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             fileSystemAccessor.CopyFileOrDirectory(unhandledPackagePath, folderToStore);
             var fileName = fileSystemAccessor.GetFileNameWithoutExtension(unhandledPackagePath) +exceptionExtension;
 
-            fileSystemAccessor.WriteAllText(fileSystemAccessor.CombinePath(folderToStore, fileName), string.Format("{0} {1}", e.Message, e.StackTrace));
+            fileSystemAccessor.WriteAllText(fileSystemAccessor.CombinePath(folderToStore, fileName), CreateContentOfExceptionFile(e));
+        }
+
+        private string CreateContentOfExceptionFile(Exception e, int iteration=0)
+        {
+            var result = string.Format("{0}{1} {2}", new string(Enumerable.Range(0, iteration).Select(i => '\t').ToArray()), e.Message, e.StackTrace);
+
+            var aggregateException = e as AggregateException;
+            if (aggregateException == null)
+                return result;
+
+            result += Environment.NewLine;
+            result += string.Join(Environment.NewLine,
+                aggregateException.InnerExceptions.Select(
+                    exception => CreateContentOfExceptionFile(exception, iteration + 1)));
+
+            return result;
         }
     }
 }
