@@ -7,12 +7,10 @@
 @model IPagedList<AccountListViewItemModel>
 @{
     ViewBag.Title = "Registered users";
-
+    Layout = "~/Views/Shared/Layout.List.cshtml";
     string controller = ViewBag.Controller ?? WB.UI.Designer.GlobalHelper.CurrentController;
 }
-@section Scripts {
-    @Scripts.Render("~/list")
-}
+
 <table id="user-table-header" class="table table-header">
     <thead>
         <tr>
