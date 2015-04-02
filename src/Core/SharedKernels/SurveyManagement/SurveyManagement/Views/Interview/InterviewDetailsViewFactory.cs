@@ -95,9 +95,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 }
                 else
                 {
-                    interviewGroupView.Entities = interviewGroupView.Entities.OfType<InterviewQuestionView>()
-                        .Where(question => IsQuestionInFilter(filter, question))
-                        .Select(question => (InterviewEntityView) question)
+                    interviewGroupView.Entities = interviewGroupView.Entities
+                        .Where(question => (question is InterviewQuestionView && IsQuestionInFilter(filter, (InterviewQuestionView) question)) || question is InterviewStaticTextView)
                         .ToList();
 
                     if (interviewGroupView.Entities.Any())
