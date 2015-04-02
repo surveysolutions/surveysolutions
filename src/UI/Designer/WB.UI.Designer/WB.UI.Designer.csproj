@@ -1130,7 +1130,7 @@
     <Content Include="UpdatedDesigner\content\designer-editor\wb-question-list.css.css.map">
       <DependentUpon>wb-question-list.css.css</DependentUpon>
     </Content>
-    <Content Include="Views\Shared\Layout.Account.cshtml" />
+    <Content Include="Views\Account\Layout.Account.cshtml" />
     <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.less" />
     <Content Include="UpdatedDesigner\content\designer-start\bootstrap-override.less" />
     <Content Include="UpdatedDesigner\content\designer-start\custom-fonts.less" />
@@ -1167,7 +1167,7 @@
     <Content Include="UpdatedDesigner\vendor\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Scripts\jquery-2.1.3.min.map" />
     <Content Include="UpdatedDesigner\content\fonts\Roboto300.woff" />
-    <Content Include="Views\Shared\Layout.Error.cshtml" />
+    <Content Include="Views\Error\Layout.Error.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -1185,16 +1185,10 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Account\ConfirmationFailure.cshtml" />
-    <Content Include="Views\Shared\Delete.cshtml" />
     <Content Include="Views\Questionnaire\Public.cshtml" />
-    <Content Include="Views\Shared\_alerts.cshtml" />
-    <Content Include="Views\Shared\Layout.empty.cshtml" />
     <Content Include="Views\Shared\Layout.cshtml" />
     <Content Include="Views\Shared\_html5shiv.cshtml" />
-    <Content Include="Views\Shared\Create.cshtml" />
-    <Content Include="Views\Shared\Details.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
-    <Content Include="Views\Shared\Edit.cshtml" />
     <Content Include="Views\Error\AccessDenied.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
@@ -1203,12 +1197,10 @@
     <Content Include="Views\Pdf\_RenderQuestionDetails.cshtml" />
     <Content Include="Views\Pdf\_RenderQuestionnaire.cshtml" />
     <Content Include="Views\Pdf\RenderQuestionnaire.cshtml" />
-    <Content Include="Views\Shared\EditForm.cshtml" />
     <Content Include="Views\Account\PasswordReset.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmationFailure.cshtml" />
     <Content Include="Views\Shared\DeleteModalDialog.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\Admin_QiestionnaireListView.cshtml" />
     <Content Include="Views\Error\Forbidden.cshtml" />
     <Content Include="Views\Admin\Import.cshtml" />
     <Content Include="Views\SystemMailer\_Layout.cshtml" />
@@ -1250,7 +1242,7 @@
     <Content Include="UpdatedDesigner\content\dropdown.css.less" />
     <Content Include="Views\Pdf\_RenderStaticTextDetails.cshtml" />
     <Content Include="Views\ControlPanel\Index.cshtml" />
-    <Content Include="Views\Shared\Layout.admin.cshtml" />
+    <Content Include="Views\ControlPanel\Layout.ControlPanel.cshtml" />
     <Content Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
     <Content Include="UpdatedDesigner\fonts\OpenSans300.woff" />
     <Content Include="Views\Questionnaire\EditOptions.cshtml" />
