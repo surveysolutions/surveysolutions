@@ -26,8 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
                 throw new Exception("Principal not fully constructed");
             if (!this.identity.IsAuthenticated || role == null)
                 return false;
-            role = role.Trim();
-
+            
             if (!Roles.Enabled)
                 return false;
 

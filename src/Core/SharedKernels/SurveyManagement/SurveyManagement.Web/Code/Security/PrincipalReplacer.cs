@@ -1,15 +1,13 @@
 ﻿using System.Security.Principal;
 using System.Threading;
 using System.Web;
-using System.Web.Mvc;
 using System.Web.Security;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
 {
-    public class UpdatePrincipal : ActionFilterAttribute
+    public static class PrincipalReplacer
     {
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        public static void ReplacePrincipal()
         {
             IPrincipal usr = HttpContext.Current.User;
             if (usr.Identity.IsAuthenticated && usr.Identity.AuthenticationType == "Forms")
@@ -20,8 +18,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
                 HttpContext.Current.User = customPrincipal;
                 Thread.CurrentPrincipal = customPrincipal;
             }
-
-            base.OnActionExecuting(filterContext);
         }
     }
 }
