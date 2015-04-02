@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="Accessors\QuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="Aggregates\IQuestionnaire.cs" />
+    <Compile Include="Commands\Interview\RepeatLastInterviewStatus.cs" />
     <Compile Include="Commands\Interview\SynchronizeInterviewEventsCommand.cs" />
     <Compile Include="Implementation\Aggregates\User.cs" />
     <Compile Include="Implementation\Aggregates\Snapshots\UserState.cs" />
