@@ -37,7 +37,7 @@ namespace WB.UI.Headquarters
         
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new UpdatePrincipal());
+            filters.Add(new ReplacePrincipal());
             filters.Add(new RequireSecureConnectionAttribute());
             filters.Add(new NoCacheAttribute());
             filters.Add(new HandleErrorAttribute());
@@ -53,7 +53,7 @@ namespace WB.UI.Headquarters
 
         public static void RegisterWebApiFilters(HttpFilterCollection filters)
         {
-            filters.Add(new UpdatePrincipalWebApi());
+            filters.Add(new ReplacePrincipalWebApi());
             filters.Add(new SupervisorFunctionsEnabledAttribute());
         }
 

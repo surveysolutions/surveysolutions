@@ -96,7 +96,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (this.ModelState.IsValid)
             {
-                if ((User.Identity as CustomIdentity).IsObserver)
+                if (User.Identity.IsObserver())
                 {
                     this.Error("You cannot perform any operation in observer mode.");
                 }
