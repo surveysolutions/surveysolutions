@@ -72,7 +72,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .InitializesWith<ImportFromDesignerForTester>   (aggregate => aggregate.ImportFromDesignerForTester)
                 .InitializesWith<ImportFromSupervisor>          (aggregate => aggregate.ImportFromSupervisor)
                 .InitializesWith<RegisterPlainQuestionnaire>    (aggregate => aggregate.RegisterPlainQuestionnaire)
-                .Handles<DeleteQuestionnaire>                   (aggregate => aggregate.DeleteQuestionnaire);
+                .Handles<DeleteQuestionnaire>                   (aggregate => aggregate.DeleteQuestionnaire)
+                .Handles<DisableQuestionnaire>(aggregate => aggregate.DisableQuestionnaire);
 
             CommandRegistry
                 .Setup<User>()
