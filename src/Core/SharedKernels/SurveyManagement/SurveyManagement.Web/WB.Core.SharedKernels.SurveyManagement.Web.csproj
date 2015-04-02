@@ -145,12 +145,14 @@
     <Compile Include="Code\ApiBasicAuthAttribute.cs" />
     <Compile Include="Code\Security\CustomIdentity.cs" />
     <Compile Include="Code\Security\CustomPrincipal.cs" />
+    <Compile Include="Code\Security\IdentityExtentions.cs" />
+    <Compile Include="Code\Security\PrincipalReplacer.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HealthCheckController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
-    <Compile Include="Filters\UpdatePrincipal.cs" />
-    <Compile Include="Filters\UpdatePrincipalWebApi.cs" />
+    <Compile Include="Filters\ReplacePrincipal.cs" />
+    <Compile Include="Filters\ReplacePrincipalWebApi.cs" />
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
     <Compile Include="Models\DeleteQuestionnaireRequestModel.cs" />
     <Compile Include="Models\AllQuestionnairesRequestModel.cs" />

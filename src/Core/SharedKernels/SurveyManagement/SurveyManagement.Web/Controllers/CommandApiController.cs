@@ -52,10 +52,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             if (request != null && !string.IsNullOrEmpty(request.Type) && !string.IsNullOrEmpty(request.Command))
             {
-                if ((User.Identity as CustomIdentity).IsObserver)
+                if (User.Identity.IsObserver())
                 {
                     response.IsSuccess = true;
                     response.DomainException = "You cannot perform any operation in observer mode.";
+                    return response;
                 }
 
                 try
