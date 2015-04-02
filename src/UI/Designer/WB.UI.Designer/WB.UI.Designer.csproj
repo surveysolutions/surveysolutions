@@ -357,6 +357,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\admin.css" />
+    <Content Include="Content\identity\favicon-designer-114x114.png" />
+    <Content Include="Content\identity\favicon-designer-120x120.png" />
+    <Content Include="Content\identity\favicon-designer-144x144.png" />
+    <Content Include="Content\identity\favicon-designer-152x152.png" />
+    <Content Include="Content\identity\favicon-designer-180x180.png" />
+    <Content Include="Content\identity\favicon-designer-192x192.png" />
+    <Content Include="Content\identity\favicon-designer-72x72.png" />
+    <Content Include="Content\identity\favicon-designer-76x76.png" />
+    <Content Include="Content\identity\favicon-designer.png" />
     <Content Include="Scripts\bootstrap3-unobtrusive-hack.js" />
     <Content Include="Scripts\components\bindings.js" />
     <Content Include="Scripts\components\moment-duration-format.js" />
@@ -1047,7 +1056,6 @@
     <Content Include="Content\jquery.pnotify.css" />
     <Content Include="Content\pdf-title-page.css" />
     <Content Include="Content\pdf.css" />
-    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
