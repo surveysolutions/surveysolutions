@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <style name="Theme.Splash" parent="@android:style/Theme.Light">
+    <item name="android:windowNoTitle">true</item>
+  </style>
+
+  <color name="text">#FFFFFFFF</color>
+  <color name="background">#FF2A81CB</color>
+</resources>

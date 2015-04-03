@@ -26,6 +26,11 @@ namespace WB.UI.QuestionnaireTester
 		
 		public static void UpdateIdValues()
 		{
+			global::Chance.MvvmCross.Plugins.UserInteraction.Droid.Resource.String.library_name = global::WB.UI.QuestionnaireTester.Resource.String.library_name;
+			global::Cirrious.MvvmCross.Plugins.Network.Droid.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
+			global::Cirrious.MvvmCross.Plugins.Network.Droid.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
+			global::IHS.MvvmCross.Plugins.Keychain.Droid.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
+			global::IHS.MvvmCross.Plugins.Keychain.Droid.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 			global::Xamarin.InsightsCore.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
 			global::Xamarin.InsightsCore.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 		}
@@ -61,11 +66,33 @@ namespace WB.UI.QuestionnaireTester
 			}
 		}
 		
+		public partial class Color
+		{
+			
+			// aapt resource value: 0x7f070001
+			public const int background = 2131165185;
+			
+			// aapt resource value: 0x7f070000
+			public const int text = 2131165184;
+			
+			static Color()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Color()
+			{
+			}
+		}
+		
 		public partial class Drawable
 		{
 			
 			// aapt resource value: 0x7f020000
 			public const int Icon = 2130837504;
+			
+			// aapt resource value: 0x7f020001
+			public const int loginLogo = 2130837505;
 			
 			static Drawable()
 			{
@@ -83,6 +110,12 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f050000
 			public const int MvxBindingTagUnique = 2131034112;
 			
+			// aapt resource value: 0x7f050002
+			public const int loginbuttonframe = 2131034114;
+			
+			// aapt resource value: 0x7f050001
+			public const int logo = 2131034113;
+			
 			static Id()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
@@ -97,7 +130,10 @@ namespace WB.UI.QuestionnaireTester
 		{
 			
 			// aapt resource value: 0x7f030000
-			public const int splash = 2130903040;
+			public const int login = 2130903040;
+			
+			// aapt resource value: 0x7f030001
+			public const int splash = 2130903041;
 			
 			static Layout()
 			{
@@ -115,8 +151,20 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f040001
 			public const int ApplicationName = 2130968577;
 			
+			// aapt resource value: 0x7f040005
+			public const int BufferSize = 2130968581;
+			
+			// aapt resource value: 0x7f040003
+			public const int DesignerEndpoint = 2130968579;
+			
 			// aapt resource value: 0x7f040000
 			public const int Hello = 2130968576;
+			
+			// aapt resource value: 0x7f040004
+			public const int HttpResponseTimeout = 2130968580;
+			
+			// aapt resource value: 0x7f040002
+			public const int library_name = 2130968578;
 			
 			static String()
 			{
@@ -124,6 +172,22 @@ namespace WB.UI.QuestionnaireTester
 			}
 			
 			private String()
+			{
+			}
+		}
+		
+		public partial class Style
+		{
+			
+			// aapt resource value: 0x7f060000
+			public const int Theme_Splash = 2131099648;
+			
+			static Style()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Style()
 			{
 			}
 		}

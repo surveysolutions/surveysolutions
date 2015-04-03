@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/background">
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:src="@drawable/icon" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/logo"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/text"
+            android:layout_marginLeft="15dp"
+            android:layout_centerVertical="true"
+            local:MvxBind="Text Localization('LoginTitleText')" />
+    </RelativeLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbarStyle="outsideOverlay">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center">
+            <ImageView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/loginLogo" />
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:singleLine="true"
+                local:MvxBind="Text LoginName; Hint Localization('LoginNameHint')" />
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:singleLine="true"
+                android:password="true"
+                local:MvxBind="Text Password; Hint Localization('PasswordHint')" />
+            <RelativeLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp">
+                <FrameLayout
+                    android:id="@+id/loginbuttonframe"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp">
+                    <Button
+                        android:layout_height="wrap_content"
+                        android:layout_width="fill_parent"
+                        android:background="@color/background"
+                        android:textColor="@color/text"
+                        local:MvxBind="Click LoginCommand; Text Localization('LoginText')" />
+                    <ProgressBar
+                        android:layout_height="20dp"
+                        android:layout_width="wrap_content"
+                        android:indeterminateOnly="true"
+                        android:keepScreenOn="false"
+                        android:layout_gravity="center"
+                        android:paddingRight="70dp"
+                        local:MvxBind="Visible IsInProgress" />
+                </FrameLayout>
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/loginbuttonframe"
+                    local:MvxBind="Checked StaySignedIn; Text Localization('StaySignedInText')" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

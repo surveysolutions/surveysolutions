@@ -14,11 +14,15 @@ namespace WB.UI.QuestionnaireTester.Views
             set { base.ViewModel = value; }
         }
 
-        protected override void OnCreate(Bundle bundle)
+        protected override void OnViewModelSet()
         {
-            base.OnCreate(bundle);
+            base.OnViewModelSet();
+            this.SetContentView(ViewResourceId);
+        }
 
-            this.SetContentView(this.ViewResourceId);
+        public override void OnBackPressed()
+        {
+            this.ViewModel.NavigateToPreviousViewModel();
         }
     }
 }
