@@ -6,10 +6,12 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.EventBus;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.EventBus.Implementation
+
+namespace WB.Core.Infrastructure.EventBus.Implementation
 {
-    public class LiteEventBus : IEventBus
+    public class LiteEventBus : ILiteEventBus
     {
         private readonly ILogger logger;
         private readonly IEventRegistry eventRegistry;

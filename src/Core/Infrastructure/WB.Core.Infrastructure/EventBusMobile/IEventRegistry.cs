@@ -1,18 +1,18 @@
 ﻿using System;
-using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.QuestionnaireTester.EventBus.Implementation;
+using WB.Core.Infrastructure.EventBus.Implementation;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.EventBus
+
+namespace WB.Core.Infrastructure.EventBus
 {
     public interface IEventRegistry
     {
         void Subscribe<TEvent>(Action<TEvent> handler);
         void Subscribe<TEvent>(IEventBusEventHandler<TEvent> handler);
-        void SubscribeAll(object obj);
+        void Subscribe(object obj);
 
         void Unsubscribe<TEvent>(Action<TEvent> handler);
         void Unsubscribe<TEvent>(IEventBusEventHandler<TEvent> handler);
-        void UnsubscribeAll(object obj);
+        void Unsubscribe(object obj);
 
         IEventSubscription<TEvent> GetSubscription<TEvent>();
     }
