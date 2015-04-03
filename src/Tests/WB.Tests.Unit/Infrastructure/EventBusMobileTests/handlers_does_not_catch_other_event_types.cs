@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Infrastructure.EventBusMobileTests
         Because of = () =>
             eventBus.Publish(@event);
 
-        It should_sub1Mock_doesnot_call_Handle_once = () =>
+        It should_sub1Mock_doesnot_call_Handle = () =>
             Mock.Get(sub1Mock).Verify(s => s.Handle(Moq.It.IsAny<int>()), Times.Never);
 
         It should_sub2Mock_call_Handle_once = () =>

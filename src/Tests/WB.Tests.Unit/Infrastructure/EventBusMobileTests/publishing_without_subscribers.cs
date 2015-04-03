@@ -1,3 +1,4 @@
+using System;
 using Machine.Specifications;
 using WB.Core.Infrastructure.EventBus;
 
@@ -12,14 +13,15 @@ namespace WB.Tests.Unit.Infrastructure.EventBusMobileTests
             eventBus = CreateEventBus();
         };
 
-        Because of = () =>
-            eventBus.Publish(value);
+        private Because of = () =>
+            exception = Catch.Exception(() => eventBus.Publish(value));
 
         It should_nothing_happen_including_exceptions = () =>
-            value = 10;
+            exception.ShouldBeNull();
 
 
         private static ILiteEventBus eventBus;
         private static int value;
+        private static Exception exception;
     }
 }
