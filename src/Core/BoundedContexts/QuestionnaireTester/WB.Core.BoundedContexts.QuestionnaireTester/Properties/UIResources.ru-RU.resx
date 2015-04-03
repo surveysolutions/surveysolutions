@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutTitle" xml:space="preserve">
+    <value>О программе</value>
+  </data>
+  <data name="AccountIsLockedOnServer" xml:space="preserve">
+    <value>Ваша учетная запись была заблокирована администратором. Пожалуйста, обратитесь в службу поддержки Survey Solutions</value>
+  </data>
+  <data name="ApplicationNameText" xml:space="preserve">
+    <value>Имя приложения:</value>
+  </data>
+  <data name="ApplicationVersionText" xml:space="preserve">
+    <value>Версия приложения:</value>
+  </data>
+  <data name="BufferSizeText" xml:space="preserve">
+    <value>Размер пакета принимаемых/передаваемых данных, который используется при синхронизации с сервером</value>
+  </data>
+  <data name="BufferSizeUnitsText" xml:space="preserve">
+    <value>в байтах</value>
+  </data>
+  <data name="CheckForUpdatesText" xml:space="preserve">
+    <value>Проверить обновления</value>
+  </data>
+  <data name="ConfirmationNoText" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="ConfirmationText" xml:space="preserve">
+    <value>Подтверждение</value>
+  </data>
+  <data name="ConfirmationYesText" xml:space="preserve">
+    <value>Да</value>
+  </data>
+  <data name="Dashboard_SearchText" xml:space="preserve">
+    <value>Поиск (по имени, автору)</value>
+  </data>
+  <data name="EmptyQuestionnaireListBySearchText" xml:space="preserve">
+    <value>По Вашему запросу ничего не найдено</value>
+  </data>
+  <data name="EmptyQuestionnaireListText" xml:space="preserve">
+    <value>Нет опросников.  &lt;br/&gt; Потяните вниз, чтобы обновить список</value>
+  </data>
+  <data name="EndpointText" xml:space="preserve">
+    <value>Адрес веб-сервиса:</value>
+  </data>
+  <data name="EngineVersionText" xml:space="preserve">
+    <value>Версия ядра:</value>
+  </data>
+  <data name="HttpResponseTimeoutText" xml:space="preserve">
+    <value>Время ожидания отвера от сервера:</value>
+  </data>
+  <data name="HttpResponseTimeoutUnitsText" xml:space="preserve">
+    <value>в секундах</value>
+  </data>
+  <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
+    <value>Подключение к серверу</value>
+  </data>
+  <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
+    <value>Создание интервью</value>
+  </data>
+  <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
+    <value>Загрузка опросника -  {0}%</value>
+  </data>
+  <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
+    <value>У Вас нет прав на просмотр данного &lt;a href="{0}/Designer/app/open/{1}"&gt;{2}&lt;/a&gt; опросника.  Похоже что автор (&lt;font color="black"&gt;"{3}"&lt;/font&gt;) опросника удалил Вас из списка людей с которыми был расшарен  данный опросник. Вы можете написать владельцу опросника по email: &lt;a href="mailto:{4}"&gt;Обратиться к автору&lt;/a&gt;</value>
+  </data>
+  <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
+    <value>Запрашиваемый опросник &lt;a href="{0}/Designer/app/open/{1}"&gt;{2}&lt;/a&gt; не найден</value>
+  </data>
+  <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
+    <value>Запрашиваемый опросник &lt;font color="black"&gt;{2}&lt;/font&gt; содержит ошибки. &lt;br/&gt; Пожалуйста, исправьте все ошибки в опроснике с помощью  &lt;br/&gt; &lt;a href="{0}/Designer/app/open/{1}"&gt;Редактора опросников&lt;/a&gt;</value>
+  </data>
+  <data name="ImportQuestionnaire_Error_UpgradeRequired" xml:space="preserve">
+    <value>Ваша версия приложения не поддерживает открытие данного опросника &lt;br/&gt;&lt;br/&gt; &lt;a href="market://details?id=org.worldbank.solutions.Vtester"&gt;Обновить приложение&lt;/a&gt;</value>
+  </data>
+  <data name="ImportQuestionnaire_OpenLocalInterview" xml:space="preserve">
+    <value>Нет связи с дизайнером Survey Solutions. Открыть локальную копию опросника?</value>
+  </data>
+  <data name="ImportQuestionnaire_PrepareQuestionnaire" xml:space="preserve">
+    <value>Погдотовка опросника к созданию интервью</value>
+  </data>
+  <data name="ImportQuestionnaire_StoreAssembly" xml:space="preserve">
+    <value>Сохранение динамически подключаемой библиотеки интервью на диск</value>
+  </data>
+  <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
+    <value>Сохранение опросника на диск</value>
+  </data>
+  <data name="ImportQuestionnaire_VerifyOnServer" xml:space="preserve">
+    <value>Проверка опросника на наличие ошибок</value>
+  </data>
+  <data name="InternalServerError" xml:space="preserve">
+    <value>На данный момент сервер недоступен. Просим прощения за неудобства. Работа сервера будет восстановлена в ближайшее время</value>
+  </data>
+  <data name="LastModifiedDateTitle" xml:space="preserve">
+    <value>Изменено:</value>
+  </data>
+  <data name="LegacyText" xml:space="preserve">
+    <value>@ 2015 The World Bank Group, Все права защищены.</value>
+  </data>
+  <data name="LoginNameHint" xml:space="preserve">
+    <value>Имя пользователя</value>
+  </data>
+  <data name="LoginText" xml:space="preserve">
+    <value>Войти</value>
+  </data>
+  <data name="LoginTitleText" xml:space="preserve">
+    <value>Авторизация</value>
+  </data>
+  <data name="Maintenance" xml:space="preserve">
+    <value>The website of survey solutions designer is on the maintenance mode now. Sorry for the inconvenience</value>
+  </data>
+  <data name="OSVersionText" xml:space="preserve">
+    <value>Версия адроида:</value>
+  </data>
+  <data name="OwnerNameTitle" xml:space="preserve">
+    <value>Автор:</value>
+  </data>
+  <data name="PasswordHint" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="PrefilledQuestionsSubTitle" xml:space="preserve">
+    <value>предзаполненные вопросы</value>
+  </data>
+  <data name="RequestTimeout" xml:space="preserve">
+    <value>Время ожидания ответа от сервера дизвйнера Survey Solutions истекло. Пожалуйста, проверьте Ваше интернет соединение</value>
+  </data>
+  <data name="ResetSettingsConfirmationText" xml:space="preserve">
+    <value>Вы действительно хотите сбросить все параметры в состояние по умолчанию?</value>
+  </data>
+  <data name="ResetSettingsSuccessText" xml:space="preserve">
+    <value>Все параметры были сброшены в состояние по умолчанию</value>
+  </data>
+  <data name="ResetSettingsText" xml:space="preserve">
+    <value>По умолчанию</value>
+  </data>
+  <data name="SaveSettingsSuccessText" xml:space="preserve">
+    <value>Ваши настройки успешно сохранены</value>
+  </data>
+  <data name="SaveSettingsText" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
+  <data name="ServiceUnavailable" xml:space="preserve">
+    <value>Нет связи с дизайнером Survey Solutions</value>
+  </data>
+  <data name="SettingsText" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="Settings_AllowToSendInfoByCrashesText" xml:space="preserve">
+    <value>Разрешить отправлять анонимную информацию о всех крушениях приложения</value>
+  </data>
+  <data name="SignOutText" xml:space="preserve">
+    <value>Выйти</value>
+  </data>
+  <data name="StaySignedInText" xml:space="preserve">
+    <value>Запомнить меня</value>
+  </data>
+  <data name="TryAgainLink" xml:space="preserve">
+    <value>Попробовать снова</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>Вы ввели неправильное имя или пароль</value>
+  </data>
+</root>
