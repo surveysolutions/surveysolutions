@@ -5,7 +5,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Infrastructure.EventBusMobileTests
 {
-    internal class handler_must_donot_handle_events_after_unsubscribe : EventBusTestsContext
+    internal class handler_must_not_have_handle_events_after_unsubscribe : EventBusTestsContext
     {
         Establish context = () =>
         {
@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Infrastructure.EventBusMobileTests
         Because of = () =>
             eventBus.Publish(value);
 
-        It should_doesnot_call_Handle_for_int = () =>
+        It should_doesnot_call_Handle_for_int_subscription = () =>
             Mock.Get(subMock).Verify(s => s.Handle(Moq.It.IsAny<int>()), Times.Never);
 
         private static ILiteEventBus eventBus;
