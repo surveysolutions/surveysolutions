@@ -43,9 +43,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
         It should_throw_exception_with_interviewId_equals_to_null = () =>
             exception.InterviewId.ShouldBeNull();
 
-        It should_result_be_null = () =>
-           result.ShouldBeNull();
-
         private static IncomingSyncPackagesQueue incomingSyncPackagesQueue;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
         private static Guid interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
