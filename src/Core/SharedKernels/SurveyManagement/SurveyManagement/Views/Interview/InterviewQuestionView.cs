@@ -145,7 +145,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                     if (answer is DateTime)
                     {
                          var date = (DateTime) answer;
-                         return AnswerUtils.AnswerToString(date.ToLocalTime());
+                         return date.ToString("u");
                     }
                    break;
                 case QuestionType.GpsCoordinates:

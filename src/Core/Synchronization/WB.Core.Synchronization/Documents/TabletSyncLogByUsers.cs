@@ -10,6 +10,7 @@ namespace WB.Core.Synchronization.Documents
         public TabletSyncLogByUsers()
         {
             SyncLog = new Dictionary<Guid, List<TabletSyncLog>>();
+            Users = new List<Guid>();
         }
 
         public Guid DeviceId { get; set; }
