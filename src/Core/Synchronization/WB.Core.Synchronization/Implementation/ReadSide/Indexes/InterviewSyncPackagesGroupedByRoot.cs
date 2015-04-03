@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.Implementation.ReadSide.Indexes
@@ -27,13 +23,13 @@ namespace WB.Core.Synchronization.Implementation.ReadSide.Indexes
                 };
 
             this.Reduce = results => from result in results
-                group result by result.InterviewId
+                group result by new { result.InterviewId, result.UserId }
                 into g
                 let lastPackage = g.OrderBy(x => x.SortIndex).Last()
                 select new SyncPackageGroup
                 {
                     PackageId = lastPackage.PackageId,
-                    InterviewId = g.Key,
+                    InterviewId = lastPackage.InterviewId,
                     UserId = lastPackage.UserId,
                     SortIndex = lastPackage.SortIndex,
                     ContentSize = lastPackage.ContentSize,

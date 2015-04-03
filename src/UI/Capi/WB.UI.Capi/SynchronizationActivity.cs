@@ -132,10 +132,16 @@ namespace WB.UI.Capi
 
                 this.StartSynctionization(authentificator, (sender, args) =>
                 {
+                    var wasSynchronizationSuccessfull = this.synchronizer.WasSynchronizationSuccessfull;
                     this.RunOnUiThread(() =>
                     {
                         this.DestroyDialog();
-                        this.tvSyncResult.Text = Resources.GetString(Resource.String.SyncIsFinished);
+                        this.tvSyncResult.Text = this.GetFinishSynchronizationMessageByItsStatus(wasSynchronizationSuccessfull);
+                        if (!wasSynchronizationSuccessfull)
+                        {
+                            return;
+                        }
+
                         bool result = CapiApplication.Membership.LogOnAsync(login, passwordHash, wasPasswordHashed: true).Result;
                         if (result)
                         {
@@ -439,12 +445,20 @@ namespace WB.UI.Capi
 
         private void synchronizer_ProcessFinished(object sender, EventArgs e)
         {
+            var wasSynchronizationSuccessfull = this.synchronizer.WasSynchronizationSuccessfull;
             this.RunOnUiThread(() =>
                 {
                     this.DestroyDialog();
-                    this.tvSyncResult.Text =  Resources.GetString(Resource.String.SyncIsFinished);
+                    this.tvSyncResult.Text = this.GetFinishSynchronizationMessageByItsStatus(wasSynchronizationSuccessfull);
                 });
             this.DestroySynchronizer();
+        }
+
+        private string GetFinishSynchronizationMessageByItsStatus(bool wasSynchronizationSuccessfull)
+        {
+            return wasSynchronizationSuccessfull
+                ? this.Resources.GetString(Resource.String.SyncIsFinished)
+                : this.Resources.GetString(Resource.String.SyncIsFinishedUnsuccessfully);
         }
 
         void synchronizer_ProcessCanceling(object sender, EventArgs e)
