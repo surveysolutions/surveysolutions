@@ -90,13 +90,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EventBus\IEventBusEventHandler.cs" />
-    <Compile Include="EventBus\IEventRegistry.cs" />
-    <Compile Include="EventBus\Implementation\EventRegistry.cs" />
-    <Compile Include="EventBus\Implementation\EventSubscription.cs" />
-    <Compile Include="EventBus\Implementation\IEventSubscription.cs" />
-    <Compile Include="EventBus\Implementation\LiteEventBus.cs" />
-    <Compile Include="EventBus\Implementation\ImmutableList.cs" />
     <Compile Include="Implementation\Services\SiaqDbRepository.cs" />
     <Compile Include="Implementation\Services\SiaqoDbAccessor.cs" />
     <Compile Include="Implementation\Services\SiaqodbFactory.cs" />
