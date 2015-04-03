@@ -423,7 +423,6 @@
     <Content Include="Views\HQ\TakeNew.cshtml" />
     <Content Include="Views\HQ\VerifySample.cshtml" />
     <Content Include="Views\ControlPanel\CreateHeadquarters.cshtml" />
-    <None Include="Properties\PublishProfiles\nastya.pubxml" />
     <Content Include="Views\ControlPanel\ResetPrivilegedUserPassword.cshtml" />
     <Content Include="Views\Shared\SupervisorMainMenu.cshtml" />
     <Content Include="Views\ControlPanel\ReexportInterviews.cshtml" />
