@@ -36,6 +36,15 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Synchronization
         public event System.EventHandler ProcessCanceling;
         public event EventHandler<SynchronizationCanceledEventArgs> ProcessCanceled;
 
+        private bool wasSynchronizationSuccessfull = false;
+        public bool WasSynchronizationSuccessfull
+        {
+            get
+            {
+                return this.wasSynchronizationSuccessfull;
+            }
+        }
+
         public SynchronozationProcessor(
             IDeviceChangingVerifier deviceChangingVerifier,
             ISyncAuthenticator authentificator, 
@@ -70,6 +79,8 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Synchronization
                     await this.Handshake();
                     await this.Push();
                     await this.Pull();
+
+                    this.wasSynchronizationSuccessfull = true;
 
                     this.OnProcessFinished();
                 }
