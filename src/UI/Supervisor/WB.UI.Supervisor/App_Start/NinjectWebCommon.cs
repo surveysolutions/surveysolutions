@@ -111,7 +111,9 @@ namespace WB.UI.Supervisor.App_Start
                     LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
                 incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension,
                 incomingUnprocessedPackagesDirectoryName: LegacyOptions.IncomingUnprocessedPackageFileNameExtension,
-                origin: Constants.CapiSynchronizationOrigin, retryCount: LegacyOptions.RetryCount, retryInterval: LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval);
+                origin: Constants.CapiSynchronizationOrigin, 
+                retryCount: int.Parse(WebConfigurationManager.AppSettings["InterviewDetailsDataScheduler.RetryCount"]),
+                retryIntervalInSeconds: LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval);
 
             var basePath = appDataDirectory;
 

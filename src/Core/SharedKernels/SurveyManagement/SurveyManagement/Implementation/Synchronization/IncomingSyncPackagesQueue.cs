@@ -22,7 +22,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         private readonly ILogger logger;
         private readonly IJsonUtils jsonUtils;
         private readonly IArchiveUtils archiver;
-        private readonly ContextualPolicy policy;
 
         public IncomingSyncPackagesQueue(IFileSystemAccessor fileSystemAccessor, 
             SyncSettings syncSettings, 
@@ -35,13 +34,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             this.logger = logger;
             this.jsonUtils = jsonUtils;
             this.archiver = archiver;
-            this.policy = Policy
-                .Handle<Win32Exception>().WaitAndRetry(syncSettings.RetryCount, retryAttempt =>
-                    TimeSpan.FromSeconds(syncSettings.RetryInterval), (exception, retryCount, context) =>
-                    {
-                        logger.Error(exception.Message, exception);
-                    }
-                );
             this.incomingUnprocessedPackagesDirectory = fileSystemAccessor.CombinePath(syncSettings.AppDataDirectory,
                 syncSettings.IncomingUnprocessedPackagesDirectoryName);
 
@@ -80,6 +72,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             Guid? interviewId = null;
             try
             {
+                var policy = SetupRetryPolicyForPackage(pathToPackage);
+        
                 var fileContent = policy.Execute(() => fileSystemAccessor.ReadAllText(pathToPackage));
 
                 var syncItem = jsonUtils.Deserialize<SyncItem>(fileContent);
@@ -103,6 +97,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                 logger.Error(message, e);
                 throw new IncomingSyncPackageException(message, e, interviewId, pathToPackage);
             }
+        }
+
+        private ContextualPolicy SetupRetryPolicyForPackage(string pathToPackage)
+        {
+            return Policy
+                .Handle<Win32Exception>()
+                .WaitAndRetry(
+                    syncSettings.RetryCount,
+                    retryAttempt => TimeSpan.FromSeconds(syncSettings.RetryIntervalInSeconds),
+                    (exception, retryCount, context) =>
+                    {
+                        logger.Warn(
+                            string.Format("package '{0}' failed to open with error '{1}'", pathToPackage, exception.Message),
+                            exception);
+                    }
+                );
         }
 
         public void DeleteSyncItem(string syncItemPath)
