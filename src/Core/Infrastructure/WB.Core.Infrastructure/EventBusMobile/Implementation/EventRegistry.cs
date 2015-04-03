@@ -1,24 +1,28 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Ncqrs;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.EventBus.Implementation
+
+
+namespace WB.Core.Infrastructure.EventBus.Implementation
 {
-    public class EventRegistry: IEventRegistry
+    public class EventRegistry : IEventRegistry
     {
         private readonly ILogger logger;
 
         private readonly ConcurrentDictionary<Type, IEventSubscription> subscriptions = new ConcurrentDictionary<Type, IEventSubscription>();
+        private readonly string SubscribeMethodName = Reflect<EventRegistry>.MethodName(c => new Action<IEventBusEventHandler<object>>(c.Subscribe));
+        private readonly string UnsubscribeMethodName = Reflect<EventRegistry>.MethodName(c => new Action<IEventBusEventHandler<object>>(c.Unsubscribe));
 
         public EventRegistry(ILogger logger)
         {
             this.logger = logger;
         }
-
-        #region IMessageBus Members
 
         public void Subscribe<TEvent>(IEventBusEventHandler<TEvent> handler)
         {
@@ -52,44 +56,37 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.EventBus.Implementation
             }
         }
 
-        private readonly string subscribeMethodName = "Subscribe";
-        private readonly string unsubscribeMethodName = "Unsubscribe";
-//        private readonly string subscribeMethodName = Reflect<EventRegistry>.MethodName(c => c.Subscribe(null));
-//        private readonly string unsubscribeMethodName = Reflect<EventRegistry>.MethodName(c => c.Unsubscribe(null));
-
-        public void SubscribeAll(object obj)
+        public void Subscribe(object obj)
         {
             var eventTypes = GetEventsListToHandleFromClass(obj);
-            CallMethodForEvent(subscribeMethodName, obj, eventTypes);
+            CallMethodForEvent(SubscribeMethodName, obj, eventTypes);
         }
 
-        public void UnsubscribeAll(object obj)
+        public void Unsubscribe(object obj)
         {
             var eventTypes = GetEventsListToHandleFromClass(obj);
-            CallMethodForEvent(unsubscribeMethodName, obj, eventTypes);
+            CallMethodForEvent(UnsubscribeMethodName, obj, eventTypes);
         }
-
-        #endregion
 
         private Type[] GetEventsListToHandleFromClass(object obj)
         {
             Type type = obj.GetType();
-            Type[] interfaces = type.GetInterfaces();
+            IEnumerable<Type> interfaces = type.GetTypeInfo().ImplementedInterfaces;
             return interfaces
-                .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IEventBusEventHandler<>))
-                .Select(k => k.GetGenericArguments().Single())
+                .Where(i => i.GetTypeInfo().IsGenericType && i.GetGenericTypeDefinition() == typeof(IEventBusEventHandler<>))
+                .Select(k => k.GetTypeInfo().GenericTypeArguments.Single())
                 .ToArray();
         }
 
 
-        private static void CallMethodForEvent(string methodName, object obj, Type[] eventTypes)
+        private void CallMethodForEvent(string methodName, object obj, Type[] eventTypes)
         {
             MethodInfo method = typeof(EventRegistry).GetMethod(methodName);
 
             foreach (Type eventType in eventTypes)
             {
                 MethodInfo genericMethod = method.MakeGenericMethod(eventType);
-                genericMethod.Invoke(obj, new[] { obj });
+                genericMethod.Invoke(this, new[] { obj });
             }
         }
 

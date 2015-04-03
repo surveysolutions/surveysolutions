@@ -325,6 +325,13 @@
     <Compile Include="Core\Synchronization\when_sync_is_initialized_and_device_is_not_registered.cs" />
     <Compile Include="Core\Synchronization\when_sync_is_initialized_and_device_is_registered.cs" />
     <Compile Include="GenericSubdomains\ErrorReporting\TabletInformationSenderTests\when_archiving_process_thrown_an_exception.cs" />
+    <Compile Include="Infrastructure\EventBusMobileTests\class_must_donot_handle_events_after_unsubscribe.cs" />
+    <Compile Include="Infrastructure\EventBusMobileTests\EventBusTestsContext.cs" />
+    <Compile Include="Infrastructure\EventBusMobileTests\handler_must_donot_handle_events_after_unsubscribe.cs" />
+    <Compile Include="Infrastructure\EventBusMobileTests\handlers_does_not_catch_other_event_types.cs" />
+    <Compile Include="Infrastructure\EventBusMobileTests\publishing_without_subscribers.cs" />
+    <Compile Include="Infrastructure\EventBusMobileTests\publish_does_catch_by_multi_subscribers.cs" />
+    <Compile Include="Infrastructure\EventBusMobileTests\subscribe_all_method_register_all_event_handlers_for_class.cs" />
     <Compile Include="Infrastructure\MemoryCachedReadSideRepositoryWriterTests\when_inserting_last_item_in_store.cs" />
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\MemoryCachedReadSideStoreTestContext.cs" />
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_Clear_called.cs" />

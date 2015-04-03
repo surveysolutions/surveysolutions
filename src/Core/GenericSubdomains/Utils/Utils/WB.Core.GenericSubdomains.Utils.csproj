@@ -47,6 +47,7 @@
     <Compile Include="Implementation\RestCredentials.cs" />
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Implementation\RestException.cs" />
+    <Compile Include="Reflect.cs" />
     <Compile Include="SyncStatusCode.cs" />
     <Compile Include="Implementation\TopologicalSorter\StronglyConnectedComponent.cs" />
     <Compile Include="Implementation\TopologicalSorter.cs" />
