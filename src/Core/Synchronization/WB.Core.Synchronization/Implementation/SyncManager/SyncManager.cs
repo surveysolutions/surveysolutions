@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -31,7 +30,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         private readonly string userQueryIndexName = typeof(UserSyncPackagesByBriefFields).Name;
         private readonly string interviewGroupQueryIndexName = typeof(InterviewSyncPackagesGroupedByRoot).Name;
         private readonly string allInterviewQueryIndexName = typeof(InterviewSyncPackagesByBriefFields).Name;
-        private readonly string questionnireQueryIndexName = typeof(QuestionnaireSyncPackagesByBriefFields).Name;
+        private readonly string questionnaireQueryIndexName = typeof(QuestionnaireSyncPackagesByBriefFields).Name;
 
         public SyncManager(IReadSideRepositoryReader<TabletDocument> devices, 
             IIncomingSyncPackagesQueue incomingSyncPackagesQueue, 
@@ -109,7 +108,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
             var updateFromLastPackageByQuestionnaire = FilterDeletedQuestionnaires(allFromLastPackageByQuestionnaire, lastSyncedPackageId);
 
-            this.TrackArIdsRequestIfNeeded(userId, deviceId, SyncItemType.Questionnaire, lastSyncedPackageId, updateFromLastPackageByQuestionnaire);
+            this.TrackArIdsRequest(userId, deviceId, SyncItemType.Questionnaire, lastSyncedPackageId, updateFromLastPackageByQuestionnaire);
 
             return new SyncItemsMetaContainer
             {
@@ -121,16 +120,18 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         {
             this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
-            var updateFromLastPakageByUser =
+            var updateFromLastPackageByUser =
                 this.GetUpdateFromLastPackage(userId, lastSyncedPackageId, GetGroupedUserSyncPackage, GetLastUserSyncPackage)
                     .Select(x => new SynchronizationChunkMeta(x.PackageId, x.SortIndex, x.UserId, null))
-                    .ToList(); 
+                    .ToList();
 
-            this.TrackArIdsRequestIfNeeded(userId, deviceId, SyncItemType.User, lastSyncedPackageId, updateFromLastPakageByUser);
+            updateFromLastPackageByUser = updateFromLastPackageByUser.Skip(Math.Max(0, updateFromLastPackageByUser.Count() - 1)).Take(1).ToList();
+
+            this.TrackArIdsRequest(userId, deviceId, SyncItemType.User, lastSyncedPackageId, updateFromLastPackageByUser);
 
             return new SyncItemsMetaContainer
             {
-                SyncPackagesMeta = updateFromLastPakageByUser.Skip(Math.Max(0, updateFromLastPakageByUser.Count() - 1)).Take(1)
+                SyncPackagesMeta = updateFromLastPackageByUser
             };
         }
 
@@ -145,7 +146,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                     x => new SynchronizationChunkMeta(x.PackageId, x.SortIndex, x.UserId, x.ItemType))
                     .ToList();
 
-            this.TrackArIdsRequestIfNeeded(userId, deviceId, SyncItemType.Interview, lastSyncedPackageId, updateFromLastPackageByInterview);
+            this.TrackArIdsRequest(userId, deviceId, SyncItemType.Interview, lastSyncedPackageId, updateFromLastPackageByInterview);
 
             return new SyncItemsMetaContainer
             {
@@ -162,7 +163,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             if (package == null)
                 throw new ArgumentException(string.Format("Package {0} with user is absent", packageId));
 
-            this.TrackPackgeRequest(deviceId, SyncItemType.User, packageId, userId);
+            this.TrackPackageRequest(deviceId, SyncItemType.User, packageId, userId);
 
             return new UserSyncPackageDto
                    {
@@ -180,7 +181,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             if (package == null)
                 throw new ArgumentException(string.Format("Package {0} with questionnaire is absent", packageId));
 
-            this.TrackPackgeRequest(deviceId, SyncItemType.Questionnaire, packageId, userId);
+            this.TrackPackageRequest(deviceId, SyncItemType.Questionnaire, packageId, userId);
 
             return new QuestionnaireSyncPackageDto
                    {
@@ -198,7 +199,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             if (packageMetaInformation == null)
                 throw new ArgumentException(string.Format("Package {0} with interview is absent", packageId));
 
-            this.TrackPackgeRequest(deviceId, SyncItemType.Interview, packageId, userId);
+            this.TrackPackageRequest(deviceId, SyncItemType.Interview, packageId, userId);
 
             return new InterviewSyncPackageDto
                    {
@@ -224,20 +225,17 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
         private IQueryable<InterviewSyncPackageMeta> GetLastInterviewSyncPackage(Guid userId)
         {
-           return 
-                indexAccessor.Query<InterviewSyncPackageMeta>(allInterviewQueryIndexName).Where(x=>x.UserId==userId);
+           return indexAccessor.Query<InterviewSyncPackageMeta>(allInterviewQueryIndexName).Where(x=>x.UserId==userId);
         }
 
         private IQueryable<UserSyncPackageMeta> GetLastUserSyncPackage(Guid userId)
         {
-            return
-              indexAccessor.Query<UserSyncPackageMeta>(userQueryIndexName).Where(x => x.UserId == userId);
+            return indexAccessor.Query<UserSyncPackageMeta>(userQueryIndexName).Where(x => x.UserId == userId);
         }
 
         private IQueryable<QuestionnaireSyncPackageMeta> GetLastQuestionnaireSyncPackage(Guid userId)
         {
-            return
-                indexAccessor.Query<QuestionnaireSyncPackageMeta>(questionnireQueryIndexName);
+            return indexAccessor.Query<QuestionnaireSyncPackageMeta>(this.questionnaireQueryIndexName);
         }
 
         private IQueryable<InterviewSyncPackageMeta> GetGroupedInterviewSyncPackage(Guid userId, long? lastSyncedSortIndex)
@@ -265,7 +263,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         private IQueryable<QuestionnaireSyncPackageMeta> GetGroupedQuestionnaireSyncPackage(Guid userId,
             long? lastSyncedSortIndex)
         {
-            var items = indexAccessor.Query<QuestionnaireSyncPackageMeta>(questionnireQueryIndexName);
+            var items = indexAccessor.Query<QuestionnaireSyncPackageMeta>(this.questionnaireQueryIndexName);
 
             var filteredItems = lastSyncedSortIndex.HasValue
                 ? items.Where(x => x.SortIndex > lastSyncedSortIndex.Value)
@@ -307,7 +305,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             }
         }
 
-        private void TrackPackgeRequest(Guid deviceId, string packageType, string packageId, Guid userId)
+        private void TrackPackageRequest(Guid deviceId, string packageType, string packageId, Guid userId)
         {
             this.syncLogger.TrackPackageRequest(deviceId, userId, packageType, packageId);
         }
@@ -327,7 +325,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             this.syncLogger.TraceHandshake(deviceId, userId, appVersion);
         }
 
-        private void TrackArIdsRequestIfNeeded(Guid userId, Guid deviceId, string packageType, string lastSyncedPackageId, IEnumerable<SynchronizationChunkMeta> updateFromLastPakage)
+        private void TrackArIdsRequest(Guid userId, Guid deviceId, string packageType, string lastSyncedPackageId, IEnumerable<SynchronizationChunkMeta> updateFromLastPakage)
         {
             this.syncLogger.TrackArIdsRequest(deviceId, userId, packageType, lastSyncedPackageId, updateFromLastPakage.Select(x => x.Id).ToArray());
         }
@@ -336,7 +334,6 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         {
             this.syncLogger.TrackDeviceRegistration(deviceId, userId, appVersion, androidId);
         }
-
        
         public IList<T> QueryAll<T>(Func<IQueryable<T>> query)
         {

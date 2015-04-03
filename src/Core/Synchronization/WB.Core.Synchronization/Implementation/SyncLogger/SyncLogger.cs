@@ -10,7 +10,7 @@ namespace WB.Core.Synchronization.Implementation.SyncLogger
     internal class SyncLogger : ISyncLogger
     {
         private readonly IReadSideKeyValueStorage<TabletSyncLogByUsers> tabletLogWriter;
-        private const int lastSyncLimit = 15;
+        private const int LastSyncLimit = 15;
 
         public SyncLogger(IReadSideKeyValueStorage<TabletSyncLogByUsers> tabletLogWriter)
         {
@@ -24,9 +24,7 @@ namespace WB.Core.Synchronization.Implementation.SyncLogger
                    var updatedState = new TabletSyncLogByUsers
                    {
                        AndroidId = androidId,
-                       RegistrationDate = DateTime.Now,
-                       LastUpdateDate = DateTime.Now,
-                       Users = new List<Guid>()
+                       RegistrationDate = DateTime.Now
                    };
 
                    updatedState.Users.Add(userId);
@@ -38,12 +36,13 @@ namespace WB.Core.Synchronization.Implementation.SyncLogger
         {
             this.UpdateState(deviceId, currentState =>
               {
-                  currentState.Users.Add(userId);
+                  if (currentState.Users.All(x => x != userId))
+                  {
+                      currentState.Users.Add(userId);
+                  }
                   return currentState;
               });
         }
-
-      
 
         public void UnlinkUserFromDevice(Guid deviceId, Guid userId)
         {
@@ -108,9 +107,9 @@ namespace WB.Core.Synchronization.Implementation.SyncLogger
 
                    var syncInfoCount = currentState.SyncLog[userId].Count;
 
-                   var syncTail = syncInfoCount < lastSyncLimit 
+                   var syncTail = syncInfoCount < LastSyncLimit 
                        ? currentState.SyncLog[userId]
-                       : currentState.SyncLog[userId].Skip(syncInfoCount - lastSyncLimit + 1).Take(lastSyncLimit - 1).ToList();
+                       : currentState.SyncLog[userId].Skip(syncInfoCount - LastSyncLimit + 1).Take(LastSyncLimit - 1).ToList();
 
                    syncTail.Add(new TabletSyncLog { AppVersion = appVersion, HandshakeTime = DateTime.Now });
                    
@@ -122,7 +121,10 @@ namespace WB.Core.Synchronization.Implementation.SyncLogger
 
         private void UpdateState(Guid deviceId, Func<TabletSyncLogByUsers, TabletSyncLogByUsers> updateState)
         {
-            TabletSyncLogByUsers currentState = tabletLogWriter.GetById(deviceId);
+            TabletSyncLogByUsers currentState = tabletLogWriter.GetById(deviceId) ?? new TabletSyncLogByUsers
+                                                                                     {
+                                                                                         RegistrationDate = DateTime.Now
+                                                                                     };
             var updatedState = updateState(currentState);
             updatedState.LastUpdateDate = DateTime.Now;
             tabletLogWriter.Store(updatedState, deviceId);
