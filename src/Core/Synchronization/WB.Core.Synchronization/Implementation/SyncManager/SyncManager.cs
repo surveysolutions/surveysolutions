@@ -139,9 +139,10 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         {
             this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
-            var allUpdatesFromLastPackage = this.GetUpdateFromLastPackage(userId, lastSyncedPackageId, GetGroupedInterviewSyncPackage, GetLastInterviewSyncPackage);
+            IList<InterviewSyncPackageMeta> allUpdatesFromLastPackage = 
+                this.GetUpdateFromLastPackage(userId, lastSyncedPackageId, GetGroupedInterviewSyncPackage, GetLastInterviewSyncPackage);
 
-            var updateFromLastPackageByInterview =
+            List<SynchronizationChunkMeta> updateFromLastPackageByInterview =
                 allUpdatesFromLastPackage.Select(
                     x => new SynchronizationChunkMeta(x.PackageId, x.SortIndex, x.UserId, x.ItemType))
                     .ToList();
@@ -339,16 +340,14 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         {
             var result = new List<T>();
             int skipResults = 0;
-            while (true)
+            bool receivedAnyFromDb;
+            do
             {
-                var chunk = query().Skip(skipResults).ToList();
-
-                if (!chunk.Any())
-                    break;
-
+                var chunk = query().Skip(skipResults).Take(128).ToList();
+                receivedAnyFromDb = chunk.Any();
                 result.AddRange(chunk);
                 skipResults = result.Count;
-            }
+            } while (receivedAnyFromDb);
             return result;
         }
     }
