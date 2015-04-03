@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Utils;
@@ -48,13 +49,23 @@ namespace WB.Core.Synchronization.MetaInfo
                 if (answerOnFeaturedQuestion != null && answerOnFeaturedQuestion.Answer != null)
                 {
                     featuredQuestionList.Add(new FeaturedQuestionMeta(featuredQuestion.PublicKey, featuredQuestion.QuestionText,
-                        AnswerUtils.AnswerToString(answerOnFeaturedQuestion.Answer)));
+                        GetAnswerOnPrefilledQuestion(answerOnFeaturedQuestion)));
                 }
             }
 
             metaInfo.FeaturedQuestionsMeta = featuredQuestionList;
 
             return metaInfo;
+        }
+
+        private static string GetAnswerOnPrefilledQuestion(AnsweredQuestionSynchronizationDto answerOnFeaturedQuestion)
+        {
+            if (answerOnFeaturedQuestion.Answer is DateTime)
+            {
+                return ((DateTime)answerOnFeaturedQuestion.Answer).ToString("u");
+            }
+
+            return AnswerUtils.AnswerToString(answerOnFeaturedQuestion.Answer);
         }
     }
 }
