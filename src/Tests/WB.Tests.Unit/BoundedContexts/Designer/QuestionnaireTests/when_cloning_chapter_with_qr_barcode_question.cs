@@ -22,7 +22,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 EnablementCondition =  conditionExpression,
                 Instructions = instructions,
                 IsMandatory =  isMandatory,
-                VariableName = variableName
+                VariableName = variableName,
+                ValidationExpression = validation,
+                ValidationMessage = validationMessage
             });
 
             eventContext = new EventContext();
@@ -78,6 +80,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_QRBarcodeQuestionCloned_event_ConditionExpression_be_equal_conditionExpression = () =>
             eventContext.GetSingleEvent<QRBarcodeQuestionCloned>().EnablementCondition.ShouldEqual(conditionExpression);
 
+        It should_QRBarcodeQuestionCloned_event_ValidationExpression_be_equal_validation = () =>
+           eventContext.GetSingleEvent<QRBarcodeQuestionCloned>().ValidationExpression.ShouldEqual(validation);
+
+        It should_QRBarcodeQuestionCloned_event_ValidationMessage_be_equal_validationMessage = () =>
+            eventContext.GetSingleEvent<QRBarcodeQuestionCloned>().ValidationMessage.ShouldEqual(validationMessage);
+
         private static Questionnaire questionnaire;
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static Guid targetGroupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -90,7 +98,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static string conditionExpression = "condition exptession";
         private static string instructions = "instructions";
         private static bool isMandatory = true;
-            
+        private static string validation = "validation";
+        private static string validationMessage = "validationMessage";
+
         private static int targetIndex = 0;
         private static EventContext eventContext;
     }

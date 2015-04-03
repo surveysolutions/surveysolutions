@@ -29,7 +29,6 @@
     ViewBag.Title = "Tablet sync log";
 }
 <div class="container">
-    <h2>@Model.AndroidId</h2>
     <h3>Active users on this tablet</h3>
     <ul class="list-group">
         @foreach (var user in Model.Users)
@@ -49,85 +48,85 @@
                 var countOfTransferedPackages = sync.PackagesTrackingInfo[SyncItemType.User].PackagesRequestInfo.Count + sync.PackagesTrackingInfo[SyncItemType.Questionnaire].PackagesRequestInfo.Count + sync.PackagesTrackingInfo[SyncItemType.Interview].PackagesRequestInfo.Count;
                 <table class="table table-condensed table-bordered" style="margin-bottom: 40px; border-bottom: 1px solid #ddd;">
                     <colgroup>
-                        <col style="width: 33%;" />
-                        <col />
-                        <col style="width: 33%;" />
+                        <col style="width: 33%;"/>
+                        <col/>
+                        <col style="width: 33%;"/>
                     </colgroup>
                     <tbody>
+                    <tr>
+                        <td colspan="2">
+                            <b>@sync.HandshakeTime.ToLocalTime().ToString("HH:mm:ss, dd MMM, dddd")</b>
+                            @if (countOfTransferedPackages == 0)
+                            {
+                                <span class="label label-primary">no packages was transferred</span>
+                            }
+                            else if (isTabletClear)
+                            {
+                                <span class="label label-warning">tablet was clear</span>
+                            }
+                        </td>
+                        <td>
+                            Sync protocol version: @sync.AppVersion
+                        </td>
+                    </tr>
+                    @if (!isTabletClear || countOfTransferedPackages > 0)
+                    {
                         <tr>
-                            <td colspan="2">
-                                <b>@sync.HandshakeTime.ToLocalTime().ToString("HH:mm:ss, dd MMM, dddd")</b>
-                                @if (countOfTransferedPackages == 0)
-                                {
-                                    <span class="label label-primary">no packages was transferred</span>
-                                }
-                                else if (isTabletClear)
-                                {
-                                    <span class="label label-warning">tablet was clear</span>
-                                }
+                            <td>User's packages</td>
+                            <td>Questionnaire packages</td>
+                            <td>Interview's packages</td>
+                        </tr>
+                    }
+                    @if (!isTabletClear)
+                    {
+                        <tr class="info">
+                            <td class="monospace">@(sync.PackagesTrackingInfo[SyncItemType.User].LastPackageId ?? "-")</td>
+                            <td class="monospace">@(sync.PackagesTrackingInfo[SyncItemType.Questionnaire].LastPackageId ?? "-")</td>
+                            <td class="monospace">@(sync.PackagesTrackingInfo[SyncItemType.Interview].LastPackageId ?? "-")</td>
+                        </tr>
+                    }
+                    @if (countOfTransferedPackages > 0)
+                    {
+                        <tr>
+                            <td>
+                                <ul class="list-group">
+                                    @foreach (var requestInfo in sync.PackagesTrackingInfo[SyncItemType.User].PackagesRequestInfo)
+                                    {
+                                        <li class="list-group-item">
+                                            <span class="monospace">@requestInfo.Key</span>
+                                            <span class="label label-info">@ShowTime(requestInfo)</span>
+                                        </li>
+                                    }
+                                    @if (sync.PackagesTrackingInfo[SyncItemType.User].PackagesRequestInfo.Count > 1)
+                                    {
+                                        <div class="alert alert-danger" role="alert">No more than one user package should be transferred</div>
+                                    }
+                                </ul>
                             </td>
                             <td>
-                                Sync protocol version: @sync.AppVersion
+                                <ul class="list-group">
+                                    @foreach (var requestInfo in sync.PackagesTrackingInfo[SyncItemType.Questionnaire].PackagesRequestInfo)
+                                    {
+                                        <li class="list-group-item">
+                                            <span class="monospace">@requestInfo.Key</span>
+                                            <span class="label label-info">@ShowTime(requestInfo)</span>
+                                        </li>
+                                    }
+                                </ul>
+                            </td>
+                            <td>
+                                <ul class="list-group">
+                                    @foreach (var requestInfo in sync.PackagesTrackingInfo[SyncItemType.Interview].PackagesRequestInfo)
+                                    {
+                                        <li class="list-group-item">
+                                            <span class="monospace">@requestInfo.Key</span>
+                                            <span class="label label-info">@ShowTime(requestInfo)</span>
+                                        </li>
+                                    }
+                                </ul>
                             </td>
                         </tr>
-                        @if (!isTabletClear || countOfTransferedPackages > 0)
-                        {
-                            <tr>
-                                <td>User's packages</td>
-                                <td>Questionnaire packages</td>
-                                <td>Interview's packages</td>
-                            </tr>
-                        }
-                        @if (!isTabletClear)
-                        {
-                            <tr class="info">
-                                <td class="monospace">@(sync.PackagesTrackingInfo[SyncItemType.User].LastPackageId ?? "-")</td>
-                                <td class="monospace">@(sync.PackagesTrackingInfo[SyncItemType.Questionnaire].LastPackageId ?? "-")</td>
-                                <td class="monospace">@(sync.PackagesTrackingInfo[SyncItemType.Interview].LastPackageId ?? "-")</td>
-                            </tr>
-                        }
-                        @if (countOfTransferedPackages > 0)
-                        {
-                            <tr>
-                                <td>
-                                    <ul class="list-group">
-                                        @foreach (var requestInfo in sync.PackagesTrackingInfo[SyncItemType.User].PackagesRequestInfo)
-                                        {
-                                            <li class="list-group-item">
-                                                <span class="monospace">@requestInfo.Key</span>
-                                                <span class="label label-info">@ShowTime(requestInfo)</span>
-                                            </li>
-                                        }
-                                        @if (sync.PackagesTrackingInfo[SyncItemType.User].PackagesRequestInfo.Count > 1)
-                                        {
-                                            <div class="alert alert-danger" role="alert">No more than one user package should be transferred</div>
-                                        }
-                                    </ul>
-                                </td>
-                                <td>
-                                    <ul class="list-group">
-                                        @foreach (var requestInfo in sync.PackagesTrackingInfo[SyncItemType.Questionnaire].PackagesRequestInfo)
-                                        {
-                                            <li class="list-group-item">
-                                                <span class="monospace">@requestInfo.Key</span>
-                                                <span class="label label-info">@ShowTime(requestInfo)</span>
-                                            </li>
-                                        }
-                                    </ul>
-                                </td>
-                                <td>
-                                    <ul class="list-group">
-                                        @foreach (var requestInfo in sync.PackagesTrackingInfo[SyncItemType.Interview].PackagesRequestInfo)
-                                        {
-                                            <li class="list-group-item">
-                                                <span class="monospace">@requestInfo.Key</span>
-                                                <span class="label label-info">@ShowTime(requestInfo)</span>
-                                            </li>
-                                        }
-                                    </ul>
-                                </td>
-                            </tr>
-                        }
+                    }
                     </tbody>
                 </table>
             }
