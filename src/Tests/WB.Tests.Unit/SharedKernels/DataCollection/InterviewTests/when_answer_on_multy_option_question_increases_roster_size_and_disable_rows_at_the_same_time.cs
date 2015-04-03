@@ -20,7 +20,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
-    [Ignore("http://issues.wbcapi.org/youtrack/issue/KP-5249")]
+    //[Ignore("http://issues.wbcapi.org/youtrack/issue/KP-5249")]
     internal class when_answer_on_multy_option_question_increases_roster_size_and_disable_rows_at_the_same_time : InterviewTestsContext
     {
         Establish context = () =>
@@ -77,11 +77,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             //remove second row
             enablementQueue.Enqueue(new EnablementChanges(new List<Identity>(), new List<Identity>(), new List<Identity>(), new List<Identity>()));
             //return first row
-            enablementQueue.Enqueue(new EnablementChanges(new List<Identity>(), new List<Identity>(), new List<Identity>(), new List<Identity>()/*{
-                       if uncomment this line the test  become succesefull                                                                                                                         
+            enablementQueue.Enqueue(new EnablementChanges(new List<Identity>(), new List<Identity>(), new List<Identity>(), new List<Identity>(){
+                      // if uncomment this line the test  become succesefull                                                                                                                         
                         new Identity(numericQuestionInsideRoster, new decimal[] {1}),
                         new Identity(numericQuestionInsideRoster, new decimal[] {2})
-                    }*/));
+                    }));
             //answer on numeric question
             enablementQueue.Enqueue(new EnablementChanges(new List<Identity>(), new List<Identity>(), new List<Identity>(), new List<Identity>()));
 

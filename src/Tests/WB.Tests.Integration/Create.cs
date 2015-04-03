@@ -143,6 +143,11 @@ namespace WB.Tests.Integration
             {
                 return new RosterInstancesAdded(rosterInstances);
             }
+
+            public static RosterInstancesRemoved RosterInstancesRemoved(params RosterInstance[] rosterInstances)
+            {
+                return new RosterInstancesRemoved(rosterInstances);
+            }
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
@@ -341,6 +346,10 @@ namespace WB.Tests.Integration
             return new AddedRosterInstance(groupId, outerRosterVector ?? Empty.RosterVector, rosterInstanceId, sortIndex);
         }
 
+        public static RosterInstance RosterInstance(Guid groupId, decimal[] outerRosterVector = null, decimal rosterInstanceId = 0)
+        {
+            return new RosterInstance(groupId, outerRosterVector ?? Empty.RosterVector, rosterInstanceId);
+        }
 
         public static ISqlServiceFactory SqliteServiceFactoryForTests(string dbFileName, IFileSystemAccessor fileSystemAccessor=null)
         {
