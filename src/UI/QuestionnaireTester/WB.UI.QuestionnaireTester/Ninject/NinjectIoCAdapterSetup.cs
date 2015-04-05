@@ -6,7 +6,7 @@ namespace WB.UI.QuestionnaireTester.Ninject
     {
         public static IMvxIoCProvider CreateIocProvider()
         {
-             return new NinjectMvxIocProvider(new SecurityModule(), new MvxPluginsModule(), new NetworkModule(), new LoggerModule(), new CommonModule());
+             return new NinjectMvxIocProvider(new SecurityModule(), new NetworkModule(), new LoggerModule(), new CommonModule());
         }
     }
 }

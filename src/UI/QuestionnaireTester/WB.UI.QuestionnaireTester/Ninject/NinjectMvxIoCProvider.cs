@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Cirrious.CrossCore.Core;
 using Cirrious.CrossCore.IoC;
 using Ninject;
@@ -9,6 +10,7 @@ namespace WB.UI.QuestionnaireTester.Ninject
     public class NinjectMvxIocProvider : MvxSingleton<IMvxIoCProvider>, IMvxIoCProvider
     {
         private readonly StandardKernel kernel = new StandardKernel();
+        private readonly Dictionary<Type, List<Action>> pluginsForLazyRegistration = new Dictionary<Type, List<Action>>();
 
         public NinjectMvxIocProvider(params INinjectModule[] modules)
         {
@@ -22,10 +24,27 @@ namespace WB.UI.QuestionnaireTester.Ninject
 
         public void CallbackWhenRegistered(Type type, Action action)
         {
+            if (!CanResolve(type))
+            {
+                List<Action> actions;
+                if (pluginsForLazyRegistration.TryGetValue(type, out actions))
+                {
+                    actions.Add(action);
+                }
+                else
+                {
+                    actions = new List<Action> {action};
+                    pluginsForLazyRegistration[type] = actions;
+                }
+                return;
+            }
+
+            action();
         }
 
         public void CallbackWhenRegistered<T>(Action action)
         {
+            this.CallbackWhenRegistered(typeof(T), action);
         }
 
         public bool CanResolve(Type type)
@@ -86,6 +105,7 @@ namespace WB.UI.QuestionnaireTester.Ninject
         public void RegisterSingleton<TInterface>(TInterface theObject) where TInterface : class
         {
             kernel.Bind<TInterface>().ToConstant(theObject).InSingletonScope();
+            LazyPluginsRegistration(typeof(TInterface));
         }
 
         public void RegisterType(Type tFrom, Type tTo)
@@ -128,6 +148,23 @@ namespace WB.UI.QuestionnaireTester.Ninject
         void IMvxIoCProvider.RegisterType<TFrom, TTo>()
         {
             kernel.Bind<TFrom>().To<TTo>();
+        }
+
+        private void LazyPluginsRegistration(Type tInterface)
+        {
+            List<Action> actions;
+            lock (this)
+            {
+                if (pluginsForLazyRegistration.TryGetValue(tInterface, out actions))
+                    pluginsForLazyRegistration.Remove(tInterface);
+            }
+
+            if (actions == null) return;
+
+            foreach (var action in actions)
+            {
+                action();
+            }
         }
     }
 }
