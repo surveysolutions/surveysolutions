@@ -37,6 +37,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModelLoader\Implimentation\InterviewViewModelLoader.cs" />
+    <Compile Include="ViewModelLoader\IViewModelLoader.cs" />
     <Compile Include="Properties\UIResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -44,6 +46,7 @@
     </Compile>
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\ChapterViewModel.cs" />
     <Compile Include="ViewModels\SplashViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +65,15 @@
     <Reference Include="Cirrious.MvvmCross.Localization">
       <HintPath>..\..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.0\lib\portable-win+net45+wp8+win8+wpa81\Cirrious.MvvmCross.Localization.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
+      <Project>{89b14b50-5305-45e2-9835-7a05bd0b97a9}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\UIResources.resx">
