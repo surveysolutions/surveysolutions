@@ -211,13 +211,13 @@
     <value>@ 2015 The World Bank Group, All Rights Reserved.</value>
   </data>
   <data name="LoginNameHint" xml:space="preserve">
-    <value>User name</value>
+    <value>Your login</value>
   </data>
   <data name="LoginText" xml:space="preserve">
     <value>Sign in</value>
   </data>
   <data name="LoginTitleText" xml:space="preserve">
-    <value>Authorization</value>
+    <value>Survey Solutions Questionnaire Tester Application</value>
   </data>
   <data name="Maintenance" xml:space="preserve">
     <value>The website of survey solutions designer is on the maintenance mode now. Sorry for the inconvenience</value>
