@@ -1,6 +1,7 @@
 using System;
 using Machine.Specifications;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace WB.Tests.Unit.Infrastructure.EventBusMobileTests
 {

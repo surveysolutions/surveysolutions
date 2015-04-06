@@ -2,6 +2,7 @@ using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Infrastructure.EventBusMobileTests

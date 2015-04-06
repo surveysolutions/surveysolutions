@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace WB.Core.Infrastructure.EventBus.Implementation
+namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 {
     class EventSubscription<TEvent> : IEventSubscription<TEvent>
     {
