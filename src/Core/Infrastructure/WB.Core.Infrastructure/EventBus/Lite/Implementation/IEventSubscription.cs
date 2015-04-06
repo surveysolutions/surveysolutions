@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.Infrastructure.EventBus.Implementation
+namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 {
     public interface IEventSubscription : IDisposable
     {

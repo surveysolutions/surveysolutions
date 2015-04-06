@@ -7,9 +7,7 @@ using Ncqrs;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 
-
-
-namespace WB.Core.Infrastructure.EventBus.Implementation
+namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 {
     public class EventRegistry : IEventRegistry
     {

@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.EventBus;
 
-
-namespace WB.Core.Infrastructure.EventBus.Implementation
+namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 {
     public class LiteEventBus : ILiteEventBus
     {

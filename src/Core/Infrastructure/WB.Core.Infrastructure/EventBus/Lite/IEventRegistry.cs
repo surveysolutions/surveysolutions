@@ -1,8 +1,7 @@
 ﻿using System;
-using WB.Core.Infrastructure.EventBus.Implementation;
+using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 
-
-namespace WB.Core.Infrastructure.EventBus
+namespace WB.Core.Infrastructure.EventBus.Lite
 {
     public interface IEventRegistry
     {
