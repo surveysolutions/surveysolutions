@@ -1,9 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <style name="Theme.Splash" parent="@android:style/Theme.Light">
+  <!-- Base theme applied no matter what API -->
+  <style name="Theme.Light.Base" parent="Theme.AppCompat.Light.DarkActionBar">
     <item name="android:windowNoTitle">true</item>
+    <item name="windowActionBar">false</item>
+    <item name="android:colorPrimary">@color/colorPrimary</item>
+    <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="android:colorAccent">@color/colorAccent</item>
+  </style>
+  
+  <style name="Theme.Light" parent="Theme.Light.Base">
   </style>
 
-  <color name="text">#FFFFFFFF</color>
-  <color name="background">#FF2A81CB</color>
+  <style name="Theme.Splash" parent="Theme.Light.Base">
+  </style>
+
+  
+  <color name="applicationBackground">#FFFAFAFA</color>
+  <color name="loginToolbarBackground">#FF666666</color>
+  <color name="loginToolbarText">#FFFFFFFF</color>
+  
+  <color name="colorPrimary">#3498DB</color>
+  <color name="colorPrimaryDark">#3498DB</color>
+  <color name="colorAccent">#3498DB</color>
 </resources>

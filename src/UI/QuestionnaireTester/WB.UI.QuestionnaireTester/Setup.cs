@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Android.Content;
+using Android.Support.V4.Widget;
+using Android.Support.V7.Widget;
 using Android.Widget;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.IoC;
@@ -51,6 +53,22 @@ namespace WB.UI.QuestionnaireTester
             registry.RegisterFactory(new MvxCustomBindingFactory<TextView>("Hint", (view) => new TextViewHintBinding(view)));
 
             base.FillTargetFactories(registry);
+        }
+
+        protected override IList<Assembly> AndroidViewAssemblies
+        {
+            get
+            {
+                var toReturn = base.AndroidViewAssemblies;
+
+                // Add assemblies with other views we use.  When the XML is inflated
+                // MvvmCross knows about the types and won't compain about them.  This
+                // speeds up inflation noticeably.
+                toReturn.Add(typeof(DrawerLayout).Assembly);
+                toReturn.Add(typeof(SwitchCompat).Assembly);
+
+                return toReturn;
+            }
         }
 
         protected override Assembly[] GetViewModelAssemblies()

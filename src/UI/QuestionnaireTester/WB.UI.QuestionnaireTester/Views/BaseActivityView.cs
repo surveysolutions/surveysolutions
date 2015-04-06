@@ -4,7 +4,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 
 namespace WB.UI.QuestionnaireTester.Views
 {
-    public abstract class BaseActivityView<TViewModel> : MvxActivity where TViewModel : BaseViewModel
+    public abstract class BaseActivityView<TViewModel> : MvxActionBarActivity where TViewModel : BaseViewModel
     {
         protected abstract int ViewResourceId { get; }
 
