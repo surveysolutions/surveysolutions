@@ -341,7 +341,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User name.
+        ///   Looks up a localized string similar to Your login.
         /// </summary>
         public static string LoginNameHint {
             get {
@@ -359,7 +359,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Authorization.
+        ///   Looks up a localized string similar to Survey Solutions Questionnaire Tester Application.
         /// </summary>
         public static string LoginTitleText {
             get {
