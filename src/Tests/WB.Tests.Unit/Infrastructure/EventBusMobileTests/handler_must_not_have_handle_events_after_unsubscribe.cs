@@ -1,6 +1,7 @@
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Infrastructure.EventBusMobileTests
