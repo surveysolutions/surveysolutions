@@ -1,6 +1,8 @@
 ﻿namespace WB.Core.Infrastructure.EventBus.Lite
 {
-    public interface IEventBusEventHandler<TEvent> 
+    public interface IEventBusEventHandler { }
+
+    public interface IEventBusEventHandler<TEvent> : IEventBusEventHandler
     {
         void Handle(TEvent @event);
     }

@@ -1,104 +1,111 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Ncqrs;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+
 
 namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 {
     public class EventRegistry : IEventRegistry
     {
-        private readonly ILogger logger;
-
-        private readonly ConcurrentDictionary<Type, IEventSubscription> subscriptions = new ConcurrentDictionary<Type, IEventSubscription>();
-        private readonly string SubscribeMethodName = Reflect<EventRegistry>.MethodName(c => new Action<IEventBusEventHandler<object>>(c.Subscribe));
-        private readonly string UnsubscribeMethodName = Reflect<EventRegistry>.MethodName(c => new Action<IEventBusEventHandler<object>>(c.Unsubscribe));
-
-        public EventRegistry(ILogger logger)
+        private class Subscription
         {
-            this.logger = logger;
+            public object Pointer { get; set; }
+
+            public Action<object> MethodAction { get; set; }
         }
 
-        public void Subscribe<TEvent>(IEventBusEventHandler<TEvent> handler)
+        private readonly string registerHandlerMethodName = Reflect<EventRegistry>.MethodName(r => new Action<object>(r.RegisterHandler<object>));
+
+        private readonly Dictionary<Type, List<Subscription>> handlers = new Dictionary<Type, List<Subscription>>();
+        
+        private static readonly object LockObject = new object();
+
+
+        public void Subscribe(IEventBusEventHandler handler)
         {
-            Subscribe<TEvent>(handler.Handle);
+            var eventTypes = GetHandledEventTypes(handler);
+            RegisterHandlersForEvents(handler, eventTypes);
         }
 
-        public void Subscribe<TEvent>(Action<TEvent> handler)
-        {
-            var subscription = (EventSubscription<TEvent>)subscriptions.GetOrAdd(
-                typeof(TEvent),
-                t => new EventSubscription<TEvent>());
-            subscription.Subscribe(handler);
-        }
 
-        public void Unsubscribe<TEvent>(IEventBusEventHandler<TEvent> handler)
+        public void Unsubscribe(IEventBusEventHandler handler)
         {
-            Unsubscribe<TEvent>(handler.Handle);
-        }
-
-        public void Unsubscribe<TEvent>(Action<TEvent> handler)
-        {
-            var eventType = typeof (TEvent);
-            IEventSubscription subscription;
-            if (subscriptions.TryGetValue(eventType, out subscription))
+            foreach (Type type in GetHandledEventTypes(handler))
             {
-                ((EventSubscription<TEvent>) subscription).Unsubscribe(handler);
-            }
-            else
-            {
-                logger.Info("No subscribers for event {0} found.".FormatString(eventType.ToString()));
+                lock (LockObject)
+                {
+                    if (this.handlers.ContainsKey(type))
+                    {
+                        handlers[type].RemoveAll(s => s.Pointer == handler);
+                    }
+                }
             }
         }
 
-        public void Subscribe(object obj)
+        public IEnumerable<Action<object>> GetHandlers(object @event)
         {
-            var eventTypes = GetEventsListToHandleFromClass(obj);
-            CallMethodForEvent(SubscribeMethodName, obj, eventTypes);
+            Type eventType = @event.GetType();
+
+            lock (LockObject)
+            {
+                List<Subscription> subscriptionsList;
+                if (handlers.TryGetValue(eventType, out subscriptionsList))
+                    return subscriptionsList.Select(s => s.MethodAction).ToList();
+
+                return Enumerable.Empty<Action<object>>();
+            }
         }
 
-        public void Unsubscribe(object obj)
+        private void RegisterHandler<TEvent>(object handler)
         {
-            var eventTypes = GetEventsListToHandleFromClass(obj);
-            CallMethodForEvent(UnsubscribeMethodName, obj, eventTypes);
+            var eventType = typeof(TEvent);
+            var eventBusEventHandler = (IEventBusEventHandler<TEvent>) handler;
+
+            lock (LockObject)
+            {
+                List<Subscription> handlersList = this.handlers.GetOrAdd(eventType, () => new List<Subscription>());
+
+                handlersList.Add(new Subscription()
+                {
+                    Pointer = handler,
+                    MethodAction = (obj => eventBusEventHandler.Handle((TEvent)obj))
+                });
+            }
         }
 
-        private Type[] GetEventsListToHandleFromClass(object obj)
+        private void RegisterHandlersForEvents(object handler, Type[] eventTypes)
         {
-            Type type = obj.GetType();
-            IEnumerable<Type> interfaces = type.GetTypeInfo().ImplementedInterfaces;
-            return interfaces
-                .Where(i => i.GetTypeInfo().IsGenericType && i.GetGenericTypeDefinition() == typeof(IEventBusEventHandler<>))
-                .Select(k => k.GetTypeInfo().GenericTypeArguments.Single())
-                .ToArray();
-        }
-
-
-        private void CallMethodForEvent(string methodName, object obj, Type[] eventTypes)
-        {
-            MethodInfo method = typeof(EventRegistry).GetMethod(methodName);
+            MethodInfo method = typeof(EventRegistry).GetMethod(registerHandlerMethodName);
 
             foreach (Type eventType in eventTypes)
             {
                 MethodInfo genericMethod = method.MakeGenericMethod(eventType);
-                genericMethod.Invoke(this, new[] { obj });
+                genericMethod.Invoke(this, new[] { handler });
             }
         }
 
-        public IEventSubscription<TEvent> GetSubscription<TEvent>()
+        private static Type[] GetHandledEventTypes(object handler)
         {
-            var eventType = typeof(TEvent);
+            return handler
+                .GetType()
+                .GetTypeInfo()
+                .ImplementedInterfaces
+                .Where(IsEventHandlerInterface)
+                .Select(GetEventType)
+                .ToArray();
+        }
 
-            IEventSubscription subscription;
-            if (subscriptions.TryGetValue(eventType, out subscription))
-            {
-                return (IEventSubscription<TEvent>)subscription;
-            }
+        private static Type GetEventType(Type k)
+        {
+            return k.GetTypeInfo().GenericTypeArguments.Single();
+        }
 
-            return null;
+        private static bool IsEventHandlerInterface(Type i)
+        {
+            return i.GetTypeInfo().IsGenericType && i.GetGenericTypeDefinition() == typeof(IEventBusEventHandler<>);
         }
     }
 }

@@ -76,9 +76,6 @@
     <Compile Include="EventBus\Lite\IEventRegistry.cs" />
     <Compile Include="EventBus\Lite\ILiteEventBus.cs" />
     <Compile Include="EventBus\Lite\Implementation\EventRegistry.cs" />
-    <Compile Include="EventBus\Lite\Implementation\EventSubscription.cs" />
-    <Compile Include="EventBus\Lite\Implementation\IEventSubscription.cs" />
-    <Compile Include="EventBus\Lite\Implementation\ImmutableList.cs" />
     <Compile Include="EventBus\Lite\Implementation\LiteEventBus.cs" />
     <Compile Include="LinqUtils.cs" />
     <Compile Include="Modularity\IIocRegistry.cs" />
