@@ -14,6 +14,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         
         private readonly IInterviewsSynchronizer interviewsSynchronizer;
         private readonly IQuestionnaireSynchronizer questionnaireSynchronizer;
+        private readonly IPlainTransactionManager plainTransactionManager;
 
         private readonly HeadquartersPullContext headquartersPullContext;
         private readonly HeadquartersPushContext headquartersPushContext;
@@ -26,6 +27,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             ILocalUserFeedProcessor localUserFeedProcessor, 
             IInterviewsSynchronizer interviewsSynchronizer, 
             IQuestionnaireSynchronizer questionnaireSynchronizer,
+            IPlainTransactionManager plainTransactionManager,
             HeadquartersPullContext headquartersPullContext,
             HeadquartersPushContext headquartersPushContext)
         {
@@ -33,6 +35,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             if (feedReader == null) throw new ArgumentNullException("feedReader");
             if (localUserFeedProcessor == null) throw new ArgumentNullException("localUserFeedProcessor");
             if (interviewsSynchronizer == null) throw new ArgumentNullException("interviewsSynchronizer");
+            if (plainTransactionManager == null) throw new ArgumentNullException("plainTransactionManager");
             if (headquartersPullContext == null) throw new ArgumentNullException("headquartersPullContext");
             if (headquartersPushContext == null) throw new ArgumentNullException("headquartersPushContext");
 
@@ -43,6 +46,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.headquartersPullContext = headquartersPullContext;
             this.headquartersPushContext = headquartersPushContext;
             this.questionnaireSynchronizer = questionnaireSynchronizer;
+            this.plainTransactionManager = plainTransactionManager;
         }
 
         public void Pull()
@@ -65,6 +69,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             {
                 this.isSynchronizationRunning = true;
                 this.headquartersPullContext.Start();
+                
+                this.plainTransactionManager.BeginTransaction();
                 var lastStoredFeedEntry = this.localUsersFeedStorage.GetLastEntry();
 
                 this.headquartersPullContext.PushMessage(lastStoredFeedEntry != null ? 
@@ -75,6 +81,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                 this.headquartersPullContext.PushMessageFormat("Saving {0} new events to local storage", newEvents.Count);
                 this.localUsersFeedStorage.Store(newEvents);
+
+                this.plainTransactionManager.CommitTransaction();
 
                 this.questionnaireSynchronizer.Pull();
 

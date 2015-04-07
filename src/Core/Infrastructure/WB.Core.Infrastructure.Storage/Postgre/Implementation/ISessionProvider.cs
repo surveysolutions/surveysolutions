@@ -6,4 +6,6 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
     {
         ISession GetSession();
     }
+
+    internal interface IPlainSessionProvider : ISessionProvider { }
 }

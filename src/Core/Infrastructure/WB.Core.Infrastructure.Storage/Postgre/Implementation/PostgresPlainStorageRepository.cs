@@ -8,29 +8,28 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
-    public class PostgresPlainStorageRepository<TEntity> : IPlainStorageAccessor<TEntity> where TEntity : class
+    internal class PostgresPlainStorageRepository<TEntity> : IPlainStorageAccessor<TEntity> where TEntity : class
     {
-        private readonly ISession session;
+        private readonly ISessionProvider sessionProvider;
 
-        public PostgresPlainStorageRepository([Named(PostgresPlainStorageModule.SessionName)]ISession session)
+        public PostgresPlainStorageRepository(IPlainSessionProvider sessionProvider)
         {
-            if (session == null) throw new ArgumentNullException("session");
-            this.session = session;
+            this.sessionProvider = sessionProvider;
         }
 
         public TEntity GetById(object id)
         {
-            return this.session.Get<TEntity>(id);
+            return this.sessionProvider.GetSession().Get<TEntity>(id);
         }
 
         public void Remove(object id)
         {
-            this.session.Delete(id);
+            this.sessionProvider.GetSession().Delete(id);
         }
 
         public void Store(TEntity entity, object id)
         {
-            this.session.SaveOrUpdate(entity);
+            this.sessionProvider.GetSession().SaveOrUpdate(entity);
         }
 
         public void Store(IEnumerable<Tuple<TEntity, object>> entities)
@@ -43,7 +42,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
         {
-            return query.Invoke(this.session.Query<TEntity>());
+            return query.Invoke(this.sessionProvider.GetSession().Query<TEntity>());
         }
     }
 }

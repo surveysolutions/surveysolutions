@@ -1173,6 +1173,7 @@ namespace WB.Tests.Unit
                 Mock.Of<ILocalUserFeedProcessor>(),
                 interviewsSynchronizer ?? Mock.Of<IInterviewsSynchronizer>(),
                 Mock.Of<IQuestionnaireSynchronizer>(),
+                Mock.Of<IPlainTransactionManager>(),
                 HeadquartersPullContext(),
                 HeadquartersPushContext());
         }
