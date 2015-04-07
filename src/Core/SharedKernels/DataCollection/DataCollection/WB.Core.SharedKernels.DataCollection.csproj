@@ -64,7 +64,7 @@
     <Compile Include="Commands\User\LinkUserToDevice.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireDisabled.cs" />
     <Compile Include="Events\User\UserLinkedToDevice.cs" />
-    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewStateFull.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\StatefullInterview.cs" />
     <Compile Include="Implementation\Aggregates\User.cs" />
     <Compile Include="Implementation\Aggregates\Snapshots\UserState.cs" />
     <Compile Include="Commands\Interview\AnswerMultipleOptionsLinkedQuestionCommand.cs" />
