@@ -76,6 +76,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId);
 
+        IEnumerable<Guid> GetAllUnderlyingChildGroups(Guid groupId);
+
         Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId);
         
         bool IsQuestionMandatory(Guid questionId);

@@ -238,6 +238,14 @@
     <Content Include="Content\datepicker.css" />
     <Content Include="Content\datepicker3.css" />
     <Content Include="Content\favicon.png" />
+    <Content Include="Content\identity\favicon-hq-120x120.png" />
+    <Content Include="Content\identity\favicon-hq-144x144.png" />
+    <Content Include="Content\identity\favicon-hq-152x152.png" />
+    <Content Include="Content\identity\favicon-hq-180x180.png" />
+    <Content Include="Content\identity\favicon-hq-192x192.png" />
+    <Content Include="Content\identity\favicon-hq-72x72.png" />
+    <Content Include="Content\identity\favicon-hq-76x76.png" />
+    <Content Include="Content\identity\favicon-hq.png" />
     <Content Include="Content\popover-extra-placements.min.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -427,7 +435,6 @@
     <Content Include="Views\HQ\TakeNew.cshtml" />
     <Content Include="Views\HQ\VerifySample.cshtml" />
     <Content Include="Views\ControlPanel\CreateHeadquarters.cshtml" />
-    <None Include="Properties\PublishProfiles\nastya.pubxml" />
     <Content Include="Views\ControlPanel\ResetPrivilegedUserPassword.cshtml" />
     <Content Include="Views\Shared\SupervisorMainMenu.cshtml" />
     <Content Include="Views\ControlPanel\ReexportInterviews.cshtml" />

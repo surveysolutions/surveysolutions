@@ -7,6 +7,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -68,13 +69,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return interviewSummary;
         }
 
-        private InterviewSummary AnswerQuestion(InterviewSummary interviewSummary, Guid questionId, string answer, DateTime updateDate)
+        private InterviewSummary AnswerQuestion(InterviewSummary interviewSummary, Guid questionId, object answer, DateTime updateDate)
         {
            return this.UpdateInterviewSummary(interviewSummary, updateDate, interview =>
             {
                 if (interview.AnswersToFeaturedQuestions.Any(x => x.Id == questionId))
                 {
-                    interview.AnswerFeaturedQuestion(questionId, answer);
+                    interview.AnswerFeaturedQuestion(questionId, AnswerUtils.AnswerToString(answer));
                 }
             });
         }
@@ -186,23 +187,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<NumericRealQuestionAnswered> evnt)
         {
-            return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString(CultureInfo.InvariantCulture), evnt.EventTimeStamp);
+            return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.EventTimeStamp);
         }
 
         public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
         {
-            return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString(CultureInfo.InvariantCulture), evnt.EventTimeStamp);
+            return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.EventTimeStamp);
         }
 
         public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<DateTimeQuestionAnswered> evnt)
         {
-            return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString("d", CultureInfo.InvariantCulture), evnt.EventTimeStamp);
+            return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString("u"), evnt.EventTimeStamp);
         }
 
         public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<GeoLocationQuestionAnswered> evnt)
         {
-            return this.AnswerQuestion(currentState, evnt.Payload.QuestionId,
-                            string.Format("{0},{1}[{2}]", evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy), evnt.EventTimeStamp);
+            var answerByGeoQuestion = new GeoPosition(evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy, evnt.Payload.Altitude, evnt.Payload.Timestamp);
+            return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, answerByGeoQuestion, evnt.EventTimeStamp);
         }
 
         public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<QRBarcodeQuestionAnswered> evnt)

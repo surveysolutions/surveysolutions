@@ -20,7 +20,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             var parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
             @event = CreateTextListQuestionClonedEvent(questionId: questionId, sourceQuestionId: sourceQuestionId);
-
+            @event.Payload.ValidationExpression = validation;
+            @event.Payload.ValidationMessage = validationMessage;
             var questionnaireDocument = CreateQuestionnaireDocument(new[]
             {
                 CreateGroup(groupId: parentGroupId, children: new []
@@ -45,11 +46,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
         Because of = () =>
             denormalizer.Handle(@event);
 
-        It should_set_null_as_default_value_for__ValidationExpression__field = () =>
-            questionData.ValidationExpression.ShouldBeNull();
+        It should_set_validation_value_for__ValidationExpression__field = () =>
+            questionData.ValidationExpression.ShouldEqual(validation);
 
-        It should_set_null_as_default_value_for__ValidationMessage__field = () =>
-            questionData.ValidationMessage.ShouldBeNull();
+        It should_set_validationMessage_value_for__ValidationMessage__field = () =>
+            questionData.ValidationMessage.ShouldEqual(validationMessage);
 
         It should_set_Interviewer_as_default_value_for__QuestionScope__field = () =>
             questionData.QuestionScope.ShouldEqual(QuestionScope.Interviewer);
@@ -65,5 +66,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
         private static IPublishedEvent<TextListQuestionCloned> @event;
         private static Guid sourceQuestionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid questionId = Guid.Parse("22222222222222222222222222222222");
+        private static string validation = "validation";
+        private static string validationMessage = "validationMessage";
     }
 }
