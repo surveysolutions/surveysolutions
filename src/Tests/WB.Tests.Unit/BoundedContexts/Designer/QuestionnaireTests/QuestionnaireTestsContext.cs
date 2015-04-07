@@ -173,7 +173,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
         public static void AddGroup(Questionnaire questionnaire, Guid groupId, Guid? parentGroupId, string condition, Guid responsibleId,
             Guid? rosterSizeQuestionId = null, bool isRoster = false, RosterSizeSourceType rosterSizeSource = RosterSizeSourceType.Question,
-            string[] rosterFixedTitles = null, Guid? rosterTitleQuestionId = null)
+           Tuple<decimal,string>[] rosterFixedTitles = null, Guid? rosterTitleQuestionId = null)
         {
             questionnaire.AddGroupAndMoveIfNeeded(groupId,
                 responsibleId: responsibleId, title: "New group", variableName: null, rosterSizeQuestionId: rosterSizeQuestionId, description: null,

@@ -135,9 +135,15 @@ namespace WB.Tests.Unit
                 return new GroupBecameARoster(Guid.NewGuid(), rosterId);
             }
 
-            public static RosterChanged RosterChanged(Guid rosterId, RosterSizeSourceType rosterType, string[] titles)
+            public static RosterChanged RosterChanged(Guid rosterId, RosterSizeSourceType rosterType, Tuple<decimal, string>[] titles)
             {
-                return new RosterChanged(Guid.NewGuid(), rosterId, null, rosterType, titles, null);
+                return new RosterChanged(Guid.NewGuid(), rosterId)
+                {
+                    RosterSizeQuestionId = null,
+                    RosterSizeSource = rosterType,
+                    FixedRosterTitles = titles,
+                    RosterTitleQuestionId = null
+                };
             }
 
             public static NewQuestionAdded AddTextQuestion(Guid questionId, Guid parentId)
