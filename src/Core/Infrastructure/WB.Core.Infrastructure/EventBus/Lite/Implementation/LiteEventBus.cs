@@ -1,57 +1,59 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using Ncqrs.Eventing;
 using WB.Core.Infrastructure.Aggregates;
+
 
 namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 {
     public class LiteEventBus : ILiteEventBus
     {
-        private readonly ILogger logger;
         private readonly IEventRegistry eventRegistry;
 
-        public LiteEventBus(ILogger logger, IEventRegistry eventRegistry)
+        public LiteEventBus(IEventRegistry eventRegistry)
         {
-            this.logger = logger;
             this.eventRegistry = eventRegistry;
-        }
-
-        public void Publish(IPublishableEvent eventMessage)
-        {
-            Publish<IPublishableEvent>(eventMessage);
-        }
-
-        public void Publish(IEnumerable<IPublishableEvent> eventMessages)
-        {
-            foreach (var eventMessage in eventMessages)
-            {
-                Publish(eventMessage);
-            }
         }
 
         public void PublishUncommitedEventsFromAggregateRoot(IAggregateRoot aggregateRoot, string origin)
         {
-            var uncommittedChanges = aggregateRoot.GetUncommittedChanges().ToArray();
-            Publish(uncommittedChanges);
+            UncommittedEvent[] uncommittedChanges = aggregateRoot.GetUncommittedChanges().ToArray();
 
-            aggregateRoot.MarkChangesAsCommitted();
+            try
+            {
+                Publish(uncommittedChanges);
+            }
+            finally
+            {
+                aggregateRoot.MarkChangesAsCommitted();
+            }
         }
 
-        public void Publish<TEvent>(TEvent @event)
+        private void Publish(UncommittedEvent[] uncommittedChanges)
         {
-            var eventType = typeof (TEvent);
-            logger.Info("Event {0} published".FormatString(eventType.ToString()));
+            foreach (var uncommittedChange in uncommittedChanges)
+            {
+                var handlers = this.eventRegistry.GetHandlers(uncommittedChange.Payload);
 
-            IEventSubscription<TEvent> subscription = eventRegistry.GetSubscription<TEvent>();
-            if (subscription != null)
-            {
-                subscription.RaiseEvent(@event);
-            }
-            else
-            {
-                logger.Info("No subscribers for event {0} found.".FormatString(eventType.ToString()));
+                var exceptions = new List<Exception>();
+
+                foreach (var handler in handlers)
+                {
+                    try
+                    {
+                        handler.Invoke(uncommittedChange.Payload);
+                    }
+                    catch (Exception exception)
+                    {
+                        exceptions.Add(exception);
+                    }
+                }
+
+                if (exceptions.Count > 0)
+                    throw new AggregateException(
+                       string.Format("{0} handler(s) failed to handle published event '{1}' by event source '{2}' with sequence '{3}'.", exceptions.Count, uncommittedChange.EventIdentifier, uncommittedChange.EventSourceId, uncommittedChange.EventSequence),
+                       exceptions);
             }
         }
     }

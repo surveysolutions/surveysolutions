@@ -38,6 +38,7 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="NamedLocker.cs" />
     <Compile Include="FileSizeUtils.cs" />
     <Compile Include="IAsyncExecutor.cs" />

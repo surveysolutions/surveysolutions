@@ -1,9 +1,10 @@
-﻿using Ncqrs.Eventing.ServiceModel.Bus;
+﻿using WB.Core.Infrastructure.Aggregates;
+
 
 namespace WB.Core.Infrastructure.EventBus.Lite
 {
-    public interface ILiteEventBus : IEventBus
+    public interface ILiteEventBus
     {
-        void Publish<TEvent>(TEvent @event);
+        void PublishUncommitedEventsFromAggregateRoot(IAggregateRoot aggregateRoot, string origin);
     }
 }
