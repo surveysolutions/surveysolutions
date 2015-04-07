@@ -253,7 +253,9 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
             var rosterIdentityKey = Util.GetRosterKey(IdOf.parentScopeMap[rosterId], rosterVector);
 			var rosterStringKey = Util.GetRosterStringKey(rosterIdentityKey);
-            this.InterviewScopes[rosterStringKey].SetTitle(rosterTitle);
+            var rosterLevel = this.InterviewScopes[rosterStringKey] as IRosterLevel;
+            if (rosterLevel != null)
+                rosterLevel.SetRowName(rosterTitle);
         }
 
     }
@@ -304,9 +306,6 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             return level;
         }
 
-	    public int @index  { get { return 0; } }                
-        public object @value{ get { return ""id"" ; } }
-                    
         private double? @__a = null;
         private ConditionalState @__a_state = new ConditionalState(IdOf.@__a_id);
         public double? a
