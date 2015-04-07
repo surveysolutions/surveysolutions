@@ -1,5 +1,6 @@
 using Machine.Specifications;
 using Moq;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using It = Machine.Specifications.It;
@@ -10,7 +11,7 @@ namespace WB.Tests.Unit.Infrastructure.EventBusMobileTests
     {
         Establish context = () =>
         {
-            value = 10;
+            aggregateRoot = CreateDummyAggregateRoot((int)10, (long)10, "10");
             
             eventRegistry = CreateEventRegistry();
             eventBus = CreateEventBus(eventRegistry);
@@ -21,14 +22,14 @@ namespace WB.Tests.Unit.Infrastructure.EventBusMobileTests
         };
 
         Because of = () =>
-            eventBus.Publish(value);
+            eventBus.PublishUncommitedEventsFromAggregateRoot(aggregateRoot, null);
 
         It should_doesnot_call_Handle_for_int_subscription = () =>
             Mock.Get(subMock).Verify(s => s.Handle(Moq.It.IsAny<int>()), Times.Never);
 
         private static ILiteEventBus eventBus;
         private static IEventRegistry eventRegistry;
-        private static int value;
+        private static IAggregateRoot aggregateRoot;
         private static IEventBusEventHandler<int> subMock;
     }
 }

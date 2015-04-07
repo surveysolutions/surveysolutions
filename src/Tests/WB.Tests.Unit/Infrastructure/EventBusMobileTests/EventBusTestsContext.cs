@@ -1,6 +1,10 @@
+using System;
+using System.Linq;
 using Moq;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
@@ -18,32 +22,44 @@ namespace WB.Tests.Unit.Infrastructure.EventBusMobileTests
             public virtual void Handle(string @event) { }
         }
 
-        public static IPublishableEvent CreatePublishableEvent()
+        public class DummyEvent
         {
-            return CreateEvent<IPublishableEvent>();
-        }         
-        
-        public static TEvent CreateEvent<TEvent>() where TEvent : class
-        {
-            return Mock.Of<TEvent>();
+            public object Obj { get; set; } 
         }
 
-        public static DumyEventHandlers CreateClassWithEventHandlers() 
+        public static DummyEvent CreateDummyEvent()
+        {
+            return new DummyEvent();
+        }         
+        
+        public static IAggregateRoot CreateDummyAggregateRoot(params object[] events)
+        {
+            UncommittedEvent[] uncommittedEvents = events.Select(CreateUncommitedEvent).ToArray();
+            Mock<IAggregateRoot> mock = new Mock<IAggregateRoot>();
+            mock.Setup(a => a.GetUncommittedChanges()).Returns(uncommittedEvents);
+            return mock.Object;
+        }
+
+        private static UncommittedEvent CreateUncommitedEvent(object @event)
+        {
+            //return e => Mock.Of<UncommittedEvent>(m => m.Payload == e);
+            return new UncommittedEvent(Guid.Empty, Guid.Empty, 0, 0, DateTime.Now, @event);
+        }
+
+        public static DumyEventHandlers CreateDummyClassWithEventHandlers() 
         {
             return Mock.Of<DumyEventHandlers>();
         }  
         
         public static IEventRegistry CreateEventRegistry()
         {
-            var logger = Mock.Of<ILogger>();
-            return new EventRegistry(logger);
+            return new EventRegistry();
         }
 
         public static ILiteEventBus CreateEventBus(IEventRegistry eventRegistry = null)
         {
-            var logger = Mock.Of<ILogger>();
             var eventReg = eventRegistry ?? Mock.Of<IEventRegistry>();
-            return new LiteEventBus(logger, eventReg);
+            return new LiteEventBus(eventReg);
         }
     }
 }

@@ -1,18 +1,15 @@
 ﻿using System;
-using WB.Core.Infrastructure.EventBus.Lite.Implementation;
+using System.Collections.Generic;
+
 
 namespace WB.Core.Infrastructure.EventBus.Lite
 {
     public interface IEventRegistry
     {
-        void Subscribe<TEvent>(Action<TEvent> handler);
-        void Subscribe<TEvent>(IEventBusEventHandler<TEvent> handler);
-        void Subscribe(object obj);
+        void Subscribe(IEventBusEventHandler handler);
 
-        void Unsubscribe<TEvent>(Action<TEvent> handler);
-        void Unsubscribe<TEvent>(IEventBusEventHandler<TEvent> handler);
-        void Unsubscribe(object obj);
+        void Unsubscribe(IEventBusEventHandler obj);
 
-        IEventSubscription<TEvent> GetSubscription<TEvent>();
+        IEnumerable<Action<object>> GetHandlers(object @event);
     }
 }
