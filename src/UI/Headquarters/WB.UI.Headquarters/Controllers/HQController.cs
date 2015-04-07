@@ -102,15 +102,15 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult SampleBatchUpload(BatchUploadModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
+            
+            if (!this.ModelState.IsValid)
+            {
+                return this.View("BatchUpload", model);
+            }
 
             if (User.Identity.IsObserver())
             {
                 this.Error("You cannot perform any operation in observer mode.");
-                return this.View("BatchUpload", model);
-            }
-
-            if (!this.ModelState.IsValid)
-            {
                 return this.View("BatchUpload", model);
             }
 
@@ -132,17 +132,17 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
+            if (!this.ModelState.IsValid)
+            {
+                return this.View("BatchUpload", model);
+            }
+
             if (User.Identity.IsObserver())
             {
                 this.Error("You cannot perform any operation in observer mode.");
                 return this.View("BatchUpload", model);
             }
 
-            if (!this.ModelState.IsValid)
-            {
-                return this.View("BatchUpload", model);
-            }
-            
             var preloadedDataId = this.preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
             var preloadedMetadata = this.preloadedDataRepository.GetPreloadedDataMetaInformationForPanelData(preloadedDataId);
 
