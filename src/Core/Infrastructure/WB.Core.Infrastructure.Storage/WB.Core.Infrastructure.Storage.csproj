@@ -141,6 +141,7 @@
     <Compile Include="Memory\Implementation\MemoryCachedReadSideStore.cs" />
     <Compile Include="Memory\Implementation\MemoryCachedKeyValueStorage.cs" />
     <Compile Include="Memory\Implementation\ReadSideStoreMemoryCacheSettings.cs" />
+    <Compile Include="NinjectExtensions.cs" />
     <Compile Include="Postgre\Implementation\ICqrsPostgresTransactionManager.cs" />
     <Compile Include="Postgre\Implementation\ISessionProvider.cs" />
     <Compile Include="Postgre\Implementation\PlainPostgresTransactionManager.cs" />

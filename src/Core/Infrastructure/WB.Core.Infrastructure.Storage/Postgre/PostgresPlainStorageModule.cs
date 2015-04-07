@@ -9,7 +9,6 @@ using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using NHibernate.Tool.hbm2ddl;
 using Ninject;
-using Ninject.Web.Common;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Storage.Postgre.Implementation;
@@ -36,7 +35,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
 
             this.Bind<PlainPostgresTransactionManager>()
                 .ToSelf()
-                .InRequestScope();
+                .InRequestOrThreadScope();
 
             this.Bind<IPlainSessionProvider>().ToMethod(context => context.Kernel.Get<PlainPostgresTransactionManager>());
             this.Bind<IPlainTransactionManager>().ToMethod(context => context.Kernel.Get<PlainPostgresTransactionManager>());
@@ -87,6 +86,4 @@ namespace WB.Core.Infrastructure.Storage.Postgre
             return mapper.CompileMappingForAllExplicitlyAddedEntities();
         }
     }
-
-    
 }
