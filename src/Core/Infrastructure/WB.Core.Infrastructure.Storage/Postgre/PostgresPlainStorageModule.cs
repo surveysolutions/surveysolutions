@@ -18,7 +18,8 @@ namespace WB.Core.Infrastructure.Storage.Postgre
 {
     public class PostgresPlainStorageModule : Ninject.Modules.NinjectModule
     {
-        internal const string SessionName = "PlainSession";
+        internal const string SessionFactoryName = "PlainSessionFactory";
+        internal const string SessionProviderName = "PlainSessinProvider";
         private readonly PostgresPlainStorageSettings settings;
 
         public PostgresPlainStorageModule(PostgresPlainStorageSettings settings)
@@ -31,14 +32,15 @@ namespace WB.Core.Infrastructure.Storage.Postgre
         {
             this.Bind<ISessionFactory>().ToMethod(context => this.BuildSessionFactory())
                                         .InSingletonScope()
-                                        .Named("PlainSessionFactory");
-            this.Bind<ISession>()
-                .ToMethod(context => context.Kernel.Get<ISessionFactory>("PlainSessionFactory").OpenSession())
-                .InRequestScope()
-                .Named(SessionName);
+                                        .Named(SessionFactoryName);
 
-            this.Bind(typeof(IPlainStorageAccessor<>)).To(typeof(PostgresPlainStorageRepository<>)).InTransientScope();
-            this.Bind<IPlainTransactionManager>().To<PlainPostgresTransactionManager>();
+            this.Bind<PlainPostgresTransactionManager>()
+                .ToSelf()
+                .InRequestScope();
+
+            this.Bind<IPlainSessionProvider>().ToMethod(context => context.Kernel.Get<PlainPostgresTransactionManager>());
+            this.Bind<IPlainTransactionManager>().ToMethod(context => context.Kernel.Get<PlainPostgresTransactionManager>());
+            this.Bind(typeof(IPlainStorageAccessor<>)).To(typeof(PostgresPlainStorageRepository<>));
         }
 
         private ISessionFactory BuildSessionFactory()
@@ -85,4 +87,6 @@ namespace WB.Core.Infrastructure.Storage.Postgre
             return mapper.CompileMappingForAllExplicitlyAddedEntities();
         }
     }
+
+    
 }

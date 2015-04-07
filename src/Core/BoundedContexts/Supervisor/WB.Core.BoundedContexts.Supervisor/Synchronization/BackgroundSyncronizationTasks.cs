@@ -1,6 +1,5 @@
 ﻿using System;
 using Quartz;
-using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 {
@@ -20,11 +19,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 
         public void Configure()
         {
-            IJobDetail job = JobBuilder.Create<Synchronizer>()
+            IJobDetail job = JobBuilder.Create<ISynchronizer>()
                 .WithIdentity("HQ sync", "Synchronization")
                 .StoreDurably(true)
                 .Build();
-
 
             if (this.schedulerSettigns.SchedulerEnabled)
             {
