@@ -41,10 +41,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
                     }
                 });
 
-
+            firstFileInFolder = interviewId.FormatGuid();
             fileSystemAccessorMock.Setup(x => x.IsFileExists(Moq.It.IsAny<string>())).Returns(true);
             fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>()))
-                .Returns(new[] { interviewId.FormatGuid() });
+                .Returns(new[] { firstFileInFolder });
             fileSystemAccessorMock.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
                 .Returns<string, string>(Path.Combine);
 
@@ -55,12 +55,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
         Because of = () =>
                result = incomingSyncPackagesQueue.DeQueue();
 
-        It should_result_be_equal_to_first_file_in_folder = () =>
-            result.PathToPackage.ShouldEqual(interviewId.FormatGuid());
+        It should_return_first_file_in_folder = () =>
+            result.PathToPackage.ShouldEqual(firstFileInFolder);
 
         private static IncomingSyncPackagesQueue incomingSyncPackagesQueue;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
         private static Guid interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static IncomingSyncPackage result;
+        private static string firstFileInFolder;
     }
 }

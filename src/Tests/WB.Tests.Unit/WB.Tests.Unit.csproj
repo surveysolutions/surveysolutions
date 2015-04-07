@@ -340,6 +340,7 @@
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_Store_called_and_cache_is_enabled_and_cache_limit_is_reached.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_3_functional_handlers_and_first_and_last_of_them_fail.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_3_old_school_handlers_and_first_and_last_of_them_fail.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_multy_option_question_increases_roster_size_and_disable_rows_at_the_same_time.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_created_on_client_interview_events.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_deleted_interview_events.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_interview_events.cs" />
@@ -410,6 +411,7 @@
     <Compile Include="SharedKernels\SurveyManagement\UnhandledPackageStorageTests\when_StoreUnhandledPackage_called_and_interviewId_is_null.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\InterviewSynchronizationDenormalizerTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\QuestionnaireSynchronizationDenormalizerTestsContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\UnhandledPackageStorageTests\when_StoreUnhandledPackage_called_with_aggregate_exception.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UserDenormalizerTests\UserDenormalizerTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UserDenormalizerTests\when_user_linked_to_device_for_the_second_time.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\UserViewFactoryTestContext.cs" />
@@ -1459,7 +1461,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_rejecting_interview_in_deleted_state.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_rejecting_interview_with_comments_from_HQ.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_rejecting_interview_with_comments_from_HQ_when_interview_is_Restored_from_snapshot.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_autopropagatable_question_which_triggers_group_propagation_with_mandatory_question_inside_disabled_group.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_datetime_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1_and_answer_is__08_Mar_2011__.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_geolocation_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_integer_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1_and_answer_is_7.cs" />

@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -68,6 +70,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public ActionResult ReadSide()
         {
             return this.View();
+        }
+
+        public ActionResult RepeatLastInterviewStatus(Guid? interviewId)
+        {
+            if (!interviewId.HasValue)
+            {
+                return this.View();
+            }
+            else
+            {
+                this.CommandService.Execute(new RepeatLastInterviewStatus(interviewId.Value, "Status set by Survey Solutions support team"));
+                return this.View(model: string.Format("Successfully repeated status for interview {0}", interviewId.Value.FormatGuid()));
+            }
         }
 
         #region interview ravalidationg

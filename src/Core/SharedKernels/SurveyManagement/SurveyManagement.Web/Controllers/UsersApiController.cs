@@ -61,51 +61,28 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [Authorize(Roles = "Administrator, Headquarter, Observer")]
         public UserListView Supervisors(UsersListViewModel data)
         {
-            var input = new UserListViewInputModel
-                {
-                    Role = UserRoles.Supervisor,
-                    Orders = data.SortOrder,
-                    SearchBy = data.SearchBy
-                };
-
-            if (data.Pager != null)
-            {
-                input.Page = data.Pager.Page;
-                input.PageSize = data.Pager.PageSize;
-            }
-
-            UserListView result = this.supervisorsFactory.Load(input);
-            return result;
+            return GetUsers(data, UserRoles.Supervisor);
         }
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Observer")]
         public UserListView Headquarters(UsersListViewModel data)
         {
-            var input = new UserListViewInputModel
-            {
-                Role = UserRoles.Headquarter,
-                Orders = data.SortOrder,
-                SearchBy = data.SearchBy
-            };
-
-            if (data.Pager != null)
-            {
-                input.Page = data.Pager.Page;
-                input.PageSize = data.Pager.PageSize;
-            }
-
-            UserListView result = this.supervisorsFactory.Load(input);
-            return result;
+            return GetUsers(data, UserRoles.Headquarter);
         }
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
         public UserListView Observers(UsersListViewModel data)
         {
+            return GetUsers(data, UserRoles.Observer);
+        }
+
+        private UserListView GetUsers(UsersListViewModel data, UserRoles role)
+        {
             var input = new UserListViewInputModel
             {
-                Role = UserRoles.Observer,
+                Role = role,
                 Orders = data.SortOrder,
                 SearchBy = data.SearchBy
             };
@@ -116,8 +93,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 input.PageSize = data.Pager.PageSize;
             }
 
-            UserListView result = this.supervisorsFactory.Load(input);
-            return result;
+            return this.supervisorsFactory.Load(input);
         }
     }
 }

@@ -150,7 +150,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<TextQuestionAnswered> evnt)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.EventTimeStamp,
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTime,
             CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.Answer), evnt.Payload.PropagationVector));
 
             return view;
@@ -158,7 +158,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.EventTimeStamp,
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTime,
                 CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.SelectedValues),
                     evnt.Payload.PropagationVector));
 
@@ -167,7 +167,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<SingleOptionQuestionAnswered> evnt)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.EventTimeStamp,
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTime,
                 CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.SelectedValue),
                     evnt.Payload.PropagationVector));
 
@@ -176,7 +176,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<NumericRealQuestionAnswered> evnt)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.EventTimeStamp,
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTime,
                 CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.Answer),
                     evnt.Payload.PropagationVector));
 
@@ -185,7 +185,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.EventTimeStamp,
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTime,
              CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.Answer),
                  evnt.Payload.PropagationVector));
 
@@ -194,7 +194,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<DateTimeQuestionAnswered> evnt)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.EventTimeStamp,
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTime,
                 CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.Answer),
                     evnt.Payload.PropagationVector));
 
@@ -203,7 +203,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<GeoLocationQuestionAnswered> evnt)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.EventTimeStamp,
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTime,
           CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(new GeoPosition(evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy, evnt.Payload.Altitude,
                         evnt.Payload.Timestamp)),
               evnt.Payload.PropagationVector));
@@ -213,7 +213,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.EventTimeStamp,
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTime,
               CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.SelectedPropagationVectors),
                   evnt.Payload.PropagationVector));
 
@@ -222,7 +222,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.EventTimeStamp,
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTime,
              CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.SelectedPropagationVector),
                  evnt.Payload.PropagationVector));
 
@@ -231,7 +231,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<TextListQuestionAnswered> evnt)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.EventTimeStamp,
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTime,
            CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(new InterviewTextListAnswers(evnt.Payload.Answers)),
                evnt.Payload.PropagationVector));
 
@@ -240,7 +240,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<QRBarcodeQuestionAnswered> evnt)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.EventTimeStamp,
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTime,
             CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.Answer),
             evnt.Payload.PropagationVector));
 
@@ -249,7 +249,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<PictureQuestionAnswered> evnt)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.EventTimeStamp,
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTime,
            CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.PictureFileName),
            evnt.Payload.PropagationVector));
 
@@ -268,7 +268,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 parameters.Add("roster", string.Join(",", evnt.Payload.PropagationVector));
             }
 
-            AddHistoricalRecord(view, InterviewHistoricalAction.CommentSet, evnt.Payload.UserId, evnt.EventTimeStamp, parameters);
+            AddHistoricalRecord(view, InterviewHistoricalAction.CommentSet, evnt.Payload.UserId, evnt.Payload.CommentTime, parameters);
 
             return view;
         }

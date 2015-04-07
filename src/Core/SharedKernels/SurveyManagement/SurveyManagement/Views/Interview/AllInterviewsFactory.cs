@@ -42,7 +42,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                     {
                         Id = a.Id,
                         Answer = a.Answer,
-                        Question = a.Title
+                        Question = a.Title,
+                        Type = a.Type
                     }).ToList(),
                     InterviewId = x.InterviewId,
                     LastEntryDate = x.UpdateDate.ToShortDateString(),

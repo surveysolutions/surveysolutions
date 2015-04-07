@@ -41,10 +41,15 @@
                         var itemId = listViewModel.GetId();
                         var itemType = listViewModel.GetLabel();
                         var itemName = Uri.EscapeDataString(listViewModel.GetName());
-
+                        var actionModel = listViewModel as IActionItem;
                         <tr class="@(listViewModel.IsDeleted ? "deleted" : "")">
                             <td class="search-value">
-                                @listViewModel.Title
+                                @if  (actionModel.CanEdit) {
+                                    @Html.ActionLink(listViewModel.Title, "Open", "App", routevalues, null)
+                                }
+                                else {
+                                    @listViewModel.Title
+                                }
                             </td>
                             <td class="date">
                                 @listViewModel.LastEntryDate.FormatDate()
@@ -57,7 +62,7 @@
                             </td>
                             <td>
                                 @{
-                        var actionModel = listViewModel as IActionItem;
+                       
                         if (actionModel != null)
                         {
                             if (actionModel.CanCopy || actionModel.CanDelete || actionModel.CanEdit || actionModel.CanExport || actionModel.CanPreview || actionModel.CanPrint || actionModel.CanSynchronize || actionModel.CanOpen)
@@ -68,26 +73,25 @@
                                         <span class="caret"></span>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        @{
-                                if (actionModel.CanSynchronize)
-                                {
-                                    <li>@Html.ActionLink("Export to HQ", "Export", "Admin", routevalues, null)</li>
-                                }
-                                if (actionModel.CanCopy)
-                                {
-                                    <li>@Html.ActionLink("Clone", "Clone", "Questionnaire", routevalues, null)</li>
-                                }
-                                if (actionModel.CanExportToPdf)
-                                {
-                                    <li class="divider"></li>
-                                            <li>@Html.ActionLink("Export as PDF", "exportquestionnaire", "Pdf", routevalues, null)</li>
-                                }
-                                if (actionModel.CanDelete)
-                                {
-                                    <li class="divider"></li>
-                                            <li><a href="#mDelete" data-bind='click: deleteItem.bind($data,"@itemId", "@itemType", "@itemName")' data-toggle="modal">Delete</a></li>
-                                }
+                                        @if (actionModel.CanEdit) {
+                                            <li>@Html.ActionLink("Edit", "Open", "App", routevalues, null)</li>
                                         }
+                                        @{if (actionModel.CanSynchronize) {
+                                            <li>@Html.ActionLink("Export to HQ", "Export", "Admin", routevalues, null)</li>
+                                        }
+                                        if (actionModel.CanCopy){
+                                            <li>@Html.ActionLink("Clone", "Clone", "Questionnaire", routevalues, null)</li>
+                                        }
+                                        if (actionModel.CanExportToPdf) {
+                                            <li class="divider"></li>
+                                            <li>@Html.ActionLink("Export as PDF", "exportquestionnaire", "Pdf", routevalues, null)</li>
+                                        }
+                                        if (actionModel.CanDelete) {
+                                            <li class="divider"></li>
+                                            <li>
+                                                <a href="#mDelete" onclick='deleteQuestionnaireModel.deleteItem("@itemId", "@itemType", "@itemName")' data-toggle="modal">Delete</a>
+                                            </li>
+                                        }}
                                     </ul>
                                 </div>
                             }

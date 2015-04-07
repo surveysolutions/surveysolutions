@@ -183,6 +183,7 @@
                     "id": utilityService.guid()
                 });
                 $scope.activeQuestion.optionsCount += 1;
+                $scope.questionForm.$setDirty();
             };
 
             $scope.editFilteredComboboxOptions = function () {
@@ -243,6 +244,7 @@
             $scope.removeOption = function (index) {
                 $scope.activeQuestion.options.splice(index, 1);
                 $scope.activeQuestion.optionsCount -= 1;
+                $scope.questionForm.$setDirty();
             };
 
             $scope.showOptionsInTextarea = function () {
@@ -303,6 +305,7 @@
                 if (itemId) {
                     $scope.activeQuestion.cascadeFromQuestionId = itemId;
                     $scope.activeQuestion.cascadeFromQuestion = _.find($scope.sourceOfSingleQuestions, { id: $scope.activeQuestion.cascadeFromQuestionId });
+                    $scope.questionForm.$setDirty();
                 }
             };
 

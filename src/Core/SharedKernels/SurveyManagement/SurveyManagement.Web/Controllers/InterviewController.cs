@@ -78,9 +78,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (interviewInfo == null || interviewSummary == null)
                 return HttpNotFound();
 
+            var detailsViewModel = interviewDetailsViewFactory.GetInterviewDetails(interviewId: id, 
+                                                                                   currentGroupId: currentGroupId,
+                                                                                   filter: filter, 
+                                                                                   currentGroupRosterVector: this.ParseRosterVector(rosterVector));
             return
-                View(interviewDetailsViewFactory.GetInterviewDetails(interviewId: id, currentGroupId: currentGroupId,
-                    filter: filter, currentGroupRosterVector: this.ParseRosterVector(rosterVector)));
+                View(detailsViewModel);
         }
 
         public ActionResult InterviewHistory(Guid id)

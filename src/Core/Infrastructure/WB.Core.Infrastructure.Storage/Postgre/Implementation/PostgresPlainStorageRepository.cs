@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate;
 using NHibernate.Linq;
-using Ninject;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
