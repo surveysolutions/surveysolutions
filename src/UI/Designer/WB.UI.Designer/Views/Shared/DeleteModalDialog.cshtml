@@ -7,13 +7,13 @@
                 <h4 class="modal-title">Delete <small>confirmation</small></h4>
             </div>
             <div class="modal-body">
-                <p>Do you really want to delete "<strong data-bind="text: itemName"></strong>" questionnaire?</p>
+                <p>Do you really want to delete "<strong id="delete-modal-questionnaire-title"></strong>" questionnaire?</p>
             </div>
             <div class="modal-footer">
                 @using (Html.BeginForm("Delete", GlobalHelper.CurrentController, FormMethod.Post, new { }))
                 {
                     @Html.AntiForgeryToken()
-                    <input name="id" data-bind="value: itemId" type="hidden"/>
+                    <input name="id" id="delete-modal-questionnaire-id" type="hidden" />
                     <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
                     <button type="submit" class="btn btn-primary" value="Delete">Delete</button>
                 }

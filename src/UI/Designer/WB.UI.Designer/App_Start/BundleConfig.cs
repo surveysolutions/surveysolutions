@@ -14,14 +14,16 @@ namespace WB.UI.Designer
 
             bundles.Add(
                 new StyleBundle("~/content/css").Include(
-                    "~/Content/bootstrap.css",
+                    "~/UpdatedDesigner/vendor/bootstrap/dist/bootstrap.css",
                     "~/Content/font-awesome.min.css",
                     "~/Content/body.css", 
                     "~/Content/bootstrap-responsive.css", 
                     "~/Content/bootstrap-mvc-validation.css"));
 
             bundles.Add(
-                new ScriptBundle("~/simplepage").Include("~/Scripts/jquery-{version}.js", "~/Scripts/bootstrap.js"));
+                new ScriptBundle("~/simplepage").Include(
+                    "~/UpdatedDesigner/vendor/jquery/dist/jquery.js",
+                    "~/UpdatedDesigner/vendor/bootstrap/dist/bootstrap.js"));
 
             bundles.Add(
                 new ScriptBundle("~/editform").Include(
@@ -34,8 +36,7 @@ namespace WB.UI.Designer
 
             bundles.Add(
                 new ScriptBundle("~/list").Include(
-                    "~/Scripts/jquery-{version}.js", 
-                    "~/Scripts/knockout-{version}.js",
+                    "~/UpdatedDesigner/vendor/jquery/dist/jquery.js",
                     "~/UpdatedDesigner/vendor/jquery-mousewheel/jquery.mousewheel.js",
                     "~/UpdatedDesigner/vendor/perfect-scrollbar/src/perfect-scrollbar.js",
                     "~/Scripts/common.js"));

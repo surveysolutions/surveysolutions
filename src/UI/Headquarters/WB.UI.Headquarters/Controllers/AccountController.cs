@@ -108,7 +108,7 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
             if (this.ModelState.IsValid)
             {
-                if ((User.Identity as CustomIdentity).IsObserver)
+                if (User.Identity.IsObserver())
                 {
                     this.Error("You cannot perform any operation in observer mode.");
                 }
@@ -156,20 +156,20 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Headquarter, Supervisor")]
         public ActionResult ReturnToObserver()
         {
-            var currentUserName = (User.Identity as CustomIdentity);
+            var currentUserIdentity = (User.Identity as CustomIdentity);
 
-            if (currentUserName == null || string.IsNullOrEmpty(currentUserName.ObserverName))
+            if (currentUserIdentity == null || string.IsNullOrEmpty(currentUserIdentity.ObserverName))
                 throw new HttpException(404, string.Empty);
             
             var alowedRoles = new string[] { UserRoles.Administrator.ToString(), UserRoles.Observer.ToString(), UserRoles.Operator.ToString() };
-            var userRoles = Roles.GetRolesForUser(currentUserName.ObserverName);
+            var userRoles = Roles.GetRolesForUser(currentUserIdentity.ObserverName);
 
             bool targetUserInValidRole = userRoles.Any(r => alowedRoles.Contains(r));
 
             if (!targetUserInValidRole) 
                 throw new HttpException(404, string.Empty);
             
-            this.authentication.SignIn(currentUserName.ObserverName, false);
+            this.authentication.SignIn(currentUserIdentity.ObserverName, false);
             return this.RedirectToAction("Index", "Headquarters");
         }
     }
