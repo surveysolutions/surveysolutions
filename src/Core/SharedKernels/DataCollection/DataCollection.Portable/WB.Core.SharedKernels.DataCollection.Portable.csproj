@@ -51,6 +51,7 @@
     <Compile Include="IInterviewEvaluator.cs" />
     <Compile Include="IInterviewExpressionState.cs" />
     <Compile Include="IExpressionExecutable.cs" />
+    <Compile Include="IRosterLevel.cs" />
     <Compile Include="ISyncProtocolVersionProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionnaireVersion.cs" />
