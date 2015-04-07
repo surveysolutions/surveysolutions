@@ -437,14 +437,5 @@ namespace WB.Core.SharedKernels.DataCollection
 #pragma warning restore
             }
         }
-
-        private string levelTitle;
-
-        public string @title { get { return levelTitle; }}
-
-        public void SetTitle(string newTitle)
-        {
-            this.levelTitle = newTitle;
-        }
     }
 }
