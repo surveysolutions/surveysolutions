@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
-using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
@@ -20,6 +19,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
 using WB.Core.SharedKernels.SurveyManagement.Views.TakeNew;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -103,6 +103,12 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
+            if (User.Identity.IsObserver())
+            {
+                this.Error("You cannot perform any operation in observer mode.");
+                return this.View("BatchUpload", model);
+            }
+
             if (!this.ModelState.IsValid)
             {
                 return this.View("BatchUpload", model);
@@ -126,11 +132,17 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
+            if (User.Identity.IsObserver())
+            {
+                this.Error("You cannot perform any operation in observer mode.");
+                return this.View("BatchUpload", model);
+            }
+
             if (!this.ModelState.IsValid)
             {
                 return this.View("BatchUpload", model);
             }
-
+            
             var preloadedDataId = this.preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
             var preloadedMetadata = this.preloadedDataRepository.GetPreloadedDataMetaInformationForPanelData(preloadedDataId);
 
@@ -184,6 +196,12 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult ImportPanelData(Guid questionnaireId, long version, string id, Guid responsibleSupervisor)
         {
+            if (User.Identity.IsObserver())
+            {
+                this.Error("You cannot perform any operation in observer mode.");
+                return this.View("VerifySample", new PreloadedDataVerificationErrorsView(questionnaireId, version, null, id, PreloadedContentType.Panel));
+            }
+
             this.sampleImportService.CreatePanel(questionnaireId, version, id, this.preloadedDataRepository.GetPreloadedDataOfPanel(id),
                 this.GlobalInfo.GetCurrentUser().Id, responsibleSupervisor);
 
@@ -192,6 +210,12 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult ImportSampleData(Guid questionnaireId, long version, string id, Guid responsibleSupervisor)
         {
+            if (User.Identity.IsObserver())
+            {
+                this.Error("You cannot perform any operation in observer mode.");
+                return this.View("VerifySample", new PreloadedDataVerificationErrorsView(questionnaireId, version, null, id, PreloadedContentType.Panel));
+            }
+
             this.sampleImportService.CreateSample(questionnaireId,
                     version,
                     id,

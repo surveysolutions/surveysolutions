@@ -5,6 +5,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Shared.Web.Filters;
@@ -36,16 +37,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                UserView user = this.GetUserByName(model.UserName);
-                if (user == null)
+                if (User.Identity.IsObserver())
                 {
-                    this.CreateInterviewer(model, model.SupervisorId);
-                    this.Success("Interviewer was successfully created");
-                    return this.Back(model.SupervisorId);
+                    this.Error("You cannot perform any operation in observer mode.");
                 }
                 else
                 {
-                    this.Error("User name already exists. Please enter a different user name.");
+                    UserView user = this.GetUserByName(model.UserName);
+                    if (user == null)
+                    {
+                        this.CreateInterviewer(model, model.SupervisorId);
+                        this.Success("Interviewer was successfully created");
+                        return this.Back(model.SupervisorId);
+                    }
+                    else
+                    {
+                        this.Error("User name already exists. Please enter a different user name.");
+                    }
                 }
             }
 
@@ -82,16 +90,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                var user = this.GetUserById(model.Id);
-                if (user != null)
+                if (User.Identity.IsObserver())
                 {
-                    this.UpdateAccount(user: user, editModel: model);
-                    this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
-                    return this.Back(user.Supervisor.Id);
+                    this.Error("You cannot perform any operation in observer mode.");
                 }
                 else
                 {
-                    this.Error("Could not update user information because current user does not exist");
+                    var user = this.GetUserById(model.Id);
+                    if (user != null)
+                    {
+                        this.UpdateAccount(user: user, editModel: model);
+                        this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
+                        return this.Back(user.Supervisor.Id);
+                    }
+                    else
+                    {
+                        this.Error("Could not update user information because current user does not exist");
+                    }
                 }
             }
 
