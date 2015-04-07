@@ -37,7 +37,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                         id: rosterId, 
                         rosterSizeSourceType: RosterSizeSourceType.Question,
                         rosterSizeQuestionId: rosterSizeQuestionId,
-                        variable: "roster",
+                        variable: "varRoster",
                         children: new IComposite[]
                         {
                             Create.NumericIntegerQuestion(rosterAgeQuestionId, variable: "age")
@@ -45,7 +45,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                     Create.NumericIntegerQuestion(
                         id: rosterValidation,
-                        enablementCondition: "roster.Select(x => x.age).Max() > 65")
+                        enablementCondition: "varRoster.Select(x => x.age).Max() > 65")
                 );
 
                 var result = new InvokeResults();
