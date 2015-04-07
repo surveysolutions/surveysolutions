@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                     group.RosterSizeQuestionId = Guid.NewGuid();
                     group.RosterTitleQuestionId = Guid.NewGuid();
                     group.RosterSizeSource = RosterSizeSourceType.FixedTitles;
-                    group.RosterFixedTitles = new string[] { "fixed roster title" };
+                    group.FixedRosterTitles = new Tuple<decimal, string>[] { new Tuple<decimal, string>(1, "fixed roster title")  };
                 }));
 
             @event = CreateGroupStoppedBeingARosterEvent(groupId: groupId);
@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 
         It should_set_group_RosterFixedTitles_property_to_null = () =>
             questionnaireDocument.GetGroup(groupId)
-                .RosterFixedTitles.ShouldBeNull();
+                .FixedRosterTitles.ShouldBeNull();
 
         private static QuestionnaireDenormalizer denormalizer;
         private static IPublishedEvent<GroupStoppedBeingARoster> @event;

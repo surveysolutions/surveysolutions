@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
             result.EnablementCondition.ShouldEqual(GetGroup(rosterId).EnablementCondition);
 
         It should_return_roster_with_RosterFixedTitles_equals_g3_RosterFixedTitles = () =>
-            result.RosterFixedTitles.ShouldEqual(GetGroup(rosterId).RosterFixedTitles);
+            result.FixedRosterTitles.ShouldEqual(GetGroup(rosterId).FixedRosterTitles);
 
         It should_return_roster_with_RosterSizeMultiQuestionId_be_null = () =>
             result.RosterSizeMultiQuestionId.ShouldBeNull();

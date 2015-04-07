@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
-    public abstract class AbstractConditionalLevel<T> where T : IExpressionExecutable
+    public abstract class AbstractConditionalLevel<T> : BaseFunctions where T : IExpressionExecutable
     {
         public decimal[] RosterVector { get; private set; }
         public Identity[] RosterKey { get; private set; }
@@ -436,6 +436,15 @@ namespace WB.Core.SharedKernels.DataCollection
                 }
 #pragma warning restore
             }
+        }
+
+        private string levelTitle;
+
+        public string @title { get { return levelTitle; }}
+
+        public void SetTitle(string newTitle)
+        {
+            this.levelTitle = newTitle;
         }
     }
 }

@@ -352,6 +352,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fixed roster values must be unique..
+        /// </summary>
+        internal static string WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues {
+            get {
+                return ResourceManager.GetString("WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Max answer count must be in range [1, 40]..
         /// </summary>
         internal static string WB0042_TextListQuestionMaxAnswerInRange1And40 {

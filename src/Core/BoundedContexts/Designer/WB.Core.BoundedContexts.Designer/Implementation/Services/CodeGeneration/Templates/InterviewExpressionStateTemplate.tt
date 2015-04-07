@@ -74,6 +74,20 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             this.SetSiblings(rosterIdentityKey, rosterStringKey);
         }
 
+		 public override void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
+            string rosterTitle)
+        {
+            if (!IdOf.parentScopeMap.ContainsKey(rosterId))
+            {
+                return;
+            }
+
+            decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
+            var rosterIdentityKey = Util.GetRosterKey(IdOf.parentScopeMap[rosterId], rosterVector);
+			var rosterStringKey = Util.GetRosterStringKey(rosterIdentityKey);
+            this.InterviewScopes[rosterStringKey].SetTitle(rosterTitle);
+        }
+
         public override void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
         {
             if (!IdOf.parentScopeMap.ContainsKey(rosterId))
@@ -214,7 +228,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
         //generating rosters
         <#foreach (var rosterGroup in QuestionnaireTemplateStructure.RostersGroupedByScope) 
            {
-                RosterScopeTemplate template = new RosterScopeTemplate(rosterGroup, QuestionnaireTemplateStructure, QuestionnaireTemplateStructure.GenerateEmbeddedExpressionMethods);
+                RosterScopeTemplate template = new RosterScopeTemplate(rosterGroup, QuestionnaireTemplateStructure);
                 this.Write(template.TransformText());
                 
            }

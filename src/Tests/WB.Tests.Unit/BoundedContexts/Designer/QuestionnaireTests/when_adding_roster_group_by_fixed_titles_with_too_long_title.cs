@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             exception = Catch.Exception(() =>
                 questionnaire.AddGroupAndMoveIfNeeded(groupId: groupId, responsibleId: responsibleId, title: tooLongTitle, variableName: null,
                     rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: parentGroupId,
-                    isRoster: true, rosterSizeSource: RosterSizeSourceType.FixedTitles, rosterFixedTitles: new[] { "roster fixed title 1", "roster fixd title 2" }, rosterTitleQuestionId: null));
+                    isRoster: true, rosterSizeSource: RosterSizeSourceType.FixedTitles, rosterFixedTitles: new[] {new Tuple<decimal, string>(1,"roster fixed title 1"),new Tuple<decimal, string>(2, "roster fixd title 2") }, rosterTitleQuestionId: null));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

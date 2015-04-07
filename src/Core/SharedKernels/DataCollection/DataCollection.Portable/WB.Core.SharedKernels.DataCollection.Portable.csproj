@@ -44,6 +44,7 @@
     <Compile Include="ConversionHelper.cs" />
     <Compile Include="DummyInterviewExpressionState.cs" />
     <Compile Include="EnablementChanges.cs" />
+    <Compile Include="F.cs" />
     <Compile Include="GeoLocation.cs" />
     <Compile Include="Identity.cs" />
     <Compile Include="IdentityComparer.cs" />
