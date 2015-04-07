@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using Microsoft.Practices.ServiceLocation;
 using NHibernate;
 using NHibernate.Linq;
+using Ninject;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
@@ -17,7 +18,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
     {
         private readonly ISessionProvider sessionProvider;
 
-        public PostgreReadSideRepository(ISessionProvider sessionProvider)
+        public PostgreReadSideRepository([Named(PostgresReadSideModule.SessionProviderName)]ISessionProvider sessionProvider)
         {
             this.sessionProvider = sessionProvider;
         }

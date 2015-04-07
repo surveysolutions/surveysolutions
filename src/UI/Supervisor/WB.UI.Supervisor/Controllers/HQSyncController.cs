@@ -53,6 +53,7 @@ namespace WB.UI.Supervisor.Controllers
             return Json(new object());
         }
 
+        [NoTransaction]
         public ActionResult PullStatus()
         {
             return Json(new
@@ -64,6 +65,7 @@ namespace WB.UI.Supervisor.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
+        [NoTransaction]
         public ActionResult PushStatus()
         {
             return Json(new

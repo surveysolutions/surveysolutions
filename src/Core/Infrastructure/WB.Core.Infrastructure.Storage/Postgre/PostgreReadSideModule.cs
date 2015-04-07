@@ -28,6 +28,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
     public class PostgresReadSideModule : Ninject.Modules.NinjectModule
     {
         internal const string ReadSideSessionFactoryName = "ReadSideSessionFactory";
+        internal const string SessionProviderName = "ReadSideProvider";
         private readonly string connectionString;
         private readonly IEnumerable<Assembly> mappingAssemblies;
         private static int memoryCacheSizePerEntity;
@@ -61,7 +62,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
 
             this.Kernel.Bind<TransactionManagerProvider>().ToSelf().InSingletonScope();
 
-            this.Kernel.Bind<ISessionProvider>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
+            this.Kernel.Bind<ISessionProvider>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>()).Named(SessionProviderName);
             this.Kernel.Bind<ITransactionManager>().To<CqrsPostgresTransactionManager>();
 
             this.Kernel.Bind<ITransactionManagerProvider>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
