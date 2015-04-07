@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
 
             if (!string.IsNullOrEmpty(input.UserName) && !string.IsNullOrEmpty(input.Password))
             {
-                var doc = this.reader.Query(_ => _.FirstOrDefault(u => u.UserName.ToLower() == input.UserName && u.Password == input.Password));
+                var doc = this.reader.Query(_ => _.FirstOrDefault(u => u.UserName.ToLower() == input.UserName.ToLower() && u.Password == input.Password));
                 return ToWebView(doc);
             }
 
