@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
-
-using WB.Core.SharedKernels.DataCollection;
+﻿using System;
+using System.Collections.Generic;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     public class ScreenViewModel
     {
-        public Identity Id { get; set; }
-        public Identity ParentId { get; set; }
+        public Guid Id { get; set; }
+        public decimal[] RosterVector{ get; set; }
+
+        public Guid ParentId { get; set; }
+        public decimal[] ParentRosterVector { get; set; }
 
         public string Title { get; set; }
         public string RosterTitle { get; set; }
@@ -30,7 +32,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
     public class GroupReferenceViewModel : IInterviewItemViewModel
     {
-        public Identity Id { get; set; }
+        public Guid Id { get; set; }
+        public decimal[] RosterVector { get; set; }
+
         public string Title { get; set; }
         public bool IsComplete { get; set; }
         public int CountOfAnsweredQuestions { get; set; }
@@ -52,14 +56,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     public class StaticTextViewModel : IInterviewItemViewModel
     {
         public bool IsDisabled { get; set; }
-        public Identity Id { get; set; }
+        public Guid Id { get; set; }
+        public decimal[] RosterVector { get; set; }
         public string Title { get; set; }
     }
 
     public abstract class AbstractQuestionViewModel : IInterviewItemViewModel
     {
         public bool IsDisabled { get; set; }
-        public Identity Id { get; set; }
+        public Guid Id { get; set; }
+        public decimal[] RosterVector { get; set; }
         public string Title { get; set; }
     }
 
