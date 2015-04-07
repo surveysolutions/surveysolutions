@@ -84,6 +84,19 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             }
         }
 
+        public override void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, string rosterTitle)
+        {
+            if (!IdOf.parentScopeMap.ContainsKey(rosterId))
+            {
+                return;
+            }
+
+            decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
+            var rosterIdentityKey = Util.GetRosterKey(IdOf.parentScopeMap[rosterId], rosterVector);
+            var rosterStringKey = Util.GetRosterStringKey(rosterIdentityKey);
+            this.InterviewScopes[rosterStringKey].SetTitle(rosterTitle);
+        }
+
         public override void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
         {
             if (!IdOf.parentScopeMap.ContainsKey(rosterId))
@@ -357,6 +370,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             {
                 questionsToBeValid = new List<Identity>();
                 questionsToBeInvalid =new List<Identity>();
+            }
+
+            public int @index
+            {
+                get { return 0; }
+            }
+
+            public object @value
+            {
+                get { return id; }
             }
 
             protected override IEnumerable<Action> ConditionExpressions
@@ -651,6 +674,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 this.Validate(out questionsToBeValid,out questionsToBeInvalid);
             }
 
+            public object @value { get { return RosterVector.Last(); } }
+            public int @index { get { return (@__parent).hhMembers.Select((s, i) => new { Index = i, Value = s }).Where(t => t.Value.value == this.value).Select(t => t.Index).First(); } }
         }
 
         //roster second level
@@ -776,6 +801,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 this.Validate(out questionsToBeValid, out questionsToBeInvalid);
             }
 
+            public object @value { get { return RosterVector.Last(); } }
+            public int @index { get { return (@__parent).foodConsumption.Select((s, i) => new { Index = i, Value = s }).Where(t => t.Value.value == this.value).Select(t => t.Index).First(); } }
 
 
             public IExpressionExecutable CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances)
@@ -896,7 +923,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             {
                 this.Validate(out questionsToBeValid, out questionsToBeInvalid);
             }
-            
+
+            public object @value { get { return RosterVector.Last(); } }
+            public int @index { get { return (@__parent).educations.Select((s, i) => new { Index = i, Value = s }).Where(t => t.Value.value == this.value).Select(t => t.Index).First(); } }
+
         }
 
         public static class IdOf

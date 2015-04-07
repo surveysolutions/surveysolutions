@@ -309,7 +309,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
             foreach (IGroup fixedRosterGroup in fixedRosterGroups)
             {
-                collectedMaxValues.Add(fixedRosterGroup.PublicKey, fixedRosterGroup.RosterFixedTitles.Length);
+                collectedMaxValues.Add(fixedRosterGroup.PublicKey, fixedRosterGroup.FixedRosterTitles.Length);
             }
 
             return collectedMaxValues;
@@ -375,7 +375,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             if (@group.RosterSizeSource == RosterSizeSourceType.FixedTitles && headerStructureForLevel.LevelLabels == null)
             {
                 headerStructureForLevel.LevelLabels =
-                    @group.RosterFixedTitles.Select((title, index) => new LabelItem() { Caption = index.ToString(), Title = title })
+                    @group.FixedRosterTitles.Select(title => new LabelItem() { Caption = title.Item1.ToString(), Title = title.Item2 })
                         .ToArray();
             }
 

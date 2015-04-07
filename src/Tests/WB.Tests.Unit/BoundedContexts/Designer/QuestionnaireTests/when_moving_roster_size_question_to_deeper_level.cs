@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
             AddGroup(questionnaire: questionnaire, groupId: targetRosterGroupId, parentGroupId: chapterId, condition: null,
                 responsibleId: responsibleId, rosterSizeQuestionId: null, isRoster: true, rosterSizeSource: RosterSizeSourceType.FixedTitles,
-                rosterTitleQuestionId: null, rosterFixedTitles: new[] { "fixed title 1" });
+                rosterTitleQuestionId: null, rosterFixedTitles: new[] {new Tuple<decimal, string>(1, "fixed title 1") });
         };
 
         private Because of = () =>

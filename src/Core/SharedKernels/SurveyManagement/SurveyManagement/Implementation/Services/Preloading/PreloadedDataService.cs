@@ -86,7 +86,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             {
                 return
                     questionnaireDocument.FirstOrDefault<IGroup>(g => g.PublicKey == levelScopeVector.Last())
-                        .RosterFixedTitles.Select((t, i) => (decimal) i)
+                        .FixedRosterTitles.Select(t => t.Item1)
                         .ToArray();
             }
 

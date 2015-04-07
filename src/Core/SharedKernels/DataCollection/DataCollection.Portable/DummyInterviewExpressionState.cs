@@ -104,6 +104,11 @@ namespace WB.Core.SharedKernels.DataCollection
             throw new NotImplementedException();
         }
 
+        public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, string rosterTitle)
+        {
+            throw new NotImplementedException();
+        }
+
         public void RemoveRoster(Guid rosterId, decimal[] rosterVector, decimal rosterInstanceId)
         {
             throw new NotImplementedException();
