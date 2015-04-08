@@ -45,16 +45,23 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                UserView user = GetUserByName(model.UserName);
-                if (user == null)
+                if (User.Identity.IsObserver())
                 {
-                    this.CreateSupervisor(model);
-                    this.Success("Supervisor was successfully created");
-                    return this.RedirectToAction("Index");
+                    this.Error("You cannot perform any operation in observer mode.");
                 }
                 else
                 {
-                    this.Error("User name already exists. Please enter a different user name.");
+                    UserView user = GetUserByName(model.UserName);
+                    if (user == null)
+                    {
+                        this.CreateSupervisor(model);
+                        this.Success("Supervisor was successfully created");
+                        return this.RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        this.Error("User name already exists. Please enter a different user name.");
+                    }
                 }
             }
 
@@ -88,38 +95,38 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter")]
         public ActionResult Edit(UserEditModel model)
         {
-            if (this.ModelState.IsValid)
+            if (!this.ModelState.IsValid) 
+                return this.View(model);
+            
+            if (User.Identity.IsObserver())
             {
-                if (User.Identity.IsObserver())
+                this.Error("You cannot perform any operation in observer mode.");
+            }
+            else
+            {
+                var user = this.GetUserById(model.Id);
+                if (user != null)
                 {
-                    this.Error("You cannot perform any operation in observer mode.");
+                    var forbiddenRoles = new string[]
+                    {UserRoles.Administrator.ToString(), UserRoles.Headquarter.ToString()};
+                    var doesUserInForbiddenRole =
+                        IdentityManager.GetRolesForUser(user.UserName).Any(r => forbiddenRoles.Contains(r));
+
+                    if (!doesUserInForbiddenRole)
+                    {
+                        this.UpdateAccount(user: user, editModel: model);
+                        this.Success(string.Format("Information about <b>{0}</b> successfully updated",
+                            user.UserName));
+                        return this.RedirectToAction("Index");
+                    }
+
+                    this.Error(
+                        "Could not update user information because you don't have permission to perform this operation");
+
                 }
                 else
                 {
-                    var user = this.GetUserById(model.Id);
-                    if (user != null)
-                    {
-                        var forbiddenRoles = new string[]
-                        {UserRoles.Administrator.ToString(), UserRoles.Headquarter.ToString()};
-                        var doesUserInForbiddenRole =
-                            IdentityManager.GetRolesForUser(user.UserName).Any(r => forbiddenRoles.Contains(r));
-
-                        if (!doesUserInForbiddenRole)
-                        {
-                            this.UpdateAccount(user: user, editModel: model);
-                            this.Success(string.Format("Information about <b>{0}</b> successfully updated",
-                                user.UserName));
-                            return this.RedirectToAction("Index");
-                        }
-
-                        this.Error(
-                            "Could not update user information because you don't have permission to perform this operation");
-
-                    }
-                    else
-                    {
-                        this.Error("Could not update user information because current user does not exist");
-                    }
+                    this.Error("Could not update user information because current user does not exist");
                 }
             }
 
