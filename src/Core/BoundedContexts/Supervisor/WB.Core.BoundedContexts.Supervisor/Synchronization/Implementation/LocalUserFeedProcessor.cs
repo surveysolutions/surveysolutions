@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         public Guid[] PullUsersAndReturnListOfSynchronizedSupervisorsId()
         {
             var localSupervisors = this.cqrsTransactionManager.ExecuteInQueryTransaction(() =>
-                users.Query(_ => _.Where(x => x.Roles.Contains(UserRoles.Supervisor))));
+                this.users.Query(_ => _.Where(x => x.Roles.Contains(UserRoles.Supervisor)).ToList()));
 
             foreach (var localSupervisor in localSupervisors)
             {
@@ -110,21 +110,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private void UpdateOrCreateUser(UserView userDetails)
         {
-            ICommand userCommand = null;
-
             UserRoles[] userRoles = userDetails.Roles.ToArray();
             bool userShouldBeLockedByHq = userDetails.IsLockedByHQ || userRoles.Contains(UserRoles.Headquarter);
 
-            if (this.users.GetById(userDetails.PublicKey) == null)
-            {
-                userCommand = new CreateUserCommand(userDetails.PublicKey, userDetails.UserName, userDetails.Password, userDetails.Email,
-                    userRoles, userDetails.IsLockedBySupervisor, userShouldBeLockedByHq, userDetails.Supervisor);
-            }
-            else
-            {
-                userCommand = new ChangeUserCommand(userDetails.PublicKey, userDetails.Email,
-                    userRoles, null, userShouldBeLockedByHq, userDetails.Password, Guid.Empty);
-            }
+            UserDocument user = this.cqrsTransactionManager.ExecuteInQueryTransaction(() =>
+                this.users.GetById(userDetails.PublicKey));
+
+            ICommand userCommand =
+                (user == null)
+                    ? new CreateUserCommand(userDetails.PublicKey, userDetails.UserName, userDetails.Password, userDetails.Email,
+                        userRoles, userDetails.IsLockedBySupervisor, userShouldBeLockedByHq, userDetails.Supervisor) as ICommand
+                    : new ChangeUserCommand(userDetails.PublicKey, userDetails.Email,
+                        userRoles, null, userShouldBeLockedByHq, userDetails.Password, Guid.Empty) as ICommand;
 
             this.executeCommand(userCommand);
         }

@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -6,6 +7,7 @@ namespace WB.Core.GenericSubdomains.Utils
 {
     public static class GuidExtensions
     {
+        [DebuggerStepThrough]
         public static string FormatGuid(this Guid guid)
         {
             return guid.ToString("N");

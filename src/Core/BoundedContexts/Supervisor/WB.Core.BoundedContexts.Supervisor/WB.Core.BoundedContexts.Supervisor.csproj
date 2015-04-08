@@ -148,6 +148,7 @@
     <Compile Include="Synchronization\Implementation\LocalQuestionnaireFeedEntry.cs" />
     <Compile Include="Synchronization\Implementation\LocalUserFeedProcessor.cs" />
     <Compile Include="Synchronization\Implementation\QuestionnaireSynchronizer.cs" />
+    <Compile Include="Synchronization\Implementation\SynchronizationJob.cs" />
     <Compile Include="Synchronization\Implementation\UserChangedFeedReader.cs" />
     <Compile Include="Synchronization\IInterviewsSynchronizer.cs" />
     <Compile Include="Synchronization\IQuestionnaireSynchronizer.cs" />

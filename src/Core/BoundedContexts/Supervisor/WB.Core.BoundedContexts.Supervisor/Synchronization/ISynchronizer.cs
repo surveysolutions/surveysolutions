@@ -4,7 +4,7 @@ using Quartz;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 {
-    public interface ISynchronizer : IJob
+    public interface ISynchronizer
     {
         void Pull();
         void Push(Guid userId);

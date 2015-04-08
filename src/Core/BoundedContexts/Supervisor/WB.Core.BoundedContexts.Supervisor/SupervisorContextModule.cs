@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using Ninject;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Supervisor.Interviews;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation;
@@ -34,7 +35,9 @@ namespace WB.Core.BoundedContexts.Supervisor
             this.Bind<IHeadquartersSettings>().ToConstant(this.headquartersSettings);
             this.Bind<IHeadquartersLoginService>().To<HeadquartersLoginService>();
             this.Bind<ILocalFeedStorage>().To<LocalFeedStorage>();
+            this.Bind<SynchronizationJob>().ToSelf();
             this.Bind<ISynchronizer>().To<Synchronizer>();
+            this.Bind<Func<ISynchronizer>>().ToMethod(context => () => context.Kernel.Get<ISynchronizer>());
             this.Bind<IInterviewsSynchronizer>().To<InterviewsSynchronizer>();
             this.Bind<IUserChangedFeedReader>().To<UserChangedFeedReader>();
             this.Bind<IQuestionnaireSynchronizer>().To<QuestionnaireSynchronizer>();

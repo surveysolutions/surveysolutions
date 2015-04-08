@@ -57,6 +57,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             if (this.session != null)
             {
                 this.session.Dispose();
+                this.session = null;
             }
         }
 

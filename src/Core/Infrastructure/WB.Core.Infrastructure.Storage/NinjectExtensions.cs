@@ -1,4 +1,5 @@
 using System;
+using Ninject;
 using Ninject.Activation;
 using Ninject.Syntax;
 using Ninject.Web.Common;
