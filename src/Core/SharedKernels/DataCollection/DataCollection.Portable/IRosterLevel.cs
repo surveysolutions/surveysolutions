@@ -12,8 +12,8 @@ namespace WB.Core.SharedKernels.DataCollection
         void SetRowName(string rowname);
         int @rowindex { get; }
     }
-    public interface IRosterLevel<T> : IRosterLevel where T : IExpressionExecutable
+    public interface IRosterLevel<T> : IRosterLevel where T : class, IRosterLevel
     {
-        IList<T> @roster { get; }
+        RosterRowList<T> @roster { get; }
     }
 }

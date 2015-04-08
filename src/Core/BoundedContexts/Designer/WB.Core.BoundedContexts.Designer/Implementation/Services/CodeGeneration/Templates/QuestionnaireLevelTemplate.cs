@@ -498,7 +498,7 @@ foreach (var @roster in Model.Rosters)
             
             #line default
             #line hidden
-            this.Write("        public IList<");
+            this.Write("        public RosterRowList<");
             
             #line 112 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedTypeName));
@@ -520,21 +520,14 @@ foreach (var @roster in Model.Rosters)
             
             #line default
             #line hidden
-            this.Write(".Last());\r\n                return rosters == null ? new List<");
+            this.Write(".Last());\r\n\t\t\t\treturn new RosterRowList<");
             
             #line 117 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedTypeName));
             
             #line default
             #line hidden
-            this.Write(">() : rosters.Select(x => x as ");
-            
-            #line 117 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedTypeName));
-            
-            #line default
-            #line hidden
-            this.Write(").ToList();\r\n            }\r\n        }\r\n        ");
+            this.Write(">(rosters);\r\n            }\r\n        }\r\n        ");
             
             #line 120 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
  }

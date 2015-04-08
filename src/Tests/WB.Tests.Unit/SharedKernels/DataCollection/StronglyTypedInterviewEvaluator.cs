@@ -384,21 +384,21 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 }
             }
 
-            public IList<HhMember_type> hhMembers
+            public RosterRowList<HhMember_type> hhMembers
             {
                 get
                 {
                     var rosters = this.GetInstances(new Identity[0], IdOf.hhMemberScopeIds.Last());
-                    return rosters == null ? new List<HhMember_type>() : rosters.Select(x => x as HhMember_type).ToList();
+                    return new RosterRowList<HhMember_type>(rosters);
                 }
             }
 
-            public IList<Education_type> educations
+            public RosterRowList<Education_type> educations
             {
                 get
                 {
                     var rosters = this.GetInstances(new Identity[0], IdOf.eduScopeIds.Last());
-                    return rosters == null ? new List<Education_type>() : rosters.Select(x => x as Education_type).ToList();
+                    return new RosterRowList<Education_type>(rosters);
                 }
             }
         }
@@ -445,12 +445,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 get { return this.__parent.hhMembers; }
             }
 
-            public IList<FoodConsumption_type> foodConsumption
+            public RosterRowList<FoodConsumption_type> foodConsumption
             {
                 get
                 {
                     var rosters = this.GetInstances(this.RosterKey, IdOf.foodConsumptionIds.Last());
-                    return rosters == null ? new List<FoodConsumption_type>() : rosters.Select(x => x as FoodConsumption_type).ToList();
+                    return new RosterRowList<FoodConsumption_type>(rosters);
                 }
             }
 
@@ -643,7 +643,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                     marital_status = this.@__maritalStatus,
                     married_with = this.@__marriedWith
                 };
-                level.SetRowName(this.@rowname);
+                ((IRosterLevel)level).SetRowName(this.@rowname);
                 foreach (var state in level.EnablementStates)
                 {
                     var originalState = this.EnablementStates[state.Key];
@@ -676,7 +676,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
             public string @rowname { get; private set; }
 
-            public void SetRowName(string rosterRowName)
+            void IRosterLevel.SetRowName(string rosterRowName)
             {
                 this.@rowname = rosterRowName;
             }
@@ -686,7 +686,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 get { return (@__parent).hhMembers.Select((s, i) => new { Index = i, Value = s }).Where(t => t.Value.@rowcode == this.@rowcode).Select(t => t.Index).First(); }
             }
 
-            public IList<HhMember_type> @roster
+            public RosterRowList<HhMember_type> @roster
             {
                 get { return @__parent.hhMembers; }
             }
@@ -832,7 +832,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 get { return (@__parent).hhMembers.Select((s, i) => new { Index = i, Value = s }).Where(t => t.Value.@rowcode == this.@rowcode).Select(t => t.Index).First(); }
             }
 
-            public IList<FoodConsumption_type> @roster
+            public RosterRowList<FoodConsumption_type> @roster
             {
                 get { return @__parent.foodConsumption; }
             }
@@ -974,7 +974,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 get { return (@__parent).hhMembers.Select((s, i) => new { Index = i, Value = s }).Where(t => t.Value.@rowcode == this.@rowcode).Select(t => t.Index).First(); }
             }
 
-            public IList<Education_type> @roster
+            public RosterRowList<Education_type> @roster
             {
                 get { return @__parent.educations; }
             }
