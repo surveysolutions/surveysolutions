@@ -3,7 +3,7 @@ using WB.UI.QuestionnaireTester.Implementation.Services;
 
 namespace WB.UI.QuestionnaireTester.Ninject
 {
-    public class CommonModule : NinjectModule
+    public class ApplicationModule : NinjectModule
     {
         public override void Load()
         {
