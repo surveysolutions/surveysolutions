@@ -123,7 +123,7 @@
     <Compile Include="Implementation\Services\RestServiceSettings.cs" />
     <Compile Include="Implementation\Services\XamarinInsightsLogger.cs" />
     <Compile Include="Implementation\Views\Identity.cs" />
-    <Compile Include="Ninject\CommonModule.cs" />
+    <Compile Include="Ninject\ApplicationModule.cs" />
     <Compile Include="Ninject\LoggerModule.cs" />
     <Compile Include="Ninject\NinjectIoCAdapterSetup.cs" />
     <Compile Include="Ninject\NinjectMvxIoCProvider.cs" />
@@ -146,7 +146,9 @@
     <Content Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </Content>
-    <AndroidResource Include="Resources\values\MvxBindingAttributes.xml" />
+    <AndroidResource Include="Resources\values\MvxBindingAttributes.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\drawable\loginLogo.png" />
     <AndroidResource Include="Resources\values\styles.xml">
       <SubType>Designer</SubType>
@@ -172,6 +174,10 @@
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\Utils\WB.Core.GenericSubdomains.Utils.Rest\WB.Core.GenericSubdomains.Utils.Rest.csproj">
       <Project>{f3be22b5-c075-4b9c-a99d-e89b70a0dfcd}</Project>
       <Name>WB.Core.GenericSubdomains.Utils.Rest</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
       <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>

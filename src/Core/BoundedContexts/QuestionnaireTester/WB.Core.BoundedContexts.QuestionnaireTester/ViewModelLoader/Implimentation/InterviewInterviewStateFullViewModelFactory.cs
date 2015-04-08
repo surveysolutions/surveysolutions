@@ -18,12 +18,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implimenta
 {
     internal class InterviewInterviewStateFullViewModelFactory : IInterviewStateFullViewModelFactory
     {
-        private readonly IPlainStorageAccessor<IQuestionnaireDocument> plainStorageQuestionnaireAccessor;
-        private readonly IPlainStorageAccessor<InterviewStateFull> plainStorageInterviewAccessor;
+        private readonly IPlainStorageAccessor<QuestionnaireDocument> plainStorageQuestionnaireAccessor;
+        private readonly IPlainStorageAccessor<StatefullInterview> plainStorageInterviewAccessor;
 
         public InterviewInterviewStateFullViewModelFactory(
-            IPlainStorageAccessor<IQuestionnaireDocument> plainStorageQuestionnaireAccessor,
-            IPlainStorageAccessor<InterviewStateFull> plainStorageInterviewAccessor)
+            IPlainStorageAccessor<QuestionnaireDocument> plainStorageQuestionnaireAccessor,
+            IPlainStorageAccessor<StatefullInterview> plainStorageInterviewAccessor)
         {
             this.plainStorageQuestionnaireAccessor = plainStorageQuestionnaireAccessor;
             this.plainStorageInterviewAccessor = plainStorageInterviewAccessor;

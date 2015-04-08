@@ -1151,6 +1151,9 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f080009
 			public const int MvxBindingTagUnique = 2131230729;
 			
+			// aapt resource value: 0x7f080040
+			public const int TheListView = 2131230784;
+			
 			// aapt resource value: 0x7f080032
 			public const int action_bar = 2131230770;
 			
@@ -1439,13 +1442,16 @@ namespace WB.UI.QuestionnaireTester
 			public const int abc_simple_dropdown_hint = 2130903062;
 			
 			// aapt resource value: 0x7f030017
-			public const int login = 2130903063;
+			public const int chapter = 2130903063;
 			
 			// aapt resource value: 0x7f030018
-			public const int splash = 2130903064;
+			public const int login = 2130903064;
 			
 			// aapt resource value: 0x7f030019
-			public const int support_simple_spinner_dropdown_item = 2130903065;
+			public const int splash = 2130903065;
+			
+			// aapt resource value: 0x7f03001a
+			public const int support_simple_spinner_dropdown_item = 2130903066;
 			
 			static Layout()
 			{

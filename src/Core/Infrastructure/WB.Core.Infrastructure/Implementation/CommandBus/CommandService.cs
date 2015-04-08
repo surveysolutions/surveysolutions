@@ -5,16 +5,17 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace WB.Core.Infrastructure.Implementation.CommandBus
 {
     internal class CommandService : ICommandService
     {
         private readonly IAggregateRootRepository repository;
-        private readonly IEventBus eventBus;
+        private readonly ILiteEventBus eventBus;
         private readonly IAggregateSnapshotter snapshooter;
 
-        public CommandService(IAggregateRootRepository repository, IEventBus eventBus, IAggregateSnapshotter snapshooter)
+        public CommandService(IAggregateRootRepository repository, ILiteEventBus eventBus, IAggregateSnapshotter snapshooter)
         {
             this.repository = repository;
             this.eventBus = eventBus;

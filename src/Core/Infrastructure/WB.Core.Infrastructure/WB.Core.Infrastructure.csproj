@@ -52,6 +52,7 @@
     <Compile Include="EventBus\IAtomicEventHandler.cs" />
     <Compile Include="EventBus\IEventHandler.cs" />
     <Compile Include="Implementation\Aggregates\AggregateRootRepository.cs" />
+    <Compile Include="Implementation\Aggregates\InMemoryAggregateRootRepository.cs" />
     <Compile Include="Implementation\CommandBus\CommandService.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideDenormalizerStatistic.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideEventHandlerDescription.cs" />
@@ -172,6 +173,7 @@
     <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryWriter.cs" />
     <Compile Include="ReadSide\Repository\Accessors\ReadSideStorageVersionedWrapper.cs" />
     <Compile Include="Services\IAdditionalDataService.cs" />
+    <Compile Include="InfrastructureModuleMobile.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">

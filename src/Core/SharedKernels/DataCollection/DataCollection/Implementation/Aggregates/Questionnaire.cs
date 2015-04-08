@@ -26,30 +26,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private Dictionary<long, IQuestionnaire> availableVersions = new Dictionary <long, IQuestionnaire>();
         private HashSet<long> disabledQuestionnaires = new HashSet<long>();
 
-        protected internal void Apply(TemplateImported e)
+        protected internal virtual void Apply(TemplateImported e)
         {
             var templateVersion = e.Version ?? (this.Version + 1);
             availableVersions[templateVersion] = new PlainQuestionnaire(e.Source, () => templateVersion, e.ResponsibleId);
         }
 
-        protected internal void Apply(QuestionnaireDeleted e)
+        protected internal virtual void Apply(QuestionnaireDeleted e)
         {
             availableVersions[e.QuestionnaireVersion] = null;
             disabledQuestionnaires.Remove(e.QuestionnaireVersion);
         }
 
-        protected internal void Apply(QuestionnaireDisabled e)
+        protected internal virtual void Apply(QuestionnaireDisabled e)
         {
             disabledQuestionnaires.Add(e.QuestionnaireVersion);
         }
 
-        private void Apply(PlainQuestionnaireRegistered e)
+        protected virtual void Apply(PlainQuestionnaireRegistered e)
         {
             this.isProxyToPlainQuestionnaireRepository = true;
             availableVersions[e.Version] = null;
         }
 
-        protected internal void Apply(QuestionnaireAssemblyImported e)
+        protected internal virtual void Apply(QuestionnaireAssemblyImported e)
         {
         }
 
