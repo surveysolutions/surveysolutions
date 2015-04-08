@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     {
         private static readonly decimal[] EmptyRosterVector = { };
 
-        private Guid questionnaireId;
+        protected Guid questionnaireId;
         private Guid interviewerId;
         private long questionnaireVersion;
         private bool wasCompleted;
@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private InterviewStateDependentOnAnswers interviewState = new InterviewStateDependentOnAnswers();
+        protected InterviewStateDependentOnAnswers interviewState = new InterviewStateDependentOnAnswers();
 
         internal virtual void Apply(InterviewCreated @event)
         {
