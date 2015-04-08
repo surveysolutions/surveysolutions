@@ -19,20 +19,21 @@ namespace WB.Tests.Unit.Core.Synchronization
     {
         Establish context = () =>
         {
-            tabletDocument = CreateTabletDocument(deviceId, androidId);
+            TabletDocument tabletDocument = CreateTabletDocument(deviceId, androidId);
             devices = Mock.Of<IReadSideRepositoryReader<TabletDocument>>(x => x.GetById(deviceId.FormatGuid()) == tabletDocument);
 
+            const int ChunckSize = 128;
             interviewSyncPackageMetas = new List<InterviewSyncPackageMeta>();
             for (int i = 0; i < 40; i++)
             {
-                for (int j = 0; j < chunckSize; j++)
+                for (int j = 0; j < ChunckSize; j++)
                 {
                     interviewSyncPackageMetas.Add(CreateInterviewSyncPackageMetaInformation(Guid.NewGuid(),
-                        sortIndex: i*chunckSize + (j + 1), itemType: SyncItemType.Interview, userId: userId));
+                        sortIndex: i*ChunckSize + (j + 1), itemType: SyncItemType.Interview, userId: UserId));
                 }
 
                 interviewSyncPackageMetas.Add(CreateInterviewSyncPackageMetaInformation(Guid.NewGuid(),
-                       sortIndex: i * chunckSize + (chunckSize + 1), itemType: SyncItemType.DeleteInterview, userId: userId));
+                       sortIndex: i * ChunckSize + (ChunckSize + 1), itemType: SyncItemType.DeleteInterview, userId: UserId));
             }
 
             var writer = new TestInMemoryWriter<InterviewSyncPackageMeta>();
@@ -45,7 +46,7 @@ namespace WB.Tests.Unit.Core.Synchronization
         };
 
         Because of = () =>
-         result = syncManager.GetInterviewPackageIdsWithOrder(userId, deviceId, null);
+         result = syncManager.GetInterviewPackageIdsWithOrder(UserId, deviceId, null);
 
         It should_return_not_null_result = () =>
             result.ShouldNotBeNull();
@@ -56,7 +57,7 @@ namespace WB.Tests.Unit.Core.Synchronization
        It should_not_contain_delete_packages = () =>
             result.SyncPackagesMeta.ShouldNotContain(x => x.ItemType == SyncItemType.DeleteInterview);
 
-       It should_not_contain_only_interview_packages = () =>
+       It should_contain_only_interview_packages = () =>
             result.SyncPackagesMeta.Count(x => x.ItemType == SyncItemType.Interview).ShouldEqual(result.SyncPackagesMeta.Count());
 
         private static SyncManager syncManager;
@@ -64,12 +65,9 @@ namespace WB.Tests.Unit.Core.Synchronization
 
         private const string androidId = "Android";
         private static Guid deviceId = androidId.ToGuid();
-        private static TabletDocument tabletDocument;
         private static IReadSideRepositoryReader<TabletDocument> devices;
 
-        private static readonly Guid userId = Guid.Parse("11111111111111111111111111111111");
-
-        private static readonly int chunckSize=128;
+        private static readonly Guid UserId = Guid.Parse("11111111111111111111111111111111");
         private static List<InterviewSyncPackageMeta> interviewSyncPackageMetas = new List<InterviewSyncPackageMeta>();
     }
 }
