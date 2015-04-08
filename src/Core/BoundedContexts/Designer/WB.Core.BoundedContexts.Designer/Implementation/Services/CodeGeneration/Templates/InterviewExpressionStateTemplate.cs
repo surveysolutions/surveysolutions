@@ -30,9 +30,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\nusing System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;\r\nusing Sys" +
-                    "tem.Text.RegularExpressions;\r\n\r\n\r\nnamespace WB.Core.SharedKernels.DataCollection" +
-                    ".Generated\r\n{\r\n    public class ");
+            this.Write("using System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;\r\nusing Syste" +
+                    "m.Text.RegularExpressions;\r\nusing WB.Core.SharedKernels.DataCollection.CustomFun" +
+                    "ctions;\r\n\r\n\r\nnamespace WB.Core.SharedKernels.DataCollection.Generated\r\n{\r\n    pu" +
+                    "blic class ");
             
             #line 17 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(QuestionnaireTemplateStructure.GeneratedClassName));
