@@ -17,18 +17,20 @@
     <div>
         @BatchUpload.UploadSampleDescription
     </div>
-    <br />
-    <div>
-        <table class="table table-striped table-bordered table-condensed table-break-words">
-            <thead>
+    <br/>
+    @if (Model!= null && Model.FeaturedQuestions != null)
+    {
+        <div>
+            <table class="table table-striped table-bordered table-condensed table-break-words">
+                <thead>
                 <tr>
                     @foreach (var item in Model.FeaturedQuestions)
                     {
                         <th>@Html.DisplayFor(modelItem => item.Caption)</th>
                     }
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 @for (int i = 0; i < 5; i++)
                 {
 
@@ -40,10 +42,10 @@
                     </tr>
 
                 }
-            </tbody>
-        </table>
-    </div>
-
+                </tbody>
+            </table>
+        </div>
+    }
     <div>
         @using (Html.BeginForm("SampleBatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.QuestionnaireVersion }, FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
