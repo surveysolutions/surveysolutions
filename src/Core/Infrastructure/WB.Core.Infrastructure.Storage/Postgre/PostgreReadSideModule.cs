@@ -63,7 +63,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
             this.Kernel.Bind<TransactionManagerProvider>().ToSelf().InSingletonScope();
 
             this.Kernel.Bind<ISessionProvider>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>()).Named(SessionProviderName);
-            this.Kernel.Bind<ITransactionManager>().To<CqrsPostgresTransactionManager>();
+            this.Kernel.Bind<ITransactionManager>().ToMethod(context => context.Kernel.Get<CqrsPostgresTransactionManager>());
 
             this.Kernel.Bind<ITransactionManagerProvider>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
             this.Kernel.Bind<ITransactionManagerProviderManager>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());

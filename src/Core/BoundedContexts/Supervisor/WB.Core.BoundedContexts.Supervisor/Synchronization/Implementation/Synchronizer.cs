@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
 using Nito.AsyncEx;
-using Quartz;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 {
-    internal class Synchronizer : ISynchronizer, IJob
+    internal class Synchronizer : ISynchronizer
     {
         private readonly ILocalFeedStorage localUsersFeedStorage;
         private readonly ILocalUserFeedProcessor localUserFeedProcessor;
@@ -125,11 +124,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     }
                 }
             }
-        }
-
-        public void Execute(IJobExecutionContext context)
-        {
-            this.Pull();
         }
     }
 }
