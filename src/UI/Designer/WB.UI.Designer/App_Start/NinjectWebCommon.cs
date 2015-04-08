@@ -20,6 +20,7 @@ using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
@@ -134,7 +135,9 @@ namespace WB.UI.Designer.App_Start
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
             NcqrsEnvironment.SetGetter<IEventBus>(() => GetEventBus(kernel));
+            NcqrsEnvironment.SetGetter<ILiteEventBus>(() => GetEventBus(kernel));
             kernel.Bind<IEventBus>().ToMethod(_ => GetEventBus(kernel));
+            kernel.Bind<ILiteEventBus>().ToMethod(_ => GetEventBus(kernel));
             kernel.Bind<IEventDispatcher>().ToMethod(_ => GetEventBus(kernel));
         }
 
