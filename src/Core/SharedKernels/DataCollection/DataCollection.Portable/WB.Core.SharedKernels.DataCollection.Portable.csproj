@@ -42,9 +42,12 @@
     <Compile Include="AbstractInterviewExpressionState.cs" />
     <Compile Include="ConditionalState.cs" />
     <Compile Include="ConversionHelper.cs" />
+    <Compile Include="CustomFunctions\BaseFunctions.cs" />
+    <Compile Include="CustomFunctions\StaticFunctions.cs" />
+    <Compile Include="CustomFunctions\ZScore\LMS.cs" />
+    <Compile Include="CustomFunctions\ZScore\ZScoreBaseFunctions.cs" />
     <Compile Include="DummyInterviewExpressionState.cs" />
     <Compile Include="EnablementChanges.cs" />
-    <Compile Include="F.cs" />
     <Compile Include="GeoLocation.cs" />
     <Compile Include="Identity.cs" />
     <Compile Include="IdentityComparer.cs" />
