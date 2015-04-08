@@ -21,11 +21,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             return this.plainStorage.Query(_ => _.OrderByDescending(x => x.Timestamp).FirstOrDefault());
         }
 
-        public void Store(LocalUserChangedFeedEntry userChangedEvent)
-        {
-            this.Store(new List<LocalUserChangedFeedEntry>{userChangedEvent});
-        }
-
         public void Store(IEnumerable<LocalUserChangedFeedEntry> userChangedEvent)
         {
             this.plainStorage.Store(userChangedEvent.Select(@event => Tuple.Create(@event, (object) @event.EntryId)));

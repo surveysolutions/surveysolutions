@@ -56,7 +56,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
                        .InSingletonScope()
                        .Named(ReadSideSessionFactoryName);
 
-            this.Kernel.Bind<CqrsPostgresTransactionManager>().ToSelf().InRequestScope();
+            this.Kernel.Bind<CqrsPostgresTransactionManager>().ToSelf().InRequestOrThreadScope();
             this.Kernel.Bind<Func<CqrsPostgresTransactionManager>>().ToMethod(context => () => context.Kernel.Get<CqrsPostgresTransactionManager>());
             this.Kernel.Bind<RebuildReadSideCqrsPostgresTransactionManager>().ToSelf();
 

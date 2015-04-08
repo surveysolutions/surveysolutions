@@ -37,7 +37,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.Questionnaire
                 plainStorage ?? Mock.Of<IPlainStorageAccessor<LocalQuestionnaireFeedEntry>>(), Mock.Of<ILogger>(),
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(), commandService ?? Mock.Of<ICommandService>(),
                 headquartersQuestionnaireReader ?? Mock.Of<IHeadquartersQuestionnaireReader>(),
-                deleteQuestionnaireService ?? Mock.Of<IDeleteQuestionnaireService>());
+                deleteQuestionnaireService ?? Mock.Of<IDeleteQuestionnaireService>(),
+                Mock.Of<IPlainTransactionManager>());
 
         }
 
