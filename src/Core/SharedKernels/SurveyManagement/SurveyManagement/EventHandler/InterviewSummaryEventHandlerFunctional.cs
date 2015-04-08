@@ -73,7 +73,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
            return this.UpdateInterviewSummary(interviewSummary, updateDate, interview =>
             {
-                if (interview.AnswersToFeaturedQuestions.Any(x => x.Id == questionId))
+                if (interview.AnswersToFeaturedQuestions.Any(x => x.Questionid == questionId))
                 {
                     interview.AnswerFeaturedQuestion(questionId, AnswerUtils.AnswerToString(answer));
                 }
@@ -85,9 +85,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             return this.UpdateInterviewSummary(interviewSummary, updateDate, interview =>
             {
-                if (interview.AnswersToFeaturedQuestions.Any(x => x.Id == questionId))
+                if (interview.AnswersToFeaturedQuestions.Any(x => x.Questionid == questionId))
                 {
-                    var featuredQuestion = interview.AnswersToFeaturedQuestions.First(x => x.Id == questionId);
+                    var featuredQuestion = interview.AnswersToFeaturedQuestions.First(x => x.Questionid == questionId);
                     if (featuredQuestion == null)
                         return;
 
@@ -217,7 +217,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             {
                 foreach (var question in evnt.Payload.Questions)
                 {
-                    if (interview.AnswersToFeaturedQuestions.Any(x => x.Id == question.Id))
+                    if (interview.AnswersToFeaturedQuestions.Any(x => x.Questionid == question.Id))
                     {
                         interview.AnswerFeaturedQuestion(question.Id, string.Empty);
                     }
@@ -358,7 +358,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     {
                         foreach (var answeredQuestionSynchronizationDto in evnt.Payload.FeaturedQuestionsMeta)
                         {
-                            if (interview.AnswersToFeaturedQuestions.Any(x => x.Id == answeredQuestionSynchronizationDto.Id))
+                            if (interview.AnswersToFeaturedQuestions.Any(x => x.Questionid == answeredQuestionSynchronizationDto.Id))
                             {
                                 interview.AnswerFeaturedQuestion(answeredQuestionSynchronizationDto.Id, answeredQuestionSynchronizationDto.Answer.ToString());
                             }

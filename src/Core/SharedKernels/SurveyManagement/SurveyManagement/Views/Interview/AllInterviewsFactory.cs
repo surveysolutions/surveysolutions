@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 {
                     FeaturedQuestions = x.AnswersToFeaturedQuestions.Select(a => new InterviewFeaturedQuestion()
                     {
-                        Id = a.Id,
+                        Id = a.Questionid,
                         Answer = a.Answer,
                         Question = a.Title,
                         Type = a.Type
