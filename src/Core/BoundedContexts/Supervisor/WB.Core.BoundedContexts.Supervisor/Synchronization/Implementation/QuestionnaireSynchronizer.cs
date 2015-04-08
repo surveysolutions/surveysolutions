@@ -8,6 +8,10 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
@@ -27,15 +31,19 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly IHeadquartersQuestionnaireReader headquartersQuestionnaireReader;
         private readonly Action<ICommand> executeCommand;
         private readonly ILogger logger;
+        private readonly IPlainTransactionManager plainTransactionManager;
 
-        public QuestionnaireSynchronizer(IAtomFeedReader feedReader, 
+        public QuestionnaireSynchronizer(
+            IAtomFeedReader feedReader, 
             IHeadquartersSettings settings,
             HeadquartersPullContext headquartersPullContext, 
             IPlainStorageAccessor<LocalQuestionnaireFeedEntry> plainStorage, 
             ILogger logger, 
             IPlainQuestionnaireRepository plainQuestionnaireRepository,
-
-            ICommandService commandService, IHeadquartersQuestionnaireReader headquartersQuestionnaireReader, IDeleteQuestionnaireService deleteQuestionnaireService)
+            ICommandService commandService,
+            IHeadquartersQuestionnaireReader headquartersQuestionnaireReader,
+            IDeleteQuestionnaireService deleteQuestionnaireService,
+            IPlainTransactionManager plainTransactionManager)
         {
             this.feedReader = feedReader;
             this.settings = settings;
@@ -43,85 +51,100 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.plainStorage = plainStorage;
             this.logger = logger;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.executeCommand = command => commandService.Execute(command, origin: Constants.HeadquartersSynchronizationOrigin);
             this.headquartersQuestionnaireReader = headquartersQuestionnaireReader;
             this.deleteQuestionnaireService = deleteQuestionnaireService;
-            this.executeCommand = command => commandService.Execute(command, origin: Constants.HeadquartersSynchronizationOrigin);
-            
+            this.plainTransactionManager = plainTransactionManager;
         }
 
         public void Pull()
         {
-            this.StoreEventsToLocalStorage();
+            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+            {
+                this.StoreEventsToLocalStorage();
+            });
 
-            IEnumerable<LocalQuestionnaireFeedEntry> events =
-                this.plainStorage.Query(_ => _.Where(x => !x.Processed));
+            IEnumerable<LocalQuestionnaireFeedEntry> events = this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+                this.plainStorage.Query(_ => _
+                    .Where(x => !x.Processed)
+                    .OrderByDescending(x => x.Timestamp)
+                    .ToList()));
 
             this.headquartersPullContext.PushMessage(string.Format("Synchronizing questionnaires. Events count: {0}", events.Count()));
 
             foreach (var questionnaireFeedEntry in events)
             {
-                try
+                this.plainTransactionManager.ExecuteInPlainTransaction(() =>
                 {
-                    switch (questionnaireFeedEntry.EntryType)
+                    try
                     {
-                        case QuestionnaireEntryType.QuestionnaireDeleted:
-                            DeleteQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
-                                questionnaireFeedEntry.QuestionnaireVersion);
-                            break;
-                        case QuestionnaireEntryType.QuestionnaireCreated:
-                        case QuestionnaireEntryType.QuestionnaireCreatedInCensusMode:
+                        this.ProcessFeedEntryDependingOnType(questionnaireFeedEntry);
 
-                            if (this.IsQuestionnaireAlreadyStoredLocally(questionnaireFeedEntry.QuestionnaireId,
-                                questionnaireFeedEntry.QuestionnaireVersion))
-                                break;
-
-                            string questionnaireDetailsUrl = this.settings.QuestionnaireDetailsEndpoint
-                                .Replace("{id}", questionnaireFeedEntry.QuestionnaireId.FormatGuid())
-                                .Replace("{version}", questionnaireFeedEntry.QuestionnaireVersion.ToString());
-
-                            string questionnaireAssemblyUrl = this.settings.QuestionnaireAssemblyEndpoint
-                                .Replace("{id}", questionnaireFeedEntry.QuestionnaireId.FormatGuid())
-                                .Replace("{version}", questionnaireFeedEntry.QuestionnaireVersion.ToString());
-
-                            this.headquartersPullContext.PushMessage(string.Format("Loading questionnaire using {0} URL", questionnaireDetailsUrl));
-
-                            QuestionnaireDocument questionnaireDocument = this.headquartersQuestionnaireReader.GetQuestionnaireByUri(new Uri(questionnaireDetailsUrl)).Result;
-
-                            this.headquartersPullContext.PushMessage(string.Format("Loading questionnaire assembly using {0} URL", questionnaireAssemblyUrl));
-
-                            byte[] questionnaireAssembly = this.headquartersQuestionnaireReader.GetAssemblyByUri(new Uri(questionnaireAssemblyUrl)).Result;
-
-                            string questionnaireAssemblyInBase64 = questionnaireAssembly != null ? Convert.ToBase64String(questionnaireAssembly) : null;
-
-                            this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
-                                questionnaireFeedEntry.QuestionnaireVersion, questionnaireDocument);
-
-                            this.executeCommand(new RegisterPlainQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
-                                questionnaireFeedEntry.QuestionnaireVersion,
-                                questionnaireFeedEntry.EntryType == QuestionnaireEntryType.QuestionnaireCreatedInCensusMode,
-                                questionnaireAssemblyInBase64));
-
-                            break;
+                        questionnaireFeedEntry.Processed = true;
+                        questionnaireFeedEntry.ProcessedWithError = false;
                     }
-                    questionnaireFeedEntry.Processed = true;
-                    questionnaireFeedEntry.ProcessedWithError = false;
-                }
-                catch (AggregateException ex)
-                {
-                    foreach (var inner in ex.InnerExceptions)
+                    catch (AggregateException ex)
                     {
-                        this.MarkAsProcessedWithError(questionnaireFeedEntry, inner);
+                        foreach (var inner in ex.InnerExceptions)
+                        {
+                            this.MarkAsProcessedWithError(questionnaireFeedEntry, inner);
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    this.MarkAsProcessedWithError(questionnaireFeedEntry, ex);
-                    this.logger.Error(string.Format("Questionnaire synchronization error in event {0}.", questionnaireFeedEntry.EntryId), ex);
-                }
-                finally
-                {
-                    this.plainStorage.Store(questionnaireFeedEntry, questionnaireFeedEntry.EntryId);
-                }
+                    catch (Exception ex)
+                    {
+                        this.MarkAsProcessedWithError(questionnaireFeedEntry, ex);
+                        this.logger.Error(string.Format("Questionnaire synchronization error in event {0}.", questionnaireFeedEntry.EntryId), ex);
+                    }
+                    finally
+                    {
+                        this.plainStorage.Store(questionnaireFeedEntry, questionnaireFeedEntry.EntryId);
+                    }
+                });
+            }
+        }
+
+        private void ProcessFeedEntryDependingOnType(LocalQuestionnaireFeedEntry questionnaireFeedEntry)
+        {
+            switch (questionnaireFeedEntry.EntryType)
+            {
+                case QuestionnaireEntryType.QuestionnaireDeleted:
+                    this.DeleteQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
+                        questionnaireFeedEntry.QuestionnaireVersion);
+                    break;
+                case QuestionnaireEntryType.QuestionnaireCreated:
+                case QuestionnaireEntryType.QuestionnaireCreatedInCensusMode:
+
+                    if (this.IsQuestionnaireAlreadyStoredLocally(questionnaireFeedEntry.QuestionnaireId,
+                        questionnaireFeedEntry.QuestionnaireVersion))
+                        break;
+
+                    string questionnaireDetailsUrl = this.settings.QuestionnaireDetailsEndpoint
+                        .Replace("{id}", questionnaireFeedEntry.QuestionnaireId.FormatGuid())
+                        .Replace("{version}", questionnaireFeedEntry.QuestionnaireVersion.ToString());
+
+                    string questionnaireAssemblyUrl = this.settings.QuestionnaireAssemblyEndpoint
+                        .Replace("{id}", questionnaireFeedEntry.QuestionnaireId.FormatGuid())
+                        .Replace("{version}", questionnaireFeedEntry.QuestionnaireVersion.ToString());
+
+                    this.headquartersPullContext.PushMessage(string.Format("Loading questionnaire using {0} URL", questionnaireDetailsUrl));
+
+                    QuestionnaireDocument questionnaireDocument = this.headquartersQuestionnaireReader.GetQuestionnaireByUri(new Uri(questionnaireDetailsUrl)).Result;
+
+                    this.headquartersPullContext.PushMessage(string.Format("Loading questionnaire assembly using {0} URL", questionnaireAssemblyUrl));
+
+                    byte[] questionnaireAssembly = this.headquartersQuestionnaireReader.GetAssemblyByUri(new Uri(questionnaireAssemblyUrl)).Result;
+
+                    string questionnaireAssemblyInBase64 = questionnaireAssembly != null ? Convert.ToBase64String(questionnaireAssembly) : null;
+
+                    this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
+                        questionnaireFeedEntry.QuestionnaireVersion, questionnaireDocument);
+
+                    this.executeCommand(new RegisterPlainQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
+                        questionnaireFeedEntry.QuestionnaireVersion,
+                        questionnaireFeedEntry.EntryType == QuestionnaireEntryType.QuestionnaireCreatedInCensusMode,
+                        questionnaireAssemblyInBase64));
+
+                    break;
             }
         }
 

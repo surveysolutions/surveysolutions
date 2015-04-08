@@ -6,7 +6,9 @@ using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
@@ -22,6 +24,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly IHeadquartersUserReader headquartersUserReader;
         private readonly ILogger logger;
         private readonly HeadquartersPullContext headquartersPullContext;
+        private readonly IPlainTransactionManager plainTransactionManager;
+        private readonly ITransactionManager cqrsTransactionManager;
 
         public LocalUserFeedProcessor(
             IQueryableReadSideRepositoryReader<UserDocument> users,
@@ -29,7 +33,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             ICommandService commandService,
             IHeadquartersUserReader headquartersUserReader,
             ILogger logger,
-            HeadquartersPullContext headquartersPullContext)
+            HeadquartersPullContext headquartersPullContext,
+            IPlainTransactionManager plainTransactionManager,
+            ITransactionManager cqrsTransactionManager)
         {
             if (users == null) throw new ArgumentNullException("users");
             if (localFeedStorage == null) throw new ArgumentNullException("localFeedStorage");
@@ -37,6 +43,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             if (headquartersUserReader == null) throw new ArgumentNullException("headquartersUserReader");
             if (logger == null) throw new ArgumentNullException("logger");
             if (headquartersPullContext == null) throw new ArgumentNullException("headquartersPullContext");
+            if (plainTransactionManager == null) throw new ArgumentNullException("plainTransactionManager");
+            if (cqrsTransactionManager == null) throw new ArgumentNullException("cqrsTransactionManager");
 
             this.users = users;
             this.localFeedStorage = localFeedStorage;
@@ -44,20 +52,28 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.headquartersUserReader = headquartersUserReader;
             this.logger = logger;
             this.headquartersPullContext = headquartersPullContext;
+            this.plainTransactionManager = plainTransactionManager;
+            this.cqrsTransactionManager = cqrsTransactionManager;
         }
 
         public Guid[] PullUsersAndReturnListOfSynchronizedSupervisorsId()
         {
-            var localSupervisors = users.Query(_ => _.Where(x => x.Roles.Contains(UserRoles.Supervisor)));
+            var localSupervisors = this.cqrsTransactionManager.ExecuteInQueryTransaction(() =>
+                users.Query(_ => _.Where(x => x.Roles.Contains(UserRoles.Supervisor))));
 
             foreach (var localSupervisor in localSupervisors)
             {
-                IEnumerable<LocalUserChangedFeedEntry> events = this.localFeedStorage.GetNotProcessedSupervisorEvents(localSupervisor.PublicKey.FormatGuid());
+                IEnumerable<LocalUserChangedFeedEntry> events = this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+                    this.localFeedStorage.GetNotProcessedSupervisorEvents(localSupervisor.PublicKey.FormatGuid()));
+
                 this.headquartersPullContext.PushMessageFormat("Processing {0} non processed events for supervisor '{1}'", events.Count(), localSupervisor.UserName);
 
                 foreach (var userChanges in events.GroupBy(x => x.ChangedUserId))
                 {
-                    this.ProcessOneUserChanges(userChanges);
+                    this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+                    {
+                        this.ProcessOneUserChanges(userChanges);
+                    });
                 }
             }
             return localSupervisors.Select(s => s.PublicKey).ToArray();
@@ -79,7 +95,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     appliedChange.IsProcessed = true;
                 }
 
-                this.localFeedStorage.Store(changeThatShouldBeApplied);
+                this.localFeedStorage.Store(userChanges);
             }
             catch (ApplicationException e)
             {

@@ -1122,7 +1122,8 @@ namespace WB.Tests.Unit
                 interviewSynchronizationFileStorage ??
                     Mock.Of<IInterviewSynchronizationFileStorage>(
                         _ => _.GetBinaryFilesFromSyncFolder() == new List<InterviewBinaryDataDescriptor>()),
-                 archiver: archiver ?? Mock.Of<IArchiveUtils>());
+                archiver ?? Mock.Of<IArchiveUtils>(),
+                Mock.Of<IPlainTransactionManager>());
         }
 
         public static IHeadquartersSettings HeadquartersSettings(Uri loginServiceUri = null,
