@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             .Returns(new UserDocument());
 
             plainStorageMock.Setup(
-                x => x.Query(Moq.It.IsAny<Func<IQueryable<LocalInterviewFeedEntry>, IQueryable<LocalInterviewFeedEntry>>>())).
+                x => x.Query(Moq.It.IsAny<Func<IQueryable<LocalInterviewFeedEntry>, List<LocalInterviewFeedEntry>>>())).
                 Returns(
                     new[]
                     {
@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                             InterviewId = interviewId.FormatGuid(),
                             InterviewerId = userId.FormatGuid()
                         }
-                    }.AsQueryable());
+                    }.ToList());
 
             iInterviewSynchronizationDto = new InterviewSynchronizationDto(interviewId, InterviewStatus.SupervisorAssigned, "",
                         userId, questionnaireId, 2, new AnsweredQuestionSynchronizationDto[0], new HashSet<InterviewItemId>(),

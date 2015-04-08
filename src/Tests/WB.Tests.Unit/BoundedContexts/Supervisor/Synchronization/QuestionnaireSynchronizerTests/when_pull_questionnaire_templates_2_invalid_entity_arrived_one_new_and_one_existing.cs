@@ -41,8 +41,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.Questionnaire
 
             plainStorageMock=new Mock<IPlainStorageAccessor<LocalQuestionnaireFeedEntry>>();
             plainStorageMock.Setup(
-                x => x.Query(Moq.It.IsAny<Func<IQueryable<LocalQuestionnaireFeedEntry>, IQueryable<LocalQuestionnaireFeedEntry>>>()))
-                .Returns(localQuestionnaireFeedEntres.AsQueryable());
+                x => x.Query(Moq.It.IsAny<Func<IQueryable<LocalQuestionnaireFeedEntry>, List<LocalQuestionnaireFeedEntry>>>()))
+                .Returns(localQuestionnaireFeedEntres.ToList());
 
             headquartersQuestionnaireReaderMock=new Mock<IHeadquartersQuestionnaireReader>();
             headquartersQuestionnaireReaderMock.Setup(x => x.GetQuestionnaireByUri(Moq.It.IsAny<Uri>()))
