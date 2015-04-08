@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using Raven.Client.Linq;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -263,7 +264,12 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                 return filteredItems.ToList();
             });
 
-            return packages.AsQueryable();
+            IEnumerable<InterviewSyncPackageMeta> result = 
+                from p in packages
+                group p by p.InterviewId into g
+                select g.Last();
+
+            return result.AsQueryable();
         }
 
         private IQueryable<UserSyncPackageMeta> GetGroupedUserSyncPackage(Guid userId, long? lastSyncedSortIndex)
@@ -309,7 +315,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         {
             if (lastSyncedPackageId == null)
             {
-                return QueryAll<T>(() => groupedQuery(userId, null));
+                return groupedQuery(userId, null).ToList();
             }
 
             var queryable = allQuery(userId).ToList();
@@ -318,13 +324,12 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
             if (lastSyncedPackage == null)
             {
-                throw new SyncPackageNotFoundException(string.Format(
-                    "Sync package with id {0} was not found on server", lastSyncedPackageId));
+                throw new SyncPackageNotFoundException(string.Format("Sync package with id {0} was not found on server", lastSyncedPackageId));
             }
 
             long lastSyncedSortIndex = lastSyncedPackage.SortIndex;
 
-            return QueryAll<T>(() => groupedQuery(userId, lastSyncedSortIndex));
+            return groupedQuery(userId, lastSyncedSortIndex).ToList();
         }
 
         private void MakeSureThisDeviceIsRegisteredOrThrow(Guid deviceId)
@@ -365,21 +370,6 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         private void TrackDeviceRegistration(Guid deviceId, Guid userId, string appVersion, string androidId)
         {
             this.syncLogger.TrackDeviceRegistration(deviceId, userId, appVersion, androidId);
-        }
-       
-        public IList<T> QueryAll<T>(Func<IQueryable<T>> query)
-        {
-            var result = new List<T>();
-            int skipResults = 0;
-            bool receivedAnyFromDb;
-            do
-            {
-                var chunk = query().Skip(skipResults).Take(128).ToList();
-                receivedAnyFromDb = chunk.Any();
-                result.AddRange(chunk);
-                skipResults = result.Count;
-            } while (receivedAnyFromDb);
-            return result;
         }
     }
 }
