@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
                 .Select(x => new TeamInterviewsViewItem {
                     FeaturedQuestions = x.AnswersToFeaturedQuestions.Select(a => new InterviewFeaturedQuestion
                     {
-                        Id = a.Id,
+                        Id = a.Questionid,
                         Answer = a.Answer,
                         Question = a.Title,
                         Type = a.Type

@@ -432,7 +432,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 ? interviewSummary.AnswersToFeaturedQuestions
                     .Select(
                         featuredQuestion =>
-                            new FeaturedQuestionMeta(featuredQuestion.Id, featuredQuestion.Title, featuredQuestion.Answer)).ToList()
+                            new FeaturedQuestionMeta(featuredQuestion.Questionid, featuredQuestion.Title, featuredQuestion.Answer)).ToList()
                 : null;
 
             var metadata = new InterviewMetaInfo

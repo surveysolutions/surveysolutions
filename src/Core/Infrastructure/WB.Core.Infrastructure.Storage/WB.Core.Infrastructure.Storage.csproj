@@ -142,9 +142,11 @@
     <Compile Include="Memory\Implementation\MemoryCachedKeyValueStorage.cs" />
     <Compile Include="Memory\Implementation\ReadSideStoreMemoryCacheSettings.cs" />
     <Compile Include="NinjectExtensions.cs" />
+    <Compile Include="Postgre\Implementation\PostgresClientBatchingBatcherFactory.cs" />
     <Compile Include="Postgre\Implementation\ICqrsPostgresTransactionManager.cs" />
     <Compile Include="Postgre\Implementation\ISessionProvider.cs" />
     <Compile Include="Postgre\Implementation\PlainPostgresTransactionManager.cs" />
+    <Compile Include="Postgre\Implementation\PostgresClientBatchingBatcher.cs" />
     <Compile Include="Postgre\Implementation\PostgresPlainStorageRepository.cs" />
     <Compile Include="Postgre\Implementation\RebuildReadSideCqrsPostgresTransactionManager.cs" />
     <Compile Include="Postgre\Implementation\PostgresReadSideCleaner.cs" />

@@ -79,22 +79,23 @@ namespace WB.Core.Infrastructure.Storage.Postgre
         private ISessionFactory BuildSessionFactory()
         {
             //File.WriteAllText(@"D:\Temp\Mapping.xml" ,Serialize(this.GetMappings()));
-
-
             var cfg = new Configuration();
             cfg.DataBaseIntegration(db =>
             {
                 db.ConnectionString = connectionString;
                 db.Dialect<NHibernate.Dialect.PostgreSQL82Dialect>();
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
+                db.Batcher<PostgresClientBatchingBatcherFactory>();
+                db.BatchSize = 128;
+                
             });
             cfg.Proxy(proxy => proxy.ProxyFactoryFactory<NHibernate.ByteCode.Castle.ProxyFactoryFactory>());
-
             cfg.AddDeserializedMapping(GetMappings(), "Main");
             var update = new SchemaUpdate(cfg);
             update.Execute(true, true);
             this.Kernel.Bind<SchemaUpdate>().ToConstant(update).InSingletonScope();
 
+            cfg.SessionFactory().GenerateStatistics();
             return cfg.BuildSessionFactory();
         }
 

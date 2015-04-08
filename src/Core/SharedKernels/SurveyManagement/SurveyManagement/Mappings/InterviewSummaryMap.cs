@@ -60,7 +60,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
     {
         public QuestionOptionsMap()
         {
-            Table("QuestionOptions");
             Id(x => x.Id, id => id.Generator(Generators.HighLow));
             Property(x => x.QuestionId);
             Property(x => x.Text);
@@ -72,7 +71,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
     {
         public InterviewCommentedStatusMap()
         {
-            Table("CommentedStatusesHistoryItems");   
             Id(x => x.Id, idMap => idMap.Generator(Generators.HighLow));
             Property(x => x.Comment);
             Property(x => x.Date);
@@ -86,14 +84,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
     {
         public QuestionAnswerMap()
         {
-            this.Table("AnswersToFeaturedQuestions");
+            Id(x => x.Id, idMap => idMap.Generator(Generators.HighLow));
 
-            this.ComposedId(cmp =>
-            {
-                cmp.ManyToOne(x => x.InterviewSummary, clm => clm.Column("InterviewSummaryId"));
-                cmp.Property(x => x.Id, clm => clm.Column("id"));
-            });
-
+            Property(x => x.Questionid, clm => clm.Column("QuestionId"));
             Property(x => x.Title, col => col.Column("AnswerTitle"));
             Property(x => x.Answer, col => col.Column("AnswerValue"));
         }

@@ -36,7 +36,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus
                         }).ToList(),
                     FeaturedQuestions = interviewSummary.AnswersToFeaturedQuestions.Select(a => new InterviewFeaturedQuestion
                     {
-                        Id = a.Id,
+                        Id = a.Questionid,
                         Answer = a.Answer,
                         Question = a.Title
                     }).ToList(),
