@@ -1086,8 +1086,8 @@ namespace WB.Tests.Unit
         }
 
         public static InterviewsSynchronizer InterviewsSynchronizer(
-            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter = null,
-            IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter = null,
+            IReadSideRepositoryReader<InterviewSummary> interviewSummaryRepositoryReader = null,
+            IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryReader = null,
             Func<HttpMessageHandler> httpMessageHandler = null,
             IEventStore eventStore = null,
             ILogger logger = null,
@@ -1116,14 +1116,15 @@ namespace WB.Tests.Unit
                 headquartersPushContext ?? HeadquartersPushContext(),
                 eventStore ?? Mock.Of<IEventStore>(),
                 jsonUtils ?? Mock.Of<IJsonUtils>(),
-                interviewSummaryRepositoryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
-                readyToSendInterviewsRepositoryWriter ?? Mock.Of<IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview>>(),
+                interviewSummaryRepositoryReader ?? Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(),
+                readyToSendInterviewsRepositoryReader ?? Mock.Of<IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview>>(),
                 httpMessageHandler ?? Mock.Of<Func<HttpMessageHandler>>(),
                 interviewSynchronizationFileStorage ??
                     Mock.Of<IInterviewSynchronizationFileStorage>(
                         _ => _.GetBinaryFilesFromSyncFolder() == new List<InterviewBinaryDataDescriptor>()),
                 archiver ?? Mock.Of<IArchiveUtils>(),
-                Mock.Of<IPlainTransactionManager>());
+                Mock.Of<IPlainTransactionManager>(),
+                Mock.Of<ITransactionManager>());
         }
 
         public static IHeadquartersSettings HeadquartersSettings(Uri loginServiceUri = null,

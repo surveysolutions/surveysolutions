@@ -52,12 +52,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly HeadquartersPushContext headquartersPushContext;
         private readonly IEventStore eventStore;
         private readonly IJsonUtils jsonUtils;
-        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter;
+        private readonly IReadSideRepositoryReader<InterviewSummary> interviewSummaryRepositoryReader;
         private readonly IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryReader;
         private readonly Func<HttpMessageHandler> httpMessageHandler;
         private readonly IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage;
         private readonly IArchiveUtils archiver;
         private readonly IPlainTransactionManager plainTransactionManager;
+        private readonly ITransactionManager cqrsTransactionManager;
 
         public InterviewsSynchronizer(
             IAtomFeedReader feedReader,
@@ -72,12 +73,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             HeadquartersPushContext headquartersPushContext,
             IEventStore eventStore,
             IJsonUtils jsonUtils,
-            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter,
+            IReadSideRepositoryReader<InterviewSummary> interviewSummaryRepositoryReader,
             IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryReader,
             Func<HttpMessageHandler> httpMessageHandler,
             IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage,
             IArchiveUtils archiver,
-            IPlainTransactionManager plainTransactionManager)
+            IPlainTransactionManager plainTransactionManager,
+            ITransactionManager cqrsTransactionManager)
         {
             if (feedReader == null) throw new ArgumentNullException("feedReader");
             if (settings == null) throw new ArgumentNullException("settings");
@@ -93,7 +95,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             if (jsonUtils == null) throw new ArgumentNullException("jsonUtils");
             if (archiver == null) throw new ArgumentNullException("archiver");
             if (plainTransactionManager == null) throw new ArgumentNullException("plainTransactionManager");
-            if (interviewSummaryRepositoryWriter == null) throw new ArgumentNullException("interviewSummaryRepositoryWriter");
+            if (interviewSummaryRepositoryReader == null) throw new ArgumentNullException("interviewSummaryRepositoryReader");
             if (readyToSendInterviewsRepositoryReader == null) throw new ArgumentNullException("readyToSendInterviewsRepositoryReader");
             if (httpMessageHandler == null) throw new ArgumentNullException("httpMessageHandler");
 
@@ -109,12 +111,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.headquartersPushContext = headquartersPushContext;
             this.eventStore = eventStore;
             this.jsonUtils = jsonUtils;
-            this.interviewSummaryRepositoryWriter = interviewSummaryRepositoryWriter;
+            this.interviewSummaryRepositoryReader = interviewSummaryRepositoryReader;
             this.readyToSendInterviewsRepositoryReader = readyToSendInterviewsRepositoryReader;
             this.httpMessageHandler = httpMessageHandler;
             this.interviewSynchronizationFileStorage = interviewSynchronizationFileStorage;
             this.archiver = archiver;
             this.plainTransactionManager = plainTransactionManager;
+            this.cqrsTransactionManager = cqrsTransactionManager;
         }
 
         public void PullInterviewsForSupervisors(Guid[] supervisorIds)
@@ -230,7 +233,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             this.headquartersPullContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Interview0wasrejectedbyHQFormat, interviewId));
 
-            var interviewSummary = this.interviewSummaryRepositoryWriter.GetById(interviewId);
+            var interviewSummary = this.GetInterviewSummary(Guid.Parse(interviewId));
             if (interviewSummary == null)
 
             {
@@ -246,6 +249,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 interviewDetails.UserId,
                 interviewDetails,
                 DateTime.Now));
+        }
+
+        private InterviewSummary GetInterviewSummary(Guid interviewId)
+        {
+            return this.cqrsTransactionManager.ExecuteInQueryTransaction(() =>
+                this.interviewSummaryRepositoryReader.GetById(interviewId));
         }
 
         public void Push(Guid userId)
@@ -318,11 +327,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         }
         private bool IsResponsiblePresent(Guid userId)
         {
-            return users.GetById(userId) != null;
+            return this.cqrsTransactionManager.ExecuteInQueryTransaction(() =>
+                this.users.GetById(userId) != null);
         }
         private bool IsInterviewPresent(Guid interviewId)
         {
-            var interviewSummary = this.interviewSummaryRepositoryWriter.GetById(interviewId);
+            var interviewSummary = this.GetInterviewSummary(interviewId);
             return interviewSummary != null && !interviewSummary.IsDeleted;
         }
 
@@ -357,7 +367,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         {
             Guid interviewIdGuid = Guid.Parse(interviewId);
 
-            var interviewSummary = this.interviewSummaryRepositoryWriter.GetById(interviewId);
+            var interviewSummary = this.GetInterviewSummary(interviewIdGuid);
             if (interviewSummary == null)
                 return;
 
@@ -391,10 +401,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private List<Guid> GetInterviewsToPush()
         {
-            return this.readyToSendInterviewsRepositoryReader
-                .QueryAll()
-                .Select(interview => interview.InterviewId)
-                .ToList();
+            return this.cqrsTransactionManager.ExecuteInQueryTransaction(() =>
+                this.readyToSendInterviewsRepositoryReader
+                    .QueryAll()
+                    .Select(interview => interview.InterviewId)
+                    .ToList());
         }
 
         private void PushInterview(Guid interviewId, Guid userId)
@@ -422,7 +433,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private string GetInterviewDataToBeSentAsString(Guid interviewId, AggregateRootEvent[] eventsToSend)
         {
-            InterviewSummary interviewSummary = this.interviewSummaryRepositoryWriter.GetById(interviewId);
+            InterviewSummary interviewSummary = this.GetInterviewSummary(interviewId);
 
             InterviewCommentedStatus lastInterviewCommentedStatus = interviewSummary.CommentedStatusesHistory.LastOrDefault();
             string lastComment = lastInterviewCommentedStatus != null ? lastInterviewCommentedStatus.Comment : string.Empty;
