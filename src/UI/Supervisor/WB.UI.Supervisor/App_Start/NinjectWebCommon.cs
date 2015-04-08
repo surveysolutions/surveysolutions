@@ -46,6 +46,7 @@ using WB.UI.Supervisor.App_Start;
 using WB.UI.Supervisor.Controllers;
 using WebActivatorEx;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Synchronization.Implementation.ReadSide.Indexes;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
@@ -195,6 +196,8 @@ namespace WB.UI.Supervisor.App_Start
             Type[] handlersToIgnore = ignoredDenormalizersConfigSection == null ? new Type[0] : ignoredDenormalizersConfigSection.GetIgnoredTypes();
             var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(), handlersToIgnore);
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
+            NcqrsEnvironment.SetDefault<ILiteEventBus>(bus);
+            kernel.Bind<ILiteEventBus>().ToConstant(bus);
             kernel.Bind<IEventBus>().ToConstant(bus);
             kernel.Bind<IEventDispatcher>().ToConstant(bus);
 

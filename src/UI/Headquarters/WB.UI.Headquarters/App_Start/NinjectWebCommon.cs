@@ -20,6 +20,7 @@ using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
@@ -215,7 +216,9 @@ namespace WB.UI.Headquarters
             Type[] handlersToIgnore = ignoredDenormalizersConfigSection == null ? new Type[0] : ignoredDenormalizersConfigSection.GetIgnoredTypes();
             var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(), handlersToIgnore);
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
+            NcqrsEnvironment.SetDefault<ILiteEventBus>(bus);
             kernel.Bind<IEventBus>().ToConstant(bus);
+            kernel.Bind<ILiteEventBus>().ToConstant(bus);
             kernel.Bind<IEventDispatcher>().ToConstant(bus);
             foreach (object handler in kernel.GetAll(typeof(IEventHandler)))
             {
