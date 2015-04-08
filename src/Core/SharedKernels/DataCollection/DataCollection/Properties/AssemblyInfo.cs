@@ -41,4 +41,5 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("WB.Tests.Integration")]
 
 [assembly: InternalsVisibleTo("WB.Core.SharedKernels.SurveyManagement")]
+[assembly: InternalsVisibleTo("WB.Core.BoundedContexts.QuestionnaireTester")]
 [assembly: InternalsVisibleTo("WB.UI.Shared.Android")]

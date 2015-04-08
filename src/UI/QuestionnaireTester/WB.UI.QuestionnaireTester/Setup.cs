@@ -41,7 +41,8 @@ namespace WB.UI.QuestionnaireTester
             var viewModelViewLookup = new Dictionary<Type, Type>()
             {
                 {typeof (SplashViewModel), typeof (SplashView)},
-                {typeof (LoginViewModel), typeof (LoginView)}
+                {typeof (LoginViewModel), typeof (LoginView)},
+                {typeof (ChapterViewModel), typeof (ChapterView)},
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();

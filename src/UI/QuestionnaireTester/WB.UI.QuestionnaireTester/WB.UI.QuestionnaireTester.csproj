@@ -134,6 +134,7 @@
     <Compile Include="Setup.cs" />
     <Compile Include="ValueConverters\LocalizationValueConverter.cs" />
     <Compile Include="Views\BaseActivityView.cs" />
+    <Compile Include="Views\ChapterView.cs" />
     <Compile Include="Views\LoginView.cs" />
     <Compile Include="Views\MvxActionBarActivity.cs" />
     <Compile Include="Views\SplashView.cs" />
@@ -157,6 +158,7 @@
     <None Include="packages.config" />
     <AndroidResource Include="Resources\layout\splash.axml" />
     <AndroidResource Include="Resources\layout\login.axml" />
+    <AndroidResource Include="Resources\layout\chapter.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester.csproj">
