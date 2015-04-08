@@ -66,7 +66,7 @@
 
         <#foreach (var parentRoster in Model.ParentScope.GetAllRostersToTop()) 
         {#>
-        public IList<<#=parentRoster.GeneratedTypeName#>> <#=parentRoster.VariableName#> { get { return this.@_parent.<#=parentRoster.VariableName#>; } }                                        
+        public RosterRowList<<#=parentRoster.GeneratedTypeName#>> <#=parentRoster.VariableName#> { get { return this.@_parent.<#=parentRoster.VariableName#>; } }                                        
         <#}#>
           
 		public decimal @rowcode { get { return RosterVector.Last(); } }
@@ -74,12 +74,12 @@
         public int @rowindex { get { return @_parent.<#=this.Model.RostersInScope[0].VariableName#>.Select((s, i) => new { Index = i, Value = s }).Where(t => t.Value.@rowcode == this.@rowcode).Select(t => t.Index).First(); } }    
 
         public string @rowname { get; private set; }
-		public void SetRowName(string rosterRowName)
+		void IRosterLevel.SetRowName(string rosterRowName)
         {
 			this.@rowname = rosterRowName;
         }
 
-		public IList<<#=this.Model.GeneratedTypeName#>> @roster
+		public RosterRowList<<#=this.Model.GeneratedTypeName#>> @roster
         {
 			get { return @_parent.<#=this.Model.RostersInScope[0].VariableName#>; }
         }
@@ -96,7 +96,7 @@
                 <#=q.GeneratedMemberName#> = this.<#=q.GeneratedMemberName#>,        
              <#}#>
             };
-			level.SetRowName(this.@rowname);
+			((IRosterLevel)level).SetRowName(this.@rowname);
             ConditionalDependencies = new Dictionary<Guid, Guid[]>(this.ConditionalDependencies);
             StructuralDependencies = new Dictionary<Guid, Guid[]>(this.StructuralDependencies);
 
@@ -158,12 +158,12 @@
         //rosters
         <#foreach (var @roster in Model.Rosters) 
         {#>
-        public IList<<#=@roster.GeneratedTypeName#>> <#=@roster.VariableName#>
+        public RosterRowList<<#=@roster.GeneratedTypeName#>> <#=@roster.VariableName#>
         {
             get
             {
                 var rosters = this.GetInstances(this.RosterKey, IdOf.<#=@roster.GeneratedRosterScopeName#>.Last());
-                return rosters == null ? new List<<#=@roster.GeneratedTypeName#>>() : rosters.Select(x => x as <#=@roster.GeneratedTypeName#>).ToList();
+				return new RosterRowList<<#=@roster.GeneratedTypeName#>>(rosters);
             }
         }
         <# }#>

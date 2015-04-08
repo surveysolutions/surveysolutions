@@ -382,7 +382,7 @@ foreach (var parentRoster in Model.ParentScope.GetAllRostersToTop())
             
             #line default
             #line hidden
-            this.Write("        public IList<");
+            this.Write("        public RosterRowList<");
             
             #line 69 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(parentRoster.GeneratedTypeName));
@@ -421,12 +421,12 @@ foreach (var parentRoster in Model.ParentScope.GetAllRostersToTop())
             this.Write(@".Select((s, i) => new { Index = i, Value = s }).Where(t => t.Value.@rowcode == this.@rowcode).Select(t => t.Index).First(); } }    
 
         public string @rowname { get; private set; }
-		public void SetRowName(string rosterRowName)
+		void IRosterLevel.SetRowName(string rosterRowName)
         {
 			this.@rowname = rosterRowName;
         }
 
-		public IList<");
+		public RosterRowList<");
             
             #line 82 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.Model.GeneratedTypeName));
@@ -484,7 +484,7 @@ foreach (var q in Model.Questions)
             #line default
             #line hidden
             this.Write(@"            };
-			level.SetRowName(this.@rowname);
+			((IRosterLevel)level).SetRowName(this.@rowname);
             ConditionalDependencies = new Dictionary<Guid, Guid[]>(this.ConditionalDependencies);
             StructuralDependencies = new Dictionary<Guid, Guid[]>(this.StructuralDependencies);
 
@@ -723,7 +723,7 @@ foreach (var @roster in Model.Rosters)
             
             #line default
             #line hidden
-            this.Write("        public IList<");
+            this.Write("        public RosterRowList<");
             
             #line 161 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedTypeName));
@@ -745,21 +745,14 @@ foreach (var @roster in Model.Rosters)
             
             #line default
             #line hidden
-            this.Write(".Last());\r\n                return rosters == null ? new List<");
+            this.Write(".Last());\r\n\t\t\t\treturn new RosterRowList<");
             
             #line 166 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedTypeName));
             
             #line default
             #line hidden
-            this.Write(">() : rosters.Select(x => x as ");
-            
-            #line 166 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedTypeName));
-            
-            #line default
-            #line hidden
-            this.Write(").ToList();\r\n            }\r\n        }\r\n        ");
+            this.Write(">(rosters);\r\n            }\r\n        }\r\n        ");
             
             #line 169 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
