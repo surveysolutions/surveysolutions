@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Machine.Specifications;
-
 using Moq;
-
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -17,7 +14,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Core.Synchronization
 {
-    [Ignore("KP-5123")]
     internal class when_getting_interview_ids_and_device_is_registered_and_last_package_id_is_not_empty : SyncManagerTestContext
     {
         Establish context = () =>
@@ -37,16 +33,8 @@ namespace WB.Tests.Unit.Core.Synchronization
 
             lastSyncedPackageId = interviewSyncPackageMetas[0].PackageId;
 
-            var syncPackageMetas = new List<InterviewSyncPackageMeta>
-            {
-                CreateInterviewSyncPackageMetaInformation(interviewId, sortIndex:3, itemType: SyncItemType.Interview, userId:user1Id),
-                CreateInterviewSyncPackageMetaInformation(interviewId, sortIndex:4, itemType: SyncItemType.DeleteInterview, userId:user1Id),
-                CreateInterviewSyncPackageMetaInformation(interviewId, sortIndex:5, itemType: SyncItemType.Interview, userId:userId),
-                CreateInterviewSyncPackageMetaInformation(interview1Id, sortIndex:6, itemType: SyncItemType.Interview, userId:userId)
-            };
-
             var writer = new TestInMemoryWriter<InterviewSyncPackageMeta>();
-            foreach (var package in syncPackageMetas)
+            foreach (var package in interviewSyncPackageMetas)
             {
                 writer.Store(package, package.PackageId);
             }
