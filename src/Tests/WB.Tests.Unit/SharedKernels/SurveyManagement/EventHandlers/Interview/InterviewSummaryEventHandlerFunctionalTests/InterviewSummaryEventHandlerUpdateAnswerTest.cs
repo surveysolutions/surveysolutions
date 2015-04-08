@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 CreateInterviewSummaryQuestions(
                     new QuestionAnswer()
                     {
-                        Id = questionId,
+                        Questionid = questionId,
                     });
 
             savedInterviewSummary.QuestionOptions.Add(new QuestionOptions() {  QuestionId = questionId, Value = 1, Text = answerText });
@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 interviewSummaryEventHandler.Update(savedInterviewSummary,
                     this.CreatePublishableEvent(new SingleOptionQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now, 1)));
 
-            Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions.First(x => x.Id == questionId).Answer, Is.EqualTo(answerText));
+            Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions.First(x => x.Questionid == questionId).Answer, Is.EqualTo(answerText));
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 CreateInterviewSummaryQuestions(
                     new QuestionAnswer
                     {
-                        Id = questionId,
+                        Questionid = questionId,
                     });
             foreach (var option in options)
             {
@@ -77,7 +77,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 interviewSummaryEventHandler.Update(savedInterviewSummary,
                     this.CreatePublishableEvent(new MultipleOptionsQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now,
                         new decimal[] { 1, 3, 8 })));
-            Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions.First(x => x.Id == questionId).Answer, Is.EqualTo("1,3,8"));
+            Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions.First(x => x.Questionid == questionId).Answer, Is.EqualTo("1,3,8"));
         }
 
         [Test]
@@ -95,7 +95,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 CreateInterviewSummaryQuestions(
                     new QuestionAnswer()
                     {
-                        Id = questionId
+                        Questionid = questionId
                     });
 
             var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional();
@@ -103,7 +103,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             var updatedInterviewSummary = this.CallUpdateMethod(interviewSummaryEventHandler, savedInterviewSummary,
                 this.CreateQuestionAnsweredEventByQuestionType(questionId, type, answer));
 
-            Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions.First(x => x.Id == questionId).Answer, Is.EqualTo(answer.ToString()));
+            Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions.First(x => x.Questionid == questionId).Answer, Is.EqualTo(answer.ToString()));
         }
 
         [Test]
@@ -118,7 +118,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             var savedInterviewSummary = CreateInterviewSummaryQuestions(
                     new QuestionAnswer()
                     {
-                        Id = questionId
+                        Questionid = questionId
                     });
 
             savedInterviewSummary.WasCreatedOnClient = true;
@@ -134,7 +134,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             var updatedInterviewSummary = this.CallUpdateMethod(interviewSummaryEventHandler, savedInterviewSummary,
                 synchronizationMetadataApplied);
 
-            Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions.First(x => x.Id == questionId).Answer, Is.EqualTo(answer.ToString()));
+            Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions.First(x => x.Questionid == questionId).Answer, Is.EqualTo(answer.ToString()));
         }
 
         private QuestionAnswered CreateQuestionAnsweredEventByQuestionType(Guid questionId, QuestionType type, object answer)
