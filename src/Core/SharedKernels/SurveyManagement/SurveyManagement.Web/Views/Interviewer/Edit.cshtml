@@ -4,7 +4,6 @@
 @{
     ViewBag.Title = string.Format("Interviewer: {0}", Model.UserName);
 }
-
 @section scripts
 {
     @Scripts.Render("~/validate")
@@ -12,14 +11,12 @@
         $('#umbrella').hide();
     </script>
 }
+
+@Html.Partial("_alerts")
 <div class="page-header">
-    <h2>
-        Edit interviewer: &nbsp;
-        <small>
-            @Model.UserName
-        </small>
-    </h2>
+    <h2>Edit Interviewer: &nbsp; <small> @Model.UserName</small></h2>
 </div>
+
 <div class="row">
     <div class="col-md-6">
         @using (Html.BeginForm())
