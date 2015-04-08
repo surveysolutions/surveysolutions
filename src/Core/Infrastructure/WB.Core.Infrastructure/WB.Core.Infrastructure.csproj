@@ -173,6 +173,7 @@
     <Compile Include="Transactions\ITransactionManagerProviderManager.cs" />
     <Compile Include="Transactions\NoTransactionTransactionManager.cs" />
     <Compile Include="Transactions\NoTransactionTransactionManagerProvider.cs" />
+    <Compile Include="Transactions\TransactionManagerExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">

@@ -24,6 +24,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -56,6 +57,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly Func<HttpMessageHandler> httpMessageHandler;
         private readonly IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage;
         private readonly IArchiveUtils archiver;
+        private readonly IPlainTransactionManager plainTransactionManager;
 
         public InterviewsSynchronizer(
             IAtomFeedReader feedReader,
@@ -72,8 +74,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             IJsonUtils jsonUtils,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter,
             IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryReader,
-            Func<HttpMessageHandler> httpMessageHandler, IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage,
-            IArchiveUtils archiver)
+            Func<HttpMessageHandler> httpMessageHandler,
+            IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage,
+            IArchiveUtils archiver,
+            IPlainTransactionManager plainTransactionManager)
         {
             if (feedReader == null) throw new ArgumentNullException("feedReader");
             if (settings == null) throw new ArgumentNullException("settings");
@@ -88,6 +92,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             if (eventStore == null) throw new ArgumentNullException("eventStore");
             if (jsonUtils == null) throw new ArgumentNullException("jsonUtils");
             if (archiver == null) throw new ArgumentNullException("archiver");
+            if (plainTransactionManager == null) throw new ArgumentNullException("plainTransactionManager");
             if (interviewSummaryRepositoryWriter == null) throw new ArgumentNullException("interviewSummaryRepositoryWriter");
             if (readyToSendInterviewsRepositoryReader == null) throw new ArgumentNullException("readyToSendInterviewsRepositoryReader");
             if (httpMessageHandler == null) throw new ArgumentNullException("httpMessageHandler");
@@ -109,76 +114,85 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.httpMessageHandler = httpMessageHandler;
             this.interviewSynchronizationFileStorage = interviewSynchronizationFileStorage;
             this.archiver = archiver;
+            this.plainTransactionManager = plainTransactionManager;
         }
 
         public void PullInterviewsForSupervisors(Guid[] supervisorIds)
         {
-            this.StoreEventsToLocalStorage();
+            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+            {
+                this.StoreEventsToLocalStorage();
+            });
 
             foreach (var localSupervisor in supervisorIds)
             {
-                List<LocalInterviewFeedEntry> events = 
-                    this.plainStorage.Query(_ => _.Where(x => x.SupervisorId == localSupervisor.FormatGuid() && !x.Processed))
-                                     .OrderByDescending(x => x.Timestamp).ToList();
+                List<LocalInterviewFeedEntry> events = this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+                    this.plainStorage.Query(_ => _
+                        .Where(x => x.SupervisorId == localSupervisor.FormatGuid() && !x.Processed)
+                        .OrderByDescending(x => x.Timestamp)
+                        .ToList()));
 
                 this.headquartersPullContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.SynchronizingInterviewsForSupervisor0EventsCount1Format, localSupervisor, events.Count()));
                 
                 foreach (var interviewFeedEntry in events)
                 {
-                    try
+                    this.plainTransactionManager.ExecuteInPlainTransaction(() =>
                     {
-                        if (interviewFeedEntry.Processed) continue;
-
-                        switch (interviewFeedEntry.EntryType)
+                        try
                         {
-                            case EntryType.SupervisorAssigned:
-                                var interviewDetails = this.GetInterviewDetails(interviewFeedEntry).Result;
-                                if (!this.IsResponsiblePresent(interviewDetails.UserId))
-                                    continue;
+                            if (interviewFeedEntry.Processed) return;
 
-                                this.CreateOrUpdateInterviewFromHeadquarters(interviewDetails, interviewFeedEntry.SupervisorId);
-                                break;
-                            case EntryType.InterviewUnassigned:
-                                this.CancelInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.UserId);
-                                this.MarkOtherInterviewEventsAsProcessed(events, interviewFeedEntry);
-                                break;
-                            case EntryType.InterviewDeleted:
-                                this.HardDeleteInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.UserId);
-                                this.MarkOtherInterviewEventsAsProcessed(events, interviewFeedEntry);
-                                break;
-                            case EntryType.InterviewRejected:
-                                var rejectedInterview = this.GetInterviewDetails(interviewFeedEntry).Result;
-                                if (!this.IsResponsiblePresent(rejectedInterview.UserId))
-                                    continue;
+                            switch (interviewFeedEntry.EntryType)
+                            {
+                                case EntryType.SupervisorAssigned:
+                                    var interviewDetails = this.GetInterviewDetails(interviewFeedEntry).Result;
+                                    if (!this.IsResponsiblePresent(interviewDetails.UserId))
+                                        return;
 
-                                this.RejectInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.SupervisorId, rejectedInterview);
-                                break;
-                            default:
-                                this.logger.Warn(string.Format(
-                                    Resources.InterviewsSynchronizer.Unknowneventoftype0receivedininterviewsfeedItwasskippedandmarkedasprocessedwitherrorEventId1Format,
-                                    interviewFeedEntry.EntryType, interviewFeedEntry.EntryId));
-                                break;
+                                    this.CreateOrUpdateInterviewFromHeadquarters(interviewDetails, interviewFeedEntry.SupervisorId);
+                                    break;
+                                case EntryType.InterviewUnassigned:
+                                    this.CancelInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.UserId);
+                                    this.MarkOtherInterviewEventsAsProcessed(events, interviewFeedEntry);
+                                    break;
+                                case EntryType.InterviewDeleted:
+                                    this.HardDeleteInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.UserId);
+                                    this.MarkOtherInterviewEventsAsProcessed(events, interviewFeedEntry);
+                                    break;
+                                case EntryType.InterviewRejected:
+                                    var rejectedInterview = this.GetInterviewDetails(interviewFeedEntry).Result;
+                                    if (!this.IsResponsiblePresent(rejectedInterview.UserId))
+                                        return;
+
+                                    this.RejectInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.SupervisorId, rejectedInterview);
+                                    break;
+                                default:
+                                    this.logger.Warn(string.Format(
+                                        Resources.InterviewsSynchronizer.Unknowneventoftype0receivedininterviewsfeedItwasskippedandmarkedasprocessedwitherrorEventId1Format,
+                                        interviewFeedEntry.EntryType, interviewFeedEntry.EntryId));
+                                    break;
+                            }
+
+                            interviewFeedEntry.Processed = true;
+                            interviewFeedEntry.ProcessedWithError = false;
                         }
-
-                        interviewFeedEntry.Processed = true;
-                        interviewFeedEntry.ProcessedWithError = false;
-                    }
-                    catch (AggregateException ex)
-                    {
-                        foreach (var inner in ex.InnerExceptions)
+                        catch (AggregateException ex)
                         {
-                            this.MarkAsProcessedWithError(interviewFeedEntry, inner);
+                            foreach (var inner in ex.InnerExceptions)
+                            {
+                                this.MarkAsProcessedWithError(interviewFeedEntry, inner);
+                            }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        this.MarkAsProcessedWithError(interviewFeedEntry, ex);
-                        this.logger.Error(string.Format(Resources.InterviewsSynchronizer.Interviewssynchronizationerrorinevent0Format, interviewFeedEntry.EntryId), ex);
-                    }
-                    finally
-                    {
-                        this.plainStorage.Store(interviewFeedEntry, interviewFeedEntry.EntryId);
-                    }
+                        catch (Exception ex)
+                        {
+                            this.MarkAsProcessedWithError(interviewFeedEntry, ex);
+                            this.logger.Error(string.Format(Resources.InterviewsSynchronizer.Interviewssynchronizationerrorinevent0Format, interviewFeedEntry.EntryId), ex);
+                        }
+                        finally
+                        {
+                            this.plainStorage.Store(interviewFeedEntry, interviewFeedEntry.EntryId);
+                        }
+                    });
                 }
             }
         }

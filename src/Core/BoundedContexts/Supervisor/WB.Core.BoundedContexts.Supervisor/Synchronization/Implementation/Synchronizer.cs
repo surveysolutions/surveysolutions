@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Nito.AsyncEx;
 using Quartz;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 {
@@ -70,23 +71,24 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 this.isSynchronizationRunning = true;
                 this.headquartersPullContext.Start();
                 
-                this.plainTransactionManager.BeginTransaction();
-                var lastStoredFeedEntry = this.localUsersFeedStorage.GetLastEntry();
+                this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+                {
+                    var lastStoredFeedEntry = this.localUsersFeedStorage.GetLastEntry();
 
-                this.headquartersPullContext.PushMessage(lastStoredFeedEntry != null ? 
+                    this.headquartersPullContext.PushMessage(lastStoredFeedEntry != null ? 
                         string.Format("Last synchronized userentry id {0}, date {1}", lastStoredFeedEntry.EntryId, lastStoredFeedEntry.Timestamp) : 
                         string.Format("Nothing synchronized yet, loading full users event stream"));
 
-                List<LocalUserChangedFeedEntry> newEvents = AsyncContext.Run(() => this.feedReader.ReadAfterAsync(lastStoredFeedEntry));
+                    List<LocalUserChangedFeedEntry> newEvents = AsyncContext.Run(() => this.feedReader.ReadAfterAsync(lastStoredFeedEntry));
 
-                this.headquartersPullContext.PushMessageFormat("Saving {0} new events to local storage", newEvents.Count);
-                this.localUsersFeedStorage.Store(newEvents);
+                    this.headquartersPullContext.PushMessageFormat("Saving {0} new events to local storage", newEvents.Count);
+                    this.localUsersFeedStorage.Store(newEvents);
+                });
 
-                this.plainTransactionManager.CommitTransaction();
+                var supervisorIds = this.localUserFeedProcessor.PullUsersAndReturnListOfSynchronizedSupervisorsId();
 
                 this.questionnaireSynchronizer.Pull();
 
-                var supervisorIds = this.localUserFeedProcessor.PullUsersAndReturnListOfSynchronizedSupervisorsId();
                 this.interviewsSynchronizer.PullInterviewsForSupervisors(supervisorIds);
             }
             catch (ApplicationException e)

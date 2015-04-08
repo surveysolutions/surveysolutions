@@ -106,7 +106,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public virtual Guid Id { get; set; }
         public virtual string Title { get; set; }
         public virtual string Answer { get; set; }
-        public QuestionType Type { get; set; }
+        public virtual QuestionType Type { get; set; }
 
         public virtual InterviewSummary InterviewSummary { get; set; }
 
