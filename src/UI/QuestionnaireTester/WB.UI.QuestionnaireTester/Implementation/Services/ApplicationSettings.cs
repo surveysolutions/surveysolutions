@@ -12,6 +12,7 @@ namespace WB.UI.QuestionnaireTester.Implementation.Services
         private const string DesignerEndpointParameterName = "DesignerEndpoint";
         private const string HttpResponseTimeoutParameterName = "HttpResponseTimeout";
         private const string BufferSizeParameterName = "BufferSize";
+        private const string AcceptUnsignedSslCertificateParameterName = "AcceptUnsignedSslCertificate";
         
         private static ISharedPreferences sharedPreferences
         {
@@ -49,6 +50,12 @@ namespace WB.UI.QuestionnaireTester.Implementation.Services
         public int BufferSize
         {
             get { return int.Parse(GetPreferenceString(BufferSizeParameterName, Resource.String.BufferSize)); }
+            set { SavePreferenceValue(BufferSizeParameterName, value.ToString()); }
+        }
+
+        public bool AcceptUnsignedSslCertificate
+        {
+            get { return bool.Parse(GetPreferenceString(AcceptUnsignedSslCertificateParameterName, Resource.String.AcceptUnsignedSslCertificate)); }
             set { SavePreferenceValue(BufferSizeParameterName, value.ToString()); }
         }
 
