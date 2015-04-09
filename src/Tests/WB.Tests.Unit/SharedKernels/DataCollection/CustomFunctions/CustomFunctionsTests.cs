@@ -28,13 +28,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         [Test]
         public void Test_InRange()
         {
-            Assert.IsTrue(StaticFunctions.InRange(1, 0, 10));
-            Assert.IsFalse(StaticFunctions.InRange(1, 3, 10));
-            Assert.IsFalse(StaticFunctions.InRange(13, 3, 10));
+            Assert.IsTrue(Extensions.InRange(1, 0, 10));
+            Assert.IsFalse(Extensions.InRange(1, 3, 10));
+            Assert.IsFalse(Extensions.InRange(13, 3, 10));
 
-            Assert.IsTrue(StaticFunctions.InRange(1.0, 0.0, 10.0));
-            Assert.IsFalse(StaticFunctions.InRange(1.0, 3.0, 10.0));
-            Assert.IsFalse(StaticFunctions.InRange(13.0, 3.0, 10.0));
+            Assert.IsTrue(Extensions.InRange(1.0, 0.0, 10.0));
+            Assert.IsFalse(Extensions.InRange(1.0, 3.0, 10.0));
+            Assert.IsFalse(Extensions.InRange(13.0, 3.0, 10.0));
 
             decimal? ten = 10;
             decimal? three = 3;
@@ -42,9 +42,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             decimal? zero = 0;
             decimal? thirteen = 13;
 
-            Assert.IsTrue(StaticFunctions.InRange(one, zero, ten));
-            Assert.IsFalse(StaticFunctions.InRange(one, three, ten));
-            Assert.IsFalse(StaticFunctions.InRange(thirteen, three, ten));
+            Assert.IsTrue(Extensions.InRange(one, zero, ten));
+            Assert.IsFalse(Extensions.InRange(one, three, ten));
+            Assert.IsFalse(Extensions.InRange(thirteen, three, ten));
 
             Assert.IsTrue(one.InRange(zero, ten));
             Assert.IsFalse(one.InRange(three, ten));
@@ -56,10 +56,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         {
             long? d = 2;
             Assert.IsFalse(d.InList());
-            Assert.IsTrue(StaticFunctions.InList(1, 1, 2, 3, 4));
-            Assert.IsFalse(StaticFunctions.InList(0, 1, 2, 3, 4));
-            Assert.IsFalse(StaticFunctions.InList(null, 1, 2, 3, 4));
-            Assert.IsTrue(StaticFunctions.InList(null, 1, 2, 3, 4, null));
+            Assert.IsTrue(Extensions.InList(1, 1, 2, 3, 4));
+            Assert.IsFalse(Extensions.InList(0, 1, 2, 3, 4));
+            Assert.IsFalse(Extensions.InList(null, 1, 2, 3, 4));
+            Assert.IsTrue(Extensions.InList(null, 1, 2, 3, 4, null));
         }
 
         [Test]
@@ -67,10 +67,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         {
             double? d = 2.0;
             Assert.IsFalse(d.InList());
-            Assert.IsTrue(StaticFunctions.InList(1.0, 1.0, 2.0, 3.0, 4.0));
-            Assert.IsFalse(StaticFunctions.InList(0.0, 1.0, 2.0, 3.0, 4.0));
-            Assert.IsFalse(StaticFunctions.InList(null, 1.0, 2.0, 3.0, 4.0));
-            Assert.IsTrue(StaticFunctions.InList(null, 1.0, 2.0, 3.0, 4.0, null));
+            Assert.IsTrue(Extensions.InList(1.0, 1.0, 2.0, 3.0, 4.0));
+            Assert.IsFalse(Extensions.InList(0.0, 1.0, 2.0, 3.0, 4.0));
+            Assert.IsFalse(Extensions.InList(null, 1.0, 2.0, 3.0, 4.0));
+            Assert.IsTrue(Extensions.InList(null, 1.0, 2.0, 3.0, 4.0, null));
         }
 
         [Test]
@@ -83,10 +83,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             decimal? three = 3;
             decimal? four = 4;
             Assert.IsFalse(d.InList());
-            Assert.IsTrue(StaticFunctions.InList(one, one, two, three, four));
-            Assert.IsFalse(StaticFunctions.InList(zero, one, two, three, four));
-            Assert.IsFalse(StaticFunctions.InList(null, one, two, three, four));
-            Assert.IsTrue(StaticFunctions.InList(null, one, two, three, four, null));
+            Assert.IsTrue(Extensions.InList(one, one, two, three, four));
+            Assert.IsFalse(Extensions.InList(zero, one, two, three, four));
+            Assert.IsFalse(Extensions.InList(null, one, two, three, four));
+            Assert.IsTrue(Extensions.InList(null, one, two, three, four, null));
         }
 
         [Test]
@@ -306,35 +306,35 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         [Test]
         public void Test_IsMilTime()
         {
-            Assert.IsTrue(new BaseFunctions().IsMilTime("0600"));
-            Assert.IsTrue(new BaseFunctions().IsMilTime("2323"));
-            Assert.IsTrue(new BaseFunctions().IsMilTime("0600"));
-            Assert.IsTrue(new BaseFunctions().IsMilTime("2323"));
+            Assert.IsTrue(new BaseFunctions().IsMilitaryTime("0600"));
+            Assert.IsTrue(new BaseFunctions().IsMilitaryTime("2323"));
+            Assert.IsTrue(new BaseFunctions().IsMilitaryTime("0600"));
+            Assert.IsTrue(new BaseFunctions().IsMilitaryTime("2323"));
 
-            Assert.IsFalse(new BaseFunctions().IsMilTime(""));
-            Assert.IsFalse(new BaseFunctions().IsMilTime("0090"));
-            Assert.IsFalse(new BaseFunctions().IsMilTime("2500"));
-            Assert.IsFalse(new BaseFunctions().IsMilTime("2525"));
-            Assert.IsFalse(new BaseFunctions().IsMilTime("545")); // leading zeroes are required
-            Assert.IsFalse(new BaseFunctions().IsMilTime("5:45")); // delimiters are not allowed
-            Assert.IsFalse(new BaseFunctions().IsMilTime("15.3")); // only digits are allowed
+            Assert.IsFalse(new BaseFunctions().IsMilitaryTime(""));
+            Assert.IsFalse(new BaseFunctions().IsMilitaryTime("0090"));
+            Assert.IsFalse(new BaseFunctions().IsMilitaryTime("2500"));
+            Assert.IsFalse(new BaseFunctions().IsMilitaryTime("2525"));
+            Assert.IsFalse(new BaseFunctions().IsMilitaryTime("545")); // leading zeroes are required
+            Assert.IsFalse(new BaseFunctions().IsMilitaryTime("5:45")); // delimiters are not allowed
+            Assert.IsFalse(new BaseFunctions().IsMilitaryTime("15.3")); // only digits are allowed
         }
 
         [Test]
         public void Test_IsMilTimeZ()
         {
-            Assert.IsTrue(new BaseFunctions().IsMilTimeZ("0600Z"));
-            Assert.IsTrue(new BaseFunctions().IsMilTimeZ("2323J"));
-            Assert.IsTrue(new BaseFunctions().IsMilTimeZ("0600Z"));
-            Assert.IsTrue(new BaseFunctions().IsMilTimeZ("2323J"));
+            Assert.IsTrue(new BaseFunctions().IsMilitaryTimeZ("0600Z"));
+            Assert.IsTrue(new BaseFunctions().IsMilitaryTimeZ("2323J"));
+            Assert.IsTrue(new BaseFunctions().IsMilitaryTimeZ("0600Z"));
+            Assert.IsTrue(new BaseFunctions().IsMilitaryTimeZ("2323J"));
 
-            Assert.IsFalse(new BaseFunctions().IsMilTimeZ(""));
-            Assert.IsFalse(new BaseFunctions().IsMilTimeZ("0090A"));
-            Assert.IsFalse(new BaseFunctions().IsMilTimeZ("2500Z"));
-            Assert.IsFalse(new BaseFunctions().IsMilTimeZ("2525B"));
-            Assert.IsFalse(new BaseFunctions().IsMilTimeZ("0630q")); // small letters not allowed, capital letters are required
-            Assert.IsFalse(new BaseFunctions().IsMilTimeZ("0630")); // time zone is required
-            Assert.IsFalse(new BaseFunctions().IsMilTimeZ("545A")); // leading zeroes are required
+            Assert.IsFalse(new BaseFunctions().IsMilitaryTimeZ(""));
+            Assert.IsFalse(new BaseFunctions().IsMilitaryTimeZ("0090A"));
+            Assert.IsFalse(new BaseFunctions().IsMilitaryTimeZ("2500Z"));
+            Assert.IsFalse(new BaseFunctions().IsMilitaryTimeZ("2525B"));
+            Assert.IsFalse(new BaseFunctions().IsMilitaryTimeZ("0630q")); // small letters not allowed, capital letters are required
+            Assert.IsFalse(new BaseFunctions().IsMilitaryTimeZ("0630")); // time zone is required
+            Assert.IsFalse(new BaseFunctions().IsMilitaryTimeZ("545A")); // leading zeroes are required
         }
 
         [Test]
@@ -515,12 +515,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         [Test]
         public void Test_IsAlphaLatinOrDelim()
         {
-            Assert.IsTrue("".IsAlphaLatinOrDelim());
-            Assert.IsTrue("ABC".IsAlphaLatinOrDelim());
-            Assert.IsTrue("xyz".IsAlphaLatinOrDelim());
-            Assert.IsTrue("ABCxyz".IsAlphaLatinOrDelim());
-            Assert.IsTrue("abc.".IsAlphaLatinOrDelim());
-            Assert.IsFalse("abc(def)gh".IsAlphaLatinOrDelim());
+            Assert.IsTrue("".IsAlphaLatinOrDelimiter());
+            Assert.IsTrue("ABC".IsAlphaLatinOrDelimiter());
+            Assert.IsTrue("xyz".IsAlphaLatinOrDelimiter());
+            Assert.IsTrue("ABCxyz".IsAlphaLatinOrDelimiter());
+            Assert.IsTrue("abc.".IsAlphaLatinOrDelimiter());
+            Assert.IsFalse("abc(def)gh".IsAlphaLatinOrDelimiter());
         }
 
         [Test]
@@ -541,7 +541,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             var p1 = new GeoLocation(38.9047, -77.0164,0,0);
             var p2 = new GeoLocation(39.9500, -75.1667,0,0);
 
-            var d = StaticFunctions.GpsDistance(p1, p2);
+            var d = Extensions.GpsDistance(p1, p2);
             Assert.IsTrue(Math.Abs(196800 - d) < 100);
 
             p1.Latitude = 36.12;
@@ -558,16 +558,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         {
             var delta = 0.1;
 
-            Assert.AreEqual(2, new BaseFunctions().Bmi(20, false, 18.7), delta);
-            Assert.AreEqual(2, new BaseFunctions().Hcfa(20, false, 49.4), delta);
-            Assert.AreEqual(2, new BaseFunctions().Lhfa(20, false, 88.7), delta);
-            Assert.AreEqual(2, new BaseFunctions().Wfa(20, false, 13.7), delta);
+            Assert.AreEqual(2, ZScore.Bmi(20, false, 18.7), delta);
+            Assert.AreEqual(2, ZScore.Hcfa(20, false, 49.4), delta);
+            Assert.AreEqual(2, ZScore.Lhfa(20, false, 88.7), delta);
+            Assert.AreEqual(2, ZScore.Wfa(20, false, 13.7), delta);
 
-            Assert.AreEqual(2, new BaseFunctions().Wfl(99.5, false, 18.0), delta);
-            Assert.AreEqual(2, new BaseFunctions().Ssfa(20, true, 9.0), delta);
-            Assert.AreEqual(2, new BaseFunctions().Acfa(20, true, 17.4), delta);
-            Assert.AreEqual(2, new BaseFunctions().Tsfa(50, true, 12.9), delta);
-            Assert.AreEqual(2, new BaseFunctions().Wfh(85, true, 13.8), delta);
+            Assert.AreEqual(2, ZScore.Wfl(99.5, false, 18.0), delta);
+            Assert.AreEqual(2, ZScore.Ssfa(20, true, 9.0), delta);
+            Assert.AreEqual(2, ZScore.Acfa(20, true, 17.4), delta);
+            Assert.AreEqual(2, ZScore.Tsfa(50, true, 12.9), delta);
+            Assert.AreEqual(2, ZScore.Wfh(85, true, 13.8), delta);
 
         }
     }
