@@ -1,6 +1,6 @@
 namespace WB.Core.GenericSubdomains.Utils.Services
 {
-    public interface IIdentity
+    public interface IUserIdentity
     {
         bool IsAuthenticated { get; }
         string Name { get; }
