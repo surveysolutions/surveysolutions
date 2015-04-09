@@ -5,18 +5,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 {
     internal class StatefullInterview : Interview
     {
-        public Guid QuestionaryId
-        {
-            get { return base.questionnaireId; }
-        }
-
-        public object GetAnswerOnQuestion(Guid questionId, decimal[] rosterVector = null)
-        {
-//            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(questionId, rosterVector);
-//            return this.interviewState.AnswersSupportedInExpressions[questionKey];
-            return null;
-        }
-
         #region Interview initialization
         internal override void Apply(InterviewCreated @event)
         {

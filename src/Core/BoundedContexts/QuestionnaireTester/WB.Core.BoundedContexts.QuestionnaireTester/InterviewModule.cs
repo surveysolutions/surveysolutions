@@ -1,7 +1,9 @@
 ﻿using Ninject;
 using Ninject.Modules;
+using WB.Core.BoundedContexts.QuestionnaireTester.Model;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implimentation;
+using WB.Core.Infrastructure.Implementation;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester
 {
@@ -9,7 +11,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester
     {
         public override void Load()
         {
-            Bind<IInterviewStateFullViewModelFactory>().To<InterviewInterviewStateFullViewModelFactory>().InSingletonScope();
+            Bind<IInterviewStateFullViewModelFactory>().To<InterviewInterviewStateFullViewModelFactory>()
+                .WithConstructorArgument("plainStorageInterviewAccessor", _ => new InMemoryPlainStorageAccessor<InterviewModel>());
         }
     }
 }

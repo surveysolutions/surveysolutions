@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.QuestionnaireTester.Model;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
 using WB.Core.GenericSubdomains.Utils;
@@ -20,27 +22,27 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implimenta
     internal class InterviewInterviewStateFullViewModelFactory : IInterviewStateFullViewModelFactory
     {
         private readonly IPlainStorageAccessor<QuestionnaireDocument> plainStorageQuestionnaireAccessor;
-        private readonly IPlainStorageAccessor<StatefullInterview> plainStorageInterviewAccessor;
+        private readonly IPlainStorageAccessor<InterviewModel> plainStorageInterviewAccessor;
 
         public InterviewInterviewStateFullViewModelFactory(
             IPlainStorageAccessor<QuestionnaireDocument> plainStorageQuestionnaireAccessor,
-            IPlainStorageAccessor<StatefullInterview> plainStorageInterviewAccessor)
+            IPlainStorageAccessor<InterviewModel> plainStorageInterviewAccessor)
         {
             this.plainStorageQuestionnaireAccessor = plainStorageQuestionnaireAccessor;
             this.plainStorageInterviewAccessor = plainStorageInterviewAccessor;
         }
 
-        private readonly Dictionary<Type, Func<IComposite, object, object>> mapQuestions = new Dictionary<Type, Func<IComposite, object, object>>()
+        private readonly Dictionary<Type, Func<Guid, InterviewModel, QuestionnaireDocument, MvxViewModel>> mapQuestions = new Dictionary<Type, Func<Guid, InterviewModel, QuestionnaireDocument, MvxViewModel>>()
         {
-            { typeof(IGroup), GetGroupViewModel },
-            { typeof(IStaticText), GetStaticTextViewModel },
-            { typeof(TextQuestion), GetTextQuestionViewModel },
+            { typeof(IGroup), (questionId, interview, questionnaire) => new GroupReferanceViewModel(questionId, interview, questionnaire) },
+            { typeof(IStaticText), (questionId, interview, questionnaire) => new StaticTextViewModel(questionId, questionnaire) },
+            { typeof(TextQuestion), (questionId, interview, questionnaire) => new TextQuestionViewModel(questionId, interview, questionnaire) },
         };
 
         public IEnumerable<object> Load(string interviewId, string chapterId)
         {
-            var interviewStateFull = plainStorageInterviewAccessor.GetById(interviewId);
-            var questionaryId = interviewStateFull.QuestionaryId.FormatGuid();
+            var interview = plainStorageInterviewAccessor.GetById(interviewId);
+            var questionaryId = interview.QuestionaryId.FormatGuid();
 
             var questionnaire = plainStorageQuestionnaireAccessor.GetById(questionaryId);
             
@@ -53,44 +55,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implimenta
 
             foreach (var child in @group.Children)
             {
-                var answerOnQuestion = interviewStateFull.GetAnswerOnQuestion(child.PublicKey);
-
                 var entityType = child.GetType();
-
                 var mapQuestionFunc = mapQuestions[entityType];
-                var entityViewModel = mapQuestionFunc.Invoke(child, answerOnQuestion);
+                var entityViewModel = mapQuestionFunc.Invoke(child.PublicKey, interview, questionnaire);
 
                 entities.Add(entityViewModel);
             }
 
             return entities;
         }
-
-        private static object GetTextQuestionViewModel(IComposite entity, object answer)
-        {
-            TextQuestion textQuestion = (TextQuestion)entity;
-            TextQuestionViewModel textQuestionViewModel = new TextQuestionViewModel();
-            textQuestionViewModel.Title = textQuestion.QuestionText;
-            textQuestionViewModel.Answer = (string)answer;
-            return textQuestion;
-
-        }
-
-        private static object GetStaticTextViewModel(IComposite entity, object answer)
-        {
-            IStaticText staticText = (IStaticText)entity;
-            StaticTextViewModel staticTextViewModel = new StaticTextViewModel();
-            staticTextViewModel.Title = staticText.Text;
-            return staticText;
-        }
-
-        private static object GetGroupViewModel(IComposite entity, object answer)
-        {
-            IGroup @group = (IGroup) entity;
-            GroupViewModel groupViewModel = new GroupViewModel();
-            groupViewModel.Title = @group.Title;
-            return @group;
-        }
-
     }
 }
