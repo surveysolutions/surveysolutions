@@ -140,12 +140,16 @@
     self.SendCommands = function (commands, onSuccess, skipInProgressCheck) {
         self.SendRequest(commandExecutionUrl, commands, function(data) {
             var failedCommands = ko.utils.arrayFilter(data.CommandStatuses, function(cmd) {
-                return !cmd.IsSuccess;
+                return !cmd.IsSuccess || (!Supervisor.Framework.Objects.isUndefined(cmd.DomainException) && cmd.DomainException != null);
             });
 
             if (failedCommands.length > 0) {
                 var failedDomainExceptions = ko.utils.arrayMap(failedCommands, function(failedCommand) {
-                    return failedCommand.DomainException;
+                    if (!Supervisor.Framework.Objects.isUndefined(failedCommand.DomainException) && failedCommand.DomainException != null)
+                        return failedCommand.DomainException;
+                    else {
+                        return input.settings.messages.unhandledExceptionMessage;
+                    }
                 });
                 self.ShowErrors(failedDomainExceptions);
             } else {
