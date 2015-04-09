@@ -40,6 +40,10 @@
     <Compile Include="Implementation\Aggregates\StatefullQuestionnaire.cs" />
     <Compile Include="MobileDataCollectionModule.cs" />
     <Compile Include="InterviewModule.cs" />
+    <Compile Include="..\..\Designer\WB.Core.BoundedContexts.Designer\Views\Questionnaire\Questionnaire.cs">
+      <Link>Views\Designer\Questionnaire.cs</Link>
+    </Compile>
+    <Compile Include="Model\InterviewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModelLoader\Implimentation\InterviewInterviewStateFullViewModelFactory.cs" />
     <Compile Include="ViewModelLoader\IInterviewStateFullViewModelFactory.cs" />
@@ -48,14 +52,20 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UIResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\DashboardViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\ChapterViewModel.cs" />
     <Compile Include="ViewModels\ScreenViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\GroupViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\StaticTextViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\TextQuestionViewModel.cs" />
+    <Compile Include="ViewModels\PrefilledQuestionsViewModel.cs" />
+    <Compile Include="ViewModels\SearchQuestionnairesViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\SplashViewModel.cs" />
+    <Compile Include="Views\QuestionnaireListItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -108,7 +118,19 @@
       <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
       <Name>WB.Core.GenericSubdomains.Utils</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
+      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
+      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

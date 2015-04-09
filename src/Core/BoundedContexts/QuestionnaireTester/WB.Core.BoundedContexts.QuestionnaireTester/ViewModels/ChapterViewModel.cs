@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
@@ -29,7 +28,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public override void NavigateToPreviousViewModel()
         {
-
+            this.ShowViewModel<DashboardViewModel>();
         }
     }
 }

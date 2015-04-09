@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Utils.Services;
@@ -7,42 +8,61 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
 {
     public class NewtonJsonUtils : IJsonUtils
     {
+        private readonly JsonUtilsSettings jsonUtilsSettings;
         private readonly JsonSerializer jsonSerializer;
         private readonly JsonSerializerSettings objectsOnlySerializeSettings;
         private readonly JsonSerializerSettings allTypesSerializeSettings;
 
+        private readonly Dictionary<TypeSerializationSettings, JsonSerializerSettings> JsonSerializerSettingsByTypeNameHandling =
+                new Dictionary<TypeSerializationSettings, JsonSerializerSettings>()
+                {
+                    {
+                        TypeSerializationSettings.AllTypes, new JsonSerializerSettings
+                        {
+                            TypeNameHandling = TypeNameHandling.All,
+                            NullValueHandling = NullValueHandling.Ignore,
+                            FloatParseHandling = FloatParseHandling.Decimal
+                        }
+                    },
+                    {
+                        TypeSerializationSettings.ObjectsOnly, new JsonSerializerSettings
+                        {
+                            TypeNameHandling = TypeNameHandling.Objects,
+                            NullValueHandling = NullValueHandling.Ignore,
+                            FloatParseHandling = FloatParseHandling.Decimal,
+                            Formatting = Formatting.None
+                        }
+                    },
+                    {
+                        TypeSerializationSettings.None, new JsonSerializerSettings
+                        {
+                            TypeNameHandling = TypeNameHandling.None,
+                            NullValueHandling = NullValueHandling.Ignore,
+                            FloatParseHandling = FloatParseHandling.Decimal,
+                            Formatting = Formatting.None
+                        }
+                    }
+                };
+
         public NewtonJsonUtils()
         {
-            this.objectsOnlySerializeSettings = new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.Objects,
-                NullValueHandling = NullValueHandling.Ignore,
-                FloatParseHandling = FloatParseHandling.Decimal,
-                Formatting = Formatting.None
-            };
+            this.jsonSerializer = JsonSerializer.Create(JsonSerializerSettingsByTypeNameHandling[this.jsonUtilsSettings.TypeNameHandling]);
+        }
 
-            this.allTypesSerializeSettings = new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All,
-                NullValueHandling = NullValueHandling.Ignore,
-                FloatParseHandling = FloatParseHandling.Decimal
-            };
-
-            this.jsonSerializer = JsonSerializer.Create(this.objectsOnlySerializeSettings);
+        public NewtonJsonUtils(JsonUtilsSettings jsonUtilsSettings)
+        {
+            this.jsonUtilsSettings = jsonUtilsSettings;
+            this.jsonSerializer = JsonSerializer.Create(JsonSerializerSettingsByTypeNameHandling[this.jsonUtilsSettings.TypeNameHandling]);
         }
 
         public string Serialize(object item)
         {
-            return Serialize(item, TypeSerializationSettings.ObjectsOnly);
+            return Serialize(item, this.jsonUtilsSettings.TypeNameHandling);
         }
 
         public string Serialize(object item, TypeSerializationSettings typeSerializationSettings)
         {
-            var settings = typeSerializationSettings == TypeSerializationSettings.ObjectsOnly
-                ? this.objectsOnlySerializeSettings
-                : this.allTypesSerializeSettings;
-
-            return JsonConvert.SerializeObject(item, Formatting.None, settings);
+            return JsonConvert.SerializeObject(item, Formatting.None, JsonSerializerSettingsByTypeNameHandling[typeSerializationSettings]);
         }
 
         public byte[] SerializeToByteArray(object payload)

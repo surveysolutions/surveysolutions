@@ -152,11 +152,38 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to My questionnaires.
+        /// </summary>
+        public static string Dashboard_MyQuestionnairesLinkText {
+            get {
+                return ResourceManager.GetString("Dashboard_MyQuestionnairesLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Public questionnaires.
+        /// </summary>
+        public static string Dashboard_PublicQuestionnairesLinkText {
+            get {
+                return ResourceManager.GetString("Dashboard_PublicQuestionnairesLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search (by name, author).
         /// </summary>
         public static string Dashboard_SearchText {
             get {
                 return ResourceManager.GetString("Dashboard_SearchText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaires.
+        /// </summary>
+        public static string Dashboard_ToolbarText {
+            get {
+                return ResourceManager.GetString("Dashboard_ToolbarText", resourceCulture);
             }
         }
         
