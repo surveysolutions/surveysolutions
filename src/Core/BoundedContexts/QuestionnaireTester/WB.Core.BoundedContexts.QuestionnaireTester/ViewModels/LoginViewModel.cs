@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
                 this.principal.SignIn(userName: LoginName, password: Password, rememberMe: StaySignedIn);
 
-                //this.ShowViewModel<DashboardViewModel>();
+                this.ShowViewModel<DashboardViewModel>();
             }
             catch (RestException ex)
             {
