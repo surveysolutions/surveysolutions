@@ -62,20 +62,21 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         public void BulkStore(List<Tuple<TEntity, string>> bulk)
         {
             var sessionFactory = ServiceLocator.Current.GetInstance<ISessionFactory>(PostgresReadSideModule.ReadSideSessionFactoryName);
-            ISession session = sessionFactory.OpenSession();
-            using(var transaction = session.BeginTransaction())
+            using (ISession session = sessionFactory.OpenSession())
+            using (ITransaction transaction = session.BeginTransaction())
+            using (IStatelessSession statelessSession = sessionFactory.OpenStatelessSession(session.Connection))
             {
                 foreach (var tuple in bulk)
                 {
                     TEntity entity = tuple.Item1;
                     string id = tuple.Item2;
 
-                    var storedEntity = session.Get<TEntity>(id);
+                    var storedEntity = statelessSession.Get<TEntity>(id);
 
                     if (storedEntity != null)
                     {
                         var merge = session.Merge(entity);
-                        session.SaveOrUpdate(merge);
+                        session.Update(merge);
                     }
                     else
                     {

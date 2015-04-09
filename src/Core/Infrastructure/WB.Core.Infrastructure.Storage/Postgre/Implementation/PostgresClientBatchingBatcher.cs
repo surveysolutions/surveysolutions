@@ -139,17 +139,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
                 this.Prepare(this.currentBatch);
 
-                int rowsAffected = 0;
-                try
-                {
-                    rowsAffected = this.currentBatch.ExecuteNonQuery();
-                }
-                catch (Exception)
-                {
-                    if (Debugger.IsAttached)
-                        Debugger.Break();
-                    throw;
-                }
+                int rowsAffected = this.currentBatch.ExecuteNonQuery();
 
                 Expectations.VerifyOutcomeBatched(this.totalExpectedRowsAffected, rowsAffected);
 
