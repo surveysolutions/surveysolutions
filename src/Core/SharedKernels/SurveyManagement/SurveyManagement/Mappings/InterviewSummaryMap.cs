@@ -32,7 +32,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
                     collection.Table("AnswersToFeaturedQuestions");
                     collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
                     collection.Inverse(true);
-                    collection.BatchSize(12);
+                    collection.Lazy(CollectionLazy.NoLazy);
+                    collection.Fetch(CollectionFetchMode.Subselect);
                 },
                 rel => rel.OneToMany());
 
@@ -42,6 +43,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
                     collection.Key(key => key.Column("InterviewSummaryId"));
                     collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
                     collection.Inverse(true);
+                    collection.Lazy(CollectionLazy.NoLazy);
+                    collection.Fetch(CollectionFetchMode.Subselect);
                 },
                 relation => relation.OneToMany());
 
@@ -51,6 +54,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
                    collection.Key(key => key.Column("InterviewSummaryId"));
                    collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
                    collection.Inverse(true);
+                   collection.Lazy(CollectionLazy.NoLazy);
+                   collection.Fetch(CollectionFetchMode.Subselect);
                },
                relation => relation.OneToMany());
         }
