@@ -8,12 +8,14 @@ namespace WB.UI.QuestionnaireTester.Ninject
     {
         public static IMvxIoCProvider CreateIocProvider()
         {
-             return new NinjectMvxIocProvider(
-                 new SecurityModule(), 
-                 new NetworkModule(), 
-                 new LoggerModule(), 
-                 new MobileDataCollectionModule(), 
-                 new ApplicationModule());
+            return new NinjectMvxIocProvider(
+                new SecurityModule(), 
+                new NetworkModule(), 
+                new LoggerModule(),
+                new ApplicationModule(),
+                new ServiceLocationModule(),
+                new PlainStorageInfrastructureModule(),
+                new MobileDataCollectionModule());
         }
     }
 }
