@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Text;
-using WB.Core.SharedKernels.DataCollection.CustomFunctions.ZScore;
 
 namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
 {
-    public class BaseFunctions : ZScoreBaseFunctions
+    public class BaseFunctions
     {
         /// @name  Date and time management functions
         /// @{
@@ -94,7 +93,7 @@ namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
         /// </summary>
         /// <param name="stringVar">String variable</param>
         /// <returns>True if the specified variable contains valid time in 'military format' without time zone, false otherwise.</returns>
-        public bool IsMilTime(string stringVar)
+        public bool IsMilitaryTime(string stringVar)
         {
             // 0600, 2315
             if (String.IsNullOrEmpty(stringVar)) return false;
@@ -113,14 +112,14 @@ namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
         /// </summary>
         /// <param name="stringVar">String variable.</param>
         /// <returns>True if the specified variable contains valid time in 'military format' without time zone, false otherwise.</returns>
-        public bool IsMilTimeZ(string stringVar)
+        public bool IsMilitaryTimeZ(string stringVar)
         {
             // 0600R, 2315Z
             const string milZones = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             if (String.IsNullOrEmpty(stringVar)) return false;
             if (stringVar.Length != 5) return false;
 
-            if (IsMilTime(stringVar.Substring(0, 4)) == false) return false;
+            if (IsMilitaryTime(stringVar.Substring(0, 4)) == false) return false;
             if (milZones.IndexOf(stringVar.Substring(4, 1)) < 0) return false;
             return true;
         }

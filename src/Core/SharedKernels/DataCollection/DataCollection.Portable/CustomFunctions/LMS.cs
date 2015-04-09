@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.SharedKernels.DataCollection.CustomFunctions.ZScore
+namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
 {
     internal class LMS
     {

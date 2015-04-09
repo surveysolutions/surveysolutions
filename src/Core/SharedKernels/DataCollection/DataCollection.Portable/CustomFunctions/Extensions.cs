@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
 {
-    public static class StaticFunctions
+    public static class Extensions
     {
         /// @name  Numeric functions
         /// @{ 
@@ -340,7 +340,7 @@ namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
         /// </summary>
         /// <param name="s">string to be checked</param>
         /// <returns>True if the string consists entirely of permitted characters, false otherwise.</returns>
-        public static bool IsAlphaLatinOrDelim(this string s)
+        public static bool IsAlphaLatinOrDelimiter(this string s)
         {
             const string validChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ,;.";
             return s.ConsistsOf(validChars);
