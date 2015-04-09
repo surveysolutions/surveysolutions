@@ -90,6 +90,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                         this.Logger.Error("Internal server error when login.", ex);
                         this.uiDialogs.Alert(UIResources.InternalServerError);
                         break;
+                    case HttpStatusCode.NotFound:
+                        this.Logger.Error("Designer cannot be found.", ex);
+                        this.uiDialogs.Alert(UIResources.Login_Error_NotFound);
+                        break;
                     default:
                         throw;
                 }

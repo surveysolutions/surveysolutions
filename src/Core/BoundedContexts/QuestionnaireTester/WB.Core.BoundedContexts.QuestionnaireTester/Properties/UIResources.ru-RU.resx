@@ -234,6 +234,9 @@
   <data name="Maintenance" xml:space="preserve">
     <value>The website of survey solutions designer is on the maintenance mode now. Sorry for the inconvenience</value>
   </data>
+  <data name="OpenQuestionnaire" xml:space="preserve">
+    <value>Открыть опросник</value>
+  </data>
   <data name="OSVersionText" xml:space="preserve">
     <value>Версия адроида:</value>
   </data>
@@ -284,5 +287,8 @@
   </data>
   <data name="Unauthorized" xml:space="preserve">
     <value>Вы ввели неправильное имя или пароль</value>
+  </data>
+  <data name="Login_Error_NotFound" xml:space="preserve">
+    <value>Сервер с приложением Designer не отвечает. Проверьте адрес подключения к серверу или повторите попытку позже</value>
   </data>
 </root>

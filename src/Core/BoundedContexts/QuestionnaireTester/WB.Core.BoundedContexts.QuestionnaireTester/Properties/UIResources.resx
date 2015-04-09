@@ -231,6 +231,9 @@
   <data name="Maintenance" xml:space="preserve">
     <value>The website of survey solutions designer is on the maintenance mode now. Sorry for the inconvenience</value>
   </data>
+  <data name="OpenQuestionnaire" xml:space="preserve">
+    <value>Open questionnaire</value>
+  </data>
   <data name="OSVersionText" xml:space="preserve">
     <value>Android version:</value>
   </data>
@@ -284,5 +287,8 @@
   </data>
   <data name="Unauthorized" xml:space="preserve">
     <value>Your login or password is incorrect</value>
+  </data>
+  <data name="Login_Error_NotFound" xml:space="preserve">
+    <value>Designer web application is not accessable at this moment. Check connection setting or try again later</value>
   </data>
 </root>
