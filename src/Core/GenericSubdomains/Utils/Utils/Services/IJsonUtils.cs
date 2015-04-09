@@ -3,12 +3,6 @@ using System.IO;
 
 namespace WB.Core.GenericSubdomains.Utils.Services
 {
-    public enum TypeSerializationSettings
-    {
-        ObjectsOnly,
-        AllTypes
-    }
-
     public interface IJsonUtils
     {
         string Serialize(object item);
