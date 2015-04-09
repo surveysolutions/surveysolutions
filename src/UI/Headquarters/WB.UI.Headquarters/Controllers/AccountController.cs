@@ -64,11 +64,7 @@ namespace WB.UI.Headquarters.Controllers
                         {
                             return this.RedirectToAction("SurveysAndStatuses", "HQ");
                         }
-                        if (isObserver)
-                        {
-                            return this.RedirectToAction("Index", "Supervisor");
-                        }
-                        if (isAdmin)
+                        if (isObserver || isAdmin)
                         {
                             return this.RedirectToAction("Index", "Headquarters");
                         }
