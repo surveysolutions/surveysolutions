@@ -22,6 +22,9 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
             this.restServiceSettings = restServiceSettings;
             this.logger = logger;
             this.networkService = networkService;
+
+            if (this.restServiceSettings.AcceptUnsignedSslCertificate)
+                AcceptUnsignedSslCertificate();
         }
 
         private async Task<HttpResponseMessage> ExecuteRequestAsync(string url, Func<FlurlClient, Task<HttpResponseMessage>> request, CancellationToken token,
@@ -67,6 +70,11 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
                 this.logger.Error(string.Format("Request to '{0}'. QueryParams: {1} failed. ", fullUrl, fullUrl.QueryParams), ex);
                 throw new RestException(message: Resources.NoConnection, innerException: ex);
             }
+        }
+
+        private static void AcceptUnsignedSslCertificate()
+        {
+            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
         }
 
         public async Task<T> GetAsync<T>(string url, object queryString = null, RestCredentials credentials = null)
