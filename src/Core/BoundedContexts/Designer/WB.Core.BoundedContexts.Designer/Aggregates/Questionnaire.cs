@@ -944,8 +944,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(groupId, variableName);
 
-            this.ThrowIfExpressionContainsNotExistingQuestionReference(condition, variableName);
-
             this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, isRoster: isRoster, rosterSizeSource: rosterSizeSource,
                 rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: rosterFixedTitles,
                 rosterTitleQuestionId: rosterTitleQuestionId, rosterDepthFunc: () => GetQuestionnaireItemDepthAsVector(parentGroupId));
@@ -1004,8 +1002,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
 
             this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespacesOrTooLong(title);
-
-            this.ThrowIfExpressionContainsNotExistingQuestionReference(condition, variableName);
 
             this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, 
                 isRoster: isRoster,
@@ -1283,8 +1279,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespacesOrTooLong(title);
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(groupId, variableName);
-
-            this.ThrowIfExpressionContainsNotExistingQuestionReference(condition, variableName);
 
             this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, isRoster: isRoster, rosterSizeSource: rosterSizeSource,
                 rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: rosterFixedTitles,
@@ -1614,7 +1608,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled,
                 responsibleId);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
 
             this.ApplyEvent(new QuestionChanged
             {
@@ -1654,7 +1647,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, responsibleId);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
 
             this.ApplyEvent(new QuestionChanged
             {
@@ -1694,7 +1686,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled,
                 responsibleId);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
 
             this.ApplyEvent(new QuestionChanged
             {
@@ -1739,7 +1730,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToQuestionId);
             this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false, null, scope, null);
             this.ThrowIfMaxAllowedAnswersInvalid(QuestionType.MultyOption, linkedToQuestionId, maxAllowedAnswers, options);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
 
             this.ApplyEvent(new QuestionChanged
             {
@@ -1810,7 +1800,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox, scope, cascadeFromQuestionId);
             this.ThrowIfCascadingQuestionHasConditionOrValidation(questionId, cascadeFromQuestionId, validationExpression, enablementCondition);
             this.ThrowIfCategoricalSingleOptionsQuestionHasMoreThan200Options(options, isFilteredCombobox, cascadeFromQuestionId, linkedToQuestionId.HasValue);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
 
 
             this.ApplyEvent(new QuestionChanged
@@ -1929,7 +1918,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
             this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
 
             this.ApplyEvent(new NumericQuestionChanged
             {
@@ -1967,8 +1955,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled, responsibleId);
-
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
 
             ThrowIfMaxAnswerCountNotInRange1to40(maxAnswerCount);
 
@@ -2027,7 +2013,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfGeneralQuestionSettingsAreInvalid(questionId: questionId, parentGroupId: null, title: title,
                 variableName: variableName, condition: enablementCondition, responsibleId: responsibleId);
 
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
             this.ApplyEvent(new QRBarcodeQuestionUpdated()
             {
                 QuestionId = questionId,
@@ -2184,7 +2169,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfTitleIsEmptyOrTooLong(title);
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, variableName);
-            this.ThrowIfExpressionContainsNotExistingQuestionReference(condition, variableName);
 
             var parentGroup = parentGroupId.HasValue
                 ? this.GetGroupById(parentGroupId.Value)
@@ -2196,13 +2180,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroupId.Value);
             }
-        }
-
-        private void ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(string condition,
-            string validationExpression, string variableName)
-        {
-            this.ThrowIfExpressionContainsNotExistingQuestionReference(validationExpression, variableName);
-            this.ThrowIfExpressionContainsNotExistingQuestionReference(condition, string.Empty);
         }
 
         private void ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(Guid questionId, 
@@ -2501,20 +2478,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(
                     DomainExceptionType.VariableNameShouldNotMatchWithKeywords,
                     keyword + " is a keyword. Variable name shouldn't match with keywords");
-            }
-        }
-
-        private void ThrowIfExpressionContainsNotExistingQuestionReference(string expression, string variableName)
-        {
-            if (!IsExpressionDefined(expression))
-                return;
-
-            IEnumerable<string> identifiersUsedInExpression = ExpressionProcessor.GetIdentifiersUsedInExpression(expression)
-                .Except(new [] { variableName });
-
-            foreach (var identifier in identifiersUsedInExpression)
-            {
-                this.ParseExpressionIdentifierToExistingQuestionIdIgnoringThisIdentifierOrThrow(identifier, expression);
             }
         }
 

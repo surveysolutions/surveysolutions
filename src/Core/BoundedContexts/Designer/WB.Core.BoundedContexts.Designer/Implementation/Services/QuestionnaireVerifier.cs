@@ -177,7 +177,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier(QuestionnaireTitleHasInvalidCharacters, "WB0097", VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
                     Verifier(QuestionnaireHasSizeMoreThan5MB, "WB0098", size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size)),
 
-                    this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
@@ -239,7 +238,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             {
                 yield return CreateExpressionSyntaxError(new ExpressionLocation(locationOfExpressionError));
             }
-        }
+        } 
 
         private static Tuple<bool, decimal> QuestionnaireHasSizeMoreThan5MB(QuestionnaireDocument questionnaire)
         {
@@ -1076,34 +1075,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return incorrectReferencedQuestions;
         }
 
-        private IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel(
-            QuestionnaireDocument questionnaire, VerificationState state)
-        {
-            var questionsWithValidationExpression = questionnaire.Find<IQuestion>(q => !string.IsNullOrEmpty(q.ValidationExpression));
-
-            var errorByAllQuestionsWithCustomValidation = new List<QuestionnaireVerificationError>();
-
-            foreach (var questionWithValidationExpression in questionsWithValidationExpression)
-            {
-                IEnumerable<string> identifiersUsedInExpression =
-                    this.expressionProcessor.GetIdentifiersUsedInExpression(questionWithValidationExpression.ValidationExpression);
-
-                Guid[] vectorOfRosterSizeQuestionsForQuestionWithCustomValidation =
-                    GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(questionWithValidationExpression, questionnaire);
-
-                if (vectorOfRosterSizeQuestionsForQuestionWithCustomValidation != null)
-                {
-                    VerifyEnumerableAndAccumulateErrorsToList(identifiersUsedInExpression, errorByAllQuestionsWithCustomValidation,
-                        identifier => GetVerificationErrorByCustomExpressionReferenceOrNull(
-                            questionWithValidationExpression, identifier,
-                            questionnaire,
-                            CustomValidationExpressionUsesNotRecognizedParameter));
-                }
-            }
-
-            return errorByAllQuestionsWithCustomValidation;
-        }
-
         private IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel(
             QuestionnaireDocument questionnaire, VerificationState state)
         {
@@ -1121,14 +1092,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
                 if (vectorOfRosterSizeQuestionsForQuestionWithCustomCondition != null)
                 { 
-                    VerifyEnumerableAndAccumulateErrorsToList(identifiersUsedInExpression, 
-                        errorByAllItemsWithCustomCondition,
-                        identifier => GetVerificationErrorByCustomExpressionReferenceOrNull(
-                            itemWithConditionExpression, 
-                            identifier,
-                            questionnaire,
-                            CustomConditionExpressionUsesNotRecognizedParameter));
-
                     VerifyEnumerableAndAccumulateErrorsToList(identifiersUsedInExpression, errorByAllItemsWithCustomCondition,
                      identifier => GetVerificationErrorByConditionsInGroupsReferencedChildQuestionsOrNull(
                          itemWithConditionExpression, identifier, questionnaire));
@@ -1208,33 +1171,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
 
             return null;
-        }
-
-        private static QuestionnaireVerificationError GetVerificationErrorByCustomExpressionReferenceOrNull(
-            IComposite itemWithExpression, 
-            string identifier, 
-            QuestionnaireDocument questionnaire,
-            Func<IComposite, QuestionnaireVerificationError> notRecognizedParameterError)
-        {
-            /*if (IsSpecialThisIdentifier(identifier))
-            {*/
-                return null;/*
-            }
-
-         /*   IQuestion questionsReferencedInExpression = GetQuestionByIdentifier(identifier, questionnaire);
-            IGroup rosterReferencedInExpression = GetRosterByIdentifier(identifier, questionnaire);
-
-            if (questionsReferencedInExpression == null && rosterReferencedInExpression == null && !IsVariableNameNameSpace(identifier))
-            {
-                return notRecognizedParameterError(itemWithExpression);
-            }
-
-            if (rosterReferencedInExpression != null)
-            {
-                return null;
-            }
-
-            return null;*/
         }
 
         private static bool IsVariableNameNameSpace(string identifier)
