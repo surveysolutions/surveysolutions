@@ -148,7 +148,7 @@
     <Compile Include="Implementation\Services\Principal.cs" />
     <Compile Include="Implementation\Services\RestServiceSettings.cs" />
     <Compile Include="Implementation\Services\XamarinInsightsLogger.cs" />
-    <Compile Include="Implementation\Views\Identity.cs" />
+    <Compile Include="Implementation\Views\UserIdentity.cs" />
     <Compile Include="Ninject\ApplicationModule.cs" />
     <Compile Include="Ninject\LoggerModule.cs" />
     <Compile Include="Ninject\NinjectIoCAdapterSetup.cs" />
@@ -162,7 +162,6 @@
     <Compile Include="Setup.cs" />
     <Compile Include="ValueConverters\LocalizationValueConverter.cs" />
     <Compile Include="Views\BaseActivityView.cs" />
-    <Compile Include="Views\ChapterView.cs" />
     <Compile Include="Views\DashboardView.cs" />
     <Compile Include="Views\LoginView.cs" />
     <Compile Include="Views\MvxActionBarActivity.cs" />
@@ -194,7 +193,6 @@
     <None Include="packages.config" />
     <AndroidResource Include="Resources\layout\splash.axml" />
     <AndroidResource Include="Resources\layout\login.axml" />
-    <AndroidResource Include="Resources\layout\chapter.axml" />
     <AndroidResource Include="Resources\layout\dashboard.axml" />
     <AndroidResource Include="Resources\layout\my_questionnaire_list_item.axml" />
     <AndroidResource Include="Resources\layout\public_questionnaire_list_item.axml" />
@@ -212,7 +210,6 @@
       <Project>{f3be22b5-c075-4b9c-a99d-e89b70a0dfcd}</Project>
       <Name>WB.Core.GenericSubdomains.Utils.Rest</Name>
     </ProjectReference>
-
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Storage.Mobile\WB.Core.Infrastructure.Storage.Mobile.csproj">
       <Project>{AC9D8028-37EA-44F6-92EC-05F20EF27253}</Project>
       <Name>WB.Core.Infrastructure.Storage.Mobile</Name>
