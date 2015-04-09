@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.Core.SharedKernels.DataCollection.CustomFunctions.ZScore
+namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
 {
     /** 
  * 
@@ -27,7 +27,7 @@ http://www.who.int/childgrowth/publications/en/
     /// <summary>
     /// The WHO Child Growth Standards    
     /// </summary>
-    public class ZScoreBaseFunctions
+    public static class ZScore
     {
         /// <summary>
         /// BMI-for-age: Birth to 5 years.
@@ -43,7 +43,7 @@ http://www.who.int/childgrowth/publications/en/
         /// 
         /// \b Example
         /// \snippet Examples.cs Computing Bmi
-        public double Bmi(int ageMonths, bool isBoy, double measurement)
+        public static double Bmi(int ageMonths, bool isBoy, double measurement)
         {
             return LMS.GetScore(ageMonths, isBoy, measurement, _bmiBoys, _bmiGirls);
         }
@@ -61,7 +61,7 @@ http://www.who.int/childgrowth/publications/en/
         /// 
         /// \b Example
         /// \snippet Examples.cs Computing Wfa
-        public double Wfa(int ageMonths, bool isBoy, double measurement)
+        public static double Wfa(int ageMonths, bool isBoy, double measurement)
         {
             return LMS.GetScore(ageMonths, isBoy, measurement, _wfaBoys, _wfaGirls);
         }
@@ -81,7 +81,7 @@ http://www.who.int/childgrowth/publications/en/
         /// 
         /// \b Example
         /// \snippet Examples.cs Computing Lhfa
-        public double Lhfa(int ageMonths, bool isBoy, double measurement)
+        public static double Lhfa(int ageMonths, bool isBoy, double measurement)
         {
             return LMS.GetScore(ageMonths, isBoy, measurement, _lhfaBoys, _lhfaGirls);
         }
@@ -100,7 +100,7 @@ http://www.who.int/childgrowth/publications/en/
         /// 
         /// \b Example
         /// \snippet Examples.cs Computing Hcfa
-        public double Hcfa(int ageMonths, bool isBoy, double measurement)
+        public static double Hcfa(int ageMonths, bool isBoy, double measurement)
         {
             return LMS.GetScore(ageMonths, isBoy, measurement, _hcfaBoys, _hcfaGirls);
         }
@@ -118,7 +118,7 @@ http://www.who.int/childgrowth/publications/en/
         /// 
         /// \b Example
         /// \snippet Examples.cs Computing Tsfa
-        public double Tsfa(int ageMonths, bool isBoy, double measurement)
+        public static double Tsfa(int ageMonths, bool isBoy, double measurement)
         {
             if (ageMonths < 3)
                 throw new ArgumentException("Error. Age is out of range.");
@@ -139,7 +139,7 @@ http://www.who.int/childgrowth/publications/en/
         /// 
         /// \b Example
         /// \snippet Examples.cs Computing Acfa
-        public double Acfa(int ageMonths, bool isBoy, double measurement)
+        public static double Acfa(int ageMonths, bool isBoy, double measurement)
         {
             if (ageMonths < 3)
                 throw new ArgumentOutOfRangeException("Error. Age is out of range.", "ageMonths");
@@ -160,7 +160,7 @@ http://www.who.int/childgrowth/publications/en/
         /// 
         /// \b Example
         /// \snippet Examples.cs Computing Ssfa
-        public double Ssfa(int ageMonths, bool isBoy, double measurement)
+        public static double Ssfa(int ageMonths, bool isBoy, double measurement)
         {
             if (ageMonths < 3)
                 throw new ArgumentException("Error. Age is out of range.", "ageMonths");
@@ -184,7 +184,7 @@ http://www.who.int/childgrowth/publications/en/
         /// 
         /// \b Example
         /// \snippet Examples.cs Computing Wfl
-        public double Wfl(double length, bool isBoy, double weight)
+        public static double Wfl(double length, bool isBoy, double weight)
         {
             const double min = 45.0;
             const double max = 110.0;
@@ -215,7 +215,7 @@ http://www.who.int/childgrowth/publications/en/
         /// 
         /// \b Example
         /// \snippet Examples.cs Computing Wfh
-        public double Wfh(double height, bool isBoy, double weight)
+        public static double Wfh(double height, bool isBoy, double weight)
         {
             const double min = 65.0;
             const double max = 120.0;
@@ -239,7 +239,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _bmiBoys
 
-        private readonly LMS[] _bmiBoys = new[]
+        private static LMS[] _bmiBoys = new[]
         {
             new LMS(-0.30530, 13.40690, 0.09560),
             new LMS(0.27080, 14.94410, 0.09027),
@@ -308,7 +308,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _bmiGirls
 
-        private readonly LMS[] _bmiGirls = new[]
+        private static LMS[] _bmiGirls = new[]
         {
             new LMS(-0.06310, 13.33630, 0.09272),
             new LMS(0.34480, 14.56790, 0.09556),
@@ -377,7 +377,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _hcfaBoys
 
-        private readonly LMS[] _hcfaBoys = new[]
+        private static LMS[] _hcfaBoys = new[]
         {
             new LMS(1.00000, 34.46180, 0.03686),
             new LMS(1.00000, 37.27590, 0.03133),
@@ -446,7 +446,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _hcfaGirls
 
-        private readonly LMS[] _hcfaGirls = new[]
+        private static LMS[] _hcfaGirls = new[]
         {
             new LMS(1.00000, 33.87870, 0.03496),
             new LMS(1.00000, 36.54630, 0.03210),
@@ -515,7 +515,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _wfaBoys
 
-        private readonly LMS[] _wfaBoys = new[]
+        private static LMS[] _wfaBoys = new[]
         {
             new LMS(0.34870, 3.34640, 0.14602),
             new LMS(0.22970, 4.47090, 0.13395),
@@ -584,7 +584,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _wfaGirls
 
-        private readonly LMS[] _wfaGirls = new[]
+        private static LMS[] _wfaGirls = new[]
         {
             new LMS(0.38090, 3.23220, 0.14171),
             new LMS(0.17140, 4.18730, 0.13724),
@@ -653,7 +653,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _lhfaBoys
 
-        private readonly LMS[] _lhfaBoys = new[]
+        private static LMS[] _lhfaBoys = new[]
         {
             new LMS(1.00000, 49.88420, 0.03795),
             new LMS(1.00000, 54.72440, 0.03557),
@@ -722,7 +722,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _lhfaGirls
 
-        private readonly LMS[] _lhfaGirls = new[]
+        private static LMS[] _lhfaGirls = new[]
         {
             new LMS(1.00000, 49.14770, 0.03790),
             new LMS(1.00000, 53.68720, 0.03640),
@@ -791,7 +791,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _tsfaBoys
 
-        private readonly LMS[] _tsfaBoys = new[]
+        private static LMS[] _tsfaBoys = new[]
         {
             new LMS(0.00000, 0.00000, 0.00000),
             new LMS(0.00000, 0.00000, 0.00000),
@@ -860,7 +860,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _tsfaGirls
 
-        private readonly LMS[] _tsfaGirls = new[]
+        private static LMS[] _tsfaGirls = new[]
         {
             new LMS(0.00000, 0.00000, 0.00000),
             new LMS(0.00000, 0.00000, 0.00000),
@@ -929,7 +929,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _acfaBoys
 
-        private readonly LMS[] _acfaBoys = new[]
+        private static LMS[] _acfaBoys = new[]
         {
             new LMS(0.00000, 0.00000, 0.00000),
             new LMS(0.00000, 0.00000, 0.00000),
@@ -998,7 +998,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _acfaGirls
 
-        private readonly LMS[] _acfaGirls = new[]
+        private static LMS[] _acfaGirls = new[]
         {
             new LMS(0.00000, 0.00000, 0.00000),
             new LMS(0.00000, 0.00000, 0.00000),
@@ -1067,7 +1067,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _ssfaBoys
 
-        private readonly LMS[] _ssfaBoys = new[]
+        private static LMS[] _ssfaBoys = new[]
         {
             new LMS(0.00000, 0.00000, 0.00000),
             new LMS(0.00000, 0.00000, 0.00000),
@@ -1136,7 +1136,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _ssfaGirls
 
-        private readonly LMS[] _ssfaGirls = new[]
+        private static LMS[] _ssfaGirls = new[]
         {
             new LMS(0.00000, 0.00000, 0.00000),
             new LMS(0.00000, 0.00000, 0.00000),
@@ -1205,7 +1205,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _wflBoys
 
-        private readonly LMS[] _wflBoys = new[]
+        private static LMS[] _wflBoys = new[]
         {
             new LMS(-0.35210, 2.44100, 0.09182),
             new LMS(-0.35210, 2.52440, 0.09153),
@@ -1344,7 +1344,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _wflGirls
 
-        private readonly LMS[] _wflGirls = new[]
+        private static LMS[] _wflGirls = new[]
         {
             new LMS(-0.38330, 2.46070, 0.09029),
             new LMS(-0.38330, 2.54570, 0.09033),
@@ -1483,7 +1483,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _wfhBoys
 
-        private readonly LMS[] _wfhBoys = new[]
+        private static readonly LMS[] _wfhBoys = new[]
         {
             new LMS(-0.35210, 7.43270, 0.08217),
             new LMS(-0.35210, 7.55040, 0.08214),
@@ -1602,7 +1602,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _wfhGirls
 
-        private readonly LMS[] _wfhGirls = new[]
+        private static  LMS[] _wfhGirls = new[]
         {
             new LMS(-0.38330, 7.24020, 0.09113),
             new LMS(-0.38330, 7.35230, 0.09109),
